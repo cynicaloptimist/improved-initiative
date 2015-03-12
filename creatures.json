@@ -1,0 +1,41 @@
+[{	"Name" : "Hobgoblin",
+	"Type" : "Medium humanoid (goblinoid), lawful evil",
+	"AC" : {"Value" : 18, "Notes" : "chain mail, shield"},
+	"HP" : {"Value" : 11, "Notes" : "2d8 + 2" },
+	"Speed" : [{"Value" : 30}],
+	"Attributes" : {
+		"Str" : 13,
+		"Dex" : 12,
+		"Con" : 12,
+		"Int" : 10,
+		"Wis" : 10,
+		"Cha" : 9
+	},
+	"Senses" : ["darkvision 60 ft.", "passive Perception 10"],
+	"Languages" : ["Common", "Goblin"],
+	"Challenge" : 0.5,
+	"Traits" : [{"Name" : "Martial advantage", "Content" : "Once per turn, the hobgoblin can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if the creature is within 5 feet of an ally of the hobgoblin that is not incapacitated.", "Scopes" : ["offense"]}],
+	"Actions" : [{"Name" : "Longsword", "Content" : "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8+1) slashing damage"},
+				 {"Name" : "Longbow", "Content" : "Ranged Weapon Attack: +3 to hit, range 80/320 ft., one target. Hit: 5 (1d8+1) piercing damage"}]
+},
+{	"Name" : "Skeleton",
+	"Type" : "Medium undead, lawful evil",
+	"AC" : {"Value" : 13, "Notes" : "armor scraps"},
+	"HP" : {"Value" : 13, "Notes" : "2d8 + 4" },
+	"Speed" : [{"Value" : 30}],
+	"Attributes" : {
+		"Str" : 10,
+		"Dex" : 14,
+		"Con" : 15,
+		"Int" : 6,
+		"Wis" : 8,
+		"Cha" : 5
+	},
+	"Vulnerabilities" : ["bludgeoning"],
+	"Immunities" : ["poison","poisoned"],
+	"Senses" : ["darkvision 60 ft.", "passive Perception 9"],
+	"Languages" : ["understands languages it knew in life but cannot speak"],
+	"Challenge" : 0.25,
+	"Actions" : [{"Name" : "Shortsword", "Content" : "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) slashing damage"},
+				 {"Name" : "Shortbow", "Content" : "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6+2) piercing damage"}]
+}]
