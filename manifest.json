@@ -1,7 +1,7 @@
 {
   "name": "Improved Initiative",
   "description": "Combat tracker for D&D 5e.",
-  "version": "0.1",
+  "version": "0.0.1",
   "manifest_version": 2,
   "app": {
     "background": {
