@@ -8,8 +8,7 @@ var loadCreatures = function(containers, creatures){
 }
 var addCreature = function(){
 	var creature = creatures[$(this).attr('creature-index')];
-	encounter.add(creature);
-	console.log("adding %O", creature);
+	encounter.addCreature(creature);
 }
 var initialize = function() {
 	$.getJSON('creatures.json', function(json){
