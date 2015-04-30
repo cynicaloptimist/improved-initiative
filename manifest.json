@@ -6,7 +6,10 @@
   "app": {
     "background": {
       "scripts": ["background.js"]
-    }
+    },
+  "sandbox" : {
+    "pages": ["tracker.html", "creatures.html"]
+  }
   },
   "icons": { "16": "calculator-16.png", "128": "calculator-128.png" }
 }

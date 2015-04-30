@@ -6,7 +6,6 @@ var Encounter = function(){
 Encounter.prototype.addCreature = function(creatureJson){
   console.log("adding %O", creatureJson);
   var encounterIndex = this.creatures.push(creatureJson) - 1;
-  var newElement = $('.encounter').append("<p encounter-index='" + encounterIndex + "'>" + creatureJson.Name + "</p>");
   var creature = new Creature(creatureJson);
   newElement.data(creature);
 };
@@ -45,5 +44,12 @@ chrome.app.window.create('creatures.html', {
 	},
 	function(creatureWindow){
 		creatureWindow.contentWindow.encounter = encounter;
-	}
-);
+	});
+
+var viewModel = {
+                  encounter: ko.observable(encounter)
+                };
+$(document).ready(function(){
+  ko.applyBindings(viewModel);  
+})
+
