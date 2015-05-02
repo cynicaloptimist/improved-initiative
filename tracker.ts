@@ -33,18 +33,7 @@ Creature.prototype.CalculateModifier = function(attribute)
   return Math.floor((attribute - 10) / 2)
 };
 
-encounter = new Encounter();
-chrome.app.window.create('creatures.html', {
-  'outerBounds': {
-      'left': 800,
-      'top': 100,
-      'width': 400,
-      'height': 500
-    }
-	},
-	function(creatureWindow){
-		creatureWindow.contentWindow.encounter = encounter;
-	});
+var encounter = new Encounter();
 
 var viewModel = {
                   encounter: ko.observable(encounter)
