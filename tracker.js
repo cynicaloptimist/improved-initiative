@@ -1,36 +1,20 @@
-var loadCreatures = function (containers, creatures) {
-    if (creatures.length) {
-        creatures.forEach(function (creature, index) {
-            containers.append("<p creature-index='" + index + "'>" + creature.Name + "</p>");
-        });
-    }
-};
-var addCreature = function () {
-    var creature = creatures[$(this).attr('creature-index')];
-    encounter.addCreature(creature);
-};
-var initialize = function () {
-    $.getJSON('creatures.json', function (json) {
-        creatures = json;
-        loadCreatures($('.creatures'), creatures);
-        $('.creatures p').click(addCreature);
-    });
-};
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/knockout/knockout.d.ts" />
 var Encounter = (function () {
     function Encounter() {
-        this.addCreature = function (creatureJson) {
-            console.log("adding %O", creatureJson);
-            var encounterIndex = this.creatures.push(creatureJson) - 1;
-            var creature = new Creature(creatureJson);
-            newElement.data(creature);
-        };
-        this.getCreatures = function (filter) {
-            if (typeof filter === 'function') {
-                return this.creatures.filter(filter);
-            }
-            return this.creatures;
-        };
     }
+    Encounter.prototype.addCreature = function (creatureJson) {
+        console.log("adding %O", creatureJson);
+        var encounterIndex = this.creatures.push(creatureJson) - 1;
+        var creature = new Creature(creatureJson);
+    };
+    Encounter.prototype.getCreatures = function (filter) {
+        if (typeof filter === 'function') {
+            return this.creatures.filter(filter);
+        }
+        return this.creatures;
+    };
+    ;
     return Encounter;
 })();
 ;
@@ -50,9 +34,28 @@ var Creature = (function () {
     return Creature;
 })();
 var encounter = new Encounter();
+var loadCreatures = function (containers, creatures) {
+    if (creatures.length) {
+        creatures.forEach(function (creature, index) {
+            containers.append("<p creature-index='" + index + "'>" + creature.Name + "</p>");
+        });
+    }
+};
+var creatures;
+var addCreature = function () {
+    var creature = creatures[$(this).attr('creature-index')];
+    encounter.addCreature(creature);
+};
+var initialize = function () {
+};
 var viewModel = {
     encounter: ko.observable(encounter)
 };
 $(function () {
+    $.getJSON('creatures.json', function (json) {
+        creatures = json;
+        loadCreatures($('.creatures'), creatures);
+        $('.creatures p').click(addCreature);
+    });
     ko.applyBindings(viewModel);
 });

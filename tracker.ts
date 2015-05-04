@@ -1,64 +1,14 @@
-declare var ko: any;
-
-interface JQuery {
-    fadeIn(): JQuery;
-    fadeOut(): JQuery;
-    focus(): JQuery;
-    html(): string;
-    html(val: string): JQuery;
-    show(): JQuery;
-    addClass(className: string): JQuery;
-    removeClass(className: string): JQuery;
-    append(el: HTMLElement): JQuery;
-    val(): string;
-    val(value: string): JQuery;
-    attr(attrName: string): string;
-}
-
-declare var $: {
-    (el: HTMLElement): JQuery;
-    (selector: string): JQuery;
-    (readyCallback: () => void ): JQuery;
-    (getJson: () => any): function;
-};
-
-declare var _: {
-    each<T, U>(arr: T[], f: (elem: T) => U): U[];
-    delay(f: Function, wait: number, ...arguments: any[]): number;
-    template(template: string): (model: any) => string;
-    bindAll(object: any, ...methodNames: string[]): void;
-};
-
-var loadCreatures = function(containers, creatures){
-	if(creatures.length){
-		creatures.forEach(function(creature, index){
-			containers.append("<p creature-index='" + index + "'>" + creature.Name + "</p>");
-		});
-	}
-}
-
-var addCreature = function(){
-	var creature = creatures[$(this).attr('creature-index')];
-	encounter.addCreature(creature);
-}
-
-var initialize = function() {
-	$.getJSON('creatures.json', function(json){
-    	creatures = json;
-    	loadCreatures($('.creatures'), creatures);
-    	$('.creatures p').click(addCreature);
-    });
-}
+/// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/knockout/knockout.d.ts" />
 
 class Encounter {
-  creatures: Creature[]
-  addCreature = function(creatureJson){
+  creatures: StatBlock[]
+  addCreature(creatureJson: StatBlock){
     console.log("adding %O", creatureJson);
     var encounterIndex = this.creatures.push(creatureJson) - 1;
     var creature = new Creature(creatureJson);
-    newElement.data(creature)
   }
-  getCreatures = function(filter){
+  getCreatures(filter: (StatBlock) => boolean): StatBlock[]{
     if(typeof filter === 'function'){
       return this.creatures.filter(filter);
     }
@@ -66,14 +16,31 @@ class Encounter {
   };
 };
 
+interface IHaveValue{
+  Value: number;
+}
+interface IHaveAttributes{
+  Str: number;
+  Dex: number;
+  Con: number;
+  Cha: number;
+  Int: number;
+  Wis: number;
+}
+
+interface StatBlock{
+  Name: string;
+  HP: IHaveValue;
+  Attributes: IHaveAttributes;
+}
 
 class Creature{
   Name: string;
   MaxHP: number;
   CurrentHP: number;
   InitiativeModifier: number;
-  
-  constructor(creatureJson){
+  StatBlock: StatBlock;
+  constructor(creatureJson: StatBlock){
     if(!creatureJson){
       throw "Couldn't create Creature- no Json passed in.";
     }
@@ -92,6 +59,26 @@ class Creature{
 
 var encounter = new Encounter();
 
+var loadCreatures = function(containers, creatures){
+	if(creatures.length){
+		creatures.forEach(function(creature, index){
+			containers.append("<p creature-index='" + index + "'>" + creature.Name + "</p>");
+		});
+	}
+}
+
+var creatures;
+
+var addCreature = function(){
+	var creature = creatures[$(this).attr('creature-index')];
+	encounter.addCreature(creature);
+}
+
+var initialize = function() {
+	
+}
+
+
 var viewModel = {
                   encounter: ko.observable(encounter)
                 };
@@ -99,5 +86,10 @@ var viewModel = {
 
 
 $(() => {
+    $.getJSON('creatures.json', function(json){
+    	creatures = json;
+    	loadCreatures($('.creatures'), creatures);
+    	$('.creatures p').click(addCreature);
+    });
     ko.applyBindings(viewModel);
 });
