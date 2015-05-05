@@ -2,17 +2,17 @@
 /// <reference path="typings/knockout/knockout.d.ts" />
 var Encounter = (function () {
     function Encounter() {
+        this.creatures = ko.observableArray();
     }
     Encounter.prototype.addCreature = function (creatureJson) {
         console.log("adding %O", creatureJson);
-        var encounterIndex = this.creatures.push(creatureJson) - 1;
-        var creature = new Creature(creatureJson);
+        this.creatures.push(new Creature(creatureJson));
     };
     Encounter.prototype.getCreatures = function (filter) {
         if (typeof filter === 'function') {
-            return this.creatures.filter(filter);
+            return this.creatures().filter(filter);
         }
-        return this.creatures;
+        return this.creatures();
     };
     ;
     return Encounter;
@@ -33,15 +33,19 @@ var Creature = (function () {
     };
     return Creature;
 })();
-var viewModel = {
-    AddCreature: function (data) {
-        console.log(data);
-        this.Encounter().addCreature(data);
-    },
-    encounter: ko.observable(new Encounter()),
-    creatures: ko.observableArray()
-};
+var ViewModel = (function () {
+    function ViewModel() {
+        var self = this;
+        this.encounter = ko.observable(new Encounter());
+        this.creatures = ko.observableArray();
+        this.AddCreature = function (data) {
+            self.encounter().addCreature(data);
+        };
+    }
+    return ViewModel;
+})();
 $(function () {
+    var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function (json) {
         viewModel.creatures(json);

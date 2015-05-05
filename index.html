@@ -10,11 +10,12 @@
   <body>
   Creatures
   <div class="creatures" data-bind="foreach: creatures">
-  <p data-bind="text: Name; click: $root.AddCreature;"></p>
+  <p data-bind="text: Name, click: $root.AddCreature;"></p>
   </div>
   
   Tracker
-  <div class="encounter" data-bind="foreach: encounter.creatures">
+  <div class="encounter" data-bind="foreach: encounter().creatures">
+    <p data-bind="text: Name"></p>
   </div>
   </body>
 </html>

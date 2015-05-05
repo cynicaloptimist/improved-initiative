@@ -2,17 +2,19 @@
 /// <reference path="typings/knockout/knockout.d.ts" />
 
 class Encounter {
-  creatures: StatBlock[]
+  constructor(){
+    this.creatures = ko.observableArray<Creature>(); 
+  }
+  creatures: KnockoutObservableArray<Creature>;
   addCreature(creatureJson: StatBlock){
     console.log("adding %O", creatureJson);
-    var encounterIndex = this.creatures.push(creatureJson) - 1;
-    var creature = new Creature(creatureJson);
+    this.creatures.push(new Creature(creatureJson));
   }
-  getCreatures(filter: (StatBlock) => boolean): StatBlock[]{
+  getCreatures(filter: (Creature) => boolean): Creature[]{
     if(typeof filter === 'function'){
-      return this.creatures.filter(filter);
+      return this.creatures().filter(filter);
     }
-    return this.creatures;
+    return this.creatures();
   };
 };
 
@@ -58,17 +60,22 @@ class Creature{
   }
 }
 
-var viewModel = 
-{
-  AddCreature: function(data){
-    console.log(data);
-    this.Encounter().addCreature(data);
-  },
-  encounter: ko.observable<Encounter>(new Encounter()),
-  creatures: ko.observableArray<Creature>()
-};
+class ViewModel{
+  constructor(){
+    var self = this;
+    this.encounter = ko.observable<Encounter>(new Encounter());
+    this.creatures = ko.observableArray<Creature>();
+    this.AddCreature = function (data: StatBlock){
+      self.encounter().addCreature(data);
+    }
+  }
+  AddCreature: (StatBlock) => void;
+  encounter: KnockoutObservable<Encounter>;
+  creatures: KnockoutObservableArray<Creature>;
+}
 
 $(() => {
+    var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function(json){
     	viewModel.creatures(json);
