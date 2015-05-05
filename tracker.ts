@@ -19,6 +19,7 @@ class Encounter {
 interface IHaveValue{
   Value: number;
 }
+
 interface IHaveAttributes{
   Str: number;
   Dex: number;
@@ -51,45 +52,25 @@ class Creature{
     this.InitiativeModifier = this.CalculateModifier(creatureJson.Attributes.Dex);
   }
   
-  CalculateModifier = function(attribute)
+  CalculateModifier(attribute: number)
   {
     return Math.floor((attribute - 10) / 2)
   }
 }
 
-var encounter = new Encounter();
-
-var loadCreatures = function(containers, creatures){
-	if(creatures.length){
-		creatures.forEach(function(creature, index){
-			containers.append("<p creature-index='" + index + "'>" + creature.Name + "</p>");
-		});
-	}
-}
-
-var creatures;
-
-var addCreature = function(){
-	var creature = creatures[$(this).attr('creature-index')];
-	encounter.addCreature(creature);
-}
-
-var initialize = function() {
-	
-}
-
-
-var viewModel = {
-                  encounter: ko.observable(encounter)
-                };
-
-
+var viewModel = 
+{
+  AddCreature: function(data){
+    console.log(data);
+    this.Encounter().addCreature(data);
+  },
+  encounter: ko.observable<Encounter>(new Encounter()),
+  creatures: ko.observableArray<Creature>()
+};
 
 $(() => {
-    $.getJSON('creatures.json', function(json){
-    	creatures = json;
-    	loadCreatures($('.creatures'), creatures);
-    	$('.creatures p').click(addCreature);
-    });
     ko.applyBindings(viewModel);
+    $.getJSON('creatures.json', function(json){
+    	viewModel.creatures(json);
+    });
 });
