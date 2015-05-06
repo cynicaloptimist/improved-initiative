@@ -1,5 +1,6 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+/// <reference path="typings/mousetrap/mousetrap.d.ts" />
 var Rules = (function () {
     function Rules() {
     }
@@ -69,8 +70,13 @@ var ViewModel = (function () {
     }
     return ViewModel;
 })();
+function RegisterKeybindings(viewModel) {
+    Mousetrap.bind('j', viewModel.encounter().selectNextCombatant);
+    Mousetrap.bind('k', viewModel.encounter().selectPreviousCombatant);
+}
 $(function () {
     var viewModel = new ViewModel();
+    RegisterKeybindings(viewModel);
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function (json) {
         viewModel.creatures(json);

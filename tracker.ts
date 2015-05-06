@@ -1,5 +1,7 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+/// <reference path="typings/mousetrap/mousetrap.d.ts" />
+
 class Rules {
   CalculateModifier(attribute: number)
   {
@@ -16,6 +18,7 @@ class Encounter {
     this.creatures = ko.observableArray<Creature>(); 
     this.selectedCreature = ko.observable<Creature>();
   }
+  
   creatures: KnockoutObservableArray<Creature>;
   selectedCreature: KnockoutObservable<Creature>;
   
@@ -103,8 +106,14 @@ class ViewModel{
   creatures: KnockoutObservableArray<Creature>;
 }
 
+function RegisterKeybindings(viewModel: ViewModel){
+  Mousetrap.bind('j',viewModel.encounter().selectNextCombatant);
+  Mousetrap.bind('k',viewModel.encounter().selectPreviousCombatant);
+}
+
 $(() => {
     var viewModel = new ViewModel();
+    RegisterKeybindings(viewModel);
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function(json){
     	viewModel.creatures(json);
