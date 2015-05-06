@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <script type="text/javascript" src="lib/jquery-2.1.3.js"></script>
+  <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
   <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
     
   <script type="text/javascript" src="tracker.js"></script>
   
-  <style type="text/css" src="tracker.css"></style>
+  <link rel="stylesheet" href="tracker.css">
   </head>
   <body>
   <h1>Creatures</h1>
-  <div class="creatures" data-bind="foreach: creatures">
-  <p data-bind="text: Name, click: $root.AddCreature;"></p>
-  </div>
+  <ul class="creatures" data-bind="foreach: creatures">
+  <li data-bind="text: Name, click: $root.AddCreature;"></li>
+  </ul>
   
   <h1>Tracker</h1>
-  <div class="encounter" data-bind="foreach: encounter().creatures">
-    <p data-bind="text: Name, css: { selected: $parent().selectedCreature() == $data }, click: $parent().selectedCreature"></p>
+  <div class="encounter" data-bind="with: encounter">
+    <ul class="combatants" data-bind="foreach: creatures">
+      <li data-bind="css: { selected: $parent.selectedCreature() == $data }, click: $parent.selectedCreature">
+        <span data-bind="text: Name" class="name"></span>
+        HP: <span data-bind="text: CurrentHP" class="current-hp"></span> / 
+        <span data-bind="text: MaxHP" class="max-hp"></span>
+      </li>
+    </ul>
+    <p data-bind="click: selectPreviousCombatant">Up</p>
+    <p data-bind="click: selectNextCombatant">Down</p>
   </div>
   </body>
 </html>

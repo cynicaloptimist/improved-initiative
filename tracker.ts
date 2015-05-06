@@ -18,17 +18,37 @@ class Encounter {
   }
   creatures: KnockoutObservableArray<Creature>;
   selectedCreature: KnockoutObservable<Creature>;
+  
   addCreature(creatureJson: StatBlock){
     console.log("adding %O", creatureJson);
     this.creatures.push(new Creature(creatureJson));
   }
+  
   getCreatures(filter: (Creature) => boolean): Creature[]{
     if(typeof filter === 'function'){
       return this.creatures().filter(filter);
     }
     return this.creatures();
-  };
-};
+  }
+  
+  relativeNavigateFocus(offset: number){
+    var newIndex = this.creatures.indexOf(this.selectedCreature()) + offset;
+    if(newIndex < 0){ 
+      newIndex = 0;
+    } else if(newIndex >= this.creatures().length) { 
+      newIndex = this.creatures().length - 1; 
+    }
+    this.selectedCreature(this.creatures()[newIndex]);
+  }
+  
+  selectPreviousCombatant(){
+    this.relativeNavigateFocus(-1);
+  }
+  
+  selectNextCombatant(){
+    this.relativeNavigateFocus(1);
+  }
+}
 
 interface IHaveValue{
   Value: number;

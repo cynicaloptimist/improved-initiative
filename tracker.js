@@ -26,10 +26,24 @@ var Encounter = (function () {
         }
         return this.creatures();
     };
-    ;
+    Encounter.prototype.relativeNavigateFocus = function (offset) {
+        var newIndex = this.creatures.indexOf(this.selectedCreature()) + offset;
+        if (newIndex < 0) {
+            newIndex = 0;
+        }
+        else if (newIndex >= this.creatures().length) {
+            newIndex = this.creatures().length - 1;
+        }
+        this.selectedCreature(this.creatures()[newIndex]);
+    };
+    Encounter.prototype.selectPreviousCombatant = function () {
+        this.relativeNavigateFocus(-1);
+    };
+    Encounter.prototype.selectNextCombatant = function () {
+        this.relativeNavigateFocus(1);
+    };
     return Encounter;
 })();
-;
 var Creature = (function () {
     function Creature(creatureJson, rules) {
         if (!creatureJson) {

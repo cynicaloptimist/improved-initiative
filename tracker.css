@@ -1,3 +1,7 @@
+.encounter {
+	border: 1px solid black;
+}
+
 .encounter .selected {
 	border: 1px solid black;
 }
