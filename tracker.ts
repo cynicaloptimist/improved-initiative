@@ -2,66 +2,6 @@
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
-class Rules {
-  CalculateModifier(attribute: number)
-  {
-    return Math.floor((attribute - 10) / 2);
-  }
-  AbilityCheck(mods: number[])
-  {
-    return Math.ceil(Math.random() * 20) + mods.reduce((p,c) => p + c);
-  }
-}
-
-class Encounter {
-  constructor(){
-    this.creatures = ko.observableArray<Creature>(); 
-    this.selectedCreature = ko.observable<Creature>();
-  }
-  
-  creatures: KnockoutObservableArray<Creature>;
-  selectedCreature: KnockoutObservable<Creature>;
-  
-  addCreature(creatureJson: StatBlock){
-    console.log("adding %O", creatureJson);
-    this.creatures.push(new Creature(creatureJson, this));
-  }
-  
-  sortByInitiative(){
-    this.creatures.sort((l,r) => r.Initiative() - l.Initiative());
-  }
-  
-  relativeNavigateFocus(offset: number){
-    var newIndex = this.creatures.indexOf(this.selectedCreature()) + offset;
-    if(newIndex < 0){ 
-      newIndex = 0;
-    } else if(newIndex >= this.creatures().length) { 
-      newIndex = this.creatures().length - 1; 
-    }
-    this.selectedCreature(this.creatures()[newIndex]);
-  }
-  
-  selectPreviousCombatant(){
-    this.relativeNavigateFocus(-1);
-  }
-  
-  selectNextCombatant(){
-    this.relativeNavigateFocus(1);
-  }
-  
-  focusSelectedCreatureHP(){
-    if(this.selectedCreature()){
-      this.selectedCreature().FocusHP(true);
-    }
-    return false;
-  }
-  
-  RollInitiative(){
-    this.creatures().forEach(c => { c.RollInitiative(); })
-    this.sortByInitiative();
-  }
-}
-
 interface IHaveValue{
   Value: number;
 }
@@ -81,6 +21,100 @@ interface StatBlock{
   Attributes: IHaveAttributes;
 }
 
+interface Rules{
+  CalculateModifier: (attribute:number) => number;
+  AbilityCheck: (mods : number[]) => number;
+}
+
+class DefaultRules implements Rules {
+  CalculateModifier = (attribute: number) =>
+  {
+    return Math.floor((attribute - 10) / 2);
+  }
+  AbilityCheck = (mods: number[]) => 
+  {
+    return Math.ceil(Math.random() * 20) + mods.reduce((p,c) => p + c);
+  }
+}
+
+class Encounter {
+  constructor(rules?: Rules){
+    this.creatures = ko.observableArray<Creature>(); 
+    this.SelectedCreature = ko.observable<Creature>();
+    this.Rules = rules || new DefaultRules();
+  }
+  
+  creatures: KnockoutObservableArray<Creature>;
+  SelectedCreature: KnockoutObservable<Creature>;
+  Rules: Rules;
+  
+  private sortByInitiative = () => {
+    this.creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || (r.InitiativeModifier - l.InitiativeModifier));
+  }
+  
+  private relativeNavigateFocus = (offset: number) => 
+  {
+    var newIndex = this.creatures.indexOf(this.SelectedCreature()) + offset;
+    if(newIndex < 0){ 
+      newIndex = 0;
+    } else if(newIndex >= this.creatures().length) { 
+      newIndex = this.creatures().length - 1; 
+    }
+    this.SelectedCreature(this.creatures()[newIndex]);
+  }
+  
+  private moveCreature = (creature: Creature, index: number) => {
+    this.creatures.remove(creature);
+    this.creatures.splice(index,0,creature);
+  }
+  
+  AddCreature = (creatureJson: StatBlock) => 
+  {
+    console.log("adding %O", creatureJson);
+    this.creatures.push(new Creature(creatureJson, this));
+  };
+  
+  SelectPreviousCombatant = () =>
+  {
+    this.relativeNavigateFocus(-1);
+  }
+  
+  SelectNextCombatant = () =>
+  {
+    this.relativeNavigateFocus(1);
+  }
+  
+  FocusSelectedCreatureHP = () =>
+  {
+    if(this.SelectedCreature()){
+      this.SelectedCreature().FocusHP(true);
+    }
+    return false;
+  }
+  
+  MoveSelectedCreatureUp = () =>
+  {
+    var creature = this.SelectedCreature();
+    if(creature){
+      this.moveCreature(creature, this.creatures.indexOf(creature) - 1);
+    }
+  }
+  
+  MoveSelectedCreatureDown = () =>
+  {
+    var creature = this.SelectedCreature();
+    if(creature){
+      this.moveCreature(creature, this.creatures.indexOf(creature) + 1);
+    }
+  }
+  
+  RollInitiative = () =>
+  {
+    this.creatures().forEach(c => { c.RollInitiative(); })
+    this.sortByInitiative();
+  }
+}
+
 class Creature{
   Name: string;
   MaxHP: number;
@@ -90,35 +124,33 @@ class Creature{
   Initiative: KnockoutObservable<number>;
   StatBlock: StatBlock;
   Encounter: Encounter;
-  Rules: Rules;
   FocusHP: KnockoutObservable<boolean>;
   constructor(creatureJson: StatBlock, encounter: Encounter, rules?: Rules){
     if(!creatureJson){
       throw "Couldn't create Creature- no Json passed in.";
     }
     this.Encounter = encounter;
-    this.Rules = rules || new Rules();
     this.Name = creatureJson.Name;
     this.MaxHP = creatureJson.HP.Value;
     this.CurrentHP = ko.observable(creatureJson.HP.Value);
     this.HPChange = ko.observable(null);
-    this.InitiativeModifier = this.Rules.CalculateModifier(creatureJson.Attributes.Dex);
+    this.InitiativeModifier = this.Encounter.Rules.CalculateModifier(creatureJson.Attributes.Dex);
     this.Initiative = ko.observable(0);
     this.StatBlock = creatureJson;
     this.FocusHP = ko.observable(false);
   }
-  CommitHP(){
+  CommitHP = () => {
     this.CurrentHP(this.CurrentHP() - this.HPChange());
     this.HPChange(null);
     this.FocusHP(false);
   }
-  GetHPColor(){
+  GetHPColor = () => {
     var green = Math.floor((this.CurrentHP() / this.MaxHP) * 220);
     var red = Math.floor((this.MaxHP - this.CurrentHP()) / this.MaxHP * 255);
     return "rgb(" + red + "," + green + ",0)";
   }
-  RollInitiative(){
-    this.Initiative(this.Rules.AbilityCheck([this.InitiativeModifier]));
+  RollInitiative = () => {
+    this.Initiative(this.Encounter.Rules.AbilityCheck([this.InitiativeModifier]));
   }
 }
 
@@ -133,9 +165,10 @@ class ViewModel{
 }
 
 function RegisterKeybindings(viewModel: ViewModel){
-  Mousetrap.bind('j',viewModel.encounter().selectNextCombatant.bind(viewModel.encounter()));
-  Mousetrap.bind('k',viewModel.encounter().selectPreviousCombatant.bind(viewModel.encounter()));
-  Mousetrap.bind('t',viewModel.encounter().focusSelectedCreatureHP.bind(viewModel.encounter()));
+  Mousetrap.bind('j',viewModel.encounter().SelectNextCombatant);
+  Mousetrap.bind('k',viewModel.encounter().SelectPreviousCombatant);
+  Mousetrap.bind('t',viewModel.encounter().FocusSelectedCreatureHP);
+  Mousetrap.bind('alt+r',viewModel.encounter().RollInitiative)
 }
 
 $(() => {

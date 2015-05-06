@@ -1,9 +1,15 @@
 * {
 	cursor: default;
 	border: 1px solid transparent;
+	font-family: sans-serif;
 }
+
 input {
 	cursor: auto;
+}
+
+h1 {
+	font-size:large;
 }
 
 .encounter {
@@ -12,6 +18,18 @@ input {
 
 .encounter .selected {
 	border: 1px solid black;
+}
+
+.creature div {
+	display: inline-block;
+}
+
+.creature .initiative {
+	width:20px;
+}
+
+.creature .name {
+	width:150px;
 }
 
 .hp {

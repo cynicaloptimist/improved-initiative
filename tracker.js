@@ -1,86 +1,104 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
-var Rules = (function () {
-    function Rules() {
+var DefaultRules = (function () {
+    function DefaultRules() {
+        this.CalculateModifier = function (attribute) {
+            return Math.floor((attribute - 10) / 2);
+        };
+        this.AbilityCheck = function (mods) {
+            return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
+        };
     }
-    Rules.prototype.CalculateModifier = function (attribute) {
-        return Math.floor((attribute - 10) / 2);
-    };
-    Rules.prototype.AbilityCheck = function (mods) {
-        return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
-    };
-    return Rules;
+    return DefaultRules;
 })();
 var Encounter = (function () {
-    function Encounter() {
+    function Encounter(rules) {
+        var _this = this;
+        this.sortByInitiative = function () {
+            _this.creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) || (r.InitiativeModifier - l.InitiativeModifier); });
+        };
+        this.relativeNavigateFocus = function (offset) {
+            var newIndex = _this.creatures.indexOf(_this.SelectedCreature()) + offset;
+            if (newIndex < 0) {
+                newIndex = 0;
+            }
+            else if (newIndex >= _this.creatures().length) {
+                newIndex = _this.creatures().length - 1;
+            }
+            _this.SelectedCreature(_this.creatures()[newIndex]);
+        };
+        this.moveCreature = function (creature, index) {
+            _this.creatures.remove(creature);
+            _this.creatures.splice(index, 0, creature);
+        };
+        this.AddCreature = function (creatureJson) {
+            console.log("adding %O", creatureJson);
+            _this.creatures.push(new Creature(creatureJson, _this));
+        };
+        this.SelectPreviousCombatant = function () {
+            _this.relativeNavigateFocus(-1);
+        };
+        this.SelectNextCombatant = function () {
+            _this.relativeNavigateFocus(1);
+        };
+        this.FocusSelectedCreatureHP = function () {
+            if (_this.SelectedCreature()) {
+                _this.SelectedCreature().FocusHP(true);
+            }
+            return false;
+        };
+        this.MoveSelectedCreatureUp = function () {
+            var creature = _this.SelectedCreature();
+            if (creature) {
+                _this.moveCreature(creature, _this.creatures.indexOf(creature) - 1);
+            }
+        };
+        this.MoveSelectedCreatureDown = function () {
+            var creature = _this.SelectedCreature();
+            if (creature) {
+                _this.moveCreature(creature, _this.creatures.indexOf(creature) + 1);
+            }
+        };
+        this.RollInitiative = function () {
+            _this.creatures().forEach(function (c) { c.RollInitiative(); });
+            _this.sortByInitiative();
+        };
         this.creatures = ko.observableArray();
-        this.selectedCreature = ko.observable();
+        this.SelectedCreature = ko.observable();
+        this.Rules = rules || new DefaultRules();
     }
-    Encounter.prototype.addCreature = function (creatureJson) {
-        console.log("adding %O", creatureJson);
-        this.creatures.push(new Creature(creatureJson, this));
-    };
-    Encounter.prototype.sortByInitiative = function () {
-        this.creatures.sort(function (l, r) { return r.Initiative() - l.Initiative(); });
-    };
-    Encounter.prototype.relativeNavigateFocus = function (offset) {
-        var newIndex = this.creatures.indexOf(this.selectedCreature()) + offset;
-        if (newIndex < 0) {
-            newIndex = 0;
-        }
-        else if (newIndex >= this.creatures().length) {
-            newIndex = this.creatures().length - 1;
-        }
-        this.selectedCreature(this.creatures()[newIndex]);
-    };
-    Encounter.prototype.selectPreviousCombatant = function () {
-        this.relativeNavigateFocus(-1);
-    };
-    Encounter.prototype.selectNextCombatant = function () {
-        this.relativeNavigateFocus(1);
-    };
-    Encounter.prototype.focusSelectedCreatureHP = function () {
-        if (this.selectedCreature()) {
-            this.selectedCreature().FocusHP(true);
-        }
-        return false;
-    };
-    Encounter.prototype.RollInitiative = function () {
-        this.creatures().forEach(function (c) { c.RollInitiative(); });
-        this.sortByInitiative();
-    };
     return Encounter;
 })();
 var Creature = (function () {
     function Creature(creatureJson, encounter, rules) {
+        var _this = this;
+        this.CommitHP = function () {
+            _this.CurrentHP(_this.CurrentHP() - _this.HPChange());
+            _this.HPChange(null);
+            _this.FocusHP(false);
+        };
+        this.GetHPColor = function () {
+            var green = Math.floor((_this.CurrentHP() / _this.MaxHP) * 220);
+            var red = Math.floor((_this.MaxHP - _this.CurrentHP()) / _this.MaxHP * 255);
+            return "rgb(" + red + "," + green + ",0)";
+        };
+        this.RollInitiative = function () {
+            _this.Initiative(_this.Encounter.Rules.AbilityCheck([_this.InitiativeModifier]));
+        };
         if (!creatureJson) {
             throw "Couldn't create Creature- no Json passed in.";
         }
         this.Encounter = encounter;
-        this.Rules = rules || new Rules();
         this.Name = creatureJson.Name;
         this.MaxHP = creatureJson.HP.Value;
         this.CurrentHP = ko.observable(creatureJson.HP.Value);
         this.HPChange = ko.observable(null);
-        this.InitiativeModifier = this.Rules.CalculateModifier(creatureJson.Attributes.Dex);
+        this.InitiativeModifier = this.Encounter.Rules.CalculateModifier(creatureJson.Attributes.Dex);
         this.Initiative = ko.observable(0);
         this.StatBlock = creatureJson;
         this.FocusHP = ko.observable(false);
     }
-    Creature.prototype.CommitHP = function () {
-        this.CurrentHP(this.CurrentHP() - this.HPChange());
-        this.HPChange(null);
-        this.FocusHP(false);
-    };
-    Creature.prototype.GetHPColor = function () {
-        var green = Math.floor((this.CurrentHP() / this.MaxHP) * 220);
-        var red = Math.floor((this.MaxHP - this.CurrentHP()) / this.MaxHP * 255);
-        return "rgb(" + red + "," + green + ",0)";
-    };
-    Creature.prototype.RollInitiative = function () {
-        this.Initiative(this.Rules.AbilityCheck([this.InitiativeModifier]));
-    };
     return Creature;
 })();
 var ViewModel = (function () {
@@ -92,9 +110,10 @@ var ViewModel = (function () {
     return ViewModel;
 })();
 function RegisterKeybindings(viewModel) {
-    Mousetrap.bind('j', viewModel.encounter().selectNextCombatant.bind(viewModel.encounter()));
-    Mousetrap.bind('k', viewModel.encounter().selectPreviousCombatant.bind(viewModel.encounter()));
-    Mousetrap.bind('t', viewModel.encounter().focusSelectedCreatureHP.bind(viewModel.encounter()));
+    Mousetrap.bind('j', viewModel.encounter().SelectNextCombatant);
+    Mousetrap.bind('k', viewModel.encounter().SelectPreviousCombatant);
+    Mousetrap.bind('t', viewModel.encounter().FocusSelectedCreatureHP);
+    Mousetrap.bind('alt+r', viewModel.encounter().RollInitiative);
 }
 $(function () {
     var viewModel = new ViewModel();
