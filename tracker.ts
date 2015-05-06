@@ -1,11 +1,23 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+class Rules {
+  CalculateModifier(attribute: number)
+  {
+    return Math.floor((attribute - 10) / 2);
+  }
+  AbilityCheck(mods: number[])
+  {
+    return Math.ceil(Math.random() * 20) + mods.reduce((p,c) => p + c);
+  }
+}
 
 class Encounter {
   constructor(){
     this.creatures = ko.observableArray<Creature>(); 
+    this.selectedCreature = ko.observable<Creature>();
   }
   creatures: KnockoutObservableArray<Creature>;
+  selectedCreature: KnockoutObservable<Creature>;
   addCreature(creatureJson: StatBlock){
     console.log("adding %O", creatureJson);
     this.creatures.push(new Creature(creatureJson));
@@ -43,20 +55,17 @@ class Creature{
   CurrentHP: number;
   InitiativeModifier: number;
   StatBlock: StatBlock;
-  constructor(creatureJson: StatBlock){
+  Rules: Rules;
+  constructor(creatureJson: StatBlock, rules?: Rules){
     if(!creatureJson){
       throw "Couldn't create Creature- no Json passed in.";
     }
+    this.Rules = rules || new Rules();
     this.Name = creatureJson.Name;
     this.MaxHP = creatureJson.HP.Value;
     this.CurrentHP = creatureJson.HP.Value;
-  
-    this.InitiativeModifier = this.CalculateModifier(creatureJson.Attributes.Dex);
-  }
-  
-  CalculateModifier(attribute: number)
-  {
-    return Math.floor((attribute - 10) / 2)
+    this.InitiativeModifier = this.Rules.CalculateModifier(creatureJson.Attributes.Dex);
+    this.StatBlock = creatureJson;
   }
 }
 

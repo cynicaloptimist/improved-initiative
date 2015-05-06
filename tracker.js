@@ -1,8 +1,20 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+var Rules = (function () {
+    function Rules() {
+    }
+    Rules.prototype.CalculateModifier = function (attribute) {
+        return Math.floor((attribute - 10) / 2);
+    };
+    Rules.prototype.AbilityCheck = function (mods) {
+        return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
+    };
+    return Rules;
+})();
 var Encounter = (function () {
     function Encounter() {
         this.creatures = ko.observableArray();
+        this.selectedCreature = ko.observable();
     }
     Encounter.prototype.addCreature = function (creatureJson) {
         console.log("adding %O", creatureJson);
@@ -19,18 +31,17 @@ var Encounter = (function () {
 })();
 ;
 var Creature = (function () {
-    function Creature(creatureJson) {
+    function Creature(creatureJson, rules) {
         if (!creatureJson) {
             throw "Couldn't create Creature- no Json passed in.";
         }
+        this.Rules = rules || new Rules();
         this.Name = creatureJson.Name;
         this.MaxHP = creatureJson.HP.Value;
         this.CurrentHP = creatureJson.HP.Value;
-        this.InitiativeModifier = this.CalculateModifier(creatureJson.Attributes.Dex);
+        this.InitiativeModifier = this.Rules.CalculateModifier(creatureJson.Attributes.Dex);
+        this.StatBlock = creatureJson;
     }
-    Creature.prototype.CalculateModifier = function (attribute) {
-        return Math.floor((attribute - 10) / 2);
-    };
     return Creature;
 })();
 var ViewModel = (function () {
