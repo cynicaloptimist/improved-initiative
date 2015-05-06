@@ -119,8 +119,8 @@ function RegisterKeybindings(viewModel) {
     Mousetrap.bind('k', viewModel.encounter().SelectPreviousCombatant);
     Mousetrap.bind('t', viewModel.encounter().FocusSelectedCreatureHP);
     Mousetrap.bind('alt+r', viewModel.encounter().RollInitiative);
-    Mousetrap.bind('alt+j', viewModel.encounter().MoveSelectedCreatureUp);
-    Mousetrap.bind('alt+k', viewModel.encounter().MoveSelectedCreatureDown);
+    Mousetrap.bind('alt+j', viewModel.encounter().MoveSelectedCreatureDown);
+    Mousetrap.bind('alt+k', viewModel.encounter().MoveSelectedCreatureUp);
 }
 $(function () {
     var viewModel = new ViewModel();

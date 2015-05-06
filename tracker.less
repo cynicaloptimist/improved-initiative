@@ -14,49 +14,50 @@ h1 {
 
 .encounter {
 	border: 1px solid black;
-}
-
-.encounter .selected {
-	border: 1px solid black;
-}
-
-.creature div {
-	display: inline-block;
-}
-
-.creature .initiative {
-	width:20px;
-}
-
-.creature .name {
-	width:150px;
-}
-
-.hp {
-	position:relative;
-	display:inline-block;
-}
-
-.hp form {
-	display:inline-block;
-}
-
-.hp .current-hp::before{
-	content: 'HP: ';
-}
-
-.hp .max-hp::before {
-	content: '/';
-}
-
-.hp input {
-	position:absolute;
-	border:3px solid red;
-	left: 30px;
-	top: -23px;
-	width:20px;
-}
-
-.hp:hover{
-	border: 1px solid red;
+	
+	.creature {
+		&.selected {
+			border: 1px solid black;
+		}
+		
+		div {
+			display: inline-block;
+		}
+		
+		.initiative {
+			width:20px;
+		}
+		
+		.name {
+			width:150px;
+		}
+		
+		
+		.hp {
+			position:relative;
+			&:hover{
+				border: 1px solid red;
+			}
+		
+			form {
+				display:inline-block;
+			}
+			
+			.current-hp::before{
+				content: 'HP: ';
+			}
+			
+			.max-hp::before {
+				content: '/';
+			}
+			
+			input {
+				position:absolute;
+				border:3px solid red;
+				left: 30px;
+				top: -23px;
+				width:20px;
+			}
+		}
+	}
 }
