@@ -71,8 +71,8 @@ var ViewModel = (function () {
     return ViewModel;
 })();
 function RegisterKeybindings(viewModel) {
-    Mousetrap.bind('j', viewModel.encounter().selectNextCombatant);
-    Mousetrap.bind('k', viewModel.encounter().selectPreviousCombatant);
+    Mousetrap.bind('j', viewModel.encounter().selectNextCombatant.bind(viewModel.encounter()));
+    Mousetrap.bind('k', viewModel.encounter().selectPreviousCombatant.bind(viewModel.encounter()));
 }
 $(function () {
     var viewModel = new ViewModel();

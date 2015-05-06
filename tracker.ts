@@ -107,8 +107,8 @@ class ViewModel{
 }
 
 function RegisterKeybindings(viewModel: ViewModel){
-  Mousetrap.bind('j',viewModel.encounter().selectNextCombatant);
-  Mousetrap.bind('k',viewModel.encounter().selectPreviousCombatant);
+  Mousetrap.bind('j',viewModel.encounter().selectNextCombatant.bind(viewModel.encounter()));
+  Mousetrap.bind('k',viewModel.encounter().selectPreviousCombatant.bind(viewModel.encounter()));
 }
 
 $(() => {
