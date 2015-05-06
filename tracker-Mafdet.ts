@@ -27,10 +27,6 @@ class Encounter {
     this.creatures.push(new Creature(creatureJson, this));
   }
   
-  sortByInitiative(){
-    this.creatures.sort((l,r) => r.Initiative() - l.Initiative());
-  }
-  
   relativeNavigateFocus(offset: number){
     var newIndex = this.creatures.indexOf(this.selectedCreature()) + offset;
     if(newIndex < 0){ 
@@ -54,11 +50,6 @@ class Encounter {
       this.selectedCreature().FocusHP(true);
     }
     return false;
-  }
-  
-  RollInitiative(){
-    this.creatures().forEach(c => { c.RollInitiative(); })
-    this.sortByInitiative();
   }
 }
 
@@ -87,7 +78,6 @@ class Creature{
   CurrentHP: KnockoutObservable<number>;
   HPChange: KnockoutObservable<number>;
   InitiativeModifier: number;
-  Initiative: KnockoutObservable<number>;
   StatBlock: StatBlock;
   Encounter: Encounter;
   Rules: Rules;
@@ -103,7 +93,6 @@ class Creature{
     this.CurrentHP = ko.observable(creatureJson.HP.Value);
     this.HPChange = ko.observable(null);
     this.InitiativeModifier = this.Rules.CalculateModifier(creatureJson.Attributes.Dex);
-    this.Initiative = ko.observable(0);
     this.StatBlock = creatureJson;
     this.FocusHP = ko.observable(false);
   }
@@ -116,9 +105,6 @@ class Creature{
     var green = Math.floor((this.CurrentHP() / this.MaxHP) * 220);
     var red = Math.floor((this.MaxHP - this.CurrentHP()) / this.MaxHP * 255);
     return "rgb(" + red + "," + green + ",0)";
-  }
-  RollInitiative(){
-    this.Initiative(this.Rules.AbilityCheck([this.InitiativeModifier]));
   }
 }
 

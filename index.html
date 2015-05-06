@@ -12,18 +12,23 @@
   <body>
   <h1>Creatures</h1>
   <ul class="creatures" data-bind="foreach: creatures">
-  <li data-bind="text: Name, click: $root.AddCreature;"></li>
+  <li data-bind="text: Name, click: $root.encounter().addCreature.bind($root.encounter());"></li>
   </ul>
   
   <h1>Tracker</h1>
   <div class="encounter" data-bind="with: encounter">
     <ul class="combatants" data-bind="foreach: creatures">
       <li data-bind="css: { selected: $parent.selectedCreature() == $data }, click: $parent.selectedCreature">
+        <span data-bind="text: Initiative"></span>
         <span data-bind="text: Name" class="name"></span>
-        HP: <span data-bind="text: CurrentHP" class="current-hp"></span> / 
-        <span data-bind="text: MaxHP" class="max-hp"></span>
+        <div class="hp" data-bind="click: FocusHP">
+          HP: <span data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></span>
+              <form data-bind="submit: CommitHP"><input data-bind="value: HPChange, visible: FocusHP, hasFocus: FocusHP" /></form> / 
+              <span data-bind="text: MaxHP" class="max-hp"></span>
+        </div>
       </li>
     </ul>
+    <p data-bind="click: RollInitiative">Roll Initiative!</p>
     <p data-bind="click: selectPreviousCombatant">Up</p>
     <p data-bind="click: selectNextCombatant">Down</p>
   </div>

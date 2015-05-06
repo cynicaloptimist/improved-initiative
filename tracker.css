@@ -1,7 +1,36 @@
+* {
+	cursor: default;
+	border: 1px solid transparent;
+}
+input {
+	cursor: auto;
+}
+
 .encounter {
 	border: 1px solid black;
 }
 
 .encounter .selected {
 	border: 1px solid black;
+}
+
+.hp {
+	position:relative;
+	display:inline-block;
+}
+
+.hp form {
+	display:inline-block;
+}
+
+.hp input {
+	position:absolute;
+	border:3px solid red;
+	left: 30px;
+	top: -23px;
+	width:20px;
+}
+
+.hp:hover{
+	border: 1px solid red;
 }
