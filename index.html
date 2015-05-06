@@ -32,5 +32,8 @@
     <p data-bind="click: MoveSelectedCreatureUp">Up</p>
     <p data-bind="click: MoveSelectedCreatureDown">Down</p>
   </div>
+  
+  <h1>Selected Creature</h1>
+  <pre class="selected-creature" data-bind="text:encounter().SelectedCreatureStatblock()"></pre>
   </body>
 </html>

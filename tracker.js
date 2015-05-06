@@ -50,16 +50,21 @@ var Encounter = (function () {
         };
         this.MoveSelectedCreatureUp = function () {
             var creature = _this.SelectedCreature();
-            if (creature) {
-                _this.moveCreature(creature, _this.creatures.indexOf(creature) - 1);
+            var index = _this.creatures.indexOf(creature);
+            if (creature && index > 0) {
+                _this.moveCreature(creature, index - 1);
             }
         };
         this.MoveSelectedCreatureDown = function () {
             var creature = _this.SelectedCreature();
-            if (creature) {
-                _this.moveCreature(creature, _this.creatures.indexOf(creature) + 1);
+            var index = _this.creatures.indexOf(creature);
+            if (creature && index < _this.creatures().length - 1) {
+                _this.moveCreature(creature, index + 1);
             }
         };
+        this.SelectedCreatureStatblock = function () { return _this.SelectedCreature()
+            ? JSON.stringify(_this.SelectedCreature().StatBlock, null, '\t')
+            : ""; };
         this.RollInitiative = function () {
             _this.creatures().forEach(function (c) { c.RollInitiative(); });
             _this.sortByInitiative();
@@ -114,6 +119,8 @@ function RegisterKeybindings(viewModel) {
     Mousetrap.bind('k', viewModel.encounter().SelectPreviousCombatant);
     Mousetrap.bind('t', viewModel.encounter().FocusSelectedCreatureHP);
     Mousetrap.bind('alt+r', viewModel.encounter().RollInitiative);
+    Mousetrap.bind('alt+j', viewModel.encounter().MoveSelectedCreatureUp);
+    Mousetrap.bind('alt+k', viewModel.encounter().MoveSelectedCreatureDown);
 }
 $(function () {
     var viewModel = new ViewModel();

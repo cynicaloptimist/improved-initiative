@@ -63,7 +63,8 @@ class Encounter {
     this.SelectedCreature(this.creatures()[newIndex]);
   }
   
-  private moveCreature = (creature: Creature, index: number) => {
+  private moveCreature = (creature: Creature, index: number) => 
+  {
     this.creatures.remove(creature);
     this.creatures.splice(index,0,creature);
   }
@@ -72,7 +73,7 @@ class Encounter {
   {
     console.log("adding %O", creatureJson);
     this.creatures.push(new Creature(creatureJson, this));
-  };
+  }
   
   SelectPreviousCombatant = () =>
   {
@@ -95,18 +96,25 @@ class Encounter {
   MoveSelectedCreatureUp = () =>
   {
     var creature = this.SelectedCreature();
-    if(creature){
-      this.moveCreature(creature, this.creatures.indexOf(creature) - 1);
+    var index = this.creatures.indexOf(creature)
+    if(creature && index > 0){
+      this.moveCreature(creature, index - 1);
     }
   }
   
   MoveSelectedCreatureDown = () =>
   {
     var creature = this.SelectedCreature();
-    if(creature){
-      this.moveCreature(creature, this.creatures.indexOf(creature) + 1);
+    var index = this.creatures.indexOf(creature)
+    if(creature && index < this.creatures().length - 1){
+      this.moveCreature(creature, index + 1);
     }
   }
+  
+  SelectedCreatureStatblock = () => this.SelectedCreature() 
+                                  ? JSON.stringify(this.SelectedCreature().StatBlock, null, '\t') 
+                                  : ""
+  
   
   RollInitiative = () =>
   {
@@ -168,7 +176,9 @@ function RegisterKeybindings(viewModel: ViewModel){
   Mousetrap.bind('j',viewModel.encounter().SelectNextCombatant);
   Mousetrap.bind('k',viewModel.encounter().SelectPreviousCombatant);
   Mousetrap.bind('t',viewModel.encounter().FocusSelectedCreatureHP);
-  Mousetrap.bind('alt+r',viewModel.encounter().RollInitiative)
+  Mousetrap.bind('alt+r',viewModel.encounter().RollInitiative);
+  Mousetrap.bind('alt+j',viewModel.encounter().MoveSelectedCreatureUp);
+  Mousetrap.bind('alt+k',viewModel.encounter().MoveSelectedCreatureDown);
 }
 
 $(() => {
