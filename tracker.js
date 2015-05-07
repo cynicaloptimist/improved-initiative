@@ -6,9 +6,10 @@ var DefaultRules = (function () {
         this.CalculateModifier = function (attribute) {
             return Math.floor((attribute - 10) / 2);
         };
-        this.AbilityCheck = function (mods) {
+        this.Check = function (mods) {
             return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
         };
+        this.GroupSimilarCreatures = false;
     }
     return DefaultRules;
 })();
@@ -16,7 +17,8 @@ var Encounter = (function () {
     function Encounter(rules) {
         var _this = this;
         this.sortByInitiative = function () {
-            _this.creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) || (r.InitiativeModifier - l.InitiativeModifier); });
+            _this.creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
+                (r.InitiativeModifier - l.InitiativeModifier); });
         };
         this.relativeNavigateFocus = function (offset) {
             var newIndex = _this.creatures.indexOf(_this.SelectedCreature()) + offset;
@@ -66,7 +68,18 @@ var Encounter = (function () {
             ? JSON.stringify(_this.SelectedCreature().StatBlock, null, '\t')
             : ""; };
         this.RollInitiative = function () {
-            _this.creatures().forEach(function (c) { c.RollInitiative(); });
+            if (_this.Rules.GroupSimilarCreatures) {
+                var initiatives = [];
+                _this.creatures().forEach(function (c) {
+                    if (initiatives[c.Name] === undefined) {
+                        initiatives[c.Name] = c.RollInitiative();
+                    }
+                    c.Initiative(initiatives[c.Name]);
+                });
+            }
+            else {
+                _this.creatures().forEach(function (c) { c.RollInitiative(); });
+            }
             _this.sortByInitiative();
         };
         this.creatures = ko.observableArray();
@@ -96,7 +109,17 @@ var Creature = (function () {
             return "rgb(" + red + "," + green + ",0)";
         };
         this.RollInitiative = function () {
-            _this.Initiative(_this.Encounter.Rules.AbilityCheck([_this.InitiativeModifier]));
+            var roll = _this.Encounter.Rules.Check([_this.InitiativeModifier]);
+            _this.Initiative(roll);
+            return roll;
+        };
+        this.AbilityCheck = function (attribute, mods) {
+            var abilityScore = _this.StatBlock.Attributes[attribute];
+            if (abilityScore === undefined) {
+                throw "attribute " + attribute + "not on creatures " + _this.Alias();
+            }
+            mods.push(_this.Encounter.Rules.CalculateModifier(abilityScore));
+            return _this.Encounter.Rules.Check(mods);
         };
         if (!creatureJson) {
             throw "Couldn't create Creature- no Json passed in.";

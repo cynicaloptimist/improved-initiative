@@ -15,48 +15,55 @@ h1 {
 .encounter {
 	border: 1px solid black;
 	
-	.creature {
-		&.selected {
-			border: 1px solid black;
-		}
+	.combatants{
+		padding-left:0px;
 		
-		div {
-			display: inline-block;
-		}
-		
-		.initiative {
-			width:20px;
-		}
-		
-		.name {
-			width:150px;
-		}
-		
-		
-		.hp {
-			position:relative;
-			&:hover{
-				border: 1px solid red;
-			}
-		
-			form {
-				display:inline-block;
+		.creature {
+			list-style-position:inside;
+			padding-left:10px;
+			
+			&.selected {
+				border: 1px solid black;
 			}
 			
-			.current-hp::before{
-				content: 'HP: ';
+			div {
+				display: inline-block;
 			}
 			
-			.max-hp::before {
-				content: '/';
-			}
-			
-			input {
-				position:absolute;
-				border:3px solid red;
-				left: 30px;
-				top: -23px;
+			.initiative {
 				width:20px;
+			}
+			
+			.name {
+				width:150px;
+			}
+			
+			
+			.hp {
+				position:relative;
+				&:hover{
+					border: 1px solid red;
+				}
+			
+				form {
+					display:inline-block;
+				}
+				
+				.current-hp::before{
+					content: 'HP: ';
+				}
+				
+				.max-hp::before {
+					content: '/';
+				}
+				
+				input {
+					position:absolute;
+					border:3px solid red;
+					left: 30px;
+					top: -23px;
+					width:20px;
+				}
 			}
 		}
 	}

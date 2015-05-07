@@ -1,5 +1,6 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+/// <reference path="typings/knockout/bindingHandlers.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
 interface IHaveValue{
@@ -23,7 +24,8 @@ interface StatBlock{
 
 interface Rules{
   CalculateModifier: (attribute:number) => number;
-  AbilityCheck: (mods : number[]) => number;
+  Check: (mods : number[]) => number;
+  GroupSimilarCreatures: boolean;
 }
 
 class DefaultRules implements Rules {
@@ -31,10 +33,11 @@ class DefaultRules implements Rules {
   {
     return Math.floor((attribute - 10) / 2);
   }
-  AbilityCheck = (mods: number[]) => 
+  Check = (mods: number[]) => 
   {
     return Math.ceil(Math.random() * 20) + mods.reduce((p,c) => p + c);
   }
+  GroupSimilarCreatures = false;
 }
 
 class Encounter {
@@ -49,7 +52,8 @@ class Encounter {
   Rules: Rules;
   
   private sortByInitiative = () => {
-    this.creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || (r.InitiativeModifier - l.InitiativeModifier));
+    this.creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
+                                 (r.InitiativeModifier - l.InitiativeModifier));
   }
   
   private relativeNavigateFocus = (offset: number) => 
@@ -118,7 +122,21 @@ class Encounter {
   
   RollInitiative = () =>
   {
-    this.creatures().forEach(c => { c.RollInitiative(); })
+    if(this.Rules.GroupSimilarCreatures)
+    {
+      var initiatives = []
+      this.creatures().forEach(
+        c => {
+          if(initiatives[c.Name] === undefined){
+            initiatives[c.Name] = c.RollInitiative();
+          }
+          c.Initiative(initiatives[c.Name]);
+        }
+      )
+    } else {
+      this.creatures().forEach(c => { c.RollInitiative(); })
+    }
+    
     this.sortByInitiative();
   }
 }
@@ -170,7 +188,17 @@ class Creature{
     return "rgb(" + red + "," + green + ",0)";
   }
   RollInitiative = () => {
-    this.Initiative(this.Encounter.Rules.AbilityCheck([this.InitiativeModifier]));
+    var roll = this.Encounter.Rules.Check([this.InitiativeModifier]);
+    this.Initiative(roll);
+    return roll;
+  }
+  AbilityCheck = (attribute: string, mods: number[]) => {
+    var abilityScore = this.StatBlock.Attributes[attribute];
+    if(abilityScore === undefined){
+      throw "attribute " + attribute + "not on creatures " + this.Alias();
+    }
+    mods.push(this.Encounter.Rules.CalculateModifier(abilityScore));
+    return this.Encounter.Rules.Check(mods);
   }
 }
 
