@@ -24,7 +24,7 @@
     <ul class="combatants" data-bind="foreach: creatures">
       <li class="creature" data-bind="css: { selected: $parent.SelectedCreature() == $data }, click: $parent.SelectedCreature">
         <div data-bind="text: Initiative" class="initiative"></div>
-        <div data-bind="text: Name" class="name"></div>
+        <input data-bind="value: Alias()" class="name" />
         <div class="hp" data-bind="click: FocusHP">
         <div data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></div>
         <form data-bind="submit: CommitHP"><input data-bind="value: HPChange, visible: FocusHP, hasFocus: FocusHP" /></form>

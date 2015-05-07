@@ -125,6 +125,7 @@ class Encounter {
 
 class Creature{
   Name: string;
+  Alias: KnockoutObservable<string>;
   MaxHP: number;
   CurrentHP: KnockoutObservable<number>;
   HPChange: KnockoutObservable<number>;
@@ -139,6 +140,7 @@ class Creature{
     }
     this.Encounter = encounter;
     this.Name = creatureJson.Name;
+    this.Alias = this.setAlias(this.Name);
     this.MaxHP = creatureJson.HP.Value;
     this.CurrentHP = ko.observable(creatureJson.HP.Value);
     this.HPChange = ko.observable(null);
@@ -147,6 +149,16 @@ class Creature{
     this.StatBlock = creatureJson;
     this.FocusHP = ko.observable(false);
   }
+  
+  private setAlias = (name: string) => {
+    var others = this.Encounter.creatures().filter(c => c !== this && c.Name === name);
+    if(others.length === 1){
+      others[0].Alias(name + " 1")
+    }
+    
+    return ko.observable(name + " " + (others.length + 1));
+  }
+  
   CommitHP = () => {
     this.CurrentHP(this.CurrentHP() - this.HPChange());
     this.HPChange(null);

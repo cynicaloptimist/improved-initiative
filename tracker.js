@@ -78,6 +78,13 @@ var Encounter = (function () {
 var Creature = (function () {
     function Creature(creatureJson, encounter, rules) {
         var _this = this;
+        this.setAlias = function (name) {
+            var others = _this.Encounter.creatures().filter(function (c) { return c !== _this && c.Name === name; });
+            if (others.length === 1) {
+                others[0].Alias(name + " 1");
+            }
+            return ko.observable(name + " " + (others.length + 1));
+        };
         this.CommitHP = function () {
             _this.CurrentHP(_this.CurrentHP() - _this.HPChange());
             _this.HPChange(null);
@@ -96,6 +103,7 @@ var Creature = (function () {
         }
         this.Encounter = encounter;
         this.Name = creatureJson.Name;
+        this.Alias = this.setAlias(this.Name);
         this.MaxHP = creatureJson.HP.Value;
         this.CurrentHP = ko.observable(creatureJson.HP.Value);
         this.HPChange = ko.observable(null);
