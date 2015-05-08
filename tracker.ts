@@ -158,9 +158,6 @@ class Creature{
   Encounter: Encounter;
   FocusHP: KnockoutObservable<boolean>;
   constructor(creatureJson: IHaveTrackerStats, encounter: Encounter, rules?: Rules){
-    if(!creatureJson){
-      throw "Couldn't create Creature- no Json passed in.";
-    }
     this.Encounter = encounter;
     this.Name = creatureJson.Name;
     this.Alias = this.setAlias(this.Name);

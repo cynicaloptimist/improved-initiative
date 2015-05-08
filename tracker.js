@@ -129,9 +129,6 @@ var Creature = (function () {
             mods.push(_this.Encounter.Rules.CalculateModifier(abilityScore));
             return _this.Encounter.Rules.Check(mods);
         };
-        if (!creatureJson) {
-            throw "Couldn't create Creature- no Json passed in.";
-        }
         this.Encounter = encounter;
         this.Name = creatureJson.Name;
         this.Alias = this.setAlias(this.Name);
