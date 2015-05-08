@@ -4,12 +4,34 @@
 	font-family: sans-serif;
 }
 
+.zebra-stripe(@color:lightgray;@offcolor:transparent;) {
+	&:nth-child(2n){
+		background-color: @color;
+	}
+	&:nth-child(2n+1){
+		background-color: @offcolor;
+	}
+}
+
 input {
 	cursor: auto;
 }
 
 h1 {
 	font-size:large;
+}
+
+ul.creature-library {
+	border: 1px solid black;
+	padding-left: 0px;
+	list-style-type: none;
+	li {
+		padding-left: 10px;
+		.zebra-stripe();
+		&:hover{
+			border: 1px solid gray;
+		}
+	}
 }
 
 .encounter {
@@ -21,6 +43,7 @@ h1 {
 		.creature {
 			list-style-position:inside;
 			padding-left:10px;
+			.zebra-stripe(lightgray;darkgray;);
 			
 			&.selected {
 				border: 1px solid black;
