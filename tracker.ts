@@ -1,6 +1,5 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
-/// <reference path="typings/knockout/bindingHandlers.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
 interface IHaveValue{
@@ -16,7 +15,7 @@ interface IHaveAttributes{
   Wis: number;
 }
 
-interface StatBlock{
+interface IHaveTrackerStats{
   Name: string;
   HP: IHaveValue;
   Attributes: IHaveAttributes;
@@ -45,15 +44,28 @@ class Encounter {
     this.creatures = ko.observableArray<Creature>(); 
     this.SelectedCreature = ko.observable<Creature>();
     this.Rules = rules || new DefaultRules();
+    this.SelectedCreatureStatblock = ko.computed(() => 
+    {
+      return this.SelectedCreature() 
+                 ? this.SelectedCreature().StatBlock 
+                 : { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0} }
+    })
   }
   
   creatures: KnockoutObservableArray<Creature>;
   SelectedCreature: KnockoutObservable<Creature>;
+  SelectedCreatureStatblock: KnockoutComputed<IHaveTrackerStats>;
   Rules: Rules;
   
   private sortByInitiative = () => {
     this.creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
                                  (r.InitiativeModifier - l.InitiativeModifier));
+  }
+  
+  private moveCreature = (creature: Creature, index: number) => 
+  {
+    this.creatures.remove(creature);
+    this.creatures.splice(index,0,creature);
   }
   
   private relativeNavigateFocus = (offset: number) => 
@@ -67,13 +79,7 @@ class Encounter {
     this.SelectedCreature(this.creatures()[newIndex]);
   }
   
-  private moveCreature = (creature: Creature, index: number) => 
-  {
-    this.creatures.remove(creature);
-    this.creatures.splice(index,0,creature);
-  }
-  
-  AddCreature = (creatureJson: StatBlock) => 
+  AddCreature = (creatureJson: IHaveTrackerStats) => 
   {
     console.log("adding %O", creatureJson);
     this.creatures.push(new Creature(creatureJson, this));
@@ -115,11 +121,6 @@ class Encounter {
     }
   }
   
-  SelectedCreatureStatblock = () => this.SelectedCreature() 
-                                  ? JSON.stringify(this.SelectedCreature().StatBlock, null, '\t') 
-                                  : ""
-  
-  
   RollInitiative = () =>
   {
     if(this.Rules.GroupSimilarCreatures)
@@ -149,10 +150,10 @@ class Creature{
   HPChange: KnockoutObservable<number>;
   InitiativeModifier: number;
   Initiative: KnockoutObservable<number>;
-  StatBlock: StatBlock;
+  StatBlock: IHaveTrackerStats;
   Encounter: Encounter;
   FocusHP: KnockoutObservable<boolean>;
-  constructor(creatureJson: StatBlock, encounter: Encounter, rules?: Rules){
+  constructor(creatureJson: IHaveTrackerStats, encounter: Encounter, rules?: Rules){
     if(!creatureJson){
       throw "Couldn't create Creature- no Json passed in.";
     }
@@ -195,7 +196,7 @@ class Creature{
   AbilityCheck = (attribute: string, mods: number[]) => {
     var abilityScore = this.StatBlock.Attributes[attribute];
     if(abilityScore === undefined){
-      throw "attribute " + attribute + "not on creatures " + this.Alias();
+      throw "attribute " + attribute + " not on creatures " + this.Alias();
     }
     mods.push(this.Encounter.Rules.CalculateModifier(abilityScore));
     return this.Encounter.Rules.Check(mods);

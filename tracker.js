@@ -20,6 +20,10 @@ var Encounter = (function () {
             _this.creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                 (r.InitiativeModifier - l.InitiativeModifier); });
         };
+        this.moveCreature = function (creature, index) {
+            _this.creatures.remove(creature);
+            _this.creatures.splice(index, 0, creature);
+        };
         this.relativeNavigateFocus = function (offset) {
             var newIndex = _this.creatures.indexOf(_this.SelectedCreature()) + offset;
             if (newIndex < 0) {
@@ -29,10 +33,6 @@ var Encounter = (function () {
                 newIndex = _this.creatures().length - 1;
             }
             _this.SelectedCreature(_this.creatures()[newIndex]);
-        };
-        this.moveCreature = function (creature, index) {
-            _this.creatures.remove(creature);
-            _this.creatures.splice(index, 0, creature);
         };
         this.AddCreature = function (creatureJson) {
             console.log("adding %O", creatureJson);
@@ -64,9 +64,6 @@ var Encounter = (function () {
                 _this.moveCreature(creature, index + 1);
             }
         };
-        this.SelectedCreatureStatblock = function () { return _this.SelectedCreature()
-            ? JSON.stringify(_this.SelectedCreature().StatBlock, null, '\t')
-            : ""; };
         this.RollInitiative = function () {
             if (_this.Rules.GroupSimilarCreatures) {
                 var initiatives = [];
@@ -85,6 +82,11 @@ var Encounter = (function () {
         this.creatures = ko.observableArray();
         this.SelectedCreature = ko.observable();
         this.Rules = rules || new DefaultRules();
+        this.SelectedCreatureStatblock = ko.computed(function () {
+            return _this.SelectedCreature()
+                ? _this.SelectedCreature().StatBlock
+                : { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0 } };
+        });
     }
     return Encounter;
 })();
@@ -116,7 +118,7 @@ var Creature = (function () {
         this.AbilityCheck = function (attribute, mods) {
             var abilityScore = _this.StatBlock.Attributes[attribute];
             if (abilityScore === undefined) {
-                throw "attribute " + attribute + "not on creatures " + _this.Alias();
+                throw "attribute " + attribute + " not on creatures " + _this.Alias();
             }
             mods.push(_this.Encounter.Rules.CalculateModifier(abilityScore));
             return _this.Encounter.Rules.Check(mods);

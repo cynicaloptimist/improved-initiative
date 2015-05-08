@@ -38,6 +38,8 @@
   </div>
   
   <h1>Selected Creature</h1>
-  <pre class="selected-creature" data-bind="text:encounter().SelectedCreatureStatblock()"></pre>
+  <div class="selected-creature" data-bind="with:encounter().SelectedCreatureStatblock()">
+    <div data-bind="text: Name"></div>
+  </div>
   </body>
 </html>
