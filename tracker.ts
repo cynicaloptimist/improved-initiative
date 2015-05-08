@@ -21,6 +21,10 @@ interface IHaveTrackerStats{
   Attributes: IHaveAttributes;
 }
 
+class StatBlock {
+  static Empty = { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0} }
+}
+
 interface Rules{
   CalculateModifier: (attribute:number) => number;
   Check: (mods : number[]) => number;
@@ -41,14 +45,14 @@ class DefaultRules implements Rules {
 
 class Encounter {
   constructor(rules?: Rules){
-    this.creatures = ko.observableArray<Creature>(); 
+    this.creatures = ko.observableArray<Creature>();
     this.SelectedCreature = ko.observable<Creature>();
     this.Rules = rules || new DefaultRules();
     this.SelectedCreatureStatblock = ko.computed(() => 
     {
       return this.SelectedCreature() 
                  ? this.SelectedCreature().StatBlock 
-                 : { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0} }
+                 : StatBlock.Empty;
     })
   }
   
@@ -207,10 +211,10 @@ class ViewModel{
   constructor(){
     var self = this;
     this.encounter = ko.observable<Encounter>(new Encounter());
-    this.creatures = ko.observableArray<Creature>();
+    this.creatures = ko.observableArray<IHaveTrackerStats>();
   }
   encounter: KnockoutObservable<Encounter>;
-  creatures: KnockoutObservableArray<Creature>;
+  creatures: KnockoutObservableArray<IHaveTrackerStats>;
 }
 
 function RegisterKeybindings(viewModel: ViewModel){
@@ -228,5 +232,8 @@ $(() => {
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function(json){
     	viewModel.creatures(json);
+      viewModel.creatures().forEach(viewModel.encounter().AddCreature);
+      viewModel.creatures().forEach(viewModel.encounter().AddCreature);
+      viewModel.creatures().forEach(viewModel.encounter().AddCreature);
     });
 });

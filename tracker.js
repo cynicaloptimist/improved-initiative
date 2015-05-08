@@ -1,6 +1,12 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
+var StatBlock = (function () {
+    function StatBlock() {
+    }
+    StatBlock.Empty = { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0 } };
+    return StatBlock;
+})();
 var DefaultRules = (function () {
     function DefaultRules() {
         this.CalculateModifier = function (attribute) {
@@ -85,7 +91,7 @@ var Encounter = (function () {
         this.SelectedCreatureStatblock = ko.computed(function () {
             return _this.SelectedCreature()
                 ? _this.SelectedCreature().StatBlock
-                : { Name: 'None', HP: { Value: 0 }, Attributes: { Str: 0, Dex: 0, Con: 0, Cha: 0, Int: 0, Wis: 0 } };
+                : StatBlock.Empty;
         });
     }
     return Encounter;
@@ -161,5 +167,8 @@ $(function () {
     ko.applyBindings(viewModel);
     $.getJSON('creatures.json', function (json) {
         viewModel.creatures(json);
+        viewModel.creatures().forEach(viewModel.encounter().AddCreature);
+        viewModel.creatures().forEach(viewModel.encounter().AddCreature);
+        viewModel.creatures().forEach(viewModel.encounter().AddCreature);
     });
 });
