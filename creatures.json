@@ -1,8 +1,8 @@
 [{	"Name" : "Hobgoblin",
 	"Type" : "Medium humanoid (goblinoid), lawful evil",
-	"AC" : {"Value" : 18, "Notes" : "chain mail, shield"},
-	"HP" : {"Value" : 11, "Notes" : "2d8 + 2" },
-	"Speed" : [{"Value" : 30}],
+	"AC" : {"Value" : 18, "Notes" : "<em>(chain mail, shield)</em>"},
+	"HP" : {"Value" : 11, "Notes" : "<em>(2d8 + 2)</em>" },
+	"Speed" : ["30 feet"],
 	"Attributes" : {
 		"Str" : 13,
 		"Dex" : 12,
@@ -11,6 +11,8 @@
 		"Wis" : 10,
 		"Cha" : 9
 	},
+	"Skills" : [{ "Name" : "History" , "Value" : 2}],
+	"Saves" : [{ "Name" : "Dex" , "Value" : 3}],
 	"Senses" : ["darkvision 60 ft.", "passive Perception 10"],
 	"Languages" : ["Common", "Goblin"],
 	"Challenge" : 0.5,
@@ -20,9 +22,9 @@
 },
 {	"Name" : "Skeleton",
 	"Type" : "Medium undead, lawful evil",
-	"AC" : {"Value" : 13, "Notes" : "armor scraps"},
-	"HP" : {"Value" : 13, "Notes" : "2d8 + 4" },
-	"Speed" : [{"Value" : 30}],
+	"AC" : {"Value" : 13, "Notes" : "<em>(armor scraps)</em>"},
+	"HP" : {"Value" : 13, "Notes" : "<em>(2d8 + 4)</em>" },
+	"Speed" : ["30 feet"],
 	"Attributes" : {
 		"Str" : 10,
 		"Dex" : 14,
@@ -31,11 +33,37 @@
 		"Wis" : 8,
 		"Cha" : 5
 	},
-	"Vulnerabilities" : ["bludgeoning"],
-	"Immunities" : ["poison","poisoned"],
+	"DamageVulnerabilities" : ["bludgeoning"],
+	"DamageImmunities" : ["poison"],
+	"ConditionImmunities" : ["poisoned"],
+	"Senses" : ["darkvision 60 ft.", "passive Perception 9"],
+	"Languages" : ["understands languages it knew in life but cannot speak"],
+	"Challenge" : 0.25,
+	"Actions" : [{"Name" : "Shortsword", "Content" : "<em>Melee Weapon Attack:</em> +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) slashing damage"},
+				 {"Name" : "Shortbow", "Content" : "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6+2) piercing damage"}]
+},
+{	"Name" : "Incomplete Statblock",
+	"Type" : "Medium undead, lawful evil",
+	"HP" : {"Value" : 13, "Notes" : "<em>(2d8 + 4)</em>" },
+	"Speed" : ["30 feet"],
+	"Attributes" : {
+		"Str" : 10,
+		"Dex" : 14,
+		"Con" : 15,
+		"Int" : 6,
+		"Wis" : 8,
+		"Cha" : 5
+	},
+	"DamageVulnerabilities" : ["bludgeoning"],
+	"DamageImmunities" : ["poison","poisoned"],
 	"Senses" : ["darkvision 60 ft.", "passive Perception 9"],
 	"Languages" : ["understands languages it knew in life but cannot speak"],
 	"Challenge" : 0.25,
 	"Actions" : [{"Name" : "Shortsword", "Content" : "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) slashing damage"},
 				 {"Name" : "Shortbow", "Content" : "Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6+2) piercing damage"}]
-}]
+},
+{
+	"Name" : "Swimmer",
+	"Speed" : ["30 feet", "swim 60 feet"]
+}
+]

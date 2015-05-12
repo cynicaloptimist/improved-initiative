@@ -1,0 +1,63 @@
+<div class="Name" data-bind="text: Name"></div>
+
+<div class="Type" data-bind="text: Type"></div>
+
+<div class="AC">
+  <span class="label">Armor Class</span>
+  <span data-bind="text: AC.Value"></span>
+  <span class="notes" data-bind="html: AC.Notes"></span>
+</div>
+
+<div class="HP">
+  <span class="label">Hit Points</span>
+  <span data-bind="text: HP.Value"></span>
+  <span class="notes" data-bind="html: HP.Notes"></span>
+</div>
+
+<div class="speed">
+  <span class="label">Speed</span>
+  <span data-bind="text: Speed.join(', ')"></span>
+</div>
+
+<div class="Attributes" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
+  <div>
+    <div class="label" data-bind="text: $data"></div>
+    <div class="score" data-bind="css: $data, text: $parent.Attributes[$data]"></div>
+    <div class="modifier" data-bind="css: $data, 
+      text: ($parent.Attributes[$data] >= 10?'(+':'(') + 
+            $root.encounter().Rules.CalculateModifier($parent.Attributes[$data]) +
+            ')'">
+    </div>
+  </div>
+</div>
+
+<div class="modifiers" data-bind="foreach: ['Saves', 'Skills']">
+  <div data-bind="visible: $parent[$data].length, css: $data">
+    <span class="label" data-bind="text: $data"></span>
+    <!-- ko foreach: $parent[$data] -->
+      <span data-bind="text:$data.Name"></span>
+      <span data-bind="text: ($data.Value >= 0?'+':'-') + $data.Value"></span>
+    <!-- /ko -->
+  </div>
+</div>
+
+<div class="keyword-sets" data-bind="foreach: ['DamageVulnerabilities','DamageResistances','DamageImmunities','ConditionImmunities','Senses','Languages']">
+  <div data-bind="visible: $parent[$data].length, css: $data">
+    <span class="label" data-bind="text:$data"></span>
+    <span data-bind="text: $parent[$data].join(', ')"></span>
+  </div>
+</div>
+
+<div class="Challenge">
+  <span class="label">Challenge</span>
+  <span data-bind="text:Challenge"></span>
+</div>
+
+<div class="unique-traits" data-bind="foreach: ['Traits','Actions','LegendaryActions']">
+  <div data-bind="visible: $parent[$data].length, css: $data, foreach: $parent[$data]">
+    <div>
+      <span class="label" data-bind="text: Name"></span>
+      <span data-bind="html: Content"></span>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <link rel="stylesheet/less" type="text/css" href="tracker.less" />
-  <script src="lib/less.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="tracker.css">
   
   <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
   <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
@@ -10,36 +9,110 @@
       
   <script type="text/javascript" src="tracker.js"></script>
   
-  
-  
+  <script type="text/html" id="full-statblock">
+    <div class="Name" data-bind="text: Name"></div>
+
+    <div class="Type" data-bind="text: Type"></div>
+
+    <div class="AC">
+      <span class="label">Armor Class</span>
+      <span data-bind="text: AC.Value"></span>
+      <span class="notes" data-bind="html: AC.Notes"></span>
+    </div>
+
+    <div class="HP">
+      <span class="label">Hit Points</span>
+      <span data-bind="text: HP.Value"></span>
+      <span class="notes" data-bind="html: HP.Notes"></span>
+    </div>
+
+    <div class="speed">
+      <span class="label">Speed</span>
+      <span data-bind="text: Speed.join(', ')"></span>
+    </div>
+
+    <div class="Attributes" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
+      <div>
+        <div class="label" data-bind="text: $data"></div>
+        <div class="score" data-bind="css: $data, text: $parent.Attributes[$data]"></div>
+        <div class="modifier" data-bind="css: $data, 
+          text: ($parent.Attributes[$data] >= 10?'(+':'(') + 
+                $root.encounter().Rules.CalculateModifier($parent.Attributes[$data]) +
+                ')'">
+        </div>
+      </div>
+    </div>
+
+    <div class="modifiers" data-bind="foreach: ['Saves', 'Skills']">
+      <div data-bind="visible: $parent[$data].length, css: $data">
+        <span class="label" data-bind="text: $data"></span>
+        <!-- ko foreach: $parent[$data] -->
+          <span data-bind="text:$data.Name"></span>
+          <span data-bind="text: ($data.Value >= 0?'+':'-') + $data.Value"></span>
+        <!-- /ko -->
+      </div>
+    </div>
+
+    <div class="keyword-sets" data-bind="foreach: ['DamageVulnerabilities','DamageResistances','DamageImmunities','ConditionImmunities','Senses','Languages']">
+      <div data-bind="visible: $parent[$data].length, css: $data">
+        <span class="label" data-bind="text:$data"></span>
+        <span data-bind="text: $parent[$data].join(', ')"></span>
+      </div>
+    </div>
+
+    <div class="Challenge">
+      <span class="label">Challenge</span>
+      <span data-bind="text:Challenge"></span>
+    </div>
+
+    <div class="unique-traits" data-bind="foreach: ['Traits','Actions','LegendaryActions']">
+      <div data-bind="visible: $parent[$data].length, css: $data, foreach: $parent[$data]">
+        <div>
+          <span class="label" data-bind="text: Name"></span>
+          <span data-bind="html: Content"></span>
+        </div>
+      </div>
+    </div>
+  </script>
+
   </head>
   <body>
-  <h1>Creatures</h1>
-  <ul class="creature-library" data-bind="foreach: creatures">
-  <li data-bind="text: Name, click: $root.encounter().AddCreature"></li>
-  </ul>
-  
-  <h1>Tracker</h1>
-  <div class="encounter" data-bind="with: encounter">
-    <ul class="combatants" data-bind="foreach: creatures">
-      <li class="creature" data-bind="css: { selected: $parent.SelectedCreature() == $data }, click: $parent.SelectedCreature">
-        <div data-bind="text: Initiative" class="initiative"></div>
-        <input data-bind="value: Alias()" class="name" />
-        <div class="hp" data-bind="click: FocusHP">
-        <div data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></div>
-        <form data-bind="submit: CommitHP"><input data-bind="value: HPChange, visible: FocusHP, hasFocus: FocusHP" /></form>
-        <div data-bind="text: MaxHP" class="max-hp"></div>
-        </div>
-      </li>
-    </ul>
-    <p data-bind="click: RollInitiative">Roll Initiative!</p>
-    <p data-bind="click: MoveSelectedCreatureUp">Up</p>
-    <p data-bind="click: MoveSelectedCreatureDown">Down</p>
+  <div class="active-creature" >
+    <h1>Active Creature</h1>
+    <div data-bind="visible: encounter().ActiveCreature(), template: { name: 'full-statblock', data:encounter().ActiveCreatureStatblock() }"></div>
   </div>
-  
-  <h1>Selected Creature</h1>
-  <div class="selected-creature" data-bind="with:encounter().SelectedCreatureStatblock()">
-    <div data-bind="text: Name"></div>
+  <div class="tracker">
+    <h1>Creatures</h1>
+    <input class="filter-library" placeholder="Filter..." data-bind="value: LibraryFilter, valueUpdate: 'keyup'" />
+    <ul class="creature-library" data-bind="foreach: FilteredCreatures()">
+      <li data-bind="text: Name, click: $root.encounter().AddCreature"></li>
+    </ul>
+    
+    <h1>Tracker</h1>
+    <div class="encounter" data-bind="with: encounter">
+      <ul class="combatants" data-bind="foreach: creatures">
+        <li class="creature" data-bind="css: { selected: $parent.SelectedCreature() == $data, active: $parent.ActiveCreature() == $data }, click: $parent.SelectedCreature">
+          <div data-bind="text: Initiative" class="initiative"></div>
+          <div data-bind="text: Alias(), visible:!EditName()" class="name"></div>
+          <form data-bind="submit: CommitName">
+            <input data-bind="value: Alias(), visible: EditName(), hasFocus: EditName" class="name" />
+          </form>
+          <div class="hp" data-bind="click: FocusHP">
+          <div data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></div>
+          <form data-bind="submit: CommitHP">
+            <input data-bind="value: HPChange, visible: FocusHP, hasFocus: FocusHP" />
+          </form>
+          <div data-bind="text: MaxHP" class="max-hp"></div>
+          </div>
+          <div class="ac" data-bind="text: AC"></div>
+        </li>
+      </ul>
+      <p data-bind="click: RollInitiative">Roll Initiative!</p>
+    </div>
+  </div>
+  <div class="selected-creature">
+    <h1>Selected Creature</h1>
+    <div data-bind="visible: encounter().SelectedCreature(), template: { name: 'full-statblock', data:encounter().SelectedCreatureStatblock() }"></div>
   </div>
   </body>
 </html>

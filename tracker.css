@@ -1,0 +1,165 @@
+* {
+  cursor: default;
+  border: 1px solid transparent;
+  font-family: sans-serif;
+}
+body {
+  display: flex;
+  justify-content: center;
+}
+body input {
+  cursor: auto;
+}
+body h1 {
+  font-size: large;
+}
+body ul.creature-library {
+  border: 1px solid black;
+  padding-left: 0px;
+  list-style-type: none;
+}
+body ul.creature-library li {
+  padding-left: 10px;
+}
+body ul.creature-library li:nth-child(2n) {
+  background-color: lightgray;
+}
+body ul.creature-library li:nth-child(2n) input {
+  background-color: lightgray;
+}
+body ul.creature-library li:nth-child(2n) input:hover,
+body ul.creature-library li:nth-child(2n) input:focus {
+  background-color: white;
+}
+body ul.creature-library li:nth-child(2n+1) {
+  background-color: transparent;
+}
+body ul.creature-library li:nth-child(2n+1) input {
+  background-color: transparent;
+}
+body ul.creature-library li:nth-child(2n+1) input:hover,
+body ul.creature-library li:nth-child(2n+1) input:focus {
+  background-color: white;
+}
+body ul.creature-library li:hover {
+  border: 1px solid gray;
+}
+body .encounter {
+  border: 1px solid black;
+}
+body .encounter .combatants {
+  padding-left: 0px;
+}
+body .encounter .combatants .creature {
+  list-style-position: inside;
+  list-style-type: circle;
+  padding-left: 10px;
+}
+body .encounter .combatants .creature.active {
+  list-style-type: disc;
+}
+body .encounter .combatants .creature:nth-child(2n) {
+  background-color: lightgray;
+}
+body .encounter .combatants .creature:nth-child(2n) input {
+  background-color: lightgray;
+}
+body .encounter .combatants .creature:nth-child(2n) input:hover,
+body .encounter .combatants .creature:nth-child(2n) input:focus {
+  background-color: white;
+}
+body .encounter .combatants .creature:nth-child(2n+1) {
+  background-color: darkgray;
+}
+body .encounter .combatants .creature:nth-child(2n+1) input {
+  background-color: darkgray;
+}
+body .encounter .combatants .creature:nth-child(2n+1) input:hover,
+body .encounter .combatants .creature:nth-child(2n+1) input:focus {
+  background-color: white;
+}
+body .encounter .combatants .creature.selected {
+  border: 1px solid black;
+}
+body .encounter .combatants .creature div,
+body .encounter .combatants .creature form {
+  display: inline-block;
+}
+body .encounter .combatants .creature .initiative {
+  width: 20px;
+}
+body .encounter .combatants .creature .name {
+  width: 150px;
+}
+body .encounter .combatants .creature .hp {
+  position: relative;
+  width: 60px;
+  text-align: right;
+}
+body .encounter .combatants .creature .hp:hover {
+  border: 1px solid red;
+}
+body .encounter .combatants .creature .hp .max-hp::before {
+  content: '/ ';
+}
+body .encounter .combatants .creature .hp input {
+  position: absolute;
+  border: 3px solid red;
+  left: 30px;
+  top: -23px;
+  width: 20px;
+}
+body .encounter .combatants .creature .conditions {
+  overflow-x: hidden;
+}
+body .selected-creature,
+body .active-creature {
+  width: 350px;
+  margin: 5px;
+}
+body .selected-creature .label,
+body .active-creature .label {
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+body .selected-creature .notes,
+body .active-creature .notes {
+  font-style: italic;
+}
+body .selected-creature .Name,
+body .active-creature .Name {
+  color: darkred;
+  font-weight: bold;
+  font-size: large;
+}
+body .selected-creature .Type,
+body .active-creature .Type,
+body .selected-creature .Speed,
+body .active-creature .Speed,
+body .selected-creature .Attributes,
+body .active-creature .Attributes,
+body .selected-creature .Challenge,
+body .active-creature .Challenge,
+body .selected-creature .Traits,
+body .active-creature .Traits {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom-color: darkred;
+}
+body .selected-creature .Attributes,
+body .active-creature .Attributes {
+  display: flex;
+}
+body .selected-creature .Attributes > div,
+body .active-creature .Attributes > div {
+  flex-grow: 1;
+  text-align: center;
+}
+body .selected-creature .Attributes > div .label,
+body .active-creature .Attributes > div .label {
+  text-transform: uppercase;
+}
+body .tracker {
+  flex-grow: 1;
+  margin: 5px;
+}
