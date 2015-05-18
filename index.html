@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <link rel="stylesheet" href="lib/font-awesome-4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="tracker.css">
   
+  <title>Improved Initiative</title>
+
   <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
   <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
   <script type="text/javascript" src="lib/mousetrap.js"></script>
@@ -10,7 +13,7 @@
   <script type="text/javascript" src="tracker.js"></script>
   
   <script type="text/html" id="full-statblock">
-    <div class="Name" data-bind="text: Name"></div>
+    <h2 class="Name" data-bind="text: Name"></h2>
 
     <div class="Type" data-bind="text: Type"></div>
 
@@ -36,9 +39,7 @@
         <div class="label" data-bind="text: $data"></div>
         <div class="score" data-bind="css: $data, text: $parent.Attributes[$data]"></div>
         <div class="modifier" data-bind="css: $data, 
-          text: ($parent.Attributes[$data] >= 10?'(+':'(') + 
-                $root.encounter().Rules.CalculateModifier($parent.Attributes[$data]) +
-                ')'">
+          text: $root.Encounter().Rules.Modifier($parent.Attributes[$data]).toModifierString()">
         </div>
       </div>
     </div>
@@ -48,71 +49,113 @@
         <span class="label" data-bind="text: $data"></span>
         <!-- ko foreach: $parent[$data] -->
           <span data-bind="text:$data.Name"></span>
-          <span data-bind="text: ($data.Value >= 0?'+':'-') + $data.Value"></span>
+          <span class="csv" data-bind="text: ($data.Modifier >= 0?'+':'-') + $data.Modifier"></span>
         <!-- /ko -->
       </div>
     </div>
 
-    <div class="keyword-sets" data-bind="foreach: ['DamageVulnerabilities','DamageResistances','DamageImmunities','ConditionImmunities','Senses','Languages']">
+    <div class="keyword-sets" data-bind="foreach: ['Senses','DamageVulnerabilities','DamageResistances','DamageImmunities','ConditionImmunities','Languages']">
       <div data-bind="visible: $parent[$data].length, css: $data">
-        <span class="label" data-bind="text:$data"></span>
-        <span data-bind="text: $parent[$data].join(', ')"></span>
+        <span class="label" data-bind="uiText:$data"></span>
+        <span class="csv" data-bind="text: $parent[$data].join(', ')"></span>
       </div>
     </div>
 
-    <div class="Challenge">
+    <div class="Challenge" data-bind="visible: Challenge">
       <span class="label">Challenge</span>
       <span data-bind="text:Challenge"></span>
     </div>
 
     <div class="unique-traits" data-bind="foreach: ['Traits','Actions','LegendaryActions']">
+      <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h2>
       <div data-bind="visible: $parent[$data].length, css: $data, foreach: $parent[$data]">
         <div>
           <span class="label" data-bind="text: Name"></span>
+          <span class="label" data-bind="text: Usage"></span>
           <span data-bind="html: Content"></span>
         </div>
       </div>
     </div>
   </script>
-
   </head>
   <body>
-  <div class="active-creature" >
-    <h1>Active Creature</h1>
-    <div data-bind="visible: encounter().ActiveCreature(), template: { name: 'full-statblock', data:encounter().ActiveCreatureStatblock() }"></div>
-  </div>
-  <div class="tracker">
-    <h1>Creatures</h1>
-    <input class="filter-library" placeholder="Filter..." data-bind="value: LibraryFilter, valueUpdate: 'keyup'" />
+  <div class="library" data-bind="with: Library">
+    <h1>Library</h1>
+    <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
     <ul class="creature-library" data-bind="foreach: FilteredCreatures()">
-      <li data-bind="text: Name, click: $root.encounter().AddCreature"></li>
+      <li data-bind="click: $root.Encounter().AddCreature"><span data-bind="text: Name"></span><span class="fa fa-search preview"></span></li>
     </ul>
-    
-    <h1>Tracker</h1>
-    <div class="encounter" data-bind="with: encounter">
-      <ul class="combatants" data-bind="foreach: creatures">
-        <li class="creature" data-bind="css: { selected: $parent.SelectedCreature() == $data, active: $parent.ActiveCreature() == $data }, click: $parent.SelectedCreature">
-          <div data-bind="text: Initiative" class="initiative"></div>
-          <div data-bind="text: Alias(), visible:!EditName()" class="name"></div>
-          <form data-bind="submit: CommitName">
-            <input data-bind="value: Alias(), visible: EditName(), hasFocus: EditName" class="name" />
-          </form>
-          <div class="hp" data-bind="click: FocusHP">
-          <div data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></div>
-          <form data-bind="submit: CommitHP">
-            <input data-bind="value: HPChange, visible: FocusHP, hasFocus: FocusHP" />
-          </form>
-          <div data-bind="text: MaxHP" class="max-hp"></div>
-          </div>
-          <div class="ac" data-bind="text: AC"></div>
-        </li>
-      </ul>
-      <p data-bind="click: RollInitiative">Roll Initiative!</p>
+  </div>
+
+  <div class="preview statblock" data-bind="visible: Library().PreviewCreatureStatblock().Name">
+    <div data-bind="template: { name: 'full-statblock', data: Library().PreviewCreatureStatblock() }"></div>
+  </div>
+
+  <div class="views">
+    <div class="active statblock" >
+      <h1>Active Creature</h1>
+      <div data-bind="visible: Encounter().ActiveCreature(), template: { name: 'full-statblock', data:Encounter().ActiveCreatureStatblock() }"></div>
+    </div>
+
+    <div class="tracker">
+      <div class="encounter" data-bind="with: Encounter">
+        <h1>Tracker</h1>
+        <ul class="combatants">
+          <li class="creature header">
+            <div class="initiative"><span class="fa fa-forward"></span></div>
+            <div class="name">Combatant</div>
+            <div class="hp"><span class = "fa fa-heart"></span></div>
+            <div class="ac"><span class = "fa fa-shield"></span></div>
+            <div class="tags">Tags</div>
+          </li>
+          <!-- ko foreach: Creatures -->
+          <li class="creature" data-bind="css: { selected: $parent.SelectedCreature() == $data, active: $parent.ActiveCreature() == $data }, click: $parent.SelectedCreature">
+            <div data-bind="text: Initiative" class="initiative"></div>
+            <div class="name">
+              <span data-bind="text: Alias, visible:!EditingName(), attr: {title: Alias}"></span>
+              <input data-bind="textInput: Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
+            </div>
+            <div class="hp" data-bind="click: EditingHP">
+              <input type="number" data-bind="textInput: HPChange, onEnter: CommitHP, visible: EditingHP, hasFocus: EditingHP" />
+              <span data-bind="text: CurrentHP, style: {color: GetHPColor()}" class="current-hp"></span>
+              <span data-bind="text: MaxHP" class="max-hp"></span>
+            </div>
+            <div class="ac" data-bind="text: AC"></div>
+            <div class="tags">
+              <input data-bind="textInput: NewTag, visible: AddingTag, hasFocus: AddingTag, onEnter: CommitTag" class="tags" />
+              <!--ko foreach: Tags() -->
+              <div class="tag outline">
+                <span data-bind="text: $data"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
+              </div>
+              <!-- /ko -->
+              <span class="fa-clickable fa-plus" data-bind="click: AddingTag, visible: !AddingTag()"></span>
+            </div>
+          </li>
+          <!-- /ko -->
+        </ul>
+        <!-- ko if: UserResponseRequests().length -->
+        <form class="user-response-requests" data-bind="
+          submit:UserResponseRequests()[0].HandleResponse,
+          html:UserResponseRequests()[0].requestContent,
+          focusOnRender:'.response'">
+        </form>
+        <!-- /ko -->
+      </div>
+    </div>
+    <div class="selected statblock">
+      <h1>Target Creature</h1>
+      <div data-bind="visible: Encounter().SelectedCreature(), template: { name: 'full-statblock', data:Encounter().SelectedCreatureStatblock() }"></div>
     </div>
   </div>
-  <div class="selected-creature">
-    <h1>Selected Creature</h1>
-    <div data-bind="visible: encounter().SelectedCreature(), template: { name: 'full-statblock', data:encounter().SelectedCreatureStatblock() }"></div>
+  <div class="interface-buttons" data-bind="with:Encounter()">
+    <div data-bind="click: RollInitiative">Roll Initiative! <span class="fa fa-play"></span></div>
+    <div data-bind="click: NextTurn">Next Turn <span class="fa fa-step-forward"></span></div>
+    <div data-bind="click: PreviousTurn">Previous Turn <span class="fa fa-step-backward"></span></div>
+    <div data-bind="click: MoveSelectedCreatureDown">Move <span class="fa fa-arrow-down"></span></div>
+    <div data-bind="click: MoveSelectedCreatureUp">Move <span class="fa fa-arrow-up"></span></div>
+    <div data-bind="click: EditSelectedCreatureName">Rename <span class="fa fa-edit"></span></div>
+    <div data-bind="click: RemoveSelectedCreature">Remove <span class="fa fa-trash"></span></div>
+    <div onclick="$('.library').slideDown()">Add <span class="fa fa-plus"></span></div>
   </div>
   </body>
 </html>

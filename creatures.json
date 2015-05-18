@@ -44,7 +44,7 @@
 },
 {	"Name" : "Incomplete Statblock",
 	"Type" : "Medium undead, lawful evil",
-	"HP" : {"Value" : 13, "Notes" : "<em>(2d8 + 4)</em>" },
+	"HP" : {"Value" : 555, "Notes" : "<em>(2d8 + 546)</em>" },
 	"Speed" : ["30 feet"],
 	"Attributes" : {
 		"Str" : 10,

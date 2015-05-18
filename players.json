@@ -1,0 +1,16 @@
+[{	
+	"Player" : "Player",
+	"Name" : "Urtoch",
+	"Type" : "Orc Barbarian",
+	"AC" : {"Value" : 16, "Notes" : "<em>(chain mail, shield)</em>"},
+	"HP" : {"Value" : 16, "Notes" : "<em>(2d8 + 2)</em>" },
+	"Speed" : ["30 feet"],
+	"Attributes" : {
+		"Str" : 18,
+		"Dex" : 14,
+		"Con" : 12,
+		"Int" : 7,
+		"Wis" : 10,
+		"Cha" : 8
+	}
+}]
