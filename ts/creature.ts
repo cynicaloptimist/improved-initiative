@@ -7,7 +7,7 @@ module ImprovedInitiative {
 	  CurrentHP: KnockoutObservable<number>;
 	  HPChange: KnockoutObservable<number>;
 	  AC: number;
-	  AbilityModifiers: IHaveAttributes;
+	  AbilityModifiers: IHaveAbilities;
 	  Tags: KnockoutObservableArray<string>;
     NewTag: KnockoutObservable<string>;
 	  InitiativeModifier: number;
@@ -33,7 +33,7 @@ module ImprovedInitiative {
       this.AC = this.StatBlock.AC.Value;
       this.Tags = ko.observableArray<string>();
       this.NewTag = ko.observable<string>();
-      this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Attributes.Dex);
+      this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Abilities.Dex);
       this.Initiative = ko.observable(0);
       this.EditingHP = ko.observable(false);
       this.EditingName = ko.observable(false);
@@ -46,7 +46,7 @@ module ImprovedInitiative {
 	  CurrentHP: KnockoutObservable<number>;
 	  HPChange: KnockoutObservable<number>;
 	  AC: number;
-	  AbilityModifiers: IHaveAttributes;
+	  AbilityModifiers: IHaveAbilities;
     Tags: KnockoutObservableArray<string>;
     NewTag: KnockoutObservable<string>;
 	  InitiativeModifier: number;
@@ -68,9 +68,9 @@ module ImprovedInitiative {
 	  }
 	  
 	  private calculateModifiers = () => {
-	    var modifiers = StatBlock.Empty().Attributes;
-	    for(var attribute in this.StatBlock.Attributes){
-	      modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock.Attributes[attribute]);
+	    var modifiers = StatBlock.Empty().Abilities;
+	    for(var attribute in this.StatBlock.Abilities){
+	      modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock.Abilities[attribute]);
 	    }
 	    return modifiers;
 	  }

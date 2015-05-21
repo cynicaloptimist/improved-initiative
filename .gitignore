@@ -1,3 +1,4 @@
 *.min.js
 server.js
 /node_modules/*
+/lib/*

@@ -1,10 +1,11 @@
 module ImprovedInitiative {
-	export class Encounter {
+  export class Encounter {
     constructor(rules?: IRules){
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
       this.SelectedCreature = ko.observable<ICreature>();
       this.UserResponseRequests = ko.observableArray<IUserResponseRequest>();
+      //this.ResponseRequest = ko.computed(() => (this.UserResponseRequests()[0] || {requestContent: ''}).requestContent)
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
         return this.SelectedCreature() 
@@ -27,6 +28,7 @@ module ImprovedInitiative {
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     UserResponseRequests: KnockoutObservableArray<IUserResponseRequest>;
+    //ResponseRequest: KnockoutComputed<string>;
     
     private sortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
@@ -52,6 +54,7 @@ module ImprovedInitiative {
     
     AddCreature = (creatureJson: IHaveTrackerStats) => 
     {
+      console.log("adding %O to encounter", creatureJson);
       if(creatureJson.Player && creatureJson.Player.toLocaleLowerCase() === 'player'){
         this.Creatures.push(new PlayerCharacter(creatureJson, this))
       } else {
@@ -76,7 +79,7 @@ module ImprovedInitiative {
     FocusSelectedCreatureHP = () =>
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().EditHP(true);
+        this.SelectedCreature().EditingHP(true);
       }
       return false;
     }
@@ -110,13 +113,13 @@ module ImprovedInitiative {
     EditSelectedCreatureName = () => 
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().EditName(true);
+        this.SelectedCreature().EditingName(true);
       }
     }
     
     RequestInitiative = (playercharacter: ICreature) => {
-      this.UserResponseRequests.unshift(new UserResponseRequest(
-        `<p>Initiative Roll for ${playercharacter.Alias()}: <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
+      this.UserResponseRequests.push(new UserResponseRequest(
+        `<p>Initiative Roll for ${playercharacter.Alias()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
         '.response',
         (response: any) => {
           playercharacter.Initiative(parseInt(response));
@@ -126,7 +129,7 @@ module ImprovedInitiative {
     }
     
     FocusResponseRequest = () => {
-      $('form .response').select();
+      $('form input').select();
     }
     
     RollInitiative = () =>
@@ -148,6 +151,8 @@ module ImprovedInitiative {
       
       this.sortByInitiative();
       this.ActiveCreature(this.Creatures()[0]);
+      
+      $('.library').slideUp()
     }
     
     NextTurn = () => {

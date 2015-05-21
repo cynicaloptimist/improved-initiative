@@ -1,85 +1,5 @@
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    ko.bindingHandlers.focusOnRender = {
-        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            //unwrap this so Knockout knows this update depends on the array's state
-            ko.unwrap(viewModel.UserResponseRequests);
-            $(element).find(valueAccessor()).select();
-        }
-    };
-    ko.bindingHandlers.onEnter = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            var callback = valueAccessor();
-            $(element).keypress(function (event) {
-                var keyCode = (event.which ? event.which : event.keyCode);
-                if (keyCode === 13) {
-                    callback.call(viewModel);
-                    return false;
-                }
-                return true;
-            });
-        }
-    };
-    ko.bindingHandlers.uiText = {
-        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            if (ImprovedInitiative.uiText[valueAccessor()]) {
-                $(element).html(ImprovedInitiative.uiText[valueAccessor()]);
-            }
-            else {
-                $(element).html(valueAccessor());
-            }
-        }
-    };
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
-    var UserResponseRequest = (function () {
-        function UserResponseRequest(requestContent, inputSelector, callback, stack) {
-            var _this = this;
-            this.requestContent = requestContent;
-            this.inputSelector = inputSelector;
-            this.callback = callback;
-            this.HandleResponse = function (form) {
-                _this.callback($(form).find(_this.inputSelector).val());
-                _this.stack.remove(_this);
-                return false;
-            };
-            this.stack = stack;
-        }
-        return UserResponseRequest;
-    })();
-    ImprovedInitiative.UserResponseRequest = UserResponseRequest;
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-Number.prototype.toModifierString = function () {
-    if (this >= 0) {
-        return "+" + this;
-    }
-    return this;
-};
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
-    var StatBlock = (function () {
-        function StatBlock() {
-        }
-        StatBlock.Empty = function () { return ({
-            Name: '', Type: '',
-            HP: { Value: 1, Notes: '' }, AC: { Value: 10, Notes: '' },
-            Speed: [],
-            Attributes: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
-            DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],
-            Saves: [], Skills: [], Senses: [], Languages: [],
-            Challenge: '',
-            Traits: [],
-            Actions: [],
-            LegendaryActions: []
-        }); };
-        StatBlock.Attributes = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
-        return StatBlock;
-    })();
-    ImprovedInitiative.StatBlock = StatBlock;
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
     var Creature = (function () {
         function Creature(creatureJson, Encounter) {
             var _this = this;
@@ -95,9 +15,9 @@ var ImprovedInitiative;
                 return ko.observable(name + " " + (others.length + 1));
             };
             this.calculateModifiers = function () {
-                var modifiers = ImprovedInitiative.StatBlock.Empty().Attributes;
-                for (var attribute in _this.StatBlock.Attributes) {
-                    modifiers[attribute] = _this.Encounter.Rules.Modifier(_this.StatBlock.Attributes[attribute]);
+                var modifiers = ImprovedInitiative.StatBlock.Empty().Abilities;
+                for (var attribute in _this.StatBlock.Abilities) {
+                    modifiers[attribute] = _this.Encounter.Rules.Modifier(_this.StatBlock.Abilities[attribute]);
                 }
                 return modifiers;
             };
@@ -138,7 +58,7 @@ var ImprovedInitiative;
             this.AC = this.StatBlock.AC.Value;
             this.Tags = ko.observableArray();
             this.NewTag = ko.observable();
-            this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Attributes.Dex);
+            this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Abilities.Dex);
             this.Initiative = ko.observable(0);
             this.EditingHP = ko.observable(false);
             this.EditingName = ko.observable(false);
@@ -148,27 +68,38 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.Creature = Creature;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var PlayerCharacter = (function (_super) {
-        __extends(PlayerCharacter, _super);
-        function PlayerCharacter() {
-            var _this = this;
-            _super.apply(this, arguments);
-            this.RollInitiative = function () {
-                _this.Encounter.RequestInitiative(_this);
-                return _this.Encounter.Rules.Check(_this.InitiativeModifier);
-            };
+    ko.bindingHandlers.focusOnRender = {
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            //unwrap this so Knockout knows this update depends on the array's state
+            ko.unwrap(viewModel.UserResponseRequests);
+            $(element).find(valueAccessor()).select();
         }
-        return PlayerCharacter;
-    })(ImprovedInitiative.Creature);
-    ImprovedInitiative.PlayerCharacter = PlayerCharacter;
+    };
+    ko.bindingHandlers.onEnter = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var callback = valueAccessor();
+            $(element).keypress(function (event) {
+                var keyCode = (event.which ? event.which : event.keyCode);
+                if (keyCode === 13) {
+                    callback.call(viewModel);
+                    return false;
+                }
+                return true;
+            });
+        }
+    };
+    ko.bindingHandlers.uiText = {
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            if (ImprovedInitiative.uiText[valueAccessor()]) {
+                $(element).html(ImprovedInitiative.uiText[valueAccessor()]);
+            }
+            else {
+                $(element).html(valueAccessor());
+            }
+        }
+    };
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -306,26 +237,6 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var DefaultRules = (function () {
-        function DefaultRules() {
-            this.Modifier = function (attribute) {
-                return Math.floor((attribute - 10) / 2);
-            };
-            this.Check = function () {
-                var mods = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    mods[_i - 0] = arguments[_i];
-                }
-                return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
-            };
-            this.GroupSimilarCreatures = false;
-        }
-        return DefaultRules;
-    })();
-    ImprovedInitiative.DefaultRules = DefaultRules;
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
     var CreatureLibrary = (function () {
         function CreatureLibrary(creatures) {
             var _this = this;
@@ -413,14 +324,14 @@ var ImprovedInitiative;
                     Skills: _this.ToModifierSet(_this.GetString('skills')) || _this.ToModifierSet(proficiences[1])
                 };
             };
-            this.GetAttributes = function () {
+            this.GetAbilities = function () {
                 return {
                     Str: parseInt(_this.GetString('abilities>strength>score') || '10'),
                     Dex: parseInt(_this.GetString('abilities>dexterity>score') || '10'),
                     Con: parseInt(_this.GetString('abilities>constitution>score') || '10'),
                     Int: parseInt(_this.GetString('abilities>intelligence>score') || '10'),
                     Wis: parseInt(_this.GetString('abilities>wisdom>score') || '10'),
-                    Cha: parseInt(_this.GetString('abilities>charisma>score') || '10')
+                    Cha: parseInt(_this.GetString('abilities>charisma>score') || '10'),
                 };
             };
             this.GetUniqueTraits = function (selector) {
@@ -449,7 +360,7 @@ var ImprovedInitiative;
                 creature.HP = imp.GetNotes('hp', 'hd');
                 creature.AC = imp.GetNotes('ac', 'actext');
                 creature.Speed = imp.GetArray('speed');
-                creature.Attributes = imp.GetAttributes();
+                creature.Abilities = imp.GetAbilities();
                 var proficiencies = imp.GetProficiencies();
                 creature.Saves = proficiencies.Saves;
                 creature.Skills = proficiencies.Skills;
@@ -471,7 +382,98 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.LibraryImporter = LibraryImporter;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var PlayerCharacter = (function (_super) {
+        __extends(PlayerCharacter, _super);
+        function PlayerCharacter() {
+            var _this = this;
+            _super.apply(this, arguments);
+            this.RollInitiative = function () {
+                _this.Encounter.RequestInitiative(_this);
+                return _this.Encounter.Rules.Check(_this.InitiativeModifier);
+            };
+        }
+        return PlayerCharacter;
+    })(ImprovedInitiative.Creature);
+    ImprovedInitiative.PlayerCharacter = PlayerCharacter;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var DefaultRules = (function () {
+        function DefaultRules() {
+            this.Modifier = function (attribute) {
+                return Math.floor((attribute - 10) / 2);
+            };
+            this.Check = function () {
+                var mods = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    mods[_i - 0] = arguments[_i];
+                }
+                return Math.ceil(Math.random() * 20) + mods.reduce(function (p, c) { return p + c; });
+            };
+            this.GroupSimilarCreatures = false;
+        }
+        return DefaultRules;
+    })();
+    ImprovedInitiative.DefaultRules = DefaultRules;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+Number.prototype.toModifierString = function () {
+    if (this >= 0) {
+        return "+" + this;
+    }
+    return this;
+};
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var StatBlock = (function () {
+        function StatBlock() {
+        }
+        StatBlock.Empty = function () { return ({
+            Name: '', Type: '',
+            HP: { Value: 1, Notes: '' }, AC: { Value: 10, Notes: '' },
+            Speed: [],
+            Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
+            DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],
+            Saves: [], Skills: [], Senses: [], Languages: [],
+            Challenge: '',
+            Traits: [],
+            Actions: [],
+            LegendaryActions: []
+        }); };
+        StatBlock.Attributes = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
+        return StatBlock;
+    })();
+    ImprovedInitiative.StatBlock = StatBlock;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var UserResponseRequest = (function () {
+        function UserResponseRequest(requestContent, inputSelector, callback, stack) {
+            var _this = this;
+            this.requestContent = requestContent;
+            this.inputSelector = inputSelector;
+            this.callback = callback;
+            this.HandleResponse = function (form) {
+                _this.callback($(form).find(_this.inputSelector).val());
+                _this.stack.remove(_this);
+                return false;
+            };
+            this.stack = stack;
+        }
+        return UserResponseRequest;
+    })();
+    ImprovedInitiative.UserResponseRequest = UserResponseRequest;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+/// <reference path="typings/requirejs/require.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="custombindinghandlers.ts" />

@@ -1,4 +1,6 @@
+/// <reference path="typings/requirejs/require.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
+/// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
@@ -32,7 +34,7 @@ module ImprovedInitiative {
     Mousetrap.bind('n',viewModel.Encounter().NextTurn);
     Mousetrap.bind('alt+n',viewModel.Encounter().PreviousTurn);
     Mousetrap.bind('t',viewModel.Encounter().FocusSelectedCreatureHP);
-    Mousetrap.bind('g',viewModel.Encounter().AddSelectedCreatureTag)
+    Mousetrap.bind('g',viewModel.Encounter().AddSelectedCreatureTag);
     Mousetrap.bind('del',viewModel.Encounter().RemoveSelectedCreature);
     Mousetrap.bind('f2', viewModel.Encounter().EditSelectedCreatureName);
     Mousetrap.bind('alt+r',viewModel.Encounter().RollInitiative);
@@ -41,26 +43,24 @@ module ImprovedInitiative {
   }
   
   $(() => {
-      var viewModel = new ViewModel();
-      RegisterKeybindings(viewModel);
-      ko.applyBindings(viewModel);
-      $.ajax("db.xml").done(xml => {
-        
-        var library = LibraryImporter.Import(xml);
-        viewModel.Library().Add(library);
-        
-        $('.fa.preview').hover(e => {
-          viewModel.Library().PreviewCreature(ko.dataFor(e.target));
-          var popPosition = $(e.target).position().top;
-          var maxPopPosition = $(document).height() - $('.preview.statblock').height();
-          if(popPosition > maxPopPosition){
-            popPosition = maxPopPosition - 10;
-          }
-          $('.preview.statblock').css('top', popPosition);
-        }, e => {
-          viewModel.Library().PreviewCreature(null);
-        });
-      })
+    var viewModel = new ViewModel();
+    RegisterKeybindings(viewModel);
+    ko.applyBindings(viewModel);
+    $.ajax("db.xml").done(xml => {
+      var library = LibraryImporter.Import(xml);
+      viewModel.Library().Add(library);
       
+      $('.fa.preview').hover(e => {
+        viewModel.Library().PreviewCreature(ko.dataFor(e.target));
+        var popPosition = $(e.target).position().top;
+        var maxPopPosition = $(document).height() - $('.preview.statblock').height();
+        if(popPosition > maxPopPosition){
+          popPosition = maxPopPosition - 10;
+        }
+        $('.preview.statblock').css('top', popPosition);
+      }, e => {
+        viewModel.Library().PreviewCreature(null);
+      });
+    })
   });
 }

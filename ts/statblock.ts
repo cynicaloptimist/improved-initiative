@@ -13,7 +13,7 @@ module ImprovedInitiative {
     Value: number;
   }
   
-  export interface IHaveAttributes{
+  export interface IHaveAbilities{
     Str: number;
     Dex: number;
     Con: number;
@@ -48,7 +48,7 @@ module ImprovedInitiative {
     Name: string;
     HP: IHaveValue;
     AC: IHaveValue;
-    Attributes: IHaveAttributes;
+    Attributes: IHaveAbilities;
   }
   
   export interface IStatBlock {
@@ -57,7 +57,7 @@ module ImprovedInitiative {
       HP: IHaveValue;
       AC: IHaveValue;
       Speed: string [];
-      Attributes: IHaveAttributes;
+      Abilities: IHaveAbilities;
       InitiativeModifier?: number;
       DamageVulnerabilities: string []; 
       DamageResistances: string []; 
@@ -78,7 +78,7 @@ module ImprovedInitiative {
       Name: '', Type: '', 
       HP: { Value: 1, Notes: ''},  AC: { Value: 10, Notes: ''},
       Speed: [],
-      Attributes: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
+      Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
       DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],
       Saves: [], Skills: [], Senses: [], Languages: [],
       Challenge: '',

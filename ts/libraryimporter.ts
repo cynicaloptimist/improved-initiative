@@ -52,7 +52,7 @@ module ImprovedInitiative {
 			}
 		}
 		
-		GetAttributes = () => {
+		GetAbilities = () => {
 			return {
 				Str: parseInt(this.GetString('abilities>strength>score') || '10'),
 				Dex: parseInt(this.GetString('abilities>dexterity>score') || '10'),
@@ -90,7 +90,7 @@ module ImprovedInitiative {
 				creature.HP = imp.GetNotes('hp','hd');
 				creature.AC = imp.GetNotes('ac','actext');
 				creature.Speed = imp.GetArray('speed');
-				creature.Attributes = imp.GetAttributes();
+				creature.Abilities = imp.GetAbilities();
 				var proficiencies = imp.GetProficiencies()
 				creature.Saves = proficiencies.Saves;
 				creature.Skills = proficiencies.Skills;
