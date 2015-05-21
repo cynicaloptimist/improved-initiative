@@ -6,8 +6,13 @@
   <link rel="stylesheet" type="text/css" href="tracker.css">
   
   <title>Improved Initiative</title>
-
-  <script data-main="js/main" src="node_modules/requirejs/require.js"></script>
+  
+  <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
+  <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
+  <script type="text/javascript" src="lib/mousetrap.js"></script>
+  <script type="text/javascript" src="js/ImprovedInitiative.js"></script>
+  
   </head>
   <body>
   <div class="library" data-bind="with: Library">
@@ -19,13 +24,24 @@
   </div>
 
   <div class="preview statblock" data-bind="visible: Library().PreviewCreatureStatblock().Name">
-    <div data-bind="template: { name: 'full-statblock', data: Library().PreviewCreatureStatblock() }"></div>
+    <div data-bind="component: { 
+        name: 'defaultstatblock', 
+        params:{ 
+          creature: Library().PreviewCreatureStatblock() 
+        } 
+      }"></div>
   </div>
 
   <div class="views">
     <div class="active statblock" >
       <h1>Active Creature</h1>
-      <div data-bind="visible: Encounter().ActiveCreature(), template: { name: 'full-statblock', data:Encounter().ActiveCreatureStatblock() }"></div>
+      <div data-bind="visible: Encounter().ActiveCreature(), 
+      component: { 
+        name: 'defaultstatblock', 
+        params: { 
+          creature: Encounter().ActiveCreatureStatblock() 
+        } 
+      }"></div>
     </div>
 
     <div class="tracker">
@@ -75,7 +91,13 @@
     </div>
     <div class="selected statblock">
       <h1>Target Creature</h1>
-      <div data-bind="visible: Encounter().SelectedCreature(), template: { name: 'full-statblock', data:Encounter().SelectedCreatureStatblock() }"></div>
+      <div data-bind="visible: Encounter().SelectedCreature(), 
+      component: { 
+        name: 'defaultstatblock', 
+        params:{ 
+          creature: Encounter().SelectedCreatureStatblock() 
+        } 
+      }"></div>
     </div>
   </div>
   <div class="interface-buttons" data-bind="with:Encounter()">

@@ -3687,7 +3687,7 @@ body .statblock .Name {
 }
 body .statblock .Type,
 body .statblock .Speed,
-body .statblock .Attributes,
+body .statblock .Abilities,
 body .statblock .Challenge,
 body .statblock .Traits,
 body .statblock .Actions {
@@ -3695,14 +3695,14 @@ body .statblock .Actions {
   padding-bottom: 5px;
   margin-bottom: 5px;
 }
-body .statblock .Attributes {
+body .statblock .Abilities {
   display: flex;
 }
-body .statblock .Attributes > div {
+body .statblock .Abilities > div {
   flex-grow: 1;
   text-align: center;
 }
-body .statblock .Attributes > div .label {
+body .statblock .Abilities > div .label {
   text-transform: uppercase;
 }
 body .tracker {

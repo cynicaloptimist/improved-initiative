@@ -5,6 +5,7 @@
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
 /// <reference path="custombindinghandlers.ts" />
+/// <reference path="components.ts" />
 /// <reference path="userresponse.ts" />
 /// <reference path="statblock.ts" />
 /// <reference path="creature.ts" />
