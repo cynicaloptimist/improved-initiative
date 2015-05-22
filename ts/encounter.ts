@@ -79,7 +79,7 @@ module ImprovedInitiative {
     FocusSelectedCreatureHP = () =>
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().EditingHP(true);
+        this.SelectedCreature().ViewModel.EditingHP(true);
       }
       return false;
     }
@@ -87,7 +87,7 @@ module ImprovedInitiative {
     AddSelectedCreatureTag = () => 
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().AddingTag(true);
+        this.SelectedCreature().ViewModel.AddingTag(true);
       }
       return false;
     }
@@ -113,7 +113,7 @@ module ImprovedInitiative {
     EditSelectedCreatureName = () => 
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().EditingName(true);
+        this.SelectedCreature().ViewModel.EditingName(true);
       }
     }
     

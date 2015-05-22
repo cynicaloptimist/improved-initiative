@@ -22,9 +22,62 @@ module ImprovedInitiative {
   ko.components.loaders.unshift(templateLoader);
   
   ko.components.register('defaultstatblock', {
-    viewModel: function(params) {
-      return params.creature;
-    },
+    viewModel: function(params) { return params.creature; },
     template: { name: 'defaultstatblock' }
   });
+  
+  ko.components.register('activestatblock', {
+    viewModel: function(params) { return params.creature; },
+    template: { name: 'activestatblock' }
+  });
+  
+  export class CombatantViewModel {
+    constructor(public Creature: Creature){}
+    	  
+    GetHPColor = () => {
+	    var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
+	    var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
+	    return "rgb(" + red + "," + green + ",0)";
+	  };
+    
+    EditingHP = ko.observable(false);
+    
+    HPChange = ko.observable(null);
+    
+	  CommitHP = () => {
+	    this.Creature.CurrentHP(this.Creature.CurrentHP() - this.HPChange());
+	    this.HPChange(null);
+	    this.EditingHP(false);
+	  };
+    
+	  EditingName = ko.observable(false);
+    
+	  CommitName = () => {
+	    this.EditingName(false);
+	  };
+    
+    AddingTag = ko.observable(false);
+    
+    NewTag = ko.observable(null);
+    
+    CommitTag = () => {
+      this.Creature.Tags.push(this.NewTag());
+      this.NewTag(null);
+	    this.AddingTag(false);
+	  };
+    
+    RemoveTag = (tag: string) => {
+      this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
+    };
+      
+      
+  }
+  
+  ko.components.register('combatant', {
+    viewModel: function(params) {
+      params.creature.ViewModel = new CombatantViewModel(params.creature);
+      return params.creature.ViewModel;
+    },
+    template: { name: 'combatant' }
+  })
 }

@@ -45,6 +45,7 @@ module ImprovedInitiative {
   
   export interface IHaveTrackerStats {
     Player?: string;
+    Type?: string;
     Name: string;
     HP: IHaveValue;
     AC: IHaveValue;

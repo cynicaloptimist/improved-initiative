@@ -4,6 +4,21 @@
 
 <hr />
 
+
+<!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
+<div data-bind="if: $parent[$data].length, css: $data">
+  <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h2>
+  <div data-bind="foreach: $parent[$data]">
+    <div>
+      <span class="label" data-bind="text: Name"></span>
+      <span class="label" data-bind="text: Usage"></span>
+      <span data-bind="html: Content"></span>
+    </div>
+  </div>
+  <hr />
+</div>
+<!-- /ko -->
+
 <div class="AC">
   <span class="label">Armor Class</span>
   <span data-bind="text: AC.Value"></span>
@@ -54,19 +69,3 @@
   <span class="label">Challenge</span>
   <span data-bind="text:Challenge"></span>
 </div>
-
-<hr />
-
-<!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
-<div data-bind="if: $parent[$data].length, css: $data">
-  <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h2>
-  <div data-bind="foreach: $parent[$data]">
-    <div>
-      <span class="label" data-bind="text: Name"></span>
-      <span class="label" data-bind="text: Usage"></span>
-      <span data-bind="html: Content"></span>
-    </div>
-  </div>
-  <hr />
-</div>
-<!-- /ko -->

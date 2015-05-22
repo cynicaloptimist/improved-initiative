@@ -77,9 +77,8 @@ body{
 
 	.preview.statblock {
 		position: fixed;
-		left: 300px;
+		left: 400px;
 		top: 0px;
-		width: 300px;
 		background-color: rgba(255,255,255,0.99);
 		z-index: 5;
 		border: 2px solid gray;
@@ -92,7 +91,7 @@ body{
 		left: 0px;
 		top: 0px;
 		height: 100%;
-		width: 300px;
+		width: 400px;
 		background-color: rgba(255,255,255,0.99);
 		overflow-y: scroll;
 		z-index: 3;
@@ -168,7 +167,11 @@ body{
 					text-align:center;
 
 					&:hover{
-						border: 1px solid red;
+						background-color: rgba(100,0,0,0.5);
+					}
+
+					&.focused{
+						background-color: rgba(255,0,0,0.5);
 					}
 					
 					.current-hp{
@@ -186,7 +189,7 @@ body{
 					input {
 						position:absolute;
 						border:3px solid red;
-						left: 15px;
+						right: 0px;
 						top: -23px;
 						width:40px;
 					}
@@ -224,7 +227,7 @@ body{
 				.hp {
 					text-align:center;
 					&:hover{
-						border-color:transparent;
+						background-color: inherit;
 					}
 				}
 			}
@@ -234,6 +237,13 @@ body{
 		width: 400px;
 		overflow-y: scroll;
 		flex-shrink: 1;
+
+		hr {
+			margin: 5px 0px;
+			background-color: darkred;
+			border: none;
+			height: 1px;
+		}
 
 		.csv{
 			&::after {
@@ -254,11 +264,6 @@ body{
 			color:darkred;
 			font-weight:bold;
 			font-size: large;
-		}
-		.Type, .Speed, .Abilities, .Challenge, .Traits, .Actions{
-			border-bottom-color: darkred;
-			padding-bottom: 5px;
-			margin-bottom: 5px;
 		}
 		.Abilities {
 			display: flex;

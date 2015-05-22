@@ -10,7 +10,6 @@ module ImprovedInitiative {
 	export class CreatureLibrary implements ICreatureLibrary {
 		constructor (creatures?: IHaveTrackerStats []) {
 			this.Creatures(creatures || []);
-      
 		}
 		Creatures = ko.observableArray<IHaveTrackerStats>();
     LibraryFilter = ko.observable('');
@@ -19,9 +18,13 @@ module ImprovedInitiative {
       if(filter.length == 0){
         return this.Creatures();
       }
-      return this.Creatures().filter(v => {
+      var creaturesWithFilterInName = this.Creatures().filter(v => {
         return v.Name.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) > -1;
       });
+      var creaturesWithFilterInType = this.Creatures().filter(v => {
+        return v.Type && v.Type.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) > -1;
+      });
+      return creaturesWithFilterInName.concat(creaturesWithFilterInType);
     });
     
     PreviewCreature = ko.observable<IHaveTrackerStats>()

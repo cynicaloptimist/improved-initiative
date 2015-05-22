@@ -21,10 +21,53 @@ var ImprovedInitiative;
     };
     ko.components.loaders.unshift(templateLoader);
     ko.components.register('defaultstatblock', {
-        viewModel: function (params) {
-            return params.creature;
-        },
+        viewModel: function (params) { return params.creature; },
         template: { name: 'defaultstatblock' }
+    });
+    ko.components.register('activestatblock', {
+        viewModel: function (params) { return params.creature; },
+        template: { name: 'activestatblock' }
+    });
+    var CombatantViewModel = (function () {
+        function CombatantViewModel(Creature) {
+            var _this = this;
+            this.Creature = Creature;
+            this.GetHPColor = function () {
+                var green = Math.floor((_this.Creature.CurrentHP() / _this.Creature.MaxHP) * 170);
+                var red = Math.floor((_this.Creature.MaxHP - _this.Creature.CurrentHP()) / _this.Creature.MaxHP * 170);
+                return "rgb(" + red + "," + green + ",0)";
+            };
+            this.EditingHP = ko.observable(false);
+            this.HPChange = ko.observable(null);
+            this.CommitHP = function () {
+                _this.Creature.CurrentHP(_this.Creature.CurrentHP() - _this.HPChange());
+                _this.HPChange(null);
+                _this.EditingHP(false);
+            };
+            this.EditingName = ko.observable(false);
+            this.CommitName = function () {
+                _this.EditingName(false);
+            };
+            this.AddingTag = ko.observable(false);
+            this.NewTag = ko.observable(null);
+            this.CommitTag = function () {
+                _this.Creature.Tags.push(_this.NewTag());
+                _this.NewTag(null);
+                _this.AddingTag(false);
+            };
+            this.RemoveTag = function (tag) {
+                _this.Creature.Tags.splice(_this.Creature.Tags.indexOf(tag), 1);
+            };
+        }
+        return CombatantViewModel;
+    })();
+    ImprovedInitiative.CombatantViewModel = CombatantViewModel;
+    ko.components.register('combatant', {
+        viewModel: function (params) {
+            params.creature.ViewModel = new CombatantViewModel(params.creature);
+            return params.creature.ViewModel;
+        },
+        template: { name: 'combatant' }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
@@ -33,7 +76,7 @@ var ImprovedInitiative;
         function Creature(creatureJson, Encounter) {
             var _this = this;
             this.Encounter = Encounter;
-            this.setAlias = function (name) {
+            this.SetAlias = function (name) {
                 var others = _this.Encounter.Creatures().filter(function (c) { return c !== _this && c.Name === name; });
                 if (others.length === 0) {
                     return ko.observable(name);
@@ -50,27 +93,6 @@ var ImprovedInitiative;
                 }
                 return modifiers;
             };
-            this.CommitHP = function () {
-                _this.CurrentHP(_this.CurrentHP() - _this.HPChange());
-                _this.HPChange(null);
-                _this.EditingHP(false);
-            };
-            this.CommitName = function () {
-                _this.EditingName(false);
-            };
-            this.CommitTag = function () {
-                _this.Tags.push(_this.NewTag());
-                _this.NewTag(null);
-                _this.AddingTag(false);
-            };
-            this.RemoveTag = function (tag) {
-                _this.Tags.splice(_this.Tags.indexOf(tag), 1);
-            };
-            this.GetHPColor = function () {
-                var green = Math.floor((_this.CurrentHP() / _this.MaxHP) * 170);
-                var red = Math.floor((_this.MaxHP - _this.CurrentHP()) / _this.MaxHP * 170);
-                return "rgb(" + red + "," + green + ",0)";
-            };
             this.RollInitiative = function () {
                 var roll = _this.Encounter.Rules.Check(_this.InitiativeModifier);
                 _this.Initiative(roll);
@@ -79,7 +101,7 @@ var ImprovedInitiative;
             this.StatBlock = ImprovedInitiative.StatBlock.Empty();
             jQuery.extend(this.StatBlock, creatureJson);
             this.Name = this.StatBlock.Name;
-            this.Alias = this.setAlias(this.Name);
+            this.Alias = this.SetAlias(this.Name);
             this.MaxHP = this.StatBlock.HP.Value;
             this.CurrentHP = ko.observable(this.StatBlock.HP.Value);
             this.HPChange = ko.observable(null);
@@ -89,9 +111,6 @@ var ImprovedInitiative;
             this.NewTag = ko.observable();
             this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Abilities.Dex);
             this.Initiative = ko.observable(0);
-            this.EditingHP = ko.observable(false);
-            this.EditingName = ko.observable(false);
-            this.AddingTag = ko.observable(false);
         }
         return Creature;
     })();
@@ -174,13 +193,13 @@ var ImprovedInitiative;
             };
             this.FocusSelectedCreatureHP = function () {
                 if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().EditingHP(true);
+                    _this.SelectedCreature().ViewModel.EditingHP(true);
                 }
                 return false;
             };
             this.AddSelectedCreatureTag = function () {
                 if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().AddingTag(true);
+                    _this.SelectedCreature().ViewModel.AddingTag(true);
                 }
                 return false;
             };
@@ -200,7 +219,7 @@ var ImprovedInitiative;
             };
             this.EditSelectedCreatureName = function () {
                 if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().EditingName(true);
+                    _this.SelectedCreature().ViewModel.EditingName(true);
                 }
             };
             this.RequestInitiative = function (playercharacter) {
@@ -276,9 +295,13 @@ var ImprovedInitiative;
                 if (filter.length == 0) {
                     return _this.Creatures();
                 }
-                return _this.Creatures().filter(function (v) {
+                var creaturesWithFilterInName = _this.Creatures().filter(function (v) {
                     return v.Name.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) > -1;
                 });
+                var creaturesWithFilterInType = _this.Creatures().filter(function (v) {
+                    return v.Type && v.Type.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) > -1;
+                });
+                return creaturesWithFilterInName.concat(creaturesWithFilterInType);
             });
             this.PreviewCreature = ko.observable();
             this.PreviewCreatureStatblock = ko.computed(function () {

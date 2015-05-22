@@ -3493,9 +3493,8 @@ body .views li {
 }
 body .preview.statblock {
   position: fixed;
-  left: 300px;
+  left: 400px;
   top: 0px;
-  width: 300px;
   background-color: rgba(255, 255, 255, 0.99);
   z-index: 5;
   border: 2px solid gray;
@@ -3506,7 +3505,7 @@ body .library {
   left: 0px;
   top: 0px;
   height: 100%;
-  width: 300px;
+  width: 400px;
   background-color: rgba(255, 255, 255, 0.99);
   overflow-y: scroll;
   z-index: 3;
@@ -3611,7 +3610,10 @@ body .encounter .combatants .creature .hp {
   text-align: center;
 }
 body .encounter .combatants .creature .hp:hover {
-  border: 1px solid red;
+  background-color: rgba(100, 0, 0, 0.5);
+}
+body .encounter .combatants .creature .hp.focused {
+  background-color: rgba(255, 0, 0, 0.5);
 }
 body .encounter .combatants .creature .hp .current-hp {
   font-weight: bold;
@@ -3626,7 +3628,7 @@ body .encounter .combatants .creature .hp .max-hp:before {
 body .encounter .combatants .creature .hp input {
   position: absolute;
   border: 3px solid red;
-  left: 15px;
+  right: 0px;
   top: -23px;
   width: 40px;
 }
@@ -3661,12 +3663,18 @@ body .encounter .combatants .creature.header .hp {
   text-align: center;
 }
 body .encounter .combatants .creature.header .hp:hover {
-  border-color: transparent;
+  background-color: inherit;
 }
 body .statblock {
   width: 400px;
   overflow-y: scroll;
   flex-shrink: 1;
+}
+body .statblock hr {
+  margin: 5px 0px;
+  background-color: darkred;
+  border: none;
+  height: 1px;
 }
 body .statblock .csv::after {
   content: ', ';
@@ -3684,16 +3692,6 @@ body .statblock .Name {
   color: darkred;
   font-weight: bold;
   font-size: large;
-}
-body .statblock .Type,
-body .statblock .Speed,
-body .statblock .Abilities,
-body .statblock .Challenge,
-body .statblock .Traits,
-body .statblock .Actions {
-  border-bottom-color: darkred;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
 }
 body .statblock .Abilities {
   display: flex;

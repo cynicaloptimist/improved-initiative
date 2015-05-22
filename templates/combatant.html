@@ -1,0 +1,20 @@
+<div data-bind="text: Creature.Initiative" class="initiative"></div>
+<div class="name">
+  <span data-bind="text: Creature.Alias, visible:!EditingName(), attr: {title: Creature.Alias}"></span>
+  <input data-bind="textInput: Creature.Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
+</div>
+<div class="hp" data-bind="click: EditingHP, css: { focused: EditingHP }">
+  <input type="number" data-bind="textInput: HPChange, onEnter: CommitHP, visible: EditingHP, hasFocus: EditingHP" />
+  <span data-bind="text: Creature.CurrentHP, style: { color: GetHPColor() }" class="current-hp"></span>
+  <span data-bind="text: Creature.MaxHP" class="max-hp"></span>
+</div>
+<div class="ac" data-bind="text: Creature.AC"></div>
+<div class="tags">
+  <input data-bind="textInput: NewTag, visible: AddingTag, hasFocus: AddingTag, onEnter: CommitTag" class="tags" />
+  <!--ko foreach: Creature.Tags() -->
+  <div class="tag outline">
+    <span data-bind="text: $data"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
+  </div>
+  <!-- /ko -->
+  <span class="fa-clickable fa-plus" data-bind="click: AddingTag, visible: !AddingTag()"></span>
+</div>
