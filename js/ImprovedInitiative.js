@@ -104,11 +104,9 @@ var ImprovedInitiative;
             this.Alias = this.SetAlias(this.Name);
             this.MaxHP = this.StatBlock.HP.Value;
             this.CurrentHP = ko.observable(this.StatBlock.HP.Value);
-            this.HPChange = ko.observable(null);
             this.AbilityModifiers = this.calculateModifiers();
             this.AC = this.StatBlock.AC.Value;
             this.Tags = ko.observableArray();
-            this.NewTag = ko.observable();
             this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Abilities.Dex);
             this.Initiative = ko.observable(0);
         }
