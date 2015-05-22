@@ -3493,8 +3493,9 @@ body .views li {
 }
 body .preview.statblock {
   position: fixed;
-  left: 400px;
+  left: 370px;
   top: 0px;
+  max-height: 800px;
   background-color: rgba(255, 255, 255, 0.99);
   z-index: 5;
   border: 2px solid gray;

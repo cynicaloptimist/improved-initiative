@@ -565,6 +565,25 @@ var ImprovedInitiative;
         Mousetrap.bind('alt+j', viewModel.Encounter().MoveSelectedCreatureDown);
         Mousetrap.bind('alt+k', viewModel.Encounter().MoveSelectedCreatureUp);
     }
+    function InitializeJquery(viewModel) {
+        $('.fa.preview').hover(function (e) {
+            viewModel.Library().PreviewCreature(ko.dataFor(e.target));
+            //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
+            var popPosition = $(e.target).position().top;
+            var maxPopPosition = $(document).height() - parseInt($('.preview.statblock').css('max-height'));
+            if (popPosition > maxPopPosition) {
+                popPosition = maxPopPosition - 10;
+            }
+            $('.preview.statblock').css('top', popPosition);
+        }, function (e) {
+            if (!$('.preview.statblock').is(':hover')) {
+                viewModel.Library().PreviewCreature(null);
+            }
+        });
+        $('.preview.statblock').hover(null, function (e) {
+            viewModel.Library().PreviewCreature(null);
+        });
+    }
     $(function () {
         var viewModel = new ViewModel();
         RegisterKeybindings(viewModel);
@@ -572,17 +591,7 @@ var ImprovedInitiative;
         $.ajax("db.xml").done(function (xml) {
             var library = ImprovedInitiative.LibraryImporter.Import(xml);
             viewModel.Library().Add(library);
-            $('.fa.preview').hover(function (e) {
-                viewModel.Library().PreviewCreature(ko.dataFor(e.target));
-                var popPosition = $(e.target).position().top;
-                var maxPopPosition = $(document).height() - $('.preview.statblock').height();
-                if (popPosition > maxPopPosition) {
-                    popPosition = maxPopPosition - 10;
-                }
-                $('.preview.statblock').css('top', popPosition);
-            }, function (e) {
-                viewModel.Library().PreviewCreature(null);
-            });
+            InitializeJquery(viewModel);
         });
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));

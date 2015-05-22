@@ -43,6 +43,30 @@ module ImprovedInitiative {
     Mousetrap.bind('alt+k',viewModel.Encounter().MoveSelectedCreatureUp);
   }
   
+  function InitializeJquery(viewModel: ViewModel){
+    $('.fa.preview').hover(e => {
+        viewModel.Library().PreviewCreature(ko.dataFor(e.target));
+        
+        //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
+        var popPosition = $(e.target).position().top;
+        var maxPopPosition = $(document).height() - parseInt($('.preview.statblock').css('max-height'));
+        if(popPosition > maxPopPosition){
+          popPosition = maxPopPosition - 10;
+        }
+        $('.preview.statblock').css('top', popPosition);
+        
+        
+      }, e => {
+        if(!$('.preview.statblock').is(':hover'))
+        {
+          viewModel.Library().PreviewCreature(null);
+        }
+    });
+    $('.preview.statblock').hover(null, e => {
+      viewModel.Library().PreviewCreature(null);
+    })
+  }
+  
   $(() => {
     var viewModel = new ViewModel();
     RegisterKeybindings(viewModel);
@@ -50,18 +74,7 @@ module ImprovedInitiative {
     $.ajax("db.xml").done(xml => {
       var library = LibraryImporter.Import(xml);
       viewModel.Library().Add(library);
-      
-      $('.fa.preview').hover(e => {
-        viewModel.Library().PreviewCreature(ko.dataFor(e.target));
-        var popPosition = $(e.target).position().top;
-        var maxPopPosition = $(document).height() - $('.preview.statblock').height();
-        if(popPosition > maxPopPosition){
-          popPosition = maxPopPosition - 10;
-        }
-        $('.preview.statblock').css('top', popPosition);
-      }, e => {
-        viewModel.Library().PreviewCreature(null);
-      });
+      InitializeJquery(viewModel);
     })
   });
 }
