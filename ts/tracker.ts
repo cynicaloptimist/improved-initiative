@@ -2,6 +2,7 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+/// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
 /// <reference path="custombindinghandlers.ts" />
@@ -23,58 +24,59 @@ module ImprovedInitiative {
     'DamageImmunities': 'Damage Immunities',
     'ConditionImmunities': 'Condition Immunities'
   }
-  
+  class KeyBinding {
+    Description: string;
+    Combo: string;
+    Binding: () => any;
+  }
   class ViewModel{
     Encounter = ko.observable<Encounter>(new Encounter());
     Library = ko.observable<ICreatureLibrary>(new CreatureLibrary());
-  }
-  
-  function RegisterKeybindings(viewModel: ViewModel){
-    Mousetrap.bind('j',viewModel.Encounter().SelectNextCombatant);
-    Mousetrap.bind('k',viewModel.Encounter().SelectPreviousCombatant);
-    Mousetrap.bind('n',viewModel.Encounter().NextTurn);
-    Mousetrap.bind('alt+n',viewModel.Encounter().PreviousTurn);
-    Mousetrap.bind('t',viewModel.Encounter().FocusSelectedCreatureHP);
-    Mousetrap.bind('g',viewModel.Encounter().AddSelectedCreatureTag);
-    Mousetrap.bind('del',viewModel.Encounter().RemoveSelectedCreature);
-    Mousetrap.bind('f2', viewModel.Encounter().EditSelectedCreatureName);
-    Mousetrap.bind('alt+r',viewModel.Encounter().RollInitiative);
-    Mousetrap.bind('alt+j',viewModel.Encounter().MoveSelectedCreatureDown);
-    Mousetrap.bind('alt+k',viewModel.Encounter().MoveSelectedCreatureUp);
-  }
-  
-  function InitializeJquery(viewModel: ViewModel){
-    $('.fa.preview').hover(e => {
-        viewModel.Library().PreviewCreature(ko.dataFor(e.target));
-        
-        //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
-        var popPosition = $(e.target).position().top;
-        var maxPopPosition = $(document).height() - parseInt($('.preview.statblock').css('max-height'));
-        if(popPosition > maxPopPosition){
-          popPosition = maxPopPosition - 10;
-        }
-        $('.preview.statblock').css('top', popPosition);
-        
-        
-      }, e => {
-        if(!$('.preview.statblock').is(':hover'))
-        {
-          viewModel.Library().PreviewCreature(null);
-        }
-    });
-    $('.preview.statblock').hover(null, e => {
-      viewModel.Library().PreviewCreature(null);
-    })
+    SaveEncounter = () => {
+      localStorage.setItem('ImprovedInititiative', ko.mapping.toJSON(this.Encounter().Creatures));
+    }
+    LoadEncounter = () => {
+      this.Encounter().Creatures = ko.mapping.fromJSON(localStorage.getItem('ImprovedInitiative'));
+    }
+    
+    KeyBindings: KeyBinding [] = [
+      { Description: 'Select Next Combatant', Combo: 'j', Binding: this.Encounter().SelectNextCombatant },
+      { Description: 'Select Previous Combatant', Combo: 'k', Binding: this.Encounter().SelectPreviousCombatant },
+      { Description: 'Next Turn', Combo: 'n', Binding: this.Encounter().NextTurn },
+      { Description: 'Previous Turn', Combo: 'alt+n', Binding: this.Encounter().PreviousTurn },
+      { Description: 'Damage/Heal Selected Combatant', Combo: 't', Binding: this.Encounter().FocusSelectedCreatureHP },
+      { Description: 'Add Tag to Selected Combatant', Combo: 'g', Binding: this.Encounter().AddSelectedCreatureTag },
+      { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', Binding: this.Encounter().RemoveSelectedCreature },
+      { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', Binding: this.Encounter().EditSelectedCreatureName },
+      { Description: 'Roll Initiative', Combo: 'alt+r', Binding: this.Encounter().RollInitiative },
+      { Description: 'Move Selected Combatant Down', Combo: 'alt+j', Binding: this.Encounter().MoveSelectedCreatureDown },
+      { Description: 'Move Selected Combatant Up', Combo: 'alt+k', Binding: this.Encounter().MoveSelectedCreatureUp },
+      { Description: 'Show Keybindings', Combo: '?', Binding: this.ShowKeybindings },
+      { Description: 'Add Temporary HP', Combo: 'alt+t', Binding: this.Encounter().AddSelectedCreatureTemporaryHP },
+      { Description: 'Save Encounter', Combo: 'alt+s', Binding: this.SaveEncounter },
+      { Description: 'Load Encounter', Combo: 'alt+o', Binding: this.LoadEncounter },
+    ];
+    
+    ShowKeybindings = () => {
+      $('.keybindings').toggle();
+    }
+    
+    RegisterKeybindings(){
+      Mousetrap.reset();
+      this.KeyBindings.forEach(b => Mousetrap.bind(b.Combo, b.Binding))
+    }
   }
   
   $(() => {
     var viewModel = new ViewModel();
-    RegisterKeybindings(viewModel);
+    viewModel.RegisterKeybindings();
     ko.applyBindings(viewModel);
-    $.ajax("db.xml").done(xml => {
+    $.ajax("client.xml").done(xml => {
       var library = LibraryImporter.Import(xml);
-      viewModel.Library().Add(library);
-      InitializeJquery(viewModel);
+      viewModel.Library().AddCreatures(library);
+    })
+    $.ajax("playercharacters.json").done(json => {
+      viewModel.Library().AddPlayers(json);
     })
   });
 }

@@ -8,6 +8,7 @@
   <title>Improved Initiative</title>
   
   <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
+  <script type="text/javascript" src="lib/knockout.mapping.js"></script>
   <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
   <script type="text/javascript" src="lib/jquery-ui-1.11.4/jquery-ui.js"></script>
   <script type="text/javascript" src="lib/mousetrap.js"></script>
@@ -15,7 +16,15 @@
   
   </head>
   <body>
-  <div class="preview statblock" data-bind="visible: Library().PreviewCreatureStatblock().Name">
+  <div class="keybindings" data-bind="foreach: KeyBindings">
+    <div><span data-bind="text: Description"></span>: <input data-bind="value: Combo" />
+    </div>
+  </div>
+  <div class="preview statblock" data-bind="
+    visible: Library().PreviewCreatureStatblock().Name,
+    event: {
+      mouseout: Library().HidePreviewPane
+    }">
     <div data-bind="component: { 
         name: 'defaultstatblock', 
         params:{ 
@@ -23,15 +32,31 @@
         } 
       }"></div>
   </div>
-  
-  <div class="library" data-bind="with: Library">
-    <h1>Library</h1>
-    <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-    <ul class="creature-library" data-bind="foreach: FilteredCreatures()">
-      <li data-bind="click: $root.Encounter().AddCreature"><span data-bind="text: Name"></span><span class="fa fa-search preview"></span></li>
-    </ul>
+  <div class="libraries">
+    <h1 data-bind="format: 'Library'">{0} {1} {2}</h1>
+    <div class="tabs">
+      <div data-bind="click: Library().DisplayTab.bind(null, 'Creatures')">Creatures</div>
+      <div data-bind="click: Library().DisplayTab.bind(null, 'Players')">Players</div>
+      <div>Encounters</div>
+    </div>
+    <div class="library" data-bind="with: Library">
+      <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
+      <ul class="creature-library" data-bind="foreach: FilteredCreatures">
+        <li data-bind="click: $root.Encounter().AddCreature">
+          <span data-bind="text: Name"></span>
+          <span class="fa fa-search preview" data-bind="event: {
+            mouseover: $parent.ShowPreviewPane,
+            mouseout: $parent.HidePreviewPane
+          }"></span>
+          <span class="fa fa-edit" data-bind="click: $parent.EditCreature"></span>
+        </li>
+      </ul>
+      <div class="interface-buttons">
+        <div data-bind="click: AddNewCreature"><span class="fa fa-plus"></span></div>
+        <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
+      </div>
+    </div>
   </div>
-
   <div class="views">
 
   <div class="active statblock" data-bind="if: Encounter().ActiveCreature()">
@@ -45,7 +70,24 @@
     }"></div>
   </div>
   
-  
+<!-- ko if: Library().EditCreature -->
+
+  <div class="editor">
+    <h1>Edit Creature</h1>
+    <div data-bind="component: {
+      name: 'editstatblock',
+      params: {
+        statblock: Library().EditCreatureStatblock
+      }
+    }"></div>
+    <div class="interface-buttons">
+      <div data-bind="click: Library().SaveCreature"><span class="fa fa-check"></span></div>
+    </div>
+  </div>
+
+<!-- /ko -->
+<!-- ko ifnot: Library().EditCreature -->
+
   <div class="tracker">
     <div class="encounter" data-bind="with: Encounter">
       <h1>Tracker</h1>
@@ -79,6 +121,8 @@
     </div>
     </div>
 
+<!-- /ko -->
+
     <div class="selected statblock">
       <h1>Target Creature</h1>
       <div data-bind="visible: Encounter().SelectedCreature(), 
@@ -91,14 +135,14 @@
     </div>
   </div>
   <div class="interface-buttons" data-bind="with:Encounter()">
-    <div data-bind="click: RollInitiative">Roll Initiative! <span class="fa fa-play"></span></div>
+    <div class='highlight' data-bind="click: RollInitiative">Roll Initiative! <span class="fa fa-play"></span></div>
     <div data-bind="click: NextTurn">Next Turn <span class="fa fa-step-forward"></span></div>
     <div data-bind="click: PreviousTurn">Previous Turn <span class="fa fa-step-backward"></span></div>
     <div data-bind="click: MoveSelectedCreatureDown">Move <span class="fa fa-arrow-down"></span></div>
     <div data-bind="click: MoveSelectedCreatureUp">Move <span class="fa fa-arrow-up"></span></div>
     <div data-bind="click: EditSelectedCreatureName">Rename <span class="fa fa-edit"></span></div>
     <div data-bind="click: RemoveSelectedCreature">Remove <span class="fa fa-trash"></span></div>
-    <div onclick="$('.library').slideDown()">Add <span class="fa fa-plus"></span></div>
+    <div onclick="$('.libraries').slideDown()">Add <span class="fa fa-plus"></span></div>
   </div>
   </body>
 </html>

@@ -49,7 +49,8 @@ module ImprovedInitiative {
     Name: string;
     HP: IHaveValue;
     AC: IHaveValue;
-    Attributes: IHaveAbilities;
+    InitiativeModifier?: number;
+    Abilities: IHaveAbilities;
   }
   
   export interface IStatBlock {
@@ -88,6 +89,6 @@ module ImprovedInitiative {
       LegendaryActions: []
     })
     
-    static Attributes = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
+    static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
 	}
 }

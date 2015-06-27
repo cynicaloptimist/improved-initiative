@@ -63,6 +63,10 @@ body{
 	h1 {
 		font-size:large;
 		padding: 5px;
+		background-color: darkred;
+		color: white;
+		margin-bottom: 5px;
+		min-height: 2em;
 	}
 
 	.views {
@@ -71,8 +75,16 @@ body{
 		flex-grow: 1;
 		div, li {
 			cursor: default;
-			border: 1px solid transparent;
 		}
+	}
+
+	.keybindings {
+		position: fixed;
+		top: 200px;
+		margin:auto;
+		z-index:10;
+		background-color: rgb(255,255,255);
+		display:none;
 	}
 
 	.preview.statblock {
@@ -80,24 +92,39 @@ body{
 		left: 370px;
 		top: 0px;
 		max-height: 800px;
-		background-color: rgba(255,255,255,0.99);
+		background-color: rgb(255,255,255);
 		z-index: 5;
 		border: 2px solid gray;
 		border-radius: 2px;
 	}
 
-
-	.library {
+	.libraries {
 		position: fixed;
 		left: 0px;
 		top: 0px;
-		height: 100%;
+		max-height: 100%;
 		width: 400px;
-		background-color: rgba(255,255,255,0.99);
-		overflow-y: scroll;
+		background-color: white;
 		z-index: 3;
+		display: flex;
+		flex-direction:column;
+		.tabs {
+			min-height: 25px;
+			div {
+				display:inline-block;
+			}
+		}
+	}
+	.library {
+		display: flex;
+		flex-direction:column;
+		.filter-library {
+			margin: 5px;
+			min-height: 2em;
+		}
 		ul.creature-library {
-			border: 1px solid black;
+			overflow-y: scroll;
+			flex-shrink: 1;
 			list-style-type: none;
 			li {
 				line-height: 24px;
@@ -164,15 +191,18 @@ body{
 				
 				.hp {
 					position:relative;
-					width:80px;
+					width:115px;
 					text-align:center;
 
 					&:hover{
 						background-color: rgba(100,0,0,0.5);
 					}
 
-					&.focused{
+					&.applyDamage{
 						background-color: rgba(255,0,0,0.5);
+					}
+					&.applyTemporaryHP{
+						background-color: rgba(0,200,0,0.5);
 					}
 					
 					.current-hp{
@@ -239,6 +269,13 @@ body{
 		overflow-y: scroll;
 		flex-shrink: 1;
 
+		>div {
+			margin: 3px;
+			* {
+				font-family: serif;
+			}
+		}
+
 		hr {
 			margin: 5px 0px;
 			background-color: darkred;
@@ -277,8 +314,17 @@ body{
 			}
 		}
 	}
-	.tracker {
+	.tracker, .editor {
 		flex-grow: 1;
+	}
+
+	.editor {
+		.stats label {
+			display: flex;
+			flex-direction: row;
+			width: 300px;
+			justify-content: space-between;
+		}
 	}
 
 	.interface-buttons {
@@ -294,6 +340,12 @@ body{
 			.outline();
 			&:hover {
 				background-color: rgba(0,0,0,0.2);
+			}
+			&.highlight{
+				background-color: rgb(60, 179, 80);
+				&:hover {
+					background-color: rgb(80, 189, 90);
+				}
 			}
 		}
 	}

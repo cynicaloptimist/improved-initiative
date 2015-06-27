@@ -3480,6 +3480,10 @@ body input {
 body h1 {
   font-size: large;
   padding: 5px;
+  background-color: darkred;
+  color: white;
+  margin-bottom: 5px;
+  min-height: 2em;
 }
 body .views {
   display: flex;
@@ -3489,30 +3493,53 @@ body .views {
 body .views div,
 body .views li {
   cursor: default;
-  border: 1px solid transparent;
+}
+body .keybindings {
+  position: fixed;
+  top: 200px;
+  margin: auto;
+  z-index: 10;
+  background-color: #ffffff;
+  display: none;
 }
 body .preview.statblock {
   position: fixed;
   left: 370px;
   top: 0px;
   max-height: 800px;
-  background-color: rgba(255, 255, 255, 0.99);
+  background-color: #ffffff;
   z-index: 5;
   border: 2px solid gray;
   border-radius: 2px;
 }
-body .library {
+body .libraries {
   position: fixed;
   left: 0px;
   top: 0px;
-  height: 100%;
+  max-height: 100%;
   width: 400px;
-  background-color: rgba(255, 255, 255, 0.99);
-  overflow-y: scroll;
+  background-color: white;
   z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+body .libraries .tabs {
+  min-height: 25px;
+}
+body .libraries .tabs div {
+  display: inline-block;
+}
+body .library {
+  display: flex;
+  flex-direction: column;
+}
+body .library .filter-library {
+  margin: 5px;
+  min-height: 2em;
 }
 body .library ul.creature-library {
-  border: 1px solid black;
+  overflow-y: scroll;
+  flex-shrink: 1;
   list-style-type: none;
 }
 body .library ul.creature-library li {
@@ -3607,14 +3634,17 @@ body .encounter .combatants .creature .name {
 }
 body .encounter .combatants .creature .hp {
   position: relative;
-  width: 80px;
+  width: 115px;
   text-align: center;
 }
 body .encounter .combatants .creature .hp:hover {
   background-color: rgba(100, 0, 0, 0.5);
 }
-body .encounter .combatants .creature .hp.focused {
+body .encounter .combatants .creature .hp.applyDamage {
   background-color: rgba(255, 0, 0, 0.5);
+}
+body .encounter .combatants .creature .hp.applyTemporaryHP {
+  background-color: rgba(0, 200, 0, 0.5);
 }
 body .encounter .combatants .creature .hp .current-hp {
   font-weight: bold;
@@ -3671,6 +3701,12 @@ body .statblock {
   overflow-y: scroll;
   flex-shrink: 1;
 }
+body .statblock > div {
+  margin: 3px;
+}
+body .statblock > div * {
+  font-family: serif;
+}
 body .statblock hr {
   margin: 5px 0px;
   background-color: darkred;
@@ -3704,8 +3740,15 @@ body .statblock .Abilities > div {
 body .statblock .Abilities > div .label {
   text-transform: uppercase;
 }
-body .tracker {
+body .tracker,
+body .editor {
   flex-grow: 1;
+}
+body .editor .stats label {
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+  justify-content: space-between;
 }
 body .interface-buttons {
   display: flex;
@@ -3727,4 +3770,10 @@ body .interface-buttons > div.button:hover {
 }
 body .interface-buttons > div:hover {
   background-color: rgba(0, 0, 0, 0.2);
+}
+body .interface-buttons > div.highlight {
+  background-color: #3cb350;
+}
+body .interface-buttons > div.highlight:hover {
+  background-color: #50bd5a;
 }

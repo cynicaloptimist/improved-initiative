@@ -5,6 +5,7 @@ module ImprovedInitiative {
 	  Alias: KnockoutObservable<string>;
 	  MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
+    TemporaryHP: KnockoutObservable<number>;
 	  AC: number;
 	  AbilityModifiers: IHaveAbilities;
 	  Tags: KnockoutObservableArray<string>;
@@ -23,6 +24,7 @@ module ImprovedInitiative {
       this.Alias = this.SetAlias(this.Name)
       this.MaxHP = this.StatBlock.HP.Value;
       this.CurrentHP = ko.observable(this.StatBlock.HP.Value);
+      this.TemporaryHP = ko.observable(0);
       this.AbilityModifiers = this.calculateModifiers();
       this.AC = this.StatBlock.AC.Value;
       this.Tags = ko.observableArray<string>();
@@ -34,6 +36,7 @@ module ImprovedInitiative {
 	  Alias: KnockoutObservable<string>;
 	  MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
+    TemporaryHP: KnockoutObservable<number>;
 	  HPChange: KnockoutObservable<number>;
 	  AC: number;
 	  AbilityModifiers: IHaveAbilities;

@@ -70,7 +70,7 @@ module ImprovedInitiative {
 			.map((trait) => {
 				return {
 					Name: $(trait).find('name').html(),
-					Content: $(trait).find('desc').html(),
+					Content: $(trait).find('desc').html().replace('\\r', '<br />'),
 					Usage: '' //todo
 				}
 			})
@@ -81,7 +81,7 @@ module ImprovedInitiative {
 		static Import = (xmlDoc: string) => {
 			var library = [];
 			
-			$(xmlDoc).find('npc category>*').each((_,creatureXml) => {
+			$(xmlDoc).find('npcdata>*').each((_,creatureXml) => {
 				var imp = new CreatureImporter(creatureXml);
 				var creature = StatBlock.Empty();
 				

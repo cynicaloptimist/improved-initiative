@@ -1,8 +1,24 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+interface String {
+  format: (...arguments: any[]) => string;
+}
+String.prototype.format = function () {
+  var args;
+  if(arguments[0] instanceof Array){
+    args = arguments[0];  
+  } else {
+    args = arguments;
+  }
+  return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+    if (m == "{{") { return "{"; }
+    if (m == "}}") { return "}"; }
+    return args[n] || "{" + n + "}";
+  });
+};
 
 module ImprovedInitiative {
-	var templateLoader = {
+  var templateLoader = {
     loadTemplate: function(name, templateConfig, callback) {
         if (templateConfig.name) {
             var fullUrl = '/templates/' + templateConfig.name + '.html';
@@ -31,23 +47,85 @@ module ImprovedInitiative {
     template: { name: 'activestatblock' }
   });
   
+  ko.components.register('editstatblock', {
+    viewModel: function(params) { return params.statblock; },
+    template: { name: 'editstatblock' }
+  });
+  
   export class CombatantViewModel {
-    constructor(public Creature: Creature){}
-    	  
+    DisplayHP: () => void;
+    
+    constructor(public Creature: Creature){
+      this.DisplayHP = ko.pureComputed(() => {
+        if(this.Creature.TemporaryHP()){
+          return '{0}+{1}/{2}'.format(this.Creature.CurrentHP(), this.Creature.TemporaryHP(), this.Creature.MaxHP);
+        } else {
+          return '{0}/{1}'.format(this.Creature.CurrentHP(), this.Creature.MaxHP);
+        }
+      })
+    }
+    
     GetHPColor = () => {
 	    var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
 	    var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
 	    return "rgb(" + red + "," + green + ",0)";
 	  };
     
-    EditingHP = ko.observable(false);
+    EditingHP = ko.observable(false)
+    AddingTemporaryHP = ko.observable(false)
     
-    HPChange = ko.observable(null);
+    EditHP = () => {
+      this.EditingHP(true);
+    }
+    
+    AddTemporaryHP = () => {
+      this.AddingTemporaryHP(true);
+    }
+    
+    ShowHPInput = ko.pureComputed<boolean>(() => {
+      return this.EditingHP() || this.AddingTemporaryHP()
+    });
+    
+    HPInput = ko.observable(null);
     
 	  CommitHP = () => {
-	    this.Creature.CurrentHP(this.Creature.CurrentHP() - this.HPChange());
-	    this.HPChange(null);
-	    this.EditingHP(false);
+      if(this.EditingHP()){
+        var damage = this.HPInput(), 
+            healing = -this.HPInput(), 
+            currHP = this.Creature.CurrentHP(), 
+            tempHP = this.Creature.TemporaryHP();
+  
+  	    if(damage > 0){
+          tempHP =- damage;
+          if(tempHP < 0){
+            currHP += tempHP;
+            tempHP = 0;
+          }
+        } else {
+          currHP += healing;
+          if(currHP > this.Creature.MaxHP)
+          {
+            currHP = this.Creature.MaxHP;
+          }
+        }
+        
+        this.Creature.CurrentHP(currHP);
+        this.Creature.TemporaryHP(tempHP);
+        this.EditingHP(false);
+        
+      } else if(this.AddingTemporaryHP) {
+        
+        var newTemporaryHP = this.HPInput(),
+            currentTemporaryHP = this.Creature.TemporaryHP();
+        if(newTemporaryHP > currentTemporaryHP) {
+          currentTemporaryHP = newTemporaryHP;
+        }
+        
+        this.Creature.TemporaryHP(currentTemporaryHP);
+        this.AddingTemporaryHP(false);
+      }
+      
+	    this.HPInput(null);
 	  };
     
 	  EditingName = ko.observable(false);

@@ -1,5 +1,23 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+String.prototype.format = function () {
+    var args;
+    if (arguments[0] instanceof Array) {
+        args = arguments[0];
+    }
+    else {
+        args = arguments;
+    }
+    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+        if (m == "{{") {
+            return "{";
+        }
+        if (m == "}}") {
+            return "}";
+        }
+        return args[n] || "{" + n + "}";
+    });
+};
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var templateLoader = {
@@ -28,6 +46,10 @@ var ImprovedInitiative;
         viewModel: function (params) { return params.creature; },
         template: { name: 'activestatblock' }
     });
+    ko.components.register('editstatblock', {
+        viewModel: function (params) { return params.statblock; },
+        template: { name: 'editstatblock' }
+    });
     var CombatantViewModel = (function () {
         function CombatantViewModel(Creature) {
             var _this = this;
@@ -38,11 +60,46 @@ var ImprovedInitiative;
                 return "rgb(" + red + "," + green + ",0)";
             };
             this.EditingHP = ko.observable(false);
-            this.HPChange = ko.observable(null);
+            this.AddingTemporaryHP = ko.observable(false);
+            this.EditHP = function () {
+                _this.EditingHP(true);
+            };
+            this.AddTemporaryHP = function () {
+                _this.AddingTemporaryHP(true);
+            };
+            this.ShowHPInput = ko.pureComputed(function () {
+                return _this.EditingHP() || _this.AddingTemporaryHP();
+            });
+            this.HPInput = ko.observable(null);
             this.CommitHP = function () {
-                _this.Creature.CurrentHP(_this.Creature.CurrentHP() - _this.HPChange());
-                _this.HPChange(null);
-                _this.EditingHP(false);
+                if (_this.EditingHP()) {
+                    var damage = _this.HPInput(), healing = -_this.HPInput(), currHP = _this.Creature.CurrentHP(), tempHP = _this.Creature.TemporaryHP();
+                    if (damage > 0) {
+                        tempHP = -damage;
+                        if (tempHP < 0) {
+                            currHP += tempHP;
+                            tempHP = 0;
+                        }
+                    }
+                    else {
+                        currHP += healing;
+                        if (currHP > _this.Creature.MaxHP) {
+                            currHP = _this.Creature.MaxHP;
+                        }
+                    }
+                    _this.Creature.CurrentHP(currHP);
+                    _this.Creature.TemporaryHP(tempHP);
+                    _this.EditingHP(false);
+                }
+                else if (_this.AddingTemporaryHP) {
+                    var newTemporaryHP = _this.HPInput(), currentTemporaryHP = _this.Creature.TemporaryHP();
+                    if (newTemporaryHP > currentTemporaryHP) {
+                        currentTemporaryHP = newTemporaryHP;
+                    }
+                    _this.Creature.TemporaryHP(currentTemporaryHP);
+                    _this.AddingTemporaryHP(false);
+                }
+                _this.HPInput(null);
             };
             this.EditingName = ko.observable(false);
             this.CommitName = function () {
@@ -58,6 +115,14 @@ var ImprovedInitiative;
             this.RemoveTag = function (tag) {
                 _this.Creature.Tags.splice(_this.Creature.Tags.indexOf(tag), 1);
             };
+            this.DisplayHP = ko.pureComputed(function () {
+                if (_this.Creature.TemporaryHP()) {
+                    return '{0}+{1}/{2}'.format(_this.Creature.CurrentHP(), _this.Creature.TemporaryHP(), _this.Creature.MaxHP);
+                }
+                else {
+                    return '{0}/{1}'.format(_this.Creature.CurrentHP(), _this.Creature.MaxHP);
+                }
+            });
         }
         return CombatantViewModel;
     })();
@@ -104,6 +169,7 @@ var ImprovedInitiative;
             this.Alias = this.SetAlias(this.Name);
             this.MaxHP = this.StatBlock.HP.Value;
             this.CurrentHP = ko.observable(this.StatBlock.HP.Value);
+            this.TemporaryHP = ko.observable(0);
             this.AbilityModifiers = this.calculateModifiers();
             this.AC = this.StatBlock.AC.Value;
             this.Tags = ko.observableArray();
@@ -146,13 +212,24 @@ var ImprovedInitiative;
             }
         }
     };
+    ko.bindingHandlers.format = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            bindingContext['formatString'] = $(element).html();
+        },
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var replacements = ko.unwrap(valueAccessor());
+            if (!(replacements instanceof Array)) {
+                replacements = [replacements];
+            }
+            $(element).html(bindingContext['formatString'].format(replacements));
+        }
+    };
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var Encounter = (function () {
         function Encounter(rules) {
             var _this = this;
-            //ResponseRequest: KnockoutComputed<string>;
             this.sortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
@@ -192,6 +269,12 @@ var ImprovedInitiative;
             this.FocusSelectedCreatureHP = function () {
                 if (_this.SelectedCreature()) {
                     _this.SelectedCreature().ViewModel.EditingHP(true);
+                }
+                return false;
+            };
+            this.AddSelectedCreatureTemporaryHP = function () {
+                if (_this.SelectedCreature()) {
+                    _this.SelectedCreature().ViewModel.AddingTemporaryHP(true);
                 }
                 return false;
             };
@@ -244,7 +327,7 @@ var ImprovedInitiative;
                 }
                 _this.sortByInitiative();
                 _this.ActiveCreature(_this.Creatures()[0]);
-                $('.library').slideUp();
+                $('.libraries').slideUp();
             };
             this.NextTurn = function () {
                 var nextIndex = _this.Creatures().indexOf(_this.ActiveCreature()) + 1;
@@ -264,7 +347,6 @@ var ImprovedInitiative;
             this.Creatures = ko.observableArray();
             this.SelectedCreature = ko.observable();
             this.UserResponseRequests = ko.observableArray();
-            //this.ResponseRequest = ko.computed(() => (this.UserResponseRequests()[0] || {requestContent: ''}).requestContent)
             this.SelectedCreatureStatblock = ko.computed(function () {
                 return _this.SelectedCreature()
                     ? _this.SelectedCreature().StatBlock
@@ -287,8 +369,28 @@ var ImprovedInitiative;
         function CreatureLibrary(creatures) {
             var _this = this;
             this.Creatures = ko.observableArray();
+            this.Players = ko.observableArray();
+            this.ShowPreviewPane = function (creature, event) {
+                _this.PreviewCreature(creature);
+                //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
+                var popPosition = $(event.target).position().top;
+                var maxPopPosition = $(document).height() - parseInt($('.preview.statblock').css('max-height'));
+                if (popPosition > maxPopPosition) {
+                    popPosition = maxPopPosition - 10;
+                }
+                $('.preview.statblock').css('top', popPosition);
+            };
+            this.HidePreviewPane = function () {
+                if (!$('.preview.statblock').is(':hover')) {
+                    _this.PreviewCreature(null);
+                }
+            };
+            this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {
+                if (_this.DisplayTab() == 'Players') {
+                    return _this.Players();
+                }
                 var filter = _this.LibraryFilter();
                 if (filter.length == 0) {
                     return _this.Creatures();
@@ -305,9 +407,35 @@ var ImprovedInitiative;
             this.PreviewCreatureStatblock = ko.computed(function () {
                 return _this.PreviewCreature() || ImprovedInitiative.StatBlock.Empty();
             });
+            this.EditCreature = ko.observable();
+            this.EditCreatureStatblock = ko.computed(function () {
+                return _this.EditCreature() || ImprovedInitiative.StatBlock.Empty();
+            });
+            this.SaveCreature = function () {
+                var creature = _this.EditCreature();
+                if (_this.DisplayTab() == 'Creatures') {
+                    _this.Creatures.splice(_this.Creatures.indexOf(creature), 1, creature);
+                }
+                else if (_this.DisplayTab() == 'Players') {
+                    creature.Player = 'player';
+                    _this.Players.splice(_this.Players.indexOf(creature), 1, creature);
+                }
+                _this.EditCreature(null);
+            };
+            this.AddNewPlayer = function () {
+                var player = ImprovedInitiative.StatBlock.Empty();
+                _this.EditCreature(player);
+            };
+            this.AddNewCreature = function () {
+                var creature = ImprovedInitiative.StatBlock.Empty();
+                _this.EditCreature(creature);
+            };
             this.Creatures(creatures || []);
         }
-        CreatureLibrary.prototype.Add = function (creatureOrLibrary) {
+        CreatureLibrary.prototype.AddPlayers = function (library) {
+            this.Players(this.Players().concat(library));
+        };
+        CreatureLibrary.prototype.AddCreatures = function (creatureOrLibrary) {
             if (creatureOrLibrary.length) {
                 this.Creatures(this.Creatures().concat(creatureOrLibrary));
             }
@@ -389,7 +517,7 @@ var ImprovedInitiative;
                     .map(function (trait) {
                     return {
                         Name: $(trait).find('name').html(),
-                        Content: $(trait).find('desc').html(),
+                        Content: $(trait).find('desc').html().replace('\\r', '<br />'),
                         Usage: '' //todo
                     };
                 });
@@ -402,7 +530,7 @@ var ImprovedInitiative;
         }
         LibraryImporter.Import = function (xmlDoc) {
             var library = [];
-            $(xmlDoc).find('npc category>*').each(function (_, creatureXml) {
+            $(xmlDoc).find('npcdata>*').each(function (_, creatureXml) {
                 var imp = new CreatureImporter(creatureXml);
                 var creature = ImprovedInitiative.StatBlock.Empty();
                 creature.Name = imp.GetString('name');
@@ -497,7 +625,7 @@ var ImprovedInitiative;
             Actions: [],
             LegendaryActions: []
         }); };
-        StatBlock.Attributes = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
+        StatBlock.AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
         return StatBlock;
     })();
     ImprovedInitiative.StatBlock = StatBlock;
@@ -525,6 +653,7 @@ var ImprovedInitiative;
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
+/// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="custombindinghandlers.ts" />
 /// <reference path="components.ts" />
@@ -545,53 +674,59 @@ var ImprovedInitiative;
         'DamageImmunities': 'Damage Immunities',
         'ConditionImmunities': 'Condition Immunities'
     };
+    var KeyBinding = (function () {
+        function KeyBinding() {
+        }
+        return KeyBinding;
+    })();
     var ViewModel = (function () {
         function ViewModel() {
+            var _this = this;
             this.Encounter = ko.observable(new ImprovedInitiative.Encounter());
             this.Library = ko.observable(new ImprovedInitiative.CreatureLibrary());
+            this.SaveEncounter = function () {
+                localStorage.setItem('ImprovedInititiative', ko.mapping.toJSON(_this.Encounter().Creatures));
+            };
+            this.LoadEncounter = function () {
+                _this.Encounter().Creatures = ko.mapping.fromJSON(localStorage.getItem('ImprovedInitiative'));
+            };
+            this.KeyBindings = [
+                { Description: 'Select Next Combatant', Combo: 'j', Binding: this.Encounter().SelectNextCombatant },
+                { Description: 'Select Previous Combatant', Combo: 'k', Binding: this.Encounter().SelectPreviousCombatant },
+                { Description: 'Next Turn', Combo: 'n', Binding: this.Encounter().NextTurn },
+                { Description: 'Previous Turn', Combo: 'alt+n', Binding: this.Encounter().PreviousTurn },
+                { Description: 'Damage/Heal Selected Combatant', Combo: 't', Binding: this.Encounter().FocusSelectedCreatureHP },
+                { Description: 'Add Tag to Selected Combatant', Combo: 'g', Binding: this.Encounter().AddSelectedCreatureTag },
+                { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', Binding: this.Encounter().RemoveSelectedCreature },
+                { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', Binding: this.Encounter().EditSelectedCreatureName },
+                { Description: 'Roll Initiative', Combo: 'alt+r', Binding: this.Encounter().RollInitiative },
+                { Description: 'Move Selected Combatant Down', Combo: 'alt+j', Binding: this.Encounter().MoveSelectedCreatureDown },
+                { Description: 'Move Selected Combatant Up', Combo: 'alt+k', Binding: this.Encounter().MoveSelectedCreatureUp },
+                { Description: 'Show Keybindings', Combo: '?', Binding: this.ShowKeybindings },
+                { Description: 'Add Temporary HP', Combo: 'alt+t', Binding: this.Encounter().AddSelectedCreatureTemporaryHP },
+                { Description: 'Save Encounter', Combo: 'alt+s', Binding: this.SaveEncounter },
+                { Description: 'Load Encounter', Combo: 'alt+o', Binding: this.LoadEncounter },
+            ];
+            this.ShowKeybindings = function () {
+                $('.keybindings').toggle();
+            };
         }
+        ViewModel.prototype.RegisterKeybindings = function () {
+            Mousetrap.reset();
+            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.Combo, b.Binding); });
+        };
         return ViewModel;
     })();
-    function RegisterKeybindings(viewModel) {
-        Mousetrap.bind('j', viewModel.Encounter().SelectNextCombatant);
-        Mousetrap.bind('k', viewModel.Encounter().SelectPreviousCombatant);
-        Mousetrap.bind('n', viewModel.Encounter().NextTurn);
-        Mousetrap.bind('alt+n', viewModel.Encounter().PreviousTurn);
-        Mousetrap.bind('t', viewModel.Encounter().FocusSelectedCreatureHP);
-        Mousetrap.bind('g', viewModel.Encounter().AddSelectedCreatureTag);
-        Mousetrap.bind('del', viewModel.Encounter().RemoveSelectedCreature);
-        Mousetrap.bind('f2', viewModel.Encounter().EditSelectedCreatureName);
-        Mousetrap.bind('alt+r', viewModel.Encounter().RollInitiative);
-        Mousetrap.bind('alt+j', viewModel.Encounter().MoveSelectedCreatureDown);
-        Mousetrap.bind('alt+k', viewModel.Encounter().MoveSelectedCreatureUp);
-    }
-    function InitializeJquery(viewModel) {
-        $('.fa.preview').hover(function (e) {
-            viewModel.Library().PreviewCreature(ko.dataFor(e.target));
-            //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
-            var popPosition = $(e.target).position().top;
-            var maxPopPosition = $(document).height() - parseInt($('.preview.statblock').css('max-height'));
-            if (popPosition > maxPopPosition) {
-                popPosition = maxPopPosition - 10;
-            }
-            $('.preview.statblock').css('top', popPosition);
-        }, function (e) {
-            if (!$('.preview.statblock').is(':hover')) {
-                viewModel.Library().PreviewCreature(null);
-            }
-        });
-        $('.preview.statblock').hover(null, function (e) {
-            viewModel.Library().PreviewCreature(null);
-        });
-    }
     $(function () {
         var viewModel = new ViewModel();
-        RegisterKeybindings(viewModel);
+        viewModel.RegisterKeybindings();
         ko.applyBindings(viewModel);
-        $.ajax("db.xml").done(function (xml) {
+        $.ajax("client.xml").done(function (xml) {
             var library = ImprovedInitiative.LibraryImporter.Import(xml);
-            viewModel.Library().Add(library);
-            InitializeJquery(viewModel);
+            viewModel.Library().AddCreatures(library);
+        });
+        $.ajax("playercharacters.json").done(function (json) {
+            viewModel.Library().AddPlayers(json);
         });
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));

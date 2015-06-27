@@ -5,7 +5,6 @@ module ImprovedInitiative {
       this.Creatures = ko.observableArray<ICreature>();
       this.SelectedCreature = ko.observable<ICreature>();
       this.UserResponseRequests = ko.observableArray<IUserResponseRequest>();
-      //this.ResponseRequest = ko.computed(() => (this.UserResponseRequests()[0] || {requestContent: ''}).requestContent)
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
         return this.SelectedCreature() 
@@ -28,7 +27,6 @@ module ImprovedInitiative {
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     UserResponseRequests: KnockoutObservableArray<IUserResponseRequest>;
-    //ResponseRequest: KnockoutComputed<string>;
     
     private sortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
@@ -80,6 +78,13 @@ module ImprovedInitiative {
     {
       if(this.SelectedCreature()){
         this.SelectedCreature().ViewModel.EditingHP(true);
+      }
+      return false;
+    }
+    
+    AddSelectedCreatureTemporaryHP = () => {
+      if(this.SelectedCreature()){
+        this.SelectedCreature().ViewModel.AddingTemporaryHP(true);
       }
       return false;
     }
@@ -152,7 +157,7 @@ module ImprovedInitiative {
       this.sortByInitiative();
       this.ActiveCreature(this.Creatures()[0]);
       
-      $('.library').slideUp()
+      $('.libraries').slideUp()
     }
     
     NextTurn = () => {

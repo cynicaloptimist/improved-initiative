@@ -2,6 +2,7 @@ interface KnockoutBindingHandlers {
   focusOnRender: KnockoutBindingHandler;
   onEnter: KnockoutBindingHandler;
   uiText: KnockoutBindingHandler;
+  format: KnockoutBindingHandler;
 }
 	
 module ImprovedInitiative {
@@ -35,6 +36,19 @@ module ImprovedInitiative {
         $(element).html(valueAccessor());
       }
       
+    }
+  }
+  
+  ko.bindingHandlers.format = {
+    init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+      bindingContext['formatString'] = $(element).html();
+    },
+    update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+      var replacements = ko.unwrap(valueAccessor());
+      if(!(replacements instanceof Array)){
+        replacements = [replacements];
+      }
+      $(element).html(bindingContext['formatString'].format(replacements));
     }
   }
 }
