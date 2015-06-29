@@ -419,7 +419,7 @@ var ImprovedInitiative;
                 if (popPosition > maxPopPosition) {
                     popPosition = maxPopPosition - 10;
                 }
-                $('.preview.statblock').css('top', popPosition);
+                $('.preview.statblock').css('top', popPosition).select();
             };
             this.HidePreviewPane = function () {
                 if (!$('.preview.statblock').is(':hover')) {
@@ -485,7 +485,11 @@ var ImprovedInitiative;
         };
         CreatureLibrary.prototype.AddCreatures = function (creatureOrLibrary) {
             if (creatureOrLibrary.length) {
-                this.Creatures(this.Creatures().concat(creatureOrLibrary));
+                this.Creatures(this.Creatures()
+                    .concat(creatureOrLibrary
+                    .sort(function (a, b) {
+                    return a.Name.toLocaleLowerCase() < b.Name.toLocaleLowerCase() ? -1 : 1;
+                })));
             }
             else {
                 this.Creatures().push(creatureOrLibrary);
@@ -781,9 +785,8 @@ var ImprovedInitiative;
         var viewModel = new ViewModel();
         viewModel.RegisterKeybindings();
         ko.applyBindings(viewModel);
-        $.ajax("client.xml").done(function (xml) {
-            var library = ImprovedInitiative.LibraryImporter.Import(xml);
-            viewModel.Library().AddCreatures(library);
+        $.ajax("creatures.json").done(function (json) {
+            viewModel.Library().AddCreatures(json);
         });
         $.ajax("playercharacters.json").done(function (json) {
             viewModel.Library().AddPlayers(json);

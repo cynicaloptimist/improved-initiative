@@ -88,9 +88,8 @@ module ImprovedInitiative {
     var viewModel = new ViewModel();
     viewModel.RegisterKeybindings();
     ko.applyBindings(viewModel);
-    $.ajax("client.xml").done(xml => {
-      var library = LibraryImporter.Import(xml);
-      viewModel.Library().AddCreatures(library);
+    $.ajax("creatures.json").done(json => {
+      viewModel.Library().AddCreatures(json);
     })
     $.ajax("playercharacters.json").done(json => {
       viewModel.Library().AddPlayers(json);

@@ -35,7 +35,7 @@ module ImprovedInitiative {
       if(popPosition > maxPopPosition){
         popPosition = maxPopPosition - 10;
       }
-      $('.preview.statblock').css('top', popPosition);
+      $('.preview.statblock').css('top', popPosition).select();
     }
     
     HidePreviewPane = () => {
@@ -107,7 +107,12 @@ module ImprovedInitiative {
     AddCreatures(creatureOrLibrary: any): void {
       if(creatureOrLibrary.length)
       {
-        this.Creatures(this.Creatures().concat(creatureOrLibrary));
+        this.Creatures(
+          this.Creatures()
+              .concat(creatureOrLibrary
+                        .sort((a: IHaveTrackerStats, b: IHaveTrackerStats) => { 
+                          return a.Name.toLocaleLowerCase() < b.Name.toLocaleLowerCase() ? -1 : 1;
+                        })));
       } else {
         this.Creatures().push(creatureOrLibrary);
       }
