@@ -3548,6 +3548,7 @@ body .library ul.creature-library li {
 }
 body .library ul.creature-library li:nth-child(2n) {
   background-color: lightgray;
+  border-color: lightgray;
 }
 body .library ul.creature-library li:nth-child(2n) input {
   background-color: lightgray;
@@ -3558,6 +3559,7 @@ body .library ul.creature-library li:nth-child(2n) input:focus {
 }
 body .library ul.creature-library li:nth-child(2n+1) {
   background-color: transparent;
+  border-color: transparent;
 }
 body .library ul.creature-library li:nth-child(2n+1) input {
   background-color: transparent;
@@ -3591,18 +3593,9 @@ body .encounter .combatants .creature {
   border-width: 1px 5px;
   list-style-type: none;
 }
-body .encounter .combatants .creature.active {
-  border-left: 5px solid green;
-}
-body .encounter .combatants .creature.active .initiative {
-  font-weight: bold;
-}
-body .encounter .combatants .creature.selected {
-  border-right: 5px solid darkred;
-  border-color: darkred;
-}
 body .encounter .combatants .creature:nth-child(2n) {
   background-color: lightgray;
+  border-color: lightgray;
 }
 body .encounter .combatants .creature:nth-child(2n) input {
   background-color: lightgray;
@@ -3613,6 +3606,7 @@ body .encounter .combatants .creature:nth-child(2n) input:focus {
 }
 body .encounter .combatants .creature:nth-child(2n+1) {
   background-color: darkgray;
+  border-color: darkgray;
 }
 body .encounter .combatants .creature:nth-child(2n+1) input {
   background-color: darkgray;
@@ -3620,6 +3614,17 @@ body .encounter .combatants .creature:nth-child(2n+1) input {
 body .encounter .combatants .creature:nth-child(2n+1) input:hover,
 body .encounter .combatants .creature:nth-child(2n+1) input:focus {
   background-color: white;
+}
+body .encounter .combatants .creature.active {
+  border-left-color: green;
+}
+body .encounter .combatants .creature.active .initiative {
+  font-weight: bold;
+}
+body .encounter .combatants .creature.selected {
+  border-right-color: darkred;
+  border-top-color: darkred;
+  border-bottom-color: darkred;
 }
 body .encounter .combatants .creature div {
   display: inline-block;
@@ -3689,6 +3694,7 @@ body .encounter .combatants .creature .tags .fa-plus {
 }
 body .encounter .combatants .creature.header {
   background-color: black;
+  border-color: black;
   color: white;
   text-align: center;
 }
