@@ -3587,7 +3587,8 @@ body .encounter .combatants .creature {
   justify-content: space-between;
   align-items: flex-start;
   line-height: 32px;
-  border-width: 0px 5px;
+  border-style: solid;
+  border-width: 1px 5px;
   list-style-type: none;
 }
 body .encounter .combatants .creature.active {
@@ -3598,6 +3599,7 @@ body .encounter .combatants .creature.active .initiative {
 }
 body .encounter .combatants .creature.selected {
   border-right: 5px solid darkred;
+  border-color: darkred;
 }
 body .encounter .combatants .creature:nth-child(2n) {
   background-color: lightgray;

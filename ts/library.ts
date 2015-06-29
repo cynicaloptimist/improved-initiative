@@ -3,6 +3,7 @@ module ImprovedInitiative {
 		Creatures: KnockoutObservableArray<IHaveTrackerStats>;
     FilteredCreatures: KnockoutComputed<IHaveTrackerStats []>;
     Players: KnockoutObservableArray<IHaveTrackerStats>;
+    SavedEncounterIndex: KnockoutObservableArray<string>;
     LibraryFilter: KnockoutObservable<string>;
     DisplayTab: KnockoutObservable<string>;
     AddCreatures: (json: IHaveTrackerStats []) => void;
@@ -13,9 +14,17 @@ module ImprovedInitiative {
 	export class CreatureLibrary implements ICreatureLibrary {
 		constructor (creatures?: IHaveTrackerStats []) {
 			this.Creatures(creatures || []);
+      var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
+      if(savedEncounterList == 'undefined'){
+        savedEncounterList = '[]';
+      }
+      JSON.parse(savedEncounterList).forEach(e => {
+        this.SavedEncounterIndex.push(e);
+      });
 		}
 		Creatures = ko.observableArray<IHaveTrackerStats>();
     Players = ko.observableArray<IHaveTrackerStats>();
+    SavedEncounterIndex = ko.observableArray<string>();
     
     ShowPreviewPane = (creature,event) => {
       this.PreviewCreature(creature);

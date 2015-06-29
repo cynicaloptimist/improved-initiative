@@ -27,34 +27,51 @@ module ImprovedInitiative {
   class KeyBinding {
     Description: string;
     Combo: string;
-    Binding: () => any;
+    GetBinding: () => any;
   }
   class ViewModel{
     Encounter = ko.observable<Encounter>(new Encounter());
     Library = ko.observable<ICreatureLibrary>(new CreatureLibrary());
     SaveEncounter = () => {
-      localStorage.setItem('ImprovedInititiative', ko.mapping.toJSON(this.Encounter().Creatures));
+      //todo: move userresponserequests to the viewmodel
+      this.Encounter().UserResponseRequests.push(new UserResponseRequest(
+        `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,
+        '.response',
+        (response: string) => {
+          var savedEncounter = this.Encounter().Save(response);
+          var savedEncounters = this.Library().SavedEncounterIndex;
+          savedEncounters().push(response);
+          localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
+          localStorage.setItem(`ImprovedInitiative.SavedEncounters.${response}`, JSON.stringify(savedEncounter));
+        },
+        this.Encounter().UserResponseRequests))
+      
     }
-    LoadEncounter = () => {
-      this.Encounter().Creatures = ko.mapping.fromJSON(localStorage.getItem('ImprovedInitiative'));
+    LoadEncounterByName = (encounterName: string) => {
+      var encounterJSON = localStorage.getItem(`ImprovedInitiative.SavedEncounters.${encounterName}`);
+      if(encounterJSON === 'undefined'){
+        throw `Couldn't find encounter '${encounterName}'`;
+      }
+      var encounter = Encounter.Load(JSON.parse(encounterJSON))
+      this.Encounter(encounter);
+      this.RegisterKeybindings();
     }
     
     KeyBindings: KeyBinding [] = [
-      { Description: 'Select Next Combatant', Combo: 'j', Binding: this.Encounter().SelectNextCombatant },
-      { Description: 'Select Previous Combatant', Combo: 'k', Binding: this.Encounter().SelectPreviousCombatant },
-      { Description: 'Next Turn', Combo: 'n', Binding: this.Encounter().NextTurn },
-      { Description: 'Previous Turn', Combo: 'alt+n', Binding: this.Encounter().PreviousTurn },
-      { Description: 'Damage/Heal Selected Combatant', Combo: 't', Binding: this.Encounter().FocusSelectedCreatureHP },
-      { Description: 'Add Tag to Selected Combatant', Combo: 'g', Binding: this.Encounter().AddSelectedCreatureTag },
-      { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', Binding: this.Encounter().RemoveSelectedCreature },
-      { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', Binding: this.Encounter().EditSelectedCreatureName },
-      { Description: 'Roll Initiative', Combo: 'alt+r', Binding: this.Encounter().RollInitiative },
-      { Description: 'Move Selected Combatant Down', Combo: 'alt+j', Binding: this.Encounter().MoveSelectedCreatureDown },
-      { Description: 'Move Selected Combatant Up', Combo: 'alt+k', Binding: this.Encounter().MoveSelectedCreatureUp },
-      { Description: 'Show Keybindings', Combo: '?', Binding: this.ShowKeybindings },
-      { Description: 'Add Temporary HP', Combo: 'alt+t', Binding: this.Encounter().AddSelectedCreatureTemporaryHP },
-      { Description: 'Save Encounter', Combo: 'alt+s', Binding: this.SaveEncounter },
-      { Description: 'Load Encounter', Combo: 'alt+o', Binding: this.LoadEncounter },
+      { Description: 'Select Next Combatant', Combo: 'j', GetBinding: () => this.Encounter().SelectNextCombatant },
+      { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: () => this.Encounter().SelectPreviousCombatant },
+      { Description: 'Next Turn', Combo: 'n', GetBinding: () => this.Encounter().NextTurn },
+      { Description: 'Previous Turn', Combo: 'alt+n', GetBinding: () => this.Encounter().PreviousTurn },
+      { Description: 'Damage/Heal Selected Combatant', Combo: 't', GetBinding: () => this.Encounter().FocusSelectedCreatureHP },
+      { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: () => this.Encounter().AddSelectedCreatureTag },
+      { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: () => this.Encounter().RemoveSelectedCreature },
+      { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', GetBinding: () => this.Encounter().EditSelectedCreatureName },
+      { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: () => this.Encounter().RollInitiative },
+      { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: () => this.Encounter().MoveSelectedCreatureDown },
+      { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: () => this.Encounter().MoveSelectedCreatureUp },
+      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ShowKeybindings },
+      { Description: 'Add Temporary HP', Combo: 'alt+t', GetBinding: () => this.Encounter().AddSelectedCreatureTemporaryHP },
+      { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: () => this.SaveEncounter },
     ];
     
     ShowKeybindings = () => {
@@ -63,7 +80,7 @@ module ImprovedInitiative {
     
     RegisterKeybindings(){
       Mousetrap.reset();
-      this.KeyBindings.forEach(b => Mousetrap.bind(b.Combo, b.Binding))
+      this.KeyBindings.forEach(b => Mousetrap.bind(b.Combo, b.GetBinding()))
     }
   }
   

@@ -33,13 +33,21 @@
       }"></div>
   </div>
   <div class="libraries">
-    <h1 data-bind="format: 'Library'">{0} {1} {2}</h1>
+    <h1>Library</h1>
     <div class="tabs">
       <div data-bind="click: Library().DisplayTab.bind(null, 'Creatures')">Creatures</div>
       <div data-bind="click: Library().DisplayTab.bind(null, 'Players')">Players</div>
-      <div>Encounters</div>
+      <div data-bind="click: Library().DisplayTab.bind(null, 'Encounters')">Encounters</div>
     </div>
     <div class="library" data-bind="with: Library">
+      <!-- ko if: DisplayTab() == 'Encounters' -->
+      <ul class="creature-library" data-bind="foreach: SavedEncounterIndex">
+        <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
+          <span data-bind="text: $data"></span>
+        </li>
+      </ul>
+      <!-- /ko -->
+      <!-- ko ifnot: DisplayTab() == 'Encounters' -->
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
       <ul class="creature-library" data-bind="foreach: FilteredCreatures">
         <li data-bind="click: $root.Encounter().AddCreature">
@@ -55,6 +63,7 @@
         <div data-bind="click: AddNewCreature"><span class="fa fa-plus"></span></div>
         <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
       </div>
+      <!-- /ko -->
     </div>
   </div>
   <div class="views">

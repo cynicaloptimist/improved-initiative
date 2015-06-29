@@ -2,11 +2,11 @@ module ImprovedInitiative {
 	export interface IUserResponseRequest {
 		requestContent: string;
 		inputSelector: string;
-		callback: (response: HTMLFormElement) => void;
+		callback: (response: any) => void;
 	}
 	
 	export class UserResponseRequest implements IUserResponseRequest{
-		constructor(public requestContent, public inputSelector: string, public callback: (response: HTMLFormElement) => void, stack: KnockoutObservableArray<IUserResponseRequest>){
+		constructor(public requestContent, public inputSelector: string, public callback: (response: any) => void, stack: KnockoutObservableArray<IUserResponseRequest>){
 			this.stack = stack;
 		}
 		private stack: KnockoutObservableArray<IUserResponseRequest>;

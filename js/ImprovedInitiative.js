@@ -251,14 +251,23 @@ var ImprovedInitiative;
             this.AddCreature = function (creatureJson) {
                 console.log("adding %O to encounter", creatureJson);
                 if (creatureJson.Player && creatureJson.Player.toLocaleLowerCase() === 'player') {
-                    _this.Creatures.push(new ImprovedInitiative.PlayerCharacter(creatureJson, _this));
+                    var creature = new ImprovedInitiative.PlayerCharacter(creatureJson, _this);
                 }
                 else {
-                    _this.Creatures.push(new ImprovedInitiative.Creature(creatureJson, _this));
+                    var creature = new ImprovedInitiative.Creature(creatureJson, _this);
                 }
+                _this.Creatures.push(creature);
+                return creature;
             };
             this.RemoveSelectedCreature = function () {
+                var index = _this.Creatures.indexOf(_this.SelectedCreature());
                 _this.Creatures.remove(_this.SelectedCreature());
+                if (_this.Creatures().length <= index) {
+                    _this.SelectedCreature(_this.Creatures()[index - 1]);
+                }
+                else {
+                    _this.SelectedCreature(_this.Creatures()[index]);
+                }
             };
             this.SelectPreviousCombatant = function () {
                 _this.relativeNavigateFocus(-1);
@@ -343,6 +352,32 @@ var ImprovedInitiative;
                 }
                 _this.ActiveCreature(_this.Creatures()[previousIndex]);
             };
+            this.Save = function (name) {
+                return {
+                    Name: name,
+                    Creatures: _this.Creatures().map(function (c) {
+                        return {
+                            Statblock: c.StatBlock,
+                            CurrentHP: c.CurrentHP(),
+                            TemporaryHP: c.TemporaryHP(),
+                            Initiative: c.Initiative(),
+                            Alias: c.Alias(),
+                            Tags: c.Tags()
+                        };
+                    })
+                };
+            };
+            this.AddSavedEncounter = function (e) {
+                e.Creatures
+                    .forEach(function (c) {
+                    var creature = _this.AddCreature(c.Statblock);
+                    creature.CurrentHP(c.CurrentHP);
+                    creature.TemporaryHP(c.TemporaryHP);
+                    creature.Initiative(c.Initiative);
+                    creature.Alias(c.Alias);
+                    creature.Tags(c.Tags);
+                });
+            };
             this.Rules = rules || new ImprovedInitiative.DefaultRules();
             this.Creatures = ko.observableArray();
             this.SelectedCreature = ko.observable();
@@ -359,6 +394,11 @@ var ImprovedInitiative;
                     : ImprovedInitiative.StatBlock.Empty();
             });
         }
+        Encounter.Load = function (e) {
+            var encounter = new Encounter();
+            encounter.AddSavedEncounter(e);
+            return encounter;
+        };
         return Encounter;
     })();
     ImprovedInitiative.Encounter = Encounter;
@@ -370,6 +410,7 @@ var ImprovedInitiative;
             var _this = this;
             this.Creatures = ko.observableArray();
             this.Players = ko.observableArray();
+            this.SavedEncounterIndex = ko.observableArray();
             this.ShowPreviewPane = function (creature, event) {
                 _this.PreviewCreature(creature);
                 //todo: move this code into some sort of AfterRender within the preview statblock so it resizes first.
@@ -431,6 +472,13 @@ var ImprovedInitiative;
                 _this.EditCreature(creature);
             };
             this.Creatures(creatures || []);
+            var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
+            if (savedEncounterList == 'undefined') {
+                savedEncounterList = '[]';
+            }
+            JSON.parse(savedEncounterList).forEach(function (e) {
+                _this.SavedEncounterIndex.push(e);
+            });
         }
         CreatureLibrary.prototype.AddPlayers = function (library) {
             this.Players(this.Players().concat(library));
@@ -685,27 +733,39 @@ var ImprovedInitiative;
             this.Encounter = ko.observable(new ImprovedInitiative.Encounter());
             this.Library = ko.observable(new ImprovedInitiative.CreatureLibrary());
             this.SaveEncounter = function () {
-                localStorage.setItem('ImprovedInititiative', ko.mapping.toJSON(_this.Encounter().Creatures));
+                //todo: move userresponserequests to the viewmodel
+                _this.Encounter().UserResponseRequests.push(new ImprovedInitiative.UserResponseRequest("<p>Save Encounter As: <input class='response' type='text' value='' /></p>", '.response', function (response) {
+                    var savedEncounter = _this.Encounter().Save(response);
+                    var savedEncounters = _this.Library().SavedEncounterIndex;
+                    savedEncounters().push(response);
+                    localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
+                    localStorage.setItem("ImprovedInitiative.SavedEncounters." + response, JSON.stringify(savedEncounter));
+                }, _this.Encounter().UserResponseRequests));
             };
-            this.LoadEncounter = function () {
-                _this.Encounter().Creatures = ko.mapping.fromJSON(localStorage.getItem('ImprovedInitiative'));
+            this.LoadEncounterByName = function (encounterName) {
+                var encounterJSON = localStorage.getItem("ImprovedInitiative.SavedEncounters." + encounterName);
+                if (encounterJSON === 'undefined') {
+                    throw "Couldn't find encounter '" + encounterName + "'";
+                }
+                var encounter = ImprovedInitiative.Encounter.Load(JSON.parse(encounterJSON));
+                _this.Encounter(encounter);
+                _this.RegisterKeybindings();
             };
             this.KeyBindings = [
-                { Description: 'Select Next Combatant', Combo: 'j', Binding: this.Encounter().SelectNextCombatant },
-                { Description: 'Select Previous Combatant', Combo: 'k', Binding: this.Encounter().SelectPreviousCombatant },
-                { Description: 'Next Turn', Combo: 'n', Binding: this.Encounter().NextTurn },
-                { Description: 'Previous Turn', Combo: 'alt+n', Binding: this.Encounter().PreviousTurn },
-                { Description: 'Damage/Heal Selected Combatant', Combo: 't', Binding: this.Encounter().FocusSelectedCreatureHP },
-                { Description: 'Add Tag to Selected Combatant', Combo: 'g', Binding: this.Encounter().AddSelectedCreatureTag },
-                { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', Binding: this.Encounter().RemoveSelectedCreature },
-                { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', Binding: this.Encounter().EditSelectedCreatureName },
-                { Description: 'Roll Initiative', Combo: 'alt+r', Binding: this.Encounter().RollInitiative },
-                { Description: 'Move Selected Combatant Down', Combo: 'alt+j', Binding: this.Encounter().MoveSelectedCreatureDown },
-                { Description: 'Move Selected Combatant Up', Combo: 'alt+k', Binding: this.Encounter().MoveSelectedCreatureUp },
-                { Description: 'Show Keybindings', Combo: '?', Binding: this.ShowKeybindings },
-                { Description: 'Add Temporary HP', Combo: 'alt+t', Binding: this.Encounter().AddSelectedCreatureTemporaryHP },
-                { Description: 'Save Encounter', Combo: 'alt+s', Binding: this.SaveEncounter },
-                { Description: 'Load Encounter', Combo: 'alt+o', Binding: this.LoadEncounter },
+                { Description: 'Select Next Combatant', Combo: 'j', GetBinding: function () { return _this.Encounter().SelectNextCombatant; } },
+                { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: function () { return _this.Encounter().SelectPreviousCombatant; } },
+                { Description: 'Next Turn', Combo: 'n', GetBinding: function () { return _this.Encounter().NextTurn; } },
+                { Description: 'Previous Turn', Combo: 'alt+n', GetBinding: function () { return _this.Encounter().PreviousTurn; } },
+                { Description: 'Damage/Heal Selected Combatant', Combo: 't', GetBinding: function () { return _this.Encounter().FocusSelectedCreatureHP; } },
+                { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: function () { return _this.Encounter().AddSelectedCreatureTag; } },
+                { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: function () { return _this.Encounter().RemoveSelectedCreature; } },
+                { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', GetBinding: function () { return _this.Encounter().EditSelectedCreatureName; } },
+                { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: function () { return _this.Encounter().RollInitiative; } },
+                { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: function () { return _this.Encounter().MoveSelectedCreatureDown; } },
+                { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: function () { return _this.Encounter().MoveSelectedCreatureUp; } },
+                { Description: 'Show Keybindings', Combo: '?', GetBinding: function () { return _this.ShowKeybindings; } },
+                { Description: 'Add Temporary HP', Combo: 'alt+t', GetBinding: function () { return _this.Encounter().AddSelectedCreatureTemporaryHP; } },
+                { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: function () { return _this.SaveEncounter; } },
             ];
             this.ShowKeybindings = function () {
                 $('.keybindings').toggle();
@@ -713,7 +773,7 @@ var ImprovedInitiative;
         }
         ViewModel.prototype.RegisterKeybindings = function () {
             Mousetrap.reset();
-            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.Combo, b.Binding); });
+            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.Combo, b.GetBinding()); });
         };
         return ViewModel;
     })();

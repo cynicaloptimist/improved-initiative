@@ -1,4 +1,17 @@
 module ImprovedInitiative {
+  export interface ISavedCreature {
+    Statblock: IStatBlock;
+    CurrentHP: number;
+    TemporaryHP: number;
+    Initiative: number;
+    Alias: string;
+    Tags: string [];
+  }
+  export interface ISavedEncounter {
+    Name: string;
+    Creatures: ISavedCreature [];
+  }
+  
   export class Encounter {
     constructor(rules?: IRules){
       this.Rules = rules || new DefaultRules();
@@ -54,14 +67,22 @@ module ImprovedInitiative {
     {
       console.log("adding %O to encounter", creatureJson);
       if(creatureJson.Player && creatureJson.Player.toLocaleLowerCase() === 'player'){
-        this.Creatures.push(new PlayerCharacter(creatureJson, this))
+        var creature = new PlayerCharacter(creatureJson, this);
       } else {
-        this.Creatures.push(new Creature(creatureJson, this));
+        var creature = new Creature(creatureJson, this);
       }
+      this.Creatures.push(creature);
+      return creature;
     }
     
     RemoveSelectedCreature = () => {
+      var index = this.Creatures.indexOf(this.SelectedCreature());
       this.Creatures.remove(this.SelectedCreature());
+      if(this.Creatures().length <= index){
+        this.SelectedCreature(this.Creatures()[index-1])
+      } else {
+        this.SelectedCreature(this.Creatures()[index]);
+      }
     }
     
     SelectPreviousCombatant = () =>
@@ -174,6 +195,40 @@ module ImprovedInitiative {
         previousIndex = this.Creatures().length - 1;
       }
       this.ActiveCreature(this.Creatures()[previousIndex]);
+    }
+    
+    Save: (name: string) => ISavedEncounter = name => {
+      return {
+        Name: name,
+        Creatures: this.Creatures().map<ISavedCreature>(c => {
+          return {
+            Statblock: c.StatBlock,
+            CurrentHP: c.CurrentHP(),
+            TemporaryHP: c.TemporaryHP(),
+            Initiative: c.Initiative(),
+            Alias: c.Alias(),
+            Tags: c.Tags()
+          }
+        })
+      };
+    }
+    
+    static Load: (e: ISavedEncounter) => Encounter = e => {
+      var encounter = new Encounter();
+      encounter.AddSavedEncounter(e)
+      return encounter;
+    }
+    
+    AddSavedEncounter: (e: ISavedEncounter) => void = e => {
+      e.Creatures
+       .forEach(c => {
+        var creature = this.AddCreature(c.Statblock);
+        creature.CurrentHP(c.CurrentHP);
+        creature.TemporaryHP(c.TemporaryHP);
+        creature.Initiative(c.Initiative);
+        creature.Alias(c.Alias);
+        creature.Tags(c.Tags);
+      })
     }
   }
 }
