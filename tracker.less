@@ -81,12 +81,32 @@ body{
 	}
 
 	.keybindings {
-		position: fixed;
-		top: 200px;
-		margin:auto;
-		z-index:10;
-		background-color: rgb(255,255,255);
-		display:none;
+		border: 2px solid gray;
+		border-radius: 5px;
+		padding: 5px;
+	  position: fixed;
+	  text-align:right;
+	  right: 0;
+	  left: 0;
+	  top: 100px;
+	  margin: auto;
+	  z-index: 10;
+	  background-color: #ffffff;
+	  display: none;
+	  width: 450px;
+	  .label {
+	  	display:inline-block;
+	  	width: 380px;
+	  	margin-right: 10px;
+	  }
+	  input[type="text"] {
+	  	width: 40px;
+	  }
+	  input[type="button"] {
+	  	right: 0;
+	  	margin: 3px;
+	  	padding: 3px;
+	  }
 	}
 
 	.preview.statblock {

@@ -58,6 +58,7 @@ module ImprovedInitiative {
     }
     
     KeyBindings: KeyBinding [] = [
+      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ToggleKeybindings },
       { Description: 'Select Next Combatant', Combo: 'j', GetBinding: () => this.Encounter().SelectNextCombatant },
       { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: () => this.Encounter().SelectPreviousCombatant },
       { Description: 'Next Turn', Combo: 'n', GetBinding: () => this.Encounter().NextTurn },
@@ -65,17 +66,18 @@ module ImprovedInitiative {
       { Description: 'Damage/Heal Selected Combatant', Combo: 't', GetBinding: () => this.Encounter().FocusSelectedCreatureHP },
       { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: () => this.Encounter().AddSelectedCreatureTag },
       { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: () => this.Encounter().RemoveSelectedCreature },
-      { Description: 'Edit Selected Combatant\'s Alias', Combo: 'f2', GetBinding: () => this.Encounter().EditSelectedCreatureName },
+      { Description: 'Rename Selected Combatant', Combo: 'f2', GetBinding: () => this.Encounter().EditSelectedCreatureName },
       { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: () => this.Encounter().RollInitiative },
       { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: () => this.Encounter().MoveSelectedCreatureDown },
       { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: () => this.Encounter().MoveSelectedCreatureUp },
-      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ShowKeybindings },
       { Description: 'Add Temporary HP', Combo: 'alt+t', GetBinding: () => this.Encounter().AddSelectedCreatureTemporaryHP },
       { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: () => this.SaveEncounter },
     ];
     
-    ShowKeybindings = () => {
-      $('.keybindings').toggle();
+    ToggleKeybindings = () => {
+      if ($('.keybindings').toggle().css('display') == 'none'){
+        this.RegisterKeybindings();
+      }
     }
     
     RegisterKeybindings(){

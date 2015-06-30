@@ -3495,12 +3495,32 @@ body .views li {
   cursor: default;
 }
 body .keybindings {
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px;
   position: fixed;
-  top: 200px;
+  text-align: right;
+  right: 0;
+  left: 0;
+  top: 100px;
   margin: auto;
   z-index: 10;
   background-color: #ffffff;
   display: none;
+  width: 450px;
+}
+body .keybindings .label {
+  display: inline-block;
+  width: 380px;
+  margin-right: 10px;
+}
+body .keybindings input[type="text"] {
+  width: 40px;
+}
+body .keybindings input[type="button"] {
+  right: 0;
+  margin: 3px;
+  padding: 3px;
 }
 body .preview.statblock {
   position: fixed;
