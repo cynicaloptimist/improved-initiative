@@ -88,11 +88,11 @@ module ImprovedInitiative {
     var viewModel = new ViewModel();
     viewModel.RegisterKeybindings();
     ko.applyBindings(viewModel);
-    $.ajax("creatures.json").done(json => {
+    $.ajax("basic_rules_creatures.json").done((json: IHaveTrackerStats []) => {
       viewModel.Library().AddCreatures(json);
-    })
+    });
     $.ajax("playercharacters.json").done(json => {
       viewModel.Library().AddPlayers(json);
-    })
+    });
   });
 }

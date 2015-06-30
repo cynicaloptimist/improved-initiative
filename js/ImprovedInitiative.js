@@ -785,7 +785,7 @@ var ImprovedInitiative;
         var viewModel = new ViewModel();
         viewModel.RegisterKeybindings();
         ko.applyBindings(viewModel);
-        $.ajax("creatures.json").done(function (json) {
+        $.ajax("basic_rules_creatures.json").done(function (json) {
             viewModel.Library().AddCreatures(json);
         });
         $.ajax("playercharacters.json").done(function (json) {
