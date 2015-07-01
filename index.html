@@ -123,15 +123,15 @@
         </li>
         <!-- /ko -->
       </ul>
-      <!-- ko if: UserResponseRequests().length -->
+    </div>
+    <!-- ko if: UserPollQueue.CurrentPoll() -->
       <form class="user-response-requests" data-bind="
-        submit:UserResponseRequests()[0].HandleResponse,
-        html:UserResponseRequests()[0].requestContent,
-        focusOnRender:'.response'">
+        submit:UserPollQueue.Resolve,
+        html:UserPollQueue.CurrentPoll().requestContent,
+        focusOnRender:UserPollQueue.CurrentPoll().inputSelector">
       </form>
-      <!-- /ko -->
-    </div>
-    </div>
+    <!-- /ko -->
+  </div>
 
 <!-- /ko -->
 

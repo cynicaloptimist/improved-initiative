@@ -1,13 +1,12 @@
 /// <reference path="typings/requirejs/require.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
-/// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
 /// <reference path="custombindinghandlers.ts" />
 /// <reference path="components.ts" />
-/// <reference path="userresponse.ts" />
+/// <reference path="userpoll.ts" />
 /// <reference path="statblock.ts" />
 /// <reference path="creature.ts" />
 /// <reference path="playercharacter.ts" />
@@ -24,35 +23,36 @@ module ImprovedInitiative {
     'DamageImmunities': 'Damage Immunities',
     'ConditionImmunities': 'Condition Immunities'
   }
+  
   class KeyBinding {
     Description: string;
     Combo: string;
     GetBinding: () => any;
   }
-  class ViewModel{
-    Encounter = ko.observable<Encounter>(new Encounter());
+  
+  export class ViewModel{
+    UserPollQueue = new UserPollQueue();
     Library = ko.observable<ICreatureLibrary>(new CreatureLibrary());
+    Encounter = ko.observable<Encounter>(new Encounter(this.UserPollQueue));
     SaveEncounter = () => {
-      //todo: move userresponserequests to the viewmodel
-      this.Encounter().UserResponseRequests.push(new UserResponseRequest(
-        `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,
-        '.response',
-        (response: string) => {
+      this.UserPollQueue.Add({
+        requestContent: `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,
+        inputSelector: '.response',
+        callback: (response: string) => {
           var savedEncounter = this.Encounter().Save(response);
           var savedEncounters = this.Library().SavedEncounterIndex;
           savedEncounters().push(response);
           localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
           localStorage.setItem(`ImprovedInitiative.SavedEncounters.${response}`, JSON.stringify(savedEncounter));
-        },
-        this.Encounter().UserResponseRequests))
-      
+        }
+      })
     }
     LoadEncounterByName = (encounterName: string) => {
       var encounterJSON = localStorage.getItem(`ImprovedInitiative.SavedEncounters.${encounterName}`);
       if(encounterJSON === 'undefined'){
         throw `Couldn't find encounter '${encounterName}'`;
       }
-      var encounter = Encounter.Load(JSON.parse(encounterJSON))
+      var encounter = Encounter.Load(JSON.parse(encounterJSON), this.UserPollQueue)
       this.Encounter(encounter);
       this.RegisterKeybindings();
     }

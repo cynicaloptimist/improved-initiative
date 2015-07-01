@@ -7,9 +7,7 @@ interface KnockoutBindingHandlers {
 	
 module ImprovedInitiative {
 	ko.bindingHandlers.focusOnRender = {
-    update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-      //unwrap this so Knockout knows this update depends on the array's state
-      ko.unwrap(viewModel.UserResponseRequests);
+    update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: ViewModel, bindingContext?: KnockoutBindingContext) => {
       $(element).find(valueAccessor()).select();
     }
   }

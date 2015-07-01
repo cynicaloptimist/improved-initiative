@@ -184,8 +184,6 @@ var ImprovedInitiative;
 (function (ImprovedInitiative) {
     ko.bindingHandlers.focusOnRender = {
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            //unwrap this so Knockout knows this update depends on the array's state
-            ko.unwrap(viewModel.UserResponseRequests);
             $(element).find(valueAccessor()).select();
         }
     };
@@ -228,8 +226,9 @@ var ImprovedInitiative;
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var Encounter = (function () {
-        function Encounter(rules) {
+        function Encounter(UserPollQueue, rules) {
             var _this = this;
+            this.UserPollQueue = UserPollQueue;
             this.sortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
@@ -313,10 +312,14 @@ var ImprovedInitiative;
                 }
             };
             this.RequestInitiative = function (playercharacter) {
-                _this.UserResponseRequests.push(new ImprovedInitiative.UserResponseRequest("<p>Initiative Roll for " + playercharacter.Alias() + " (" + playercharacter.InitiativeModifier.toModifierString() + "): <input class='response' type='number' value='" + _this.Rules.Check(playercharacter.InitiativeModifier) + "' /></p>", '.response', function (response) {
-                    playercharacter.Initiative(parseInt(response));
-                    _this.sortByInitiative();
-                }, _this.UserResponseRequests));
+                _this.UserPollQueue.Add({
+                    requestContent: "<p>Initiative Roll for " + playercharacter.Alias() + " (" + playercharacter.InitiativeModifier.toModifierString() + "): <input class='response' type='number' value='" + _this.Rules.Check(playercharacter.InitiativeModifier) + "' /></p>",
+                    inputSelector: '.response',
+                    callback: function (response) {
+                        playercharacter.Initiative(parseInt(response));
+                        _this.sortByInitiative();
+                    }
+                });
             };
             this.FocusResponseRequest = function () {
                 $('form input').select();
@@ -381,7 +384,6 @@ var ImprovedInitiative;
             this.Rules = rules || new ImprovedInitiative.DefaultRules();
             this.Creatures = ko.observableArray();
             this.SelectedCreature = ko.observable();
-            this.UserResponseRequests = ko.observableArray();
             this.SelectedCreatureStatblock = ko.computed(function () {
                 return _this.SelectedCreature()
                     ? _this.SelectedCreature().StatBlock
@@ -394,8 +396,8 @@ var ImprovedInitiative;
                     : ImprovedInitiative.StatBlock.Empty();
             });
         }
-        Encounter.Load = function (e) {
-            var encounter = new Encounter();
+        Encounter.Load = function (e, userPollQueue) {
+            var encounter = new Encounter(userPollQueue);
             encounter.AddSavedEncounter(e);
             return encounter;
         };
@@ -682,34 +684,42 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.StatBlock = StatBlock;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
+/// <reference path="tracker.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var UserResponseRequest = (function () {
-        function UserResponseRequest(requestContent, inputSelector, callback, stack) {
+    var UserPollQueue = (function () {
+        function UserPollQueue() {
             var _this = this;
-            this.requestContent = requestContent;
-            this.inputSelector = inputSelector;
-            this.callback = callback;
-            this.HandleResponse = function (form) {
-                _this.callback($(form).find(_this.inputSelector).val());
-                _this.stack.remove(_this);
+            this.Queue = ko.observableArray();
+            this.Add = function (poll) {
+                _this.Queue.push(poll);
+            };
+            this.Resolve = function (form) {
+                var poll = _this.Queue.shift();
+                poll.callback($(form).find(poll.inputSelector).val());
                 return false;
             };
-            this.stack = stack;
+            this.CurrentPoll = ko.pureComputed(function () {
+                return _this.Queue()[0];
+            });
+            this.FocusCurrentPoll = function () {
+                if (_this.Queue[0]) {
+                    $(_this.Queue[0].inputSelector).select();
+                }
+            };
         }
-        return UserResponseRequest;
+        return UserPollQueue;
     })();
-    ImprovedInitiative.UserResponseRequest = UserResponseRequest;
+    ImprovedInitiative.UserPollQueue = UserPollQueue;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 /// <reference path="typings/requirejs/require.d.ts" />
 /// <reference path="typings/jquery/jquery.d.ts" />
-/// <reference path="typings/jqueryui/jqueryui.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="custombindinghandlers.ts" />
 /// <reference path="components.ts" />
-/// <reference path="userresponse.ts" />
+/// <reference path="userpoll.ts" />
 /// <reference path="statblock.ts" />
 /// <reference path="creature.ts" />
 /// <reference path="playercharacter.ts" />
@@ -734,24 +744,28 @@ var ImprovedInitiative;
     var ViewModel = (function () {
         function ViewModel() {
             var _this = this;
-            this.Encounter = ko.observable(new ImprovedInitiative.Encounter());
+            this.UserPollQueue = new ImprovedInitiative.UserPollQueue();
             this.Library = ko.observable(new ImprovedInitiative.CreatureLibrary());
+            this.Encounter = ko.observable(new ImprovedInitiative.Encounter(this.UserPollQueue));
             this.SaveEncounter = function () {
-                //todo: move userresponserequests to the viewmodel
-                _this.Encounter().UserResponseRequests.push(new ImprovedInitiative.UserResponseRequest("<p>Save Encounter As: <input class='response' type='text' value='' /></p>", '.response', function (response) {
-                    var savedEncounter = _this.Encounter().Save(response);
-                    var savedEncounters = _this.Library().SavedEncounterIndex;
-                    savedEncounters().push(response);
-                    localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
-                    localStorage.setItem("ImprovedInitiative.SavedEncounters." + response, JSON.stringify(savedEncounter));
-                }, _this.Encounter().UserResponseRequests));
+                _this.UserPollQueue.Add({
+                    requestContent: "<p>Save Encounter As: <input class='response' type='text' value='' /></p>",
+                    inputSelector: '.response',
+                    callback: function (response) {
+                        var savedEncounter = _this.Encounter().Save(response);
+                        var savedEncounters = _this.Library().SavedEncounterIndex;
+                        savedEncounters().push(response);
+                        localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
+                        localStorage.setItem("ImprovedInitiative.SavedEncounters." + response, JSON.stringify(savedEncounter));
+                    }
+                });
             };
             this.LoadEncounterByName = function (encounterName) {
                 var encounterJSON = localStorage.getItem("ImprovedInitiative.SavedEncounters." + encounterName);
                 if (encounterJSON === 'undefined') {
                     throw "Couldn't find encounter '" + encounterName + "'";
                 }
-                var encounter = ImprovedInitiative.Encounter.Load(JSON.parse(encounterJSON));
+                var encounter = ImprovedInitiative.Encounter.Load(JSON.parse(encounterJSON), _this.UserPollQueue);
                 _this.Encounter(encounter);
                 _this.RegisterKeybindings();
             };
@@ -783,6 +797,7 @@ var ImprovedInitiative;
         };
         return ViewModel;
     })();
+    ImprovedInitiative.ViewModel = ViewModel;
     $(function () {
         var viewModel = new ViewModel();
         viewModel.RegisterKeybindings();

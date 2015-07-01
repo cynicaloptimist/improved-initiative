@@ -13,11 +13,10 @@ module ImprovedInitiative {
   }
   
   export class Encounter {
-    constructor(rules?: IRules){
+    constructor(public UserPollQueue?: UserPollQueue, rules?: IRules){
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
       this.SelectedCreature = ko.observable<ICreature>();
-      this.UserResponseRequests = ko.observableArray<IUserResponseRequest>();
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
         return this.SelectedCreature() 
@@ -39,7 +38,6 @@ module ImprovedInitiative {
     SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
-    UserResponseRequests: KnockoutObservableArray<IUserResponseRequest>;
     
     private sortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
@@ -144,14 +142,14 @@ module ImprovedInitiative {
     }
     
     RequestInitiative = (playercharacter: ICreature) => {
-      this.UserResponseRequests.push(new UserResponseRequest(
-        `<p>Initiative Roll for ${playercharacter.Alias()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
-        '.response',
-        (response: any) => {
+      this.UserPollQueue.Add({
+        requestContent: `<p>Initiative Roll for ${playercharacter.Alias()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
+        inputSelector: '.response',
+        callback: (response: any) => {
           playercharacter.Initiative(parseInt(response));
           this.sortByInitiative();
-        },
-        this.UserResponseRequests))
+        }
+      });
     }
     
     FocusResponseRequest = () => {
@@ -213,8 +211,8 @@ module ImprovedInitiative {
       };
     }
     
-    static Load: (e: ISavedEncounter) => Encounter = e => {
-      var encounter = new Encounter();
+    static Load = (e: ISavedEncounter, userPollQueue: UserPollQueue) => {
+      var encounter = new Encounter(userPollQueue);
       encounter.AddSavedEncounter(e)
       return encounter;
     }
