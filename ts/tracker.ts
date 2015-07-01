@@ -4,6 +4,7 @@
 /// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
 
+/// <reference path="toolbox.ts" />
 /// <reference path="custombindinghandlers.ts" />
 /// <reference path="components.ts" />
 /// <reference path="userpoll.ts" />

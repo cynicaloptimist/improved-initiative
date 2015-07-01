@@ -1,21 +1,5 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
-interface String {
-  format: (...arguments: any[]) => string;
-}
-String.prototype.format = function () {
-  var args;
-  if(arguments[0] instanceof Array){
-    args = arguments[0];  
-  } else {
-    args = arguments;
-  }
-  return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
-    if (m == "{{") { return "{"; }
-    if (m == "}}") { return "}"; }
-    return args[n] || "{" + n + "}";
-  });
-};
 
 module ImprovedInitiative {
   var templateLoader = {
@@ -52,7 +36,7 @@ module ImprovedInitiative {
     template: { name: 'editstatblock' }
   });
   
-  export class CombatantViewModel {
+  class CombatantViewModel {
     DisplayHP: () => void;
     
     constructor(public Creature: Creature){

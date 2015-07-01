@@ -1,23 +1,5 @@
 /// <reference path="typings/jquery/jquery.d.ts" />
 /// <reference path="typings/knockout/knockout.d.ts" />
-String.prototype.format = function () {
-    var args;
-    if (arguments[0] instanceof Array) {
-        args = arguments[0];
-    }
-    else {
-        args = arguments;
-    }
-    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
-        if (m == "{{") {
-            return "{";
-        }
-        if (m == "}}") {
-            return "}";
-        }
-        return args[n] || "{" + n + "}";
-    });
-};
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var templateLoader = {
@@ -656,12 +638,6 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.DefaultRules = DefaultRules;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
-Number.prototype.toModifierString = function () {
-    if (this >= 0) {
-        return "+" + this;
-    }
-    return this;
-};
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var StatBlock = (function () {
@@ -684,6 +660,30 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.StatBlock = StatBlock;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
+Number.prototype.toModifierString = function () {
+    if (this >= 0) {
+        return "+" + this;
+    }
+    return this;
+};
+String.prototype.format = function () {
+    var args;
+    if (arguments[0] instanceof Array) {
+        args = arguments[0];
+    }
+    else {
+        args = arguments;
+    }
+    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+        if (m == "{{") {
+            return "{";
+        }
+        if (m == "}}") {
+            return "}";
+        }
+        return args[n] || "{" + n + "}";
+    });
+};
 /// <reference path="tracker.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -717,6 +717,7 @@ var ImprovedInitiative;
 /// <reference path="typings/knockout/knockout.d.ts" />
 /// <reference path="typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="toolbox.ts" />
 /// <reference path="custombindinghandlers.ts" />
 /// <reference path="components.ts" />
 /// <reference path="userpoll.ts" />

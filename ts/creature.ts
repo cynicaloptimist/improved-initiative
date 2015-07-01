@@ -13,10 +13,10 @@ module ImprovedInitiative {
 	  Initiative: KnockoutObservable<number>;
 	  StatBlock: IStatBlock;
     RollInitiative: () => void;
-    ViewModel: CombatantViewModel;
+    
   }
 	
-  export class Creature implements ICreature{
+  export class Creature {
 	  constructor(creatureJson: IHaveTrackerStats, public Encounter: Encounter){
 	    this.StatBlock = StatBlock.Empty();
       jQuery.extend(this.StatBlock, creatureJson);
@@ -45,7 +45,6 @@ module ImprovedInitiative {
 	  InitiativeModifier: number;
 	  Initiative: KnockoutObservable<number>;
 	  StatBlock: IStatBlock;
-    ViewModel: any;
 	  
     SetAlias = (name: string) => {
 	    var others = this.Encounter.Creatures().filter(c => c !== this && c.Name === name);

@@ -1,13 +1,3 @@
-interface Number {
-  toModifierString: () => string; 
-}
-Number.prototype.toModifierString = function(){
-  if(this >= 0){
-    return `+${this}`
-  }
-  return this
-}
-
 module ImprovedInitiative {
   interface IHaveValue{
     Value: number;
