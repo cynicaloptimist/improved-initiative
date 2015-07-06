@@ -33,55 +33,59 @@ var ImprovedInitiative;
         template: { name: 'editstatblock' }
     });
     var CombatantViewModel = (function () {
-        function CombatantViewModel(Creature) {
+        function CombatantViewModel(Creature, PollUser) {
             var _this = this;
             this.Creature = Creature;
+            this.PollUser = PollUser;
+            this.applyDamage = function (inputDamage) {
+                var damage = parseInt(inputDamage), healing = -damage, currHP = _this.Creature.CurrentHP(), tempHP = _this.Creature.TemporaryHP();
+                if (isNaN(damage)) {
+                    return;
+                }
+                if (damage > 0) {
+                    tempHP -= damage;
+                    if (tempHP < 0) {
+                        currHP += tempHP;
+                        tempHP = 0;
+                    }
+                }
+                else {
+                    currHP += healing;
+                    if (currHP > _this.Creature.MaxHP) {
+                        currHP = _this.Creature.MaxHP;
+                    }
+                }
+                _this.Creature.CurrentHP(currHP);
+                _this.Creature.TemporaryHP(tempHP);
+            };
+            this.applyTemporaryHP = function (inputTHP) {
+                var newTemporaryHP = parseInt(inputTHP), currentTemporaryHP = _this.Creature.TemporaryHP();
+                if (isNaN(newTemporaryHP)) {
+                    return;
+                }
+                if (newTemporaryHP > currentTemporaryHP) {
+                    currentTemporaryHP = newTemporaryHP;
+                }
+                _this.Creature.TemporaryHP(currentTemporaryHP);
+            };
             this.GetHPColor = function () {
                 var green = Math.floor((_this.Creature.CurrentHP() / _this.Creature.MaxHP) * 170);
                 var red = Math.floor((_this.Creature.MaxHP - _this.Creature.CurrentHP()) / _this.Creature.MaxHP * 170);
                 return "rgb(" + red + "," + green + ",0)";
             };
-            this.EditingHP = ko.observable(false);
-            this.AddingTemporaryHP = ko.observable(false);
             this.EditHP = function () {
-                _this.EditingHP(true);
+                _this.PollUser({
+                    requestContent: "Apply damage to " + _this.Creature.Alias() + ": <input class='response' type='number' />",
+                    inputSelector: '.response',
+                    callback: _this.applyDamage
+                });
             };
             this.AddTemporaryHP = function () {
-                _this.AddingTemporaryHP(true);
-            };
-            this.ShowHPInput = ko.pureComputed(function () {
-                return _this.EditingHP() || _this.AddingTemporaryHP();
-            });
-            this.HPInput = ko.observable(null);
-            this.CommitHP = function () {
-                if (_this.EditingHP()) {
-                    var damage = _this.HPInput(), healing = -_this.HPInput(), currHP = _this.Creature.CurrentHP(), tempHP = _this.Creature.TemporaryHP();
-                    if (damage > 0) {
-                        tempHP = -damage;
-                        if (tempHP < 0) {
-                            currHP += tempHP;
-                            tempHP = 0;
-                        }
-                    }
-                    else {
-                        currHP += healing;
-                        if (currHP > _this.Creature.MaxHP) {
-                            currHP = _this.Creature.MaxHP;
-                        }
-                    }
-                    _this.Creature.CurrentHP(currHP);
-                    _this.Creature.TemporaryHP(tempHP);
-                    _this.EditingHP(false);
-                }
-                else if (_this.AddingTemporaryHP) {
-                    var newTemporaryHP = _this.HPInput(), currentTemporaryHP = _this.Creature.TemporaryHP();
-                    if (newTemporaryHP > currentTemporaryHP) {
-                        currentTemporaryHP = newTemporaryHP;
-                    }
-                    _this.Creature.TemporaryHP(currentTemporaryHP);
-                    _this.AddingTemporaryHP(false);
-                }
-                _this.HPInput(null);
+                _this.PollUser({
+                    requestContent: "Grant temporary hit points to " + _this.Creature.Alias() + ": <input class='response' type='number' />",
+                    inputSelector: '.response',
+                    callback: _this.applyTemporaryHP
+                });
             };
             this.EditingName = ko.observable(false);
             this.CommitName = function () {
@@ -111,7 +115,7 @@ var ImprovedInitiative;
     ImprovedInitiative.CombatantViewModel = CombatantViewModel;
     ko.components.register('combatant', {
         viewModel: function (params) {
-            params.creature.ViewModel = new CombatantViewModel(params.creature);
+            params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
             return params.creature.ViewModel;
         },
         template: { name: 'combatant' }
@@ -258,13 +262,13 @@ var ImprovedInitiative;
             };
             this.FocusSelectedCreatureHP = function () {
                 if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.EditingHP(true);
+                    _this.SelectedCreature().ViewModel.EditHP();
                 }
                 return false;
             };
             this.AddSelectedCreatureTemporaryHP = function () {
                 if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.AddingTemporaryHP(true);
+                    _this.SelectedCreature().ViewModel.AddTemporaryHP();
                 }
                 return false;
             };

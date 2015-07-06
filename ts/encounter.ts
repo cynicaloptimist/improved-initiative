@@ -96,14 +96,14 @@ module ImprovedInitiative {
     FocusSelectedCreatureHP = () =>
     {
       if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.EditingHP(true);
+        this.SelectedCreature().ViewModel.EditHP();
       }
       return false;
     }
     
     AddSelectedCreatureTemporaryHP = () => {
       if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.AddingTemporaryHP(true);
+        this.SelectedCreature().ViewModel.AddTemporaryHP();
       }
       return false;
     }

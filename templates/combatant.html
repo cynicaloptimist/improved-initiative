@@ -3,8 +3,7 @@
   <span data-bind="text: Creature.Alias, visible:!EditingName(), attr: {title: Creature.Alias}"></span>
   <input data-bind="textInput: Creature.Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
 </div>
-<div class="hp" data-bind="click: EditHP, css: { applyDamage: EditingHP, applyTemporaryHP: AddingTemporaryHP }">
-  <input type="number" data-bind="textInput: HPInput, onEnter: CommitHP, visible: ShowHPInput, hasFocus: ShowHPInput" />
+<div class="hp" data-bind="click: EditHP">
   <span data-bind="text: DisplayHP, style: { color: GetHPColor() }" class="current-hp"></span>
 </div>
 <div class="ac" data-bind="text: Creature.AC"></div>

@@ -36,10 +36,10 @@ module ImprovedInitiative {
     template: { name: 'editstatblock' }
   });
   
-  class CombatantViewModel {
+  export class CombatantViewModel {
     DisplayHP: () => void;
     
-    constructor(public Creature: Creature){
+    constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void){
       this.DisplayHP = ko.pureComputed(() => {
         if(this.Creature.TemporaryHP()){
           return '{0}+{1}/{2}'.format(this.Creature.CurrentHP(), this.Creature.TemporaryHP(), this.Creature.MaxHP);
@@ -49,68 +49,71 @@ module ImprovedInitiative {
       })
     }
     
+    private applyDamage = inputDamage => {
+      var damage = parseInt(inputDamage),
+          healing = -damage,
+          currHP = this.Creature.CurrentHP(), 
+          tempHP = this.Creature.TemporaryHP();
+      
+      if(isNaN(damage)){
+        return
+      }
+      
+	    if(damage > 0){
+        tempHP -= damage;
+        if(tempHP < 0){
+          currHP += tempHP;
+          tempHP = 0;
+        }
+      } else {
+        currHP += healing;
+        if(currHP > this.Creature.MaxHP)
+        {
+          currHP = this.Creature.MaxHP;
+        }
+      }
+      
+      this.Creature.CurrentHP(currHP);
+      this.Creature.TemporaryHP(tempHP);
+    }
+    
+    private applyTemporaryHP = inputTHP => {
+      var newTemporaryHP = parseInt(inputTHP),
+          currentTemporaryHP = this.Creature.TemporaryHP();
+          
+      if(isNaN(newTemporaryHP)){
+        return
+      }
+      
+      if(newTemporaryHP > currentTemporaryHP) {
+        currentTemporaryHP = newTemporaryHP;
+      }
+      
+      this.Creature.TemporaryHP(currentTemporaryHP);
+    }
+    
     GetHPColor = () => {
 	    var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
 	    var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
 	    return "rgb(" + red + "," + green + ",0)";
 	  };
     
-    EditingHP = ko.observable(false)
-    AddingTemporaryHP = ko.observable(false)
-    
     EditHP = () => {
-      this.EditingHP(true);
+      this.PollUser({
+        requestContent: `Apply damage to ${this.Creature.Alias()}: <input class='response' type='number' />`,
+        inputSelector: '.response',
+        callback: this.applyDamage
+      });
     }
     
     AddTemporaryHP = () => {
-      this.AddingTemporaryHP(true);
+      this.PollUser({
+        requestContent: `Grant temporary hit points to ${this.Creature.Alias()}: <input class='response' type='number' />`,
+        inputSelector: '.response',
+        callback: this.applyTemporaryHP
+      });
     }
     
-    ShowHPInput = ko.pureComputed<boolean>(() => {
-      return this.EditingHP() || this.AddingTemporaryHP()
-    });
-    
-    HPInput = ko.observable(null);
-    
-	  CommitHP = () => {
-      if(this.EditingHP()){
-        var damage = this.HPInput(), 
-            healing = -this.HPInput(), 
-            currHP = this.Creature.CurrentHP(), 
-            tempHP = this.Creature.TemporaryHP();
-  
-  	    if(damage > 0){
-          tempHP =- damage;
-          if(tempHP < 0){
-            currHP += tempHP;
-            tempHP = 0;
-          }
-        } else {
-          currHP += healing;
-          if(currHP > this.Creature.MaxHP)
-          {
-            currHP = this.Creature.MaxHP;
-          }
-        }
-        
-        this.Creature.CurrentHP(currHP);
-        this.Creature.TemporaryHP(tempHP);
-        this.EditingHP(false);
-        
-      } else if(this.AddingTemporaryHP) {
-        
-        var newTemporaryHP = this.HPInput(),
-            currentTemporaryHP = this.Creature.TemporaryHP();
-        if(newTemporaryHP > currentTemporaryHP) {
-          currentTemporaryHP = newTemporaryHP;
-        }
-        
-        this.Creature.TemporaryHP(currentTemporaryHP);
-        this.AddingTemporaryHP(false);
-      }
-      
-	    this.HPInput(null);
-	  };
     
 	  EditingName = ko.observable(false);
     
@@ -137,7 +140,7 @@ module ImprovedInitiative {
   
   ko.components.register('combatant', {
     viewModel: function(params) {
-      params.creature.ViewModel = new CombatantViewModel(params.creature);
+      params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
       return params.creature.ViewModel;
     },
     template: { name: 'combatant' }
