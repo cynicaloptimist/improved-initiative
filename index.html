@@ -51,8 +51,8 @@
       <!-- ko ifnot: DisplayTab() == 'Encounters' -->
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
       <ul class="creature-library" data-bind="foreach: FilteredCreatures">
-        <li data-bind="click: $root.Encounter().AddCreature">
-          <span data-bind="text: Name"></span>
+        <li>
+          <span class="fa" data-bind="click: $root.Encounter().AddCreature, text: Name"></span>
           <span class="fa fa-search preview" data-bind="event: {
             mouseover: $parent.ShowPreviewPane,
             mouseout: $parent.HidePreviewPane

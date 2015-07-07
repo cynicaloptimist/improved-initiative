@@ -3564,41 +3564,23 @@ body .library ul.creature-library {
 }
 body .library ul.creature-library li {
   line-height: 24px;
-  border: 1px solid transparent;
+  margin: 1px;
+  display: flex;
 }
-body .library ul.creature-library li:nth-child(2n) {
-  background-color: lightgray;
-  border-color: lightgray;
-}
-body .library ul.creature-library li:nth-child(2n) input {
-  background-color: lightgray;
-}
-body .library ul.creature-library li:nth-child(2n) input:hover,
-body .library ul.creature-library li:nth-child(2n) input:focus {
-  background-color: white;
-}
-body .library ul.creature-library li:nth-child(2n+1) {
-  background-color: transparent;
-  border-color: transparent;
-}
-body .library ul.creature-library li:nth-child(2n+1) input {
-  background-color: transparent;
-}
-body .library ul.creature-library li:nth-child(2n+1) input:hover,
-body .library ul.creature-library li:nth-child(2n+1) input:focus {
-  background-color: white;
-}
-body .library ul.creature-library li:hover {
-  border: 1px solid gray;
+body .library ul.creature-library li:nth-child(2n) .fa {
+  background-color: #f0f0f0;
 }
 body .library ul.creature-library li .fa {
-  float: right;
   padding: 2px 6px;
-  border: 2px solid gray;
-  border-radius: 6px;
+  margin-left: 1px;
+  border: 1px solid darkred;
+  border-radius: 4px;
+}
+body .library ul.creature-library li .fa:first-child {
+  flex-grow: 1;
 }
 body .library ul.creature-library li .fa:hover {
-  background-color: gray;
+  background-color: #cdcdcd;
 }
 body .encounter {
   display: flex;

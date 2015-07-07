@@ -149,19 +149,22 @@ body{
 			flex-shrink: 1;
 			list-style-type: none;
 			li {
-				line-height: 24px;
-				border: 1px solid transparent;
-				.zebra-stripe();
-				&:hover{
-					border: 1px solid gray;
+				&:nth-child(2n) .fa {
+					background-color: #f0f0f0;
 				}
+				line-height: 24px;
+				margin: 1px;
+				display:flex;
 				.fa {
-					float:right;
+					&:first-child {
+						flex-grow: 1;
+					}
 					padding: 2px 6px;
-					border: 2px solid gray;
-					border-radius: 6px;
+					margin-left: 1px;
+					border: 1px solid darkred;
+					border-radius: 4px;
 					&:hover{
-						background-color:gray;
+						background-color:lighten(gray, 30%);
 					}
 				}
 			}
