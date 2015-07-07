@@ -1,4 +1,3 @@
-*.min.js
-/node_modules/*
-/licensed/*
-/js/*
+node_modules/*
+licensed/*
+js/*
