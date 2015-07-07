@@ -1,4 +1,4 @@
 *.min.js
 /node_modules/*
-/lib/*
 /licensed/*
+/js/*
