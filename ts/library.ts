@@ -9,11 +9,13 @@ module ImprovedInitiative {
     AddCreatures: (json: IHaveTrackerStats []) => void;
     AddPlayers: (json: IHaveTrackerStats []) => void;
     PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
+    EditStatBlock: (StatBlock: IStatBlock) => void;
 	}
 	
 	export class CreatureLibrary implements ICreatureLibrary {
-		constructor (creatures?: IHaveTrackerStats []) {
+		constructor (creatures?: IHaveTrackerStats [], editor?) {
 			this.Creatures(creatures || []);
+      this.StatBlockEditor = editor || new StatblockEditorViewModel();
       var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
       if(savedEncounterList == 'undefined'){
         savedEncounterList = '[]';
@@ -25,6 +27,7 @@ module ImprovedInitiative {
 		Creatures = ko.observableArray<IHaveTrackerStats>();
     Players = ko.observableArray<IHaveTrackerStats>();
     SavedEncounterIndex = ko.observableArray<string>();
+    StatBlockEditor: IStatBlockEditor;
     
     ShowPreviewPane = (creature,event) => {
       this.PreviewCreature(creature);
@@ -70,33 +73,19 @@ module ImprovedInitiative {
       return this.PreviewCreature() || StatBlock.Empty();
     });
     
-    EditCreature = ko.observable<IHaveTrackerStats>();
-    EditCreatureStatblock = ko.computed(() => {
-      return this.EditCreature() || StatBlock.Empty();
-    })
-    
-    SaveCreature = () => {
-      var creature = this.EditCreature();
-      if(this.DisplayTab() == 'Creatures')
-      {
-        this.Creatures.splice(this.Creatures.indexOf(creature), 1, creature);
-      } 
-      else if (this.DisplayTab() == 'Players')
-      {
-        creature.Player = 'player'
-        this.Players.splice(this.Players.indexOf(creature), 1, creature);
-      }
-      this.EditCreature(null);
+    EditStatBlock = (StatBlock: IStatBlock) => {
+      this.StatBlockEditor.Edit(StatBlock);
+      return false;
     }
     
     AddNewPlayer = () => {
       var player = StatBlock.Empty();
-      this.EditCreature(player);
+      this.EditStatBlock(player);
     }
     
     AddNewCreature = () => {
       var creature = StatBlock.Empty();
-      this.EditCreature(creature);
+      this.EditStatBlock(creature);
     }
     
     AddPlayers(library: IHaveTrackerStats []): void {

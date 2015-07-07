@@ -33,8 +33,10 @@ module ImprovedInitiative {
   
   export class ViewModel{
     UserPollQueue = new UserPollQueue();
-    Library = ko.observable<ICreatureLibrary>(new CreatureLibrary());
+    StatBlockEditor = new StatblockEditorViewModel();
+    Library = ko.observable<ICreatureLibrary>(new CreatureLibrary(null, this.StatBlockEditor));
     Encounter = ko.observable<Encounter>(new Encounter(this.UserPollQueue));
+    
     SaveEncounter = () => {
       this.UserPollQueue.Add({
         requestContent: `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,

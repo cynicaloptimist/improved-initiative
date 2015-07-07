@@ -22,17 +22,40 @@ module ImprovedInitiative {
   ko.components.loaders.unshift(templateLoader);
   
   ko.components.register('defaultstatblock', {
-    viewModel: function(params) { return params.creature; },
+    viewModel: params => { return params.creature; },
     template: { name: 'defaultstatblock' }
   });
   
   ko.components.register('activestatblock', {
-    viewModel: function(params) { return params.creature; },
+    viewModel: params => { return params.creature; },
     template: { name: 'activestatblock' }
   });
   
+  export interface IStatBlockEditor {
+    Edit: (StatBlock: IStatBlock) => void;
+  }
+  
+  export class StatblockEditorViewModel {
+    StatBlock = ko.observable<IStatBlock>();
+    editorType = ko.observable<string>('basic');
+    statBlockJson = ko.observable<string>();
+    
+    Edit = (StatBlock: IStatBlock) => {
+      this.StatBlock(StatBlock);
+      this.statBlockJson(JSON.stringify(StatBlock, null, 2));
+    }
+    
+    SaveCreature = () => {
+      if(this.editorType() === 'advanced') {
+        var editedCreature = JSON.parse(this.statBlockJson());
+        $.extend(this.StatBlock(), editedCreature)
+      }
+      this.StatBlock(null);
+    }
+  }
+  
   ko.components.register('editstatblock', {
-    viewModel: function(params) { return params.statblock; },
+    viewModel: params => params.editor,
     template: { name: 'editstatblock' }
   });
   

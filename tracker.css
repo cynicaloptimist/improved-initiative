@@ -3778,6 +3778,10 @@ body .editor .stats label {
   width: 300px;
   justify-content: space-between;
 }
+body .editor .json-editor {
+  width: 400px;
+  height: 300px;
+}
 body .interface-buttons {
   display: flex;
   flex-direction: row-reverse;

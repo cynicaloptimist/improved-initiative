@@ -57,7 +57,7 @@
             mouseover: $parent.ShowPreviewPane,
             mouseout: $parent.HidePreviewPane
           }"></span>
-          <span class="fa fa-edit" data-bind="click: $parent.EditCreature"></span>
+          <span class="fa fa-edit" data-bind="click: $parent.EditStatBlock"></span>
         </li>
       </ul>
       <div class="interface-buttons">
@@ -80,23 +80,16 @@
     }"></div>
   </div>
   
-<!-- ko if: Library().EditCreature -->
-
-  <div class="editor">
-    <h1>Edit Creature</h1>
-    <div data-bind="component: {
-      name: 'editstatblock',
-      params: {
-        statblock: Library().EditCreatureStatblock
-      }
-    }"></div>
-    <div class="interface-buttons">
-      <div data-bind="click: Library().SaveCreature"><span class="fa fa-check"></span></div>
-    </div>
-  </div>
-
+<!-- ko if: StatBlockEditor.StatBlock() -->
+  <div class="editor" data-bind="component: {
+    name: 'editstatblock',
+    params: {
+      editor: StatBlockEditor
+    }
+  }"></div>
 <!-- /ko -->
-<!-- ko ifnot: Library().EditCreature -->
+
+<!-- ko ifnot: StatBlockEditor.StatBlock() -->
 
   <div class="tracker">
     <div class="encounter" data-bind="with: Encounter">
@@ -139,7 +132,7 @@
       component: { 
         name: 'defaultstatblock', 
         params:{ 
-          creature: Encounter().SelectedCreatureStatblock() 
+          creature: Encounter().SelectedCreatureStatblock(),
         } 
       }"></div>
     </div>
