@@ -70,24 +70,23 @@ module ImprovedInitiative {
       return this.PreviewCreature() || StatBlock.Empty();
     });
     
-    StatblockEditor: StatBlockEditor;
-    
     EditStatBlock = (StatBlock: IStatBlock) => {
-      this.StatblockEditor.EditCreature(StatBlock, (newStatBlock: IStatBlock) => {
-        if(StatBlock.Player == "player"){
-          this.Players.splice(this.Players.indexOf(StatBlock),1,newStatBlock)
-        }
+      this.StatBlockEditor.EditCreature(StatBlock, (newStatBlock: IStatBlock) => {
+        
       });
       return false;
     }
     
     AddNewPlayer = () => {
       var player = StatBlock.Empty();
+      player.Player = "player";
+      this.AddPlayers([player]);
       this.EditStatBlock(player);
     }
     
     AddNewCreature = () => {
       var creature = StatBlock.Empty();
+      this.AddCreatures(creature);
       this.EditStatBlock(creature);
     }
     

@@ -13,6 +13,7 @@ module ImprovedInitiative {
     EditCreature = (StatBlock: IStatBlock, callback: (newStatBlock: IStatBlock) => void) => {
       this.StatBlock(StatBlock);
       this.statBlockJson(JSON.stringify(StatBlock, null, 2));
+      this.callback = callback;
     }
     
     SaveCreature = () => {
