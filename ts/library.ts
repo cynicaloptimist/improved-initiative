@@ -70,7 +70,7 @@ module ImprovedInitiative {
       return this.PreviewCreature() || StatBlock.Empty();
     });
     
-    StatblockEditor: StatblockEditor;
+    StatblockEditor: StatBlockEditor;
     
     EditStatBlock = (StatBlock: IStatBlock) => {
       this.StatblockEditor.EditCreature(StatBlock, (newStatBlock: IStatBlock) => {

@@ -9,6 +9,7 @@
 /// <reference path="components.ts" />
 /// <reference path="userpoll.ts" />
 /// <reference path="statblock.ts" />
+/// <reference path="statblockeditor.ts" />
 /// <reference path="creature.ts" />
 /// <reference path="playercharacter.ts" />
 /// <reference path="encounter.ts" />
@@ -34,7 +35,7 @@ module ImprovedInitiative {
   export class ViewModel{
     UserPollQueue = new UserPollQueue();
     Encounter = new Encounter(this.UserPollQueue);
-    StatBlockEditor = new StatblockEditor();
+    StatBlockEditor = new StatBlockEditor();
     Library = new CreatureLibrary(this.StatBlockEditor);
     
     SaveEncounter = () => {
