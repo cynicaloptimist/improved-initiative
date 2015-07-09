@@ -22,23 +22,23 @@
     <input type="button" value="Save Keybindings" data-bind="click: ToggleKeybindings" />
   </div>
   <div class="preview statblock" data-bind="
-    visible: Library().PreviewCreatureStatblock().Name,
+    visible: Library.PreviewCreatureStatblock().Name,
     event: {
-      mouseout: Library().HidePreviewPane
+      mouseout: Library.HidePreviewPane
     }">
     <div data-bind="component: { 
         name: 'defaultstatblock', 
         params:{ 
-          creature: Library().PreviewCreatureStatblock() 
+          creature: Library.PreviewCreatureStatblock() 
         } 
       }"></div>
   </div>
   <div class="libraries">
     <h1>Library</h1>
     <div class="tabs">
-      <div data-bind="click: Library().DisplayTab.bind(null, 'Creatures')">Creatures</div>
-      <div data-bind="click: Library().DisplayTab.bind(null, 'Players')">Players</div>
-      <div data-bind="click: Library().DisplayTab.bind(null, 'Encounters')">Encounters</div>
+      <div data-bind="click: Library.DisplayTab.bind(null, 'Creatures')">Creatures</div>
+      <div data-bind="click: Library.DisplayTab.bind(null, 'Players')">Players</div>
+      <div data-bind="click: Library.DisplayTab.bind(null, 'Encounters')">Encounters</div>
     </div>
     <div class="library" data-bind="with: Library">
       <!-- ko if: DisplayTab() == 'Encounters' -->
@@ -52,7 +52,7 @@
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
       <ul class="creature-library" data-bind="foreach: FilteredCreatures">
         <li>
-          <span class="fa" data-bind="click: $root.Encounter().AddCreature, text: Name"></span>
+          <span class="fa" data-bind="click: $root.Encounter.AddCreature, text: Name"></span>
           <span class="fa fa-search preview" data-bind="event: {
             mouseover: $parent.ShowPreviewPane,
             mouseout: $parent.HidePreviewPane
@@ -69,13 +69,13 @@
   </div>
   <div class="views">
 
-  <div class="active statblock" data-bind="if: Encounter().ActiveCreature()">
+  <div class="active statblock" data-bind="if: Encounter.ActiveCreature()">
     <h1>Active Creature</h1>
-    <div data-bind="visible: Encounter().ActiveCreature(), 
+    <div data-bind="visible: Encounter.ActiveCreature(), 
     component: { 
       name: 'activestatblock', 
       params: { 
-        creature: Encounter().ActiveCreatureStatblock() 
+        creature: Encounter.ActiveCreatureStatblock() 
       } 
     }"></div>
   </div>
@@ -128,16 +128,16 @@
 
     <div class="selected statblock">
       <h1>Target Creature</h1>
-      <div data-bind="visible: Encounter().SelectedCreature(), 
+      <div data-bind="visible: Encounter.SelectedCreature(), 
       component: { 
         name: 'defaultstatblock', 
         params:{ 
-          creature: Encounter().SelectedCreatureStatblock(),
+          creature: Encounter.SelectedCreatureStatblock(),
         } 
       }"></div>
     </div>
   </div>
-  <div class="interface-buttons" data-bind="with:Encounter()">
+  <div class="interface-buttons" data-bind="with:Encounter">
     <div class='highlight' data-bind="click: RollInitiative">Roll Initiative! <span class="fa fa-play"></span></div>
     <div data-bind="click: NextTurn">Next Turn <span class="fa fa-step-forward"></span></div>
     <div data-bind="click: PreviousTurn">Previous Turn <span class="fa fa-step-backward"></span></div>

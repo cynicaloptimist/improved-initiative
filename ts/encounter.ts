@@ -211,12 +211,6 @@ module ImprovedInitiative {
       };
     }
     
-    static Load = (e: ISavedEncounter, userPollQueue: UserPollQueue) => {
-      var encounter = new Encounter(userPollQueue);
-      encounter.AddSavedEncounter(e)
-      return encounter;
-    }
-    
     AddSavedEncounter: (e: ISavedEncounter) => void = e => {
       e.Creatures
        .forEach(c => {

@@ -32,15 +32,17 @@ module ImprovedInitiative {
   });
   
   export interface IStatBlockEditor {
-    Edit: (StatBlock: IStatBlock) => void;
+    StatBlock: KnockoutObservable<IStatBlock>;
+    EditCreature: (StatBlock: IStatBlock, callback: (newStatBlock: IStatBlock) => void) => void;
   }
   
-  export class StatblockEditorViewModel {
+  export class StatblockEditor {
+    private callback: (newStatBlock: IStatBlock) => void;
     StatBlock = ko.observable<IStatBlock>();
     editorType = ko.observable<string>('basic');
     statBlockJson = ko.observable<string>();
     
-    Edit = (StatBlock: IStatBlock) => {
+    EditCreature = (StatBlock: IStatBlock, callback: (newStatBlock: IStatBlock) => void) => {
       this.StatBlock(StatBlock);
       this.statBlockJson(JSON.stringify(StatBlock, null, 2));
     }
@@ -50,6 +52,7 @@ module ImprovedInitiative {
         var editedCreature = JSON.parse(this.statBlockJson());
         $.extend(this.StatBlock(), editedCreature)
       }
+      this.callback(this.StatBlock());
       this.StatBlock(null);
     }
   }

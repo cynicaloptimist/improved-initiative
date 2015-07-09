@@ -63,6 +63,7 @@ module ImprovedInitiative {
       Traits: IUsableTrait [];
       Actions: IUsableTrait [];
       LegendaryActions: IUsableTrait [];
+      Player: string;
   }
   
   export class StatBlock {
@@ -76,7 +77,8 @@ module ImprovedInitiative {
       Challenge: '',
       Traits: [],
       Actions: [],
-      LegendaryActions: []
+      LegendaryActions: [],
+      Player: ''
     })
     
     static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]

@@ -13,10 +13,8 @@ module ImprovedInitiative {
 	}
 	
 	export class CreatureLibrary implements ICreatureLibrary {
-		constructor (creatures?: IHaveTrackerStats [], editor?) {
-			this.Creatures(creatures || []);
-      this.StatBlockEditor = editor || new StatblockEditorViewModel();
-      var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
+		constructor (private StatBlockEditor: IStatBlockEditor) {
+			var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
       if(savedEncounterList == 'undefined'){
         savedEncounterList = '[]';
       }
@@ -24,10 +22,9 @@ module ImprovedInitiative {
         this.SavedEncounterIndex.push(e);
       });
 		}
-		Creatures = ko.observableArray<IHaveTrackerStats>();
+		Creatures = ko.observableArray<IHaveTrackerStats>([]);
     Players = ko.observableArray<IHaveTrackerStats>();
     SavedEncounterIndex = ko.observableArray<string>();
-    StatBlockEditor: IStatBlockEditor;
     
     ShowPreviewPane = (creature,event) => {
       this.PreviewCreature(creature);
@@ -73,8 +70,14 @@ module ImprovedInitiative {
       return this.PreviewCreature() || StatBlock.Empty();
     });
     
+    StatblockEditor: StatblockEditor;
+    
     EditStatBlock = (StatBlock: IStatBlock) => {
-      this.StatBlockEditor.Edit(StatBlock);
+      this.StatblockEditor.EditCreature(StatBlock, (newStatBlock: IStatBlock) => {
+        if(StatBlock.Player == "player"){
+          this.Players.splice(this.Players.indexOf(StatBlock),1,newStatBlock)
+        }
+      });
       return false;
     }
     
