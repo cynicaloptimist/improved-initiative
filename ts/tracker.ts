@@ -94,11 +94,15 @@ module ImprovedInitiative {
     var viewModel = new ViewModel();
     viewModel.RegisterKeybindings();
     ko.applyBindings(viewModel);
-    $.ajax("basic_rules_creatures.json").done((json: IHaveTrackerStats []) => {
-      viewModel.Library.AddCreatures(json);
+    
+    $.ajax("licensed/creatures.json").done((json: IHaveTrackerStats []) => {
+      if(json.length){
+        viewModel.Library.AddCreatures(json);
+      } else {
+        $.ajax("basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
+      }
     });
-    $.ajax("playercharacters.json").done(json => {
-      viewModel.Library.AddPlayers(json);
-    });
+    
+    $.ajax("playercharacters.json").done(viewModel.Library.AddPlayers);
   });
 }
