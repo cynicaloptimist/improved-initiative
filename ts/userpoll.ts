@@ -13,8 +13,9 @@ module ImprovedInitiative {
 			this.Queue.push(poll);
 		}
 		Resolve = (form: HTMLFormElement) => {
-			var poll = this.Queue.shift();
+			var poll = this.Queue()[0];
 			poll.callback($(form).find(poll.inputSelector).val());
+			this.Queue.shift();
 			return false;
 		}
 		CurrentPoll = ko.pureComputed(() => {
