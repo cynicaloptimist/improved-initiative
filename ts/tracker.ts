@@ -95,7 +95,7 @@ module ImprovedInitiative {
     viewModel.RegisterKeybindings();
     ko.applyBindings(viewModel);
     
-    $.ajax("licensed/creatures.json").done((json: IHaveTrackerStats []) => {
+    $.ajax("user/creatures.json").done((json: IHaveTrackerStats []) => {
       if(json.length){
         viewModel.Library.AddCreatures(json);
       } else {
@@ -103,6 +103,6 @@ module ImprovedInitiative {
       }
     });
     
-    $.ajax("playercharacters.json").done(viewModel.Library.AddPlayers);
+    $.ajax("user/playercharacters.json").done(viewModel.Library.AddPlayers);
   });
 }
