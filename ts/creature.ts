@@ -11,24 +11,25 @@ module ImprovedInitiative {
 	  Tags: KnockoutObservableArray<string>;
 	  InitiativeModifier: number;
 	  Initiative: KnockoutObservable<number>;
-	  StatBlock: IStatBlock;
+	  StatBlock: KnockoutObservable<IStatBlock>;
     RollInitiative: () => void;
     ViewModel: CombatantViewModel;
   }
 	
   export class Creature implements ICreature{
 	  constructor(creatureJson: IHaveTrackerStats, public Encounter: Encounter){
-	    this.StatBlock = StatBlock.Empty();
-      jQuery.extend(this.StatBlock, creatureJson);
-	    this.Name = this.StatBlock.Name;
+	    var statBlock = StatBlock.Empty();
+      jQuery.extend(statBlock, creatureJson);
+      this.StatBlock = ko.observable(statBlock);
+	    this.Name = statBlock.Name;
       this.Alias = this.SetAlias(this.Name)
-      this.MaxHP = this.StatBlock.HP.Value;
-      this.CurrentHP = ko.observable(this.StatBlock.HP.Value);
+      this.MaxHP = statBlock.HP.Value;
+      this.CurrentHP = ko.observable(statBlock.HP.Value);
       this.TemporaryHP = ko.observable(0);
       this.AbilityModifiers = this.calculateModifiers();
-      this.AC = this.StatBlock.AC.Value;
+      this.AC = statBlock.AC.Value;
       this.Tags = ko.observableArray<string>();
-      this.InitiativeModifier = this.StatBlock.InitiativeModifier || this.Encounter.Rules.Modifier(this.StatBlock.Abilities.Dex);
+      this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
       this.Initiative = ko.observable(0);
 	  }
     
@@ -43,7 +44,7 @@ module ImprovedInitiative {
     NewTag: KnockoutObservable<string>;
 	  InitiativeModifier: number;
 	  Initiative: KnockoutObservable<number>;
-	  StatBlock: IStatBlock;
+	  StatBlock: KnockoutObservable<IStatBlock>;
     ViewModel: any;
 	  
     SetAlias = (name: string) => {
@@ -59,8 +60,8 @@ module ImprovedInitiative {
 	  
 	  private calculateModifiers = () => {
 	    var modifiers = StatBlock.Empty().Abilities;
-	    for(var attribute in this.StatBlock.Abilities){
-	      modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock.Abilities[attribute]);
+	    for(var attribute in this.StatBlock().Abilities){
+	      modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock().Abilities[attribute]);
 	    }
 	    return modifiers;
 	  }

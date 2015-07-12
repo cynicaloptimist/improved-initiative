@@ -20,14 +20,14 @@ module ImprovedInitiative {
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
         return this.SelectedCreature() 
-                   ? this.SelectedCreature().StatBlock
+                   ? this.SelectedCreature().StatBlock()
                    : StatBlock.Empty();
       });
       this.ActiveCreature = ko.observable<ICreature>();
       this.ActiveCreatureStatblock = ko.computed(() => 
       {
         return this.ActiveCreature() 
-                   ? this.ActiveCreature().StatBlock
+                   ? this.ActiveCreature().StatBlock()
                    : StatBlock.Empty();
       });
     }
@@ -200,7 +200,7 @@ module ImprovedInitiative {
         Name: name,
         Creatures: this.Creatures().map<ISavedCreature>(c => {
           return {
-            Statblock: c.StatBlock,
+            Statblock: c.StatBlock(),
             CurrentHP: c.CurrentHP(),
             TemporaryHP: c.TemporaryHP(),
             Initiative: c.Initiative(),
