@@ -20,6 +20,10 @@ String.prototype.format = function () {
   return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
     if (m == "{{") { return "{"; }
     if (m == "}}") { return "}"; }
-    return args[n] || "{" + n + "}";
+    if(args[n] === null || args[n] === undefined)
+    {
+      return "{" + n + "}";
+    }
+    return args[n];
   });
 };
