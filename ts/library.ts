@@ -1,6 +1,6 @@
 module ImprovedInitiative {
 	export interface ICreatureLibrary {
-		Creatures: KnockoutObservableArray<IHaveTrackerStats>;
+		Creatures: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
     FilteredCreatures: KnockoutComputed<IHaveTrackerStats []>;
     Players: KnockoutObservableArray<IHaveTrackerStats>;
     SavedEncounterIndex: KnockoutObservableArray<string>;
@@ -19,10 +19,9 @@ module ImprovedInitiative {
         JSON.parse(savedEncounterList).forEach(e => this.SavedEncounterIndex.push(e));
       }
 		}
-		Creatures = ko.observableArray<IHaveTrackerStats>([]);
+		Creatures = ko.observableArray<KnockoutObservable<IHaveTrackerStats>>([]);
     Players = ko.observableArray<IHaveTrackerStats>([]);
     SavedEncounterIndex = ko.observableArray<string>([]);
-    
     
     PreviewCreature = ko.observable<IHaveTrackerStats>(null);
     AdjustPreviewPane = () => {
@@ -44,22 +43,25 @@ module ImprovedInitiative {
     LibraryFilter = ko.observable('');
     
     FilteredCreatures = ko.computed(() => {
-      if(this.DisplayTab() == 'Players'){
-        return this.Players()
-      }
-      var filter = this.LibraryFilter().toLocaleLowerCase();
-      if(filter.length == 0){
-        return this.Creatures();
-      }
-      var creaturesWithFilterInName = [],
+      var creatures = ko.unwrap(this.Creatures),
+          players = ko.unwrap(this.Players),
+          filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+          creaturesWithFilterInName = [],
           creaturesWithFilterInType = [];
+
+      if(this.DisplayTab() == 'Players'){
+        return players;
+      }
+      if(filter.length == 0){
+        return creatures;
+      }
       
-      this.Creatures().forEach(c => {
-        if(c.Name.toLocaleLowerCase().indexOf(filter) > -1) {
+      creatures.forEach(c => {
+        if(c().Name.toLocaleLowerCase().indexOf(filter) > -1) {
           creaturesWithFilterInName.push(c);
           return;
         }
-        if(c.Type.toLocaleLowerCase().indexOf(filter) > -1) {
+        if(c().Type.toLocaleLowerCase().indexOf(filter) > -1) {
           creaturesWithFilterInType.push(c);
         }
       })
@@ -82,7 +84,7 @@ module ImprovedInitiative {
     
     AddNewCreature = () => {
       var creature = StatBlock.Empty();
-      this.AddCreatures(creature);
+      this.AddCreatures([creature]);
       this.EditStatBlock(creature);
     }
     
@@ -90,19 +92,8 @@ module ImprovedInitiative {
       this.Players(this.Players().concat(library));
     }
     
-    AddCreatures(creatureOrLibrary: IHaveTrackerStats | IHaveTrackerStats []): void;
-    AddCreatures(creatureOrLibrary: any): void {
-      if(creatureOrLibrary.length)
-      {
-        this.Creatures(
-          this.Creatures()
-              .concat(creatureOrLibrary
-                        .sort((a: IHaveTrackerStats, b: IHaveTrackerStats) => { 
-                          return a.Name.toLocaleLowerCase() < b.Name.toLocaleLowerCase() ? -1 : 1;
-                        })));
-      } else {
-        this.Creatures().push(creatureOrLibrary);
-      }
+    AddCreatures(library: IHaveTrackerStats []): void {
+      library.forEach(c => this.Creatures.push(ko.observable(c)));
     }
 	}
 }
