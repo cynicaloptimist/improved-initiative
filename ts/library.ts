@@ -1,7 +1,7 @@
 module ImprovedInitiative {
 	export interface ICreatureLibrary {
 		Creatures: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
-    FilteredCreatures: KnockoutComputed<IHaveTrackerStats []>;
+    FilteredCreatures: KnockoutComputed<KnockoutObservable<IHaveTrackerStats> []>;
     Players: KnockoutObservableArray<IHaveTrackerStats>;
     SavedEncounterIndex: KnockoutObservableArray<string>;
     LibraryFilter: KnockoutObservable<string>;
@@ -9,7 +9,7 @@ module ImprovedInitiative {
     AddCreatures: (json: IHaveTrackerStats []) => void;
     AddPlayers: (json: IHaveTrackerStats []) => void;
     PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
-    EditStatBlock: (StatBlock: IStatBlock) => void;
+    EditStatBlock: (StatBlock: IStatBlock, event?) => void;
 	}
 	
 	export class CreatureLibrary implements ICreatureLibrary {
@@ -42,7 +42,7 @@ module ImprovedInitiative {
     DisplayTab = ko.observable('Creatures');
     LibraryFilter = ko.observable('');
     
-    FilteredCreatures = ko.computed(() => {
+    FilteredCreatures = ko.computed<KnockoutObservable<IStatBlock> []>(() => {
       var creatures = ko.unwrap(this.Creatures),
           players = ko.unwrap(this.Players),
           filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
@@ -68,9 +68,10 @@ module ImprovedInitiative {
       return creaturesWithFilterInName.concat(creaturesWithFilterInType);
     });
     
-    EditStatBlock = (StatBlock: IStatBlock) => {
+    EditStatBlock = (StatBlock: IStatBlock, event?) => {
+      var StatBlockObservable = this.Creatures().filter(c => c() === StatBlock)[0];
       this.StatBlockEditor.EditCreature(StatBlock, (newStatBlock: IStatBlock) => {
-        
+        StatBlockObservable(newStatBlock);
       });
       return false;
     }
@@ -79,13 +80,12 @@ module ImprovedInitiative {
       var player = StatBlock.Empty();
       player.Player = "player";
       this.AddPlayers([player]);
-      this.EditStatBlock(player);
+      //this.EditStatBlock(player);
     }
     
     AddNewCreature = () => {
       var creature = StatBlock.Empty();
-      this.AddCreatures([creature]);
-      this.EditStatBlock(creature);
+      this.EditStatBlock(this.AddCreature(creature)());
     }
     
     AddPlayers = (library: IHaveTrackerStats []) => {
@@ -94,6 +94,11 @@ module ImprovedInitiative {
     
     AddCreatures(library: IHaveTrackerStats []): void {
       library.forEach(c => this.Creatures.push(ko.observable(c)));
+    }
+    AddCreature(creature: IStatBlock): KnockoutObservable<IStatBlock> {
+      var observableCreature = ko.observable(creature);
+      this.Creatures.push(observableCreature);
+      return observableCreature;
     }
 	}
 }
