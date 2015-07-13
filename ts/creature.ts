@@ -1,8 +1,8 @@
 module ImprovedInitiative {
 	export interface ICreature{
     Encounter: Encounter;
-	  Name: string;
 	  Alias: KnockoutObservable<string>;
+    SetNumberedAlias: (name: string) => void;
 	  MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
@@ -21,8 +21,8 @@ module ImprovedInitiative {
 	    var statBlock = StatBlock.Empty();
       jQuery.extend(statBlock, creatureJson);
       this.StatBlock = ko.observable(statBlock);
-	    this.Name = statBlock.Name;
-      this.Alias = this.SetAlias(this.Name)
+      this.Alias(statBlock.Name);
+	    this.SetNumberedAlias(statBlock.Name);
       this.MaxHP = statBlock.HP.Value;
       this.CurrentHP = ko.observable(statBlock.HP.Value);
       this.TemporaryHP = ko.observable(0);
@@ -33,8 +33,7 @@ module ImprovedInitiative {
       this.Initiative = ko.observable(0);
 	  }
     
-    Name: string;
-	  Alias: KnockoutObservable<string>;
+    Alias = ko.observable('');
 	  MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
@@ -47,15 +46,16 @@ module ImprovedInitiative {
 	  StatBlock: KnockoutObservable<IStatBlock>;
     ViewModel: any;
 	  
-    SetAlias = (name: string) => {
-	    var others = this.Encounter.Creatures().filter(c => c !== this && c.Name === name);
-	    if(others.length === 0){
-	      return ko.observable(name);
+    SetNumberedAlias = (name: string) => {
+	    var others = this.Encounter.Creatures().filter(c => c !== this && c.StatBlock().Name === name);
+      if(others.length === 0){
+	      this.Alias(name);
+        return;
 	    }
 	    if(others.length === 1){
 	      others[0].Alias(name + " 1")
 	    }
-	    return ko.observable(name + " " + (others.length + 1));
+      this.Alias(name + " " + (others.length + 1));
 	  }
 	  
 	  private calculateModifiers = () => {

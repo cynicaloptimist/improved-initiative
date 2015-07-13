@@ -13,7 +13,7 @@ module ImprovedInitiative {
   }
   
   export class Encounter {
-    constructor(public UserPollQueue?: UserPollQueue, rules?: IRules){
+    constructor(public UserPollQueue?: UserPollQueue, public StatBlockEditor?: StatBlockEditor, rules?: IRules){
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
       this.SelectedCreature = ko.observable<ICreature>();
@@ -141,6 +141,17 @@ module ImprovedInitiative {
       }
     }
     
+    EditSelectedCreature = () => 
+    {
+      var selectedCreature = this.SelectedCreature();
+      if(selectedCreature){
+        this.StatBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
+          selectedCreature.StatBlock(newStatBlock);
+          selectedCreature.SetNumberedAlias(newStatBlock.Name);
+        })
+      }
+    }
+    
     RequestInitiative = (playercharacter: ICreature) => {
       this.UserPollQueue.Add({
         requestContent: `<p>Initiative Roll for ${playercharacter.Alias()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
@@ -163,10 +174,10 @@ module ImprovedInitiative {
         var initiatives = []
         this.Creatures().forEach(
           c => {
-            if(initiatives[c.Name] === undefined){
-              initiatives[c.Name] = c.RollInitiative();
+            if(initiatives[c.StatBlock().Name] === undefined){
+              initiatives[c.StatBlock().Name] = c.RollInitiative();
             }
-            c.Initiative(initiatives[c.Name]);
+            c.Initiative(initiatives[c.StatBlock().Name]);
           }
         )
       } else {

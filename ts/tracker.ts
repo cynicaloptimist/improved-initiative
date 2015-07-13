@@ -34,8 +34,8 @@ module ImprovedInitiative {
   
   export class ViewModel{
     UserPollQueue = new UserPollQueue();
-    Encounter = new Encounter(this.UserPollQueue);
     StatBlockEditor = new StatBlockEditor();
+    Encounter = new Encounter(this.UserPollQueue, this.StatBlockEditor);
     Library = new CreatureLibrary(this.StatBlockEditor);
     
     SaveEncounter = () => {
@@ -71,6 +71,7 @@ module ImprovedInitiative {
       { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: () => this.Encounter.AddSelectedCreatureTag },
       { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: () => this.Encounter.RemoveSelectedCreature },
       { Description: 'Rename Selected Combatant', Combo: 'f2', GetBinding: () => this.Encounter.EditSelectedCreatureName },
+      { Description: 'Edit Selected Combatant', Combo: 'alt+e', GetBinding: () => this.Encounter.EditSelectedCreature},
       { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: () => this.Encounter.RollInitiative },
       { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: () => this.Encounter.MoveSelectedCreatureDown },
       { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: () => this.Encounter.MoveSelectedCreatureUp },
