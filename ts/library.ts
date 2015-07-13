@@ -93,7 +93,9 @@ module ImprovedInitiative {
     }
     
     AddCreatures(library: IHaveTrackerStats []): void {
-      library.forEach(c => this.Creatures.push(ko.observable(c)));
+      library.sort((c1,c2) => {
+        return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
+      }).forEach(c => this.Creatures.push(ko.observable(c)));
     }
     AddCreature(creature: IStatBlock): KnockoutObservable<IStatBlock> {
       var observableCreature = ko.observable(creature);
