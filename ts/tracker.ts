@@ -12,6 +12,7 @@
 /// <reference path="statblockeditor.ts" />
 /// <reference path="creature.ts" />
 /// <reference path="playercharacter.ts" />
+/// <reference path="combatantviewmodel.ts" />
 /// <reference path="encounter.ts" />
 /// <reference path="rules.ts" />
 /// <reference path="library.ts" />
