@@ -1,8 +1,8 @@
 module ImprovedInitiative {
 	export interface ICreatureLibrary {
 		Creatures: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
+    Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
     FilteredCreatures: KnockoutComputed<KnockoutObservable<IHaveTrackerStats> []>;
-    Players: KnockoutObservableArray<IHaveTrackerStats>;
     SavedEncounterIndex: KnockoutObservableArray<string>;
     LibraryFilter: KnockoutObservable<string>;
     DisplayTab: KnockoutObservable<string>;
@@ -20,7 +20,7 @@ module ImprovedInitiative {
       }
 		}
 		Creatures = ko.observableArray<KnockoutObservable<IHaveTrackerStats>>([]);
-    Players = ko.observableArray<IHaveTrackerStats>([]);
+    Players = ko.observableArray<KnockoutObservable<IHaveTrackerStats>>([]);
     SavedEncounterIndex = ko.observableArray<string>([]);
     
     PreviewCreature = ko.observable<IHaveTrackerStats>(null);
@@ -77,10 +77,9 @@ module ImprovedInitiative {
     }
     
     AddNewPlayer = () => {
-      var player = StatBlock.Empty();
+      var player = StatBlock.Empty(s => {s.Player = "player"});
       player.Player = "player";
-      this.AddPlayers([player]);
-      //this.EditStatBlock(player);
+      this.EditStatBlock(this.AddCreature(player)());
     }
     
     AddNewCreature = () => {
@@ -89,10 +88,15 @@ module ImprovedInitiative {
     }
     
     AddPlayers = (library: IHaveTrackerStats []) => {
-      this.Players(this.Players().concat(library));
+      library.forEach(c => this.Players.push(ko.observable(c)));
+    }
+    AddPlayer(player: IStatBlock): KnockoutObservable<IStatBlock> {
+      var observablePlayer = ko.observable(player);
+      this.Players.push(observablePlayer);
+      return observablePlayer;
     }
     
-    AddCreatures(library: IHaveTrackerStats []): void {
+    AddCreatures = (library: IHaveTrackerStats []) =>  {
       library.sort((c1,c2) => {
         return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
       }).forEach(c => this.Creatures.push(ko.observable(c)));

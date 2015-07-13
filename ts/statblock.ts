@@ -67,19 +67,23 @@ module ImprovedInitiative {
   }
   
   export class StatBlock {
-    static Empty = (): IStatBlock => ({
-      Name: '', Type: '', 
-      HP: { Value: 1, Notes: ''},  AC: { Value: 10, Notes: ''},
-      Speed: [],
-      Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
-      DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],
-      Saves: [], Skills: [], Senses: [], Languages: [],
-      Challenge: '',
-      Traits: [],
-      Actions: [],
-      LegendaryActions: [],
-      Player: ''
-    })
+    static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
+      var statBlock =  {
+        Name: '', Type: '', 
+        HP: { Value: 1, Notes: ''},  AC: { Value: 10, Notes: ''},
+        Speed: [],
+        Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
+        DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],
+        Saves: [], Skills: [], Senses: [], Languages: [],
+        Challenge: '',
+        Traits: [],
+        Actions: [],
+        LegendaryActions: [],
+        Player: ''
+      };
+      if(mutator) { mutator(statBlock) };
+      return statBlock;
+    }
     
     static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
 	}
