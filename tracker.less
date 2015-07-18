@@ -1,0 +1,398 @@
+@import "lib/font-awesome-4.3.0/less/variables.less";
+@import "lib/font-awesome-4.3.0/less/font-awesome.less";
+@import "lib/font-awesome-4.3.0/less/icons.less";
+
+*{
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	cursor: default;
+}
+
+.zebra-stripe(@color:lightgray;@offcolor:transparent;) {
+	&:nth-child(2n){
+		background-color: @color;
+		border-color: @color;
+		input{
+			background-color: @color;
+			&:hover, &:focus {
+				background-color: white;
+			}
+		}
+	}
+	&:nth-child(2n+1){
+		background-color: @offcolor;
+		border-color: @offcolor;
+		input{
+			background-color: @offcolor;
+			&:hover, &:focus {
+				background-color: white;
+			}
+		}
+	}
+}
+
+.outline {
+	border: 1px solid gray;
+	border-radius: 4px;
+	background-color: rgba(0,0,0,0.1);
+	&.button:hover {
+		background-color: rgba(0,0,0,0.3);
+	}
+}
+.button {
+	cursor:pointer;
+}
+.fa-clickable {
+	cursor:pointer;
+	.fa();
+}
+
+html{
+	height: 100%;
+}
+
+#playerview li.creature {
+	&.hidden {
+		display:none;
+	}
+
+	&:not(.playercharacter){
+		font-style: italic;
+	}
+	line-height: 64px;
+	font-size: 200%;
+	.initiative {
+		width: 50px;
+	}
+	.name {
+		flex-grow:1;
+	}
+	.hp {
+		width: 230px;
+		&:hover {
+			background-color: inherit;
+		}
+	}
+}
+
+body{
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	input {
+		cursor: auto;
+	}
+
+	h1 {
+		font-size:large;
+		padding: 5px;
+		background-color: darkred;
+		color: white;
+		margin-bottom: 5px;
+		min-height: 2em;
+	}
+
+	.views {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		div, li {
+			cursor: default;
+		}
+	}
+
+	.keybindings {
+		border: 2px solid gray;
+		border-radius: 5px;
+		padding: 5px;
+	  position: fixed;
+	  text-align:right;
+	  right: 0;
+	  left: 0;
+	  top: 100px;
+	  margin: auto;
+	  z-index: 10;
+	  background-color: #ffffff;
+	  display: none;
+	  width: 450px;
+	  .label {
+	  	display:inline-block;
+	  	width: 380px;
+	  	margin-right: 10px;
+	  }
+	  input[type="text"] {
+	  	width: 40px;
+	  }
+	  input[type="button"] {
+	  	right: 0;
+	  	margin: 3px;
+	  	padding: 3px;
+	  }
+	}
+
+	.preview.statblock {
+		position: fixed;
+		left: 376px;
+		top: 10px;
+		max-height: 90%;
+		background-color: rgb(255,255,255);
+		z-index: 5;
+		border: 2px solid gray;
+		border-radius: 2px;
+	}
+
+	.libraries {
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		max-height: 100%;
+		width: 400px;
+		background-color: white;
+		z-index: 3;
+		display: flex;
+		flex-direction:column;
+		.tabs {
+			min-height: 25px;
+			div {
+				display:inline-block;
+			}
+		}
+	}
+	.library {
+		display: flex;
+		flex-direction:column;
+		.filter-library {
+			margin: 5px;
+			min-height: 2em;
+		}
+		ul.creature-library {
+			overflow-y: scroll;
+			flex-shrink: 1;
+			list-style-type: none;
+			li {
+				&:nth-child(2n) .fa {
+					background-color: #f0f0f0;
+				}
+				line-height: 24px;
+				margin: 1px;
+				display:flex;
+				.fa {
+					&:first-child {
+						flex-grow: 1;
+					}
+					padding: 2px 6px;
+					margin-left: 1px;
+					border: 1px solid darkred;
+					border-radius: 4px;
+					&:hover{
+						background-color:lighten(gray, 30%);
+					}
+				}
+			}
+		}
+	}
+
+	.encounter {
+		display: flex;
+		flex-direction: column;
+		
+		.combatants{
+			
+			.creature {
+				.zebra-stripe(lightgray;darkgray);
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				line-height: 32px;
+				border-style: solid;
+				border-width: 1px 5px;
+				&.active {
+					border-left-color: green;
+					.initiative{
+						font-weight: bold;
+					}
+				}
+				&.selected {
+					border-right-color: darkred;
+					border-top-color: darkred;
+					border-bottom-color: darkred;
+				}
+				
+				list-style-type: none;
+
+				
+				div {
+					display: inline-block;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
+				
+				.initiative {
+					width:25px;
+					text-align:center;
+				}
+				
+				.name {
+					padding-left: 6px;
+					width:220px;
+					overflow-x: hidden;
+				}
+				
+				.hp {
+					position:relative;
+					width:115px;
+					text-align:center;
+
+					&:hover{
+						background-color: rgba(100,0,0,0.5);
+					}
+
+					&.applyDamage{
+						background-color: rgba(255,0,0,0.5);
+					}
+					&.applyTemporaryHP{
+						background-color: rgba(0,200,0,0.5);
+					}
+					
+
+
+					input {
+						position:absolute;
+						border:3px solid red;
+						right: 0px;
+						top: -23px;
+						width:40px;
+					}
+				}
+
+				.ac{
+					width:30px;
+					text-align:center;
+				}
+
+				.tags {
+					flex-grow: 1;
+					input {
+						width: 50px;
+					}
+					.tag {
+						font-size: small;
+						line-height: 24px;
+						padding: 0 4px;
+						.fa-remove {
+							margin-left: 4px;
+						}
+					}
+					.fa-plus, .fa-eye, .fa-eye-slash {
+						float:right;
+						padding: 8px;
+					}
+				}
+			}
+
+			.creature.header {
+				background-color: black;
+				border-color:black;
+				color: white;
+				text-align:center;
+				.hp {
+					text-align:center;
+					&:hover{
+						background-color: inherit;
+					}
+				}
+			}
+		}
+	}
+	.statblock{
+		width: 400px;
+		overflow-y: scroll;
+		flex-shrink: 1;
+
+		>div {
+			margin: 3px;
+			* {
+				font-family: serif;
+			}
+		}
+
+		hr {
+			margin: 5px 0px;
+			background-color: darkred;
+			border: none;
+			height: 1px;
+		}
+
+		.csv{
+			&::after {
+				content: ', ';
+			}
+			&:last-child::after{
+				content: '';
+			}
+		}
+
+		.label {
+			font-weight:bold;
+		}
+		.notes {
+			font-style: italic;
+		}
+		.Name {
+			color:darkred;
+			font-weight:bold;
+			font-size: large;
+		}
+		.Abilities {
+			display: flex;
+			>div {
+				flex-grow: 1;
+				text-align:center;
+				.label{
+					text-transform: uppercase;
+				}
+			}
+		}
+	}
+	.tracker, .editor {
+		flex-grow: 1;
+	}
+
+	.editor {
+		.stats label {
+			display: flex;
+			flex-direction: row;
+			width: 300px;
+			justify-content: space-between;
+		}
+		.json-editor {
+			width: 400px;
+			height: 300px;
+		}
+	}
+
+	.interface-buttons {
+		display:flex;
+		flex-direction:row-reverse;
+		flex-wrap:wrap;
+		background-color: rgba(0,0,0,0.1);
+		min-height: 42px;
+		>div {
+			padding: 10px;
+			margin: 2px;
+			.button();
+			.outline();
+			&:hover {
+				background-color: rgba(0,0,0,0.2);
+			}
+			&.highlight{
+				background-color: rgb(60, 179, 80);
+				&:hover {
+					background-color: rgb(80, 189, 90);
+				}
+			}
+		}
+	}
+}

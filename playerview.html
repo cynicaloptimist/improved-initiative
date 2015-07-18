@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="tracker.css">
+  
+  <title>Player Window - Improved Initiative</title>
+  
+  <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
+  <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="lib/mousetrap.js"></script>
+  <script type="text/javascript" src="js/ImprovedInitiative.js"></script>
+  
+  </head>
+  <body id="playerview">
+    <div class="encounter" data-bind="with:Encounter">
+      <ul class="combatants">
+        <li class="creature header">
+          <div class="initiative"><span class="fa fa-forward"></span></div>
+          <div class="name">Combatant</div>
+          <div class="hp"><span class = "fa fa-heart"></span></div>
+        </li>
+        <!-- ko foreach: Creatures -->
+          <!-- ko ifnot: Hidden -->
+          <li class="creature" data-bind="
+            css: { active: $parent.ActiveCreature() == $data, playercharacter: $data.IsPlayerCharacter }, 
+            component: {
+              name: 'playerdisplaycombatant',
+              params: { creature: $data, addUserPoll: function(){} }
+            }">
+          </li>
+          <!-- /ko -->
+        <!-- /ko -->
+      </ul>
+    </div>
+  </body>
+</html>
