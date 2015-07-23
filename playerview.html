@@ -23,10 +23,11 @@
         <!-- ko foreach: Creatures -->
           <!-- ko ifnot: Hidden -->
           <li class="creature" data-bind="
-            css: { active: $parent.ActiveCreature() == $data, playercharacter: $data.IsPlayerCharacter }, 
+            css: { active: $parent.ActiveCreature() == $data, 
+                   playercharacter: $data.IsPlayerCharacter }, 
             component: {
               name: 'playerdisplaycombatant',
-              params: { creature: $data, addUserPoll: function(){} }
+              params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
             }">
           </li>
           <!-- /ko -->
