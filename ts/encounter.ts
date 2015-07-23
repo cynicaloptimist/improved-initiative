@@ -16,6 +16,7 @@ module ImprovedInitiative {
     constructor(public UserPollQueue?: UserPollQueue, public StatBlockEditor?: StatBlockEditor, rules?: IRules){
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
+      this.CreatureCountsByName = [];
       this.SelectedCreature = ko.observable<ICreature>();
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
@@ -34,6 +35,7 @@ module ImprovedInitiative {
     
     Rules: IRules;
     Creatures: KnockoutObservableArray<ICreature>;
+    CreatureCountsByName: KnockoutObservable<number> [];
     SelectedCreature: KnockoutObservable<ICreature>;
     SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
     ActiveCreature: KnockoutObservable<ICreature>;
@@ -78,12 +80,21 @@ module ImprovedInitiative {
     }
     
     RemoveSelectedCreature = () => {
-      var index = this.Creatures.indexOf(this.SelectedCreature());
-      this.Creatures.remove(this.SelectedCreature());
+      var creature = ko.unwrap(this.SelectedCreature),
+          index = this.Creatures.indexOf(creature);
+          
+      this.Creatures.remove(creature);
+      
       if(this.Creatures().length <= index){
         this.SelectedCreature(this.Creatures()[index-1])
       } else {
         this.SelectedCreature(this.Creatures()[index]);
+      }
+      
+      //Only reset creature count if we just removed the last one of its kind.
+      var deletedCreatureName = creature.StatBlock().Name;
+      if(this.Creatures().every(c => c.StatBlock().Name != deletedCreatureName)){
+        this.CreatureCountsByName[deletedCreatureName](0);
       }
     }
     
@@ -151,7 +162,6 @@ module ImprovedInitiative {
       if(selectedCreature){
         this.StatBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
           selectedCreature.StatBlock(newStatBlock);
-          selectedCreature.SetNumberedAlias(newStatBlock.Name);
         })
       }
     }

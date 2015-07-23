@@ -2,7 +2,7 @@ module ImprovedInitiative {
 	export interface ICreature{
     Encounter: Encounter;
 	  Alias: KnockoutObservable<string>;
-    SetNumberedAlias: (name: string) => void;
+    IndexLabel: number;
 	  MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
@@ -22,8 +22,7 @@ module ImprovedInitiative {
 	    var statBlock = StatBlock.Empty();
       jQuery.extend(statBlock, creatureJson);
       this.StatBlock = ko.observable(statBlock);
-      this.Alias(statBlock.Name);
-	    this.SetNumberedAlias(statBlock.Name);
+      this.setIndexLabel();
       this.MaxHP = statBlock.HP.Value;
       this.CurrentHP = ko.observable(statBlock.HP.Value);
       this.TemporaryHP = ko.observable(0);
@@ -34,8 +33,9 @@ module ImprovedInitiative {
       this.Initiative = ko.observable(0);
 	  }
     
-    Alias = ko.observable('');
-	  MaxHP: number;
+    IndexLabel: number;
+    Alias = ko.observable(null);
+    MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
     PlayerDisplayHP: KnockoutComputed<string>;
@@ -49,18 +49,17 @@ module ImprovedInitiative {
     StatBlock: KnockoutObservable<IStatBlock>;
     ViewModel: any;
     IsPlayerCharacter = false;
-	  
-    SetNumberedAlias = (name: string) => {
-	    var others = this.Encounter.Creatures().filter(c => c !== this && c.StatBlock().Name === name);
-      if(others.length === 0){
-	      this.Alias(name);
-        return;
-	    }
-	    if(others.length === 1){
-	      others[0].Alias(name + " 1")
-	    }
-      this.Alias(name + " " + (others.length + 1));
-	  }
+    
+    private setIndexLabel() {
+      var name = this.StatBlock().Name,
+          counts = this.Encounter.CreatureCountsByName;
+      if(!counts[name]){
+        counts[name] = ko.observable(1);
+      } else {
+        counts[name](counts[name]() + 1);
+      }
+      this.IndexLabel = counts[name]();
+    }
 	  
 	  private calculateModifiers = () => {
 	    var modifiers = StatBlock.Empty().Abilities;

@@ -3469,8 +3469,12 @@ html {
   height: 100%;
 }
 #playerview li.creature {
+  border-left-width: 10px;
   line-height: 64px;
   font-size: 200%;
+}
+#playerview li.creature.active .name {
+  text-decoration: underline;
 }
 #playerview li.creature.hidden {
   display: none;

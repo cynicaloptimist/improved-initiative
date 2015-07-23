@@ -106,6 +106,18 @@ module ImprovedInitiative {
       this.Creature.Hidden(!this.Creature.Hidden());
     }
     
+    DisplayName = ko.computed(() => {
+      var alias = ko.unwrap(this.Creature.Alias),
+          creatureCounts = ko.unwrap(this.Creature.Encounter.CreatureCountsByName),
+          name = ko.unwrap(this.Creature.StatBlock).Name,
+          index = this.Creature.IndexLabel;
+          
+      return alias ||
+             creatureCounts[name]() > 1 ? 
+             name + " " + index : 
+             name;
+    })
+    
     EditingName = ko.observable(false);
     
     CommitName = () => {

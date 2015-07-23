@@ -71,7 +71,7 @@ module ImprovedInitiative {
     }
     
     KeyBindings: KeyBinding [] = [
-      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ToggleKeybindings },
+      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ToggleKeybindingDisplay },
       { Description: 'Select Next Combatant', Combo: 'j', GetBinding: () => this.Encounter().SelectNextCombatant },
       { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: () => this.Encounter().SelectPreviousCombatant },
       { Description: 'Next Turn', Combo: 'n', GetBinding: () => this.Encounter().NextTurn },
@@ -88,7 +88,7 @@ module ImprovedInitiative {
       { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: () => this.SaveEncounter },
     ];
     
-    ToggleKeybindings = () => {
+    ToggleKeybindingDisplay = () => {
       if ($('.keybindings').toggle().css('display') == 'none'){
         this.RegisterKeybindings();
       }

@@ -1,6 +1,6 @@
 <div data-bind="text: Creature.Initiative" class="initiative"></div>
 <div class="name">
-  <span data-bind="text: Creature.Alias, visible:!EditingName(), attr: {title: Creature.Alias}"></span>
+  <span data-bind="text: DisplayName, visible:!EditingName(), attr: {title: DisplayName }"></span>
   <input data-bind="textInput: Creature.Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
 </div>
 <div class="hp" data-bind="click: EditHP">
