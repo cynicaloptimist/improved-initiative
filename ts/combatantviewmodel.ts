@@ -84,7 +84,7 @@ module ImprovedInitiative {
     
     EditHP = () => {
       this.PollUser({
-        requestContent: `Apply damage to ${this.Creature.Alias()}: <input class='response' type='number' />`,
+        requestContent: `Apply damage to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
         callback: this.applyDamage
       });
@@ -92,7 +92,7 @@ module ImprovedInitiative {
     
     AddTemporaryHP = () => {
       this.PollUser({
-        requestContent: `Grant temporary hit points to ${this.Creature.Alias()}: <input class='response' type='number' />`,
+        requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
         callback: this.applyTemporaryHP
       });
