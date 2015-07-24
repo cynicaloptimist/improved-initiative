@@ -46,7 +46,9 @@ module ImprovedInitiative {
         callback: (response: string) => {
           var savedEncounter = this.Encounter().Save(response);
           var savedEncounters = this.Library.SavedEncounterIndex;
-          savedEncounters().push(response);
+          if(savedEncounters.indexOf(response) == -1){
+            savedEncounters().push(response);
+          }
           localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
           localStorage.setItem(`ImprovedInitiative.SavedEncounters.${response}`, JSON.stringify(savedEncounter));
         }
@@ -58,6 +60,7 @@ module ImprovedInitiative {
         throw `Couldn't find encounter '${encounterName}'`;
       }
       this.Encounter().Creatures([]);
+      this.Encounter().CreatureCountsByName = [];
       this.Encounter().AddSavedEncounter(JSON.parse(encounterJSON))
       this.RegisterKeybindings();
     }

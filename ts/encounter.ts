@@ -5,6 +5,7 @@ module ImprovedInitiative {
     TemporaryHP: number;
     Initiative: number;
     Alias: string;
+    IndexLabel: number;
     Tags: string [];
   }
   export interface ISavedEncounter {
@@ -230,6 +231,7 @@ module ImprovedInitiative {
             TemporaryHP: c.TemporaryHP(),
             Initiative: c.Initiative(),
             Alias: c.Alias(),
+            IndexLabel: c.IndexLabel,
             Tags: c.Tags()
           }
         })
@@ -243,6 +245,7 @@ module ImprovedInitiative {
         creature.CurrentHP(c.CurrentHP);
         creature.TemporaryHP(c.TemporaryHP);
         creature.Initiative(c.Initiative);
+        creature.IndexLabel = c.IndexLabel;
         creature.Alias(c.Alias);
         creature.Tags(c.Tags);
       })
