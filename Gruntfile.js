@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-open');
@@ -23,6 +24,14 @@ module.exports = function(grunt) {
                   module: 'amd',
                   target: 'es5'
               }
+          },
+          test: {
+              src: ['test/**/*.ts'],
+              dest: 'js/ImprovedInitiativeTests.js',
+              options: {
+                  module: 'amd',
+                  target: 'es5'
+              }
           }
       },
       less: {
@@ -35,6 +44,11 @@ module.exports = function(grunt) {
           }
         }
       },
+      mochaTest: {
+        test: {
+          src: ['js/ImprovedInitiativeTests.js'],
+        }
+      },
       watch: {
         typescript: {
           files: '**/*.ts',
@@ -43,6 +57,10 @@ module.exports = function(grunt) {
         lesscss: {
           files: '**/*.less',
           tasks: ['less']
+        },
+        mochaTest: {
+          files: 'test/*.js',
+          tasks: ['mochaTest']
         }
       },
       open: {
@@ -53,4 +71,4 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['connect', 'open', 'watch']);
-}
+};
