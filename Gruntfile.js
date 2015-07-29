@@ -59,7 +59,7 @@ module.exports = function(grunt) {
           tasks: ['less']
         },
         mochaTest: {
-          files: 'test/*.js',
+          files: 'js/ImprovedInitiativeTests.js',
           tasks: ['mochaTest']
         }
       },
