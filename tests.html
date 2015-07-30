@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Improved Initiative tests</title>
+  <link rel="stylesheet" media="all" href="node_modules/mocha/mocha.css">
+</head>
+<body>
+  <div id="mocha"><p><a href=".">Index</a></p></div>
+  <div id="messages"></div>
+  <div id="fixtures"></div>
+  <script src="node_modules/mocha/mocha.js"></script>
+  <script src="node_modules/chai/chai.js"></script>
+  <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
+  <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="lib/mousetrap.js"></script>
+  <script src="js/ImprovedInitiative.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="js/ImprovedInitiativeTests.js"></script>
+  <script>mocha.run();</script>
+</body>
+</html>

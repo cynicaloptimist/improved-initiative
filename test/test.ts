@@ -1,11 +1,12 @@
-declare var require, describe, it;
+/// <reference path="../ts/typings/mocha/mocha.d.ts" />
+/// <reference path="../ts/typings/chai/chai.d.ts" />
+/// <reference path="../ts/typings/sinon/sinon.d.ts" />
 
-var assert = require("assert")
-describe('Array', function() {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present in typescript', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+var expect = chai.expect
+describe('Array', () => {
+  describe('#indexOf()', () => {
+    it('should expect an array length to be correct', function () {
+      expect([0,1,2].length).to.equal(3);
     });
     it('should run mocha when I save this file');
   });
