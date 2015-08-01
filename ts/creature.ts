@@ -31,6 +31,7 @@ module ImprovedInitiative {
       this.Tags = ko.observableArray<string>();
       this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
       this.Initiative = ko.observable(0);
+      this.Initiative.subscribe(this.Encounter.SortByInitiative);
 	  }
     
     IndexLabel: number;

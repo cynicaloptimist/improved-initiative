@@ -43,7 +43,7 @@ module ImprovedInitiative {
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     State: KnockoutObservable<string> = ko.observable('inactive');
     
-    private sortByInitiative = () => {
+    SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
                                    (r.InitiativeModifier - l.InitiativeModifier));
     }
@@ -189,7 +189,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: (response: any) => {
           playercharacter.Initiative(parseInt(response));
-          this.sortByInitiative();
+          this.SortByInitiative();
         }
       });
     }
@@ -200,7 +200,6 @@ module ImprovedInitiative {
     
     StartEncounter = () => {
       this.State('active');
-      this.sortByInitiative();
       this.ActiveCreature(this.Creatures()[0]);
     }
     
