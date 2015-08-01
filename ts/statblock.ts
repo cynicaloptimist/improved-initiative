@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-  interface IHaveValue{
+  export interface IHaveValue{
     Value: number;
   }
   
@@ -12,22 +12,22 @@ module ImprovedInitiative {
     Wis: number;
   }
   
-  interface IHaveAModifier{
+  export interface IHaveAModifier{
     Name: string;
     Modifier: number;
   }
   
-  interface IHaveNotes {
+  export interface IHaveNotes {
     Value: string;
     Notes: string;
   }
   
-  interface IHaveContent{
+  export interface IHaveContent{
     Name: string;
     Content: string;
   }
   
-  interface IUsableTrait {
+  export interface IUsableTrait {
     Name: string;
     Content: string;
     Usage?: string;

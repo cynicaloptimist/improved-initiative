@@ -26,7 +26,7 @@ module ImprovedInitiative {
     'ConditionImmunities': 'Condition Immunities'
   }
   
-  class KeyBinding {
+  export class KeyBinding {
     Description: string;
     Combo: string;
     GetBinding: () => any;

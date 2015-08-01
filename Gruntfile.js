@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-open');
@@ -22,12 +21,13 @@ module.exports = function(grunt) {
               dest: 'js/ImprovedInitiative.js',
               options: {
                   module: 'amd',
-                  target: 'es5'
+                  target: 'es5',
+                  declaration: true
               }
           },
           test: {
               src: ['test/**/*.ts'],
-              dest: 'test/test.js',
+              dest: 'js/test.js',
               options: {
                   module: 'amd',
                   target: 'es5'

@@ -6,15 +6,19 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="../js/ImprovedInitiative.d.ts" />
 
-var casper = require('casper').create();
+var expect = chai.expect;
 
-casper.start('http://casperjs.org/', function() {
-    this.echo(this.getTitle());
+describe("ViewModel", function() {
+  var vm: ImprovedInitiative.ViewModel;
+  beforeEach(() => {
+    vm = new ImprovedInitiative.ViewModel();
+  })
+  describe("constructor", function() {
+    it("should have an encounter", function() {
+      expect(vm.Encounter()).to.exist;
+      expect(vm.Encounter().Creatures()).to.be.empty;
+    });
+  });
 });
-
-casper.thenOpen('http://phantomjs.org', function() {
-    this.echo(this.getTitle());
-});
-
-casper.run();
