@@ -3514,6 +3514,7 @@ body .views {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  height: 300px;
 }
 body .views div,
 body .views li {
@@ -3727,7 +3728,6 @@ body .encounter .combatants .creature.header .hp:hover {
 body .statblock {
   width: 400px;
   overflow-y: scroll;
-  flex-shrink: 1;
 }
 body .statblock > div {
   margin: 3px;
