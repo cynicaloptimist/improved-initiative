@@ -16,7 +16,7 @@ describe("ViewModel", function() {
     vm = new ImprovedInitiative.ViewModel();
   })
   describe("constructor", function() {
-    it("should have an encounter", function() {
+    it("should have an encounter with no creatures", function() {
       expect(vm.Encounter()).to.exist;
       expect(vm.Encounter().Creatures()).to.be.empty;
     });
