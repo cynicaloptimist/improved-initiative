@@ -41,6 +41,7 @@ module ImprovedInitiative {
     SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
+    State: KnockoutObservable<string> = ko.observable('inactive');
     
     private sortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
@@ -169,7 +170,7 @@ module ImprovedInitiative {
     
     RequestInitiative = (playercharacter: ICreature) => {
       this.UserPollQueue.Add({
-        requestContent: `<p>Initiative Roll for ${playercharacter.Alias()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
+        requestContent: `<p>Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
         inputSelector: '.response',
         callback: (response: any) => {
           playercharacter.Initiative(parseInt(response));
@@ -180,6 +181,17 @@ module ImprovedInitiative {
     
     FocusResponseRequest = () => {
       $('form input').select();
+    }
+    
+    StartEncounter = () => {
+      this.State('active');
+      this.sortByInitiative();
+      this.ActiveCreature(this.Creatures()[0]);
+    }
+    
+    EndEncounter = () => {
+      this.State('inactive');
+      this.ActiveCreature(null);
     }
     
     RollInitiative = () =>
@@ -197,10 +209,10 @@ module ImprovedInitiative {
         )
       } else {
         this.Creatures().forEach(c => { c.RollInitiative(); })
+        this.UserPollQueue.Add({
+          callback: this.StartEncounter
+        });
       }
-      
-      this.sortByInitiative();
-      this.ActiveCreature(this.Creatures()[0]);
       
       $('.libraries').slideUp()
     }
