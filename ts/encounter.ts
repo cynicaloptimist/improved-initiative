@@ -133,6 +133,19 @@ module ImprovedInitiative {
       return false;
     }
     
+    EditSelectedCreatureInitiative = () => {
+      if(this.SelectedCreature()){
+        this.SelectedCreature().ViewModel.EditInitiative();
+      }
+    }
+    
+    private checkForUpdatedInitiative(creature, index) {
+      var movedPast = this.Creatures()[index];
+      if(movedPast){
+        creature.Initiative(movedPast.Initiative());
+      }
+    }
+    
     MoveSelectedCreatureUp = () =>
     {
       var creature = this.SelectedCreature();
@@ -140,6 +153,7 @@ module ImprovedInitiative {
       if(creature && index > 0){
         this.moveCreature(creature, index - 1);
       }
+      this.checkForUpdatedInitiative(creature, index);
     }
     
     MoveSelectedCreatureDown = () =>
@@ -149,6 +163,7 @@ module ImprovedInitiative {
       if(creature && index < this.Creatures().length - 1){
         this.moveCreature(creature, index + 1);
       }
+      this.checkForUpdatedInitiative(creature, index);
     }
     
     EditSelectedCreatureName = () => 

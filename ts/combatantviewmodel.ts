@@ -90,6 +90,14 @@ module ImprovedInitiative {
       });
     }
     
+    EditInitiative = () => {
+      this.PollUser({
+        requestContent: `Update initiative for ${this.DisplayName()}: <input class='response' type='number' />`,
+        inputSelector: '.response',
+        callback: this.Creature.Initiative
+      });
+    }
+    
     AddTemporaryHP = () => {
       this.PollUser({
         requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,

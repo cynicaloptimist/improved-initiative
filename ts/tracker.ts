@@ -83,6 +83,7 @@ module ImprovedInitiative {
       { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: () => this.Encounter().RemoveSelectedCreature },
       { Description: 'Rename Selected Combatant', Combo: 'f2', GetBinding: () => this.Encounter().EditSelectedCreatureName },
       { Description: 'Edit Selected Combatant', Combo: 'alt+e', GetBinding: () => this.Encounter().EditSelectedCreature},
+      { Description: 'Edit Selected Combatant', Combo: 'alt+i', GetBinding: () => this.Encounter().EditSelectedCreatureInitiative},
       { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: () => this.Encounter().RollInitiative },
       { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: () => this.Encounter().MoveSelectedCreatureDown },
       { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: () => this.Encounter().MoveSelectedCreatureUp },
