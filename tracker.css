@@ -3577,6 +3577,7 @@ body .libraries .tabs div {
 }
 body .library {
   display: flex;
+  overflow-y: scroll;
   flex-direction: column;
 }
 body .library .filter-library {
@@ -3584,7 +3585,6 @@ body .library .filter-library {
   min-height: 2em;
 }
 body .library ul.creature-library {
-  overflow-y: scroll;
   flex-shrink: 1;
   list-style-type: none;
 }
