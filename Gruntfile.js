@@ -27,7 +27,7 @@ module.exports = function(grunt) {
           },
           test: {
               src: ['test/**/*.ts'],
-              dest: 'js/ImprovedInitiativeTests.js',
+              dest: 'test/test.js',
               options: {
                   module: 'amd',
                   target: 'es5'
@@ -44,11 +44,6 @@ module.exports = function(grunt) {
           }
         }
       },
-      mochaTest: {
-        test: {
-          src: ['js/ImprovedInitiativeTests.js'],
-        }
-      },
       watch: {
         typescript: {
           files: '**/*.ts',
@@ -57,18 +52,9 @@ module.exports = function(grunt) {
         lesscss: {
           files: '**/*.less',
           tasks: ['less']
-        },
-        mochaTest: {
-          files: 'js/ImprovedInitiativeTests.js',
-          tasks: ['mochaTest']
         }
-      },
-      open: {
-          dev: {
-              path: 'http://localhost:8080/index.html'
-          }
       }
   });
 
-  grunt.registerTask('default', ['connect', 'open', 'watch']);
+  grunt.registerTask('default', ['connect', 'watch']);
 };
