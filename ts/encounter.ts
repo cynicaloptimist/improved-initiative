@@ -139,13 +139,6 @@ module ImprovedInitiative {
       }
     }
     
-    private checkForUpdatedInitiative(creature, index) {
-      var movedPast = this.Creatures()[index];
-      if(movedPast){
-        creature.Initiative(movedPast.Initiative());
-      }
-    }
-    
     MoveSelectedCreatureUp = () =>
     {
       var creature = this.SelectedCreature();
@@ -153,7 +146,6 @@ module ImprovedInitiative {
       if(creature && index > 0){
         this.moveCreature(creature, index - 1);
       }
-      this.checkForUpdatedInitiative(creature, index);
     }
     
     MoveSelectedCreatureDown = () =>
@@ -163,7 +155,6 @@ module ImprovedInitiative {
       if(creature && index < this.Creatures().length - 1){
         this.moveCreature(creature, index + 1);
       }
-      this.checkForUpdatedInitiative(creature, index);
     }
     
     EditSelectedCreatureName = () => 
@@ -189,7 +180,6 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: (response: any) => {
           playercharacter.Initiative(parseInt(response));
-          this.SortByInitiative();
         }
       });
     }
@@ -210,10 +200,13 @@ module ImprovedInitiative {
     
     RollInitiative = () =>
     {
+      // Foreaching over the original array while we're rearranging it
+      // causes unpredictable results- dupe it first.
+      var creatures = this.Creatures().slice(); 
       if(this.Rules.GroupSimilarCreatures)
       {
         var initiatives = []
-        this.Creatures().forEach(
+        creatures.forEach(
           c => {
             if(initiatives[c.StatBlock().Name] === undefined){
               initiatives[c.StatBlock().Name] = c.RollInitiative();
@@ -222,7 +215,9 @@ module ImprovedInitiative {
           }
         )
       } else {
-        this.Creatures().forEach(c => { c.RollInitiative(); })
+        creatures.forEach(c => { 
+          c.RollInitiative();
+        });
         this.UserPollQueue.Add({
           callback: this.StartEncounter
         });
