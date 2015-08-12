@@ -5,6 +5,7 @@
 
 /// <reference path="toolbox.ts" />
 /// <reference path="custombindinghandlers.ts" />
+/// <reference path="command.ts" />
 /// <reference path="components.ts" />
 /// <reference path="userpoll.ts" />
 /// <reference path="statblock.ts" />
@@ -24,12 +25,6 @@ module ImprovedInitiative {
     'DamageResistances': 'Damage Resistances',
     'DamageImmunities': 'Damage Immunities',
     'ConditionImmunities': 'Condition Immunities'
-  }
-  
-  export class KeyBinding {
-    Description: string;
-    Combo: string;
-    GetBinding: () => any;
   }
   
   export class ViewModel{
@@ -72,23 +67,23 @@ module ImprovedInitiative {
       }
     }
     
-    KeyBindings: KeyBinding [] = [
-      { Description: 'Show Keybindings', Combo: '?', GetBinding: () => this.ToggleKeybindingDisplay },
-      { Description: 'Select Next Combatant', Combo: 'j', GetBinding: () => this.Encounter().SelectNextCombatant },
-      { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: () => this.Encounter().SelectPreviousCombatant },
-      { Description: 'Next Turn', Combo: 'n', GetBinding: () => this.Encounter().NextTurn },
-      { Description: 'Previous Turn', Combo: 'alt+n', GetBinding: () => this.Encounter().PreviousTurn },
-      { Description: 'Damage/Heal Selected Combatant', Combo: 't', GetBinding: () => this.Encounter().FocusSelectedCreatureHP },
-      { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: () => this.Encounter().AddSelectedCreatureTag },
-      { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: () => this.Encounter().RemoveSelectedCreature },
-      { Description: 'Rename Selected Combatant', Combo: 'f2', GetBinding: () => this.Encounter().EditSelectedCreatureName },
-      { Description: 'Edit Selected Combatant', Combo: 'alt+e', GetBinding: () => this.Encounter().EditSelectedCreature},
-      { Description: 'Edit Selected Combatant', Combo: 'alt+i', GetBinding: () => this.Encounter().EditSelectedCreatureInitiative},
-      { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: () => this.Encounter().RollInitiative },
-      { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: () => this.Encounter().MoveSelectedCreatureDown },
-      { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: () => this.Encounter().MoveSelectedCreatureUp },
-      { Description: 'Add Temporary HP', Combo: 'alt+t', GetBinding: () => this.Encounter().AddSelectedCreatureTemporaryHP },
-      { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: () => this.SaveEncounter },
+    KeyBindings: Command [] = [
+      { Description: 'Show Keybindings', KeyBinding: '?', GetActionBinding: () => this.ToggleKeybindingDisplay },
+      { Description: 'Select Next Combatant', KeyBinding: 'j', GetActionBinding: () => this.Encounter().SelectNextCombatant },
+      { Description: 'Select Previous Combatant', KeyBinding: 'k', GetActionBinding: () => this.Encounter().SelectPreviousCombatant },
+      { Description: 'Next Turn', KeyBinding: 'n', GetActionBinding: () => this.Encounter().NextTurn },
+      { Description: 'Previous Turn', KeyBinding: 'alt+n', GetActionBinding: () => this.Encounter().PreviousTurn },
+      { Description: 'Damage/Heal Selected Combatant', KeyBinding: 't', GetActionBinding: () => this.Encounter().FocusSelectedCreatureHP },
+      { Description: 'Add Tag to Selected Combatant', KeyBinding: 'g', GetActionBinding: () => this.Encounter().AddSelectedCreatureTag },
+      { Description: 'Remove Selected Combatant from Encounter', KeyBinding: 'del', GetActionBinding: () => this.Encounter().RemoveSelectedCreature },
+      { Description: 'Rename Selected Combatant', KeyBinding: 'f2', GetActionBinding: () => this.Encounter().EditSelectedCreatureName },
+      { Description: 'Edit Selected Combatant', KeyBinding: 'alt+e', GetActionBinding: () => this.Encounter().EditSelectedCreature},
+      { Description: 'Edit Selected Combatant', KeyBinding: 'alt+i', GetActionBinding: () => this.Encounter().EditSelectedCreatureInitiative},
+      { Description: 'Roll Initiative', KeyBinding: 'alt+r', GetActionBinding: () => this.Encounter().RollInitiative },
+      { Description: 'Move Selected Combatant Down', KeyBinding: 'alt+j', GetActionBinding: () => this.Encounter().MoveSelectedCreatureDown },
+      { Description: 'Move Selected Combatant Up', KeyBinding: 'alt+k', GetActionBinding: () => this.Encounter().MoveSelectedCreatureUp },
+      { Description: 'Add Temporary HP', KeyBinding: 'alt+t', GetActionBinding: () => this.Encounter().AddSelectedCreatureTemporaryHP },
+      { Description: 'Save Encounter', KeyBinding: 'alt+s', GetActionBinding: () => this.SaveEncounter },
     ];
     
     ToggleKeybindingDisplay = () => {
@@ -99,7 +94,7 @@ module ImprovedInitiative {
     
     RegisterKeybindings(){
       Mousetrap.reset();
-      this.KeyBindings.forEach(b => Mousetrap.bind(b.Combo, b.GetBinding()))
+      this.KeyBindings.forEach(b => Mousetrap.bind(b.KeyBinding, b.GetActionBinding()))
     }
   }
   

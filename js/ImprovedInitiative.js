@@ -139,6 +139,15 @@ var ImprovedInitiative;
         template: { name: 'playerdisplaycombatant' }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var Command = (function () {
+        function Command() {
+        }
+        return Command;
+    })();
+    ImprovedInitiative.Command = Command;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/knockout/knockout.d.ts" />
 var ImprovedInitiative;
@@ -867,6 +876,7 @@ var ImprovedInitiative;
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="toolbox.ts" />
 /// <reference path="custombindinghandlers.ts" />
+/// <reference path="command.ts" />
 /// <reference path="components.ts" />
 /// <reference path="userpoll.ts" />
 /// <reference path="statblock.ts" />
@@ -887,12 +897,6 @@ var ImprovedInitiative;
         'DamageImmunities': 'Damage Immunities',
         'ConditionImmunities': 'Condition Immunities'
     };
-    var KeyBinding = (function () {
-        function KeyBinding() {
-        }
-        return KeyBinding;
-    })();
-    ImprovedInitiative.KeyBinding = KeyBinding;
     var ViewModel = (function () {
         function ViewModel() {
             var _this = this;
@@ -933,22 +937,22 @@ var ImprovedInitiative;
                 };
             };
             this.KeyBindings = [
-                { Description: 'Show Keybindings', Combo: '?', GetBinding: function () { return _this.ToggleKeybindingDisplay; } },
-                { Description: 'Select Next Combatant', Combo: 'j', GetBinding: function () { return _this.Encounter().SelectNextCombatant; } },
-                { Description: 'Select Previous Combatant', Combo: 'k', GetBinding: function () { return _this.Encounter().SelectPreviousCombatant; } },
-                { Description: 'Next Turn', Combo: 'n', GetBinding: function () { return _this.Encounter().NextTurn; } },
-                { Description: 'Previous Turn', Combo: 'alt+n', GetBinding: function () { return _this.Encounter().PreviousTurn; } },
-                { Description: 'Damage/Heal Selected Combatant', Combo: 't', GetBinding: function () { return _this.Encounter().FocusSelectedCreatureHP; } },
-                { Description: 'Add Tag to Selected Combatant', Combo: 'g', GetBinding: function () { return _this.Encounter().AddSelectedCreatureTag; } },
-                { Description: 'Remove Selected Combatant from Encounter', Combo: 'del', GetBinding: function () { return _this.Encounter().RemoveSelectedCreature; } },
-                { Description: 'Rename Selected Combatant', Combo: 'f2', GetBinding: function () { return _this.Encounter().EditSelectedCreatureName; } },
-                { Description: 'Edit Selected Combatant', Combo: 'alt+e', GetBinding: function () { return _this.Encounter().EditSelectedCreature; } },
-                { Description: 'Edit Selected Combatant', Combo: 'alt+i', GetBinding: function () { return _this.Encounter().EditSelectedCreatureInitiative; } },
-                { Description: 'Roll Initiative', Combo: 'alt+r', GetBinding: function () { return _this.Encounter().RollInitiative; } },
-                { Description: 'Move Selected Combatant Down', Combo: 'alt+j', GetBinding: function () { return _this.Encounter().MoveSelectedCreatureDown; } },
-                { Description: 'Move Selected Combatant Up', Combo: 'alt+k', GetBinding: function () { return _this.Encounter().MoveSelectedCreatureUp; } },
-                { Description: 'Add Temporary HP', Combo: 'alt+t', GetBinding: function () { return _this.Encounter().AddSelectedCreatureTemporaryHP; } },
-                { Description: 'Save Encounter', Combo: 'alt+s', GetBinding: function () { return _this.SaveEncounter; } },
+                { Description: 'Show Keybindings', KeyBinding: '?', GetActionBinding: function () { return _this.ToggleKeybindingDisplay; } },
+                { Description: 'Select Next Combatant', KeyBinding: 'j', GetActionBinding: function () { return _this.Encounter().SelectNextCombatant; } },
+                { Description: 'Select Previous Combatant', KeyBinding: 'k', GetActionBinding: function () { return _this.Encounter().SelectPreviousCombatant; } },
+                { Description: 'Next Turn', KeyBinding: 'n', GetActionBinding: function () { return _this.Encounter().NextTurn; } },
+                { Description: 'Previous Turn', KeyBinding: 'alt+n', GetActionBinding: function () { return _this.Encounter().PreviousTurn; } },
+                { Description: 'Damage/Heal Selected Combatant', KeyBinding: 't', GetActionBinding: function () { return _this.Encounter().FocusSelectedCreatureHP; } },
+                { Description: 'Add Tag to Selected Combatant', KeyBinding: 'g', GetActionBinding: function () { return _this.Encounter().AddSelectedCreatureTag; } },
+                { Description: 'Remove Selected Combatant from Encounter', KeyBinding: 'del', GetActionBinding: function () { return _this.Encounter().RemoveSelectedCreature; } },
+                { Description: 'Rename Selected Combatant', KeyBinding: 'f2', GetActionBinding: function () { return _this.Encounter().EditSelectedCreatureName; } },
+                { Description: 'Edit Selected Combatant', KeyBinding: 'alt+e', GetActionBinding: function () { return _this.Encounter().EditSelectedCreature; } },
+                { Description: 'Edit Selected Combatant', KeyBinding: 'alt+i', GetActionBinding: function () { return _this.Encounter().EditSelectedCreatureInitiative; } },
+                { Description: 'Roll Initiative', KeyBinding: 'alt+r', GetActionBinding: function () { return _this.Encounter().RollInitiative; } },
+                { Description: 'Move Selected Combatant Down', KeyBinding: 'alt+j', GetActionBinding: function () { return _this.Encounter().MoveSelectedCreatureDown; } },
+                { Description: 'Move Selected Combatant Up', KeyBinding: 'alt+k', GetActionBinding: function () { return _this.Encounter().MoveSelectedCreatureUp; } },
+                { Description: 'Add Temporary HP', KeyBinding: 'alt+t', GetActionBinding: function () { return _this.Encounter().AddSelectedCreatureTemporaryHP; } },
+                { Description: 'Save Encounter', KeyBinding: 'alt+s', GetActionBinding: function () { return _this.SaveEncounter; } },
             ];
             this.ToggleKeybindingDisplay = function () {
                 if ($('.keybindings').toggle().css('display') == 'none') {
@@ -958,7 +962,7 @@ var ImprovedInitiative;
         }
         ViewModel.prototype.RegisterKeybindings = function () {
             Mousetrap.reset();
-            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.Combo, b.GetBinding()); });
+            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.KeyBinding, b.GetActionBinding()); });
         };
         return ViewModel;
     })();

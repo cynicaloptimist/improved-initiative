@@ -27,6 +27,13 @@ declare module ImprovedInitiative {
     }
 }
 declare module ImprovedInitiative {
+    class Command {
+        Description: string;
+        KeyBinding: string;
+        GetActionBinding: () => any;
+    }
+}
+declare module ImprovedInitiative {
 }
 declare module ImprovedInitiative {
     interface ICreature {
@@ -299,11 +306,6 @@ declare module ImprovedInitiative {
         'DamageImmunities': string;
         'ConditionImmunities': string;
     };
-    class KeyBinding {
-        Description: string;
-        Combo: string;
-        GetBinding: () => any;
-    }
     class ViewModel {
         UserPollQueue: UserPollQueue;
         StatBlockEditor: StatBlockEditor;
@@ -312,7 +314,7 @@ declare module ImprovedInitiative {
         SaveEncounter: () => void;
         LoadEncounterByName: (encounterName: string) => void;
         LaunchPlayerWindow: () => void;
-        KeyBindings: KeyBinding[];
+        KeyBindings: Command[];
         ToggleKeybindingDisplay: () => void;
         RegisterKeybindings(): void;
     }
