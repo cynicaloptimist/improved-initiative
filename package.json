@@ -12,7 +12,6 @@
     "grunt-contrib-nodeunit": "~0.4.1",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-less": "^0.1.7",
     "grunt-mocha-test": "^0.12.7",
     "grunt-open": "^0.2.3",
     "grunt-typescript": "^0.6.2",
