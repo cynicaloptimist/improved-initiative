@@ -3,21 +3,6 @@
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
 
-/// <reference path="toolbox.ts" />
-/// <reference path="custombindinghandlers.ts" />
-/// <reference path="command.ts" />
-/// <reference path="components.ts" />
-/// <reference path="userpoll.ts" />
-/// <reference path="statblock.ts" />
-/// <reference path="statblockeditor.ts" />
-/// <reference path="creature.ts" />
-/// <reference path="playercharacter.ts" />
-/// <reference path="combatantviewmodel.ts" />
-/// <reference path="encounter.ts" />
-/// <reference path="rules.ts" />
-/// <reference path="library.ts" />
-/// <reference path="libraryimporter.ts" />
-
 module ImprovedInitiative {
   export var uiText = {
     'LegendaryActions': 'Legendary Actions',
@@ -67,7 +52,7 @@ module ImprovedInitiative {
       }
     }
     
-    KeyBindings: Command [] = [
+    Commands: Command [] = [
       { Description: 'Show Keybindings', KeyBinding: '?', GetActionBinding: () => this.ToggleKeybindingDisplay },
       { Description: 'Select Next Combatant', KeyBinding: 'j', GetActionBinding: () => this.Encounter().SelectNextCombatant },
       { Description: 'Select Previous Combatant', KeyBinding: 'k', GetActionBinding: () => this.Encounter().SelectPreviousCombatant },
@@ -94,7 +79,7 @@ module ImprovedInitiative {
     
     RegisterKeybindings(){
       Mousetrap.reset();
-      this.KeyBindings.forEach(b => Mousetrap.bind(b.KeyBinding, b.GetActionBinding()))
+      this.Commands.forEach(b => Mousetrap.bind(b.KeyBinding, b.GetActionBinding()))
     }
   }
   

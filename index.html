@@ -14,8 +14,8 @@
   </head>
   <body id="tracker">
   <div class="keybindings">
-    <!--ko foreach: KeyBindings -->
-    <div><div class='label' data-bind="text: Description"></div><input type="text" data-bind="value: Combo" />
+    <!--ko foreach: Commands -->
+    <div><div class='label' data-bind="text: Description"></div><input type="text" data-bind="value: KeyBinding" />
     </div>
     <!--/ko -->
     <input type="button" value="Save Keybindings" data-bind="click: ToggleKeybindingDisplay" />

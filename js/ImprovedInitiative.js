@@ -148,8 +148,6 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.Command = Command;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
-/// <reference path="../typings/jquery/jquery.d.ts" />
-/// <reference path="../typings/knockout/knockout.d.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var templateLoader = {
@@ -833,61 +831,10 @@ String.prototype.format = function () {
         return args[n];
     });
 };
-/// <reference path="tracker.ts" />
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
-    var UserPollQueue = (function () {
-        function UserPollQueue() {
-            var _this = this;
-            this.Queue = ko.observableArray();
-            this.Add = function (poll) {
-                _this.Queue.push(poll);
-            };
-            this.checkForAutoResolve = function () {
-                var poll = _this.Queue()[0];
-                if (poll && !poll.requestContent) {
-                    poll.callback(null);
-                    _this.Queue.shift();
-                }
-            };
-            this.Resolve = function (form) {
-                var poll = _this.Queue()[0];
-                poll.callback($(form).find(poll.inputSelector).val());
-                _this.Queue.shift();
-                return false;
-            };
-            this.CurrentPoll = ko.pureComputed(function () {
-                return _this.Queue()[0];
-            });
-            this.FocusCurrentPoll = function () {
-                if (_this.Queue[0]) {
-                    $(_this.Queue[0].inputSelector).select();
-                }
-            };
-            this.Queue.subscribe(this.checkForAutoResolve);
-        }
-        return UserPollQueue;
-    })();
-    ImprovedInitiative.UserPollQueue = UserPollQueue;
-})(ImprovedInitiative || (ImprovedInitiative = {}));
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
-/// <reference path="toolbox.ts" />
-/// <reference path="custombindinghandlers.ts" />
-/// <reference path="command.ts" />
-/// <reference path="components.ts" />
-/// <reference path="userpoll.ts" />
-/// <reference path="statblock.ts" />
-/// <reference path="statblockeditor.ts" />
-/// <reference path="creature.ts" />
-/// <reference path="playercharacter.ts" />
-/// <reference path="combatantviewmodel.ts" />
-/// <reference path="encounter.ts" />
-/// <reference path="rules.ts" />
-/// <reference path="library.ts" />
-/// <reference path="libraryimporter.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     ImprovedInitiative.uiText = {
@@ -936,7 +883,7 @@ var ImprovedInitiative;
                     pWindow.ko.applyBindings(_this, pWindow.document.body);
                 };
             };
-            this.KeyBindings = [
+            this.Commands = [
                 { Description: 'Show Keybindings', KeyBinding: '?', GetActionBinding: function () { return _this.ToggleKeybindingDisplay; } },
                 { Description: 'Select Next Combatant', KeyBinding: 'j', GetActionBinding: function () { return _this.Encounter().SelectNextCombatant; } },
                 { Description: 'Select Previous Combatant', KeyBinding: 'k', GetActionBinding: function () { return _this.Encounter().SelectPreviousCombatant; } },
@@ -962,7 +909,7 @@ var ImprovedInitiative;
         }
         ViewModel.prototype.RegisterKeybindings = function () {
             Mousetrap.reset();
-            this.KeyBindings.forEach(function (b) { return Mousetrap.bind(b.KeyBinding, b.GetActionBinding()); });
+            this.Commands.forEach(function (b) { return Mousetrap.bind(b.KeyBinding, b.GetActionBinding()); });
         };
         return ViewModel;
     })();
@@ -994,4 +941,40 @@ var ImprovedInitiative;
             waitForInitChild();
         }
     });
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var UserPollQueue = (function () {
+        function UserPollQueue() {
+            var _this = this;
+            this.Queue = ko.observableArray();
+            this.Add = function (poll) {
+                _this.Queue.push(poll);
+            };
+            this.checkForAutoResolve = function () {
+                var poll = _this.Queue()[0];
+                if (poll && !poll.requestContent) {
+                    poll.callback(null);
+                    _this.Queue.shift();
+                }
+            };
+            this.Resolve = function (form) {
+                var poll = _this.Queue()[0];
+                poll.callback($(form).find(poll.inputSelector).val());
+                _this.Queue.shift();
+                return false;
+            };
+            this.CurrentPoll = ko.pureComputed(function () {
+                return _this.Queue()[0];
+            });
+            this.FocusCurrentPoll = function () {
+                if (_this.Queue[0]) {
+                    $(_this.Queue[0].inputSelector).select();
+                }
+            };
+            this.Queue.subscribe(this.checkForAutoResolve);
+        }
+        return UserPollQueue;
+    })();
+    ImprovedInitiative.UserPollQueue = UserPollQueue;
 })(ImprovedInitiative || (ImprovedInitiative = {}));

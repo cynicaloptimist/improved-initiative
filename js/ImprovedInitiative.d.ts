@@ -283,22 +283,6 @@ interface Number {
     toModifierString: () => string;
 }
 declare module ImprovedInitiative {
-    interface IUserPoll {
-        requestContent?: string;
-        inputSelector?: string;
-        callback: (response: any) => void;
-    }
-    class UserPollQueue {
-        Queue: KnockoutObservableArray<IUserPoll>;
-        constructor();
-        Add: (poll: IUserPoll) => void;
-        private checkForAutoResolve;
-        Resolve: (form: HTMLFormElement) => boolean;
-        CurrentPoll: KnockoutComputed<IUserPoll>;
-        FocusCurrentPoll: () => void;
-    }
-}
-declare module ImprovedInitiative {
     var uiText: {
         'LegendaryActions': string;
         'DamageVulnerabilities': string;
@@ -314,8 +298,24 @@ declare module ImprovedInitiative {
         SaveEncounter: () => void;
         LoadEncounterByName: (encounterName: string) => void;
         LaunchPlayerWindow: () => void;
-        KeyBindings: Command[];
+        Commands: Command[];
         ToggleKeybindingDisplay: () => void;
         RegisterKeybindings(): void;
+    }
+}
+declare module ImprovedInitiative {
+    interface IUserPoll {
+        requestContent?: string;
+        inputSelector?: string;
+        callback: (response: any) => void;
+    }
+    class UserPollQueue {
+        Queue: KnockoutObservableArray<IUserPoll>;
+        constructor();
+        Add: (poll: IUserPoll) => void;
+        private checkForAutoResolve;
+        Resolve: (form: HTMLFormElement) => boolean;
+        CurrentPoll: KnockoutComputed<IUserPoll>;
+        FocusCurrentPoll: () => void;
     }
 }

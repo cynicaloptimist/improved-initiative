@@ -1,5 +1,3 @@
-/// <reference path="tracker.ts" />
-
 module ImprovedInitiative {
 	export interface IUserPoll {
 		requestContent?: string;
