@@ -3,5 +3,6 @@ module ImprovedInitiative {
     Description: string;
     KeyBinding: string;
     GetActionBinding: () => any;
+    ShowOnActionBar: KnockoutObservable<boolean>;
   }
 }
