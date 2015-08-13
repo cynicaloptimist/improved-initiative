@@ -15,7 +15,11 @@
   <body id="tracker">
   <div class="keybindings">
     <!--ko foreach: Commands -->
-    <div><div class='label' data-bind="text: Description"></div><input type="text" data-bind="value: KeyBinding" />
+    <div>
+      <span class="fa" data-bind="css: ActionBarIcon"></span>
+      <div class='label' data-bind="text: Description"></div>
+      <input type="text" data-bind="value: KeyBinding" />
+      <input type="checkbox" data-bind="checked: ShowOnActionBar" />
     </div>
     <!--/ko -->
     <input type="button" value="Save Keybindings" data-bind="click: ToggleKeybindingDisplay" />
@@ -137,14 +141,13 @@
       }"></div>
     </div>
   </div>
-  <div class="interface-buttons" data-bind="with:Encounter">
-    <div class='highlight' data-bind="click: RollInitiative">Roll Initiative! <span class="fa fa-play"></span></div>
-    <div data-bind="click: NextTurn">Next Turn <span class="fa fa-step-forward"></span></div>
-    <div data-bind="click: MoveSelectedCreatureDown">Move <span class="fa fa-arrow-down"></span></div>
-    <div data-bind="click: MoveSelectedCreatureUp">Move <span class="fa fa-arrow-up"></span></div>
-    <div onclick="$('.libraries').slideDown()">Add <span class="fa fa-plus"></span></div>
-    <div data-bind="click: $root.LaunchPlayerWindow">Player Window <span class="fa fa-users"></span></div>
-    <div data-bind="click: $root.ToggleKeybindingDisplay">Keybindings <span class="fa fa-keyboard-o"></span></div>
+  <div class="interface-buttons" data-bind="foreach: Commands">
+    <div class="fa" data-bind="
+      visible: ShowOnActionBar,
+      css: ActionBarIcon,
+      attr: { title: Description },
+      click: GetActionBinding()
+      "></div>
   </div>
   </body>
 </html>

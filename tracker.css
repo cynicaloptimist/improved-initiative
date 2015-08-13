@@ -3525,7 +3525,6 @@ body .keybindings {
   border-radius: 5px;
   padding: 5px;
   position: fixed;
-  text-align: right;
   right: 0;
   left: 0;
   top: 100px;
@@ -3535,13 +3534,22 @@ body .keybindings {
   display: none;
   width: 450px;
 }
-body .keybindings .label {
-  display: inline-block;
-  width: 380px;
-  margin-right: 10px;
+body .keybindings div {
+  display: flex;
 }
-body .keybindings input[type="text"] {
+body .keybindings div span {
+  width: 24px;
+}
+body .keybindings div .label {
+  display: inline-block;
+  margin-right: 10px;
+  flex-grow: 1;
+}
+body .keybindings div input[type="text"] {
   width: 40px;
+}
+body .keybindings div input[type="checkbox"] {
+  margin: 4px;
 }
 body .keybindings input[type="button"] {
   right: 0;
