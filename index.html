@@ -44,7 +44,7 @@
       <div data-bind="click: Library.DisplayTab.bind(null, 'Players')">Players</div>
       <div data-bind="click: Library.DisplayTab.bind(null, 'Encounters')">Encounters</div>
     </div>
-    <div class="library" data-bind="with: Library">
+    <!--ko with: Library -->
       <!-- ko if: DisplayTab() == 'Encounters' -->
       <ul class="creature-library" data-bind="foreach: SavedEncounterIndex">
         <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
@@ -69,7 +69,7 @@
         <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
       </div>
       <!-- /ko -->
-    </div>
+    <!-- /ko -->
   </div>
   <div class="views">
 

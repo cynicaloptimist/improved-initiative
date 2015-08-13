@@ -3549,6 +3549,7 @@ body .commands div .keybinding {
 body .commands div .actionbaricon {
   width: 24px;
   margin: 4px;
+  text-align: center;
 }
 body .commands div .showonactionbar {
   margin: 4px;
@@ -3572,7 +3573,7 @@ body .libraries {
   position: fixed;
   left: 0px;
   top: 0px;
-  max-height: 100%;
+  height: 100%;
   width: 400px;
   background-color: white;
   z-index: 3;
@@ -3585,37 +3586,33 @@ body .libraries .tabs {
 body .libraries .tabs div {
   display: inline-block;
 }
-body .library {
-  display: flex;
-  overflow-y: scroll;
-  flex-direction: column;
-}
-body .library .filter-library {
+body .filter-library {
   margin: 5px;
   min-height: 2em;
 }
-body .library ul.creature-library {
+body ul.creature-library {
   flex-shrink: 1;
   list-style-type: none;
+  overflow-y: scroll;
 }
-body .library ul.creature-library li {
+body ul.creature-library li {
   line-height: 24px;
   margin: 1px;
   display: flex;
 }
-body .library ul.creature-library li:nth-child(2n) .fa {
+body ul.creature-library li:nth-child(2n) .fa {
   background-color: #f0f0f0;
 }
-body .library ul.creature-library li .fa {
+body ul.creature-library li .fa {
   padding: 2px 6px;
   margin-left: 1px;
   border: 1px solid darkred;
   border-radius: 4px;
 }
-body .library ul.creature-library li .fa:first-child {
+body ul.creature-library li .fa:first-child {
   flex-grow: 1;
 }
-body .library ul.creature-library li .fa:hover {
+body ul.creature-library li .fa:hover {
   background-color: #cdcdcd;
 }
 body .encounter {
