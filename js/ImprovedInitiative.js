@@ -967,13 +967,8 @@ var ImprovedInitiative;
             var viewModel = new ViewModel();
             viewModel.RegisterKeybindings();
             ko.applyBindings(viewModel, document.body);
-            $.ajax("user/creatures.json").done(function (json) {
-                if (json.length) {
-                    viewModel.Library.AddCreatures(json);
-                }
-                else {
-                    $.ajax("basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
-                }
+            $.ajax("user/creatures.json").done(viewModel.Library.AddCreatures).fail(function () {
+                $.ajax("basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
             });
             $.ajax("user/playercharacters.json").done(viewModel.Library.AddPlayers);
         }
