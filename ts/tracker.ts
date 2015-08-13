@@ -56,7 +56,7 @@ module ImprovedInitiative {
       { Description: 'Show Keybindings', 
         KeyBinding: '?',
         ActionBarIcon: 'fa-keyboard-o', 
-        GetActionBinding: () => this.ToggleKeybindingDisplay,
+        GetActionBinding: () => this.ToggleCommandDisplay,
         ShowOnActionBar: ko.observable(true) },
       { Description: 'Select Next Combatant', 
         KeyBinding: 'j',
@@ -135,8 +135,8 @@ module ImprovedInitiative {
         ShowOnActionBar: ko.observable(false) },
     ]
     
-    ToggleKeybindingDisplay = () => {
-      if ($('.keybindings').toggle().css('display') == 'none'){
+    ToggleCommandDisplay = () => {
+      if ($('.commands').toggle().css('display') == 'none'){
         this.RegisterKeybindings();
       }
     }

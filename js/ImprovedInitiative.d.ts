@@ -301,7 +301,7 @@ declare module ImprovedInitiative {
         LoadEncounterByName: (encounterName: string) => void;
         LaunchPlayerWindow: () => void;
         Commands: Command[];
-        ToggleKeybindingDisplay: () => void;
+        ToggleCommandDisplay: () => void;
         RegisterKeybindings(): void;
     }
 }

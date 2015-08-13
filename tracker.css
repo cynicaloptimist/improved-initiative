@@ -3520,7 +3520,7 @@ body .views div,
 body .views li {
   cursor: default;
 }
-body .keybindings {
+body .commands {
   border: 2px solid gray;
   border-radius: 5px;
   padding: 5px;
@@ -3534,24 +3534,26 @@ body .keybindings {
   display: none;
   width: 450px;
 }
-body .keybindings div {
+body .commands div {
   display: flex;
 }
-body .keybindings div span {
-  width: 24px;
-}
-body .keybindings div .label {
+body .commands div .label {
   display: inline-block;
   margin-right: 10px;
   flex-grow: 1;
 }
-body .keybindings div input[type="text"] {
+body .commands div .keybinding {
   width: 40px;
-}
-body .keybindings div input[type="checkbox"] {
   margin: 4px;
 }
-body .keybindings input[type="button"] {
+body .commands div .actionbaricon {
+  width: 24px;
+  margin: 4px;
+}
+body .commands div .showonactionbar {
+  margin: 4px;
+}
+body .commands .savekeybindings {
   right: 0;
   margin: 3px;
   padding: 3px;
@@ -3800,6 +3802,8 @@ body .interface-buttons {
 body .interface-buttons > div {
   padding: 10px;
   margin: 2px;
+  width: 24px;
+  text-align: center;
   cursor: pointer;
   border: 1px solid gray;
   border-radius: 4px;

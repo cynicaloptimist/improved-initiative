@@ -13,16 +13,16 @@
   
   </head>
   <body id="tracker">
-  <div class="keybindings">
+  <div class="commands">
     <!--ko foreach: Commands -->
     <div>
-      <span class="fa" data-bind="css: ActionBarIcon"></span>
-      <div class='label' data-bind="text: Description"></div>
-      <input type="text" data-bind="value: KeyBinding" />
-      <input type="checkbox" data-bind="checked: ShowOnActionBar" />
+      <div class="label" data-bind="text: Description"></div>
+      <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+      <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
+      <input class="showonactionbar" type="checkbox" data-bind="checked: ShowOnActionBar" />
     </div>
     <!--/ko -->
-    <input type="button" value="Save Keybindings" data-bind="click: ToggleKeybindingDisplay" />
+    <input class="savekeybindings"" type="button" value="Save Keybindings" data-bind="click: ToggleCommandDisplay" />
   </div>
   <!-- ko template: { if: Library.PreviewCreature } -->
   <div class="preview statblock" data-bind="

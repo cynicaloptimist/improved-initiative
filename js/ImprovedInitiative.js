@@ -887,7 +887,7 @@ var ImprovedInitiative;
                 { Description: 'Show Keybindings',
                     KeyBinding: '?',
                     ActionBarIcon: 'fa-keyboard-o',
-                    GetActionBinding: function () { return _this.ToggleKeybindingDisplay; },
+                    GetActionBinding: function () { return _this.ToggleCommandDisplay; },
                     ShowOnActionBar: ko.observable(true) },
                 { Description: 'Select Next Combatant',
                     KeyBinding: 'j',
@@ -965,8 +965,8 @@ var ImprovedInitiative;
                     GetActionBinding: function () { return _this.SaveEncounter; },
                     ShowOnActionBar: ko.observable(false) },
             ];
-            this.ToggleKeybindingDisplay = function () {
-                if ($('.keybindings').toggle().css('display') == 'none') {
+            this.ToggleCommandDisplay = function () {
+                if ($('.commands').toggle().css('display') == 'none') {
                     _this.RegisterKeybindings();
                 }
             };

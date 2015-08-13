@@ -111,7 +111,7 @@ body{
 		}
 	}
 
-	.keybindings {
+	.commands {
 		border: 2px solid gray;
 		border-radius: 5px;
 		padding: 5px;
@@ -126,22 +126,24 @@ body{
 		width: 450px;
 		div {
 			display: flex;
-			span {
-				width: 24px;
-			}
 			.label {
 				display:inline-block;
 				margin-right: 10px;
 				flex-grow:1;
 			}
-			input[type="text"] {
+			.keybinding {
 				width: 40px;
+				margin: 4px;
 			}
-			input[type="checkbox"] {
+			.actionbaricon {
+				width: 24px;
+				margin: 4px;
+			}
+			.showonactionbar {
 				margin: 4px;
 			}
 		}
-		input[type="button"] {
+		.savekeybindings {
 			right: 0;
 			margin: 3px;
 			padding: 3px;
@@ -395,6 +397,8 @@ body{
 		>div {
 			padding: 10px;
 			margin: 2px;
+			width: 24px;
+			text-align:center;
 			.button();
 			.outline();
 			&:hover {
