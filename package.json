@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cynicaloptimist/improved-initiative.git"
+  },
   "devDependencies": {
     "chai": "^3.2.0",
     "grunt": "~0.4.5",
