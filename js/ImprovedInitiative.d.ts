@@ -34,6 +34,13 @@ declare module ImprovedInitiative {
         GetActionBinding: () => any;
         ShowOnActionBar: KnockoutObservable<boolean>;
     }
+    var BuildCommandList: (v: ViewModel) => {
+        Description: string;
+        KeyBinding: string;
+        ActionBarIcon: string;
+        GetActionBinding: () => () => void;
+        ShowOnActionBar: KnockoutObservable<boolean>;
+    }[];
 }
 declare module ImprovedInitiative {
 }
@@ -301,7 +308,13 @@ declare module ImprovedInitiative {
         LoadEncounterByName: (encounterName: string) => void;
         LaunchPlayerWindow: () => void;
         ShowLibraries: () => void;
-        Commands: Command[];
+        Commands: {
+            Description: string;
+            KeyBinding: string;
+            ActionBarIcon: string;
+            GetActionBinding: () => () => void;
+            ShowOnActionBar: KnockoutObservable<boolean>;
+        }[];
         ToggleCommandDisplay: () => void;
         RegisterKeybindings(): void;
     }
