@@ -883,11 +883,24 @@ var ImprovedInitiative;
                     pWindow.ko.applyBindings(_this, pWindow.document.body);
                 };
             };
+            this.ShowLibraries = function () {
+                $('.libraries').slideDown();
+            };
             this.Commands = [
-                { Description: 'Show Keybindings',
-                    KeyBinding: '?',
-                    ActionBarIcon: 'fa-keyboard-o',
-                    GetActionBinding: function () { return _this.ToggleCommandDisplay; },
+                { Description: 'Roll Initiative',
+                    KeyBinding: 'alt+r',
+                    ActionBarIcon: 'fa-play',
+                    GetActionBinding: function () { return _this.Encounter().RollInitiative; },
+                    ShowOnActionBar: ko.observable(true) },
+                { Description: 'Open Creature Library',
+                    KeyBinding: 'alt+a',
+                    ActionBarIcon: 'fa-user-plus',
+                    GetActionBinding: function () { return _this.ShowLibraries; },
+                    ShowOnActionBar: ko.observable(true) },
+                { Description: 'Show Player Window',
+                    KeyBinding: 'alt+w',
+                    ActionBarIcon: 'fa-users',
+                    GetActionBinding: function () { return _this.LaunchPlayerWindow; },
                     ShowOnActionBar: ko.observable(true) },
                 { Description: 'Select Next Combatant',
                     KeyBinding: 'j',
@@ -939,11 +952,6 @@ var ImprovedInitiative;
                     ActionBarIcon: 'fa-play-circle-o',
                     GetActionBinding: function () { return _this.Encounter().EditSelectedCreatureInitiative; },
                     ShowOnActionBar: ko.observable(false) },
-                { Description: 'Roll Initiative',
-                    KeyBinding: 'alt+r',
-                    ActionBarIcon: 'fa-play',
-                    GetActionBinding: function () { return _this.Encounter().RollInitiative; },
-                    ShowOnActionBar: ko.observable(true) },
                 { Description: 'Move Selected Combatant Down',
                     KeyBinding: 'alt+j',
                     ActionBarIcon: 'fa-angle-double-down',
@@ -964,6 +972,11 @@ var ImprovedInitiative;
                     ActionBarIcon: 'fa-save',
                     GetActionBinding: function () { return _this.SaveEncounter; },
                     ShowOnActionBar: ko.observable(false) },
+                { Description: 'Show Keybindings',
+                    KeyBinding: '?',
+                    ActionBarIcon: 'fa-keyboard-o',
+                    GetActionBinding: function () { return _this.ToggleCommandDisplay; },
+                    ShowOnActionBar: ko.observable(true) }
             ];
             this.ToggleCommandDisplay = function () {
                 if ($('.commands').toggle().css('display') == 'none') {

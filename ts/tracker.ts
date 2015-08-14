@@ -52,11 +52,25 @@ module ImprovedInitiative {
       }
     }
     
+    ShowLibraries = () => {
+      $('.libraries').slideDown();
+    }
+    
     Commands: Command [] = [
-      { Description: 'Show Keybindings', 
-        KeyBinding: '?',
-        ActionBarIcon: 'fa-keyboard-o', 
-        GetActionBinding: () => this.ToggleCommandDisplay,
+      { Description: 'Roll Initiative', 
+        KeyBinding: 'alt+r',
+        ActionBarIcon: 'fa-play', 
+        GetActionBinding: () => this.Encounter().RollInitiative,
+        ShowOnActionBar: ko.observable(true) },
+      { Description: 'Open Creature Library', 
+        KeyBinding: 'alt+a',
+        ActionBarIcon: 'fa-user-plus', 
+        GetActionBinding: () => this.ShowLibraries,
+        ShowOnActionBar: ko.observable(true) },
+      { Description: 'Show Player Window', 
+        KeyBinding: 'alt+w',
+        ActionBarIcon: 'fa-users', 
+        GetActionBinding: () => this.LaunchPlayerWindow,
         ShowOnActionBar: ko.observable(true) },
       { Description: 'Select Next Combatant', 
         KeyBinding: 'j',
@@ -108,11 +122,6 @@ module ImprovedInitiative {
         ActionBarIcon: 'fa-play-circle-o', 
         GetActionBinding: () => this.Encounter().EditSelectedCreatureInitiative,
         ShowOnActionBar: ko.observable(false) },
-      { Description: 'Roll Initiative', 
-        KeyBinding: 'alt+r',
-        ActionBarIcon: 'fa-play', 
-        GetActionBinding: () => this.Encounter().RollInitiative,
-        ShowOnActionBar: ko.observable(true) },
       { Description: 'Move Selected Combatant Down', 
         KeyBinding: 'alt+j',
         ActionBarIcon: 'fa-angle-double-down', 
@@ -133,6 +142,11 @@ module ImprovedInitiative {
         ActionBarIcon: 'fa-save', 
         GetActionBinding: () => this.SaveEncounter,
         ShowOnActionBar: ko.observable(false) },
+      { Description: 'Show Keybindings', 
+        KeyBinding: '?',
+        ActionBarIcon: 'fa-keyboard-o', 
+        GetActionBinding: () => this.ToggleCommandDisplay,
+        ShowOnActionBar: ko.observable(true) }
     ]
     
     ToggleCommandDisplay = () => {

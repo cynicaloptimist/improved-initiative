@@ -300,6 +300,7 @@ declare module ImprovedInitiative {
         SaveEncounter: () => void;
         LoadEncounterByName: (encounterName: string) => void;
         LaunchPlayerWindow: () => void;
+        ShowLibraries: () => void;
         Commands: Command[];
         ToggleCommandDisplay: () => void;
         RegisterKeybindings(): void;
