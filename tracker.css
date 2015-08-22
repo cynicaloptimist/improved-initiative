@@ -3712,11 +3712,10 @@ body .encounter .combatants .creature .tags .tag {
   padding: 0 4px;
 }
 body .encounter .combatants .creature .tags .tag .fa-remove {
+  float: none;
   margin-left: 4px;
 }
-body .encounter .combatants .creature .tags .fa-plus,
-body .encounter .combatants .creature .tags .fa-eye,
-body .encounter .combatants .creature .tags .fa-eye-slash {
+body .encounter .combatants .creature .tags .fa-clickable {
   float: right;
   padding: 8px;
 }

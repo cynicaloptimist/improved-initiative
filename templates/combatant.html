@@ -1,4 +1,4 @@
-<div data-bind="text: Creature.Initiative" class="initiative"></div>
+<div data-bind="text: Creature.Initiative" title="Initiative Roll" class="initiative"></div>
 <div class="name">
   <span data-bind="text: DisplayName, visible:!EditingName(), attr: {title: DisplayName }"></span>
   <input data-bind="textInput: Creature.Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
@@ -6,7 +6,7 @@
 <div class="hp" data-bind="click: EditHP">
   <span data-bind="text: DisplayHP, style: { color: GetHPColor() }" class="current-hp"></span>
 </div>
-<div class="ac" data-bind="text: Creature.AC"></div>
+<div class="ac" title="Armor Class" data-bind="text: Creature.AC"></div>
 <div class="tags">
   <input data-bind="textInput: NewTag, visible: AddingTag, hasFocus: AddingTag, onEnter: CommitTag" class="tags" />
   <!--ko foreach: Creature.Tags() -->
@@ -14,6 +14,6 @@
     <span data-bind="text: $data"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
   </div>
   <!-- /ko -->
-  <span class="fa-clickable fa-plus" data-bind="click: AddingTag, visible: !AddingTag()"></span>
-  <span class="fa-clickable" data-bind="click: ToggleHidden, css: HiddenClass"></span>
+  <span class="fa-clickable fa-tag" title="Add tag" data-bind="click: AddingTag, visible: !AddingTag()"></span>
+  <span class="fa-clickable" title="Hide/Reveal in Player Window" data-bind="click: ToggleHidden, css: HiddenClass"></span>
 </div>
