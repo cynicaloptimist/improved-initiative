@@ -9,7 +9,7 @@ declare module ImprovedInitiative {
         DisplayHP: () => void;
         PlayerDisplayHP: () => void;
         constructor(Creature: Creature, PollUser: (poll: IUserPoll) => void);
-        private applyDamage;
+        ApplyDamage: (inputDamage: any) => void;
         private applyTemporaryHP;
         GetHPColor: () => string;
         EditHP: () => void;
@@ -84,6 +84,7 @@ declare module ImprovedInitiative {
         private setIndexLabel();
         private calculateModifiers;
         RollInitiative: () => number;
+        HandleClick: (data: ICreature, e: MouseEvent) => void;
     }
 }
 interface KnockoutBindingHandlers {
@@ -116,7 +117,7 @@ declare module ImprovedInitiative {
         Rules: IRules;
         Creatures: KnockoutObservableArray<ICreature>;
         CreatureCountsByName: KnockoutObservable<number>[];
-        SelectedCreature: KnockoutObservable<ICreature>;
+        SelectedCreatures: KnockoutObservableArray<ICreature>;
         SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
         ActiveCreature: KnockoutObservable<ICreature>;
         ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
@@ -125,16 +126,16 @@ declare module ImprovedInitiative {
         private moveCreature;
         private relativeNavigateFocus;
         AddCreature: (creatureJson: IHaveTrackerStats, event?: any) => ICreature;
-        RemoveSelectedCreature: () => void;
+        RemoveSelectedCreatures: () => void;
         SelectPreviousCombatant: () => void;
         SelectNextCombatant: () => void;
         FocusSelectedCreatureHP: () => boolean;
         AddSelectedCreatureTemporaryHP: () => boolean;
         AddSelectedCreatureTag: () => boolean;
-        EditSelectedCreatureInitiative: () => void;
+        EditSelectedCreatureInitiative: () => boolean;
         MoveSelectedCreatureUp: () => void;
         MoveSelectedCreatureDown: () => void;
-        EditSelectedCreatureName: () => void;
+        EditSelectedCreatureName: () => boolean;
         EditSelectedCreature: () => void;
         RequestInitiative: (playercharacter: ICreature) => void;
         FocusResponseRequest: () => void;

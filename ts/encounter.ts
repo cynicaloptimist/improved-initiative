@@ -18,12 +18,15 @@ module ImprovedInitiative {
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
       this.CreatureCountsByName = [];
-      this.SelectedCreature = ko.observable<ICreature>();
+      this.SelectedCreatures = ko.observableArray<ICreature>();
       this.SelectedCreatureStatblock = ko.computed(() => 
       {
-        return this.SelectedCreature() 
-                   ? this.SelectedCreature().StatBlock()
-                   : StatBlock.Empty();
+        var selectedCreatures = this.SelectedCreatures();
+        if(selectedCreatures.length == 1){
+          return selectedCreatures[0].StatBlock();
+        } else {
+          return StatBlock.Empty();
+        }
       });
       this.ActiveCreature = ko.observable<ICreature>();
       this.ActiveCreatureStatblock = ko.computed(() => 
@@ -37,7 +40,7 @@ module ImprovedInitiative {
     Rules: IRules;
     Creatures: KnockoutObservableArray<ICreature>;
     CreatureCountsByName: KnockoutObservable<number> [];
-    SelectedCreature: KnockoutObservable<ICreature>;
+    SelectedCreatures: KnockoutObservableArray<ICreature>;
     SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
@@ -56,13 +59,14 @@ module ImprovedInitiative {
     
     private relativeNavigateFocus = (offset: number) => 
     {
-      var newIndex = this.Creatures.indexOf(this.SelectedCreature()) + offset;
+      var newIndex = this.Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
       if(newIndex < 0){ 
         newIndex = 0;
       } else if(newIndex >= this.Creatures().length) { 
         newIndex = this.Creatures().length - 1; 
       }
-      this.SelectedCreature(this.Creatures()[newIndex]);
+      this.SelectedCreatures.removeAll()
+      this.SelectedCreatures.push(this.Creatures()[newIndex]);
     }
     
     AddCreature = (creatureJson: IHaveTrackerStats, event?) => 
@@ -81,23 +85,20 @@ module ImprovedInitiative {
       return creature;
     }
     
-    RemoveSelectedCreature = () => {
-      var creature = ko.unwrap(this.SelectedCreature),
-          index = this.Creatures.indexOf(creature);
+    RemoveSelectedCreatures = () => {
+      var creatures = ko.unwrap(this.SelectedCreatures),
+          index = this.Creatures.indexOf(creatures[0]),
+          deletedCreatureNames = creatures.map(c => c.StatBlock().Name);
           
-      this.Creatures.remove(creature);
-      
-      if(this.Creatures().length <= index){
-        this.SelectedCreature(this.Creatures()[index-1])
-      } else {
-        this.SelectedCreature(this.Creatures()[index]);
-      }
+      this.Creatures.removeAll(creatures);
       
       //Only reset creature count if we just removed the last one of its kind.
-      var deletedCreatureName = creature.StatBlock().Name;
-      if(this.Creatures().every(c => c.StatBlock().Name != deletedCreatureName)){
-        this.CreatureCountsByName[deletedCreatureName](0);
-      }
+      deletedCreatureNames.forEach(name => {
+        if(this.Creatures().every(c => c.StatBlock().Name != name)){
+          this.CreatureCountsByName[name](0);
+        }
+      })
+      
     }
     
     SelectPreviousCombatant = () =>
@@ -112,36 +113,39 @@ module ImprovedInitiative {
     
     FocusSelectedCreatureHP = () =>
     {
-      if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.EditHP();
+      var selectedCreatures = this.SelectedCreatures();
+      if(selectedCreatures.length == 1){
+        selectedCreatures[0].ViewModel.EditHP()
+      } else {
+        var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+        this.UserPollQueue.Add({
+          requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
+          inputSelector: '.response',
+          callback: response => selectedCreatures.forEach(c => c.ViewModel.ApplyDamage(response))
+        });
       }
       return false;
     }
     
     AddSelectedCreatureTemporaryHP = () => {
-      if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.AddTemporaryHP();
-      }
+      this.SelectedCreatures().forEach(c => c.ViewModel.AddTemporaryHP())
       return false;
     }
     
     AddSelectedCreatureTag = () => 
     {
-      if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.AddingTag(true);
-      }
+      this.SelectedCreatures().forEach(c => c.ViewModel.AddingTag(true))
       return false;
     }
     
     EditSelectedCreatureInitiative = () => {
-      if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.EditInitiative();
-      }
+      this.SelectedCreatures().forEach(c => c.ViewModel.AddTemporaryHP())
+      return false;
     }
     
     MoveSelectedCreatureUp = () =>
     {
-      var creature = this.SelectedCreature();
+      var creature = this.SelectedCreatures()[0];
       var index = this.Creatures.indexOf(creature)
       if(creature && index > 0){
         this.moveCreature(creature, index - 1);
@@ -150,7 +154,7 @@ module ImprovedInitiative {
     
     MoveSelectedCreatureDown = () =>
     {
-      var creature = this.SelectedCreature();
+      var creature = this.SelectedCreatures()[0];
       var index = this.Creatures.indexOf(creature)
       if(creature && index < this.Creatures().length - 1){
         this.moveCreature(creature, index + 1);
@@ -159,15 +163,14 @@ module ImprovedInitiative {
     
     EditSelectedCreatureName = () => 
     {
-      if(this.SelectedCreature()){
-        this.SelectedCreature().ViewModel.EditingName(true);
-      }
+      this.SelectedCreatures().forEach(c => c.ViewModel.EditingName(true) )
+      return false;
     }
     
     EditSelectedCreature = () => 
     {
-      var selectedCreature = this.SelectedCreature();
-      if(selectedCreature){
+      if(this.SelectedCreatures().length == 1){
+        var selectedCreature = this.SelectedCreatures()[0];
         this.StatBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
           selectedCreature.StatBlock(newStatBlock);
         })

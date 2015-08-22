@@ -56,7 +56,7 @@ module ImprovedInitiative {
       { Description: 'Remove Selected Combatant from Encounter', 
         KeyBinding: 'del',
         ActionBarIcon: 'fa-remove', 
-        GetActionBinding: () => v.Encounter().RemoveSelectedCreature,
+        GetActionBinding: () => v.Encounter().RemoveSelectedCreatures,
         ShowOnActionBar: ko.observable(false) },
       { Description: 'Rename Selected Combatant', 
         KeyBinding: 'f2',

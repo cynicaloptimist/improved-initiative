@@ -108,9 +108,9 @@
         </li>
         <!-- ko foreach: Creatures -->
         <li class="creature" data-bind="
-          css: { selected: $parent.SelectedCreature() == $data, 
-                 active: $parent.ActiveCreature() == $data }, 
-          click: $parent.SelectedCreature,
+          css: { selected: $parent.SelectedCreatures().indexOf($data) > -1, 
+                 active: $parent.ActiveCreature() == $data },
+          click: HandleClick,
           component: {
             name: 'combatant',
             params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
@@ -132,7 +132,7 @@
 
     <div class="selected statblock">
       <h1>Target Creature</h1>
-      <div data-bind="visible: Encounter().SelectedCreature(), 
+      <div data-bind="visible: Encounter().SelectedCreatures().length == 1, 
       component: { 
         name: 'defaultstatblock', 
         params:{ 

@@ -75,5 +75,14 @@ module ImprovedInitiative {
 	    this.Initiative(roll);
 	    return roll;
 	  }
+    
+    HandleClick = (data: ICreature, e: MouseEvent) => {
+      var selectedCreatures = this.Encounter.SelectedCreatures;
+      if(!e.ctrlKey){
+        selectedCreatures.removeAll();
+      }
+      selectedCreatures.push(data);
+    }
+    
 	}
 }

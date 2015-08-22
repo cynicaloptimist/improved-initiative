@@ -33,7 +33,7 @@ module ImprovedInitiative {
       })
     }
     
-    private applyDamage = inputDamage => {
+    ApplyDamage = inputDamage => {
       var damage = parseInt(inputDamage),
           healing = -damage,
           currHP = this.Creature.CurrentHP(), 
@@ -80,13 +80,13 @@ module ImprovedInitiative {
       var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
       var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
       return "rgb(" + red + "," + green + ",0)";
-    };
+    }
     
     EditHP = () => {
       this.PollUser({
         requestContent: `Apply damage to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
-        callback: this.applyDamage
+        callback: this.ApplyDamage
       });
     }
     

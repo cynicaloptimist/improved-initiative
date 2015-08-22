@@ -5,7 +5,7 @@ var ImprovedInitiative;
             var _this = this;
             this.Creature = Creature;
             this.PollUser = PollUser;
-            this.applyDamage = function (inputDamage) {
+            this.ApplyDamage = function (inputDamage) {
                 var damage = parseInt(inputDamage), healing = -damage, currHP = _this.Creature.CurrentHP(), tempHP = _this.Creature.TemporaryHP();
                 if (isNaN(damage)) {
                     return;
@@ -45,7 +45,7 @@ var ImprovedInitiative;
                 _this.PollUser({
                     requestContent: "Apply damage to " + _this.DisplayName() + ": <input class='response' type='number' />",
                     inputSelector: '.response',
-                    callback: _this.applyDamage
+                    callback: _this.ApplyDamage
                 });
             };
             this.EditInitiative = function () {
@@ -196,7 +196,7 @@ var ImprovedInitiative;
         { Description: 'Remove Selected Combatant from Encounter',
             KeyBinding: 'del',
             ActionBarIcon: 'fa-remove',
-            GetActionBinding: function () { return v.Encounter().RemoveSelectedCreature; },
+            GetActionBinding: function () { return v.Encounter().RemoveSelectedCreatures; },
             ShowOnActionBar: ko.observable(false) },
         { Description: 'Rename Selected Combatant',
             KeyBinding: 'f2',
@@ -289,6 +289,13 @@ var ImprovedInitiative;
                 var roll = _this.Encounter.Rules.Check(_this.InitiativeModifier);
                 _this.Initiative(roll);
                 return roll;
+            };
+            this.HandleClick = function (data, e) {
+                var selectedCreatures = _this.Encounter.SelectedCreatures;
+                if (!e.ctrlKey) {
+                    selectedCreatures.removeAll();
+                }
+                selectedCreatures.push(data);
             };
             var statBlock = ImprovedInitiative.StatBlock.Empty();
             jQuery.extend(statBlock, creatureJson);
@@ -392,14 +399,15 @@ var ImprovedInitiative;
                 _this.Creatures.splice(index, 0, creature);
             };
             this.relativeNavigateFocus = function (offset) {
-                var newIndex = _this.Creatures.indexOf(_this.SelectedCreature()) + offset;
+                var newIndex = _this.Creatures.indexOf(_this.SelectedCreatures()[0]) + offset;
                 if (newIndex < 0) {
                     newIndex = 0;
                 }
                 else if (newIndex >= _this.Creatures().length) {
                     newIndex = _this.Creatures().length - 1;
                 }
-                _this.SelectedCreature(_this.Creatures()[newIndex]);
+                _this.SelectedCreatures.removeAll();
+                _this.SelectedCreatures.push(_this.Creatures()[newIndex]);
             };
             this.AddCreature = function (creatureJson, event) {
                 console.log("adding %O to encounter", creatureJson);
@@ -416,20 +424,15 @@ var ImprovedInitiative;
                 _this.Creatures.push(creature);
                 return creature;
             };
-            this.RemoveSelectedCreature = function () {
-                var creature = ko.unwrap(_this.SelectedCreature), index = _this.Creatures.indexOf(creature);
-                _this.Creatures.remove(creature);
-                if (_this.Creatures().length <= index) {
-                    _this.SelectedCreature(_this.Creatures()[index - 1]);
-                }
-                else {
-                    _this.SelectedCreature(_this.Creatures()[index]);
-                }
+            this.RemoveSelectedCreatures = function () {
+                var creatures = ko.unwrap(_this.SelectedCreatures), index = _this.Creatures.indexOf(creatures[0]), deletedCreatureNames = creatures.map(function (c) { return c.StatBlock().Name; });
+                _this.Creatures.removeAll(creatures);
                 //Only reset creature count if we just removed the last one of its kind.
-                var deletedCreatureName = creature.StatBlock().Name;
-                if (_this.Creatures().every(function (c) { return c.StatBlock().Name != deletedCreatureName; })) {
-                    _this.CreatureCountsByName[deletedCreatureName](0);
-                }
+                deletedCreatureNames.forEach(function (name) {
+                    if (_this.Creatures().every(function (c) { return c.StatBlock().Name != name; })) {
+                        _this.CreatureCountsByName[name](0);
+                    }
+                });
             };
             this.SelectPreviousCombatant = function () {
                 _this.relativeNavigateFocus(-1);
@@ -438,50 +441,53 @@ var ImprovedInitiative;
                 _this.relativeNavigateFocus(1);
             };
             this.FocusSelectedCreatureHP = function () {
-                if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.EditHP();
+                var selectedCreatures = _this.SelectedCreatures();
+                if (selectedCreatures.length == 1) {
+                    selectedCreatures[0].ViewModel.EditHP();
+                }
+                else {
+                    var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
+                    _this.UserPollQueue.Add({
+                        requestContent: "Apply damage to " + creatureNames + ": <input class='response' type='number' />",
+                        inputSelector: '.response',
+                        callback: function (response) { return selectedCreatures.forEach(function (c) { return c.ViewModel.ApplyDamage(response); }); }
+                    });
                 }
                 return false;
             };
             this.AddSelectedCreatureTemporaryHP = function () {
-                if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.AddTemporaryHP();
-                }
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.AddTemporaryHP(); });
                 return false;
             };
             this.AddSelectedCreatureTag = function () {
-                if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.AddingTag(true);
-                }
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.AddingTag(true); });
                 return false;
             };
             this.EditSelectedCreatureInitiative = function () {
-                if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.EditInitiative();
-                }
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.AddTemporaryHP(); });
+                return false;
             };
             this.MoveSelectedCreatureUp = function () {
-                var creature = _this.SelectedCreature();
+                var creature = _this.SelectedCreatures()[0];
                 var index = _this.Creatures.indexOf(creature);
                 if (creature && index > 0) {
                     _this.moveCreature(creature, index - 1);
                 }
             };
             this.MoveSelectedCreatureDown = function () {
-                var creature = _this.SelectedCreature();
+                var creature = _this.SelectedCreatures()[0];
                 var index = _this.Creatures.indexOf(creature);
                 if (creature && index < _this.Creatures().length - 1) {
                     _this.moveCreature(creature, index + 1);
                 }
             };
             this.EditSelectedCreatureName = function () {
-                if (_this.SelectedCreature()) {
-                    _this.SelectedCreature().ViewModel.EditingName(true);
-                }
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.EditingName(true); });
+                return false;
             };
             this.EditSelectedCreature = function () {
-                var selectedCreature = _this.SelectedCreature();
-                if (selectedCreature) {
+                if (_this.SelectedCreatures().length == 1) {
+                    var selectedCreature = _this.SelectedCreatures()[0];
                     _this.StatBlockEditor.EditCreature(_this.SelectedCreatureStatblock(), function (newStatBlock) {
                         selectedCreature.StatBlock(newStatBlock);
                     });
@@ -575,11 +581,15 @@ var ImprovedInitiative;
             this.Rules = rules || new ImprovedInitiative.DefaultRules();
             this.Creatures = ko.observableArray();
             this.CreatureCountsByName = [];
-            this.SelectedCreature = ko.observable();
+            this.SelectedCreatures = ko.observableArray();
             this.SelectedCreatureStatblock = ko.computed(function () {
-                return _this.SelectedCreature()
-                    ? _this.SelectedCreature().StatBlock()
-                    : ImprovedInitiative.StatBlock.Empty();
+                var selectedCreatures = _this.SelectedCreatures();
+                if (selectedCreatures.length == 1) {
+                    return selectedCreatures[0].StatBlock();
+                }
+                else {
+                    return ImprovedInitiative.StatBlock.Empty();
+                }
             });
             this.ActiveCreature = ko.observable();
             this.ActiveCreatureStatblock = ko.computed(function () {
