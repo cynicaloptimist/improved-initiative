@@ -22,7 +22,7 @@
       <input class="showonactionbar" type="checkbox" data-bind="checked: ShowOnActionBar" />
     </div>
     <!--/ko -->
-    <input class="savekeybindings"" type="button" value="Save Keybindings" data-bind="click: ToggleCommandDisplay" />
+    <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: ToggleCommandDisplay" />
   </div>
   <!-- ko template: { if: Library.PreviewCreature } -->
   <div class="preview statblock" data-bind="
@@ -104,7 +104,7 @@
           <div class="name">Combatant</div>
           <div class="hp"><span class = "fa fa-heart"></span></div>
           <div class="ac"><span class = "fa fa-shield"></span></div>
-          <div class="tags">Tags</div>
+          <div title="Add tags to a creature to keep track of conditions or other effects." class="tags">Tags</div>
         </li>
         <!-- ko foreach: Creatures -->
         <li class="creature" data-bind="

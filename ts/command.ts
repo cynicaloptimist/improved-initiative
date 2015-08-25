@@ -93,9 +93,9 @@ module ImprovedInitiative {
         ActionBarIcon: 'fa-save', 
         GetActionBinding: () => v.SaveEncounter,
         ShowOnActionBar: ko.observable(false) },
-      { Description: 'Show Keybindings', 
+      { Description: 'Show Help and Keybindings', 
         KeyBinding: '?',
-        ActionBarIcon: 'fa-keyboard-o', 
+        ActionBarIcon: 'fa-question-circle', 
         GetActionBinding: () => v.ToggleCommandDisplay,
         ShowOnActionBar: ko.observable(true) }
     ]

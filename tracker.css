@@ -3531,7 +3531,6 @@ body .commands {
   margin: auto;
   z-index: 10;
   background-color: #ffffff;
-  display: none;
   width: 450px;
 }
 body .commands div {

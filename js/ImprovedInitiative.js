@@ -233,9 +233,9 @@ var ImprovedInitiative;
             ActionBarIcon: 'fa-save',
             GetActionBinding: function () { return v.SaveEncounter; },
             ShowOnActionBar: ko.observable(false) },
-        { Description: 'Show Keybindings',
+        { Description: 'Show Help and Keybindings',
             KeyBinding: '?',
-            ActionBarIcon: 'fa-keyboard-o',
+            ActionBarIcon: 'fa-question-circle',
             GetActionBinding: function () { return v.ToggleCommandDisplay; },
             ShowOnActionBar: ko.observable(true) }
     ]; };
