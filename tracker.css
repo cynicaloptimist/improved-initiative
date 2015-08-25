@@ -3620,46 +3620,26 @@ body .encounter {
   flex-direction: column;
 }
 body .encounter .combatants .creature {
+  border-left-color: auto;
+  background-color: lightgray;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   line-height: 32px;
-  border-style: solid;
-  border-width: 1px 5px;
+  border-left: 5px solid;
   list-style-type: none;
 }
-body .encounter .combatants .creature:nth-child(2n) {
-  background-color: lightgray;
-  border-color: lightgray;
-}
-body .encounter .combatants .creature:nth-child(2n) input {
-  background-color: lightgray;
-}
-body .encounter .combatants .creature:nth-child(2n) input:hover,
-body .encounter .combatants .creature:nth-child(2n) input:focus {
-  background-color: white;
-}
-body .encounter .combatants .creature:nth-child(2n+1) {
+body .encounter .combatants .creature:hover {
   background-color: darkgray;
-  border-color: darkgray;
-}
-body .encounter .combatants .creature:nth-child(2n+1) input {
-  background-color: darkgray;
-}
-body .encounter .combatants .creature:nth-child(2n+1) input:hover,
-body .encounter .combatants .creature:nth-child(2n+1) input:focus {
-  background-color: white;
 }
 body .encounter .combatants .creature.active {
   border-left-color: green;
 }
-body .encounter .combatants .creature.active .initiative {
+body .encounter .combatants .creature.active .name {
   font-weight: bold;
 }
 body .encounter .combatants .creature.selected {
-  border-right-color: darkred;
-  border-top-color: darkred;
-  border-bottom-color: darkred;
+  background-color: #9c9c9c;
 }
 body .encounter .combatants .creature div {
   display: inline-block;

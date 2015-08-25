@@ -216,23 +216,24 @@ body{
 		.combatants{
 			
 			.creature {
-				.zebra-stripe(lightgray;darkgray);
+				border-left-color:auto;
+				background-color: lightgray;
+				&:hover {
+					background-color: darkgray;
+				}
 				display: flex;
 				justify-content: space-between;
 				align-items: flex-start;
 				line-height: 32px;
-				border-style: solid;
-				border-width: 1px 5px;
+				border-left: 5px solid;
 				&.active {
 					border-left-color: green;
-					.initiative{
+					.name{
 						font-weight: bold;
 					}
 				}
 				&.selected {
-					border-right-color: darkred;
-					border-top-color: darkred;
-					border-bottom-color: darkred;
+					background-color: darken(darkgray, 5%);
 				}
 				
 				list-style-type: none;
