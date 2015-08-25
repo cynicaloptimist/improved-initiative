@@ -2,6 +2,7 @@
 Combat tracker for Dungeons and Dragons (D&amp;D) 5th Edition
 
 To run, install node.js and run the following in the cloned directory in a node command prompt:
+
 1. npm install
 2. npm install -g grunt-cli
 3. grunt
