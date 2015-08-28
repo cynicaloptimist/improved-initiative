@@ -61,7 +61,7 @@ module ImprovedInitiative {
       this.Creature.TemporaryHP(tempHP);
     }
     
-    private applyTemporaryHP = inputTHP => {
+    ApplyTemporaryHP = inputTHP => {
       var newTemporaryHP = parseInt(inputTHP),
           currentTemporaryHP = this.Creature.TemporaryHP();
           
@@ -102,7 +102,7 @@ module ImprovedInitiative {
       this.PollUser({
         requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
-        callback: this.applyTemporaryHP
+        callback: this.ApplyTemporaryHP
       });
     }
     

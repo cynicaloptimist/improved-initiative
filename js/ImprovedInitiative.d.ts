@@ -10,7 +10,7 @@ declare module ImprovedInitiative {
         PlayerDisplayHP: () => void;
         constructor(Creature: Creature, PollUser: (poll: IUserPoll) => void);
         ApplyDamage: (inputDamage: any) => void;
-        private applyTemporaryHP;
+        ApplyTemporaryHP: (inputTHP: any) => void;
         GetHPColor: () => string;
         EditHP: () => void;
         EditInitiative: () => void;
@@ -130,7 +130,7 @@ declare module ImprovedInitiative {
         SelectPreviousCombatant: () => void;
         SelectNextCombatant: () => void;
         FocusSelectedCreatureHP: () => boolean;
-        AddSelectedCreatureTemporaryHP: () => boolean;
+        AddSelectedCreaturesTemporaryHP: () => boolean;
         AddSelectedCreatureTag: () => boolean;
         EditSelectedCreatureInitiative: () => boolean;
         MoveSelectedCreatureUp: () => void;

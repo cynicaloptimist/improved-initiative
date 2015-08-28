@@ -26,7 +26,7 @@ var ImprovedInitiative;
                 _this.Creature.CurrentHP(currHP);
                 _this.Creature.TemporaryHP(tempHP);
             };
-            this.applyTemporaryHP = function (inputTHP) {
+            this.ApplyTemporaryHP = function (inputTHP) {
                 var newTemporaryHP = parseInt(inputTHP), currentTemporaryHP = _this.Creature.TemporaryHP();
                 if (isNaN(newTemporaryHP)) {
                     return;
@@ -59,7 +59,7 @@ var ImprovedInitiative;
                 _this.PollUser({
                     requestContent: "Grant temporary hit points to " + _this.DisplayName() + ": <input class='response' type='number' />",
                     inputSelector: '.response',
-                    callback: _this.applyTemporaryHP
+                    callback: _this.ApplyTemporaryHP
                 });
             };
             this.HiddenClass = ko.computed(function () {
@@ -226,7 +226,7 @@ var ImprovedInitiative;
         { Description: 'Add Temporary HP',
             KeyBinding: 'alt+t',
             ActionBarIcon: 'fa-medkit',
-            GetActionBinding: function () { return v.Encounter().AddSelectedCreatureTemporaryHP; },
+            GetActionBinding: function () { return v.Encounter().AddSelectedCreaturesTemporaryHP; },
             ShowOnActionBar: ko.observable(false) },
         { Description: 'Save Encounter',
             KeyBinding: 'alt+s',
@@ -455,8 +455,19 @@ var ImprovedInitiative;
                 }
                 return false;
             };
-            this.AddSelectedCreatureTemporaryHP = function () {
-                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.AddTemporaryHP(); });
+            this.AddSelectedCreaturesTemporaryHP = function () {
+                var selectedCreatures = _this.SelectedCreatures();
+                if (selectedCreatures.length == 1) {
+                    selectedCreatures[0].ViewModel.AddTemporaryHP();
+                }
+                else {
+                    var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
+                    _this.UserPollQueue.Add({
+                        requestContent: "Grant temporary hit points to " + creatureNames + ": <input class='response' type='number' />",
+                        inputSelector: '.response',
+                        callback: function (response) { return selectedCreatures.forEach(function (c) { return c.ViewModel.ApplyTemporaryHP(response); }); }
+                    });
+                }
                 return false;
             };
             this.AddSelectedCreatureTag = function () {

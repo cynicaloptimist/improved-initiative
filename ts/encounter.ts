@@ -127,8 +127,18 @@ module ImprovedInitiative {
       return false;
     }
     
-    AddSelectedCreatureTemporaryHP = () => {
-      this.SelectedCreatures().forEach(c => c.ViewModel.AddTemporaryHP())
+    AddSelectedCreaturesTemporaryHP = () => {
+      var selectedCreatures = this.SelectedCreatures();
+      if(selectedCreatures.length == 1){
+        selectedCreatures[0].ViewModel.AddTemporaryHP()
+      } else {
+        var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+        this.UserPollQueue.Add({
+          requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
+          inputSelector: '.response',
+          callback: response => selectedCreatures.forEach(c => c.ViewModel.ApplyTemporaryHP(response))
+        });
+      }
       return false;
     }
     

@@ -86,7 +86,7 @@ module ImprovedInitiative {
       { Description: 'Add Temporary HP', 
         KeyBinding: 'alt+t',
         ActionBarIcon: 'fa-medkit', 
-        GetActionBinding: () => v.Encounter().AddSelectedCreatureTemporaryHP,
+        GetActionBinding: () => v.Encounter().AddSelectedCreaturesTemporaryHP,
         ShowOnActionBar: ko.observable(false) },
       { Description: 'Save Encounter', 
         KeyBinding: 'alt+s',
