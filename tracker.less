@@ -172,9 +172,20 @@ body{
 		display: flex;
 		flex-direction:column;
 		.tabs {
-			min-height: 25px;
+			height: 25px;
+			border-bottom: 1px solid darkgray;
+			padding: 4px;
 			div {
 				display:inline-block;
+				padding: 5px;
+				border: 1px solid;
+				border-bottom: 0px;
+				&:hover {
+					background-color: lightgray;
+				}
+				&.selected {
+					background-color: darkgray;
+				}
 			}
 		}
 	}

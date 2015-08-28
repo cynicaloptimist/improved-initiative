@@ -3580,10 +3580,21 @@ body .libraries {
   flex-direction: column;
 }
 body .libraries .tabs {
-  min-height: 25px;
+  height: 25px;
+  border-bottom: 1px solid darkgray;
+  padding: 4px;
 }
 body .libraries .tabs div {
   display: inline-block;
+  padding: 5px;
+  border: 1px solid;
+  border-bottom: 0px;
+}
+body .libraries .tabs div:hover {
+  background-color: lightgray;
+}
+body .libraries .tabs div.selected {
+  background-color: darkgray;
 }
 body .filter-library {
   margin: 5px;
