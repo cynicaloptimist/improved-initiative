@@ -3558,7 +3558,8 @@ body .commands .savekeybindings {
   margin: 3px;
   padding: 3px;
 }
-body .preview.statblock {
+body .preview.statblock,
+body .preview.encounter {
   position: fixed;
   left: 376px;
   top: 10px;

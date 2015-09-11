@@ -651,6 +651,7 @@ var ImprovedInitiative;
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
             this.PreviewCreature = ko.observable(ImprovedInitiative.StatBlock.Empty());
+            this.PreviewEncounter = ko.observable({ Creatures: [], Name: '' });
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {

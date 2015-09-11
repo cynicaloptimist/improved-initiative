@@ -24,6 +24,7 @@ module ImprovedInitiative {
     SavedEncounterIndex = ko.observableArray<string>([]);
     
     PreviewCreature = ko.observable<IHaveTrackerStats>(StatBlock.Empty());
+    PreviewEncounter = ko.observable<ISavedEncounter>({Creatures: [], Name: ''});
    
     DisplayTab = ko.observable('Creatures');
     LibraryFilter = ko.observable('');

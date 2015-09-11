@@ -25,6 +25,9 @@
     <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: ToggleCommandDisplay" />
   </div>
   <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.PreviewCreature } }"></div>
+  <div class="preview encounter" data-bind="foreach: Library.PreviewEncounter().Creatures">
+    <span data-bind="text: Alias"></span>
+  </div>
   <div class="libraries">
     <h1>Library</h1>
     <div class="tabs">
@@ -37,6 +40,7 @@
       <ul class="library" data-bind="foreach: SavedEncounterIndex">
         <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
           <span class="fa" data-bind="text: $data"></span>
+          <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.encounter', data: $parent.PreviewEncounter }"></span>
         </li>
       </ul>
       <!-- /ko -->

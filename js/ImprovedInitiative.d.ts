@@ -169,6 +169,7 @@ declare module ImprovedInitiative {
         Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
         SavedEncounterIndex: KnockoutObservableArray<string>;
         PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
+        PreviewEncounter: KnockoutObservable<ISavedEncounter>;
         DisplayTab: KnockoutObservable<string>;
         LibraryFilter: KnockoutObservable<string>;
         FilteredCreatures: KnockoutComputed<KnockoutObservable<IStatBlock>[]>;
