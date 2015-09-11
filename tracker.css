@@ -3600,29 +3600,29 @@ body .filter-library {
   margin: 5px;
   min-height: 2em;
 }
-body ul.creature-library {
+body ul.library {
   flex-shrink: 1;
   list-style-type: none;
   overflow-y: scroll;
 }
-body ul.creature-library li {
+body ul.library li {
   line-height: 24px;
   margin: 1px;
   display: flex;
 }
-body ul.creature-library li:nth-child(2n) .fa {
+body ul.library li:nth-child(2n) .fa {
   background-color: #f0f0f0;
 }
-body ul.creature-library li .fa {
+body ul.library li .fa {
   padding: 2px 6px;
   margin-left: 1px;
   border: 1px solid darkred;
   border-radius: 4px;
 }
-body ul.creature-library li .fa:first-child {
+body ul.library li .fa:first-child {
   flex-grow: 1;
 }
-body ul.creature-library li .fa:hover {
+body ul.library li .fa:hover {
   background-color: #cdcdcd;
 }
 body .encounter {

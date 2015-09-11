@@ -46,15 +46,15 @@
     </div>
     <!--ko with: Library -->
       <!-- ko if: DisplayTab() == 'Encounters' -->
-      <ul class="creature-library" data-bind="foreach: SavedEncounterIndex">
+      <ul class="library" data-bind="foreach: SavedEncounterIndex">
         <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
-          <span data-bind="text: $data"></span>
+          <span class="fa" data-bind="text: $data"></span>
         </li>
       </ul>
       <!-- /ko -->
       <!-- ko ifnot: DisplayTab() == 'Encounters' -->
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-      <ul class="creature-library" data-bind="foreach: FilteredCreatures">
+      <ul class="library" data-bind="foreach: FilteredCreatures">
         <li>
           <span class="fa" data-bind="click: $root.Encounter().AddCreature, text: Name"></span>
           <span class="fa fa-edit" data-bind="click: $parent.EditStatBlock"></span>
