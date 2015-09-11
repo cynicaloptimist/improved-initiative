@@ -261,7 +261,7 @@ var ImprovedInitiative;
     };
     ko.components.loaders.unshift(templateLoader);
     ko.components.register('defaultstatblock', {
-        viewModel: function (params) { return params.creature; },
+        viewModel: function (params) { return params.creature.StatBlock || params.creature; },
         template: { name: 'defaultstatblock' }
     });
     ko.components.register('activestatblock', {
@@ -379,6 +379,34 @@ var ImprovedInitiative;
                 replacements = [replacements];
             }
             $(element).html(bindingContext['formatString'].format(replacements));
+        }
+    };
+    ko.bindingHandlers.hoverPop = {
+        init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+            // This will be called when the binding is first applied to an element
+            // Set up any initial state, event handlers, etc. here
+            //if (bindingContext.$data.init) bindingContext.$data.init(element, valueAccessor, allBindings, viewModel, bindingContext);
+            var params = valueAccessor();
+            var componentSelector = params.selector;
+            var popComponent = $(componentSelector).first();
+            popComponent.hide();
+            $(element).on('mouseover', function (event) {
+                var hoveredElementData = ko.dataFor(event.target);
+                params.data(hoveredElementData);
+                var popPosition = $(event.target).position().top;
+                var maxPopPosition = $(document).height() - popComponent.height();
+                if (popPosition > maxPopPosition) {
+                    popPosition = maxPopPosition;
+                }
+                popComponent.css('top', popPosition).select();
+            });
+            popComponent.add(element).hover(function () { popComponent.show(); }, function () { popComponent.hide(); });
+        },
+        update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+            // This will be called once when the binding is first applied to an element,
+            // and again whenever any observables/computeds that are accessed change
+            // Update the DOM element based on the supplied values here.
+            //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
     };
 })(ImprovedInitiative || (ImprovedInitiative = {}));
@@ -622,20 +650,7 @@ var ImprovedInitiative;
             this.Creatures = ko.observableArray([]);
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
-            this.PreviewCreature = ko.observable(null);
-            this.AdjustPreviewPane = function () {
-                var popPosition = $(event.target).position().top;
-                var maxPopPosition = $(document).height() - $('.preview.statblock').height();
-                if (popPosition > maxPopPosition) {
-                    popPosition = maxPopPosition - 40;
-                }
-                $('.preview.statblock').css('top', popPosition).select();
-            };
-            this.HidePreviewPane = function () {
-                if (!$('.preview.statblock').is(':hover')) {
-                    _this.PreviewCreature(null);
-                }
-            };
+            this.PreviewCreature = ko.observable(ImprovedInitiative.StatBlock.Empty());
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {

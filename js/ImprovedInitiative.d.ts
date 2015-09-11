@@ -93,6 +93,7 @@ interface KnockoutBindingHandlers {
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
+    hoverPop: KnockoutBindingHandler;
 }
 declare module ImprovedInitiative {
 }
@@ -168,8 +169,6 @@ declare module ImprovedInitiative {
         Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
         SavedEncounterIndex: KnockoutObservableArray<string>;
         PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
-        AdjustPreviewPane: () => void;
-        HidePreviewPane: () => void;
         DisplayTab: KnockoutObservable<string>;
         LibraryFilter: KnockoutObservable<string>;
         FilteredCreatures: KnockoutComputed<KnockoutObservable<IStatBlock>[]>;

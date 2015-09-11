@@ -23,22 +23,8 @@ module ImprovedInitiative {
     Players = ko.observableArray<KnockoutObservable<IHaveTrackerStats>>([]);
     SavedEncounterIndex = ko.observableArray<string>([]);
     
-    PreviewCreature = ko.observable<IHaveTrackerStats>(null);
-    AdjustPreviewPane = () => {
-      var popPosition = $(event.target).position().top;
-      var maxPopPosition = $(document).height() - $('.preview.statblock').height();
-      if(popPosition > maxPopPosition){
-        popPosition = maxPopPosition - 40;
-      }
-      $('.preview.statblock').css('top', popPosition).select();
-    }
-    HidePreviewPane = () => {
-      if(!$('.preview.statblock').is(':hover'))
-      {
-        this.PreviewCreature(null);
-      }
-    }
-    
+    PreviewCreature = ko.observable<IHaveTrackerStats>(StatBlock.Empty());
+   
     DisplayTab = ko.observable('Creatures');
     LibraryFilter = ko.observable('');
     

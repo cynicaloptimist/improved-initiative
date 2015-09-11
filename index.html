@@ -24,19 +24,7 @@
     <!--/ko -->
     <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: ToggleCommandDisplay" />
   </div>
-  <!-- ko template: { if: Library.PreviewCreature } -->
-  <div class="preview statblock" data-bind="
-      event: {
-        mouseout: Library.HidePreviewPane
-      },
-      afterRender: Library.AdjustPreviewPane,
-      component: { 
-        name: 'defaultstatblock',
-        params:{ 
-          creature: Library.PreviewCreature
-        }
-      }"></div>
-  <!-- /ko -->
+  <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.PreviewCreature } }"></div>
   <div class="libraries">
     <h1>Library</h1>
     <div class="tabs">
@@ -58,10 +46,7 @@
         <li>
           <span class="fa" data-bind="click: $root.Encounter().AddCreature, text: Name"></span>
           <span class="fa fa-edit" data-bind="click: $parent.EditStatBlock"></span>
-          <span class="fa fa-search preview" data-bind="event: {
-            mouseover: $parent.PreviewCreature,
-            mouseout: $parent.HidePreviewPane
-          }"></span>
+          <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
         </li>
       </ul>
       <div class="interface-buttons">
