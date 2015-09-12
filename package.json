@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/cynicaloptimist/improved-initiative.git"
   },
+  "engines": {
+    "node" : ">=4"
+  },
   "devDependencies": {
     "chai": "^3.2.0",
     "grunt": "~0.4.5",
