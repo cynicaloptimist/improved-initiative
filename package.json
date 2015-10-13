@@ -8,7 +8,7 @@
     "url": "https://github.com/cynicaloptimist/improved-initiative.git"
   },
   "engines": {
-    "node" : ">=4"
+    "node": ">=4"
   },
   "devDependencies": {
     "chai": "^3.2.0",
@@ -21,12 +21,12 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-mocha-test": "^0.12.7",
     "grunt-open": "^0.2.3",
-    "grunt-typescript": "^0.6.2",
+    "grunt-ts": "^5.0.1",
     "less": "^2.5.0",
     "mocha": "^2.2.5",
     "requirejs": "^2.1.17",
     "sinon": "^1.15.4",
-    "typescript": "^1.5.0-beta"
+    "typescript": "^1.6.2"
   },
   "dependencies": {
     "express": "^4.13.3",

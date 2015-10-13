@@ -1,15 +1,18 @@
 module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-typescript');
+  grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-open');
 
   grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
-      typescript: {
-          base: {
+      ts: {
+          options: {
+            removeComments: false,
+          },
+          default: {
               src: ['ts/**/*.ts'],
-              dest: 'js/ImprovedInitiative.js',
+              out: 'js/ImprovedInitiative.js',
               options: {
                   module: 'amd',
                   target: 'es5',
@@ -18,10 +21,17 @@ module.exports = function(grunt) {
           },
           test: {
               src: ['test/**/*.ts'],
-              dest: 'js/test.js',
+              out: 'js/test.js',
               options: {
                   module: 'amd',
                   target: 'es5'
+              }
+          },
+          server : {
+              src: ['server/**/*.ts'],
+              out: 'server.js',
+              options: {
+                target: 'es6'
               }
           }
       },
@@ -36,9 +46,9 @@ module.exports = function(grunt) {
         }
       },
       watch: {
-        typescript: {
+        ts: {
           files: '**/*.ts',
-          tasks: ['typescript']
+          tasks: ['ts']
         },
         lesscss: {
           files: '**/*.less',
