@@ -20,3 +20,4 @@ describe("ViewModel", function () {
         });
     });
 });
+//# sourceMappingURL=test.js.map
