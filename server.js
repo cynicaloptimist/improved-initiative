@@ -1,4 +1,5 @@
 /// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/express/express.d.ts" />
 var express = require('express');
 var port = process.env.PORT || 80;
 var app = express();
