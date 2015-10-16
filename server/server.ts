@@ -2,14 +2,27 @@
 /// <reference path="../typings/express/express.d.ts" />
 
 import express = require('express');
+var bodyParser = require('body-parser');
+
 var port = process.env.PORT || 80;
 var app = express();
+var encounters = [];
 
 app.use(express.static('./'));
+app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
     res.render('index.html');
 });
+
+app.route('/encounters/:id')
+.get((req, res) => {
+	res.json(encounters[req.params.id])
+})
+.post((req, res) => {
+	encounters[req.params.id] = req.body;
+	res.status(200).end();
+})
 
 var server = app.listen(port, function() {
 	var host = server.address().address;
