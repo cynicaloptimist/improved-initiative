@@ -12,7 +12,7 @@ module.exports = function(grunt) {
           },
           default: {
               src: ['ts/**/*.ts'],
-              out: 'js/ImprovedInitiative.js',
+              out: 'public/js/ImprovedInitiative.js',
               options: {
                   module: 'amd',
                   target: 'es5',
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
           },
           test: {
               src: ['test/**/*.ts'],
-              out: 'js/test.js',
+              out: 'public/js/test.js',
               options: {
                   module: 'amd',
                   target: 'es5'
@@ -42,7 +42,7 @@ module.exports = function(grunt) {
             paths: ["."]
           },
           files: {
-            "tracker.css": "tracker.less"
+            "public/css/tracker.css": "tracker.less"
           }
         }
       },
@@ -58,5 +58,5 @@ module.exports = function(grunt) {
       }
   });
 
-  grunt.registerTask('default', 'watch');
+  grunt.registerTask('default', ['ts', 'less']);
 };

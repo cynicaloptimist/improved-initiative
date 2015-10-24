@@ -1,7 +1,7 @@
-/// <reference path="../typings/jquery/jquery.d.ts" />
-/// <reference path="../typings/knockout/knockout.d.ts" />
-/// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
-/// <reference path="../typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="../../typings/jquery/jquery.d.ts" />
+/// <reference path="../../typings/knockout/knockout.d.ts" />
+/// <reference path="../../typings/knockout.mapping/knockout.mapping.d.ts" />
+/// <reference path="../../typings/mousetrap/mousetrap.d.ts" />
 declare module ImprovedInitiative {
     class CombatantViewModel {
         Creature: Creature;
