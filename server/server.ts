@@ -3,15 +3,21 @@
 
 import express = require('express');
 var bodyParser = require('body-parser');
+var mustacheExpress = require('mustache-express');
 
 var port = process.env.PORT || 80;
 var app = express();
 var encounters = [];
 
-app.use(express.static('./'));
+app.engine('html', mustacheExpress());
+app.set('view engine', 'html');
+app.set('views', __dirname + '/');
+
+app.use(express.static('public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
+	console.log('app.get /');
     res.render('index.html');
 });
 
