@@ -77,11 +77,11 @@ module ImprovedInitiative {
       viewModel.RegisterKeybindings();
       ko.applyBindings(viewModel, document.body);
       
-      $.ajax("user/creatures.json").done(viewModel.Library.AddCreatures).fail(() => {
-        $.ajax("basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
+      $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(() => {
+        $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
       });
       
-      $.ajax("user/playercharacters.json").done(viewModel.Library.AddPlayers);
+      $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
       var waitForInitChild = () => {

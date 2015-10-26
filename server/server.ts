@@ -8,6 +8,11 @@ var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var app = express();
 var encounters = [];
+var newEncounterIndex = (): number => {
+	var newEncounterId = encounters.length;
+	encounters[newEncounterId] = {};
+	return newEncounterId;
+}
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
@@ -17,9 +22,16 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	console.log('app.get /');
-    res.render('index.html');
+	res.redirect('e/' + newEncounterIndex());
 });
+
+app.get('/e/:id', (req, res) => {
+	console.log('app.get ' + req.path);
+	res.render('index.html', { 
+		rootDirectory	: "..", 
+		encounterId: req.params.id 
+	})
+})
 
 app.route('/encounters/:id')
 .get((req, res) => {

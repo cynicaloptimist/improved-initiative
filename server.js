@@ -6,14 +6,25 @@ var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var app = express();
 var encounters = [];
+var newEncounterIndex = function () {
+    var newEncounterId = encounters.length;
+    encounters[newEncounterId] = {};
+    return newEncounterId;
+};
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
 app.set('views', __dirname + '/');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
-    console.log('app.get /');
-    res.render('index.html');
+    res.redirect('e/' + newEncounterIndex());
+});
+app.get('/e/:id', function (req, res) {
+    console.log('app.get ' + req.path);
+    res.render('index.html', {
+        rootDirectory: "..",
+        encounterId: req.params.id
+    });
 });
 app.route('/encounters/:id')
     .get(function (req, res) {
