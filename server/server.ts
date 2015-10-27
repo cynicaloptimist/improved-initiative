@@ -27,7 +27,7 @@ app.get('/', function(req, res) {
 
 app.get('/e/:id', (req, res) => {
 	console.log('app.get ' + req.path);
-	res.render('index.html', { 
+	res.render('index', { 
 		rootDirectory	: "..", 
 		encounterId: req.params.id 
 	})
