@@ -48,6 +48,9 @@ app.route('/encounters/:id')
 
 io.on('connection', function(socket){
   	console.log('a user connected');
+	socket.on('update encounter', function(encounter){
+		console.log('encounter: ' + JSON.stringify(encounter));
+	});
 });
 
 var server = http.listen(port, function() {

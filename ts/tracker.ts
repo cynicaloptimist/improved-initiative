@@ -44,8 +44,9 @@ module ImprovedInitiative {
       this.Encounter().AddSavedEncounter(JSON.parse(encounterJSON))
       this.RegisterKeybindings();
     }
+    
     SendEncounterToServer = () => {
-      
+      this.Encounter().Socket.emit('update encounter', this.Encounter().Save());
     }
     
     LaunchPlayerWindow = () => {

@@ -125,6 +125,7 @@ declare module ImprovedInitiative {
         ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string>;
         Socket: SocketIOClient.Socket;
+        EncounterId: string;
         SortByInitiative: () => void;
         private moveCreature;
         private relativeNavigateFocus;
@@ -147,7 +148,7 @@ declare module ImprovedInitiative {
         RollInitiative: () => void;
         NextTurn: () => void;
         PreviousTurn: () => void;
-        Save: (name: string) => ISavedEncounter;
+        Save: (name?: string) => ISavedEncounter;
         AddSavedEncounter: (e: ISavedEncounter) => void;
     }
 }

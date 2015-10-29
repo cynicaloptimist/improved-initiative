@@ -231,8 +231,8 @@ var ImprovedInitiative;
         { Description: 'Save Encounter',
             KeyBinding: 'alt+s',
             ActionBarIcon: 'fa-save',
-            GetActionBinding: function () { return v.SaveEncounter; },
-            ShowOnActionBar: ko.observable(false) },
+            GetActionBinding: function () { return v.SendEncounterToServer; },
+            ShowOnActionBar: ko.observable(true) },
         { Description: 'Show Help and Keybindings',
             KeyBinding: '?',
             ActionBarIcon: 'fa-question-circle',
@@ -419,6 +419,7 @@ var ImprovedInitiative;
             this.StatBlockEditor = StatBlockEditor;
             this.State = ko.observable('inactive');
             this.Socket = io();
+            this.EncounterId = $('html')[0].getAttribute('encounterId');
             this.SortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
@@ -592,7 +593,7 @@ var ImprovedInitiative;
             };
             this.Save = function (name) {
                 return {
-                    Name: name,
+                    Name: name || _this.EncounterId,
                     Creatures: _this.Creatures().map(function (c) {
                         return {
                             Statblock: c.StatBlock(),
@@ -1007,6 +1008,7 @@ var ImprovedInitiative;
                 _this.RegisterKeybindings();
             };
             this.SendEncounterToServer = function () {
+                _this.Encounter().Socket.emit('update encounter', _this.Encounter().Save());
             };
             this.LaunchPlayerWindow = function () {
                 var playerWindow = window.open('playerview.html', 'Player View');

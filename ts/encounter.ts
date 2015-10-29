@@ -46,6 +46,7 @@ module ImprovedInitiative {
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     State: KnockoutObservable<string> = ko.observable('inactive');
     Socket: SocketIOClient.Socket = io();
+    EncounterId = $('html')[0].getAttribute('encounterId');
     
     SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
@@ -256,9 +257,9 @@ module ImprovedInitiative {
       this.ActiveCreature(this.Creatures()[previousIndex]);
     }
     
-    Save: (name: string) => ISavedEncounter = name => {
+    Save: (name?: string) => ISavedEncounter = (name?: string) => {
       return {
-        Name: name,
+        Name: name || this.EncounterId,
         Creatures: this.Creatures().map<ISavedCreature>(c => {
           return {
             Statblock: c.StatBlock(),
