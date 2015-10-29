@@ -418,6 +418,7 @@ var ImprovedInitiative;
             this.UserPollQueue = UserPollQueue;
             this.StatBlockEditor = StatBlockEditor;
             this.State = ko.observable('inactive');
+            this.Socket = io();
             this.SortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
@@ -963,6 +964,7 @@ String.prototype.format = function () {
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     ImprovedInitiative.uiText = {
@@ -1003,6 +1005,8 @@ var ImprovedInitiative;
                 _this.Encounter().CreatureCountsByName = [];
                 _this.Encounter().AddSavedEncounter(JSON.parse(encounterJSON));
                 _this.RegisterKeybindings();
+            };
+            this.SendEncounterToServer = function () {
             };
             this.LaunchPlayerWindow = function () {
                 var playerWindow = window.open('playerview.html', 'Player View');

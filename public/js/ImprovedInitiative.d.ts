@@ -2,6 +2,7 @@
 /// <reference path="../../typings/knockout/knockout.d.ts" />
 /// <reference path="../../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../../typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="../../typings/socket.io-client/socket.io-client.d.ts" />
 declare module ImprovedInitiative {
     class CombatantViewModel {
         Creature: Creature;
@@ -123,6 +124,7 @@ declare module ImprovedInitiative {
         ActiveCreature: KnockoutObservable<ICreature>;
         ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string>;
+        Socket: SocketIOClient.Socket;
         SortByInitiative: () => void;
         private moveCreature;
         private relativeNavigateFocus;
@@ -307,6 +309,7 @@ declare module ImprovedInitiative {
         Library: CreatureLibrary;
         SaveEncounter: () => void;
         LoadEncounterByName: (encounterName: string) => void;
+        SendEncounterToServer: () => void;
         LaunchPlayerWindow: () => void;
         ShowLibraries: () => void;
         Commands: {

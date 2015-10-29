@@ -1,12 +1,16 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
+/// <reference path="../typings/socket.io/socket.io.d.ts" />
 
 import express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 
 var port = process.env.PORT || 80;
-var app = express();
 var encounters = [];
 var newEncounterIndex = (): number => {
 	var newEncounterId = encounters.length;
@@ -42,9 +46,13 @@ app.route('/encounters/:id')
 	res.status(200).end();
 })
 
-var server = app.listen(port, function() {
+io.on('connection', function(socket){
+  	console.log('a user connected');
+});
+
+var server = http.listen(port, function() {
 	var host = server.address().address;
   	var port = server.address().port;
 
 	console.log('Improved Initiative listening at http://%s:%s', host, port);
-})
+});

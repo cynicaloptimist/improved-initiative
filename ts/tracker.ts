@@ -2,6 +2,7 @@
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
+/// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
 
 module ImprovedInitiative {
   export var uiText = {
@@ -42,6 +43,9 @@ module ImprovedInitiative {
       this.Encounter().CreatureCountsByName = [];
       this.Encounter().AddSavedEncounter(JSON.parse(encounterJSON))
       this.RegisterKeybindings();
+    }
+    SendEncounterToServer = () => {
+      
     }
     
     LaunchPlayerWindow = () => {

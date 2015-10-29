@@ -45,6 +45,7 @@ module ImprovedInitiative {
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     State: KnockoutObservable<string> = ko.observable('inactive');
+    Socket: SocketIOClient.Socket = io();
     
     SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
