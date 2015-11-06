@@ -35,6 +35,12 @@ module ImprovedInitiative {
                    ? this.ActiveCreature().StatBlock()
                    : StatBlock.Empty();
       });
+      
+      this.Socket.on('update encounter', (encounter) => {
+        this.Creatures([]);
+        this.CreatureCountsByName = [];
+        this.AddSavedEncounter(encounter)
+      })
     }
     
     Rules: IRules;

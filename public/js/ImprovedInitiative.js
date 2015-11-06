@@ -638,6 +638,11 @@ var ImprovedInitiative;
                     ? _this.ActiveCreature().StatBlock()
                     : ImprovedInitiative.StatBlock.Empty();
             });
+            this.Socket.on('update encounter', function (encounter) {
+                _this.Creatures([]);
+                _this.CreatureCountsByName = [];
+                _this.AddSavedEncounter(encounter);
+            });
         }
         return Encounter;
     })();
@@ -1045,15 +1050,8 @@ var ImprovedInitiative;
             $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
         }
         if ($('#playerview').length) {
-            var waitForInitChild = function () {
-                if (window['initChild']) {
-                    window['initChild'](window);
-                }
-                else {
-                    setTimeout(waitForInitChild, 500);
-                }
-            };
-            waitForInitChild();
+            var viewModel = new ViewModel();
+            ko.applyBindings(viewModel, document.body);
         }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));

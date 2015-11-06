@@ -37,6 +37,14 @@ app.get('/e/:id', (req, res) => {
 	})
 })
 
+app.get('/p/:id', (req, res) => {
+	console.log('app.get ' + req.path);
+	res.render('playerview', { 
+		rootDirectory	: "..", 
+		encounterId: req.params.id 
+	})
+})
+
 app.route('/encounters/:id')
 .get((req, res) => {
 	res.json(encounters[req.params.id])
@@ -50,6 +58,7 @@ io.on('connection', function(socket){
   	console.log('a user connected');
 	socket.on('update encounter', function(encounter){
 		console.log('encounter: ' + JSON.stringify(encounter));
+		io.emit('update encounter', encounter);
 	});
 });
 

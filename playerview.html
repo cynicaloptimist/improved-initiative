@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html encounterId = "{{encounterId}}">
   <head>
-  <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="tracker.css">
+  <link rel="stylesheet" href="{{rootDirectory}}/lib/font-awesome-4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/tracker.css">
   
-  <title>Player Window - Improved Initiative</title>
+  <title>Player View - Improved Initiative</title>
   
-  <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
-  <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
-  <script type="text/javascript" src="lib/mousetrap.js"></script>
-  <script type="text/javascript" src="js/ImprovedInitiative.js"></script>
+  <script type="text/javascript" src="{{rootDirectory}}/lib/knockout-3.3.0.debug.js"></script>
+  <script type="text/javascript" src="{{rootDirectory}}/lib/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="{{rootDirectory}}/lib/mousetrap.js"></script>
+  <script type="text/javascript" src="{{rootDirectory}}/lib/socket.io.js"></script>
+  <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
   
   </head>
   <body id="playerview">

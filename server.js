@@ -29,6 +29,13 @@ app.get('/e/:id', function (req, res) {
         encounterId: req.params.id
     });
 });
+app.get('/p/:id', function (req, res) {
+    console.log('app.get ' + req.path);
+    res.render('playerview', {
+        rootDirectory: "..",
+        encounterId: req.params.id
+    });
+});
 app.route('/encounters/:id')
     .get(function (req, res) {
     res.json(encounters[req.params.id]);
@@ -41,6 +48,7 @@ io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('update encounter', function (encounter) {
         console.log('encounter: ' + JSON.stringify(encounter));
+        io.emit('update encounter', encounter);
     });
 });
 var server = http.listen(port, function () {

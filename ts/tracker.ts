@@ -89,14 +89,8 @@ module ImprovedInitiative {
       $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
-      var waitForInitChild = () => {
-        if(window['initChild']){
-          window['initChild'](window);
-        } else {
-          setTimeout(waitForInitChild, 500)
-        }
-      }
-      waitForInitChild();
+      var viewModel = new ViewModel();
+      ko.applyBindings(viewModel, document.body);
     }
   });
 }
