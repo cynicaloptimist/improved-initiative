@@ -1,4 +1,4 @@
 .vscode/*
 .tscache/*
 node_modules/*
-user/*
+public/user/*
