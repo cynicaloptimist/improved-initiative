@@ -45,21 +45,17 @@ app.get('/p/:id', (req, res) => {
 	})
 })
 
-app.route('/encounters/:id')
-.get((req, res) => {
-	res.json(encounters[req.params.id])
-})
-.post((req, res) => {
-	encounters[req.params.id] = req.body;
-	res.status(200).end();
-})
-
 io.on('connection', function(socket){
   	console.log('a user connected');
-	socket.on('update encounter', function(encounter){
+	socket.on('update encounter', function(id, encounter){
+		socket.join(id);
 		console.log('encounter: ' + JSON.stringify(encounter));
-		io.emit('update encounter', encounter);
+		socket.broadcast.to(id).emit('update encounter', encounter);
 	});
+	socket.on('join encounter', function(id){
+		console.log(`encounter ${id} joined`);
+		socket.join(id);
+	})
 });
 
 var server = http.listen(port, function() {

@@ -418,8 +418,8 @@ var ImprovedInitiative;
             this.UserPollQueue = UserPollQueue;
             this.StatBlockEditor = StatBlockEditor;
             this.State = ko.observable('inactive');
-            this.Socket = io();
             this.EncounterId = $('html')[0].getAttribute('encounterId');
+            this.Socket = io();
             this.SortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
@@ -643,6 +643,7 @@ var ImprovedInitiative;
                 _this.CreatureCountsByName = [];
                 _this.AddSavedEncounter(encounter);
             });
+            this.Socket.emit('join encounter', this.EncounterId);
         }
         return Encounter;
     })();
@@ -1013,7 +1014,7 @@ var ImprovedInitiative;
                 _this.RegisterKeybindings();
             };
             this.SendEncounterToServer = function () {
-                _this.Encounter().Socket.emit('update encounter', _this.Encounter().Save());
+                _this.Encounter().Socket.emit('update encounter', _this.Encounter().EncounterId, _this.Encounter().Save());
             };
             this.LaunchPlayerWindow = function () {
                 var playerWindow = window.open('playerview.html', 'Player View');

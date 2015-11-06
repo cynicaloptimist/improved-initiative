@@ -46,7 +46,7 @@ module ImprovedInitiative {
     }
     
     SendEncounterToServer = () => {
-      this.Encounter().Socket.emit('update encounter', this.Encounter().Save());
+      this.Encounter().Socket.emit('update encounter', this.Encounter().EncounterId, this.Encounter().Save());
     }
     
     LaunchPlayerWindow = () => {

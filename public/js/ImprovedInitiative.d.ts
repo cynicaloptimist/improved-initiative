@@ -124,8 +124,8 @@ declare module ImprovedInitiative {
         ActiveCreature: KnockoutObservable<ICreature>;
         ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string>;
-        Socket: SocketIOClient.Socket;
         EncounterId: string;
+        Socket: SocketIOClient.Socket;
         SortByInitiative: () => void;
         private moveCreature;
         private relativeNavigateFocus;

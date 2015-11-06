@@ -41,6 +41,8 @@ module ImprovedInitiative {
         this.CreatureCountsByName = [];
         this.AddSavedEncounter(encounter)
       })
+      
+      this.Socket.emit('join encounter', this.EncounterId);
     }
     
     Rules: IRules;
@@ -51,8 +53,8 @@ module ImprovedInitiative {
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     State: KnockoutObservable<string> = ko.observable('inactive');
-    Socket: SocketIOClient.Socket = io();
     EncounterId = $('html')[0].getAttribute('encounterId');
+    Socket: SocketIOClient.Socket = io();
     
     SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
