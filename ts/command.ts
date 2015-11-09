@@ -91,7 +91,7 @@ module ImprovedInitiative {
       { Description: 'Save Encounter', 
         KeyBinding: 'alt+s',
         ActionBarIcon: 'fa-save', 
-        GetActionBinding: () => v.SendEncounterToServer,
+        GetActionBinding: () => v.SaveEncounter,
         ShowOnActionBar: ko.observable(true) },
       { Description: 'Show Help and Keybindings', 
         KeyBinding: '?',

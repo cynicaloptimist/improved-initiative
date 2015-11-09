@@ -231,7 +231,7 @@ var ImprovedInitiative;
         { Description: 'Save Encounter',
             KeyBinding: 'alt+s',
             ActionBarIcon: 'fa-save',
-            GetActionBinding: function () { return v.SendEncounterToServer; },
+            GetActionBinding: function () { return v.SaveEncounter; },
             ShowOnActionBar: ko.observable(true) },
         { Description: 'Show Help and Keybindings',
             KeyBinding: '?',
@@ -607,6 +607,22 @@ var ImprovedInitiative;
                     })
                 };
             };
+            this.SaveLight = function (name) {
+                return {
+                    Name: name || _this.EncounterId,
+                    Creatures: _this.Creatures().map(function (c) {
+                        return {
+                            Statblock: ImprovedInitiative.SimplifyStatBlock(c.StatBlock()),
+                            CurrentHP: c.CurrentHP(),
+                            TemporaryHP: c.TemporaryHP(),
+                            Initiative: c.Initiative(),
+                            Alias: c.Alias(),
+                            IndexLabel: c.IndexLabel,
+                            Tags: c.Tags()
+                        };
+                    })
+                };
+            };
             this.AddSavedEncounter = function (e) {
                 e.Creatures
                     .forEach(function (c) {
@@ -909,6 +925,30 @@ var ImprovedInitiative;
         return StatBlock;
     })();
     ImprovedInitiative.StatBlock = StatBlock;
+    ImprovedInitiative.SimplifyStatBlock = function (statBlock) {
+        return {
+            Abilities: statBlock.Abilities,
+            AC: statBlock.AC,
+            Actions: [],
+            Challenge: statBlock.Challenge,
+            ConditionImmunities: [],
+            DamageImmunities: [],
+            DamageResistances: [],
+            DamageVulnerabilities: [],
+            HP: statBlock.HP,
+            InitiativeModifier: statBlock.InitiativeModifier,
+            Languages: [],
+            LegendaryActions: [],
+            Saves: [],
+            Senses: [],
+            Skills: [],
+            Speed: statBlock.Speed,
+            Name: statBlock.Name,
+            Player: statBlock.Player,
+            Traits: [],
+            Type: statBlock.Type
+        };
+    };
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -1014,7 +1054,7 @@ var ImprovedInitiative;
                 _this.RegisterKeybindings();
             };
             this.SendEncounterToServer = function () {
-                _this.Encounter().Socket.emit('update encounter', _this.Encounter().EncounterId, _this.Encounter().Save());
+                _this.Encounter().Socket.emit('update encounter', _this.Encounter().EncounterId, _this.Encounter().SaveLight());
             };
             this.LaunchPlayerWindow = function () {
                 var playerWindow = window.open('playerview.html', 'Player View');

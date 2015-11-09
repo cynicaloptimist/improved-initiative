@@ -61,10 +61,15 @@ module ImprovedInitiative {
                                    (r.InitiativeModifier - l.InitiativeModifier));
     }
     
+    EmitEncounter = () => {
+      this.Socket.emit('update encounter', this.EncounterId, this.SaveLight());
+    }
+    
     private moveCreature = (creature: ICreature, index: number) => 
     {
       this.Creatures.remove(creature);
       this.Creatures.splice(index,0,creature);
+      this.EmitEncounter();
     }
     
     private relativeNavigateFocus = (offset: number) => 
@@ -92,6 +97,8 @@ module ImprovedInitiative {
         creature.Hidden(true);
       }
       this.Creatures.push(creature);
+      
+      this.EmitEncounter();
       return creature;
     }
     
@@ -109,6 +116,7 @@ module ImprovedInitiative {
         }
       })
       
+      this.EmitEncounter();
     }
     
     SelectPreviousCombatant = () =>
@@ -131,7 +139,10 @@ module ImprovedInitiative {
         this.UserPollQueue.Add({
           requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
           inputSelector: '.response',
-          callback: response => selectedCreatures.forEach(c => c.ViewModel.ApplyDamage(response))
+          callback: response => selectedCreatures.forEach(c => {
+            c.ViewModel.ApplyDamage(response);
+            this.EmitEncounter();
+          })
         });
       }
       return false;
@@ -146,7 +157,10 @@ module ImprovedInitiative {
         this.UserPollQueue.Add({
           requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
           inputSelector: '.response',
-          callback: response => selectedCreatures.forEach(c => c.ViewModel.ApplyTemporaryHP(response))
+          callback: response => selectedCreatures.forEach(c => {
+            c.ViewModel.ApplyTemporaryHP(response);
+            this.EmitEncounter();
+          })
         });
       }
       return false;
@@ -159,7 +173,7 @@ module ImprovedInitiative {
     }
     
     EditSelectedCreatureInitiative = () => {
-      this.SelectedCreatures().forEach(c => c.ViewModel.AddTemporaryHP())
+      this.SelectedCreatures().forEach(c => c.ViewModel.EditInitiative())
       return false;
     }
     
@@ -214,11 +228,13 @@ module ImprovedInitiative {
     StartEncounter = () => {
       this.State('active');
       this.ActiveCreature(this.Creatures()[0]);
+      this.EmitEncounter();
     }
     
     EndEncounter = () => {
       this.State('inactive');
       this.ActiveCreature(null);
+      this.EmitEncounter();
     }
     
     RollInitiative = () =>
@@ -255,6 +271,7 @@ module ImprovedInitiative {
         nextIndex = 0;
       }
       this.ActiveCreature(this.Creatures()[nextIndex]);
+      this.EmitEncounter();
     }
     
     PreviousTurn = () => {
@@ -263,6 +280,7 @@ module ImprovedInitiative {
         previousIndex = this.Creatures().length - 1;
       }
       this.ActiveCreature(this.Creatures()[previousIndex]);
+      this.EmitEncounter();
     }
     
     Save: (name?: string) => ISavedEncounter = (name?: string) => {
@@ -271,6 +289,23 @@ module ImprovedInitiative {
         Creatures: this.Creatures().map<ISavedCreature>(c => {
           return {
             Statblock: c.StatBlock(),
+            CurrentHP: c.CurrentHP(),
+            TemporaryHP: c.TemporaryHP(),
+            Initiative: c.Initiative(),
+            Alias: c.Alias(),
+            IndexLabel: c.IndexLabel,
+            Tags: c.Tags()
+          }
+        })
+      };
+    }
+    
+    SaveLight: (name?: string) => ISavedEncounter = (name?: string) => {
+      return {
+        Name: name || this.EncounterId,
+        Creatures: this.Creatures().map<ISavedCreature>(c => {
+          return {
+            Statblock: SimplifyStatBlock(c.StatBlock()),
             CurrentHP: c.CurrentHP(),
             TemporaryHP: c.TemporaryHP(),
             Initiative: c.Initiative(),

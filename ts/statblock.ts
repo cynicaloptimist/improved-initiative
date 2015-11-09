@@ -87,4 +87,29 @@ module ImprovedInitiative {
     
     static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
 	}
+  
+  export var SimplifyStatBlock: (statblock: IStatBlock) => IStatBlock = (statBlock) => {
+    return {
+            Abilities: statBlock.Abilities,
+            AC: statBlock.AC,
+            Actions: [],
+            Challenge: statBlock.Challenge,
+            ConditionImmunities: [],
+            DamageImmunities: [],
+            DamageResistances: [],
+            DamageVulnerabilities: [],
+            HP: statBlock.HP,
+            InitiativeModifier: statBlock.InitiativeModifier,
+            Languages: [],
+            LegendaryActions: [],
+            Saves: [],
+            Senses: [],
+            Skills: [],
+            Speed: statBlock.Speed,
+            Name: statBlock.Name,
+            Player: statBlock.Player,
+            Traits: [],
+            Type: statBlock.Type
+          };
+  }
 }

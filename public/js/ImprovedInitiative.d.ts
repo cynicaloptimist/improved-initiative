@@ -149,6 +149,7 @@ declare module ImprovedInitiative {
         NextTurn: () => void;
         PreviousTurn: () => void;
         Save: (name?: string) => ISavedEncounter;
+        SaveLight: (name?: string) => ISavedEncounter;
         AddSavedEncounter: (e: ISavedEncounter) => void;
     }
 }
@@ -274,6 +275,7 @@ declare module ImprovedInitiative {
         static Empty: (mutator?: (s: IStatBlock) => void) => IStatBlock;
         static AbilityNames: string[];
     }
+    var SimplifyStatBlock: (statblock: IStatBlock) => IStatBlock;
 }
 declare module ImprovedInitiative {
     interface IStatBlockEditor {

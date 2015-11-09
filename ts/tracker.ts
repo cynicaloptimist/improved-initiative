@@ -45,10 +45,6 @@ module ImprovedInitiative {
       this.RegisterKeybindings();
     }
     
-    SendEncounterToServer = () => {
-      this.Encounter().Socket.emit('update encounter', this.Encounter().EncounterId, this.Encounter().Save());
-    }
-    
     LaunchPlayerWindow = () => {
       var playerWindow = window.open('playerview.html', 'Player View');
       playerWindow.initChild = (pWindow) => {
