@@ -36,6 +36,10 @@ var ImprovedInitiative;
                 }
                 _this.Creature.TemporaryHP(currentTemporaryHP);
             };
+            this.ApplyInitiative = function (inputInitiative) {
+                _this.Creature.Initiative(inputInitiative);
+                _this.Creature.Encounter.SortByInitiative();
+            };
             this.GetHPColor = function () {
                 var green = Math.floor((_this.Creature.CurrentHP() / _this.Creature.MaxHP) * 170);
                 var red = Math.floor((_this.Creature.MaxHP - _this.Creature.CurrentHP()) / _this.Creature.MaxHP * 170);
@@ -45,21 +49,30 @@ var ImprovedInitiative;
                 _this.PollUser({
                     requestContent: "Apply damage to " + _this.DisplayName() + ": <input class='response' type='number' />",
                     inputSelector: '.response',
-                    callback: _this.ApplyDamage
+                    callback: function (damage) {
+                        _this.ApplyDamage(damage);
+                        _this.Creature.Encounter.EmitEncounter();
+                    }
                 });
             };
             this.EditInitiative = function () {
                 _this.PollUser({
                     requestContent: "Update initiative for " + _this.DisplayName() + ": <input class='response' type='number' />",
                     inputSelector: '.response',
-                    callback: _this.Creature.Initiative
+                    callback: function (initiative) {
+                        _this.ApplyInitiative(initiative);
+                        _this.Creature.Encounter.EmitEncounter();
+                    }
                 });
             };
             this.AddTemporaryHP = function () {
                 _this.PollUser({
                     requestContent: "Grant temporary hit points to " + _this.DisplayName() + ": <input class='response' type='number' />",
                     inputSelector: '.response',
-                    callback: _this.ApplyTemporaryHP
+                    callback: function (thp) {
+                        _this.ApplyTemporaryHP(thp);
+                        _this.Creature.Encounter.EmitEncounter();
+                    }
                 });
             };
             this.HiddenClass = ko.computed(function () {
@@ -309,7 +322,6 @@ var ImprovedInitiative;
             this.Tags = ko.observableArray();
             this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
             this.Initiative = ko.observable(0);
-            this.Initiative.subscribe(this.Encounter.SortByInitiative);
         }
         Creature.prototype.setIndexLabel = function () {
             var name = this.StatBlock().Name, counts = this.Encounter.CreatureCountsByName;
@@ -423,10 +435,28 @@ var ImprovedInitiative;
             this.SortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
+                _this.EmitEncounter();
+            };
+            this.EmitEncounter = function () {
+                if ($('#tracker').length) {
+                    _this.Socket.emit('update encounter', _this.EncounterId, _this.SaveLight());
+                }
             };
             this.moveCreature = function (creature, index) {
+                var currentPosition = _this.Creatures().indexOf(creature);
+                var newInitiative = creature.Initiative();
+                var creatureBefore = _this.Creatures()[index];
+                var creatureAfter = _this.Creatures()[index + 1];
+                if (index > currentPosition && creatureBefore && creatureBefore.Initiative() < creature.Initiative()) {
+                    newInitiative = creatureBefore.Initiative();
+                }
+                if (index < currentPosition && creatureAfter && creatureAfter.Initiative() > creature.Initiative()) {
+                    newInitiative = creatureAfter.Initiative();
+                }
                 _this.Creatures.remove(creature);
                 _this.Creatures.splice(index, 0, creature);
+                creature.Initiative(newInitiative);
+                _this.EmitEncounter();
             };
             this.relativeNavigateFocus = function (offset) {
                 var newIndex = _this.Creatures.indexOf(_this.SelectedCreatures()[0]) + offset;
@@ -452,6 +482,7 @@ var ImprovedInitiative;
                     creature.Hidden(true);
                 }
                 _this.Creatures.push(creature);
+                _this.EmitEncounter();
                 return creature;
             };
             this.RemoveSelectedCreatures = function () {
@@ -463,6 +494,7 @@ var ImprovedInitiative;
                         _this.CreatureCountsByName[name](0);
                     }
                 });
+                _this.EmitEncounter();
             };
             this.SelectPreviousCombatant = function () {
                 _this.relativeNavigateFocus(-1);
@@ -472,32 +504,28 @@ var ImprovedInitiative;
             };
             this.FocusSelectedCreatureHP = function () {
                 var selectedCreatures = _this.SelectedCreatures();
-                if (selectedCreatures.length == 1) {
-                    selectedCreatures[0].ViewModel.EditHP();
-                }
-                else {
-                    var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
-                    _this.UserPollQueue.Add({
-                        requestContent: "Apply damage to " + creatureNames + ": <input class='response' type='number' />",
-                        inputSelector: '.response',
-                        callback: function (response) { return selectedCreatures.forEach(function (c) { return c.ViewModel.ApplyDamage(response); }); }
-                    });
-                }
+                var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
+                _this.UserPollQueue.Add({
+                    requestContent: "Apply damage to " + creatureNames + ": <input class='response' type='number' />",
+                    inputSelector: '.response',
+                    callback: function (response) { return selectedCreatures.forEach(function (c) {
+                        c.ViewModel.ApplyDamage(response);
+                        _this.EmitEncounter();
+                    }); }
+                });
                 return false;
             };
             this.AddSelectedCreaturesTemporaryHP = function () {
                 var selectedCreatures = _this.SelectedCreatures();
-                if (selectedCreatures.length == 1) {
-                    selectedCreatures[0].ViewModel.AddTemporaryHP();
-                }
-                else {
-                    var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
-                    _this.UserPollQueue.Add({
-                        requestContent: "Grant temporary hit points to " + creatureNames + ": <input class='response' type='number' />",
-                        inputSelector: '.response',
-                        callback: function (response) { return selectedCreatures.forEach(function (c) { return c.ViewModel.ApplyTemporaryHP(response); }); }
-                    });
-                }
+                var creatureNames = selectedCreatures.map(function (c) { return c.ViewModel.DisplayName(); }).join(', ');
+                _this.UserPollQueue.Add({
+                    requestContent: "Grant temporary hit points to " + creatureNames + ": <input class='response' type='number' />",
+                    inputSelector: '.response',
+                    callback: function (response) { return selectedCreatures.forEach(function (c) {
+                        c.ViewModel.ApplyTemporaryHP(response);
+                        _this.EmitEncounter();
+                    }); }
+                });
                 return false;
             };
             this.AddSelectedCreatureTag = function () {
@@ -505,7 +533,7 @@ var ImprovedInitiative;
                 return false;
             };
             this.EditSelectedCreatureInitiative = function () {
-                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.AddTemporaryHP(); });
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.EditInitiative(); });
                 return false;
             };
             this.MoveSelectedCreatureUp = function () {
@@ -547,12 +575,15 @@ var ImprovedInitiative;
                 $('form input').select();
             };
             this.StartEncounter = function () {
+                _this.SortByInitiative();
                 _this.State('active');
                 _this.ActiveCreature(_this.Creatures()[0]);
+                _this.EmitEncounter();
             };
             this.EndEncounter = function () {
                 _this.State('inactive');
                 _this.ActiveCreature(null);
+                _this.EmitEncounter();
             };
             this.RollInitiative = function () {
                 // Foreaching over the original array while we're rearranging it
@@ -583,6 +614,7 @@ var ImprovedInitiative;
                     nextIndex = 0;
                 }
                 _this.ActiveCreature(_this.Creatures()[nextIndex]);
+                _this.EmitEncounter();
             };
             this.PreviousTurn = function () {
                 var previousIndex = _this.Creatures().indexOf(_this.ActiveCreature()) - 1;
@@ -590,10 +622,12 @@ var ImprovedInitiative;
                     previousIndex = _this.Creatures().length - 1;
                 }
                 _this.ActiveCreature(_this.Creatures()[previousIndex]);
+                _this.EmitEncounter();
             };
             this.Save = function (name) {
                 return {
                     Name: name || _this.EncounterId,
+                    ActiveCreatureIndex: _this.Creatures().indexOf(_this.ActiveCreature()),
                     Creatures: _this.Creatures().map(function (c) {
                         return {
                             Statblock: c.StatBlock(),
@@ -610,6 +644,7 @@ var ImprovedInitiative;
             this.SaveLight = function (name) {
                 return {
                     Name: name || _this.EncounterId,
+                    ActiveCreatureIndex: _this.Creatures().indexOf(_this.ActiveCreature()),
                     Creatures: _this.Creatures().map(function (c) {
                         return {
                             Statblock: ImprovedInitiative.SimplifyStatBlock(c.StatBlock()),
@@ -635,6 +670,23 @@ var ImprovedInitiative;
                     creature.Tags(c.Tags);
                 });
             };
+            this.LoadSavedEncounter = function (e) {
+                _this.Creatures.removeAll();
+                e.Creatures
+                    .forEach(function (c) {
+                    var creature = _this.AddCreature(c.Statblock);
+                    creature.CurrentHP(c.CurrentHP);
+                    creature.TemporaryHP(c.TemporaryHP);
+                    creature.Initiative(c.Initiative);
+                    creature.IndexLabel = c.IndexLabel;
+                    creature.Alias(c.Alias);
+                    creature.Tags(c.Tags);
+                });
+                if (e.ActiveCreatureIndex != -1) {
+                    _this.State('active');
+                    _this.ActiveCreature(_this.Creatures()[e.ActiveCreatureIndex]);
+                }
+            };
             this.Rules = rules || new ImprovedInitiative.DefaultRules();
             this.Creatures = ko.observableArray();
             this.CreatureCountsByName = [];
@@ -657,7 +709,7 @@ var ImprovedInitiative;
             this.Socket.on('update encounter', function (encounter) {
                 _this.Creatures([]);
                 _this.CreatureCountsByName = [];
-                _this.AddSavedEncounter(encounter);
+                _this.LoadSavedEncounter(encounter);
             });
             this.Socket.emit('join encounter', this.EncounterId);
         }
@@ -675,7 +727,7 @@ var ImprovedInitiative;
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
             this.PreviewCreature = ko.observable(ImprovedInitiative.StatBlock.Empty());
-            this.PreviewEncounter = ko.observable({ Creatures: [], Name: '' });
+            this.PreviewEncounter = ko.observable({ Creatures: [], ActiveCreatureIndex: -1, Name: '' });
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {
@@ -1053,15 +1105,8 @@ var ImprovedInitiative;
                 _this.Encounter().AddSavedEncounter(JSON.parse(encounterJSON));
                 _this.RegisterKeybindings();
             };
-            this.SendEncounterToServer = function () {
-                _this.Encounter().Socket.emit('update encounter', _this.Encounter().EncounterId, _this.Encounter().SaveLight());
-            };
             this.LaunchPlayerWindow = function () {
-                var playerWindow = window.open('playerview.html', 'Player View');
-                playerWindow.initChild = function (pWindow) {
-                    pWindow.ko = ko;
-                    pWindow.ko.applyBindings(_this, pWindow.document.body);
-                };
+                window.open('../p/' + _this.Encounter().EncounterId, 'Player View');
             };
             this.ShowLibraries = function () {
                 $('.libraries').slideDown();

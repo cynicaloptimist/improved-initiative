@@ -10,6 +10,7 @@ module ImprovedInitiative {
   }
   export interface ISavedEncounter {
     Name: string;
+    ActiveCreatureIndex: number;
     Creatures: ISavedCreature [];
   }
   
@@ -39,7 +40,7 @@ module ImprovedInitiative {
       this.Socket.on('update encounter', (encounter) => {
         this.Creatures([]);
         this.CreatureCountsByName = [];
-        this.AddSavedEncounter(encounter)
+        this.LoadSavedEncounter(encounter)
       })
       
       this.Socket.emit('join encounter', this.EncounterId);
@@ -59,16 +60,30 @@ module ImprovedInitiative {
     SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
                                    (r.InitiativeModifier - l.InitiativeModifier));
+      this.EmitEncounter();
     }
     
     EmitEncounter = () => {
-      this.Socket.emit('update encounter', this.EncounterId, this.SaveLight());
+      if($('#tracker').length){
+        this.Socket.emit('update encounter', this.EncounterId, this.SaveLight());
+      }
     }
     
     private moveCreature = (creature: ICreature, index: number) => 
     {
+      var currentPosition = this.Creatures().indexOf(creature);
+      var newInitiative = creature.Initiative();
+      var creatureBefore = this.Creatures()[index];
+      var creatureAfter = this.Creatures()[index + 1];
+      if(index > currentPosition && creatureBefore && creatureBefore.Initiative() < creature.Initiative()){
+        newInitiative = creatureBefore.Initiative();
+      }
+      if(index < currentPosition && creatureAfter && creatureAfter.Initiative() > creature.Initiative()){
+        newInitiative = creatureAfter.Initiative();
+      }
       this.Creatures.remove(creature);
       this.Creatures.splice(index,0,creature);
+      creature.Initiative(newInitiative);
       this.EmitEncounter();
     }
     
@@ -132,37 +147,29 @@ module ImprovedInitiative {
     FocusSelectedCreatureHP = () =>
     {
       var selectedCreatures = this.SelectedCreatures();
-      if(selectedCreatures.length == 1){
-        selectedCreatures[0].ViewModel.EditHP()
-      } else {
-        var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
-        this.UserPollQueue.Add({
-          requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
-          inputSelector: '.response',
-          callback: response => selectedCreatures.forEach(c => {
-            c.ViewModel.ApplyDamage(response);
-            this.EmitEncounter();
-          })
-        });
-      }
+      var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+      this.UserPollQueue.Add({
+        requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
+        inputSelector: '.response',
+        callback: response => selectedCreatures.forEach(c => {
+          c.ViewModel.ApplyDamage(response);
+          this.EmitEncounter();
+        })
+      });
       return false;
     }
     
     AddSelectedCreaturesTemporaryHP = () => {
       var selectedCreatures = this.SelectedCreatures();
-      if(selectedCreatures.length == 1){
-        selectedCreatures[0].ViewModel.AddTemporaryHP()
-      } else {
-        var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
-        this.UserPollQueue.Add({
-          requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
-          inputSelector: '.response',
-          callback: response => selectedCreatures.forEach(c => {
-            c.ViewModel.ApplyTemporaryHP(response);
-            this.EmitEncounter();
-          })
-        });
-      }
+      var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+      this.UserPollQueue.Add({
+        requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
+        inputSelector: '.response',
+        callback: response => selectedCreatures.forEach(c => {
+          c.ViewModel.ApplyTemporaryHP(response);
+          this.EmitEncounter();
+        })
+      });
       return false;
     }
     
@@ -226,6 +233,7 @@ module ImprovedInitiative {
     }
     
     StartEncounter = () => {
+      this.SortByInitiative();
       this.State('active');
       this.ActiveCreature(this.Creatures()[0]);
       this.EmitEncounter();
@@ -286,6 +294,7 @@ module ImprovedInitiative {
     Save: (name?: string) => ISavedEncounter = (name?: string) => {
       return {
         Name: name || this.EncounterId,
+        ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
         Creatures: this.Creatures().map<ISavedCreature>(c => {
           return {
             Statblock: c.StatBlock(),
@@ -303,6 +312,7 @@ module ImprovedInitiative {
     SaveLight: (name?: string) => ISavedEncounter = (name?: string) => {
       return {
         Name: name || this.EncounterId,
+        ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
         Creatures: this.Creatures().map<ISavedCreature>(c => {
           return {
             Statblock: SimplifyStatBlock(c.StatBlock()),
@@ -328,6 +338,24 @@ module ImprovedInitiative {
         creature.Alias(c.Alias);
         creature.Tags(c.Tags);
       })
+    }
+    
+    LoadSavedEncounter: (e: ISavedEncounter) => void = e => {
+      this.Creatures.removeAll();
+      e.Creatures
+       .forEach(c => {
+        var creature = this.AddCreature(c.Statblock);
+        creature.CurrentHP(c.CurrentHP);
+        creature.TemporaryHP(c.TemporaryHP);
+        creature.Initiative(c.Initiative);
+        creature.IndexLabel = c.IndexLabel;
+        creature.Alias(c.Alias);
+        creature.Tags(c.Tags);
+      });
+      if(e.ActiveCreatureIndex != -1){
+        this.State('active');
+        this.ActiveCreature(this.Creatures()[e.ActiveCreatureIndex]);
+      }
     }
   }
 }

@@ -76,6 +76,11 @@ module ImprovedInitiative {
       this.Creature.TemporaryHP(currentTemporaryHP);
     }
     
+    ApplyInitiative = inputInitiative => {
+      this.Creature.Initiative(inputInitiative);
+      this.Creature.Encounter.SortByInitiative();
+    }
+    
     GetHPColor = () => {
       var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
       var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
@@ -86,7 +91,10 @@ module ImprovedInitiative {
       this.PollUser({
         requestContent: `Apply damage to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
-        callback: this.ApplyDamage
+        callback: damage => {
+          this.ApplyDamage(damage);
+          this.Creature.Encounter.EmitEncounter();
+        }
       });
     }
     
@@ -94,7 +102,10 @@ module ImprovedInitiative {
       this.PollUser({
         requestContent: `Update initiative for ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
-        callback: this.Creature.Initiative
+        callback: initiative => {
+          this.ApplyInitiative(initiative);
+          this.Creature.Encounter.EmitEncounter();
+        }
       });
     }
     
@@ -102,7 +113,10 @@ module ImprovedInitiative {
       this.PollUser({
         requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
         inputSelector: '.response',
-        callback: this.ApplyTemporaryHP
+        callback: thp => {
+          this.ApplyTemporaryHP(thp);
+          this.Creature.Encounter.EmitEncounter();
+        }
       });
     }
     

@@ -12,6 +12,7 @@ declare module ImprovedInitiative {
         constructor(Creature: Creature, PollUser: (poll: IUserPoll) => void);
         ApplyDamage: (inputDamage: any) => void;
         ApplyTemporaryHP: (inputTHP: any) => void;
+        ApplyInitiative: (inputInitiative: any) => void;
         GetHPColor: () => string;
         EditHP: () => void;
         EditInitiative: () => void;
@@ -110,6 +111,7 @@ declare module ImprovedInitiative {
     }
     interface ISavedEncounter {
         Name: string;
+        ActiveCreatureIndex: number;
         Creatures: ISavedCreature[];
     }
     class Encounter {
@@ -127,6 +129,7 @@ declare module ImprovedInitiative {
         EncounterId: string;
         Socket: SocketIOClient.Socket;
         SortByInitiative: () => void;
+        EmitEncounter: () => void;
         private moveCreature;
         private relativeNavigateFocus;
         AddCreature: (creatureJson: IHaveTrackerStats, event?: any) => ICreature;
@@ -151,6 +154,7 @@ declare module ImprovedInitiative {
         Save: (name?: string) => ISavedEncounter;
         SaveLight: (name?: string) => ISavedEncounter;
         AddSavedEncounter: (e: ISavedEncounter) => void;
+        LoadSavedEncounter: (e: ISavedEncounter) => void;
     }
 }
 declare module ImprovedInitiative {
@@ -312,7 +316,6 @@ declare module ImprovedInitiative {
         Library: CreatureLibrary;
         SaveEncounter: () => void;
         LoadEncounterByName: (encounterName: string) => void;
-        SendEncounterToServer: () => void;
         LaunchPlayerWindow: () => void;
         ShowLibraries: () => void;
         Commands: {

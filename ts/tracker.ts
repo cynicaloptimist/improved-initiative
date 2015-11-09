@@ -46,11 +46,7 @@ module ImprovedInitiative {
     }
     
     LaunchPlayerWindow = () => {
-      var playerWindow = window.open('playerview.html', 'Player View');
-      playerWindow.initChild = (pWindow) => {
-        pWindow.ko = ko;
-        pWindow.ko.applyBindings(this, pWindow.document.body);
-      }
+      window.open('../p/' + this.Encounter().EncounterId, 'Player View');
     }
     
     ShowLibraries = () => {
