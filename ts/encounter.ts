@@ -7,6 +7,7 @@ module ImprovedInitiative {
     Alias: string;
     IndexLabel: number;
     Tags: string [];
+    Hidden: boolean;
   }
   export interface ISavedEncounter {
     Name: string;
@@ -73,13 +74,12 @@ module ImprovedInitiative {
     {
       var currentPosition = this.Creatures().indexOf(creature);
       var newInitiative = creature.Initiative();
-      var creatureBefore = this.Creatures()[index];
-      var creatureAfter = this.Creatures()[index + 1];
-      if(index > currentPosition && creatureBefore && creatureBefore.Initiative() < creature.Initiative()){
-        newInitiative = creatureBefore.Initiative();
+      var passedCreature = this.Creatures()[index];
+      if(index > currentPosition && passedCreature && passedCreature.Initiative() < creature.Initiative()){
+        newInitiative = passedCreature.Initiative();
       }
-      if(index < currentPosition && creatureAfter && creatureAfter.Initiative() > creature.Initiative()){
-        newInitiative = creatureAfter.Initiative();
+      if(index < currentPosition && passedCreature && passedCreature.Initiative() > creature.Initiative()){
+        newInitiative = passedCreature.Initiative();
       }
       this.Creatures.remove(creature);
       this.Creatures.splice(index,0,creature);
@@ -303,7 +303,8 @@ module ImprovedInitiative {
             Initiative: c.Initiative(),
             Alias: c.Alias(),
             IndexLabel: c.IndexLabel,
-            Tags: c.Tags()
+            Tags: c.Tags(),
+            Hidden: c.Hidden()
           }
         })
       };
@@ -321,37 +322,31 @@ module ImprovedInitiative {
             Initiative: c.Initiative(),
             Alias: c.Alias(),
             IndexLabel: c.IndexLabel,
-            Tags: c.Tags()
+            Tags: c.Tags(),
+            Hidden: c.Hidden()
           }
         })
       };
     }
     
+    private loadCreature = (savedCreature: ISavedCreature) => {
+        var creature = this.AddCreature(savedCreature.Statblock);
+        creature.CurrentHP(savedCreature.CurrentHP);
+        creature.TemporaryHP(savedCreature.TemporaryHP);
+        creature.Initiative(savedCreature.Initiative);
+        creature.IndexLabel = savedCreature.IndexLabel;
+        creature.Alias(savedCreature.Alias);
+        creature.Tags(savedCreature.Tags);
+        creature.Hidden(savedCreature.Hidden);
+    }
+    
     AddSavedEncounter: (e: ISavedEncounter) => void = e => {
-      e.Creatures
-       .forEach(c => {
-        var creature = this.AddCreature(c.Statblock);
-        creature.CurrentHP(c.CurrentHP);
-        creature.TemporaryHP(c.TemporaryHP);
-        creature.Initiative(c.Initiative);
-        creature.IndexLabel = c.IndexLabel;
-        creature.Alias(c.Alias);
-        creature.Tags(c.Tags);
-      })
+      e.Creatures.forEach(this.loadCreature);
     }
     
     LoadSavedEncounter: (e: ISavedEncounter) => void = e => {
       this.Creatures.removeAll();
-      e.Creatures
-       .forEach(c => {
-        var creature = this.AddCreature(c.Statblock);
-        creature.CurrentHP(c.CurrentHP);
-        creature.TemporaryHP(c.TemporaryHP);
-        creature.Initiative(c.Initiative);
-        creature.IndexLabel = c.IndexLabel;
-        creature.Alias(c.Alias);
-        creature.Tags(c.Tags);
-      });
+      e.Creatures.forEach(this.loadCreature);
       if(e.ActiveCreatureIndex != -1){
         this.State('active');
         this.ActiveCreature(this.Creatures()[e.ActiveCreatureIndex]);

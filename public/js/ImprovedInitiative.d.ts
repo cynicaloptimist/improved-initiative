@@ -108,6 +108,7 @@ declare module ImprovedInitiative {
         Alias: string;
         IndexLabel: number;
         Tags: string[];
+        Hidden: boolean;
     }
     interface ISavedEncounter {
         Name: string;
@@ -153,6 +154,7 @@ declare module ImprovedInitiative {
         PreviousTurn: () => void;
         Save: (name?: string) => ISavedEncounter;
         SaveLight: (name?: string) => ISavedEncounter;
+        private loadCreature;
         AddSavedEncounter: (e: ISavedEncounter) => void;
         LoadSavedEncounter: (e: ISavedEncounter) => void;
     }

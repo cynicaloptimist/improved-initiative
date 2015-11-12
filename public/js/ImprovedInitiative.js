@@ -445,13 +445,12 @@ var ImprovedInitiative;
             this.moveCreature = function (creature, index) {
                 var currentPosition = _this.Creatures().indexOf(creature);
                 var newInitiative = creature.Initiative();
-                var creatureBefore = _this.Creatures()[index];
-                var creatureAfter = _this.Creatures()[index + 1];
-                if (index > currentPosition && creatureBefore && creatureBefore.Initiative() < creature.Initiative()) {
-                    newInitiative = creatureBefore.Initiative();
+                var passedCreature = _this.Creatures()[index];
+                if (index > currentPosition && passedCreature && passedCreature.Initiative() < creature.Initiative()) {
+                    newInitiative = passedCreature.Initiative();
                 }
-                if (index < currentPosition && creatureAfter && creatureAfter.Initiative() > creature.Initiative()) {
-                    newInitiative = creatureAfter.Initiative();
+                if (index < currentPosition && passedCreature && passedCreature.Initiative() > creature.Initiative()) {
+                    newInitiative = passedCreature.Initiative();
                 }
                 _this.Creatures.remove(creature);
                 _this.Creatures.splice(index, 0, creature);
@@ -636,7 +635,8 @@ var ImprovedInitiative;
                             Initiative: c.Initiative(),
                             Alias: c.Alias(),
                             IndexLabel: c.IndexLabel,
-                            Tags: c.Tags()
+                            Tags: c.Tags(),
+                            Hidden: c.Hidden()
                         };
                     })
                 };
@@ -653,35 +653,28 @@ var ImprovedInitiative;
                             Initiative: c.Initiative(),
                             Alias: c.Alias(),
                             IndexLabel: c.IndexLabel,
-                            Tags: c.Tags()
+                            Tags: c.Tags(),
+                            Hidden: c.Hidden()
                         };
                     })
                 };
             };
+            this.loadCreature = function (savedCreature) {
+                var creature = _this.AddCreature(savedCreature.Statblock);
+                creature.CurrentHP(savedCreature.CurrentHP);
+                creature.TemporaryHP(savedCreature.TemporaryHP);
+                creature.Initiative(savedCreature.Initiative);
+                creature.IndexLabel = savedCreature.IndexLabel;
+                creature.Alias(savedCreature.Alias);
+                creature.Tags(savedCreature.Tags);
+                creature.Hidden(savedCreature.Hidden);
+            };
             this.AddSavedEncounter = function (e) {
-                e.Creatures
-                    .forEach(function (c) {
-                    var creature = _this.AddCreature(c.Statblock);
-                    creature.CurrentHP(c.CurrentHP);
-                    creature.TemporaryHP(c.TemporaryHP);
-                    creature.Initiative(c.Initiative);
-                    creature.IndexLabel = c.IndexLabel;
-                    creature.Alias(c.Alias);
-                    creature.Tags(c.Tags);
-                });
+                e.Creatures.forEach(_this.loadCreature);
             };
             this.LoadSavedEncounter = function (e) {
                 _this.Creatures.removeAll();
-                e.Creatures
-                    .forEach(function (c) {
-                    var creature = _this.AddCreature(c.Statblock);
-                    creature.CurrentHP(c.CurrentHP);
-                    creature.TemporaryHP(c.TemporaryHP);
-                    creature.Initiative(c.Initiative);
-                    creature.IndexLabel = c.IndexLabel;
-                    creature.Alias(c.Alias);
-                    creature.Tags(c.Tags);
-                });
+                e.Creatures.forEach(_this.loadCreature);
                 if (e.ActiveCreatureIndex != -1) {
                     _this.State('active');
                     _this.ActiveCreature(_this.Creatures()[e.ActiveCreatureIndex]);
