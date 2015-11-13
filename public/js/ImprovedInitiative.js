@@ -645,7 +645,7 @@ var ImprovedInitiative;
                 return {
                     Name: name || _this.EncounterId,
                     ActiveCreatureIndex: _this.Creatures().indexOf(_this.ActiveCreature()),
-                    Creatures: _this.Creatures().map(function (c) { return new ImprovedInitiative.PlayerDisplayCreature(c); })
+                    Creatures: _this.Creatures().map(function (c) { return new ImprovedInitiative.PlayerViewCreature(c); })
                 };
             };
             this.loadCreature = function (savedCreature) {
@@ -911,15 +911,15 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var PlayerDisplayCreature = (function () {
-        function PlayerDisplayCreature(creature) {
+    var PlayerViewCreature = (function () {
+        function PlayerViewCreature(creature) {
             this.Name = creature.Alias() + creature.IndexLabel;
             this.HPPercentage = creature.CurrentHP() / creature.MaxHP;
             this.Initiative = creature.Initiative();
         }
-        return PlayerDisplayCreature;
+        return PlayerViewCreature;
     })();
-    ImprovedInitiative.PlayerDisplayCreature = PlayerDisplayCreature;
+    ImprovedInitiative.PlayerViewCreature = PlayerViewCreature;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -1067,6 +1067,60 @@ var ImprovedInitiative;
         'DamageImmunities': 'Damage Immunities',
         'ConditionImmunities': 'Condition Immunities'
     };
+    $(function () {
+        if ($('#tracker').length) {
+            var viewModel = new ImprovedInitiative.ViewModel();
+            viewModel.RegisterKeybindings();
+            ko.applyBindings(viewModel, document.body);
+            $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(function () {
+                $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
+            });
+            $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
+        }
+        if ($('#playerview').length) {
+            var viewModel = new ImprovedInitiative.ViewModel();
+            ko.applyBindings(viewModel, document.body);
+        }
+    });
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var UserPollQueue = (function () {
+        function UserPollQueue() {
+            var _this = this;
+            this.Queue = ko.observableArray();
+            this.Add = function (poll) {
+                _this.Queue.push(poll);
+            };
+            this.checkForAutoResolve = function () {
+                var poll = _this.Queue()[0];
+                if (poll && !poll.requestContent) {
+                    poll.callback(null);
+                    _this.Queue.shift();
+                }
+            };
+            this.Resolve = function (form) {
+                var poll = _this.Queue()[0];
+                poll.callback($(form).find(poll.inputSelector).val());
+                _this.Queue.shift();
+                return false;
+            };
+            this.CurrentPoll = ko.pureComputed(function () {
+                return _this.Queue()[0];
+            });
+            this.FocusCurrentPoll = function () {
+                if (_this.Queue[0]) {
+                    $(_this.Queue[0].inputSelector).select();
+                }
+            };
+            this.Queue.subscribe(this.checkForAutoResolve);
+        }
+        return UserPollQueue;
+    })();
+    ImprovedInitiative.UserPollQueue = UserPollQueue;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
     var ViewModel = (function () {
         function ViewModel() {
             var _this = this;
@@ -1119,56 +1173,5 @@ var ImprovedInitiative;
         return ViewModel;
     })();
     ImprovedInitiative.ViewModel = ViewModel;
-    $(function () {
-        if ($('#tracker').length) {
-            var viewModel = new ViewModel();
-            viewModel.RegisterKeybindings();
-            ko.applyBindings(viewModel, document.body);
-            $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(function () {
-                $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
-            });
-            $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
-        }
-        if ($('#playerview').length) {
-            var viewModel = new ViewModel();
-            ko.applyBindings(viewModel, document.body);
-        }
-    });
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
-    var UserPollQueue = (function () {
-        function UserPollQueue() {
-            var _this = this;
-            this.Queue = ko.observableArray();
-            this.Add = function (poll) {
-                _this.Queue.push(poll);
-            };
-            this.checkForAutoResolve = function () {
-                var poll = _this.Queue()[0];
-                if (poll && !poll.requestContent) {
-                    poll.callback(null);
-                    _this.Queue.shift();
-                }
-            };
-            this.Resolve = function (form) {
-                var poll = _this.Queue()[0];
-                poll.callback($(form).find(poll.inputSelector).val());
-                _this.Queue.shift();
-                return false;
-            };
-            this.CurrentPoll = ko.pureComputed(function () {
-                return _this.Queue()[0];
-            });
-            this.FocusCurrentPoll = function () {
-                if (_this.Queue[0]) {
-                    $(_this.Queue[0].inputSelector).select();
-                }
-            };
-            this.Queue.subscribe(this.checkForAutoResolve);
-        }
-        return UserPollQueue;
-    })();
-    ImprovedInitiative.UserPollQueue = UserPollQueue;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 //# sourceMappingURL=ImprovedInitiative.js.map

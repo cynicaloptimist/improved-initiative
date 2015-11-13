@@ -153,7 +153,7 @@ declare module ImprovedInitiative {
         NextTurn: () => void;
         PreviousTurn: () => void;
         Save: (name?: string) => ISavedEncounter<ISavedCreature>;
-        SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerDisplayCreature>;
+        SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerViewCreature>;
         private loadCreature;
         AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
         LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
@@ -204,7 +204,7 @@ declare module ImprovedInitiative {
     }
 }
 declare module ImprovedInitiative {
-    class PlayerDisplayCreature {
+    class PlayerViewCreature {
         Name: string;
         HPPercentage: number;
         Initiative: number;
@@ -319,6 +319,24 @@ declare module ImprovedInitiative {
         'DamageImmunities': string;
         'ConditionImmunities': string;
     };
+}
+declare module ImprovedInitiative {
+    interface IUserPoll {
+        requestContent?: string;
+        inputSelector?: string;
+        callback: (response: any) => void;
+    }
+    class UserPollQueue {
+        Queue: KnockoutObservableArray<IUserPoll>;
+        constructor();
+        Add: (poll: IUserPoll) => void;
+        private checkForAutoResolve;
+        Resolve: (form: HTMLFormElement) => boolean;
+        CurrentPoll: KnockoutComputed<IUserPoll>;
+        FocusCurrentPoll: () => void;
+    }
+}
+declare module ImprovedInitiative {
     class ViewModel {
         UserPollQueue: UserPollQueue;
         StatBlockEditor: StatBlockEditor;
@@ -337,21 +355,5 @@ declare module ImprovedInitiative {
         }[];
         ToggleCommandDisplay: () => void;
         RegisterKeybindings(): void;
-    }
-}
-declare module ImprovedInitiative {
-    interface IUserPoll {
-        requestContent?: string;
-        inputSelector?: string;
-        callback: (response: any) => void;
-    }
-    class UserPollQueue {
-        Queue: KnockoutObservableArray<IUserPoll>;
-        constructor();
-        Add: (poll: IUserPoll) => void;
-        private checkForAutoResolve;
-        Resolve: (form: HTMLFormElement) => boolean;
-        CurrentPoll: KnockoutComputed<IUserPoll>;
-        FocusCurrentPoll: () => void;
     }
 }
