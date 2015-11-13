@@ -166,8 +166,7 @@ var ImprovedInitiative;
     });
     ko.components.register('playerdisplaycombatant', {
         viewModel: function (params) {
-            params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
-            return params.creature.ViewModel;
+            return params.creature;
         },
         template: { name: 'playerdisplaycombatant' }
     });

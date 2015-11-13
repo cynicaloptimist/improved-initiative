@@ -141,19 +141,4 @@ module ImprovedInitiative {
       
   }
   
-  ko.components.register('combatant', {
-    viewModel: function(params) {
-      params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
-      return params.creature.ViewModel;
-    },
-    template: { name: 'combatant' }
-  })
-  
-  ko.components.register('playerdisplaycombatant', {
-    viewModel: function(params) {
-      params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
-      return params.creature.ViewModel;
-    },
-    template: { name: 'playerdisplaycombatant' }
-  })
 }
