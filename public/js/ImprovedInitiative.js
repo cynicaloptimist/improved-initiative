@@ -1,5 +1,48 @@
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
+    var CombatantPlayerViewModel = (function () {
+        function CombatantPlayerViewModel(creature) {
+            this.Name = creature.ViewModel ? creature.ViewModel.DisplayName() :
+                creature.StatBlock().Name;
+            this.HPDisplay = this.GetHPDisplay(creature);
+            this.HPColor = "black"; //this.GetHPColor(creature.ViewModel)
+            this.Initiative = creature.Initiative();
+            this.IsPlayerCharacter = creature.IsPlayerCharacter;
+        }
+        CombatantPlayerViewModel.prototype.GetHPDisplay = function (creature) {
+            if (creature.IsPlayerCharacter) {
+                if (creature.TemporaryHP()) {
+                    return '{0}+{1}/{2}'.format(creature.CurrentHP(), creature.TemporaryHP(), creature.MaxHP);
+                }
+                else {
+                    return '{0}/{1}'.format(creature.CurrentHP(), creature.MaxHP);
+                }
+            }
+            if (creature.Encounter.Rules.EnemyHPTransparency == "whenBloodied") {
+                if (creature.CurrentHP() <= 0) {
+                    return "<span class='defeatedHP'>Defeated</span>";
+                }
+                else if (creature.CurrentHP() < creature.MaxHP / 2) {
+                    return "<span class='bloodiedHP'>Bloodied</span>";
+                }
+                else if (creature.CurrentHP() < creature.MaxHP) {
+                    return "<span class='hurtHP'>Hurt</span>";
+                }
+                return "<span class='healthyHP'>Healthy</span>";
+            }
+            else {
+                if (creature.CurrentHP() <= 0) {
+                    return "<span class='defeatedHP'>Defeated</span>";
+                }
+                return "<span class='healthyHP'>Healthy</span>";
+            }
+        };
+        return CombatantPlayerViewModel;
+    })();
+    ImprovedInitiative.CombatantPlayerViewModel = CombatantPlayerViewModel;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
     var CombatantViewModel = (function () {
         function CombatantViewModel(Creature, PollUser) {
             var _this = this;
@@ -108,29 +151,6 @@ var ImprovedInitiative;
                 }
                 else {
                     return '{0}/{1}'.format(_this.Creature.CurrentHP(), _this.Creature.MaxHP);
-                }
-            });
-            this.PlayerDisplayHP = ko.pureComputed(function () {
-                if (_this.Creature.IsPlayerCharacter) {
-                    return _this.DisplayHP();
-                }
-                if (_this.Creature.Encounter.Rules.EnemyHPTransparency == "whenBloodied") {
-                    if (_this.Creature.CurrentHP() <= 0) {
-                        return "<span class='defeatedHP'>Defeated</span>";
-                    }
-                    else if (_this.Creature.CurrentHP() < _this.Creature.MaxHP / 2) {
-                        return "<span class='bloodiedHP'>Bloodied</span>";
-                    }
-                    else if (_this.Creature.CurrentHP() < _this.Creature.MaxHP) {
-                        return "<span class='hurtHP'>Hurt</span>";
-                    }
-                    return "<span class='healthyHP'>Healthy</span>";
-                }
-                else {
-                    if (_this.Creature.CurrentHP() <= 0) {
-                        return "<span class='defeatedHP'>Defeated</span>";
-                    }
-                    return "<span class='healthyHP'>Healthy</span>";
                 }
             });
         }
@@ -438,9 +458,7 @@ var ImprovedInitiative;
                 _this.EmitEncounter();
             };
             this.EmitEncounter = function () {
-                if ($('#tracker').length) {
-                    _this.Socket.emit('update encounter', _this.EncounterId, _this.SavePlayerDisplay());
-                }
+                _this.Socket.emit('update encounter', _this.EncounterId, _this.SavePlayerDisplay());
             };
             this.moveCreature = function (creature, index) {
                 var currentPosition = _this.Creatures().indexOf(creature);
@@ -645,7 +663,11 @@ var ImprovedInitiative;
                 return {
                     Name: name || _this.EncounterId,
                     ActiveCreatureIndex: _this.Creatures().indexOf(_this.ActiveCreature()),
-                    Creatures: _this.Creatures().map(function (c) { return new ImprovedInitiative.PlayerViewCreature(c); })
+                    Creatures: _this.Creatures()
+                        .filter(function (c) {
+                        return c.Hidden() == false;
+                    })
+                        .map(function (c) { return new ImprovedInitiative.CombatantPlayerViewModel(c); })
                 };
             };
             this.loadCreature = function (savedCreature) {
@@ -688,12 +710,6 @@ var ImprovedInitiative;
                     ? _this.ActiveCreature().StatBlock()
                     : ImprovedInitiative.StatBlock.Empty();
             });
-            this.Socket.on('update encounter', function (encounter) {
-                _this.Creatures([]);
-                _this.CreatureCountsByName = [];
-                _this.LoadSavedEncounter(encounter);
-            });
-            this.Socket.emit('join encounter', this.EncounterId);
         }
         return Encounter;
     })();
@@ -911,15 +927,28 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var PlayerViewCreature = (function () {
-        function PlayerViewCreature(creature) {
-            this.Name = creature.Alias() + creature.IndexLabel;
-            this.HPPercentage = creature.CurrentHP() / creature.MaxHP;
-            this.Initiative = creature.Initiative();
+    var PlayerViewModel = (function () {
+        function PlayerViewModel() {
+            var _this = this;
+            this.Creatures = ko.observableArray();
+            this.ActiveCreature = ko.observable();
+            this.EncounterId = $('html')[0].getAttribute('encounterId');
+            this.Socket = io();
+            this.Socket.on('update encounter', function (encounter) {
+                _this.Creatures([]);
+                _this.LoadEncounter(encounter);
+            });
+            this.Socket.emit('join encounter', this.EncounterId);
         }
-        return PlayerViewCreature;
+        PlayerViewModel.prototype.LoadEncounter = function (encounter) {
+            this.Creatures(encounter.Creatures);
+            if (encounter.ActiveCreatureIndex != -1) {
+                this.ActiveCreature(this.Creatures()[encounter.ActiveCreatureIndex]);
+            }
+        };
+        return PlayerViewModel;
     })();
-    ImprovedInitiative.PlayerViewCreature = PlayerViewCreature;
+    ImprovedInitiative.PlayerViewModel = PlayerViewModel;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -1078,8 +1107,8 @@ var ImprovedInitiative;
             $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
         }
         if ($('#playerview').length) {
-            var viewModel = new ImprovedInitiative.ViewModel();
-            ko.applyBindings(viewModel, document.body);
+            var playerViewModel = new ImprovedInitiative.PlayerViewModel();
+            ko.applyBindings(playerViewModel, document.body);
         }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));

@@ -27,8 +27,8 @@ module ImprovedInitiative {
       $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
-      var viewModel = new ViewModel();
-      ko.applyBindings(viewModel, document.body);
+      var playerViewModel = new PlayerViewModel();
+      ko.applyBindings(playerViewModel, document.body);
     }
   });
 }

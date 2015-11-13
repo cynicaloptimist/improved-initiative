@@ -15,6 +15,7 @@ module ImprovedInitiative {
 	  StatBlock: KnockoutObservable<IStatBlock>;
     RollInitiative: () => void;
     ViewModel: CombatantViewModel;
+    IsPlayerCharacter: boolean;
   }
 	
   export class Creature implements ICreature{

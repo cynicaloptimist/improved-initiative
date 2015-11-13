@@ -4,11 +4,21 @@
 /// <reference path="../../typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="../../typings/socket.io-client/socket.io-client.d.ts" />
 declare module ImprovedInitiative {
+    class CombatantPlayerViewModel {
+        Name: string;
+        HPDisplay: string;
+        HPColor: string;
+        Initiative: number;
+        IsPlayerCharacter: boolean;
+        constructor(creature: ICreature);
+        private GetHPDisplay(creature);
+    }
+}
+declare module ImprovedInitiative {
     class CombatantViewModel {
         Creature: Creature;
         PollUser: (poll: IUserPoll) => void;
-        DisplayHP: () => void;
-        PlayerDisplayHP: () => void;
+        DisplayHP: KnockoutComputed<string>;
         constructor(Creature: Creature, PollUser: (poll: IUserPoll) => void);
         ApplyDamage: (inputDamage: any) => void;
         ApplyTemporaryHP: (inputTHP: any) => void;
@@ -63,6 +73,7 @@ declare module ImprovedInitiative {
         StatBlock: KnockoutObservable<IStatBlock>;
         RollInitiative: () => void;
         ViewModel: CombatantViewModel;
+        IsPlayerCharacter: boolean;
     }
     class Creature implements ICreature {
         Encounter: Encounter;
@@ -153,7 +164,7 @@ declare module ImprovedInitiative {
         NextTurn: () => void;
         PreviousTurn: () => void;
         Save: (name?: string) => ISavedEncounter<ISavedCreature>;
-        SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerViewCreature>;
+        SavePlayerDisplay: (name?: string) => ISavedEncounter<CombatantPlayerViewModel>;
         private loadCreature;
         AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
         LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
@@ -204,11 +215,13 @@ declare module ImprovedInitiative {
     }
 }
 declare module ImprovedInitiative {
-    class PlayerViewCreature {
-        Name: string;
-        HPPercentage: number;
-        Initiative: number;
-        constructor(creature: ICreature);
+    class PlayerViewModel {
+        Creatures: KnockoutObservableArray<CombatantPlayerViewModel>;
+        ActiveCreature: KnockoutObservable<CombatantPlayerViewModel>;
+        EncounterId: string;
+        Socket: SocketIOClient.Socket;
+        constructor();
+        LoadEncounter(encounter: ISavedEncounter<CombatantPlayerViewModel>): void;
     }
 }
 declare module ImprovedInitiative {

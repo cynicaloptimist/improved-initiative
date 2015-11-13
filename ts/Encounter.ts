@@ -37,14 +37,6 @@ module ImprovedInitiative {
                    ? this.ActiveCreature().StatBlock()
                    : StatBlock.Empty();
       });
-      
-      this.Socket.on('update encounter', (encounter) => {
-        this.Creatures([]);
-        this.CreatureCountsByName = [];
-        this.LoadSavedEncounter(encounter)
-      })
-      
-      this.Socket.emit('join encounter', this.EncounterId);
     }
     
     Rules: IRules;
@@ -65,9 +57,7 @@ module ImprovedInitiative {
     }
     
     EmitEncounter = () => {
-      if($('#tracker').length){
-        this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
-      }
+      this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
     }
     
     private moveCreature = (creature: ICreature, index: number) => 
@@ -310,11 +300,15 @@ module ImprovedInitiative {
       };
     }
     
-    SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerViewCreature> = (name?: string) => {
+    SavePlayerDisplay: (name?: string) => ISavedEncounter<CombatantPlayerViewModel> = (name?: string) => {
       return {
         Name: name || this.EncounterId,
         ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
-        Creatures: this.Creatures().map<PlayerViewCreature>(c => new PlayerViewCreature(c))
+        Creatures: this.Creatures()
+                       .filter(c => {
+                           return c.Hidden() == false;
+                       })
+                       .map<CombatantPlayerViewModel>(c => new CombatantPlayerViewModel(c))
       };
     }
     

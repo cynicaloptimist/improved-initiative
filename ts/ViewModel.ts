@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-  export class ViewModel{
+  export class ViewModel {
     UserPollQueue = new UserPollQueue();
     StatBlockEditor = new StatBlockEditor();
     Encounter = ko.observable(new Encounter(this.UserPollQueue, this.StatBlockEditor));

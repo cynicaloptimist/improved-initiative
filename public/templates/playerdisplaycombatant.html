@@ -1,8 +1,7 @@
-<div data-bind="text: Creature.Initiative" class="initiative"></div>
+<div data-bind="text: Initiative" class="initiative"></div>
 <div class="name">
-  <span data-bind="text: DisplayName, visible:!EditingName(), attr: {title: DisplayName }"></span>
-  <input data-bind="textInput: Creature.Alias, visible: EditingName, hasFocus: EditingName, onEnter: CommitName" />
+  <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>
-<div class="hp" data-bind="click: EditHP">
-  <span data-bind="html: PlayerDisplayHP, style: { color: GetHPColor() }" class="current-hp"></span>
+<div class="hp">
+  <span data-bind="html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
 </div>

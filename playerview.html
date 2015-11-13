@@ -14,7 +14,7 @@
   
   </head>
   <body id="playerview">
-    <div class="encounter" data-bind="with:Encounter">
+    <div class="encounter">
       <ul class="combatants">
         <li class="creature header">
           <div class="initiative"><span class="fa fa-forward"></span></div>
@@ -22,7 +22,6 @@
           <div class="hp"><span class = "fa fa-heart"></span></div>
         </li>
         <!-- ko foreach: Creatures -->
-          <!-- ko ifnot: Hidden -->
           <li class="creature" data-bind="
             css: { active: $parent.ActiveCreature() == $data, 
                    playercharacter: $data.IsPlayerCharacter }, 
@@ -31,7 +30,6 @@
               params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
             }">
           </li>
-          <!-- /ko -->
         <!-- /ko -->
       </ul>
     </div>
