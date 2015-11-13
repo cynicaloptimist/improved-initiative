@@ -110,10 +110,10 @@ declare module ImprovedInitiative {
         Tags: string[];
         Hidden: boolean;
     }
-    interface ISavedEncounter {
+    interface ISavedEncounter<T> {
         Name: string;
         ActiveCreatureIndex: number;
-        Creatures: ISavedCreature[];
+        Creatures: T[];
     }
     class Encounter {
         UserPollQueue: UserPollQueue;
@@ -152,11 +152,11 @@ declare module ImprovedInitiative {
         RollInitiative: () => void;
         NextTurn: () => void;
         PreviousTurn: () => void;
-        Save: (name?: string) => ISavedEncounter;
-        SaveLight: (name?: string) => ISavedEncounter;
+        Save: (name?: string) => ISavedEncounter<ISavedCreature>;
+        SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerDisplayCreature>;
         private loadCreature;
-        AddSavedEncounter: (e: ISavedEncounter) => void;
-        LoadSavedEncounter: (e: ISavedEncounter) => void;
+        AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
+        LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void;
     }
 }
 declare module ImprovedInitiative {
@@ -179,7 +179,7 @@ declare module ImprovedInitiative {
         Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
         SavedEncounterIndex: KnockoutObservableArray<string>;
         PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
-        PreviewEncounter: KnockoutObservable<ISavedEncounter>;
+        PreviewEncounter: KnockoutObservable<ISavedEncounter<ISavedCreature>>;
         DisplayTab: KnockoutObservable<string>;
         LibraryFilter: KnockoutObservable<string>;
         FilteredCreatures: KnockoutComputed<KnockoutObservable<IStatBlock>[]>;
@@ -201,6 +201,14 @@ declare module ImprovedInitiative {
     class PlayerCharacter extends Creature {
         IsPlayerCharacter: boolean;
         RollInitiative: () => number;
+    }
+}
+declare module ImprovedInitiative {
+    class PlayerDisplayCreature {
+        Name: string;
+        HPPercentage: number;
+        Initiative: number;
+        constructor(creature: ICreature);
     }
 }
 declare module ImprovedInitiative {

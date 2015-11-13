@@ -9,10 +9,10 @@ module ImprovedInitiative {
     Tags: string [];
     Hidden: boolean;
   }
-  export interface ISavedEncounter {
+  export interface ISavedEncounter<T> {
     Name: string;
     ActiveCreatureIndex: number;
-    Creatures: ISavedCreature [];
+    Creatures: T [];
   }
   
   export class Encounter {
@@ -66,7 +66,7 @@ module ImprovedInitiative {
     
     EmitEncounter = () => {
       if($('#tracker').length){
-        this.Socket.emit('update encounter', this.EncounterId, this.SaveLight());
+        this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
       }
     }
     
@@ -291,7 +291,7 @@ module ImprovedInitiative {
       this.EmitEncounter();
     }
     
-    Save: (name?: string) => ISavedEncounter = (name?: string) => {
+    Save: (name?: string) => ISavedEncounter<ISavedCreature> = (name?: string) => {
       return {
         Name: name || this.EncounterId,
         ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
@@ -310,22 +310,11 @@ module ImprovedInitiative {
       };
     }
     
-    SaveLight: (name?: string) => ISavedEncounter = (name?: string) => {
+    SavePlayerDisplay: (name?: string) => ISavedEncounter<PlayerDisplayCreature> = (name?: string) => {
       return {
         Name: name || this.EncounterId,
         ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
-        Creatures: this.Creatures().map<ISavedCreature>(c => {
-          return {
-            Statblock: SimplifyStatBlock(c.StatBlock()),
-            CurrentHP: c.CurrentHP(),
-            TemporaryHP: c.TemporaryHP(),
-            Initiative: c.Initiative(),
-            Alias: c.Alias(),
-            IndexLabel: c.IndexLabel,
-            Tags: c.Tags(),
-            Hidden: c.Hidden()
-          }
-        })
+        Creatures: this.Creatures().map<PlayerDisplayCreature>(c => new PlayerDisplayCreature(c))
       };
     }
     
@@ -340,11 +329,11 @@ module ImprovedInitiative {
         creature.Hidden(savedCreature.Hidden);
     }
     
-    AddSavedEncounter: (e: ISavedEncounter) => void = e => {
+    AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
       e.Creatures.forEach(this.loadCreature);
     }
     
-    LoadSavedEncounter: (e: ISavedEncounter) => void = e => {
+    LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
       this.Creatures.removeAll();
       e.Creatures.forEach(this.loadCreature);
       if(e.ActiveCreatureIndex != -1){

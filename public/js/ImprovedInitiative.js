@@ -439,7 +439,7 @@ var ImprovedInitiative;
             };
             this.EmitEncounter = function () {
                 if ($('#tracker').length) {
-                    _this.Socket.emit('update encounter', _this.EncounterId, _this.SaveLight());
+                    _this.Socket.emit('update encounter', _this.EncounterId, _this.SavePlayerDisplay());
                 }
             };
             this.moveCreature = function (creature, index) {
@@ -641,22 +641,11 @@ var ImprovedInitiative;
                     })
                 };
             };
-            this.SaveLight = function (name) {
+            this.SavePlayerDisplay = function (name) {
                 return {
                     Name: name || _this.EncounterId,
                     ActiveCreatureIndex: _this.Creatures().indexOf(_this.ActiveCreature()),
-                    Creatures: _this.Creatures().map(function (c) {
-                        return {
-                            Statblock: ImprovedInitiative.SimplifyStatBlock(c.StatBlock()),
-                            CurrentHP: c.CurrentHP(),
-                            TemporaryHP: c.TemporaryHP(),
-                            Initiative: c.Initiative(),
-                            Alias: c.Alias(),
-                            IndexLabel: c.IndexLabel,
-                            Tags: c.Tags(),
-                            Hidden: c.Hidden()
-                        };
-                    })
+                    Creatures: _this.Creatures().map(function (c) { return new ImprovedInitiative.PlayerDisplayCreature(c); })
                 };
             };
             this.loadCreature = function (savedCreature) {
@@ -919,6 +908,18 @@ var ImprovedInitiative;
         return PlayerCharacter;
     })(ImprovedInitiative.Creature);
     ImprovedInitiative.PlayerCharacter = PlayerCharacter;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var PlayerDisplayCreature = (function () {
+        function PlayerDisplayCreature(creature) {
+            this.Name = creature.Alias() + creature.IndexLabel;
+            this.HPPercentage = creature.CurrentHP() / creature.MaxHP;
+            this.Initiative = creature.Initiative();
+        }
+        return PlayerDisplayCreature;
+    })();
+    ImprovedInitiative.PlayerDisplayCreature = PlayerDisplayCreature;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
