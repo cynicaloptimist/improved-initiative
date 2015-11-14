@@ -6,7 +6,6 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
-/// <reference path="../public/js/ImprovedInitiative.d.ts" />
 
 var expect = chai.expect;
 

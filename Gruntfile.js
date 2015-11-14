@@ -15,8 +15,7 @@ module.exports = function(grunt) {
               out: 'public/js/ImprovedInitiative.js',
               options: {
                   module: 'amd',
-                  target: 'es5',
-                  declaration: true
+                  target: 'es5'
               }
           },
           test: {
