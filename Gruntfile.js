@@ -11,7 +11,7 @@ module.exports = function(grunt) {
             removeComments: false,
           },
           default: {
-              src: ['ts/**/*.ts'],
+              src: ['ts_src/**/*.ts'],
               out: 'public/js/ImprovedInitiative.js',
               options: {
                   module: 'amd',
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
               }
           },
           test: {
-              src: ['test/**/*.ts', 'ts/**/*.ts'],
+              src: ['test/**/*.ts', 'ts_src/**/*.ts'],
               out: 'public/js/test.js',
               options: {
                   module: 'amd',
