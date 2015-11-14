@@ -149,6 +149,7 @@ var ImprovedInitiative;
             });
             this.ToggleHidden = function (data, event) {
                 _this.Creature.Hidden(!_this.Creature.Hidden());
+                _this.Creature.Encounter.QueueEmitEncounter();
             };
             this.DisplayName = ko.computed(function () {
                 var alias = ko.unwrap(_this.Creature.Alias), creatureCounts = ko.unwrap(_this.Creature.Encounter.CreatureCountsByName), name = ko.unwrap(_this.Creature.StatBlock).Name, index = _this.Creature.IndexLabel;

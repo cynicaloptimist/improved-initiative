@@ -104,6 +104,7 @@ module ImprovedInitiative {
     
     ToggleHidden = (data, event) => {
       this.Creature.Hidden(!this.Creature.Hidden());
+      this.Creature.Encounter.QueueEmitEncounter();
     }
     
     DisplayName = ko.computed(() => {

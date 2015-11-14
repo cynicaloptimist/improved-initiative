@@ -58,7 +58,7 @@ module ImprovedInitiative {
     
     private emitEncounterTimeoutID;
     
-    EmitEncounter = () => {
+    private EmitEncounter = () => {
       this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
     }
     
