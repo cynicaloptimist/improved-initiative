@@ -8,7 +8,7 @@ module ImprovedInitiative {
   $(() => {
     if($('#tracker').length)
     {
-      var viewModel = new EncounterViewModel();
+      var viewModel = new TrackerViewModel();
       viewModel.RegisterKeybindings();
       ko.applyBindings(viewModel, document.body);
       

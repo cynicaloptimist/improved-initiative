@@ -392,8 +392,8 @@ var ImprovedInitiative;
     };
     ko.bindingHandlers.uiText = {
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-            if (ImprovedInitiative.uiText[valueAccessor()]) {
-                $(element).html(ImprovedInitiative.uiText[valueAccessor()]);
+            if (ImprovedInitiative.TextAssets[valueAccessor()]) {
+                $(element).html(ImprovedInitiative.TextAssets[valueAccessor()]);
             }
             else {
                 $(element).html(valueAccessor());
@@ -1054,6 +1054,16 @@ var ImprovedInitiative;
         template: { name: 'editstatblock' }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    ImprovedInitiative.TextAssets = {
+        'LegendaryActions': 'Legendary Actions',
+        'DamageVulnerabilities': 'Damage Vulnerabilities',
+        'DamageResistances': 'Damage Resistances',
+        'DamageImmunities': 'Damage Immunities',
+        'ConditionImmunities': 'Condition Immunities'
+    };
+})(ImprovedInitiative || (ImprovedInitiative = {}));
 Number.prototype.toModifierString = function () {
     if (this >= 0) {
         return "+" + this;
@@ -1088,16 +1098,9 @@ String.prototype.format = function () {
 /// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    ImprovedInitiative.uiText = {
-        'LegendaryActions': 'Legendary Actions',
-        'DamageVulnerabilities': 'Damage Vulnerabilities',
-        'DamageResistances': 'Damage Resistances',
-        'DamageImmunities': 'Damage Immunities',
-        'ConditionImmunities': 'Condition Immunities'
-    };
     $(function () {
         if ($('#tracker').length) {
-            var viewModel = new ImprovedInitiative.ViewModel();
+            var viewModel = new ImprovedInitiative.TrackerViewModel();
             viewModel.RegisterKeybindings();
             ko.applyBindings(viewModel, document.body);
             $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(function () {
@@ -1113,44 +1116,8 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var UserPollQueue = (function () {
-        function UserPollQueue() {
-            var _this = this;
-            this.Queue = ko.observableArray();
-            this.Add = function (poll) {
-                _this.Queue.push(poll);
-            };
-            this.checkForAutoResolve = function () {
-                var poll = _this.Queue()[0];
-                if (poll && !poll.requestContent) {
-                    poll.callback(null);
-                    _this.Queue.shift();
-                }
-            };
-            this.Resolve = function (form) {
-                var poll = _this.Queue()[0];
-                poll.callback($(form).find(poll.inputSelector).val());
-                _this.Queue.shift();
-                return false;
-            };
-            this.CurrentPoll = ko.pureComputed(function () {
-                return _this.Queue()[0];
-            });
-            this.FocusCurrentPoll = function () {
-                if (_this.Queue[0]) {
-                    $(_this.Queue[0].inputSelector).select();
-                }
-            };
-            this.Queue.subscribe(this.checkForAutoResolve);
-        }
-        return UserPollQueue;
-    })();
-    ImprovedInitiative.UserPollQueue = UserPollQueue;
-})(ImprovedInitiative || (ImprovedInitiative = {}));
-var ImprovedInitiative;
-(function (ImprovedInitiative) {
-    var ViewModel = (function () {
-        function ViewModel() {
+    var TrackerViewModel = (function () {
+        function TrackerViewModel() {
             var _this = this;
             this.UserPollQueue = new ImprovedInitiative.UserPollQueue();
             this.StatBlockEditor = new ImprovedInitiative.StatBlockEditor();
@@ -1194,12 +1161,48 @@ var ImprovedInitiative;
                 }
             };
         }
-        ViewModel.prototype.RegisterKeybindings = function () {
+        TrackerViewModel.prototype.RegisterKeybindings = function () {
             Mousetrap.reset();
             this.Commands.forEach(function (b) { return Mousetrap.bind(b.KeyBinding, b.GetActionBinding()); });
         };
-        return ViewModel;
+        return TrackerViewModel;
     })();
-    ImprovedInitiative.ViewModel = ViewModel;
+    ImprovedInitiative.TrackerViewModel = TrackerViewModel;
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var UserPollQueue = (function () {
+        function UserPollQueue() {
+            var _this = this;
+            this.Queue = ko.observableArray();
+            this.Add = function (poll) {
+                _this.Queue.push(poll);
+            };
+            this.checkForAutoResolve = function () {
+                var poll = _this.Queue()[0];
+                if (poll && !poll.requestContent) {
+                    poll.callback(null);
+                    _this.Queue.shift();
+                }
+            };
+            this.Resolve = function (form) {
+                var poll = _this.Queue()[0];
+                poll.callback($(form).find(poll.inputSelector).val());
+                _this.Queue.shift();
+                return false;
+            };
+            this.CurrentPoll = ko.pureComputed(function () {
+                return _this.Queue()[0];
+            });
+            this.FocusCurrentPoll = function () {
+                if (_this.Queue[0]) {
+                    $(_this.Queue[0].inputSelector).select();
+                }
+            };
+            this.Queue.subscribe(this.checkForAutoResolve);
+        }
+        return UserPollQueue;
+    })();
+    ImprovedInitiative.UserPollQueue = UserPollQueue;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 //# sourceMappingURL=ImprovedInitiative.js.map

@@ -10,9 +10,9 @@
 var expect = chai.expect;
 
 describe("ViewModel", function() {
-  var vm: ImprovedInitiative.ViewModel;
+  var vm: ImprovedInitiative.TrackerViewModel;
   beforeEach(() => {
-    vm = new ImprovedInitiative.ViewModel();
+    vm = new ImprovedInitiative.TrackerViewModel();
   })
   describe("constructor", function() {
     it("should have an encounter with no creatures", function() {
