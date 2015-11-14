@@ -115,7 +115,7 @@ var ImprovedInitiative;
                     inputSelector: '.response',
                     callback: function (damage) {
                         _this.ApplyDamage(damage);
-                        _this.Creature.Encounter.EmitEncounter();
+                        _this.Creature.Encounter.QueueEmitEncounter();
                     }
                 });
             };
@@ -125,7 +125,7 @@ var ImprovedInitiative;
                     inputSelector: '.response',
                     callback: function (initiative) {
                         _this.ApplyInitiative(initiative);
-                        _this.Creature.Encounter.EmitEncounter();
+                        _this.Creature.Encounter.QueueEmitEncounter();
                     }
                 });
             };
@@ -135,7 +135,7 @@ var ImprovedInitiative;
                     inputSelector: '.response',
                     callback: function (thp) {
                         _this.ApplyTemporaryHP(thp);
-                        _this.Creature.Encounter.EmitEncounter();
+                        _this.Creature.Encounter.QueueEmitEncounter();
                     }
                 });
             };
@@ -475,10 +475,14 @@ var ImprovedInitiative;
             this.SortByInitiative = function () {
                 _this.Creatures.sort(function (l, r) { return (r.Initiative() - l.Initiative()) ||
                     (r.InitiativeModifier - l.InitiativeModifier); });
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.EmitEncounter = function () {
                 _this.Socket.emit('update encounter', _this.EncounterId, _this.SavePlayerDisplay());
+            };
+            this.QueueEmitEncounter = function () {
+                clearTimeout(_this.emitEncounterTimeoutID);
+                _this.emitEncounterTimeoutID = setTimeout(_this.EmitEncounter, 10);
             };
             this.moveCreature = function (creature, index) {
                 var currentPosition = _this.Creatures().indexOf(creature);
@@ -493,7 +497,7 @@ var ImprovedInitiative;
                 _this.Creatures.remove(creature);
                 _this.Creatures.splice(index, 0, creature);
                 creature.Initiative(newInitiative);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.relativeNavigateFocus = function (offset) {
                 var newIndex = _this.Creatures.indexOf(_this.SelectedCreatures()[0]) + offset;
@@ -519,7 +523,7 @@ var ImprovedInitiative;
                     creature.Hidden(true);
                 }
                 _this.Creatures.push(creature);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
                 return creature;
             };
             this.RemoveSelectedCreatures = function () {
@@ -531,7 +535,7 @@ var ImprovedInitiative;
                         _this.CreatureCountsByName[name](0);
                     }
                 });
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.SelectPreviousCombatant = function () {
                 _this.relativeNavigateFocus(-1);
@@ -547,7 +551,7 @@ var ImprovedInitiative;
                     inputSelector: '.response',
                     callback: function (response) { return selectedCreatures.forEach(function (c) {
                         c.ViewModel.ApplyDamage(response);
-                        _this.EmitEncounter();
+                        _this.QueueEmitEncounter();
                     }); }
                 });
                 return false;
@@ -560,7 +564,7 @@ var ImprovedInitiative;
                     inputSelector: '.response',
                     callback: function (response) { return selectedCreatures.forEach(function (c) {
                         c.ViewModel.ApplyTemporaryHP(response);
-                        _this.EmitEncounter();
+                        _this.QueueEmitEncounter();
                     }); }
                 });
                 return false;
@@ -615,12 +619,12 @@ var ImprovedInitiative;
                 _this.SortByInitiative();
                 _this.State('active');
                 _this.ActiveCreature(_this.Creatures()[0]);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.EndEncounter = function () {
                 _this.State('inactive');
                 _this.ActiveCreature(null);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.RollInitiative = function () {
                 // Foreaching over the original array while we're rearranging it
@@ -651,7 +655,7 @@ var ImprovedInitiative;
                     nextIndex = 0;
                 }
                 _this.ActiveCreature(_this.Creatures()[nextIndex]);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.PreviousTurn = function () {
                 var previousIndex = _this.Creatures().indexOf(_this.ActiveCreature()) - 1;
@@ -659,7 +663,7 @@ var ImprovedInitiative;
                     previousIndex = _this.Creatures().length - 1;
                 }
                 _this.ActiveCreature(_this.Creatures()[previousIndex]);
-                _this.EmitEncounter();
+                _this.QueueEmitEncounter();
             };
             this.Save = function (name) {
                 return {

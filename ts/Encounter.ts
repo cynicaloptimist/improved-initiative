@@ -53,11 +53,18 @@ module ImprovedInitiative {
     SortByInitiative = () => {
       this.Creatures.sort((l,r) => (r.Initiative() - l.Initiative()) || 
                                    (r.InitiativeModifier - l.InitiativeModifier));
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
+    
+    private emitEncounterTimeoutID;
     
     EmitEncounter = () => {
       this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
+    }
+    
+    QueueEmitEncounter = () => {
+      clearTimeout(this.emitEncounterTimeoutID);
+      this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
     
     private moveCreature = (creature: ICreature, index: number) => 
@@ -74,7 +81,7 @@ module ImprovedInitiative {
       this.Creatures.remove(creature);
       this.Creatures.splice(index,0,creature);
       creature.Initiative(newInitiative);
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     private relativeNavigateFocus = (offset: number) => 
@@ -103,7 +110,7 @@ module ImprovedInitiative {
       }
       this.Creatures.push(creature);
       
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
       return creature;
     }
     
@@ -121,7 +128,7 @@ module ImprovedInitiative {
         }
       })
       
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     SelectPreviousCombatant = () =>
@@ -143,7 +150,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: response => selectedCreatures.forEach(c => {
           c.ViewModel.ApplyDamage(response);
-          this.EmitEncounter();
+          this.QueueEmitEncounter();
         })
       });
       return false;
@@ -157,7 +164,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: response => selectedCreatures.forEach(c => {
           c.ViewModel.ApplyTemporaryHP(response);
-          this.EmitEncounter();
+          this.QueueEmitEncounter();
         })
       });
       return false;
@@ -226,13 +233,13 @@ module ImprovedInitiative {
       this.SortByInitiative();
       this.State('active');
       this.ActiveCreature(this.Creatures()[0]);
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     EndEncounter = () => {
       this.State('inactive');
       this.ActiveCreature(null);
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     RollInitiative = () =>
@@ -269,7 +276,7 @@ module ImprovedInitiative {
         nextIndex = 0;
       }
       this.ActiveCreature(this.Creatures()[nextIndex]);
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     PreviousTurn = () => {
@@ -278,7 +285,7 @@ module ImprovedInitiative {
         previousIndex = this.Creatures().length - 1;
       }
       this.ActiveCreature(this.Creatures()[previousIndex]);
-      this.EmitEncounter();
+      this.QueueEmitEncounter();
     }
     
     Save: (name?: string) => ISavedEncounter<ISavedCreature> = (name?: string) => {

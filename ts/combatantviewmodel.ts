@@ -71,7 +71,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: damage => {
           this.ApplyDamage(damage);
-          this.Creature.Encounter.EmitEncounter();
+          this.Creature.Encounter.QueueEmitEncounter();
         }
       });
     }
@@ -82,7 +82,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: initiative => {
           this.ApplyInitiative(initiative);
-          this.Creature.Encounter.EmitEncounter();
+          this.Creature.Encounter.QueueEmitEncounter();
         }
       });
     }
@@ -93,7 +93,7 @@ module ImprovedInitiative {
         inputSelector: '.response',
         callback: thp => {
           this.ApplyTemporaryHP(thp);
-          this.Creature.Encounter.EmitEncounter();
+          this.Creature.Encounter.QueueEmitEncounter();
         }
       });
     }
@@ -137,8 +137,5 @@ module ImprovedInitiative {
     RemoveTag = (tag: string) => {
       this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
     };
-      
-      
   }
-  
 }
