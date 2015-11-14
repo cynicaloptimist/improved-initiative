@@ -9,7 +9,7 @@ interface KnockoutBindingHandlers {
 	
 module ImprovedInitiative {
 	ko.bindingHandlers.focusOnRender = {
-    update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: ViewModel, bindingContext?: KnockoutBindingContext) => {
+    update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
       $(element).find(valueAccessor()).select();
     }
   }
@@ -45,8 +45,8 @@ module ImprovedInitiative {
   
   ko.bindingHandlers.uiText = {
     update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-      if(uiText[valueAccessor()]){
-        $(element).html(uiText[valueAccessor()])
+      if(TextAssets[valueAccessor()]){
+        $(element).html(TextAssets[valueAccessor()])
       } else {
         $(element).html(valueAccessor());
       }

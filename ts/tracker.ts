@@ -5,18 +5,10 @@
 /// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
 
 module ImprovedInitiative {
-  export var uiText = {
-    'LegendaryActions': 'Legendary Actions',
-    'DamageVulnerabilities': 'Damage Vulnerabilities',
-    'DamageResistances': 'Damage Resistances',
-    'DamageImmunities': 'Damage Immunities',
-    'ConditionImmunities': 'Condition Immunities'
-  }
-  
   $(() => {
     if($('#tracker').length)
     {
-      var viewModel = new ViewModel();
+      var viewModel = new EncounterViewModel();
       viewModel.RegisterKeybindings();
       ko.applyBindings(viewModel, document.body);
       

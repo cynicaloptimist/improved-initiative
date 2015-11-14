@@ -7,7 +7,7 @@ module ImprovedInitiative {
     ShowOnActionBar: KnockoutObservable<boolean>;
   }
   
-  export var BuildCommandList = (v: ViewModel) => [
+  export var BuildCommandList = (v: TrackerViewModel) => [
       { Description: 'Roll Initiative', 
         KeyBinding: 'alt+r',
         ActionBarIcon: 'fa-play', 

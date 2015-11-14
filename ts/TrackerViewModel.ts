@@ -20,6 +20,7 @@ module ImprovedInitiative {
         }
       })
     }
+    
     LoadEncounterByName = (encounterName: string) => {
       var encounterJSON = localStorage.getItem(`ImprovedInitiative.SavedEncounters.${encounterName}`);
       if(encounterJSON === 'undefined'){
