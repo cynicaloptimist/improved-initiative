@@ -23,10 +23,15 @@ var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var CombatantPlayerViewModel = (function () {
         function CombatantPlayerViewModel(creature) {
+            this.GetHPColor = function (creature) {
+                var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
+                var red = Math.floor((creature.MaxHP - creature.CurrentHP()) / creature.MaxHP * 170);
+                return "rgb(" + red + "," + green + ",0)";
+            };
             this.Name = creature.ViewModel ? creature.ViewModel.DisplayName() :
                 creature.StatBlock().Name;
             this.HPDisplay = this.GetHPDisplay(creature);
-            this.HPColor = "black"; //this.GetHPColor(creature.ViewModel)
+            this.HPColor = this.GetHPColor(creature);
             this.Initiative = creature.Initiative();
             this.IsPlayerCharacter = creature.IsPlayerCharacter;
         }
