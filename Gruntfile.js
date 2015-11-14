@@ -19,7 +19,7 @@ module.exports = function(grunt) {
               }
           },
           test: {
-              src: ['test/**/*.ts'],
+              src: ['test/**/*.ts', 'ts/**/*.ts'],
               out: 'public/js/test.js',
               options: {
                   module: 'amd',

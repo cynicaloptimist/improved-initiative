@@ -157,19 +157,6 @@ var ImprovedInitiative;
         return CombatantViewModel;
     })();
     ImprovedInitiative.CombatantViewModel = CombatantViewModel;
-    ko.components.register('combatant', {
-        viewModel: function (params) {
-            params.creature.ViewModel = new CombatantViewModel(params.creature, params.addUserPoll);
-            return params.creature.ViewModel;
-        },
-        template: { name: 'combatant' }
-    });
-    ko.components.register('playerdisplaycombatant', {
-        viewModel: function (params) {
-            return params.creature;
-        },
-        template: { name: 'playerdisplaycombatant' }
-    });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -299,6 +286,19 @@ var ImprovedInitiative;
     ko.components.register('activestatblock', {
         viewModel: function (params) { return params.creature; },
         template: { name: 'activestatblock' }
+    });
+    ko.components.register('combatant', {
+        viewModel: function (params) {
+            params.creature.ViewModel = new ImprovedInitiative.CombatantViewModel(params.creature, params.addUserPoll);
+            return params.creature.ViewModel;
+        },
+        template: { name: 'combatant' }
+    });
+    ko.components.register('playerdisplaycombatant', {
+        viewModel: function (params) {
+            return params.creature;
+        },
+        template: { name: 'playerdisplaycombatant' }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
