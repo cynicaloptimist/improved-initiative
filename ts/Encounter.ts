@@ -226,7 +226,7 @@ module ImprovedInitiative {
     }
     
     FocusResponseRequest = () => {
-      $('form input').select();
+      $('#user-response-requests input').first().select();
     }
     
     StartEncounter = () => {

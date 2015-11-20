@@ -598,7 +598,7 @@ var ImprovedInitiative;
                 });
             };
             this.FocusResponseRequest = function () {
-                $('form input').select();
+                $('#user-response-requests input').first().select();
             };
             this.StartEncounter = function () {
                 _this.SortByInitiative();

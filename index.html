@@ -110,7 +110,7 @@
       </ul>
     </div>
     <!-- ko if: UserPollQueue.CurrentPoll() -->
-      <form class="user-response-requests" data-bind="
+      <form id="user-response-requests" class="user-response-requests" data-bind="
         submit:UserPollQueue.Resolve,
         html:UserPollQueue.CurrentPoll().requestContent,
         focusOnRender:UserPollQueue.CurrentPoll().inputSelector">
