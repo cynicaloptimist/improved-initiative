@@ -45,6 +45,10 @@ app.get('/p/:id', (req, res) => {
 	})
 })
 
+app.get('/playerviews/:id', (req, res) => {
+	res.json(playerViews[req.params.id]);
+})
+
 io.on('connection', function(socket){
   	console.log('a user connected');
 	socket.on('update encounter', function(id, encounter){

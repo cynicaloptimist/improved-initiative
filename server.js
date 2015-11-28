@@ -36,6 +36,9 @@ app.get('/p/:id', function (req, res) {
         encounterId: req.params.id
     });
 });
+app.get('/playerviews/:id', function (req, res) {
+    res.json(playerViews[req.params.id]);
+});
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('update encounter', function (id, encounter) {

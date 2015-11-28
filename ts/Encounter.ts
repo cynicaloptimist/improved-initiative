@@ -96,6 +96,17 @@ module ImprovedInitiative {
       this.SelectedCreatures.push(this.Creatures()[newIndex]);
     }
     
+    private loadCreature = (savedCreature: ISavedCreature) => {
+        var creature = this.AddCreature(savedCreature.Statblock);
+        creature.CurrentHP(savedCreature.CurrentHP);
+        creature.TemporaryHP(savedCreature.TemporaryHP);
+        creature.Initiative(savedCreature.Initiative);
+        creature.IndexLabel = savedCreature.IndexLabel;
+        creature.Alias(savedCreature.Alias);
+        creature.Tags(savedCreature.Tags);
+        creature.Hidden(savedCreature.Hidden);
+    }
+        
     AddCreature = (creatureJson: IHaveTrackerStats, event?) => 
     {
       console.log("adding %O to encounter", creatureJson);
@@ -317,17 +328,6 @@ module ImprovedInitiative {
                        })
                        .map<CombatantPlayerViewModel>(c => new CombatantPlayerViewModel(c))
       };
-    }
-    
-    private loadCreature = (savedCreature: ISavedCreature) => {
-        var creature = this.AddCreature(savedCreature.Statblock);
-        creature.CurrentHP(savedCreature.CurrentHP);
-        creature.TemporaryHP(savedCreature.TemporaryHP);
-        creature.Initiative(savedCreature.Initiative);
-        creature.IndexLabel = savedCreature.IndexLabel;
-        creature.Alias(savedCreature.Alias);
-        creature.Tags(savedCreature.Tags);
-        creature.Hidden(savedCreature.Hidden);
     }
     
     AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {

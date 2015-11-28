@@ -516,6 +516,16 @@ var ImprovedInitiative;
                 _this.SelectedCreatures.removeAll();
                 _this.SelectedCreatures.push(_this.Creatures()[newIndex]);
             };
+            this.loadCreature = function (savedCreature) {
+                var creature = _this.AddCreature(savedCreature.Statblock);
+                creature.CurrentHP(savedCreature.CurrentHP);
+                creature.TemporaryHP(savedCreature.TemporaryHP);
+                creature.Initiative(savedCreature.Initiative);
+                creature.IndexLabel = savedCreature.IndexLabel;
+                creature.Alias(savedCreature.Alias);
+                creature.Tags(savedCreature.Tags);
+                creature.Hidden(savedCreature.Hidden);
+            };
             this.AddCreature = function (creatureJson, event) {
                 console.log("adding %O to encounter", creatureJson);
                 var creature;
@@ -699,16 +709,6 @@ var ImprovedInitiative;
                     })
                         .map(function (c) { return new ImprovedInitiative.CombatantPlayerViewModel(c); })
                 };
-            };
-            this.loadCreature = function (savedCreature) {
-                var creature = _this.AddCreature(savedCreature.Statblock);
-                creature.CurrentHP(savedCreature.CurrentHP);
-                creature.TemporaryHP(savedCreature.TemporaryHP);
-                creature.Initiative(savedCreature.Initiative);
-                creature.IndexLabel = savedCreature.IndexLabel;
-                creature.Alias(savedCreature.Alias);
-                creature.Tags(savedCreature.Tags);
-                creature.Hidden(savedCreature.Hidden);
             };
             this.AddSavedEncounter = function (e) {
                 e.Creatures.forEach(_this.loadCreature);
@@ -958,27 +958,26 @@ var ImprovedInitiative;
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var PlayerViewModel = (function () {
-        function PlayerViewModel(encounter) {
+        function PlayerViewModel() {
             var _this = this;
-            this.Creatures = ko.observableArray();
+            this.Creatures = ko.observableArray([]);
             this.ActiveCreature = ko.observable();
             this.EncounterId = $('html')[0].getAttribute('encounterId');
             this.Socket = io();
-            if (encounter) {
-                this.LoadEncounter(encounter);
-            }
+            this.LoadEncounter = function (encounter) {
+                _this.Creatures(encounter.Creatures);
+                if (encounter.ActiveCreatureIndex != -1) {
+                    _this.ActiveCreature(_this.Creatures()[encounter.ActiveCreatureIndex]);
+                }
+            };
+            this.LoadEncounterFromServer = function (encounterId) {
+                $.ajax("../playerviews/" + encounterId).done(_this.LoadEncounter);
+            };
             this.Socket.on('update encounter', function (encounter) {
-                _this.Creatures([]);
                 _this.LoadEncounter(encounter);
             });
             this.Socket.emit('join encounter', this.EncounterId);
         }
-        PlayerViewModel.prototype.LoadEncounter = function (encounter) {
-            this.Creatures(encounter.Creatures);
-            if (encounter.ActiveCreatureIndex != -1) {
-                this.ActiveCreature(this.Creatures()[encounter.ActiveCreatureIndex]);
-            }
-        };
         return PlayerViewModel;
     })();
     ImprovedInitiative.PlayerViewModel = PlayerViewModel;
@@ -1145,8 +1144,8 @@ var ImprovedInitiative;
         }
         if ($('#playerview').length) {
             var encounterId = $('html')[0].getAttribute('encounterId');
-            var activeEncounter = getEncounter(encounterId);
-            var playerViewModel = new ImprovedInitiative.PlayerViewModel(activeEncounter);
+            var playerViewModel = new ImprovedInitiative.PlayerViewModel();
+            playerViewModel.LoadEncounterFromServer(encounterId);
             ko.applyBindings(playerViewModel, document.body);
         }
     });

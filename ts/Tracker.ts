@@ -21,8 +21,8 @@ module ImprovedInitiative {
     }
     if($('#playerview').length){
       var encounterId = $('html')[0].getAttribute('encounterId');
-      var activeEncounter = getEncounter(encounterId)
-      var playerViewModel = new PlayerViewModel(activeEncounter);
+      var playerViewModel = new PlayerViewModel();
+      playerViewModel.LoadEncounterFromServer(encounterId);
       ko.applyBindings(playerViewModel, document.body);
     }
   });
