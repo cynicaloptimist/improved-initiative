@@ -212,7 +212,7 @@ module ImprovedInitiative {
     
     EditSelectedCreatureName = () => 
     {
-      this.SelectedCreatures().forEach(c => c.ViewModel.EditingName(true) )
+      this.SelectedCreatures().forEach(c => c.ViewModel.EditName() )
       return false;
     }
     

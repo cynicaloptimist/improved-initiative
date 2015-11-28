@@ -113,6 +113,16 @@ var ImprovedInitiative;
                     }
                 });
             };
+            this.EditName = function () {
+                _this.PollUser({
+                    requestContent: "Change alias for " + _this.DisplayName() + ": <input class='response' />",
+                    inputSelector: '.response',
+                    callback: function (alias) {
+                        _this.Creature.Alias(alias);
+                        _this.Creature.Encounter.QueueEmitEncounter();
+                    }
+                });
+            };
             this.AddTemporaryHP = function () {
                 _this.PollUser({
                     requestContent: "Grant temporary hit points to " + _this.DisplayName() + ": <input class='response' type='number' />",
@@ -133,14 +143,10 @@ var ImprovedInitiative;
             this.DisplayName = ko.computed(function () {
                 var alias = ko.unwrap(_this.Creature.Alias), creatureCounts = ko.unwrap(_this.Creature.Encounter.CreatureCountsByName), name = ko.unwrap(_this.Creature.StatBlock).Name, index = _this.Creature.IndexLabel;
                 return alias ||
-                    creatureCounts[name]() > 1 ?
-                    name + " " + index :
-                    name;
+                    (creatureCounts[name]() > 1 ?
+                        name + " " + index :
+                        name);
             });
-            this.EditingName = ko.observable(false);
-            this.CommitName = function () {
-                _this.EditingName(false);
-            };
             this.AddingTag = ko.observable(false);
             this.NewTag = ko.observable(null);
             this.CommitTag = function () {
@@ -587,7 +593,7 @@ var ImprovedInitiative;
                 }
             };
             this.EditSelectedCreatureName = function () {
-                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.EditingName(true); });
+                _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.EditName(); });
                 return false;
             };
             this.EditSelectedCreature = function () {

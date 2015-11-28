@@ -87,6 +87,17 @@ module ImprovedInitiative {
       });
     }
     
+    EditName = () => {
+      this.PollUser({
+        requestContent: `Change alias for ${this.DisplayName()}: <input class='response' />`,
+        inputSelector: '.response',
+        callback: alias => {
+          this.Creature.Alias(alias);
+          this.Creature.Encounter.QueueEmitEncounter();
+        }
+      });
+    }
+    
     AddTemporaryHP = () => {
       this.PollUser({
         requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
@@ -114,16 +125,10 @@ module ImprovedInitiative {
           index = this.Creature.IndexLabel;
           
       return alias ||
-             creatureCounts[name]() > 1 ? 
+             (creatureCounts[name]() > 1 ? 
              name + " " + index : 
-             name;
+             name);
     })
-    
-    EditingName = ko.observable(false);
-    
-    CommitName = () => {
-      this.EditingName(false);
-    };
     
     AddingTag = ko.observable(false);
     
