@@ -8,10 +8,10 @@ var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
-var encounters = [];
+var playerViews = [];
 var newEncounterIndex = function () {
-    var newEncounterId = encounters.length;
-    encounters[newEncounterId] = {};
+    var newEncounterId = playerViews.length;
+    playerViews[newEncounterId] = {};
     return newEncounterId;
 };
 app.engine('html', mustacheExpress());
@@ -26,7 +26,7 @@ app.get('/e/:id', function (req, res) {
     console.log('app.get ' + req.path);
     res.render('index', {
         rootDirectory: "..",
-        encounterId: req.params.id
+        encounterId: req.params.id,
     });
 });
 app.get('/p/:id', function (req, res) {
@@ -41,6 +41,7 @@ io.on('connection', function (socket) {
     socket.on('update encounter', function (id, encounter) {
         socket.join(id);
         console.log('encounter: ' + JSON.stringify(encounter));
+        playerViews[id] = encounter;
         socket.broadcast.to(id).emit('update encounter', encounter);
     });
     socket.on('join encounter', function (id) {

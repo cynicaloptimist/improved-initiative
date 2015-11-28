@@ -5,7 +5,11 @@ module ImprovedInitiative {
     EncounterId = $('html')[0].getAttribute('encounterId');
     Socket: SocketIOClient.Socket = io();
     
-    constructor() {
+    constructor(encounter) {
+      if(encounter){
+        this.LoadEncounter(encounter);
+      }
+      
       this.Socket.on('update encounter', (encounter) => {
         this.Creatures([]);
         this.LoadEncounter(encounter)

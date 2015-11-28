@@ -16,10 +16,13 @@ module ImprovedInitiative {
         $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
       });
       
+      $.ajax("../user/custom-creatures.json").done(viewModel.Library.AddCreatures);
       $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
-      var playerViewModel = new PlayerViewModel();
+      var encounterId = $('html')[0].getAttribute('encounterId');
+      var activeEncounter = getEncounter(encounterId)
+      var playerViewModel = new PlayerViewModel(activeEncounter);
       ko.applyBindings(playerViewModel, document.body);
     }
   });

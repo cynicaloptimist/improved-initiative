@@ -958,12 +958,15 @@ var ImprovedInitiative;
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var PlayerViewModel = (function () {
-        function PlayerViewModel() {
+        function PlayerViewModel(encounter) {
             var _this = this;
             this.Creatures = ko.observableArray();
             this.ActiveCreature = ko.observable();
             this.EncounterId = $('html')[0].getAttribute('encounterId');
             this.Socket = io();
+            if (encounter) {
+                this.LoadEncounter(encounter);
+            }
             this.Socket.on('update encounter', function (encounter) {
                 _this.Creatures([]);
                 _this.LoadEncounter(encounter);
@@ -1137,10 +1140,13 @@ var ImprovedInitiative;
             $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(function () {
                 $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
             });
+            $.ajax("../user/custom-creatures.json").done(viewModel.Library.AddCreatures);
             $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
         }
         if ($('#playerview').length) {
-            var playerViewModel = new ImprovedInitiative.PlayerViewModel();
+            var encounterId = $('html')[0].getAttribute('encounterId');
+            var activeEncounter = getEncounter(encounterId);
+            var playerViewModel = new ImprovedInitiative.PlayerViewModel(activeEncounter);
             ko.applyBindings(playerViewModel, document.body);
         }
     });
