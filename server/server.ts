@@ -14,6 +14,7 @@ var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
+var playerCharacters = [];
 
 fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 	if(err){
@@ -32,6 +33,20 @@ fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 		});
 	}
 })
+
+fs.readFile('public/user/custom-creatures.json', (err, json) => {
+	if(err){
+		return;
+	}
+	creatures = creatures.concat(JSON.parse(json));
+});
+
+fs.readFile('public/user/playercharacters.json', (err, json) => {
+	if(err){
+		return;
+	}
+	playerCharacters = playerCharacters.concat(JSON.parse(json));
+});
 
 var newEncounterIndex = (): number => {
 	var newEncounterId = playerViews.length;
@@ -78,6 +93,16 @@ app.get('/creatures/', (req, res) => {
 
 app.get('/creatures/:id', (req, res) => {
 	res.json(creatures[req.params.id]);
+});
+
+app.get('/playercharacters/', (req, res) => {
+	res.json(playerCharacters.map((playercharacter, index) => {
+		return { "Id": index, "Name": playercharacter.Name }
+	}));
+})
+
+app.get('/playercharacters/:id', (req, res) => {
+	res.json(playerCharacters[req.params.id]);
 });
 
 io.on('connection', function(socket){

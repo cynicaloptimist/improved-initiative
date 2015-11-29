@@ -11,6 +11,7 @@ var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
+var playerCharacters = [];
 fs.access('public/user/creatures.json', fs.R_OK, function (err) {
     if (err) {
         fs.readFile('public/basic_rules_creatures.json', function (err, json) {
@@ -28,6 +29,18 @@ fs.access('public/user/creatures.json', fs.R_OK, function (err) {
             creatures = creatures.concat(JSON.parse(json));
         });
     }
+});
+fs.readFile('public/user/custom-creatures.json', function (err, json) {
+    if (err) {
+        return;
+    }
+    creatures = creatures.concat(JSON.parse(json));
+});
+fs.readFile('public/user/playercharacters.json', function (err, json) {
+    if (err) {
+        return;
+    }
+    playerCharacters = playerCharacters.concat(JSON.parse(json));
 });
 var newEncounterIndex = function () {
     var newEncounterId = playerViews.length;
@@ -66,6 +79,14 @@ app.get('/creatures/', function (req, res) {
 });
 app.get('/creatures/:id', function (req, res) {
     res.json(creatures[req.params.id]);
+});
+app.get('/playercharacters/', function (req, res) {
+    res.json(playerCharacters.map(function (playercharacter, index) {
+        return { "Id": index, "Name": playercharacter.Name };
+    }));
+});
+app.get('/playercharacters/:id', function (req, res) {
+    res.json(playerCharacters[req.params.id]);
 });
 io.on('connection', function (socket) {
     console.log('a user connected');
