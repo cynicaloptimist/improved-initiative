@@ -25,7 +25,7 @@
     <!--/ko -->
     <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: ToggleCommandDisplay" />
   </div>
-  <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.PreviewCreature } }"></div>
+  <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
   <div class="libraries">
     <h1>Library</h1>
     <div class="tabs">
@@ -38,7 +38,6 @@
       <ul class="library" data-bind="foreach: SavedEncounterIndex">
         <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
           <span class="fa" data-bind="text: $data"></span>
-          <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.encounter', data: $parent.PreviewEncounter }"></span>
         </li>
       </ul>
       <!-- /ko -->
@@ -46,13 +45,11 @@
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
       <ul class="library" data-bind="foreach: FilteredCreatures">
         <li>
-          <span class="fa" data-bind="click: $root.Encounter().AddCreature, text: Name"></span>
-          <span class="fa fa-edit" data-bind="click: $parent.EditStatBlock"></span>
+          <span class="fa" data-bind="click: $root.Encounter().AddCreatureFromListing, text: Name"></span>
           <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
         </li>
       </ul>
       <div class="interface-buttons">
-        <div data-bind="click: AddNewCreature"><span class="fa fa-plus"></span></div>
         <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
       </div>
       <!-- /ko -->

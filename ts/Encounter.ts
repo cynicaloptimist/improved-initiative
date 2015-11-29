@@ -106,7 +106,17 @@ module ImprovedInitiative {
         creature.Tags(savedCreature.Tags);
         creature.Hidden(savedCreature.Hidden);
     }
-        
+    
+    AddCreatureFromListing = (listing: CreatureListing, event?) => {
+      if(listing.IsLoaded){
+        this.AddCreature(listing.StatBlock(), event);
+      } else {
+        listing.LoadStatBlock(listing => {
+          this.AddCreature(listing.StatBlock(), event);
+        })
+      }
+    }
+    
     AddCreature = (creatureJson: IStatBlock, event?) => 
     {
       console.log("adding %O to encounter", creatureJson);

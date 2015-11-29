@@ -532,6 +532,16 @@ var ImprovedInitiative;
                 creature.Tags(savedCreature.Tags);
                 creature.Hidden(savedCreature.Hidden);
             };
+            this.AddCreatureFromListing = function (listing, event) {
+                if (listing.IsLoaded) {
+                    _this.AddCreature(listing.StatBlock(), event);
+                }
+                else {
+                    listing.LoadStatBlock(function (listing) {
+                        _this.AddCreature(listing.StatBlock(), event);
+                    });
+                }
+            };
             this.AddCreature = function (creatureJson, event) {
                 console.log("adding %O to encounter", creatureJson);
                 var creature;
@@ -755,6 +765,14 @@ var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var CreatureListing = (function () {
         function CreatureListing(id, name, type) {
+            var _this = this;
+            this.LoadStatBlock = function (callback) {
+                $.getJSON("/creatures/" + _this.Id, function (json) {
+                    _this.IsLoaded = true;
+                    _this.StatBlock(json);
+                    callback(_this);
+                });
+            };
             this.Id = id;
             this.Name = name;
             this.Type = type;
@@ -763,6 +781,7 @@ var ImprovedInitiative;
         }
         return CreatureListing;
     })();
+    ImprovedInitiative.CreatureListing = CreatureListing;
     var CreatureLibrary = (function () {
         function CreatureLibrary(StatBlockEditor) {
             var _this = this;
@@ -770,7 +789,21 @@ var ImprovedInitiative;
             this.Creatures = ko.observableArray([]);
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
-            this.PreviewCreature = ko.observable(ImprovedInitiative.StatBlock.Empty());
+            this.previewStatBlock = ko.observable(null);
+            this.GetPreviewStatBlock = ko.computed(function () {
+                return _this.previewStatBlock() || ImprovedInitiative.StatBlock.Empty();
+            });
+            this.PreviewCreature = function (creature) {
+                if (creature.IsLoaded) {
+                    _this.previewStatBlock(creature.StatBlock());
+                }
+                else {
+                    _this.previewStatBlock(null);
+                    creature.LoadStatBlock(function (listing) {
+                        _this.previewStatBlock(listing.StatBlock());
+                    });
+                }
+            };
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {
@@ -793,13 +826,17 @@ var ImprovedInitiative;
                 return creaturesWithFilterInName.concat(creaturesWithFilterInType);
             });
             this.AddPlayers = function (library) {
-                ko.utils.arrayPushAll(_this.Players, library);
+                ko.utils.arrayPushAll(_this.Players, library.map(function (c) {
+                    return new CreatureListing(c.Id, c.Name, c.Type);
+                }));
             };
             this.AddCreatures = function (library) {
                 library.sort(function (c1, c2) {
                     return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
                 });
-                ko.utils.arrayPushAll(_this.Creatures, library);
+                ko.utils.arrayPushAll(_this.Creatures, library.map(function (c) {
+                    return new CreatureListing(c.Id, c.Name, c.Type);
+                }));
             };
             var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
             if (savedEncounterList && savedEncounterList != 'undefined') {

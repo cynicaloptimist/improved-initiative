@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-	class CreatureListing {
+	export class CreatureListing {
         Id: string;
         Name: string;
         Type: string;
@@ -11,6 +11,14 @@ module ImprovedInitiative {
             this.Type = type;
             this.IsLoaded = false;
             this.StatBlock = ko.observable(StatBlock.Empty(c => {c.Name = name}));
+        }
+        
+        LoadStatBlock = (callback: (CreatureListing) => void) => {
+            $.getJSON(`/creatures/${this.Id}`, (json) => {
+                this.IsLoaded = true;
+                this.StatBlock(json);
+                callback(this);
+            })
         }
     }
     
@@ -25,12 +33,27 @@ module ImprovedInitiative {
         Players = ko.observableArray<CreatureListing>([]);
         SavedEncounterIndex = ko.observableArray<string>([]);
         
-        PreviewCreature = ko.observable<IStatBlock>(StatBlock.Empty());
+        private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
+        
+        GetPreviewStatBlock = ko.computed(() => {
+            return this.previewStatBlock() || StatBlock.Empty();
+        })
+        
+        PreviewCreature = (creature: CreatureListing) => {
+            if(creature.IsLoaded){
+                this.previewStatBlock(creature.StatBlock());
+            } else {
+                this.previewStatBlock(null);
+                creature.LoadStatBlock(listing => {
+                    this.previewStatBlock(listing.StatBlock());
+                });
+            }
+        }
     
         DisplayTab = ko.observable('Creatures');
         LibraryFilter = ko.observable('');
         
-        FilteredCreatures = ko.computed<KnockoutObservable<IStatBlock> []>(() => {
+        FilteredCreatures = ko.computed<CreatureListing []>(() => {
             var creatures = ko.unwrap(this.Creatures),
                 players = ko.unwrap(this.Players),
                 filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
@@ -57,14 +80,18 @@ module ImprovedInitiative {
         });
     
         AddPlayers = (library: CreatureListing []) => {
-            ko.utils.arrayPushAll(this.Players, library);
+            ko.utils.arrayPushAll(this.Players, library.map(c => {
+                return new CreatureListing(c.Id, c.Name, c.Type);
+            }));
         }
         
         AddCreatures = (library: CreatureListing []) =>  {
             library.sort((c1,c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
-            ko.utils.arrayPushAll(this.Creatures, library);
+            ko.utils.arrayPushAll(this.Creatures, library.map(c => {
+                return new CreatureListing(c.Id, c.Name, c.Type);
+            }));
         }
 	}
 }
