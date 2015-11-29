@@ -732,6 +732,16 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
+    var CreatureListing = (function () {
+        function CreatureListing(id, name, type) {
+            this.Id = id;
+            this.Name = name;
+            this.Type = type;
+            this.IsLoaded = false;
+            this.StatBlock = ko.observable(ImprovedInitiative.StatBlock.Empty(function (c) { c.Name = name; }));
+        }
+        return CreatureListing;
+    })();
     var CreatureLibrary = (function () {
         function CreatureLibrary(StatBlockEditor) {
             var _this = this;
@@ -740,7 +750,6 @@ var ImprovedInitiative;
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
             this.PreviewCreature = ko.observable(ImprovedInitiative.StatBlock.Empty());
-            this.PreviewEncounter = ko.observable({ Creatures: [], ActiveCreatureIndex: -1, Name: '' });
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {
@@ -752,55 +761,30 @@ var ImprovedInitiative;
                     return creatures;
                 }
                 creatures.forEach(function (c) {
-                    if (c().Name.toLocaleLowerCase().indexOf(filter) > -1) {
+                    if (c.Name.toLocaleLowerCase().indexOf(filter) > -1) {
                         creaturesWithFilterInName.push(c);
                         return;
                     }
-                    if (c().Type.toLocaleLowerCase().indexOf(filter) > -1) {
+                    if (c.Type.toLocaleLowerCase().indexOf(filter) > -1) {
                         creaturesWithFilterInType.push(c);
                     }
                 });
                 return creaturesWithFilterInName.concat(creaturesWithFilterInType);
             });
-            this.EditStatBlock = function (StatBlock, event) {
-                var StatBlockObservable = _this.Creatures().filter(function (c) { return c() === StatBlock; })[0];
-                _this.StatBlockEditor.EditCreature(StatBlock, function (newStatBlock) {
-                    StatBlockObservable(newStatBlock);
-                });
-                return false;
-            };
-            this.AddNewPlayer = function () {
-                var player = ImprovedInitiative.StatBlock.Empty(function (s) { s.Player = "player"; });
-                player.Player = "player";
-                _this.EditStatBlock(_this.AddCreature(player)());
-            };
-            this.AddNewCreature = function () {
-                var creature = ImprovedInitiative.StatBlock.Empty();
-                _this.EditStatBlock(_this.AddCreature(creature)());
-            };
             this.AddPlayers = function (library) {
-                library.forEach(function (c) { return _this.Players.push(ko.observable(c)); });
+                ko.utils.arrayPushAll(_this.Players, library);
             };
             this.AddCreatures = function (library) {
                 library.sort(function (c1, c2) {
                     return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
-                }).forEach(function (c) { return _this.Creatures.push(ko.observable(c)); });
+                });
+                ko.utils.arrayPushAll(_this.Creatures, library);
             };
             var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
             if (savedEncounterList && savedEncounterList != 'undefined') {
                 JSON.parse(savedEncounterList).forEach(function (e) { return _this.SavedEncounterIndex.push(e); });
             }
         }
-        CreatureLibrary.prototype.AddPlayer = function (player) {
-            var observablePlayer = ko.observable(player);
-            this.Players.push(observablePlayer);
-            return observablePlayer;
-        };
-        CreatureLibrary.prototype.AddCreature = function (creature) {
-            var observableCreature = ko.observable(creature);
-            this.Creatures.push(observableCreature);
-            return observableCreature;
-        };
         return CreatureLibrary;
     })();
     ImprovedInitiative.CreatureLibrary = CreatureLibrary;
@@ -995,7 +979,7 @@ var ImprovedInitiative;
         }
         StatBlock.Empty = function (mutator) {
             var statBlock = {
-                Name: '', Type: '',
+                Id: null, Name: '', Type: '',
                 HP: { Value: 1, Notes: '' }, AC: { Value: 10, Notes: '' },
                 Speed: [],
                 Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },

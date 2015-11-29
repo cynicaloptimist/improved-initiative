@@ -107,7 +107,7 @@ module ImprovedInitiative {
         creature.Hidden(savedCreature.Hidden);
     }
         
-    AddCreature = (creatureJson: IHaveTrackerStats, event?) => 
+    AddCreature = (creatureJson: IStatBlock, event?) => 
     {
       console.log("adding %O to encounter", creatureJson);
       var creature: ICreature;

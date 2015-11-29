@@ -74,7 +74,7 @@ app.get('/playerviews/:id', function (req, res) {
 });
 app.get('/creatures/', function (req, res) {
     res.json(creatures.map(function (creature, index) {
-        return { "Id": index, "Name": creature.Name };
+        return { "Id": index, "Name": creature.Name, "Type": creature.Type };
     }));
 });
 app.get('/creatures/:id', function (req, res) {

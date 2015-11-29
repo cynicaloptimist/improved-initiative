@@ -34,6 +34,7 @@ module ImprovedInitiative {
   }
   
   export interface IHaveTrackerStats {
+    Id?: number;
     Player?: string;
     Type?: string;
     Name: string;
@@ -44,7 +45,8 @@ module ImprovedInitiative {
   }
   
   export interface IStatBlock {
-      Name: string; 
+      Id?: number;
+      Name: string;
       Type: string;
       HP: IHaveValue;
       AC: IHaveValue;
@@ -69,7 +71,7 @@ module ImprovedInitiative {
   export class StatBlock {
     static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
       var statBlock =  {
-        Name: '', Type: '', 
+        Id: null, Name: '', Type: '', 
         HP: { Value: 1, Notes: ''},  AC: { Value: 10, Notes: ''},
         Speed: [],
         Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },

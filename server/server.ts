@@ -87,7 +87,7 @@ app.get('/playerviews/:id', (req, res) => {
 
 app.get('/creatures/', (req, res) => {
 	res.json(creatures.map((creature, index) => {
-		return { "Id": index, "Name": creature.Name }
+		return { "Id": index, "Name": creature.Name, "Type": creature.Type }
 	}));
 })
 

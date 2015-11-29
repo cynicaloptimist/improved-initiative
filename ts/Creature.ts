@@ -19,7 +19,7 @@ module ImprovedInitiative {
   }
 	
   export class Creature implements ICreature{
-	  constructor(creatureJson: IHaveTrackerStats, public Encounter: Encounter){
+	  constructor(creatureJson: IStatBlock, public Encounter: Encounter){
 	    var statBlock = StatBlock.Empty();
       jQuery.extend(statBlock, creatureJson);
       this.StatBlock = ko.observable(statBlock);
