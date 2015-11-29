@@ -3,18 +3,20 @@ module ImprovedInitiative {
         Id: string;
         Name: string;
         Type: string;
+        Link: string;
         IsLoaded: boolean;
         StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(id, name, type){
+        constructor(id, name, type, link){
             this.Id = id;
             this.Name = name;
             this.Type = type;
+            this.Link = link;
             this.IsLoaded = false;
             this.StatBlock = ko.observable(StatBlock.Empty(c => {c.Name = name}));
         }
         
         LoadStatBlock = (callback: (CreatureListing) => void) => {
-            $.getJSON(`/creatures/${this.Id}`, (json) => {
+            $.getJSON(this.Link, (json) => {
                 this.IsLoaded = true;
                 this.StatBlock(json);
                 callback(this);
@@ -81,7 +83,7 @@ module ImprovedInitiative {
     
         AddPlayers = (library: CreatureListing []) => {
             ko.utils.arrayPushAll(this.Players, library.map(c => {
-                return new CreatureListing(c.Id, c.Name, c.Type);
+                return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
             }));
         }
         
@@ -90,7 +92,7 @@ module ImprovedInitiative {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
             ko.utils.arrayPushAll(this.Creatures, library.map(c => {
-                return new CreatureListing(c.Id, c.Name, c.Type);
+                return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
             }));
         }
 	}

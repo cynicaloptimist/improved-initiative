@@ -87,7 +87,7 @@ app.get('/playerviews/:id', (req, res) => {
 
 app.get('/creatures/', (req, res) => {
 	res.json(creatures.map((creature, index) => {
-		return { "Id": index, "Name": creature.Name, "Type": creature.Type }
+		return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
 	}));
 })
 
@@ -97,7 +97,7 @@ app.get('/creatures/:id', (req, res) => {
 
 app.get('/playercharacters/', (req, res) => {
 	res.json(playerCharacters.map((playercharacter, index) => {
-		return { "Id": index, "Name": playercharacter.Name }
+		return { "Id": index, "Name": playercharacter.Name, "Type": playercharacter.Type, "Link": `/playercharacters/${index}` }
 	}));
 })
 

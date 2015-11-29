@@ -743,10 +743,10 @@ var ImprovedInitiative;
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var CreatureListing = (function () {
-        function CreatureListing(id, name, type) {
+        function CreatureListing(id, name, type, link) {
             var _this = this;
             this.LoadStatBlock = function (callback) {
-                $.getJSON("/creatures/" + _this.Id, function (json) {
+                $.getJSON(_this.Link, function (json) {
                     _this.IsLoaded = true;
                     _this.StatBlock(json);
                     callback(_this);
@@ -755,6 +755,7 @@ var ImprovedInitiative;
             this.Id = id;
             this.Name = name;
             this.Type = type;
+            this.Link = link;
             this.IsLoaded = false;
             this.StatBlock = ko.observable(ImprovedInitiative.StatBlock.Empty(function (c) { c.Name = name; }));
         }
@@ -806,7 +807,7 @@ var ImprovedInitiative;
             });
             this.AddPlayers = function (library) {
                 ko.utils.arrayPushAll(_this.Players, library.map(function (c) {
-                    return new CreatureListing(c.Id, c.Name, c.Type);
+                    return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
                 }));
             };
             this.AddCreatures = function (library) {
@@ -814,7 +815,7 @@ var ImprovedInitiative;
                     return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
                 });
                 ko.utils.arrayPushAll(_this.Creatures, library.map(function (c) {
-                    return new CreatureListing(c.Id, c.Name, c.Type);
+                    return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
                 }));
             };
             var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
