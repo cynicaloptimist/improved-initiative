@@ -2,3 +2,4 @@
 .tscache/*
 node_modules/*
 public/user/*
+*.js.map
