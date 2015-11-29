@@ -5,13 +5,23 @@
 import express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io: SocketIO.Server = require('socket.io')(http);
+var fs = require('fs');
 
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 
 var port = process.env.PORT || 80;
 var playerViews = [];
+var creatures = [];
+
+fs.readFile('public/basic_rules_creatures.json', (err, json) => {
+	if(err){
+		throw `Couldn't read creature library: ${err}`;
+	}
+	creatures = JSON.parse(json);
+});
+
 var newEncounterIndex = (): number => {
 	var newEncounterId = playerViews.length;
 	playerViews[newEncounterId] = {};
@@ -47,6 +57,12 @@ app.get('/p/:id', (req, res) => {
 
 app.get('/playerviews/:id', (req, res) => {
 	res.json(playerViews[req.params.id]);
+})
+
+app.get('/creatures/', (req, res) => {
+	res.json(creatures.map((creature, index) => {
+		return { "Id": index, "Name": creature.Name }
+	}));
 })
 
 io.on('connection', function(socket){
