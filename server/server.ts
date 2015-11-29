@@ -15,12 +15,23 @@ var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
 
-fs.readFile('public/basic_rules_creatures.json', (err, json) => {
+fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 	if(err){
-		throw `Couldn't read creature library: ${err}`;
+		fs.readFile('public/basic_rules_creatures.json', (err, json) => {
+			if(err){
+				throw `Couldn't read creature library: ${err}`;
+			}
+			creatures = creatures.concat(JSON.parse(json));
+		});
+	} else {
+		fs.readFile('public/user/creatures.json', (err, json) => {
+			if(err){
+				throw `Couldn't read creature library: ${err}`;
+			}
+			creatures = creatures.concat(JSON.parse(json));
+		});
 	}
-	creatures = JSON.parse(json);
-});
+})
 
 var newEncounterIndex = (): number => {
 	var newEncounterId = playerViews.length;
@@ -64,6 +75,10 @@ app.get('/creatures/', (req, res) => {
 		return { "Id": index, "Name": creature.Name }
 	}));
 })
+
+app.get('/creatures/:id', (req, res) => {
+	res.json(creatures[req.params.id]);
+});
 
 io.on('connection', function(socket){
   	console.log('a user connected');
