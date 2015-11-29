@@ -12,12 +12,8 @@ module ImprovedInitiative {
       viewModel.RegisterKeybindings();
       ko.applyBindings(viewModel, document.body);
       
-      $.ajax("../user/creatures.json").done(viewModel.Library.AddCreatures).fail(() => {
-        $.ajax("../basic_rules_creatures.json").done(viewModel.Library.AddCreatures);
-      });
-      
-      $.ajax("../user/custom-creatures.json").done(viewModel.Library.AddCreatures);
-      $.ajax("../user/playercharacters.json").done(viewModel.Library.AddPlayers);
+      $.ajax("../creatures/").done(viewModel.Library.AddCreatures);
+      $.ajax("../playercharacters/").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
       var encounterId = $('html')[0].getAttribute('encounterId');

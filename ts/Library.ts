@@ -1,15 +1,15 @@
 module ImprovedInitiative {
 	export interface ICreatureLibrary {
 		Creatures: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
-    Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
-    FilteredCreatures: KnockoutComputed<KnockoutObservable<IHaveTrackerStats> []>;
-    SavedEncounterIndex: KnockoutObservableArray<string>;
-    LibraryFilter: KnockoutObservable<string>;
-    DisplayTab: KnockoutObservable<string>;
-    AddCreatures: (json: IHaveTrackerStats []) => void;
-    AddPlayers: (json: IHaveTrackerStats []) => void;
-    PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
-    EditStatBlock: (StatBlock: IStatBlock, event?) => void;
+        Players: KnockoutObservableArray<KnockoutObservable<IHaveTrackerStats>>;
+        FilteredCreatures: KnockoutComputed<KnockoutObservable<IHaveTrackerStats> []>;
+        SavedEncounterIndex: KnockoutObservableArray<string>;
+        LibraryFilter: KnockoutObservable<string>;
+        DisplayTab: KnockoutObservable<string>;
+        AddCreatures: (json: IHaveTrackerStats []) => void;
+        AddPlayers: (json: IHaveTrackerStats []) => void;
+        PreviewCreature: KnockoutObservable<IHaveTrackerStats>;
+        EditStatBlock: (StatBlock: IStatBlock, event?) => void;
 	}
 	
 	export class CreatureLibrary implements ICreatureLibrary {
