@@ -16,20 +16,10 @@ module ImprovedInitiative {
   }
   
   export class Encounter {
-    constructor(public UserPollQueue?: UserPollQueue, public StatBlockEditor?: StatBlockEditor, rules?: IRules){
+    constructor(rules?: IRules){
       this.Rules = rules || new DefaultRules();
       this.Creatures = ko.observableArray<ICreature>();
       this.CreatureCountsByName = [];
-      this.SelectedCreatures = ko.observableArray<ICreature>();
-      this.SelectedCreatureStatblock = ko.computed(() => 
-      {
-        var selectedCreatures = this.SelectedCreatures();
-        if(selectedCreatures.length == 1){
-          return selectedCreatures[0].StatBlock();
-        } else {
-          return StatBlock.Empty();
-        }
-      });
       this.ActiveCreature = ko.observable<ICreature>();
       this.ActiveCreatureStatblock = ko.computed(() => 
       {
@@ -42,8 +32,6 @@ module ImprovedInitiative {
     Rules: IRules;
     Creatures: KnockoutObservableArray<ICreature>;
     CreatureCountsByName: KnockoutObservable<number> [];
-    SelectedCreatures: KnockoutObservableArray<ICreature>;
-    SelectedCreatureStatblock: KnockoutComputed<IStatBlock>;
     ActiveCreature: KnockoutObservable<ICreature>;
     ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
     State: KnockoutObservable<string> = ko.observable('inactive');
@@ -67,7 +55,7 @@ module ImprovedInitiative {
       this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
     
-    private moveCreature = (creature: ICreature, index: number) => 
+    MoveCreature = (creature: ICreature, index: number) => 
     {
       var currentPosition = this.Creatures().indexOf(creature);
       var newInitiative = creature.Initiative();
@@ -84,18 +72,6 @@ module ImprovedInitiative {
       this.QueueEmitEncounter();
     }
     
-    private relativeNavigateFocus = (offset: number) => 
-    {
-      var newIndex = this.Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
-      if(newIndex < 0){ 
-        newIndex = 0;
-      } else if(newIndex >= this.Creatures().length) { 
-        newIndex = this.Creatures().length - 1; 
-      }
-      this.SelectedCreatures.removeAll()
-      this.SelectedCreatures.push(this.Creatures()[newIndex]);
-    }
-    
     private loadCreature = (savedCreature: ISavedCreature) => {
         var creature = this.AddCreature(savedCreature.Statblock);
         creature.CurrentHP(savedCreature.CurrentHP);
@@ -105,16 +81,6 @@ module ImprovedInitiative {
         creature.Alias(savedCreature.Alias);
         creature.Tags(savedCreature.Tags);
         creature.Hidden(savedCreature.Hidden);
-    }
-    
-    AddCreatureFromListing = (listing: CreatureListing, event?) => {
-      if(listing.IsLoaded){
-        this.AddCreature(listing.StatBlock(), event);
-      } else {
-        listing.LoadStatBlock(listing => {
-          this.AddCreature(listing.StatBlock(), event);
-        })
-      }
     }
     
     AddCreature = (creatureJson: IStatBlock, event?) => 
@@ -135,107 +101,6 @@ module ImprovedInitiative {
       return creature;
     }
     
-    RemoveSelectedCreatures = () => {
-      var creatures = ko.unwrap(this.SelectedCreatures),
-          index = this.Creatures.indexOf(creatures[0]),
-          deletedCreatureNames = creatures.map(c => c.StatBlock().Name);
-          
-      this.Creatures.removeAll(creatures);
-      
-      //Only reset creature count if we just removed the last one of its kind.
-      deletedCreatureNames.forEach(name => {
-        if(this.Creatures().every(c => c.StatBlock().Name != name)){
-          this.CreatureCountsByName[name](0);
-        }
-      })
-      
-      this.QueueEmitEncounter();
-    }
-    
-    SelectPreviousCombatant = () =>
-    {
-      this.relativeNavigateFocus(-1);
-    }
-    
-    SelectNextCombatant = () =>
-    {
-      this.relativeNavigateFocus(1);
-    }
-    
-    FocusSelectedCreatureHP = () =>
-    {
-      var selectedCreatures = this.SelectedCreatures();
-      var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
-      this.UserPollQueue.Add({
-        requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
-        inputSelector: '.response',
-        callback: response => selectedCreatures.forEach(c => {
-          c.ViewModel.ApplyDamage(response);
-          this.QueueEmitEncounter();
-        })
-      });
-      return false;
-    }
-    
-    AddSelectedCreaturesTemporaryHP = () => {
-      var selectedCreatures = this.SelectedCreatures();
-      var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
-      this.UserPollQueue.Add({
-        requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
-        inputSelector: '.response',
-        callback: response => selectedCreatures.forEach(c => {
-          c.ViewModel.ApplyTemporaryHP(response);
-          this.QueueEmitEncounter();
-        })
-      });
-      return false;
-    }
-    
-    AddSelectedCreatureTag = () => 
-    {
-      this.SelectedCreatures().forEach(c => c.ViewModel.AddingTag(true))
-      return false;
-    }
-    
-    EditSelectedCreatureInitiative = () => {
-      this.SelectedCreatures().forEach(c => c.ViewModel.EditInitiative())
-      return false;
-    }
-    
-    MoveSelectedCreatureUp = () =>
-    {
-      var creature = this.SelectedCreatures()[0];
-      var index = this.Creatures.indexOf(creature)
-      if(creature && index > 0){
-        this.moveCreature(creature, index - 1);
-      }
-    }
-    
-    MoveSelectedCreatureDown = () =>
-    {
-      var creature = this.SelectedCreatures()[0];
-      var index = this.Creatures.indexOf(creature)
-      if(creature && index < this.Creatures().length - 1){
-        this.moveCreature(creature, index + 1);
-      }
-    }
-    
-    EditSelectedCreatureName = () => 
-    {
-      this.SelectedCreatures().forEach(c => c.ViewModel.EditName() )
-      return false;
-    }
-    
-    EditSelectedCreature = () => 
-    {
-      if(this.SelectedCreatures().length == 1){
-        var selectedCreature = this.SelectedCreatures()[0];
-        this.StatBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
-          selectedCreature.StatBlock(newStatBlock);
-        })
-      }
-    }
-    
     RequestInitiative = (playercharacter: ICreature) => {
       this.UserPollQueue.Add({
         requestContent: `<p>Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
@@ -244,10 +109,6 @@ module ImprovedInitiative {
           playercharacter.Initiative(parseInt(response));
         }
       });
-    }
-    
-    FocusResponseRequest = () => {
-      $('#user-response-requests input').first().select();
     }
     
     StartEncounter = () => {

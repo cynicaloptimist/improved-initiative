@@ -25,7 +25,7 @@ module ImprovedInitiative {
     }
     
 	export class CreatureLibrary {
-		constructor (private StatBlockEditor: IStatBlockEditor) {
+		constructor () {
 			var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
             if(savedEncounterList && savedEncounterList != 'undefined'){
                 JSON.parse(savedEncounterList).forEach(e => this.SavedEncounterIndex.push(e));
