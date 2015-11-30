@@ -3520,6 +3520,15 @@ body .views div,
 body .views li {
   cursor: default;
 }
+body .modalblur {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9;
+}
 body .commands {
   border: 2px solid gray;
   border-radius: 5px;

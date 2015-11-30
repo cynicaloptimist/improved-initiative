@@ -43,6 +43,7 @@ module ImprovedInitiative {
     Commands = BuildCommandList(this);
     
     ToggleCommandDisplay = () => {
+      $('.modalblur').toggle();
       if ($('.commands').toggle().css('display') == 'none'){
         this.RegisterKeybindings();
       }

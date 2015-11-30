@@ -219,7 +219,7 @@ var ImprovedInitiative;
             ActionBarIcon: 'fa-plus-circle',
             GetActionBinding: function () { return v.Encounter().FocusSelectedCreatureHP; },
             ShowOnActionBar: ko.observable(false) },
-        { Description: 'Add Tag to Selected Combatant',
+        { Description: 'Add Note to Selected Combatant',
             KeyBinding: 'g',
             ActionBarIcon: 'fa-tag',
             GetActionBinding: function () { return v.Encounter().AddSelectedCreatureTag; },
@@ -1196,6 +1196,7 @@ var ImprovedInitiative;
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
             this.ToggleCommandDisplay = function () {
+                $('.modalblur').toggle();
                 if ($('.commands').toggle().css('display') == 'none') {
                     _this.RegisterKeybindings();
                 }
