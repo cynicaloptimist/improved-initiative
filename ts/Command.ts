@@ -48,7 +48,7 @@ module ImprovedInitiative {
         ActionBarIcon: 'fa-plus-circle', 
         GetActionBinding: () => v.Encounter().FocusSelectedCreatureHP,
         ShowOnActionBar: ko.observable(false) },
-      { Description: 'Add Tag to Selected Combatant', 
+      { Description: 'Add Note to Selected Combatant', 
         KeyBinding: 'g',
         ActionBarIcon: 'fa-tag', 
         GetActionBinding: () => v.Encounter().AddSelectedCreatureTag,
