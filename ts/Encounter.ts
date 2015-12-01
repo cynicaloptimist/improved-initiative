@@ -101,8 +101,8 @@ module ImprovedInitiative {
       return creature;
     }
     
-    RequestInitiative = (playercharacter: ICreature) => {
-      this.UserPollQueue.Add({
+    RequestInitiative = (playercharacter: ICreature, userPollQueue: UserPollQueue) => {
+      userPollQueue.Add({
         requestContent: `<p>Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
         inputSelector: '.response',
         callback: (response: any) => {
@@ -124,7 +124,7 @@ module ImprovedInitiative {
       this.QueueEmitEncounter();
     }
     
-    RollInitiative = () =>
+    RollInitiative = (userPollQueue: UserPollQueue) =>
     {
       // Foreaching over the original array while we're rearranging it
       // causes unpredictable results- dupe it first.
@@ -135,20 +135,16 @@ module ImprovedInitiative {
         creatures.forEach(
           c => {
             if(initiatives[c.StatBlock().Name] === undefined){
-              initiatives[c.StatBlock().Name] = c.RollInitiative();
+              initiatives[c.StatBlock().Name] = c.RollInitiative(userPollQueue);
             }
             c.Initiative(initiatives[c.StatBlock().Name]);
           }
         )
       } else {
         creatures.forEach(c => { 
-          c.RollInitiative();
-        });
-        this.UserPollQueue.Add({
-          callback: this.StartEncounter
+          c.RollInitiative(userPollQueue);
         });
       }
-      
       $('.libraries').slideUp()
     }
     

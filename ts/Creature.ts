@@ -13,7 +13,7 @@ module ImprovedInitiative {
 	  Initiative: KnockoutObservable<number>;
     Hidden: KnockoutObservable<boolean>;
 	  StatBlock: KnockoutObservable<IStatBlock>;
-    RollInitiative: () => void;
+    RollInitiative: (userPollQueue: UserPollQueue) => void;
     ViewModel: CombatantViewModel;
     IsPlayerCharacter: boolean;
   }
@@ -70,19 +70,10 @@ module ImprovedInitiative {
 	    return modifiers;
 	  }
     
-    RollInitiative = () => {
+    RollInitiative = (userPollQueue: UserPollQueue) => {
 	    var roll = this.Encounter.Rules.Check(this.InitiativeModifier);
 	    this.Initiative(roll);
 	    return roll;
 	  }
-    
-    HandleClick = (data: ICreature, e: MouseEvent) => {
-      var selectedCreatures = this.Encounter.SelectedCreatures;
-      if(!e.ctrlKey){
-        selectedCreatures.removeAll();
-      }
-      selectedCreatures.push(data);
-    }
-    
 	}
 }

@@ -9,7 +9,7 @@ module ImprovedInitiative {
     if($('#tracker').length)
     {
       var viewModel = new TrackerViewModel();
-      viewModel.RegisterKeybindings();
+      viewModel.Commander.RegisterKeybindings();
       ko.applyBindings(viewModel, document.body);
       
       $.ajax("../creatures/").done(viewModel.Library.AddCreatures);

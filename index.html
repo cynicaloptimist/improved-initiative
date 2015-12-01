@@ -14,9 +14,9 @@
   
   </head>
   <body id="tracker">
-  <div class="modalblur" data-bind="click: ToggleCommandDisplay"></div>
+  <div class="modalblur" data-bind="click: Commander.ToggleCommandDisplay"></div>
   <div class="commands">
-    <!--ko foreach: Commands -->
+    <!--ko foreach: Commander.Commands -->
     <div>
       <div class="label" data-bind="text: Description"></div>
       <input class="keybinding" type="text" data-bind="value: KeyBinding" />
@@ -24,7 +24,7 @@
       <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar" />
     </div>
     <!--/ko -->
-    <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: ToggleCommandDisplay" />
+    <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: Commander.ToggleCommandDisplay" />
   </div>
   <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
   <div class="libraries">
@@ -37,7 +37,7 @@
     <!--ko with: Library -->
       <!-- ko if: DisplayTab() == 'Encounters' -->
       <ul class="library" data-bind="foreach: SavedEncounterIndex">
-        <li data-bind="click: $root.LoadEncounterByName.bind(null, $data)">
+        <li data-bind="click: $root.Commander.LoadEncounterByName.bind(null, $data)">
           <span class="fa" data-bind="text: $data"></span>
         </li>
       </ul>
@@ -46,7 +46,7 @@
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
       <ul class="library" data-bind="foreach: FilteredCreatures">
         <li>
-          <span class="fa" data-bind="click: $root.Encounter().AddCreatureFromListing, text: Name"></span>
+          <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
           <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
         </li>
       </ul>
@@ -93,9 +93,9 @@
         </li>
         <!-- ko foreach: Creatures -->
         <li class="creature" data-bind="
-          css: { selected: $parent.SelectedCreatures().indexOf($data) > -1, 
+          css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
                  active: $parent.ActiveCreature() == $data },
-          click: HandleClick,
+          click: $root.Commander.SelectCreature,
           component: {
             name: 'combatant',
             params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
@@ -117,21 +117,21 @@
 
     <div class="selected statblock">
       <h1>Target Creature</h1>
-      <div data-bind="visible: Encounter().SelectedCreatures().length == 1, 
+      <div data-bind="visible: Commander.SelectedCreatures().length == 1, 
       component: { 
         name: 'defaultstatblock', 
         params:{ 
-          creature: Encounter().SelectedCreatureStatblock(),
+          creature: Commander.SelectedCreatureStatblock(),
         } 
       }"></div>
     </div>
   </div>
-  <div class="interface-buttons" data-bind="foreach: Commands">
+  <div class="interface-buttons" data-bind="foreach: Commander.Commands">
     <div class="fa" data-bind="
       visible: ShowOnActionBar,
       css: ActionBarIcon,
       attr: { title: Description },
-      click: GetActionBinding()
+      click: ActionBinding
       "></div>
   </div>
   </body>
