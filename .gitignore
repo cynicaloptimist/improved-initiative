@@ -2,4 +2,5 @@
 .tscache/*
 node_modules/*
 public/user/*
+public/fonts/*
 *.js.map

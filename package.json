@@ -31,7 +31,7 @@
   "dependencies": {
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
-    "font-awesome": "^4.3.0",
+    "font-awesome": "^4.5.0",
     "jquery": "^2.1.4",
     "knockout": "^3.3.0",
     "mousetrap": "^1.5.3",
@@ -39,5 +39,9 @@
     "mustache-express": "^1.2.1",
     "socket.io": "^1.3.7",
     "socket.io-client": "^1.3.7"
+  },
+  "scripts": {
+    "copy:fonts": "cp -R node_modules/font-awesome/fonts public/fonts",
+    "postinstall": "npm run copy:fonts"
   }
 }
