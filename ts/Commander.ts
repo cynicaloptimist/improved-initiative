@@ -147,6 +147,7 @@ module ImprovedInitiative {
                 var selectedCreature = this.SelectedCreatures()[0];
                 this.statBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
                     selectedCreature.StatBlock(newStatBlock);
+                    this.encounter().QueueEmitEncounter();
                 })
             }
         }

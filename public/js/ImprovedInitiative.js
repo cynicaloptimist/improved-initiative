@@ -141,9 +141,9 @@ var ImprovedInitiative;
                 _this.Creature.Encounter.QueueEmitEncounter();
             };
             this.DisplayName = ko.computed(function () {
-                var alias = ko.unwrap(_this.Creature.Alias), creatureCounts = ko.unwrap(_this.Creature.Encounter.CreatureCountsByName), name = ko.unwrap(_this.Creature.StatBlock).Name, index = _this.Creature.IndexLabel;
+                var alias = ko.unwrap(_this.Creature.Alias), name = ko.unwrap(_this.Creature.StatBlock).Name, creatureCount = ko.unwrap(_this.Creature.Encounter.CreatureCountsByName[name]), index = _this.Creature.IndexLabel;
                 return alias ||
-                    (creatureCounts[name]() > 1 ?
+                    (creatureCount > 1 ?
                         name + " " + index :
                         name);
             });
@@ -391,6 +391,7 @@ var ImprovedInitiative;
                     var selectedCreature = _this.SelectedCreatures()[0];
                     _this.statBlockEditor.EditCreature(_this.SelectedCreatureStatblock(), function (newStatBlock) {
                         selectedCreature.StatBlock(newStatBlock);
+                        _this.encounter().QueueEmitEncounter();
                     });
                 }
             };
@@ -521,7 +522,12 @@ var ImprovedInitiative;
             var statBlock = ImprovedInitiative.StatBlock.Empty();
             jQuery.extend(statBlock, creatureJson);
             this.StatBlock = ko.observable(statBlock);
+            var statBlockName = statBlock.Name;
             this.setIndexLabel();
+            this.StatBlock.subscribe(function (newStatBlock) {
+                _this.setIndexLabel(statBlockName);
+                statBlockName = newStatBlock.Name;
+            });
             this.MaxHP = statBlock.HP.Value;
             this.CurrentHP = ko.observable(statBlock.HP.Value);
             this.TemporaryHP = ko.observable(0);
@@ -531,8 +537,14 @@ var ImprovedInitiative;
             this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
             this.Initiative = ko.observable(0);
         }
-        Creature.prototype.setIndexLabel = function () {
+        Creature.prototype.setIndexLabel = function (oldName) {
             var name = this.StatBlock().Name, counts = this.Encounter.CreatureCountsByName;
+            if (name == oldName) {
+                return;
+            }
+            if (oldName) {
+                counts[oldName](counts[oldName]() - 1);
+            }
             if (!counts[name]) {
                 counts[name] = ko.observable(1);
             }
@@ -1139,8 +1151,8 @@ var ImprovedInitiative;
             };
             this.SaveCreature = function () {
                 if (_this.editorType() === 'advanced') {
-                    var editedCreature = JSON.parse(_this.statBlockJson());
-                    $.extend(_this.StatBlock(), editedCreature);
+                    var statBlockFromJSON = JSON.parse(_this.statBlockJson());
+                    _this.StatBlock($.extend(ImprovedInitiative.StatBlock.Empty(), statBlockFromJSON));
                 }
                 _this.callback(_this.StatBlock());
                 _this.StatBlock(null);

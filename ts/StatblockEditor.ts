@@ -1,10 +1,5 @@
 module ImprovedInitiative {
-	export interface IStatBlockEditor {
-    StatBlock: KnockoutObservable<IStatBlock>;
-    EditCreature: (StatBlock: IStatBlock, callback: (newStatBlock: IStatBlock) => void) => void;
-  }
-  
-  export class StatBlockEditor {
+	export class StatBlockEditor {
     private callback: (newStatBlock: IStatBlock) => void;
     StatBlock = ko.observable<IStatBlock>();
     editorType = ko.observable<string>('basic');
@@ -18,8 +13,8 @@ module ImprovedInitiative {
     
     SaveCreature = () => {
       if(this.editorType() === 'advanced') {
-        var editedCreature = JSON.parse(this.statBlockJson());
-        $.extend(this.StatBlock(), editedCreature)
+        var statBlockFromJSON = JSON.parse(this.statBlockJson());
+        this.StatBlock($.extend(StatBlock.Empty(), statBlockFromJSON))
       }
       this.callback(this.StatBlock());
       this.StatBlock(null);

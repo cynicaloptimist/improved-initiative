@@ -120,12 +120,12 @@ module ImprovedInitiative {
     
     DisplayName = ko.computed(() => {
       var alias = ko.unwrap(this.Creature.Alias),
-          creatureCounts = ko.unwrap(this.Creature.Encounter.CreatureCountsByName),
           name = ko.unwrap(this.Creature.StatBlock).Name,
+          creatureCount = ko.unwrap(this.Creature.Encounter.CreatureCountsByName[name]),
           index = this.Creature.IndexLabel;
           
       return alias ||
-             (creatureCounts[name]() > 1 ? 
+             (creatureCount > 1 ? 
              name + " " + index : 
              name);
     })

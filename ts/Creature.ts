@@ -19,14 +19,23 @@ module ImprovedInitiative {
   }
 	
   export class Creature implements ICreature{
-	  constructor(creatureJson: IStatBlock, public Encounter: Encounter){
-	    var statBlock = StatBlock.Empty();
+    constructor(creatureJson: IStatBlock, public Encounter: Encounter){
+	    
+      var statBlock = StatBlock.Empty();
       jQuery.extend(statBlock, creatureJson);
       this.StatBlock = ko.observable(statBlock);
+      
+      var statBlockName = statBlock.Name;
       this.setIndexLabel();
+      this.StatBlock.subscribe((newStatBlock) => {
+        this.setIndexLabel(statBlockName);
+        statBlockName = newStatBlock.Name;
+      }); 
+      
       this.MaxHP = statBlock.HP.Value;
       this.CurrentHP = ko.observable(statBlock.HP.Value);
       this.TemporaryHP = ko.observable(0);
+      
       this.AbilityModifiers = this.calculateModifiers();
       this.AC = statBlock.AC.Value;
       this.Tags = ko.observableArray<string>();
@@ -51,9 +60,15 @@ module ImprovedInitiative {
     ViewModel: any;
     IsPlayerCharacter = false;
     
-    private setIndexLabel() {
+    private setIndexLabel(oldName?: string) {
       var name = this.StatBlock().Name,
           counts = this.Encounter.CreatureCountsByName;
+      if(name == oldName){
+          return;
+      }
+      if(oldName){
+        counts[oldName](counts[oldName]() - 1);
+      }
       if(!counts[name]){
         counts[name] = ko.observable(1);
       } else {
