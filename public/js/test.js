@@ -861,10 +861,10 @@ var ImprovedInitiative;
     var CreatureLibrary = (function () {
         function CreatureLibrary() {
             var _this = this;
+            this.previewStatBlock = ko.observable(null);
             this.Creatures = ko.observableArray([]);
             this.Players = ko.observableArray([]);
             this.SavedEncounterIndex = ko.observableArray([]);
-            this.previewStatBlock = ko.observable(null);
             this.GetPreviewStatBlock = ko.computed(function () {
                 return _this.previewStatBlock() || ImprovedInitiative.StatBlock.Empty();
             });

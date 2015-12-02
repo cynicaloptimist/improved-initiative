@@ -25,17 +25,18 @@ module ImprovedInitiative {
     }
     
 	export class CreatureLibrary {
-		constructor () {
+		private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
+        
+        constructor () {
 			var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
             if(savedEncounterList && savedEncounterList != 'undefined'){
                 JSON.parse(savedEncounterList).forEach(e => this.SavedEncounterIndex.push(e));
             }
 		}
+        
         Creatures = ko.observableArray<CreatureListing>([]);
         Players = ko.observableArray<CreatureListing>([]);
         SavedEncounterIndex = ko.observableArray<string>([]);
-        
-        private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
         
         GetPreviewStatBlock = ko.computed(() => {
             return this.previewStatBlock() || StatBlock.Empty();

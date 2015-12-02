@@ -26,7 +26,7 @@
     "mocha": "^2.2.5",
     "requirejs": "^2.1.17",
     "sinon": "^1.15.4",
-    "typescript": "^1.6.2"
+    "typescript": "^1.7.3"
   },
   "dependencies": {
     "body-parser": "^1.14.1",
