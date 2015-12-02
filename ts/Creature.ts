@@ -19,46 +19,47 @@ module ImprovedInitiative {
   }
 	
   export class Creature implements ICreature{
-    constructor(creatureJson: IStatBlock, public Encounter: Encounter){
-	    
-      var statBlock = StatBlock.Empty();
-      jQuery.extend(statBlock, creatureJson);
-      this.StatBlock = ko.observable(statBlock);
+    constructor(creatureJson, public Encounter: Encounter){
+      var statBlock = jQuery.extend(StatBlock.Empty(), creatureJson);
       
-      var statBlockName = statBlock.Name;
-      this.setIndexLabel();
+      this.StatBlock(statBlock);
+
+      this.processStatBlock(statBlock);
+      
       this.StatBlock.subscribe((newStatBlock) => {
-        this.setIndexLabel(statBlockName);
-        statBlockName = newStatBlock.Name;
+        this.processStatBlock(newStatBlock, statBlock);
+        statBlock = newStatBlock;
       }); 
       
-      this.MaxHP = statBlock.HP.Value;
       this.CurrentHP = ko.observable(statBlock.HP.Value);
-      this.TemporaryHP = ko.observable(0);
-      
-      this.AbilityModifiers = this.calculateModifiers();
-      this.AC = statBlock.AC.Value;
-      this.Tags = ko.observableArray<string>();
-      this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
-      this.Initiative = ko.observable(0);
 	  }
     
-    IndexLabel: number;
     Alias = ko.observable(null);
+    TemporaryHP: KnockoutObservable<number> = ko.observable(0);
+    Tags: KnockoutObservableArray<string> = ko.observableArray<string>();
+	  Initiative: KnockoutObservable<number> = ko.observable(0);
+    StatBlock: KnockoutObservable<IStatBlock> = ko.observable<IStatBlock>();
+    Hidden = ko.observable(false);
+
+    IndexLabel: number;
     MaxHP: number;
 	  CurrentHP: KnockoutObservable<number>;
-    TemporaryHP: KnockoutObservable<number>;
     PlayerDisplayHP: KnockoutComputed<string>;
 	  AC: number;
 	  AbilityModifiers: IHaveAbilities;
-    Tags: KnockoutObservableArray<string>;
     NewTag: KnockoutObservable<string>;
 	  InitiativeModifier: number;
-	  Initiative: KnockoutObservable<number>;
-    Hidden = ko.observable(false);
-    StatBlock: KnockoutObservable<IStatBlock>;
     ViewModel: any;
     IsPlayerCharacter = false;
+    
+    private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock){
+        this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
+        
+        this.AC = newStatBlock.AC.Value;
+        this.MaxHP = newStatBlock.HP.Value;
+        this.AbilityModifiers = this.calculateModifiers();
+        this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
+    }
     
     private setIndexLabel(oldName?: string) {
       var name = this.StatBlock().Name,

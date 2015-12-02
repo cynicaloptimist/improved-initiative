@@ -505,6 +505,10 @@ var ImprovedInitiative;
             var _this = this;
             this.Encounter = Encounter;
             this.Alias = ko.observable(null);
+            this.TemporaryHP = ko.observable(0);
+            this.Tags = ko.observableArray();
+            this.Initiative = ko.observable(0);
+            this.StatBlock = ko.observable();
             this.Hidden = ko.observable(false);
             this.IsPlayerCharacter = false;
             this.calculateModifiers = function () {
@@ -519,24 +523,22 @@ var ImprovedInitiative;
                 _this.Initiative(roll);
                 return roll;
             };
-            var statBlock = ImprovedInitiative.StatBlock.Empty();
-            jQuery.extend(statBlock, creatureJson);
-            this.StatBlock = ko.observable(statBlock);
-            var statBlockName = statBlock.Name;
-            this.setIndexLabel();
+            var statBlock = jQuery.extend(ImprovedInitiative.StatBlock.Empty(), creatureJson);
+            this.StatBlock(statBlock);
+            this.processStatBlock(statBlock);
             this.StatBlock.subscribe(function (newStatBlock) {
-                _this.setIndexLabel(statBlockName);
-                statBlockName = newStatBlock.Name;
+                _this.processStatBlock(newStatBlock, statBlock);
+                statBlock = newStatBlock;
             });
-            this.MaxHP = statBlock.HP.Value;
             this.CurrentHP = ko.observable(statBlock.HP.Value);
-            this.TemporaryHP = ko.observable(0);
-            this.AbilityModifiers = this.calculateModifiers();
-            this.AC = statBlock.AC.Value;
-            this.Tags = ko.observableArray();
-            this.InitiativeModifier = statBlock.InitiativeModifier || this.Encounter.Rules.Modifier(statBlock.Abilities.Dex);
-            this.Initiative = ko.observable(0);
         }
+        Creature.prototype.processStatBlock = function (newStatBlock, oldStatBlock) {
+            this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
+            this.AC = newStatBlock.AC.Value;
+            this.MaxHP = newStatBlock.HP.Value;
+            this.AbilityModifiers = this.calculateModifiers();
+            this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
+        };
         Creature.prototype.setIndexLabel = function (oldName) {
             var name = this.StatBlock().Name, counts = this.Encounter.CreatureCountsByName;
             if (name == oldName) {
