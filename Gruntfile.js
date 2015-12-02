@@ -18,14 +18,6 @@ module.exports = function(grunt) {
                   target: 'es5'
               }
           },
-          test: {
-              src: ['test/**/*.ts', 'ts/**/*.ts'],
-              out: 'public/js/test.js',
-              options: {
-                  module: 'amd',
-                  target: 'es5'
-              }
-          },
           server : {
               src: ['server/**/*.ts'],
               outDir: '.',
@@ -34,6 +26,16 @@ module.exports = function(grunt) {
                 target: 'es5'
               }
           }
+      },
+      tstest: {
+        test: {
+              src: ['test/**/*.ts', 'ts/**/*.ts'],
+              out: 'public/js/test.js',
+              options: {
+                  module: 'amd',
+                  target: 'es5'
+              }
+          },
       },
       less: {
         development: {
