@@ -301,7 +301,10 @@ var ImprovedInitiative;
                 }
             };
             this.SelectCreature = function (data, e) {
-                if (!e.ctrlKey) {
+                if (!data) {
+                    return;
+                }
+                if (!(e && e.ctrlKey)) {
                     _this.SelectedCreatures.removeAll();
                 }
                 _this.SelectedCreatures.push(data);
@@ -318,14 +321,18 @@ var ImprovedInitiative;
                 _this.SelectedCreatures.push(_this.encounter().Creatures()[newIndex]);
             };
             this.RemoveSelectedCreatures = function () {
-                var creatures = ko.unwrap(_this.SelectedCreatures), index = _this.encounter().Creatures.indexOf(creatures[0]), deletedCreatureNames = creatures.map(function (c) { return c.StatBlock().Name; });
+                var creatures = _this.SelectedCreatures.removeAll(), index = _this.encounter().Creatures.indexOf(creatures[0]), deletedCreatureNames = creatures.map(function (c) { return c.StatBlock().Name; });
                 _this.encounter().Creatures.removeAll(creatures);
-                //Only reset creature count if we just removed the last one of its kind.
+                var allMyFriendsAreGone = function (name) { return _this.encounter().Creatures().every(function (c) { return c.StatBlock().Name != name; }); };
                 deletedCreatureNames.forEach(function (name) {
-                    if (_this.encounter().Creatures().every(function (c) { return c.StatBlock().Name != name; })) {
+                    if (allMyFriendsAreGone(name)) {
                         _this.encounter().CreatureCountsByName[name](0);
                     }
                 });
+                if (index >= _this.encounter().Creatures().length) {
+                    index = _this.encounter().Creatures().length - 1;
+                }
+                _this.SelectCreature(_this.encounter().Creatures()[index]);
                 _this.encounter().QueueEmitEncounter();
             };
             this.SelectPreviousCombatant = function () {

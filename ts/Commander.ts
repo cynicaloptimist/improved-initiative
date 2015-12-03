@@ -31,8 +31,11 @@ module ImprovedInitiative {
             }
         }
         
-        SelectCreature = (data: ICreature, e: MouseEvent) => {
-            if(!e.ctrlKey){
+        SelectCreature = (data: ICreature, e?: MouseEvent) => {
+            if(!data){
+                return;
+            }
+            if(!(e && e.ctrlKey)){
                 this.SelectedCreatures.removeAll();
             }
             this.SelectedCreatures.push(data);
@@ -51,18 +54,24 @@ module ImprovedInitiative {
         }
         
         RemoveSelectedCreatures = () => {
-            var creatures = ko.unwrap(this.SelectedCreatures),
+            var creatures = this.SelectedCreatures.removeAll(),
                 index = this.encounter().Creatures.indexOf(creatures[0]),
                 deletedCreatureNames = creatures.map(c => c.StatBlock().Name);
-                
+            
             this.encounter().Creatures.removeAll(creatures);
             
-            //Only reset creature count if we just removed the last one of its kind.
+            var allMyFriendsAreGone = name => this.encounter().Creatures().every(c => c.StatBlock().Name != name);
+            
             deletedCreatureNames.forEach(name => {
-                if(this.encounter().Creatures().every(c => c.StatBlock().Name != name)){
-                this.encounter().CreatureCountsByName[name](0);
+                if(allMyFriendsAreGone(name)){
+                    this.encounter().CreatureCountsByName[name](0);
                 }
-            })
+            });
+            
+            if(index >= this.encounter().Creatures().length){
+                index = this.encounter().Creatures().length - 1;
+            }
+            this.SelectCreature(this.encounter().Creatures()[index])
             
             this.encounter().QueueEmitEncounter();
         }
