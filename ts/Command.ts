@@ -66,7 +66,7 @@ module ImprovedInitiative {
       { Description: 'Edit Selected Combatant', 
         KeyBinding: 'alt+e',
         ActionBarIcon: 'fa-edit', 
-        ActionBinding: c.EditSelectedCreature,
+        ActionBinding: c.EditSelectedCreatureStatBlock,
         ShowOnActionBar: ko.observable(false) },
       { Description: 'Edit Selected Combatant Initiative', 
         KeyBinding: 'alt+i',

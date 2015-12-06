@@ -22,13 +22,25 @@ module ImprovedInitiative {
         });
         
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
-            if(listing.IsLoaded){
+            listing.LoadStatBlock(listing => {
                 this.encounter().AddCreature(listing.StatBlock(), event);
-            } else {
-                listing.LoadStatBlock(listing => {
-                    this.encounter().AddCreature(listing.StatBlock(), event);
-                })
-            }
+            });
+        }
+        
+        EditCreatureFromListing = (listing: CreatureListing) => {
+            listing.LoadStatBlock(l => {
+                this.statBlockEditor.EditCreature(l.StatBlock(), newStatBlock => {
+                    l.StatBlock(newStatBlock);
+                    l.Name(newStatBlock.Name);
+                });
+            });
+        }
+        
+        AddNewPlayerCharacter = () => {
+            this.statBlockEditor.EditCreature(StatBlock.Empty(s => s.Player = "player"), newStatBlock => {
+                var newListing = new CreatureListing(null, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                this.library.Players.unshift(newListing);
+            });
         }
         
         SelectCreature = (data: ICreature, e?: MouseEvent) => {
@@ -150,7 +162,7 @@ module ImprovedInitiative {
             return false;
         }
             
-        EditSelectedCreature = () => 
+        EditSelectedCreatureStatBlock = () => 
         {
             if(this.SelectedCreatures().length == 1){
                 var selectedCreature = this.SelectedCreatures()[0];

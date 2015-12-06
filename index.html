@@ -47,11 +47,13 @@
       <ul class="library" data-bind="foreach: FilteredCreatures">
         <li>
           <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
+          <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreatureFromListing"></span>
           <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
         </li>
       </ul>
       <div class="interface-buttons">
         <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
+        <div data-bind="visible: DisplayTab() == 'Players', click: $root.Commander.AddNewPlayerCharacter"><span class="fa fa-plus"></span></div>
       </div>
       <!-- /ko -->
     <!-- /ko -->

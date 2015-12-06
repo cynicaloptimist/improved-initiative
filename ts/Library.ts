@@ -1,26 +1,31 @@
 module ImprovedInitiative {
 	export class CreatureListing {
         Id: string;
-        Name: string;
+        Name: KnockoutObservable<string>;
         Type: string;
         Link: string;
         IsLoaded: boolean;
         StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(id, name, type, link){
+        constructor(id: string, name: string, type: string, link: string, statblock?: IStatBlock){
             this.Id = id;
-            this.Name = name;
+            this.Name = ko.observable(name);
             this.Type = type;
             this.Link = link;
-            this.IsLoaded = false;
-            this.StatBlock = ko.observable(StatBlock.Empty(c => {c.Name = name}));
+            this.IsLoaded = !!statblock;
+            this.StatBlock = ko.observable(statblock || StatBlock.Empty(c => {c.Name = name}));
         }
         
-        LoadStatBlock = (callback: (CreatureListing) => void) => {
-            $.getJSON(this.Link, (json) => {
-                this.IsLoaded = true;
-                this.StatBlock(json);
+        LoadStatBlock = (callback: (listing: CreatureListing) => void) => {
+            if(this.IsLoaded){
                 callback(this);
-            })
+            }
+            else {
+                $.getJSON(this.Link, (json) => {
+                    this.IsLoaded = true;
+                    this.StatBlock(json);
+                    callback(this);
+                });
+            }
         }
     }
     
@@ -43,14 +48,10 @@ module ImprovedInitiative {
         })
         
         PreviewCreature = (creature: CreatureListing) => {
-            if(creature.IsLoaded){
-                this.previewStatBlock(creature.StatBlock());
-            } else {
-                this.previewStatBlock(null);
-                creature.LoadStatBlock(listing => {
-                    this.previewStatBlock(listing.StatBlock());
-                });
-            }
+            this.previewStatBlock(null);
+            creature.LoadStatBlock(listing => {
+                this.previewStatBlock(listing.StatBlock());
+            });
         }
     
         DisplayTab = ko.observable('Creatures');
@@ -71,7 +72,7 @@ module ImprovedInitiative {
             }
             
             creatures.forEach(c => {
-                if(c.Name.toLocaleLowerCase().indexOf(filter) > -1) {
+                if(c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                     creaturesWithFilterInName.push(c);
                     return;
                 }
@@ -82,13 +83,13 @@ module ImprovedInitiative {
             return creaturesWithFilterInName.concat(creaturesWithFilterInType);
         });
     
-        AddPlayers = (library: CreatureListing []) => {
+        AddPlayers = (library) => {
             ko.utils.arrayPushAll(this.Players, library.map(c => {
                 return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
             }));
         }
         
-        AddCreatures = (library: CreatureListing []) =>  {
+        AddCreatures = (library) =>  {
             library.sort((c1,c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });

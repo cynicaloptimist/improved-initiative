@@ -237,7 +237,7 @@ var ImprovedInitiative;
         { Description: 'Edit Selected Combatant',
             KeyBinding: 'alt+e',
             ActionBarIcon: 'fa-edit',
-            ActionBinding: c.EditSelectedCreature,
+            ActionBinding: c.EditSelectedCreatureStatBlock,
             ShowOnActionBar: ko.observable(false) },
         { Description: 'Edit Selected Combatant Initiative',
             KeyBinding: 'alt+i',
@@ -291,14 +291,23 @@ var ImprovedInitiative;
                 }
             });
             this.AddCreatureFromListing = function (listing, event) {
-                if (listing.IsLoaded) {
+                listing.LoadStatBlock(function (listing) {
                     _this.encounter().AddCreature(listing.StatBlock(), event);
-                }
-                else {
-                    listing.LoadStatBlock(function (listing) {
-                        _this.encounter().AddCreature(listing.StatBlock(), event);
+                });
+            };
+            this.EditCreatureFromListing = function (listing) {
+                listing.LoadStatBlock(function (l) {
+                    _this.statBlockEditor.EditCreature(l.StatBlock(), function (newStatBlock) {
+                        l.StatBlock(newStatBlock);
+                        l.Name(newStatBlock.Name);
                     });
-                }
+                });
+            };
+            this.AddNewPlayerCharacter = function () {
+                _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { return s.Player = "player"; }), function (newStatBlock) {
+                    var newListing = new ImprovedInitiative.CreatureListing(null, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                    _this.library.Players.unshift(newListing);
+                });
             };
             this.SelectCreature = function (data, e) {
                 if (!data) {
@@ -309,7 +318,7 @@ var ImprovedInitiative;
                 }
                 _this.SelectedCreatures.push(data);
             };
-            this.relativeNavigateFocus = function (offset) {
+            this.selectCreatureByOffset = function (offset) {
                 var newIndex = _this.encounter().Creatures.indexOf(_this.SelectedCreatures()[0]) + offset;
                 if (newIndex < 0) {
                     newIndex = 0;
@@ -336,10 +345,10 @@ var ImprovedInitiative;
                 _this.encounter().QueueEmitEncounter();
             };
             this.SelectPreviousCombatant = function () {
-                _this.relativeNavigateFocus(-1);
+                _this.selectCreatureByOffset(-1);
             };
             this.SelectNextCombatant = function () {
-                _this.relativeNavigateFocus(1);
+                _this.selectCreatureByOffset(1);
             };
             this.FocusSelectedCreatureHP = function () {
                 var selectedCreatures = _this.SelectedCreatures();
@@ -393,7 +402,7 @@ var ImprovedInitiative;
                 _this.SelectedCreatures().forEach(function (c) { return c.ViewModel.EditName(); });
                 return false;
             };
-            this.EditSelectedCreature = function () {
+            this.EditSelectedCreatureStatBlock = function () {
                 if (_this.SelectedCreatures().length == 1) {
                     var selectedCreature = _this.SelectedCreatures()[0];
                     _this.statBlockEditor.EditCreature(_this.SelectedCreatureStatblock(), function (newStatBlock) {
@@ -825,21 +834,26 @@ var ImprovedInitiative;
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var CreatureListing = (function () {
-        function CreatureListing(id, name, type, link) {
+        function CreatureListing(id, name, type, link, statblock) {
             var _this = this;
             this.LoadStatBlock = function (callback) {
-                $.getJSON(_this.Link, function (json) {
-                    _this.IsLoaded = true;
-                    _this.StatBlock(json);
+                if (_this.IsLoaded) {
                     callback(_this);
-                });
+                }
+                else {
+                    $.getJSON(_this.Link, function (json) {
+                        _this.IsLoaded = true;
+                        _this.StatBlock(json);
+                        callback(_this);
+                    });
+                }
             };
             this.Id = id;
-            this.Name = name;
+            this.Name = ko.observable(name);
             this.Type = type;
             this.Link = link;
-            this.IsLoaded = false;
-            this.StatBlock = ko.observable(ImprovedInitiative.StatBlock.Empty(function (c) { c.Name = name; }));
+            this.IsLoaded = !!statblock;
+            this.StatBlock = ko.observable(statblock || ImprovedInitiative.StatBlock.Empty(function (c) { c.Name = name; }));
         }
         return CreatureListing;
     })();
@@ -855,15 +869,10 @@ var ImprovedInitiative;
                 return _this.previewStatBlock() || ImprovedInitiative.StatBlock.Empty();
             });
             this.PreviewCreature = function (creature) {
-                if (creature.IsLoaded) {
-                    _this.previewStatBlock(creature.StatBlock());
-                }
-                else {
-                    _this.previewStatBlock(null);
-                    creature.LoadStatBlock(function (listing) {
-                        _this.previewStatBlock(listing.StatBlock());
-                    });
-                }
+                _this.previewStatBlock(null);
+                creature.LoadStatBlock(function (listing) {
+                    _this.previewStatBlock(listing.StatBlock());
+                });
             };
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
@@ -876,7 +885,7 @@ var ImprovedInitiative;
                     return creatures;
                 }
                 creatures.forEach(function (c) {
-                    if (c.Name.toLocaleLowerCase().indexOf(filter) > -1) {
+                    if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                         creaturesWithFilterInName.push(c);
                         return;
                     }
