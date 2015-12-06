@@ -22,8 +22,8 @@ module.exports = function(grunt) {
               src: ['server/**/*.ts'],
               outDir: '.',
               options: {
-                module: 'commonjs',
-                target: 'es5'
+                  module: 'commonjs',
+                  target: 'es5'
               }
           }
       },
