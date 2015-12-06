@@ -41,7 +41,7 @@ module ImprovedInitiative {
             this.SelectedCreatures.push(data);
         }
         
-        private relativeNavigateFocus = (offset: number) => 
+        private selectCreatureByOffset = (offset: number) => 
         {
             var newIndex = this.encounter().Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
             if(newIndex < 0){ 
@@ -78,12 +78,12 @@ module ImprovedInitiative {
             
         SelectPreviousCombatant = () =>
         {
-            this.relativeNavigateFocus(-1);
+            this.selectCreatureByOffset(-1);
         }
             
         SelectNextCombatant = () =>
         {
-            this.relativeNavigateFocus(1);
+            this.selectCreatureByOffset(1);
         }
             
         FocusSelectedCreatureHP = () =>
