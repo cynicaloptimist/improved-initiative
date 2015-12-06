@@ -37,7 +37,7 @@
     <!--ko with: Library -->
       <!-- ko if: DisplayTab() == 'Encounters' -->
       <ul class="library" data-bind="foreach: SavedEncounterIndex">
-        <li data-bind="click: $root.Commander.LoadEncounterByName.bind(null, $data)">
+        <li data-bind="click: $root.Commander.LoadEncounterByName">
           <span class="fa" data-bind="text: $data"></span>
         </li>
       </ul>
