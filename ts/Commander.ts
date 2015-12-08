@@ -38,8 +38,10 @@ module ImprovedInitiative {
         
         AddNewPlayerCharacter = () => {
             this.statBlockEditor.EditCreature(StatBlock.Empty(s => s.Player = "player"), newStatBlock => {
-                var newListing = new CreatureListing(null, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
-                this.library.Players.unshift(newListing);
+                PostJSON('/playercharacters/', newStatBlock, data => {
+                    var newListing = new CreatureListing(data.id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                    this.library.Players.unshift(newListing);
+                });
             });
         }
         
@@ -113,7 +115,8 @@ module ImprovedInitiative {
             return false;
         }
             
-        AddSelectedCreaturesTemporaryHP = () => {
+        AddSelectedCreaturesTemporaryHP = () => 
+        {
             var selectedCreatures = this.SelectedCreatures();
             var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
             this.userPollQueue.Add({
@@ -128,7 +131,7 @@ module ImprovedInitiative {
         }
             
         AddSelectedCreatureTag = () => 
-            {
+        {
             this.SelectedCreatures().forEach(c => c.ViewModel.AddingTag(true))
             return false;
         }

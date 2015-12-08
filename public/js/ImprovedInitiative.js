@@ -305,8 +305,10 @@ var ImprovedInitiative;
             };
             this.AddNewPlayerCharacter = function () {
                 _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { return s.Player = "player"; }), function (newStatBlock) {
-                    var newListing = new ImprovedInitiative.CreatureListing(null, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
-                    _this.library.Players.unshift(newListing);
+                    PostJSON('/playercharacters/', newStatBlock, function (data) {
+                        var newListing = new ImprovedInitiative.CreatureListing(data.id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                        _this.library.Players.unshift(newListing);
+                    });
                 });
             };
             this.SelectCreature = function (data, e) {
@@ -1219,6 +1221,16 @@ String.prototype.format = function () {
             return "{" + n + "}";
         }
         return args[n];
+    });
+};
+var PostJSON = function (url, data, success) {
+    return $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(data),
+        success: success,
+        dataType: "json",
+        contentType: "application/json"
     });
 };
 /// <reference path="../typings/jquery/jquery.d.ts" />

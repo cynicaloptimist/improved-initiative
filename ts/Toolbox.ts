@@ -1,15 +1,18 @@
 interface String {
   format: (...arguments: any[]) => string;
 }
+
 interface Number {
   toModifierString: () => string; 
 }
+
 Number.prototype.toModifierString = function(){
   if(this >= 0){
     return `+${this}`
   }
   return this
 }
+
 String.prototype.format = function () {
   var args;
   if(arguments[0] instanceof Array){
@@ -27,3 +30,13 @@ String.prototype.format = function () {
     return args[n];
   });
 };
+
+var PostJSON = (url: string, data: any, success: (data: any) => void) => 
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: JSON.stringify(data),
+            success: success,
+            dataType: "json",
+            contentType: "application/json"
+        });

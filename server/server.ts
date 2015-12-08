@@ -99,7 +99,15 @@ app.get('/playercharacters/', (req, res) => {
 	res.json(playerCharacters.map((playercharacter, index) => {
 		return { "Id": index, "Name": playercharacter.Name, "Type": playercharacter.Type, "Link": `/playercharacters/${index}` }
 	}));
-})
+});
+
+app.post('/playercharacters/', (req, res) => {
+	console.log(req.body);
+	if(req.body){
+		res.send({ Id: playerCharacters.push(req.body)});
+	}
+	res.end();
+});
 
 app.get('/playercharacters/:id', (req, res) => {
 	res.json(playerCharacters[req.params.id]);

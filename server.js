@@ -85,6 +85,13 @@ app.get('/playercharacters/', function (req, res) {
         return { "Id": index, "Name": playercharacter.Name, "Type": playercharacter.Type, "Link": "/playercharacters/" + index };
     }));
 });
+app.post('/playercharacters/', function (req, res) {
+    console.log(req.body);
+    if (req.body) {
+        res.send({ Id: playerCharacters.push(req.body) });
+    }
+    res.end();
+});
 app.get('/playercharacters/:id', function (req, res) {
     res.json(playerCharacters[req.params.id]);
 });
