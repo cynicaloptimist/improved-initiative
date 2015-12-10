@@ -6,12 +6,21 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
+var MongoClient = require('mongodb').MongoClient;
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
+var mongoDbUrl = process.env.MongoDbUrl || 'mongodb://localhost:27017/test';
+MongoClient.connect(mongoDbUrl, function (err, db) {
+    if (err) {
+        throw err;
+    }
+    console.log("Connected correctly to server.");
+    db.close();
+});
 fs.access('public/user/creatures.json', fs.R_OK, function (err) {
     if (err) {
         fs.readFile('public/basic_rules_creatures.json', function (err, json) {

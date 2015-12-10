@@ -7,6 +7,7 @@ var app = express();
 var http = require('http').Server(app);
 var io: SocketIO.Server = require('socket.io')(http);
 var fs = require('fs');
+var MongoClient = require('mongodb').MongoClient;
 
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
@@ -15,6 +16,15 @@ var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
+
+var mongoDbUrl = process.env.MongoDbUrl || 'mongodb://localhost:27017/test';
+MongoClient.connect(mongoDbUrl, (err, db) => {
+  if(err){
+	  throw err;
+  }
+  console.log("Connected to mongoDb server.");
+  db.close();
+});
 
 fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 	if(err){
