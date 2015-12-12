@@ -45,7 +45,7 @@ module ImprovedInitiative {
   }
   
   export interface IStatBlock {
-      Id?: number;
+      Id?: string;
       Name: string;
       Type: string;
       HP: IHaveValue;

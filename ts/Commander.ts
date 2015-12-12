@@ -32,16 +32,20 @@ module ImprovedInitiative {
                 this.statBlockEditor.EditCreature(l.StatBlock(), newStatBlock => {
                     l.StatBlock(newStatBlock);
                     l.Name(newStatBlock.Name);
+                    if(newStatBlock.Player == "player"){
+                        Store.Save<IStatBlock>('PlayerCharacters', newStatBlock.Id, newStatBlock)
+                    }
                 });
             });
         }
         
         AddNewPlayerCharacter = () => {
             this.statBlockEditor.EditCreature(StatBlock.Empty(s => s.Player = "player"), newStatBlock => {
-                PostJSON('/playercharacters/', newStatBlock, data => {
-                    var newListing = new CreatureListing(data.id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
-                    this.library.Players.unshift(newListing);
-                });
+                var newId = this.library.Players().length.toString();
+                newStatBlock.Id = newId;
+                var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                this.library.Players.unshift(newListing);
+                Store.Save<IStatBlock>('PlayerCharacters', newId, newStatBlock);
             });
         }
         

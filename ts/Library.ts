@@ -22,7 +22,7 @@ module ImprovedInitiative {
             else {
                 $.getJSON(this.Link, (json) => {
                     this.IsLoaded = true;
-                    this.StatBlock(json);
+                    this.StatBlock($.extend(StatBlock.Empty(), json));
                     callback(this);
                 });
             }
@@ -34,6 +34,10 @@ module ImprovedInitiative {
         
         constructor () {
             Store.List('SavedEncounters').forEach(e => this.SavedEncounterIndex.push(e));
+            Store.List('PlayerCharacters').forEach(name => {
+                var statBlock = Store.Load<IStatBlock>('PlayerCharacters', name);
+                this.Players.push(new CreatureListing (null, statBlock.Name, statBlock.Type, null, statBlock));
+            });
 		}
         
         Creatures = ko.observableArray<CreatureListing>([]);

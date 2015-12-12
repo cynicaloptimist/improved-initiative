@@ -300,15 +300,19 @@ var ImprovedInitiative;
                     _this.statBlockEditor.EditCreature(l.StatBlock(), function (newStatBlock) {
                         l.StatBlock(newStatBlock);
                         l.Name(newStatBlock.Name);
+                        if (newStatBlock.Player == "player") {
+                            ImprovedInitiative.Store.Save('PlayerCharacters', newStatBlock.Id, newStatBlock);
+                        }
                     });
                 });
             };
             this.AddNewPlayerCharacter = function () {
                 _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { return s.Player = "player"; }), function (newStatBlock) {
-                    PostJSON('/playercharacters/', newStatBlock, function (data) {
-                        var newListing = new ImprovedInitiative.CreatureListing(data.id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
-                        _this.library.Players.unshift(newListing);
-                    });
+                    var newId = _this.library.Players().length.toString();
+                    newStatBlock.Id = newId;
+                    var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                    _this.library.Players.unshift(newListing);
+                    ImprovedInitiative.Store.Save('PlayerCharacters', newId, newStatBlock);
                 });
             };
             this.SelectCreature = function (data, e) {
@@ -839,7 +843,7 @@ var ImprovedInitiative;
                 else {
                     $.getJSON(_this.Link, function (json) {
                         _this.IsLoaded = true;
-                        _this.StatBlock(json);
+                        _this.StatBlock($.extend(ImprovedInitiative.StatBlock.Empty(), json));
                         callback(_this);
                     });
                 }
@@ -905,6 +909,10 @@ var ImprovedInitiative;
                 }));
             };
             ImprovedInitiative.Store.List('SavedEncounters').forEach(function (e) { return _this.SavedEncounterIndex.push(e); });
+            ImprovedInitiative.Store.List('PlayerCharacters').forEach(function (name) {
+                var statBlock = ImprovedInitiative.Store.Load('PlayerCharacters', name);
+                _this.Players.push(new CreatureListing(null, statBlock.Name, statBlock.Type, null, statBlock));
+            });
         }
         return CreatureLibrary;
     })();
