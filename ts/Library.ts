@@ -33,10 +33,7 @@ module ImprovedInitiative {
 		private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
         
         constructor () {
-			var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
-            if(savedEncounterList && savedEncounterList != 'undefined'){
-                JSON.parse(savedEncounterList).forEach(e => this.SavedEncounterIndex.push(e));
-            }
+            Store.List('SavedEncounters').forEach(e => this.SavedEncounterIndex.push(e));
 		}
         
         Creatures = ko.observableArray<CreatureListing>([]);

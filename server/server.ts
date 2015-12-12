@@ -18,6 +18,7 @@ var creatures = [];
 var playerCharacters = [];
 
 var mongoDbUrl = process.env.MongoDbUrl || 'mongodb://localhost:27017/test';
+/*
 MongoClient.connect(mongoDbUrl, (err, db) => {
   if(err){
 	  throw err;
@@ -25,7 +26,7 @@ MongoClient.connect(mongoDbUrl, (err, db) => {
   console.log("Connected to mongoDb server.");
   db.close();
 });
-
+*/
 fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 	if(err){
 		fs.readFile('public/basic_rules_creatures.json', (err, json) => {

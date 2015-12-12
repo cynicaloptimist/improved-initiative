@@ -450,19 +450,13 @@ var ImprovedInitiative;
                         if (savedEncounters.indexOf(response) == -1) {
                             savedEncounters().push(response);
                         }
-                        localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
-                        localStorage.setItem("ImprovedInitiative.SavedEncounters." + response, JSON.stringify(savedEncounter));
+                        ImprovedInitiative.Store.Save('SavedEncounters', response, savedEncounter);
                     }
                 });
             };
             this.LoadEncounterByName = function (encounterName) {
-                var encounterJSON = localStorage.getItem("ImprovedInitiative.SavedEncounters." + encounterName);
-                if (encounterJSON === 'undefined') {
-                    throw "Couldn't find encounter '" + encounterName + "'";
-                }
-                _this.encounter().Creatures([]);
-                _this.encounter().CreatureCountsByName = [];
-                _this.encounter().AddSavedEncounter(JSON.parse(encounterJSON));
+                var encounter = ImprovedInitiative.Store.Load('SavedEncounters', encounterName);
+                _this.encounter().LoadSavedEncounter(encounter);
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
         }
@@ -910,10 +904,7 @@ var ImprovedInitiative;
                     return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
                 }));
             };
-            var savedEncounterList = localStorage.getItem('ImprovedInitiative.SavedEncounters');
-            if (savedEncounterList && savedEncounterList != 'undefined') {
-                JSON.parse(savedEncounterList).forEach(function (e) { return _this.SavedEncounterIndex.push(e); });
-            }
+            ImprovedInitiative.Store.List('SavedEncounters').forEach(function (e) { return _this.SavedEncounterIndex.push(e); });
         }
         return CreatureLibrary;
     })();
@@ -1185,6 +1176,52 @@ var ImprovedInitiative;
         viewModel: function (params) { return params.editor; },
         template: { name: 'editstatblock' }
     });
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
+    var Store = (function () {
+        function Store() {
+        }
+        Store.List = function (listName) {
+            var listKey = Store._prefix + "." + listName;
+            var list = Store.load(listKey);
+            if (list && list.constructor === Array) {
+                return list;
+            }
+            Store.save(listKey, []);
+            return [];
+        };
+        Store.Save = function (listName, key, value) {
+            var listKey = Store._prefix + "." + listName;
+            var fullKey = Store._prefix + "." + listName + "." + key;
+            var list = Store.List(listName);
+            if (list.indexOf(key) == -1) {
+                list.push(key);
+                Store.save(listKey, list);
+            }
+            Store.save(fullKey, value);
+        };
+        Store.Load = function (listName, key) {
+            var fullKey = Store._prefix + "." + listName + "." + key;
+            return Store.load(fullKey);
+        };
+        Store.Delete = function (listName, key) {
+            var listKey = Store._prefix + "." + listName;
+            var fullKey = Store._prefix + "." + listName + "." + key;
+            var list = Store.List(listName);
+            var keyIndex = list.indexOf(key);
+            if (keyIndex != -1) {
+                list.splice(keyIndex, 1);
+                Store.save(listKey, list);
+            }
+            localStorage.removeItem(fullKey);
+        };
+        Store._prefix = "ImprovedInitiative";
+        Store.save = function (key, value) { return localStorage.setItem(key, JSON.stringify(value)); };
+        Store.load = function (key) { return JSON.parse(localStorage.getItem(key)); };
+        return Store;
+    })();
+    ImprovedInitiative.Store = Store;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {

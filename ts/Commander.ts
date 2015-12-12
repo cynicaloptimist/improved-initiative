@@ -219,25 +219,19 @@ module ImprovedInitiative {
                 requestContent: `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,
                 inputSelector: '.response',
                 callback: (response: string) => {
-                var savedEncounter = this.encounter().Save(response);
-                var savedEncounters = this.library.SavedEncounterIndex;
-                if(savedEncounters.indexOf(response) == -1){
-                    savedEncounters().push(response);
-                }
-                localStorage.setItem('ImprovedInitiative.SavedEncounters', JSON.stringify(savedEncounters()));
-                localStorage.setItem(`ImprovedInitiative.SavedEncounters.${response}`, JSON.stringify(savedEncounter));
+                    var savedEncounter = this.encounter().Save(response);
+                    var savedEncounters = this.library.SavedEncounterIndex;
+                    if(savedEncounters.indexOf(response) == -1){
+                        savedEncounters().push(response);
+                    }
+                    Store.Save('SavedEncounters', response, savedEncounter);
                 }
             })
         }
     
         LoadEncounterByName = (encounterName: string) => {
-            var encounterJSON = localStorage.getItem(`ImprovedInitiative.SavedEncounters.${encounterName}`);
-            if(encounterJSON === 'undefined'){
-                throw `Couldn't find encounter '${encounterName}'`;
-            }
-            this.encounter().Creatures([]);
-            this.encounter().CreatureCountsByName = [];
-            this.encounter().AddSavedEncounter(JSON.parse(encounterJSON))
+            var encounter = Store.Load<ISavedEncounter<ISavedCreature>>('SavedEncounters', encounterName);
+            this.encounter().LoadSavedEncounter(encounter)
         }
     }
 }
