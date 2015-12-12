@@ -811,6 +811,7 @@ var ImprovedInitiative;
             };
             this.LoadSavedEncounter = function (e) {
                 _this.Creatures.removeAll();
+                _this.CreatureCountsByName = [];
                 e.Creatures.forEach(_this.loadCreature);
                 if (e.ActiveCreatureIndex != -1) {
                     _this.State('active');

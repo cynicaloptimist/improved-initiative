@@ -203,6 +203,7 @@ module ImprovedInitiative {
     
     LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
       this.Creatures.removeAll();
+      this.CreatureCountsByName = [];
       e.Creatures.forEach(this.loadCreature);
       if(e.ActiveCreatureIndex != -1){
         this.State('active');
