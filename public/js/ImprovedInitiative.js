@@ -471,6 +471,10 @@ var ImprovedInitiative;
                 if (keyBinding) {
                     c.KeyBinding = keyBinding;
                 }
+                var showOnActionBar = ImprovedInitiative.Store.Load('ActionBar', c.Description);
+                if (showOnActionBar != null) {
+                    c.ShowOnActionBar(showOnActionBar);
+                }
             });
         }
         Commander.prototype.RegisterKeyBindings = function () {
@@ -478,7 +482,7 @@ var ImprovedInitiative;
             this.Commands.forEach(function (b) {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
                 ImprovedInitiative.Store.Save('KeyBindings', b.Description, b.KeyBinding);
-                ImprovedInitiative.Store.Save('ActionBar', b.Description, b.ShowOnActionBar);
+                ImprovedInitiative.Store.Save('ActionBar', b.Description, b.ShowOnActionBar());
             });
         };
         return Commander;
@@ -1240,7 +1244,13 @@ var ImprovedInitiative;
         };
         Store._prefix = "ImprovedInitiative";
         Store.save = function (key, value) { return localStorage.setItem(key, JSON.stringify(value)); };
-        Store.load = function (key) { return JSON.parse(localStorage.getItem(key) || 'null'); };
+        Store.load = function (key) {
+            var value = localStorage.getItem(key);
+            if (value === "undefined") {
+                return null;
+            }
+            return JSON.parse(value);
+        };
         return Store;
     })();
     ImprovedInitiative.Store = Store;

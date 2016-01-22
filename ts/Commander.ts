@@ -14,6 +14,10 @@ module ImprovedInitiative {
                 if(keyBinding){
                     c.KeyBinding = keyBinding;
                 }
+                var showOnActionBar = Store.Load<boolean>('ActionBar', c.Description);
+                if(showOnActionBar != null){
+                    c.ShowOnActionBar(showOnActionBar);
+                }
             })
         }
         
@@ -214,7 +218,7 @@ module ImprovedInitiative {
             this.Commands.forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
                 Store.Save('KeyBindings', b.Description, b.KeyBinding);
-                Store.Save('ActionBar', b.Description, b.ShowOnActionBar);
+                Store.Save('ActionBar', b.Description, b.ShowOnActionBar());
             })
         }
         
