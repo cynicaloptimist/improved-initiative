@@ -19,6 +19,9 @@ module ImprovedInitiative {
                     c.ShowOnActionBar(showOnActionBar);
                 }
             })
+            if(Store.Load('User', 'SkipIntro')){
+                this.ToggleCommandDisplay();
+            }
         }
         
         SelectedCreatureStatblock: KnockoutComputed<IStatBlock> = ko.computed(() => 
@@ -227,6 +230,7 @@ module ImprovedInitiative {
             $('.modalblur').toggle();
             if ($('.commands').toggle().css('display') == 'none'){
                 this.RegisterKeyBindings();
+                Store.Save('User', 'SkipIntro', true);
             }
         }
         

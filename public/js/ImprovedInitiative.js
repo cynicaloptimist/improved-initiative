@@ -449,6 +449,7 @@ var ImprovedInitiative;
                 $('.modalblur').toggle();
                 if ($('.commands').toggle().css('display') == 'none') {
                     _this.RegisterKeyBindings();
+                    ImprovedInitiative.Store.Save('User', 'SkipIntro', true);
                 }
             };
             this.RollInitiative = function () {
@@ -492,6 +493,9 @@ var ImprovedInitiative;
                     c.ShowOnActionBar(showOnActionBar);
                 }
             });
+            if (ImprovedInitiative.Store.Load('User', 'SkipIntro')) {
+                this.ToggleCommandDisplay();
+            }
         }
         Commander.prototype.RegisterKeyBindings = function () {
             Mousetrap.reset();
