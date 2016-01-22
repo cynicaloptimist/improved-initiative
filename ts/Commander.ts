@@ -199,6 +199,10 @@ module ImprovedInitiative {
             }
         }
         
+        DropModalBlur = () => {
+            $('.modalblur, .modal').hide();
+        }
+        
         RegisterKeybindings(){
             Mousetrap.reset();
             this.Commands.forEach(b => Mousetrap.bind(b.KeyBinding, b.ActionBinding))

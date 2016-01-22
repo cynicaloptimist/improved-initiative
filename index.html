@@ -14,8 +14,8 @@
   
   </head>
   <body id="tracker">
-  <div class="modalblur" data-bind="click: Commander.ToggleCommandDisplay"></div>
-  <div class="commands">
+  <div class="modalblur" data-bind="click: Commander.DropModalBlur"></div>
+  <div class="commands modal">
     <!--ko foreach: Commander.Commands -->
     <div>
       <div class="label" data-bind="text: Description"></div>
@@ -24,7 +24,8 @@
       <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar" />
     </div>
     <!--/ko -->
-    <input class="savekeybindings"" type="button" value="Save and Close" data-bind="click: Commander.ToggleCommandDisplay" />
+    <div class="savekeybindings"><input type="button" value="Save and Close" data-bind="click: Commander.ToggleCommandDisplay" /></div>
+    <p class="about"><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>. All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
   </div>
   <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
   <div class="libraries">

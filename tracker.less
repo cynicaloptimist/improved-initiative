@@ -121,7 +121,7 @@ body{
 		z-index: 9;
 	}
 	
-	.commands {
+	.modal {
 		border: 2px solid gray;
 		border-radius: 5px;
 		padding: 5px;
@@ -133,7 +133,10 @@ body{
 		z-index: 10;
 		background-color: #ffffff;
 		width: 450px;
-		div {
+	}
+    
+    .commands {
+        div {
 			display: flex;
 			.label {
 				display:inline-block;
@@ -154,11 +157,17 @@ body{
 			}
 		}
 		.savekeybindings {
-			right: 0;
-			margin: 3px;
-			padding: 3px;
+            text-align:right;
+            input {
+                padding: 3px;
+                margin-right: 3px;
+                margin-left: auto;
+            }
 		}
-	}
+        .about {
+            margin: 10px 0px;
+        }
+    }
 
 	.preview.statblock, .preview.encounter {
 		position: fixed;

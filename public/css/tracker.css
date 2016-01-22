@@ -4092,7 +4092,7 @@ body .modalblur {
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 9;
 }
-body .commands {
+body .modal {
   border: 2px solid gray;
   border-radius: 5px;
   padding: 5px;
@@ -4126,9 +4126,15 @@ body .commands div .showonactionbar {
   margin: 4px;
 }
 body .commands .savekeybindings {
-  right: 0;
-  margin: 3px;
+  text-align: right;
+}
+body .commands .savekeybindings input {
   padding: 3px;
+  margin-right: 3px;
+  margin-left: auto;
+}
+body .commands .about {
+  margin: 10px 0px;
 }
 body .preview.statblock,
 body .preview.encounter {
