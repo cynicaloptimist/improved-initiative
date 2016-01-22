@@ -466,9 +466,11 @@ var ImprovedInitiative;
                 _this.encounter().LoadSavedEncounter(encounter);
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
-            ImprovedInitiative.Store.List('KeyBindings').forEach(function (k) {
-                var keyBinding = ImprovedInitiative.Store.Load('KeyBindings', k);
-                _this.Commands.find(function (c) { return c.Description == k; }).KeyBinding = keyBinding;
+            this.Commands.forEach(function (c) {
+                var keyBinding = ImprovedInitiative.Store.Load('KeyBindings', c.Description);
+                if (keyBinding) {
+                    c.KeyBinding = keyBinding;
+                }
             });
         }
         Commander.prototype.RegisterKeyBindings = function () {
@@ -1238,7 +1240,7 @@ var ImprovedInitiative;
         };
         Store._prefix = "ImprovedInitiative";
         Store.save = function (key, value) { return localStorage.setItem(key, JSON.stringify(value)); };
-        Store.load = function (key) { return JSON.parse(localStorage.getItem(key)); };
+        Store.load = function (key) { return JSON.parse(localStorage.getItem(key) || 'null'); };
         return Store;
     })();
     ImprovedInitiative.Store = Store;

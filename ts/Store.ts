@@ -2,7 +2,7 @@ module ImprovedInitiative {
 	export class Store {
 		private static _prefix = "ImprovedInitiative";
 		private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-		private static load = (key) => JSON.parse(localStorage.getItem(key));
+		private static load = (key) => JSON.parse(localStorage.getItem(key) || 'null');
 		
 		static List(listName: string): string[] {
 			var listKey = `${Store._prefix}.${listName}`;

@@ -9,11 +9,12 @@ module ImprovedInitiative {
                     private library: CreatureLibrary) 
         { 
             this.Commands = BuildCommandList(this);
-            Store.List('KeyBindings').forEach(k => {
-                var keyBinding = Store.Load<string>('KeyBindings', k);
-                this.Commands.find(c => c.Description == k).KeyBinding = keyBinding;
+            this.Commands.forEach(c => {
+                var keyBinding = Store.Load<string>('KeyBindings', c.Description);
+                if(keyBinding){
+                    c.KeyBinding = keyBinding;
+                }
             })
-            
         }
         
         SelectedCreatureStatblock: KnockoutComputed<IStatBlock> = ko.computed(() => 
