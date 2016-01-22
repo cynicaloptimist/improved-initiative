@@ -432,9 +432,6 @@ var ImprovedInitiative;
                     _this.RegisterKeyBindings();
                 }
             };
-            this.DropModalBlur = function () {
-                $('.modalblur, .modal').hide();
-            };
             this.RollInitiative = function () {
                 _this.encounter().RollInitiative(_this.userPollQueue);
                 _this.userPollQueue.Add({
