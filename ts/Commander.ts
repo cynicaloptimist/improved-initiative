@@ -9,6 +9,11 @@ module ImprovedInitiative {
                     private library: CreatureLibrary) 
         { 
             this.Commands = BuildCommandList(this);
+            Store.List('KeyBindings').forEach(k => {
+                var keyBinding = Store.Load<string>('KeyBindings', k);
+                this.Commands.find(c => c.Description == k).KeyBinding = keyBinding;
+            })
+            
         }
         
         SelectedCreatureStatblock: KnockoutComputed<IStatBlock> = ko.computed(() => 
@@ -195,7 +200,7 @@ module ImprovedInitiative {
         ToggleCommandDisplay = () => {
             $('.modalblur').toggle();
             if ($('.commands').toggle().css('display') == 'none'){
-                this.RegisterKeybindings();
+                this.RegisterKeyBindings();
             }
         }
         
@@ -203,9 +208,13 @@ module ImprovedInitiative {
             $('.modalblur, .modal').hide();
         }
         
-        RegisterKeybindings(){
+        RegisterKeyBindings(){
             Mousetrap.reset();
-            this.Commands.forEach(b => Mousetrap.bind(b.KeyBinding, b.ActionBinding))
+            this.Commands.forEach(b => {
+                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
+                Store.Save('KeyBindings', b.Description, b.KeyBinding);
+                Store.Save('ActionBar', b.Description, b.ShowOnActionBar);
+            })
         }
         
         RollInitiative = () => {

@@ -429,7 +429,7 @@ var ImprovedInitiative;
             this.ToggleCommandDisplay = function () {
                 $('.modalblur').toggle();
                 if ($('.commands').toggle().css('display') == 'none') {
-                    _this.RegisterKeybindings();
+                    _this.RegisterKeyBindings();
                 }
             };
             this.DropModalBlur = function () {
@@ -466,10 +466,18 @@ var ImprovedInitiative;
                 _this.encounter().LoadSavedEncounter(encounter);
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
+            ImprovedInitiative.Store.List('KeyBindings').forEach(function (k) {
+                var keyBinding = ImprovedInitiative.Store.Load('KeyBindings', k);
+                _this.Commands.find(function (c) { return c.Description == k; }).KeyBinding = keyBinding;
+            });
         }
-        Commander.prototype.RegisterKeybindings = function () {
+        Commander.prototype.RegisterKeyBindings = function () {
             Mousetrap.reset();
-            this.Commands.forEach(function (b) { return Mousetrap.bind(b.KeyBinding, b.ActionBinding); });
+            this.Commands.forEach(function (b) {
+                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
+                ImprovedInitiative.Store.Save('KeyBindings', b.Description, b.KeyBinding);
+                ImprovedInitiative.Store.Save('ActionBar', b.Description, b.ShowOnActionBar);
+            });
         };
         return Commander;
     })();
@@ -1292,7 +1300,7 @@ var ImprovedInitiative;
     $(function () {
         if ($('#tracker').length) {
             var viewModel = new ImprovedInitiative.TrackerViewModel();
-            viewModel.Commander.RegisterKeybindings();
+            viewModel.Commander.RegisterKeyBindings();
             ko.applyBindings(viewModel, document.body);
             $.ajax("../creatures/").done(viewModel.Library.AddCreatures);
             $.ajax("../playercharacters/").done(viewModel.Library.AddPlayers);
