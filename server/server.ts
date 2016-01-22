@@ -18,7 +18,7 @@ var playerCharacters = [];
 
 fs.access('public/user/creatures.json', fs.R_OK, (err) => {
 	if(err){
-		fs.readFile('public/basic_rules_creatures.json', (err, json) => {
+		fs.readFile('public/ogl_creatures.json', (err, json) => {
 			if(err){
 				throw `Couldn't read creature library: ${err}`;
 			}
