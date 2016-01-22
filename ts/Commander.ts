@@ -43,20 +43,41 @@ module ImprovedInitiative {
                     l.StatBlock(newStatBlock);
                     l.Name(newStatBlock.Name);
                     if(newStatBlock.Player == "player"){
-                        Store.Save<IStatBlock>('PlayerCharacters', newStatBlock.Id, newStatBlock)
+                        l.Id = newStatBlock.Id;
+                        Store.Save<IStatBlock>('PlayerCharacters', l.Id, newStatBlock);
+                    } else {
+                        if(newStatBlock.Id){
+                            l.Id = newStatBlock.Id;
+                            Store.Save<IStatBlock>('Creatures', newStatBlock.Id, newStatBlock);
+                        }
                     }
                 });
             });
         }
         
-        AddNewPlayerCharacter = () => {
-            this.statBlockEditor.EditCreature(StatBlock.Empty(s => s.Player = "player"), newStatBlock => {
+        AddToLibrary = () => {
+            if(this.library.DisplayTab() == 'Players')
+            {
                 var newId = this.library.Players().length.toString();
-                newStatBlock.Id = newId;
-                var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
-                this.library.Players.unshift(newListing);
-                Store.Save<IStatBlock>('PlayerCharacters', newId, newStatBlock);
-            });
+                this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Player = "player", s.Id = newId }), newStatBlock => {
+                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                    this.library.Players.unshift(newListing);
+                    Store.Save<IStatBlock>('PlayerCharacters', newId, newStatBlock);
+                });
+            }
+            if(this.library.DisplayTab() == 'Creatures')
+            {
+                var newId = this.library.Creatures().length.toString();
+                this.statBlockEditor.EditCreature(StatBlock.Empty(s => s.Id = newId), newStatBlock => {
+                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                    this.library.Creatures.unshift(newListing);
+                    Store.Save<IStatBlock>('Creatures', newId, newStatBlock);
+                });
+            }
+            if(this.library.DisplayTab() == 'Encounters')
+            {
+                this.SaveEncounter();
+            }
         }
         
         SelectCreature = (data: ICreature, e?: MouseEvent) => {

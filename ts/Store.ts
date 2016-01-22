@@ -18,6 +18,9 @@ module ImprovedInitiative {
 			return [];
 		}
 		static Save<T> (listName: string, key: string, value: T) {
+            if(typeof(key) !== "string"){
+                throw `Can't save to non-string key ${key}`;
+            }
 			var listKey = `${Store._prefix}.${listName}`;
 			var fullKey = `${Store._prefix}.${listName}.${key}`;
 			var list = Store.List(listName);

@@ -34,10 +34,14 @@ module ImprovedInitiative {
         
         constructor () {
             Store.List('SavedEncounters').forEach(e => this.SavedEncounterIndex.push(e));
-            Store.List('PlayerCharacters').forEach(name => {
-                var statBlock = Store.Load<IStatBlock>('PlayerCharacters', name);
-                this.Players.push(new CreatureListing (null, statBlock.Name, statBlock.Type, null, statBlock));
+            Store.List('PlayerCharacters').forEach(id => {
+                var statBlock = Store.Load<IStatBlock>('PlayerCharacters', id);
+                this.Players.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, statBlock));
             });
+            Store.List('Creatures').forEach(id => {
+                var statBlock = Store.Load<IStatBlock>('Creatures', id);
+                this.Creatures.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, statBlock));
+            })
 		}
         
         Creatures = ko.observableArray<CreatureListing>([]);
