@@ -4094,7 +4094,7 @@ body .modalblur {
 }
 body .modal {
   border: 2px solid gray;
-  border-radius: 5px;
+  border-radius: 4px;
   padding: 5px;
   position: fixed;
   right: 0;
@@ -4299,6 +4299,16 @@ body .encounter .combatants .creature.header .hp {
 }
 body .encounter .combatants .creature.header .hp:hover {
   background-color: inherit;
+}
+body .user-response-requests {
+  border: 2px solid darkred;
+  border-radius: 4px;
+  margin: 8px;
+  padding: 8px;
+}
+body .user-response-requests button {
+  margin-left: 6px;
+  padding: 6px;
 }
 body .statblock {
   width: 400px;

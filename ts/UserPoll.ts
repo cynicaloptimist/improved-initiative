@@ -13,6 +13,7 @@ module ImprovedInitiative {
 		}
 		
 		Add = (poll: IUserPoll) => {
+            poll.requestContent += "<button type='submit'><span class='fa fa-check'></span></button>";
 			this.Queue.push(poll);
 		}
 		

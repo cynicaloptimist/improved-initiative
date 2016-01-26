@@ -1372,6 +1372,7 @@ var ImprovedInitiative;
             var _this = this;
             this.Queue = ko.observableArray();
             this.Add = function (poll) {
+                poll.requestContent += "<button type='submit'><span class='fa fa-check'></span></button>";
                 _this.Queue.push(poll);
             };
             this.checkForAutoResolve = function () {
