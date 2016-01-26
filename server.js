@@ -81,21 +81,6 @@ app.get('/creatures/', function (req, res) {
 app.get('/creatures/:id', function (req, res) {
     res.json(creatures[req.params.id]);
 });
-app.get('/playercharacters/', function (req, res) {
-    res.json(playerCharacters.map(function (playercharacter, index) {
-        return { "Id": index, "Name": playercharacter.Name, "Type": playercharacter.Type, "Link": "/playercharacters/" + index };
-    }));
-});
-app.post('/playercharacters/', function (req, res) {
-    console.log(req.body);
-    if (req.body) {
-        res.send({ Id: playerCharacters.push(req.body) });
-    }
-    res.end();
-});
-app.get('/playercharacters/:id', function (req, res) {
-    res.json(playerCharacters[req.params.id]);
-});
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('update encounter', function (id, encounter) {

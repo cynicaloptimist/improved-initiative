@@ -13,7 +13,6 @@ module ImprovedInitiative {
       ko.applyBindings(viewModel, document.body);
       
       $.ajax("../creatures/").done(viewModel.Library.AddCreatures);
-      $.ajax("../playercharacters/").done(viewModel.Library.AddPlayers);
     }
     if($('#playerview').length){
       var encounterId = $('html')[0].getAttribute('encounterId');
