@@ -2,11 +2,13 @@
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/socket.io/socket.io.d.ts" />
 
+import fs = require('fs');
 import express = require('express');
+import socketIO = require('socket.io');
+var argv = require('minimist')(process.argv.slice(2));
 var app = express();
 var http = require('http').Server(app);
-var io: SocketIO.Server = require('socket.io')(http);
-var fs = require('fs');
+var io = socketIO(http);
 
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
@@ -16,37 +18,35 @@ var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
 
-fs.access('public/user/creatures.json', fs.R_OK, (err) => {
-	if(err){
-		fs.readFile('public/ogl_creatures.json', (err, json) => {
-			if(err){
-				throw `Couldn't read creature library: ${err}`;
-			}
-			creatures = creatures.concat(JSON.parse(json));
-		});
-	} else {
-		fs.readFile('public/user/creatures.json', (err, json) => {
-			if(err){
-				throw `Couldn't read creature library: ${err}`;
-			}
-			creatures = creatures.concat(JSON.parse(json));
-		});
-	}
-})
-
-fs.readFile('public/user/custom-creatures.json', (err, json) => {
-	if(err){
-		return;
-	}
-	creatures = creatures.concat(JSON.parse(json));
+var importCreatureLibrary = (filename) => fs.readFile(filename, (err, buffer) => {
+    if(err){
+        throw `Couldn't read creature library ${filename}: ${err}`;
+    }
+    creatures = creatures.concat(JSON.parse(buffer.toString()));
 });
 
-fs.readFile('public/user/playercharacters.json', (err, json) => {
-	if(err){
-		return;
-	}
-	playerCharacters = playerCharacters.concat(JSON.parse(json));
-});
+if(argv.f){
+    fs.stat(argv.f, (err, stats) => {
+        if(err){
+            throw `couldn't access ${argv.f}`;
+        }
+        if(stats.isDirectory()){
+            fs.readdir(argv.f, (err, fileNames) => {
+                if(err){
+                    throw `couldn't read directory ${argv.f}`; 
+                }
+                fileNames.forEach(fileName => {
+                    importCreatureLibrary(argv.f + '/' + fileName);
+                });
+            })
+        } else {
+            importCreatureLibrary(argv.f);
+        }
+    })
+}
+else {
+    importCreatureLibrary('ogl_creatures.json');
+}
 
 var newEncounterIndex = (): number => {
 	var newEncounterId = playerViews.length;

@@ -1,47 +1,48 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/socket.io/socket.io.d.ts" />
+var fs = require('fs');
 var express = require('express');
+var socketIO = require('socket.io');
+var argv = require('minimist')(process.argv.slice(2));
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var fs = require('fs');
+var io = socketIO(http);
 var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 var port = process.env.PORT || 80;
 var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
-fs.access('public/user/creatures.json', fs.R_OK, function (err) {
+var importCreatureLibrary = function (filename) { return fs.readFile(filename, function (err, buffer) {
     if (err) {
-        fs.readFile('public/ogl_creatures.json', function (err, json) {
-            if (err) {
-                throw "Couldn't read creature library: " + err;
-            }
-            creatures = creatures.concat(JSON.parse(json));
-        });
+        throw "Couldn't read creature library " + filename + ": " + err;
     }
-    else {
-        fs.readFile('public/user/creatures.json', function (err, json) {
-            if (err) {
-                throw "Couldn't read creature library: " + err;
-            }
-            creatures = creatures.concat(JSON.parse(json));
-        });
-    }
-});
-fs.readFile('public/user/custom-creatures.json', function (err, json) {
-    if (err) {
-        return;
-    }
-    creatures = creatures.concat(JSON.parse(json));
-});
-fs.readFile('public/user/playercharacters.json', function (err, json) {
-    if (err) {
-        return;
-    }
-    playerCharacters = playerCharacters.concat(JSON.parse(json));
-});
+    creatures = creatures.concat(JSON.parse(buffer.toString()));
+}); };
+if (argv.f) {
+    fs.stat(argv.f, function (err, stats) {
+        if (err) {
+            throw "couldn't access " + argv.f;
+        }
+        if (stats.isDirectory()) {
+            fs.readdir(argv.f, function (err, fileNames) {
+                if (err) {
+                    throw "couldn't read directory " + argv.f;
+                }
+                fileNames.forEach(function (fileName) {
+                    importCreatureLibrary(argv.f + '/' + fileName);
+                });
+            });
+        }
+        else {
+            importCreatureLibrary(argv.f);
+        }
+    });
+}
+else {
+    importCreatureLibrary('ogl_creatures.json');
+}
 var newEncounterIndex = function () {
     var newEncounterId = playerViews.length;
     playerViews[newEncounterId] = {};

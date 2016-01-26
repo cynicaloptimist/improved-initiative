@@ -34,6 +34,7 @@
     "font-awesome": "^4.5.0",
     "jquery": "^2.1.4",
     "knockout": "^3.3.0",
+    "minimist": "^1.2.0",
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
