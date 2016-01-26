@@ -67,7 +67,7 @@ module ImprovedInitiative {
     
     EditHP = () => {
       this.PollUser({
-        requestContent: `Apply damage to ${this.DisplayName()}: <input class='response' type='number' />`,
+        requestContent: `Apply damage to ${this.DisplayName()} (${this.DisplayHP()}): <input class='response' type='number' />`,
         inputSelector: '.response',
         callback: damage => {
           this.ApplyDamage(damage);

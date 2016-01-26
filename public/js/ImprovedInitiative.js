@@ -95,7 +95,7 @@ var ImprovedInitiative;
             };
             this.EditHP = function () {
                 _this.PollUser({
-                    requestContent: "Apply damage to " + _this.DisplayName() + ": <input class='response' type='number' />",
+                    requestContent: "Apply damage to " + _this.DisplayName() + " (" + _this.DisplayHP() + "): <input class='response' type='number' />",
                     inputSelector: '.response',
                     callback: function (damage) {
                         _this.ApplyDamage(damage);
