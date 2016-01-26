@@ -174,6 +174,7 @@ var ImprovedInitiative;
 (function (ImprovedInitiative) {
     var Command = (function () {
         function Command(Description, ActionBinding, KeyBinding, ActionBarIcon, showOnActionBar, LockOnActionBar) {
+            var _this = this;
             if (KeyBinding === void 0) { KeyBinding = ''; }
             if (ActionBarIcon === void 0) { ActionBarIcon = ''; }
             if (showOnActionBar === void 0) { showOnActionBar = true; }
@@ -184,6 +185,11 @@ var ImprovedInitiative;
             this.ActionBarIcon = ActionBarIcon;
             this.LockOnActionBar = LockOnActionBar;
             this.ShowOnActionBar = ko.observable(showOnActionBar);
+            if (LockOnActionBar) {
+                this.ShowOnActionBar.subscribe(function (_) {
+                    _this.ShowOnActionBar(true);
+                });
+            }
         }
         return Command;
     })();

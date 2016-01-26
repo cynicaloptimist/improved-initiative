@@ -8,6 +8,11 @@ module ImprovedInitiative {
                 showOnActionBar: boolean = true,
                 public LockOnActionBar: boolean = false){
         this.ShowOnActionBar = ko.observable(showOnActionBar);
+        if(LockOnActionBar){
+            this.ShowOnActionBar.subscribe(_ => {
+                this.ShowOnActionBar(true);
+            });
+        }
     }
   }
   
