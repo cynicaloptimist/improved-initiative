@@ -8,7 +8,7 @@ interface KnockoutBindingHandlers {
 }
 	
 module ImprovedInitiative {
-	ko.bindingHandlers.focusOnRender = {
+  ko.bindingHandlers.focusOnRender = {
     update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
       $(element).find(valueAccessor()).select();
     }

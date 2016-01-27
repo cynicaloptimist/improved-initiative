@@ -260,7 +260,7 @@ var ImprovedInitiative;
             this.AddToLibrary = function () {
                 if (_this.library.DisplayTab() == 'Players') {
                     var newId = _this.library.Players().length.toString();
-                    _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { s.Player = "player", s.Id = newId; }), function (newStatBlock) {
+                    _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { s.Player = "player", s.Id = newId, s.Name = "New Character"; }), function (newStatBlock) {
                         var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                         _this.library.Players.unshift(newListing);
                         ImprovedInitiative.Store.Save('PlayerCharacters', newId, newStatBlock);
@@ -268,7 +268,7 @@ var ImprovedInitiative;
                 }
                 if (_this.library.DisplayTab() == 'Creatures') {
                     var newId = _this.library.Creatures().length.toString();
-                    _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { return s.Id = newId; }), function (newStatBlock) {
+                    _this.statBlockEditor.EditCreature(ImprovedInitiative.StatBlock.Empty(function (s) { s.Id = newId, s.Name = "New Creature"; }), function (newStatBlock) {
                         var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                         _this.library.Creatures.unshift(newListing);
                         ImprovedInitiative.Store.Save('Creatures', newId, newStatBlock);
@@ -1159,8 +1159,20 @@ var ImprovedInitiative;
                     var statBlockFromJSON = JSON.parse(_this.statBlockJson());
                     _this.StatBlock($.extend(ImprovedInitiative.StatBlock.Empty(), statBlockFromJSON));
                 }
-                _this.callback(_this.StatBlock());
+                var editedStatBlock = _this.StatBlock();
+                editedStatBlock.HP.Value = _this.parseInt(editedStatBlock.HP.Value, 1);
+                editedStatBlock.AC.Value = _this.parseInt(editedStatBlock.AC.Value, 10);
+                editedStatBlock.Abilities.Dex = _this.parseInt(editedStatBlock.Abilities.Dex, 10);
+                _this.callback(editedStatBlock);
                 _this.StatBlock(null);
+            };
+            this.parseInt = function (value, defaultValue) {
+                if (defaultValue === void 0) { defaultValue = null; }
+                if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+                    return Number(value);
+                if (defaultValue !== null)
+                    return defaultValue;
+                return NaN;
             };
         }
         return StatBlockEditor;
