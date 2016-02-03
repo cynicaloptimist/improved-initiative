@@ -28,7 +28,7 @@ module ImprovedInitiative {
     
     DeleteCreature = () => {
         var statBlock = this.StatBlock();
-        this.deleteCallback(statBlock.Player == 'player' ? 'PlayerCharacters' : 'Creatures', statBlock.Id);
+        this.deleteCallback(statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures, statBlock.Id);
         this.StatBlock(null);
     }
     

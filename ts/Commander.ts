@@ -10,16 +10,16 @@ module ImprovedInitiative {
         { 
             this.Commands = BuildCommandList(this);
             this.Commands.forEach(c => {
-                var keyBinding = Store.Load<string>('KeyBindings', c.Description);
+                var keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
                 if(keyBinding){
                     c.KeyBinding = keyBinding;
                 }
-                var showOnActionBar = Store.Load<boolean>('ActionBar', c.Description);
+                var showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
                 if(showOnActionBar != null){
                     c.ShowOnActionBar(showOnActionBar);
                 }
             })
-            if(Store.Load('User', 'SkipIntro')){
+            if(Store.Load(Store.User, 'SkipIntro')){
                 this.ToggleCommandDisplay();
             }
         }
@@ -42,10 +42,10 @@ module ImprovedInitiative {
         
         private deleteCreature = (library: string, id: string) => {
             Store.Delete(library, id);
-            if(library == "PlayerCharacters"){
+            if(library == Store.PlayerCharacters){
                 this.library.Players.remove(c => c.Id == id);
             }
-            if(library == "Creatures"){
+            if(library == Store.Creatures){
                 this.library.Creatures.remove(c => c.Id == id);
             }
         }
@@ -57,13 +57,13 @@ module ImprovedInitiative {
                     l.Name(newStatBlock.Name);
                     if(newStatBlock.Player == "player"){
                         l.Id = newStatBlock.Id;
-                        Store.Save<IStatBlock>('PlayerCharacters', l.Id, newStatBlock);
+                        Store.Save<IStatBlock>(Store.PlayerCharacters, l.Id, newStatBlock);
                     } else {
                         if(newStatBlock.Id === null || newStatBlock.Id === undefined){
                             newStatBlock.Id = this.library.Creatures().length.toString();
                             this.library.Creatures.unshift(new CreatureListing(newStatBlock.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock))
                         }
-                        Store.Save<IStatBlock>('Creatures', newStatBlock.Id, newStatBlock);
+                        Store.Save<IStatBlock>(Store.Creatures, newStatBlock.Id, newStatBlock);
                     }
                 }, this.deleteCreature);
             });
@@ -76,7 +76,7 @@ module ImprovedInitiative {
                 this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Player = "player", s.Id = newId, s.Name = "New Character" }), newStatBlock => {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Players.unshift(newListing);
-                    Store.Save<IStatBlock>('PlayerCharacters', newId, newStatBlock);
+                    Store.Save<IStatBlock>(Store.PlayerCharacters, newId, newStatBlock);
                 }, this.deleteCreature);
             }
             if(this.library.DisplayTab() == 'Creatures')
@@ -85,7 +85,7 @@ module ImprovedInitiative {
                 this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Id = newId, s.Name = "New Creature"}), newStatBlock => {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Creatures.unshift(newListing);
-                    Store.Save<IStatBlock>('Creatures', newId, newStatBlock);
+                    Store.Save<IStatBlock>(Store.Creatures, newId, newStatBlock);
                 }, this.deleteCreature);
             }
             if(this.library.DisplayTab() == 'Encounters')
@@ -243,7 +243,7 @@ module ImprovedInitiative {
             $('.modalblur').toggle();
             if ($('.commands').toggle().css('display') == 'none'){
                 this.RegisterKeyBindings();
-                Store.Save('User', 'SkipIntro', true);
+                Store.Save(Store.User, 'SkipIntro', true);
             }
         }
         
@@ -251,8 +251,8 @@ module ImprovedInitiative {
             Mousetrap.reset();
             this.Commands.forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
-                Store.Save('KeyBindings', b.Description, b.KeyBinding);
-                Store.Save('ActionBar', b.Description, b.ShowOnActionBar());
+                Store.Save(Store.KeyBindings, b.Description, b.KeyBinding);
+                Store.Save(Store.ActionBar, b.Description, b.ShowOnActionBar());
             })
         }
         
@@ -280,18 +280,18 @@ module ImprovedInitiative {
                     if(savedEncounters.indexOf(response) == -1){
                         savedEncounters.push(response);
                     }
-                    Store.Save('SavedEncounters', response, savedEncounter);
+                    Store.Save(Store.SavedEncounters, response, savedEncounter);
                 }
             })
         }
     
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<ISavedEncounter<ISavedCreature>>('SavedEncounters', encounterName);
+            var encounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.SavedEncounters, encounterName);
             this.encounter().LoadSavedEncounter(encounter);
         }
         
         DeleteSavedEncounter = (encounterName: string) => {
-            Store.Delete('SavedEncounters', encounterName);
+            Store.Delete(Store.SavedEncounters, encounterName);
             this.library.SavedEncounterIndex.remove(encounterName);
         }
     }
