@@ -720,7 +720,7 @@ var ImprovedInitiative;
             };
             this.RequestInitiative = function (playercharacter, userPollQueue) {
                 userPollQueue.Add({
-                    requestContent: "<p>Initiative Roll for " + playercharacter.ViewModel.DisplayName() + " (" + playercharacter.InitiativeModifier.toModifierString() + "): <input class='response' type='number' value='" + _this.Rules.Check(playercharacter.InitiativeModifier) + "' /></p>",
+                    requestContent: "Initiative Roll for " + playercharacter.ViewModel.DisplayName() + " (" + playercharacter.InitiativeModifier.toModifierString() + "): <input class='response' type='number' value='" + _this.Rules.Check(playercharacter.InitiativeModifier) + "' />",
                     inputSelector: '.response',
                     callback: function (response) {
                         playercharacter.Initiative(parseInt(response));
@@ -1348,33 +1348,33 @@ var ImprovedInitiative;
     var UserPollQueue = (function () {
         function UserPollQueue() {
             var _this = this;
-            this.Queue = ko.observableArray();
+            this.queue = ko.observableArray();
             this.Add = function (poll) {
-                poll.requestContent += "<button type='submit'><span class='fa fa-check'></span></button>";
-                _this.Queue.push(poll);
-            };
-            this.checkForAutoResolve = function () {
-                var poll = _this.Queue()[0];
-                if (poll && !poll.requestContent) {
-                    poll.callback(null);
-                    _this.Queue.shift();
-                }
+                _this.queue.push(poll);
             };
             this.Resolve = function (form) {
-                var poll = _this.Queue()[0];
+                var poll = _this.queue()[0];
                 poll.callback($(form).find(poll.inputSelector).val());
-                _this.Queue.shift();
+                _this.queue.shift();
                 return false;
             };
-            this.CurrentPoll = ko.pureComputed(function () {
-                return _this.Queue()[0];
+            this.HasPoll = ko.pureComputed(function () {
+                return _this.queue().length > 0;
             });
-            this.FocusCurrentPoll = function () {
-                if (_this.Queue[0]) {
-                    $(_this.Queue[0].inputSelector).select();
+            this.Message = ko.pureComputed(function () {
+                return _this.queue()[0].requestContent + "<button type='submit'><span class='fa fa-check'></span></button>";
+            });
+            this.InputSelector = ko.pureComputed(function () {
+                return _this.queue()[0].inputSelector;
+            }).extend({ notify: 'always' });
+            this.checkForAutoResolve = function () {
+                var poll = _this.queue()[0];
+                if (poll && !poll.requestContent) {
+                    poll.callback(null);
+                    _this.queue.shift();
                 }
             };
-            this.Queue.subscribe(this.checkForAutoResolve);
+            this.queue.subscribe(this.checkForAutoResolve);
         }
         return UserPollQueue;
     })();

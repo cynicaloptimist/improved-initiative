@@ -103,7 +103,7 @@ module ImprovedInitiative {
     
     RequestInitiative = (playercharacter: ICreature, userPollQueue: UserPollQueue) => {
       userPollQueue.Add({
-        requestContent: `<p>Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' /></p>`,
+        requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' />`,
         inputSelector: '.response',
         callback: (response: any) => {
           playercharacter.Initiative(parseInt(response));

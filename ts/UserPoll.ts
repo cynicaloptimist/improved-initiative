@@ -6,40 +6,40 @@ module ImprovedInitiative {
 	}
 	
 	export class UserPollQueue {
-		Queue: KnockoutObservableArray<IUserPoll> = ko.observableArray<IUserPoll>();
+		private queue: KnockoutObservableArray<IUserPoll> = ko.observableArray<IUserPoll>();
 		
 		constructor() {
-			this.Queue.subscribe(this.checkForAutoResolve);
+			this.queue.subscribe(this.checkForAutoResolve);
 		}
 		
-		Add = (poll: IUserPoll) => {
-            poll.requestContent += "<button type='submit'><span class='fa fa-check'></span></button>";
-			this.Queue.push(poll);
-		}
-		
-		private checkForAutoResolve = () => {
-			var poll = this.Queue()[0];
-			if(poll && !poll.requestContent){
-				poll.callback(null);
-				this.Queue.shift();
-			}
+        Add = (poll: IUserPoll) => {
+			this.queue.push(poll);
 		}
 		
 		Resolve = (form: HTMLFormElement) => {
-			var poll = this.Queue()[0];
+			var poll = this.queue()[0];
 			poll.callback($(form).find(poll.inputSelector).val());
-			this.Queue.shift();
-			
+			this.queue.shift();
 			return false;
 		}
+        
+        HasPoll = ko.pureComputed(() => {
+            return this.queue().length > 0;
+        });
 		
-		CurrentPoll = ko.pureComputed(() => {
-			return this.Queue()[0]
-		})
-		FocusCurrentPoll = () => {
-			if(this.Queue[0])
-			{
-				$(this.Queue[0].inputSelector).select()
+		Message = ko.pureComputed(() => {
+            return this.queue()[0].requestContent + "<button type='submit'><span class='fa fa-check'></span></button>";
+        });
+        
+        InputSelector = ko.pureComputed(() => {
+            return this.queue()[0].inputSelector;
+        }).extend( { notify: 'always' } );
+        
+        private checkForAutoResolve = () => {
+			var poll = this.queue()[0];
+			if(poll && !poll.requestContent){
+				poll.callback(null);
+				this.queue.shift();
 			}
 		}
 	}

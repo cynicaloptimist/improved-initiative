@@ -112,11 +112,11 @@
         <!-- /ko -->
       </ul>
     </div>
-    <!-- ko if: UserPollQueue.CurrentPoll() -->
+    <!-- ko if: UserPollQueue.HasPoll() -->
       <form id="user-response-requests" class="user-response-requests" data-bind="
-        submit:UserPollQueue.Resolve,
-        html:UserPollQueue.CurrentPoll().requestContent,
-        focusOnRender:UserPollQueue.CurrentPoll().inputSelector">
+        submit: UserPollQueue.Resolve,
+        html: UserPollQueue.Message(),
+        focusOnRender: UserPollQueue.InputSelector()">
       </form>
     <!-- /ko -->
   </div>
