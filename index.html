@@ -40,8 +40,13 @@
       <ul class="library" data-bind="foreach: SavedEncounterIndex">
         <li data-bind="click: $root.Commander.LoadEncounterByName">
           <span class="fa" data-bind="text: $data"></span>
+          <span class="fa fa-trash" data-bind="click: $root.Commander.DeleteSavedEncounter"></span>
         </li>
       </ul>
+      <div class="interface-buttons">
+        <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
+        <div data-bind="click: $root.Commander.SaveEncounter"><span class="fa fa-plus"></span></div>
+      </div>
       <!-- /ko -->
       <!-- ko ifnot: DisplayTab() == 'Encounters' -->
       <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />

@@ -422,13 +422,13 @@ var ImprovedInitiative;
             };
             this.SaveEncounter = function () {
                 _this.userPollQueue.Add({
-                    requestContent: "<p>Save Encounter As: <input class='response' type='text' value='' /></p>",
+                    requestContent: "Save Encounter As: <input class='response' type='text' value='' />",
                     inputSelector: '.response',
                     callback: function (response) {
                         var savedEncounter = _this.encounter().Save(response);
                         var savedEncounters = _this.library.SavedEncounterIndex;
                         if (savedEncounters.indexOf(response) == -1) {
-                            savedEncounters().push(response);
+                            savedEncounters.push(response);
                         }
                         ImprovedInitiative.Store.Save('SavedEncounters', response, savedEncounter);
                     }
@@ -437,6 +437,10 @@ var ImprovedInitiative;
             this.LoadEncounterByName = function (encounterName) {
                 var encounter = ImprovedInitiative.Store.Load('SavedEncounters', encounterName);
                 _this.encounter().LoadSavedEncounter(encounter);
+            };
+            this.DeleteSavedEncounter = function (encounterName) {
+                ImprovedInitiative.Store.Delete('SavedEncounters', encounterName);
+                _this.library.SavedEncounterIndex.remove(encounterName);
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
             this.Commands.forEach(function (c) {

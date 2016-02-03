@@ -272,13 +272,13 @@ module ImprovedInitiative {
         }
         SaveEncounter = () => {
             this.userPollQueue.Add({
-                requestContent: `<p>Save Encounter As: <input class='response' type='text' value='' /></p>`,
+                requestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
                 inputSelector: '.response',
                 callback: (response: string) => {
                     var savedEncounter = this.encounter().Save(response);
                     var savedEncounters = this.library.SavedEncounterIndex;
                     if(savedEncounters.indexOf(response) == -1){
-                        savedEncounters().push(response);
+                        savedEncounters.push(response);
                     }
                     Store.Save('SavedEncounters', response, savedEncounter);
                 }
@@ -287,7 +287,12 @@ module ImprovedInitiative {
     
         LoadEncounterByName = (encounterName: string) => {
             var encounter = Store.Load<ISavedEncounter<ISavedCreature>>('SavedEncounters', encounterName);
-            this.encounter().LoadSavedEncounter(encounter)
+            this.encounter().LoadSavedEncounter(encounter);
+        }
+        
+        DeleteSavedEncounter = (encounterName: string) => {
+            Store.Delete('SavedEncounters', encounterName);
+            this.library.SavedEncounterIndex.remove(encounterName);
         }
     }
 }
