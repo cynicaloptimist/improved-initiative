@@ -239,6 +239,15 @@ var ImprovedInitiative;
                     _this.encounter().AddCreature(listing.StatBlock(), event);
                 });
             };
+            this.deleteCreature = function (library, id) {
+                ImprovedInitiative.Store.Delete(library, id);
+                if (library == "PlayerCharacters") {
+                    _this.library.Players.remove(function (c) { return c.Id == id; });
+                }
+                if (library == "Creatures") {
+                    _this.library.Creatures.remove(function (c) { return c.Id == id; });
+                }
+            };
             this.EditCreatureFromListing = function (listing) {
                 listing.LoadStatBlock(function (l) {
                     _this.statBlockEditor.EditCreature(l.StatBlock(), function (newStatBlock) {
@@ -254,7 +263,7 @@ var ImprovedInitiative;
                                 ImprovedInitiative.Store.Save('Creatures', newStatBlock.Id, newStatBlock);
                             }
                         }
-                    });
+                    }, _this.deleteCreature);
                 });
             };
             this.AddToLibrary = function () {
@@ -264,7 +273,7 @@ var ImprovedInitiative;
                         var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                         _this.library.Players.unshift(newListing);
                         ImprovedInitiative.Store.Save('PlayerCharacters', newId, newStatBlock);
-                    });
+                    }, _this.deleteCreature);
                 }
                 if (_this.library.DisplayTab() == 'Creatures') {
                     var newId = _this.library.Creatures().length.toString();
@@ -272,7 +281,7 @@ var ImprovedInitiative;
                         var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                         _this.library.Creatures.unshift(newListing);
                         ImprovedInitiative.Store.Save('Creatures', newId, newStatBlock);
-                    });
+                    }, _this.deleteCreature);
                 }
                 if (_this.library.DisplayTab() == 'Encounters') {
                     _this.SaveEncounter();
@@ -377,6 +386,8 @@ var ImprovedInitiative;
                     _this.statBlockEditor.EditCreature(_this.SelectedCreatureStatblock(), function (newStatBlock) {
                         selectedCreature.StatBlock(newStatBlock);
                         _this.encounter().QueueEmitEncounter();
+                    }, function (library, id) {
+                        _this.RemoveSelectedCreatures();
                     });
                 }
             };
@@ -1149,10 +1160,11 @@ var ImprovedInitiative;
             this.StatBlock = ko.observable();
             this.editorType = ko.observable('basic');
             this.statBlockJson = ko.observable();
-            this.EditCreature = function (StatBlock, callback) {
+            this.EditCreature = function (StatBlock, saveCallback, deleteCallback) {
                 _this.StatBlock(StatBlock);
                 _this.statBlockJson(JSON.stringify(StatBlock, null, 2));
-                _this.callback = callback;
+                _this.saveCallback = saveCallback;
+                _this.deleteCallback = deleteCallback;
             };
             this.SaveCreature = function () {
                 if (_this.editorType() === 'advanced') {
@@ -1163,7 +1175,12 @@ var ImprovedInitiative;
                 editedStatBlock.HP.Value = _this.parseInt(editedStatBlock.HP.Value, 1);
                 editedStatBlock.AC.Value = _this.parseInt(editedStatBlock.AC.Value, 10);
                 editedStatBlock.Abilities.Dex = _this.parseInt(editedStatBlock.Abilities.Dex, 10);
-                _this.callback(editedStatBlock);
+                _this.saveCallback(editedStatBlock);
+                _this.StatBlock(null);
+            };
+            this.DeleteCreature = function () {
+                var statBlock = _this.StatBlock();
+                _this.deleteCallback(statBlock.Player == 'player' ? 'PlayerCharacters' : 'Creatures', statBlock.Id);
                 _this.StatBlock(null);
             };
             this.parseInt = function (value, defaultValue) {

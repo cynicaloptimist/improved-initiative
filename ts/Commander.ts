@@ -40,6 +40,16 @@ module ImprovedInitiative {
             });
         }
         
+        private deleteCreature = (library: string, id: string) => {
+            Store.Delete(library, id);
+            if(library == "PlayerCharacters"){
+                this.library.Players.remove(c => c.Id == id);
+            }
+            if(library == "Creatures"){
+                this.library.Creatures.remove(c => c.Id == id);
+            }
+        }
+        
         EditCreatureFromListing = (listing: CreatureListing) => {
             listing.LoadStatBlock(l => {
                 this.statBlockEditor.EditCreature(l.StatBlock(), newStatBlock => {
@@ -54,7 +64,7 @@ module ImprovedInitiative {
                             Store.Save<IStatBlock>('Creatures', newStatBlock.Id, newStatBlock);
                         }
                     }
-                });
+                }, this.deleteCreature);
             });
         }
         
@@ -66,7 +76,7 @@ module ImprovedInitiative {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Players.unshift(newListing);
                     Store.Save<IStatBlock>('PlayerCharacters', newId, newStatBlock);
-                });
+                }, this.deleteCreature);
             }
             if(this.library.DisplayTab() == 'Creatures')
             {
@@ -75,7 +85,7 @@ module ImprovedInitiative {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Creatures.unshift(newListing);
                     Store.Save<IStatBlock>('Creatures', newId, newStatBlock);
-                });
+                }, this.deleteCreature);
             }
             if(this.library.DisplayTab() == 'Encounters')
             {
@@ -210,6 +220,8 @@ module ImprovedInitiative {
                 this.statBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
                     selectedCreature.StatBlock(newStatBlock);
                     this.encounter().QueueEmitEncounter();
+                }, (library, id) => {
+                    this.RemoveSelectedCreatures();
                 })
             }
         }
