@@ -258,10 +258,11 @@ var ImprovedInitiative;
                             ImprovedInitiative.Store.Save('PlayerCharacters', l.Id, newStatBlock);
                         }
                         else {
-                            if (newStatBlock.Id) {
-                                l.Id = newStatBlock.Id;
-                                ImprovedInitiative.Store.Save('Creatures', newStatBlock.Id, newStatBlock);
+                            if (newStatBlock.Id === null || newStatBlock.Id === undefined) {
+                                newStatBlock.Id = _this.library.Creatures().length.toString();
+                                _this.library.Creatures.unshift(new ImprovedInitiative.CreatureListing(newStatBlock.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock));
                             }
+                            ImprovedInitiative.Store.Save('Creatures', newStatBlock.Id, newStatBlock);
                         }
                     }, _this.deleteCreature);
                 });

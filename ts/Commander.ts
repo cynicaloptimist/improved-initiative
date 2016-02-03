@@ -59,10 +59,11 @@ module ImprovedInitiative {
                         l.Id = newStatBlock.Id;
                         Store.Save<IStatBlock>('PlayerCharacters', l.Id, newStatBlock);
                     } else {
-                        if(newStatBlock.Id){
-                            l.Id = newStatBlock.Id;
-                            Store.Save<IStatBlock>('Creatures', newStatBlock.Id, newStatBlock);
+                        if(newStatBlock.Id === null || newStatBlock.Id === undefined){
+                            newStatBlock.Id = this.library.Creatures().length.toString();
+                            this.library.Creatures.unshift(new CreatureListing(newStatBlock.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock))
                         }
+                        Store.Save<IStatBlock>('Creatures', newStatBlock.Id, newStatBlock);
                     }
                 }, this.deleteCreature);
             });
