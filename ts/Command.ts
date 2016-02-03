@@ -32,7 +32,7 @@ module ImprovedInitiative {
         new Command('Edit Selected Combatant Initiative', c.EditSelectedCreatureInitiative, 'alt+i', 'fa-play-circle-o'),
         new Command('Move Selected Combatant Down', c.MoveSelectedCreatureDown, 'alt+j', 'fa-angle-double-down'),
         new Command('Move Selected Combatant Up', c.MoveSelectedCreatureUp, 'alt+k', 'fa-angle-double-up'),
-        new Command('Add Temporary HP', c.AddSelectedCreaturesTemporaryHP, 'alt+t', 'fa-medkit'),
+        new Command('Apply Temporary HP', c.AddSelectedCreaturesTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Save Encounter', c.SaveEncounter, 'alt+s', 'fa-save'),
         new Command('Show Help and Keybindings', c.ToggleCommandDisplay, '?', 'fa-question-circle', true, true)
     ]
