@@ -3990,6 +3990,9 @@
 .fa-percent:before {
   content: "\f295";
 }
+/* Main Primary color */
+/* Main Secondary color (1) */
+/* Main Secondary color (2) */
 * {
   font-family: sans-serif;
   margin: 0;
@@ -3997,7 +4000,7 @@
   cursor: default;
 }
 .outline {
-  border: 1px solid gray;
+  border: 1px solid #005353;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -4075,7 +4078,7 @@ body input {
 body h1 {
   font-size: large;
   padding: 5px;
-  background-color: darkred;
+  background-color: #8b0000;
   color: white;
   margin-bottom: 5px;
   min-height: 2em;
@@ -4202,7 +4205,7 @@ body ul.library li:nth-child(2n) .fa {
 body ul.library li .fa {
   padding: 2px 6px;
   margin-left: 1px;
-  border: 1px solid darkred;
+  border: 1px solid #8b0000;
   border-radius: 4px;
 }
 body ul.library li .fa:first-child {
@@ -4229,7 +4232,7 @@ body .encounter .combatants .creature:hover {
   background-color: darkgray;
 }
 body .encounter .combatants .creature.active {
-  border-left-color: green;
+  border-left-color: #568200;
 }
 body .encounter .combatants .creature.active .name {
   font-weight: bold;
@@ -4306,7 +4309,7 @@ body .encounter .combatants .creature.header .hp:hover {
   background-color: inherit;
 }
 body .user-response-requests {
-  border: 2px solid darkred;
+  border: 2px solid #8b0000;
   border-radius: 4px;
   margin: 8px;
   padding: 8px;
@@ -4327,7 +4330,7 @@ body .statblock > div * {
 }
 body .statblock hr {
   margin: 5px 0px;
-  background-color: darkred;
+  background-color: #8b0000;
   border: none;
   height: 1px;
 }
@@ -4344,7 +4347,7 @@ body .statblock .notes {
   font-style: italic;
 }
 body .statblock .Name {
-  color: darkred;
+  color: #8b0000;
   font-weight: bold;
   font-size: large;
 }
@@ -4385,7 +4388,7 @@ body .interface-buttons > div {
   width: 24px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid gray;
+  border: 1px solid #005353;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.1);
 }

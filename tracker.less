@@ -2,6 +2,24 @@
 @import "node_modules/font-awesome/less/font-awesome.less";
 @import "node_modules/font-awesome/less/icons.less";
 
+@pRed-0: #8B0000;	/* Main Primary color */
+@pRed-1: #CE3434;
+@pRed-2: #AB1616;
+@pRed-3: #660000;
+@pRed-4: #3C0000;
+
+@pBlue-0: #005353;	/* Main Secondary color (1) */
+@pBlue-1: #1F7C7C;
+@pBlue-2: #0D6767;
+@pBlue-3: #003D3D;
+@pBlue-4: #002424;
+
+@pGreen-0: #568200;	/* Main Secondary color (2) */
+@pGreen-1: #90C030;
+@pGreen-2: #71A014;
+@pGreen-3: #3F5F00;
+@pGreen-4: #253800;
+
 *{
 	font-family: sans-serif;
 	margin: 0;
@@ -33,7 +51,7 @@
 }
 
 .outline {
-	border: 1px solid gray;
+	border: 1px solid @pBlue-0;
 	border-radius: 4px;
 	background-color: rgba(0,0,0,0.1);
 	&.button:hover {
@@ -101,7 +119,7 @@ body{
 	h1 {
 		font-size:large;
 		padding: 5px;
-		background-color: darkred;
+		background-color: @pRed-0;
 		color: white;
 		margin-bottom: 5px;
 		min-height: 2em;
@@ -236,7 +254,7 @@ body{
 				}
 				padding: 2px 6px;
 				margin-left: 1px;
-				border: 1px solid darkred;
+				border: 1px solid @pRed-0;
 				border-radius: 4px;
 				&:hover{
 					background-color:lighten(gray, 30%);
@@ -263,7 +281,7 @@ body{
 				line-height: 32px;
 				border-left: 5px solid;
 				&.active {
-					border-left-color: green;
+					border-left-color: @pGreen-0;
 					.name{
 						font-weight: bold;
 					}
@@ -356,7 +374,7 @@ body{
 		}
 	}
     .user-response-requests {
-        border: 2px solid darkred;
+        border: 2px solid @pRed-0;
         border-radius: 4px;
         margin: 8px;
         padding: 8px;
@@ -378,7 +396,7 @@ body{
 
 		hr {
 			margin: 5px 0px;
-			background-color: darkred;
+			background-color: @pRed-0;
 			border: none;
 			height: 1px;
 		}
@@ -399,7 +417,7 @@ body{
 			font-style: italic;
 		}
 		.Name {
-			color:darkred;
+			color:@pRed-0;
 			font-weight:bold;
 			font-size: large;
 		}
