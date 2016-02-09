@@ -138,10 +138,12 @@ module ImprovedInitiative {
       this.Creature.Tags.push(this.NewTag());
       this.NewTag(null);
       this.AddingTag(false);
+      this.Creature.Encounter.QueueEmitEncounter();
     };
     
     RemoveTag = (tag: string) => {
       this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
+      this.Creature.Encounter.QueueEmitEncounter();
     };
   }
 }

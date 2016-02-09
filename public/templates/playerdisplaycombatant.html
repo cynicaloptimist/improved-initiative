@@ -5,3 +5,8 @@
 <div class="hp">
   <span data-bind="html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
 </div>
+<div class="tags" data-bind="foreach: Tags">
+  <div class="tag outline">
+    <span data-bind="text: $data"></span>
+  </div>
+</div>

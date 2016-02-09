@@ -1,18 +1,18 @@
 module ImprovedInitiative {
 	export interface ICreature{
     Encounter: Encounter;
-	  Alias: KnockoutObservable<string>;
+    Alias: KnockoutObservable<string>;
     IndexLabel: number;
-	  MaxHP: number;
-	  CurrentHP: KnockoutObservable<number>;
+    MaxHP: number;
+    CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
-	  AC: number;
-	  AbilityModifiers: IHaveAbilities;
-	  Tags: KnockoutObservableArray<string>;
-	  InitiativeModifier: number;
-	  Initiative: KnockoutObservable<number>;
+    AC: number;
+    AbilityModifiers: IHaveAbilities;
+    Tags: KnockoutObservableArray<string>;
+    InitiativeModifier: number;
+    Initiative: KnockoutObservable<number>;
     Hidden: KnockoutObservable<boolean>;
-	  StatBlock: KnockoutObservable<IStatBlock>;
+    StatBlock: KnockoutObservable<IStatBlock>;
     RollInitiative: (userPollQueue: UserPollQueue) => void;
     ViewModel: CombatantViewModel;
     IsPlayerCharacter: boolean;
@@ -37,18 +37,18 @@ module ImprovedInitiative {
     Alias = ko.observable(null);
     TemporaryHP: KnockoutObservable<number> = ko.observable(0);
     Tags: KnockoutObservableArray<string> = ko.observableArray<string>();
-	  Initiative: KnockoutObservable<number> = ko.observable(0);
+    Initiative: KnockoutObservable<number> = ko.observable(0);
     StatBlock: KnockoutObservable<IStatBlock> = ko.observable<IStatBlock>();
     Hidden = ko.observable(false);
 
     IndexLabel: number;
     MaxHP: number;
-	  CurrentHP: KnockoutObservable<number>;
+    CurrentHP: KnockoutObservable<number>;
     PlayerDisplayHP: KnockoutComputed<string>;
-	  AC: number;
-	  AbilityModifiers: IHaveAbilities;
+    AC: number;
+    AbilityModifiers: IHaveAbilities;
     NewTag: KnockoutObservable<string>;
-	  InitiativeModifier: number;
+    InitiativeModifier: number;
     ViewModel: any;
     IsPlayerCharacter = false;
     
@@ -62,29 +62,29 @@ module ImprovedInitiative {
     }
     
     private setIndexLabel(oldName?: string) {
-      var name = this.StatBlock().Name,
-          counts = this.Encounter.CreatureCountsByName;
-      if(name == oldName){
-          return;
-      }
-      if(oldName){
-        counts[oldName](counts[oldName]() - 1);
-      }
-      if(!counts[name]){
-        counts[name] = ko.observable(1);
-      } else {
-        counts[name](counts[name]() + 1);
-      }
-      this.IndexLabel = counts[name]();
+        var name = this.StatBlock().Name,
+            counts = this.Encounter.CreatureCountsByName;
+        if(name == oldName){
+            return;
+        }
+        if(oldName){
+            counts[oldName](counts[oldName]() - 1);
+        }
+        if(!counts[name]){
+            counts[name] = ko.observable(1);
+        } else {
+            counts[name](counts[name]() + 1);
+        }
+        this.IndexLabel = counts[name]();
     }
 	  
-	  private calculateModifiers = () => {
+	private calculateModifiers = () => {
 	    var modifiers = StatBlock.Empty().Abilities;
 	    for(var attribute in this.StatBlock().Abilities){
 	      modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock().Abilities[attribute]);
 	    }
 	    return modifiers;
-	  }
+	}
     
     RollInitiative = (userPollQueue: UserPollQueue) => {
 	    var roll = this.Encounter.Rules.Check(this.InitiativeModifier);

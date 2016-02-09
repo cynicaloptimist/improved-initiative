@@ -4057,6 +4057,13 @@ html {
 #playerview li.creature .hp:hover {
   background-color: inherit;
 }
+#playerview li.creature .tags {
+  flex-grow: 2;
+}
+#playerview li.creature .tags .tag {
+  line-height: 46px;
+  font-size: inherit;
+}
 body {
   display: flex;
   flex-direction: column;

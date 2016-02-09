@@ -4,6 +4,7 @@ module ImprovedInitiative {
     HPDisplay: string;
     HPColor: string;
     Initiative: number;
+    Tags: string [];
     IsPlayerCharacter: boolean;
 
     constructor(creature: ICreature){
@@ -13,6 +14,7 @@ module ImprovedInitiative {
       this.HPColor = this.GetHPColor(creature);
       this.Initiative = creature.Initiative();
       this.IsPlayerCharacter = creature.IsPlayerCharacter;
+      this.Tags = creature.Tags();
     }
     
     private GetHPDisplay(creature: ICreature): string {
