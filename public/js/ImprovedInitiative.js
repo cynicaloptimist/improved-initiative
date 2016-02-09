@@ -1253,10 +1253,10 @@ var ImprovedInitiative;
         Store._prefix = "ImprovedInitiative";
         Store.PlayerCharacters = "PlayerCharacters";
         Store.Creatures = "Creatures";
-        Store.SavedEncounters = "Creatures";
+        Store.SavedEncounters = "SavedEncounters";
         Store.User = "User";
-        Store.KeyBindings = "PlayerCharacters";
-        Store.ActionBar = "PlayerCharacters";
+        Store.KeyBindings = "KeyBindings";
+        Store.ActionBar = "ActionBar";
         Store.save = function (key, value) { return localStorage.setItem(key, JSON.stringify(value)); };
         Store.load = function (key) {
             var value = localStorage.getItem(key);

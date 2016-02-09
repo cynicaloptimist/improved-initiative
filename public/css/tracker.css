@@ -4049,7 +4049,7 @@ html {
   width: 50px;
 }
 #playerview li.creature .name {
-  flex-grow: 1;
+  width: 330px;
 }
 #playerview li.creature .hp {
   width: 230px;
@@ -4288,12 +4288,10 @@ body .encounter .combatants .creature .tags .tag {
   padding: 0 4px;
 }
 body .encounter .combatants .creature .tags .tag .fa-remove {
-  float: none;
   margin-left: 4px;
 }
-body .encounter .combatants .creature .tags .fa-clickable {
-  float: right;
-  padding: 8px;
+body .encounter .combatants .creature .buttons {
+  padding: 0 4px;
 }
 body .encounter .combatants .creature.header {
   background-color: black;
