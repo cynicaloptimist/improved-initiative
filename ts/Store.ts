@@ -4,10 +4,10 @@ module ImprovedInitiative {
 		
         static PlayerCharacters: string = "PlayerCharacters";
         static Creatures: string = "Creatures";
-        static SavedEncounters: string = "Creatures";
+        static SavedEncounters: string = "SavedEncounters";
         static User: string = "User";
-        static KeyBindings: string = "PlayerCharacters";
-        static ActionBar: string = "PlayerCharacters";
+        static KeyBindings: string = "KeyBindings";
+        static ActionBar: string = "ActionBar";
         
         static List(listName: string): string[] {
 			var listKey = `${Store._prefix}.${listName}`;
