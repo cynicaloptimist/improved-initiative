@@ -477,7 +477,7 @@ var ImprovedInitiative;
     var templateLoader = {
         loadTemplate: function (name, templateConfig, callback) {
             if (templateConfig.name) {
-                var fullUrl = '/templates/' + templateConfig.name + '.html';
+                var fullUrl = '/templates/' + templateConfig.name;
                 $.get(fullUrl, function (markupString) {
                     // We need an array of DOM nodes, not a string.
                     // We can use the default loader to convert to the

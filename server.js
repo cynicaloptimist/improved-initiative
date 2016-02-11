@@ -73,6 +73,11 @@ app.get('/p/:id', function (req, res) {
 app.get('/playerviews/:id', function (req, res) {
     res.json(playerViews[req.params.id]);
 });
+app.get('/templates/:name', function (req, res) {
+    res.render("templates/" + req.params.name, {
+        rootDirectory: "..",
+    });
+});
 app.get('/creatures/', function (req, res) {
     res.json(creatures.map(function (creature, index) {
         return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": "/creatures/" + index };

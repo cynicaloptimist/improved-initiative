@@ -85,6 +85,12 @@ app.get('/playerviews/:id', (req, res) => {
 	res.json(playerViews[req.params.id]);
 })
 
+app.get('/templates/:name', (req, res) => {
+    res.render(`templates/${req.params.name}`, {
+        rootDirectory	: "..", 
+    });
+})
+
 app.get('/creatures/', (req, res) => {
 	res.json(creatures.map((creature, index) => {
 		return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
