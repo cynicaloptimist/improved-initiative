@@ -4115,36 +4115,57 @@ body .modal {
   background-color: #ffffff;
   width: 450px;
 }
-body .commands div {
+body .tabs {
+  height: 25px;
+  border-bottom: 1px solid darkgray;
+  padding: 4px;
+}
+body .tabs div {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid;
+  border-bottom: 0px;
+}
+body .tabs div:hover {
+  background-color: lightgray;
+}
+body .tabs div.selected {
+  background-color: darkgray;
+}
+body .settings .tab {
+  margin: 10px 0px;
+  display: none;
+}
+body .settings .about {
+  display: block;
+}
+body .settings .commands div {
   display: flex;
 }
-body .commands div .label {
+body .settings .commands div .label {
   display: inline-block;
   margin-right: 10px;
   flex-grow: 1;
 }
-body .commands div .keybinding {
+body .settings .commands div .keybinding {
   width: 40px;
   margin: 4px;
 }
-body .commands div .actionbaricon {
+body .settings .commands div .actionbaricon {
   width: 24px;
   margin: 4px;
   text-align: center;
 }
-body .commands div .showonactionbar {
+body .settings .commands div .showonactionbar {
   margin: 4px;
 }
-body .commands .savekeybindings {
+body .settings .commands .savekeybindings {
   text-align: right;
 }
-body .commands .savekeybindings input {
+body .settings .commands .savekeybindings input {
   padding: 3px;
   margin-right: 3px;
   margin-left: auto;
-}
-body .commands .about {
-  margin: 10px 0px;
 }
 body .preview.statblock,
 body .preview.encounter {
@@ -4167,23 +4188,6 @@ body .libraries {
   z-index: 3;
   display: flex;
   flex-direction: column;
-}
-body .libraries .tabs {
-  height: 25px;
-  border-bottom: 1px solid darkgray;
-  padding: 4px;
-}
-body .libraries .tabs div {
-  display: inline-block;
-  padding: 5px;
-  border: 1px solid;
-  border-bottom: 0px;
-}
-body .libraries .tabs div:hover {
-  background-color: lightgray;
-}
-body .libraries .tabs div.selected {
-  background-color: darkgray;
 }
 body .filter-library {
   margin: 5px;

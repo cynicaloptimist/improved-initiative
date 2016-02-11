@@ -20,7 +20,7 @@ module ImprovedInitiative {
                 }
             })
             if(Store.Load(Store.User, 'SkipIntro')){
-                this.ToggleCommandDisplay();
+                this.HideSettings();
             }
         }
         
@@ -239,12 +239,16 @@ module ImprovedInitiative {
             window.open(`/p/${this.encounter().EncounterId}`, 'Player View');
         }
         
-        ToggleCommandDisplay = () => {
-            $('.modalblur').toggle();
-            if ($('.commands').toggle().css('display') == 'none'){
-                this.RegisterKeyBindings();
-                Store.Save(Store.User, 'SkipIntro', true);
-            }
+        ShowSettings = () => {
+            $('.modalblur').show();
+            $('.settings').show();
+        }
+        
+        HideSettings = () => {
+            $('.modalblur').hide();
+            $('.settings').hide();
+            this.RegisterKeyBindings();
+            Store.Save(Store.User, 'SkipIntro', true);
         }
         
         RegisterKeyBindings(){

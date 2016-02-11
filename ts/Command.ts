@@ -34,6 +34,6 @@ module ImprovedInitiative {
         new Command('Move Selected Combatant Up', c.MoveSelectedCreatureUp, 'alt+k', 'fa-angle-double-up'),
         new Command('Apply Temporary HP', c.AddSelectedCreaturesTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Save Encounter', c.SaveEncounter, 'alt+s', 'fa-save'),
-        new Command('Show Help and Keybindings', c.ToggleCommandDisplay, '?', 'fa-question-circle', true, true)
+        new Command('Settings', c.ShowSettings, '?', 'fa-gear', true, true)
     ]
 }

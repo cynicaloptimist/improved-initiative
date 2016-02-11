@@ -160,37 +160,61 @@ body{
 		width: 450px;
 	}
     
-    .commands {
+    .tabs {
+        height: 25px;
+        border-bottom: 1px solid darkgray;
+        padding: 4px;
         div {
-			display: flex;
-			.label {
-				display:inline-block;
-				margin-right: 10px;
-				flex-grow:1;
-			}
-			.keybinding {
-				width: 40px;
-				margin: 4px;
-			}
-			.actionbaricon {
-				width: 24px;
-				margin: 4px;
-				text-align:center;
-			}
-			.showonactionbar {
-				margin: 4px;
-			}
-		}
-		.savekeybindings {
-            text-align:right;
-            input {
-                padding: 3px;
-                margin-right: 3px;
-                margin-left: auto;
+            display:inline-block;
+            padding: 5px;
+            border: 1px solid;
+            border-bottom: 0px;
+            &:hover {
+                background-color: lightgray;
             }
-		}
-        .about {
+            &.selected {
+                background-color: darkgray;
+            }
+        }
+    }
+    
+    .settings {
+        .tab {
             margin: 10px 0px;
+            display:none;
+        }
+        .about {
+            display:block;
+        }
+        .commands {
+            div {
+                display: flex;
+                .label {
+                    display:inline-block;
+                    margin-right: 10px;
+                    flex-grow:1;
+                }
+                .keybinding {
+                    width: 40px;
+                    margin: 4px;
+                }
+                .actionbaricon {
+                    width: 24px;
+                    margin: 4px;
+                    text-align:center;
+                }
+                .showonactionbar {
+                    margin: 4px;
+                }
+            }
+            .savekeybindings {
+                text-align:right;
+                input {
+                    padding: 3px;
+                    margin-right: 3px;
+                    margin-left: auto;
+                }
+            }
         }
     }
 
@@ -215,23 +239,6 @@ body{
 		z-index: 3;
 		display: flex;
 		flex-direction:column;
-		.tabs {
-			height: 25px;
-			border-bottom: 1px solid darkgray;
-			padding: 4px;
-			div {
-				display:inline-block;
-				padding: 5px;
-				border: 1px solid;
-				border-bottom: 0px;
-				&:hover {
-					background-color: lightgray;
-				}
-				&.selected {
-					background-color: darkgray;
-				}
-			}
-		}
 	}
 	.filter-library {
 		margin: 5px;

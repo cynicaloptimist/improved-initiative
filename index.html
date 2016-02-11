@@ -14,8 +14,8 @@
   
   </head>
   <body id="tracker">
-  <div class="modalblur" data-bind="click: Commander.ToggleCommandDisplay"></div>
-  <div class="commands modal" data-bind="component: { name: 'settings', params: { commander: Commander } }">
+  <div class="modalblur" data-bind="click: Commander.HideSettings"></div>
+  <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }">
   </div>
   <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
   <div class="libraries">

@@ -215,7 +215,7 @@ var ImprovedInitiative;
         new Command('Move Selected Combatant Up', c.MoveSelectedCreatureUp, 'alt+k', 'fa-angle-double-up'),
         new Command('Apply Temporary HP', c.AddSelectedCreaturesTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Save Encounter', c.SaveEncounter, 'alt+s', 'fa-save'),
-        new Command('Show Help and Keybindings', c.ToggleCommandDisplay, '?', 'fa-question-circle', true, true)
+        new Command('Settings', c.ShowSettings, '?', 'fa-gear', true, true)
     ]; };
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
@@ -404,12 +404,15 @@ var ImprovedInitiative;
             this.LaunchPlayerWindow = function () {
                 window.open("/p/" + _this.encounter().EncounterId, 'Player View');
             };
-            this.ToggleCommandDisplay = function () {
-                $('.modalblur').toggle();
-                if ($('.commands').toggle().css('display') == 'none') {
-                    _this.RegisterKeyBindings();
-                    ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, 'SkipIntro', true);
-                }
+            this.ShowSettings = function () {
+                $('.modalblur').show();
+                $('.settings').show();
+            };
+            this.HideSettings = function () {
+                $('.modalblur').hide();
+                $('.settings').hide();
+                _this.RegisterKeyBindings();
+                ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, 'SkipIntro', true);
             };
             this.RollInitiative = function () {
                 _this.encounter().RollInitiative(_this.userPollQueue);
@@ -457,7 +460,7 @@ var ImprovedInitiative;
                 }
             });
             if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
-                this.ToggleCommandDisplay();
+                this.HideSettings();
             }
         }
         Commander.prototype.RegisterKeyBindings = function () {
@@ -493,11 +496,19 @@ var ImprovedInitiative;
     };
     ko.components.loaders.unshift(templateLoader);
     ko.components.register('settings', {
-        viewModel: function (params) { return params.commander; },
+        viewModel: function (params) {
+            return {
+                Commander: params.commander,
+                ShowTab: function (tabSelector) {
+                    $('.settings .tab').hide();
+                    $(".settings " + tabSelector).show();
+                }
+            };
+        },
         template: { name: 'settings' }
     });
     ko.components.register('defaultstatblock', {
-        viewModel: function (params) { return params.creature.StatBlock || params.creature; },
+        viewModel: function (params) { return params.creature; },
         template: { name: 'defaultstatblock' }
     });
     ko.components.register('activestatblock', {
@@ -512,9 +523,7 @@ var ImprovedInitiative;
         template: { name: 'combatant' }
     });
     ko.components.register('playerdisplaycombatant', {
-        viewModel: function (params) {
-            return params.creature;
-        },
+        viewModel: function (params) { return params.creature; },
         template: { name: 'playerdisplaycombatant' }
     });
 })(ImprovedInitiative || (ImprovedInitiative = {}));

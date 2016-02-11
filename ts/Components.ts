@@ -19,12 +19,20 @@ module ImprovedInitiative {
   ko.components.loaders.unshift(templateLoader);
   
   ko.components.register('settings', {
-    viewModel: params => params.commander,
+    viewModel: (params) => {
+        return {
+            Commander: params.commander,
+            ShowTab: (tabSelector: string) => {
+                $('.settings .tab').hide();
+                $(`.settings ${tabSelector}`).show();
+            }
+        }
+    },
     template: { name: 'settings' }
   });
   
   ko.components.register('defaultstatblock', {
-    viewModel: params => { return params.creature.StatBlock || params.creature; },
+    viewModel: params => { return params.creature; },
     template: { name: 'defaultstatblock' }
   });
   
@@ -42,9 +50,7 @@ module ImprovedInitiative {
   })
   
   ko.components.register('playerdisplaycombatant', {
-    viewModel: function(params) { 
-      return params.creature; 
-    },
+    viewModel: params => { return params.creature; },
     template: { name: 'playerdisplaycombatant' }
   })
 
