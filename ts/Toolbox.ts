@@ -6,6 +6,10 @@ interface Number {
   toModifierString: () => string; 
 }
 
+interface Function {
+    with: (valueToPass: any) => Function
+}
+
 Number.prototype.toModifierString = function(){
   if(this >= 0){
     return `+${this}`
@@ -30,6 +34,10 @@ String.prototype.format = function () {
     return args[n];
   });
 };
+
+Function.prototype.with = function(value: any){
+    return this.bind(null, value);
+}
 
 var PostJSON = (url: string, data: any, success: (data: any) => void) => 
         $.ajax({

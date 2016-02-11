@@ -21,9 +21,9 @@
   <div class="libraries">
     <h1>Library</h1>
     <div class="tabs">
-      <div data-bind="click: Library.DisplayTab.bind(null, 'Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</div>
-      <div data-bind="click: Library.DisplayTab.bind(null, 'Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</div>
-      <div data-bind="click: Library.DisplayTab.bind(null, 'Encounters'), css: { selected: Library.DisplayTab() == 'Encounters' }">Encounters</div>
+      <div data-bind="click: Library.DisplayTab.with('Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</div>
+      <div data-bind="click: Library.DisplayTab.with('Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</div>
+      <div data-bind="click: Library.DisplayTab.with('Encounters'), css: { selected: Library.DisplayTab() == 'Encounters' }">Encounters</div>
     </div>
     <!--ko with: Library -->
       <!-- ko if: DisplayTab() == 'Encounters' -->

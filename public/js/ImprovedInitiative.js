@@ -1310,6 +1310,9 @@ String.prototype.format = function () {
         return args[n];
     });
 };
+Function.prototype.with = function (value) {
+    return this.bind(null, value);
+};
 var PostJSON = function (url, data, success) {
     return $.ajax({
         type: "POST",
