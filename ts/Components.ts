@@ -18,6 +18,11 @@ module ImprovedInitiative {
    
   ko.components.loaders.unshift(templateLoader);
   
+  ko.components.register('settings', {
+    viewModel: params => params.commander,
+    template: { name: 'settings' }
+  });
+  
   ko.components.register('defaultstatblock', {
     viewModel: params => { return params.creature.StatBlock || params.creature; },
     template: { name: 'defaultstatblock' }
