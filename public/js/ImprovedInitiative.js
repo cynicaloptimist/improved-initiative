@@ -502,6 +502,9 @@ var ImprovedInitiative;
                 ShowTab: function (tabSelector) {
                     $('.settings .tab').hide();
                     $(".settings " + tabSelector).show();
+                },
+                ExportData: function () {
+                    saveAs(new Blob([[JSON.stringify({ Hello: "World" }, null, 2)]], { type: 'application/json' }), 'hello_world.txt');
                 }
             };
         },
@@ -1337,6 +1340,7 @@ var PostJSON = function (url, data, success) {
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
+/// <reference path="../typings/FileSaver/FileSaver.d.ts" />
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     $(function () {

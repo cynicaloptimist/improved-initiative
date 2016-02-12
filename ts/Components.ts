@@ -25,6 +25,9 @@ module ImprovedInitiative {
             ShowTab: (tabSelector: string) => {
                 $('.settings .tab').hide();
                 $(`.settings ${tabSelector}`).show();
+            },
+            ExportData: () => {
+                saveAs(new Blob([[JSON.stringify({Hello:"World"}, null, 2)]], {type : 'application/json'}),'hello_world.txt');
             }
         }
     },

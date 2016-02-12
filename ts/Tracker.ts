@@ -3,6 +3,7 @@
 /// <reference path="../typings/knockout.mapping/knockout.mapping.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
 /// <reference path="../typings/socket.io-client/socket.io-client.d.ts" />
+/// <reference path="../typings/FileSaver/FileSaver.d.ts" />
 
 module ImprovedInitiative {
   $(() => {
