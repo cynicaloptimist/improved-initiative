@@ -504,7 +504,8 @@ var ImprovedInitiative;
                     $(".settings " + tabSelector).show();
                 },
                 ExportData: function () {
-                    saveAs(new Blob([[JSON.stringify({ Hello: "World" }, null, 2)]], { type: 'application/json' }), 'hello_world.txt');
+                    var blob = ImprovedInitiative.Store.ExportAllAsBlob();
+                    saveAs(blob, 'improved-initiative.json');
                 }
             };
         },
@@ -1266,6 +1267,18 @@ var ImprovedInitiative;
             }
             localStorage.removeItem(fullKey);
         };
+        Store.ExportAllAsBlob = function () {
+            var data = Store.Lists.map(function (listName) {
+                var list = {};
+                list[listName] = Store.List(listName).map(function (itemName) {
+                    var item = {};
+                    item[itemName] = Store.Load(listName, itemName);
+                    return item;
+                });
+                return list;
+            });
+            return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        };
         Store._prefix = "ImprovedInitiative";
         Store.PlayerCharacters = "PlayerCharacters";
         Store.Creatures = "Creatures";
@@ -1273,6 +1286,7 @@ var ImprovedInitiative;
         Store.User = "User";
         Store.KeyBindings = "KeyBindings";
         Store.ActionBar = "ActionBar";
+        Store.Lists = [Store.PlayerCharacters, Store.Creatures, Store.SavedEncounters, Store.User, Store.KeyBindings, Store.ActionBar];
         Store.save = function (key, value) { return localStorage.setItem(key, JSON.stringify(value)); };
         Store.load = function (key) {
             var value = localStorage.getItem(key);

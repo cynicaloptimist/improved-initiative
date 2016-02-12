@@ -9,6 +9,8 @@ module ImprovedInitiative {
         static KeyBindings: string = "KeyBindings";
         static ActionBar: string = "ActionBar";
         
+        static Lists = [Store.PlayerCharacters, Store.Creatures, Store.SavedEncounters, Store.User, Store.KeyBindings, Store.ActionBar];
+        
         static List(listName: string): string[] {
 			var listKey = `${Store._prefix}.${listName}`;
 			var list = Store.load(listKey);
@@ -46,6 +48,20 @@ module ImprovedInitiative {
 			}
 			localStorage.removeItem(fullKey);
 		}
+        
+        static ExportAllAsBlob() {
+            var data = Store.Lists.map(listName => {
+                var list = {};
+                list[listName] = Store.List(listName).map(itemName => {
+                    var item = {};
+                    item[itemName] = Store.Load(listName, itemName);
+                    return item;
+                });
+                return list;
+            })
+            return new Blob([JSON.stringify(data, null, 2)], 
+                            {type : 'application/json'});
+        }
         
         private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 		private static load = (key) => {

@@ -27,7 +27,8 @@ module ImprovedInitiative {
                 $(`.settings ${tabSelector}`).show();
             },
             ExportData: () => {
-                saveAs(new Blob([[JSON.stringify({Hello:"World"}, null, 2)]], {type : 'application/json'}),'hello_world.txt');
+                var blob = Store.ExportAllAsBlob();
+                saveAs(blob,'improved-initiative.json');
             }
         }
     },
