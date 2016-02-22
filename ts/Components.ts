@@ -27,8 +27,14 @@ module ImprovedInitiative {
                 $(`.settings ${tabSelector}`).show();
             },
             ExportData: () => {
-                var blob = Store.ExportAllAsBlob();
+                var blob = Store.ExportAll();
                 saveAs(blob,'improved-initiative.json');
+            },
+            ImportData: (_, event) => {
+                var file = event.target.files[0];
+                if(file){
+                    Store.ImportAll(file);
+                }
             }
         }
     },

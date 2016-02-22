@@ -9,8 +9,6 @@ module ImprovedInitiative {
         static KeyBindings: string = "KeyBindings";
         static ActionBar: string = "ActionBar";
         
-        static Lists = [Store.PlayerCharacters, Store.Creatures, Store.SavedEncounters, Store.User, Store.KeyBindings, Store.ActionBar];
-        
         static List(listName: string): string[] {
 			var listKey = `${Store._prefix}.${listName}`;
 			var list = Store.load(listKey);
@@ -49,18 +47,30 @@ module ImprovedInitiative {
 			localStorage.removeItem(fullKey);
 		}
         
-        static ExportAllAsBlob() {
-            var data = Store.Lists.map(listName => {
-                var list = {};
-                list[listName] = Store.List(listName).map(itemName => {
-                    var item = {};
-                    item[itemName] = Store.Load(listName, itemName);
-                    return item;
-                });
-                return list;
-            })
-            return new Blob([JSON.stringify(data, null, 2)], 
+        static ExportAll() {
+            return new Blob([JSON.stringify(localStorage, null, 2)], 
                             {type : 'application/json'});
+        }
+        
+        static ImportAll(file: File) {
+            var reader = new FileReader();
+            reader.onload = (event: any) => {
+                var json = event.target.result;
+                try {
+                    var importedStorage = JSON.parse(json);
+                } catch (error) {
+                    alert(`There was a problem importing ${file.name}: ${error}`);
+                    return;
+                }
+                if(confirm(`Replace your Improved Initiative data with imported ${file.name} and reload?`)){
+                    localStorage.clear();
+                    for(var key in importedStorage){
+                        localStorage.setItem(key, importedStorage[key]);
+                    }
+                    location.reload();
+                }
+            };
+            reader.readAsText(file);
         }
         
         private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
