@@ -18,6 +18,6 @@
     <div class="savekeybindings"><input type="button" value="Save and Close" data-bind="click: Commander.HideSettings" /></div>
 </div>
 <div class="options tab">
-    <input type="button" value="Export User Data" data-bind="click: ExportData" />
-    <input type="file" value="Import User Data" data-bind="event: { change: ImportData }" />
+    <p>Export your user data as JSON: <input type="button" value="Download File" data-bind="click: ExportData" /></p>
+    <p>Import an exported user data file: <input type="file" accept=".json" data-bind="event: { change: ImportData }" /></p>
 </div>

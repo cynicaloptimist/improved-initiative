@@ -4113,7 +4113,7 @@ body .modal {
   margin: auto;
   z-index: 10;
   background-color: #ffffff;
-  width: 450px;
+  width: 500px;
 }
 body .tabs {
   height: 25px;
@@ -4166,6 +4166,9 @@ body .settings .commands .savekeybindings input {
   padding: 3px;
   margin-right: 3px;
   margin-left: auto;
+}
+body .settings input[type=button] {
+  padding: 1px 6px;
 }
 body .preview.statblock,
 body .preview.encounter {
