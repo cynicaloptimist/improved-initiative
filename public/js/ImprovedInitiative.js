@@ -445,8 +445,10 @@ var ImprovedInitiative;
                 _this.encounter().LoadSavedEncounter(encounter);
             };
             this.DeleteSavedEncounter = function (encounterName) {
-                ImprovedInitiative.Store.Delete(ImprovedInitiative.Store.SavedEncounters, encounterName);
-                _this.library.SavedEncounterIndex.remove(encounterName);
+                if (confirm("Delete saved encounter \"" + encounterName + "\"? This cannot be undone.")) {
+                    ImprovedInitiative.Store.Delete(ImprovedInitiative.Store.SavedEncounters, encounterName);
+                    _this.library.SavedEncounterIndex.remove(encounterName);
+                }
             };
             this.Commands = ImprovedInitiative.BuildCommandList(this);
             this.Commands.forEach(function (c) {

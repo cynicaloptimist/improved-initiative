@@ -295,8 +295,10 @@ module ImprovedInitiative {
         }
         
         DeleteSavedEncounter = (encounterName: string) => {
-            Store.Delete(Store.SavedEncounters, encounterName);
-            this.library.SavedEncounterIndex.remove(encounterName);
+            if(confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)){
+                Store.Delete(Store.SavedEncounters, encounterName);
+                this.library.SavedEncounterIndex.remove(encounterName);
+            }
         }
     }
 }
