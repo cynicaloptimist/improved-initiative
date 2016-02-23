@@ -251,44 +251,15 @@ var ImprovedInitiative;
                     _this.library.Creatures.remove(function (c) { return c.Id == id; });
                 }
             };
-            this.EditCreatureFromListing = function (listing) {
-                listing.LoadStatBlock(function (l) {
-                    _this.statBlockEditor.EditCreature(l.Id, l.StatBlock(), function (newStatBlock) {
-                        l.StatBlock(newStatBlock);
-                        l.Name(newStatBlock.Name);
-                        if (newStatBlock.Player == "player") {
-                            ImprovedInitiative.Store.Save(ImprovedInitiative.Store.PlayerCharacters, l.Id, newStatBlock);
-                        }
-                        else {
-                            if (l.Id === null || l.Id === undefined) {
-                                l.Id = _this.library.Creatures().length.toString();
-                                _this.library.Creatures.unshift(new ImprovedInitiative.CreatureListing(l.Id, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock));
-                            }
-                            ImprovedInitiative.Store.Save(ImprovedInitiative.Store.Creatures, l.Id, newStatBlock);
-                        }
-                    }, _this.deleteCreature);
-                });
-            };
-            this.AddToLibrary = function () {
-                if (_this.library.DisplayTab() == 'Players') {
-                    var newId = _this.library.Players().length.toString();
-                    _this.statBlockEditor.EditCreature(newId, ImprovedInitiative.StatBlock.Empty(function (s) { s.Player = "player", s.Name = "New Character"; }), function (newStatBlock) {
-                        var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
-                        _this.library.Players.unshift(newListing);
-                        ImprovedInitiative.Store.Save(ImprovedInitiative.Store.PlayerCharacters, newId, newStatBlock);
-                    }, _this.deleteCreature);
-                }
-                if (_this.library.DisplayTab() == 'Creatures') {
-                    var newId = _this.library.Creatures().length.toString();
-                    _this.statBlockEditor.EditCreature(newId, ImprovedInitiative.StatBlock.Empty(function (s) { s.Name = "New Creature"; }), function (newStatBlock) {
-                        var newListing = new ImprovedInitiative.CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
-                        _this.library.Creatures.unshift(newListing);
-                        ImprovedInitiative.Store.Save(ImprovedInitiative.Store.Creatures, newId, newStatBlock);
-                    }, _this.deleteCreature);
-                }
-                if (_this.library.DisplayTab() == 'Encounters') {
-                    _this.SaveEncounter();
-                }
+            this.CreateAndEditCreature = function (library) {
+                var statBlock = ImprovedInitiative.StatBlock.Empty(library == "Players" ?
+                    function (s) {
+                        s.Name = "New Player Character";
+                        s.Player = "player";
+                    } :
+                    function (s) {
+                        s.Name = "New Creature";
+                    });
             };
             this.SelectCreature = function (data, e) {
                 if (!data) {
