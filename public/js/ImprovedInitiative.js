@@ -1213,8 +1213,10 @@ var ImprovedInitiative;
             };
             this.DeleteCreature = function () {
                 var statBlock = _this.StatBlock();
-                _this.deleteCallback(statBlock.Player == 'player' ? ImprovedInitiative.Store.PlayerCharacters : ImprovedInitiative.Store.Creatures, statBlock.Id);
-                _this.StatBlock(null);
+                if (confirm("Delete statblock for " + statBlock.Name + "? This cannot be undone.")) {
+                    _this.deleteCallback(statBlock.Player == 'player' ? ImprovedInitiative.Store.PlayerCharacters : ImprovedInitiative.Store.Creatures, statBlock.Id);
+                    _this.StatBlock(null);
+                }
             };
             this.parseInt = function (value, defaultValue) {
                 if (defaultValue === void 0) { defaultValue = null; }

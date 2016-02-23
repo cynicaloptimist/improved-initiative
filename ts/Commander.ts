@@ -56,14 +56,13 @@ module ImprovedInitiative {
                     l.StatBlock(newStatBlock);
                     l.Name(newStatBlock.Name);
                     if(newStatBlock.Player == "player"){
-                        l.Id = newStatBlock.Id;
                         Store.Save<IStatBlock>(Store.PlayerCharacters, l.Id, newStatBlock);
                     } else {
-                        if(newStatBlock.Id === null || newStatBlock.Id === undefined){
-                            newStatBlock.Id = this.library.Creatures().length.toString();
-                            this.library.Creatures.unshift(new CreatureListing(newStatBlock.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock))
+                        if(l.Id === null || l.Id === undefined){
+                            l.Id = this.library.Creatures().length.toString();
+                            this.library.Creatures.unshift(new CreatureListing(l.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock))
                         }
-                        Store.Save<IStatBlock>(Store.Creatures, newStatBlock.Id, newStatBlock);
+                        Store.Save<IStatBlock>(Store.Creatures, l.Id, newStatBlock);
                     }
                 }, this.deleteCreature);
             });
@@ -73,7 +72,7 @@ module ImprovedInitiative {
             if(this.library.DisplayTab() == 'Players')
             {
                 var newId = this.library.Players().length.toString();
-                this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Player = "player", s.Id = newId, s.Name = "New Character" }), newStatBlock => {
+                this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Player = "player", s.Name = "New Character" }), newStatBlock => {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Players.unshift(newListing);
                     Store.Save<IStatBlock>(Store.PlayerCharacters, newId, newStatBlock);
@@ -82,7 +81,7 @@ module ImprovedInitiative {
             if(this.library.DisplayTab() == 'Creatures')
             {
                 var newId = this.library.Creatures().length.toString();
-                this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Id = newId, s.Name = "New Creature"}), newStatBlock => {
+                this.statBlockEditor.EditCreature(StatBlock.Empty(s => { s.Name = "New Creature"}), newStatBlock => {
                     var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
                     this.library.Creatures.unshift(newListing);
                     Store.Save<IStatBlock>(Store.Creatures, newId, newStatBlock);
