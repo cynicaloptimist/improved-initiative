@@ -1,16 +1,10 @@
 module ImprovedInitiative {
 	export class CreatureListing {
-        Id: string;
         Name: KnockoutObservable<string>;
-        Type: string;
-        Link: string;
         IsLoaded: boolean;
         StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(id: string, name: string, type: string, link: string, statblock?: IStatBlock){
-            this.Id = id;
+        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statblock?: IStatBlock){
             this.Name = ko.observable(name);
-            this.Type = type;
-            this.Link = link;
             this.IsLoaded = !!statblock;
             this.StatBlock = ko.observable(statblock || StatBlock.Empty(c => {c.Name = name}));
         }
@@ -36,11 +30,11 @@ module ImprovedInitiative {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             Store.List(Store.PlayerCharacters).forEach(id => {
                 var statBlock = Store.Load<IStatBlock>(Store.PlayerCharacters, id);
-                this.Players.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, statBlock));
+                this.Players.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
             Store.List(Store.Creatures).forEach(id => {
                 var statBlock = Store.Load<IStatBlock>(Store.PlayerCharacters, id);
-                this.Creatures.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, statBlock));
+                this.Creatures.push(new CreatureListing (id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
 		}
         
@@ -88,18 +82,12 @@ module ImprovedInitiative {
             return creaturesWithFilterInName.concat(creaturesWithFilterInType);
         });
     
-        AddPlayers = (library) => {
-            ko.utils.arrayPushAll(this.Players, library.map(c => {
-                return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
-            }));
-        }
-        
-        AddCreatures = (library) =>  {
+        AddCreaturesFromServer = (library) =>  {
             library.sort((c1,c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
             ko.utils.arrayPushAll(this.Creatures, library.map(c => {
-                return new CreatureListing(c.Id, c.Name, c.Type, c.Link);
+                return new CreatureListing(c.Id, c.Name, c.Type, c.Link, "server");
             }));
         }
 	}

@@ -52,7 +52,7 @@ module ImprovedInitiative {
         
         EditCreatureFromListing = (listing: CreatureListing) => {
             listing.LoadStatBlock(l => {
-                this.statBlockEditor.EditCreature(l.StatBlock(), newStatBlock => {
+                this.statBlockEditor.EditCreature(l.Id, l.StatBlock(), newStatBlock => {
                     l.StatBlock(newStatBlock);
                     l.Name(newStatBlock.Name);
                     if(newStatBlock.Player == "player"){
@@ -60,7 +60,7 @@ module ImprovedInitiative {
                     } else {
                         if(l.Id === null || l.Id === undefined){
                             l.Id = this.library.Creatures().length.toString();
-                            this.library.Creatures.unshift(new CreatureListing(l.Id, newStatBlock.Name, newStatBlock.Type, null, newStatBlock))
+                            this.library.Creatures.unshift(new CreatureListing(l.Id, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock))
                         }
                         Store.Save<IStatBlock>(Store.Creatures, l.Id, newStatBlock);
                     }
@@ -72,8 +72,8 @@ module ImprovedInitiative {
             if(this.library.DisplayTab() == 'Players')
             {
                 var newId = this.library.Players().length.toString();
-                this.statBlockEditor.EditCreature(StatBlock.Empty(s => {s.Player = "player", s.Name = "New Character" }), newStatBlock => {
-                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                this.statBlockEditor.EditCreature(newId, StatBlock.Empty(s => {s.Player = "player", s.Name = "New Character" }), newStatBlock => {
+                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
                     this.library.Players.unshift(newListing);
                     Store.Save<IStatBlock>(Store.PlayerCharacters, newId, newStatBlock);
                 }, this.deleteCreature);
@@ -81,8 +81,8 @@ module ImprovedInitiative {
             if(this.library.DisplayTab() == 'Creatures')
             {
                 var newId = this.library.Creatures().length.toString();
-                this.statBlockEditor.EditCreature(StatBlock.Empty(s => { s.Name = "New Creature"}), newStatBlock => {
-                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, newStatBlock);
+                this.statBlockEditor.EditCreature(newId, StatBlock.Empty(s => { s.Name = "New Creature"}), newStatBlock => {
+                    var newListing = new CreatureListing(newId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
                     this.library.Creatures.unshift(newListing);
                     Store.Save<IStatBlock>(Store.Creatures, newId, newStatBlock);
                 }, this.deleteCreature);
@@ -217,7 +217,7 @@ module ImprovedInitiative {
         {
             if(this.SelectedCreatures().length == 1){
                 var selectedCreature = this.SelectedCreatures()[0];
-                this.statBlockEditor.EditCreature(this.SelectedCreatureStatblock(), newStatBlock => {
+                this.statBlockEditor.EditCreature(null, this.SelectedCreatureStatblock(), newStatBlock => {
                     selectedCreature.StatBlock(newStatBlock);
                     this.encounter().QueueEmitEncounter();
                 }, (library, id) => {

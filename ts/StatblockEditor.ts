@@ -2,11 +2,13 @@ module ImprovedInitiative {
 	export class StatBlockEditor {
     private saveCallback: (newStatBlock: IStatBlock) => void;
     private deleteCallback: (library: string, id: string) => void;
+    private statBlockId: string;
     StatBlock = ko.observable<IStatBlock>();
     editorType = ko.observable<string>('basic');
     statBlockJson = ko.observable<string>();
     
-    EditCreature = (StatBlock: IStatBlock, saveCallback: (newStatBlock: IStatBlock) => void, deleteCallback: (library: string, id: string) => void) => {
+    EditCreature = (statBlockId: string, StatBlock: IStatBlock, saveCallback: (newStatBlock: IStatBlock) => void, deleteCallback: (library: string, id: string) => void) => {
+      this.statBlockId = statBlockId;
       this.StatBlock(StatBlock);
       this.statBlockJson(JSON.stringify(StatBlock, null, 2));
       this.saveCallback = saveCallback;
@@ -37,7 +39,7 @@ module ImprovedInitiative {
         var statBlock = this.StatBlock();
         if(confirm(`Delete statblock for ${statBlock.Name}? This cannot be undone.`))
         {
-            this.deleteCallback(statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures, statBlock.Id);
+            this.deleteCallback(statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures, this.statBlockId);
             this.StatBlock(null);
         }
     }
