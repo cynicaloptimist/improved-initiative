@@ -44,7 +44,7 @@
       <ul class="library" data-bind="foreach: FilteredCreatures">
         <li>
           <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
-          <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreatureFromListing"></span>
+          <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreature"></span>
           <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
         </li>
       </ul>

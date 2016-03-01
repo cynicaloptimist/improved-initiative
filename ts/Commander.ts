@@ -38,7 +38,7 @@ module ImprovedInitiative {
             });
         }
 
-        private deleteCreature = (library: string, id: string) => {
+        private deleteSavedCreature = (library: string, id: string) => {
             Store.Delete(library, id);
             if (library == Store.PlayerCharacters) {
                 this.library.Players.remove(c => c.Id == id);
@@ -48,7 +48,7 @@ module ImprovedInitiative {
             }
         }
 
-        private saveCreature = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+        private saveNewCreature = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
             var listing = new CreatureListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
             Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
@@ -57,22 +57,40 @@ module ImprovedInitiative {
                 this.library.Creatures.unshift(listing);
             }
         }
-
-        private createNewListing = () => {
-
-        }
-
+        
         CreateAndEditCreature = (library: string) => {
             var statBlock = StatBlock.Empty();
             if (library == "Players") {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
                 var newId = this.library.Players().length.toString();
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveCreature, () => { });
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
             } else {
                 statBlock.Name = "New Creature";
                 var newId = this.library.Creatures().length.toString();
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveCreature, () => { });
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+            }
+        }
+        
+        private duplicateAndEditCreature = (listing: CreatureListing) => {
+            var statBlock = listing.StatBlock();
+            if (statBlock.Player == "player") {
+                var newId = this.library.Players().length.toString();
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+            } else {
+                var newId = this.library.Creatures().length.toString();
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+            }
+        }
+        
+        EditCreature = (listing: CreatureListing) => {
+            if (listing.Source == "server") {
+                listing.LoadStatBlock(this.duplicateAndEditCreature);
+            } else {
+                this.statBlockEditor.EditCreature(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+                    Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
+                    listing.StatBlock(newStatBlock);
+                }, this.deleteSavedCreature);
             }
         }
 

@@ -242,7 +242,7 @@ var ImprovedInitiative;
                     _this.encounter().AddCreature(listing.StatBlock(), event);
                 });
             };
-            this.deleteCreature = function (library, id) {
+            this.deleteSavedCreature = function (library, id) {
                 ImprovedInitiative.Store.Delete(library, id);
                 if (library == ImprovedInitiative.Store.PlayerCharacters) {
                     _this.library.Players.remove(function (c) { return c.Id == id; });
@@ -251,7 +251,7 @@ var ImprovedInitiative;
                     _this.library.Creatures.remove(function (c) { return c.Id == id; });
                 }
             };
-            this.saveCreature = function (store, statBlockId, newStatBlock) {
+            this.saveNewCreature = function (store, statBlockId, newStatBlock) {
                 var listing = new ImprovedInitiative.CreatureListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
                 ImprovedInitiative.Store.Save(store, statBlockId, newStatBlock);
                 if (store == ImprovedInitiative.Store.PlayerCharacters) {
@@ -267,10 +267,34 @@ var ImprovedInitiative;
                     statBlock.Name = "New Player Character";
                     statBlock.Player = "player";
                     var newId = _this.library.Players().length.toString();
-                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveCreature, _this.deleteCreature);
+                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveNewCreature, function () { });
                 }
                 else {
                     statBlock.Name = "New Creature";
+                    var newId = _this.library.Creatures().length.toString();
+                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveNewCreature, function () { });
+                }
+            };
+            this.duplicateAndEditCreature = function (listing) {
+                var statBlock = listing.StatBlock();
+                if (statBlock.Player == "player") {
+                    var newId = _this.library.Players().length.toString();
+                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveNewCreature, function () { });
+                }
+                else {
+                    var newId = _this.library.Creatures().length.toString();
+                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveNewCreature, function () { });
+                }
+            };
+            this.EditCreature = function (listing) {
+                if (listing.Source == "server") {
+                    listing.LoadStatBlock(_this.duplicateAndEditCreature);
+                }
+                else {
+                    _this.statBlockEditor.EditCreature(listing.Id, listing.StatBlock(), function (store, statBlockId, newStatBlock) {
+                        ImprovedInitiative.Store.Save(store, statBlockId, newStatBlock);
+                        listing.StatBlock(newStatBlock);
+                    }, _this.deleteSavedCreature);
                 }
             };
             this.SelectCreature = function (data, e) {
@@ -863,6 +887,10 @@ var ImprovedInitiative;
             this.Name = ko.observable(name);
             this.IsLoaded = !!statblock;
             this.StatBlock = ko.observable(statblock || ImprovedInitiative.StatBlock.Empty(function (c) { c.Name = name; }));
+            this.StatBlock.subscribe(function (newStatBlock) {
+                _this.Name(newStatBlock.Name);
+                _this.Type = newStatBlock.Type;
+            });
         }
         return CreatureListing;
     })();
@@ -918,7 +946,7 @@ var ImprovedInitiative;
                 _this.Players.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
             ImprovedInitiative.Store.List(ImprovedInitiative.Store.Creatures).forEach(function (id) {
-                var statBlock = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.PlayerCharacters, id);
+                var statBlock = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.Creatures, id);
                 _this.Creatures.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
         }

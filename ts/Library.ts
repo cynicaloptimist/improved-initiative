@@ -7,6 +7,10 @@ module ImprovedInitiative {
             this.Name = ko.observable(name);
             this.IsLoaded = !!statblock;
             this.StatBlock = ko.observable(statblock || StatBlock.Empty(c => { c.Name = name }));
+            this.StatBlock.subscribe(newStatBlock => {
+                this.Name(newStatBlock.Name);
+                this.Type = newStatBlock.Type;
+            });
         }
 
         LoadStatBlock = (callback: (listing: CreatureListing) => void) => {
@@ -33,7 +37,7 @@ module ImprovedInitiative {
                 this.Players.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
             Store.List(Store.Creatures).forEach(id => {
-                var statBlock = Store.Load<IStatBlock>(Store.PlayerCharacters, id);
+                var statBlock = Store.Load<IStatBlock>(Store.Creatures, id);
                 this.Creatures.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
         }
