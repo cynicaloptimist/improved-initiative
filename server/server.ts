@@ -19,21 +19,21 @@ var creatures = [];
 var playerCharacters = [];
 
 var importCreatureLibrary = (filename) => fs.readFile(filename, (err, buffer) => {
-    if(err){
+    if (err) {
         throw `Couldn't read creature library ${filename}: ${err}`;
     }
     creatures = creatures.concat(JSON.parse(buffer.toString()));
 });
 
-if(argv.f){
+if (argv.f) {
     fs.stat(argv.f, (err, stats) => {
-        if(err){
+        if (err) {
             throw `couldn't access ${argv.f}`;
         }
-        if(stats.isDirectory()){
+        if (stats.isDirectory()) {
             fs.readdir(argv.f, (err, fileNames) => {
-                if(err){
-                    throw `couldn't read directory ${argv.f}`; 
+                if (err) {
+                    throw `couldn't read directory ${argv.f}`;
                 }
                 fileNames.forEach(fileName => {
                     importCreatureLibrary(argv.f + '/' + fileName);
@@ -49,9 +49,9 @@ else {
 }
 
 var newEncounterIndex = (): number => {
-	var newEncounterId = playerViews.length;
-	playerViews[newEncounterId] = {};
-	return newEncounterId;
+    var newEncounterId = playerViews.length;
+    playerViews[newEncounterId] = {};
+    return newEncounterId;
 }
 
 app.engine('html', mustacheExpress());
@@ -62,62 +62,62 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-	res.redirect('e/' + newEncounterIndex());
+    res.redirect('e/' + newEncounterIndex());
 });
 
 app.get('/e/:id', (req, res) => {
-	console.log('app.get ' + req.path);
-	res.render('index', { 
-		rootDirectory	: "..", 
-		encounterId: req.params.id,
-	})
+    console.log('app.get ' + req.path);
+    res.render('index', {
+        rootDirectory: "..",
+        encounterId: req.params.id,
+    })
 })
 
 app.get('/p/:id', (req, res) => {
-	console.log('app.get ' + req.path);
-	res.render('playerview', { 
-		rootDirectory	: "..", 
-		encounterId: req.params.id
-	})
+    console.log('app.get ' + req.path);
+    res.render('playerview', {
+        rootDirectory: "..",
+        encounterId: req.params.id
+    })
 })
 
 app.get('/playerviews/:id', (req, res) => {
-	res.json(playerViews[req.params.id]);
+    res.json(playerViews[req.params.id]);
 })
 
 app.get('/templates/:name', (req, res) => {
     res.render(`templates/${req.params.name}`, {
-        rootDirectory	: "..", 
+        rootDirectory: "..",
     });
 })
 
 app.get('/creatures/', (req, res) => {
-	res.json(creatures.map((creature, index) => {
-		return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
-	}));
+    res.json(creatures.map((creature, index) => {
+        return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
+    }));
 })
 
 app.get('/creatures/:id', (req, res) => {
-	res.json(creatures[req.params.id]);
+    res.json(creatures[req.params.id]);
 });
 
-io.on('connection', function(socket){
-  	console.log('a user connected');
-	socket.on('update encounter', function(id, encounter){
-		socket.join(id);
-		console.log('encounter: ' + JSON.stringify(encounter));
-		playerViews[id] = encounter;
-		socket.broadcast.to(id).emit('update encounter', encounter);
-	});
-	socket.on('join encounter', function(id){
-		console.log(`encounter ${id} joined`);
-		socket.join(id);
-	})
+io.on('connection', function(socket) {
+    console.log('a user connected');
+    socket.on('update encounter', function(id, encounter) {
+        socket.join(id);
+        console.log('encounter: ' + JSON.stringify(encounter));
+        playerViews[id] = encounter;
+        socket.broadcast.to(id).emit('update encounter', encounter);
+    });
+    socket.on('join encounter', function(id) {
+        console.log(`encounter ${id} joined`);
+        socket.join(id);
+    })
 });
 
 var server = http.listen(port, function() {
-	var host = server.address().address;
-  	var port = server.address().port;
+    var host = server.address().address;
+    var port = server.address().port;
 
-	console.log('Improved Initiative listening at http://%s:%s', host, port);
+    console.log('Improved Initiative listening at http://%s:%s', host, port);
 });

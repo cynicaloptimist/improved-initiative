@@ -6,20 +6,19 @@
 /// <reference path="../typings/FileSaver/FileSaver.d.ts" />
 
 module ImprovedInitiative {
-  $(() => {
-    if($('#tracker').length)
-    {
-      var viewModel = new TrackerViewModel();
-      viewModel.Commander.RegisterKeyBindings();
-      ko.applyBindings(viewModel, document.body);
-      
-      $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
-    }
-    if($('#playerview').length){
-      var encounterId = $('html')[0].getAttribute('encounterId');
-      var playerViewModel = new PlayerViewModel();
-      playerViewModel.LoadEncounterFromServer(encounterId);
-      ko.applyBindings(playerViewModel, document.body);
-    }
-  });
+    $(() => {
+        if ($('#tracker').length) {
+            var viewModel = new TrackerViewModel();
+            viewModel.Commander.RegisterKeyBindings();
+            ko.applyBindings(viewModel, document.body);
+
+            $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
+        }
+        if ($('#playerview').length) {
+            var encounterId = $('html')[0].getAttribute('encounterId');
+            var playerViewModel = new PlayerViewModel();
+            playerViewModel.LoadEncounterFromServer(encounterId);
+            ko.applyBindings(playerViewModel, document.body);
+        }
+    });
 }

@@ -1,48 +1,46 @@
 interface String {
-  format: (...arguments: any[]) => string;
+    format: (...arguments: any[]) => string;
 }
 
 interface Number {
-  toModifierString: () => string; 
+    toModifierString: () => string;
 }
 
 interface Function {
     with: (...params: any[]) => ((...params: any[]) => any)
 }
 
-Number.prototype.toModifierString = function(){
-  if(this >= 0){
-    return `+${this}`
-  }
-  return this
+Number.prototype.toModifierString = function() {
+    if (this >= 0) {
+        return `+${this}`
+    }
+    return this
 }
 
-String.prototype.format = function () {
-  var args;
-  if(arguments[0] instanceof Array){
-    args = arguments[0];  
-  } else {
-    args = arguments;
-  }
-  return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
-    if (m == "{{") { return "{"; }
-    if (m == "}}") { return "}"; }
-    if(args[n] === null || args[n] === undefined)
-    {
-      return "{" + n + "}";
+String.prototype.format = function() {
+    var args;
+    if (arguments[0] instanceof Array) {
+        args = arguments[0];
+    } else {
+        args = arguments;
     }
-    return args[n];
-  });
+    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function(m, n) {
+        if (m == "{{") { return "{"; }
+        if (m == "}}") { return "}"; }
+        if (args[n] === null || args[n] === undefined) {
+            return "{" + n + "}";
+        }
+        return args[n];
+    });
 };
 
 Function.prototype.with = function(...params: any[]) {
-    if (typeof this !== "function")
-    {
+    if (typeof this !== "function") {
         throw new TypeError("Function.prototype.with needs to be called on a function");
     }
     var slice = Array.prototype.slice,
-        args = slice.call(arguments), 
-        fn = this, 
+        args = slice.call(arguments),
+        fn = this,
         partial = function() {
             return fn.apply(this, args.concat(slice.call(arguments)));
         };
@@ -50,12 +48,12 @@ Function.prototype.with = function(...params: any[]) {
     return partial;
 };
 
-var PostJSON = (url: string, data: any, success: (data: any) => void) => 
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: JSON.stringify(data),
-            success: success,
-            dataType: "json",
-            contentType: "application/json"
-        });
+var PostJSON = (url: string, data: any, success: (data: any) => void) =>
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(data),
+        success: success,
+        dataType: "json",
+        contentType: "application/json"
+    });
