@@ -4139,6 +4139,23 @@ body .settings .tab {
 body .settings .about {
   display: block;
 }
+body .settings .about .tips {
+  display: flex;
+}
+body .settings .about .tips p {
+  margin: 6px;
+}
+body .settings .about .tips .fa {
+  border: 1px solid #005353;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin: auto;
+  padding: 10px;
+}
+body .settings .about .tips .fa.button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
 body .settings .commands div {
   display: flex;
 }

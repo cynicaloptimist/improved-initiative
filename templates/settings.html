@@ -7,21 +7,9 @@
     <p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
         All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
     <div class="tips">
-        <p>You can use the player view URL to track your combat on any device.</p>
-        <p>Editing a creature after it has been added to combat will only change that individual creature.</p>
-        <p>You can restore a creature's hit points by applying negative damage to it.</p>
-        <p>Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a
-            creature already has.</p>
-        <p>The 'alt' key can be used for secrecy. Adding a creature or a tag while holding 'alt' will hide it from the player
-            view.</p>
-        <p>Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at
-            the same time this way.</p>
-        <p>Moving a creature in the initiative order will automatically adjust their initiative count.</p>
-        <p>The active creature will have its traits and actions displayed first for ease of reference.</p>
-        <p>The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate
-            this.</p>
-        <p>Want to contribute? The source code for Improved Initiative is available on <a href="http://github.com/cynicaloptimist/improved-initiative"
-            target="_blank">Github.</a></p>
+        <span data-bind="click: PreviousTip" title = "Previous Tip" class="fa fa-arrow-left"></span>
+        <p data-bind="html: Tip"></p>
+        <span data-bind="click: NextTip" title = "Next Tip" class="fa fa-arrow-right"></span>
     </div>
 </div>
 <div class="commands tab">
