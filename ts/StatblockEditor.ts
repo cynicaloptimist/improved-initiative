@@ -1,16 +1,20 @@
 module ImprovedInitiative {
 	export class StatBlockEditor {
-    private saveCallback: (newStatBlock: IStatBlock) => void;
+    private saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void;
     private deleteCallback: (library: string, id: string) => void;
     private statBlockId: string;
     StatBlock = ko.observable<IStatBlock>();
     editorType = ko.observable<string>('basic');
     statBlockJson = ko.observable<string>();
     
-    EditCreature = (statBlockId: string, StatBlock: IStatBlock, saveCallback: (newStatBlock: IStatBlock) => void, deleteCallback: (library: string, id: string) => void) => {
+    EditCreature = (statBlockId: string, 
+                    statBlock: IStatBlock, 
+                    saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void, 
+                    deleteCallback: (library: string, id: string) => void) => 
+    {
       this.statBlockId = statBlockId;
-      this.StatBlock(StatBlock);
-      this.statBlockJson(JSON.stringify(StatBlock, null, 2));
+      this.StatBlock(statBlock);
+      this.statBlockJson(JSON.stringify(statBlock, null, 2));
       this.saveCallback = saveCallback;
       this.deleteCallback = deleteCallback;
     }
@@ -31,7 +35,7 @@ module ImprovedInitiative {
         editedStatBlock.AC.Value = this.parseInt(editedStatBlock.AC.Value, 10)
         editedStatBlock.Abilities.Dex = this.parseInt(editedStatBlock.Abilities.Dex, 10)
       }
-      this.saveCallback(editedStatBlock);
+      this.saveCallback(this.statBlockLibrary(), this.statBlockId, editedStatBlock);
       this.StatBlock(null);
     }
     
@@ -39,9 +43,13 @@ module ImprovedInitiative {
         var statBlock = this.StatBlock();
         if(confirm(`Delete statblock for ${statBlock.Name}? This cannot be undone.`))
         {
-            this.deleteCallback(statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures, this.statBlockId);
+            this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
             this.StatBlock(null);
         }
+    }
+    
+    private statBlockLibrary(): string {
+        return this.StatBlock().Player == 'player' ? Store.PlayerCharacters : Store.Creatures
     }
     
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {

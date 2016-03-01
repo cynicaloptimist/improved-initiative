@@ -251,15 +251,27 @@ var ImprovedInitiative;
                     _this.library.Creatures.remove(function (c) { return c.Id == id; });
                 }
             };
+            this.saveCreature = function (store, statBlockId, newStatBlock) {
+                var listing = new ImprovedInitiative.CreatureListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
+                ImprovedInitiative.Store.Save(store, statBlockId, newStatBlock);
+                if (store == ImprovedInitiative.Store.PlayerCharacters) {
+                    _this.library.Players.unshift(listing);
+                }
+                else {
+                    _this.library.Creatures.unshift(listing);
+                }
+            };
             this.CreateAndEditCreature = function (library) {
-                var statBlock = ImprovedInitiative.StatBlock.Empty(library == "Players" ?
-                    function (s) {
-                        s.Name = "New Player Character";
-                        s.Player = "player";
-                    } :
-                    function (s) {
-                        s.Name = "New Creature";
-                    });
+                var statBlock = ImprovedInitiative.StatBlock.Empty();
+                if (library == "Players") {
+                    statBlock.Name = "New Player Character";
+                    statBlock.Player = "player";
+                    var newId = _this.library.Players().length.toString();
+                    _this.statBlockEditor.EditCreature(newId, statBlock, _this.saveCreature, _this.deleteCreature);
+                }
+                else {
+                    statBlock.Name = "New Creature";
+                }
             };
             this.SelectCreature = function (data, e) {
                 if (!data) {
@@ -357,7 +369,7 @@ var ImprovedInitiative;
             this.EditSelectedCreatureStatBlock = function () {
                 if (_this.SelectedCreatures().length == 1) {
                     var selectedCreature = _this.SelectedCreatures()[0];
-                    _this.statBlockEditor.EditCreature(null, _this.SelectedCreatureStatblock(), function (newStatBlock) {
+                    _this.statBlockEditor.EditCreature(null, _this.SelectedCreatureStatblock(), function (_, __, newStatBlock) {
                         selectedCreature.StatBlock(newStatBlock);
                         _this.encounter().QueueEmitEncounter();
                     }, function (library, id) {
@@ -1159,10 +1171,10 @@ var ImprovedInitiative;
             this.StatBlock = ko.observable();
             this.editorType = ko.observable('basic');
             this.statBlockJson = ko.observable();
-            this.EditCreature = function (statBlockId, StatBlock, saveCallback, deleteCallback) {
+            this.EditCreature = function (statBlockId, statBlock, saveCallback, deleteCallback) {
                 _this.statBlockId = statBlockId;
-                _this.StatBlock(StatBlock);
-                _this.statBlockJson(JSON.stringify(StatBlock, null, 2));
+                _this.StatBlock(statBlock);
+                _this.statBlockJson(JSON.stringify(statBlock, null, 2));
                 _this.saveCallback = saveCallback;
                 _this.deleteCallback = deleteCallback;
             };
@@ -1183,13 +1195,13 @@ var ImprovedInitiative;
                     editedStatBlock.AC.Value = _this.parseInt(editedStatBlock.AC.Value, 10);
                     editedStatBlock.Abilities.Dex = _this.parseInt(editedStatBlock.Abilities.Dex, 10);
                 }
-                _this.saveCallback(editedStatBlock);
+                _this.saveCallback(_this.statBlockLibrary(), _this.statBlockId, editedStatBlock);
                 _this.StatBlock(null);
             };
             this.DeleteCreature = function () {
                 var statBlock = _this.StatBlock();
                 if (confirm("Delete statblock for " + statBlock.Name + "? This cannot be undone.")) {
-                    _this.deleteCallback(statBlock.Player == 'player' ? ImprovedInitiative.Store.PlayerCharacters : ImprovedInitiative.Store.Creatures, _this.statBlockId);
+                    _this.deleteCallback(_this.statBlockLibrary(), _this.statBlockId);
                     _this.StatBlock(null);
                 }
             };
@@ -1202,6 +1214,9 @@ var ImprovedInitiative;
                 return NaN;
             };
         }
+        StatBlockEditor.prototype.statBlockLibrary = function () {
+            return this.StatBlock().Player == 'player' ? ImprovedInitiative.Store.PlayerCharacters : ImprovedInitiative.Store.Creatures;
+        };
         return StatBlockEditor;
     })();
     ImprovedInitiative.StatBlockEditor = StatBlockEditor;
@@ -1332,8 +1347,19 @@ String.prototype.format = function () {
         return args[n];
     });
 };
-Function.prototype.with = function (value) {
-    return this.bind(null, value);
+Function.prototype.with = function () {
+    var params = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        params[_i - 0] = arguments[_i];
+    }
+    if (typeof this !== "function") {
+        throw new TypeError("Function.prototype.with needs to be called on a function");
+    }
+    var slice = Array.prototype.slice, args = slice.call(arguments), fn = this, partial = function () {
+        return fn.apply(this, args.concat(slice.call(arguments)));
+    };
+    partial.prototype = Object.create(this.prototype);
+    return partial;
 };
 var PostJSON = function (url, data, success) {
     return $.ajax({

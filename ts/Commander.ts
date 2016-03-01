@@ -50,17 +50,28 @@ module ImprovedInitiative {
             }
         }
         
+        private saveCreature = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+            var listing = new CreatureListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
+            Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
+            if(store == Store.PlayerCharacters){
+                this.library.Players.unshift(listing);
+            } else {
+                this.library.Creatures.unshift(listing);
+            }
+        }
+        
         CreateAndEditCreature = (library: string) => {
-            var statBlock = StatBlock.Empty(
-                library == "Players" ? 
-                s => {
-                    s.Name = "New Player Character";
-                    s.Player = "player";
-                } : 
-                s => {
-                    s.Name = "New Creature";
-                });
-                
+            var statBlock = StatBlock.Empty();
+            if(library == "Players"){
+                statBlock.Name = "New Player Character";
+                statBlock.Player = "player";
+                var newId = this.library.Players().length.toString();
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveCreature, () => {});
+            } else {
+                statBlock.Name = "New Creature";
+                var newId = this.library.Creatures().length.toString();
+                this.statBlockEditor.EditCreature(newId, statBlock, this.saveCreature, () => {});
+            }
         }
         
         SelectCreature = (data: ICreature, e?: MouseEvent) => {
@@ -187,7 +198,7 @@ module ImprovedInitiative {
         {
             if(this.SelectedCreatures().length == 1){
                 var selectedCreature = this.SelectedCreatures()[0];
-                this.statBlockEditor.EditCreature(null, this.SelectedCreatureStatblock(), newStatBlock => {
+                this.statBlockEditor.EditCreature(null, this.SelectedCreatureStatblock(), (_, __, newStatBlock) => {
                     selectedCreature.StatBlock(newStatBlock);
                     this.encounter().QueueEmitEncounter();
                 }, (library, id) => {
