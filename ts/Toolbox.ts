@@ -7,7 +7,7 @@ interface Number {
 }
 
 interface Function {
-    with: (valueToPass: any) => Function
+    with: (...params: any[]) => ((...params: any[]) => any)
 }
 
 Number.prototype.toModifierString = function(){
@@ -35,9 +35,20 @@ String.prototype.format = function () {
   });
 };
 
-Function.prototype.with = function(value: any){
-    return this.bind(null, value);
-}
+Function.prototype.with = function(...params: any[]) {
+    if (typeof this !== "function")
+    {
+        throw new TypeError("Function.prototype.with needs to be called on a function");
+    }
+    var slice = Array.prototype.slice,
+        args = slice.call(arguments), 
+        fn = this, 
+        partial = function() {
+            return fn.apply(this, args.concat(slice.call(arguments)));
+        };
+    partial.prototype = Object.create(this.prototype);
+    return partial;
+};
 
 var PostJSON = (url: string, data: any, success: (data: any) => void) => 
         $.ajax({
