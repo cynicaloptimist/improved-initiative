@@ -7,7 +7,7 @@
 
 <!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
 <div data-bind="if: $parent[$data].length, css: $data">
-  <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h2>
+    <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h2>
   <div data-bind="foreach: $parent[$data]">
     <div>
       <span class="label" data-bind="text: Name"></span>

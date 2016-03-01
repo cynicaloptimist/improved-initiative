@@ -1,21 +1,34 @@
 <h1>Edit Creature</h1>
 <div class="editor-type">
-Editor: <label><input type="radio" name="editor-type" value="basic" data-bind="checked: editorType" />Basic</label>
-<label><input type="radio" name="editor-type" value="advanced" data-bind="checked: editorType" />Advanced</label>
+    Editor:
+    <label>
+        <input type="radio" name="editor-type" value="basic" data-bind="checked: editorType" />Basic</label>
+    <label>
+        <input type="radio" name="editor-type" value="advanced" data-bind="checked: editorType" />Advanced</label>
 </div>
 <!-- ko if: editorType() == 'basic' -->
 <div class="stats" data-bind="with: StatBlock">
-  <label>Name <input data-bind="value: Name" /></label>
-  <label>Type <input data-bind="value: Type" /></label>
-  <label>HP <input type="number" data-bind="value: HP.Value" /></label>
-  <label>AC <input type="number" data-bind="value: AC.Value" /></label>
-  <label>Dex <input type="number" data-bind="value: Abilities.Dex" /></label>
+    <label>Name
+        <input data-bind="value: Name" />
+    </label>
+    <label>Type
+        <input data-bind="value: Type" />
+    </label>
+    <label>HP
+        <input type="number" data-bind="value: HP.Value" />
+    </label>
+    <label>AC
+        <input type="number" data-bind="value: AC.Value" />
+    </label>
+    <label>Dex
+        <input type="number" data-bind="value: Abilities.Dex" />
+    </label>
 </div>
 <!-- /ko -->
 <!-- ko if: editorType() == 'advanced' -->
 <textarea class="json-editor" spellcheck="false" data-bind="value: statBlockJson"></textarea>
 <!-- /ko -->
 <div class="interface-buttons">
-  <div data-bind="click: SaveCreature"><span class="fa fa-check"></span></div>
-  <div data-bind="click: DeleteCreature"><span class="fa fa-trash"></span></div>
+    <div data-bind="click: SaveCreature"><span class="fa fa-check"></span></div>
+    <div data-bind="click: DeleteCreature"><span class="fa fa-trash"></span></div>
 </div>

@@ -1,12 +1,12 @@
 <div data-bind="text: Initiative" class="initiative"></div>
 <div class="name">
-  <span data-bind="text: Name, attr: {title: Name }"></span>
+    <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>
 <div class="hp">
-  <span data-bind="html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
+    <span data-bind="html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
 </div>
 <div class="tags" data-bind="foreach: Tags">
-  <div class="tag outline">
-    <span data-bind="text: $data"></span>
-  </div>
+    <div class="tag outline">
+        <span data-bind="text: $data"></span>
+    </div>
 </div>
