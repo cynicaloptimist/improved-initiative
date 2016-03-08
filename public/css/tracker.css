@@ -4132,6 +4132,9 @@ body .tabs div:hover {
 body .tabs div.selected {
   background-color: darkgray;
 }
+body .settings p {
+  margin: 6px;
+}
 body .settings .tab {
   margin: 10px 0px;
   display: none;
@@ -4140,10 +4143,18 @@ body .settings .about {
   display: block;
 }
 body .settings .about .tips {
+  margin-top: 12px;
   display: flex;
+  padding: 4px;
+  border: 1px solid #005353;
+  border-radius: 4px;
+  background-color: rgba(31, 124, 124, 0.1);
 }
-body .settings .about .tips p {
-  margin: 6px;
+body .settings .about .tips p::before {
+  content: "Tips";
+  display: block;
+  text-align: center;
+  font-style: italic;
 }
 body .settings .about .tips .fa {
   border: 1px solid #005353;

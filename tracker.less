@@ -179,6 +179,9 @@ body{
     }
     
     .settings {
+        p {
+            margin: 6px;
+        }
         .tab {
             margin: 10px 0px;
             display:none;
@@ -186,9 +189,19 @@ body{
         .about {
             display:block;
             .tips {
+                margin-top:12px;
                 display: flex;
+                padding:4px;
+                border: 1px solid @pBlue-0;
+                border-radius: 4px;
+                background-color: fade(@pBlue-1, 10%);
                 p {
-                    margin: 6px;
+                    &::before {
+                        content: "Tips";
+                        display: block;
+                        text-align: center;
+                        font-style: italic;
+                    }
                 }
                 .fa {
                     .outline();
@@ -196,6 +209,7 @@ body{
                     margin:auto;
                     padding: 10px;
                 }
+                
             }
         }
         .commands {
