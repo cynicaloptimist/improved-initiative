@@ -506,6 +506,7 @@ var ImprovedInitiative;
     ko.components.register('settings', {
         viewModel: function (params) {
             var tips = [
+                "You can view command list and set keybindings on the 'Commands' tab.",
                 "You can use the player view URL to track your combat on any device.",
                 "Editing a creature after it has been added to combat will only change that individual creature.",
                 "You can restore a creature's hit points by applying negative damage to it.",
@@ -517,9 +518,14 @@ var ImprovedInitiative;
                 "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
                 "Want to contribute? The source code for Improved Initiative is available on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
             ];
-            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
-            var cycleTipIndex = function (amount) {
-                var newIndex = currentTipIndex() + amount;
+            if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
+                var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
+            }
+            else {
+                var currentTipIndex = ko.observable(0);
+            }
+            function cycleTipIndex() {
+                var newIndex = currentTipIndex() + this;
                 if (newIndex < 0) {
                     newIndex = tips.length - 1;
                 }
@@ -527,7 +533,7 @@ var ImprovedInitiative;
                     newIndex = 0;
                 }
                 currentTipIndex(newIndex);
-            };
+            }
             return {
                 Commander: params.commander,
                 ShowTab: function (tabSelector) {
@@ -545,8 +551,8 @@ var ImprovedInitiative;
                     }
                 },
                 Tip: ko.computed(function () { return tips[currentTipIndex() % tips.length]; }),
-                NextTip: cycleTipIndex.with(1),
-                PreviousTip: cycleTipIndex.with(-1)
+                NextTip: cycleTipIndex.bind(1),
+                PreviousTip: cycleTipIndex.bind(-1)
             };
         },
         template: { name: 'settings' }

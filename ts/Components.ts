@@ -21,6 +21,7 @@ module ImprovedInitiative {
     ko.components.register('settings', {
         viewModel: (params) => {
             var tips = [
+                "You can view command list and set keybindings on the 'Commands' tab.",
                 "You can use the player view URL to track your combat on any device.",
                 "Editing a creature after it has been added to combat will only change that individual creature.",
                 "You can restore a creature's hit points by applying negative damage to it.",
@@ -32,9 +33,15 @@ module ImprovedInitiative {
                 "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
                 "Want to contribute? The source code for Improved Initiative is available on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
             ];
-            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
-            var cycleTipIndex = (amount) => {
-                var newIndex = currentTipIndex() + amount;
+            if (Store.Load(Store.User, 'SkipIntro')) {
+                var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));   
+            }
+            else {
+                var currentTipIndex = ko.observable(0);
+            }
+            
+            function cycleTipIndex() {
+                var newIndex = currentTipIndex() + this;
                 if(newIndex < 0) {
                     newIndex = tips.length - 1;
                 } else if (newIndex > tips.length - 1){
@@ -42,6 +49,7 @@ module ImprovedInitiative {
                 }
                 currentTipIndex(newIndex);
             }
+            
             return {
                 Commander: params.commander,
                 ShowTab: (tabSelector: string) => {
@@ -59,8 +67,8 @@ module ImprovedInitiative {
                     }
                 },
                 Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
-                NextTip: cycleTipIndex.with(1),
-                PreviousTip: cycleTipIndex.with(-1)
+                NextTip: cycleTipIndex.bind(1),
+                PreviousTip: cycleTipIndex.bind(-1)
             }
         },
         template: { name: 'settings' }
