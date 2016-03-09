@@ -511,7 +511,7 @@ var ImprovedInitiative;
                 "Editing a creature after it has been added to combat will only change that individual creature.",
                 "You can restore a creature's hit points by applying negative damage to it.",
                 "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-                "The 'alt' key can be used for secrecy. Adding a creature or a tag while holding 'alt' will hide it from the player view.",
+                "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
                 "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
                 "Moving a creature in the initiative order will automatically adjust their initiative count.",
                 "The active creature will have its traits and actions displayed first for ease of reference.",
