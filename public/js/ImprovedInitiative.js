@@ -614,14 +614,23 @@ var ImprovedInitiative;
                 _this.processStatBlock(newStatBlock, statBlock);
                 statBlock = newStatBlock;
             });
-            this.CurrentHP = ko.observable(statBlock.HP.Value);
+            this.CurrentHP = ko.observable(this.MaxHP);
         }
         Creature.prototype.processStatBlock = function (newStatBlock, oldStatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
             this.AC = newStatBlock.AC.Value;
-            this.MaxHP = newStatBlock.HP.Value;
+            this.MaxHP = this.getMaxHP(newStatBlock.HP);
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
+        };
+        Creature.prototype.getMaxHP = function (HP) {
+            if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "RollMonsterHp")) {
+                try {
+                    return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
+                }
+                finally { }
+            }
+            return HP.Value;
         };
         Creature.prototype.setIndexLabel = function (oldName) {
             var name = this.StatBlock().Name, counts = this.Encounter.CreatureCountsByName;
@@ -1198,6 +1207,7 @@ var ImprovedInitiative;
             this.GroupSimilarCreatures = false;
             this.EnemyHPTransparency = "whenBloodied";
             this.RollHpExpression = function (expression) {
+                expression = expression.replace(/[() ]/gi, '');
                 //Taken from http://codereview.stackexchange.com/a/40996
                 var match = /^(\d+)?d(\d+)([+-]\d+)?$/.exec(expression);
                 if (!match) {
@@ -1205,7 +1215,10 @@ var ImprovedInitiative;
                 }
                 var howMany = (typeof match[1] == 'undefined') ? 1 : parseInt(match[1]);
                 var dieSize = parseInt(match[2]);
-                var rolls = new Array(howMany).map(function (_) { return Math.ceil(Math.random() * dieSize); });
+                var rolls = [];
+                for (var i = 0; i < howMany; i++) {
+                    rolls[i] = Math.ceil(Math.random() * dieSize);
+                }
                 var modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3]);
                 return new RollResult(rolls, modifier);
             };
@@ -1222,7 +1235,7 @@ var ImprovedInitiative;
         StatBlock.Empty = function (mutator) {
             var statBlock = {
                 Name: '', Type: '',
-                HP: { Value: 1, Notes: '' }, AC: { Value: 10, Notes: '' },
+                HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 Speed: [],
                 Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
                 DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],

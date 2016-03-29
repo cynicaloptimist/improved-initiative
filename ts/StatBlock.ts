@@ -18,7 +18,7 @@ module ImprovedInitiative {
     }
 
     export interface IHaveNotes {
-        Value: string;
+        Value: number;
         Notes: string;
     }
 
@@ -38,7 +38,7 @@ module ImprovedInitiative {
         Player?: string;
         Type?: string;
         Name: string;
-        HP: IHaveValue;
+        HP: IHaveNotes;
         AC: IHaveValue;
         InitiativeModifier?: number;
         Abilities: IHaveAbilities;
@@ -47,7 +47,7 @@ module ImprovedInitiative {
     export interface IStatBlock {
         Name: string;
         Type: string;
-        HP: IHaveValue;
+        HP: IHaveNotes;
         AC: IHaveValue;
         Speed: string[];
         Abilities: IHaveAbilities;
@@ -71,7 +71,7 @@ module ImprovedInitiative {
         static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
             var statBlock = {
                 Name: '', Type: '',
-                HP: { Value: 1, Notes: '' }, AC: { Value: 10, Notes: '' },
+                HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 Speed: [],
                 Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
                 DamageVulnerabilities: [], DamageResistances: [], DamageImmunities: [], ConditionImmunities: [],

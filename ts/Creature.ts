@@ -31,7 +31,7 @@ module ImprovedInitiative {
                 statBlock = newStatBlock;
             });
 
-            this.CurrentHP = ko.observable(statBlock.HP.Value);
+            this.CurrentHP = ko.observable(this.MaxHP);
         }
 
         Alias = ko.observable(null);
@@ -56,10 +56,19 @@ module ImprovedInitiative {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
 
             this.AC = newStatBlock.AC.Value;
-            this.MaxHP = newStatBlock.HP.Value;
+            this.MaxHP = this.getMaxHP(newStatBlock.HP);
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
         }
+
+        private getMaxHP(HP: IHaveNotes) {
+            if (Store.Load(Store.User, "RollMonsterHp")) {
+                try {
+                    return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
+                } finally {}
+            }
+            return HP.Value;
+        }        
 
         private setIndexLabel(oldName?: string) {
             var name = this.StatBlock().Name,
