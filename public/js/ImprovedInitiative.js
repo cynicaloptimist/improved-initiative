@@ -1155,6 +1155,34 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
+    var RollResult = (function () {
+        function RollResult(Rolls, Modifier) {
+            this.Rolls = Rolls;
+            this.Modifier = Modifier;
+        }
+        Object.defineProperty(RollResult.prototype, "Total", {
+            get: function () { return this.Rolls.reduce(function (p, c) { return c + p; }, 0) + this.Modifier; },
+            enumerable: true,
+            configurable: true
+        });
+        ;
+        Object.defineProperty(RollResult.prototype, "String", {
+            get: function () {
+                var output = "[" + this.Rolls + "]";
+                if (this.Modifier > 0) {
+                    output += " + " + this.Modifier;
+                }
+                if (this.Modifier < 0) {
+                    output += " - " + this.Modifier;
+                }
+                return output + (" = " + this.Total);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return RollResult;
+    })();
+    ImprovedInitiative.RollResult = RollResult;
     var DefaultRules = (function () {
         function DefaultRules() {
             this.Modifier = function (attribute) {
@@ -1169,6 +1197,18 @@ var ImprovedInitiative;
             };
             this.GroupSimilarCreatures = false;
             this.EnemyHPTransparency = "whenBloodied";
+            this.RollHpExpression = function (expression) {
+                //Taken from http://codereview.stackexchange.com/a/40996
+                var match = /^(\d+)?d(\d+)([+-]\d+)?$/.exec(expression);
+                if (!match) {
+                    throw "Invalid dice notation: " + expression;
+                }
+                var howMany = (typeof match[1] == 'undefined') ? 1 : parseInt(match[1]);
+                var dieSize = parseInt(match[2]);
+                var rolls = new Array(howMany).map(function (_) { return Math.ceil(Math.random() * dieSize); });
+                var modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3]);
+                return new RollResult(rolls, modifier);
+            };
         }
         return DefaultRules;
     })();
