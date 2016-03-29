@@ -49,6 +49,11 @@ module ImprovedInitiative {
                 }
                 currentTipIndex(newIndex);
             }
+
+            var rollHp = ko.observable(Store.Load(Store.User, "RollMonsterHp"));
+            rollHp.subscribe(newValue => {
+                Store.Save(Store.User, "RollMonsterHp", newValue);
+            });
             
             return {
                 Commander: params.commander,
@@ -66,6 +71,7 @@ module ImprovedInitiative {
                         Store.ImportAll(file);
                     }
                 },
+                RollHp: rollHp,
                 Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
                 NextTip: cycleTipIndex.bind(1),
                 PreviousTip: cycleTipIndex.bind(-1)

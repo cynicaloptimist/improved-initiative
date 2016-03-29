@@ -534,6 +534,10 @@ var ImprovedInitiative;
                 }
                 currentTipIndex(newIndex);
             }
+            var rollHp = ko.observable(ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "RollMonsterHp"));
+            rollHp.subscribe(function (newValue) {
+                ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, "RollMonsterHp", newValue);
+            });
             return {
                 Commander: params.commander,
                 ShowTab: function (tabSelector) {
@@ -550,6 +554,7 @@ var ImprovedInitiative;
                         ImprovedInitiative.Store.ImportAll(file);
                     }
                 },
+                RollHp: rollHp,
                 Tip: ko.computed(function () { return tips[currentTipIndex() % tips.length]; }),
                 NextTip: cycleTipIndex.bind(1),
                 PreviousTip: cycleTipIndex.bind(-1)
