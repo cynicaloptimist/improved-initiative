@@ -946,14 +946,14 @@ var ImprovedInitiative;
             this.DisplayTab = ko.observable('Creatures');
             this.LibraryFilter = ko.observable('');
             this.FilteredCreatures = ko.computed(function () {
-                var creatures = ko.unwrap(_this.Creatures), players = ko.unwrap(_this.Players), filter = (ko.unwrap(_this.LibraryFilter) || '').toLocaleLowerCase(), creaturesWithFilterInName = [], creaturesWithFilterInType = [];
-                if (_this.DisplayTab() == 'Players') {
-                    return players;
-                }
+                var filter = (ko.unwrap(_this.LibraryFilter) || '').toLocaleLowerCase(), creaturesWithFilterInName = [], creaturesWithFilterInType = [];
+                var library = _this.DisplayTab() == 'Players'
+                    ? ko.unwrap(_this.Players)
+                    : ko.unwrap(_this.Creatures);
                 if (filter.length == 0) {
-                    return creatures;
+                    return library;
                 }
-                creatures.forEach(function (c) {
+                library.forEach(function (c) {
                     if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                         creaturesWithFilterInName.push(c);
                         return;

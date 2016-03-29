@@ -61,20 +61,18 @@ module ImprovedInitiative {
         LibraryFilter = ko.observable('');
 
         FilteredCreatures = ko.computed<CreatureListing[]>(() => {
-            var creatures = ko.unwrap(this.Creatures),
-                players = ko.unwrap(this.Players),
-                filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+            var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 creaturesWithFilterInName = [],
                 creaturesWithFilterInType = [];
-
-            if (this.DisplayTab() == 'Players') {
-                return players;
-            }
+            var library = this.DisplayTab() == 'Players'
+                ? ko.unwrap(this.Players)
+                : ko.unwrap(this.Creatures);
+                 
             if (filter.length == 0) {
-                return creatures;
+                return library;
             }
 
-            creatures.forEach(c => {
+            library.forEach(c => {
                 if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                     creaturesWithFilterInName.push(c);
                     return;
