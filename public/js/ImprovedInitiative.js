@@ -516,7 +516,7 @@ var ImprovedInitiative;
                 "Moving a creature in the initiative order will automatically adjust their initiative count.",
                 "The active creature will have its traits and actions displayed first for ease of reference.",
                 "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
-                "Want to contribute? The source code for Improved Initiative is available on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
+                "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
             ];
             if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
                 var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
@@ -619,7 +619,9 @@ var ImprovedInitiative;
         Creature.prototype.processStatBlock = function (newStatBlock, oldStatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
             this.AC = newStatBlock.AC.Value;
-            this.MaxHP = this.getMaxHP(newStatBlock.HP);
+            if (this.MaxHP == 0) {
+                this.MaxHP = this.getMaxHP(newStatBlock.HP);
+            }
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
         };
@@ -628,7 +630,9 @@ var ImprovedInitiative;
                 try {
                     return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
                 }
-                finally { }
+                catch (e) {
+                    return HP.Value;
+                }
             }
             return HP.Value;
         };

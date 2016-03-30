@@ -56,7 +56,10 @@ module ImprovedInitiative {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
 
             this.AC = newStatBlock.AC.Value;
-            this.MaxHP = this.getMaxHP(newStatBlock.HP);
+            if (this.MaxHP == 0)
+            {
+                this.MaxHP = this.getMaxHP(newStatBlock.HP);
+            }    
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
         }
@@ -65,7 +68,9 @@ module ImprovedInitiative {
             if (Store.Load(Store.User, "RollMonsterHp")) {
                 try {
                     return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
-                } finally {}
+                } catch (e) {
+                    return HP.Value;
+                }
             }
             return HP.Value;
         }        
