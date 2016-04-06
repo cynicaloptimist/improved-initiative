@@ -56,7 +56,7 @@ module ImprovedInitiative {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
 
             this.AC = newStatBlock.AC.Value;
-            if (this.MaxHP == 0)
+            if (this.MaxHP == undefined)
             {
                 this.MaxHP = this.getMaxHP(newStatBlock.HP);
             }    
