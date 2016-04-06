@@ -29,24 +29,16 @@ var ImprovedInitiative;
                     return '{0}/{1}'.format(creature.CurrentHP(), creature.MaxHP);
                 }
             }
-            if (creature.Encounter.Rules.EnemyHPTransparency == "whenBloodied") {
-                if (creature.CurrentHP() <= 0) {
-                    return "<span class='defeatedHP'>Defeated</span>";
-                }
-                else if (creature.CurrentHP() < creature.MaxHP / 2) {
-                    return "<span class='bloodiedHP'>Bloodied</span>";
-                }
-                else if (creature.CurrentHP() < creature.MaxHP) {
-                    return "<span class='hurtHP'>Hurt</span>";
-                }
-                return "<span class='healthyHP'>Healthy</span>";
+            if (creature.CurrentHP() <= 0) {
+                return "<span class='defeatedHP'>Defeated</span>";
             }
-            else {
-                if (creature.CurrentHP() <= 0) {
-                    return "<span class='defeatedHP'>Defeated</span>";
-                }
-                return "<span class='healthyHP'>Healthy</span>";
+            else if (creature.CurrentHP() < creature.MaxHP / 2) {
+                return "<span class='bloodiedHP'>Bloodied</span>";
             }
+            else if (creature.CurrentHP() < creature.MaxHP) {
+                return "<span class='hurtHP'>Hurt</span>";
+            }
+            return "<span class='healthyHP'>Healthy</span>";
         };
         return CombatantPlayerViewModel;
     })();
