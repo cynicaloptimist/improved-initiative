@@ -54,7 +54,7 @@ module ImprovedInitiative {
 
         private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
-
+            this.IsPlayerCharacter = newStatBlock.Player == "player";
             this.AC = newStatBlock.AC.Value;
             if (this.MaxHP == undefined)
             {

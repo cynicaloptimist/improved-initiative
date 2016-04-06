@@ -5,8 +5,8 @@ var ImprovedInitiative;
             this.GetHPColor = function (creature) {
                 var monsterHpVerbosity = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "MonsterHPVerbosity");
                 if (!creature.IsPlayerCharacter &&
-                    monsterHpVerbosity == "Monochrome Label" ||
-                    monsterHpVerbosity == "Hide All") {
+                    (monsterHpVerbosity == "Monochrome Label" ||
+                        monsterHpVerbosity == "Hide All")) {
                     return "auto";
                 }
                 var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
@@ -567,6 +567,7 @@ var ImprovedInitiative;
         }
         Creature.prototype.processStatBlock = function (newStatBlock, oldStatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
+            this.IsPlayerCharacter = newStatBlock.Player == "player";
             this.AC = newStatBlock.AC.Value;
             if (this.MaxHP == undefined) {
                 this.MaxHP = this.getMaxHP(newStatBlock.HP);
