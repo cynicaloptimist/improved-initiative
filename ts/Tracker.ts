@@ -7,11 +7,10 @@
 
 module ImprovedInitiative {
     $(() => {
+        RegisterComponents();
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
-            viewModel.Commander.RegisterKeyBindings();
             ko.applyBindings(viewModel, document.body);
-
             $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
         }
         if ($('#playerview').length) {

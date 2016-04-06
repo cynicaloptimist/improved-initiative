@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export var SettingsViewModel = (params) => {
+    export var Settings = (params) => {
         var tips = [
             "You can view command list and set keybindings on the 'Commands' tab.",
             "You can use the player view URL to track your combat on any device.",
@@ -34,6 +34,11 @@ module ImprovedInitiative {
         rollHp.subscribe(newValue => {
             Store.Save(Store.User, "RollMonsterHp", newValue);
         });
+
+        var hpVerbosity = ko.observable(Store.Load(Store.User, "MonsterHPVerbosity") || "Colored Label");
+        hpVerbosity.subscribe(selectedOption => {
+            Store.Save(Store.User, "MonsterHPVerbosity", selectedOption);
+        })
         
         return {
             Commander: params.commander,
@@ -51,7 +56,11 @@ module ImprovedInitiative {
                     Store.ImportAll(file);
                 }
             },
+
             RollHp: rollHp,
+            HpVerbosityOptions: ["Actual HP", "Colored Label", "Monochrome Label"],
+            HpVerbosity: hpVerbosity,
+            
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1)

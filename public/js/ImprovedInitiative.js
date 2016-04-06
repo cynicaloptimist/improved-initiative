@@ -3,6 +3,10 @@ var ImprovedInitiative;
     var CombatantPlayerViewModel = (function () {
         function CombatantPlayerViewModel(creature) {
             this.GetHPColor = function (creature) {
+                var monsterHpVerbosity = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "MonsterHPVerbosity");
+                if (monsterHpVerbosity == "Monochrome Label") {
+                    return "auto";
+                }
                 var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
                 var red = Math.floor((creature.MaxHP - creature.CurrentHP()) / creature.MaxHP * 170);
                 return "rgb(" + red + "," + green + ",0)";
@@ -16,7 +20,8 @@ var ImprovedInitiative;
             this.Tags = creature.Tags();
         }
         CombatantPlayerViewModel.prototype.GetHPDisplay = function (creature) {
-            if (creature.IsPlayerCharacter) {
+            var monsterHpVerbosity = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "MonsterHPVerbosity");
+            if (creature.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
                 if (creature.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(creature.CurrentHP(), creature.TemporaryHP(), creature.MaxHP);
                 }
@@ -485,102 +490,49 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
-    var templateLoader = {
-        loadTemplate: function (name, templateConfig, callback) {
-            if (templateConfig.name) {
-                var fullUrl = '/templates/' + templateConfig.name;
-                $.get(fullUrl, function (markupString) {
-                    // We need an array of DOM nodes, not a string.
-                    // We can use the default loader to convert to the
-                    // required format.
-                    ko.components.defaultLoader.loadTemplate(name, markupString, callback);
-                });
+    ImprovedInitiative.RegisterComponents = function () {
+        var templateLoader = {
+            loadTemplate: function (name, templateConfig, callback) {
+                if (templateConfig.name) {
+                    var fullUrl = '/templates/' + templateConfig.name;
+                    $.get(fullUrl, function (markupString) {
+                        // We need an array of DOM nodes, not a string.
+                        // We can use the default loader to convert to the
+                        // required format.
+                        ko.components.defaultLoader.loadTemplate(name, markupString, callback);
+                    });
+                }
+                else {
+                    // Unrecognized config format. Let another loader handle it.
+                    callback(null);
+                }
             }
-            else {
-                // Unrecognized config format. Let another loader handle it.
-                callback(null);
-            }
-        }
+        };
+        ko.components.loaders.unshift(templateLoader);
+        ko.components.register('settings', {
+            viewModel: ImprovedInitiative.Settings,
+            template: { name: 'settings' }
+        });
+        ko.components.register('defaultstatblock', {
+            viewModel: function (params) { return params.creature; },
+            template: { name: 'defaultstatblock' }
+        });
+        ko.components.register('activestatblock', {
+            viewModel: function (params) { return params.creature; },
+            template: { name: 'activestatblock' }
+        });
+        ko.components.register('combatant', {
+            viewModel: function (params) {
+                params.creature.ViewModel = new ImprovedInitiative.CombatantViewModel(params.creature, params.addUserPoll);
+                return params.creature.ViewModel;
+            },
+            template: { name: 'combatant' }
+        });
+        ko.components.register('playerdisplaycombatant', {
+            viewModel: function (params) { return params.creature; },
+            template: { name: 'playerdisplaycombatant' }
+        });
     };
-    ko.components.loaders.unshift(templateLoader);
-    ko.components.register('settings', {
-        viewModel: function (params) {
-            var tips = [
-                "You can view command list and set keybindings on the 'Commands' tab.",
-                "You can use the player view URL to track your combat on any device.",
-                "Editing a creature after it has been added to combat will only change that individual creature.",
-                "You can restore a creature's hit points by applying negative damage to it.",
-                "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-                "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
-                "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
-                "Moving a creature in the initiative order will automatically adjust their initiative count.",
-                "The active creature will have its traits and actions displayed first for ease of reference.",
-                "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
-                "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
-            ];
-            if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
-                var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
-            }
-            else {
-                var currentTipIndex = ko.observable(0);
-            }
-            function cycleTipIndex() {
-                var newIndex = currentTipIndex() + this;
-                if (newIndex < 0) {
-                    newIndex = tips.length - 1;
-                }
-                else if (newIndex > tips.length - 1) {
-                    newIndex = 0;
-                }
-                currentTipIndex(newIndex);
-            }
-            var rollHp = ko.observable(ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "RollMonsterHp"));
-            rollHp.subscribe(function (newValue) {
-                ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, "RollMonsterHp", newValue);
-            });
-            return {
-                Commander: params.commander,
-                ShowTab: function (tabSelector) {
-                    $('.settings .tab').hide();
-                    $(".settings " + tabSelector).show();
-                },
-                ExportData: function () {
-                    var blob = ImprovedInitiative.Store.ExportAll();
-                    saveAs(blob, 'improved-initiative.json');
-                },
-                ImportData: function (_, event) {
-                    var file = event.target.files[0];
-                    if (file) {
-                        ImprovedInitiative.Store.ImportAll(file);
-                    }
-                },
-                RollHp: rollHp,
-                Tip: ko.computed(function () { return tips[currentTipIndex() % tips.length]; }),
-                NextTip: cycleTipIndex.bind(1),
-                PreviousTip: cycleTipIndex.bind(-1)
-            };
-        },
-        template: { name: 'settings' }
-    });
-    ko.components.register('defaultstatblock', {
-        viewModel: function (params) { return params.creature; },
-        template: { name: 'defaultstatblock' }
-    });
-    ko.components.register('activestatblock', {
-        viewModel: function (params) { return params.creature; },
-        template: { name: 'activestatblock' }
-    });
-    ko.components.register('combatant', {
-        viewModel: function (params) {
-            params.creature.ViewModel = new ImprovedInitiative.CombatantViewModel(params.creature, params.addUserPoll);
-            return params.creature.ViewModel;
-        },
-        template: { name: 'combatant' }
-    });
-    ko.components.register('playerdisplaycombatant', {
-        viewModel: function (params) { return params.creature; },
-        template: { name: 'playerdisplaycombatant' }
-    });
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
@@ -1233,6 +1185,71 @@ var ImprovedInitiative;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
+    ImprovedInitiative.Settings = function (params) {
+        var tips = [
+            "You can view command list and set keybindings on the 'Commands' tab.",
+            "You can use the player view URL to track your combat on any device.",
+            "Editing a creature after it has been added to combat will only change that individual creature.",
+            "You can restore a creature's hit points by applying negative damage to it.",
+            "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
+            "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
+            "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
+            "Moving a creature in the initiative order will automatically adjust their initiative count.",
+            "The active creature will have its traits and actions displayed first for ease of reference.",
+            "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
+            "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
+        ];
+        if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
+            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
+        }
+        else {
+            var currentTipIndex = ko.observable(0);
+        }
+        function cycleTipIndex() {
+            var newIndex = currentTipIndex() + this;
+            if (newIndex < 0) {
+                newIndex = tips.length - 1;
+            }
+            else if (newIndex > tips.length - 1) {
+                newIndex = 0;
+            }
+            currentTipIndex(newIndex);
+        }
+        var rollHp = ko.observable(ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "RollMonsterHp"));
+        rollHp.subscribe(function (newValue) {
+            ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, "RollMonsterHp", newValue);
+        });
+        var hpVerbosity = ko.observable(ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "MonsterHPVerbosity") || "Colored Label");
+        hpVerbosity.subscribe(function (selectedOption) {
+            ImprovedInitiative.Store.Save(ImprovedInitiative.Store.User, "MonsterHPVerbosity", selectedOption);
+        });
+        return {
+            Commander: params.commander,
+            ShowTab: function (tabSelector) {
+                $('.settings .tab').hide();
+                $(".settings " + tabSelector).show();
+            },
+            ExportData: function () {
+                var blob = ImprovedInitiative.Store.ExportAll();
+                saveAs(blob, 'improved-initiative.json');
+            },
+            ImportData: function (_, event) {
+                var file = event.target.files[0];
+                if (file) {
+                    ImprovedInitiative.Store.ImportAll(file);
+                }
+            },
+            RollHp: rollHp,
+            HpVerbosityOptions: ["Actual HP", "Colored Label", "Monochrome Label"],
+            HpVerbosity: hpVerbosity,
+            Tip: ko.computed(function () { return tips[currentTipIndex() % tips.length]; }),
+            NextTip: cycleTipIndex.bind(1),
+            PreviousTip: cycleTipIndex.bind(-1)
+        };
+    };
+})(ImprovedInitiative || (ImprovedInitiative = {}));
+var ImprovedInitiative;
+(function (ImprovedInitiative) {
     var StatBlock = (function () {
         function StatBlock() {
         }
@@ -1502,9 +1519,9 @@ var PostJSON = function (url, data, success) {
 var ImprovedInitiative;
 (function (ImprovedInitiative) {
     $(function () {
+        ImprovedInitiative.RegisterComponents();
         if ($('#tracker').length) {
             var viewModel = new ImprovedInitiative.TrackerViewModel();
-            viewModel.Commander.RegisterKeyBindings();
             ko.applyBindings(viewModel, document.body);
             $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
         }
@@ -1525,6 +1542,7 @@ var ImprovedInitiative;
             this.Encounter = ko.observable(new ImprovedInitiative.Encounter());
             this.Library = new ImprovedInitiative.CreatureLibrary();
             this.Commander = new ImprovedInitiative.Commander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.Library);
+            this.Commander.RegisterKeyBindings();
         }
         return TrackerViewModel;
     })();

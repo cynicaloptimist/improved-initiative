@@ -1,0 +1,12 @@
+given a creature or player
+	one can be created
+		a saved one can be edited
+		a saved one can be deleted
+	one can be added to combat
+		one can be damaged
+		one can be deleted
+	when an encounter starts
+		players ask for initiative roll
+		creatures roll their own
+
+

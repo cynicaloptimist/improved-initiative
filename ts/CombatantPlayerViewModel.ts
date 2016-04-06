@@ -20,7 +20,7 @@ module ImprovedInitiative {
         private GetHPDisplay(creature: ICreature): string {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
             
-            if (creature.IsPlayerCharacter || monsterHpVerbosity == "ActualHP") {
+            if (creature.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
                 if (creature.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(creature.CurrentHP(), creature.TemporaryHP(), creature.MaxHP);
                 } else {
@@ -46,7 +46,7 @@ module ImprovedInitiative {
 
         private GetHPColor = (creature: ICreature) => {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
-            if (monsterHpVerbosity == "MonochromeLabel") {
+            if (monsterHpVerbosity == "Monochrome Label") {
                 return "auto";
             }
             var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
