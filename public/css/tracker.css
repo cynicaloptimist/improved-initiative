@@ -4303,18 +4303,6 @@ body .encounter .combatants .creature .hp.applyDamage {
 body .encounter .combatants .creature .hp.applyTemporaryHP {
   background-color: rgba(0, 200, 0, 0.5);
 }
-body .encounter .combatants .creature .hp .healthyHP {
-  color: green;
-}
-body .encounter .combatants .creature .hp .hurtHP {
-  color: yellow;
-}
-body .encounter .combatants .creature .hp .bloodiedHP {
-  color: red;
-}
-body .encounter .combatants .creature .hp .defeatedHP {
-  color: black;
-}
 body .encounter .combatants .creature .ac {
   width: 30px;
   text-align: center;

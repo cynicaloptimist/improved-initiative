@@ -4,7 +4,9 @@ var ImprovedInitiative;
         function CombatantPlayerViewModel(creature) {
             this.GetHPColor = function (creature) {
                 var monsterHpVerbosity = ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, "MonsterHPVerbosity");
-                if (monsterHpVerbosity == "Monochrome Label") {
+                if (!creature.IsPlayerCharacter &&
+                    monsterHpVerbosity == "Monochrome Label" ||
+                    monsterHpVerbosity == "Hide All") {
                     return "auto";
                 }
                 var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
@@ -28,6 +30,9 @@ var ImprovedInitiative;
                 else {
                     return '{0}/{1}'.format(creature.CurrentHP(), creature.MaxHP);
                 }
+            }
+            if (monsterHpVerbosity == "Hide All") {
+                return '';
             }
             if (creature.CurrentHP() <= 0) {
                 return "<span class='defeatedHP'>Defeated</span>";
@@ -1232,7 +1237,12 @@ var ImprovedInitiative;
                 }
             },
             RollHp: rollHp,
-            HpVerbosityOptions: ["Actual HP", "Colored Label", "Monochrome Label"],
+            HpVerbosityOptions: [
+                "Actual HP",
+                "Colored Label",
+                "Monochrome Label",
+                "Hide All"
+            ],
             HpVerbosity: hpVerbosity,
             Tip: ko.computed(function () { return tips[currentTipIndex() % tips.length]; }),
             NextTip: cycleTipIndex.bind(1),

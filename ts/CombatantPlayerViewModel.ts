@@ -28,6 +28,10 @@ module ImprovedInitiative {
                 }
             }
 
+            if (monsterHpVerbosity == "Hide All") {
+                return '';
+            }            
+
             if (creature.CurrentHP() <= 0) {
                 return "<span class='defeatedHP'>Defeated</span>";
             } else if (creature.CurrentHP() < creature.MaxHP / 2) {
@@ -40,7 +44,9 @@ module ImprovedInitiative {
 
         private GetHPColor = (creature: ICreature) => {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
-            if (monsterHpVerbosity == "Monochrome Label") {
+            if (!creature.IsPlayerCharacter &&
+                monsterHpVerbosity == "Monochrome Label" ||
+                monsterHpVerbosity == "Hide All") {
                 return "auto";
             }
             var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);

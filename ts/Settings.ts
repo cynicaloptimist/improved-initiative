@@ -14,17 +14,17 @@ module ImprovedInitiative {
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
         if (Store.Load(Store.User, 'SkipIntro')) {
-            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));   
+            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
         }
         else {
             var currentTipIndex = ko.observable(0);
         }
-        
+
         function cycleTipIndex() {
             var newIndex = currentTipIndex() + this;
-            if(newIndex < 0) {
+            if (newIndex < 0) {
                 newIndex = tips.length - 1;
-            } else if (newIndex > tips.length - 1){
+            } else if (newIndex > tips.length - 1) {
                 newIndex = 0;
             }
             currentTipIndex(newIndex);
@@ -39,7 +39,7 @@ module ImprovedInitiative {
         hpVerbosity.subscribe(selectedOption => {
             Store.Save(Store.User, "MonsterHPVerbosity", selectedOption);
         })
-        
+
         return {
             Commander: params.commander,
             ShowTab: (tabSelector: string) => {
@@ -58,9 +58,14 @@ module ImprovedInitiative {
             },
 
             RollHp: rollHp,
-            HpVerbosityOptions: ["Actual HP", "Colored Label", "Monochrome Label"],
+            HpVerbosityOptions: [
+                "Actual HP",
+                "Colored Label",
+                "Monochrome Label",
+                "Hide All"
+            ],
             HpVerbosity: hpVerbosity,
-            
+
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1)
