@@ -25,17 +25,15 @@ module.exports = function(grunt) {
                   module: 'commonjs',
                   target: 'es5'
               }
-          }
-      },
-      tstest: {
-        test: {
+          },
+          test: {
               src: ['test/**/*.ts', 'ts/**/*.ts'],
-              out: 'public/js/test.js',
+              out: 'test.js',
               options: {
-                  module: 'amd',
+                  module: 'commonjs',
                   target: 'es5'
               }
-          },
+          }
       },
       less: {
         development: {
@@ -59,5 +57,6 @@ module.exports = function(grunt) {
       }
   });
 
-  grunt.registerTask('default', ['ts', 'less']);
+  grunt.registerTask('default', ['ts:default', 'ts:server', 'less']);
+  grunt.registerTask('test', ['ts:test']);
 };

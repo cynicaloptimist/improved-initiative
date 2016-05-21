@@ -1194,7 +1194,7 @@ var ImprovedInitiative;
             "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
             "Moving a creature in the initiative order will automatically adjust their initiative count.",
             "The active creature will have its traits and actions displayed first for ease of reference.",
-            "The player view will only display a colored, qualitative indicator for HP. You can use temporary HP to obfuscate this.",
+            "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
         if (ImprovedInitiative.Store.Load(ImprovedInitiative.Store.User, 'SkipIntro')) {
