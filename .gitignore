@@ -3,5 +3,6 @@
 node_modules/*
 public/user/*
 public/fonts/*
+public/css/*
 *.js.map
 *.js
