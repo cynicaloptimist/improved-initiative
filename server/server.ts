@@ -61,7 +61,7 @@ var newEncounterIndex = (): string => {
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
-app.set('views', __dirname + '/');
+app.set('views', __dirname + '/corehtml');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

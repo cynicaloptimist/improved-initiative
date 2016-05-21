@@ -13,7 +13,7 @@ module.exports = function(grunt) {
           },
           default: {
               src: ['ts/**/*.ts'],
-              out: 'ImprovedInitiative.js',
+              out: 'ImprovedInitiative.Client.js',
               options: {
                   module: 'amd',
                   target: 'es5'
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
           },
           server : {
               src: ['server/**/*.ts'],
-              outDir: '.',
+              outDir: 'ImprovedInitiative.Server.js',
               options: {
                   module: 'commonjs',
                   target: 'es5'
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
           },
           test: {
               src: ['test/**/*.ts'],
-              out: 'test.js',
+              out: 'ImprovedInitiative.Tests.js',
               options: {
                   module: 'commonjs',
                   target: 'es5'
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
             'node_modules/mousetrap/mousetrap.js',
             'node_modules/socket.io-client/socket.io.js',
             'node_modules/browser-filesaver/FileSaver.js',
-            'ImprovedInitiative.js'
+            'ImprovedInitiative.Client.js'
           ],
           dest: 'public/js/ImprovedInitiative.js'
         }
