@@ -19183,4 +19183,4 @@ var ImprovedInitiative;
     })();
     ImprovedInitiative.UserPollQueue = UserPollQueue;
 })(ImprovedInitiative || (ImprovedInitiative = {}));
-//# sourceMappingURL=ImprovedInitiative.js.map
+//# sourceMappingURL=ImprovedInitiative.Client.js.map

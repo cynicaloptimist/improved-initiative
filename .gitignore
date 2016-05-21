@@ -4,3 +4,4 @@ public/fonts/*
 public/css/*
 *.js.map
 *.js
+!Gruntfile.js
