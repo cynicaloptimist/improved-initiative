@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-open');
 
@@ -12,7 +13,7 @@ module.exports = function(grunt) {
           },
           default: {
               src: ['ts/**/*.ts'],
-              out: 'public/js/ImprovedInitiative.js',
+              out: 'ImprovedInitiative.js',
               options: {
                   module: 'amd',
                   target: 'es5'
@@ -45,6 +46,19 @@ module.exports = function(grunt) {
           }
         }
       },
+      concat: {
+        js: {
+          src: [
+            'node_modules/knockout/build/output/knockout-latest.js',
+            'node_modules/jquery/dist/jquery.js',
+            'node_modules/mousetrap/mousetrap.js',
+            'node_modules/socket.io-client/socket.io.js',
+            'node_modules/browser-filesaver/FileSaver.js',
+            'ImprovedInitiative.js'
+          ],
+          dest: 'public/js/ImprovedInitiative.js'
+        }
+      },
       watch: {
         ts: {
           files: '**/*.ts',
@@ -57,6 +71,6 @@ module.exports = function(grunt) {
       }
   });
 
-  grunt.registerTask('default', ['ts:default', 'ts:server', 'less']);
+  grunt.registerTask('default', ['ts:default', 'ts:server', 'less', 'concat']);
   grunt.registerTask('test', ['ts:test']);
 };
