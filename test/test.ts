@@ -7,7 +7,7 @@
 /// <reference path="../typings/knockout/knockout.d.ts" />
 /// <reference path="../typings/mousetrap/mousetrap.d.ts" />
 
-var expect = chai.expect;
+var expect = require('chai').expect;
 
 describe("ViewModel", function() {
   var vm: ImprovedInitiative.TrackerViewModel;
