@@ -23,7 +23,7 @@ module.exports = function(grunt) {
               src: ['server/**/*.ts'],
               out: 'ImprovedInitiative.Server.js',
               options: {
-                  module: 'commonjs',
+                  module: 'amd',
                   target: 'es5'
               }
           },
