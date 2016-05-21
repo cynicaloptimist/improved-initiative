@@ -13,7 +13,7 @@ module.exports = function(grunt) {
           },
           default: {
               src: ['ts/**/*.ts'],
-              out: 'ImprovedInitiative.Client.js',
+              outDir: 'ImprovedInitiative.Client',
               options: {
                   module: 'amd',
                   target: 'es5'
@@ -21,15 +21,15 @@ module.exports = function(grunt) {
           },
           server : {
               src: ['server/**/*.ts'],
-              out: 'ImprovedInitiative.Server.js',
+              outDir: 'ImprovedInitiative.Server',
               options: {
-                  module: 'amd',
+                  module: 'commonjs',
                   target: 'es5'
               }
           },
           test: {
               src: ['test/**/*.ts'],
-              out: 'ImprovedInitiative.Tests.js',
+              outDir: 'ImprovedInitiative.Tests',
               options: {
                   module: 'commonjs',
                   target: 'es5'
