@@ -44,7 +44,12 @@ else {
     importCreatureLibrary('ogl_creatures.json');
 }
 var newEncounterIndex = function () {
-    var newEncounterId = playerViews.length;
+    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    var newEncounterId = '';
+    for (var i = 0; i < 8; i++) {
+        var index = Math.floor(Math.random() * chars.length);
+        newEncounterId += chars[index];
+    }
     playerViews[newEncounterId] = {};
     return newEncounterId;
 };

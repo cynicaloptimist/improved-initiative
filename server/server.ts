@@ -48,8 +48,13 @@ else {
     importCreatureLibrary('ogl_creatures.json');
 }
 
-var newEncounterIndex = (): number => {
-    var newEncounterId = playerViews.length;
+var newEncounterIndex = (): string => {
+    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    var newEncounterId = ''
+    for (var i = 0; i < 8; i++) {
+        var index = Math.floor(Math.random() * chars.length);
+        newEncounterId += chars[index];
+    }
     playerViews[newEncounterId] = {};
     return newEncounterId;
 }
