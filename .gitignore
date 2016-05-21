@@ -1,5 +1,3 @@
-.vscode/*
-.tscache/*
 node_modules/*
 public/user/*
 public/fonts/*
