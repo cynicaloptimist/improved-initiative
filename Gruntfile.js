@@ -28,7 +28,7 @@ module.exports = function(grunt) {
               }
           },
           test: {
-              src: ['test/**/*.ts', 'ts/**/*.ts'],
+              src: ['test/**/*.ts'],
               out: 'test.js',
               options: {
                   module: 'commonjs',
