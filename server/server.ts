@@ -61,7 +61,7 @@ var newEncounterIndex = (): string => {
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
-app.set('views', __dirname + '/corehtml');
+app.set('views', __dirname + '/html');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
@@ -72,7 +72,7 @@ app.get('/', function(req, res) {
 
 app.get('/e/:id', (req, res) => {
     console.log('app.get ' + req.path);
-    res.render('index', {
+    res.render('tracker', {
         rootDirectory: "..",
         encounterId: req.params.id,
     })

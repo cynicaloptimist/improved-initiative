@@ -21,7 +21,7 @@ module.exports = function(grunt) {
           },
           server : {
               src: ['server/**/*.ts'],
-              outDir: 'ImprovedInitiative.Server',
+              outDir: '.',
               options: {
                   module: 'commonjs',
                   target: 'es5'
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
             'node_modules/mousetrap/mousetrap.js',
             'node_modules/socket.io-client/socket.io.js',
             'node_modules/browser-filesaver/FileSaver.js',
-            'ImprovedInitiative.Client.js'
+            'ImprovedInitiative.Client/*.js'
           ],
           dest: 'public/js/ImprovedInitiative.js'
         }

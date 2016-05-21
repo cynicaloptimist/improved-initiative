@@ -1,6 +1,7 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/socket.io/socket.io.d.ts" />
+"use strict";
 var fs = require('fs');
 var express = require('express');
 var socketIO = require('socket.io');
@@ -55,7 +56,7 @@ var newEncounterIndex = function () {
 };
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
-app.set('views', __dirname + '/');
+app.set('views', __dirname + '/corehtml');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
@@ -63,7 +64,7 @@ app.get('/', function (req, res) {
 });
 app.get('/e/:id', function (req, res) {
     console.log('app.get ' + req.path);
-    res.render('index', {
+    res.render('tracker', {
         rootDirectory: "..",
         encounterId: req.params.id,
     });

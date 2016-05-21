@@ -4,4 +4,5 @@ public/fonts/*
 public/css/*
 *.js.map
 *.js
+.baseDir
 !Gruntfile.js
