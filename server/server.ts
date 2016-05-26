@@ -67,7 +67,10 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-    res.redirect('e/' + newEncounterIndex());
+    res.render('landing', {
+        rootDirectory: "..",
+        encounterId: newEncounterIndex(),
+    })
 });
 
 app.get('/e/:id', (req, res) => {
