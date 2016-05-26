@@ -4,6 +4,13 @@
 @import "http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin";
 @import "http://fonts.googleapis.com/css?family=Josefin+Slab&subset=latin";
 
+@primary-green: #00643c;
+@background: antiquewhite;
+@shadow: #999;
+
+@medium-spacer: 5px;
+@large-spacer: 15px;
+
 * {
     font-family: 'Josefin Sans', sans-serif;
     margin: 0;
@@ -11,6 +18,82 @@
 	cursor: default;
 }
 
+html, body {
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+ul.bulleted {
+    padding-left:40px;
+    margin:1em 0;
+}
+
 h1 {
     font-family: 'Josefin Slab', serif;
+    padding:@medium-spacer;
+    &:before {
+        content: url("../img/wing-transparent-antiquewhite.png");
+        margin-right:4px;
+    }
+}
+
+#landing {
+    display: flex;
+    flex-grow:1;
+    flex-direction: column;
+    align-items: center;
+    background-color: @primary-green;
+    color: @background;
+    
+    input {
+        padding:@medium-spacer;
+        margin:@medium-spacer;
+    }
+
+    .content {
+        display: flex;
+        align-items:center;
+    }
+
+    .start {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: black;
+        background-color: @background;
+        width:400px;
+        padding:@large-spacer;
+        margin:@large-spacer;
+        border-radius: @medium-spacer;
+        box-shadow: 2px 2px 1px @shadow inset;
+    }
+    
+    .launch-controls {
+        display:flex;
+        flex-direction:column;
+        div {
+            display:flex;
+        }
+        input {
+            flex-grow:1;
+        }
+    }
+    .start-encounter {
+        input {
+            background-color: @primary-green;
+            border-color: lighten(@primary-green, 20);
+            &:hover {
+                border-color: lighten(@primary-green, 10);
+            }
+            color: @background;
+        }
+    }
+}
+
+.footer {
+    background-color: @background;
+    box-shadow: 2px 2px 1px @shadow inset;
+    text-align: center;
+    padding:@medium-spacer;
 }
