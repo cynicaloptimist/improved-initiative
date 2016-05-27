@@ -19,5 +19,9 @@ module ImprovedInitiative {
             playerViewModel.LoadEncounterFromServer(encounterId);
             ko.applyBindings(playerViewModel, document.body);
         }
+        if ($('#launcher'.length)) {
+            var launcherViewModel = new LauncherViewModel();
+            ko.applyBindings(launcherViewModel, document.body);
+        }
     });
 }
