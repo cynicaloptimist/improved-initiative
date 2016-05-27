@@ -6,6 +6,8 @@
 
 @primary-green: #00643c;
 @background: antiquewhite;
+@button-face: #ccc;
+@button-text: black;
 @shadow: #999;
 
 @medium-spacer: 5px;
@@ -29,9 +31,29 @@ ul.bulleted {
     margin:1em 0;
 }
 
+.button(@button-face: @button-face, @button-text: @button-text) {
+    margin:auto;
+    padding: 10px;
+    text-align:center;
+    
+    cursor:pointer;
+    
+    border: 1px solid darken(@button-face, 20);
+	border-radius: 4px;
+                    
+	background-color: @button-face;
+	&:hover {
+		background-color: darken(@button-face, 10);
+	}
+}
+
+span.button {
+    .button();
+}
+
 h1 {
     font-family: 'Josefin Slab', serif;
-    padding:@medium-spacer;
+    padding:25px;
     &:before {
         content: url("../img/wing-transparent-antiquewhite.png");
         margin-right:4px;
@@ -46,17 +68,22 @@ h1 {
     background-color: @primary-green;
     color: @background;
     
-    input {
+    input[type="text"] {
         padding:@medium-spacer;
-        margin:@medium-spacer;
     }
 
     .content {
         display: flex;
         align-items:center;
+        width: 80%;
     }
-
+    
+    .logo {
+        flex-grow:1;
+    }
+    
     .start {
+        flex-grow: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -64,7 +91,7 @@ h1 {
         background-color: @background;
         width:400px;
         padding:@large-spacer;
-        margin:@large-spacer;
+        margin:60px;
         border-radius: @medium-spacer;
         box-shadow: 2px 2px 1px @shadow inset;
     }
@@ -75,18 +102,14 @@ h1 {
         div {
             display:flex;
         }
-        input {
+        .button, input {
             flex-grow:1;
+            margin: @medium-spacer;
         }
     }
     .start-encounter {
-        input {
-            background-color: @primary-green;
-            border-color: lighten(@primary-green, 20);
-            &:hover {
-                border-color: lighten(@primary-green, 10);
-            }
-            color: @background;
+        .button {
+            .button(lighten(@primary-green, 15), @background);
         }
     }
 }

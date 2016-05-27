@@ -11,7 +11,9 @@
 <div id="landing">
     <h1>Improved Initiative</h1>
     <div class="content">
-        <img src="img/boot-transparent-antiquewhite.png" />
+        <div class="logo">
+            <img src="img/boot-transparent-antiquewhite.png" />
+        </div>
         <div class="start">
             <h2>Combat Tracker for D&D 5E</h2>
             <p>Improved Initative enhances combat in your D&D game without getting between you and your players.</p>
@@ -22,11 +24,11 @@
             </ul>
             <div class="launch-controls">
                 <div class="start-encounter">
-                    <input type="button" value="Start an Encounter" />
+                    <span class="button" data-bind="click: StartEncounter">Start an Encounter</span>
                 </div>
                 <div class="join-encounter">
-                    <input type="text" placeholder="Encounter ID or URL" />
-                    <input type="button" value="Watch an Encounter" />
+                    <input type="text" placeholder="Encounter ID or URL" data-bind="value: JoinEncounterInput" />
+                    <span class="button" data-bind="click: JoinEncounter">Join an Encounter</span>
                 </div>
             </div>
         </div>
