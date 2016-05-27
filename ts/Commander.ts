@@ -221,10 +221,10 @@ module ImprovedInitiative {
             $('#user-response-requests input').first().select();
         }
 
-        ShowLibraries = () => {
-            $('.libraries').slideDown();
-        }
-
+        ShowingLibraries = ko.observable(true);
+        ShowLibraries = () => this.ShowingLibraries(true);
+        HideLibraries = () => this.ShowingLibraries(false);
+        
         LaunchPlayerWindow = () => {
             window.open(`/p/${this.encounter().EncounterId}`, 'Player View');
         }

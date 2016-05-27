@@ -2,7 +2,7 @@
 <html encounterId="{{encounterId}}">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/tracker.css">
+    <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.css">
 
     <title>Combat Tracker - Improved Initiative</title>
 
@@ -11,73 +11,88 @@
 </head>
 
 <body id="tracker">
-    <div class="modalblur" data-bind="click: Commander.HideSettings"></div>
-    <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }">
+    <div class="floating-sections">
+        <div class="modalblur" data-bind="click: Commander.HideSettings"></div>
+        <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }"></div>
+        <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     </div>
-    <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
-    <div class="libraries">
-        <h1>Library</h1>
-        <div class="tabs">
-            <div data-bind="click: Library.DisplayTab.with('Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</div>
-            <div data-bind="click: Library.DisplayTab.with('Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</div>
-            <div data-bind="click: Library.DisplayTab.with('Encounters'), css: { selected: Library.DisplayTab() == 'Encounters' }">Encounters</div>
-        </div>
-        <!--ko with: Library -->
-        <!-- ko if: DisplayTab() == 'Encounters' -->
-        <ul class="library" data-bind="foreach: SavedEncounterIndex">
-            <li data-bind="click: $root.Commander.LoadEncounterByName">
-                <span class="fa" data-bind="text: $data"></span>
-                <span class="fa fa-trash" data-bind="click: $root.Commander.DeleteSavedEncounter"></span>
-            </li>
-        </ul>
-        <div class="interface-buttons">
-            <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
-            <div data-bind="click: $root.Commander.SaveEncounter"><span class="fa fa-plus"></span></div>
-        </div>
-        <!-- /ko -->
-        <!-- ko ifnot: DisplayTab() == 'Encounters' -->
-        <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-        <ul class="library" data-bind="foreach: FilteredCreatures">
-            <li>
-                <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
-                <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreature"></span>
-                <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
-            </li>
-        </ul>
-        <div class="interface-buttons">
-            <div onclick="$('.libraries').slideUp()"><span class="fa fa-chevron-up"></span></div>
-            <div data-bind="click: $root.Commander.CreateAndEditCreature.with(DisplayTab())"><span class="fa fa-plus"></span></div>
-        </div>
-        <!-- /ko -->
-        <!-- /ko -->
+    <div class="commands" data-bind="foreach: Commander.Commands">
+        <span class="button" data-bind="
+            visible: ShowOnActionBar,
+            css: ActionBarIcon,
+            attr: { title: Description },
+            click: ActionBinding
+        ">
+        </span>
     </div>
-    <div class="views">
-
+    <div class="left-column">
+        <!-- ko if: Commander.ShowingLibraries -->
+        <div class="libraries">
+            <h1>Library</h1>
+            <div class="library-tabs">
+                <div data-bind="click: Library.DisplayTab.with('Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</div>
+                <div data-bind="click: Library.DisplayTab.with('Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</div>
+                <div data-bind="click: Library.DisplayTab.with('Encounters'), css: { selected: Library.DisplayTab() == 'Encounters' }">Encounters</div>
+            </div>
+            <!--ko with: Library -->
+            <!-- ko if: DisplayTab() == 'Encounters' -->
+            <ul class="library" data-bind="foreach: SavedEncounterIndex">
+                <li data-bind="click: $root.Commander.LoadEncounterByName">
+                    <span class="fa" data-bind="text: $data"></span>
+                    <span class="fa fa-trash" data-bind="click: $root.Commander.DeleteSavedEncounter"></span>
+                </li>
+            </ul>
+            <div class="interface-buttons">
+                <div onclick="Commander.HideLibraries"><span class="fa fa-chevron-up"></span></div>
+                <div data-bind="click: $root.Commander.SaveEncounter"><span class="fa fa-plus"></span></div>
+            </div>
+            <!-- /ko -->
+            <!-- ko ifnot: DisplayTab() == 'Encounters' -->
+            <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
+            <ul class="library" data-bind="foreach: FilteredCreatures">
+                <li>
+                    <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
+                    <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreature"></span>
+                    <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
+                </li>
+            </ul>
+            <div class="interface-buttons">
+                <div onclick="Commander.HideLibraries"><span class="fa fa-chevron-up"></span></div>
+                <div data-bind="click: $root.Commander.CreateAndEditCreature.with(DisplayTab())"><span class="fa fa-plus"></span></div>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko ifnot: Commander.ShowingLibraries -->
         <div class="active statblock" data-bind="if: Encounter().ActiveCreature()">
             <h1>Active Creature</h1>
-            <div data-bind="visible: Encounter().ActiveCreature(), 
-    component: { 
-      name: 'activestatblock', 
-      params: { 
-        creature: Encounter().ActiveCreatureStatblock() 
-      } 
-    }"></div>
+            <div data-bind="
+                visible: Encounter().ActiveCreature(), 
+                component: { 
+                    name: 'activestatblock', 
+                    params: { 
+                    creature: Encounter().ActiveCreatureStatblock() 
+                    } 
+                }">
+            </div>
         </div>
-
+        <!-- /ko -->
+    </div>
+    <div class="center-column">
         <!-- ko if: StatBlockEditor.StatBlock() -->
         <div class="editor" data-bind="component: {
-    name: 'editstatblock',
-    params: {
-      editor: StatBlockEditor
-    }
-  }"></div>
+            name: 'editstatblock',
+            params: {
+            editor: StatBlockEditor
+            }
+        }"></div>
         <!-- /ko -->
 
         <!-- ko ifnot: StatBlockEditor.StatBlock() -->
-
-        <div class="tracker">
+        <div class="combat">
             <div class="encounter" data-bind="with: Encounter">
-                <h1>Tracker</h1>
+                <h1>Improved Initiative</h1>
                 <ul class="combatants">
                     <li class="creature header">
                         <div class="initiative"><span class="fa fa-forward"></span></div>
@@ -88,47 +103,40 @@
                     </li>
                     <!-- ko foreach: Creatures -->
                     <li class="creature" data-bind="
-          css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
-                 active: $parent.ActiveCreature() == $data },
-          click: $root.Commander.SelectCreature,
-          component: {
-            name: 'combatant',
-            params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
-          }">
+                        css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
+                                active: $parent.ActiveCreature() == $data },
+                        click: $root.Commander.SelectCreature,
+                        component: {
+                        name: 'combatant',
+                        params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
+                        }">
                     </li>
                     <!-- /ko -->
                 </ul>
             </div>
             <!-- ko if: UserPollQueue.HasPoll() -->
             <form id="user-response-requests" class="user-response-requests" data-bind="
-        submit: UserPollQueue.Resolve,
-        html: UserPollQueue.Message(),
-        focusOnRender: UserPollQueue.InputSelector()">
+                submit: UserPollQueue.Resolve,
+                html: UserPollQueue.Message(),
+                focusOnRender: UserPollQueue.InputSelector()">
             </form>
             <!-- /ko -->
         </div>
 
         <!-- /ko -->
-
+    </div>
+    <div class="right-column">
         <div class="selected statblock">
             <h1>Target Creature</h1>
             <div data-bind="visible: Commander.SelectedCreatures().length == 1, 
-      component: { 
-        name: 'defaultstatblock', 
-        params:{ 
-          creature: Commander.SelectedCreatureStatblock(),
-        } 
-      }"></div>
+                component: { 
+                name: 'defaultstatblock', 
+                params:{ 
+                    creature: Commander.SelectedCreatureStatblock(),
+                } 
+                }">
+            </div>
         </div>
     </div>
-    <div class="interface-buttons" data-bind="foreach: Commander.Commands">
-        <div class="fa" data-bind="
-      visible: ShowOnActionBar,
-      css: ActionBarIcon,
-      attr: { title: Description },
-      click: ActionBinding
-      "></div>
-    </div>
 </body>
-
 </html>
