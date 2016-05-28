@@ -167,10 +167,6 @@ ul.bulleted {
 #tracker {
     flex-direction: row;
 
-    >div {
-        overflow-y: auto;
-    }
-    
     .center-column {
         flex-grow:1;
     }
@@ -193,6 +189,7 @@ ul.bulleted {
         ul {
             background-color: @primary-white;
             color: @primary-black;
+            overflow-y: auto;
         }
         li {
             list-style-type: none;
