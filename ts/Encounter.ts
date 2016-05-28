@@ -140,7 +140,6 @@ module ImprovedInitiative {
                     c.RollInitiative(userPollQueue);
                 });
             }
-            $('.libraries').slideUp()
         }
 
         NextTurn = () => {

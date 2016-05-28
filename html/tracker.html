@@ -28,7 +28,7 @@
     <div class="left-column">
         <!-- ko if: Commander.ShowingLibraries -->
         <div class="libraries">
-            <h1>Library</h1>
+            <h2>Library</h2>
             <div class="library-tabs">
                 <span data-bind="click: Library.DisplayTab.with('Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</span>
                 <span data-bind="click: Library.DisplayTab.with('Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</span>
@@ -66,7 +66,7 @@
         <!-- /ko -->
         <!-- ko ifnot: Commander.ShowingLibraries -->
         <div class="active statblock" data-bind="if: Encounter().ActiveCreature()">
-            <h1>Active Creature</h1>
+            <h2>Active Creature</h2>
             <div data-bind="
                 visible: Encounter().ActiveCreature(), 
                 component: { 
@@ -127,7 +127,7 @@
     </div>
     <div class="right-column">
         <div class="selected statblock">
-            <h1>Target Creature</h1>
+            <h2>Target Creature</h2>
             <div data-bind="visible: Commander.SelectedCreatures().length == 1, 
                 component: { 
                 name: 'defaultstatblock', 

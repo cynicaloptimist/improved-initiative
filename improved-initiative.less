@@ -15,8 +15,13 @@
 
 //Spacers
 
+@small-spacer: 2px;
 @medium-spacer: 5px;
 @large-spacer: 15px;
+
+@button-width: 42px;
+@button-inner: 18px;
+@border-radius: 5px;
 
 //elements
 
@@ -54,16 +59,21 @@ ul.bulleted {
 }
 
 //Common
+.fa {
+    .fa();
+    font-family: 'Josefin Sans', sans-serif;
+    &:before {
+        font-family: FontAwesome;
+    }
+}
 
 .button(@button-face: @button-face, @button-text: @button-text) {
-    margin:auto;
+    .fa();
     padding: 10px;
     text-align:center;
     
-    cursor:pointer;
-    
     border: 1px solid darken(@button-face, 20);
-	border-radius: 4px;
+	border-radius: @border-radius;
                     
 	background-color: @button-face;
 	&:hover {
@@ -71,30 +81,7 @@ ul.bulleted {
 	}
 }
 
-.zebra-stripe(@color:lightgray;@offcolor:transparent;) {
-	&:nth-child(2n){
-		background-color: @color;
-		border-color: @color;
-		input{
-			background-color: @color;
-			&:hover, &:focus {
-				background-color: white;
-			}
-		}
-	}
-	&:nth-child(2n+1){
-		background-color: @offcolor;
-		border-color: @offcolor;
-		input{
-			background-color: @offcolor;
-			&:hover, &:focus {
-				background-color: white;
-			}
-		}
-	}
-}
-
-span.button {
+.button {
     .button();
 }
 
@@ -110,7 +97,7 @@ span.button {
 	
 .modal {
     border: 2px solid gray;
-    border-radius: 4px;
+    border-radius: @border-radius;
     padding: 5px;
     position: fixed;
     right: 0;
@@ -120,6 +107,10 @@ span.button {
     z-index: 10;
     background-color: #ffffff;
     width: 500px;
+}
+
+.floating-sections div {
+    position:fixed;
 }
 
 //Layout
@@ -153,7 +144,7 @@ span.button {
         background-color: @primary-white;
         padding:@large-spacer;
         margin:60px;
-        border-radius: @medium-spacer;
+        border-radius: @border-radius;
         box-shadow: 2px 2px 1px @shadow inset;
     }
     
@@ -169,6 +160,84 @@ span.button {
     .start-encounter {
         .button {
             .button(lighten(@primary-green, 15), @primary-white);
+        }
+    }
+}
+
+#tracker {
+    flex-direction: row;
+
+    >div {
+        overflow-y: auto;
+    }
+    
+    .center-column {
+        flex-grow:1;
+    }
+    
+    .left-column, .right-column {
+        width: 300px;
+    }
+    
+    .commands {
+        background-color: @primary-white;
+        color: @primary-black;
+        width: @button-width;
+        .button {
+            margin: 1px 0;
+        }
+        
+    }
+    
+    .libraries {
+        ul {
+            background-color: @primary-white;
+            color: @primary-black;
+        }
+        li {
+            list-style-type: none;
+            display:flex;
+
+            &:nth-child(2n) span{
+                background-color: darken(@primary-white, 5);
+            }
+
+            span {
+                border: 1px solid @primary-black;
+                border-radius: @border-radius;
+                padding: @small-spacer;
+                margin: 1px;
+                &:first-child {
+                    flex-grow: 1;
+                }
+                &:hover {
+                    background-color: darken(@primary-white, 10);
+                }
+            }
+        }
+        input {
+            cursor: text;
+        }
+    }
+    
+    .library-tabs {
+        display:block;
+        margin-top: @medium-spacer + @small-spacer;
+        margin-left: @small-spacer;
+        span {
+            border: 1px solid;
+            border-bottom: none;
+            padding: @small-spacer @medium-spacer;
+            border-radius: 0px @border-radius 0px 0px;
+            
+            &:hover {
+                background-color: darken(@primary-white, 10);
+                color: @primary-green;
+            }
+            &.selected {
+                background-color: @primary-white;
+                color: @primary-green;
+            }
         }
     }
 }

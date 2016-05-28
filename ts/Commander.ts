@@ -255,6 +255,7 @@ module ImprovedInitiative {
             this.userPollQueue.Add({
                 callback: this.encounter().StartEncounter
             });
+            this.HideLibraries();
         }
 
         NextTurn = () => {
