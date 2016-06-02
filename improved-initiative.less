@@ -109,8 +109,9 @@ ul.bulleted {
     width: 500px;
 }
 
-.floating-sections div {
+.floating-sections>div {
     position:fixed;
+    max-height: 100%;
 }
 
 //Layout
@@ -166,17 +167,17 @@ ul.bulleted {
 
 #tracker {
     flex-direction: row;
-
+    overflow:hidden;
+    
     .center-column {
         flex-grow:1;
     }
     
-    .left-column, .right-column {
-        width: 300px;
+    .left-column, .right-column, .preview.statblock {
+        width: 350px;
     }
     
     .commands {
-        background-color: @primary-white;
         color: @primary-black;
         width: @button-width;
         .button {
@@ -238,6 +239,49 @@ ul.bulleted {
         }
     }
 }
+
+.statblock {
+    background-color: @primary-white;
+    color: @primary-black;
+    display:block;
+    padding:@small-spacer;
+    overflow-y:auto;
+    >div {
+        flex-direction:row;
+        span {
+            padding-right: @small-spacer;
+        }
+    }
+    .label {
+        font-weight:bold;
+    }
+    
+    .Abilities {
+        justify-content: space-around;
+        div {
+            flex-direction: column;
+            align-items:center;
+        }
+    }
+    
+    .modifiers, .keyword-sets {
+        flex-direction: column;
+        div {
+            flex-direction: row;
+        }
+    }
+    .Traits, .Actions, .LegendaryActions {
+        flex-direction: column;
+        div {
+            flex-direction: column;
+            div {
+                display:block;
+            }
+        }
+    }
+}
+
+
 
 .footer {
     background-color: @primary-white;
