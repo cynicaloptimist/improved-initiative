@@ -42,7 +42,7 @@
                     <span class="fa fa-trash" data-bind="click: $root.Commander.DeleteSavedEncounter"></span>
                 </li>
             </ul>
-            <div class="interface-buttons">
+            <div class="library-buttons">
                 <div onclick="Commander.HideLibraries"><span class="fa fa-chevron-up"></span></div>
                 <div data-bind="click: $root.Commander.SaveEncounter"><span class="fa fa-plus"></span></div>
             </div>
@@ -56,9 +56,9 @@
                     <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
                 </li>
             </ul>
-            <div class="interface-buttons">
-                <div onclick="Commander.HideLibraries"><span class="fa fa-chevron-up"></span></div>
-                <div data-bind="click: $root.Commander.CreateAndEditCreature.with(DisplayTab())"><span class="fa fa-plus"></span></div>
+            <div class="library-buttons">
+                <span data-bind="click: $root.Commander.HideLibraries" class="fa fa-chevron-up"></span>
+                <span data-bind="click: $root.Commander.CreateAndEditCreature.with(DisplayTab())" class="fa fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- /ko -->

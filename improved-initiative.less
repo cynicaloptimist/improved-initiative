@@ -7,8 +7,18 @@
 //Colors
 
 @primary-green: #00643c;
+@hover-green: lighten(@primary-green, 10);
+
 @primary-white: antiquewhite;
+@zebra-white: darken(@primary-white, 3);
+@hover-white: darken(@primary-white, 10);
+@selected-white: darken(@primary-white, 20);
+@active-white: screen(@primary-white, @primary-green);
+
+@active-green: darken(overlay(@primary-white, @primary-green), 10);
+
 @primary-black: black;
+
 @button-face: #ccc;
 @button-text: black;
 @shadow: #999;
@@ -49,7 +59,7 @@ h1 {
     font-family: 'Josefin Slab', serif;
     &:before {
         content: url("../img/wing-transparent-antiquewhite.png");
-        margin-right:4px;
+        margin-right:@medium-spacer;
     }
 }
 
@@ -86,7 +96,7 @@ ul.bulleted {
                     
 	background-color: @button-face;
 	&:hover {
-		background-color: darken(@button-face, 10);
+		background-color: @hover-white;
 	}
 }
 
@@ -107,7 +117,7 @@ ul.bulleted {
 .modal {
     border: 2px solid gray;
     border-radius: @border-radius;
-    padding: 5px;
+    padding: @medium-spacer;
     position: fixed;
     right: 0;
     left: 0;
@@ -183,22 +193,46 @@ ul.bulleted {
     }
     
     .left-column, .right-column, .preview.statblock {
+        background-color: @primary-white;
+        color: @primary-black;
+
         width: 350px;
+        margin: @medium-spacer;
+        padding: @medium-spacer;
+        
+        border-radius: @border-radius;
+        box-shadow: 2px 2px 1px @shadow inset;
     }
     
     .commands {
+        background-color: @primary-white;
         color: @primary-black;
+        
+        padding: @small-spacer;
         width: @button-width;
+
         .button {
             margin: 1px 0;
         }
         
     }
     
+    .library-button {
+        border: 1px solid @primary-green;
+        border-radius: @border-radius;
+        padding: @small-spacer;
+        margin: 1px;
+
+        &:hover {
+            background-color: @hover-white;
+        }
+    }
+
     .libraries {
+        background-color: @primary-white;
+        color: @primary-black;
+            
         ul {
-            background-color: @primary-white;
-            color: @primary-black;
             overflow-y: auto;
         }
         li {
@@ -206,19 +240,13 @@ ul.bulleted {
             display:flex;
 
             &:nth-child(2n) span{
-                background-color: darken(@primary-white, 3);
+                background-color: @zebra-white;
             }
 
             span {
-                border: 1px solid screen(@primary-green, @primary-black);
-                border-radius: @border-radius;
-                padding: @small-spacer;
-                margin: 1px;
+                .library-button();
                 &:first-child {
                     flex-grow: 1;
-                }
-                &:hover {
-                    background-color: darken(@primary-white, 10);
                 }
             }
         }
@@ -238,13 +266,27 @@ ul.bulleted {
             border-radius: 0px @border-radius 0px 0px;
             
             &:hover {
-                background-color: darken(@primary-white, 10);
-                color: @primary-green;
+                background-color: @hover-green;
+                color: @primary-white;
             }
             &.selected {
-                background-color: @primary-white;
-                color: @primary-green;
+                background-color: @primary-green;
+                color: @primary-white;
             }
+        }
+    }
+
+    .library-buttons {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 20px;
+
+        background-color: @primary-white;
+        color: @primary-black;
+
+        span {
+            .library-button();
         }
     }
 }
@@ -292,30 +334,30 @@ ul.bulleted {
 
 .creature {
     display: flex;
-    padding: 1px;
-    border-left: 6px solid transparent;
+    padding: @small-spacer;
+    border-left: @medium-spacer solid transparent;
 
     color: @primary-black;
     background-color: @primary-white;
 
     &:nth-child(2n) {
-        background-color: darken(@primary-white, 3);
+        background-color: @zebra-white;
     }
     &.active {
         border-left-color: lighten(@primary-green, 15);
-        background-color: darken(overlay(@primary-white, @primary-green), 10);
+        background-color: @active-green;
     }
     &:hover {
-        background-color: darken(@primary-white, 15);
+        background-color: @hover-white;
     }
     &.selected {
-        background-color: darken(@primary-white, 20);
+        background-color: @selected-white;
     }
     
     &.header {
         background-color: @primary-black;
         color: @primary-white;
-        padding: 2px;
+        padding: @medium-spacer;
     }
 
     .initiative {
