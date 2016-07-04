@@ -12,6 +12,11 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "requirejs": "^2.1.17",
+    "sinon": "^1.15.4"
+  },
+  "dependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-connect": "^0.10.1",
@@ -24,12 +29,6 @@
     "grunt-open": "^0.2.3",
     "grunt-ts": "^5.0.1",
     "less": "^2.5.0",
-    "mocha": "^2.2.5",
-    "requirejs": "^2.1.17",
-    "sinon": "^1.15.4",
-    "typescript": "^1.7.3"
-  },
-  "dependencies": {
     "body-parser": "^1.14.1",
     "browser-filesaver": "^1.1.0",
     "express": "^4.13.3",
@@ -41,9 +40,11 @@
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
     "socket.io": "^1.3.7",
-    "socket.io-client": "^1.3.7"
+    "socket.io-client": "^1.3.7",
+    "typescript": "^1.7.3"
   },
-  "scripts": {
-    "start": "grunt; node server.js"
+  "scripts":{
+    "postinstall": "grunt",
+    "start": "node server.js"
   }
 }
