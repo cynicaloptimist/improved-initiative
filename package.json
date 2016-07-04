@@ -46,7 +46,7 @@
     "typescript": "^1.7.3"
   },
   "scripts": {
-    "postinstall": "grunt postinstall",
+    "postinstall": "./node_modules/grunt/bin/grunt postinstall",
     "start": "node server.js"
   }
 }
