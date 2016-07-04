@@ -48,7 +48,7 @@ else {
     importCreatureLibrary('ogl_creatures.json');
 }
 
-var newEncounterIndex = (): string => {
+var probablyUniqueString = (): string => {
     var chars = '1234567890abcdefghijkmnpqrstuvxyz';
     var newEncounterId = ''
     for (var i = 0; i < 8; i++) {
@@ -69,7 +69,7 @@ app.use(bodyParser.json());
 app.get('/', function(req, res) {
     res.render('landing', {
         rootDirectory: "..",
-        encounterId: newEncounterIndex(),
+        encounterId: probablyUniqueString(),
     })
 });
 
