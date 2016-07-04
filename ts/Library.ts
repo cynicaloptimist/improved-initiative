@@ -102,6 +102,7 @@ module ImprovedInitiative {
         AddSamplePlayersFromUrl = (url: string) => {
             $.getJSON(url, (json: IStatBlock []) => {
                 json.forEach((statBlock, index) => {
+                    statBlock = $.extend(StatBlock.Empty(), statBlock);
                     this.Players.push(new CreatureListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
                 })
             });
