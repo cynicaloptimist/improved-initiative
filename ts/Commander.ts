@@ -218,7 +218,7 @@ module ImprovedInitiative {
         }
 
         FocusResponseRequest = () => {
-            $('#user-response-requests input').first().select();
+            $('#user-poll input').first().select();
         }
 
         ShowingLibraries = ko.observable(true);

@@ -114,15 +114,14 @@
                     <!-- /ko -->
                 </ul>
             </div>
+            </div>
+        <!-- /ko -->
             <!-- ko if: UserPollQueue.HasPoll() -->
-            <form id="user-response-requests" class="user-response-requests" data-bind="
+            <form id="user-poll" class="user-poll" data-bind="
                 submit: UserPollQueue.Resolve,
                 html: UserPollQueue.Message(),
                 focusOnRender: UserPollQueue.InputSelector()">
             </form>
-            <!-- /ko -->
-        </div>
-
         <!-- /ko -->
     </div>
     <div class="right-column">
