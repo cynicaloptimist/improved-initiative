@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-open');
-
+  
   grunt.initConfig({
       pkg: grunt.file.readJSON('package.json'),
       ts: {
@@ -63,15 +63,16 @@ module.exports = function(grunt) {
       watch: {
         ts: {
           files: '**/*.ts',
-          tasks: ['ts']
+          tasks: ['ts', 'concat']
         },
         lesscss: {
           files: '**/*.less',
           tasks: ['less']
         }
-      }
+      },
   });
 
-  grunt.registerTask('default', ['ts:default', 'ts:server', 'less', 'concat']);
+  grunt.registerTask('build', ['ts:default', 'ts:server', 'less', 'concat']);
+  grunt.registerTask('default', ['build', 'watch']);
   grunt.registerTask('test', ['ts:test']);
 };
