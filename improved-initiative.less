@@ -172,6 +172,7 @@ input, textarea {
     
     .logo {
         flex-grow:1;
+        margin: 30px;
     }
     
     .start {
@@ -181,7 +182,7 @@ input, textarea {
         align-items: center;
 
         padding:@large-spacer;
-        margin:60px;
+        margin:30px;
     }
     
     .launch-controls {
@@ -474,4 +475,10 @@ input, textarea {
 
     padding: @medium-spacer;
     margin: @medium-spacer 0 0 0;
+}
+
+@media (max-width: 800px) {
+    .logo {
+        display: none;
+    }
 }
