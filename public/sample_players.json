@@ -8,7 +8,7 @@
     },
     "AC": {
         "Value": 17,
-        "Notes": ""
+        "Notes": "chain mail"
     },
     "Speed": ["30 ft."],
     "Abilities": {
@@ -41,6 +41,144 @@
     ],
     "Senses": [],
     "Languages": ["Common", "Draconic", "Dwarvish"],
+    "Actions": [],
+    "LegendaryActions": [],
+    "Player": "player"
+  },
+  {
+    "Name": "Shem",
+    "Type": "Hill Dwarf Cleric",
+    "HP": {
+        "Value": 11,
+        "Notes": ""
+    },
+    "AC": {
+        "Value": 18,
+        "Notes": "chain mail, shield"
+    },
+    "Speed": ["25 ft."],
+    "Abilities": {
+        "Str": 14,
+        "Dex": 8,
+        "Con": 15,
+        "Cha": 12,
+        "Int": 10,
+        "Wis": 16
+    },
+    "Saves": [
+      {
+        "Name": "Wis",
+        "Modifier": 5
+      },
+      {
+        "Name": "Cha",
+        "Modifier": 3
+      }
+    ],
+    "Skills": [
+      {
+        "Name": "Perception",
+        "Modifier": 3
+      },
+      {
+        "Name": "Insight",
+        "Modifier": 3
+      }
+    ],
+    "Senses": [],
+    "Languages": ["Common", "Dwarvish"],
+    "Actions": [],
+    "LegendaryActions": [],
+    "Player": "player"
+  },
+  {
+    "Name": "Underfoot",
+    "Type": "Lightfoot Halfling Rogue",
+    "HP": {
+        "Value": 9,
+        "Notes": ""
+    },
+    "AC": {
+        "Value": 14,
+        "Notes": "leather armor"
+    },
+    "Speed": ["25 ft."],
+    "Abilities": {
+        "Str": 8,
+        "Dex": 16,
+        "Con": 12,
+        "Cha": 16,
+        "Int": 13,
+        "Wis": 10
+    },
+    "Saves": [
+      {
+        "Name": "Dex",
+        "Modifier": 5
+      },
+      {
+        "Name": "Int",
+        "Modifier": 3
+      }
+    ],
+    "Skills": [
+      {
+        "Name": "Perception",
+        "Modifier": 0
+      },
+      {
+        "Name": "Insight",
+        "Modifier": 0
+      }
+    ],
+    "Senses": [],
+    "Languages": ["Common", "Halfling"],
+    "Actions": [],
+    "LegendaryActions": [],
+    "Player": "player"
+  },
+  {
+    "Name": "Ellumyr",
+    "Type": "High Elf Wizard",
+    "HP": {
+        "Value": 8,
+        "Notes": ""
+    },
+    "AC": {
+        "Value": 12,
+        "Notes": ""
+    },
+    "Speed": ["30 ft."],
+    "Abilities": {
+        "Str": 10,
+        "Dex": 15,
+        "Con": 14,
+        "Cha": 8,
+        "Int": 16,
+        "Wis": 12
+    },
+    "Saves": [
+      {
+        "Name": "Int",
+        "Modifier": 5
+      },
+      {
+        "Name": "Wis",
+        "Modifier": 3
+      }
+    ],
+    "Skills": [
+      {
+        "Name": "Perception",
+        "Modifier": 3
+      },
+      {
+        "Name": "Insight",
+        "Modifier": 3
+      }
+    ],
+    "Senses": [],
+    "Languages": ["Common", "Elvish", "Draconic", "Dwarvish", "Goblin"],
     "Actions": [],
     "LegendaryActions": [],
     "Player": "player"
