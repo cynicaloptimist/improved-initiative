@@ -43,7 +43,6 @@ module.exports = function(grunt) {
             paths: ["."]
           },
           files: {
-            "public/css/tracker.css": "tracker.less",
             "public/css/improved-initiative.css": "improved-initiative.less"
           }
         }
