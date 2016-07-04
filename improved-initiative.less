@@ -53,6 +53,10 @@ h1 {
     }
 }
 
+h2 {
+    line-height: 1.4;
+}
+
 ul.bulleted {
     padding-left:40px;
     margin:1em 0;
@@ -65,6 +69,11 @@ ul.bulleted {
     &:before {
         font-family: FontAwesome;
     }
+}
+
+.fa-clickable {
+	cursor:pointer;
+	.fa();
 }
 
 .button(@button-face: @button-face, @button-text: @button-text) {
@@ -197,11 +206,11 @@ ul.bulleted {
             display:flex;
 
             &:nth-child(2n) span{
-                background-color: darken(@primary-white, 5);
+                background-color: darken(@primary-white, 3);
             }
 
             span {
-                border: 1px solid @primary-black;
+                border: 1px solid screen(@primary-green, @primary-black);
                 border-radius: @border-radius;
                 padding: @small-spacer;
                 margin: 1px;
@@ -281,7 +290,62 @@ ul.bulleted {
     }
 }
 
+.creature {
+    display: flex;
+    padding: 1px;
+    border-left: 6px solid transparent;
 
+    color: @primary-black;
+    background-color: @primary-white;
+
+    &:nth-child(2n) {
+        background-color: darken(@primary-white, 3);
+    }
+    &.active {
+        border-left-color: lighten(@primary-green, 15);
+        background-color: darken(overlay(@primary-white, @primary-green), 10);
+    }
+    &:hover {
+        background-color: darken(@primary-white, 15);
+    }
+    &.selected {
+        background-color: darken(@primary-white, 20);
+    }
+    
+    &.header {
+        background-color: @primary-black;
+        color: @primary-white;
+        padding: 2px;
+    }
+
+    .initiative {
+        width: 30px;
+        text-align: center;
+    }
+
+    .name {
+        width: 25%;
+    }
+
+    .hp {
+        width: 70px;
+        text-align: center;
+    }
+
+    .ac {
+        width: 30px;
+        text-align: center;
+    }
+
+    .tags {
+        flex-grow:1;
+    }
+
+    .buttons {
+        width: 35px;
+        text-align: right;
+    }
+}
 
 .footer {
     background-color: @primary-white;
