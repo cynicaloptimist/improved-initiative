@@ -72,6 +72,10 @@ ul.bulleted {
     margin:1em 0;
 }
 
+input, textarea {
+    background-color: lighten(@primary-white, 3);
+}
+
 //Common
 .fa {
     .fa();
@@ -217,18 +221,46 @@ ul.bulleted {
         
     }
     
-    .library-button {
-        border: 1px solid @primary-green;
-        border-radius: @border-radius;
-        padding: @small-spacer;
-        margin: 1px;
+    .editor {
+        flex-grow: 1;
 
-        &:hover {
-            background-color: @hover-white;
+        .editor-type {
+            flex-direction: row;
+        }
+
+        input {
+            &[type="text"] {
+                width: 200px;
+            }
+            &[type="number"] {
+                width: 40px;
+            } 
+        }
+
+        .json-editor {
+            flex-grow:1;
+            font-family: Courier New, Courier, monospace;
+        }
+        .buttons {
+            color: @primary-black;
+
+            flex-direction: row;
+            justify-content: flex-end;
         }
     }
 
     .libraries {
+        .library-button {
+            border: 1px solid @primary-green;
+            border-radius: @border-radius;
+            padding: @small-spacer;
+            margin: 1px;
+
+            &:hover {
+                background-color: @hover-white;
+            }
+        }
+
         background-color: @primary-white;
         color: @primary-black;
             
@@ -253,19 +285,19 @@ ul.bulleted {
         input {
             cursor: text;
         }
-    }
-    
-    .library-buttons {
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: center;
-        min-height: 20px;
 
-        background-color: @primary-white;
-        color: @primary-black;
+        .library-buttons {
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 20px;
 
-        span {
-            .library-button();
+            background-color: @primary-white;
+            color: @primary-black;
+
+            span {
+                .library-button();
+            }
         }
     }
 }

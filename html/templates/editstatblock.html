@@ -1,4 +1,4 @@
-<h1>Edit Creature</h1>
+<h2>Edit Creature</h2>
 <div class="editor-type">
     Editor:
     <label>
@@ -9,10 +9,10 @@
 <!-- ko if: editorType() == 'basic' -->
 <div class="stats" data-bind="with: StatBlock">
     <label>Name
-        <input data-bind="value: Name" />
+        <input type="text" data-bind="value: Name" />
     </label>
     <label>Type
-        <input data-bind="value: Type" />
+        <input type="text" data-bind="value: Type" />
     </label>
     <label>HP
         <input type="number" data-bind="value: HP.Value" />
@@ -28,7 +28,7 @@
 <!-- ko if: editorType() == 'advanced' -->
 <textarea class="json-editor" spellcheck="false" data-bind="value: statBlockJson"></textarea>
 <!-- /ko -->
-<div class="interface-buttons">
-    <div data-bind="click: SaveCreature"><span class="fa fa-check"></span></div>
-    <div data-bind="click: DeleteCreature"><span class="fa fa-trash"></span></div>
+<div class="buttons">
+    <div data-bind="click: SaveCreature"><span class="button fa-check"></span></div>
+    <div data-bind="click: DeleteCreature"><span class="button fa-trash"></span></div>
 </div>
