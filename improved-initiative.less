@@ -128,13 +128,26 @@ input, textarea {
     top: 100px;
     margin: auto;
     z-index: 10;
-    background-color: #ffffff;
+    background-color: @primary-white;
+    color: @primary-black;
+
     width: 500px;
 }
 
 .floating-sections>div {
     position:fixed;
     max-height: 100%;
+}
+
+.recessed {
+    background-color: @primary-white;
+    color: @primary-black;
+
+    margin: @medium-spacer;
+    padding: @medium-spacer;
+        
+    border-radius: @border-radius;
+    box-shadow: 2px 2px 1px @shadow inset;
 }
 
 //Layout
@@ -162,14 +175,13 @@ input, textarea {
     }
     
     .start {
+        .recessed();
+
         flex-grow: 1;
         align-items: center;
-        color: @primary-black;
-        background-color: @primary-white;
+
         padding:@large-spacer;
         margin:60px;
-        border-radius: @border-radius;
-        box-shadow: 2px 2px 1px @shadow inset;
     }
     
     .launch-controls {
@@ -197,15 +209,9 @@ input, textarea {
     }
     
     .left-column, .right-column, .preview.statblock {
-        background-color: @primary-white;
-        color: @primary-black;
+        .recessed();
 
         width: 350px;
-        margin: @medium-spacer;
-        padding: @medium-spacer;
-        
-        border-radius: @border-radius;
-        box-shadow: 2px 2px 1px @shadow inset;
     }
     
     .commands {
@@ -247,11 +253,10 @@ input, textarea {
             flex-direction: row;
             justify-content: flex-end;
         }
-        }
+    }
 
     .user-poll {
-        margin: @small-spacer;
-        padding: @small-spacer;
+        .recessed();
     }
 
     .libraries {
@@ -266,9 +271,6 @@ input, textarea {
             }
         }
 
-        background-color: @primary-white;
-        color: @primary-black;
-            
         ul {
             overflow-y: auto;
         }
@@ -297,9 +299,6 @@ input, textarea {
             align-items: center;
             min-height: 20px;
 
-            background-color: @primary-white;
-            color: @primary-black;
-
             span {
                 .library-button();
             }
@@ -308,8 +307,7 @@ input, textarea {
 }
 
 .settings {
-    color: @primary-black;
-
+    
     .tab {
         border: 1px solid @primary-green;
         padding: @medium-spacer;
@@ -369,8 +367,8 @@ input, textarea {
 }
 
 .statblock {
-    background-color: @primary-white;
-    color: @primary-black;
+    // background-color: @primary-white;
+    // color: @primary-black;
     display:block;
     padding:@small-spacer;
     overflow-y:auto;
@@ -467,10 +465,13 @@ input, textarea {
 }
 
 .footer {
-    background-color: @primary-white;
-    color: @primary-black;
+    .recessed();
+    
+    border-radius: 0;
     box-shadow: 2px 2px 1px @shadow inset;
     text-align: center;
     align-self: stretch;
-    padding:@medium-spacer;
+
+    padding: @medium-spacer;
+    margin: @medium-spacer 0 0 0;
 }
