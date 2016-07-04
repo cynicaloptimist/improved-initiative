@@ -255,27 +255,6 @@ ul.bulleted {
         }
     }
     
-    .library-tabs {
-        display:block;
-        margin-top: @medium-spacer + @small-spacer;
-        margin-left: @small-spacer;
-        span {
-            border: 1px solid;
-            border-bottom: none;
-            padding: @small-spacer @medium-spacer;
-            border-radius: 0px @border-radius 0px 0px;
-            
-            &:hover {
-                background-color: @hover-green;
-                color: @primary-white;
-            }
-            &.selected {
-                background-color: @primary-green;
-                color: @primary-white;
-            }
-        }
-    }
-
     .library-buttons {
         flex-direction: row;
         justify-content: flex-end;
@@ -287,6 +266,67 @@ ul.bulleted {
 
         span {
             .library-button();
+        }
+    }
+}
+
+.settings {
+    color: @primary-black;
+
+    .tab {
+        border: 1px solid @primary-green;
+        padding: @medium-spacer;
+    }
+
+    .tips {
+        flex-direction: row;
+        align-items: center;
+        span {
+            padding: @medium-spacer;
+        }
+    }
+
+    .keybindings >div {
+        flex-direction: row;
+        align-items: center;
+        span {
+            padding:@small-spacer;
+            &.label {
+                flex-grow:1;
+            }
+            &.actionbaricon {
+                width: 20px;
+                text-align: center;
+            }
+        }
+    }
+
+    .options p {
+        padding: @medium-spacer;
+    }
+
+    .keybindings, .options {
+        display:none;
+    }
+}
+
+.tabs {
+    display:block;
+    margin-top: @medium-spacer + @small-spacer;
+    margin-left: @small-spacer;
+    span {
+        border: 1px solid @primary-green;
+        border-bottom: none;
+        padding: 1px @medium-spacer;
+        border-radius: 0px @border-radius 0px 0px;
+        
+        &:hover {
+            background-color: @hover-green;
+            color: @primary-white;
+        }
+        &.selected {
+            background-color: @primary-green;
+            color: @primary-white;
         }
     }
 }

@@ -1,21 +1,21 @@
 <div class="tabs">
-    <div data-bind="click: ShowTab.with('.about')">About</div>
-    <div data-bind="click: ShowTab.with('.commands')">Commands</div>
-    <div data-bind="click: ShowTab.with('.options')">Options</div>
+    <span data-bind="click: ShowTab.with('.about')">About</span>
+    <span data-bind="click: ShowTab.with('.keybindings')">Commands</span>
+    <span data-bind="click: ShowTab.with('.options')">Options</span>
 </div>
-<div class="about tab">
+<div class="tab about">
     <p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
         All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
     <div class="tips">
-        <span data-bind="click: PreviousTip" title="Previous Tip" class="fa fa-arrow-left"></span>
-        <p data-bind="html: Tip"></p>
-        <span data-bind="click: NextTip" title="Next Tip" class="fa fa-arrow-right"></span>
+        <span data-bind="click: PreviousTip" title="Previous Tip" class="fa-clickable fa-arrow-left"></span>
+        <span data-bind="html: Tip"></span>
+        <span data-bind="click: NextTip" title="Next Tip" class="fa-clickable fa-arrow-right"></span>
     </div>
 </div>
-<div class="commands tab">
+<div class="tab keybindings">
     <!--ko foreach: Commander.Commands -->
     <div>
-        <div class="label" data-bind="text: Description"></div>
+        <span class="label" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
         <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
         <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
@@ -26,7 +26,7 @@
         <input type="button" value="Save and Close" data-bind="click: Commander.HideSettings" />
     </div>
 </div>
-<div class="options tab">
+<div class="tab options">
     <p>Export your user data as JSON:
         <input type="button" value="Download File" data-bind="click: ExportData" />
     </p>
