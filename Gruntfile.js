@@ -27,14 +27,6 @@ module.exports = function(grunt) {
                   module: 'commonjs',
                   target: 'es5'
               }
-          },
-          test: {
-              src: ['test/*.ts'],
-              outDir: 'ImprovedInitiative.Tests',
-              options: {
-                  module: 'commonjs',
-                  target: 'es5'
-              }
           }
       },
       less: {
@@ -82,5 +74,4 @@ module.exports = function(grunt) {
   grunt.registerTask('build', ['ts:default', 'ts:server', 'less', 'concat']);
   grunt.registerTask('default', ['build', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build']);
-  grunt.registerTask('test', ['ts:test']);
 };
