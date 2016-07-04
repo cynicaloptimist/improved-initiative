@@ -13,7 +13,7 @@ module.exports = function(grunt) {
             removeComments: false,
           },
           default: {
-              src: ['ts/**/*.ts'],
+              src: ['ts/*.ts'],
               outDir: 'ImprovedInitiative.Client',
               options: {
                   module: 'amd',
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
               }
           },
           server : {
-              src: ['server/**/*.ts'],
+              src: ['server/*.ts'],
               outDir: '.',
               options: {
                   module: 'commonjs',
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
               }
           },
           test: {
-              src: ['test/**/*.ts'],
+              src: ['test/*.ts'],
               outDir: 'ImprovedInitiative.Tests',
               options: {
                   module: 'commonjs',
