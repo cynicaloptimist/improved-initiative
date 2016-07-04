@@ -1,0 +1,48 @@
+[
+  {
+    "Name": "Gregorr",
+    "Type": "Human Fighter",
+    "HP": {
+        "Value": 12,
+        "Notes": ""
+    },
+    "AC": {
+        "Value": 17,
+        "Notes": ""
+    },
+    "Speed": ["30 ft."],
+    "Abilities": {
+        "Str": 16,
+        "Dex": 9,
+        "Con": 15,
+        "Cha": 14,
+        "Int": 11,
+        "Wis": 13
+    },
+    "Saves": [
+      {
+        "Name": "Str",
+        "Modifier": 5
+      },
+      {
+        "Name": "Con",
+        "Modifier": 4
+      }
+    ],
+    "Skills": [
+      {
+        "Name": "Perception",
+        "Modifier": 3
+      },
+      {
+        "Name": "Insight",
+        "Modifier": 1
+      }
+    ],
+    "Senses": [],
+    "Languages": ["Common", "Draconic", "Dwarvish"],
+    "Actions": [],
+    "LegendaryActions": [],
+    "Player": "player"
+  }
+]
