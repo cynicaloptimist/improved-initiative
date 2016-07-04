@@ -40,7 +40,7 @@ module ImprovedInitiative {
 
         DeleteCreature = () => {
             var statBlock = this.StatBlock();
-            if (confirm(`Delete statblock for ${statBlock.Name}? This cannot be undone.`)) {
+            if (confirm(`Delete your custom statblock for ${statBlock.Name}? This cannot be undone.`)) {
                 this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
                 this.StatBlock(null);
             }
