@@ -7,7 +7,7 @@ module ImprovedInitiative {
         CurrentHP: KnockoutObservable<number>;
         TemporaryHP: KnockoutObservable<number>;
         AC: number;
-        AbilityModifiers: IHaveAbilities;
+        AbilityModifiers: AbilityScores;
         Tags: KnockoutObservableArray<string>;
         InitiativeModifier: number;
         Initiative: KnockoutObservable<number>;
@@ -46,7 +46,7 @@ module ImprovedInitiative {
         CurrentHP: KnockoutObservable<number>;
         PlayerDisplayHP: KnockoutComputed<string>;
         AC: number;
-        AbilityModifiers: IHaveAbilities;
+        AbilityModifiers: AbilityScores;
         NewTag: KnockoutObservable<string>;
         InitiativeModifier: number;
         ViewModel: any;
@@ -64,7 +64,7 @@ module ImprovedInitiative {
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
         }
 
-        private getMaxHP(HP: IHaveNotes) {
+        private getMaxHP(HP: ValueAndNotes) {
             if (Store.Load(Store.User, "RollMonsterHp")) {
                 try {
                     return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;

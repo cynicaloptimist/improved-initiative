@@ -1,9 +1,5 @@
 module ImprovedInitiative {
-    export interface IHaveValue {
-        Value: number;
-    }
-
-    export interface IHaveAbilities {
+    export interface AbilityScores {
         Str: number;
         Dex: number;
         Con: number;
@@ -12,22 +8,17 @@ module ImprovedInitiative {
         Wis: number;
     }
 
-    export interface IHaveAModifier {
+    export interface NameAndModifier {
         Name: string;
         Modifier: number;
     }
 
-    export interface IHaveNotes {
+    export interface ValueAndNotes {
         Value: number;
         Notes: string;
     }
 
-    export interface IHaveContent {
-        Name: string;
-        Content: string;
-    }
-
-    export interface IUsableTrait {
+    export interface NameAndContent {
         Name: string;
         Content: string;
         Usage?: string;
@@ -38,32 +29,32 @@ module ImprovedInitiative {
         Player?: string;
         Type?: string;
         Name: string;
-        HP: IHaveNotes;
-        AC: IHaveValue;
+        HP: ValueAndNotes;
+        AC: ValueAndNotes;
         InitiativeModifier?: number;
-        Abilities: IHaveAbilities;
+        Abilities: AbilityScores;
     }
 
     export interface IStatBlock {
         Name: string;
         Type: string;
-        HP: IHaveNotes;
-        AC: IHaveValue;
+        HP: ValueAndNotes;
+        AC: ValueAndNotes;
         Speed: string[];
-        Abilities: IHaveAbilities;
+        Abilities: AbilityScores;
         InitiativeModifier?: number;
         DamageVulnerabilities: string[];
         DamageResistances: string[];
         DamageImmunities: string[];
         ConditionImmunities: string[];
-        Saves: IHaveAModifier[];
-        Skills: IHaveAModifier[];
+        Saves: NameAndModifier[];
+        Skills: NameAndModifier[];
         Senses: string[];
         Languages: string[];
         Challenge: string;
-        Traits: IUsableTrait[];
-        Actions: IUsableTrait[];
-        LegendaryActions: IUsableTrait[];
+        Traits: NameAndContent[];
+        Actions: NameAndContent[];
+        LegendaryActions: NameAndContent[];
         Player: string;
     }
 
