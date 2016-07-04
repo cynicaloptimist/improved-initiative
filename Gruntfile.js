@@ -3,6 +3,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-open');
   
   grunt.initConfig({
@@ -70,9 +71,17 @@ module.exports = function(grunt) {
           tasks: ['less']
         }
       },
+      copy: {
+        main: {
+          files: [
+            {expand: true, cwd: 'node_modules/font-awesome/fonts/', src: ['**'], dest: 'public/fonts/'}
+          ]
+        }
+      }
   });
 
   grunt.registerTask('build', ['ts:default', 'ts:server', 'less', 'concat']);
   grunt.registerTask('default', ['build', 'watch']);
+  grunt.registerTask('postinstall', ['copy', 'build']);
   grunt.registerTask('test', ['ts:test']);
 };
