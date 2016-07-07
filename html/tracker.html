@@ -80,7 +80,7 @@
         <!-- /ko -->
     </div>
     <div class="center-column">
-        <!-- ko if: StatBlockEditor.StatBlock() -->
+        <!-- ko if: StatBlockEditor.EditableStatBlock() -->
             <div class="editor" data-bind="component: {
                 name: 'editstatblock',
                 params: {
@@ -89,7 +89,7 @@
             }"></div>
         <!-- /ko -->
 
-        <!-- ko ifnot: StatBlockEditor.StatBlock() -->
+        <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
             <div class="combat">
                 <div class="encounter" data-bind="with: Encounter">
                     <h2>Initiative Order</h2>

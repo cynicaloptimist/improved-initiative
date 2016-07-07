@@ -2,30 +2,42 @@
 <div class="editor-type">
     Editor:
     <label>
-        <input type="radio" name="editor-type" value="basic" data-bind="checked: editorType" />Basic</label>
+        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Basic</label>
     <label>
-        <input type="radio" name="editor-type" value="advanced" data-bind="checked: editorType" />Advanced</label>
+        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />Advanced</label>
 </div>
-<!-- ko if: editorType() == 'basic' -->
-<div class="stats" data-bind="with: StatBlock">
-    <label>Name
+<!-- ko if: EditorType() == 'basic' -->
+<div class="stats statblock" data-bind="with: EditableStatBlock">
+    <p><label>Name
         <input type="text" data-bind="value: Name" />
-    </label>
-    <label>Type
+    </label></p>
+    <p><label>Type
         <input type="text" data-bind="value: Type" />
-    </label>
-    <label>HP
-        <input type="number" data-bind="value: HP.Value" />
-    </label>
-    <label>AC
-        <input type="number" data-bind="value: AC.Value" />
-    </label>
-    <label>Dex
-        <input type="number" data-bind="value: Abilities.Dex" />
-    </label>
+    </label></p>
+    <p>
+        <label>HP
+            <input type="number" data-bind="value: HP.Value" />
+        </label>
+        <label>AC
+            <input type="number" data-bind="value: AC.Value" />
+        </label>
+    </p>
+    <div class="Abilities" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
+        <div class="label" data-bind="text: $data"></div>
+        <input type="number" class="score" data-bind="value: $parent.Abilities[$data]" />
+    </div>
+    <div class="speeds" data-bind="with: { speeds: Speed }">
+        <p>Speeds 
+        <!-- ko foreach: speeds -->
+            <input type="text" data-bind="value: Value" />
+            <span class = "fa-clickable fa-remove" data-bind="click: Remove"></span>
+        <!-- /ko -->
+        <span class = "fa-clickable fa-plus" data-bind="click: speeds.AddEmpty"></span></p>
+    </div>
+    
 </div>
 <!-- /ko -->
-<!-- ko if: editorType() == 'advanced' -->
+<!-- ko if: EditorType() == 'advanced' -->
 <textarea class="json-editor" spellcheck="false" data-bind="value: statBlockJson"></textarea>
 <!-- /ko -->
 <div class="buttons">
