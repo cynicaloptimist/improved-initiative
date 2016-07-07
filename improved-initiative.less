@@ -237,11 +237,14 @@ input, textarea {
 
         input {
             &[type="text"] {
-                width: 200px;
+                width: 100px;
             }
             &[type="number"] {
                 width: 40px;
-            } 
+            }
+            &.name, &.type {
+                width:200px;
+            }
         }
 
         .json-editor {
