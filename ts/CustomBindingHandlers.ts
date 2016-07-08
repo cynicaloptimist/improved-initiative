@@ -3,6 +3,7 @@ interface KnockoutBindingHandlers {
     afterRender: KnockoutBindingHandler;
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
+    rollableText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
 }
@@ -51,6 +52,25 @@ module ImprovedInitiative {
                 $(element).html(valueAccessor());
             }
 
+        }
+    }
+
+    ko.bindingHandlers.rollableText = {
+        init: (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+            var text = valueAccessor();
+            var rules: IRules = bindingContext.$root.Encounter().Rules;
+            var findDice = rules.ValidDicePattern;
+            findDice.global = true;
+            text = text.replace(findDice, match => {
+                return `<span class='rollable'>${match}</span>`;
+            });
+
+            $(element).html(text);
+            $(element).find('.rollable').on('click', (event) => {
+                var diceExpression = event.target.innerHTML;
+                var diceRoll = rules.RollHpExpression(diceExpression);
+                window.prompt(`${diceExpression} -> ${diceRoll.String}`, diceRoll.Total.toString());
+            });
         }
     }
 
