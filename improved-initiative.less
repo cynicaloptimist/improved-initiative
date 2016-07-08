@@ -17,7 +17,10 @@
 
 @active-green: darken(overlay(@primary-white, @primary-green), 10);
 
+@hover-red: pink;
+
 @primary-black: #222;
+@disabled-black: #777;
 
 @button-face: #ccc;
 @button-text: black;
@@ -194,9 +197,14 @@ input, textarea {
             margin: @medium-spacer;
         }
     }
-    .start-encounter {
-        .button {
-            .button(lighten(@primary-green, 15), @primary-white);
+    .start-encounter .button {
+        .button(lighten(@primary-green, 15), @primary-white);
+    }
+    .disabled {
+        cursor: default;
+        color: @disabled-black;
+        &:hover {
+            background-color: @button-face;
         }
     }
 }
@@ -415,6 +423,11 @@ input, textarea {
     .label {
         font-weight:bold;
     }
+    .rollable {
+        cursor: pointer;
+        border-bottom: 1px dashed @shadow;
+        margin-bottom: -1px;
+    }
     
     .Abilities {
         justify-content: space-around;
@@ -481,6 +494,9 @@ input, textarea {
     .hp {
         width: 70px;
         text-align: center;
+        &:hover {
+            background-color: @hover-red;
+        }
     }
 
     .ac {

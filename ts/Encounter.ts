@@ -180,12 +180,19 @@ module ImprovedInitiative {
         }
 
         SavePlayerDisplay: (name?: string) => ISavedEncounter<CombatantPlayerViewModel> = (name?: string) => {
+            var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             return {
                 Name: name || this.EncounterId,
                 ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
                 Creatures: this.Creatures()
                     .filter(c => {
-                        return c.Hidden() == false;
+                        if (c.Hidden()) {
+                            return false;
+                        }
+                        if (hideMonstersOutsideEncounter && this.State() == 'inactive' && !c.IsPlayerCharacter) {
+                            return false;
+                        }
+                        return true;
                     })
                     .map<CombatantPlayerViewModel>(c => new CombatantPlayerViewModel(c))
             };

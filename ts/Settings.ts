@@ -38,7 +38,12 @@ module ImprovedInitiative {
         var hpVerbosity = ko.observable(Store.Load(Store.User, "MonsterHPVerbosity") || "Colored Label");
         hpVerbosity.subscribe(selectedOption => {
             Store.Save(Store.User, "MonsterHPVerbosity", selectedOption);
-        })
+        });
+
+        var hideMonstersOutsideEncounter = ko.observable(Store.Load(Store.User, "HideMonstersOutsideEncounter"));
+        hideMonstersOutsideEncounter.subscribe(newValue => {
+            Store.Save(Store.User, "HideMonstersOutsideEncounter", newValue);
+        });
 
         return {
             Commander: params.commander,
@@ -65,6 +70,7 @@ module ImprovedInitiative {
                 "Hide All"
             ],
             HpVerbosity: hpVerbosity,
+            HideMonstersOutsideEncounter: hideMonstersOutsideEncounter,
 
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),

@@ -5,6 +5,7 @@ module ImprovedInitiative {
         GroupSimilarCreatures: boolean;
         EnemyHPTransparency: string;
         RollHpExpression: (expression: string) => RollResult;
+        ValidDicePattern: RegExp;
     }
 
     export class RollResult {
@@ -31,10 +32,10 @@ module ImprovedInitiative {
         }
         GroupSimilarCreatures = false;
         EnemyHPTransparency = "whenBloodied";
+        ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?/
         RollHpExpression = (expression: string) => {
-            expression = expression.replace(/[() ]/gi, '');
             //Taken from http://codereview.stackexchange.com/a/40996
-            var match = /^(\d+)?d(\d+)([+-]\d+)?$/.exec(expression);
+            var match = this.ValidDicePattern.exec(expression);
             if (!match) {
                 throw "Invalid dice notation: " + expression;
             }
@@ -46,7 +47,7 @@ module ImprovedInitiative {
             for (var i = 0; i < howMany; i++) {
                 rolls[i] = Math.ceil(Math.random() * dieSize);
             }
-            var modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3]);
+            var modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3].replace(' ', ''));
             return new RollResult(rolls, modifier);
         }
     }
