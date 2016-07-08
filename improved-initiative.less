@@ -235,7 +235,32 @@ input, textarea {
             flex-direction: row;
         }
 
+        .stats {
+            display: block;
+            overflow-y: auto;
+        }
+
+        .stats > div {
+            flex-flow: row wrap;
+            margin: @small-spacer;
+        }
+
+        div.actions {
+            flex-direction: column;
+            p {
+                font-weight: bold;
+            }
+            div {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            textarea {
+                flex-grow: 1;
+            }
+        }
+
         input {
+            margin-left: @medium-spacer;
             &[type="text"] {
                 width: 100px;
             }
@@ -245,6 +270,10 @@ input, textarea {
             &.name, &.type {
                 width:200px;
             }
+        }
+
+        .fa-clickable {
+            margin-left: @medium-spacer;
         }
 
         .json-editor {
@@ -378,6 +407,7 @@ input, textarea {
     overflow-y:auto;
     >div {
         flex-direction:row;
+        flex-wrap: wrap;
         span {
             padding-right: @small-spacer;
         }
