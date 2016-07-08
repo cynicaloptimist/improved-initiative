@@ -1,4 +1,4 @@
-<h2 class="Name" data-bind="text: Name"></h2>
+<h3 class="Name" data-bind="text: Name"></h3>
 
 <div class="Type" data-bind="text: Type"></div>
 
@@ -59,7 +59,7 @@
 
 <!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
 <div data-bind="if: $parent[$data].length, css: $data">
-    <h3 data-bind="uiText: $data, visible: $parent[$data].length"></h3>
+    <h4 data-bind="uiText: $data, visible: $parent[$data].length"></h4>
     <div data-bind="foreach: $parent[$data]">
         <div>
         <span class="label" data-bind="text: Name"></span>
