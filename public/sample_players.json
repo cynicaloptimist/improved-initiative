@@ -8,7 +8,7 @@
     },
     "AC": {
         "Value": 17,
-        "Notes": "chain mail"
+        "Notes": "(chain mail)"
     },
     "Speed": ["30 ft."],
     "Abilities": {
@@ -54,7 +54,7 @@
     },
     "AC": {
         "Value": 18,
-        "Notes": "chain mail, shield"
+        "Notes": "(chain mail, shield)"
     },
     "Speed": ["25 ft."],
     "Abilities": {
@@ -100,7 +100,7 @@
     },
     "AC": {
         "Value": 14,
-        "Notes": "leather armor"
+        "Notes": "(leather armor)"
     },
     "Speed": ["25 ft."],
     "Abilities": {
