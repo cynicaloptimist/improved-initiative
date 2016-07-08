@@ -51,8 +51,9 @@ module ImprovedInitiative {
                     }));
                 }
             }
-
-            return ko.toJS(editableStatBlock);
+            let unObservableStatBlock = ko.toJS(editableStatBlock);
+            delete unObservableStatBlock.__ko_mapping__;
+            return unObservableStatBlock;
         }
 
         SaveCreature = () => {
