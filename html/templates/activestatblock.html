@@ -12,7 +12,7 @@
     <div>
       <span class="label" data-bind="text: Name"></span>
       <span class="label" data-bind="text: Usage"></span>
-      <span data-bind="html: Content"></span>
+      <span data-bind="rollableText: Content"></span>
     </div>
   </div>
   <hr />
@@ -28,7 +28,7 @@
 <div class="HP">
   <span class="label">Hit Points</span>
   <span data-bind="text: HP.Value"></span>
-  <span class="notes" data-bind="html: HP.Notes"></span>
+  <span class="notes" data-bind="rollableText: HP.Notes"></span>
 </div>
 
 <div class="speed">
