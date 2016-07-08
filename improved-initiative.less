@@ -17,6 +17,8 @@
 
 @active-green: darken(overlay(@primary-white, @primary-green), 10);
 
+@hover-red: pink;
+
 @primary-black: #222;
 
 @button-face: #ccc;
@@ -481,6 +483,9 @@ input, textarea {
     .hp {
         width: 70px;
         text-align: center;
+        &:hover {
+            background-color: @hover-red;
+        }
     }
 
     .ac {
