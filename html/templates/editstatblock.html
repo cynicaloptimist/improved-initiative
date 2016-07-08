@@ -2,9 +2,9 @@
 <div class="editor-type">
     Editor: 
     <label>
-        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Basic</label>
+        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Form</label>
     <label>
-        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />Advanced</label>
+        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
 </div>
 <!-- ko if: EditorType() == 'basic' -->
 <div class="stats" data-bind="with: EditableStatBlock">
