@@ -20,6 +20,7 @@
 @hover-red: pink;
 
 @primary-black: #222;
+@disabled-black: #777;
 
 @button-face: #ccc;
 @button-text: black;
@@ -196,9 +197,14 @@ input, textarea {
             margin: @medium-spacer;
         }
     }
-    .start-encounter {
-        .button {
-            .button(lighten(@primary-green, 15), @primary-white);
+    .start-encounter .button {
+        .button(lighten(@primary-green, 15), @primary-white);
+    }
+    .disabled {
+        cursor: default;
+        color: @disabled-black;
+        &:hover {
+            background-color: @button-face;
         }
     }
 }

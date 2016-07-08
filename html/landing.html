@@ -27,8 +27,8 @@
                     <span class="button" data-bind="click: StartEncounter">Start an Encounter</span>
                 </div>
                 <div class="join-encounter">
-                    <input type="text" placeholder="Encounter ID or URL" data-bind="value: JoinEncounterInput" />
-                    <span class="button" data-bind="click: JoinEncounter">Join an Encounter</span>
+                    <input type="text" placeholder="Encounter ID or URL" data-bind="textInput: JoinEncounterInput" />
+                    <span class="button" data-bind="click: JoinEncounter, css: JoinEncounterButtonClass()">Join an Encounter</span>
                 </div>
             </div>
         </div>
