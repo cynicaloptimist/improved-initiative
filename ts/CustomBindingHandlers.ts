@@ -55,23 +55,31 @@ module ImprovedInitiative {
         }
     }
 
-    ko.bindingHandlers.rollableText = {
-        init: (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-            var text = valueAccessor();
-            var rules: IRules = bindingContext.$root.Encounter().Rules;
-            var findDice = rules.ValidDicePattern;
-            findDice.global = true;
-            text = text.replace(findDice, match => {
-                return `<span class='rollable'>${match}</span>`;
-            });
+    let rollableTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+        var text = valueAccessor();
+        var rules: IRules = bindingContext.$root.Encounter().Rules;
+        var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
+        var findDice = rules.ValidDicePattern;
+        findDice.global = true;
+        text = text.replace(findDice, match => {
+            return `<span class='rollable'>${match}</span>`;
+        });
 
-            $(element).html(text);
-            $(element).find('.rollable').on('click', (event) => {
-                var diceExpression = event.target.innerHTML;
-                var diceRoll = rules.RollHpExpression(diceExpression);
-                window.prompt(`${diceExpression} -> ${diceRoll.String}`, diceRoll.Total.toString());
+        $(element).html(text);
+        $(element).find('.rollable').on('click', (event) => {
+            var diceExpression = event.target.innerHTML;
+            var diceRoll = rules.RollHpExpression(diceExpression);
+            userPollQueue.Add({
+                requestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
+                inputSelector: '.rollTotal',
+                callback: response => null
             });
-        }
+        });
+    };
+
+    ko.bindingHandlers.rollableText = {
+        init: rollableTextHandler,
+        update: rollableTextHandler
     }
 
     ko.bindingHandlers.format = {
