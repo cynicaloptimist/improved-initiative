@@ -59,8 +59,7 @@ module ImprovedInitiative {
         var text = valueAccessor();
         var rules: IRules = bindingContext.$root.Encounter().Rules;
         var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
-        var findDice = rules.ValidDicePattern;
-        findDice.global = true;
+        var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text.replace(findDice, match => {
             return `<span class='rollable'>${match}</span>`;
         });
