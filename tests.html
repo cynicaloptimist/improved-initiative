@@ -15,17 +15,15 @@
     <div id="fixtures"></div>
     <script src="node_modules/mocha/mocha.js"></script>
     <script src="node_modules/chai/chai.js"></script>
-    <script type="text/javascript" src="lib/knockout-3.3.0.debug.js"></script>
-    <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
-    <script type="text/javascript" src="lib/mousetrap.js"></script>
-    <script type="text/javascript" src="js/ImprovedInitiative.js"></script>
+    <script type="text/javascript" src="public/lib/knockout-3.3.0.debug.js"></script>
+    <script type="text/javascript" src="public/lib/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="public/lib/mousetrap.js"></script>
     <script>
         mocha.setup('bdd')
     </script>
-    <script src="js/test.js"></script>
+    <script src="test.js"></script>
     <script>
-        if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
-      else { mocha.run(); }
+        mocha.run();
     </script>
 </body>
 

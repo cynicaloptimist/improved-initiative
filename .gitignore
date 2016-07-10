@@ -1,7 +1,8 @@
-.vscode/*
-.tscache/*
 node_modules/*
 public/user/*
 public/fonts/*
+public/css/*
 *.js.map
 *.js
+.baseDir
+!Gruntfile.js

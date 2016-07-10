@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html encounterId="{{encounterId}}">
+
+<head>
+    <title>Improved Initiative</title>
+    <meta name="description" content="Improved Initative is a combat tracker for D&D 5E that won't get between you and your players.">
+    
+    <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.css">
+    <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
+</head>
+<body id="landing">
+    <h1 class="improved-initiative">Improved Initiative</h1>
+    <div class="content">
+        <div class="logo">
+            <img src="img/boot-transparent-antiquewhite.png" />
+        </div>
+        <div class="start">
+            <h2>Combat Tracker for D&D 5E</h2>
+            <p>Improved Initative enhances combat in your D&D game without getting between you and your players.</p>
+            <ul class="bulleted">
+                <li>Automatically rolls initiative!</li>
+                <li>Easily handles HP arithmetic!</li>
+                <li>Won't gain sentience and overthrow mankind!</li>
+            </ul>
+            <div class="launch-controls">
+                <div class="start-encounter">
+                    <span class="button" data-bind="click: StartEncounter">Start an Encounter</span>
+                </div>
+                <div class="join-encounter">
+                    <input type="text" placeholder="Encounter ID or URL" data-bind="textInput: JoinEncounterInput" />
+                    <span class="button" data-bind="click: JoinEncounter, css: JoinEncounterButtonClass()">Join an Encounter</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
+            All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
+    </div>
+</body>
+</html>

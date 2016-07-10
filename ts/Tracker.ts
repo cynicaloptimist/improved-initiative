@@ -7,11 +7,10 @@
 
 module ImprovedInitiative {
     $(() => {
+        RegisterComponents();
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
-            viewModel.Commander.RegisterKeyBindings();
             ko.applyBindings(viewModel, document.body);
-
             $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
         }
         if ($('#playerview').length) {
@@ -19,6 +18,10 @@ module ImprovedInitiative {
             var playerViewModel = new PlayerViewModel();
             playerViewModel.LoadEncounterFromServer(encounterId);
             ko.applyBindings(playerViewModel, document.body);
+        }
+        if ($('#landing').length) {
+            var launcherViewModel = new LauncherViewModel();
+            ko.applyBindings(launcherViewModel, document.body);
         }
     });
 }

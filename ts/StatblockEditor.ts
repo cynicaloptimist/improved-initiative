@@ -3,51 +3,88 @@ module ImprovedInitiative {
         private saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void;
         private deleteCallback: (library: string, id: string) => void;
         private statBlockId: string;
-        StatBlock = ko.observable<IStatBlock>();
-        editorType = ko.observable<string>('basic');
-        statBlockJson = ko.observable<string>();
+        private statBlock: IStatBlock;
+
+        EditorType = ko.observable<string>('basic');
+        JsonStatBlock = ko.observable<string>();
+        EditableStatBlock = ko.observable();
 
         EditCreature = (statBlockId: string,
             statBlock: IStatBlock,
             saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void,
             deleteCallback: (library: string, id: string) => void) => {
+            
             this.statBlockId = statBlockId;
-            this.StatBlock(statBlock);
-            this.statBlockJson(JSON.stringify(statBlock, null, 2));
+            this.statBlock = $.extend(StatBlock.Empty(), statBlock);
+
+            this.EditableStatBlock(this.makeEditable(this.statBlock));
+            this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
+            
             this.saveCallback = saveCallback;
             this.deleteCallback = deleteCallback;
         }
 
+        private makeEditable = (statBlock: IStatBlock) => {
+            let observableStatBlock = ko.mapping.fromJS(this.statBlock);
+            
+            for (let key in observableStatBlock) {
+                let maybeArray = observableStatBlock[key];
+                if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
+                    maybeArray(maybeArray().map(e => {
+                        return new RemovableArrayValue(maybeArray, e);
+                    }));
+                    maybeArray.AddEmpty = () => {
+                        maybeArray.push(new RemovableArrayValue(maybeArray, ''))
+                    };
+                }
+            }
+            
+            return observableStatBlock;
+        }
+
+        private unMakeEditable = (editableStatBlock: any) => {
+            for (let key in editableStatBlock) {  
+                let maybeArray = editableStatBlock[key];
+                if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
+                    editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
+                        return e.Value;
+                    }));
+                }
+            }
+            let unObservableStatBlock = ko.toJS(editableStatBlock);
+            delete unObservableStatBlock.__ko_mapping__;
+            return unObservableStatBlock;
+        }
+
         SaveCreature = () => {
-            if (this.editorType() === 'advanced') {
+            let editedStatBlock: IStatBlock = StatBlock.Empty();
+
+            if (this.EditorType() === 'advanced') {
                 try {
-                    var statBlockFromJSON = JSON.parse(this.statBlockJson());
+                    var statBlockFromJSON = JSON.parse(this.JsonStatBlock());
                 } catch (error) {
                     alert(`Couldn't parse JSON from advanced editor.`);
                     return;
                 }
-                this.StatBlock($.extend(StatBlock.Empty(), statBlockFromJSON))
+                $.extend(editedStatBlock, statBlockFromJSON)
             }
-            var editedStatBlock = this.StatBlock();
-            if (this.editorType() === 'basic') {
-                editedStatBlock.HP.Value = this.parseInt(editedStatBlock.HP.Value, 1)
-                editedStatBlock.AC.Value = this.parseInt(editedStatBlock.AC.Value, 10)
-                editedStatBlock.Abilities.Dex = this.parseInt(editedStatBlock.Abilities.Dex, 10)
+            if (this.EditorType() === 'basic') {
+                $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
             }
+            
             this.saveCallback(this.statBlockLibrary(), this.statBlockId, editedStatBlock);
-            this.StatBlock(null);
+            this.EditableStatBlock(null);
         }
 
         DeleteCreature = () => {
-            var statBlock = this.StatBlock();
-            if (confirm(`Delete statblock for ${statBlock.Name}? This cannot be undone.`)) {
+            if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
                 this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
-                this.StatBlock(null);
+                this.EditableStatBlock(null);
             }
         }
 
         private statBlockLibrary(): string {
-            return this.StatBlock().Player == 'player' ? Store.PlayerCharacters : Store.Creatures
+            return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures
         }
 
         private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {

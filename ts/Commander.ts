@@ -218,13 +218,13 @@ module ImprovedInitiative {
         }
 
         FocusResponseRequest = () => {
-            $('#user-response-requests input').first().select();
+            $('#user-poll input').first().select();
         }
 
-        ShowLibraries = () => {
-            $('.libraries').slideDown();
-        }
-
+        ShowingLibraries = ko.observable(true);
+        ShowLibraries = () => this.ShowingLibraries(true);
+        HideLibraries = () => this.ShowingLibraries(false);
+        
         LaunchPlayerWindow = () => {
             window.open(`/p/${this.encounter().EncounterId}`, 'Player View');
         }
@@ -255,6 +255,7 @@ module ImprovedInitiative {
             this.userPollQueue.Add({
                 callback: this.encounter().StartEncounter
             });
+            this.HideLibraries();
         }
 
         NextTurn = () => {

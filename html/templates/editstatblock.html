@@ -1,0 +1,77 @@
+<h2>Edit Creature</h2>
+<div class="editor-type">
+    Editor: 
+    <label>
+        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Form</label>
+    <label>
+        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
+</div>
+<!-- ko if: EditorType() == 'basic' -->
+<div class="stats" data-bind="with: EditableStatBlock">
+    <div><label>Name 
+        <input class="name" type="text" data-bind="value: Name" />
+    </label></div>
+    <div><label>Type 
+        <input class="type" type="text" data-bind="value: Type" />
+    </label></div>
+    <div>
+        <label>HP 
+            <input type="number" data-bind="value: HP.Value" />
+        </label>
+        <label>AC 
+            <input type="number" data-bind="value: AC.Value" />
+        </label>
+    </div>
+    <div class="Abilities" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
+        <div data-bind="text: $data"></div>
+        <input type="number" class="score" data-bind="value: $parent.Abilities[$data]" />
+    </div>
+    <!-- ko foreach: ['Saves', 'Skills'] -->
+    <div data-bind="css: $data">
+        <span data-bind="text: $data"></span>
+        <!-- ko foreach: $parent[$data] -->
+        <input type="text" data-bind="value: Value.Name"></span>
+        <input type="number" data-bind="value: Value.Modifier"></span>
+        <span class = "fa-clickable fa-remove" data-bind="click: Remove"></span>
+        <!-- /ko -->
+        <span class = "fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span>
+    </div>
+    <!-- /ko -->
+    <!-- ko foreach: ['Speed', 'Senses','DamageVulnerabilities','DamageResistances','DamageImmunities','ConditionImmunities','Languages'] -->
+    <div data-bind="css: $data">
+        <span data-bind="uiText: $data"></span>
+        <!-- ko foreach: $parent[$data] -->
+        <input type="text" data-bind="value: Value"></span>
+        <span class = "fa-clickable fa-remove" data-bind="click: Remove"></span>
+        <!-- /ko -->
+        <span class = "fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span></p>
+    </div>
+    <!-- /ko -->
+    <div>
+        <label>Challenge
+            <input type="text" data-bind="value: Challenge" />
+        </label>
+    </div>
+    <!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
+    <hr />
+    <div data-bind="css: $data" class="actions">
+        <p data-bind="uiText: $data"></p>
+        <!-- ko foreach: $parent[$data] -->
+        <div>
+            <input type="text" data-bind="value: Value.Name">
+            <textarea data-bind="value: Value.Content"></textarea>
+            <span class = "fa-clickable fa-remove" data-bind="click: Remove"></span>
+        </div>
+        <!-- /ko -->
+        <div><span class = "fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</span></div>
+    </div>
+    <!-- /ko -->
+</div>
+<!-- /ko -->
+<!-- ko if: EditorType() == 'advanced' -->
+<textarea class="json-editor" spellcheck="false" data-bind="value: JsonStatBlock"></textarea>
+<!-- /ko -->
+<div class="buttons">
+    <div data-bind="click: SaveCreature"><span class="button fa-check"></span></div>
+    <div data-bind="click: DeleteCreature"><span class="button fa-trash"></span></div>
+</div>

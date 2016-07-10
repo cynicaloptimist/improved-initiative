@@ -3,6 +3,7 @@ interface KnockoutBindingHandlers {
     afterRender: KnockoutBindingHandler;
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
+    rollableText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
 }
@@ -54,6 +55,32 @@ module ImprovedInitiative {
         }
     }
 
+    let rollableTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+        var text = valueAccessor();
+        var rules: IRules = bindingContext.$root.Encounter().Rules;
+        var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
+        var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
+        text = text.replace(findDice, match => {
+            return `<span class='rollable'>${match}</span>`;
+        });
+
+        $(element).html(text);
+        $(element).find('.rollable').on('click', (event) => {
+            var diceExpression = event.target.innerHTML;
+            var diceRoll = rules.RollHpExpression(diceExpression);
+            userPollQueue.Add({
+                requestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
+                inputSelector: '.rollTotal',
+                callback: response => null
+            });
+        });
+    };
+
+    ko.bindingHandlers.rollableText = {
+        init: rollableTextHandler,
+        update: rollableTextHandler
+    }
+
     ko.bindingHandlers.format = {
         init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             bindingContext['formatString'] = $(element).html();
@@ -80,13 +107,15 @@ module ImprovedInitiative {
             $(element).on('mouseover', event => {
                 var hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
-
-                var popPosition = $(event.target).position().top;
+                var target = $(event.target);
+                var top = target.position().top;
+                var left = target.position().left + target.width();
                 var maxPopPosition = $(document).height() - popComponent.height();
-                if (popPosition > maxPopPosition) {
-                    popPosition = maxPopPosition;
+                if (top > maxPopPosition) {
+                    top = maxPopPosition;
                 }
-                popComponent.css('top', popPosition).select();
+                popComponent.css('left', left);
+                popComponent.css('top', top).select();
             })
 
             popComponent.add(element).hover(() => { popComponent.show() },

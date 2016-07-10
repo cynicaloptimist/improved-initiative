@@ -1,0 +1,45 @@
+<div class="tabs">
+    <span data-bind="click: ShowTab.with('.about')">About</span>
+    <span data-bind="click: ShowTab.with('.keybindings')">Commands</span>
+    <span data-bind="click: ShowTab.with('.options')">Options</span>
+</div>
+<div class="tab about">
+    <p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
+        All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
+    <div class="tips">
+        <span data-bind="click: PreviousTip" title="Previous Tip" class="fa-clickable fa-arrow-left"></span>
+        <span data-bind="html: Tip"></span>
+        <span data-bind="click: NextTip" title="Next Tip" class="fa-clickable fa-arrow-right"></span>
+    </div>
+</div>
+<div class="tab keybindings">
+    <!--ko foreach: Commander.Commands -->
+    <div>
+        <span class="label" data-bind="text: Description"></span>
+        <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+        <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
+        <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
+        />
+    </div>
+    <!--/ko -->
+    <div class="savekeybindings">
+        <input type="button" value="Save and Close" data-bind="click: Commander.HideSettings" />
+    </div>
+</div>
+<div class="tab options">
+    <p>Export your user data as JSON:
+        <input type="button" value="Download File" data-bind="click: ExportData" />
+    </p>
+    <p>Import an exported user data file:
+        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
+    </p>
+    <p>Roll monster HP when adding to combat: 
+        <input type="checkbox" data-bind="checked: RollHp" />
+    </p>
+    <p>Player View Monster HP Verbosity:
+        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
+    </p>
+    <p>Hide monsters from player view when encounter is not active: 
+        <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
+    </p>
+</div>

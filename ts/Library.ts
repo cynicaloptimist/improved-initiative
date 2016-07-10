@@ -32,10 +32,16 @@ module ImprovedInitiative {
 
         constructor() {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
+            
             Store.List(Store.PlayerCharacters).forEach(id => {
                 var statBlock = Store.Load<IStatBlock>(Store.PlayerCharacters, id);
                 this.Players.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
+
+            if (this.Players().length == 0) {
+                this.AddSamplePlayersFromUrl('/sample_players.json');
+            }
+
             Store.List(Store.Creatures).forEach(id => {
                 var statBlock = Store.Load<IStatBlock>(Store.Creatures, id);
                 this.Creatures.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
@@ -61,20 +67,18 @@ module ImprovedInitiative {
         LibraryFilter = ko.observable('');
 
         FilteredCreatures = ko.computed<CreatureListing[]>(() => {
-            var creatures = ko.unwrap(this.Creatures),
-                players = ko.unwrap(this.Players),
-                filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+            var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 creaturesWithFilterInName = [],
                 creaturesWithFilterInType = [];
-
-            if (this.DisplayTab() == 'Players') {
-                return players;
-            }
+            var library = this.DisplayTab() == 'Players'
+                ? ko.unwrap(this.Players)
+                : ko.unwrap(this.Creatures);
+                 
             if (filter.length == 0) {
-                return creatures;
+                return library;
             }
 
-            creatures.forEach(c => {
+            library.forEach(c => {
                 if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                     creaturesWithFilterInName.push(c);
                     return;
@@ -94,5 +98,14 @@ module ImprovedInitiative {
                 return new CreatureListing(c.Id, c.Name, c.Type, c.Link, "server");
             }));
         }
+
+        AddSamplePlayersFromUrl = (url: string) => {
+            $.getJSON(url, (json: IStatBlock []) => {
+                json.forEach((statBlock, index) => {
+                    statBlock = $.extend(StatBlock.Empty(), statBlock);
+                    this.Players.push(new CreatureListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                })
+            });
+        } 
     }
 }

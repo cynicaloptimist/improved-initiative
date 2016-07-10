@@ -7,7 +7,7 @@ module ImprovedInitiative {
         CurrentHP: KnockoutObservable<number>;
         TemporaryHP: KnockoutObservable<number>;
         AC: number;
-        AbilityModifiers: IHaveAbilities;
+        AbilityModifiers: AbilityScores;
         Tags: KnockoutObservableArray<string>;
         InitiativeModifier: number;
         Initiative: KnockoutObservable<number>;
@@ -31,7 +31,7 @@ module ImprovedInitiative {
                 statBlock = newStatBlock;
             });
 
-            this.CurrentHP = ko.observable(statBlock.HP.Value);
+            this.CurrentHP = ko.observable(this.MaxHP);
         }
 
         Alias = ko.observable(null);
@@ -46,7 +46,7 @@ module ImprovedInitiative {
         CurrentHP: KnockoutObservable<number>;
         PlayerDisplayHP: KnockoutComputed<string>;
         AC: number;
-        AbilityModifiers: IHaveAbilities;
+        AbilityModifiers: AbilityScores;
         NewTag: KnockoutObservable<string>;
         InitiativeModifier: number;
         ViewModel: any;
@@ -54,12 +54,26 @@ module ImprovedInitiative {
 
         private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
-
+            this.IsPlayerCharacter = newStatBlock.Player == "player";
             this.AC = newStatBlock.AC.Value;
-            this.MaxHP = newStatBlock.HP.Value;
+            if (this.MaxHP == undefined)
+            {
+                this.MaxHP = this.getMaxHP(newStatBlock.HP);
+            }    
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
         }
+
+        private getMaxHP(HP: ValueAndNotes) {
+            if (Store.Load(Store.User, "RollMonsterHp")) {
+                try {
+                    return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
+                } catch (e) {
+                    return HP.Value;
+                }
+            }
+            return HP.Value;
+        }        
 
         private setIndexLabel(oldName?: string) {
             var name = this.StatBlock().Name,

@@ -48,26 +48,34 @@ else {
     importCreatureLibrary('ogl_creatures.json');
 }
 
-var newEncounterIndex = (): number => {
-    var newEncounterId = playerViews.length;
+var probablyUniqueString = (): string => {
+    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    var newEncounterId = ''
+    for (var i = 0; i < 8; i++) {
+        var index = Math.floor(Math.random() * chars.length);
+        newEncounterId += chars[index];
+    }
     playerViews[newEncounterId] = {};
     return newEncounterId;
 }
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
-app.set('views', __dirname + '/');
+app.set('views', __dirname + '/html');
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res) {
-    res.redirect('e/' + newEncounterIndex());
+    res.render('landing', {
+        rootDirectory: "..",
+        encounterId: probablyUniqueString(),
+    })
 });
 
 app.get('/e/:id', (req, res) => {
     console.log('app.get ' + req.path);
-    res.render('index', {
+    res.render('tracker', {
         rootDirectory: "..",
         encounterId: req.params.id,
     })
