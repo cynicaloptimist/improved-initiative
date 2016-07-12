@@ -37,6 +37,8 @@
 @button-inner: 18px;
 @border-radius: 5px;
 
+@scrollbar-width: 17px;
+
 //elements
 
 * {
@@ -284,20 +286,26 @@ input[type="number"] {
 }
 
 .commands {
-        background-color: @primary-white;
-        color: @primary-black;
-        
-        padding: @small-spacer;
-        width: @button-width;
-
-        .button {
-            margin: 1px 0;
-        }
-        
-        .fa-play {
-            .button(@button-face-green, @primary-black);
-        }
+    .scrollframe {
+        width: @button-width + @scrollbar-width;
+        overflow-x: hidden;
     }
+    background-color: @primary-white;
+    color: @primary-black;
+    
+    padding: @small-spacer;
+    width: @button-width;
+
+    overflow: hidden;
+
+    .button {
+        margin: 1px 0;
+    }
+    
+    .fa-play {
+        .button(@button-face-green, @primary-black);
+    }
+}
     
 .editor {
     flex-grow: 1;
