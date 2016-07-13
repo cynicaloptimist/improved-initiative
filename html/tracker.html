@@ -16,14 +16,16 @@
         <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }"></div>
         <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     </div>
-    <div class="commands" data-bind="foreach: Commander.Commands">
-        <span class="button" data-bind="
-            visible: ShowOnActionBar,
-            css: ActionBarIcon,
-            attr: { title: Description },
-            click: ActionBinding
-        ">
-        </span>
+    <div class="commands">
+        <div class="scrollframe" data-bind="foreach: Commander.Commands">
+            <span class="button" data-bind="
+                visible: ShowOnActionBar,
+                css: ActionBarIcon,
+                attr: { title: Description },
+                click: ActionBinding
+            ">
+            </span>
+        </div>
     </div>
     <div class="left-column">
         <!-- ko if: Commander.ShowingLibraries -->

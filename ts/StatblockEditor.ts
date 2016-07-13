@@ -24,20 +24,39 @@ module ImprovedInitiative {
             this.deleteCallback = deleteCallback;
         }
 
+        
         private makeEditable = (statBlock: IStatBlock) => {
+            let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
+            let modifierLists = ['Saves', 'Skills'];
+            let traitLists = ['Traits', 'Actions', 'LegendaryActions'];
+            
             let observableStatBlock = ko.mapping.fromJS(this.statBlock);
             
-            for (let key in observableStatBlock) {
-                let maybeArray = observableStatBlock[key];
-                if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
-                    maybeArray(maybeArray().map(e => {
-                        return new RemovableArrayValue(maybeArray, e);
+            let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
+                for (let arrayName of arrayNames) {
+                    let array = observableStatBlock[arrayName];
+                    array(array().map(item => {
+                        return new RemovableArrayValue(array, item);
                     }));
-                    maybeArray.AddEmpty = () => {
-                        maybeArray.push(new RemovableArrayValue(maybeArray, ''))
+                    
+                    array.AddEmpty = () => {
+                        array.push(new RemovableArrayValue(array, makeEmptyValue()))
                     };
                 }
             }
+
+            makeRemovableArrays(stringLists, () => '');
+
+            makeRemovableArrays(modifierLists, () => ({
+                Name: ko.observable(''),
+                Modifier: ko.observable('')
+            }));
+            
+            makeRemovableArrays(traitLists, () => ({
+                Name: ko.observable(''),
+                Content: ko.observable(''),
+                Usage: ko.observable('')
+            }))
             
             return observableStatBlock;
         }

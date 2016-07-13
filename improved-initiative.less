@@ -23,6 +23,7 @@
 @disabled-black: #777;
 
 @button-face: #ccc;
+@button-face-green: lighten(@primary-green, 15);
 @button-text: black;
 @shadow: #999;
 
@@ -35,6 +36,8 @@
 @button-width: 42px;
 @button-inner: 18px;
 @border-radius: 5px;
+
+@scrollbar-width: 17px;
 
 //elements
 
@@ -206,7 +209,7 @@ input[type="number"] {
         }
     }
     .start-encounter .button {
-        .button(lighten(@primary-green, 15), @primary-white);
+        .button(@button-face-green, @primary-black);
     }
     .disabled {
         cursor: default;
@@ -230,130 +233,140 @@ input[type="number"] {
 
         width: 350px;
     }
-    
-    .commands {
-        background-color: @primary-white;
-        color: @primary-black;
-        
+}
+
+.user-poll {
+        .recessed();
+}
+
+.libraries {
+    .library-button {
+        border: 1px solid @primary-green;
+        border-radius: @border-radius;
         padding: @small-spacer;
-        width: @button-width;
+        margin: 1px;
 
-        .button {
-            margin: 1px 0;
+        &:hover {
+            background-color: @hover-white;
         }
-        
     }
-    
-    .editor {
-        flex-grow: 1;
 
-        .editor-type {
-            flex-direction: row;
+    ul {
+        overflow-y: auto;
+    }
+    li {
+        list-style-type: none;
+        display:flex;
+
+        &:nth-child(2n) span{
+            background-color: @zebra-white;
         }
 
-        .stats {
-            display: block;
-            overflow-y: auto;
-        }
-
-        .stats > div {
-            flex-flow: row wrap;
-            margin: @small-spacer;
-        }
-
-        div.actions {
-            flex-direction: column;
-            p {
-                font-weight: bold;
-            }
-            div {
-                flex-direction: row;
-                align-items: flex-start;
-            }
-            textarea {
+        span {
+            .library-button();
+            &:first-child {
                 flex-grow: 1;
             }
         }
-
-        input {
-            margin-left: @medium-spacer;
-            &[type="text"] {
-                width: 100px;
-            }
-            &[type="number"] {
-                width: 40px;
-            }
-            &.name, &.type {
-                width:200px;
-            }
-        }
-
-        .fa-clickable {
-            margin-left: @medium-spacer;
-        }
-
-        .json-editor {
-            flex-grow:1;
-            font-family: Courier New, Courier, monospace;
-        }
-        .buttons {
-            color: @primary-black;
-
-            flex-direction: row;
-            justify-content: flex-end;
-        }
+    }
+    input {
+        cursor: text;
     }
 
-    .user-poll {
-        .recessed();
-    }
+    .library-buttons {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 20px;
 
-    .libraries {
-        .library-button {
-            border: 1px solid @primary-green;
-            border-radius: @border-radius;
-            padding: @small-spacer;
-            margin: 1px;
-
-            &:hover {
-                background-color: @hover-white;
-            }
-        }
-
-        ul {
-            overflow-y: auto;
-        }
-        li {
-            list-style-type: none;
-            display:flex;
-
-            &:nth-child(2n) span{
-                background-color: @zebra-white;
-            }
-
-            span {
-                .library-button();
-                &:first-child {
-                    flex-grow: 1;
-                }
-            }
-        }
-        input {
-            cursor: text;
-        }
-
-        .library-buttons {
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            min-height: 20px;
-
-            span {
-                .library-button();
-            }
+        span {
+            .library-button();
         }
     }
 }
+
+.commands {
+    .scrollframe {
+        width: @button-width + @scrollbar-width;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    background-color: @primary-white;
+    color: @primary-black;
+    
+    padding: @small-spacer;
+    width: @button-width;
+
+    overflow: hidden;
+
+    .button {
+        margin: 1px 0;
+    }
+    
+    .fa-play {
+        .button(@button-face-green, @primary-black);
+    }
+}
+    
+.editor {
+    flex-grow: 1;
+
+    .editor-type {
+        flex-direction: row;
+    }
+
+    .stats {
+        display: block;
+        overflow-y: auto;
+    }
+
+    .stats > div {
+        flex-flow: row wrap;
+        margin: @small-spacer;
+    }
+
+    div.actions {
+        flex-direction: column;
+        p {
+            font-weight: bold;
+        }
+        div {
+            flex-direction: row;
+            align-items: flex-start;
+        }
+        textarea {
+            flex-grow: 1;
+        }
+    }
+
+    input {
+        margin-left: @medium-spacer;
+        &[type="text"] {
+            width: 100px;
+        }
+        &[type="number"] {
+            width: 40px;
+        }
+        &.name, &.type {
+            width:200px;
+        }
+    }
+
+    .fa-clickable {
+        margin-left: @medium-spacer;
+    }
+
+    .json-editor {
+        flex-grow:1;
+        font-family: Courier New, Courier, monospace;
+    }
+    .buttons {
+        color: @primary-black;
+
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+    }
 
 .settings {
     
@@ -405,8 +418,7 @@ input[type="number"] {
         border-radius: 0px @border-radius 0px 0px;
         
         &:hover {
-            background-color: @hover-green;
-            color: @primary-white;
+            background-color: @hover-white;
         }
         &.selected {
             background-color: @primary-green;
