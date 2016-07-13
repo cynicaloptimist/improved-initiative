@@ -25,18 +25,49 @@ module ImprovedInitiative {
         }
 
         private makeEditable = (statBlock: IStatBlock) => {
+            let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
+            let traitLists = ['Traits', 'Actions', 'LegendaryActions'];
+            let modifierLists = ['Saves', 'Skills'];
+            
             let observableStatBlock = ko.mapping.fromJS(this.statBlock);
             
-            for (let key in observableStatBlock) {
-                let maybeArray = observableStatBlock[key];
-                if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
-                    maybeArray(maybeArray().map(e => {
-                        return new RemovableArrayValue(maybeArray, e);
-                    }));
-                    maybeArray.AddEmpty = () => {
-                        maybeArray.push(new RemovableArrayValue(maybeArray, ''))
-                    };
-                }
+            for (let stringList of stringLists) {
+                let strings = observableStatBlock[stringList];
+                strings(strings().map(e => {
+                    return new RemovableArrayValue(strings, e);
+                }));
+                
+                strings.AddEmpty = () => {
+                    strings.push(new RemovableArrayValue(strings, ''))
+                };
+            }
+
+            for (let modifierList of modifierLists) {
+                let modifiers = observableStatBlock[modifierList];
+                modifiers(modifiers().map(e => {
+                    return new RemovableArrayValue(modifiers, e);
+                }));
+                
+                modifiers.AddEmpty = () => {
+                    modifiers.push(new RemovableArrayValue(modifiers, {
+                        Name: ko.observable(''),
+                        Modifier: ko.observable('')                    }))
+                };
+            }
+
+            for (let traitList of traitLists) {
+                let traits = observableStatBlock[traitList];
+                traits(traits().map(e => {
+                    return new RemovableArrayValue(traits, e);
+                }));
+                
+                traits.AddEmpty = () => {
+                    traits.push(new RemovableArrayValue(traits, {
+                        Name: ko.observable(''),
+                        Content: ko.observable(''),
+                        Usage: ko.observable('')
+                    }))
+                };
             }
             
             return observableStatBlock;
