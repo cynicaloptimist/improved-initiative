@@ -118,35 +118,38 @@ input[type="number"] {
     .button();
 }
 
-.modalblur {
-    position: fixed;
-    left:0;
-    top:0;
-    height:100%;
-    width:100%;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 9;
-}
-	
-.modal {
-    border: 2px solid gray;
-    border-radius: @border-radius;
-    padding: @medium-spacer;
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 100px;
-    margin: auto;
-    z-index: 10;
-    background-color: @primary-white;
-    color: @primary-black;
+.floating-sections {
+    position: relative;
+    >div {
+        position: fixed;
+        max-height: 100%;
+    }
 
-    width: 500px;
-}
+    .modalblur {
+        left:0;
+        top:0;
+        height:100%;
+        width:100%;
+        background-color: rgba(0,0,0,0.7);
+        z-index: 9;
+    }
 
-.floating-sections>div {
-    position:fixed;
-    max-height: 100%;
+    .modal {
+        border: 2px solid gray;
+        border-radius: @border-radius;
+        padding: @medium-spacer;
+        z-index: 10;
+        background-color: @primary-white;
+        color: @primary-black;
+    }
+
+    .settings {
+        width: 500px;
+        left:0;
+        right:0;
+        top:100px;
+        margin: auto;
+    }
 }
 
 .recessed {
@@ -488,6 +491,9 @@ input[type="number"] {
     &.active {
         border-left-color: lighten(@primary-green, 15);
         background-color: @active-green;
+        .name {
+            font-weight:bold;
+        }
     }
     &:hover {
         background-color: @hover-white;
