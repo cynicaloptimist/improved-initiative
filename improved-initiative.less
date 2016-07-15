@@ -118,35 +118,41 @@ input[type="number"] {
     .button();
 }
 
-.modalblur {
-    position: fixed;
-    left:0;
-    top:0;
-    height:100%;
-    width:100%;
-    background-color: rgba(0,0,0,0.7);
-    z-index: 9;
-}
-	
-.modal {
-    border: 2px solid gray;
-    border-radius: @border-radius;
-    padding: @medium-spacer;
-    position: fixed;
-    right: 0;
-    left: 0;
-    top: 100px;
-    margin: auto;
-    z-index: 10;
-    background-color: @primary-white;
-    color: @primary-black;
 
-    width: 500px;
-}
-
-.floating-sections>div {
-    position:fixed;
+.preview.statblock {
+    position: fixed;
     max-height: 100%;
+}
+
+.modalcontainer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+
+    justify-content: center;
+    align-items: center;
+
+    .modalblur {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+    }
+    
+    .modal {
+        border: 2px solid gray;
+        border-radius: @border-radius;
+        padding: @medium-spacer;
+        z-index: 1;
+        background-color: @primary-white;
+        color: @primary-black;
+    }
+
+    .settings {
+        width: 500px;
+        position: relative;
+        margin: auto;
+    }
 }
 
 .recessed {
@@ -170,7 +176,8 @@ input[type="number"] {
     }
         
     input[type="text"] {
-        padding:@medium-spacer;
+        padding: @medium-spacer;
+        line-height: 2em;
     }
 
     .content {
@@ -182,7 +189,7 @@ input[type="number"] {
     
     .logo {
         flex-grow:1;
-        margin: 30px;
+        margin: 0 30px;
     }
     
     .start {
@@ -196,7 +203,7 @@ input[type="number"] {
         align-items: center;
 
         padding:@large-spacer;
-        margin:30px;
+        margin: 0 30px;
     }
     
     .launch-controls {
@@ -226,6 +233,9 @@ input[type="number"] {
     
     .center-column {
         flex-grow:1;
+        background-image: url('../img/improved-initiative-transparent_darkgreen.png');
+        background-position: center bottom;
+        background-repeat: no-repeat;
     }
     
     .left-column, .right-column, .preview.statblock {
@@ -488,6 +498,9 @@ input[type="number"] {
     &.active {
         border-left-color: lighten(@primary-green, 15);
         background-color: @active-green;
+        .name {
+            font-weight:bold;
+        }
     }
     &:hover {
         background-color: @hover-white;
@@ -550,7 +563,7 @@ input[type="number"] {
     margin: @medium-spacer 0 0 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 800px), (max-height: 560px) {
     .logo {
         display: none;
     }
