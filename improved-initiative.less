@@ -173,7 +173,8 @@ input[type="number"] {
     }
         
     input[type="text"] {
-        padding:@medium-spacer;
+        padding: @medium-spacer;
+        line-height: 2em;
     }
 
     .content {
@@ -185,7 +186,7 @@ input[type="number"] {
     
     .logo {
         flex-grow:1;
-        margin: 30px;
+        margin: 0 30px;
     }
     
     .start {
@@ -199,7 +200,7 @@ input[type="number"] {
         align-items: center;
 
         padding:@large-spacer;
-        margin:30px;
+        margin: 0 30px;
     }
     
     .launch-controls {
@@ -556,7 +557,7 @@ input[type="number"] {
     margin: @medium-spacer 0 0 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 800px), (max-height: 560px) {
     .logo {
         display: none;
     }
