@@ -11,11 +11,11 @@
 </head>
 
 <body id="tracker">
-    <div class="floating-sections">
+    <div class="modalcontainer">
         <div class="modalblur" data-bind="click: Commander.HideSettings"></div>
         <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }"></div>
-        <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     </div>
+    <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe" data-bind="foreach: Commander.Commands">
             <span class="button" data-bind="

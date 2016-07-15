@@ -230,13 +230,11 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
-            $('.modalblur').show();
-            $('.settings').show();
+            $('.modalcontainer').show();
         }
 
         HideSettings = () => {
-            $('.modalblur').hide();
-            $('.settings').hide();
+            $('.modalcontainer').hide();
             this.RegisterKeyBindings();
             Store.Save(Store.User, 'SkipIntro', true);
         }
