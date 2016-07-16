@@ -1,5 +1,6 @@
 module ImprovedInitiative {
     export interface ICreature {
+        Id: number;
         Encounter: Encounter;
         Alias: KnockoutObservable<string>;
         IndexLabel: number;
@@ -19,8 +20,18 @@ module ImprovedInitiative {
     }
 
     export class Creature implements ICreature {
-        constructor(creatureJson, public Encounter: Encounter) {
-            var statBlock = jQuery.extend(StatBlock.Empty(), creatureJson);
+        static nextId = 0;
+
+        constructor(creatureJson, public Encounter: Encounter, savedCreature?: ISavedCreature) {
+            this.Id = savedCreature ? savedCreature.Id : Creature.nextId++;
+            
+            var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), creatureJson);
+            
+            if (savedCreature) {
+                statBlock.HP.Value = savedCreature.MaxHP || savedCreature.Statblock.HP.Value;
+            } else {
+                statBlock.HP.Value = this.getMaxHP(statBlock.HP);
+            }
 
             this.StatBlock(statBlock);
 
@@ -32,13 +43,18 @@ module ImprovedInitiative {
             });
 
             this.CurrentHP = ko.observable(this.MaxHP);
-        }
 
+            if (savedCreature) {
+                this.processSavedCreature(savedCreature);
+            }
+        }
+        
+        Id = 0;
         Alias = ko.observable(null);
-        TemporaryHP: KnockoutObservable<number> = ko.observable(0);
-        Tags: KnockoutObservableArray<string> = ko.observableArray<string>();
-        Initiative: KnockoutObservable<number> = ko.observable(0);
-        StatBlock: KnockoutObservable<IStatBlock> = ko.observable<IStatBlock>();
+        TemporaryHP = ko.observable(0);
+        Tags = ko.observableArray<string>();
+        Initiative = ko.observable(0);
+        StatBlock = ko.observable<IStatBlock>();
         Hidden = ko.observable(false);
 
         IndexLabel: number;
@@ -56,12 +72,19 @@ module ImprovedInitiative {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
             this.IsPlayerCharacter = newStatBlock.Player == "player";
             this.AC = newStatBlock.AC.Value;
-            if (this.MaxHP == undefined)
-            {
-                this.MaxHP = this.getMaxHP(newStatBlock.HP);
-            }    
+            this.MaxHP = newStatBlock.HP.Value;
             this.AbilityModifiers = this.calculateModifiers();
             this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
+        }
+
+        private processSavedCreature(savedCreature: ISavedCreature) {
+            this.IndexLabel = savedCreature.IndexLabel;
+            this.CurrentHP(savedCreature.CurrentHP);
+            this.TemporaryHP(savedCreature.TemporaryHP);
+            this.Initiative(savedCreature.Initiative);
+            this.Alias(savedCreature.Alias);
+            this.Tags(savedCreature.Tags);
+            this.Hidden(savedCreature.Hidden);
         }
 
         private getMaxHP(HP: ValueAndNotes) {

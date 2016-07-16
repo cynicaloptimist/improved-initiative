@@ -15,8 +15,8 @@ module ImprovedInitiative {
 
         LoadEncounter = (encounter: ISavedEncounter<CombatantPlayerViewModel>) => {
             this.Creatures(encounter.Creatures);
-            if (encounter.ActiveCreatureIndex != -1) {
-                this.ActiveCreature(this.Creatures()[encounter.ActiveCreatureIndex]);
+            if (encounter.ActiveCreatureId != -1) {
+                this.ActiveCreature(this.Creatures().filter(c => c.Id == encounter.ActiveCreatureId).pop());
             }
         }
 
