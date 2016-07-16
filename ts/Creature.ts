@@ -23,14 +23,14 @@ module ImprovedInitiative {
         static nextId = 0;
 
         constructor(creatureJson, public Encounter: Encounter, savedCreature?: ISavedCreature) {
-            this.Id = savedCreature ? savedCreature.Id : Creature.nextId++;
-            
             var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), creatureJson);
             
             if (savedCreature) {
                 statBlock.HP.Value = savedCreature.MaxHP || savedCreature.Statblock.HP.Value;
+                this.Id = savedCreature.Id || Creature.nextId++;
             } else {
                 statBlock.HP.Value = this.getMaxHP(statBlock.HP);
+                this.Id = Creature.nextId++;
             }
 
             this.StatBlock(statBlock);
