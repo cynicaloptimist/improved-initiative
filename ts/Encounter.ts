@@ -197,6 +197,12 @@ module ImprovedInitiative {
             this.Creatures.removeAll();
             this.CreatureCountsByName = [];
             e.Creatures.forEach(c => this.AddCreature(c.Statblock, null, c));
+            
+            var legacyCreatureIndex = e["ActiveCreatureIndex"];
+            if (legacyCreatureIndex != undefined && legacyCreatureIndex != -1) {
+                e.ActiveCreatureId = this.Creatures()[legacyCreatureIndex].Id;
+            }
+            
             if (e.ActiveCreatureId != -1) {
                 this.State('active');
                 this.ActiveCreature(this.Creatures().filter(c => c.Id == e.ActiveCreatureId).pop());
