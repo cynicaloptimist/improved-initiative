@@ -1,6 +1,8 @@
 module ImprovedInitiative {
     export interface ISavedCreature {
+        Id: number;
         Statblock: IStatBlock;
+        MaxHP: number;
         CurrentHP: number;
         TemporaryHP: number;
         Initiative: number;
@@ -11,7 +13,7 @@ module ImprovedInitiative {
     }
     export interface ISavedEncounter<T> {
         Name: string;
-        ActiveCreatureIndex: number;
+        ActiveCreatureId: number;
         Creatures: T[];
     }
 
@@ -70,24 +72,13 @@ module ImprovedInitiative {
             this.QueueEmitEncounter();
         }
 
-        private loadCreature = (savedCreature: ISavedCreature) => {
-            var creature = this.AddCreature(savedCreature.Statblock);
-            creature.CurrentHP(savedCreature.CurrentHP);
-            creature.TemporaryHP(savedCreature.TemporaryHP);
-            creature.Initiative(savedCreature.Initiative);
-            creature.IndexLabel = savedCreature.IndexLabel;
-            creature.Alias(savedCreature.Alias);
-            creature.Tags(savedCreature.Tags);
-            creature.Hidden(savedCreature.Hidden);
-        }
-
-        AddCreature = (creatureJson: IStatBlock, event?) => {
+        AddCreature = (creatureJson: IStatBlock, event?, savedCreature?: ISavedCreature) => {
             console.log("adding %O to encounter", creatureJson);
             var creature: ICreature;
             if (creatureJson.Player && creatureJson.Player.toLocaleLowerCase() === 'player') {
-                creature = new PlayerCharacter(creatureJson, this);
+                creature = new PlayerCharacter(creatureJson, this, savedCreature);
             } else {
-                creature = new Creature(creatureJson, this);
+                creature = new Creature(creatureJson, this, savedCreature);
             }
             if (event && event.altKey) {
                 creature.Hidden(true);
@@ -161,12 +152,15 @@ module ImprovedInitiative {
         }
 
         Save: (name?: string) => ISavedEncounter<ISavedCreature> = (name?: string) => {
+            var activeCreature = this.ActiveCreature();
             return {
                 Name: name || this.EncounterId,
-                ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
+                ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
                 Creatures: this.Creatures().map<ISavedCreature>(c => {
                     return {
+                        Id: c.Id,
                         Statblock: c.StatBlock(),
+                        MaxHP: c.MaxHP,
                         CurrentHP: c.CurrentHP(),
                         TemporaryHP: c.TemporaryHP(),
                         Initiative: c.Initiative(),
@@ -181,9 +175,10 @@ module ImprovedInitiative {
 
         SavePlayerDisplay: (name?: string) => ISavedEncounter<CombatantPlayerViewModel> = (name?: string) => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
+            var activeCreature = this.ActiveCreature();
             return {
                 Name: name || this.EncounterId,
-                ActiveCreatureIndex: this.Creatures().indexOf(this.ActiveCreature()),
+                ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
                 Creatures: this.Creatures()
                     .filter(c => {
                         if (c.Hidden()) {
@@ -198,17 +193,13 @@ module ImprovedInitiative {
             };
         }
 
-        AddSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
-            e.Creatures.forEach(this.loadCreature);
-        }
-
         LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
             this.Creatures.removeAll();
             this.CreatureCountsByName = [];
-            e.Creatures.forEach(this.loadCreature);
-            if (e.ActiveCreatureIndex != -1) {
+            e.Creatures.forEach(c => this.AddCreature(c.Statblock, null, c));
+            if (e.ActiveCreatureId != -1) {
                 this.State('active');
-                this.ActiveCreature(this.Creatures()[e.ActiveCreatureIndex]);
+                this.ActiveCreature(this.Creatures().filter(c => c.Id == e.ActiveCreatureId).pop());
             }
         }
     }

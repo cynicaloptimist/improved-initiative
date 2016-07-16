@@ -4,12 +4,14 @@ module ImprovedInitiative {
         HPDisplay: string;
         HPColor: string;
         Initiative: number;
+        Id: number;
         Tags: string[];
         IsPlayerCharacter: boolean;
 
         constructor(creature: ICreature) {
             this.Name = creature.ViewModel ? creature.ViewModel.DisplayName() :
                 creature.StatBlock().Name;
+            this.Id = creature.Id;
             this.HPDisplay = this.GetHPDisplay(creature);
             this.HPColor = this.GetHPColor(creature);
             this.Initiative = creature.Initiative();
