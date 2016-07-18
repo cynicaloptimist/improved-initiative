@@ -63,6 +63,11 @@ module ImprovedInitiative {
 
         private unMakeEditable = (editableStatBlock: any) => {
             for (let key in editableStatBlock) {  
+                if (key == "HP") {
+                    var hpInt = parseInt(editableStatBlock[key].Value());
+                    editableStatBlock[key].Value(hpInt);
+                }
+
                 let maybeArray = editableStatBlock[key];
                 if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
                     editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
