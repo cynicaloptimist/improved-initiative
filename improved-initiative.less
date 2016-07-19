@@ -521,7 +521,7 @@ input[type="number"] {
     }
 
     .name {
-        width: 25%;
+        width: 50%;
     }
 
     .hp {
@@ -547,10 +547,19 @@ input[type="number"] {
     }
 }
 
-#playerview .creature .hp:hover {
-    background-color: initial;
-}
+#playerview {
+    margin: 0;
 
+    font-size: 4.5vw;
+        
+    background-image: url('../img/improved-initiative-transparent_darkgreen.png');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+
+    .creature .hp:hover {
+        background-color: initial;
+    }
+}
 .footer {
     .recessed();
     
