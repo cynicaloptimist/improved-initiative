@@ -116,11 +116,17 @@ module ImprovedInitiative {
         }
 
         RemoveSelectedCreatures = () => {
-            var creatures = this.SelectedCreatures.removeAll(),
-                index = this.encounter().Creatures.indexOf(creatures[0]),
-                deletedCreatureNames = creatures.map(c => c.StatBlock().Name);
+            var creaturesToRemove = this.SelectedCreatures.removeAll(),
+                indexOfFirstCreatureToRemove = this.encounter().Creatures.indexOf(creaturesToRemove[0]),
+                deletedCreatureNames = creaturesToRemove.map(c => c.StatBlock().Name);
+            
+            if (this.encounter().Creatures().length > creaturesToRemove.length) {
+                while (creaturesToRemove.indexOf(this.encounter().ActiveCreature()) > -1) {
+                    this.encounter().NextTurn();
+                }
+            }
 
-            this.encounter().Creatures.removeAll(creatures);
+            this.encounter().Creatures.removeAll(creaturesToRemove);
 
             var allMyFriendsAreGone = name => this.encounter().Creatures().every(c => c.StatBlock().Name != name);
 
@@ -130,10 +136,10 @@ module ImprovedInitiative {
                 }
             });
 
-            if (index >= this.encounter().Creatures().length) {
-                index = this.encounter().Creatures().length - 1;
+            if (indexOfFirstCreatureToRemove >= this.encounter().Creatures().length) {
+                indexOfFirstCreatureToRemove = this.encounter().Creatures().length - 1;
             }
-            this.SelectCreature(this.encounter().Creatures()[index])
+            this.SelectCreature(this.encounter().Creatures()[indexOfFirstCreatureToRemove])
 
             this.encounter().QueueEmitEncounter();
         }
