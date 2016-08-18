@@ -6,3 +6,4 @@ public/css/*
 *.js
 .baseDir
 !Gruntfile.js
+!test/test.js
