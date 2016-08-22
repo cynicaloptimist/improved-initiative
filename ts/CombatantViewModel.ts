@@ -15,7 +15,8 @@ module ImprovedInitiative {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 currHP = this.Creature.CurrentHP(),
-                tempHP = this.Creature.TemporaryHP();
+                tempHP = this.Creature.TemporaryHP(),
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
 
             if (isNaN(damage)) {
                 return
@@ -26,6 +27,9 @@ module ImprovedInitiative {
                 if (tempHP < 0) {
                     currHP += tempHP;
                     tempHP = 0;
+                }
+                if (currHP < 0 && !allowNegativeHP) {
+                    currHP = 0;
                 }
             } else {
                 currHP += healing;

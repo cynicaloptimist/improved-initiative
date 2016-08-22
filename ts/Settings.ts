@@ -45,6 +45,11 @@ module ImprovedInitiative {
             Store.Save(Store.User, "HideMonstersOutsideEncounter", newValue);
         });
 
+        var allowNegativeHP = ko.observable(Store.Load(Store.User, "AllowNegativeHP"));
+        allowNegativeHP.subscribe(newValue => {
+            Store.Save(Store.User, "AllowNegativeHP", newValue);
+        });
+
         return {
             Commander: params.commander,
             ShowTab: (tabSelector: string) => {
@@ -71,6 +76,7 @@ module ImprovedInitiative {
             ],
             HpVerbosity: hpVerbosity,
             HideMonstersOutsideEncounter: hideMonstersOutsideEncounter,
+            AllowNegativeHP: allowNegativeHP,
 
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
