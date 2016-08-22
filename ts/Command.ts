@@ -1,6 +1,7 @@
 module ImprovedInitiative {
   export class Command {
-    ShowOnActionBar: KnockoutObservable<boolean>;
+      ShowOnActionBar: KnockoutObservable<boolean>;
+      ToolTip: KnockoutComputed<string>;  
     constructor(public Description: string,
                 public ActionBinding: () => any,
                 public KeyBinding: string = '',
@@ -13,6 +14,8 @@ module ImprovedInitiative {
                 this.ShowOnActionBar(true);
             });
         }
+
+        this.ToolTip = ko.computed(() => `${this.Description} [${this.KeyBinding}]`);
     }
   }
   
