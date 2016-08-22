@@ -245,6 +245,8 @@ module ImprovedInitiative {
             Store.Save(Store.User, 'SkipIntro', true);
         }
 
+        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
+        
         RegisterKeyBindings() {
             Mousetrap.reset();
             this.Commands.forEach(b => {

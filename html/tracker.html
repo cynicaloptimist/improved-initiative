@@ -95,6 +95,9 @@
             <div class="combat">
                 <div class="encounter" data-bind="with: Encounter">
                     <h2>Initiative Order</h2>
+                    <!-- ko if: $root.Commander.DisplayRoundCounter() -->
+                        <div class="round-counter">Current Round: <span data-bind="text: RoundCounter"></span></div>
+                    <!-- /ko -->
                     <ul class="combatants">
                         <li class="creature header">
                             <span class="initiative fa fa-forward"></span></span>

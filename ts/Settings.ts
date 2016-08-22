@@ -1,5 +1,8 @@
 module ImprovedInitiative {
-    export var Settings = (params) => {
+    interface Params {
+        commander: Commander;
+    }
+    export var Settings = (params: Params) => {
         var tips = [
             "You can view command list and set keybindings on the 'Commands' tab.",
             "You can use the player view URL to track your combat on any device.",
@@ -30,25 +33,16 @@ module ImprovedInitiative {
             currentTipIndex(newIndex);
         }
 
-        var rollHp = ko.observable(Store.Load(Store.User, "RollMonsterHp"));
-        rollHp.subscribe(newValue => {
-            Store.Save(Store.User, "RollMonsterHp", newValue);
-        });
+        var loadSetting = (settingName: string, defaultSetting?) => {
+            var setting = ko.observable(Store.Load(Store.User, settingName) || defaultSetting);
+            setting.subscribe(newValue => {
+                Store.Save(Store.User, settingName, newValue);
+            });
+            return setting;
+        }
 
-        var hpVerbosity = ko.observable(Store.Load(Store.User, "MonsterHPVerbosity") || "Colored Label");
-        hpVerbosity.subscribe(selectedOption => {
-            Store.Save(Store.User, "MonsterHPVerbosity", selectedOption);
-        });
-
-        var hideMonstersOutsideEncounter = ko.observable(Store.Load(Store.User, "HideMonstersOutsideEncounter"));
-        hideMonstersOutsideEncounter.subscribe(newValue => {
-            Store.Save(Store.User, "HideMonstersOutsideEncounter", newValue);
-        });
-
-        var allowNegativeHP = ko.observable(Store.Load(Store.User, "AllowNegativeHP"));
-        allowNegativeHP.subscribe(newValue => {
-            Store.Save(Store.User, "AllowNegativeHP", newValue);
-        });
+        var displayRoundCounter = loadSetting("DisplayRoundCounter");
+        displayRoundCounter.subscribe(params.commander.DisplayRoundCounter);
 
         return {
             Commander: params.commander,
@@ -67,16 +61,17 @@ module ImprovedInitiative {
                 }
             },
 
-            RollHp: rollHp,
+            RollHp: loadSetting("RollMonsterHp"),
             HpVerbosityOptions: [
                 "Actual HP",
                 "Colored Label",
                 "Monochrome Label",
                 "Hide All"
             ],
-            HpVerbosity: hpVerbosity,
-            HideMonstersOutsideEncounter: hideMonstersOutsideEncounter,
-            AllowNegativeHP: allowNegativeHP,
+            HpVerbosity: loadSetting("MonsterHPVerbosity", "Colored Label"),
+            HideMonstersOutsideEncounter: loadSetting("HideMonstersOutsideEncounter"),
+            AllowNegativeHP: loadSetting("AllowNegativeHP"),
+            DisplayRoundCounter: displayRoundCounter,
 
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
