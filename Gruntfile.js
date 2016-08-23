@@ -35,7 +35,7 @@ module.exports = function(grunt) {
             paths: ["."]
           },
           files: {
-            "public/css/improved-initiative.css": "improved-initiative.less"
+            "improved-initiative.less.css": "improved-initiative.less"
           }
         }
       },
@@ -45,22 +45,30 @@ module.exports = function(grunt) {
             'node_modules/knockout/build/output/knockout-latest.js',
             'node_modules/knockout-mapping/dist/knockout.mapping.js',
             'node_modules/jquery/dist/jquery.js',
+            'node_modules/awesomplete/awesomplete.js',
             'node_modules/mousetrap/mousetrap.js',
             'node_modules/socket.io-client/socket.io.js',
             'node_modules/browser-filesaver/FileSaver.js',
             'ImprovedInitiative.Client/*.js'
           ],
           dest: 'public/js/ImprovedInitiative.js'
+        },
+        css: {
+          src: [
+            'node_modules/awesomplete/awesomplete.css',
+            'improved-initiative.less.css'
+          ],
+          dest: 'public/css/improved-initiative.css'
         }
       },
       watch: {
         ts: {
           files: '**/*.ts',
-          tasks: ['ts', 'concat']
+          tasks: ['ts', 'concat:js']
         },
         lesscss: {
           files: '**/*.less',
-          tasks: ['less']
+          tasks: ['less', 'concat:css']
         }
       },
       copy: {

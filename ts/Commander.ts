@@ -223,10 +223,6 @@ module ImprovedInitiative {
             }
         }
 
-        FocusResponseRequest = () => {
-            $('#user-poll input').first().select();
-        }
-
         ShowingLibraries = ko.observable(true);
         ShowLibraries = () => this.ShowingLibraries(true);
         HideLibraries = () => this.ShowingLibraries(false);

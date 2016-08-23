@@ -1,4 +1,6 @@
 module ImprovedInitiative {
+    declare var Awesomplete: any;
+
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
         constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void) {
@@ -138,10 +140,21 @@ module ImprovedInitiative {
                 requestContent: `Add a note to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
                 inputSelector: '.response',
                 callback: tag => {
-                    this.Creature.Tags.push(tag);
-                    this.Creature.Encounter.QueueEmitEncounter();
+                    if (tag.length) {
+                        this.Creature.Tags.push(tag);
+                        this.Creature.Encounter.QueueEmitEncounter();
+                    }
                 }
             });
+            var input = document.getElementById("add-tag");
+            
+            new Awesomplete(input, {
+                list: Object.keys(Conditions),
+                minChars: 1,
+                autoFirst: true
+            });
+
+            $(input).select();
         }
 
         RemoveTag = (tag: string) => {
