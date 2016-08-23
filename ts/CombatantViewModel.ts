@@ -133,16 +133,16 @@ module ImprovedInitiative {
                     name);
         })
 
-        AddingTag = ko.observable(false);
-
-        NewTag = ko.observable(null);
-
-        CommitTag = () => {
-            this.Creature.Tags.push(this.NewTag());
-            this.NewTag(null);
-            this.AddingTag(false);
-            this.Creature.Encounter.QueueEmitEncounter();
-        };
+        AddTag = () => {
+            this.PollUser({
+                requestContent: `Add a note to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                inputSelector: '.response',
+                callback: tag => {
+                    this.Creature.Tags.push(tag);
+                    this.Creature.Encounter.QueueEmitEncounter();
+                }
+            });
+        }
 
         RemoveTag = (tag: string) => {
             this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);

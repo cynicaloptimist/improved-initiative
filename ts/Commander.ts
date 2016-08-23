@@ -181,7 +181,7 @@ module ImprovedInitiative {
         }
 
         AddSelectedCreatureTag = () => {
-            this.SelectedCreatures().forEach(c => c.ViewModel.AddingTag(true))
+            this.SelectedCreatures().forEach(c => c.ViewModel.AddTag())
             return false;
         }
 
