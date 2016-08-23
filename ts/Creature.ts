@@ -10,7 +10,7 @@ module ImprovedInitiative {
         AC: number;
         AbilityModifiers: AbilityScores;
         Tags: KnockoutObservableArray<string>;
-        InitiativeModifier: number;
+        InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<IStatBlock>;
@@ -64,7 +64,7 @@ module ImprovedInitiative {
         AC: number;
         AbilityModifiers: AbilityScores;
         NewTag: KnockoutObservable<string>;
-        InitiativeModifier: number;
+        InitiativeBonus: number;
         ViewModel: any;
         IsPlayerCharacter = false;
 
@@ -74,7 +74,10 @@ module ImprovedInitiative {
             this.AC = newStatBlock.AC.Value;
             this.MaxHP = newStatBlock.HP.Value;
             this.AbilityModifiers = this.calculateModifiers();
-            this.InitiativeModifier = newStatBlock.InitiativeModifier || this.AbilityModifiers.Dex || 0;
+            if (!newStatBlock.InitiativeModifier) {
+                newStatBlock.InitiativeModifier = 0;
+            }
+            this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
 
         private processSavedCreature(savedCreature: ISavedCreature) {
@@ -124,7 +127,7 @@ module ImprovedInitiative {
         }
 
         RollInitiative = (userPollQueue: UserPollQueue) => {
-            var roll = this.Encounter.Rules.Check(this.InitiativeModifier);
+            var roll = this.Encounter.Rules.Check(this.InitiativeBonus);
             this.Initiative(roll);
             return roll;
         }

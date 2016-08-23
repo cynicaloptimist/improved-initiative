@@ -43,7 +43,7 @@ module ImprovedInitiative {
 
         SortByInitiative = () => {
             this.Creatures.sort((l, r) => (r.Initiative() - l.Initiative()) ||
-                (r.InitiativeModifier - l.InitiativeModifier));
+                (r.InitiativeBonus - l.InitiativeBonus));
             this.QueueEmitEncounter();
         }
 
@@ -93,7 +93,7 @@ module ImprovedInitiative {
 
         RequestInitiative = (playercharacter: ICreature, userPollQueue: UserPollQueue) => {
             userPollQueue.Add({
-                requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' />`,
+                requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeBonus.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeBonus)}' />`,
                 inputSelector: '.response',
                 callback: (response: any) => {
                     playercharacter.Initiative(parseInt(response));
