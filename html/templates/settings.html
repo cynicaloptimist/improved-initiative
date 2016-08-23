@@ -1,9 +1,9 @@
 <div class="tabs">
-    <span data-bind="click: ShowTab.with('.about')">About</span>
-    <span data-bind="click: ShowTab.with('.keybindings')">Commands</span>
-    <span data-bind="click: ShowTab.with('.options')">Options</span>
+    <span data-bind="click: CurrentTab.with('about'), css: { selected: CurrentTab() == 'about' }">About</span>
+    <span data-bind="click: CurrentTab.with('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
+    <span data-bind="click: CurrentTab.with('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
 </div>
-<div class="tab about">
+<div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
         All Wizards of the Coast content provided under terms of the <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank">Open Gaming License Version 1.0a</a>.</p>
     <div class="tips">
@@ -12,7 +12,7 @@
         <span data-bind="click: NextTip" title="Next Tip" class="fa-clickable fa-arrow-right"></span>
     </div>
 </div>
-<div class="tab keybindings">
+<div data-bind="visible: CurrentTab() == 'keybindings'"  class="tab keybindings">
     <!--ko foreach: Commander.Commands -->
     <div>
         <span class="label" data-bind="text: Description"></span>
@@ -22,11 +22,8 @@
         />
     </div>
     <!--/ko -->
-    <div class="savekeybindings">
-        <input type="button" value="Save and Close" data-bind="click: Commander.HideSettings" />
-    </div>
 </div>
-<div class="tab options">
+<div data-bind="visible: CurrentTab() == 'options'"  class="tab options">
     <p>Export your user data as JSON:
         <input type="button" value="Download File" data-bind="click: ExportData" />
     </p>
@@ -49,3 +46,4 @@
         <input type="checkbox" data-bind="checked: AllowNegativeHP" />
     </p>
 </div>
+<div class="button save-and-close" data-bind="click: Commander.HideSettings">Save and Close</div>

@@ -46,10 +46,7 @@ module ImprovedInitiative {
 
         return {
             Commander: params.commander,
-            ShowTab: (tabSelector: string) => {
-                $('.settings .tab').hide();
-                $(`.settings ${tabSelector}`).show();
-            },
+            CurrentTab: ko.observable<string>('about'),
             ExportData: () => {
                 var blob = Store.ExportAll();
                 saveAs(blob, 'improved-initiative.json');
