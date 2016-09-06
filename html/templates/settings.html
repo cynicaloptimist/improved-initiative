@@ -24,6 +24,7 @@
     <!--/ko -->
 </div>
 <div data-bind="visible: CurrentTab() == 'options'"  class="tab options">
+    <h3>Data</h3>
     <p>Export your user data as JSON:
         <input type="button" value="Download File" data-bind="click: ExportData" />
     </p>
@@ -33,20 +34,22 @@
     <p>Import creatures from DnDAppFile:
         <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
     </p>
+    <h3>Rules</h3>
     <p>Roll monster HP when adding to combat: 
         <input type="checkbox" data-bind="checked: RollHp" />
     </p>
-    <p><strong>Player View</strong> monster HP verbosity:
-        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
-    </p>
-    <p>Display <strong>Round Counter</strong>: 
-        <input type="checkbox" data-bind="checked: DisplayRoundCounter" />
-    </p>
-    <p>Hide monsters from player view when encounter is not active: 
-        <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
-    </p>
     <p>Allow combatants to have negative hit points: 
         <input type="checkbox" data-bind="checked: AllowNegativeHP" />
+    </p>
+    <h3>Player View</h3>
+    <p>Monster HP Verbosity:
+        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
+    </p>
+    <p>Display Round Counter: 
+        <input type="checkbox" data-bind="checked: DisplayRoundCounter" />
+    </p>
+    <p>Hide monsters when encounter is not active: 
+        <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
     </p>
 </div>
 <div class="button save-and-close" data-bind="click: Commander.HideSettings">Save and Close</div>
