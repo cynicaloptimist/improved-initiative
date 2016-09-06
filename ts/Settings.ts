@@ -58,6 +58,13 @@ module ImprovedInitiative {
                 }
             },
 
+            ImportDndAppFile: (_, event) => {
+                var file = event.target.files[0];
+                if (file) {
+                    Store.ImportFromDnDAppFile(file);
+                }
+            },
+
             RollHp: loadSetting("RollMonsterHp"),
             HpVerbosityOptions: [
                 "Actual HP",

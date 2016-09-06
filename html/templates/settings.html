@@ -30,6 +30,9 @@
     <p>Import an exported user data file:
         <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
     </p>
+    <p>Import creatures from DnDAppFile:
+        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
+    </p>
     <p>Roll monster HP when adding to combat: 
         <input type="checkbox" data-bind="checked: RollHp" />
     </p>
