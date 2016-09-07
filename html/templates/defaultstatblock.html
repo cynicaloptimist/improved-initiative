@@ -26,7 +26,7 @@
         <div class="label" data-bind="text: $data"></div>
         <div class="score" data-bind="css: $data, text: $parent.Abilities[$data]"></div>
         <div class="modifier" data-bind="css: $data, 
-      text: $root.Encounter().Rules.Modifier($parent.Abilities[$data]).toModifierString()">
+      rollableText: $root.Encounter().Rules.GetModifierFromScore($parent.Abilities[$data]).toModifierString()">
         </div>
     </div>
 </div>
@@ -38,7 +38,7 @@
         <span class="label" data-bind="text: $data"></span>
         <!-- ko foreach: $parent[$data] -->
         <span data-bind="text:Name"></span>
-        <span class="csv" data-bind="text: (Modifier >= 0?'+':'-') + Modifier"></span>
+        <span class="csv" data-bind="rollableText: (Modifier >= 0?'+':'-') + Modifier"></span>
         <!-- /ko -->
     </div>
 </div>

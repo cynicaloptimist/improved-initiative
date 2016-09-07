@@ -93,7 +93,7 @@ module ImprovedInitiative {
         private getMaxHP(HP: ValueAndNotes) {
             if (Store.Load(Store.User, "RollMonsterHp")) {
                 try {
-                    return this.Encounter.Rules.RollHpExpression(HP.Notes).Total;
+                    return this.Encounter.Rules.RollDiceExpression(HP.Notes).Total;
                 } catch (e) {
                     return HP.Value;
                 }
@@ -121,7 +121,7 @@ module ImprovedInitiative {
         private calculateModifiers = () => {
             var modifiers = StatBlock.Empty().Abilities;
             for (var attribute in this.StatBlock().Abilities) {
-                modifiers[attribute] = this.Encounter.Rules.Modifier(this.StatBlock().Abilities[attribute]);
+                modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities[attribute]);
             }
             return modifiers;
         }
