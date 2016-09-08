@@ -1,10 +1,12 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/socket.io/socket.io.d.ts" />
+/// <reference path="../typings/globals/applicationinsights/index.d.ts" />
 
 import fs = require('fs');
 import express = require('express');
 import socketIO = require('socket.io');
+import appInsights = require('applicationinsights');
 var argv = require('minimist')(process.argv.slice(2));
 var app = express();
 var http = require('http').Server(app);
@@ -14,6 +16,7 @@ var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 
 var port = process.env.PORT || 80;
+var appInsightsKey = process.env.appInsightsKey;
 var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
@@ -57,6 +60,10 @@ var probablyUniqueString = (): string => {
     }
     playerViews[newEncounterId] = {};
     return newEncounterId;
+}
+
+if (appInsightsKey) {
+    appInsights.setup(appInsightsKey).start();
 }
 
 app.engine('html', mustacheExpress());

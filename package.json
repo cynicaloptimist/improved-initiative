@@ -17,6 +17,7 @@
     "sinon": "^1.15.4"
   },
   "dependencies": {
+    "applicationinsights": "^0.15.19",
     "awesomplete": "^1.1.1",
     "body-parser": "^1.14.1",
     "browser-filesaver": "^1.1.0",
