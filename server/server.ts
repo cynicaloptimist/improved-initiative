@@ -16,7 +16,6 @@ var bodyParser = require('body-parser');
 var mustacheExpress = require('mustache-express');
 
 var port = process.env.PORT || 80;
-var appInsightsKey = process.env.appInsightsKey;
 var playerViews = [];
 var creatures = [];
 var playerCharacters = [];
@@ -62,9 +61,8 @@ var probablyUniqueString = (): string => {
     return newEncounterId;
 }
 
-if (appInsightsKey) {
-    appInsights.setup(appInsightsKey).start();
-}
+console.log(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
+appInsights.setup().start();
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
