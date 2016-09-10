@@ -55,6 +55,7 @@ module ImprovedInitiative {
         Traits: NameAndContent[];
         Actions: NameAndContent[];
         LegendaryActions: NameAndContent[];
+        Description: string;
         Player: string;
     }
 
@@ -71,6 +72,7 @@ module ImprovedInitiative {
                 Traits: [],
                 Actions: [],
                 LegendaryActions: [],
+                Description: '',
                 Player: ''
             };
             if (mutator) { mutator(statBlock) };
@@ -101,7 +103,8 @@ module ImprovedInitiative {
             Name: statBlock.Name,
             Player: statBlock.Player,
             Traits: [],
-            Type: statBlock.Type
+            Type: statBlock.Type,
+            Description: statBlock.Description
         };
     }
 }
