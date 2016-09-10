@@ -57,7 +57,7 @@
 
 <hr />
 
-<!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
+<!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
 <div data-bind="if: $parent[$data].length, css: $data">
     <h4 data-bind="uiText: $data, visible: $parent[$data].length"></h4>
     <div data-bind="foreach: $parent[$data]">

@@ -54,6 +54,7 @@ module ImprovedInitiative {
         Challenge: string;
         Traits: NameAndContent[];
         Actions: NameAndContent[];
+        Reactions: NameAndContent[];
         LegendaryActions: NameAndContent[];
         Player: string;
     }
@@ -70,6 +71,7 @@ module ImprovedInitiative {
                 Challenge: '',
                 Traits: [],
                 Actions: [],
+                Reactions: [],
                 LegendaryActions: [],
                 Player: ''
             };
@@ -94,6 +96,7 @@ module ImprovedInitiative {
             InitiativeModifier: statBlock.InitiativeModifier,
             Languages: [],
             LegendaryActions: [],
+            Reactions: [],
             Saves: [],
             Senses: [],
             Skills: [],

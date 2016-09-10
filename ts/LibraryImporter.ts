@@ -104,6 +104,7 @@ module ImprovedInitiative {
 
                 creature.Traits = imp.GetUniqueTraits('traits');
                 creature.Actions = imp.GetUniqueTraits('actions');
+                creature.Reactions = imp.GetUniqueTraits('reactions');
                 creature.LegendaryActions = imp.GetUniqueTraits('legendaryactions');
 
                 library.push(creature);
