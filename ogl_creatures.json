@@ -14545,7 +14545,13 @@
     "Description": ""
   }, 
   {
-    "Reactions": [], 
+    "Reactions": [
+      {
+        "Content": ":When bright light or a creature is within 30 feet of the shrieker, it emits a\nshriek audible within 300 feet of it. The shrieker continues to shriek until\nthe disturbance moves out of range and for 1d4 of the shrieker's turns\nafterward.\n\n", 
+        "Usage": "", 
+        "Name": "Shriek"
+      }
+    ], 
     "AC": {
       "Notes": "", 
       "Value": 5
@@ -14565,7 +14571,13 @@
       "deafened", 
       "frightened"
     ], 
-    "Traits": [], 
+    "Traits": [
+      {
+        "Content": ": While the shrieker remains motionless, it is indistinguishable from an\nordinary fungus.\n\n", 
+        "Usage": "", 
+        "Name": "False Appearance"
+      }
+    ], 
     "Skills": [], 
     "Speed": [
       "0 ft."
