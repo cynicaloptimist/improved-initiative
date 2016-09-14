@@ -62,7 +62,7 @@ module ImprovedInitiative {
     export class StatBlock {
         static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
             var statBlock = {
-                Name: '', Source: 'Homebrew', Type: '',
+                Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 Speed: [],
                 Abilities: { Str: 10, Dex: 10, Con: 10, Cha: 10, Int: 10, Wis: 10 },
