@@ -28,7 +28,7 @@ module ImprovedInitiative {
         private makeEditable = (statBlock: IStatBlock) => {
             let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
             let modifierLists = ['Saves', 'Skills'];
-            let traitLists = ['Traits', 'Actions', 'LegendaryActions'];
+            let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
             
             let observableStatBlock = ko.mapping.fromJS(this.statBlock);
             
