@@ -37,6 +37,7 @@ module ImprovedInitiative {
 
     export interface IStatBlock {
         Name: string;
+        Source: string;
         Type: string;
         HP: ValueAndNotes;
         AC: ValueAndNotes;
@@ -54,14 +55,16 @@ module ImprovedInitiative {
         Challenge: string;
         Traits: NameAndContent[];
         Actions: NameAndContent[];
+        Reactions: NameAndContent[];
         LegendaryActions: NameAndContent[];
+        Description: string;
         Player: string;
     }
 
     export class StatBlock {
         static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
             var statBlock = {
-                Name: '', Type: '',
+                Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 InitiativeModifier: 0,
                 Speed: [],
@@ -71,7 +74,9 @@ module ImprovedInitiative {
                 Challenge: '',
                 Traits: [],
                 Actions: [],
+                Reactions: [],
                 LegendaryActions: [],
+                Description: '',
                 Player: ''
             };
             if (mutator) { mutator(statBlock) };
@@ -95,14 +100,17 @@ module ImprovedInitiative {
             InitiativeModifier: statBlock.InitiativeModifier,
             Languages: [],
             LegendaryActions: [],
+            Reactions: [],
             Saves: [],
             Senses: [],
             Skills: [],
             Speed: statBlock.Speed,
             Name: statBlock.Name,
+            Source: statBlock.Source,
             Player: statBlock.Player,
             Traits: [],
-            Type: statBlock.Type
+            Type: statBlock.Type,
+            Description: statBlock.Description
         };
     }
 }

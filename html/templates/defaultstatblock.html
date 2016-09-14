@@ -1,5 +1,6 @@
 <h3 class="Name" data-bind="text: Name"></h3>
 
+<div class="Source" data-bind="text: Source"></div>
 <div class="Type" data-bind="text: Type"></div>
 
 <hr />
@@ -57,7 +58,7 @@
 
 <hr />
 
-<!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
+<!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
 <div data-bind="if: $parent[$data].length, css: $data">
     <h4 data-bind="uiText: $data, visible: $parent[$data].length"></h4>
     <div data-bind="foreach: $parent[$data]">
@@ -70,3 +71,8 @@
   <hr />
 </div>
 <!-- /ko -->
+
+<div class="Description" data-bind="visible: Description">
+    <h4>Description</h4>
+    <span data-bind="text: Description"></span>
+</div>

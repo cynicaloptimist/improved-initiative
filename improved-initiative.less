@@ -362,7 +362,7 @@ input[type="file"] {
         &[type="number"] {
             width: 40px;
         }
-        &.name, &.type {
+        &.name, &.type, &.source {
             width:200px;
         }
     }
@@ -480,7 +480,16 @@ input[type="file"] {
             flex-direction: row;
         }
     }
-    .Traits, .Actions, .LegendaryActions {
+    .Traits, .Actions, .Reactions, .LegendaryActions {
+        flex-direction: column;
+        div {
+            flex-direction: column;
+            div {
+                display:block;
+            }
+        }
+    }
+    .Description {
         flex-direction: column;
         div {
             flex-direction: column;

@@ -86,7 +86,9 @@ module ImprovedInitiative {
                 var creature = StatBlock.Empty();
 
                 creature.Name = imp.GetString('name');
+                creature.Source = imp.GetString('source');
                 creature.Type = imp.GetJoinedStrings(['size', 'type', 'subtype'], ' ') + ', ' + imp.GetString('alignment');
+                creature.Description = imp.GetString('description');
                 creature.HP = imp.GetNotes('hp', 'hd');
                 creature.AC = imp.GetNotes('ac', 'actext');
                 creature.Speed = imp.GetArray('speed');
@@ -104,6 +106,7 @@ module ImprovedInitiative {
 
                 creature.Traits = imp.GetUniqueTraits('traits');
                 creature.Actions = imp.GetUniqueTraits('actions');
+                creature.Reactions = imp.GetUniqueTraits('reactions');
                 creature.LegendaryActions = imp.GetUniqueTraits('legendaryactions');
 
                 library.push(creature);
