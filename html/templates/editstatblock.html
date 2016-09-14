@@ -71,6 +71,10 @@
         <div><span class = "fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</span></div>
     </div>
     <!-- /ko -->
+    <div data-bind="css: Description" class="actions">
+        <label>Description</label>
+        <textarea data-bind="value: Description"></textarea>
+    </div>
 </div>
 <!-- /ko -->
 <!-- ko if: EditorType() == 'advanced' -->

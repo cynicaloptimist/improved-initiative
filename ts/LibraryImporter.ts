@@ -88,6 +88,7 @@ module ImprovedInitiative {
                 creature.Name = imp.GetString('name');
                 creature.Source = imp.GetString('source');
                 creature.Type = imp.GetJoinedStrings(['size', 'type', 'subtype'], ' ') + ', ' + imp.GetString('alignment');
+                creature.Description = imp.GetString('description');
                 creature.HP = imp.GetNotes('hp', 'hd');
                 creature.AC = imp.GetNotes('ac', 'actext');
                 creature.Speed = imp.GetArray('speed');
