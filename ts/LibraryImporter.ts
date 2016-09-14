@@ -86,6 +86,7 @@ module ImprovedInitiative {
                 var creature = StatBlock.Empty();
 
                 creature.Name = imp.GetString('name');
+                creature.Source = imp.GetString('source');
                 creature.Type = imp.GetJoinedStrings(['size', 'type', 'subtype'], ' ') + ', ' + imp.GetString('alignment');
                 creature.HP = imp.GetNotes('hp', 'hd');
                 creature.AC = imp.GetNotes('ac', 'actext');
