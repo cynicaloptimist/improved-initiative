@@ -1,3 +1,5 @@
+declare var markdownit: any;
+
 interface KnockoutBindingHandlers {
     focusOnRender: KnockoutBindingHandler;
     afterRender: KnockoutBindingHandler;
@@ -57,6 +59,10 @@ module ImprovedInitiative {
 
     let rollableTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         var text = valueAccessor().toString();
+
+        var md = markdownit();
+        text = md.renderInline(text);
+
         var rules: IRules = bindingContext.$root.Encounter().Rules;
         var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');

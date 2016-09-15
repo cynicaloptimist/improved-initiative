@@ -49,6 +49,7 @@ module.exports = function(grunt) {
             'node_modules/mousetrap/mousetrap.js',
             'node_modules/socket.io-client/socket.io.js',
             'node_modules/browser-filesaver/FileSaver.js',
+            'node_modules/markdown-it/dist/markdown-it.js',
             'ImprovedInitiative.Client/*.js'
           ],
           dest: 'public/js/ImprovedInitiative.js'
