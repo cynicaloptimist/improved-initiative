@@ -4,6 +4,8 @@ public/fonts/*
 *.js.map
 *.js
 *.css
+.tscache
+.vscode
 .baseDir
 !Gruntfile.js
 !test/test.js
