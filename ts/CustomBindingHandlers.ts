@@ -5,7 +5,7 @@ interface KnockoutBindingHandlers {
     afterRender: KnockoutBindingHandler;
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
-    rollableText: KnockoutBindingHandler;
+    statblockText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
 }
@@ -57,7 +57,7 @@ module ImprovedInitiative {
         }
     }
 
-    let rollableTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+    let statblockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         var text = valueAccessor().toString();
 
         var md = markdownit();
@@ -82,9 +82,9 @@ module ImprovedInitiative {
         });
     };
 
-    ko.bindingHandlers.rollableText = {
-        init: rollableTextHandler,
-        update: rollableTextHandler
+    ko.bindingHandlers.statblockText = {
+        init: statblockTextHandler,
+        update: statblockTextHandler
     }
 
     ko.bindingHandlers.format = {
