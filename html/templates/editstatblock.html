@@ -27,6 +27,11 @@
             <input type="text" data-bind="value: AC.Notes" />
         </label>
     </div>
+    <div>
+        <label>Initiative Modifier (<span class="tooltip" title = "added to Dexterity Mod to calculate total Initiative Bonus">?</span>)
+            <input type="number" data-bind="value: InitiativeModifier" />
+        </label>
+    </div>
     <div class="Abilities" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
         <div data-bind="text: $data"></div>
         <input type="number" class="score" data-bind="value: $parent.Abilities[$data]" />

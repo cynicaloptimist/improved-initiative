@@ -1,9 +1,11 @@
+declare var markdownit: any;
+
 interface KnockoutBindingHandlers {
     focusOnRender: KnockoutBindingHandler;
     afterRender: KnockoutBindingHandler;
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
-    rollableText: KnockoutBindingHandler;
+    statblockText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
 }
@@ -55,8 +57,12 @@ module ImprovedInitiative {
         }
     }
 
-    let rollableTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-        var text = valueAccessor();
+    let statblockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+        var text = valueAccessor().toString();
+
+        var md = markdownit();
+        text = md.renderInline(text);
+
         var rules: IRules = bindingContext.$root.Encounter().Rules;
         var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
@@ -67,7 +73,7 @@ module ImprovedInitiative {
         $(element).html(text);
         $(element).find('.rollable').on('click', (event) => {
             var diceExpression = event.target.innerHTML;
-            var diceRoll = rules.RollHpExpression(diceExpression);
+            var diceRoll = rules.RollDiceExpression(diceExpression);
             userPollQueue.Add({
                 requestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
                 inputSelector: '.rollTotal',
@@ -76,9 +82,9 @@ module ImprovedInitiative {
         });
     };
 
-    ko.bindingHandlers.rollableText = {
-        init: rollableTextHandler,
-        update: rollableTextHandler
+    ko.bindingHandlers.statblockText = {
+        init: statblockTextHandler,
+        update: statblockTextHandler
     }
 
     ko.bindingHandlers.format = {

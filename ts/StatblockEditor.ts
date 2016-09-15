@@ -67,6 +67,10 @@ module ImprovedInitiative {
                     var hpInt = parseInt(editableStatBlock[key].Value());
                     editableStatBlock[key].Value(hpInt);
                 }
+                if (key == "InitiativeModifier") {
+                    var initInt = parseInt(editableStatBlock[key]());
+                    editableStatBlock[key](initInt);
+                }
 
                 let maybeArray = editableStatBlock[key];
                 if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {

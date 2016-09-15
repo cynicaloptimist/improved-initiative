@@ -86,6 +86,10 @@ input[type="number"] {
     width: 40px;
 }
 
+input[type="file"] {
+    width: 170px;
+}
+
 //Common
 .fa {
     .fa();
@@ -150,6 +154,7 @@ input[type="number"] {
 
     .settings {
         width: 500px;
+        height: 500px;
         position: relative;
         margin: auto;
     }
@@ -412,8 +417,9 @@ input[type="number"] {
         padding: @medium-spacer;
     }
 
-    .keybindings, .options {
-        display:none;
+    .save-and-close {
+        margin-top: @medium-spacer;
+        align-self: flex-end;
     }
 }
 
@@ -465,6 +471,7 @@ input[type="number"] {
             flex-direction: column;
             align-items:center;
         }
+        margin-bottom: @small-spacer;
     }
     
     .modifiers, .keyword-sets {
@@ -490,6 +497,16 @@ input[type="number"] {
                 display:block;
             }
         }
+    }
+}
+
+.round-counter {
+    flex-direction: row;
+    justify-content: flex-end;
+    background-color: @primary-black;
+    padding: @medium-spacer;
+    span {
+        padding-left:@small-spacer;
     }
 }
 

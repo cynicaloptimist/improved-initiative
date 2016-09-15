@@ -1,8 +1,11 @@
 node_modules/*
 public/user/*
 public/fonts/*
-public/css/*
 *.js.map
 *.js
+*.css
+.tscache
+.vscode
 .baseDir
 !Gruntfile.js
+!test/test.js

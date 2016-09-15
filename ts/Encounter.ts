@@ -14,6 +14,7 @@ module ImprovedInitiative {
     export interface ISavedEncounter<T> {
         Name: string;
         ActiveCreatureId: number;
+        RoundCounter?: number;
         Creatures: T[];
     }
 
@@ -36,12 +37,13 @@ module ImprovedInitiative {
         ActiveCreature: KnockoutObservable<ICreature>;
         ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string> = ko.observable('inactive');
+        RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
 
         SortByInitiative = () => {
             this.Creatures.sort((l, r) => (r.Initiative() - l.Initiative()) ||
-                (r.InitiativeModifier - l.InitiativeModifier));
+                (r.InitiativeBonus - l.InitiativeBonus));
             this.QueueEmitEncounter();
         }
 
@@ -91,7 +93,7 @@ module ImprovedInitiative {
 
         RequestInitiative = (playercharacter: ICreature, userPollQueue: UserPollQueue) => {
             userPollQueue.Add({
-                requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeModifier.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeModifier)}' />`,
+                requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeBonus.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeBonus)}' />`,
                 inputSelector: '.response',
                 callback: (response: any) => {
                     playercharacter.Initiative(parseInt(response));
@@ -102,6 +104,7 @@ module ImprovedInitiative {
         StartEncounter = () => {
             this.SortByInitiative();
             this.State('active');
+            this.RoundCounter(1);
             this.ActiveCreature(this.Creatures()[0]);
             this.QueueEmitEncounter();
         }
@@ -137,6 +140,7 @@ module ImprovedInitiative {
             var nextIndex = this.Creatures().indexOf(this.ActiveCreature()) + 1;
             if (nextIndex >= this.Creatures().length) {
                 nextIndex = 0;
+                this.RoundCounter(this.RoundCounter() + 1);
             }
             this.ActiveCreature(this.Creatures()[nextIndex]);
             this.QueueEmitEncounter();
@@ -146,6 +150,7 @@ module ImprovedInitiative {
             var previousIndex = this.Creatures().indexOf(this.ActiveCreature()) - 1;
             if (previousIndex < 0) {
                 previousIndex = this.Creatures().length - 1;
+                this.RoundCounter(this.RoundCounter() - 1);
             }
             this.ActiveCreature(this.Creatures()[previousIndex]);
             this.QueueEmitEncounter();
@@ -156,6 +161,7 @@ module ImprovedInitiative {
             return {
                 Name: name || this.EncounterId,
                 ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
+                RoundCounter: this.RoundCounter(),
                 Creatures: this.Creatures().map<ISavedCreature>(c => {
                     return {
                         Id: c.Id,
@@ -179,6 +185,7 @@ module ImprovedInitiative {
             return {
                 Name: name || this.EncounterId,
                 ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
+                RoundCounter: this.RoundCounter(),
                 Creatures: this.Creatures()
                     .filter(c => {
                         if (c.Hidden()) {
@@ -207,6 +214,8 @@ module ImprovedInitiative {
                 this.State('active');
                 this.ActiveCreature(this.Creatures().filter(c => c.Id == e.ActiveCreatureId).pop());
             }
+
+            this.RoundCounter(e.RoundCounter || 1);
         }
     }
 }

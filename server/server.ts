@@ -1,10 +1,12 @@
 /// <reference path="../typings/node/node.d.ts" />
 /// <reference path="../typings/express/express.d.ts" />
 /// <reference path="../typings/socket.io/socket.io.d.ts" />
+/// <reference path="../typings/globals/applicationinsights/index.d.ts" />
 
 import fs = require('fs');
 import express = require('express');
 import socketIO = require('socket.io');
+import appInsights = require('applicationinsights');
 var argv = require('minimist')(process.argv.slice(2));
 var app = express();
 var http = require('http').Server(app);
@@ -59,6 +61,10 @@ var probablyUniqueString = (): string => {
     return newEncounterId;
 }
 
+if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+    appInsights.setup().start();
+}
+
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
 app.set('views', __dirname + '/html');
@@ -66,27 +72,24 @@ app.set('views', __dirname + '/html');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 
+var pageRenderOptionsWithEncounterId = (encounterId: string) => ({
+    rootDirectory: "..",
+    encounterId: encounterId,
+    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || ''
+});
+
 app.get('/', function(req, res) {
-    res.render('landing', {
-        rootDirectory: "..",
-        encounterId: probablyUniqueString(),
-    })
+    res.render('landing', pageRenderOptionsWithEncounterId(probablyUniqueString()));
 });
 
 app.get('/e/:id', (req, res) => {
     console.log('app.get ' + req.path);
-    res.render('tracker', {
-        rootDirectory: "..",
-        encounterId: req.params.id,
-    })
+    res.render('tracker', pageRenderOptionsWithEncounterId(req.params.id));
 })
 
 app.get('/p/:id', (req, res) => {
     console.log('app.get ' + req.path);
-    res.render('playerview', {
-        rootDirectory: "..",
-        encounterId: req.params.id
-    })
+    res.render('playerview', pageRenderOptionsWithEncounterId(req.params.id));
 })
 
 app.get('/playerviews/:id', (req, res) => {

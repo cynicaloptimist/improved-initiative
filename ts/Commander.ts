@@ -181,7 +181,7 @@ module ImprovedInitiative {
         }
 
         AddSelectedCreatureTag = () => {
-            this.SelectedCreatures().forEach(c => c.ViewModel.AddingTag(true))
+            this.SelectedCreatures().forEach(c => c.ViewModel.AddTag())
             return false;
         }
 
@@ -223,10 +223,6 @@ module ImprovedInitiative {
             }
         }
 
-        FocusResponseRequest = () => {
-            $('#user-poll input').first().select();
-        }
-
         ShowingLibraries = ko.observable(true);
         ShowLibraries = () => this.ShowingLibraries(true);
         HideLibraries = () => this.ShowingLibraries(false);
@@ -245,6 +241,8 @@ module ImprovedInitiative {
             Store.Save(Store.User, 'SkipIntro', true);
         }
 
+        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
+        
         RegisterKeyBindings() {
             Mousetrap.reset();
             this.Commands.forEach(b => {
