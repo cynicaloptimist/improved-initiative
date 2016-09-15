@@ -61,8 +61,9 @@ var probablyUniqueString = (): string => {
     return newEncounterId;
 }
 
-console.log(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
-appInsights.setup().start();
+if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
+    appInsights.setup().start();
+}
 
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
