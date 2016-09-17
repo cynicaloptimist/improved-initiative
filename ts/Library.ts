@@ -34,7 +34,7 @@ module ImprovedInitiative {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             
             Store.List(Store.PlayerCharacters).forEach(id => {
-                var statBlock = Store.Load<IStatBlock>(Store.PlayerCharacters, id);
+                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.PlayerCharacters, id));
                 this.Players.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
@@ -43,7 +43,7 @@ module ImprovedInitiative {
             }
 
             Store.List(Store.Creatures).forEach(id => {
-                var statBlock = Store.Load<IStatBlock>(Store.Creatures, id);
+                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.Creatures, id));
                 this.Creatures.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
         }

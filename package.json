@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -17,6 +17,8 @@
     "sinon": "^1.15.4"
   },
   "dependencies": {
+    "applicationinsights": "^0.15.19",
+    "awesomplete": "^1.1.1",
     "body-parser": "^1.14.1",
     "browser-filesaver": "^1.1.0",
     "express": "^4.13.3",
@@ -38,6 +40,7 @@
     "knockout": "^3.4.0",
     "knockout-mapping": "^2.6.0",
     "less": "^2.5.0",
+    "markdown-it": "^7.0.1",
     "minimist": "^1.2.0",
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",

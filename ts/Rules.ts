@@ -1,10 +1,10 @@
 module ImprovedInitiative {
     export interface IRules {
-        Modifier: (attribute: number) => number;
+        GetModifierFromScore: (attribute: number) => number;
         Check: (...mods: number[]) => number;
         GroupSimilarCreatures: boolean;
         EnemyHPTransparency: string;
-        RollHpExpression: (expression: string) => RollResult;
+        RollDiceExpression: (expression: string) => RollResult;
         ValidDicePattern: RegExp;
     }
 
@@ -17,37 +17,43 @@ module ImprovedInitiative {
                 output += ` + ${this.Modifier}`
             }
             if (this.Modifier < 0) {
-                output += ` - ${this.Modifier}`
+                output += ` - ${-this.Modifier}`
             }
             return output + ` = ${this.Total}`;
         }
     }    
 
     export class DefaultRules implements IRules {
-        Modifier = (attribute: number) => {
-            return Math.floor((attribute - 10) / 2);
+        GetModifierFromScore = (abilityScore: number) => {
+            return Math.floor((abilityScore - 10) / 2);
         }
         Check = (...mods: number[]) => {
-            return Math.ceil(Math.random() * 20) + mods.reduce((p, c) => p + c);
+            return Math.ceil(Math.random() * 20) + (mods.length ? mods.reduce((p, c) => p + c) : 0);
         }
         GroupSimilarCreatures = false;
         EnemyHPTransparency = "whenBloodied";
-        ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?/
-        RollHpExpression = (expression: string) => {
+        ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/
+        RollDiceExpression = (expression: string) => {
             //Taken from http://codereview.stackexchange.com/a/40996
-            var match = this.ValidDicePattern.exec(expression);
+            let match = this.ValidDicePattern.exec(expression);
             if (!match) {
                 throw "Invalid dice notation: " + expression;
             }
 
-            var howMany = (typeof match[1] == 'undefined') ? 1 : parseInt(match[1]);
-            var dieSize = parseInt(match[2]);
+            let isLooseModifier = typeof match[4] == 'string'
+            if (match[4]) {
+                let modifier = parseInt(match[4].replace(/[\s]*/g, ''));
+                return new RollResult([this.Check()], modifier);
+            }
+
+            let howMany = (typeof match[1] == 'undefined') ? 1 : parseInt(match[1]);
+            let dieSize = parseInt(match[2]);
             
-            var rolls = [];
-            for (var i = 0; i < howMany; i++) {
+            let rolls = [];
+            for (let i = 0; i < howMany; i++) {
                 rolls[i] = Math.ceil(Math.random() * dieSize);
             }
-            var modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3].replace(' ', ''));
+            let modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3].replace(/[\s]*/g, ''));
             return new RollResult(rolls, modifier);
         }
     }

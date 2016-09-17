@@ -11,6 +11,9 @@
     <div><label>Name 
         <input class="name" type="text" data-bind="value: Name" />
     </label></div>
+    <div><label>Source
+        <input class="type" type="text" data-bind="value: Source" />
+    </label></div>
     <div><label>Type 
         <input class="type" type="text" data-bind="value: Type" />
     </label></div>
@@ -22,6 +25,11 @@
         <label>AC 
             <input type="number" data-bind="value: AC.Value" />
             <input type="text" data-bind="value: AC.Notes" />
+        </label>
+    </div>
+    <div>
+        <label>Initiative Modifier (<span class="tooltip" title = "added to Dexterity Mod to calculate total Initiative Bonus">?</span>)
+            <input type="number" data-bind="value: InitiativeModifier" />
         </label>
     </div>
     <div class="Abilities" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
@@ -54,7 +62,7 @@
             <input type="text" data-bind="value: Challenge" />
         </label>
     </div>
-    <!-- ko foreach: ['Traits','Actions','LegendaryActions'] -->
+    <!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
     <hr />
     <div data-bind="css: $data" class="actions">
         <p data-bind="uiText: $data"></p>
@@ -68,6 +76,10 @@
         <div><span class = "fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</span></div>
     </div>
     <!-- /ko -->
+    <div data-bind="css: Description" class="actions">
+        <label>Description</label>
+        <textarea data-bind="value: Description"></textarea>
+    </div>
 </div>
 <!-- /ko -->
 <!-- ko if: EditorType() == 'advanced' -->

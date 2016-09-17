@@ -18,6 +18,7 @@ module ImprovedInitiative {
             Store.save(listKey, []);
             return [];
         }
+
         static Save<T>(listName: string, key: string, value: T) {
             if (typeof (key) !== "string") {
                 throw `Can't save to non-string key ${key}`;
@@ -31,10 +32,12 @@ module ImprovedInitiative {
             }
             Store.save(fullKey, value);
         }
+
         static Load<T>(listName: string, key: string): T {
             var fullKey = `${Store._prefix}.${listName}.${key}`;
             return Store.load(fullKey);
         }
+
         static Delete<T>(listName: string, key: string) {
             var listKey = `${Store._prefix}.${listName}`;
             var fullKey = `${Store._prefix}.${listName}.${key}`;
@@ -71,6 +74,30 @@ module ImprovedInitiative {
                 }
             };
             reader.readAsText(file);
+        }
+
+        static ImportFromDnDAppFile(file: File) {
+            var callback = (creatures: IStatBlock[]) => {
+                creatures.forEach(c => {
+                    this.Save(Store.Creatures, c.Name, c);
+                });
+            };
+
+            if (confirm(`Import all creatures in ${file.name} and reload?`)) {
+                try {
+                    new DnDAppFilesImporter().ImportFromXml(file, callback);
+                    location.reload();
+                } catch (error) {
+                    alert(`There was a problem importing ${file.name}: ${error}`);
+                    return;
+                }
+            }
+        }
+
+        static ExportCreatures() {
+            var creatures = this.List(Store.Creatures).map(id => Store.Load(Store.Creatures, id));
+            return new Blob([JSON.stringify(creatures, null, 2)],
+                { type: 'application/json' });
         }
 
         private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));

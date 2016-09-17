@@ -1,4 +1,6 @@
 module ImprovedInitiative {
+    declare var Awesomplete: any;
+
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
         constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void) {
@@ -15,7 +17,8 @@ module ImprovedInitiative {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 currHP = this.Creature.CurrentHP(),
-                tempHP = this.Creature.TemporaryHP();
+                tempHP = this.Creature.TemporaryHP(),
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
 
             if (isNaN(damage)) {
                 return
@@ -26,6 +29,9 @@ module ImprovedInitiative {
                 if (tempHP < 0) {
                     currHP += tempHP;
                     tempHP = 0;
+                }
+                if (currHP < 0 && !allowNegativeHP) {
+                    currHP = 0;
                 }
             } else {
                 currHP += healing;
@@ -129,16 +135,27 @@ module ImprovedInitiative {
                     name);
         })
 
-        AddingTag = ko.observable(false);
+        AddTag = () => {
+            this.PollUser({
+                requestContent: `Add a note to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                inputSelector: '.response',
+                callback: tag => {
+                    if (tag.length) {
+                        this.Creature.Tags.push(tag);
+                        this.Creature.Encounter.QueueEmitEncounter();
+                    }
+                }
+            });
+            var input = document.getElementById("add-tag");
+            
+            new Awesomplete(input, {
+                list: Object.keys(Conditions),
+                minChars: 1,
+                autoFirst: true
+            });
 
-        NewTag = ko.observable(null);
-
-        CommitTag = () => {
-            this.Creature.Tags.push(this.NewTag());
-            this.NewTag(null);
-            this.AddingTag(false);
-            this.Creature.Encounter.QueueEmitEncounter();
-        };
+            $(input).select();
+        }
 
         RemoveTag = (tag: string) => {
             this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);

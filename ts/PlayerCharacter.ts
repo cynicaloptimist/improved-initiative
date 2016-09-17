@@ -4,7 +4,7 @@ module ImprovedInitiative {
 
         RollInitiative = (userPollQueue: UserPollQueue) => {
             this.Encounter.RequestInitiative(this, userPollQueue);
-            return this.Encounter.Rules.Check(this.InitiativeModifier);
+            return this.Encounter.Rules.Check(this.InitiativeBonus);
         }
     }
 }

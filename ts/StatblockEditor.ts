@@ -28,7 +28,7 @@ module ImprovedInitiative {
         private makeEditable = (statBlock: IStatBlock) => {
             let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
             let modifierLists = ['Saves', 'Skills'];
-            let traitLists = ['Traits', 'Actions', 'LegendaryActions'];
+            let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
             
             let observableStatBlock = ko.mapping.fromJS(this.statBlock);
             
@@ -66,6 +66,10 @@ module ImprovedInitiative {
                 if (key == "HP") {
                     var hpInt = parseInt(editableStatBlock[key].Value());
                     editableStatBlock[key].Value(hpInt);
+                }
+                if (key == "InitiativeModifier") {
+                    var initInt = parseInt(editableStatBlock[key]());
+                    editableStatBlock[key](initInt);
                 }
 
                 let maybeArray = editableStatBlock[key];
