@@ -42,7 +42,7 @@ module ImprovedInitiative {
 
             let isLooseModifier = typeof match[4] == 'string'
             if (match[4]) {
-                let modifier = parseInt(match[4].replace(' ', ''));
+                let modifier = parseInt(match[4].replace(/[\s]*/g, ''));
                 return new RollResult([this.Check()], modifier);
             }
 
@@ -53,7 +53,7 @@ module ImprovedInitiative {
             for (let i = 0; i < howMany; i++) {
                 rolls[i] = Math.ceil(Math.random() * dieSize);
             }
-            let modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3].replace(' ', ''));
+            let modifier = (typeof match[3] == 'undefined') ? 0 : parseInt(match[3].replace(/[\s]*/g, ''));
             return new RollResult(rolls, modifier);
         }
     }
