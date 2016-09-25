@@ -13,7 +13,7 @@ module.exports = function(grunt) {
             removeComments: false,
           },
           default: {
-              src: ['ts/*.ts'],
+              src: ['client/*.ts'],
               outDir: 'ImprovedInitiative.Client',
               options: {
                   module: 'amd',
