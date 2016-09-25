@@ -4,32 +4,27 @@
 /// <reference path="../typings/globals/applicationinsights/index.d.ts" />
 
 import socketIO = require('socket.io');
-import appInsights = require('applicationinsights');
 import express = require('express');
 
+import ConfigureAppInsights from './configureappinsights';
 import ConfigureRoutes from './routes';
 import LoadCreatures from './loadcreatures';
 import ConfigureSockets from './sockets';
+import LaunchServer from './launchserver';
+
+ConfigureAppInsights();
+
+var creatures = [];
+var playerViews = [];
+
+LoadCreatures(creatures);
 
 var app = express();
 var http = require('http').Server(app);
-var io = socketIO(http);
 
-var port = process.env.PORT || 80;
-var playerViews = [];
-var creatures = [];
-
-if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
-    appInsights.setup().start();
-}
-
-LoadCreatures(creatures);
 ConfigureRoutes(app, creatures, playerViews);
+
+var io = socketIO(http);
 ConfigureSockets(io, playerViews);
 
-var server = http.listen(port, function() {
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log('Improved Initiative listening at http://%s:%s', host, port);
-});
+LaunchServer(http);
