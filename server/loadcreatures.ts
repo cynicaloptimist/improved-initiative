@@ -1,38 +1,38 @@
 import fs = require('fs');
 
-var importCreatureLibrary = (filename, creatures) => fs.readFile(filename, (err, buffer) => {
+var addCreaturesFromFile = (filename, creatures) => fs.readFile(filename, (err, buffer) => {
     if (err) {
         throw `Couldn't read creature library ${filename}: ${err}`;
     }
 
     var newCreatures = JSON.parse(buffer.toString());
-    var args = [0, 0].concat(newCreatures);
-    Array.prototype.splice.apply(creatures, args);
+    creatures.push.apply(creatures, newCreatures);
 });
 
 export default function(creatures){
-    var argv = require('minimist')(process.argv.slice(2));
-
-    if (argv.f) {
-        fs.stat(argv.f, (err, stats) => {
+    var path = require('minimist')(process.argv.slice(2)).f;
+    
+    if (path) {
+        fs.stat(path, (err, stats) => {
             if (err) {
-                throw `couldn't access ${argv.f}`;
+                throw `couldn't access ${path}`;
             }
             if (stats.isDirectory()) {
-                fs.readdir(argv.f, (err, fileNames) => {
+                fs.readdir(path, (err, fileNames) => {
                     if (err) {
-                        throw `couldn't read directory ${argv.f}`;
+                        throw `couldn't read directory ${path}`;
                     }
                     fileNames.forEach(fileName => {
-                        importCreatureLibrary(argv.f + '/' + fileName, creatures);
+                        addCreaturesFromFile(path + '/' + fileName, creatures);
                     });
                 })
             } else {
-                importCreatureLibrary(argv.f, creatures);
+                addCreaturesFromFile(path, creatures);
             }
         })
     }
+    
     else {
-        importCreatureLibrary('ogl_creatures.json', creatures);
+        addCreaturesFromFile('ogl_creatures.json', creatures);
     }
 }

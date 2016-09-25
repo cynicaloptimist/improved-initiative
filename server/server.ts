@@ -14,15 +14,15 @@ import LaunchServer from './launchserver';
 
 ConfigureAppInsights();
 
-var creatures = [];
+var creatureLibrary = [];
 var playerViews = [];
 
-LoadCreatures(creatures);
+LoadCreatures(creatureLibrary);
 
 var app = express();
 var http = require('http').Server(app);
 
-ConfigureRoutes(app, creatures, playerViews);
+ConfigureRoutes(app, creatureLibrary, playerViews);
 
 var io = socketIO(http);
 ConfigureSockets(io, playerViews);
