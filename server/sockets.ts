@@ -1,15 +1,26 @@
-export default function(io, playerViews) {
-    io.on('connection', function (socket) {
-        console.log('a user connected');
-        socket.on('update encounter', function(id, encounter) {
-            socket.join(id);
-            console.log('encounter: ' + JSON.stringify(encounter));
-            playerViews[id] = encounter;
-            socket.broadcast.to(id).emit('update encounter', encounter);
+export default function(io: SocketIO.Server, playerViews) {
+    io.on('connection', function (socket: SocketIO.Socket) {
+
+        var encounterId = null;
+
+        socket.on('update encounter', function (id, updatedEncounter) {
+            encounterId = id;
+            socket.join(encounterId);
+            playerViews[encounterId] = updatedEncounter;
+            socket.broadcast.to(encounterId).emit('update encounter', updatedEncounter);
         });
-        socket.on('join encounter', function(id) {
-            console.log(`encounter ${id} joined`);
+
+        socket.on('join encounter', function (id) {
+            encounterId = id;
             socket.join(id);
-        })
+        });
+
+        socket.on('disconnect', function () {
+            io.in(encounterId).clients((error, clients) => {
+                if (clients.length == 0) {
+                    delete playerViews[encounterId];
+                }
+            });
+        });
     });
 }
