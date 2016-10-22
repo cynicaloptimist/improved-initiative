@@ -17,11 +17,19 @@ module ImprovedInitiative {
             this.Creatures(encounter.Creatures);
             if (encounter.ActiveCreatureId != -1) {
                 this.ActiveCreature(this.Creatures().filter(c => c.Id == encounter.ActiveCreatureId).pop());
+                setTimeout(this.ScrollToActiveCreature, 1);
             }
         }
 
         LoadEncounterFromServer = (encounterId: string) => {
             $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
+        }
+
+        ScrollToActiveCreature = () => {
+            var activeCreature = $('.active')[0];
+            if (activeCreature) {
+                activeCreature.scrollIntoView(false);        
+            }
         }
     }
 }
