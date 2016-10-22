@@ -137,6 +137,8 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
+            var appInsights = window["appInsights"];
+            appInsights.trackEvent("TurnCompleted");
             var nextIndex = this.Creatures().indexOf(this.ActiveCreature()) + 1;
             if (nextIndex >= this.Creatures().length) {
                 nextIndex = 0;
