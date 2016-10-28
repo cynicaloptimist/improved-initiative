@@ -247,7 +247,7 @@ module ImprovedInitiative {
         
         RegisterKeyBindings() {
             Mousetrap.reset();
-            this.EncounterCommands.forEach(b => {
+            this.EncounterCommands.concat(this.CombatantCommands).forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
                 Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
                 Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
