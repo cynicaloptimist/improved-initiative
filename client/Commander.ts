@@ -1,14 +1,16 @@
 module ImprovedInitiative {
     export class Commander {
-        Commands: Command[];
+        CombatantCommands: Command[];
+        EncounterCommands: Command[];
         SelectedCreatures: KnockoutObservableArray<ICreature> = ko.observableArray<ICreature>([]);
 
         constructor(private encounter: KnockoutObservable<Encounter>,
             private userPollQueue: UserPollQueue,
             private statBlockEditor: StatBlockEditor,
             private library: CreatureLibrary) {
-            this.Commands = BuildCommandList(this);
-            this.Commands.forEach(c => {
+            this.EncounterCommands = BuildEncounterCommandList(this);
+            this.CombatantCommands = BuildCombatantCommandList(this);
+            this.EncounterCommands.concat(this.CombatantCommands).forEach(c => {
                 var keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
                 if (keyBinding) {
                     c.KeyBinding = keyBinding;
@@ -245,7 +247,7 @@ module ImprovedInitiative {
         
         RegisterKeyBindings() {
             Mousetrap.reset();
-            this.Commands.forEach(b => {
+            this.EncounterCommands.forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
                 Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
                 Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());

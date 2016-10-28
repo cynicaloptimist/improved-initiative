@@ -13,7 +13,18 @@
     </div>
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'"  class="tab keybindings">
-    <!--ko foreach: Commander.Commands -->
+    <h2>Encounter Commands</h2>
+    <!--ko foreach: Commander.EncounterCommands -->
+    <div>
+        <span class="label" data-bind="text: Description"></span>
+        <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+        <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
+        <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
+        />
+    </div>
+    <!--/ko -->
+    <h2>Combatant Commands</h2>
+    <!--ko foreach: Commander.CombatantCommands -->
     <div>
         <span class="label" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
