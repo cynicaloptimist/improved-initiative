@@ -253,11 +253,21 @@ module ImprovedInitiative {
         
         RegisterKeyBindings() {
             Mousetrap.reset();
+
+            Mousetrap.bind('backspace', e => {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    // internet explorer
+                    e.returnValue = false;
+                }
+            })
+
             this.EncounterCommands.concat(this.CombatantCommands).forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
                 Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
                 Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
-            })
+            });
         }
 
         StartEncounter = () => {
