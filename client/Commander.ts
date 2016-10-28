@@ -274,6 +274,10 @@ module ImprovedInitiative {
             this.encounter().EndEncounter();
         }
 
+        ClearEncounter = () => {
+            this.encounter().ClearEncounter();
+        }
+
         NextTurn = () => {
             this.encounter().NextTurn();
         }
@@ -298,7 +302,7 @@ module ImprovedInitiative {
 
         LoadEncounterByName = (encounterName: string) => {
             var encounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.SavedEncounters, encounterName);
-            this.encounter().LoadSavedEncounter(encounter);
+            this.encounter().LoadSavedEncounter(encounter, this.userPollQueue);
         }
 
         DeleteSavedEncounter = (encounterName: string) => {

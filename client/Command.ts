@@ -22,6 +22,7 @@ module ImprovedInitiative {
   export var BuildEncounterCommandList: (c: Commander) => Command [] = c => [
         new Command('Start Encounter', c.StartEncounter, 'alt+r', 'fa-play'),
         new Command('End Encounter', c.EndEncounter, 'alt+e', 'fa-stop'),
+        new Command('Clear Encounter', c.ClearEncounter, 'alt+del', 'fa-trash'),
         new Command('Open Library', c.ShowLibraries, 'alt+a', 'fa-user-plus'),
         new Command('Show Player Window', c.LaunchPlayerWindow, 'alt+w', 'fa-users'),
         new Command('Select Next Combatant', c.SelectNextCombatant, 'j', 'fa-arrow-down', false),

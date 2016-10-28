@@ -181,7 +181,7 @@ module ImprovedInitiative {
             };
         }
 
-        SavePlayerDisplay: (name?: string) => ISavedEncounter<CombatantPlayerViewModel> = (name?: string) => {
+        SavePlayerDisplay = (name?: string) => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             var activeCreature = this.ActiveCreature();
             return {
@@ -202,22 +202,39 @@ module ImprovedInitiative {
             };
         }
 
-        LoadSavedEncounter: (e: ISavedEncounter<ISavedCreature>) => void = e => {
-            this.Creatures.removeAll();
-            this.CreatureCountsByName = [];
-            e.Creatures.forEach(c => this.AddCreature(c.Statblock, null, c));
-            
-            var legacyCreatureIndex = e["ActiveCreatureIndex"];
+        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCreature>, userPollQueue: UserPollQueue) => {
+            let legacyCreatureIndex = savedEncounter["ActiveCreatureIndex"];
             if (legacyCreatureIndex != undefined && legacyCreatureIndex != -1) {
-                e.ActiveCreatureId = this.Creatures()[legacyCreatureIndex].Id;
+                savedEncounter.ActiveCreatureId = this.Creatures()[legacyCreatureIndex].Id;
             }
-            
-            if (e.ActiveCreatureId != -1) {
-                this.State('active');
-                this.ActiveCreature(this.Creatures().filter(c => c.Id == e.ActiveCreatureId).pop());
-            }
+            let savedEncounterIsActive = savedEncounter.ActiveCreatureId != -1;
+            let currentEncounterIsActive = this.State() == 'active';
 
-            this.RoundCounter(e.RoundCounter || 1);
+            savedEncounter.Creatures.forEach(c => {
+                let combatant = this.AddCreature(c.Statblock, null, c);
+                if (currentEncounterIsActive) {
+                    combatant.RollInitiative(userPollQueue);
+                }
+            });
+            
+            if (currentEncounterIsActive) {
+                this.SortByInitiative();
+            }
+            else {
+                if (savedEncounterIsActive) {
+                    this.State('active');
+                    this.ActiveCreature(this.Creatures().filter(c => c.Id == savedEncounter.ActiveCreatureId).pop());
+                }
+                this.RoundCounter(savedEncounter.RoundCounter || 1);
+            }
+        }
+
+        ClearEncounter = () => {
+            if (confirm("Remove all creatures and end encounter?")) {
+                this.Creatures.removeAll();
+                this.CreatureCountsByName = [];
+                this.EndEncounter();
+            }
         }
     }
 }
