@@ -254,12 +254,18 @@ module ImprovedInitiative {
             })
         }
 
-        RollInitiative = () => {
-            this.encounter().RollInitiative(this.userPollQueue);
+        StartEncounter = () => {
+            if (this.encounter().State() == 'inactive') {
+                this.encounter().RollInitiative(this.userPollQueue);
+            }
             this.userPollQueue.Add({
                 callback: this.encounter().StartEncounter
             });
             this.HideLibraries();
+        }
+
+        EndEncounter = () => {
+            this.encounter().EndEncounter();
         }
 
         NextTurn = () => {

@@ -20,8 +20,9 @@ module ImprovedInitiative {
   }
   
   export var BuildEncounterCommandList: (c: Commander) => Command [] = c => [
-        new Command('Roll Initiative', c.RollInitiative, 'alt+r', 'fa-play'),
-        new Command('Open Creature Library', c.ShowLibraries, 'alt+a', 'fa-user-plus'),
+        new Command('Start Encounter', c.StartEncounter, 'alt+r', 'fa-play'),
+        new Command('End Encounter', c.EndEncounter, 'alt+e', 'fa-stop'),
+        new Command('Open Library', c.ShowLibraries, 'alt+a', 'fa-user-plus'),
         new Command('Show Player Window', c.LaunchPlayerWindow, 'alt+w', 'fa-users'),
         new Command('Select Next Combatant', c.SelectNextCombatant, 'j', 'fa-arrow-down', false),
         new Command('Select Previous Combatant', c.SelectPreviousCombatant, 'k', 'fa-arrow-up', false),
