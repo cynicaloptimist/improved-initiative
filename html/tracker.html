@@ -39,7 +39,7 @@
             ">
             </span>
         </div>
-        <div class="commands-combatant" data-bind="foreach: Commander.CombatantCommands">
+        <div class="commands-combatant" data-bind="visible: Commander.SelectedCreatures().length > 0, foreach: Commander.CombatantCommands">
             <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
