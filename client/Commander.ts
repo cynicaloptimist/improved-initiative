@@ -34,6 +34,12 @@ module ImprovedInitiative {
             }
         });
 
+        SelectedCreatureNames: KnockoutComputed<string> = ko.computed(() =>
+            this.SelectedCreatures()
+                .map(c => c.ViewModel.DisplayName())
+                .join(', ')
+        );
+
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
             listing.LoadStatBlock(listing => {
                 this.encounter().AddCreature(listing.StatBlock(), event);

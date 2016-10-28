@@ -91,7 +91,7 @@
         <!-- /ko -->
         <!-- ko ifnot: Commander.ShowingLibraries -->
         <div class="active-creature" data-bind="if: Encounter().ActiveCreature()">
-            <h2>Active Creature</h2>
+            <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
                 visible: Encounter().ActiveCreature(), 
                 component: { 
@@ -153,8 +153,8 @@
         <!-- /ko -->
     </div>
     <div class="right-column">
-        <div class="target-creature">
-            <h2>Target Creature</h2>
+        <div class="selected-combatant">
+            <h2>Selected Combatant</h2>
             <div class="statblock" data-bind="visible: Commander.SelectedCreatures().length == 1, 
                 component: { 
                 name: 'defaultstatblock', 
@@ -162,6 +162,9 @@
                     creature: Commander.SelectedCreatureStatblock(),
                 } 
                 }">
+            </div>
+            <div class="selected-combatant-names" data-bind = "visible: Commander.SelectedCreatures().length > 1, 
+                text: Commander.SelectedCreatureNames()">
             </div>
         </div>
     </div>
