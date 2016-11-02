@@ -5,7 +5,7 @@ module ImprovedInitiative {
         }
         UserPollQueue = new UserPollQueue();
         StatBlockEditor = new StatBlockEditor();
-        Encounter = ko.observable(new Encounter());
+        Encounter = new Encounter(this.UserPollQueue);
         Library = new CreatureLibrary();
         Commander = new Commander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.Library)
     }

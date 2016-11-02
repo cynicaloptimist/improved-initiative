@@ -19,8 +19,8 @@ module ImprovedInitiative {
     }
 
     export class Encounter {
-        constructor(rules?: IRules) {
-            this.Rules = rules || new DefaultRules();
+        constructor(userPollQueue: UserPollQueue) {
+            this.Rules = new DefaultRules();
             this.Creatures = ko.observableArray<ICreature>();
             this.CreatureCountsByName = [];
             this.ActiveCreature = ko.observable<ICreature>();
@@ -29,6 +29,11 @@ module ImprovedInitiative {
                     ? this.ActiveCreature().StatBlock()
                     : StatBlock.Empty();
             });
+
+            var autosavedEncounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.AutoSavedEncounters, this.EncounterId);
+            if (autosavedEncounter) {
+                this.LoadSavedEncounter(autosavedEncounter, userPollQueue);
+            }
         }
 
         Rules: IRules;
@@ -51,6 +56,7 @@ module ImprovedInitiative {
 
         private EmitEncounter = () => {
             this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
+            Store.Save<ISavedEncounter<ISavedCreature>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
         }
 
         QueueEmitEncounter = () => {

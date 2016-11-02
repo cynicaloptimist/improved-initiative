@@ -5,6 +5,7 @@ module ImprovedInitiative {
         static PlayerCharacters: string = "PlayerCharacters";
         static Creatures: string = "Creatures";
         static SavedEncounters: string = "SavedEncounters";
+        static AutoSavedEncounters: string = "AutoSavedEncounters";
         static User: string = "User";
         static KeyBindings: string = "KeyBindings";
         static ActionBar: string = "ActionBar";

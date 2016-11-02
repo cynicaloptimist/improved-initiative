@@ -4,7 +4,7 @@ module ImprovedInitiative {
         EncounterCommands: Command[];
         SelectedCreatures: KnockoutObservableArray<ICreature> = ko.observableArray<ICreature>([]);
 
-        constructor(private encounter: KnockoutObservable<Encounter>,
+        constructor(private encounter: Encounter,
             private userPollQueue: UserPollQueue,
             private statBlockEditor: StatBlockEditor,
             private library: CreatureLibrary) {
@@ -42,7 +42,7 @@ module ImprovedInitiative {
 
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
             listing.LoadStatBlock(listing => {
-                this.encounter().AddCreature(listing.StatBlock(), event);
+                this.encounter.AddCreature(listing.StatBlock(), event);
             });
         }
 
@@ -113,43 +113,43 @@ module ImprovedInitiative {
         }
 
         private selectCreatureByOffset = (offset: number) => {
-            var newIndex = this.encounter().Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
+            var newIndex = this.encounter.Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
             if (newIndex < 0) {
                 newIndex = 0;
-            } else if (newIndex >= this.encounter().Creatures().length) {
-                newIndex = this.encounter().Creatures().length - 1;
+            } else if (newIndex >= this.encounter.Creatures().length) {
+                newIndex = this.encounter.Creatures().length - 1;
             }
             this.SelectedCreatures.removeAll()
-            this.SelectedCreatures.push(this.encounter().Creatures()[newIndex]);
+            this.SelectedCreatures.push(this.encounter.Creatures()[newIndex]);
         }
 
         RemoveSelectedCreatures = () => {
             var creaturesToRemove = this.SelectedCreatures.removeAll(),
-                indexOfFirstCreatureToRemove = this.encounter().Creatures.indexOf(creaturesToRemove[0]),
+                indexOfFirstCreatureToRemove = this.encounter.Creatures.indexOf(creaturesToRemove[0]),
                 deletedCreatureNames = creaturesToRemove.map(c => c.StatBlock().Name);
             
-            if (this.encounter().Creatures().length > creaturesToRemove.length) {
-                while (creaturesToRemove.indexOf(this.encounter().ActiveCreature()) > -1) {
-                    this.encounter().NextTurn();
+            if (this.encounter.Creatures().length > creaturesToRemove.length) {
+                while (creaturesToRemove.indexOf(this.encounter.ActiveCreature()) > -1) {
+                    this.encounter.NextTurn();
                 }
             }
 
-            this.encounter().Creatures.removeAll(creaturesToRemove);
+            this.encounter.Creatures.removeAll(creaturesToRemove);
 
-            var allMyFriendsAreGone = name => this.encounter().Creatures().every(c => c.StatBlock().Name != name);
+            var allMyFriendsAreGone = name => this.encounter.Creatures().every(c => c.StatBlock().Name != name);
 
             deletedCreatureNames.forEach(name => {
                 if (allMyFriendsAreGone(name)) {
-                    this.encounter().CreatureCountsByName[name](0);
+                    this.encounter.CreatureCountsByName[name](0);
                 }
             });
 
-            if (indexOfFirstCreatureToRemove >= this.encounter().Creatures().length) {
-                indexOfFirstCreatureToRemove = this.encounter().Creatures().length - 1;
+            if (indexOfFirstCreatureToRemove >= this.encounter.Creatures().length) {
+                indexOfFirstCreatureToRemove = this.encounter.Creatures().length - 1;
             }
-            this.SelectCreature(this.encounter().Creatures()[indexOfFirstCreatureToRemove])
+            this.SelectCreature(this.encounter.Creatures()[indexOfFirstCreatureToRemove])
 
-            this.encounter().QueueEmitEncounter();
+            this.encounter.QueueEmitEncounter();
         }
 
         SelectPreviousCombatant = () => {
@@ -168,7 +168,7 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: response => selectedCreatures.forEach(c => {
                     c.ViewModel.ApplyDamage(response);
-                    this.encounter().QueueEmitEncounter();
+                    this.encounter.QueueEmitEncounter();
                 })
             });
             return false;
@@ -182,7 +182,7 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: response => selectedCreatures.forEach(c => {
                     c.ViewModel.ApplyTemporaryHP(response);
-                    this.encounter().QueueEmitEncounter();
+                    this.encounter.QueueEmitEncounter();
                 })
             });
             return false;
@@ -200,17 +200,17 @@ module ImprovedInitiative {
 
         MoveSelectedCreatureUp = () => {
             var creature = this.SelectedCreatures()[0];
-            var index = this.encounter().Creatures.indexOf(creature)
+            var index = this.encounter.Creatures.indexOf(creature)
             if (creature && index > 0) {
-                this.encounter().MoveCreature(creature, index - 1);
+                this.encounter.MoveCreature(creature, index - 1);
             }
         }
 
         MoveSelectedCreatureDown = () => {
             var creature = this.SelectedCreatures()[0];
-            var index = this.encounter().Creatures.indexOf(creature)
-            if (creature && index < this.encounter().Creatures().length - 1) {
-                this.encounter().MoveCreature(creature, index + 1);
+            var index = this.encounter.Creatures.indexOf(creature)
+            if (creature && index < this.encounter.Creatures().length - 1) {
+                this.encounter.MoveCreature(creature, index + 1);
             }
         }
 
@@ -224,7 +224,7 @@ module ImprovedInitiative {
                 var selectedCreature = this.SelectedCreatures()[0];
                 this.statBlockEditor.EditCreature(null, this.SelectedCreatureStatblock(), (_, __, newStatBlock) => {
                     selectedCreature.StatBlock(newStatBlock);
-                    this.encounter().QueueEmitEncounter();
+                    this.encounter.QueueEmitEncounter();
                 }, (library, id) => {
                     this.RemoveSelectedCreatures();
                 })
@@ -236,7 +236,7 @@ module ImprovedInitiative {
         HideLibraries = () => this.ShowingLibraries(false);
         
         LaunchPlayerWindow = () => {
-            window.open(`/p/${this.encounter().EncounterId}`, 'Player View');
+            window.open(`/p/${this.encounter.EncounterId}`, 'Player View');
         }
 
         ShowSettings = () => {
@@ -271,36 +271,36 @@ module ImprovedInitiative {
         }
 
         StartEncounter = () => {
-            if (this.encounter().State() == 'inactive') {
-                this.encounter().RollInitiative(this.userPollQueue);
+            if (this.encounter.State() == 'inactive') {
+                this.encounter.RollInitiative(this.userPollQueue);
             }
             this.userPollQueue.Add({
-                callback: this.encounter().StartEncounter
+                callback: this.encounter.StartEncounter
             });
             this.HideLibraries();
         }
 
         EndEncounter = () => {
-            this.encounter().EndEncounter();
+            this.encounter.EndEncounter();
         }
 
         ClearEncounter = () => {
-            this.encounter().ClearEncounter();
+            this.encounter.ClearEncounter();
         }
 
         NextTurn = () => {
-            this.encounter().NextTurn();
+            this.encounter.NextTurn();
         }
 
         PreviousTurn = () => {
-            this.encounter().PreviousTurn();
+            this.encounter.PreviousTurn();
         }
         SaveEncounter = () => {
             this.userPollQueue.Add({
                 requestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
                 inputSelector: '.response',
                 callback: (response: string) => {
-                    var savedEncounter = this.encounter().Save(response);
+                    var savedEncounter = this.encounter.Save(response);
                     var savedEncounters = this.library.SavedEncounterIndex;
                     if (savedEncounters.indexOf(response) == -1) {
                         savedEncounters.push(response);
@@ -312,7 +312,7 @@ module ImprovedInitiative {
 
         LoadEncounterByName = (encounterName: string) => {
             var encounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.SavedEncounters, encounterName);
-            this.encounter().LoadSavedEncounter(encounter, this.userPollQueue);
+            this.encounter.LoadSavedEncounter(encounter, this.userPollQueue);
         }
 
         DeleteSavedEncounter = (encounterName: string) => {
