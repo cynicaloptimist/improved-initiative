@@ -184,10 +184,11 @@ module ImprovedInitiative {
         SavePlayerDisplay = (name?: string) => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             var activeCreature = this.ActiveCreature();
+            var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
                 Name: name || this.EncounterId,
                 ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
-                RoundCounter: this.RoundCounter(),
+                RoundCounter: roundCounter,
                 Creatures: this.Creatures()
                     .filter(c => {
                         if (c.Hidden()) {

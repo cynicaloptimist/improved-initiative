@@ -24,13 +24,13 @@
 
 <body id="playerview">
     <div class="encounter">
+        <div class="creature header">
+            <div class="initiative"><span class="fa fa-forward"></span></div>
+            <div class="name">Combatant</div>
+            <div class="hp"><span class="fa fa-heart"></span></div>
+            <div class="tags"><span class="fa fa-tag"></span></div>
+        </div>
         <ul class="combatants">
-            <li class="creature header">
-                <div class="initiative"><span class="fa fa-forward"></span></div>
-                <div class="name">Combatant</div>
-                <div class="hp"><span class="fa fa-heart"></span></div>
-                <div class="tags"><span class="fa fa-tag"></span></div>
-            </li>
             <!-- ko foreach: Creatures -->
             <li class="creature" data-bind="
             css: { active: $parent.ActiveCreature() == $data, 
@@ -42,6 +42,9 @@
             </li>
             <!-- /ko -->
         </ul>
+        <!-- ko if: RoundCounter -->
+        <div class="round-counter">Current Round: <span data-bind="text: RoundCounter"></span></div>
+        <!-- /ko -->
     </div>
 </body>
 
