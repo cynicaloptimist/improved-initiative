@@ -44,6 +44,7 @@ module ImprovedInitiative {
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
             listing.LoadStatBlock(listing => {
                 this.encounter.AddCreature(listing.StatBlock(), event);
+                this.eventLog.AddEvent(`${listing.Name} added to combat.`);
             });
         }
 
@@ -150,6 +151,8 @@ module ImprovedInitiative {
             }
             this.SelectCreature(this.encounter.Creatures()[indexOfFirstCreatureToRemove])
 
+            this.eventLog.AddEvent(`${deletedCreatureNames.join(', ')} removed from encounter.`);
+
             this.encounter.QueueEmitEncounter();
         }
 
@@ -169,6 +172,7 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: response => selectedCreatures.forEach(c => {
                     c.ViewModel.ApplyDamage(response);
+                    this.eventLog.AddEvent(`${response} damage applied to ${creatureNames}.`);
                     this.encounter.QueueEmitEncounter();
                 })
             });
@@ -183,9 +187,11 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: response => selectedCreatures.forEach(c => {
                     c.ViewModel.ApplyTemporaryHP(response);
+                    this.eventLog.AddEvent(`${response} temporary hit points granted to ${creatureNames}.`);
                     this.encounter.QueueEmitEncounter();
                 })
             });
+
             return false;
         }
 
@@ -203,7 +209,8 @@ module ImprovedInitiative {
             var creature = this.SelectedCreatures()[0];
             var index = this.encounter.Creatures.indexOf(creature)
             if (creature && index > 0) {
-                this.encounter.MoveCreature(creature, index - 1);
+                var newInitiative = this.encounter.MoveCreature(creature, index - 1);
+                this.eventLog.AddEvent(`${creature.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
@@ -211,7 +218,8 @@ module ImprovedInitiative {
             var creature = this.SelectedCreatures()[0];
             var index = this.encounter.Creatures.indexOf(creature)
             if (creature && index < this.encounter.Creatures().length - 1) {
-                this.encounter.MoveCreature(creature, index + 1);
+                var newInitiative = this.encounter.MoveCreature(creature, index + 1);
+                this.eventLog.AddEvent(`${creature.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
@@ -280,24 +288,31 @@ module ImprovedInitiative {
             });
             this.HideLibraries();
 
-            this.eventLog.AddEvent("Encounter started.")
+            this.eventLog.AddEvent("Encounter started.");
         }
 
         EndEncounter = () => {
             this.encounter.EndEncounter();
+            this.eventLog.AddEvent("Encounter ended.");
         }
 
         ClearEncounter = () => {
             this.encounter.ClearEncounter();
+            this.eventLog.AddEvent("All combatants removed from encounter.");
         }
 
         NextTurn = () => {
             this.encounter.NextTurn();
+            var currentCreature = this.encounter.ActiveCreature();
+            this.eventLog.AddEvent(`Start of turn for ${currentCreature.ViewModel.DisplayName()}.`);
         }
 
         PreviousTurn = () => {
             this.encounter.PreviousTurn();
+            var currentCreature = this.encounter.ActiveCreature();
+            this.eventLog.AddEvent(`Initiative rewound to ${currentCreature.ViewModel.DisplayName()}.`);
         }
+
         SaveEncounter = () => {
             this.userPollQueue.Add({
                 requestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
@@ -309,6 +324,7 @@ module ImprovedInitiative {
                         savedEncounters.push(response);
                     }
                     Store.Save(Store.SavedEncounters, response, savedEncounter);
+                    this.eventLog.AddEvent(`Encounter saved.`);
                 }
             })
         }
@@ -316,12 +332,14 @@ module ImprovedInitiative {
         LoadEncounterByName = (encounterName: string) => {
             var encounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.SavedEncounters, encounterName);
             this.encounter.LoadSavedEncounter(encounter, this.userPollQueue);
+            this.eventLog.AddEvent(`Encounter loaded.`);
         }
 
         DeleteSavedEncounter = (encounterName: string) => {
             if (confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)) {
                 Store.Delete(Store.SavedEncounters, encounterName);
                 this.library.SavedEncounterIndex.remove(encounterName);
+                this.eventLog.AddEvent(`Encounter ${encounterName} deleted.`);
             }
         }
     }

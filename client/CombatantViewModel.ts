@@ -3,7 +3,7 @@ module ImprovedInitiative {
 
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void) {
+        constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Creature.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Creature.CurrentHP(), this.Creature.TemporaryHP(), this.Creature.MaxHP);
@@ -76,6 +76,7 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: damage => {
                     this.ApplyDamage(damage);
+                    this.LogEvent(`${damage} damage applied to ${this.DisplayName()}.`);
                     this.Creature.Encounter.QueueEmitEncounter();
                 }
             });
@@ -87,17 +88,25 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: initiative => {
                     this.ApplyInitiative(initiative);
+                    this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
                     this.Creature.Encounter.QueueEmitEncounter();
                 }
             });
         }
 
         EditName = () => {
+            var currentName = this.DisplayName();
             this.PollUser({
-                requestContent: `Change alias for ${this.DisplayName()}: <input class='response' />`,
+                requestContent: `Change alias for ${currentName}: <input class='response' />`,
                 inputSelector: '.response',
                 callback: alias => {
                     this.Creature.Alias(alias);
+                    if (alias) {
+                        this.LogEvent(`${currentName} alias changed to ${alias}.`);
+                    } else {
+                        this.LogEvent(`${currentName} alias removed.`);
+                    }
+                    
                     this.Creature.Encounter.QueueEmitEncounter();
                 }
             });
@@ -109,6 +118,7 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: thp => {
                     this.ApplyTemporaryHP(thp);
+                    this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
                     this.Creature.Encounter.QueueEmitEncounter();
                 }
             });
@@ -119,7 +129,13 @@ module ImprovedInitiative {
         })
 
         ToggleHidden = (data, event) => {
-            this.Creature.Hidden(!this.Creature.Hidden());
+            if (this.Creature.Hidden()) {
+                this.Creature.Hidden(false);
+                this.LogEvent(`${this.DisplayName()} revealed in player view.`);
+            } else {
+                this.Creature.Hidden(true);
+                this.LogEvent(`${this.DisplayName()} revealed in player view.`);
+            }
             this.Creature.Encounter.QueueEmitEncounter();
         }
 
@@ -137,11 +153,12 @@ module ImprovedInitiative {
 
         AddTag = () => {
             this.PollUser({
-                requestContent: `Add a note to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                requestContent: `Add a tag to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
                 inputSelector: '.response',
                 callback: tag => {
                     if (tag.length) {
                         this.Creature.Tags.push(tag);
+                        this.LogEvent(`${this.DisplayName()} tagged with "${tag}"`);
                         this.Creature.Encounter.QueueEmitEncounter();
                     }
                 }
@@ -159,6 +176,7 @@ module ImprovedInitiative {
 
         RemoveTag = (tag: string) => {
             this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
+            this.LogEvent(`${this.DisplayName()} untagged with "${tag}"`);
             this.Creature.Encounter.QueueEmitEncounter();
         };
     }

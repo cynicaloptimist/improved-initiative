@@ -78,6 +78,7 @@ module ImprovedInitiative {
             this.Creatures.splice(index, 0, creature);
             creature.Initiative(newInitiative);
             this.QueueEmitEncounter();
+            return newInitiative;
         }
 
         AddCreature = (creatureJson: IStatBlock, event?, savedCreature?: ISavedCreature) => {

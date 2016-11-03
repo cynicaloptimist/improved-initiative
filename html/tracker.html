@@ -134,7 +134,7 @@
                 click: $root.Commander.SelectCreature,
                 component: {
                 name: 'combatant',
-                params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
+                params: { creature: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
                 }">
             </li>
             <!-- /ko -->
