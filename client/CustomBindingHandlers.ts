@@ -63,7 +63,7 @@ module ImprovedInitiative {
         var md = markdownit();
         text = md.renderInline(text);
 
-        var rules: IRules = bindingContext.$root.Encounter().Rules;
+        var rules: IRules = bindingContext.$root.Encounter.Rules;
         var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text.replace(findDice, match => {

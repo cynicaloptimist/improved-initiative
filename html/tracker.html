@@ -90,14 +90,14 @@
         </div>
         <!-- /ko -->
         <!-- ko ifnot: Commander.ShowingLibraries -->
-        <div class="active-creature" data-bind="if: Encounter().ActiveCreature()">
+        <div class="active-creature" data-bind="if: Encounter.ActiveCreature()">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
-                visible: Encounter().ActiveCreature(), 
+                visible: Encounter.ActiveCreature(), 
                 component: { 
                     name: 'activestatblock', 
                     params: { 
-                    creature: Encounter().ActiveCreatureStatblock() 
+                    creature: Encounter.ActiveCreatureStatblock() 
                     } 
                 }">
             </div>
