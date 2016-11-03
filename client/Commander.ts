@@ -44,7 +44,7 @@ module ImprovedInitiative {
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
             listing.LoadStatBlock(listing => {
                 this.encounter.AddCreature(listing.StatBlock(), event);
-                this.eventLog.AddEvent(`${listing.Name} added to combat.`);
+                this.eventLog.AddEvent(`${listing.Name()} added to combat.`);
             });
         }
 
