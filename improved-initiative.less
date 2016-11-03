@@ -511,6 +511,8 @@ input[type="file"] {
 .round-counter {
     flex-direction: row;
     justify-content: flex-end;
+    flex-shrink: 0;
+    
     background-color: @primary-black;
     padding: @medium-spacer;
     span {
@@ -589,10 +591,6 @@ input[type="file"] {
     background-image: url('../img/improved-initiative-transparent_darkgreen.png');
     background-position: center bottom;
     background-repeat: no-repeat;
-
-    .encounter {
-        flex-grow: 1;
-    }
 
     .header {
         flex-direction: row;

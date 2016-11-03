@@ -115,34 +115,30 @@
         <!-- /ko -->
 
         <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
-            <div class="combat">
-                <div class="encounter" data-bind="with: Encounter">
-                    <h2>Initiative Order</h2>
-                    <!-- ko if: $root.Commander.DisplayRoundCounter() -->
-                        <div class="round-counter">Current Round: <span data-bind="text: RoundCounter"></span></div>
-                    <!-- /ko -->
-                    <ul class="combatants">
-                        <li class="creature header">
-                            <span class="initiative fa fa-forward"></span></span>
-                            <span class="name">Combatant</span>
-                            <span class="hp fa fa-heart"></span></span>
-                            <span class="ac fa fa-shield"></span></span>
-                            <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
-                        </li>
-                        <!-- ko foreach: Creatures -->
-                        <li class="creature" data-bind="
-                            css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
-                                    active: $parent.ActiveCreature() == $data },
-                            click: $root.Commander.SelectCreature,
-                            component: {
-                            name: 'combatant',
-                            params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
-                            }">
-                        </li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-            </div>
+        <h2>Initiative Order</h2>
+        <!-- ko if: Commander.DisplayRoundCounter() -->
+            <div class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></div>
+        <!-- /ko -->
+        <ul class="combatants" data-bind="with: Encounter">
+            <li class="creature header">
+                <span class="initiative fa fa-forward"></span></span>
+                <span class="name">Combatant</span>
+                <span class="hp fa fa-heart"></span></span>
+                <span class="ac fa fa-shield"></span></span>
+                <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
+            </li>
+            <!-- ko foreach: Creatures -->
+            <li class="creature" data-bind="
+                css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
+                        active: $parent.ActiveCreature() == $data },
+                click: $root.Commander.SelectCreature,
+                component: {
+                name: 'combatant',
+                params: { creature: $data, addUserPoll: $root.UserPollQueue.Add }
+                }">
+            </li>
+            <!-- /ko -->
+        </ul>
         <!-- /ko -->
         <!-- ko if: UserPollQueue.HasPoll() -->
             <form id="user-poll" class="user-poll" data-bind="
