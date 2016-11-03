@@ -512,12 +512,27 @@ input[type="file"] {
     flex-direction: row;
     justify-content: flex-end;
     flex-shrink: 0;
-    
+
     background-color: @primary-black;
     padding: @medium-spacer;
     span {
         padding-left:@small-spacer;
     }
+}
+
+.event-log {
+    flex-direction: row;
+    flex-shrink: 0;
+    background-color: @primary-black;
+    padding: @small-spacer;
+    margin: @medium-spacer 0;
+    border-radius: @medium-spacer;
+}
+
+.combatants {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
 }
 
 .creature {
@@ -582,7 +597,7 @@ input[type="file"] {
         text-align: right;
     }
 }
-
+    
 #playerview {
     margin: 0;
 
@@ -595,12 +610,6 @@ input[type="file"] {
     .header {
         flex-direction: row;
         flex-shrink: 0;
-    }
-
-    .combatants {
-        flex-grow: 1;
-        flex-shrink: 1;
-        overflow-y: auto;
     }
 
     .initiative {
