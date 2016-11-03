@@ -7,7 +7,8 @@ module ImprovedInitiative {
         constructor(private encounter: Encounter,
             private userPollQueue: UserPollQueue,
             private statBlockEditor: StatBlockEditor,
-            private library: CreatureLibrary) {
+            private library: CreatureLibrary,
+            private eventLog: EventLog) {
             this.EncounterCommands = BuildEncounterCommandList(this);
             this.CombatantCommands = BuildCombatantCommandList(this);
             this.EncounterCommands.concat(this.CombatantCommands).forEach(c => {
@@ -278,6 +279,8 @@ module ImprovedInitiative {
                 callback: this.encounter.StartEncounter
             });
             this.HideLibraries();
+
+            this.eventLog.AddEvent("Encounter started.")
         }
 
         EndEncounter = () => {
