@@ -153,12 +153,12 @@ module ImprovedInitiative {
 
         AddTag = () => {
             this.PollUser({
-                requestContent: `Add a tag to to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                requestContent: `Add a note to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
                 inputSelector: '.response',
                 callback: tag => {
                     if (tag.length) {
                         this.Creature.Tags.push(tag);
-                        this.LogEvent(`${this.DisplayName()} tagged with "${tag}"`);
+                        this.LogEvent(`${this.DisplayName()} added note: "${tag}"`);
                         this.Creature.Encounter.QueueEmitEncounter();
                     }
                 }
@@ -176,7 +176,7 @@ module ImprovedInitiative {
 
         RemoveTag = (tag: string) => {
             this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
-            this.LogEvent(`${this.DisplayName()} untagged with "${tag}"`);
+            this.LogEvent(`${this.DisplayName()} removed note: "${tag}"`);
             this.Creature.Encounter.QueueEmitEncounter();
         };
     }
