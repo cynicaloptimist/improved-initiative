@@ -170,11 +170,13 @@ module ImprovedInitiative {
             this.userPollQueue.Add({
                 requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
                 inputSelector: '.response',
-                callback: response => selectedCreatures.forEach(c => {
-                    c.ViewModel.ApplyDamage(response);
-                    this.eventLog.AddEvent(`${response} damage applied to ${creatureNames}.`);
-                    this.encounter.QueueEmitEncounter();
-                })
+                callback: response => {
+                    if (response) {
+                        selectedCreatures.forEach(c => c.ViewModel.ApplyDamage(response))
+                        this.eventLog.AddEvent(`${response} damage applied to ${creatureNames}.`);
+                        this.encounter.QueueEmitEncounter();
+                    }
+                }
             });
             return false;
         }

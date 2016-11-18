@@ -17,7 +17,7 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-    
+
     <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
 
 </head>
@@ -30,24 +30,24 @@
     <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
-        <div class="commands-encounter" data-bind="foreach: Commander.EncounterCommands">
-            <span class="button" data-bind="
+            <div class="commands-encounter" data-bind="foreach: Commander.EncounterCommands">
+                <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
                 attr: { title: ToolTip },
                 click: ActionBinding
             ">
             </span>
-        </div>
-        <div class="commands-combatant" data-bind="visible: Commander.SelectedCreatures().length > 0, foreach: Commander.CombatantCommands">
-            <span class="button" data-bind="
+            </div>
+            <div class="commands-combatant" data-bind="visible: Commander.SelectedCreatures().length > 0, foreach: Commander.CombatantCommands">
+                <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
                 attr: { title: ToolTip },
                 click: ActionBinding
             ">
             </span>
-        </div>
+            </div>
         </div>
     </div>
     <div class="left-column">
@@ -106,7 +106,7 @@
     </div>
     <div class="center-column">
         <!-- ko if: StatBlockEditor.EditableStatBlock() -->
-            <div class="editor" data-bind="component: {
+        <div class="editor" data-bind="component: {
                 name: 'editstatblock',
                 params: {
                 editor: StatBlockEditor
@@ -116,9 +116,6 @@
 
         <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
         <h2>Initiative Order</h2>
-        <!-- ko if: Commander.DisplayRoundCounter() -->
-            <div class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></div>
-        <!-- /ko -->
         <ul class="combatants" data-bind="with: Encounter">
             <li class="creature header">
                 <span class="initiative fa fa-forward"></span></span>
@@ -141,13 +138,19 @@
         </ul>
         <!-- /ko -->
         <!-- ko if: UserPollQueue.HasPoll() -->
-            <form id="user-poll" class="user-poll" data-bind="
+        <form id="user-poll" class="user-poll" data-bind="
                 submit: UserPollQueue.Resolve,
                 html: UserPollQueue.Message(),
                 focusOnRender: UserPollQueue.InputSelector()">
-            </form>
+        </form>
         <!-- /ko -->
-        <div class="event-log" data-bind="text: EventLog.LatestEvent"></div>
+
+        <div class="footer-bar">
+            <span class="event-log" data-bind="text: EventLog.LatestEvent"></span>
+            <!-- ko if: Commander.DisplayRoundCounter() -->
+            <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+            <!-- /ko -->
+        </div>
     </div>
     <div class="right-column">
         <div class="selected-combatant">
@@ -160,10 +163,11 @@
                 } 
                 }">
             </div>
-            <div class="selected-combatant-names" data-bind = "visible: Commander.SelectedCreatures().length > 1, 
+            <div class="selected-combatant-names" data-bind="visible: Commander.SelectedCreatures().length > 1, 
                 text: Commander.SelectedCreatureNames()">
             </div>
         </div>
     </div>
 </body>
+
 </html>
