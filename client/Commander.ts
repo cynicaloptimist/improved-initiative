@@ -70,25 +70,25 @@ module ImprovedInitiative {
         
         CreateAndEditCreature = (library: string) => {
             var statBlock = StatBlock.Empty();
+            var newId = probablyUniqueString();
+
             if (library == "Players") {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
-                var newId = this.library.Players().length.toString();
                 this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
             } else {
                 statBlock.Name = "New Creature";
-                var newId = this.library.Creatures().length.toString();
                 this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
             }
         }
         
         private duplicateAndEditCreature = (listing: CreatureListing) => {
             var statBlock = listing.StatBlock();
+            var newId = probablyUniqueString();
+
             if (statBlock.Player == "player") {
-                var newId = this.library.Players().length.toString();
                 this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
             } else {
-                var newId = this.library.Creatures().length.toString();
                 this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
             }
         }
