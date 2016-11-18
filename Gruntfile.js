@@ -36,7 +36,7 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          'ImprovedInitiative.Client/client.min.js': ['ImprovedInitiative.Client/*.js']
+          'client.min.js': ['ImprovedInitiative.Client/*.js']
         }
       },
       socketio: {
@@ -80,7 +80,7 @@ module.exports = function (grunt) {
           'node_modules/socket.io-client/socket.io.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
           'node_modules/markdown-it/dist/markdown-it.min.js',
-          'ImprovedInitiative.Client/client.min.js'
+          'client.min.js'
         ],
         dest: 'public/js/ImprovedInitiative.js'
       },
