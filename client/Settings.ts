@@ -77,7 +77,7 @@ module ImprovedInitiative {
             HideMonstersOutsideEncounter: loadSetting("HideMonstersOutsideEncounter"),
             AllowNegativeHP: loadSetting("AllowNegativeHP"),
             DisplayRoundCounter: displayRoundCounter,
-
+            PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1)

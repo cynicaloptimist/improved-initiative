@@ -247,6 +247,7 @@ input[type="file"] {
         .recessed();
 
         width: 350px;
+        flex-shrink: 0;
     }
 }
 
@@ -299,7 +300,6 @@ input[type="file"] {
         }
     }
 }
-
 .commands {
     .scrollframe {
         width: @button-width + @scrollbar-width;
@@ -308,11 +308,21 @@ input[type="file"] {
     }
     background-color: @primary-white;
     color: @primary-black;
-    
-    padding: @small-spacer;
-    width: @button-width;
 
+    width: @button-width;
     overflow: hidden;
+    flex-shrink: 0;
+}
+
+.commands .scrollframe > div {
+    &.commands-combatant {
+        margin-top:10px;
+        padding-top:10px;
+        border-top: 1px solid darken(@button-face, 20);
+    }
+    
+    flex-shrink:0;
+    padding: @small-spacer;
 
     .button {
         margin: 1px 0;
@@ -322,7 +332,7 @@ input[type="file"] {
         .button(@button-face-green, @primary-black);
     }
 }
-    
+
 .editor {
     flex-grow: 1;
 
@@ -500,14 +510,22 @@ input[type="file"] {
     }
 }
 
-.round-counter {
+.footer-bar {
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
+    flex-shrink: 0;
+
     background-color: @primary-black;
     padding: @medium-spacer;
-    span {
-        padding-left:@small-spacer;
-    }
+    margin: @medium-spacer 0;
+    border-radius: @medium-spacer;
+    
+}
+
+.combatants {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow-y: auto;
 }
 
 .creature {
@@ -572,15 +590,21 @@ input[type="file"] {
         text-align: right;
     }
 }
-
+    
 #playerview {
     margin: 0;
 
-    font-size: 4.5vw;
-        
+    font-size: 150%;
+
     background-image: url('../img/improved-initiative-transparent_darkgreen.png');
     background-position: center bottom;
     background-repeat: no-repeat;
+
+    .header {
+        flex-direction: row;
+        flex-shrink: 0;
+    }
+
     .initiative {
         width: 5.5vw;
     }
