@@ -261,6 +261,7 @@ module ImprovedInitiative {
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
+        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
         
         RegisterKeyBindings() {
             Mousetrap.reset();
