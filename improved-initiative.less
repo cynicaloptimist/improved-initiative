@@ -517,21 +517,30 @@ input[type="file"] {
     border-radius: @medium-spacer;
 
     flex-shrink: 1;
-}
 
-.footer-bar {
-    flex-shrink:0;
-    flex-direction: row;
-    justify-content: space-between;
+    .event-log {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
 
-    cursor: pointer;
-}
+    .footer-bar {
+        flex-shrink:0;
+        flex-direction: row;
+        justify-content: flex-end;
 
-.event-log {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    overflow-y: auto;
+        cursor: pointer;
+
+        >span {
+            padding-right: @medium-spacer;
+        }
+    }
+
+    .latest-event {
+        flex-grow:1;
+    }
+
 }
 
 .combatants {

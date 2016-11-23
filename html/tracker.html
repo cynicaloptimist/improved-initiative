@@ -151,6 +151,7 @@
             </ul>
             <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
                 <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
+                <span class="turn-timer" data-bind="text: Encounter.TurnTimer.Readout"></span>
                 <span class="round-counter" data-bind="visible: Commander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
             </div>
         </div>
