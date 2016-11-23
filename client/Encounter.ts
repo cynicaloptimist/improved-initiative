@@ -1,3 +1,5 @@
+/// <reference path="../typings/globals/moment/index.d.ts" />
+
 module ImprovedInitiative {
     export interface ISavedCreature {
         Id: number;
@@ -37,6 +39,7 @@ module ImprovedInitiative {
         }
 
         Rules: IRules;
+        TurnTimer = new TurnTimer();
         Creatures: KnockoutObservableArray<ICreature>;
         CreatureCountsByName: KnockoutObservable<number>[];
         ActiveCreature: KnockoutObservable<ICreature>;
@@ -113,12 +116,14 @@ module ImprovedInitiative {
             this.State('active');
             this.RoundCounter(1);
             this.ActiveCreature(this.Creatures()[0]);
+            this.TurnTimer.Start();
             this.QueueEmitEncounter();
         }
 
         EndEncounter = () => {
             this.State('inactive');
             this.ActiveCreature(null);
+            this.TurnTimer.Stop();
             this.QueueEmitEncounter();
         }
 
@@ -152,6 +157,7 @@ module ImprovedInitiative {
                 this.RoundCounter(this.RoundCounter() + 1);
             }
             this.ActiveCreature(this.Creatures()[nextIndex]);
+            this.TurnTimer.Reset();
             this.QueueEmitEncounter();
         }
 
@@ -232,6 +238,7 @@ module ImprovedInitiative {
                 if (savedEncounterIsActive) {
                     this.State('active');
                     this.ActiveCreature(this.Creatures().filter(c => c.Id == savedEncounter.ActiveCreatureId).pop());
+                    this.TurnTimer.Start();
                 }
                 this.RoundCounter(savedEncounter.RoundCounter || 1);
             }
