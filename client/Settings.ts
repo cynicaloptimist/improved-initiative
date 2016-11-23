@@ -82,6 +82,7 @@ module ImprovedInitiative {
             DisplayRoundCounter: displayRoundCounter,
             DisplayTurnTimer: displayTurnTimer,
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
+            PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1)

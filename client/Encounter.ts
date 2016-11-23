@@ -17,6 +17,7 @@ module ImprovedInitiative {
         Name: string;
         ActiveCreatureId: number;
         RoundCounter?: number;
+        DisplayTurnTimer?: boolean;
         Creatures: T[];
     }
 
@@ -202,6 +203,7 @@ module ImprovedInitiative {
                 Name: name || this.EncounterId,
                 ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
                 RoundCounter: roundCounter,
+                DisplayTurnTimer: Store.Load(Store.User, "PlayerViewDisplayTurnTimer"),
                 Creatures: this.Creatures()
                     .filter(c => {
                         if (c.Hidden()) {

@@ -41,12 +41,12 @@
         </li>
         <!-- /ko -->
     </ul>
-        <div class="combat-footer">
-            <span class="turn-timer" data-bind="text: TurnTimer.Readout"></span>
-            <!-- ko if: RoundCounter -->
-            <span class="round-counter">Current Round: <span data-bind="text: RoundCounter"></span></span>
-            <!-- /ko -->
-        </div>
+    <!-- ko if: (RoundCounter() || DisplayTurnTimer()) -->
+    <div class="combat-footer">
+        <span class="turn-timer" data-bind="visible: DisplayTurnTimer, text: TurnTimer.Readout"></span>
+        <span class="round-counter" data-bind="visible: RoundCounter">Current Round: <span data-bind="text: RoundCounter"></span></span>
+    </div>
+    <!-- /ko -->
 </body>
 
 </html>
