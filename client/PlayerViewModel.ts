@@ -4,6 +4,7 @@ module ImprovedInitiative {
         ActiveCreature: KnockoutObservable<CombatantPlayerViewModel> = ko.observable<CombatantPlayerViewModel>();
         EncounterId = $('html')[0].getAttribute('encounterId');
         RoundCounter = ko.observable();
+        TurnTimer = new TurnTimer();
 
         Socket: SocketIOClient.Socket = io();
 
@@ -17,6 +18,9 @@ module ImprovedInitiative {
 
         LoadEncounter = (encounter: ISavedEncounter<CombatantPlayerViewModel>) => {
             this.Creatures(encounter.Creatures);
+            if(encounter.ActiveCreatureId != (this.ActiveCreature() || {Id: -1}).Id){
+                this.TurnTimer.Reset();
+            }
             if (encounter.ActiveCreatureId != -1) {
                 this.ActiveCreature(this.Creatures().filter(c => c.Id == encounter.ActiveCreatureId).pop());
                 setTimeout(this.ScrollToActiveCreature, 1);
