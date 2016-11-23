@@ -64,6 +64,7 @@ module.exports = function (grunt) {
           'node_modules/awesomplete/awesomplete.js',
           'node_modules/mousetrap/mousetrap.js',
           'node_modules/socket.io-client/socket.io.js',
+          'node_modules/moment/moment.js',
           'node_modules/browser-filesaver/FileSaver.js',
           'node_modules/markdown-it/dist/markdown-it.js',
           'ImprovedInitiative.Client/*.js'
@@ -78,6 +79,7 @@ module.exports = function (grunt) {
           'node_modules/awesomplete/awesomplete.min.js',
           'node_modules/mousetrap/mousetrap.min.js',
           'node_modules/socket.io-client/socket.io.min.js',
+          'node_modules/moment/min/moment.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
           'node_modules/markdown-it/dist/markdown-it.min.js',
           'client.min.js'
