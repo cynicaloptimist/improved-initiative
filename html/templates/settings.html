@@ -13,7 +13,18 @@
     </div>
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'"  class="tab keybindings">
-    <!--ko foreach: Commander.Commands -->
+    <h2>Encounter Commands</h2>
+    <!--ko foreach: Commander.EncounterCommands -->
+    <div>
+        <span class="label" data-bind="text: Description"></span>
+        <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+        <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
+        <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
+        />
+    </div>
+    <!--/ko -->
+    <h2>Combatant Commands</h2>
+    <!--ko foreach: Commander.CombatantCommands -->
     <div>
         <span class="label" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
@@ -41,12 +52,22 @@
     <p>Allow combatants to have negative hit points: 
         <input type="checkbox" data-bind="checked: AllowNegativeHP" />
     </p>
-    <h3>Player View</h3>
-    <p>Monster HP Verbosity:
-        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
-    </p>
+    <h3>Encounter View</h3>
     <p>Display Round Counter: 
         <input type="checkbox" data-bind="checked: DisplayRoundCounter" />
+    </p>
+    <p>Display Turn Timer: 
+        <input type="checkbox" data-bind="checked: DisplayTurnTimer" />
+    </p>
+    <h3>Player View</h3>
+    <p>Display Round Counter: 
+        <input type="checkbox" data-bind="checked: PlayerViewDisplayRoundCounter" />
+    </p>
+    <p>Display Turn Timer: 
+        <input type="checkbox" data-bind="checked: PlayerViewDisplayTurnTimer" />
+    </p>
+    <p>Monster HP Verbosity:
+        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
     </p>
     <p>Hide monsters when encounter is not active: 
         <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />

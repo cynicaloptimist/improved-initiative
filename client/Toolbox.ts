@@ -57,3 +57,14 @@ var PostJSON = (url: string, data: any, success: (data: any) => void) =>
         dataType: "json",
         contentType: "application/json"
     });
+
+var probablyUniqueString = (): string => {
+    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    var probablyUniqueString = ''
+    for (var i = 0; i < 8; i++) {
+        var index = Math.floor(Math.random() * chars.length);
+        probablyUniqueString += chars[index];
+    }
+    
+    return probablyUniqueString;
+}
