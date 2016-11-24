@@ -145,11 +145,15 @@
         </form>
         <!-- /ko -->
 
-        <div class="footer-bar">
-            <span class="event-log" data-bind="text: EventLog.LatestEvent"></span>
-            <!-- ko if: Commander.DisplayRoundCounter() -->
-            <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
-            <!-- /ko -->
+        <div class="combat-footer">
+            <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">
+                <li data-bind="text: $data"></li>
+            </ul>
+            <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
+                <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
+                <span class="turn-timer" data-bind="visible: Commander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
+                <span class="round-counter" data-bind="visible: Commander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+            </div>
         </div>
     </div>
     <div class="right-column">

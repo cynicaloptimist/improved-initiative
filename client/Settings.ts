@@ -45,6 +45,9 @@ module ImprovedInitiative {
         var displayRoundCounter = loadSetting("DisplayRoundCounter");
         displayRoundCounter.subscribe(params.commander.DisplayRoundCounter);
 
+        var displayTurnTimer = loadSetting("DisplayTurnTimer");
+        displayTurnTimer.subscribe(params.commander.DisplayTurnTimer);
+        
         return {
             Commander: params.commander,
             CurrentTab: ko.observable<string>('about'),
@@ -77,7 +80,9 @@ module ImprovedInitiative {
             HideMonstersOutsideEncounter: loadSetting("HideMonstersOutsideEncounter"),
             AllowNegativeHP: loadSetting("AllowNegativeHP"),
             DisplayRoundCounter: displayRoundCounter,
+            DisplayTurnTimer: displayTurnTimer,
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
+            PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1)

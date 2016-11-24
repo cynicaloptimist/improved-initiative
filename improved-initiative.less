@@ -510,16 +510,37 @@ input[type="file"] {
     }
 }
 
-.footer-bar {
-    flex-direction: row;
-    justify-content: space-between;
-    flex-shrink: 0;
-
+.combat-footer {
     background-color: @primary-black;
     padding: @medium-spacer;
     margin: @medium-spacer 0;
     border-radius: @medium-spacer;
-    
+
+    flex-shrink: 1;
+
+    .event-log {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    .footer-bar {
+        flex-shrink:0;
+        flex-direction: row;
+        justify-content: flex-end;
+
+        cursor: pointer;
+
+        >span {
+            padding-right: @medium-spacer;
+        }
+    }
+
+    .latest-event {
+        flex-grow:1;
+    }
+
 }
 
 .combatants {
@@ -618,6 +639,15 @@ input[type="file"] {
 
     .header .tags {
         text-align: center;
+    }
+
+    .combat-footer {
+        flex-direction: row;
+        justify-content: flex-end;
+        margin: @medium-spacer;
+        >span {
+            padding-right: @medium-spacer;
+        }
     }
 }
 .footer {
