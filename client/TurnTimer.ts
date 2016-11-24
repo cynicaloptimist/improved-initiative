@@ -5,6 +5,9 @@ module ImprovedInitiative {
         private intervalToken = null;
 
         Start = () => {
+            if(this.intervalToken) {
+                this.Stop();
+            }
             this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
         }
         
