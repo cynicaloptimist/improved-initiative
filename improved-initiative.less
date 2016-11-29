@@ -241,7 +241,7 @@ input[type="file"] {
     .center-column {
         flex-grow:1;
         background-image: url('../img/improved-initiative-transparent_darkgreen.png');
-        background-position: center bottom;
+        background-position: center bottom 20px;
         background-repeat: no-repeat;
     }
     
@@ -254,7 +254,7 @@ input[type="file"] {
 }
 
 .user-poll {
-        .recessed();
+    .recessed();
 }
 
 .libraries {
@@ -342,6 +342,7 @@ input[type="file"] {
 
     .editor-type {
         flex-direction: row;
+        flex-shrink:0;
     }
 
     .stats {
@@ -368,6 +369,14 @@ input[type="file"] {
         }
     }
 
+    label {
+        border: 2px solid grey;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: lightgray;
+        color: black;
+    }
+
     input {
         margin-left: @medium-spacer;
         &[type="text"] {
@@ -389,13 +398,15 @@ input[type="file"] {
         flex-grow:1;
         font-family: Courier New, Courier, monospace;
     }
+    
     .buttons {
         color: @primary-black;
 
         flex-direction: row;
+        flex-shrink:0;
         justify-content: flex-end;
     }
-    }
+}
 
 .settings {
     
@@ -622,7 +633,7 @@ input[type="file"] {
     font-size: 150%;
 
     background-image: url('../img/improved-initiative-transparent_darkgreen.png');
-    background-position: center bottom;
+    background-position: center bottom 20px;
     background-repeat: no-repeat;
 
     .header {
