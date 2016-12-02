@@ -25,12 +25,12 @@
 <body id="tracker">
     <div class="modalcontainer">
         <div class="modalblur" data-bind="click: EncounterCommander.HideSettings"></div>
-        <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander } }"></div>
+        <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     </div>
     <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
-            <div class="commands-encounter" data-bind="foreach: EncounterCommander.EncounterCommands">
+            <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
                 <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
@@ -39,7 +39,7 @@
             ">
             </span>
             </div>
-            <div class="commands-combatant" data-bind="visible: EncounterCommander.SelectedCreatures().length > 0, foreach: EncounterCommander.CombatantCommands">
+            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelectedCreature(), foreach: CombatantCommander.Commands">
                 <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
@@ -126,9 +126,9 @@
             </li>
             <!-- ko foreach: Creatures -->
             <li class="creature" data-bind="
-                css: { selected: $root.EncounterCommander.SelectedCreatures().indexOf($data) > -1, 
+                css: { selected: $root.CombatantCommander.SelectedCreatures().indexOf($data) > -1, 
                         active: $parent.ActiveCreature() == $data },
-                click: $root.EncounterCommander.SelectCreature,
+                click: $root.CombatantCommander.SelectCreature,
                 component: {
                 name: 'combatant',
                 params: { creature: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
@@ -159,16 +159,16 @@
     <div class="right-column">
         <div class="selected-combatant">
             <h2>Selected Combatant</h2>
-            <div class="statblock" data-bind="visible: EncounterCommander.SelectedCreatures().length == 1, 
+            <div class="statblock" data-bind="visible: CombatantCommander.SelectedCreatures().length == 1, 
                 component: { 
                 name: 'defaultstatblock', 
                 params:{ 
-                    creature: EncounterCommander.SelectedCreatureStatblock(),
+                    creature: CombatantCommander.SelectedCreatureStatblock(),
                 } 
                 }">
             </div>
-            <div class="selected-combatant-names" data-bind="visible: EncounterCommander.SelectedCreatures().length > 1, 
-                text: EncounterCommander.SelectedCreatureNames()">
+            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.SelectedCreatures().length > 1, 
+                text: CombatantCommander.SelectedCreatureNames()">
             </div>
         </div>
     </div>

@@ -9,5 +9,6 @@ module ImprovedInitiative {
         Encounter = new Encounter(this.UserPollQueue);
         Library = new CreatureLibrary();
         EncounterCommander = new EncounterCommander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.Library, this.EventLog);
+        CombatantCommander = new CombatantCommander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.EventLog);
     }
 }

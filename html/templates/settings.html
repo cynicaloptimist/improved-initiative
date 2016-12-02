@@ -14,7 +14,7 @@
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'"  class="tab keybindings">
     <h2>Encounter Commands</h2>
-    <!--ko foreach: Commander.EncounterCommands -->
+    <!--ko foreach: EncounterCommands -->
     <div>
         <span class="label" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
@@ -24,7 +24,7 @@
     </div>
     <!--/ko -->
     <h2>Combatant Commands</h2>
-    <!--ko foreach: Commander.CombatantCommands -->
+    <!--ko foreach: CombatantCommands -->
     <div>
         <span class="label" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
@@ -73,4 +73,4 @@
         <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
     </p>
 </div>
-<div class="button save-and-close" data-bind="click: Commander.HideSettings">Save and Close</div>
+<div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
