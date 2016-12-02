@@ -1,13 +1,13 @@
 module ImprovedInitiative {
     export class TrackerViewModel {
         constructor() {
-            this.Commander.RegisterKeyBindings();
+            this.EncounterCommander.RegisterKeyBindings();
         }
         UserPollQueue = new UserPollQueue();
         EventLog = new EventLog();
         StatBlockEditor = new StatBlockEditor();
         Encounter = new Encounter(this.UserPollQueue);
         Library = new CreatureLibrary();
-        Commander = new Commander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.Library, this.EventLog);
+        EncounterCommander = new EncounterCommander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.Library, this.EventLog);
     }
 }

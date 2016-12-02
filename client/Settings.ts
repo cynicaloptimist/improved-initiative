@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     interface Params {
-        commander: Commander;
+        encounterCommander: EncounterCommander;
     }
     export var Settings = (params: Params) => {
         var tips = [
@@ -43,13 +43,13 @@ module ImprovedInitiative {
         }
 
         var displayRoundCounter = loadSetting("DisplayRoundCounter");
-        displayRoundCounter.subscribe(params.commander.DisplayRoundCounter);
+        displayRoundCounter.subscribe(params.encounterCommander.DisplayRoundCounter);
 
         var displayTurnTimer = loadSetting("DisplayTurnTimer");
-        displayTurnTimer.subscribe(params.commander.DisplayTurnTimer);
+        displayTurnTimer.subscribe(params.encounterCommander.DisplayTurnTimer);
         
         return {
-            Commander: params.commander,
+            Commander: params.encounterCommander,
             CurrentTab: ko.observable<string>('about'),
             ExportData: () => {
                 var blob = Store.ExportAll();

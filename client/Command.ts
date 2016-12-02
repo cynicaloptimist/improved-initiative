@@ -19,7 +19,7 @@ module ImprovedInitiative {
     }
   }
   
-  export var BuildEncounterCommandList: (c: Commander) => Command [] = c => [
+  export var BuildEncounterCommandList: (c: EncounterCommander) => Command [] = c => [
         new Command('Start Encounter', c.StartEncounter, 'alt+r', 'fa-play'),
         new Command('End Encounter', c.EndEncounter, 'alt+e', 'fa-stop'),
         new Command('Clear Encounter', c.ClearEncounter, 'alt+del', 'fa-trash'),
@@ -33,7 +33,7 @@ module ImprovedInitiative {
         new Command('Settings', c.ShowSettings, '?', 'fa-gear', true, true)
   ]
     
-    export var BuildCombatantCommandList: (c: Commander) => Command [] = c => [
+    export var BuildCombatantCommandList: (c: EncounterCommander) => Command [] = c => [
         new Command('Damage/Heal Selected Combatant', c.FocusSelectedCreatureHP, 't', 'fa-plus-circle'),
         new Command('Add Note to Selected Combatant', c.AddSelectedCreatureTag, 'g', 'fa-tag', false),
         new Command('Remove Selected Combatant from Encounter', c.RemoveSelectedCreatures, 'del', 'fa-remove'),
