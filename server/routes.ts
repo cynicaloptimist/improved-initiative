@@ -27,7 +27,11 @@ var initializeNewPlayerView = (playerViews) => {
 }
 
 export default function (app: express.Express, creatures, playerViews) {
-    app.engine('html', mustacheExpress());
+    let mustacheEngine = mustacheExpress();
+    if (process.env.NODE_ENV === "development") {
+        mustacheEngine.cache._max = 0;
+    }
+    app.engine('html', mustacheEngine);
     app.set('view engine', 'html');
     app.set('views', __dirname + '/html');
 
