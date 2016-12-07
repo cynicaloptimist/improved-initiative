@@ -1,13 +1,29 @@
 {
   "name": "improved-initiative",
-  "dependencies": {
-  },
+  "dependencies": {},
   "globalDependencies": {
+    "applicationinsights": "registry:dt/applicationinsights#0.15.12+20160928124223",
+    "express": "registry:dt/express#4.0.0+20160708185218",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161012061536",
     "filesaver": "registry:dt/filesaver#0.0.0+20160622185141",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "moment": "registry:dt/moment#2.11.1+20161010105546",
     "mousetrap": "registry:dt/mousetrap#1.5.0+20160501152135",
+    "node": "registry:dt/node#6.0.0+20161121110008",
+    "react": "registry:dt/react#0.14.0+20161203201537",
+    "react-addons-create-fragment": "registry:dt/react-addons-create-fragment#0.14.0+20160709044614",
+    "react-addons-css-transition-group": "registry:dt/react-addons-css-transition-group#0.14.0+20160316155526",
+    "react-addons-linked-state-mixin": "registry:dt/react-addons-linked-state-mixin#0.14.0+20160316155526",
+    "react-addons-perf": "registry:dt/react-addons-perf#15.1.0+20160619031933",
+    "react-addons-pure-render-mixin": "registry:dt/react-addons-pure-render-mixin#0.14.0+20160316155526",
+    "react-addons-test-utils": "registry:dt/react-addons-test-utils#0.14.0+20160427035638",
+    "react-addons-transition-group": "registry:dt/react-addons-transition-group#0.14.0+20160701001352",
+    "react-addons-update": "registry:dt/react-addons-update#0.14.0+20160316155526",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-global": "registry:dt/react-global#0.14.0+20160316155526",
     "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
+    "socket.io": "registry:dt/socket.io#1.4.4+20160909205835",
     "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"
   }
 }
