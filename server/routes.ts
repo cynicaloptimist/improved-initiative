@@ -47,7 +47,7 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     app.use(bodyParser.urlencoded())
 
     app.get('/', function(req, res) {
-        res.render('landing', pageRenderOptions(initializeNewPlayerView(playerViews)));
+        res.render('index');
     });
 
     app.get('/e/:id', (req, res) => {
