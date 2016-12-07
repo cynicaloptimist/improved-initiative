@@ -53,17 +53,17 @@ module.exports = function (grunt) {
     concat: {
       js_dependencies: {
         src: [
-          'node_modules/knockout/build/output/knockout-latest.debug.js',
-          'node_modules/knockout-mapping/dist/knockout.mapping.js',
-          'node_modules/jquery/dist/jquery.js',
           'node_modules/awesomplete/awesomplete.js',
           'node_modules/mousetrap/mousetrap.js',
           'node_modules/socket.io-client/dist/socket.io.js',
           'node_modules/moment/moment.js',
           'node_modules/browser-filesaver/FileSaver.js',
-          'node_modules/markdown-it/dist/markdown-it.js'        ],
-        dest: 'public/js/dependencies.js',
-        sourceMap: true
+          'node_modules/markdown-it/dist/markdown-it.js',
+          'node_modules/react/dist/react.js',
+          'node_modules/react-dom/dist/react-dom.js',
+          'node_modules/redux/dist/redux.js'
+        ],
+        dest: 'public/js/vendors.js'
       },
       js_client: {
         src: ['ImprovedInitiative.Client/*.js'],
@@ -72,15 +72,15 @@ module.exports = function (grunt) {
       },
       js_dependencies_min: {
         src: [
-          'node_modules/knockout/build/output/knockout-latest.js',
-          'node_modules/knockout-mapping/dist/knockout.mapping.min.js',
-          'node_modules/jquery/dist/jquery.min.js',
           'node_modules/awesomplete/awesomplete.min.js',
           'node_modules/mousetrap/mousetrap.min.js',
           'node_modules/socket.io-client/dist/socket.io.min.js',
           'node_modules/moment/min/moment.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
-          'node_modules/markdown-it/dist/markdown-it.min.js'
+          'node_modules/markdown-it/dist/markdown-it.min.js',
+          'node_modules/react/dist/react.min.js',
+          'node_modules/react-dom/dist/react-dom.min.js',
+          'node_modules/redux/dist/redux.min.js'
         ],
         dest: 'public/js/dependencies.js'
       },
