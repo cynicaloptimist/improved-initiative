@@ -15,7 +15,7 @@ module.exports = function (grunt) {
       },
       default: {
         src: ['client/*.ts'],
-        outDir: 'ImprovedInitiative.Client',
+        outDir: 'build/client',
         options: {
           module: 'amd',
           target: 'es5'
@@ -36,7 +36,7 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          'client.min.js': ['ImprovedInitiative.Client/*.js']
+          'build/client.min.js': ['build/client/*.js']
         }
       }
     },
@@ -100,7 +100,11 @@ module.exports = function (grunt) {
     watch: {
       ts: {
         files: 'client/*.ts',
-        tasks: ['ts', 'concat:js_client']
+        tasks: ['ts:default', 'concat:js_client']
+      },
+      server: {
+        files: 'server/*.ts',
+        tasks: ['ts:server']
       },
       lesscss: {
         files: '**/*.less',
