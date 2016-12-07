@@ -1,0 +1,13 @@
+{
+  "name": "improved-initiative",
+  "dependencies": {
+    "react": "registry:npm/react#15.0.1+20160601175240",
+    "react-dom": "registry:npm/react-dom#15.0.1+20160826174104"
+  },
+  "globalDependencies": {
+    "filesaver": "registry:dt/filesaver#0.0.0+20160622185141",
+    "mousetrap": "registry:dt/mousetrap#1.5.0+20160501152135",
+    "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"
+  }
+}
