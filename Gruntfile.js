@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         removeComments: false,
       },
       default: {
-        src: ['client/*.ts'],
+        src: ['client/*.ts', 'client/*.tsx'],
         outDir: 'build/client',
         options: {
           module: 'amd',
