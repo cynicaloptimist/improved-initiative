@@ -18,7 +18,8 @@ module.exports = function (grunt) {
         outDir: 'build/client',
         options: {
           module: 'amd',
-          target: 'es5'
+          target: 'es5',
+          jsx: 'react'
         }
       },
       server: {
