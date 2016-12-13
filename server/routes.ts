@@ -45,28 +45,29 @@ export default function (app: express.Express, creatures, playerViews) {
     app.get('/e/:id', (req, res) => {
         console.log('app.get ' + req.path);
         res.render('tracker', pageRenderOptionsWithEncounterId(req.params.id));
-    })
+    });
 
     app.get('/p/:id', (req, res) => {
         console.log('app.get ' + req.path);
         res.render('playerview', pageRenderOptionsWithEncounterId(req.params.id));
-    })
+    });
 
     app.get('/playerviews/:id', (req, res) => {
         res.json(playerViews[req.params.id]);
-    })
+    });
 
     app.get('/templates/:name', (req, res) => {
         res.render(`templates/${req.params.name}`, {
             rootDirectory: "..",
         });
-    })
+    });
 
-    app.get('/creatures/', (req, res) => {
-        res.json(creatures.map((creature, index) => {
+    let creatureList = creatures.map((creature, index) => {
             return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
-        }));
-    })
+    });
+    app.get('/creatures/', (req, res) => {
+        res.json(creatureList);
+    });
 
     app.get('/creatures/:id', (req, res) => {
         res.json(creatures[req.params.id]);
