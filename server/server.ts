@@ -14,7 +14,7 @@ import LaunchServer from './launchserver';
 
 ConfigureAppInsights();
 
-var creatureLibrary = [];
+var creatureLibrary = {};
 var playerViews = [];
 
 LoadCreatures(creatureLibrary);

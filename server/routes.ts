@@ -62,10 +62,15 @@ export default function (app: express.Express, creatures, playerViews) {
         });
     });
 
-    let creatureList = creatures.map((creature, index) => {
-            return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
-    });
+    let creatureList = [];
     app.get('/creatures/', (req, res) => {
+        let allCreatures = Object.keys(creatures);
+        if (creatureList.length < allCreatures.length) {
+            creatureList = allCreatures.map((creatureId) => {
+                let creature = creatures[creatureId];
+                return { "Id": creature.Id, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${creature.Id}` }
+            });
+        }
         res.json(creatureList);
     });
 
