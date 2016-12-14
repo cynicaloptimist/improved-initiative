@@ -8,10 +8,6 @@ module ImprovedInitiative {
             private library: CreatureLibrary,
             private eventLog: EventLog) {
             this.Commands = BuildEncounterCommandList(this);
-            
-            if (Store.Load(Store.User, 'SkipIntro')) {
-                this.HideSettings();
-            }
         }
 
         AddCreatureFromListing = (listing: CreatureListing, event?) => {
@@ -89,34 +85,9 @@ module ImprovedInitiative {
             $('.modalcontainer').show();
         }
 
-        HideSettings = () => {
-            $('.modalcontainer').hide();
-            this.RegisterKeyBindings();
-            Store.Save(Store.User, 'SkipIntro', true);
-        }
-
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
         DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
         
-        RegisterKeyBindings() {
-            Mousetrap.reset();
-
-            Mousetrap.bind('backspace', e => {
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    // internet explorer
-                    e.returnValue = false;
-                }
-            })
-
-            this.Commands.forEach(b => {
-                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
-                Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
-                Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
-            });
-        }
-
         StartEncounter = () => {
             if (this.encounter.State() == 'inactive') {
                 this.encounter.RollInitiative(this.userPollQueue);
