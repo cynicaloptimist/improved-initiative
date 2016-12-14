@@ -221,7 +221,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Angel, Deva", 
+    "Name": "Deva", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -329,7 +329,7 @@
       "Con": 24
     }, 
     "LegendaryActions": [], 
-    "Name": "Angel, Planetar", 
+    "Name": "Planetar", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -458,7 +458,7 @@
         "Name": "Blinding Gaze (Costs 3 Actions)"
       }
     ], 
-    "Name": "Angel, Solar", 
+    "Name": "Solar", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -580,7 +580,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Ape", 
+    "Name": "Ape", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -648,7 +648,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Ape (Giant)", 
+    "Name": "Giant Ape", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -716,7 +716,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Axe Beak", 
+    "Name": "Axe Beak", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -764,7 +764,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Baboon", 
+    "Name": "Baboon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -819,7 +819,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Badger", 
+    "Name": "Badger", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -875,7 +875,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Badger (Giant)", 
+    "Name": "Giant Badger", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -941,7 +941,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Bat", 
+    "Name": "Bat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1002,7 +1002,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Bat (Giant)", 
+    "Name": "Giant Bat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1063,7 +1063,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Bear (Black)", 
+    "Name": "Black Bear", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1133,7 +1133,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Bear (Brown)", 
+    "Name": "Brown Bear", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1203,7 +1203,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Bear (Polar)", 
+    "Name": "Polar Bear", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1273,7 +1273,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Blood Hawk", 
+    "Name": "Blood Hawk", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1338,7 +1338,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Boar", 
+    "Name": "Boar", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1397,7 +1397,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Boar (Giant)", 
+    "Name": "Giant Boar", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1456,7 +1456,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Camel", 
+    "Name": "Camel", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -1504,7 +1504,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Cat", 
+    "Name": "Cat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1568,7 +1568,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Centipede (Giant)", 
+    "Name": "Giant Centipede", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -1618,7 +1618,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Crab", 
+    "Name": "Crab", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1679,7 +1679,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Crab (Giant)", 
+    "Name": "Giant Crab", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1740,7 +1740,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Crocodile", 
+    "Name": "Crocodile", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1800,7 +1800,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Crocodile (Giant)", 
+    "Name": "Giant Crocodile", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1870,7 +1870,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Deer", 
+    "Name": "Deer", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -1918,7 +1918,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Eagle", 
+    "Name": "Eagle", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -1978,7 +1978,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Elephant", 
+    "Name": "Elephant", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2037,7 +2037,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Elk", 
+    "Name": "Elk", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2096,7 +2096,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Elk (Giant)", 
+    "Name": "Giant Elk", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2163,7 +2163,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Fire Beetle (Giant)", 
+    "Name": "Giant Fire Beetle", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2218,7 +2218,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Frog", 
+    "Name": "Frog", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2282,7 +2282,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Frog (Giant)", 
+    "Name": "Giant Frog", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2357,7 +2357,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Goat", 
+    "Name": "Goat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2416,7 +2416,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Goat (Giant)", 
+    "Name": "Giant Goat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2475,7 +2475,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Hawk", 
+    "Name": "Hawk", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2535,7 +2535,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Horse (Draft)", 
+    "Name": "Draft Horse", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -2583,7 +2583,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Horse (Pony)", 
+    "Name": "Pony", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -2631,7 +2631,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Horse (Riding)", 
+    "Name": "Riding Horse", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -2679,7 +2679,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Horse (Warhorse)", 
+    "Name": "Warhorse", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2733,7 +2733,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Hyena", 
+    "Name": "Hyena", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2792,7 +2792,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Hyena (Giant)", 
+    "Name": "Giant Hyena", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2851,7 +2851,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Jackal", 
+    "Name": "Jackal", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2915,7 +2915,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Killer Whale", 
+    "Name": "Killer Whale", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -2986,7 +2986,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Lion", 
+    "Name": "Lion", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3069,7 +3069,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Lizard", 
+    "Name": "Lizard", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -3119,7 +3119,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Lizard (Giant)", 
+    "Name": "Giant Lizard", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -3169,7 +3169,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Mammoth", 
+    "Name": "Mammoth", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3228,7 +3228,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Mastiff", 
+    "Name": "Mastiff", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3287,7 +3287,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Mule", 
+    "Name": "Mule", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3346,7 +3346,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Octopus", 
+    "Name": "Octopus", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3426,7 +3426,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Octopus (Giant)", 
+    "Name": "Giant Octopus", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3506,7 +3506,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Owl", 
+    "Name": "Owl", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3576,7 +3576,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Owl (Giant)", 
+    "Name": "Giant Owl", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3649,7 +3649,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Panther", 
+    "Name": "Panther", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3723,7 +3723,7 @@
       "Con": 9
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Quipper", 
+    "Name": "Quipper", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3784,7 +3784,7 @@
       "Con": 9
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Rat", 
+    "Name": "Rat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3839,7 +3839,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Rat (Giant)", 
+    "Name": "Giant Rat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3899,7 +3899,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Raven", 
+    "Name": "Raven", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -3959,7 +3959,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Rhinoceros", 
+    "Name": "Rhinoceros", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4013,7 +4013,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Saber-Toothed Tiger", 
+    "Name": "Saber-Toothed Tiger", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4086,7 +4086,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Scorpion", 
+    "Name": "Scorpion", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -4135,7 +4135,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Scorpion (Giant)", 
+    "Name": "Giant Scorpion", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -4194,7 +4194,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Sea Horse", 
+    "Name": "Sea Horse", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4243,7 +4243,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Sea Horse (Giant)", 
+    "Name": "Giant Sea Horse", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4303,7 +4303,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Shark (Giant)", 
+    "Name": "Giant Shark", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4369,7 +4369,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Shark (Hunter)", 
+    "Name": "Hunter Shark", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4435,7 +4435,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Shark (Reef)", 
+    "Name": "Reef Shark", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4501,7 +4501,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Snake (Constrictor)", 
+    "Name": "Constrictor Snake", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -4556,7 +4556,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Snake (Giant Constrictor)", 
+    "Name": "Giant Constrictor Snake", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -4616,7 +4616,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Snake (Poisonous Giant)", 
+    "Name": "Poisonous Giant Snake", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -4671,7 +4671,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Snake (Poisonous)", 
+    "Name": "Poisonous Snake", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -4721,7 +4721,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Spider", 
+    "Name": "Spider", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4792,7 +4792,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Spider (Giant)", 
+    "Name": "Giant Spider", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4869,7 +4869,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Tiger", 
+    "Name": "Tiger", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -4943,7 +4943,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Toad (Giant)", 
+    "Name": "Giant Toad", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5009,7 +5009,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Vulture", 
+    "Name": "Vulture", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5074,7 +5074,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Vulture (Giant)", 
+    "Name": "Giant Vulture", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5149,7 +5149,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Wasp (Giant)", 
+    "Name": "Giant Wasp", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -5198,7 +5198,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Weasel", 
+    "Name": "Weasel", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5261,7 +5261,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Weasel (Giant)", 
+    "Name": "Giant Weasel", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5319,7 +5319,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Wolf", 
+    "Name": "Wolf", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5387,7 +5387,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Wolf (Dire)", 
+    "Name": "Dire Wolf", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5455,7 +5455,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animal, Wolf Spider (Giant)", 
+    "Name": "Giant Wolf Spider", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -5531,7 +5531,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Animated Object, Animated Armor", 
+    "Name": "Animated Armor", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -5608,7 +5608,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Animated Object, Flying Sword", 
+    "Name": "Flying Sword", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -5685,7 +5685,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Animated Object, Rug of Smothering", 
+    "Name": "Rug of Smothering", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -6849,7 +6849,7 @@
       "Con": 22
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Balor", 
+    "Name": "Balor", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -6963,7 +6963,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Dretch", 
+    "Name": "Dretch", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7036,7 +7036,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Glabrezu", 
+    "Name": "Glabrezu", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7134,7 +7134,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Hezrou", 
+    "Name": "Hezrou", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7234,7 +7234,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Marilith", 
+    "Name": "Marilith", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7342,7 +7342,7 @@
       "Con": 22
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Nalfeshnee", 
+    "Name": "Nalfeshnee", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7446,7 +7446,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Quasit", 
+    "Name": "Quasit", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7532,7 +7532,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Demon, Vrock", 
+    "Name": "Vrock", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7632,7 +7632,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Barbed", 
+    "Name": "Barbed Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7752,7 +7752,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Bearded", 
+    "Name": "Bearded Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7850,7 +7850,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Bone", 
+    "Name": "Bone Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -7959,7 +7959,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Chain", 
+    "Name": "Chain Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8058,7 +8058,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Erinyes", 
+    "Name": "Erinyes", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8156,7 +8156,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Horned", 
+    "Name": "Horned Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8259,7 +8259,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Ice", 
+    "Name": "Ice Devil", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8368,7 +8368,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Imp", 
+    "Name": "Imp", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8466,7 +8466,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Lemure", 
+    "Name": "Lemure", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -8535,7 +8535,7 @@
       "Con": 24
     }, 
     "LegendaryActions": [], 
-    "Name": "Devil, Pit Fiend", 
+    "Name": "Pit Fiend", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -8649,7 +8649,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Dinosaur, Plesiosaurus", 
+    "Name": "Plesiosaurus", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -8713,7 +8713,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dinosaur, Triceratops", 
+    "Name": "Triceratops", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -8772,7 +8772,7 @@
       "Con": 19
     }, 
     "LegendaryActions": [], 
-    "Name": "Dinosaur, Tyrannosaurus Rex", 
+    "Name": "Tyrannosaurus Rex", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -9034,7 +9034,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Black (Adult)", 
+    "Name": "Adult Black Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9172,7 +9172,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Black (Ancient)", 
+    "Name": "Ancient Black Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9289,7 +9289,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Black (Wyrmling)", 
+    "Name": "Black Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9380,7 +9380,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Black (Young)", 
+    "Name": "Young Black Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9503,7 +9503,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Blue (Adult)", 
+    "Name": "Adult Blue Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9636,7 +9636,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Blue (Ancient)", 
+    "Name": "Ancient Blue Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -9748,7 +9748,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Blue (Wyrmling)", 
+    "Name": "Blue Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -9833,7 +9833,7 @@
       "Con": 19
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Blue (Young)", 
+    "Name": "Young Blue Dragon", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -9950,7 +9950,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Brass (Adult)", 
+    "Name": "Adult Brass Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10091,7 +10091,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Brass (Ancient)", 
+    "Name": "Ancient Brass Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10216,7 +10216,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Brass (Wyrmling)", 
+    "Name": "Brass Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -10301,7 +10301,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Brass (Young)", 
+    "Name": "Young Brass Dragon", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -10422,7 +10422,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Bronze (Adult)", 
+    "Name": "Adult Bronze Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10569,7 +10569,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Bronze (Ancient)", 
+    "Name": "Ancient Bronze Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10695,7 +10695,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Bronze (Wyrmling)", 
+    "Name": "Bronze Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10786,7 +10786,7 @@
       "Con": 19
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Bronze (Young)", 
+    "Name": "Young Bronze Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -10913,7 +10913,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Copper (Adult)", 
+    "Name": "Adult Copper Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11050,7 +11050,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Copper (Ancient)", 
+    "Name": "Ancient Copper Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11171,7 +11171,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Copper (Wyrmling)", 
+    "Name": "Copper Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -11256,7 +11256,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Copper (Young)", 
+    "Name": "Young Copper Dragon", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -11377,7 +11377,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Gold (Adult)", 
+    "Name": "Adult Gold Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11528,7 +11528,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Gold (Ancient)", 
+    "Name": "Ancient Gold Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11658,7 +11658,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Gold (Wyrmling)", 
+    "Name": "Gold Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11749,7 +11749,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Gold (Young)", 
+    "Name": "Young Gold Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -11880,7 +11880,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Green (Adult)", 
+    "Name": "Adult Green Dragon", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -12032,7 +12032,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Green (Ancient)", 
+    "Name": "Ancient Green Dragon", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -12163,7 +12163,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Green (Wyrmling)", 
+    "Name": "Green Dragon Wyrmling", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -12256,7 +12256,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Green (Young)", 
+    "Name": "Young Green Dragon", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -12385,7 +12385,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Red (Adult)", 
+    "Name": "Adult Red Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -12518,7 +12518,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Red (Ancient)", 
+    "Name": "Ancient Red Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -12630,7 +12630,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Red (Wyrmling)", 
+    "Name": "Red Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -12715,7 +12715,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Red (Young)", 
+    "Name": "Young Red Dragon", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -12832,7 +12832,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Silver (Adult)", 
+    "Name": "Adult Silver Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -12977,7 +12977,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, Silver (Ancient)", 
+    "Name": "Ancient Silver Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -13101,7 +13101,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Silver (Wyrmling)", 
+    "Name": "Silver Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -13185,7 +13185,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, Silver (Young)", 
+    "Name": "Young Silver Dragon", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -13309,7 +13309,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, White (Adult)", 
+    "Name": "Adult White Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -13448,7 +13448,7 @@
         "Name": "Wing Attack (Costs 2 Actions)"
       }
     ], 
-    "Name": "Dragon, White (Ancient)", 
+    "Name": "Ancient White Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -13566,7 +13566,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, White (Wyrmling)", 
+    "Name": "White Dragon Wyrmling", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -13652,7 +13652,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Dragon, White (Young)", 
+    "Name": "Young White Dragon", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -14100,7 +14100,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Elf, Drow", 
+    "Name": "Drow", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -14499,7 +14499,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Fungi, Shrieker", 
+    "Name": "Shrieker", 
     "ConditionImmunities": [
       "blinded", 
       "deafened", 
@@ -14552,7 +14552,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Fungi, Violet Fungus", 
+    "Name": "Violet Fungus", 
     "ConditionImmunities": [
       "blinded", 
       "deafened", 
@@ -14692,7 +14692,7 @@
       "Con": 22
     }, 
     "LegendaryActions": [], 
-    "Name": "Genie, Djinni", 
+    "Name": "Djinni", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -14779,7 +14779,7 @@
       "Con": 24
     }, 
     "LegendaryActions": [], 
-    "Name": "Genie, Efreeti", 
+    "Name": "Efreeti", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -14962,7 +14962,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Ghoul, Ghast", 
+    "Name": "Ghast", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -15106,7 +15106,7 @@
       "Con": 22
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Cloud", 
+    "Name": "Cloud Giant", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -15198,7 +15198,7 @@
       "Con": 23
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Fire", 
+    "Name": "Fire Giant", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -15280,7 +15280,7 @@
       "Con": 21
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Frost", 
+    "Name": "Frost Giant", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -15362,7 +15362,7 @@
       "Con": 19
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Hill", 
+    "Name": "Hill Giant", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -15431,7 +15431,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Stone", 
+    "Name": "Stone Giant", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -15518,7 +15518,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Giant, Storm", 
+    "Name": "Storm Giant", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -15771,7 +15771,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Gnome, Deep (Svirfneblin)", 
+    "Name": "Deep Gnome (Svirfneblin)", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -15922,7 +15922,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Golem, Clay", 
+    "Name": "Clay Golem", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -16020,7 +16020,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Golem, Flesh", 
+    "Name": "Flesh Golem", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -16117,7 +16117,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Golem, Iron", 
+    "Name": "Iron Golem", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -16215,7 +16215,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Golem, Stone", 
+    "Name": "Stone Golem", 
     "ConditionImmunities": [
       "charmed", 
       "exhaustion", 
@@ -16595,7 +16595,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Hag, Green", 
+    "Name": "Green Hag", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -16684,7 +16684,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Hag, Night", 
+    "Name": "Night Hag", 
     "ConditionImmunities": [
       "charmed"
     ], 
@@ -16786,7 +16786,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Hag, Sea", 
+    "Name": "Sea Hag", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -17876,7 +17876,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "Lycanthrope, Werebear", 
+    "Name": "Werebear", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -17960,7 +17960,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Lycanthrope, Wereboar", 
+    "Name": "Wereboar", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -18043,7 +18043,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Lycanthrope, Wererat", 
+    "Name": "Wererat", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -18131,7 +18131,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Lycanthrope, Weretiger", 
+    "Name": "Weretiger", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -18229,7 +18229,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Lycanthrope, Werewolf", 
+    "Name": "Werewolf", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -18540,7 +18540,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Mephit, Dust", 
+    "Name": "Dust Mephit", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -18622,7 +18622,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Mephit, Ice", 
+    "Name": "Ice Mephit", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -18711,7 +18711,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "Mephit, Magma", 
+    "Name": "Magma Mephit", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -18795,7 +18795,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Mephit, Steam", 
+    "Name": "Steam Mephit", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -19383,7 +19383,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Acolyte", 
+    "Name": "Acolyte", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -19446,7 +19446,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Archmage", 
+    "Name": "Archmage", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -19527,7 +19527,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Assassin", 
+    "Name": "Assassin", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -19635,7 +19635,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Bandit Captain", 
+    "Name": "Bandit Captain", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -19715,7 +19715,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Bandit/Pirate", 
+    "Name": "Bandit", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -19768,7 +19768,7 @@
       "Con": 17
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Berserker", 
+    "Name": "Berserker", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -19822,7 +19822,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Commoner", 
+    "Name": "Commoner", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [], 
@@ -19870,7 +19870,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Cult Fanatic", 
+    "Name": "Cult Fanatic", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -19947,7 +19947,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Cultist", 
+    "Name": "Cultist", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20010,7 +20010,7 @@
       "Con": 13
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Druid", 
+    "Name": "Druid", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20083,7 +20083,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Gladiator", 
+    "Name": "Gladiator", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20174,7 +20174,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Guard", 
+    "Name": "Guard", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -20227,7 +20227,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Half-Red Dragon Veteran", 
+    "Name": "Half-Red Dragon Veteran", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -20289,7 +20289,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Knight", 
+    "Name": "Knight", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20367,7 +20367,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Mage", 
+    "Name": "Mage", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20445,7 +20445,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Noble", 
+    "Name": "Noble", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -20506,7 +20506,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Priest", 
+    "Name": "Priest", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20578,7 +20578,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Scout", 
+    "Name": "Scout", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20659,7 +20659,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Spy", 
+    "Name": "Spy", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20757,7 +20757,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Thug", 
+    "Name": "Thug", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20826,7 +20826,7 @@
       "Con": 12
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Tribal Warrior", 
+    "Name": "Tribal Warrior", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -20880,7 +20880,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "NPC, Veteran", 
+    "Name": "Veteran", 
     "ConditionImmunities": [], 
     "Traits": [], 
     "Skills": [
@@ -20952,7 +20952,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Naga, Guardian", 
+    "Name": "Guardian", 
     "ConditionImmunities": [
       "charmed", 
       "poisoned"
@@ -21040,7 +21040,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Naga, Spirit", 
+    "Name": "Spirit", 
     "ConditionImmunities": [
       "charmed", 
       "poisoned"
@@ -21369,7 +21369,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Ooze, Black Pudding", 
+    "Name": "Black Pudding", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -21447,7 +21447,7 @@
       "Con": 20
     }, 
     "LegendaryActions": [], 
-    "Name": "Ooze, Gelatinous Cube", 
+    "Name": "Gelatinous Cube", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -21519,7 +21519,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Ooze, Gray", 
+    "Name": "Gray Ooze", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -21607,7 +21607,7 @@
       "Con": 14
     }, 
     "LegendaryActions": [], 
-    "Name": "Ooze, Ochre Jelly", 
+    "Name": "Ochre Jelly", 
     "ConditionImmunities": [
       "blinded", 
       "charmed", 
@@ -22032,7 +22032,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Plant, Awakened Shrub", 
+    "Name": "Awakened Shrub", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -22090,7 +22090,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Plant, Awakened Tree", 
+    "Name": "Awakened Tree", 
     "ConditionImmunities": [], 
     "Traits": [
       {
@@ -23194,7 +23194,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Skeleton, Common", 
+    "Name": "Skeleton", 
     "ConditionImmunities": [
       "exhaustion", 
       "poisoned"
@@ -23255,7 +23255,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Skeleton, Minotaur", 
+    "Name": "Minotaur Skeleton", 
     "ConditionImmunities": [
       "exhaustion", 
       "poisoned;"
@@ -23322,7 +23322,7 @@
       "Con": 15
     }, 
     "LegendaryActions": [], 
-    "Name": "Skeleton, Warhorse", 
+    "Name": "Warhorse Skeleton", 
     "ConditionImmunities": [
       "exhaustion", 
       "poisoned"
@@ -23481,7 +23481,7 @@
         "Name": "Cast a Spell (Costs 3 Actions)"
       }
     ], 
-    "Name": "Sphinx, Androsphinx", 
+    "Name": "Androsphinx", 
     "ConditionImmunities": [
       "charmed", 
       "frightened"
@@ -23631,7 +23631,7 @@
         "Name": "Cast a Spell (Costs 3 Actions)"
       }
     ], 
-    "Name": "Sphinx, Gynosphinx", 
+    "Name": "Gynosphinx", 
     "ConditionImmunities": [
       "charmed", 
       "frightened"
@@ -23961,7 +23961,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Bats", 
+    "Name": "Swarm of Bats", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -24040,7 +24040,7 @@
       "Con": 10
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Insects", 
+    "Name": "Swarm of Insects", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -24109,7 +24109,7 @@
       "Con": 11
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Poisonous Snakes", 
+    "Name": "Swarm of Poisonous Snakes", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -24178,7 +24178,7 @@
       "Con": 9
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Quippers", 
+    "Name": "Swarm of Quippers", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -24257,7 +24257,7 @@
       "Con": 9
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Rats", 
+    "Name": "Swarm of Rats", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -24330,7 +24330,7 @@
       "Con": 8
     }, 
     "LegendaryActions": [], 
-    "Name": "Swarm, Ravens", 
+    "Name": "Swarm of Ravens", 
     "ConditionImmunities": [
       "charmed", 
       "frightened", 
@@ -25724,7 +25724,7 @@
       "Con": 16
     }, 
     "LegendaryActions": [], 
-    "Name": "Zombie, Common", 
+    "Name": "Zombie", 
     "ConditionImmunities": [
       "poisoned"
     ], 
@@ -25788,7 +25788,7 @@
       "Con": 18
     }, 
     "LegendaryActions": [], 
-    "Name": "Zombie, Ogre", 
+    "Name": "Ogre Zombie", 
     "ConditionImmunities": [
       "poisoned"
     ], 
