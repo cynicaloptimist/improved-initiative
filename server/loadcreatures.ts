@@ -13,7 +13,7 @@ const addCreaturesFromFile = (filename, creatures) => fs.readFile(filename, (err
 });
 
 const statblockSourceAbbreviations = {
-    "system-reference-document": "srd"
+    "monster-manual": "mm"
 }
 
 const toLowerCaseWithDashes = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, '-').replace(/[^a-z0-9-]/g, '');
