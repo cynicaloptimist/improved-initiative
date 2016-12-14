@@ -22,7 +22,7 @@ const createCreatureId = (creatureName: string, statblockSource: string) => {
     const sourceString = toLowerCaseWithDashes(statblockSource);
     const sourcePrefix = statblockSourceAbbreviations[sourceString] || sourceString;
     const statblockName = toLowerCaseWithDashes(creatureName);
-    return `${sourcePrefix}~${statblockName}`;
+    return `${sourcePrefix}.${statblockName}`;
 }
 
 export default function(creatures){
