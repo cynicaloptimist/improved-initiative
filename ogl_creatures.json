@@ -112,7 +112,7 @@
       "Deep Speech", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 20"
@@ -123,72 +123,6 @@
     "Challenge": "10 (5900 XP)", 
     "DamageVulnerabilities": [], 
     "Description": "Four long tentacles writhe from this three-eyed fish-like creature's flanks, and its green body glistens with thick, clear slime."
-  }, 
-  {
-    "Reactions": [], 
-    "AC": {
-      "Notes": "(natural armor)", 
-      "Value": 13
-    }, 
-    "Abilities": {
-      "Dex": 14, 
-      "Cha": 11, 
-      "Int": 14, 
-      "Wis": 4, 
-      "Str": 26, 
-      "Con": 12
-    }, 
-    "LegendaryActions": [], 
-    "Name": "Adherer", 
-    "ConditionImmunities": [], 
-    "Traits": [
-      {
-        "Content": "An adherer exudes a sour smelling, gluelike substance that is a powerful adhesive. Any creatures or items that touch it, except for items made of stone, become stuck to the adherer. The adherer automatically grapples and restrains any creature it hits with its slam attack. It can grapple up to two opponents at one time. Grappling does not reduce the adherer's number of attacks. Creatures grappled this way can break free with a successful DC 15 Str check. A weapon that strikes an adherer is stuck to the creature unless the wielder succeeds on a DC 12 Dex saving throw. Pulling a stuck weapon free requires a successful DC 12 Str check. Boiling water thrown on the adherer deals 1d6 points of damage to it and to any creature grappled by the adherer. It also grants tactical advantage on Dex saving throws and Str checks to free a weapon or to escape from the adherer's grapple; this bonus lasts for one round. Inflicting fire damage on the adherer also weakens the adhesive, granting tactical advantage on Dex saving throws and Str checks for 1d3 rounds. Universal solvent dissolves the adhesive instantly. An adherer can dissolve its adhesive at will, and the substance breaks down naturally one hour after the creature dies.", 
-        "Usage": "", 
-        "Name": "Adhesive"
-      }
-    ], 
-    "Skills": [
-      {
-        "Modifier": 3, 
-        "Name": "Stealth"
-      }
-    ], 
-    "Speed": [
-      "30 ft."
-    ], 
-    "HP": {
-      "Notes": "(7d8+14)", 
-      "Value": 45
-    }, 
-    "Saves": [], 
-    "Actions": [
-      {
-        "Content": "The adherer makes two slam attacks.", 
-        "Usage": "", 
-        "Name": "Multiattack"
-      }, 
-      {
-        "Content": "_Melee Weapon Attack: _+4 to hit (reach 5 ft.; one creature). _Hit_: 1d8 + 2 bludgeoning damage, and the target creature is grappled and restrained (see Adhesive).", 
-        "Usage": "", 
-        "Name": "Melee Attack-Slam"
-      }
-    ], 
-    "Languages": [
-      "Common (understands but can't speak)"
-    ], 
-    "Source": "5eF (Necromancer Games)", 
-    "Senses": [
-      "Darkvision 60 ft."
-    ], 
-    "DamageResistances": [], 
-    "DamageImmunities": [], 
-    "Type": "Medium aberration, lawful evil", 
-    "Challenge": "2 (450 XP)", 
-    "DamageVulnerabilities": [
-      "fire"
-    ], 
-    "Description": "This creature appears to be a withered humanoid wrapped in decaying bandages. Upon close inspection, what appeared to be bandages are actually loose folds of the creature's rotting skin. A sour odor fills the air around the creature."
   }, 
   {
     "Reactions": [], 
@@ -253,7 +187,7 @@
     "Languages": [
       "Auran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -364,7 +298,7 @@
       "all", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 19"
@@ -472,7 +406,7 @@
       "all", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": truesight 120 ft.", 
       "passive Perception 21"
@@ -612,7 +546,7 @@
       "all", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 24"
@@ -688,7 +622,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -756,7 +690,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 14"
     ], 
@@ -804,7 +738,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -859,7 +793,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -914,7 +848,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 11"
@@ -980,7 +914,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 11"
@@ -1041,7 +975,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 11"
@@ -1102,7 +1036,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 11"
@@ -1173,7 +1107,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -1243,7 +1177,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -1313,7 +1247,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -1378,7 +1312,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -1437,7 +1371,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 9"
     ], 
@@ -1496,7 +1430,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 8"
     ], 
@@ -1544,7 +1478,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 9"
     ], 
@@ -1608,7 +1542,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -1657,7 +1591,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 8"
@@ -1718,7 +1652,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 9"
@@ -1779,7 +1713,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 9"
@@ -1840,7 +1774,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -1910,7 +1844,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -1958,7 +1892,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -2018,7 +1952,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -2077,7 +2011,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -2136,7 +2070,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -2203,7 +2137,7 @@
       "Elvish", 
       "and Sylvan but can't speak them"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -2257,7 +2191,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 8"
@@ -2321,7 +2255,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 11"
@@ -2396,7 +2330,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 12"
@@ -2456,7 +2390,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -2515,7 +2449,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -2575,7 +2509,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -2623,7 +2557,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -2671,7 +2605,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -2719,7 +2653,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 10"
     ], 
@@ -2773,7 +2707,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -2832,7 +2766,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -2891,7 +2825,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -2955,7 +2889,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -3025,7 +2959,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 120 ft.", 
       "passive Perception 13"
@@ -3109,7 +3043,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -3158,7 +3092,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 9"
@@ -3208,7 +3142,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 10"
@@ -3268,7 +3202,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -3327,7 +3261,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -3386,7 +3320,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -3465,7 +3399,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 12"
@@ -3545,7 +3479,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -3615,7 +3549,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 13"
@@ -3688,7 +3622,7 @@
       "Elvish", 
       "and Sylvan but can't speak them"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 15"
@@ -3763,7 +3697,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -3823,7 +3757,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
@@ -3878,7 +3812,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 10"
@@ -3938,7 +3872,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -3999,7 +3933,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -4053,7 +3987,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -4126,7 +4060,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -4174,7 +4108,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 9"
@@ -4233,7 +4167,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 9"
@@ -4283,7 +4217,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -4343,7 +4277,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -4408,7 +4342,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 13"
@@ -4474,7 +4408,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 12"
@@ -4540,7 +4474,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "passive Perception 12"
@@ -4595,7 +4529,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 10"
@@ -4655,7 +4589,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 12"
@@ -4710,7 +4644,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 12"
@@ -4760,7 +4694,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 10"
@@ -4831,7 +4765,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 10"
@@ -4907,7 +4841,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -4982,7 +4916,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -5048,7 +4982,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 10"
@@ -5114,7 +5048,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -5189,7 +5123,7 @@
     "Languages": [
       "understands Common but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -5238,7 +5172,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -5301,7 +5235,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -5358,7 +5292,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -5427,7 +5361,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -5495,7 +5429,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -5569,7 +5503,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -5644,7 +5578,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 6"
@@ -5721,7 +5655,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 7"
@@ -5797,7 +5731,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 6"
@@ -5855,7 +5789,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "tremorsense 60 ft.", 
@@ -5928,7 +5862,7 @@
     "Languages": [
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 11"
     ], 
@@ -5985,7 +5919,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -6064,7 +5998,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 90 ft.", 
       "passive Perception 16"
@@ -6136,7 +6070,7 @@
       "Blink Dog", 
       "understands Sylvan but can't speak it"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -6210,7 +6144,7 @@
       "Common", 
       "Goblin"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -6276,7 +6210,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "tremorsense 60 ft.", 
@@ -6361,7 +6295,7 @@
       "Elvish", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -6435,7 +6369,7 @@
     "Languages": [
       "understands Draconic but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 18"
@@ -6513,7 +6447,7 @@
     "Languages": [
       "understands Deep Speech but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -6602,7 +6536,7 @@
       "Deep Speech", 
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -6652,7 +6586,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -6742,7 +6676,7 @@
       "all", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 15"
@@ -6819,7 +6753,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 10"
@@ -6888,7 +6822,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 15"
@@ -6994,7 +6928,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 13"
@@ -7069,7 +7003,7 @@
       "Abyssal", 
       "telepathy 60 ft. (works only with creatures that understand Abyssal)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -7165,7 +7099,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 13"
@@ -7259,7 +7193,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -7373,7 +7307,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 13"
@@ -7477,7 +7411,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 11"
@@ -7563,7 +7497,7 @@
       "Abyssal", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 10"
@@ -7663,7 +7597,7 @@
       "Abyssal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -7784,7 +7718,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 18"
@@ -7882,7 +7816,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 10"
@@ -7985,7 +7919,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 12"
@@ -8084,7 +8018,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -8188,7 +8122,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 12"
@@ -8291,7 +8225,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 13"
@@ -8398,7 +8332,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -8498,7 +8432,7 @@
       "Infernal", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -8569,7 +8503,7 @@
     "Languages": [
       "understands Infernal but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": darkvision 120 ft.", 
       "passive Perception 10"
@@ -8681,7 +8615,7 @@
       "Infernal", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 14"
@@ -8753,7 +8687,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -8812,7 +8746,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -8875,7 +8809,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -8960,7 +8894,7 @@
     "Languages": [
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -9050,7 +8984,7 @@
       "Aquan", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -9187,7 +9121,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -9325,7 +9259,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -9416,7 +9350,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -9518,7 +9452,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -9651,7 +9585,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -9784,7 +9718,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -9869,7 +9803,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -9965,7 +9899,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -10106,7 +10040,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -10252,7 +10186,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -10337,7 +10271,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -10437,7 +10371,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -10584,7 +10518,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -10731,7 +10665,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -10822,7 +10756,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -10928,7 +10862,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -11065,7 +10999,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -11207,7 +11141,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -11292,7 +11226,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -11392,7 +11326,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -11543,7 +11477,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -11694,7 +11628,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -11785,7 +11719,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -11895,7 +11829,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -12047,7 +11981,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -12199,7 +12133,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -12292,7 +12226,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -12400,7 +12334,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -12533,7 +12467,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -12666,7 +12600,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -12751,7 +12685,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -12847,7 +12781,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -12992,7 +12926,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -13137,7 +13071,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -13221,7 +13155,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -13324,7 +13258,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -13463,7 +13397,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -13602,7 +13536,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "darkvision 120 ft.", 
@@ -13688,7 +13622,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -13791,7 +13725,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "darkvision 120 ft.", 
@@ -13895,7 +13829,7 @@
       "Elvish", 
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 15"
@@ -13980,7 +13914,7 @@
       "Elvish", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -14056,7 +13990,7 @@
       "Dwarvish", 
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 10"
@@ -14130,7 +14064,7 @@
     "Languages": [
       "Terran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "tremorsense 60 ft.", 
@@ -14219,7 +14153,7 @@
       "Elvish", 
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 12"
@@ -14313,7 +14247,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -14389,7 +14323,7 @@
       "Giant", 
       "Orc"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -14468,7 +14402,7 @@
     "Languages": [
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -14532,7 +14466,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 11"
@@ -14591,7 +14525,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft. (blind beyond this radius)", 
       "passive Perception 6"
@@ -14655,7 +14589,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft. (blind beyond this radius)", 
       "passive Perception 6"
@@ -14725,7 +14659,7 @@
     "Languages": [
       "Terran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10;"
@@ -14815,7 +14749,7 @@
     "Languages": [
       "Auran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 13"
@@ -14902,7 +14836,7 @@
     "Languages": [
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 12"
@@ -14990,7 +14924,7 @@
     "Languages": [
       "any languages it knew in life;"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11;"
@@ -15070,7 +15004,7 @@
     "Languages": [
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -15146,7 +15080,7 @@
       "Giant Eagle", 
       "understands Common and Auran but can't speak them"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -15238,7 +15172,7 @@
       "Common", 
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 17"
     ], 
@@ -15318,7 +15252,7 @@
     "Languages": [
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 16"
     ], 
@@ -15400,7 +15334,7 @@
     "Languages": [
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 13"
     ], 
@@ -15465,7 +15399,7 @@
     "Languages": [
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -15557,7 +15491,7 @@
     "Languages": [
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -15668,7 +15602,7 @@
       "Common", 
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 19"
     ], 
@@ -15745,7 +15679,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -15810,7 +15744,7 @@
     "Languages": [
       "Gnoll"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -15895,7 +15829,7 @@
       "Terran", 
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 12"
@@ -15961,7 +15895,7 @@
       "Common", 
       "Goblin"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -16053,7 +15987,7 @@
     "Languages": [
       "understands the languages of its creator but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -16151,7 +16085,7 @@
     "Languages": [
       "understands the languages of its creator but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -16248,7 +16182,7 @@
     "Languages": [
       "understands the languages of its creator but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 10"
@@ -16336,7 +16270,7 @@
     "Languages": [
       "understands the languages of its creator but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 10"
@@ -16413,7 +16347,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -16479,7 +16413,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -16554,7 +16488,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 15"
@@ -16634,7 +16568,7 @@
     "Languages": [
       "Undercommon"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft. or 10 ft. while deafened (blind beyond this radius)", 
       "passive Perception 13"
@@ -16723,7 +16657,7 @@
       "Draconic", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -16820,7 +16754,7 @@
       "Infernal", 
       "Primordial"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 16"
@@ -16898,7 +16832,7 @@
       "Common", 
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -16963,7 +16897,7 @@
     "Languages": [
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 10"
     ], 
@@ -17032,7 +16966,7 @@
     "Languages": [
       "understands Infernal but can't speak it"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 15"
@@ -17105,7 +17039,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 15"
     ], 
@@ -17165,7 +17099,7 @@
       "Common", 
       "Goblin"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -17224,7 +17158,7 @@
     "Languages": [
       "understands the languages of its creator but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -17307,7 +17241,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 16"
@@ -17392,7 +17326,7 @@
       "Auran", 
       "understands Common but doesn't speak it"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 18"
@@ -17464,7 +17398,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
@@ -17599,7 +17533,7 @@
       "and Primordial but can't speak", 
       "telepathy 120 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 14"
@@ -17687,7 +17621,7 @@
       "Abyssal", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": darkvision 60 ft.", 
       "passive Perception 12"
@@ -17819,7 +17753,7 @@
     "Languages": [
       "Common plus up to five other languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 19"
@@ -17916,7 +17850,7 @@
     "Languages": [
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -17996,7 +17930,7 @@
     "Languages": [
       "Common (can't speak in bear form)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 17"
     ], 
@@ -18079,7 +18013,7 @@
     "Languages": [
       "Common (can't speak in boar form)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -18166,7 +18100,7 @@
     "Languages": [
       "Common (can't speak in rat form)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft. (rat form only)", 
       "passive Perception 12"
@@ -18264,7 +18198,7 @@
     "Languages": [
       "Common (can't speak in tiger form)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 15"
@@ -18352,7 +18286,7 @@
     "Languages": [
       "Common (can't speak in wolf form)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -18415,7 +18349,7 @@
     "Languages": [
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -18492,7 +18426,7 @@
     "Languages": [
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -18579,7 +18513,7 @@
     "Languages": [
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -18657,7 +18591,7 @@
       "Auran", 
       "Terran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -18744,7 +18678,7 @@
       "Aquan", 
       "Auran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -18829,7 +18763,7 @@
       "Ignan", 
       "Terran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -18903,7 +18837,7 @@
       "Aquan", 
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -18968,7 +18902,7 @@
       "Aquan", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -19039,7 +18973,7 @@
       "Abyssal", 
       "Aquan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -19121,7 +19055,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -19198,7 +19132,7 @@
     "Languages": [
       "Abyssal"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 17"
@@ -19268,7 +19202,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -19415,7 +19349,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -19486,7 +19420,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -19563,7 +19497,7 @@
     "Languages": [
       "any six languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -19667,7 +19601,7 @@
     "Languages": [
       "Thieves' cant plus any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -19755,7 +19689,7 @@
     "Languages": [
       "any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 10"
     ], 
@@ -19808,7 +19742,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -19862,7 +19796,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -19910,7 +19844,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -19987,84 +19921,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
-    "Senses": [
-      "passive Perception 11"
-    ], 
-    "DamageResistances": [], 
-    "DamageImmunities": [], 
-    "Type": "Medium humanoid (any race), any non-good alignment", 
-    "Challenge": "2 (450 XP)", 
-    "DamageVulnerabilities": [], 
-    "Description": ""
-  }, 
-  {
-    "Reactions": [], 
-    "AC": {
-      "Notes": "(no armor)", 
-      "Value": 12
-    }, 
-    "Abilities": {
-      "Dex": 14, 
-      "Cha": 15, 
-      "Int": 10, 
-      "Wis": 12, 
-      "Str": 11, 
-      "Con": 12
-    }, 
-    "LegendaryActions": [], 
-    "Name": "NPC, Cult Sorcerer", 
-    "ConditionImmunities": [], 
-    "Traits": [
-      {
-        "Content": "The cult sorcerer has advantage on saving throws against being charmed or frightened.", 
-        "Usage": "", 
-        "Name": "Dark Devotion"
-      }, 
-      {
-        "Content": "The fanatic is a 4th-level spellcaster. Its spellcasting ability is Charisma (spell save DC 11, +3 to hit with spell attacks). The fanatic has the following Sorcerer spells :    * **Cantrips (at will)**: _light_, _prestidigitation, ray of frost_   * **1st level (4 slots)**: _charm person, magic missile,_ _shield_   * **2nd level (3 slots)**: _darkness_, _scorching ray_  ", 
-        "Usage": "", 
-        "Name": "Spellcasting"
-      }
-    ], 
-    "Skills": [
-      {
-        "Modifier": 2, 
-        "Name": "Religion"
-      }, 
-      {
-        "Modifier": 4, 
-        "Name": "Persuasion"
-      }, 
-      {
-        "Modifier": 4, 
-        "Name": "Deception"
-      }
-    ], 
-    "Speed": [
-      "30 ft."
-    ], 
-    "HP": {
-      "Notes": "(6d8 + 6)", 
-      "Value": 33
-    }, 
-    "Saves": [], 
-    "Actions": [
-      {
-        "Content": "The fanatic makes two melee attacks.", 
-        "Usage": "", 
-        "Name": "Multiattack"
-      }, 
-      {
-        "Content": "_Melee or Ranged Weapon Attack_: +4 to hit, reach 5 ft. or range 20/60 ft., one creature. _Hit_: 4 (1d4 + 2) piercing damage.", 
-        "Usage": "", 
-        "Name": "Dagger"
-      }
-    ], 
-    "Languages": [
-      "any two languages (usually Common and an otherworldly tongue)"
-    ], 
-    "Source": "Homebrew", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -20127,7 +19984,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -20194,7 +20051,7 @@
     "Languages": [
       "Druidic plus any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -20291,7 +20148,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -20344,7 +20201,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -20396,7 +20253,7 @@
       "Common", 
       "Draconic"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -20484,7 +20341,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -20556,7 +20413,7 @@
     "Languages": [
       "any four languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": passive Perception 11"
     ], 
@@ -20623,7 +20480,7 @@
     "Languages": [
       "any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -20695,7 +20552,7 @@
     "Languages": [
       "any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -20776,7 +20633,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 15"
     ], 
@@ -20874,7 +20731,7 @@
     "Languages": [
       "any two languages"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 16"
     ], 
@@ -20943,7 +20800,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -20997,7 +20854,7 @@
     "Languages": [
       "any one language"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -21069,7 +20926,7 @@
     "Languages": [
       "any one language (usually Common)"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -21154,7 +21011,7 @@
       "Celestial", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -21241,7 +21098,7 @@
       "Abyssal", 
       "Common"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -21311,7 +21168,7 @@
       "Common", 
       "and Infernal but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 11"
     ], 
@@ -21367,7 +21224,7 @@
       "Common", 
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
@@ -21479,7 +21336,7 @@
       "Common", 
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": darkvision 60 ft.", 
       "passive Perception 14"
@@ -21558,7 +21415,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 8"
@@ -21635,7 +21492,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 8"
@@ -21713,7 +21570,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 8"
@@ -21791,7 +21648,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 8"
@@ -21862,7 +21719,7 @@
       "Common", 
       "Orc"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -21937,7 +21794,7 @@
     "Languages": [
       "Otyugh"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 11"
@@ -22007,7 +21864,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -22078,7 +21935,7 @@
       "Elvish", 
       "and Sylvan but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 16"
     ], 
@@ -22148,7 +22005,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -22203,7 +22060,7 @@
     "Languages": [
       "one language known by its creator"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -22261,7 +22118,7 @@
     "Languages": [
       "one language known by its creator"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 10"
     ], 
@@ -22345,7 +22202,7 @@
     "Languages": [
       "understands Common and Draconic but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -22421,7 +22278,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 30 ft.", 
       "tremorsense 60 ft.", 
@@ -22497,7 +22354,7 @@
       "Common", 
       "Infernal"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -22564,7 +22421,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "tremorsense 60 ft.", 
@@ -22656,7 +22513,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 14"
     ], 
@@ -22745,7 +22602,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 16"
@@ -22810,7 +22667,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 11"
@@ -22896,7 +22753,7 @@
     "Languages": [
       "Sahuagin"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 15"
@@ -22966,7 +22823,7 @@
     "Languages": [
       "Ignan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -23054,7 +22911,7 @@
       "Elvish", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 12"
     ], 
@@ -23132,7 +22989,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -23220,7 +23077,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft. (blind beyond this radius)", 
       "passive Perception 10"
@@ -23307,7 +23164,7 @@
     "Languages": [
       "understands commands given in any language but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "darkvision 60 ft.", 
@@ -23367,7 +23224,7 @@
     "Languages": [
       "understands all languages it knew in life but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -23434,7 +23291,7 @@
     "Languages": [
       "understands Abyssal but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -23490,7 +23347,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -23565,7 +23422,7 @@
     "Languages": [
       "understands all languages it knew in life but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -23722,7 +23579,7 @@
       "Common", 
       "Sphinx"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 20"
@@ -23839,7 +23696,7 @@
       "Common", 
       "Sphinx"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "truesight 120 ft.", 
       "passive Perception 18"
@@ -23921,7 +23778,7 @@
       "Elvish", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -23970,7 +23827,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 9"
@@ -24070,7 +23927,7 @@
       "Infernal", 
       "telepathy 60 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 15"
@@ -24152,7 +24009,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 60 ft.", 
       "passive Perception 11"
@@ -24221,7 +24078,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 8"
@@ -24290,7 +24147,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 10 ft.", 
       "passive Perception 10"
@@ -24369,7 +24226,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
@@ -24442,7 +24299,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 30 ft.", 
       "passive Perception 10"
@@ -24516,7 +24373,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 15"
     ], 
@@ -24658,7 +24515,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "blindsight 120 ft.", 
       "passive Perception 10"
@@ -24741,7 +24598,7 @@
       "Elvish", 
       "Sylvan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 13"
     ], 
@@ -24820,7 +24677,7 @@
     "Languages": [
       "Giant"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -24938,7 +24795,7 @@
       "Sylvan", 
       "telepathy 60 ft."
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -25083,7 +24940,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 17"
@@ -25180,7 +25037,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 13"
@@ -25264,7 +25121,7 @@
     "Languages": [
       "Aquan"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 10"
@@ -25352,7 +25209,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       ": darkvision 60 ft.", 
       "passive Perception 13"
@@ -25442,7 +25299,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 120 ft.", 
       "passive Perception 12"
@@ -25534,7 +25391,7 @@
       "Giant", 
       "Winter Wolf"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "passive Perception 15"
     ], 
@@ -25596,7 +25453,7 @@
       "Goblin", 
       "Worg"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -25671,7 +25528,7 @@
     "Languages": [
       "the languages it knew in life"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 12"
@@ -25752,7 +25609,7 @@
     "Languages": [
       ""
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 14"
@@ -25837,7 +25694,7 @@
     "Languages": [
       "Terran"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "tremorsense 60 ft.", 
@@ -25902,7 +25759,7 @@
     "Languages": [
       "understands the languages it knew in life but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
@@ -25966,7 +25823,7 @@
     "Languages": [
       "understands Common and Giant but can't speak"
     ], 
-    "Source": "5e SRD", 
+    "Source": "Monster Manual", 
     "Senses": [
       "darkvision 60 ft.", 
       "passive Perception 8"
