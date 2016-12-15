@@ -18,8 +18,33 @@ module ImprovedInitiative {
             "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
+
+        var saveAndClose = () => {
+            $('.modalcontainer').hide();
+            const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
+            Mousetrap.reset();
+
+            Mousetrap.bind('backspace', e => {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    // internet explorer
+                    e.returnValue = false;
+                }
+            })
+
+            allCommands.forEach(b => {
+                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
+                Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
+                Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
+            });
+
+            Store.Save(Store.User, 'SkipIntro', true);
+        }
+
         if (Store.Load(Store.User, 'SkipIntro')) {
             var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
+            saveAndClose();
         }
         else {
             var currentTipIndex = ko.observable(0);
@@ -89,7 +114,7 @@ module ImprovedInitiative {
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1),
-            SaveAndClose: params.encounterCommander.HideSettings
+            SaveAndClose: saveAndClose
         }
     }
 }
