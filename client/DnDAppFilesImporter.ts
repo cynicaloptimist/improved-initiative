@@ -61,7 +61,7 @@ module ImprovedInitiative {
         getPowers(selector: string) {
             return $(this.domElement).find(selector).toArray().map(p => ({
                 Name: $(p).find('name').html(),
-                Content: $(p).find('text').html(),
+                Content: $(p).find('text').map((i,e) => e.innerHTML).get().join('\n'),
                 Usage: ''
             }))
         }
@@ -90,6 +90,7 @@ module ImprovedInitiative {
             
             statBlock.Traits = this.getPowers("trait");
             statBlock.Actions = this.getPowers("action");
+            statBlock.Reactions = this.getPowers("reaction");
             statBlock.LegendaryActions = this.getPowers("legendary");
 
             return statBlock;
