@@ -1,6 +1,7 @@
 module ImprovedInitiative {
     interface Params {
-        commander: Commander;
+        encounterCommander: EncounterCommander;
+        combatantCommander: CombatantCommander;
     }
     export var Settings = (params: Params) => {
         var tips = [
@@ -43,13 +44,15 @@ module ImprovedInitiative {
         }
 
         var displayRoundCounter = loadSetting("DisplayRoundCounter");
-        displayRoundCounter.subscribe(params.commander.DisplayRoundCounter);
+        displayRoundCounter.subscribe(params.encounterCommander.DisplayRoundCounter);
 
         var displayTurnTimer = loadSetting("DisplayTurnTimer");
-        displayTurnTimer.subscribe(params.commander.DisplayTurnTimer);
+        displayTurnTimer.subscribe(params.encounterCommander.DisplayTurnTimer);
         
         return {
-            Commander: params.commander,
+            EncounterCommands: params.encounterCommander.Commands,
+            CombatantCommands: params.combatantCommander.Commands,
+            
             CurrentTab: ko.observable<string>('about'),
             ExportData: () => {
                 var blob = Store.ExportAll();
@@ -85,7 +88,8 @@ module ImprovedInitiative {
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
-            PreviousTip: cycleTipIndex.bind(-1)
+            PreviousTip: cycleTipIndex.bind(-1),
+            SaveAndClose: params.encounterCommander.HideSettings
         }
     }
 }

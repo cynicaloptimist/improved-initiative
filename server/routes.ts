@@ -27,7 +27,11 @@ var initializeNewPlayerView = (playerViews) => {
 }
 
 export default function (app: express.Express, creatures, playerViews) {
-    app.engine('html', mustacheExpress());
+    let mustacheEngine = mustacheExpress();
+    if (process.env.NODE_ENV === "development") {
+        mustacheEngine.cache._max = 0;
+    }
+    app.engine('html', mustacheEngine);
     app.set('view engine', 'html');
     app.set('views', __dirname + '/html');
 
@@ -41,28 +45,34 @@ export default function (app: express.Express, creatures, playerViews) {
     app.get('/e/:id', (req, res) => {
         console.log('app.get ' + req.path);
         res.render('tracker', pageRenderOptionsWithEncounterId(req.params.id));
-    })
+    });
 
     app.get('/p/:id', (req, res) => {
         console.log('app.get ' + req.path);
         res.render('playerview', pageRenderOptionsWithEncounterId(req.params.id));
-    })
+    });
 
     app.get('/playerviews/:id', (req, res) => {
         res.json(playerViews[req.params.id]);
-    })
+    });
 
     app.get('/templates/:name', (req, res) => {
         res.render(`templates/${req.params.name}`, {
             rootDirectory: "..",
         });
-    })
+    });
 
+    let creatureList = [];
     app.get('/creatures/', (req, res) => {
-        res.json(creatures.map((creature, index) => {
-            return { "Id": index, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${index}` }
-        }));
-    })
+        let allCreatures = Object.keys(creatures);
+        if (creatureList.length < allCreatures.length) {
+            creatureList = allCreatures.map((creatureId) => {
+                let creature = creatures[creatureId];
+                return { "Id": creature.Id, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${creature.Id}` }
+            });
+        }
+        res.json(creatureList);
+    });
 
     app.get('/creatures/:id', (req, res) => {
         res.json(creatures[req.params.id]);

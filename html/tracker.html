@@ -24,13 +24,13 @@
 
 <body id="tracker">
     <div class="modalcontainer">
-        <div class="modalblur" data-bind="click: Commander.HideSettings"></div>
-        <div class="settings modal" data-bind="component: { name: 'settings', params: { commander: Commander } }"></div>
+        <div class="modalblur" data-bind="click: EncounterCommander.HideSettings"></div>
+        <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     </div>
     <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
-            <div class="commands-encounter" data-bind="foreach: Commander.EncounterCommands">
+            <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
                 <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
@@ -39,7 +39,7 @@
             ">
             </span>
             </div>
-            <div class="commands-combatant" data-bind="visible: Commander.SelectedCreatures().length > 0, foreach: Commander.CombatantCommands">
+            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelectedCreature(), foreach: CombatantCommander.Commands">
                 <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="left-column">
-        <!-- ko if: Commander.ShowingLibraries -->
+        <!-- ko if: EncounterCommander.ShowingLibraries -->
         <div class="libraries">
             <h2>Library</h2>
             <div class="tabs">
@@ -62,34 +62,34 @@
             <!--ko with: Library -->
             <!-- ko if: DisplayTab() == 'Encounters' -->
             <ul class="library" data-bind="foreach: SavedEncounterIndex">
-                <li data-bind="click: $root.Commander.LoadEncounterByName">
+                <li data-bind="click: $root.EncounterCommander.LoadEncounterByName">
                     <span class="fa" data-bind="text: $data"></span>
-                    <span class="fa fa-trash" data-bind="click: $root.Commander.DeleteSavedEncounter"></span>
+                    <span class="fa fa-trash" data-bind="click: $root.EncounterCommander.DeleteSavedEncounter"></span>
                 </li>
             </ul>
             <div class="library-buttons">
-                <span data-bind="click: $root.Commander.HideLibraries" class="fa fa-chevron-up"></span>
-                <div data-bind="click: $root.Commander.SaveEncounter"><span class="fa fa-plus"></span></div>
+                <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
+                <div data-bind="click: $root.EncounterCommander.SaveEncounter"><span class="fa fa-plus"></span></div>
             </div>
             <!-- /ko -->
             <!-- ko ifnot: DisplayTab() == 'Encounters' -->
             <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
             <ul class="library" data-bind="foreach: FilteredCreatures">
                 <li>
-                    <span class="fa" data-bind="click: $root.Commander.AddCreatureFromListing, text: Name"></span>
-                    <span class="fa fa-edit" data-bind="click: $root.Commander.EditCreature"></span>
+                    <span class="fa" data-bind="click: $root.EncounterCommander.AddCreatureFromListing, text: Name"></span>
+                    <span class="fa fa-edit" data-bind="click: $root.EncounterCommander.EditCreature"></span>
                     <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
                 </li>
             </ul>
             <div class="library-buttons">
-                <span data-bind="click: $root.Commander.HideLibraries" class="fa fa-chevron-up"></span>
-                <span data-bind="click: $root.Commander.CreateAndEditCreature.with(DisplayTab())" class="fa fa-plus"></span>
+                <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
+                <span data-bind="click: $root.EncounterCommander.CreateAndEditCreature.with(DisplayTab())" class="fa fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
-        <!-- ko ifnot: Commander.ShowingLibraries -->
+        <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
         <div class="active-creature" data-bind="if: Encounter.ActiveCreature()">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
@@ -126,9 +126,9 @@
             </li>
             <!-- ko foreach: Creatures -->
             <li class="creature" data-bind="
-                css: { selected: $root.Commander.SelectedCreatures().indexOf($data) > -1, 
+                css: { selected: $root.CombatantCommander.SelectedCreatures().indexOf($data) > -1, 
                         active: $parent.ActiveCreature() == $data },
-                click: $root.Commander.SelectCreature,
+                click: $root.CombatantCommander.SelectCreature,
                 component: {
                 name: 'combatant',
                 params: { creature: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
@@ -151,24 +151,24 @@
             </ul>
             <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
                 <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
-                <span class="turn-timer" data-bind="visible: Commander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
-                <span class="round-counter" data-bind="visible: Commander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+                <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
+                <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
             </div>
         </div>
     </div>
     <div class="right-column">
         <div class="selected-combatant">
             <h2>Selected Combatant</h2>
-            <div class="statblock" data-bind="visible: Commander.SelectedCreatures().length == 1, 
+            <div class="statblock" data-bind="visible: CombatantCommander.SelectedCreatures().length == 1, 
                 component: { 
                 name: 'defaultstatblock', 
                 params:{ 
-                    creature: Commander.SelectedCreatureStatblock(),
+                    creature: CombatantCommander.SelectedCreatureStatblock(),
                 } 
                 }">
             </div>
-            <div class="selected-combatant-names" data-bind="visible: Commander.SelectedCreatures().length > 1, 
-                text: Commander.SelectedCreatureNames()">
+            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.SelectedCreatures().length > 1, 
+                text: CombatantCommander.SelectedCreatureNames()">
             </div>
         </div>
     </div>

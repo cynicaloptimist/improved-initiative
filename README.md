@@ -1,6 +1,8 @@
 # improved-initiative
 *Combat tracker for Dungeons and Dragons (D&amp;D) 5th Edition*
 
+The official Improved Initiative app lives at http://www.improved-initiative.com
+
 To run, install node.js and run the following in the cloned directory:
 
 `npm install`
