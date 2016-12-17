@@ -4,25 +4,25 @@ import bodyParser = require('body-parser');
 import mustacheExpress = require('mustache-express');
 import StatBlockLibrary from './statblocklibrary';
 
-var pageRenderOptionsWithEncounterId = (encounterId: string) => ({
+const pageRenderOptionsWithEncounterId = (encounterId: string) => ({
     rootDirectory: "..",
     encounterId: encounterId,
     appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || ''
 });
 
-var probablyUniqueString = (): string => {
-    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
-    var probablyUniqueString = ''
-    for (var i = 0; i < 8; i++) {
-        var index = Math.floor(Math.random() * chars.length);
+const probablyUniqueString = (): string => {
+    const chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    let probablyUniqueString = ''
+    for (let i = 0; i < 8; i++) {
+        const index = Math.floor(Math.random() * chars.length);
         probablyUniqueString += chars[index];
     }
     
     return probablyUniqueString;
 }
 
-var initializeNewPlayerView = (playerViews) => {
-    var encounterId = probablyUniqueString();
+const initializeNewPlayerView = (playerViews) => {
+    const encounterId = probablyUniqueString();
     playerViews[encounterId] = {};
     return encounterId;
 }
@@ -69,5 +69,10 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
 
     app.get('/creatures/:id', (req, res) => {
         res.json(statBlockLibrary.GetStatBlockById(req.params.id));
+    });
+
+    app.post('/launchencounter/', (req, res) => {
+        const newViewId = initializeNewPlayerView(playerViews);
+        res.redirect('/e/' + newViewId, )
     });
 }

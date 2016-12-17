@@ -1,7 +1,7 @@
 export default function(io: SocketIO.Server, playerViews) {
     io.on('connection', function (socket: SocketIO.Socket) {
 
-        var encounterId = null;
+        let encounterId = null;
 
         socket.on('update encounter', function (id, updatedEncounter) {
             encounterId = id;
