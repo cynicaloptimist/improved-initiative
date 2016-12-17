@@ -8,23 +8,21 @@ import express = require('express');
 
 import ConfigureAppInsights from './configureappinsights';
 import ConfigureRoutes from './routes';
-import LoadCreatures from './loadcreatures';
+import StatBlockLibrary from './statblocklibrary';
 import ConfigureSockets from './sockets';
 import LaunchServer from './launchserver';
 
 ConfigureAppInsights();
 
-var creatureLibrary = {};
-var playerViews = [];
+const creatureLibrary = StatBlockLibrary.FromFile('ogl_creatures.json');
+const playerViews = [];
 
-LoadCreatures(creatureLibrary);
-
-var app = express();
-var http = require('http').Server(app);
+const app = express();
+const http = require('http').Server(app);
 
 ConfigureRoutes(app, creatureLibrary, playerViews);
 
-var io = socketIO(http);
+const io = socketIO(http);
 ConfigureSockets(io, playerViews);
 
 LaunchServer(http);

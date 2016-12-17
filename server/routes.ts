@@ -1,7 +1,8 @@
 import express = require('express');
 
-var bodyParser = require('body-parser');
-var mustacheExpress = require('mustache-express');
+import bodyParser = require('body-parser');
+import mustacheExpress = require('mustache-express');
+import StatBlockLibrary from './statblocklibrary';
 
 var pageRenderOptionsWithEncounterId = (encounterId: string) => ({
     rootDirectory: "..",
@@ -26,7 +27,7 @@ var initializeNewPlayerView = (playerViews) => {
     return encounterId;
 }
 
-export default function (app: express.Express, creatures, playerViews) {
+export default function (app: express.Express, statBlockLibrary: StatBlockLibrary, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
@@ -62,19 +63,11 @@ export default function (app: express.Express, creatures, playerViews) {
         });
     });
 
-    let creatureList = [];
     app.get('/creatures/', (req, res) => {
-        let allCreatures = Object.keys(creatures);
-        if (creatureList.length < allCreatures.length) {
-            creatureList = allCreatures.map((creatureId) => {
-                let creature = creatures[creatureId];
-                return { "Id": creature.Id, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${creature.Id}` }
-            });
-        }
-        res.json(creatureList);
+        res.json(statBlockLibrary.GetStatBlockListings());
     });
 
     app.get('/creatures/:id', (req, res) => {
-        res.json(creatures[req.params.id]);
+        res.json(statBlockLibrary.GetStatBlockById(req.params.id));
     });
 }
