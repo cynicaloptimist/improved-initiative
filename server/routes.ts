@@ -73,6 +73,8 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
 
     app.post('/launchencounter/', (req, res) => {
         const newViewId = initializeNewPlayerView(playerViews);
-        res.redirect('/e/' + newViewId, )
+        req.session. = req.body;
+
+        res.redirect('/e/' + newViewId)
     });
 }
