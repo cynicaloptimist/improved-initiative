@@ -1,7 +1,5 @@
 /// <reference path="../typings/node/node.d.ts" />
-/// <reference path="../typings/express/express.d.ts" />
-/// <reference path="../typings/globals/socket.io/index.d.ts" />
-/// <reference path="../typings/globals/applicationinsights/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import socketIO = require('socket.io');
 import express = require('express');
