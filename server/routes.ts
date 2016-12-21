@@ -44,6 +44,7 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
     }));
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded())
 
     app.get('/', function(req, res) {
         res.render('landing', pageRenderOptions(initializeNewPlayerView(playerViews)));
@@ -83,8 +84,12 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     app.post('/launchencounter/', (req, res) => {
         const newViewId = initializeNewPlayerView(playerViews);
         const session: any = req.session;
-        
-        session.postedEncounter = req.body;
+
+        if(typeof req.body.Combatants === "string"){
+            session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) }
+        } else {
+            session.postedEncounter = req.body;
+        }
         
         res.redirect('/e/' + newViewId)
     });
