@@ -53,7 +53,7 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         const session: any = req.session;
         const options = pageRenderOptions(req.params.id);
         if(session.postedEncounter){
-            options.postedEncounter = session.postedEncounter;
+            options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
         res.render('tracker', options);
     });
