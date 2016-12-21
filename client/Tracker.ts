@@ -12,6 +12,7 @@ module ImprovedInitiative {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
             $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
+            viewModel.LaunchPostedEncounterIfAvailable();
         }
         if ($('#playerview').length) {
             var encounterId = $('html')[0].getAttribute('encounterId');
