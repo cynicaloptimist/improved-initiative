@@ -2,12 +2,15 @@ import express = require('express');
 
 import bodyParser = require('body-parser');
 import mustacheExpress = require('mustache-express');
+import session = require('express-session');
+
 import StatBlockLibrary from './statblocklibrary';
 
-const pageRenderOptionsWithEncounterId = (encounterId: string) => ({
+const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "..",
     encounterId: encounterId,
-    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || ''
+    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || '',
+    postedEncounter: null
 });
 
 const probablyUniqueString = (): string => {
@@ -37,20 +40,26 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     app.set('views', __dirname + '/html');
 
     app.use(express.static(__dirname + '/public'));
+    app.use(session({
+        secret: process.env.SESSION_SECRET || probablyUniqueString(),
+    }));
     app.use(bodyParser.json());
 
     app.get('/', function(req, res) {
-        res.render('landing', pageRenderOptionsWithEncounterId(initializeNewPlayerView(playerViews)));
+        res.render('landing', pageRenderOptions(initializeNewPlayerView(playerViews)));
     });
 
     app.get('/e/:id', (req, res) => {
-        console.log('app.get ' + req.path);
-        res.render('tracker', pageRenderOptionsWithEncounterId(req.params.id));
+        const session: any = req.session;
+        const options = pageRenderOptions(req.params.id);
+        if(session.postedEncounter){
+            options.postedEncounter = session.postedEncounter;
+        }
+        res.render('tracker', options);
     });
 
     app.get('/p/:id', (req, res) => {
-        console.log('app.get ' + req.path);
-        res.render('playerview', pageRenderOptionsWithEncounterId(req.params.id));
+        res.render('playerview', pageRenderOptions(req.params.id));
     });
 
     app.get('/playerviews/:id', (req, res) => {
@@ -73,8 +82,10 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
 
     app.post('/launchencounter/', (req, res) => {
         const newViewId = initializeNewPlayerView(playerViews);
-        req.session. = req.body;
-
+        const session: any = req.session;
+        
+        session.postedEncounter = req.body;
+        
         res.redirect('/e/' + newViewId)
     });
 }
