@@ -1,32 +1,36 @@
 import express = require('express');
 
-var bodyParser = require('body-parser');
-var mustacheExpress = require('mustache-express');
+import bodyParser = require('body-parser');
+import mustacheExpress = require('mustache-express');
+import session = require('express-session');
 
-var pageRenderOptionsWithEncounterId = (encounterId: string) => ({
+import StatBlockLibrary from './statblocklibrary';
+
+const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "..",
     encounterId: encounterId,
-    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || ''
+    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || '',
+    postedEncounter: null
 });
 
-var probablyUniqueString = (): string => {
-    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
-    var probablyUniqueString = ''
-    for (var i = 0; i < 8; i++) {
-        var index = Math.floor(Math.random() * chars.length);
+const probablyUniqueString = (): string => {
+    const chars = '1234567890abcdefghijkmnpqrstuvxyz';
+    let probablyUniqueString = ''
+    for (let i = 0; i < 8; i++) {
+        const index = Math.floor(Math.random() * chars.length);
         probablyUniqueString += chars[index];
     }
     
     return probablyUniqueString;
 }
 
-var initializeNewPlayerView = (playerViews) => {
-    var encounterId = probablyUniqueString();
+const initializeNewPlayerView = (playerViews) => {
+    const encounterId = probablyUniqueString();
     playerViews[encounterId] = {};
     return encounterId;
 }
 
-export default function (app: express.Express, creatures, playerViews) {
+export default function (app: express.Express, statBlockLibrary: StatBlockLibrary, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
@@ -36,20 +40,27 @@ export default function (app: express.Express, creatures, playerViews) {
     app.set('views', __dirname + '/html');
 
     app.use(express.static(__dirname + '/public'));
+    app.use(session({
+        secret: process.env.SESSION_SECRET || probablyUniqueString(),
+    }));
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded())
 
     app.get('/', function(req, res) {
-        res.render('landing', pageRenderOptionsWithEncounterId(initializeNewPlayerView(playerViews)));
+        res.render('landing', pageRenderOptions(initializeNewPlayerView(playerViews)));
     });
 
     app.get('/e/:id', (req, res) => {
-        console.log('app.get ' + req.path);
-        res.render('tracker', pageRenderOptionsWithEncounterId(req.params.id));
+        const session: any = req.session;
+        const options = pageRenderOptions(req.params.id);
+        if(session.postedEncounter){
+            options.postedEncounter = JSON.stringify(session.postedEncounter);
+        }
+        res.render('tracker', options);
     });
 
     app.get('/p/:id', (req, res) => {
-        console.log('app.get ' + req.path);
-        res.render('playerview', pageRenderOptionsWithEncounterId(req.params.id));
+        res.render('playerview', pageRenderOptions(req.params.id));
     });
 
     app.get('/playerviews/:id', (req, res) => {
@@ -62,19 +73,24 @@ export default function (app: express.Express, creatures, playerViews) {
         });
     });
 
-    let creatureList = [];
     app.get('/creatures/', (req, res) => {
-        let allCreatures = Object.keys(creatures);
-        if (creatureList.length < allCreatures.length) {
-            creatureList = allCreatures.map((creatureId) => {
-                let creature = creatures[creatureId];
-                return { "Id": creature.Id, "Name": creature.Name, "Type": creature.Type, "Link": `/creatures/${creature.Id}` }
-            });
-        }
-        res.json(creatureList);
+        res.json(statBlockLibrary.GetStatBlockListings());
     });
 
     app.get('/creatures/:id', (req, res) => {
-        res.json(creatures[req.params.id]);
+        res.json(statBlockLibrary.GetStatBlockById(req.params.id));
+    });
+
+    app.post('/launchencounter/', (req, res) => {
+        const newViewId = initializeNewPlayerView(playerViews);
+        const session: any = req.session;
+
+        if(typeof req.body.Combatants === "string"){
+            session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) }
+        } else {
+            session.postedEncounter = req.body;
+        }
+        
+        res.redirect('/e/' + newViewId)
     });
 }
