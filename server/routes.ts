@@ -81,7 +81,7 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         res.json(statBlockLibrary.GetStatBlockById(req.params.id));
     });
 
-    app.post('/launchencounter/', (req, res) => {
+    const importEncounter = (req, res) => {
         const newViewId = initializeNewPlayerView(playerViews);
         const session: any = req.session;
 
@@ -92,5 +92,8 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         }
         
         res.redirect('/e/' + newViewId)
-    });
+    };
+    
+    app.post('/launchencounter/', importEncounter);
+    app.post('/importencounter/', importEncounter);
 }

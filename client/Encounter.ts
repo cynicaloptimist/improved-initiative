@@ -56,6 +56,27 @@ module ImprovedInitiative {
             this.QueueEmitEncounter();
         }
 
+        ImportEncounter = (encounter) => {
+            const deepExtend = (a,b) => $.extend(true, {}, a, b);
+            if(encounter.Combatants) {
+                encounter.Combatants.forEach(c => {
+                    if(c.Id){
+                        $.ajax(`/creatures/${c.Id}`)
+                         .done(statBlockFromLibrary => {
+                             const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
+                             this.AddCreature(modifiedStatBlockFromLibrary);
+                         })
+                         .fail(_ => {
+                            this.AddCreature(deepExtend(StatBlock.Empty(), c))
+                         })
+                    } else {
+                        this.AddCreature(deepExtend(StatBlock.Empty(), c))
+                    }
+                })
+            }
+
+        }
+
         private emitEncounterTimeoutID;
 
         private EmitEncounter = () => {
