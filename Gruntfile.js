@@ -51,7 +51,7 @@ module.exports = function (grunt) {
       }
     },
     concat: {
-      js: {
+      js_dependencies: {
         src: [
           'node_modules/knockout/build/output/knockout-latest.debug.js',
           'node_modules/knockout-mapping/dist/knockout.mapping.js',
@@ -61,12 +61,16 @@ module.exports = function (grunt) {
           'node_modules/socket.io-client/dist/socket.io.js',
           'node_modules/moment/moment.js',
           'node_modules/browser-filesaver/FileSaver.js',
-          'node_modules/markdown-it/dist/markdown-it.js',
-          'ImprovedInitiative.Client/*.js'
-        ],
-        dest: 'public/js/ImprovedInitiative.js'
+          'node_modules/markdown-it/dist/markdown-it.js'        ],
+        dest: 'public/js/dependencies.js',
+        sourceMap: true
       },
-      js_min: {
+      js_client: {
+        src: ['ImprovedInitiative.Client/*.js'],
+        dest: 'public/js/ImprovedInitiative.js',
+        sourceMap: true
+      },
+      js_dependencies_min: {
         src: [
           'node_modules/knockout/build/output/knockout-latest.js',
           'node_modules/knockout-mapping/dist/knockout.mapping.min.js',
@@ -76,10 +80,14 @@ module.exports = function (grunt) {
           'node_modules/socket.io-client/dist/socket.io.min.js',
           'node_modules/moment/min/moment.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
-          'node_modules/markdown-it/dist/markdown-it.min.js',
-          'client.min.js'
+          'node_modules/markdown-it/dist/markdown-it.min.js'
         ],
-        dest: 'public/js/ImprovedInitiative.js'
+        dest: 'public/js/dependencies.js'
+      },
+      js_client_min: {
+        src: ['client.min.js'],
+        dest: 'public/js/ImprovedInitiative.js',
+        sourceMap: true
       },
       css: {
         src: [
@@ -91,8 +99,8 @@ module.exports = function (grunt) {
     },
     watch: {
       ts: {
-        files: '**/*.ts',
-        tasks: ['ts', 'concat:js']
+        files: 'client/*.ts',
+        tasks: ['ts', 'concat:js_client']
       },
       lesscss: {
         files: '**/*.less',
@@ -108,8 +116,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build_dev', ['ts:default', 'ts:server', 'less', 'concat:js', 'concat:css']);
-  grunt.registerTask('build_min', ['ts:default', 'ts:server', 'uglify', 'less', 'concat:js_min', 'concat:css']);
+  grunt.registerTask('build_dev', ['ts:default', 'ts:server', 'less', 'concat:js_client', 'concat:js_dependencies', 'concat:css']);
+  grunt.registerTask('build_min', ['ts:default', 'ts:server', 'uglify', 'less', 'concat:js_client_min', 'concat:js_dependencies_min', 'concat:css']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };
