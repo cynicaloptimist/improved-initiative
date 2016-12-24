@@ -1,9 +1,9 @@
 /// <reference path="../typings/globals/moment/index.d.ts" />
 
 module ImprovedInitiative {
-    export interface ISavedCreature {
+    export interface ISavedCombatant {
         Id: number;
-        Statblock: IStatBlock;
+        StatBlock: IStatBlock;
         MaxHP: number;
         CurrentHP: number;
         TemporaryHP: number;
@@ -15,25 +15,25 @@ module ImprovedInitiative {
     }
     export interface ISavedEncounter<T> {
         Name: string;
-        ActiveCreatureId: number;
+        ActiveCombatantId: number;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
-        Creatures: T[];
+        Combatants: T[];
     }
 
     export class Encounter {
         constructor(userPollQueue: UserPollQueue) {
             this.Rules = new DefaultRules();
-            this.Creatures = ko.observableArray<ICreature>();
-            this.CreatureCountsByName = [];
-            this.ActiveCreature = ko.observable<ICreature>();
-            this.ActiveCreatureStatblock = ko.computed(() => {
-                return this.ActiveCreature()
-                    ? this.ActiveCreature().StatBlock()
+            this.Combatants = ko.observableArray<ICombatant>();
+            this.CombatantCountsByName = [];
+            this.ActiveCombatant = ko.observable<ICombatant>();
+            this.ActiveCombatantStatBlock = ko.computed(() => {
+                return this.ActiveCombatant()
+                    ? this.ActiveCombatant().StatBlock()
                     : StatBlock.Empty();
             });
 
-            var autosavedEncounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.AutoSavedEncounters, this.EncounterId);
+            var autosavedEncounter = Store.Load<ISavedEncounter<ISavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
             if (autosavedEncounter) {
                 this.LoadSavedEncounter(autosavedEncounter, userPollQueue);
             }
@@ -41,17 +41,17 @@ module ImprovedInitiative {
 
         Rules: IRules;
         TurnTimer = new TurnTimer();
-        Creatures: KnockoutObservableArray<ICreature>;
-        CreatureCountsByName: KnockoutObservable<number>[];
-        ActiveCreature: KnockoutObservable<ICreature>;
-        ActiveCreatureStatblock: KnockoutComputed<IStatBlock>;
+        Combatants: KnockoutObservableArray<ICombatant>;
+        CombatantCountsByName: KnockoutObservable<number>[];
+        ActiveCombatant: KnockoutObservable<ICombatant>;
+        ActiveCombatantStatBlock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
 
         SortByInitiative = () => {
-            this.Creatures.sort((l, r) => (r.Initiative() - l.Initiative()) ||
+            this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
                 (r.InitiativeBonus - l.InitiativeBonus));
             this.QueueEmitEncounter();
         }
@@ -61,16 +61,16 @@ module ImprovedInitiative {
             if(encounter.Combatants) {
                 encounter.Combatants.forEach(c => {
                     if(c.Id){
-                        $.ajax(`/creatures/${c.Id}`)
+                        $.ajax(`/statblocks/${c.Id}`)
                          .done(statBlockFromLibrary => {
                              const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
-                             this.AddCreature(modifiedStatBlockFromLibrary);
+                             this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                          })
                          .fail(_ => {
-                            this.AddCreature(deepExtend(StatBlock.Empty(), c))
+                            this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
                          })
                     } else {
-                        this.AddCreature(deepExtend(StatBlock.Empty(), c))
+                        this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
                     }
                 })
             }
@@ -81,7 +81,7 @@ module ImprovedInitiative {
 
         private EmitEncounter = () => {
             this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
-            Store.Save<ISavedEncounter<ISavedCreature>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
+            Store.Save<ISavedEncounter<ISavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
         }
 
         QueueEmitEncounter = () => {
@@ -89,41 +89,40 @@ module ImprovedInitiative {
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
         }
 
-        MoveCreature = (creature: ICreature, index: number) => {
-            var currentPosition = this.Creatures().indexOf(creature);
-            var newInitiative = creature.Initiative();
-            var passedCreature = this.Creatures()[index];
-            if (index > currentPosition && passedCreature && passedCreature.Initiative() < creature.Initiative()) {
-                newInitiative = passedCreature.Initiative();
+        MoveCombatant = (combatant: ICombatant, index: number) => {
+            var currentPosition = this.Combatants().indexOf(combatant);
+            var newInitiative = combatant.Initiative();
+            var passedCombatant = this.Combatants()[index];
+            if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < combatant.Initiative()) {
+                newInitiative = passedCombatant.Initiative();
             }
-            if (index < currentPosition && passedCreature && passedCreature.Initiative() > creature.Initiative()) {
-                newInitiative = passedCreature.Initiative();
+            if (index < currentPosition && passedCombatant && passedCombatant.Initiative() > combatant.Initiative()) {
+                newInitiative = passedCombatant.Initiative();
             }
-            this.Creatures.remove(creature);
-            this.Creatures.splice(index, 0, creature);
-            creature.Initiative(newInitiative);
+            this.Combatants.remove(combatant);
+            this.Combatants.splice(index, 0, combatant);
+            combatant.Initiative(newInitiative);
             this.QueueEmitEncounter();
             return newInitiative;
         }
 
-        AddCreature = (creatureJson: IStatBlock, event?, savedCreature?: ISavedCreature) => {
-            console.log("adding %O to encounter", creatureJson);
-            var creature: ICreature;
-            if (creatureJson.Player && creatureJson.Player.toLocaleLowerCase() === 'player') {
-                creature = new PlayerCharacter(creatureJson, this, savedCreature);
+        AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: ISavedCombatant) => {
+            var combatant: ICombatant;
+            if (statBlockJson.Player && statBlockJson.Player.toLocaleLowerCase() === 'player') {
+                combatant = new PlayerCharacter(statBlockJson, this, savedCombatant);
             } else {
-                creature = new Creature(creatureJson, this, savedCreature);
+                combatant = new Combatant(statBlockJson, this, savedCombatant);
             }
             if (event && event.altKey) {
-                creature.Hidden(true);
+                combatant.Hidden(true);
             }
-            this.Creatures.push(creature);
+            this.Combatants.push(combatant);
 
             this.QueueEmitEncounter();
-            return creature;
+            return combatant;
         }
 
-        RequestInitiative = (playercharacter: ICreature, userPollQueue: UserPollQueue) => {
+        RequestInitiative = (playercharacter: ICombatant, userPollQueue: UserPollQueue) => {
             userPollQueue.Add({
                 requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeBonus.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeBonus)}' />`,
                 inputSelector: '.response',
@@ -137,14 +136,14 @@ module ImprovedInitiative {
             this.SortByInitiative();
             this.State('active');
             this.RoundCounter(1);
-            this.ActiveCreature(this.Creatures()[0]);
+            this.ActiveCombatant(this.Combatants()[0]);
             this.TurnTimer.Start();
             this.QueueEmitEncounter();
         }
 
         EndEncounter = () => {
             this.State('inactive');
-            this.ActiveCreature(null);
+            this.ActiveCombatant(null);
             this.TurnTimer.Stop();
             this.QueueEmitEncounter();
         }
@@ -152,10 +151,10 @@ module ImprovedInitiative {
         RollInitiative = (userPollQueue: UserPollQueue) => {
             // Foreaching over the original array while we're rearranging it
             // causes unpredictable results- dupe it first.
-            var creatures = this.Creatures().slice();
-            if (this.Rules.GroupSimilarCreatures) {
+            var combatants = this.Combatants().slice();
+            if (this.Rules.GroupSimilarCombatants) {
                 var initiatives = []
-                creatures.forEach(
+                combatants.forEach(
                     c => {
                         if (initiatives[c.StatBlock().Name] === undefined) {
                             initiatives[c.StatBlock().Name] = c.RollInitiative(userPollQueue);
@@ -164,7 +163,7 @@ module ImprovedInitiative {
                     }
                 )
             } else {
-                creatures.forEach(c => {
+                combatants.forEach(c => {
                     c.RollInitiative(userPollQueue);
                 });
             }
@@ -173,36 +172,36 @@ module ImprovedInitiative {
         NextTurn = () => {
             var appInsights = window["appInsights"];
             appInsights.trackEvent("TurnCompleted");
-            var nextIndex = this.Creatures().indexOf(this.ActiveCreature()) + 1;
-            if (nextIndex >= this.Creatures().length) {
+            var nextIndex = this.Combatants().indexOf(this.ActiveCombatant()) + 1;
+            if (nextIndex >= this.Combatants().length) {
                 nextIndex = 0;
                 this.RoundCounter(this.RoundCounter() + 1);
             }
-            this.ActiveCreature(this.Creatures()[nextIndex]);
+            this.ActiveCombatant(this.Combatants()[nextIndex]);
             this.TurnTimer.Reset();
             this.QueueEmitEncounter();
         }
 
         PreviousTurn = () => {
-            var previousIndex = this.Creatures().indexOf(this.ActiveCreature()) - 1;
+            var previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
             if (previousIndex < 0) {
-                previousIndex = this.Creatures().length - 1;
+                previousIndex = this.Combatants().length - 1;
                 this.RoundCounter(this.RoundCounter() - 1);
             }
-            this.ActiveCreature(this.Creatures()[previousIndex]);
+            this.ActiveCombatant(this.Combatants()[previousIndex]);
             this.QueueEmitEncounter();
         }
 
-        Save: (name?: string) => ISavedEncounter<ISavedCreature> = (name?: string) => {
-            var activeCreature = this.ActiveCreature();
+        Save: (name?: string) => ISavedEncounter<ISavedCombatant> = (name?: string) => {
+            var activeCombatant = this.ActiveCombatant();
             return {
                 Name: name || this.EncounterId,
-                ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
+                ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
                 RoundCounter: this.RoundCounter(),
-                Creatures: this.Creatures().map<ISavedCreature>(c => {
+                Combatants: this.Combatants().map<ISavedCombatant>(c => {
                     return {
                         Id: c.Id,
-                        Statblock: c.StatBlock(),
+                        StatBlock: c.StatBlock(),
                         MaxHP: c.MaxHP,
                         CurrentHP: c.CurrentHP(),
                         TemporaryHP: c.TemporaryHP(),
@@ -218,14 +217,14 @@ module ImprovedInitiative {
 
         SavePlayerDisplay = (name?: string) => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
-            var activeCreature = this.ActiveCreature();
+            var activeCombatant = this.ActiveCombatant();
             var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
                 Name: name || this.EncounterId,
-                ActiveCreatureId: activeCreature ? activeCreature.Id : -1,
+                ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
                 RoundCounter: roundCounter,
                 DisplayTurnTimer: Store.Load(Store.User, "PlayerViewDisplayTurnTimer"),
-                Creatures: this.Creatures()
+                Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {
                             return false;
@@ -239,16 +238,20 @@ module ImprovedInitiative {
             };
         }
 
-        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCreature>, userPollQueue: UserPollQueue) => {
-            let legacyCreatureIndex = savedEncounter["ActiveCreatureIndex"];
-            if (legacyCreatureIndex != undefined && legacyCreatureIndex != -1) {
-                savedEncounter.ActiveCreatureId = this.Creatures()[legacyCreatureIndex].Id;
+        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCombatant>, userPollQueue: UserPollQueue) => {
+            let legacyCombatantIndex = savedEncounter["ActiveCreatureIndex"];
+            if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
+                savedEncounter.ActiveCombatantId = this.Combatants()[legacyCombatantIndex].Id;
             }
-            let savedEncounterIsActive = savedEncounter.ActiveCreatureId != -1;
+
+            savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
+            savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
+            
+            let savedEncounterIsActive = savedEncounter.ActiveCombatantId != -1;
             let currentEncounterIsActive = this.State() == 'active';
 
-            savedEncounter.Creatures.forEach(c => {
-                let combatant = this.AddCreature(c.Statblock, null, c);
+            savedEncounter.Combatants.forEach(c => {
+                let combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
                 if (currentEncounterIsActive) {
                     combatant.RollInitiative(userPollQueue);
                 }
@@ -260,7 +263,7 @@ module ImprovedInitiative {
             else {
                 if (savedEncounterIsActive) {
                     this.State('active');
-                    this.ActiveCreature(this.Creatures().filter(c => c.Id == savedEncounter.ActiveCreatureId).pop());
+                    this.ActiveCombatant(this.Combatants().filter(c => c.Id == savedEncounter.ActiveCombatantId).pop());
                     this.TurnTimer.Start();
                 }
                 this.RoundCounter(savedEncounter.RoundCounter || 1);
@@ -269,8 +272,8 @@ module ImprovedInitiative {
 
         ClearEncounter = () => {
             if (confirm("Remove all creatures and end encounter?")) {
-                this.Creatures.removeAll();
-                this.CreatureCountsByName = [];
+                this.Combatants.removeAll();
+                this.CombatantCountsByName = [];
                 this.EndEncounter();
             }
         }

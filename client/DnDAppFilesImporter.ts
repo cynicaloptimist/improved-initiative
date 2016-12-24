@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    class CreatureImporter{
+    class StatBlockImporter{
         constructor(private domElement: Element) { }
 
         getString(selector) {
@@ -66,7 +66,7 @@ module ImprovedInitiative {
             }))
         }
 
-        public GetCreature() {
+        public GetStatBlock() {
             var statBlock = StatBlock.Empty();
 
             statBlock.Name = this.getString("name");
@@ -97,20 +97,20 @@ module ImprovedInitiative {
         }
     }
     
-    function getCreaturesFromXml(xmlString: string) {
+    function getStatBlocksFromXml(xmlString: string) {
         return $(xmlString).find("monster").toArray().map(xmlDoc => {
-            var importer = new CreatureImporter(xmlDoc);
-            return importer.GetCreature();
+            var importer = new StatBlockImporter(xmlDoc);
+            return importer.GetStatBlock();
         });
     }
 
     export class DnDAppFilesImporter {
-        public ImportFromXml(xmlFile: File, callBack: (creatures: IStatBlock []) => void) {
+        public ImportFromXml(xmlFile: File, callBack: (statBlocks: IStatBlock []) => void) {
             var reader = new FileReader();
             reader.onload = (event: any) => {
                 var xml: string = event.target.result;
-                var creatures = getCreaturesFromXml(xml);
-                callBack(creatures);
+                var statBlocks = getStatBlocksFromXml(xml);
+                callBack(statBlocks);
             };
             reader.readAsText(xmlFile);
         }

@@ -9,7 +9,7 @@ module ImprovedInitiative {
         JsonStatBlock = ko.observable<string>();
         EditableStatBlock = ko.observable();
 
-        EditCreature = (statBlockId: string,
+        EditStatBlock = (statBlockId: string,
             statBlock: IStatBlock,
             saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void,
             deleteCallback: (library: string, id: string) => void) => {
@@ -84,7 +84,7 @@ module ImprovedInitiative {
             return unObservableStatBlock;
         }
 
-        SaveCreature = () => {
+        SaveStatBlock = () => {
             let editedStatBlock: IStatBlock = StatBlock.Empty();
 
             if (this.EditorType() === 'advanced') {
@@ -104,7 +104,7 @@ module ImprovedInitiative {
             this.EditableStatBlock(null);
         }
 
-        DeleteCreature = () => {
+        DeleteStatBlock = () => {
             if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
                 this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
                 this.EditableStatBlock(null);
@@ -112,7 +112,7 @@ module ImprovedInitiative {
         }
 
         private statBlockLibrary(): string {
-            return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.Creatures
+            return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.StatBlocks
         }
 
         private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {

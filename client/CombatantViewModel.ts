@@ -3,12 +3,12 @@ module ImprovedInitiative {
 
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Creature: Creature, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
+        constructor(public Combatant: Combatant, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
-                if (this.Creature.TemporaryHP()) {
-                    return '{0}+{1}/{2}'.format(this.Creature.CurrentHP(), this.Creature.TemporaryHP(), this.Creature.MaxHP);
+                if (this.Combatant.TemporaryHP()) {
+                    return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
                 } else {
-                    return '{0}/{1}'.format(this.Creature.CurrentHP(), this.Creature.MaxHP);
+                    return '{0}/{1}'.format(this.Combatant.CurrentHP(), this.Combatant.MaxHP);
                 }
             })
         }
@@ -16,8 +16,8 @@ module ImprovedInitiative {
         ApplyDamage = inputDamage => {
             var damage = parseInt(inputDamage),
                 healing = -damage,
-                currHP = this.Creature.CurrentHP(),
-                tempHP = this.Creature.TemporaryHP(),
+                currHP = this.Combatant.CurrentHP(),
+                tempHP = this.Combatant.TemporaryHP(),
                 allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
 
             if (isNaN(damage)) {
@@ -35,18 +35,18 @@ module ImprovedInitiative {
                 }
             } else {
                 currHP += healing;
-                if (currHP > this.Creature.MaxHP) {
-                    currHP = this.Creature.MaxHP;
+                if (currHP > this.Combatant.MaxHP) {
+                    currHP = this.Combatant.MaxHP;
                 }
             }
 
-            this.Creature.CurrentHP(currHP);
-            this.Creature.TemporaryHP(tempHP);
+            this.Combatant.CurrentHP(currHP);
+            this.Combatant.TemporaryHP(tempHP);
         }
 
         ApplyTemporaryHP = inputTHP => {
             var newTemporaryHP = parseInt(inputTHP),
-                currentTemporaryHP = this.Creature.TemporaryHP();
+                currentTemporaryHP = this.Combatant.TemporaryHP();
 
             if (isNaN(newTemporaryHP)) {
                 return
@@ -56,17 +56,17 @@ module ImprovedInitiative {
                 currentTemporaryHP = newTemporaryHP;
             }
 
-            this.Creature.TemporaryHP(currentTemporaryHP);
+            this.Combatant.TemporaryHP(currentTemporaryHP);
         }
 
         ApplyInitiative = inputInitiative => {
-            this.Creature.Initiative(inputInitiative);
-            this.Creature.Encounter.SortByInitiative();
+            this.Combatant.Initiative(inputInitiative);
+            this.Combatant.Encounter.SortByInitiative();
         }
 
         GetHPColor = () => {
-            var green = Math.floor((this.Creature.CurrentHP() / this.Creature.MaxHP) * 170);
-            var red = Math.floor((this.Creature.MaxHP - this.Creature.CurrentHP()) / this.Creature.MaxHP * 170);
+            var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
+            var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
             return "rgb(" + red + "," + green + ",0)";
         }
 
@@ -77,7 +77,7 @@ module ImprovedInitiative {
                 callback: damage => {
                     this.ApplyDamage(damage);
                     this.LogEvent(`${damage} damage applied to ${this.DisplayName()}.`);
-                    this.Creature.Encounter.QueueEmitEncounter();
+                    this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
         }
@@ -89,7 +89,7 @@ module ImprovedInitiative {
                 callback: initiative => {
                     this.ApplyInitiative(initiative);
                     this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
-                    this.Creature.Encounter.QueueEmitEncounter();
+                    this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
         }
@@ -100,14 +100,14 @@ module ImprovedInitiative {
                 requestContent: `Change alias for ${currentName}: <input class='response' />`,
                 inputSelector: '.response',
                 callback: alias => {
-                    this.Creature.Alias(alias);
+                    this.Combatant.Alias(alias);
                     if (alias) {
                         this.LogEvent(`${currentName} alias changed to ${alias}.`);
                     } else {
                         this.LogEvent(`${currentName} alias removed.`);
                     }
                     
-                    this.Creature.Encounter.QueueEmitEncounter();
+                    this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
         }
@@ -119,34 +119,34 @@ module ImprovedInitiative {
                 callback: thp => {
                     this.ApplyTemporaryHP(thp);
                     this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
-                    this.Creature.Encounter.QueueEmitEncounter();
+                    this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
         }
 
         HiddenClass = ko.computed(() => {
-            return this.Creature.Hidden() ? 'fa-eye-slash' : 'fa-eye';
+            return this.Combatant.Hidden() ? 'fa-eye-slash' : 'fa-eye';
         })
 
         ToggleHidden = (data, event) => {
-            if (this.Creature.Hidden()) {
-                this.Creature.Hidden(false);
+            if (this.Combatant.Hidden()) {
+                this.Combatant.Hidden(false);
                 this.LogEvent(`${this.DisplayName()} revealed in player view.`);
             } else {
-                this.Creature.Hidden(true);
+                this.Combatant.Hidden(true);
                 this.LogEvent(`${this.DisplayName()} revealed in player view.`);
             }
-            this.Creature.Encounter.QueueEmitEncounter();
+            this.Combatant.Encounter.QueueEmitEncounter();
         }
 
         DisplayName = ko.computed(() => {
-            var alias = ko.unwrap(this.Creature.Alias),
-                name = ko.unwrap(this.Creature.StatBlock).Name,
-                creatureCount = ko.unwrap(this.Creature.Encounter.CreatureCountsByName[name]),
-                index = this.Creature.IndexLabel;
+            var alias = ko.unwrap(this.Combatant.Alias),
+                name = ko.unwrap(this.Combatant.StatBlock).Name,
+                combatantCount = ko.unwrap(this.Combatant.Encounter.CombatantCountsByName[name]),
+                index = this.Combatant.IndexLabel;
 
             return alias ||
-                (creatureCount > 1 ?
+                (combatantCount > 1 ?
                     name + " " + index :
                     name);
         })
@@ -157,9 +157,9 @@ module ImprovedInitiative {
                 inputSelector: '.response',
                 callback: tag => {
                     if (tag.length) {
-                        this.Creature.Tags.push(tag);
+                        this.Combatant.Tags.push(tag);
                         this.LogEvent(`${this.DisplayName()} added note: "${tag}"`);
-                        this.Creature.Encounter.QueueEmitEncounter();
+                        this.Combatant.Encounter.QueueEmitEncounter();
                     }
                 }
             });
@@ -175,9 +175,9 @@ module ImprovedInitiative {
         }
 
         RemoveTag = (tag: string) => {
-            this.Creature.Tags.splice(this.Creature.Tags.indexOf(tag), 1);
+            this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
             this.LogEvent(`${this.DisplayName()} removed note: "${tag}"`);
-            this.Creature.Encounter.QueueEmitEncounter();
+            this.Combatant.Encounter.QueueEmitEncounter();
         };
     }
 }

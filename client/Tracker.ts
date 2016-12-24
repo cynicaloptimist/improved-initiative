@@ -11,7 +11,7 @@ module ImprovedInitiative {
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
-            $.ajax("../creatures/").done(viewModel.Library.AddCreaturesFromServer);
+            $.ajax("../statblocks/").done(viewModel.Library.AddStatBlocksFromServer);
             viewModel.ImportEncounterIfAvailable();
         }
         if ($('#playerview').length) {

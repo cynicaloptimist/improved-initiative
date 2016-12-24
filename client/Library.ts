@@ -1,19 +1,19 @@
 module ImprovedInitiative {
-    export class CreatureListing {
+    export class StatBlockListing {
         Name: KnockoutObservable<string>;
         IsLoaded: boolean;
         StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statblock?: IStatBlock) {
+        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: IStatBlock) {
             this.Name = ko.observable(name);
-            this.IsLoaded = !!statblock;
-            this.StatBlock = ko.observable(statblock || StatBlock.Empty(c => { c.Name = name }));
+            this.IsLoaded = !!statBlock;
+            this.StatBlock = ko.observable(statBlock || StatBlock.Empty(c => { c.Name = name }));
             this.StatBlock.subscribe(newStatBlock => {
                 this.Name(newStatBlock.Name);
                 this.Type = newStatBlock.Type;
             });
         }
 
-        LoadStatBlock = (callback: (listing: CreatureListing) => void) => {
+        LoadStatBlock = (callback: (listing: StatBlockListing) => void) => {
             if (this.IsLoaded) {
                 callback(this);
             }
@@ -27,7 +27,7 @@ module ImprovedInitiative {
         }
     }
 
-    export class CreatureLibrary {
+    export class StatBlockLibrary {
         private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
 
         constructor() {
@@ -35,30 +35,30 @@ module ImprovedInitiative {
             
             Store.List(Store.PlayerCharacters).forEach(id => {
                 var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.PlayerCharacters, id));
-                this.Players.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                this.PCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
-            if (this.Players().length == 0) {
+            if (this.PCStatBlocks().length == 0) {
                 this.AddSamplePlayersFromUrl('/sample_players.json');
             }
 
-            Store.List(Store.Creatures).forEach(id => {
-                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.Creatures, id));
-                this.Creatures.push(new CreatureListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+            Store.List(Store.StatBlocks).forEach(id => {
+                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.StatBlocks, id));
+                this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
         }
 
-        Creatures = ko.observableArray<CreatureListing>([]);
-        Players = ko.observableArray<CreatureListing>([]);
+        NPCStatBlocks = ko.observableArray<StatBlockListing>([]);
+        PCStatBlocks = ko.observableArray<StatBlockListing>([]);
         SavedEncounterIndex = ko.observableArray<string>([]);
 
         GetPreviewStatBlock = ko.computed(() => {
             return this.previewStatBlock() || StatBlock.Empty();
         })
 
-        PreviewCreature = (creature: CreatureListing) => {
+        PreviewStatBlock = (listing: StatBlockListing) => {
             this.previewStatBlock(null);
-            creature.LoadStatBlock(listing => {
+            listing.LoadStatBlock(listing => {
                 this.previewStatBlock(listing.StatBlock());
             });
         }
@@ -66,13 +66,13 @@ module ImprovedInitiative {
         DisplayTab = ko.observable('Creatures');
         LibraryFilter = ko.observable('');
 
-        FilteredCreatures = ko.computed<CreatureListing[]>(() => {
+        FilteredStatBlocks = ko.computed<StatBlockListing[]>(() => {
             var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                creaturesWithFilterInName = [],
-                creaturesWithFilterInType = [];
+                statBlocksWithFilterInName = [],
+                statBlocksWithFilterInType = [];
             var library = this.DisplayTab() == 'Players'
-                ? ko.unwrap(this.Players)
-                : ko.unwrap(this.Creatures);
+                ? ko.unwrap(this.PCStatBlocks)
+                : ko.unwrap(this.NPCStatBlocks);
                  
             if (filter.length == 0) {
                 return library;
@@ -80,22 +80,22 @@ module ImprovedInitiative {
 
             library.forEach(c => {
                 if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
-                    creaturesWithFilterInName.push(c);
+                    statBlocksWithFilterInName.push(c);
                     return;
                 }
                 if (c.Type.toLocaleLowerCase().indexOf(filter) > -1) {
-                    creaturesWithFilterInType.push(c);
+                    statBlocksWithFilterInType.push(c);
                 }
             })
-            return creaturesWithFilterInName.concat(creaturesWithFilterInType);
+            return statBlocksWithFilterInName.concat(statBlocksWithFilterInType);
         });
 
-        AddCreaturesFromServer = (library) => {
+        AddStatBlocksFromServer = (library) => {
             library.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
-            ko.utils.arrayPushAll(this.Creatures, library.map(c => {
-                return new CreatureListing(c.Id, c.Name, c.Type, c.Link, "server");
+            ko.utils.arrayPushAll(this.NPCStatBlocks, library.map(c => {
+                return new StatBlockListing(c.Id, c.Name, c.Type, c.Link, "server");
             }));
         }
 
@@ -103,7 +103,7 @@ module ImprovedInitiative {
             $.getJSON(url, (json: IStatBlock []) => {
                 json.forEach((statBlock, index) => {
                     statBlock = $.extend(StatBlock.Empty(), statBlock);
-                    this.Players.push(new CreatureListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                    this.PCStatBlocks.push(new StatBlockListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
                 })
             });
         } 

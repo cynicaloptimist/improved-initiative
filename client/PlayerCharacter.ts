@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export class PlayerCharacter extends Creature {
+    export class PlayerCharacter extends Combatant {
         IsPlayerCharacter = true;
 
         RollInitiative = (userPollQueue: UserPollQueue) => {

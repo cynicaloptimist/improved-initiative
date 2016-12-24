@@ -5,71 +5,71 @@ module ImprovedInitiative {
         constructor(private encounter: Encounter,
             private userPollQueue: UserPollQueue,
             private statBlockEditor: StatBlockEditor,
-            private library: CreatureLibrary,
+            private library: StatBlockLibrary,
             private eventLog: EventLog) {
             this.Commands = BuildEncounterCommandList(this);
         }
 
-        AddCreatureFromListing = (listing: CreatureListing, event?) => {
+        AddStatBlockFromListing = (listing: StatBlockListing, event?) => {
             listing.LoadStatBlock(listing => {
-                this.encounter.AddCreature(listing.StatBlock(), event);
+                this.encounter.AddCombatantFromStatBlock(listing.StatBlock(), event);
                 this.eventLog.AddEvent(`${listing.Name()} added to combat.`);
             });
         }
 
-        private deleteSavedCreature = (library: string, id: string) => {
+        private deleteSavedStatBlock = (library: string, id: string) => {
             Store.Delete(library, id);
             if (library == Store.PlayerCharacters) {
-                this.library.Players.remove(c => c.Id == id);
+                this.library.PCStatBlocks.remove(c => c.Id == id);
             }
-            if (library == Store.Creatures) {
-                this.library.Creatures.remove(c => c.Id == id);
+            if (library == Store.StatBlocks) {
+                this.library.NPCStatBlocks.remove(c => c.Id == id);
             }
         }
 
-        private saveNewCreature = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
-            var listing = new CreatureListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
+        private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+            var listing = new StatBlockListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
             Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
-                this.library.Players.unshift(listing);
+                this.library.PCStatBlocks.unshift(listing);
             } else {
-                this.library.Creatures.unshift(listing);
+                this.library.NPCStatBlocks.unshift(listing);
             }
         }
         
-        CreateAndEditCreature = (library: string) => {
+        CreateAndEditStatBlock = (library: string) => {
             var statBlock = StatBlock.Empty();
             var newId = probablyUniqueString();
 
             if (library == "Players") {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             } else {
                 statBlock.Name = "New Creature";
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             }
         }
         
-        private duplicateAndEditCreature = (listing: CreatureListing) => {
+        private duplicateAndEditStatBlock = (listing: StatBlockListing) => {
             var statBlock = listing.StatBlock();
             var newId = probablyUniqueString();
 
             if (statBlock.Player == "player") {
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             } else {
-                this.statBlockEditor.EditCreature(newId, statBlock, this.saveNewCreature, () => { });
+                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             }
         }
         
-        EditCreature = (listing: CreatureListing) => {
+        EditStatBlock = (listing: StatBlockListing) => {
             if (listing.Source == "server") {
-                listing.LoadStatBlock(this.duplicateAndEditCreature);
+                listing.LoadStatBlock(this.duplicateAndEditStatBlock);
             } else {
-                this.statBlockEditor.EditCreature(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+                this.statBlockEditor.EditStatBlock(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
                     Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
                     listing.StatBlock(newStatBlock);
-                }, this.deleteSavedCreature);
+                }, this.deleteSavedStatBlock);
             }
         }
 
@@ -112,14 +112,14 @@ module ImprovedInitiative {
 
         NextTurn = () => {
             this.encounter.NextTurn();
-            var currentCreature = this.encounter.ActiveCreature();
-            this.eventLog.AddEvent(`Start of turn for ${currentCreature.ViewModel.DisplayName()}.`);
+            var currentCombatant = this.encounter.ActiveCombatant();
+            this.eventLog.AddEvent(`Start of turn for ${currentCombatant.ViewModel.DisplayName()}.`);
         }
 
         PreviousTurn = () => {
             this.encounter.PreviousTurn();
-            var currentCreature = this.encounter.ActiveCreature();
-            this.eventLog.AddEvent(`Initiative rewound to ${currentCreature.ViewModel.DisplayName()}.`);
+            var currentCombatant = this.encounter.ActiveCombatant();
+            this.eventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
         }
 
         SaveEncounter = () => {
@@ -139,7 +139,7 @@ module ImprovedInitiative {
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<ISavedEncounter<ISavedCreature>>(Store.SavedEncounters, encounterName);
+            var encounter = Store.Load<ISavedEncounter<ISavedCombatant>>(Store.SavedEncounters, encounterName);
             this.encounter.LoadSavedEncounter(encounter, this.userPollQueue);
             this.eventLog.AddEvent(`Encounter loaded.`);
         }

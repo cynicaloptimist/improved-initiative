@@ -12,13 +12,13 @@ import LaunchServer from './launchserver';
 
 ConfigureAppInsights();
 
-const creatureLibrary = StatBlockLibrary.FromFile('ogl_creatures.json');
+const statBlockLibrary = StatBlockLibrary.FromFile('ogl_creatures.json');
 const playerViews = [];
 
 const app = express();
 const http = require('http').Server(app);
 
-ConfigureRoutes(app, creatureLibrary, playerViews);
+ConfigureRoutes(app, statBlockLibrary, playerViews);
 
 const io = socketIO(http);
 ConfigureSockets(io, playerViews);

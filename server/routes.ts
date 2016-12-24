@@ -73,11 +73,11 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         });
     });
 
-    app.get('/creatures/', (req, res) => {
+    app.get('/statblocks/', (req, res) => {
         res.json(statBlockLibrary.GetStatBlockListings());
     });
 
-    app.get('/creatures/:id', (req, res) => {
+    app.get('/statblocks/:id', (req, res) => {
         res.json(statBlockLibrary.GetStatBlockById(req.params.id));
     });
 

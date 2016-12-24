@@ -8,25 +8,25 @@ module ImprovedInitiative {
         Tags: string[];
         IsPlayerCharacter: boolean;
 
-        constructor(creature: ICreature) {
-            this.Name = creature.ViewModel ? creature.ViewModel.DisplayName() :
-                creature.StatBlock().Name;
-            this.Id = creature.Id;
-            this.HPDisplay = this.GetHPDisplay(creature);
-            this.HPColor = this.GetHPColor(creature);
-            this.Initiative = creature.Initiative();
-            this.IsPlayerCharacter = creature.IsPlayerCharacter;
-            this.Tags = creature.Tags();
+        constructor(combatant: ICombatant) {
+            this.Name = combatant.ViewModel ? combatant.ViewModel.DisplayName() :
+                combatant.StatBlock().Name;
+            this.Id = combatant.Id;
+            this.HPDisplay = this.GetHPDisplay(combatant);
+            this.HPColor = this.GetHPColor(combatant);
+            this.Initiative = combatant.Initiative();
+            this.IsPlayerCharacter = combatant.IsPlayerCharacter;
+            this.Tags = combatant.Tags();
         }
 
-        private GetHPDisplay(creature: ICreature): string {
+        private GetHPDisplay(combatant: ICombatant): string {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
 
-            if (creature.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
-                if (creature.TemporaryHP()) {
-                    return '{0}+{1}/{2}'.format(creature.CurrentHP(), creature.TemporaryHP(), creature.MaxHP);
+            if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
+                if (combatant.TemporaryHP()) {
+                    return '{0}+{1}/{2}'.format(combatant.CurrentHP(), combatant.TemporaryHP(), combatant.MaxHP);
                 } else {
-                    return '{0}/{1}'.format(creature.CurrentHP(), creature.MaxHP);
+                    return '{0}/{1}'.format(combatant.CurrentHP(), combatant.MaxHP);
                 }
             }
 
@@ -34,25 +34,25 @@ module ImprovedInitiative {
                 return '';
             }
 
-            if (creature.CurrentHP() <= 0) {
+            if (combatant.CurrentHP() <= 0) {
                 return "<span class='defeatedHP'>Defeated</span>";
-            } else if (creature.CurrentHP() < creature.MaxHP / 2) {
+            } else if (combatant.CurrentHP() < combatant.MaxHP / 2) {
                 return "<span class='bloodiedHP'>Bloodied</span>";
-            } else if (creature.CurrentHP() < creature.MaxHP) {
+            } else if (combatant.CurrentHP() < combatant.MaxHP) {
                 return "<span class='hurtHP'>Hurt</span>";
             }
             return "<span class='healthyHP'>Healthy</span>";
         }
 
-        private GetHPColor = (creature: ICreature) => {
+        private GetHPColor = (combatant: ICombatant) => {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
-            if (!creature.IsPlayerCharacter &&
+            if (!combatant.IsPlayerCharacter &&
                    (monsterHpVerbosity == "Monochrome Label" ||
                     monsterHpVerbosity == "Hide All")) {
                 return "auto";
             }
-            var green = Math.floor((creature.CurrentHP() / creature.MaxHP) * 170);
-            var red = Math.floor((creature.MaxHP - creature.CurrentHP()) / creature.MaxHP * 170);
+            var green = Math.floor((combatant.CurrentHP() / combatant.MaxHP) * 170);
+            var red = Math.floor((combatant.MaxHP - combatant.CurrentHP()) / combatant.MaxHP * 170);
             return "rgb(" + red + "," + green + ",0)";
         }
     }
