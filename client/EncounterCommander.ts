@@ -98,7 +98,7 @@ module ImprovedInitiative {
                 this.encounter.RollInitiative(this.userPollQueue);
             }
             this.userPollQueue.Add({
-                callback: () => this.encounter.StartEncounter
+                callback: this.encounter.StartEncounter
             });
             this.HideLibraries();
 
