@@ -89,11 +89,16 @@ module ImprovedInitiative {
         DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
         
         StartEncounter = () => {
+            if(this.userPollQueue.HasPoll()){
+                this.userPollQueue.AnimatePoll();
+                return;
+            }
+
             if (this.encounter.State() == 'inactive') {
                 this.encounter.RollInitiative(this.userPollQueue);
             }
             this.userPollQueue.Add({
-                callback: this.encounter.StartEncounter
+                callback: () => this.encounter.StartEncounter
             });
             this.HideLibraries();
 

@@ -35,6 +35,18 @@ module ImprovedInitiative {
             return this.queue()[0].inputSelector;
         }).extend({ notify: 'always' });
 
+        AnimatePoll = () => {
+            const opts = { duration: 200 };
+            const up = { "margin-bottom": "+=10" };
+            const down = { "margin-bottom": "-=10" };
+            $('.user-poll')
+                .animate(up, opts)
+                .animate(down, opts)
+                .find(this.InputSelector())
+                .select();
+            
+        }
+
         private checkForAutoResolve = () => {
             var poll = this.queue()[0];
             if (poll && !poll.requestContent) {
