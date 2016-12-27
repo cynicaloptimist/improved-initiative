@@ -64,11 +64,11 @@ module.exports = function (grunt) {
           'node_modules/react-dom/dist/react-dom.js',
           'node_modules/redux/dist/redux.js'
         ],
-        dest: 'public/js/vendors.js'
+        dest: 'public/js/dependencies.js'
       },
       js_client: {
-        src: ['ImprovedInitiative.Client/*.js'],
-        dest: 'public/js/ImprovedInitiative.js',
+        src: ['build/client/*.js'],
+        dest: 'public/js/improved-initiative.js',
         sourceMap: true
       },
       js_dependencies_min: {
@@ -86,9 +86,8 @@ module.exports = function (grunt) {
         dest: 'public/js/dependencies.js'
       },
       js_client_min: {
-        src: ['client.min.js'],
-        dest: 'public/js/ImprovedInitiative.js',
-        sourceMap: true
+        src: ['build/client.min.js'],
+        dest: 'public/js/improved-initiative.js'
       },
       css: {
         src: [
