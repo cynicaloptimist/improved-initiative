@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     export interface ICombatant {
-        Id: number;
+        Id: string;
         Encounter: Encounter;
         Alias: KnockoutObservable<string>;
         IndexLabel: number;
@@ -20,17 +20,15 @@ module ImprovedInitiative {
     }
 
     export class Combatant implements ICombatant {
-        static nextId = 0;
-
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: ISavedCombatant) {
             var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
             
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
-                this.Id = savedCombatant.Id || Combatant.nextId++;
+                this.Id = '' + savedCombatant.Id; //legacy Id may be a number
             } else {
                 statBlock.HP.Value = this.getMaxHP(statBlock.HP);
-                this.Id = Combatant.nextId++;
+                this.Id = statBlock.Id + '.' + probablyUniqueString();
             }
 
             this.StatBlock(statBlock);
@@ -49,7 +47,7 @@ module ImprovedInitiative {
             }
         }
         
-        Id = 0;
+        Id = probablyUniqueString();
         Alias = ko.observable(null);
         TemporaryHP = ko.observable(0);
         Tags = ko.observableArray<string>();

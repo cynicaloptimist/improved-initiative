@@ -2,7 +2,6 @@ module ImprovedInitiative {
     export class StatBlockEditor {
         private saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void;
         private deleteCallback: (library: string, id: string) => void;
-        private statBlockId: string;
         private statBlock: IStatBlock;
 
         EditorType = ko.observable<string>('basic');
@@ -14,7 +13,7 @@ module ImprovedInitiative {
             saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void,
             deleteCallback: (library: string, id: string) => void) => {
             
-            this.statBlockId = statBlockId;
+            statBlock.Id = statBlockId;
             this.statBlock = $.extend(StatBlock.Empty(), statBlock);
 
             this.EditableStatBlock(this.makeEditable(this.statBlock));
@@ -100,13 +99,13 @@ module ImprovedInitiative {
                 $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
             }
             
-            this.saveCallback(this.statBlockLibrary(), this.statBlockId, editedStatBlock);
+            this.saveCallback(this.statBlockLibrary(), this.statBlock.Id, editedStatBlock);
             this.EditableStatBlock(null);
         }
 
         DeleteStatBlock = () => {
             if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
-                this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
+                this.deleteCallback(this.statBlockLibrary(), this.statBlock.Id);
                 this.EditableStatBlock(null);
             }
         }
