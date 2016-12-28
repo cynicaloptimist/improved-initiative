@@ -1,8 +1,5 @@
 module ImprovedInitiative {
     export class CombatantCommander {
-        Commands: Command[];
-        SelectedCreatures: KnockoutObservableArray<ICreature> = ko.observableArray<ICreature>([]);
-
         constructor(private encounter: Encounter,
             private userPollQueue: UserPollQueue,
             private statBlockEditor: StatBlockEditor,
@@ -21,93 +18,98 @@ module ImprovedInitiative {
             });
         }
 
-        HasSelectedCreature = ko.computed(() => this.SelectedCreatures().length > 0);
+        Commands: Command[];
+        SelectedCombatants: KnockoutObservableArray<ICombatant> = ko.observableArray<ICombatant>([]);
 
-        SelectedCreatureStatblock: KnockoutComputed<IStatBlock> = ko.computed(() => {
-            var selectedCreatures = this.SelectedCreatures();
-            if (selectedCreatures.length == 1) {
-                return selectedCreatures[0].StatBlock();
+        HasSelected = ko.computed(() => this.SelectedCombatants().length > 0);
+        HasOneSelected = ko.computed(() => this.SelectedCombatants().length === 1);
+        HasMultipleSelected = ko.computed(() => this.SelectedCombatants().length > 1);
+
+        StatBlock: KnockoutComputed<IStatBlock> = ko.computed(() => {
+            var selectedCombatants = this.SelectedCombatants();
+            if (selectedCombatants.length == 1) {
+                return selectedCombatants[0].StatBlock();
             } else {
                 return StatBlock.Empty();
             }
         });
 
-        SelectedCreatureNames: KnockoutComputed<string> = ko.computed(() =>
-            this.SelectedCreatures()
+        Names: KnockoutComputed<string> = ko.computed(() =>
+            this.SelectedCombatants()
                 .map(c => c.ViewModel.DisplayName())
                 .join(', ')
         );
 
-        SelectCreature = (data: ICreature, e?: MouseEvent) => {
+        Select = (data: ICombatant, e?: MouseEvent) => {
             if (!data) {
                 return;
             }
             if (!(e && e.ctrlKey)) {
-                this.SelectedCreatures.removeAll();
+                this.SelectedCombatants.removeAll();
             }
-            this.SelectedCreatures.push(data);
+            this.SelectedCombatants.push(data);
         }
 
-        private selectCreatureByOffset = (offset: number) => {
-            var newIndex = this.encounter.Creatures.indexOf(this.SelectedCreatures()[0]) + offset;
+        private selectByOffset = (offset: number) => {
+            var newIndex = this.encounter.Combatants.indexOf(this.SelectedCombatants()[0]) + offset;
             if (newIndex < 0) {
                 newIndex = 0;
-            } else if (newIndex >= this.encounter.Creatures().length) {
-                newIndex = this.encounter.Creatures().length - 1;
+            } else if (newIndex >= this.encounter.Combatants().length) {
+                newIndex = this.encounter.Combatants().length - 1;
             }
-            this.SelectedCreatures.removeAll()
-            this.SelectedCreatures.push(this.encounter.Creatures()[newIndex]);
+            this.SelectedCombatants.removeAll()
+            this.SelectedCombatants.push(this.encounter.Combatants()[newIndex]);
         }
 
-        RemoveSelectedCreatures = () => {
-            var creaturesToRemove = this.SelectedCreatures.removeAll(),
-                indexOfFirstCreatureToRemove = this.encounter.Creatures.indexOf(creaturesToRemove[0]),
-                deletedCreatureNames = creaturesToRemove.map(c => c.StatBlock().Name);
+        Remove = () => {
+            var combatantsToRemove = this.SelectedCombatants.removeAll(),
+                indexOfFirstCombatantToRemove = this.encounter.Combatants.indexOf(combatantsToRemove[0]),
+                deletedCombatantNames = combatantsToRemove.map(c => c.StatBlock().Name);
             
-            if (this.encounter.Creatures().length > creaturesToRemove.length) {
-                while (creaturesToRemove.indexOf(this.encounter.ActiveCreature()) > -1) {
+            if (this.encounter.Combatants().length > combatantsToRemove.length) {
+                while (combatantsToRemove.indexOf(this.encounter.ActiveCombatant()) > -1) {
                     this.encounter.NextTurn();
                 }
             }
 
-            this.encounter.Creatures.removeAll(creaturesToRemove);
+            this.encounter.Combatants.removeAll(combatantsToRemove);
 
-            var allMyFriendsAreGone = name => this.encounter.Creatures().every(c => c.StatBlock().Name != name);
+            var allMyFriendsAreGone = name => this.encounter.Combatants().every(c => c.StatBlock().Name != name);
 
-            deletedCreatureNames.forEach(name => {
+            deletedCombatantNames.forEach(name => {
                 if (allMyFriendsAreGone(name)) {
-                    this.encounter.CreatureCountsByName[name](0);
+                    this.encounter.CombatantCountsByName[name](0);
                 }
             });
 
-            if (indexOfFirstCreatureToRemove >= this.encounter.Creatures().length) {
-                indexOfFirstCreatureToRemove = this.encounter.Creatures().length - 1;
+            if (indexOfFirstCombatantToRemove >= this.encounter.Combatants().length) {
+                indexOfFirstCombatantToRemove = this.encounter.Combatants().length - 1;
             }
-            this.SelectCreature(this.encounter.Creatures()[indexOfFirstCreatureToRemove])
+            this.Select(this.encounter.Combatants()[indexOfFirstCombatantToRemove])
 
-            this.eventLog.AddEvent(`${deletedCreatureNames.join(', ')} removed from encounter.`);
+            this.eventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
 
             this.encounter.QueueEmitEncounter();
         }
 
-        SelectPreviousCombatant = () => {
-            this.selectCreatureByOffset(-1);
+        SelectPrevious = () => {
+            this.selectByOffset(-1);
         }
 
-        SelectNextCombatant = () => {
-            this.selectCreatureByOffset(1);
+        SelectNext = () => {
+            this.selectByOffset(1);
         }
 
-        FocusSelectedCreatureHP = () => {
-            var selectedCreatures = this.SelectedCreatures();
-            var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+        FocusHP = () => {
+            var selectedCombatants = this.SelectedCombatants();
+            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
             this.userPollQueue.Add({
-                requestContent: `Apply damage to ${creatureNames}: <input class='response' type='number' />`,
+                requestContent: `Apply damage to ${combatantNames}: <input class='response' type='number' />`,
                 inputSelector: '.response',
                 callback: response => {
                     if (response) {
-                        selectedCreatures.forEach(c => c.ViewModel.ApplyDamage(response))
-                        this.eventLog.AddEvent(`${response} damage applied to ${creatureNames}.`);
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(response))
+                        this.eventLog.AddEvent(`${response} damage applied to ${combatantNames}.`);
                         this.encounter.QueueEmitEncounter();
                     }
                 }
@@ -115,15 +117,15 @@ module ImprovedInitiative {
             return false;
         }
 
-        AddSelectedCreaturesTemporaryHP = () => {
-            var selectedCreatures = this.SelectedCreatures();
-            var creatureNames = selectedCreatures.map(c => c.ViewModel.DisplayName()).join(', ')
+        AddTemporaryHP = () => {
+            var selectedCombatants = this.SelectedCombatants();
+            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
             this.userPollQueue.Add({
-                requestContent: `Grant temporary hit points to ${creatureNames}: <input class='response' type='number' />`,
+                requestContent: `Grant temporary hit points to ${combatantNames}: <input class='response' type='number' />`,
                 inputSelector: '.response',
-                callback: response => selectedCreatures.forEach(c => {
+                callback: response => selectedCombatants.forEach(c => {
                     c.ViewModel.ApplyTemporaryHP(response);
-                    this.eventLog.AddEvent(`${response} temporary hit points granted to ${creatureNames}.`);
+                    this.eventLog.AddEvent(`${response} temporary hit points granted to ${combatantNames}.`);
                     this.encounter.QueueEmitEncounter();
                 })
             });
@@ -131,51 +133,49 @@ module ImprovedInitiative {
             return false;
         }
 
-        AddSelectedCreatureTag = () => {
-            this.SelectedCreatures().forEach(c => c.ViewModel.AddTag())
+        AddTag = () => {
+            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag())
             return false;
         }
 
-        EditSelectedCreatureInitiative = () => {
-            this.SelectedCreatures().forEach(c => c.ViewModel.EditInitiative())
+        EditInitiative = () => {
+            this.SelectedCombatants().forEach(c => c.ViewModel.EditInitiative())
             return false;
         }
 
-        MoveSelectedCreatureUp = () => {
-            var creature = this.SelectedCreatures()[0];
-            var index = this.encounter.Creatures.indexOf(creature)
-            if (creature && index > 0) {
-                var newInitiative = this.encounter.MoveCreature(creature, index - 1);
-                this.eventLog.AddEvent(`${creature.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
+        MoveUp = () => {
+            var combatant = this.SelectedCombatants()[0];
+            var index = this.encounter.Combatants.indexOf(combatant)
+            if (combatant && index > 0) {
+                var newInitiative = this.encounter.MoveCombatant(combatant, index - 1);
+                this.eventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
-        MoveSelectedCreatureDown = () => {
-            var creature = this.SelectedCreatures()[0];
-            var index = this.encounter.Creatures.indexOf(creature)
-            if (creature && index < this.encounter.Creatures().length - 1) {
-                var newInitiative = this.encounter.MoveCreature(creature, index + 1);
-                this.eventLog.AddEvent(`${creature.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
+        MoveDown = () => {
+            var combatant = this.SelectedCombatants()[0];
+            var index = this.encounter.Combatants.indexOf(combatant)
+            if (combatant && index < this.encounter.Combatants().length - 1) {
+                var newInitiative = this.encounter.MoveCombatant(combatant, index + 1);
+                this.eventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
-        EditSelectedCreatureName = () => {
-            this.SelectedCreatures().forEach(c => c.ViewModel.EditName())
+        EditName = () => {
+            this.SelectedCombatants().forEach(c => c.ViewModel.EditName())
             return false;
         }
 
-        EditSelectedCreatureStatBlock = () => {
-            if (this.SelectedCreatures().length == 1) {
-                var selectedCreature = this.SelectedCreatures()[0];
-                this.statBlockEditor.EditCreature(null, this.SelectedCreatureStatblock(), (_, __, newStatBlock) => {
-                    selectedCreature.StatBlock(newStatBlock);
+        EditStatBlock = () => {
+            if (this.SelectedCombatants().length == 1) {
+                var selectedCombatant = this.SelectedCombatants()[0];
+                this.statBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
+                    selectedCombatant.StatBlock(newStatBlock);
                     this.encounter.QueueEmitEncounter();
                 }, (_, __) => {
-                    this.RemoveSelectedCreatures();
+                    this.Remove();
                 })
             }
         }
-
-        
     }
 }

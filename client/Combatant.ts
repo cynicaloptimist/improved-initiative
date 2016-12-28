@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export interface ICreature {
+    export interface ICombatant {
         Id: number;
         Encounter: Encounter;
         Alias: KnockoutObservable<string>;
@@ -19,18 +19,18 @@ module ImprovedInitiative {
         IsPlayerCharacter: boolean;
     }
 
-    export class Creature implements ICreature {
+    export class Combatant implements ICombatant {
         static nextId = 0;
 
-        constructor(creatureJson, public Encounter: Encounter, savedCreature?: ISavedCreature) {
-            var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), creatureJson);
+        constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: ISavedCombatant) {
+            var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
             
-            if (savedCreature) {
-                statBlock.HP.Value = savedCreature.MaxHP || savedCreature.Statblock.HP.Value;
-                this.Id = savedCreature.Id || Creature.nextId++;
+            if (savedCombatant) {
+                statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
+                this.Id = savedCombatant.Id || Combatant.nextId++;
             } else {
                 statBlock.HP.Value = this.getMaxHP(statBlock.HP);
-                this.Id = Creature.nextId++;
+                this.Id = Combatant.nextId++;
             }
 
             this.StatBlock(statBlock);
@@ -44,8 +44,8 @@ module ImprovedInitiative {
 
             this.CurrentHP = ko.observable(this.MaxHP);
 
-            if (savedCreature) {
-                this.processSavedCreature(savedCreature);
+            if (savedCombatant) {
+                this.processSavedCombatant(savedCombatant);
             }
         }
         
@@ -80,14 +80,14 @@ module ImprovedInitiative {
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
 
-        private processSavedCreature(savedCreature: ISavedCreature) {
-            this.IndexLabel = savedCreature.IndexLabel;
-            this.CurrentHP(savedCreature.CurrentHP);
-            this.TemporaryHP(savedCreature.TemporaryHP);
-            this.Initiative(savedCreature.Initiative);
-            this.Alias(savedCreature.Alias);
-            this.Tags(savedCreature.Tags);
-            this.Hidden(savedCreature.Hidden);
+        private processSavedCombatant(savedCombatant: ISavedCombatant) {
+            this.IndexLabel = savedCombatant.IndexLabel;
+            this.CurrentHP(savedCombatant.CurrentHP);
+            this.TemporaryHP(savedCombatant.TemporaryHP);
+            this.Initiative(savedCombatant.Initiative);
+            this.Alias(savedCombatant.Alias);
+            this.Tags(savedCombatant.Tags);
+            this.Hidden(savedCombatant.Hidden);
         }
 
         private getMaxHP(HP: ValueAndNotes) {
@@ -103,7 +103,7 @@ module ImprovedInitiative {
 
         private setIndexLabel(oldName?: string) {
             var name = this.StatBlock().Name,
-                counts = this.Encounter.CreatureCountsByName;
+                counts = this.Encounter.CombatantCountsByName;
             if (name == oldName) {
                 return;
             }

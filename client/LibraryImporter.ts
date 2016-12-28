@@ -1,9 +1,9 @@
 module ImprovedInitiative {
 
-    class CreatureImporter {
-        constructor(private creatureXml: Element) { }
+    class StatBlockImporter {
+        constructor(private statBlockXml: Element) { }
         GetString = (selector: string) => {
-            return $(this.creatureXml).find(selector).html() || '';
+            return $(this.statBlockXml).find(selector).html() || '';
         }
         GetJoinedStrings = (selectors: string[], delimiter: string = ', ') => {
             return selectors.map(this.GetString).reduce((p, c) => {
@@ -64,7 +64,7 @@ module ImprovedInitiative {
         }
 
         GetUniqueTraits = (selector: string) => {
-            return $(this.creatureXml).find(selector).children().get()
+            return $(this.statBlockXml).find(selector).children().get()
 
 
                 .map((trait) => {
@@ -81,35 +81,35 @@ module ImprovedInitiative {
         static Import = (xmlDoc: string) => {
             var library = [];
 
-            $(xmlDoc).find('npcdata>*').each((_, creatureXml) => {
-                var imp = new CreatureImporter(creatureXml);
-                var creature = StatBlock.Empty();
+            $(xmlDoc).find('npcdata>*').each((_, statBlockXML) => {
+                var imp = new StatBlockImporter(statBlockXML);
+                var statBlock = StatBlock.Empty();
 
-                creature.Name = imp.GetString('name');
-                creature.Source = imp.GetString('source');
-                creature.Type = imp.GetJoinedStrings(['size', 'type', 'subtype'], ' ') + ', ' + imp.GetString('alignment');
-                creature.Description = imp.GetString('description');
-                creature.HP = imp.GetNotes('hp', 'hd');
-                creature.AC = imp.GetNotes('ac', 'actext');
-                creature.Speed = imp.GetArray('speed');
-                creature.Abilities = imp.GetAbilities();
+                statBlock.Name = imp.GetString('name');
+                statBlock.Source = imp.GetString('source');
+                statBlock.Type = imp.GetJoinedStrings(['size', 'type', 'subtype'], ' ') + ', ' + imp.GetString('alignment');
+                statBlock.Description = imp.GetString('description');
+                statBlock.HP = imp.GetNotes('hp', 'hd');
+                statBlock.AC = imp.GetNotes('ac', 'actext');
+                statBlock.Speed = imp.GetArray('speed');
+                statBlock.Abilities = imp.GetAbilities();
                 var proficiencies = imp.GetProficiencies()
-                creature.Saves = proficiencies.Saves;
-                creature.Skills = proficiencies.Skills;
-                creature.ConditionImmunities = imp.GetArray('conditionimmunities');
-                creature.DamageImmunities = imp.GetArray('damageimmunities');
-                creature.DamageResistances = imp.GetArray('damageresistances');
-                creature.DamageVulnerabilities = imp.GetArray('damagevulnerabilities');//todo: test this, no dragons with vulnerabilities
-                creature.Senses = imp.GetArray('senses');
-                creature.Languages = imp.GetArray('languages');
-                creature.Challenge = imp.GetString('cr');
+                statBlock.Saves = proficiencies.Saves;
+                statBlock.Skills = proficiencies.Skills;
+                statBlock.ConditionImmunities = imp.GetArray('conditionimmunities');
+                statBlock.DamageImmunities = imp.GetArray('damageimmunities');
+                statBlock.DamageResistances = imp.GetArray('damageresistances');
+                statBlock.DamageVulnerabilities = imp.GetArray('damagevulnerabilities');//todo: test this, no dragons with vulnerabilities
+                statBlock.Senses = imp.GetArray('senses');
+                statBlock.Languages = imp.GetArray('languages');
+                statBlock.Challenge = imp.GetString('cr');
 
-                creature.Traits = imp.GetUniqueTraits('traits');
-                creature.Actions = imp.GetUniqueTraits('actions');
-                creature.Reactions = imp.GetUniqueTraits('reactions');
-                creature.LegendaryActions = imp.GetUniqueTraits('legendaryactions');
+                statBlock.Traits = imp.GetUniqueTraits('traits');
+                statBlock.Actions = imp.GetUniqueTraits('actions');
+                statBlock.Reactions = imp.GetUniqueTraits('reactions');
+                statBlock.LegendaryActions = imp.GetUniqueTraits('legendaryactions');
 
-                library.push(creature);
+                library.push(statBlock);
             });
 
             return library;

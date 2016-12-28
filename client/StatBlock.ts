@@ -63,7 +63,7 @@ module ImprovedInitiative {
 
     export class StatBlock {
         static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
-            var statBlock = {
+            const statBlock = {
                 Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 InitiativeModifier: 0,
@@ -86,7 +86,7 @@ module ImprovedInitiative {
         static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
     }
 
-    export var SimplifyStatBlock: (statblock: IStatBlock) => IStatBlock = (statBlock) => {
+    export var SimplifyStatBlock: (statBlock: IStatBlock) => IStatBlock = (statBlock) => {
         return {
             Abilities: statBlock.Abilities,
             AC: statBlock.AC,

@@ -18,25 +18,26 @@
         appInsights.trackPageView();
     </script>
 
+    <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
     <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
 
 </head>
 
 <body id="playerview">
-    <div class="creature header">
+    <div class="combatant header">
         <div class="initiative"><span class="fa fa-forward"></span></div>
         <div class="name">Combatant</div>
         <div class="hp"><span class="fa fa-heart"></span></div>
         <div class="tags"><span class="fa fa-tag"></span></div>
     </div>
     <ul class="combatants">
-        <!-- ko foreach: Creatures -->
-        <li class="creature" data-bind="
-        css: { active: $parent.ActiveCreature() == $data, 
+        <!-- ko foreach: Combatants -->
+        <li class="combatant" data-bind="
+        css: { active: $parent.ActiveCombatant() == $data, 
                 playercharacter: $data.IsPlayerCharacter }, 
         component: {
             name: 'playerdisplaycombatant',
-            params: { creature: $data }
+            params: { combatant: $data }
         }">
         </li>
         <!-- /ko -->

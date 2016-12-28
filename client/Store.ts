@@ -3,7 +3,7 @@ module ImprovedInitiative {
         private static _prefix = "ImprovedInitiative";
 
         static PlayerCharacters: string = "PlayerCharacters";
-        static Creatures: string = "Creatures";
+        static StatBlocks: string = "Creatures";
         static SavedEncounters: string = "SavedEncounters";
         static AutoSavedEncounters: string = "AutoSavedEncounters";
         static User: string = "User";
@@ -78,13 +78,13 @@ module ImprovedInitiative {
         }
 
         static ImportFromDnDAppFile(file: File) {
-            var callback = (creatures: IStatBlock[]) => {
-                creatures.forEach(c => {
-                    this.Save(Store.Creatures, c.Name, c);
+            var callback = (statBlocks: IStatBlock[]) => {
+                statBlocks.forEach(c => {
+                    this.Save(Store.StatBlocks, c.Name, c);
                 });
             };
 
-            if (confirm(`Import all creatures in ${file.name} and reload?`)) {
+            if (confirm(`Import all statblocks in ${file.name} and reload?`)) {
                 try {
                     new DnDAppFilesImporter().ImportFromXml(file, callback);
                     location.reload();
@@ -95,9 +95,9 @@ module ImprovedInitiative {
             }
         }
 
-        static ExportCreatures() {
-            var creatures = this.List(Store.Creatures).map(id => Store.Load(Store.Creatures, id));
-            return new Blob([JSON.stringify(creatures, null, 2)],
+        static ExportStatBlocks() {
+            var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
+            return new Blob([JSON.stringify(statBlocks, null, 2)],
                 { type: 'application/json' });
         }
 

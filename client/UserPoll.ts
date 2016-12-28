@@ -28,12 +28,24 @@ module ImprovedInitiative {
         });
 
         Message = ko.pureComputed(() => {
-            return this.queue()[0].requestContent + "<button type='submit'><span class='fa fa-check'></span></button>";
+            return `<p>${this.queue()[0].requestContent}</p><button type='submit' class='fa fa-check button'></button>`;
         });
 
         InputSelector = ko.pureComputed(() => {
             return this.queue()[0].inputSelector;
         }).extend({ notify: 'always' });
+
+        AnimatePoll = () => {
+            const opts = { duration: 200 };
+            const up = { "margin-bottom": "+=10" };
+            const down = { "margin-bottom": "-=10" };
+            $('.user-poll')
+                .animate(up, opts)
+                .animate(down, opts)
+                .find(this.InputSelector())
+                .select();
+            
+        }
 
         private checkForAutoResolve = () => {
             var poll = this.queue()[0];

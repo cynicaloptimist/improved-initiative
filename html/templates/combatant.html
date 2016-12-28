@@ -1,9 +1,9 @@
-<span data-bind="text: Creature.Initiative" title="Initiative Roll" class="initiative"></span>
+<span data-bind="text: Combatant.Initiative" title="Initiative Roll" class="initiative"></span>
 <span class="name" data-bind="text: DisplayName, attr: {title: DisplayName }"></span>
 <span class="hp" data-bind="click: EditHP, text: DisplayHP, style: { color: GetHPColor() }"></span>
-<span class="ac" title="Armor Class" data-bind="text: Creature.AC"></span>
+<span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
 <span class="tags">
-    <!--ko foreach: Creature.Tags() -->
+    <!--ko foreach: Combatant.Tags() -->
     <span class="tag outline">
         <span data-bind="text: $data"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
     </span>

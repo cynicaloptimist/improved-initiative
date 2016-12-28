@@ -5,7 +5,7 @@ interface KnockoutBindingHandlers {
     afterRender: KnockoutBindingHandler;
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
-    statblockText: KnockoutBindingHandler;
+    statBlockText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
 }
@@ -57,7 +57,7 @@ module ImprovedInitiative {
         }
     }
 
-    let statblockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+    let statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         var text = valueAccessor().toString();
 
         var md = markdownit();
@@ -82,9 +82,9 @@ module ImprovedInitiative {
         });
     };
 
-    ko.bindingHandlers.statblockText = {
-        init: statblockTextHandler,
-        update: statblockTextHandler
+    ko.bindingHandlers.statBlockText = {
+        init: statBlockTextHandler,
+        update: statBlockTextHandler
     }
 
     ko.bindingHandlers.format = {

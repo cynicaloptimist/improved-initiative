@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html encounterId="{{encounterId}}" appInsightsKey="{{appInsightsKey}}">
+<html encounterId="{{encounterId}}" appInsightsKey="{{appInsightsKey}}" postedEncounter="{{postedEncounter}}">
 
 <head>
     <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.css">
@@ -18,6 +18,7 @@
         appInsights.trackPageView();
     </script>
 
+    <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
     <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
 
 </head>
@@ -27,7 +28,7 @@
         <div class="modalblur" data-bind="click: EncounterCommander.HideSettings"></div>
         <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     </div>
-    <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { creature: Library.GetPreviewStatBlock } }"></div>
+    <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
@@ -39,7 +40,7 @@
             ">
             </span>
             </div>
-            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelectedCreature(), foreach: CombatantCommander.Commands">
+            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
                 <span class="button" data-bind="
                 visible: ShowOnActionBar,
                 css: ActionBarIcon,
@@ -74,30 +75,29 @@
             <!-- /ko -->
             <!-- ko ifnot: DisplayTab() == 'Encounters' -->
             <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-            <ul class="library" data-bind="foreach: FilteredCreatures">
+            <ul class="library" data-bind="foreach: FilteredStatBlocks">
                 <li>
-                    <span class="fa" data-bind="click: $root.EncounterCommander.AddCreatureFromListing, text: Name"></span>
-                    <span class="fa fa-edit" data-bind="click: $root.EncounterCommander.EditCreature"></span>
-                    <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewCreature }"></span>
+                    <span class="fa" data-bind="click: $root.EncounterCommander.AddStatBlockFromListing, text: Name"></span>
+                    <span class="fa fa-edit" data-bind="click: $root.EncounterCommander.EditStatBlock"></span>
+                    <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewStatBlock }"></span>
                 </li>
             </ul>
             <div class="library-buttons">
                 <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
-                <span data-bind="click: $root.EncounterCommander.CreateAndEditCreature.with(DisplayTab())" class="fa fa-plus"></span>
+                <span data-bind="click: $root.EncounterCommander.CreateAndEditStatBlock.with(DisplayTab())" class="fa fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
-        <div class="active-creature" data-bind="if: Encounter.ActiveCreature()">
+        <div class="active-combatant" data-bind="if: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
-                visible: Encounter.ActiveCreature(), 
                 component: { 
                     name: 'activestatblock', 
                     params: { 
-                    creature: Encounter.ActiveCreatureStatblock() 
+                    statBlock: Encounter.ActiveCombatantStatBlock 
                     } 
                 }">
             </div>
@@ -117,21 +117,21 @@
         <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
         <h2>Initiative Order</h2>
         <ul class="combatants" data-bind="with: Encounter">
-            <li class="creature header">
+            <li class="combatant header">
                 <span class="initiative fa fa-forward"></span></span>
                 <span class="name">Combatant</span>
                 <span class="hp fa fa-heart"></span></span>
                 <span class="ac fa fa-shield"></span></span>
                 <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
             </li>
-            <!-- ko foreach: Creatures -->
-            <li class="creature" data-bind="
-                css: { selected: $root.CombatantCommander.SelectedCreatures().indexOf($data) > -1, 
-                        active: $parent.ActiveCreature() == $data },
-                click: $root.CombatantCommander.SelectCreature,
+            <!-- ko foreach: Combatants -->
+            <li class="combatant" data-bind="
+                css: { selected: $root.CombatantCommander.SelectedCombatants().indexOf($data) > -1, 
+                        active: $parent.ActiveCombatant() == $data },
+                click: $root.CombatantCommander.Select,
                 component: {
                 name: 'combatant',
-                params: { creature: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
+                params: { combatant: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
                 }">
             </li>
             <!-- /ko -->
@@ -158,18 +158,23 @@
     </div>
     <div class="right-column">
         <div class="selected-combatant">
+            <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
-            <div class="statblock" data-bind="visible: CombatantCommander.SelectedCreatures().length == 1, 
+            <div class="statblock" data-bind="
                 component: { 
                 name: 'defaultstatblock', 
                 params:{ 
-                    creature: CombatantCommander.SelectedCreatureStatblock(),
+                    statBlock: CombatantCommander.StatBlock(),
                 } 
                 }">
             </div>
-            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.SelectedCreatures().length > 1, 
-                text: CombatantCommander.SelectedCreatureNames()">
+            <!-- /ko -->
+            <!-- ko if: CombatantCommander.HasMultipleSelected -->
+            <h2>Selected Combatants</h2>
+            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, 
+                text: CombatantCommander.Names">
             </div>
+            <!-- /ko -->
         </div>
     </div>
 </body>
