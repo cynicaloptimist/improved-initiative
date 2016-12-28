@@ -2,7 +2,7 @@
 
 module ImprovedInitiative {
     export interface ISavedCombatant {
-        Id: number;
+        Id: string;
         StatBlock: IStatBlock;
         MaxHP: number;
         CurrentHP: number;
@@ -15,7 +15,7 @@ module ImprovedInitiative {
     }
     export interface ISavedEncounter<T> {
         Name: string;
-        ActiveCombatantId: number;
+        ActiveCombatantId: string;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
         Combatants: T[];
@@ -196,7 +196,7 @@ module ImprovedInitiative {
             var activeCombatant = this.ActiveCombatant();
             return {
                 Name: name || this.EncounterId,
-                ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
+                ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 Combatants: this.Combatants().map<ISavedCombatant>(c => {
                     return {
@@ -246,7 +246,7 @@ module ImprovedInitiative {
 
             savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
             savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
-            
+
             let savedEncounterIsActive = savedEncounter.ActiveCombatantId != -1;
             let currentEncounterIsActive = this.State() == 'active';
 
