@@ -238,16 +238,32 @@ module ImprovedInitiative {
             };
         }
 
-        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCombatant>, userPollQueue: UserPollQueue) => {
-            let legacyCombatantIndex = savedEncounter["ActiveCreatureIndex"];
-            if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
-                savedEncounter.ActiveCombatantId = this.Combatants()[legacyCombatantIndex].Id;
+        private static updateLegacySavedCreature = savedCreature => {
+            if (!savedCreature.StatBlock) {
+                savedCreature.StatBlock = savedCreature["Statblock"];
             }
+            if (!savedCreature.Id) {
+                savedCreature.Id = probablyUniqueString();
+            }
+        }
 
+        private static updateLegacySavedEncounter = savedEncounter => {
             savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
             savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
+            
+            savedEncounter.Combatants.forEach(Encounter.updateLegacySavedCreature)
 
-            let savedEncounterIsActive = savedEncounter.ActiveCombatantId != -1;
+            let legacyCombatantIndex = savedEncounter["ActiveCreatureIndex"];
+            if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
+                savedEncounter.ActiveCombatantId = savedEncounter.Combatants[legacyCombatantIndex].Id;
+            }
+            return savedEncounter;
+        }
+
+        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCombatant>, userPollQueue: UserPollQueue) => {
+            savedEncounter = Encounter.updateLegacySavedEncounter(savedEncounter);
+
+            let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
             let currentEncounterIsActive = this.State() == 'active';
 
             savedEncounter.Combatants.forEach(c => {
