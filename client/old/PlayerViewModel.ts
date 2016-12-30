@@ -25,7 +25,7 @@ module ImprovedInitiative {
             if(encounter.ActiveCombatantId != (this.ActiveCombatant() || {Id: -1}).Id){
                 this.TurnTimer.Reset();
             }
-            if (encounter.ActiveCombatantId != -1) {
+            if (encounter.ActiveCombatantId) {
                 this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
                 setTimeout(this.ScrollToActiveCombatant, 1);
             }

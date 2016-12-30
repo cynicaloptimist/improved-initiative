@@ -4,7 +4,7 @@ module ImprovedInitiative {
         HPDisplay: string;
         HPColor: string;
         Initiative: number;
-        Id: number;
+        Id: string;
         Tags: string[];
         IsPlayerCharacter: boolean;
 

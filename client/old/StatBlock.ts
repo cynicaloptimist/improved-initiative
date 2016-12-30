@@ -36,6 +36,7 @@ module ImprovedInitiative {
     }
 
     export interface IStatBlock {
+        Id: string;
         Name: string;
         Source: string;
         Type: string;
@@ -64,7 +65,7 @@ module ImprovedInitiative {
     export class StatBlock {
         static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
             const statBlock = {
-                Name: '', Source: '', Type: '',
+                Id: '', Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
                 InitiativeModifier: 0,
                 Speed: [],
@@ -98,6 +99,7 @@ module ImprovedInitiative {
             DamageVulnerabilities: [],
             HP: statBlock.HP,
             InitiativeModifier: statBlock.InitiativeModifier,
+            Id: statBlock.Id,
             Languages: [],
             LegendaryActions: [],
             Reactions: [],

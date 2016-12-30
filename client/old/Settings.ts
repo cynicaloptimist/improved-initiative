@@ -6,6 +6,7 @@ module ImprovedInitiative {
     export var Settings = (params: Params) => {
         var tips = [
             "You can view command list and set keybindings on the 'Commands' tab.",
+            "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
             "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
             "You can use the player view URL to track your combat on any device.",
             "Editing a creature after it has been added to combat will only change that individual creature.",
