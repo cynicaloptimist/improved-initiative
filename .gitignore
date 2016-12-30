@@ -1,5 +1,6 @@
 node_modules/*
 typings/*
+build/*
 public/user/*
 public/fonts/*
 *.js.map
