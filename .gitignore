@@ -6,3 +6,4 @@ public/fonts/*
 .tscache
 .vscode
 .baseDir
+*.log
