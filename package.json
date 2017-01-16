@@ -54,6 +54,7 @@
   },
   "scripts": {
     "postinstall": "grunt --no-color postinstall",
-    "start": "node server.js"
+    "start": "node server.js",
+    "clean": "git clean -f -x -e node_modules/"
   }
 }
