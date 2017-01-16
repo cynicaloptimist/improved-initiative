@@ -45,22 +45,26 @@ module.exports = {
     preLoaders: [
       {
         test: /\.js$/,
+        exclude: path.join(nodeModulesPath, 'bootstrap'),
         loader: "source-map"
       },
       {
         test: /\.js$/,
         loader: 'eslint',
+        exclude: path.join(nodeModulesPath, 'bootstrap'),
         include: srcPath,
       }
     ],
     loaders: [
       {
         test: /\.tsx?$/,
+        include: srcPath,
         loader: "ts"
       },
       {
         test: /\.js$/,
         include: srcPath,
+        exclude: path.join(nodeModulesPath, 'bootstrap'),
         loader: 'babel',
         query: require('./babel.dev')
       },
