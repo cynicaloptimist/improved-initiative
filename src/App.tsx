@@ -7,7 +7,8 @@ interface Combatant {
   Initiative: string;
 }
 
-class InitiativeList extends React.Component<{ data: Combatant [] }, {} > {
+class InitiativeList extends React.Component<{ data: Combatant[] }, {}> {
+  private props: { data: Combatant[] };
   render() {
     var combatantRows = this.props.data.map((c: Combatant) => (
       <li key={c.Id}>
@@ -40,8 +41,6 @@ class App extends React.Component<any, any> {
       Hp: "10/10"
     }] as Combatant[]
   };
-  
-  
 }
 
 export default App;
