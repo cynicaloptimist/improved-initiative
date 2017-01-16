@@ -52,6 +52,7 @@ module.exports = {
     loaders: [
       {
         test: /\.tsx?$/,
+        include: srcPath,
         loader: "ts"
       },
       {
