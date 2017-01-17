@@ -1,6 +1,8 @@
 node_modules/*
+typings/*
 public/user/*
 public/fonts/*
+*.log
 *.js.map
 *.js
 *.css
