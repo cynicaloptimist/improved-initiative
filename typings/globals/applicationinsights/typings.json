@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/d59d5bdea31295ff74ce32929da80246a5749580/applicationinsights/applicationinsights.d.ts",
-    "raw": "registry:dt/applicationinsights#0.15.12+20160323212307",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/d59d5bdea31295ff74ce32929da80246a5749580/applicationinsights/applicationinsights.d.ts"
-  }
-}

@@ -94,7 +94,7 @@ module ImprovedInitiative {
             library.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
-            ko.utils.arrayPushAll(this.NPCStatBlocks, library.map(c => {
+            ko.utils.arrayPushAll<StatBlockListing>(this.NPCStatBlocks, library.map(c => {
                 return new StatBlockListing(c.Id, c.Name, c.Type, c.Link, "server");
             }));
         }
