@@ -69,9 +69,9 @@ module.exports = {
         query: require('./babel.dev')
       },
       {
-        test: /\.css$/,
+        test: /\.less$/,
         include: srcPath,
-        loader: 'style!css!postcss'
+        loader: 'style!css!postcss!less'
       },
       {
         test: /\.json$/,
