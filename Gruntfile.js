@@ -42,12 +42,9 @@ module.exports = function (grunt) {
       }
     },
     less: {
-      development: {
-        options: {
-          paths: ["."]
-        },
+      default: {
         files: {
-          "improved-initiative.less.css": "improved-initiative.less"
+          "build/improved-initiative.less.css": ["lesscss/*.less"]
         }
       }
     },
@@ -92,7 +89,7 @@ module.exports = function (grunt) {
       css: {
         src: [
           'node_modules/awesomplete/awesomplete.css',
-          'improved-initiative.less.css'
+          'build/improved-initiative.less.css'
         ],
         dest: 'public/css/improved-initiative.css'
       }
@@ -107,7 +104,7 @@ module.exports = function (grunt) {
         tasks: ['ts:server']
       },
       lesscss: {
-        files: '**/*.less',
+        files: 'lesscss/*.less',
         tasks: ['less', 'concat:css']
       }
     },

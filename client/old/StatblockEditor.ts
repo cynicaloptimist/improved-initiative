@@ -29,7 +29,7 @@ module ImprovedInitiative {
             let modifierLists = ['Saves', 'Skills'];
             let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
             
-            let observableStatBlock = ko.mapping.fromJS(this.statBlock);
+            let observableStatBlock = ko['mapping'].fromJS(this.statBlock);
             
             let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
                 for (let arrayName of arrayNames) {
@@ -72,7 +72,7 @@ module ImprovedInitiative {
                 }
 
                 let maybeArray = editableStatBlock[key];
-                if (ko.isObservable(maybeArray) && typeof maybeArray.remove === 'function') {
+                if (ko.isObservable(maybeArray) && typeof maybeArray().remove === 'function') {
                     editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
                         return e.Value;
                     }));

@@ -79,6 +79,7 @@
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
     "typescript": "^2.1.4",
+    "typings": "^2.1.0",
     "uglify-js": "^2.7.4"
   },
   "scripts": {

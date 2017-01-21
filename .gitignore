@@ -3,6 +3,12 @@ typings/*
 build/*
 public/user/*
 public/fonts/*
+public/user/*
+public/fonts/*
+*.log
+*.js.map
+*.js
+*.css
 .tscache
 .vscode
 .baseDir
