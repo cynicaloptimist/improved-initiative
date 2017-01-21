@@ -89,7 +89,6 @@ module.exports = function (grunt) {
       css: {
         src: [
           'node_modules/awesomplete/awesomplete.css',
-          'node_modules/bootstrap/dist/css/bootstrap.css',
           'build/improved-initiative.less.css'
         ],
         dest: 'public/css/improved-initiative.css'
