@@ -1,46 +1,26 @@
 import * as React from "react";
+import { Combatant } from "./Combatant";
+import { InitiativeList } from "./InitiativeList";
 
-interface Combatant {
-  Id: number;
-  Name: string;
-  Hp: string;
-  Initiative: string;
-}
-
-class InitiativeList extends React.Component<{ data: Combatant[] }, {}> {
-  private props: { data: Combatant[] };
-  render() {
-    var combatantRows = this.props.data.map((c: Combatant) => (
-      <li key={c.Id}>
-        <span>{c.Initiative}</span>
-        <span>{c.Name}</span>
-        <span>{c.Hp}</span>
-      </li>
-    ));
-
-    return (
-      <div className="App">
-        {combatantRows}
-      </div>
-    );
-  }
-}
-
-class App extends React.Component<any, any> {
+export default class App extends React.Component<any, any> {
   render() {
     return (
-      <InitiativeList data = {this.state.combatants} />
+      <InitiativeList data={this.state.combatants} />
     )
   }
 
   state = {
     combatants: [{
       Id: 0,
-      Initiative: "0",
-      Name: "Foo",
+      Initiative: "1",
+      Name: "Alice",
       Hp: "10/10"
+    },
+    {
+      Id: 1,
+      Initiative: "0",
+      Name: "Bob",
+      Hp: "12/12"
     }] as Combatant[]
   };
 }
-
-export default App;
