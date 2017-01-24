@@ -72,7 +72,7 @@ module ImprovedInitiative {
                 }
 
                 let maybeArray = editableStatBlock[key];
-                if (ko.isObservable(maybeArray) && typeof maybeArray().remove === 'function') {
+                if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === 'function') {
                     editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
                         return e.Value;
                     }));
