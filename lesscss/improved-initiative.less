@@ -378,16 +378,9 @@ input[type="file"] {
         }
     }
 
-    label {
-        border: 2px solid grey;
-        padding: 5px;
-        border-radius: 5px;
-        background-color: lightgray;
-        color: black;
-    }
-
     input {
         margin-left: @medium-spacer;
+        color: @primary-black;
         &[type="text"] {
             width: 100px;
         }
@@ -397,6 +390,10 @@ input[type="file"] {
         &.name, &.type, &.source {
             width:200px;
         }
+    }
+
+    textarea {
+        color: @primary-black;
     }
 
     .fa-clickable {
@@ -481,9 +478,12 @@ input[type="file"] {
     display:block;
     padding:@small-spacer;
     overflow-y:auto;
+    h3, h4 {
+        margin-top: @medium-spacer;
+    }
     hr {
         margin: @small-spacer;
-        border-color: @primary-black;
+        border-color: @shadow;
     }
     >div {
         flex-direction:row;
