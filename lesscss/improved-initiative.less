@@ -1,5 +1,5 @@
 //@import "node_modules/bootstrap/less/bootstrap.less";
-@import "node_modules/bootstrap/less/variables.less";
+//@import "node_modules/bootstrap/less/variables.less";
 //@import "node_modules/bootstrap/less/type.less";
 
 @import "node_modules/font-awesome/less/variables.less";
@@ -80,7 +80,6 @@ input[type="file"] {
     padding: 10px;
     text-align:center;
     
-    border: 1px solid;
 	border-radius: @border-radius;
 }
 
@@ -111,7 +110,8 @@ input[type="file"] {
     }
     
     .modal-dialog {
-        border: 2px solid;
+        border-width: 2px;
+        border-style: solid;
         border-radius: @border-radius;
         padding: @medium-spacer;
         z-index: 1;
@@ -350,7 +350,8 @@ input[type="file"] {
 
 .settings {
     .tab {
-        border: 1px solid;
+        border-width: 1px;
+        border-style: solid;
         padding: @medium-spacer;
         overflow-y: auto;
     }
@@ -393,7 +394,8 @@ input[type="file"] {
     display:block;
     margin: @medium-spacer @small-spacer -1px @small-spacer;
     span {
-        border: 1px solid;
+        border-width: 1px;
+        border-style: solid;
         border-bottom: none;
         padding: 1px @medium-spacer;
         border-radius: 0px @border-radius 0px 0px;
@@ -503,7 +505,8 @@ input[type="file"] {
 .combatant {
     display: flex;
     padding: @small-spacer;
-    border-left: @medium-spacer solid;
+    border-left-width: @medium-spacer;
+    border-left-style: solid;
 
     &.active .name {
         font-weight:bold;

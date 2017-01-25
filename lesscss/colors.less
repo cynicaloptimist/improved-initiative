@@ -19,35 +19,46 @@
 @button-text: black;
 @shadow: #999;
 
+* {
+    border-color: @shadow;
+    box-shadow: @shadow;
+}
+
 html, body {
     background-color: @primary-green;
     color: @primary-white;
 }
 
-.button(@button-face: @button-face, @button-text: @button-text) {
-    color: @button-text;
-    background-color: @button-face;
-    border-color: darken(@button-face, 20);
+input, textarea {
+    .colors(@primary-black, lighten(@primary-white, 3));
 }
 
-.button:hover {
-    background-color: @hover-white;
+.colors(@text, @background, @border: @shadow) {
+    color: @text;
+    background-color: @background;
+    border-color: @border;
+    box-shadow: @border;
+}
+
+.left-column, 
+.right-column, 
+.statblock, 
+.commands, 
+.modal-dialog, 
+.start, 
+.footer {
+    .colors(@primary-black, @primary-white);
+}
+
+.button {
+    .colors(@button-text, @button-face, darken(@button-face, 20));
+    &:hover {
+        background-color: @hover-white;
+    }
 }
 
 .modal-blur {
     background-color: rgba(0,0,0,0.7);
-}
-
-.modal-dialog {
-    color: @primary-black;
-    background-color: @primary-white;
-    border-color: gray;
-}
-
-.recessed {
-    background-color: @primary-white;
-    color: @primary-black;
-    box-shadow: @shadow;
 }
 
 #landing {
@@ -60,32 +71,35 @@ html, body {
     .start-encounter .button {
         color: @primary-black;
         background-color: @button-face-green;
+        &:hover {
+            background-color: @hover-green;
+        }
     }
 }
 
 .libraries {
-    li:nth-child(2n) span{
+    li:nth-child(2n-1) span{
         background-color: @zebra-white;
+        &:hover {
+            background-color: @hover-white;
+        }
+    }
+    span:hover {
+        background-color: @hover-white;
     }
 }
 
 .commands {
-    background-color: @primary-white;
-    color: @primary-black;
-
     .commands-combatant {
-        border-color: darken(@button-face, 20);
+        border-color: @shadow;
     }
 
     .fa-play {
-        color: @primary-black;
-        background-color: @button-face-green;
+        .colors(@primary-black, @button-face-green, darken(@button-face, 20));
+        &:hover{
+            background-color: @hover-green;
+        }
     }
-}
-
-input, textarea {
-    color: @primary-black;
-    background-color: lighten(@primary-white, 3);
 }
 
 .settings {
@@ -105,24 +119,13 @@ input, textarea {
     }
 }
 
-.statblock {
-    hr {
-        border-color: @shadow;
-    }
-
-    .rollable {
-        border-color: @shadow;
-    }
-}
-
 .combat-footer {
     background-color: @primary-black;
 }
 
 .combatant {
-    color: @primary-black;
-    background-color: @primary-white;
-    border-color: transparent;
+    .colors(@primary-black, @primary-white, transparent);
+
     &:nth-child(2n) {
         background-color: @zebra-white;
     }
@@ -145,8 +148,7 @@ input, textarea {
     }
 
     &.header {
-        background-color: @primary-black;
-        color: @primary-white;
+        .colors(@primary-white, @primary-black, @primary-black);
         .hp:hover {
             background-color: initial;
         }
