@@ -118,7 +118,6 @@ input[type="file"] {
     .button();
 }
 
-
 .preview.statblock {
     position: fixed;
     max-height: 100%;
@@ -305,10 +304,11 @@ input[type="file"] {
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
-        min-height: 20px;
+        flex-shrink: 0;
 
         span {
-            .library-button();
+            .button();
+            margin: 1px;
         }
     }
 }
@@ -604,6 +604,9 @@ input[type="file"] {
         background-color: @primary-black;
         color: @primary-white;
         padding: @medium-spacer;
+        .hp:hover {
+            background-color: initial;
+        }
     }
 
     .initiative {
