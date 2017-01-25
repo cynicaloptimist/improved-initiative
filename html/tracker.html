@@ -24,10 +24,7 @@
 </head>
 
 <body id="tracker">
-    <div class="modalcontainer">
-        <div class="modalblur" data-bind="click: EncounterCommander.HideSettings"></div>
-        <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
-    </div>
+    <div class="modal-container" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">

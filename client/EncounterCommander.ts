@@ -82,7 +82,7 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
-            $('.modalcontainer').show();
+            $('.modal-container').show();
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
