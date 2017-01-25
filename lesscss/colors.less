@@ -1,0 +1,160 @@
+@primary-green: #00643c;
+@hover-green: lighten(@primary-green, 10);
+
+@primary-white: antiquewhite;
+@zebra-white: darken(@primary-white, 3);
+@hover-white: darken(@primary-white, 10);
+@selected-white: darken(@primary-white, 20);
+@active-white: screen(@primary-white, @primary-green);
+
+@active-green: darken(overlay(@primary-white, @primary-green), 10);
+
+@hover-red: pink;
+
+@primary-black: #222;
+@disabled-black: #777;
+
+@button-face: #ccc;
+@button-face-green: lighten(@primary-green, 15);
+@button-text: black;
+@shadow: #999;
+
+html, body {
+    background-color: @primary-green;
+    color: @primary-white;
+}
+
+.button(@button-face: @button-face, @button-text: @button-text) {
+    color: @button-text;
+    background-color: @button-face;
+    border-color: darken(@button-face, 20);
+}
+
+.button:hover {
+    background-color: @hover-white;
+}
+
+.modal-blur {
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-dialog {
+    color: @primary-black;
+    background-color: @primary-white;
+    border-color: gray;
+}
+
+.recessed {
+    background-color: @primary-white;
+    color: @primary-black;
+    box-shadow: @shadow;
+}
+
+#landing {
+    .disabled {
+        color: @disabled-black;
+        &:hover {
+            background-color: @button-face;
+        }
+    }
+    .start-encounter .button {
+        color: @primary-black;
+        background-color: @button-face-green;
+    }
+}
+
+.libraries {
+    li:nth-child(2n) span{
+        background-color: @zebra-white;
+    }
+}
+
+.commands {
+    background-color: @primary-white;
+    color: @primary-black;
+
+    .commands-combatant {
+        border-color: darken(@button-face, 20);
+    }
+
+    .fa-play {
+        color: @primary-black;
+        background-color: @button-face-green;
+    }
+}
+
+input, textarea {
+    color: @primary-black;
+    background-color: lighten(@primary-white, 3);
+}
+
+.settings {
+    .tab {
+        border-color: @primary-green;
+    }
+}
+
+.tabs span {
+    border-color: @primary-green;
+    &:hover {
+        background-color: @hover-white;
+    }
+    &.selected {
+        background-color: @primary-green;
+        color: @primary-white;
+    }
+}
+
+.statblock {
+    hr {
+        border-color: @shadow;
+    }
+
+    .rollable {
+        border-color: @shadow;
+    }
+}
+
+.combat-footer {
+    background-color: @primary-black;
+}
+
+.combatant {
+    color: @primary-black;
+    background-color: @primary-white;
+    border-color: transparent;
+    &:nth-child(2n) {
+        background-color: @zebra-white;
+    }
+
+    &.active {
+        border-color: lighten(@primary-green, 15);
+        background-color: @active-green;
+    }
+
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-white;
+    }
+
+    .hp:hover {
+        background-color: @hover-red;
+    }
+
+    &.header {
+        background-color: @primary-black;
+        color: @primary-white;
+        .hp:hover {
+            background-color: initial;
+        }
+    }
+}
+
+#playerview {
+    .hp:hover {
+        background-color: initial;
+    }
+}
