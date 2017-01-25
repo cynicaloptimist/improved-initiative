@@ -37,6 +37,10 @@ div {
     flex-direction:column;
 }
 
+a {
+    cursor: pointer;
+}
+
 h1.improved-initiative {
     font-family: 'Josefin Slab', serif;
     &:before {
@@ -361,6 +365,13 @@ input[type="file"] {
         border-style: solid;
         padding: @medium-spacer;
         overflow-y: auto;
+        p {
+            margin-bottom: @medium-spacer;
+        }
+        img {
+            vertical-align: bottom;
+            margin-right: @medium-spacer;
+        }
     }
 
     .tips {
@@ -399,7 +410,7 @@ input[type="file"] {
 
 .tabs {
     display:block;
-    margin: @medium-spacer @small-spacer -1px @small-spacer;
+    margin: @medium-spacer @small-spacer 0px @small-spacer;
     span {
         border-width: 1px;
         border-style: solid;
