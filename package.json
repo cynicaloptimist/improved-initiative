@@ -20,7 +20,6 @@
     "applicationinsights": "^0.15.19",
     "awesomplete": "^1.1.1",
     "body-parser": "^1.14.1",
-    "bootstrap": "^3.3.7",
     "browser-filesaver": "^1.1.0",
     "express": "^4.13.3",
     "express-session": "^1.14.2",
@@ -51,7 +50,7 @@
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
     "typescript": "^2.1.4",
-    "typings": "^2.1.0",
+    "typings": "2.1.0",
     "uglify-js": "^2.7.4"
   },
   "scripts": {
