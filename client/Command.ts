@@ -43,7 +43,7 @@ module ImprovedInitiative {
   ]
     
     export var BuildCombatantCommandList: (c: CombatantCommander) => Command [] = c => [
-        new Command('Damage/Heal Selected Combatant', c.FocusHP, 't', 'fa-plus-circle'),
+        new Command('Damage/Heal Selected Combatant', c.EditHP, 't', 'fa-plus-circle'),
         new Command('Add Note to Selected Combatant', c.AddTag, 'g', 'fa-tag', false),
         new Command('Remove Selected Combatant from Encounter', c.Remove, 'del', 'fa-remove'),
         new Command('Rename Selected Combatant', c.EditName, 'f2', 'fa-i-cursor'),

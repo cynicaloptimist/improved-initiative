@@ -63,7 +63,7 @@ module ImprovedInitiative {
         AbilityModifiers: AbilityScores;
         NewTag: KnockoutObservable<string>;
         InitiativeBonus: number;
-        ViewModel: any;
+        ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
         private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock) {
