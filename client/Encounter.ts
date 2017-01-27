@@ -160,10 +160,12 @@ module ImprovedInitiative {
                 requestContent,
                 inputSelector: '.response',
                 callback: (initiativeRolls: { [combatantId: string]: string }) => {
-                    playerCharacters.forEach(combatant => {
+                    const applyInitiative = combatant => {
                         const initiativeRoll = parseInt(initiativeRolls[combatant.Id]);
                         combatant.Initiative(initiativeRoll);
-                    });
+                    };
+                    playerCharacters.forEach(applyInitiative);
+                    nonPlayerCharacters.forEach(applyInitiative);
                     this.SortByInitiative();
                 }
             });
