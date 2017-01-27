@@ -2,7 +2,6 @@ module ImprovedInitiative {
     export interface IRules {
         GetModifierFromScore: (attribute: number) => number;
         Check: (...mods: number[]) => number;
-        GroupSimilarCombatants: boolean;
         EnemyHPTransparency: string;
         RollDiceExpression: (expression: string) => RollResult;
         ValidDicePattern: RegExp;
@@ -30,7 +29,6 @@ module ImprovedInitiative {
         Check = (...mods: number[]) => {
             return Math.ceil(Math.random() * 20) + (mods.length ? mods.reduce((p, c) => p + c) : 0);
         }
-        GroupSimilarCombatants = false;
         EnemyHPTransparency = "whenBloodied";
         ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/
         RollDiceExpression = (expression: string) => {
