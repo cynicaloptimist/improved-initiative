@@ -110,6 +110,10 @@ module ImprovedInitiative {
             this.eventLog.AddEvent("Encounter ended.");
         }
 
+        RerollInitiative = () => {
+            this.encounter.RollInitiative(this.userPollQueue);
+        }
+
         ClearEncounter = () => {
             this.encounter.ClearEncounter();
             this.eventLog.AddEvent("All combatants removed from encounter.");

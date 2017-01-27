@@ -163,7 +163,8 @@ module ImprovedInitiative {
                     playerCharacters.forEach(combatant => {
                         const initiativeRoll = parseInt(initiativeRolls[combatant.Id]);
                         combatant.Initiative(initiativeRoll);
-                    })
+                    });
+                    this.SortByInitiative();
                 }
             });
         }

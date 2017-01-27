@@ -33,6 +33,7 @@ module ImprovedInitiative {
   export var BuildEncounterCommandList: (c: EncounterCommander) => Command [] = c => [
         new Command('Start Encounter', c.StartEncounter, 'alt+r', 'fa-play'),
         new Command('End Encounter', c.EndEncounter, 'alt+e', 'fa-stop'),
+        new Command('Reroll Initiative', c.RerollInitiative, 'alt+shift+i', 'fa-refresh', false),
         new Command('Clear Encounter', c.ClearEncounter, 'alt+del', 'fa-trash'),
         new Command('Open Library', c.ShowLibraries, 'alt+a', 'fa-user-plus'),
         new Command('Show Player Window', c.LaunchPlayerWindow, 'alt+w', 'fa-users'),
