@@ -1,23 +1,24 @@
-@primary-green: #00643c;
+@primary-green: #00643C;
 @hover-green: lighten(@primary-green, 10);
 @active-green: lighten(@primary-green, 15);
 
-@primary-white: antiquewhite;
+@primary-white: #EAE0D5;
 @input-white: lighten(@primary-white, 3);
 @zebra-white: darken(@primary-white, 3);
 @hover-white: darken(@primary-white, 10);
-@selected-white: darken(@primary-white, 20);
-@active-white: darken(overlay(@primary-white, @primary-green), 10);
 
+@selected-light: #C6AC8F;
 
-@hover-red: pink;
+@active-white: darken(@primary-white, 7);;
 
-@primary-black: #222;
-@disabled-black: #777;
+@hover-red: #EF6461;
 
-@button-face: #ccc;
+@primary-black: #0A0908;
+@disabled-black: lighten(@primary-black, 20);
+
+@button-face: @active-white;
 @button-face-green: lighten(@primary-green, 15);
-@button-text: black;
+@button-text: @primary-black;
 @shadow: #999;
 
 * {
@@ -142,7 +143,7 @@ input, textarea {
     }
 
     &.selected {
-        background-color: @selected-white;
+        background-color: @selected-light;
     }
 
     .hp:hover {
