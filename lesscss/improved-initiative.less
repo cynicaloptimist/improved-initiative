@@ -176,6 +176,7 @@ input[type="file"] {
 
         flex-grow: 1;
         align-items: center;
+        position: relative;
 
         padding:@large-spacer;
         margin: 0 30px;
@@ -204,6 +205,29 @@ input[type="file"] {
         align-self: stretch;
 
         margin: @medium-spacer 0 0 0;
+    }
+    
+    @logo-size: 40px;
+    .patreon-logo {
+        width: @logo-size;
+        height: @logo-size;
+        position: absolute;
+        bottom: -1/4 * @logo-size;
+        right: -1/4 * @logo-size;
+        
+        animation-name: hop;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);;
+    }
+
+    @keyframes hop {
+        20%, 30% {
+            transform: translateY(0);
+        }
+        25% {
+            transform: translateY(-5px);
+        }
     }
 }
 
@@ -373,7 +397,9 @@ input[type="file"] {
             margin-right: @medium-spacer;
         }
     }
-
+    .about >div {
+        margin: @medium-spacer;
+    }
     .tips {
         flex-direction: row;
         align-items: center;
@@ -406,15 +432,16 @@ input[type="file"] {
         margin-top: @medium-spacer;
         align-self: flex-end;
     }
+
+    .patreon-logo {
+        height: 1.4em;
+    }
 }
 
 .tabs {
     display:block;
     margin: @medium-spacer @small-spacer 0px @small-spacer;
     span {
-        border-width: 1px;
-        border-style: solid;
-        border-bottom: none;
         padding: 1px @medium-spacer;
         border-radius: 0px @border-radius 0px 0px;
     }
