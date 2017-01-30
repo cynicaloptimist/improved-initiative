@@ -46,7 +46,7 @@
     <div data-bind="visible: CurrentTab() == 'options'" class="tab options">
         <h3>Data</h3>
         <p>Export your user data as JSON:
-            <input type="button" value="Download File" data-bind="click: ExportData" />
+            <span class="button" data-bind="click: ExportData">Download File</span>
         </p>
         <p>Import an exported user data file:
             <input type="file" accept=".json" data-bind="event: { change: ImportData }" />

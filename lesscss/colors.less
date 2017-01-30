@@ -1,13 +1,14 @@
 @primary-green: #00643c;
 @hover-green: lighten(@primary-green, 10);
+@active-green: lighten(@primary-green, 15);
 
 @primary-white: antiquewhite;
+@input-white: lighten(@primary-white, 3);
 @zebra-white: darken(@primary-white, 3);
 @hover-white: darken(@primary-white, 10);
 @selected-white: darken(@primary-white, 20);
-@active-white: screen(@primary-white, @primary-green);
+@active-white: darken(overlay(@primary-white, @primary-green), 10);
 
-@active-green: darken(overlay(@primary-white, @primary-green), 10);
 
 @hover-red: pink;
 
@@ -30,7 +31,7 @@ html, body {
 }
 
 input, textarea {
-    .colors(@primary-black, lighten(@primary-white, 3));
+    .colors(@primary-black, @input-white);
 }
 
 .colors(@text, @background, @border: @shadow) {
@@ -52,7 +53,7 @@ input, textarea {
 }
 
 .button {
-    .colors(@button-text, @button-face, darken(@button-face, 20));
+    .colors(@button-text, @button-face, @shadow);
     &:hover {
         background-color: @hover-white;
     }
@@ -96,7 +97,7 @@ input, textarea {
     }
 
     .fa-play {
-        .colors(@primary-black, @button-face-green, darken(@button-face, 20));
+        .colors(@primary-black, @button-face-green, @shadow);
         &:hover{
             background-color: @hover-green;
         }
@@ -110,7 +111,7 @@ input, textarea {
 }
 
 .tabs span {
-    border-color: @primary-green;
+    background-color: @active-white;
     &:hover {
         background-color: @hover-white;
     }
@@ -132,8 +133,8 @@ input, textarea {
     }
 
     &.active {
-        border-color: lighten(@primary-green, 15);
-        background-color: @active-green;
+        border-color: @active-green;
+        background-color: @active-white;
     }
 
     &:hover {
