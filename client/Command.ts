@@ -24,7 +24,7 @@ module ImprovedInitiative {
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
-            this.ShowOnActionBar(showOnActionBar);
+            this.ShowOnActionBar(showOnActionBarSetting);
         }
         
     }
