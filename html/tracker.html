@@ -67,9 +67,9 @@
                     <span class="fa fa-trash" data-bind="click: $root.EncounterCommander.DeleteSavedEncounter"></span>
                 </li>
             </ul>
-            <div class="library-buttons">
-                <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
-                <div data-bind="click: $root.EncounterCommander.SaveEncounter"><span class="fa fa-plus"></span></div>
+            <div class="buttons">
+                <span data-bind="click: $root.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+                <span data-bind="click: $root.EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- ko ifnot: DisplayTab() == 'Encounters' -->
