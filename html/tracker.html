@@ -90,7 +90,7 @@
         </div>
         <!-- /ko -->
         <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
-        <div class="active-combatant" data-bind="if: Encounter.ActiveCombatant">
+        <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
                 component: { 
