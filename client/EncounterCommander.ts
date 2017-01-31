@@ -82,7 +82,7 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
-            $('.modalcontainer').show();
+            $('.modal-container').show();
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
@@ -108,6 +108,10 @@ module ImprovedInitiative {
         EndEncounter = () => {
             this.encounter.EndEncounter();
             this.eventLog.AddEvent("Encounter ended.");
+        }
+
+        RerollInitiative = () => {
+            this.encounter.RollInitiative(this.userPollQueue);
         }
 
         ClearEncounter = () => {

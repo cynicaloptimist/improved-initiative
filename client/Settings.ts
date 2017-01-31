@@ -21,7 +21,7 @@ module ImprovedInitiative {
         ];
 
         var saveAndClose = () => {
-            $('.modalcontainer').hide();
+            $('.modal-container').hide();
             const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
             Mousetrap.reset();
 

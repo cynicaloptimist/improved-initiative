@@ -14,7 +14,7 @@ module ImprovedInitiative {
         Initiative: KnockoutObservable<number>;
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<IStatBlock>;
-        RollInitiative: (userPollQueue: UserPollQueue) => void;
+        GetInitiativeRoll: () => number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter: boolean;
     }
@@ -63,7 +63,7 @@ module ImprovedInitiative {
         AbilityModifiers: AbilityScores;
         NewTag: KnockoutObservable<string>;
         InitiativeBonus: number;
-        ViewModel: any;
+        ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
         private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock) {
@@ -124,10 +124,6 @@ module ImprovedInitiative {
             return modifiers;
         }
 
-        RollInitiative = (userPollQueue: UserPollQueue) => {
-            var roll = this.Encounter.Rules.Check(this.InitiativeBonus);
-            this.Initiative(roll);
-            return roll;
-        }
+        GetInitiativeRoll = () => this.Encounter.Rules.Check(this.InitiativeBonus);
     }
 }

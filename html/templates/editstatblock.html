@@ -8,29 +8,29 @@
 </div>
 <!-- ko if: EditorType() == 'basic' -->
 <div class="stats" data-bind="with: EditableStatBlock">
-    <div><label>Name 
+    <div>Name 
         <input class="name" type="text" data-bind="value: Name" />
-    </label></div>
-    <div><label>Source
+    </div>
+    <div>Source
         <input class="type" type="text" data-bind="value: Source" />
-    </label></div>
-    <div><label>Type 
+    </div>
+    <div>Type 
         <input class="type" type="text" data-bind="value: Type" />
-    </label></div>
-    <div>
-        <label>HP 
-            <input type="number" data-bind="value: HP.Value" />
-            <input type="text" data-bind="value: HP.Notes" />
-        </label>
-        <label>AC 
-            <input type="number" data-bind="value: AC.Value" />
-            <input type="text" data-bind="value: AC.Notes" />
-        </label>
     </div>
     <div>
-        <label>Initiative Modifier (<span class="tooltip" title = "added to Dexterity Mod to calculate total Initiative Bonus">?</span>)
+        HP 
+            <input type="number" data-bind="value: HP.Value" />
+            <input type="text" data-bind="value: HP.Notes" />
+        
+        AC 
+            <input type="number" data-bind="value: AC.Value" />
+            <input type="text" data-bind="value: AC.Notes" />
+        
+    </div>
+    <div>
+        Initiative Modifier <span title = "added to Dexterity Mod to calculate total Initiative Bonus">(?)</span>
             <input type="number" data-bind="value: InitiativeModifier" />
-        </label>
+        
     </div>
     <div class="Abilities" data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
         <div data-bind="text: $data"></div>
@@ -58,9 +58,9 @@
     </div>
     <!-- /ko -->
     <div>
-        <label>Challenge
+        Challenge
             <input type="text" data-bind="value: Challenge" />
-        </label>
+        
     </div>
     <!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
     <hr />
@@ -77,7 +77,7 @@
     </div>
     <!-- /ko -->
     <div data-bind="css: Description" class="actions">
-        <label>Description</label>
+        Description
         <textarea data-bind="value: Description"></textarea>
     </div>
 </div>
@@ -86,6 +86,6 @@
 <textarea class="json-editor" spellcheck="false" data-bind="value: JsonStatBlock"></textarea>
 <!-- /ko -->
 <div class="buttons">
-    <div data-bind="click: SaveStatBlock"><span class="button fa-check"></span></div>
+    <div data-bind="click: SaveStatBlock"><span class="button fa-save"></span></div>
     <div data-bind="click: DeleteStatBlock"><span class="button fa-trash"></span></div>
 </div>

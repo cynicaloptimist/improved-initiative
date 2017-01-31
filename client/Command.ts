@@ -24,7 +24,7 @@ module ImprovedInitiative {
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
-            this.ShowOnActionBar(showOnActionBar);
+            this.ShowOnActionBar(showOnActionBarSetting);
         }
         
     }
@@ -33,6 +33,7 @@ module ImprovedInitiative {
   export var BuildEncounterCommandList: (c: EncounterCommander) => Command [] = c => [
         new Command('Start Encounter', c.StartEncounter, 'alt+r', 'fa-play'),
         new Command('End Encounter', c.EndEncounter, 'alt+e', 'fa-stop'),
+        new Command('Reroll Initiative', c.RerollInitiative, 'alt+shift+i', 'fa-refresh', false),
         new Command('Clear Encounter', c.ClearEncounter, 'alt+del', 'fa-trash'),
         new Command('Open Library', c.ShowLibraries, 'alt+a', 'fa-user-plus'),
         new Command('Show Player Window', c.LaunchPlayerWindow, 'alt+w', 'fa-users'),
@@ -43,7 +44,7 @@ module ImprovedInitiative {
   ]
     
     export var BuildCombatantCommandList: (c: CombatantCommander) => Command [] = c => [
-        new Command('Damage/Heal Selected Combatant', c.FocusHP, 't', 'fa-plus-circle'),
+        new Command('Damage/Heal Selected Combatant', c.EditHP, 't', 'fa-plus-circle'),
         new Command('Add Note to Selected Combatant', c.AddTag, 'g', 'fa-tag', false),
         new Command('Remove Selected Combatant from Encounter', c.Remove, 'del', 'fa-remove'),
         new Command('Rename Selected Combatant', c.EditName, 'f2', 'fa-i-cursor'),

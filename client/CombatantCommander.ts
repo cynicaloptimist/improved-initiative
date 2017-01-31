@@ -100,7 +100,7 @@ module ImprovedInitiative {
             this.selectByOffset(1);
         }
 
-        FocusHP = () => {
+        EditHP = () => {
             var selectedCombatants = this.SelectedCombatants();
             var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
             this.userPollQueue.Add({

@@ -36,7 +36,7 @@ module ImprovedInitiative {
 
         ko.components.register('combatant', {
             viewModel: function(params) {
-                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.addUserPoll, params.logEvent);
+                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPoll, params.logEvent);
                 return params.combatant.ViewModel;
             },
             template: { name: 'combatant' }

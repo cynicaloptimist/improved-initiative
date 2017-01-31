@@ -17,8 +17,18 @@ module ImprovedInitiative {
         }
 
         Resolve = (form: HTMLFormElement) => {
-            var poll = this.queue()[0];
-            poll.callback($(form).find(poll.inputSelector).val());
+            const poll = this.queue()[0];
+            const inputs = $(form).find(poll.inputSelector);
+            if (inputs.length === 1) {
+                poll.callback(inputs.val());
+            } else {
+                const inputsById = {};
+                inputs.map((_, element) => {
+                    inputsById[element.getAttribute("combatantId")] = $(element).val();
+                });
+                poll.callback(inputsById);
+            }
+            
             this.queue.shift();
             return false;
         }
@@ -43,6 +53,7 @@ module ImprovedInitiative {
                 .animate(up, opts)
                 .animate(down, opts)
                 .find(this.InputSelector())
+                .first()
                 .select();
             
         }

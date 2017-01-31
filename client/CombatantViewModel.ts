@@ -3,7 +3,7 @@ module ImprovedInitiative {
 
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
+        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
@@ -71,15 +71,8 @@ module ImprovedInitiative {
         }
 
         EditHP = () => {
-            this.PollUser({
-                requestContent: `Apply damage to ${this.DisplayName()} (${this.DisplayHP()}): <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: damage => {
-                    this.ApplyDamage(damage);
-                    this.LogEvent(`${damage} damage applied to ${this.DisplayName()}.`);
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+            this.CombatantCommander.Select(this.Combatant);
+            this.CombatantCommander.EditHP();
         }
 
         EditInitiative = () => {

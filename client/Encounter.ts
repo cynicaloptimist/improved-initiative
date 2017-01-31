@@ -57,18 +57,18 @@ module ImprovedInitiative {
         }
 
         ImportEncounter = (encounter) => {
-            const deepExtend = (a,b) => $.extend(true, {}, a, b);
-            if(encounter.Combatants) {
+            const deepExtend = (a, b) => $.extend(true, {}, a, b);
+            if (encounter.Combatants) {
                 encounter.Combatants.forEach(c => {
-                    if(c.Id){
+                    if (c.Id) {
                         $.ajax(`/statblocks/${c.Id}`)
-                         .done(statBlockFromLibrary => {
-                             const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
-                             this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
-                         })
-                         .fail(_ => {
-                            this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
-                         })
+                            .done(statBlockFromLibrary => {
+                                const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
+                                this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
+                            })
+                            .fail(_ => {
+                                this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
+                            })
                     } else {
                         this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
                     }
@@ -122,16 +122,6 @@ module ImprovedInitiative {
             return combatant;
         }
 
-        RequestInitiative = (playercharacter: ICombatant, userPollQueue: UserPollQueue) => {
-            userPollQueue.Add({
-                requestContent: `Initiative Roll for ${playercharacter.ViewModel.DisplayName()} (${playercharacter.InitiativeBonus.toModifierString()}): <input class='response' type='number' value='${this.Rules.Check(playercharacter.InitiativeBonus)}' />`,
-                inputSelector: '.response',
-                callback: (response: any) => {
-                    playercharacter.Initiative(parseInt(response));
-                }
-            });
-        }
-
         StartEncounter = () => {
             this.SortByInitiative();
             this.State('active');
@@ -149,24 +139,36 @@ module ImprovedInitiative {
         }
 
         RollInitiative = (userPollQueue: UserPollQueue) => {
-            // Foreaching over the original array while we're rearranging it
-            // causes unpredictable results- dupe it first.
-            var combatants = this.Combatants().slice();
-            if (this.Rules.GroupSimilarCombatants) {
-                var initiatives = []
-                combatants.forEach(
-                    c => {
-                        if (initiatives[c.StatBlock().Name] === undefined) {
-                            initiatives[c.StatBlock().Name] = c.RollInitiative(userPollQueue);
-                        }
-                        c.Initiative(initiatives[c.StatBlock().Name]);
-                    }
-                )
-            } else {
-                combatants.forEach(c => {
-                    c.RollInitiative(userPollQueue);
-                });
-            }
+            const playerCharacters = this.Combatants().filter(c => c.IsPlayerCharacter);
+            const nonPlayerCharacters = this.Combatants().filter(c => !c.IsPlayerCharacter);
+            const buildInitiativeInput = combatant =>
+                `<li>${combatant.ViewModel.DisplayName()} ` +
+                `(${combatant.InitiativeBonus.toModifierString()}): ` +
+                `<input class='response' combatantId='${combatant.Id}'` +
+                `type='number' value= '${combatant.GetInitiativeRoll()}' /></li>`;
+
+            const requestContent = [
+                '<p>Roll Initiative:</p>',
+                '<ul>',
+                ...playerCharacters.map(buildInitiativeInput),
+                '</ul><ul>',
+                ...nonPlayerCharacters.map(buildInitiativeInput),
+                '</ul>'
+            ].join('');
+
+            userPollQueue.Add({
+                requestContent,
+                inputSelector: '.response',
+                callback: (initiativeRolls: { [combatantId: string]: string }) => {
+                    const applyInitiative = combatant => {
+                        const initiativeRoll = parseInt(initiativeRolls[combatant.Id]);
+                        combatant.Initiative(initiativeRoll);
+                    };
+                    playerCharacters.forEach(applyInitiative);
+                    nonPlayerCharacters.forEach(applyInitiative);
+                    this.SortByInitiative();
+                }
+            });
         }
 
         NextTurn = () => {
@@ -250,7 +252,7 @@ module ImprovedInitiative {
         private static updateLegacySavedEncounter = savedEncounter => {
             savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
             savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
-            
+
             savedEncounter.Combatants.forEach(Encounter.updateLegacySavedCreature)
 
             let legacyCombatantIndex = savedEncounter["ActiveCreatureIndex"];
@@ -269,10 +271,10 @@ module ImprovedInitiative {
             savedEncounter.Combatants.forEach(c => {
                 let combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
                 if (currentEncounterIsActive) {
-                    combatant.RollInitiative(userPollQueue);
+                    combatant.Initiative(combatant.GetInitiativeRoll());
                 }
             });
-            
+
             if (currentEncounterIsActive) {
                 this.SortByInitiative();
             }

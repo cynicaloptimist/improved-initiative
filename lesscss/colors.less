@@ -1,0 +1,165 @@
+@primary-green: #00643C;
+@hover-green: lighten(@primary-green, 10);
+@active-green: lighten(@primary-green, 15);
+
+@primary-white: #EAE0D5;
+@input-white: lighten(@primary-white, 3);
+@zebra-white: darken(@primary-white, 3);
+@hover-white: darken(@primary-white, 10);
+
+@selected-light: #C6AC8F;
+
+@active-white: darken(@primary-white, 7);;
+
+@hover-red: #EF6461;
+
+@primary-black: #0A0908;
+@disabled-black: lighten(@primary-black, 20);
+
+@button-face: @active-white;
+@button-face-green: lighten(@primary-green, 15);
+@button-text: @primary-black;
+@shadow: #999;
+
+* {
+    border-color: @shadow;
+    box-shadow: @shadow;
+}
+
+html, body {
+    background-color: @primary-green;
+    color: @primary-white;
+}
+
+input, textarea {
+    .colors(@primary-black, @input-white);
+}
+
+.colors(@text, @background, @border: @shadow) {
+    color: @text;
+    background-color: @background;
+    border-color: @border;
+    box-shadow: @border;
+}
+
+.left-column, 
+.right-column, 
+.statblock, 
+.commands, 
+.user-poll,
+.modal-dialog, 
+.start, 
+.footer {
+    .colors(@primary-black, @primary-white);
+}
+
+.button {
+    .colors(@button-text, @button-face, @shadow);
+    &:hover {
+        background-color: @hover-white;
+    }
+}
+
+.modal-blur {
+    background-color: rgba(0,0,0,0.7);
+}
+
+#landing {
+    .disabled {
+        color: @disabled-black;
+        &:hover {
+            background-color: @button-face;
+        }
+    }
+    .start-encounter .button {
+        color: @primary-black;
+        background-color: @button-face-green;
+        &:hover {
+            background-color: @hover-green;
+        }
+    }
+}
+
+.libraries {
+    li:nth-child(2n-1) span{
+        background-color: @zebra-white;
+        &:hover {
+            background-color: @hover-white;
+        }
+    }
+    span:hover {
+        background-color: @hover-white;
+    }
+}
+
+.commands {
+    .commands-combatant {
+        border-color: @shadow;
+    }
+
+    .fa-play {
+        .colors(@primary-black, @button-face-green, @shadow);
+        &:hover{
+            background-color: @hover-green;
+        }
+    }
+}
+
+.settings {
+    .tab {
+        border-color: @primary-green;
+    }
+}
+
+.tabs span {
+    background-color: @active-white;
+    &:hover {
+        background-color: @hover-white;
+    }
+    &.selected {
+        background-color: @primary-green;
+        color: @primary-white;
+    }
+}
+
+.combat-footer {
+    background-color: @primary-black;
+}
+
+.combatant {
+    .colors(@primary-black, @primary-white, transparent);
+
+    &:nth-child(2n) {
+        background-color: @zebra-white;
+    }
+
+    &.active {
+        border-color: @active-green;
+        background-color: @active-white;
+    }
+
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-light;
+    }
+
+    .hp:hover {
+        background-color: @hover-red;
+    }
+
+    &.header {
+        .colors(@primary-white, @primary-black, @primary-black);
+        .hp:hover {
+            background-color: initial;
+        }
+    }
+}
+
+#playerview {
+    .hp:hover {
+        background-color: initial;
+    }
+}

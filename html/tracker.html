@@ -3,7 +3,9 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.css">
-
+    <meta name="description" content="Improved Initiative is a combat tracker for D&D 5E that won't get between you and your players."></meta>
+    <meta property="og:image" content="img/improved-initiative-transparent-darkgreen.png"></meta>
+    
     <title>Combat Tracker - Improved Initiative</title>
 
     <script type="text/javascript">
@@ -24,10 +26,7 @@
 </head>
 
 <body id="tracker">
-    <div class="modalcontainer">
-        <div class="modalblur" data-bind="click: EncounterCommander.HideSettings"></div>
-        <div class="settings modal" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
-    </div>
+    <div class="modal-container" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
@@ -68,9 +67,9 @@
                     <span class="fa fa-trash" data-bind="click: $root.EncounterCommander.DeleteSavedEncounter"></span>
                 </li>
             </ul>
-            <div class="library-buttons">
-                <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
-                <div data-bind="click: $root.EncounterCommander.SaveEncounter"><span class="fa fa-plus"></span></div>
+            <div class="buttons">
+                <span data-bind="click: $root.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+                <span data-bind="click: $root.EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- ko ifnot: DisplayTab() == 'Encounters' -->
@@ -82,16 +81,16 @@
                     <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewStatBlock }"></span>
                 </li>
             </ul>
-            <div class="library-buttons">
-                <span data-bind="click: $root.EncounterCommander.HideLibraries" class="fa fa-chevron-up"></span>
-                <span data-bind="click: $root.EncounterCommander.CreateAndEditStatBlock.with(DisplayTab())" class="fa fa-plus"></span>
+            <div class="buttons">
+                <span data-bind="click: $root.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+                <span data-bind="click: $root.EncounterCommander.CreateAndEditStatBlock.with(DisplayTab())" title="Add new statblock" class="button fa-plus"></span>
             </div>
             <!-- /ko -->
             <!-- /ko -->
         </div>
         <!-- /ko -->
         <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
-        <div class="active-combatant" data-bind="if: Encounter.ActiveCombatant">
+        <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
                 component: { 
@@ -131,7 +130,7 @@
                 click: $root.CombatantCommander.Select,
                 component: {
                 name: 'combatant',
-                params: { combatant: $data, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
+                params: { combatant: $data, combatantCommander: $root.CombatantCommander, addUserPoll: $root.UserPollQueue.Add, logEvent: $root.EventLog.AddEvent }
                 }">
             </li>
             <!-- /ko -->

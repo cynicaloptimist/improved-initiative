@@ -15,7 +15,7 @@ module.exports = function (grunt) {
       },
       default: {
         src: ['client/*.ts'],
-        outDir: 'ImprovedInitiative.Client',
+        outDir: 'build/client',
         options: {
           module: 'amd',
           target: 'es5'
@@ -36,17 +36,14 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          'client.min.js': ['ImprovedInitiative.Client/*.js']
+          'client.min.js': ['build/client/*.js']
         }
       }
     },
     less: {
-      development: {
-        options: {
-          paths: ["."]
-        },
+      default: {
         files: {
-          "improved-initiative.less.css": "improved-initiative.less"
+          "build/improved-initiative.less.css": ["lesscss/*.less"]
         }
       }
     },
@@ -66,7 +63,7 @@ module.exports = function (grunt) {
         sourceMap: true
       },
       js_client: {
-        src: ['ImprovedInitiative.Client/*.js'],
+        src: ['build/client/*.js'],
         dest: 'public/js/ImprovedInitiative.js',
         sourceMap: true
       },
@@ -92,7 +89,7 @@ module.exports = function (grunt) {
       css: {
         src: [
           'node_modules/awesomplete/awesomplete.css',
-          'improved-initiative.less.css'
+          'build/improved-initiative.less.css'
         ],
         dest: 'public/css/improved-initiative.css'
       }
@@ -103,7 +100,7 @@ module.exports = function (grunt) {
         tasks: ['ts', 'concat:js_client']
       },
       lesscss: {
-        files: '**/*.less',
+        files: 'lesscss/*.less',
         tasks: ['less', 'concat:css']
       }
     },
