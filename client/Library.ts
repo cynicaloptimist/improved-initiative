@@ -30,7 +30,7 @@ module ImprovedInitiative {
     export class StatBlockLibrary {
         private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
 
-        constructor() {
+        constructor(public EncounterCommander: EncounterCommander) {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             
             Store.List(Store.PlayerCharacters).forEach(id => {

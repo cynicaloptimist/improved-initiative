@@ -1,0 +1,34 @@
+<div class="libraries">
+    <h2>Library</h2>
+    <div class="tabs">
+        <span data-bind="click: DisplayTab.with('Creatures'), css: { selected: DisplayTab() == 'Creatures' }">Creatures</span>
+        <span data-bind="click: DisplayTab.with('Players'), css: { selected: DisplayTab() == 'Players' }">Players</span>
+        <span data-bind="click: DisplayTab.with('Encounters'), css: { selected: DisplayTab() == 'Encounters' }">Encounters</span>
+    </div>
+    <!-- ko if: DisplayTab() == 'Encounters' -->
+    <ul class="library" data-bind="foreach: SavedEncounterIndex">
+        <li data-bind="click: EncounterCommander.LoadEncounterByName">
+            <span class="fa" data-bind="text: $data"></span>
+            <span class="fa fa-trash" data-bind="click: EncounterCommander.DeleteSavedEncounter"></span>
+        </li>
+    </ul>
+    <div class="buttons">
+        <span data-bind="click: EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+        <span data-bind="click: EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
+    </div>
+    <!-- /ko -->
+    <!-- ko ifnot: DisplayTab() == 'Encounters' -->
+    <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
+    <ul class="library" data-bind="foreach: FilteredStatBlocks">
+        <li>
+            <span class="fa" data-bind="click: $parent.EncounterCommander.AddStatBlockFromListing, text: Name"></span>
+            <span class="fa fa-edit" data-bind="click: $parent.EncounterCommander.EditStatBlock"></span>
+            <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewStatBlock }"></span>
+        </li>
+    </ul>
+    <div class="buttons">
+        <span data-bind="click: EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+        <span data-bind="click: EncounterCommander.CreateAndEditStatBlock.with(DisplayTab())" title="Add new statblock" class="button fa-plus"></span>
+    </div>
+    <!-- /ko -->
+</div>

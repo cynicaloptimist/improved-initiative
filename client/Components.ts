@@ -35,16 +35,21 @@ module ImprovedInitiative {
         });
 
         ko.components.register('combatant', {
-            viewModel: function(params) {
+            viewModel: function (params) {
                 params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPoll, params.logEvent);
                 return params.combatant.ViewModel;
             },
             template: { name: 'combatant' }
-        })
+        });
 
         ko.components.register('playerdisplaycombatant', {
             viewModel: params => params.combatant,
             template: { name: 'playerdisplaycombatant' }
-        })
+        });
+
+        ko.components.register('libraries', {
+            viewModel: params => params.library,
+            template: { name: 'libraries' }
+        });
     }
 }

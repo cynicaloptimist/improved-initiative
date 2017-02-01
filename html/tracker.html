@@ -52,42 +52,13 @@
     </div>
     <div class="left-column">
         <!-- ko if: EncounterCommander.ShowingLibraries -->
-        <div class="libraries">
-            <h2>Library</h2>
-            <div class="tabs">
-                <span data-bind="click: Library.DisplayTab.with('Creatures'), css: { selected: Library.DisplayTab() == 'Creatures' }">Creatures</span>
-                <span data-bind="click: Library.DisplayTab.with('Players'), css: { selected: Library.DisplayTab() == 'Players' }">Players</span>
-                <span data-bind="click: Library.DisplayTab.with('Encounters'), css: { selected: Library.DisplayTab() == 'Encounters' }">Encounters</span>
-            </div>
-            <!--ko with: Library -->
-            <!-- ko if: DisplayTab() == 'Encounters' -->
-            <ul class="library" data-bind="foreach: SavedEncounterIndex">
-                <li data-bind="click: $root.EncounterCommander.LoadEncounterByName">
-                    <span class="fa" data-bind="text: $data"></span>
-                    <span class="fa fa-trash" data-bind="click: $root.EncounterCommander.DeleteSavedEncounter"></span>
-                </li>
-            </ul>
-            <div class="buttons">
-                <span data-bind="click: $root.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
-                <span data-bind="click: $root.EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
-            </div>
-            <!-- /ko -->
-            <!-- ko ifnot: DisplayTab() == 'Encounters' -->
-            <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-            <ul class="library" data-bind="foreach: FilteredStatBlocks">
-                <li>
-                    <span class="fa" data-bind="click: $root.EncounterCommander.AddStatBlockFromListing, text: Name"></span>
-                    <span class="fa fa-edit" data-bind="click: $root.EncounterCommander.EditStatBlock"></span>
-                    <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewStatBlock }"></span>
-                </li>
-            </ul>
-            <div class="buttons">
-                <span data-bind="click: $root.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
-                <span data-bind="click: $root.EncounterCommander.CreateAndEditStatBlock.with(DisplayTab())" title="Add new statblock" class="button fa-plus"></span>
-            </div>
-            <!-- /ko -->
-            <!-- /ko -->
-        </div>
+        <div class="libraries" data-bind="
+            component: {
+                name: 'libraries',
+                params: {
+                    library: Library
+                }
+            }"></div>
         <!-- /ko -->
         <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
@@ -98,8 +69,7 @@
                     params: { 
                     statBlock: Encounter.ActiveCombatantStatBlock 
                     } 
-                }">
-            </div>
+                }"></div>
         </div>
         <!-- /ko -->
     </div>
