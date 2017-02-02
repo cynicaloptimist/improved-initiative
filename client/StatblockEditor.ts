@@ -8,6 +8,8 @@ module ImprovedInitiative {
         JsonStatBlock = ko.observable<string>();
         EditableStatBlock = ko.observable();
 
+        HasStatBlock = ko.computed(() => !!this.EditableStatBlock());
+
         EditStatBlock = (statBlockId: string,
             statBlock: IStatBlock,
             saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void,

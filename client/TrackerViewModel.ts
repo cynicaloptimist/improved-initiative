@@ -15,5 +15,14 @@ module ImprovedInitiative {
                 this.Encounter.ImportEncounter(encounter);
             }
         }
+
+        InterfaceState = ko.computed(() => {
+            return [
+                this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
+                this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,
+                this.EncounterCommander.ShowingLibraries() ? 'showing-libraries' : null,
+                this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
+            ].filter(s => s).join(' ');
+        });
     }
 }
