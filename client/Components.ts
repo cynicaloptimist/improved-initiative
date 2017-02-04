@@ -48,7 +48,7 @@ module ImprovedInitiative {
         });
 
         ko.components.register('libraries', {
-            viewModel: params => params.library,
+            viewModel: params => new LibraryViewModel(params.encounterCommander, params.library),
             template: { name: 'libraries' }
         });
     }

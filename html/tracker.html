@@ -27,7 +27,6 @@
 
 <body id="tracker" data-bind="css: InterfaceState">
     <div class="modal-container" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
-    <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: Library.GetPreviewStatBlock } }"></div>
     <div class="commands">
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
@@ -56,7 +55,8 @@
             component: {
                 name: 'libraries',
                 params: {
-                    library: Library
+                    library: StatBlockLibrary,
+                    encounterCommander: EncounterCommander
                 }
             }"></div>
         <!-- /ko -->

@@ -6,9 +6,9 @@ module ImprovedInitiative {
 
         EditorType = ko.observable<string>('basic');
         JsonStatBlock = ko.observable<string>();
-        EditableStatBlock = ko.observable();
+        EditableStatBlock = ko.observable(null);
 
-        HasStatBlock = ko.computed(() => !!this.EditableStatBlock());
+        HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
 
         EditStatBlock = (statBlockId: string,
             statBlock: IStatBlock,
