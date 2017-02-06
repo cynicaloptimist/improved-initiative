@@ -99,7 +99,7 @@ module ImprovedInitiative {
                     } else {
                         this.LogEvent(`${currentName} alias removed.`);
                     }
-                    
+
                     this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
@@ -144,9 +144,34 @@ module ImprovedInitiative {
                     name);
         })
 
-        AddTag = () => {
+        AddTag = (encounter: Encounter) => {
+            const allCombatants = encounter.Combatants();
+            const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : '';
+            const allCombatantOptions = allCombatants.map(c => {
+                const selected = c.Id === activeCombatantId ? 'selected' : '';
+                return `<option value='${c.Id}' ${selected}>${c.ViewModel.DisplayName()}</option>`
+            });
+            const requestContent = [
+                `<div class='add-tag'>`,
+                `<div>`,
+                `Add a note to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                `<div class="button fa-hourglass" onClick= "$('.tag-advanced').slideToggle()" ></div>`,
+                `</div>`,
+                `<div class='tag-advanced'>`,
+                `...until <select id='end-timing' class='response'>`,
+                `<option value="start">start of</option>`,
+                `<option value="end">end of</option>`,
+                `</select>`,
+                `<select id='end-combatant' class='response'>`,
+                ...allCombatantOptions,
+                `</select>'s turn in `,
+                `<input type='number' id='end-duration' class='response' value='1' /> round`,
+                `</div>`,
+                `</div>`
+            ].join('');
+
             this.PollUser({
-                requestContent: `Add a note to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
+                requestContent,
                 inputSelector: '.response',
                 callback: tag => {
                     if (tag.length) {
@@ -157,7 +182,7 @@ module ImprovedInitiative {
                 }
             });
             var input = document.getElementById("add-tag");
-            
+
             new Awesomplete(input, {
                 list: Object.keys(Conditions),
                 minChars: 1,

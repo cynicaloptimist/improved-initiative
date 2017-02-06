@@ -38,7 +38,7 @@ module ImprovedInitiative {
         });
 
         Message = ko.pureComputed(() => {
-            return `<p>${this.queue()[0].requestContent}</p><button type='submit' class='fa fa-check button'></button>`;
+            return `${this.queue()[0].requestContent}<button type='submit' class='fa fa-check button'></button>`;
         });
 
         InputSelector = ko.pureComputed(() => {

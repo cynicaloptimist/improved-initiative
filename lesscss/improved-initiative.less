@@ -604,6 +604,22 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .add-tag {
+        flex-flow: column;
+        align-items: flex-start;
+        div {
+            flex-flow: row;
+            align-items: baseline;
+            > * {
+                margin: @small-spacer;
+            }
+        }
+    }
+
+    .tag-advanced {
+        display:none;
+    }
 }
     
 #playerview {

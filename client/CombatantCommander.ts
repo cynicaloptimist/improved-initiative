@@ -134,7 +134,7 @@ module ImprovedInitiative {
         }
 
         AddTag = () => {
-            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag())
+            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag(this.encounter))
             return false;
         }
 
