@@ -8,7 +8,7 @@ module ImprovedInitiative {
         Tags: string[];
         IsPlayerCharacter: boolean;
 
-        constructor(combatant: ICombatant) {
+        constructor(combatant: Combatant) {
             this.Name = combatant.ViewModel ? combatant.ViewModel.DisplayName() :
                 combatant.StatBlock().Name;
             this.Id = combatant.Id;
@@ -19,7 +19,7 @@ module ImprovedInitiative {
             this.Tags = combatant.Tags();
         }
 
-        private GetHPDisplay(combatant: ICombatant): string {
+        private GetHPDisplay(combatant: Combatant): string {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
 
             if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
@@ -44,7 +44,7 @@ module ImprovedInitiative {
             return "<span class='healthyHP'>Healthy</span>";
         }
 
-        private GetHPColor = (combatant: ICombatant) => {
+        private GetHPColor = (combatant: Combatant) => {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
             if (!combatant.IsPlayerCharacter &&
                    (monsterHpVerbosity == "Monochrome Label" ||

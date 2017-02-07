@@ -173,7 +173,8 @@ module ImprovedInitiative {
             this.PollUser({
                 requestContent,
                 inputSelector: '.response',
-                callback: tag => {
+                callback: responsesById => {
+                    const tag = responsesById['add-tag'];
                     if (tag.length) {
                         this.Combatant.Tags.push(tag);
                         this.LogEvent(`${this.DisplayName()} added note: "${tag}"`);
