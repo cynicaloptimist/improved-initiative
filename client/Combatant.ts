@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export interface ICombatant {
+    export interface Combatant {
         Id: string;
         Encounter: Encounter;
         Alias: KnockoutObservable<string>;
@@ -9,7 +9,7 @@ module ImprovedInitiative {
         TemporaryHP: KnockoutObservable<number>;
         AC: number;
         AbilityModifiers: AbilityScores;
-        Tags: KnockoutObservableArray<string>;
+        Tags: KnockoutObservableArray<Tag>;
         InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
         Hidden: KnockoutObservable<boolean>;
@@ -19,10 +19,10 @@ module ImprovedInitiative {
         IsPlayerCharacter: boolean;
     }
 
-    export class Combatant implements ICombatant {
+    export class Combatant implements Combatant {
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: ISavedCombatant) {
             var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
-            
+
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
                 this.Id = '' + savedCombatant.Id; //legacy Id may be a number
@@ -46,11 +46,11 @@ module ImprovedInitiative {
                 this.processSavedCombatant(savedCombatant);
             }
         }
-        
+
         Id = probablyUniqueString();
-        Alias = ko.observable(null);
+        Alias = ko.observable('');
         TemporaryHP = ko.observable(0);
-        Tags = ko.observableArray<string>();
+        Tags = ko.observableArray<Tag>();
         Initiative = ko.observable(0);
         StatBlock = ko.observable<IStatBlock>();
         Hidden = ko.observable(false);
@@ -61,7 +61,6 @@ module ImprovedInitiative {
         PlayerDisplayHP: KnockoutComputed<string>;
         AC: number;
         AbilityModifiers: AbilityScores;
-        NewTag: KnockoutObservable<string>;
         InitiativeBonus: number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
@@ -78,13 +77,15 @@ module ImprovedInitiative {
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
 
+        
+
         private processSavedCombatant(savedCombatant: ISavedCombatant) {
             this.IndexLabel = savedCombatant.IndexLabel;
             this.CurrentHP(savedCombatant.CurrentHP);
             this.TemporaryHP(savedCombatant.TemporaryHP);
             this.Initiative(savedCombatant.Initiative);
             this.Alias(savedCombatant.Alias);
-            this.Tags(savedCombatant.Tags);
+            this.Tags(Tag.getLegacyTags(savedCombatant.Tags));
             this.Hidden(savedCombatant.Hidden);
         }
 
@@ -97,7 +98,7 @@ module ImprovedInitiative {
                 }
             }
             return HP.Value;
-        }        
+        }
 
         private setIndexLabel(oldName?: string) {
             var name = this.StatBlock().Name,

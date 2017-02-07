@@ -173,9 +173,10 @@ module ImprovedInitiative {
             this.PollUser({
                 requestContent,
                 inputSelector: '.response',
-                callback: tag => {
+                callback: responsesById => {
+                    const tag: string = responsesById['add-tag'];
                     if (tag.length) {
-                        this.Combatant.Tags.push(tag);
+                        this.Combatant.Tags.push(new Tag(tag));
                         this.LogEvent(`${this.DisplayName()} added note: "${tag}"`);
                         this.Combatant.Encounter.QueueEmitEncounter();
                     }
@@ -192,9 +193,9 @@ module ImprovedInitiative {
             $(input).select();
         }
 
-        RemoveTag = (tag: string) => {
+        RemoveTag = (tag: Tag) => {
             this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
-            this.LogEvent(`${this.DisplayName()} removed note: "${tag}"`);
+            this.LogEvent(`${this.DisplayName()} removed note: "${tag.Text}"`);
             this.Combatant.Encounter.QueueEmitEncounter();
         };
     }
