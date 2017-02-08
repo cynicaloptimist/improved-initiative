@@ -19,7 +19,7 @@ module ImprovedInitiative {
         }
 
         Commands: Command[];
-        SelectedCombatants: KnockoutObservableArray<Combatant> = ko.observableArray<Combatant>([]);
+        SelectedCombatants: KnockoutObservableArray<ICombatant> = ko.observableArray<ICombatant>([]);
 
         HasSelected = ko.computed(() => this.SelectedCombatants().length > 0);
         HasOneSelected = ko.computed(() => this.SelectedCombatants().length === 1);
@@ -40,7 +40,7 @@ module ImprovedInitiative {
                 .join(', ')
         );
 
-        Select = (data: Combatant, e?: MouseEvent) => {
+        Select = (data: ICombatant, e?: MouseEvent) => {
             if (!data) {
                 return;
             }

@@ -10,9 +10,8 @@ module ImprovedInitiative {
         Initiative: number;
         Alias: string;
         IndexLabel: number;
-        Tags: string[] | Tag[];
+        Tags: string[];
         Hidden: boolean;
-        InterfaceVersion: string;
     }
     export interface ISavedEncounter<T> {
         Name: string;
@@ -25,9 +24,9 @@ module ImprovedInitiative {
     export class Encounter {
         constructor(userPollQueue: UserPollQueue) {
             this.Rules = new DefaultRules();
-            this.Combatants = ko.observableArray<Combatant>();
+            this.Combatants = ko.observableArray<ICombatant>();
             this.CombatantCountsByName = [];
-            this.ActiveCombatant = ko.observable<Combatant>();
+            this.ActiveCombatant = ko.observable<ICombatant>();
             this.ActiveCombatantStatBlock = ko.computed(() => {
                 return this.ActiveCombatant()
                     ? this.ActiveCombatant().StatBlock()
@@ -42,9 +41,9 @@ module ImprovedInitiative {
 
         Rules: IRules;
         TurnTimer = new TurnTimer();
-        Combatants: KnockoutObservableArray<Combatant>;
+        Combatants: KnockoutObservableArray<ICombatant>;
         CombatantCountsByName: KnockoutObservable<number>[];
-        ActiveCombatant: KnockoutObservable<Combatant>;
+        ActiveCombatant: KnockoutObservable<ICombatant>;
         ActiveCombatantStatBlock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
@@ -90,7 +89,7 @@ module ImprovedInitiative {
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
         }
 
-        MoveCombatant = (combatant: Combatant, index: number) => {
+        MoveCombatant = (combatant: ICombatant, index: number) => {
             var currentPosition = this.Combatants().indexOf(combatant);
             var newInitiative = combatant.Initiative();
             var passedCombatant = this.Combatants()[index];
@@ -108,7 +107,7 @@ module ImprovedInitiative {
         }
 
         AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: ISavedCombatant) => {
-            var combatant: Combatant;
+            var combatant: ICombatant;
             if (statBlockJson.Player && statBlockJson.Player.toLocaleLowerCase() === 'player') {
                 combatant = new PlayerCharacter(statBlockJson, this, savedCombatant);
             } else {
@@ -145,7 +144,7 @@ module ImprovedInitiative {
             const buildInitiativeInput = combatant =>
                 `<li>${combatant.ViewModel.DisplayName()} ` +
                 `(${combatant.InitiativeBonus.toModifierString()}): ` +
-                `<input class='response' id='initiative-${combatant.Id}'` +
+                `<input class='response' combatantId='${combatant.Id}'` +
                 `type='number' value= '${combatant.GetInitiativeRoll()}' /></li>`;
 
             const requestContent = [
@@ -160,9 +159,9 @@ module ImprovedInitiative {
             userPollQueue.Add({
                 requestContent,
                 inputSelector: '.response',
-                callback: (initiativeRolls: { [elementId: string]: string }) => {
+                callback: (initiativeRolls: { [combatantId: string]: string }) => {
                     const applyInitiative = combatant => {
-                        const initiativeRoll = parseInt(initiativeRolls[`initiative-${combatant.Id}`]);
+                        const initiativeRoll = parseInt(initiativeRolls[combatant.Id]);
                         combatant.Initiative(initiativeRoll);
                     };
                     playerCharacters.forEach(applyInitiative);
@@ -212,8 +211,7 @@ module ImprovedInitiative {
                         Alias: c.Alias(),
                         IndexLabel: c.IndexLabel,
                         Tags: c.Tags(),
-                        Hidden: c.Hidden(),
-                        InterfaceVersion: "1.0"
+                        Hidden: c.Hidden()
                     }
                 })
             };

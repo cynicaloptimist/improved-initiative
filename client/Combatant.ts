@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export interface Combatant {
+    export interface ICombatant {
         Id: string;
         Encounter: Encounter;
         Alias: KnockoutObservable<string>;
@@ -9,7 +9,7 @@ module ImprovedInitiative {
         TemporaryHP: KnockoutObservable<number>;
         AC: number;
         AbilityModifiers: AbilityScores;
-        Tags: KnockoutObservableArray<Tag>;
+        Tags: KnockoutObservableArray<string>;
         InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
         Hidden: KnockoutObservable<boolean>;
@@ -19,15 +19,10 @@ module ImprovedInitiative {
         IsPlayerCharacter: boolean;
     }
 
-    export type StartOfTurn = "StartOfTurn";
-    //export const StartOfTurn: StartOfTurn = "StartOfTurn";
-    export type EndOfTurn = "EndOfTurn";
-    //export const EndOfTurn: EndOfTurn = "EndOfTurn";
-
-    export class Combatant implements Combatant {
+    export class Combatant implements ICombatant {
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: ISavedCombatant) {
             var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
-
+            
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
                 this.Id = '' + savedCombatant.Id; //legacy Id may be a number
@@ -51,11 +46,11 @@ module ImprovedInitiative {
                 this.processSavedCombatant(savedCombatant);
             }
         }
-
+        
         Id = probablyUniqueString();
-        Alias = ko.observable('');
+        Alias = ko.observable(null);
         TemporaryHP = ko.observable(0);
-        Tags = ko.observableArray<Tag>();
+        Tags = ko.observableArray<string>();
         Initiative = ko.observable(0);
         StatBlock = ko.observable<IStatBlock>();
         Hidden = ko.observable(false);
@@ -66,6 +61,7 @@ module ImprovedInitiative {
         PlayerDisplayHP: KnockoutComputed<string>;
         AC: number;
         AbilityModifiers: AbilityScores;
+        NewTag: KnockoutObservable<string>;
         InitiativeBonus: number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
@@ -82,15 +78,13 @@ module ImprovedInitiative {
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
 
-        
-
         private processSavedCombatant(savedCombatant: ISavedCombatant) {
             this.IndexLabel = savedCombatant.IndexLabel;
             this.CurrentHP(savedCombatant.CurrentHP);
             this.TemporaryHP(savedCombatant.TemporaryHP);
             this.Initiative(savedCombatant.Initiative);
             this.Alias(savedCombatant.Alias);
-            this.Tags(Tag.getLegacyTags(savedCombatant.Tags));
+            this.Tags(savedCombatant.Tags);
             this.Hidden(savedCombatant.Hidden);
         }
 
@@ -103,7 +97,7 @@ module ImprovedInitiative {
                 }
             }
             return HP.Value;
-        }
+        }        
 
         private setIndexLabel(oldName?: string) {
             var name = this.StatBlock().Name,

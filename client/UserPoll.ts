@@ -24,7 +24,7 @@ module ImprovedInitiative {
             } else {
                 const inputsById = {};
                 inputs.map((_, element) => {
-                    inputsById[element.id] = $(element).val();
+                    inputsById[element.getAttribute("combatantId")] = $(element).val();
                 });
                 poll.callback(inputsById);
             }
