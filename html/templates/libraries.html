@@ -7,14 +7,14 @@
     </div>
     <!-- ko if: DisplayTab() == 'Encounters' -->
     <ul class="library" data-bind="foreach: SavedEncounterIndex">
-        <li data-bind="click: EncounterCommander.LoadEncounterByName">
+        <li data-bind="click: $parent.EncounterCommander.LoadEncounterByName">
             <span class="fa" data-bind="text: $data"></span>
-            <span class="fa fa-trash" data-bind="click: EncounterCommander.DeleteSavedEncounter"></span>
+            <span class="fa fa-trash" data-bind="click: $parent.EncounterCommander.DeleteSavedEncounter"></span>
         </li>
     </ul>
     <div class="buttons">
-        <span data-bind="click: EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
-        <span data-bind="click: EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
+        <span data-bind="click: $parent.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
+        <span data-bind="click: $parent.EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
     </div>
     <!-- /ko -->
     <!-- ko ifnot: DisplayTab() == 'Encounters' -->

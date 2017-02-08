@@ -3,8 +3,10 @@ module ImprovedInitiative {
         private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
 
         constructor(public EncounterCommander: EncounterCommander, private library: StatBlockLibrary) {
-
+            this.SavedEncounterIndex = library.SavedEncounterIndex;
         }
+
+        SavedEncounterIndex: KnockoutObservableArray<string>;
 
         GetPreviewStatBlock = ko.computed(() => {
             return this.previewStatBlock() || StatBlock.Empty();
@@ -19,7 +21,7 @@ module ImprovedInitiative {
 
         DisplayTab = ko.observable('Creatures');
         LibraryFilter = ko.observable('');
-
+        
         FilteredStatBlocks = ko.computed<StatBlockListing[]>(() => {
             var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],

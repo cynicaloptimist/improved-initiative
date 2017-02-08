@@ -148,7 +148,7 @@ module ImprovedInitiative {
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<ISavedEncounter<ISavedCombatant>>(Store.SavedEncounters, encounterName);
+            var encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
             this.encounter.LoadSavedEncounter(encounter, this.userPollQueue);
             this.eventLog.AddEvent(`Encounter loaded.`);
         }

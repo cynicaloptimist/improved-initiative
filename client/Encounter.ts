@@ -1,7 +1,7 @@
 /// <reference path="../typings/globals/moment/index.d.ts" />
 
 module ImprovedInitiative {
-    export interface ISavedCombatant {
+    export interface SavedCombatant {
         Id: string;
         StatBlock: IStatBlock;
         MaxHP: number;
@@ -10,10 +10,18 @@ module ImprovedInitiative {
         Initiative: number;
         Alias: string;
         IndexLabel: number;
-        Tags: string[];
+        Tags: string[] | SavedTag[];
         Hidden: boolean;
+        InterfaceVersion: string;
     }
-    export interface ISavedEncounter<T> {
+    export interface SavedTag {
+        Text: string;
+        DurationRemaining: number;
+        DurationTiming: DurationTiming;
+        DurationCombatantId: string;
+    }
+
+    export interface SavedEncounter<T> {
         Name: string;
         ActiveCombatantId: string;
         RoundCounter?: number;
@@ -24,16 +32,16 @@ module ImprovedInitiative {
     export class Encounter {
         constructor(userPollQueue: UserPollQueue) {
             this.Rules = new DefaultRules();
-            this.Combatants = ko.observableArray<ICombatant>();
+            this.Combatants = ko.observableArray<Combatant>();
             this.CombatantCountsByName = [];
-            this.ActiveCombatant = ko.observable<ICombatant>();
+            this.ActiveCombatant = ko.observable<Combatant>();
             this.ActiveCombatantStatBlock = ko.computed(() => {
                 return this.ActiveCombatant()
                     ? this.ActiveCombatant().StatBlock()
                     : StatBlock.Empty();
             });
 
-            var autosavedEncounter = Store.Load<ISavedEncounter<ISavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
+            var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
             if (autosavedEncounter) {
                 this.LoadSavedEncounter(autosavedEncounter, userPollQueue);
             }
@@ -41,9 +49,9 @@ module ImprovedInitiative {
 
         Rules: IRules;
         TurnTimer = new TurnTimer();
-        Combatants: KnockoutObservableArray<ICombatant>;
+        Combatants: KnockoutObservableArray<Combatant>;
         CombatantCountsByName: KnockoutObservable<number>[];
-        ActiveCombatant: KnockoutObservable<ICombatant>;
+        ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<IStatBlock>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
@@ -81,7 +89,7 @@ module ImprovedInitiative {
 
         private EmitEncounter = () => {
             this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
-            Store.Save<ISavedEncounter<ISavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
+            Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
         }
 
         QueueEmitEncounter = () => {
@@ -89,7 +97,7 @@ module ImprovedInitiative {
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
         }
 
-        MoveCombatant = (combatant: ICombatant, index: number) => {
+        MoveCombatant = (combatant: Combatant, index: number) => {
             var currentPosition = this.Combatants().indexOf(combatant);
             var newInitiative = combatant.Initiative();
             var passedCombatant = this.Combatants()[index];
@@ -106,8 +114,8 @@ module ImprovedInitiative {
             return newInitiative;
         }
 
-        AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: ISavedCombatant) => {
-            var combatant: ICombatant;
+        AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: SavedCombatant) => {
+            var combatant: Combatant;
             if (statBlockJson.Player && statBlockJson.Player.toLocaleLowerCase() === 'player') {
                 combatant = new PlayerCharacter(statBlockJson, this, savedCombatant);
             } else {
@@ -144,7 +152,7 @@ module ImprovedInitiative {
             const buildInitiativeInput = combatant =>
                 `<li>${combatant.ViewModel.DisplayName()} ` +
                 `(${combatant.InitiativeBonus.toModifierString()}): ` +
-                `<input class='response' combatantId='${combatant.Id}'` +
+                `<input class='response' id='initiative-${combatant.Id}'` +
                 `type='number' value= '${combatant.GetInitiativeRoll()}' /></li>`;
 
             const requestContent = [
@@ -159,9 +167,9 @@ module ImprovedInitiative {
             userPollQueue.Add({
                 requestContent,
                 inputSelector: '.response',
-                callback: (initiativeRolls: { [combatantId: string]: string }) => {
+                callback: (initiativeRolls: { [elementId: string]: string }) => {
                     const applyInitiative = combatant => {
-                        const initiativeRoll = parseInt(initiativeRolls[combatant.Id]);
+                        const initiativeRoll = parseInt(initiativeRolls[`initiative-${combatant.Id}`]);
                         combatant.Initiative(initiativeRoll);
                     };
                     playerCharacters.forEach(applyInitiative);
@@ -172,14 +180,32 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
-            var appInsights = window["appInsights"];
+            const appInsights = window["appInsights"];
             appInsights.trackEvent("TurnCompleted");
-            var nextIndex = this.Combatants().indexOf(this.ActiveCombatant()) + 1;
+            const activeCombatant = this.ActiveCombatant();
+
+            let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
             if (nextIndex >= this.Combatants().length) {
                 nextIndex = 0;
                 this.RoundCounter(this.RoundCounter() + 1);
+                this.durationTags.forEach(t => t.Decrement());
             }
-            this.ActiveCombatant(this.Combatants()[nextIndex]);
+
+            const nextCombatant = this.Combatants()[nextIndex];
+
+            this.durationTags
+                .filter(t =>
+                    t.DurationRemaining() == 0 && (
+                        (t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == EndOfTurn) ||
+                        (t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == StartOfTurn)
+                    )
+                )
+                .forEach(t => {
+                    t.Remove();
+                    this.durationTags.splice(this.durationTags.indexOf(t), 1);
+                });
+
+            this.ActiveCombatant(nextCombatant);
             this.TurnTimer.Reset();
             this.QueueEmitEncounter();
         }
@@ -189,18 +215,25 @@ module ImprovedInitiative {
             if (previousIndex < 0) {
                 previousIndex = this.Combatants().length - 1;
                 this.RoundCounter(this.RoundCounter() - 1);
+                this.durationTags.forEach(t => t.Increment());
             }
             this.ActiveCombatant(this.Combatants()[previousIndex]);
             this.QueueEmitEncounter();
         }
 
-        Save: (name?: string) => ISavedEncounter<ISavedCombatant> = (name?: string) => {
+        private durationTags: Tag[] = [];
+
+        AddDurationTag = (tag: Tag) => {
+            this.durationTags.push(tag);
+        }
+
+        Save: (name?: string) => SavedEncounter<SavedCombatant> = (name?: string) => {
             var activeCombatant = this.ActiveCombatant();
             return {
                 Name: name || this.EncounterId,
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
-                Combatants: this.Combatants().map<ISavedCombatant>(c => {
+                Combatants: this.Combatants().map<SavedCombatant>(c => {
                     return {
                         Id: c.Id,
                         StatBlock: c.StatBlock(),
@@ -210,8 +243,14 @@ module ImprovedInitiative {
                         Initiative: c.Initiative(),
                         Alias: c.Alias(),
                         IndexLabel: c.IndexLabel,
-                        Tags: c.Tags(),
-                        Hidden: c.Hidden()
+                        Tags: c.Tags().map(t => ({
+                            Text: t.Text,
+                            DurationRemaining: t.DurationRemaining(),
+                            DurationTiming: t.DurationTiming,  
+                            DurationCombatantId: t.DurationCombatantId
+                        })),
+                        Hidden: c.Hidden(),
+                        InterfaceVersion: "1.0"
                     }
                 })
             };
@@ -262,7 +301,7 @@ module ImprovedInitiative {
             return savedEncounter;
         }
 
-        LoadSavedEncounter = (savedEncounter: ISavedEncounter<ISavedCombatant>, userPollQueue: UserPollQueue) => {
+        LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPollQueue: UserPollQueue) => {
             savedEncounter = Encounter.updateLegacySavedEncounter(savedEncounter);
 
             let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
@@ -273,6 +312,11 @@ module ImprovedInitiative {
                 if (currentEncounterIsActive) {
                     combatant.Initiative(combatant.GetInitiativeRoll());
                 }
+                combatant.Tags().forEach(tag => {
+                    if (tag.HasDuration) {
+                        this.AddDurationTag(tag);
+                    }
+                })
             });
 
             if (currentEncounterIsActive) {
