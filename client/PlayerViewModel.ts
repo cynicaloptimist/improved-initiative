@@ -17,7 +17,7 @@ module ImprovedInitiative {
             this.Socket.emit('join encounter', this.EncounterId);
         }
 
-        LoadEncounter = (encounter: ISavedEncounter<CombatantPlayerViewModel>) => {
+        LoadEncounter = (encounter: SavedEncounter<CombatantPlayerViewModel>) => {
             this.Combatants(encounter.Combatants);
             this.DisplayTurnTimer(encounter.DisplayTurnTimer);
             this.RoundCounter(encounter.RoundCounter)

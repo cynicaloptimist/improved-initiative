@@ -20,7 +20,7 @@ module ImprovedInitiative {
     }
 
     export class Combatant implements Combatant {
-        constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: ISavedCombatant) {
+        constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
             var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
 
             if (savedCombatant) {
@@ -79,13 +79,13 @@ module ImprovedInitiative {
 
         
 
-        private processSavedCombatant(savedCombatant: ISavedCombatant) {
+        private processSavedCombatant(savedCombatant: SavedCombatant) {
             this.IndexLabel = savedCombatant.IndexLabel;
             this.CurrentHP(savedCombatant.CurrentHP);
             this.TemporaryHP(savedCombatant.TemporaryHP);
             this.Initiative(savedCombatant.Initiative);
             this.Alias(savedCombatant.Alias);
-            this.Tags(Tag.getLegacyTags(savedCombatant.Tags));
+            this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
             this.Hidden(savedCombatant.Hidden);
         }
 

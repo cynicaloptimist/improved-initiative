@@ -6,21 +6,37 @@ module ImprovedInitiative {
     export interface Tag {
         Text: string;
         HasDuration: boolean;
-        DurationRemaining: number;
+        DurationRemaining: KnockoutObservable<number>;
         DurationTiming: DurationTiming;
+        DurationCombatantId: string;
+        Remove: () => void;
+        Decrement: () => void;
+        Increment: () => void;
     }
 
     export class Tag implements Tag {
-        constructor(public Text: string, public HasDuration = false, public DurationRemaining = 0, public DurationTiming = StartOfTurn) {
-
+        constructor(public Text: string, combatant: Combatant, duration = 0, public DurationTiming = StartOfTurn, public DurationCombatantId = '') {
+            this.HasDuration = !!duration;
+            this.DurationRemaining = ko.observable(duration);
+            this.Remove = () => combatant.Tags.remove(this);
         }
 
-        public static getLegacyTags = (tags: any []): Tag[] => {
+        Decrement = () => {
+            const d = this.DurationRemaining();
+            if (d > 0) {
+                this.DurationRemaining(d - 1);
+            }
+        }
+
+        Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
+
+        public static getLegacyTags = (tags: (any) [], combatant: Combatant): Tag[] => {
             return tags.map(tag => {
                 if (tag.Text) {
-                    return tag;
+                    const savedTag: SavedTag = tag;
+                    return new Tag(savedTag.Text, combatant, savedTag.DurationRemaining, savedTag.DurationTiming, savedTag.DurationCombatantId);
                 }
-                return new Tag(tag);
+                return new Tag(tag, combatant);
             });
         }
     }
