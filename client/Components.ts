@@ -19,37 +19,23 @@ module ImprovedInitiative {
 
         ko.components.loaders.unshift(templateLoader);
 
-        ko.components.register('settings', {
-            viewModel: Settings,
-            template: { name: 'settings' }
-        });
+        const registerComponent = (name: string, viewModel: any) => ko.components.register(
+            name, 
+            {
+                viewModel,
+                template: { name }
+            }
+        )
 
-        ko.components.register('defaultstatblock', {
-            viewModel: params => params.statBlock,
-            template: { name: 'defaultstatblock' }
-        });
-
-        ko.components.register('activestatblock', {
-            viewModel: params => params.statBlock,
-            template: { name: 'activestatblock' }
-        });
-
-        ko.components.register('combatant', {
-            viewModel: function (params) {
+        registerComponent('settings', Settings);
+        registerComponent('defaultstatblock', params => params.statBlock);
+        registerComponent('activestatblock', params => params.statBlock);
+        registerComponent('combatant', params => {
                 params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPoll, params.logEvent);
                 return params.combatant.ViewModel;
-            },
-            template: { name: 'combatant' }
-        });
-
-        ko.components.register('playerdisplaycombatant', {
-            viewModel: params => params.combatant,
-            template: { name: 'playerdisplaycombatant' }
-        });
-
-        ko.components.register('libraries', {
-            viewModel: params => new LibraryViewModel(params.encounterCommander, params.library),
-            template: { name: 'libraries' }
-        });
+            });
+        registerComponent('playerdisplaycombatant', params => params.combatant);
+        registerComponent('libraries', params => new LibraryViewModel(params.encounterCommander, params.library));
+        registerComponent('defaultpoll', params => params.poll);
     }
 }

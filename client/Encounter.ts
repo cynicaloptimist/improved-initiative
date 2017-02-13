@@ -164,19 +164,19 @@ module ImprovedInitiative {
                 '</ul>'
             ].join('');
 
-            userPollQueue.Add({
-                requestContent,
-                inputSelector: '.response',
-                callback: (initiativeRolls: { [elementId: string]: string }) => {
-                    const applyInitiative = combatant => {
-                        const initiativeRoll = parseInt(initiativeRolls[`initiative-${combatant.Id}`]);
-                        combatant.Initiative(initiativeRoll);
-                    };
-                    playerCharacters.forEach(applyInitiative);
-                    nonPlayerCharacters.forEach(applyInitiative);
-                    this.SortByInitiative();
-                }
-            });
+            // userPollQueue.Add({
+            //     RequestContent: requestContent,
+            //     InputSelector: '.response',
+            //     Resolve: (initiativeRolls: { [elementId: string]: string }) => {
+            //         const applyInitiative = combatant => {
+            //             const initiativeRoll = parseInt(initiativeRolls[`initiative-${combatant.Id}`]);
+            //             combatant.Initiative(initiativeRoll);
+            //         };
+            //         playerCharacters.forEach(applyInitiative);
+            //         nonPlayerCharacters.forEach(applyInitiative);
+            //         this.SortByInitiative();
+            //     }
+            // });
         }
 
         NextTurn = () => {

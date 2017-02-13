@@ -3,7 +3,7 @@ module ImprovedInitiative {
 
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
+        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PollUser: (poll: Poll) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
@@ -13,7 +13,7 @@ module ImprovedInitiative {
             })
         }
 
-        ApplyDamage = inputDamage => {
+        ApplyDamage = (inputDamage: string) => {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 currHP = this.Combatant.CurrentHP(),
@@ -44,7 +44,7 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(tempHP);
         }
 
-        ApplyTemporaryHP = inputTHP => {
+        ApplyTemporaryHP = (inputTHP: string) => {
             var newTemporaryHP = parseInt(inputTHP),
                 currentTemporaryHP = this.Combatant.TemporaryHP();
 
@@ -59,8 +59,9 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(currentTemporaryHP);
         }
 
-        ApplyInitiative = inputInitiative => {
-            this.Combatant.Initiative(inputInitiative);
+        ApplyInitiative = (inputInitiative: string) => {
+            const initiative = parseInt(inputInitiative);
+            this.Combatant.Initiative(initiative);
             this.Combatant.Encounter.SortByInitiative();
         }
 
@@ -76,45 +77,46 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            this.PollUser({
-                requestContent: `Update initiative for ${this.DisplayName()}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: initiative => {
-                    this.ApplyInitiative(initiative);
-                    this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+            const poll = new DefaultPoll(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
+                response => {
+                    const initiative = response['initiative'];
+                    if (initiative) {
+                        this.ApplyInitiative(initiative);
+                        this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
+                        this.Combatant.Encounter.QueueEmitEncounter();
+                    }
+                })
+            this.PollUser(poll);
         }
 
         EditName = () => {
             var currentName = this.DisplayName();
-            this.PollUser({
-                requestContent: `Change alias for ${currentName}: <input class='response' />`,
-                inputSelector: '.response',
-                callback: alias => {
-                    this.Combatant.Alias(alias);
-                    if (alias) {
-                        this.LogEvent(`${currentName} alias changed to ${alias}.`);
-                    } else {
-                        this.LogEvent(`${currentName} alias removed.`);
-                    }
+            // this.PollUser({
+            //     RequestContent: `Change alias for ${currentName}: <input class='response' />`,
+            //     InputSelector: '.response',
+            //     Resolve: alias => {
+            //         this.Combatant.Alias(alias);
+            //         if (alias) {
+            //             this.LogEvent(`${currentName} alias changed to ${alias}.`);
+            //         } else {
+            //             this.LogEvent(`${currentName} alias removed.`);
+            //         }
 
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+            //         this.Combatant.Encounter.QueueEmitEncounter();
+            //     }
+            // });
         }
 
         AddTemporaryHP = () => {
-            this.PollUser({
-                requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: thp => {
-                    this.ApplyTemporaryHP(thp);
-                    this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+            // this.PollUser({
+            //     RequestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
+            //     InputSelector: '.response',
+            //     Resolve: thp => {
+            //         this.ApplyTemporaryHP(thp);
+            //         this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
+            //         this.Combatant.Encounter.QueueEmitEncounter();
+            //     }
+            // });
         }
 
         HiddenClass = ko.computed(() => {
@@ -146,17 +148,17 @@ module ImprovedInitiative {
 
         AddTag = (encounter: Encounter) => {
             
-            const poll = TagBuilder.CreatePoll(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
-            this.PollUser(poll);
-            var input = document.getElementById("tag-text");
+            // const poll = TagBuilder.CreatePoll(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
+            // this.PollUser(poll);
+            // var input = document.getElementById("tag-text");
 
-            new Awesomplete(input, {
-                list: Object.keys(Conditions),
-                minChars: 1,
-                autoFirst: true
-            });
+            // new Awesomplete(input, {
+            //     list: Object.keys(Conditions),
+            //     minChars: 1,
+            //     autoFirst: true
+            // });
 
-            $(input).select();
+            // $(input).select();
         }
 
         RemoveTag = (tag: Tag) => {

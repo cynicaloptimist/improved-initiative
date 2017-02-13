@@ -3,7 +3,7 @@ module ImprovedInitiative {
         static CreatePoll(encounter: Encounter,
             combatant: Combatant,
             displayName: string,
-            logEvent: (s: string) => void): IUserPoll {
+            logEvent: (s: string) => void): Poll {
             
             const allCombatants = encounter.Combatants();
             const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : '';
@@ -51,11 +51,7 @@ module ImprovedInitiative {
                 }
             }
 
-            return {
-                requestContent,
-                inputSelector: '.response',
-                callback: addSubmittedTag
-            }
+            return new DefaultPoll(requestContent, addSubmittedTag);
         }
     }
 }

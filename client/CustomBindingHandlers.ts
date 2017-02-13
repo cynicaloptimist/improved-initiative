@@ -74,11 +74,11 @@ module ImprovedInitiative {
         $(element).find('.rollable').on('click', (event) => {
             var diceExpression = event.target.innerHTML;
             var diceRoll = rules.RollDiceExpression(diceExpression);
-            userPollQueue.Add({
-                requestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
-                inputSelector: '.rollTotal',
-                callback: response => null
-            });
+            // userPollQueue.Add({
+            //     RequestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
+            //     InputSelector: '.rollTotal',
+            //     Resolve: response => null
+            // });
         });
     };
 

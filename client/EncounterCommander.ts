@@ -97,9 +97,7 @@ module ImprovedInitiative {
             if (this.encounter.State() == 'inactive') {
                 this.encounter.RollInitiative(this.userPollQueue);
             }
-            this.userPollQueue.Add({
-                callback: this.encounter.StartEncounter
-            });
+            
             this.HideLibraries();
 
             this.eventLog.AddEvent("Encounter started.");
@@ -132,19 +130,19 @@ module ImprovedInitiative {
         }
 
         SaveEncounter = () => {
-            this.userPollQueue.Add({
-                requestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
-                inputSelector: '.response',
-                callback: (response: string) => {
-                    var savedEncounter = this.encounter.Save(response);
-                    var savedEncounters = this.library.SavedEncounterIndex;
-                    if (savedEncounters.indexOf(response) == -1) {
-                        savedEncounters.push(response);
-                    }
-                    Store.Save(Store.SavedEncounters, response, savedEncounter);
-                    this.eventLog.AddEvent(`Encounter saved.`);
-                }
-            })
+            // this.userPollQueue.Add({
+            //     RequestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
+            //     InputSelector: '.response',
+            //     Resolve: (response: string) => {
+            //         var savedEncounter = this.encounter.Save(response);
+            //         var savedEncounters = this.library.SavedEncounterIndex;
+            //         if (savedEncounters.indexOf(response) == -1) {
+            //             savedEncounters.push(response);
+            //         }
+            //         Store.Save(Store.SavedEncounters, response, savedEncounter);
+            //         this.eventLog.AddEvent(`Encounter saved.`);
+            //     }
+            // })
         }
 
         LoadEncounterByName = (encounterName: string) => {

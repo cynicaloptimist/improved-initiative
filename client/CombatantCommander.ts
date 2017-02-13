@@ -65,7 +65,7 @@ module ImprovedInitiative {
             var combatantsToRemove = this.SelectedCombatants.removeAll(),
                 indexOfFirstCombatantToRemove = this.encounter.Combatants.indexOf(combatantsToRemove[0]),
                 deletedCombatantNames = combatantsToRemove.map(c => c.StatBlock().Name);
-            
+
             if (this.encounter.Combatants().length > combatantsToRemove.length) {
                 while (combatantsToRemove.indexOf(this.encounter.ActiveCombatant()) > -1) {
                     this.encounter.NextTurn();
@@ -101,34 +101,34 @@ module ImprovedInitiative {
         }
 
         EditHP = () => {
-            var selectedCombatants = this.SelectedCombatants();
-            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            this.userPollQueue.Add({
-                requestContent: `Apply damage to ${combatantNames}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: response => {
-                    if (response) {
-                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(response))
-                        this.eventLog.AddEvent(`${response} damage applied to ${combatantNames}.`);
+            const selectedCombatants = this.SelectedCombatants();
+            const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
+            const poll = new DefaultPoll(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
+                response => {
+                    const damage = response['damage'];
+                    if (damage) {
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage))
+                        this.eventLog.AddEvent(`${damage} damage applied to ${combatantNames}.`);
                         this.encounter.QueueEmitEncounter();
                     }
-                }
-            });
+                });
+            this.userPollQueue.Add(poll);
             return false;
         }
 
         AddTemporaryHP = () => {
-            var selectedCombatants = this.SelectedCombatants();
-            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            this.userPollQueue.Add({
-                requestContent: `Grant temporary hit points to ${combatantNames}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: response => selectedCombatants.forEach(c => {
-                    c.ViewModel.ApplyTemporaryHP(response);
-                    this.eventLog.AddEvent(`${response} temporary hit points granted to ${combatantNames}.`);
-                    this.encounter.QueueEmitEncounter();
-                })
-            });
+            const selectedCombatants = this.SelectedCombatants();
+            const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ');
+            const poll = new DefaultPoll(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
+                response => {
+                    const thp = response['thp'];
+                    if (thp) {
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyTemporaryHP(thp));
+                        this.eventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
+                        this.encounter.QueueEmitEncounter();
+                    }    
+                });
+            this.userPollQueue.Add(poll);
 
             return false;
         }
