@@ -1,6 +1,5 @@
 module ImprovedInitiative {
     export interface Poll {
-        Query: string;
         InputSelector: string;
         ComponentName: string;
         Resolve: (form: HTMLFormElement) => void;
@@ -30,7 +29,12 @@ module ImprovedInitiative {
         Polls = ko.observableArray<Poll>();
         
         Add = (poll: Poll) => {
-            poll.SetDequeueCallback(() => this.Polls.remove(poll));
+            poll.SetDequeueCallback(() => {
+                this.Polls.remove(poll)
+                if (this.HasPoll()) {
+                    $(this.Polls()[0].InputSelector).first().select();
+                }
+            });
             this.Polls.push(poll);
         }
 

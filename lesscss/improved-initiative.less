@@ -251,18 +251,6 @@ input[type="file"] {
     }
 }
 
-.user-poll {
-    .recessed();
-    li {
-        text-align: right;
-        list-style: none;
-    }
-    ul {
-        max-height: 120px;
-        overflow-y: auto;
-    }
-}
-
 .libraries {
     height: 100%;
 
@@ -601,9 +589,24 @@ input[type="file"] {
 }
 
 .user-poll {
+    .recessed();
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    div {
+        display: flex;
+        flex-flow: row;
+    }
+
+    li {
+        text-align: right;
+        list-style: none;
+    }
+    ul {
+        max-height: 120px;
+        overflow-y: auto;
+    }
 
     .add-tag {
         flex-flow: column;

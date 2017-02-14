@@ -118,19 +118,16 @@
     </ul>
     <!-- /ko -->
     <!-- ko foreach: UserPollQueue.Polls -->
-    <div class="user-poll" data-bind="
+    <form class="user-poll" data-bind="
+        submit: Resolve,
         component: {
             name: ComponentName,
             params: {
                 poll: $data
             }
         }">
-        </div>
-
-        <!-- /ko -->
-        <!-- ko if: UserPollQueue.HasPoll() -->
-        <form id="user-poll" class="user-poll">
         </form>
+
         <!-- /ko -->
 
         <div class="combat-footer">
