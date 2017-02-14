@@ -109,7 +109,7 @@
                     params: { 
                         combatant: $data, 
                         combatantCommander: $root.CombatantCommander, 
-                        addUserPoll: $root.UserPollQueue.Add, 
+                        addPrompt: $root.PromptQueue.Add, 
                         logEvent: $root.EventLog.AddEvent 
                     }
                 }">
@@ -117,13 +117,13 @@
             <!-- /ko -->
     </ul>
     <!-- /ko -->
-    <!-- ko foreach: UserPollQueue.Polls -->
-    <form class="user-poll" data-bind="
+    <!-- ko foreach: PromptQueue.Prompts -->
+    <form class="prompt" data-bind="
         submit: Resolve,
         component: {
             name: ComponentName,
             params: {
-                poll: $data
+                prompt: $data
             }
         }">
         </form>

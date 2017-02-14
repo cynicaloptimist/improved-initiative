@@ -30,7 +30,7 @@ module ImprovedInitiative {
     }
 
     export class Encounter {
-        constructor(userPollQueue: UserPollQueue) {
+        constructor(promptQueue: PromptQueue) {
             this.Rules = new DefaultRules();
             this.Combatants = ko.observableArray<Combatant>();
             this.CombatantCountsByName = [];
@@ -43,7 +43,7 @@ module ImprovedInitiative {
 
             var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
             if (autosavedEncounter) {
-                this.LoadSavedEncounter(autosavedEncounter, userPollQueue);
+                this.LoadSavedEncounter(autosavedEncounter, promptQueue);
             }
         }
 
@@ -146,7 +146,7 @@ module ImprovedInitiative {
             this.QueueEmitEncounter();
         }
 
-        RollInitiative = (userPollQueue: UserPollQueue) => {
+        RollInitiative = (promptQueue: PromptQueue) => {
             const playerCharacters = this.Combatants().filter(c => c.IsPlayerCharacter);
             const nonPlayerCharacters = this.Combatants().filter(c => !c.IsPlayerCharacter);
             const buildInitiativeInput = combatant =>
@@ -165,7 +165,7 @@ module ImprovedInitiative {
             ].join('');
 
             //TODO: Use a special class for this one.
-            const poll = new DefaultPoll(requestContent,
+            const prompt = new DefaultPrompt(requestContent,
                 response => {
                     const applyInitiative = combatant => {
                         const initiativeRoll = parseInt(response[`initiative-${combatant.Id}`]);
@@ -177,7 +177,7 @@ module ImprovedInitiative {
                 }
             );
 
-            userPollQueue.Add(poll);
+            promptQueue.Add(prompt);
         }
 
         NextTurn = () => {
@@ -302,7 +302,7 @@ module ImprovedInitiative {
             return savedEncounter;
         }
 
-        LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPollQueue: UserPollQueue) => {
+        LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPromptQueue: PromptQueue) => {
             savedEncounter = Encounter.updateLegacySavedEncounter(savedEncounter);
 
             let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;

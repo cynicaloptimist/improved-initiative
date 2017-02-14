@@ -1,13 +1,13 @@
 module ImprovedInitiative {
     export class TrackerViewModel {
-        UserPollQueue = new UserPollQueue();
+        PromptQueue = new PromptQueue();
         EventLog = new EventLog();
         StatBlockEditor = new StatBlockEditor();
-        Encounter = new Encounter(this.UserPollQueue);
+        Encounter = new Encounter(this.PromptQueue);
         
         StatBlockLibrary = new StatBlockLibrary();
-        EncounterCommander = new EncounterCommander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.StatBlockLibrary, this.EventLog);
-        CombatantCommander = new CombatantCommander(this.Encounter, this.UserPollQueue, this.StatBlockEditor, this.EventLog);
+        EncounterCommander = new EncounterCommander(this.Encounter, this.PromptQueue, this.StatBlockEditor, this.StatBlockLibrary, this.EventLog);
+        CombatantCommander = new CombatantCommander(this.Encounter, this.PromptQueue, this.StatBlockEditor, this.EventLog);
         
         ImportEncounterIfAvailable = () => {
             const encounterJSON = $('html')[0].getAttribute('postedEncounter');

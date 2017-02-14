@@ -64,7 +64,7 @@ module ImprovedInitiative {
         text = md.renderInline(text);
 
         var rules: IRules = bindingContext.$root.Encounter.Rules;
-        var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
+        var promptQueue: PromptQueue = bindingContext.$root.UserPromptQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text.replace(findDice, match => {
             return `<span class='rollable'>${match}</span>`;
@@ -74,9 +74,10 @@ module ImprovedInitiative {
         $(element).find('.rollable').on('click', (event) => {
             const diceExpression = event.target.innerHTML;
             const diceRoll = rules.RollDiceExpression(diceExpression);
-            const poll = new DefaultPoll(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
+            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
                 _ => { }
             );
+            promptQueue.Add(prompt);
         });
     };
 

@@ -1,9 +1,9 @@
 module ImprovedInitiative {
     export class TagBuilder {
-        static CreatePoll(encounter: Encounter,
+        static CreatePrompt(encounter: Encounter,
             combatant: Combatant,
             displayName: string,
-            logEvent: (s: string) => void): Poll {
+            logEvent: (s: string) => void): Prompt {
             
             const allCombatants = encounter.Combatants();
             const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : '';
@@ -51,7 +51,7 @@ module ImprovedInitiative {
                 }
             }
 
-            return new DefaultPoll(requestContent, addSubmittedTag);
+            return new DefaultPrompt(requestContent, addSubmittedTag);
         }
     }
 }

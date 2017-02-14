@@ -31,11 +31,11 @@ module ImprovedInitiative {
         registerComponent('defaultstatblock', params => params.statBlock);
         registerComponent('activestatblock', params => params.statBlock);
         registerComponent('combatant', params => {
-                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPoll, params.logEvent);
+                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPrompt, params.logEvent);
                 return params.combatant.ViewModel;
             });
         registerComponent('playerdisplaycombatant', params => params.combatant);
         registerComponent('libraries', params => new LibraryViewModel(params.encounterCommander, params.library));
-        registerComponent('defaultpoll', params => params.poll);
+        registerComponent('defaultprompt', params => params.prompt);
     }
 }

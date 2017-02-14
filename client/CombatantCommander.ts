@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class CombatantCommander {
         constructor(private encounter: Encounter,
-            private userPollQueue: UserPollQueue,
+            private promptQueue: PromptQueue,
             private statBlockEditor: StatBlockEditor,
             private eventLog: EventLog) {
             this.Commands = BuildCombatantCommandList(this);
@@ -103,7 +103,7 @@ module ImprovedInitiative {
         EditHP = () => {
             const selectedCombatants = this.SelectedCombatants();
             const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            const poll = new DefaultPoll(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
+            const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
                 response => {
                     const damage = response['damage'];
                     if (damage) {
@@ -112,14 +112,14 @@ module ImprovedInitiative {
                         this.encounter.QueueEmitEncounter();
                     }
                 });
-            this.userPollQueue.Add(poll);
+            this.promptQueue.Add(prompt);
             return false;
         }
 
         AddTemporaryHP = () => {
             const selectedCombatants = this.SelectedCombatants();
             const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ');
-            const poll = new DefaultPoll(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
+            const prompt = new DefaultPrompt(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
                 response => {
                     const thp = response['thp'];
                     if (thp) {
@@ -128,7 +128,7 @@ module ImprovedInitiative {
                         this.encounter.QueueEmitEncounter();
                     }    
                 });
-            this.userPollQueue.Add(poll);
+            this.promptQueue.Add(prompt);
 
             return false;
         }

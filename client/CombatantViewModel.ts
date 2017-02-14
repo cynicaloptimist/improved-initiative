@@ -3,7 +3,7 @@ module ImprovedInitiative {
 
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PollUser: (poll: Poll) => void, public LogEvent: (message: string) => void) {
+        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
@@ -77,7 +77,7 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            const poll = new DefaultPoll(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
+            const prompt = new DefaultPrompt(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
                 response => {
                     const initiative = response['initiative'];
                     if (initiative) {
@@ -86,12 +86,12 @@ module ImprovedInitiative {
                         this.Combatant.Encounter.QueueEmitEncounter();
                     }
                 })
-            this.PollUser(poll);
+            this.PromptUser(prompt);
         }
 
         EditName = () => {
             var currentName = this.DisplayName();
-            const poll = new DefaultPoll(`Change alias for ${currentName}: <input id='alias' class='response' />`,
+            const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
                 response => {
                     const alias = response['alias'];
                     this.Combatant.Alias();
@@ -103,7 +103,7 @@ module ImprovedInitiative {
 
                     this.Combatant.Encounter.QueueEmitEncounter();
                 });
-            this.PollUser(poll);
+            this.PromptUser(prompt);
         }
 
         HiddenClass = ko.computed(() => {
@@ -135,8 +135,8 @@ module ImprovedInitiative {
 
         AddTag = (encounter: Encounter) => {
 
-            // const poll = TagBuilder.CreatePoll(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
-            // this.PollUser(poll);
+            // const prompt = TagBuilder.CreatePrompt(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
+            // this.PromptUser(prompt);
             // var input = document.getElementById("tag-text");
 
             // new Awesomplete(input, {
