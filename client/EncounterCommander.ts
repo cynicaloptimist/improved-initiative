@@ -130,19 +130,20 @@ module ImprovedInitiative {
         }
 
         SaveEncounter = () => {
-            // this.userPollQueue.Add({
-            //     RequestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
-            //     InputSelector: '.response',
-            //     Resolve: (response: string) => {
-            //         var savedEncounter = this.encounter.Save(response);
-            //         var savedEncounters = this.library.SavedEncounterIndex;
-            //         if (savedEncounters.indexOf(response) == -1) {
-            //             savedEncounters.push(response);
-            //         }
-            //         Store.Save(Store.SavedEncounters, response, savedEncounter);
-            //         this.eventLog.AddEvent(`Encounter saved.`);
-            //     }
-            // })
+            const poll = new DefaultPoll(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
+                response => {
+                    const encounterName = response['encounterName'];
+                    if (encounterName) {
+                        var savedEncounter = this.encounter.Save(encounterName);
+                        var savedEncounters = this.library.SavedEncounterIndex;
+                        if (savedEncounters.indexOf(encounterName) == -1) {
+                            savedEncounters.push(encounterName);
+                        }
+                        Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
+                        this.eventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                    }
+                });
+            this.userPollQueue.Add(poll);
         }
 
         LoadEncounterByName = (encounterName: string) => {

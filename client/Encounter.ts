@@ -164,19 +164,20 @@ module ImprovedInitiative {
                 '</ul>'
             ].join('');
 
-            // userPollQueue.Add({
-            //     RequestContent: requestContent,
-            //     InputSelector: '.response',
-            //     Resolve: (initiativeRolls: { [elementId: string]: string }) => {
-            //         const applyInitiative = combatant => {
-            //             const initiativeRoll = parseInt(initiativeRolls[`initiative-${combatant.Id}`]);
-            //             combatant.Initiative(initiativeRoll);
-            //         };
-            //         playerCharacters.forEach(applyInitiative);
-            //         nonPlayerCharacters.forEach(applyInitiative);
-            //         this.SortByInitiative();
-            //     }
-            // });
+            //TODO: Use a special class for this one.
+            const poll = new DefaultPoll(requestContent,
+                response => {
+                    const applyInitiative = combatant => {
+                        const initiativeRoll = parseInt(response[`initiative-${combatant.Id}`]);
+                        combatant.Initiative(initiativeRoll);
+                    };
+                    playerCharacters.forEach(applyInitiative);
+                    nonPlayerCharacters.forEach(applyInitiative);
+                    this.SortByInitiative();
+                }
+            );
+
+            userPollQueue.Add(poll);
         }
 
         NextTurn = () => {

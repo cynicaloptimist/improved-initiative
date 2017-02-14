@@ -91,32 +91,19 @@ module ImprovedInitiative {
 
         EditName = () => {
             var currentName = this.DisplayName();
-            // this.PollUser({
-            //     RequestContent: `Change alias for ${currentName}: <input class='response' />`,
-            //     InputSelector: '.response',
-            //     Resolve: alias => {
-            //         this.Combatant.Alias(alias);
-            //         if (alias) {
-            //             this.LogEvent(`${currentName} alias changed to ${alias}.`);
-            //         } else {
-            //             this.LogEvent(`${currentName} alias removed.`);
-            //         }
+            const poll = new DefaultPoll(`Change alias for ${currentName}: <input id='alias' class='response' />`,
+                response => {
+                    const alias = response['alias'];
+                    this.Combatant.Alias();
+                    if (alias) {
+                        this.LogEvent(`${currentName} alias changed to ${alias}.`);
+                    } else {
+                        this.LogEvent(`${currentName} alias removed.`);
+                    }
 
-            //         this.Combatant.Encounter.QueueEmitEncounter();
-            //     }
-            // });
-        }
-
-        AddTemporaryHP = () => {
-            // this.PollUser({
-            //     RequestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
-            //     InputSelector: '.response',
-            //     Resolve: thp => {
-            //         this.ApplyTemporaryHP(thp);
-            //         this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
-            //         this.Combatant.Encounter.QueueEmitEncounter();
-            //     }
-            // });
+                    this.Combatant.Encounter.QueueEmitEncounter();
+                });
+            this.PollUser(poll);
         }
 
         HiddenClass = ko.computed(() => {
@@ -147,7 +134,7 @@ module ImprovedInitiative {
         })
 
         AddTag = (encounter: Encounter) => {
-            
+
             // const poll = TagBuilder.CreatePoll(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
             // this.PollUser(poll);
             // var input = document.getElementById("tag-text");
