@@ -8,6 +8,7 @@ interface KnockoutBindingHandlers {
     statBlockText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
+    awesomplete: KnockoutBindingHandler;
 }
 
 module ImprovedInitiative {
@@ -64,7 +65,7 @@ module ImprovedInitiative {
         text = md.renderInline(text);
 
         var rules: IRules = bindingContext.$root.Encounter.Rules;
-        var promptQueue: PromptQueue = bindingContext.$root.UserPromptQueue;
+        var promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text.replace(findDice, match => {
             return `<span class='rollable'>${match}</span>`;
@@ -132,6 +133,19 @@ module ImprovedInitiative {
             // Update the DOM element based on the supplied values here.
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
       
+        }
+    }
+
+    declare var Awesomplete: any;
+    ko.bindingHandlers.awesomplete = {
+        init: (element, valueAccessor) => {
+            new Awesomplete(element, {
+                list: valueAccessor(),
+                minChars: 1,
+                autoFirst: true
+            });
+
+            $(element).select();
         }
     }
 }

@@ -1,6 +1,4 @@
 module ImprovedInitiative {
-    declare var Awesomplete: any;
-
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
         constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
@@ -134,18 +132,8 @@ module ImprovedInitiative {
         })
 
         AddTag = (encounter: Encounter) => {
-
-            // const prompt = TagBuilder.CreatePrompt(encounter, this.Combatant, this.DisplayName(), this.LogEvent);
-            // this.PromptUser(prompt);
-            // var input = document.getElementById("tag-text");
-
-            // new Awesomplete(input, {
-            //     list: Object.keys(Conditions),
-            //     minChars: 1,
-            //     autoFirst: true
-            // });
-
-            // $(input).select();
+            const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
+            this.PromptUser(prompt);
         }
 
         RemoveTag = (tag: Tag) => {

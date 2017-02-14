@@ -173,7 +173,7 @@ module ImprovedInitiative {
                     };
                     playerCharacters.forEach(applyInitiative);
                     nonPlayerCharacters.forEach(applyInitiative);
-                    this.SortByInitiative();
+                    this.StartEncounter();
                 }
             );
 

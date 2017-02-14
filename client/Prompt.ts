@@ -7,11 +7,13 @@ module ImprovedInitiative {
     }
 
     export class DefaultPrompt implements Prompt {
-        constructor(public Query: string, private resolve: (responses: { [id: string]: string }) => void) { }
         private dequeue = () => { };
         InputSelector = ".response";
         ComponentName = "defaultprompt";
         SetDequeueCallback = callback => this.dequeue = callback;
+        
+        constructor(public Query: string, private resolve: (responses: { [id: string]: string }) => void) { }
+
         Resolve = (form: HTMLFormElement) => {
             const inputs = $(form).find(this.InputSelector);
             const inputsById = {};
