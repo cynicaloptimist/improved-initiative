@@ -1,6 +1,8 @@
 /// <reference path="../typings/globals/moment/index.d.ts" />
 
 module ImprovedInitiative {
+    const appInsights = window["appInsights"];
+
     export interface SavedCombatant {
         Id: string;
         StatBlock: IStatBlock;
@@ -127,6 +129,9 @@ module ImprovedInitiative {
             this.Combatants.push(combatant);
 
             this.QueueEmitEncounter();
+            
+            appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
+            
             return combatant;
         }
 
@@ -151,7 +156,6 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
-            const appInsights = window["appInsights"];
             appInsights.trackEvent("TurnCompleted");
             const activeCombatant = this.ActiveCombatant();
 
