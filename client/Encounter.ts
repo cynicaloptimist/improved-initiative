@@ -147,37 +147,7 @@ module ImprovedInitiative {
         }
 
         RollInitiative = (promptQueue: PromptQueue) => {
-            const playerCharacters = this.Combatants().filter(c => c.IsPlayerCharacter);
-            const nonPlayerCharacters = this.Combatants().filter(c => !c.IsPlayerCharacter);
-            const buildInitiativeInput = combatant =>
-                `<li>${combatant.ViewModel.DisplayName()} ` +
-                `(${combatant.InitiativeBonus.toModifierString()}): ` +
-                `<input class='response' id='initiative-${combatant.Id}'` +
-                `type='number' value= '${combatant.GetInitiativeRoll()}' /></li>`;
-
-            const requestContent = [
-                '<p>Roll Initiative:</p>',
-                '<ul>',
-                ...playerCharacters.map(buildInitiativeInput),
-                '</ul><ul>',
-                ...nonPlayerCharacters.map(buildInitiativeInput),
-                '</ul>'
-            ].join('');
-
-            //TODO: Use a special class for this one.
-            const prompt = new DefaultPrompt(requestContent,
-                response => {
-                    const applyInitiative = combatant => {
-                        const initiativeRoll = parseInt(response[`initiative-${combatant.Id}`]);
-                        combatant.Initiative(initiativeRoll);
-                    };
-                    playerCharacters.forEach(applyInitiative);
-                    nonPlayerCharacters.forEach(applyInitiative);
-                    this.StartEncounter();
-                }
-            );
-
-            promptQueue.Add(prompt);
+            promptQueue.Add(new InitiativePrompt(this.Combatants(), this.StartEncounter));
         }
 
         NextTurn = () => {

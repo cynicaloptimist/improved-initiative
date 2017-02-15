@@ -38,5 +38,6 @@ module ImprovedInitiative {
         registerComponent('libraries', params => new LibraryViewModel(params.encounterCommander, params.library));
         registerComponent('defaultprompt', params => params.prompt);
         registerComponent('tagprompt', params => params.prompt);
+        registerComponent('initiativeprompt', params => params.prompt);
     }
 }

@@ -1,0 +1,14 @@
+<p>Roll Initiative</p>
+<ul class="playercharacters" data-bind="foreach: PlayerCharacters, focusOnRender: InputSelector">
+    <li>
+        <span data-bind="text: Prompt"></span>
+        <input class='response' type='number' data-bind='attr: {"id": "initiative-" + Id}, value: PreRoll' />
+    </li>
+</ul>
+<ul class="nonplayercharacters" data-bind="foreach: NonPlayerCharacters">
+    <li>
+        <span data-bind="text: Prompt"></span>
+        <input class='response' type='number' data-bind='attr: {"id": "initiative-" + Id}, value: PreRoll' />
+    </li>
+</ul>
+<button type='submit' class='fa fa-check button'></button>
