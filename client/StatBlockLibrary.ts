@@ -16,6 +16,11 @@ module ImprovedInitiative {
                 var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.StatBlocks, id));
                 this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
+
+            const appInsights = window["appInsights"];
+            appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
+            appInsights.trackEvent("CustomCreatures", { Count: this.PCStatBlocks().length });
+            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.NPCStatBlocks().length});
         }
 
         NPCStatBlocks = ko.observableArray<StatBlockListing>([]);
