@@ -8,7 +8,6 @@
   "globalDependencies": {
     "filesaver": "registry:dt/filesaver#0.0.0+20160622185141",
     "jquery": "registry:dt/jquery#1.10.0+20170104155652",
-    "jqueryui": "registry:dt/jqueryui#1.11.0+20161214061125",
     "knockout": "registry:dt/knockout#3.4.0+20170105101147",
     "moment": "registry:dt/moment#2.11.1+20161010105546",
     "mousetrap": "registry:dt/mousetrap#1.5.0+20170106203657",
