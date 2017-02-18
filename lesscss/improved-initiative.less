@@ -97,11 +97,6 @@ input[type="file"] {
     .button();
 }
 
-.preview.statblock {
-    position: fixed;
-    max-height: 100%;
-}
-
 .absolute-center {
     position:absolute;
     margin: auto;
@@ -118,6 +113,11 @@ input[type="file"] {
     border-radius: @border-radius;
     padding: @medium-spacer;
     z-index: 3;
+}
+
+.preview.statblock {
+    .overlay-dialog();
+    max-height: 100%;
 }
 
 .tutorial-focus {
@@ -223,8 +223,10 @@ input[type="file"] {
     
     @logo-size: 40px;
     .patreon-logo {
-        width: @logo-size;
-        height: @logo-size;
+        img {
+            width: @logo-size;
+        }
+        
         position: absolute;
         bottom: -1/4 * @logo-size;
         right: -1/4 * @logo-size;
