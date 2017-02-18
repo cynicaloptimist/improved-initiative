@@ -7,7 +7,7 @@ module ImprovedInitiative {
     }
     interface TutorialStep {
         Message: string;
-        FocusSelector: string;
+        RaiseSelector: string;
         CalculatePosition: (element: JQuery) => Position;
     }
 
@@ -15,16 +15,25 @@ module ImprovedInitiative {
         private static steps: TutorialStep[] = [
             {
                 Message: "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to load its stat block.",
-                FocusSelector: ".left-column",
+                RaiseSelector: ".left-column",
                 CalculatePosition: element => {
-                    const left = element.position().left + element.width() + 40;
-                    const top = element.position().top + 100;
+                    const left = element.offset().left + element.width() + 40;
+                    const top = element.offset().top + 200;
+                    return { left, top };
+                }
+            },
+            {
+                Message: "When you're ready to add some adventurers, select the <strong>Players</strong> tab at the top of the library.",
+                RaiseSelector: ".tabs .players",
+                CalculatePosition: element => {
+                    const left = element.offset().left + element.width() + 40;
+                    const top = element.offset().top + 5;
                     return { left, top };
                 }
             }
         ];
         
-        /*    "Find player characters in the 'Players' tab.",
+        /*    "When you're ready to add some adventurers, select the <strong>Players</strong> tab at the top of the library.",
             "Add a few sample characters, or add your own.",
             "Start the encounter to roll initiative!",
             "Open the commands menu to see other tools and set keyboard shortcuts."*/
@@ -39,12 +48,10 @@ module ImprovedInitiative {
                 $('.tutorial-focus').removeClass('tutorial-focus');
 
                 const nextStep = TutorialViewModel.steps[newStepIndex];
-                const focusSelector = nextStep.FocusSelector;
+                const focusSelector = nextStep.RaiseSelector;
                 $(focusSelector).addClass('tutorial-focus');
-                const { left, top } = nextStep.CalculatePosition($(focusSelector));
-                $('.tutorial')
-                    .css('left', left)
-                    .css('top', top);
+                const position = nextStep.CalculatePosition($(focusSelector));
+                $('.tutorial').animate(position);
             });
             this.stepIndex(0);
             this.showTutorial = params.showTutorial;
@@ -52,6 +59,7 @@ module ImprovedInitiative {
         }
 
         End = () => {
+            $('.tutorial-focus').removeClass('tutorial-focus');
             Store.Save(Store.User, 'SkipIntro', true);
             this.showTutorial(false);
         }
