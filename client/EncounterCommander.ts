@@ -6,7 +6,8 @@ module ImprovedInitiative {
             private promptQueue: PromptQueue,
             private statBlockEditor: StatBlockEditor,
             private library: StatBlockLibrary,
-            private eventLog: EventLog) {
+            private eventLog: EventLog,
+            private displaySettings: KnockoutObservable<boolean>) {
             this.Commands = BuildEncounterCommandList(this);
         }
 
@@ -82,7 +83,7 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
-            $('.modal-container').show();
+            this.displaySettings(true);
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))

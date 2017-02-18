@@ -26,6 +26,19 @@
 </head>
 
 <body id="tracker" data-bind="css: InterfaceState">
+    <div class="modal-blur" data-bind="visible: BlurVisible, click: RemoveOverlays"></div>
+
+    <div class="settings" data-bind="
+        visible: SettingsVisible, 
+        component: { 
+            name: 'settings',
+            params: { 
+                settingsVisible: SettingsVisible,
+                encounterCommander: EncounterCommander, 
+                combatantCommander: CombatantCommander 
+            } 
+        }">
+    </div>
     <div class="modal-container" data-bind="component: { name: 'settings', params: { encounterCommander: EncounterCommander, combatantCommander: CombatantCommander } }"></div>
     <div class="commands">
         <div class="scrollframe">
