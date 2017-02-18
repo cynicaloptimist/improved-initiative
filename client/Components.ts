@@ -39,5 +39,6 @@ module ImprovedInitiative {
         registerComponent('defaultprompt', params => params.prompt);
         registerComponent('tagprompt', params => params.prompt);
         registerComponent('initiativeprompt', params => params.prompt);
+        registerComponent('tutorial', params => new TutorialViewModel(params));
     }
 }

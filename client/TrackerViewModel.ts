@@ -5,10 +5,13 @@ module ImprovedInitiative {
         StatBlockEditor = new StatBlockEditor();
         Encounter = new Encounter(this.PromptQueue);
 
+        TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro') || true);
         SettingsVisible = ko.observable(false);
         BlurVisible = ko.computed(() =>
+            this.TutorialVisible() ||
             this.SettingsVisible());
         RemoveOverlays = () => {
+            this.TutorialVisible(false);
             this.SettingsVisible(false);
         }
 

@@ -104,27 +104,39 @@ input[type="file"] {
 .absolute-center {
     position:absolute;
     margin: auto;
-        left: 0;
+    left: 0;
     right: 0;
-        top: 0;
+    top: 0;
     bottom: 0;
-    }
-    
+}
+
 .overlay-dialog {
     position: absolute;
-        border-width: 2px;
-        border-style: solid;
-        border-radius: @border-radius;
-        padding: @medium-spacer;
-        z-index: 1;
-    }
+    border-width: 2px;
+    border-style: solid;
+    border-radius: @border-radius;
+    padding: @medium-spacer;
+    z-index: 1;
+}
 
-    .settings {
+.tutorial-focus {
+    z-index: 1;
+}
+
+.tutorial {
+    .overlay-dialog();
+    width: 300px;
+    > * {
+        margin: @small-spacer;
+    }
+}
+
+.settings {
     .overlay-dialog();
     .absolute-center();
-        width: 500px;
-        height: 700px;
-    }
+    width: 500px;
+    height: 700px;
+}
 
 .modal-blur {
     position: fixed;
