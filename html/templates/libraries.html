@@ -1,9 +1,9 @@
 <div class="libraries">
     <h2>Library</h2>
     <div class="tabs">
-        <span data-bind="click: DisplayTab.with('Creatures'), css: { selected: DisplayTab() == 'Creatures' }">Creatures</span>
-        <span class="players" data-bind="click: DisplayTab.with('Players'), css: { selected: DisplayTab() == 'Players' }">Players</span>
-        <span data-bind="click: DisplayTab.with('Encounters'), css: { selected: DisplayTab() == 'Encounters' }">Encounters</span>
+        <span data-bind="click: ChangeTab('Creatures'), css: { selected: DisplayTab() == 'Creatures' }">Creatures</span>
+        <span class="players" data-bind="click: ChangeTab('Players'), css: { selected: DisplayTab() == 'Players' }">Players</span>
+        <span data-bind="click: ChangeTab('Encounters'), css: { selected: DisplayTab() == 'Encounters' }">Encounters</span>
     </div>
     <!-- ko if: DisplayTab() == 'Encounters' -->
     <ul class="library" data-bind="foreach: SavedEncounterIndex">

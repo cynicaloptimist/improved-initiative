@@ -28,6 +28,7 @@ module ImprovedInitiative {
                 };
                 combatants.forEach(applyInitiative);
                 startEncounter();
+                TutorialSpy("CompleteInitiativeRolls");
                 this.dequeue();
             }
         }

@@ -1,12 +1,11 @@
 module ImprovedInitiative {
-
-
+    export const TutorialSpy = ko.observable<string>(null);
 
     export class TutorialViewModel {
         //TODO: prevent next when awaiting a click
         //TODO: auto advance on view changes
 
-        private stepIndex: KnockoutObservable<number> = ko.observable(null);
+        private stepIndex = ko.observable<number>(null);
         private showTutorial;
 
         CurrentStep: KnockoutComputed<string>;
@@ -19,7 +18,18 @@ module ImprovedInitiative {
                 const focusSelector = nextStep.RaiseSelector;
                 $(focusSelector).addClass('tutorial-focus');
                 const position = nextStep.CalculatePosition($(focusSelector));
-                $('.tutorial').animate(position);
+                if (newStepIndex == 0) {
+                    $('.tutorial').css(position);
+                }
+                else {
+                    $('.tutorial').animate(position);
+                }
+            });
+
+            TutorialSpy.subscribe(action => {
+                if (action == TutorialSteps[this.stepIndex()].AwaitAction) {
+                    this.Next();
+                }
             });
 
             this.stepIndex(0);
@@ -32,6 +42,11 @@ module ImprovedInitiative {
             Store.Save(Store.User, 'SkipIntro', true);
             this.showTutorial(false);
         }
+
+        CanGoNext = ko.computed(() => {
+            const stepIndex = this.stepIndex();
+            return stepIndex === null || !TutorialSteps[stepIndex].AwaitAction;
+        });
 
         Next = () => {
             const nextStepIndex = this.stepIndex() + 1;

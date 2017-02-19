@@ -21,6 +21,13 @@ module ImprovedInitiative {
 
         DisplayTab = ko.observable('Creatures');
         LibraryFilter = ko.observable('');
+
+        ChangeTab = tabName => () => {
+            if (tabName === 'Players') {
+                TutorialSpy('SelectPlayersTab');
+            }
+            this.DisplayTab(tabName);
+        }
         
         FilteredStatBlocks = ko.computed<StatBlockListing[]>(() => {
             var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),

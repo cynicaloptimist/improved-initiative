@@ -83,6 +83,7 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
+            TutorialSpy("ShowSettings");
             this.displaySettings(true);
         }
 
@@ -97,6 +98,9 @@ module ImprovedInitiative {
 
             if (this.encounter.State() == 'inactive') {
                 this.encounter.RollInitiative(this.promptQueue);
+
+                //Wait for component to load
+                setTimeout(() => TutorialSpy("ShowInitiativeDialog"), 500);
             }
             
             this.HideLibraries();
