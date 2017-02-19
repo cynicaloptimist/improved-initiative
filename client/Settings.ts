@@ -21,7 +21,7 @@ module ImprovedInitiative {
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
 
-        const saveAndClose = () => {
+        const registerKeybindings = () => {
             const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
             Mousetrap.reset();
 
@@ -39,7 +39,12 @@ module ImprovedInitiative {
                 Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
                 Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
             });
+        }
 
+        registerKeybindings();
+        
+        const saveAndClose = () => {
+            registerKeybindings();
             params.settingsVisible(false);
         }
 
