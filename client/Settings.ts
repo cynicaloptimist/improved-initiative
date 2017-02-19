@@ -17,6 +17,7 @@ module ImprovedInitiative {
             "Moving a creature in the initiative order will automatically adjust their initiative count.",
             "The active creature will have its traits and actions displayed first for ease of reference.",
             "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
+            "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
 
