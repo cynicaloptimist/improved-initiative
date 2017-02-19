@@ -15,8 +15,8 @@ module ImprovedInitiative {
     }
 
     export class Tag implements Tag {
-        constructor(public Text: string, combatant: Combatant, duration = 0, public DurationTiming = StartOfTurn, public DurationCombatantId = '') {
-            this.HasDuration = !!duration;
+        constructor(public Text: string, combatant: Combatant, duration = -1, public DurationTiming = StartOfTurn, public DurationCombatantId = '') {
+            this.HasDuration = (duration > -1);
             this.DurationRemaining = ko.observable(duration);
             this.Remove = () => combatant.Tags.remove(this);
         }
