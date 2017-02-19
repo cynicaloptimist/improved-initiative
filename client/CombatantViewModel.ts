@@ -95,7 +95,7 @@ module ImprovedInitiative {
             const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
                 response => {
                     const alias = response['alias'];
-                    this.Combatant.Alias();
+                    this.Combatant.Alias(alias);
                     if (alias) {
                         this.LogEvent(`${currentName} alias changed to ${alias}.`);
                     } else {
