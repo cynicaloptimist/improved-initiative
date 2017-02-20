@@ -1,3 +1,7 @@
+interface Array<T> {
+    remove: (item: T) => void;
+}
+
 interface String {
     format: (...arguments: any[]) => string;
 }
@@ -8,6 +12,13 @@ interface Number {
 
 interface Function {
     with: (...params: any[]) => ((...params: any[]) => any)
+}
+
+Array.prototype.remove = function (item) {
+    const index = this.indexOf(item);
+    if (index > -1) {
+        this.splice(index, 1);
+    }
 }
 
 Number.prototype.toModifierString = function() {

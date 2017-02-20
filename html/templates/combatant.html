@@ -4,8 +4,8 @@
 <span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
 <span class="tags">
     <!--ko foreach: Combatant.Tags() -->
-    <span class="tag outline">
-        <span data-bind="text: $data"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
+    <span class="tag">
+        <span data-bind="text: Text"></span><span class="fa fa-hourglass" data-bind="visible: HasDuration"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
     </span>
     <!-- /ko -->
 </span>

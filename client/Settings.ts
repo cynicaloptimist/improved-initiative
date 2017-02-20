@@ -1,9 +1,10 @@
 module ImprovedInitiative {
-    interface Params {
+    export var Settings = (params: {
         encounterCommander: EncounterCommander;
         combatantCommander: CombatantCommander;
-    }
-    export var Settings = (params: Params) => {
+        settingsVisible: KnockoutObservable<boolean>;
+        repeatTutorial: () => void;
+    }) => {
         var tips = [
             "You can view command list and set keybindings on the 'Commands' tab.",
             "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
@@ -17,11 +18,11 @@ module ImprovedInitiative {
             "Moving a creature in the initiative order will automatically adjust their initiative count.",
             "The active creature will have its traits and actions displayed first for ease of reference.",
             "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
+            "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
 
-        var saveAndClose = () => {
-            $('.modal-container').hide();
+        const registerKeybindings = () => {
             const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
             Mousetrap.reset();
 
@@ -39,17 +40,16 @@ module ImprovedInitiative {
                 Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
                 Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
             });
-
-            Store.Save(Store.User, 'SkipIntro', true);
         }
 
-        if (Store.Load(Store.User, 'SkipIntro')) {
-            var currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
-            saveAndClose();
+        registerKeybindings();
+        
+        const saveAndClose = () => {
+            registerKeybindings();
+            params.settingsVisible(false);
         }
-        else {
-            var currentTipIndex = ko.observable(0);
-        }
+
+        const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
         function cycleTipIndex() {
             var newIndex = currentTipIndex() + this;
@@ -97,6 +97,8 @@ module ImprovedInitiative {
                     Store.ImportFromDnDAppFile(file);
                 }
             },
+
+            RepeatTutorial: params.repeatTutorial,
 
             RollHp: loadSetting("RollMonsterHp"),
             HpVerbosityOptions: [

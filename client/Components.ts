@@ -1,15 +1,25 @@
 module ImprovedInitiative {
+    const pendingComponents: JQueryXHR [] = [];
+    export const ComponentLoader = {
+        AfterComponentLoaded: (callback: (() => void)) => {
+            $.when(pendingComponents).always(() => {
+                setTimeout(callback, 1);
+            });
+        }
+    }
     export var RegisterComponents = () => {
         var templateLoader = {
             loadTemplate: function(name, templateConfig, callback) {
                 if (templateConfig.name) {
                     var fullUrl = '/templates/' + templateConfig.name;
-                    $.get(fullUrl, function(markupString) {
+                    const request = $.get(fullUrl, function(markupString) {
                         // We need an array of DOM nodes, not a string.
                         // We can use the default loader to convert to the
                         // required format.
                         ko.components.defaultLoader.loadTemplate(name, markupString, callback);
                     });
+                    pendingComponents.push(request);
+                    request.always(_ => pendingComponents.remove(request));
                 } else {
                     // Unrecognized config format. Let another loader handle it.
                     callback(null);
@@ -19,32 +29,26 @@ module ImprovedInitiative {
 
         ko.components.loaders.unshift(templateLoader);
 
-        ko.components.register('settings', {
-            viewModel: Settings,
-            template: { name: 'settings' }
-        });
+        const registerComponent = (name: string, viewModel: any) => ko.components.register(
+            name, 
+            {
+                viewModel,
+                template: { name }
+            }
+        )
 
-        ko.components.register('defaultstatblock', {
-            viewModel: params => params.statBlock,
-            template: { name: 'defaultstatblock' }
-        });
-
-        ko.components.register('activestatblock', {
-            viewModel: params => params.statBlock,
-            template: { name: 'activestatblock' }
-        });
-
-        ko.components.register('combatant', {
-            viewModel: function(params) {
-                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addUserPoll, params.logEvent);
+        registerComponent('settings', Settings);
+        registerComponent('defaultstatblock', params => params.statBlock);
+        registerComponent('activestatblock', params => params.statBlock);
+        registerComponent('combatant', params => {
+                params.combatant.ViewModel = new CombatantViewModel(params.combatant, params.combatantCommander, params.addPrompt, params.logEvent);
                 return params.combatant.ViewModel;
-            },
-            template: { name: 'combatant' }
-        })
-
-        ko.components.register('playerdisplaycombatant', {
-            viewModel: params => params.combatant,
-            template: { name: 'playerdisplaycombatant' }
-        })
+            });
+        registerComponent('playerdisplaycombatant', params => params.combatant);
+        registerComponent('libraries', params => new LibraryViewModel(params.encounterCommander, params.library));
+        registerComponent('defaultprompt', params => params.prompt);
+        registerComponent('tagprompt', params => params.prompt);
+        registerComponent('initiativeprompt', params => params.prompt);
+        registerComponent('tutorial', params => new TutorialViewModel(params));
     }
 }

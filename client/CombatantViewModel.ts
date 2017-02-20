@@ -1,9 +1,8 @@
 module ImprovedInitiative {
-    declare var Awesomplete: any;
-
+    const appInsights = window["appInsights"];
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PollUser: (poll: IUserPoll) => void, public LogEvent: (message: string) => void) {
+        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
@@ -13,7 +12,7 @@ module ImprovedInitiative {
             })
         }
 
-        ApplyDamage = inputDamage => {
+        ApplyDamage = (inputDamage: string) => {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 currHP = this.Combatant.CurrentHP(),
@@ -25,12 +24,14 @@ module ImprovedInitiative {
             }
 
             if (damage > 0) {
+                appInsights.trackEvent("DamageApplied", { Amount: damage });
                 tempHP -= damage;
                 if (tempHP < 0) {
                     currHP += tempHP;
                     tempHP = 0;
                 }
-                if (currHP < 0 && !allowNegativeHP) {
+                if (currHP <= 0 && !allowNegativeHP) {
+                    appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
                     currHP = 0;
                 }
             } else {
@@ -44,7 +45,7 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(tempHP);
         }
 
-        ApplyTemporaryHP = inputTHP => {
+        ApplyTemporaryHP = (inputTHP: string) => {
             var newTemporaryHP = parseInt(inputTHP),
                 currentTemporaryHP = this.Combatant.TemporaryHP();
 
@@ -59,8 +60,9 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(currentTemporaryHP);
         }
 
-        ApplyInitiative = inputInitiative => {
-            this.Combatant.Initiative(inputInitiative);
+        ApplyInitiative = (inputInitiative: string) => {
+            const initiative = parseInt(inputInitiative);
+            this.Combatant.Initiative(initiative);
             this.Combatant.Encounter.SortByInitiative();
         }
 
@@ -76,45 +78,33 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            this.PollUser({
-                requestContent: `Update initiative for ${this.DisplayName()}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: initiative => {
-                    this.ApplyInitiative(initiative);
-                    this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+            const prompt = new DefaultPrompt(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
+                response => {
+                    const initiative = response['initiative'];
+                    if (initiative) {
+                        this.ApplyInitiative(initiative);
+                        this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
+                        this.Combatant.Encounter.QueueEmitEncounter();
+                    }
+                })
+            this.PromptUser(prompt);
         }
 
         EditName = () => {
             var currentName = this.DisplayName();
-            this.PollUser({
-                requestContent: `Change alias for ${currentName}: <input class='response' />`,
-                inputSelector: '.response',
-                callback: alias => {
+            const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
+                response => {
+                    const alias = response['alias'];
                     this.Combatant.Alias(alias);
                     if (alias) {
                         this.LogEvent(`${currentName} alias changed to ${alias}.`);
                     } else {
                         this.LogEvent(`${currentName} alias removed.`);
                     }
-                    
-                    this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
-        }
 
-        AddTemporaryHP = () => {
-            this.PollUser({
-                requestContent: `Grant temporary hit points to ${this.DisplayName()}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: thp => {
-                    this.ApplyTemporaryHP(thp);
-                    this.LogEvent(`${thp} temporary hit points applied to ${this.DisplayName()}.`);
                     this.Combatant.Encounter.QueueEmitEncounter();
-                }
-            });
+                });
+            this.PromptUser(prompt);
         }
 
         HiddenClass = ko.computed(() => {
@@ -144,32 +134,14 @@ module ImprovedInitiative {
                     name);
         })
 
-        AddTag = () => {
-            this.PollUser({
-                requestContent: `Add a note to ${this.DisplayName()}: <input id='add-tag' class='response' />`,
-                inputSelector: '.response',
-                callback: tag => {
-                    if (tag.length) {
-                        this.Combatant.Tags.push(tag);
-                        this.LogEvent(`${this.DisplayName()} added note: "${tag}"`);
-                        this.Combatant.Encounter.QueueEmitEncounter();
-                    }
-                }
-            });
-            var input = document.getElementById("add-tag");
-            
-            new Awesomplete(input, {
-                list: Object.keys(Conditions),
-                minChars: 1,
-                autoFirst: true
-            });
-
-            $(input).select();
+        AddTag = (encounter: Encounter) => {
+            const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
+            this.PromptUser(prompt);
         }
 
-        RemoveTag = (tag: string) => {
+        RemoveTag = (tag: Tag) => {
             this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
-            this.LogEvent(`${this.DisplayName()} removed note: "${tag}"`);
+            this.LogEvent(`${this.DisplayName()} removed note: "${tag.Text}"`);
             this.Combatant.Encounter.QueueEmitEncounter();
         };
     }

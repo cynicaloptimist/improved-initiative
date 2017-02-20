@@ -3,10 +3,11 @@ module ImprovedInitiative {
         Commands: Command[];
         
         constructor(private encounter: Encounter,
-            private userPollQueue: UserPollQueue,
+            private promptQueue: PromptQueue,
             private statBlockEditor: StatBlockEditor,
             private library: StatBlockLibrary,
-            private eventLog: EventLog) {
+            private eventLog: EventLog,
+            private displaySettings: KnockoutObservable<boolean>) {
             this.Commands = BuildEncounterCommandList(this);
         }
 
@@ -82,24 +83,28 @@ module ImprovedInitiative {
         }
 
         ShowSettings = () => {
-            $('.modal-container').show();
+            TutorialSpy("ShowSettings");
+            this.displaySettings(true);
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
         DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
         
         StartEncounter = () => {
-            if(this.userPollQueue.HasPoll()){
-                this.userPollQueue.AnimatePoll();
+            if(this.promptQueue.HasPrompt()){
+                this.promptQueue.AnimatePrompt();
                 return;
             }
 
             if (this.encounter.State() == 'inactive') {
-                this.encounter.RollInitiative(this.userPollQueue);
+                this.encounter.RollInitiative(this.promptQueue);
+
+                //Wait for component to load
+                ComponentLoader.AfterComponentLoaded(() => {
+                    TutorialSpy("ShowInitiativeDialog")
+                });
             }
-            this.userPollQueue.Add({
-                callback: this.encounter.StartEncounter
-            });
+            
             this.HideLibraries();
 
             this.eventLog.AddEvent("Encounter started.");
@@ -111,7 +116,7 @@ module ImprovedInitiative {
         }
 
         RerollInitiative = () => {
-            this.encounter.RollInitiative(this.userPollQueue);
+            this.encounter.RollInitiative(this.promptQueue);
         }
 
         ClearEncounter = () => {
@@ -132,24 +137,25 @@ module ImprovedInitiative {
         }
 
         SaveEncounter = () => {
-            this.userPollQueue.Add({
-                requestContent: `Save Encounter As: <input class='response' type='text' value='' />`,
-                inputSelector: '.response',
-                callback: (response: string) => {
-                    var savedEncounter = this.encounter.Save(response);
-                    var savedEncounters = this.library.SavedEncounterIndex;
-                    if (savedEncounters.indexOf(response) == -1) {
-                        savedEncounters.push(response);
+            const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
+                response => {
+                    const encounterName = response['encounterName'];
+                    if (encounterName) {
+                        var savedEncounter = this.encounter.Save(encounterName);
+                        var savedEncounters = this.library.SavedEncounterIndex;
+                        if (savedEncounters.indexOf(encounterName) == -1) {
+                            savedEncounters.push(encounterName);
+                        }
+                        Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
+                        this.eventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     }
-                    Store.Save(Store.SavedEncounters, response, savedEncounter);
-                    this.eventLog.AddEvent(`Encounter saved.`);
-                }
-            })
+                });
+            this.promptQueue.Add(prompt);
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<ISavedEncounter<ISavedCombatant>>(Store.SavedEncounters, encounterName);
-            this.encounter.LoadSavedEncounter(encounter, this.userPollQueue);
+            var encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
+            this.encounter.LoadSavedEncounter(encounter, this.promptQueue);
             this.eventLog.AddEvent(`Encounter loaded.`);
         }
 

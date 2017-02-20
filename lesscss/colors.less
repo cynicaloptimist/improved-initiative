@@ -3,7 +3,7 @@
 @active-green: lighten(@primary-green, 15);
 
 @primary-white: #EAE0D5;
-@input-white: lighten(@primary-white, 3);
+@input-white: @primary-white;
 @zebra-white: darken(@primary-white, 3);
 @hover-white: darken(@primary-white, 10);
 
@@ -46,8 +46,9 @@ input, textarea {
 .right-column, 
 .statblock, 
 .commands, 
-.user-poll,
-.modal-dialog, 
+.prompt,
+.settings,
+.tutorial, 
 .start, 
 .footer {
     .colors(@primary-black, @primary-white);
@@ -80,7 +81,7 @@ input, textarea {
     }
 }
 
-.libraries {
+.library {
     li:nth-child(2n-1) span{
         background-color: @zebra-white;
         &:hover {

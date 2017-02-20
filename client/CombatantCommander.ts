@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class CombatantCommander {
         constructor(private encounter: Encounter,
-            private userPollQueue: UserPollQueue,
+            private promptQueue: PromptQueue,
             private statBlockEditor: StatBlockEditor,
             private eventLog: EventLog) {
             this.Commands = BuildCombatantCommandList(this);
@@ -19,7 +19,7 @@ module ImprovedInitiative {
         }
 
         Commands: Command[];
-        SelectedCombatants: KnockoutObservableArray<ICombatant> = ko.observableArray<ICombatant>([]);
+        SelectedCombatants: KnockoutObservableArray<Combatant> = ko.observableArray<Combatant>([]);
 
         HasSelected = ko.computed(() => this.SelectedCombatants().length > 0);
         HasOneSelected = ko.computed(() => this.SelectedCombatants().length === 1);
@@ -40,7 +40,7 @@ module ImprovedInitiative {
                 .join(', ')
         );
 
-        Select = (data: ICombatant, e?: MouseEvent) => {
+        Select = (data: Combatant, e?: MouseEvent) => {
             if (!data) {
                 return;
             }
@@ -65,7 +65,7 @@ module ImprovedInitiative {
             var combatantsToRemove = this.SelectedCombatants.removeAll(),
                 indexOfFirstCombatantToRemove = this.encounter.Combatants.indexOf(combatantsToRemove[0]),
                 deletedCombatantNames = combatantsToRemove.map(c => c.StatBlock().Name);
-            
+
             if (this.encounter.Combatants().length > combatantsToRemove.length) {
                 while (combatantsToRemove.indexOf(this.encounter.ActiveCombatant()) > -1) {
                     this.encounter.NextTurn();
@@ -101,40 +101,40 @@ module ImprovedInitiative {
         }
 
         EditHP = () => {
-            var selectedCombatants = this.SelectedCombatants();
-            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            this.userPollQueue.Add({
-                requestContent: `Apply damage to ${combatantNames}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: response => {
-                    if (response) {
-                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(response))
-                        this.eventLog.AddEvent(`${response} damage applied to ${combatantNames}.`);
+            const selectedCombatants = this.SelectedCombatants();
+            const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
+            const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
+                response => {
+                    const damage = response['damage'];
+                    if (damage) {
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage))
+                        this.eventLog.AddEvent(`${damage} damage applied to ${combatantNames}.`);
                         this.encounter.QueueEmitEncounter();
                     }
-                }
-            });
+                });
+            this.promptQueue.Add(prompt);
             return false;
         }
 
         AddTemporaryHP = () => {
-            var selectedCombatants = this.SelectedCombatants();
-            var combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            this.userPollQueue.Add({
-                requestContent: `Grant temporary hit points to ${combatantNames}: <input class='response' type='number' />`,
-                inputSelector: '.response',
-                callback: response => selectedCombatants.forEach(c => {
-                    c.ViewModel.ApplyTemporaryHP(response);
-                    this.eventLog.AddEvent(`${response} temporary hit points granted to ${combatantNames}.`);
-                    this.encounter.QueueEmitEncounter();
-                })
-            });
+            const selectedCombatants = this.SelectedCombatants();
+            const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ');
+            const prompt = new DefaultPrompt(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
+                response => {
+                    const thp = response['thp'];
+                    if (thp) {
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyTemporaryHP(thp));
+                        this.eventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
+                        this.encounter.QueueEmitEncounter();
+                    }    
+                });
+            this.promptQueue.Add(prompt);
 
             return false;
         }
 
         AddTag = () => {
-            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag())
+            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag(this.encounter))
             return false;
         }
 

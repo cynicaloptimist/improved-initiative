@@ -8,12 +8,15 @@ interface KnockoutBindingHandlers {
     statBlockText: KnockoutBindingHandler;
     format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
+    awesomplete: KnockoutBindingHandler;
 }
 
 module ImprovedInitiative {
     ko.bindingHandlers.focusOnRender = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
-            $(element).find(valueAccessor()).first().select();
+            ComponentLoader.AfterComponentLoaded(() => {
+                $(element).find(valueAccessor()).first().select();
+            });
         }
     }
 
@@ -64,7 +67,7 @@ module ImprovedInitiative {
         text = md.renderInline(text);
 
         var rules: IRules = bindingContext.$root.Encounter.Rules;
-        var userPollQueue: UserPollQueue = bindingContext.$root.UserPollQueue;
+        var promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text.replace(findDice, match => {
             return `<span class='rollable'>${match}</span>`;
@@ -72,13 +75,12 @@ module ImprovedInitiative {
 
         $(element).html(text);
         $(element).find('.rollable').on('click', (event) => {
-            var diceExpression = event.target.innerHTML;
-            var diceRoll = rules.RollDiceExpression(diceExpression);
-            userPollQueue.Add({
-                requestContent: `Rolled: ${diceExpression} -> ${diceRoll.String} <input class='rollTotal' type='number' value='${diceRoll.Total}' />`,
-                inputSelector: '.rollTotal',
-                callback: response => null
-            });
+            const diceExpression = event.target.innerHTML;
+            const diceRoll = rules.RollDiceExpression(diceExpression);
+            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
+                _ => { }
+            );
+            promptQueue.Add(prompt);
         });
     };
 
@@ -133,6 +135,19 @@ module ImprovedInitiative {
             // Update the DOM element based on the supplied values here.
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
       
+        }
+    }
+
+    declare var Awesomplete: any;
+    ko.bindingHandlers.awesomplete = {
+        init: (element, valueAccessor) => {
+            new Awesomplete(element, {
+                list: valueAccessor(),
+                minChars: 1,
+                autoFirst: true
+            });
+
+            $(element).select();
         }
     }
 }
