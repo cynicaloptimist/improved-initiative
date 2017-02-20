@@ -1,11 +1,7 @@
 module ImprovedInitiative {
     const pendingComponents: JQueryXHR [] = [];
     export const ComponentLoader = {
-        AfterComponentLoaded: (callback: (() => void)) => {
-            $.when(pendingComponents).always(() => {
-                setTimeout(callback, 1);
-            });
-        }
+        AfterComponentLoaded: (callback: (() => void)) => $.when(...pendingComponents).always(callback)
     }
     export var RegisterComponents = () => {
         var templateLoader = {
