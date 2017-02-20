@@ -9,10 +9,17 @@ module ImprovedInitiative {
         SettingsVisible = ko.observable(false);
         BlurVisible = ko.computed(() =>
             this.TutorialVisible() ||
-            this.SettingsVisible());
+            this.SettingsVisible()
+        );
         RemoveOverlays = () => {
             this.TutorialVisible(false);
             this.SettingsVisible(false);
+        };
+        RepeatTutorial = () => {
+            this.Encounter.EndEncounter();
+            this.EncounterCommander.ShowLibraries();
+            this.SettingsVisible(false);
+            this.TutorialVisible(true);
         }
 
         StatBlockLibrary = new StatBlockLibrary();

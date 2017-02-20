@@ -3,6 +3,7 @@ module ImprovedInitiative {
         encounterCommander: EncounterCommander;
         combatantCommander: CombatantCommander;
         settingsVisible: KnockoutObservable<boolean>;
+        repeatTutorial: () => void;
     }) => {
         var tips = [
             "You can view command list and set keybindings on the 'Commands' tab.",
@@ -96,6 +97,8 @@ module ImprovedInitiative {
                     Store.ImportFromDnDAppFile(file);
                 }
             },
+
+            RepeatTutorial: params.repeatTutorial,
 
             RollHp: loadSetting("RollMonsterHp"),
             HpVerbosityOptions: [
