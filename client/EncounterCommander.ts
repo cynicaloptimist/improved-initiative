@@ -100,7 +100,9 @@ module ImprovedInitiative {
                 this.encounter.RollInitiative(this.promptQueue);
 
                 //Wait for component to load
-                setTimeout(() => TutorialSpy("ShowInitiativeDialog"), 500);
+                ComponentLoader.AfterComponentLoaded(() => {
+                    TutorialSpy("ShowInitiativeDialog")
+                });
             }
             
             this.HideLibraries();
