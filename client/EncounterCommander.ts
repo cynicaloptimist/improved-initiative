@@ -99,10 +99,7 @@ module ImprovedInitiative {
             if (this.encounter.State() == 'inactive') {
                 this.encounter.RollInitiative(this.promptQueue);
 
-                //Wait for component to load
-                ComponentLoader.AfterComponentLoaded(() => {
-                    TutorialSpy("ShowInitiativeDialog")
-                });
+                ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
             }
             
             this.HideLibraries();

@@ -11,8 +11,7 @@ module ImprovedInitiative {
             this.TutorialVisible() ||
             this.SettingsVisible()
         );
-        RemoveOverlays = () => {
-            this.TutorialVisible(false);
+        CloseSettings = () => {
             this.SettingsVisible(false);
         };
         RepeatTutorial = () => {

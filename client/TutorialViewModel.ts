@@ -38,6 +38,7 @@ module ImprovedInitiative {
         }
 
         End = () => {
+            this.stepIndex(0);
             $('.tutorial-focus').removeClass('tutorial-focus');
             Store.Save(Store.User, 'SkipIntro', true);
             this.showTutorial(false);
