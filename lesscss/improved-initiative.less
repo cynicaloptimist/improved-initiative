@@ -335,6 +335,27 @@ input[type="file"] {
 .editor {
     flex-grow: 1;
 
+    textarea {
+        flex-grow: 1;
+        height: 50px;
+    }
+
+    input, textarea, p {
+        font-size: medium;
+        line-height: 1.4em;
+
+        margin-left: @medium-spacer;
+        &[type="text"] {
+            width: 100px;
+        }
+        &[type="number"] {
+            width: 40px;
+        }
+        &.name, &.type, &.source {
+            width:200px;
+        }
+    }
+
     .editor-type {
         flex-direction: row;
         flex-shrink:0;
@@ -359,24 +380,12 @@ input[type="file"] {
             flex-direction: row;
             align-items: flex-start;
         }
-        textarea {
-            flex-grow: 1;
+        input[type="text"] {
+            width: 200px;
+            height: 50px;
         }
     }
 
-    input {
-        margin-left: @medium-spacer;
-        &[type="text"] {
-            width: 100px;
-        }
-        &[type="number"] {
-            width: 40px;
-        }
-        &.name, &.type, &.source {
-            width:200px;
-        }
-    }
-    
     .fa-clickable {
         margin-left: @medium-spacer;
     }
