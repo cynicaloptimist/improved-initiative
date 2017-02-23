@@ -12,3 +12,5 @@ To run, install node.js and run the following in the cloned directory:
 Once the Improved Initiative app is running, the ui can be accessed at <http://localhost>
 
 Current todos are located [on Trello](https://trello.com/b/q71xURUt/improved-initiative)
+
+Development of Improved Initiative is supported through [Patreon](https://www.patreon.com/improvedinitiative).
