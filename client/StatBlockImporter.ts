@@ -1,16 +1,20 @@
 class StatBlockImporter {
     constructor(private statBlockXml: Element) { }
+
     GetString = (selector: string) => {
         return $(this.statBlockXml).find(selector).html() || '';
     }
+
     GetJoinedStrings = (selectors: string[], delimiter: string = ', ') => {
         return selectors.map(this.GetString).reduce((p, c) => {
             return p + (c ? delimiter + c : '');
         })
     }
+
     GetInt = (selector: string) => {
         return parseInt(this.GetString(selector));
     }
+
     GetArray = (selector: string, token: string = ', ') => {
         var arrayLine = this.GetString(selector);
         if (arrayLine) {
@@ -18,12 +22,14 @@ class StatBlockImporter {
         }
         return [];
     }
+
     GetModifier = (nameSelector: string, valueSelector: string) => {
         return {
             Name: this.GetString(nameSelector),
             Value: this.GetInt(valueSelector)
         }
     }
+    
     GetNotes = (valueSelector: string, notesSelector: string) => {
         return {
             Value: this.GetInt(valueSelector),
