@@ -83,7 +83,7 @@ module ImprovedInitiative {
 
             $(xmlDoc).find('npcdata>*').each((_, statBlockXML) => {
                 var imp = new StatBlockImporter(statBlockXML);
-                var statBlock = StatBlock.Empty();
+                var statBlock = StatBlock.Default();
 
                 statBlock.Name = imp.GetString('name');
                 statBlock.Source = imp.GetString('source');

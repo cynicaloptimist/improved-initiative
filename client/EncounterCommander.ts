@@ -39,7 +39,7 @@ module ImprovedInitiative {
         }
         
         CreateAndEditStatBlock = (library: string) => {
-            var statBlock = StatBlock.Empty();
+            var statBlock = StatBlock.Default();
             var newId = probablyUniqueString();
 
             if (library == "Players") {

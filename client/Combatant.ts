@@ -21,7 +21,7 @@ module ImprovedInitiative {
 
     export class Combatant implements Combatant {
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-            var statBlock: StatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
+            var statBlock: StatBlock = jQuery.extend(StatBlock.Default(), statBlockJson);
 
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
@@ -118,7 +118,7 @@ module ImprovedInitiative {
         }
 
         private calculateModifiers = () => {
-            var modifiers = StatBlock.Empty().Abilities;
+            var modifiers = StatBlock.Default().Abilities;
             for (var attribute in this.StatBlock().Abilities) {
                 modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities[attribute]);
             }

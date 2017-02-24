@@ -9,7 +9,7 @@ module ImprovedInitiative {
         SavedEncounterIndex: KnockoutObservableArray<string>;
 
         GetPreviewStatBlock = ko.computed(() => {
-            return this.previewStatBlock() || StatBlock.Empty();
+            return this.previewStatBlock() || StatBlock.Default();
         })
 
         PreviewStatBlock = (listing: StatBlockListing) => {

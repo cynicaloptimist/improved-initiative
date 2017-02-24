@@ -67,7 +67,7 @@ module ImprovedInitiative {
         }
 
         public GetStatBlock() {
-            var statBlock = StatBlock.Empty();
+            var statBlock = StatBlock.Default();
 
             statBlock.Name = this.getString("name");
             statBlock.Type = this.getType();

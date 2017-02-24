@@ -16,7 +16,7 @@ module ImprovedInitiative {
             deleteCallback: (library: string, id: string) => void) => {
             
             statBlock.Id = statBlockId;
-            this.statBlock = $.extend(StatBlock.Empty(), statBlock);
+            this.statBlock = $.extend(StatBlock.Default(), statBlock);
 
             this.EditableStatBlock(this.makeEditable(this.statBlock));
             this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
@@ -86,7 +86,7 @@ module ImprovedInitiative {
         }
 
         SaveStatBlock = () => {
-            let editedStatBlock: StatBlock = StatBlock.Empty();
+            let editedStatBlock: StatBlock = StatBlock.Default();
 
             if (this.EditorType() === 'advanced') {
                 try {

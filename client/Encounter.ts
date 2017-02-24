@@ -40,7 +40,7 @@ module ImprovedInitiative {
             this.ActiveCombatantStatBlock = ko.computed(() => {
                 return this.ActiveCombatant()
                     ? this.ActiveCombatant().StatBlock()
-                    : StatBlock.Empty();
+                    : StatBlock.Default();
             });
 
             var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
@@ -77,10 +77,10 @@ module ImprovedInitiative {
                                 this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                             })
                             .fail(_ => {
-                                this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
+                                this.AddCombatantFromStatBlock(deepExtend(StatBlock.Default(), c))
                             })
                     } else {
-                        this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
+                        this.AddCombatantFromStatBlock(deepExtend(StatBlock.Default(), c))
                     }
                 })
             }

@@ -30,7 +30,7 @@ module ImprovedInitiative {
             if (selectedCombatants.length == 1) {
                 return selectedCombatants[0].StatBlock();
             } else {
-                return StatBlock.Empty();
+                return StatBlock.Default();
             }
         });
 

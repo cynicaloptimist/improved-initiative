@@ -52,7 +52,7 @@ module ImprovedInitiative {
     }
 
     export class StatBlock {
-        static Empty = (mutator?: (s: StatBlock) => void): StatBlock => {
+        static Default = (mutator?: (s: StatBlock) => void): StatBlock => {
             const statBlock = {
                 Id: '', Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
