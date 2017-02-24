@@ -246,7 +246,7 @@ module ImprovedInitiative {
                         }
                         return true;
                     })
-                    .map<CombatantPlayerViewModel>(c => new CombatantPlayerViewModel(c))
+                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c))
             };
         }
 

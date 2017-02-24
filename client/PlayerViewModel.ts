@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class PlayerViewModel {
-        Combatants: KnockoutObservableArray<CombatantPlayerViewModel> = ko.observableArray<CombatantPlayerViewModel>([]);
-        ActiveCombatant: KnockoutObservable<CombatantPlayerViewModel> = ko.observable<CombatantPlayerViewModel>();
+        Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+        ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
         EncounterId = $('html')[0].getAttribute('encounterId');
         RoundCounter = ko.observable();
         TurnTimer = new TurnTimer();
@@ -17,7 +17,7 @@ module ImprovedInitiative {
             this.Socket.emit('join encounter', this.EncounterId);
         }
 
-        LoadEncounter = (encounter: SavedEncounter<CombatantPlayerViewModel>) => {
+        LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
             this.Combatants(encounter.Combatants);
             this.DisplayTurnTimer(encounter.DisplayTurnTimer);
             this.RoundCounter(encounter.RoundCounter)
