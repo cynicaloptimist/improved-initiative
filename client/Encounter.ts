@@ -117,12 +117,8 @@ module ImprovedInitiative {
         }
 
         AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: SavedCombatant) => {
-            var combatant: Combatant;
-            if (statBlockJson.Player && statBlockJson.Player.toLocaleLowerCase() === 'player') {
-                combatant = new PlayerCharacter(statBlockJson, this, savedCombatant);
-            } else {
-                combatant = new Combatant(statBlockJson, this, savedCombatant);
-            }
+            const combatant = new Combatant(statBlockJson, this, savedCombatant);
+
             if (event && event.altKey) {
                 combatant.Hidden(true);
             }
