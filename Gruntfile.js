@@ -16,6 +16,9 @@ module.exports = function (grunt) {
       client: {
         src: ['client/*.ts'],
         out: 'public/js/ImprovedInitiative.js',
+        options: {
+          fast: 'never'
+        }
       },
       server: {
         src: ['server/*.ts'],
