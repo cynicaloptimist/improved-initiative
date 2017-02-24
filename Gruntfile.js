@@ -13,7 +13,7 @@ module.exports = function (grunt) {
       options: {
         removeComments: false,
       },
-      default: {
+      client: {
         src: ['client/*.ts'],
         out: 'public/js/ImprovedInitiative.js',
       },
@@ -32,7 +32,7 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          'client.min.js': ['build/client/*.js']
+          'public/js/ImprovedInitiative.js': ['public/js/ImprovedInitiative.js']
         }
       }
     },
@@ -58,11 +58,6 @@ module.exports = function (grunt) {
         dest: 'public/js/dependencies.js',
         sourceMap: true
       },
-      js_client: {
-        src: 'public/js/ImprovedInitiative.js',
-        dest: 'public/js/ImprovedInitiative.js',
-        sourceMap: true
-      },
       js_dependencies_min: {
         src: [
           'node_modules/knockout/build/output/knockout-latest.js',
@@ -77,11 +72,6 @@ module.exports = function (grunt) {
         ],
         dest: 'public/js/dependencies.js'
       },
-      js_client_min: {
-        src: ['client.min.js'],
-        dest: 'public/js/ImprovedInitiative.js',
-        sourceMap: true
-      },
       css: {
         src: [
           'node_modules/awesomplete/awesomplete.css',
@@ -91,9 +81,13 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      ts: {
+      tsclient: {
         files: 'client/*.ts',
-        tasks: ['ts', 'concat:js_client']
+        tasks: ['ts:client', 'concat:js_client']
+      },
+      tsserver: {
+        files: 'server/*.ts',
+        tasks: ['ts:server']
       },
       lesscss: {
         files: 'lesscss/*.less',
@@ -109,8 +103,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build_dev', ['ts:default', 'ts:server', 'less', 'concat:js_client', 'concat:js_dependencies', 'concat:css']);
-  grunt.registerTask('build_min', ['ts:default', 'ts:server', 'uglify', 'less', 'concat:js_client_min', 'concat:js_dependencies_min', 'concat:css']);
+  grunt.registerTask('build_dev', ['ts:client', 'ts:server', 'less', 'concat:js_dependencies', 'concat:css']);
+  grunt.registerTask('build_min', ['ts:client', 'ts:server', 'uglify', 'less', 'concat:js_dependencies_min', 'concat:css']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };
