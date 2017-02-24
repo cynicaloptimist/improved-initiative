@@ -15,11 +15,7 @@ module.exports = function (grunt) {
       },
       default: {
         src: ['client/*.ts'],
-        outDir: 'build/client',
-        options: {
-          module: 'amd',
-          target: 'es5'
-        }
+        out: 'public/js/ImprovedInitiative.js',
       },
       server: {
         src: ['server/*.ts'],
@@ -63,7 +59,7 @@ module.exports = function (grunt) {
         sourceMap: true
       },
       js_client: {
-        src: ['build/client/*.js'],
+        src: 'public/js/ImprovedInitiative.js',
         dest: 'public/js/ImprovedInitiative.js',
         sourceMap: true
       },
