@@ -24,7 +24,7 @@ module ImprovedInitiative {
         Usage?: string;
     }
 
-    export interface IStatBlock {
+    export interface StatBlock {
         Id: string;
         Name: string;
         Source: string;
@@ -52,7 +52,7 @@ module ImprovedInitiative {
     }
 
     export class StatBlock {
-        static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
+        static Empty = (mutator?: (s: StatBlock) => void): StatBlock => {
             const statBlock = {
                 Id: '', Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },

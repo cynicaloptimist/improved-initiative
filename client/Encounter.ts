@@ -5,7 +5,7 @@ module ImprovedInitiative {
 
     export interface SavedCombatant {
         Id: string;
-        StatBlock: IStatBlock;
+        StatBlock: StatBlock;
         MaxHP: number;
         CurrentHP: number;
         TemporaryHP: number;
@@ -54,7 +54,7 @@ module ImprovedInitiative {
         Combatants: KnockoutObservableArray<Combatant>;
         CombatantCountsByName: KnockoutObservable<number>[];
         ActiveCombatant: KnockoutObservable<Combatant>;
-        ActiveCombatantStatBlock: KnockoutComputed<IStatBlock>;
+        ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
@@ -116,7 +116,7 @@ module ImprovedInitiative {
             return newInitiative;
         }
 
-        AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: SavedCombatant) => {
+        AddCombatantFromStatBlock = (statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) => {
             const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
             if (event && event.altKey) {

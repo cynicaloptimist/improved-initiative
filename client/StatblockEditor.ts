@@ -1,8 +1,8 @@
 module ImprovedInitiative {
     export class StatBlockEditor {
-        private saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void;
+        private saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void;
         private deleteCallback: (library: string, id: string) => void;
-        private statBlock: IStatBlock;
+        private statBlock: StatBlock;
 
         EditorType = ko.observable<string>('basic');
         JsonStatBlock = ko.observable<string>();
@@ -11,8 +11,8 @@ module ImprovedInitiative {
         HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
 
         EditStatBlock = (statBlockId: string,
-            statBlock: IStatBlock,
-            saveCallback: (library: string, id: string, newStatBlock: IStatBlock) => void,
+            statBlock: StatBlock,
+            saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
             deleteCallback: (library: string, id: string) => void) => {
             
             statBlock.Id = statBlockId;
@@ -26,7 +26,7 @@ module ImprovedInitiative {
         }
 
         
-        private makeEditable = (statBlock: IStatBlock) => {
+        private makeEditable = (statBlock: StatBlock) => {
             let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
             let modifierLists = ['Saves', 'Skills'];
             let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
@@ -86,7 +86,7 @@ module ImprovedInitiative {
         }
 
         SaveStatBlock = () => {
-            let editedStatBlock: IStatBlock = StatBlock.Empty();
+            let editedStatBlock: StatBlock = StatBlock.Empty();
 
             if (this.EditorType() === 'advanced') {
                 try {

@@ -25,7 +25,7 @@ module ImprovedInitiative {
         HasOneSelected = ko.computed(() => this.SelectedCombatants().length === 1);
         HasMultipleSelected = ko.computed(() => this.SelectedCombatants().length > 1);
 
-        StatBlock: KnockoutComputed<IStatBlock> = ko.computed(() => {
+        StatBlock: KnockoutComputed<StatBlock> = ko.computed(() => {
             var selectedCombatants = this.SelectedCombatants();
             if (selectedCombatants.length == 1) {
                 return selectedCombatants[0].StatBlock();

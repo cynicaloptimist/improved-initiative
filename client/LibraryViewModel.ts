@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     export class LibraryViewModel {
-        private previewStatBlock: KnockoutObservable<IStatBlock> = ko.observable(null);
+        private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
 
         constructor(public EncounterCommander: EncounterCommander, private library: StatBlockLibrary) {
             this.SavedEncounterIndex = library.SavedEncounterIndex;

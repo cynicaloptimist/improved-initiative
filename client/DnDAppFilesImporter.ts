@@ -105,7 +105,7 @@ module ImprovedInitiative {
     }
 
     export class DnDAppFilesImporter {
-        public ImportFromXml(xmlFile: File, callBack: (statBlocks: IStatBlock []) => void) {
+        public ImportFromXml(xmlFile: File, callBack: (statBlocks: StatBlock []) => void) {
             var reader = new FileReader();
             reader.onload = (event: any) => {
                 var xml: string = event.target.result;

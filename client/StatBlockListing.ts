@@ -2,8 +2,8 @@ module ImprovedInitiative {
     export class StatBlockListing {
         Name: KnockoutObservable<string>;
         IsLoaded: boolean;
-        StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: IStatBlock) {
+        StatBlock: KnockoutObservable<StatBlock>;
+        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: StatBlock) {
             this.Name = ko.observable(name);
             this.IsLoaded = !!statBlock;
             this.StatBlock = ko.observable(statBlock || StatBlock.Empty(c => { c.Name = name }));
