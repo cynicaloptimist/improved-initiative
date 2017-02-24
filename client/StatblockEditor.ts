@@ -16,7 +16,7 @@ module ImprovedInitiative {
             deleteCallback: (library: string, id: string) => void) => {
             
             statBlock.Id = statBlockId;
-            this.statBlock = $.extend(StatBlock.Default(), statBlock);
+            this.statBlock = { ...StatBlock.Default(), ...statBlock }
 
             this.EditableStatBlock(this.makeEditable(this.statBlock));
             this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));

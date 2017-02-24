@@ -67,20 +67,20 @@ module ImprovedInitiative {
         }
 
         ImportEncounter = (encounter) => {
-            const deepExtend = (a, b) => $.extend(true, {}, a, b);
+            const deepMerge = (a, b) => $.extend(true, {}, a, b);
             if (encounter.Combatants) {
                 encounter.Combatants.forEach(c => {
                     if (c.Id) {
                         $.ajax(`/statblocks/${c.Id}`)
                             .done(statBlockFromLibrary => {
-                                const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
+                                const modifiedStatBlockFromLibrary = deepMerge(statBlockFromLibrary, c);
                                 this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                             })
                             .fail(_ => {
-                                this.AddCombatantFromStatBlock(deepExtend(StatBlock.Default(), c))
+                                this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
                             })
                     } else {
-                        this.AddCombatantFromStatBlock(deepExtend(StatBlock.Default(), c))
+                        this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
                     }
                 })
             }

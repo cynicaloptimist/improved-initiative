@@ -21,7 +21,7 @@ module ImprovedInitiative {
 
     export class Combatant implements Combatant {
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-            var statBlock: StatBlock = jQuery.extend(StatBlock.Default(), statBlockJson);
+            var statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;

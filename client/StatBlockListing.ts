@@ -20,7 +20,7 @@ module ImprovedInitiative {
             else {
                 $.getJSON(this.Link, (json) => {
                     this.IsLoaded = true;
-                    this.StatBlock($.extend(StatBlock.Default(), json));
+                    this.StatBlock({ ...StatBlock.Default(), ...json });
                     callback(this);
                 });
             }

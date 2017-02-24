@@ -83,7 +83,7 @@ module.exports = function (grunt) {
     watch: {
       tsclient: {
         files: 'client/*.ts',
-        tasks: ['ts:client', 'concat:js_client']
+        tasks: ['ts:client']
       },
       tsserver: {
         files: 'server/*.ts',

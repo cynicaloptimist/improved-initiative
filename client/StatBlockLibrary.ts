@@ -4,7 +4,7 @@ module ImprovedInitiative {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             
             Store.List(Store.PlayerCharacters).forEach(id => {
-                var statBlock = $.extend(StatBlock.Default(), Store.Load<StatBlock>(Store.PlayerCharacters, id));
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
                 this.PCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
@@ -13,7 +13,7 @@ module ImprovedInitiative {
             }
 
             Store.List(Store.StatBlocks).forEach(id => {
-                var statBlock = $.extend(StatBlock.Default(), Store.Load<StatBlock>(Store.StatBlocks, id));
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
                 this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
 
@@ -39,7 +39,7 @@ module ImprovedInitiative {
         AddSamplePlayersFromUrl = (url: string) => {
             $.getJSON(url, (json: StatBlock []) => {
                 json.forEach((statBlock, index) => {
-                    statBlock = $.extend(StatBlock.Default(), statBlock);
+                    statBlock = { ...StatBlock.Default(), ...statBlock }
                     this.PCStatBlocks.push(new StatBlockListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
                 })
             });
