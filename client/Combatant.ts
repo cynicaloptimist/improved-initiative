@@ -77,8 +77,6 @@ module ImprovedInitiative {
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
 
-        
-
         private processSavedCombatant(savedCombatant: SavedCombatant) {
             this.IndexLabel = savedCombatant.IndexLabel;
             this.CurrentHP(savedCombatant.CurrentHP);
