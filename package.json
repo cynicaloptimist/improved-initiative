@@ -54,6 +54,7 @@
     "uglify-js": "^2.7.4"
   },
   "scripts": {
+    "preinstall": "git clean -fdx -e node_modules/",
     "postinstall": "typings install && grunt --no-color postinstall",
     "start": "node server.js",
     "clean": "git clean -f -x -e node_modules/"
