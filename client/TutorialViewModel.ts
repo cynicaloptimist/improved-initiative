@@ -6,7 +6,7 @@ module ImprovedInitiative {
         //TODO: auto advance on view changes
 
         private stepIndex = ko.observable<number>(null);
-        private showTutorial;
+        private showTutorial: KnockoutObservable<boolean>;
 
         CurrentStep: KnockoutComputed<string>;
         Position: KnockoutComputed<Position>;
@@ -27,14 +27,31 @@ module ImprovedInitiative {
             });
 
             TutorialSpy.subscribe(action => {
-                if (action == TutorialSteps[this.stepIndex()].AwaitAction) {
+                const index = this.stepIndex();
+                if (index && action == TutorialSteps[index].AwaitAction) {
                     this.Next();
                 }
             });
 
-            this.stepIndex(0);
             this.showTutorial = params.showTutorial;
-            this.CurrentStep = ko.computed(() => TutorialSteps[this.stepIndex()].Message);
+            
+            if (this.showTutorial()) {
+                this.stepIndex(0);    
+            }
+
+            this.showTutorial.subscribe(v => {
+                if (v) {
+                    this.stepIndex(0)
+                }
+            });
+            
+            this.CurrentStep = ko.computed(() => {
+                const index = this.stepIndex();
+                if (index) {
+                    return TutorialSteps[index].Message    
+                }
+                return "";
+            });
         }
 
         End = () => {
