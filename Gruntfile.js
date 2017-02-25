@@ -17,8 +17,13 @@ module.exports = function (grunt) {
         src: ['client/*.ts'],
         out: 'public/js/ImprovedInitiative.js',
         options: {
-          fast: 'never'
+          fast: 'never',
+          inlineSources: true
         }
+      },
+      client_prod: {
+        src: ['client/*.ts'],
+        out: 'build/ImprovedInitiative.js'
       },
       server: {
         src: ['server/*.ts'],
@@ -35,7 +40,7 @@ module.exports = function (grunt) {
       },
       prod: {
         files: {
-          'public/js/ImprovedInitiative.js': ['public/js/ImprovedInitiative.js']
+          'public/js/ImprovedInitiative.js': ['build/ImprovedInitiative.js']
         }
       }
     },
@@ -107,7 +112,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_dev', ['ts:client', 'ts:server', 'less', 'concat:js_dependencies', 'concat:css']);
-  grunt.registerTask('build_min', ['ts:client', 'ts:server', 'uglify', 'less', 'concat:js_dependencies_min', 'concat:css']);
+  grunt.registerTask('build_min', ['ts:client_prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min', 'concat:css']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };
