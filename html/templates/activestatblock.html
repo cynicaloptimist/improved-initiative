@@ -11,7 +11,7 @@
   <div data-bind="foreach: $parent[$data]">
     <div>
       <span class="stat-label" data-bind="text: Name"></span>
-      <span class="stat-label" data-bind="text: Usage"></span>
+      <span class="stat-label" data-bind="visible: Usage, text: Usage"></span>
       <span data-bind="statBlockText: Content"></span>
     </div>
   </div>
@@ -66,8 +66,13 @@
 </div>
 
 <div class="Challenge" data-bind="visible: Challenge">
-  <span class="stat-label">Challenge</span>
-  <span data-bind="text: Challenge"></span>
+    <!-- ko if: Player == "player" -->
+    <span class="stat-label">Level</span>
+    <!-- /ko -->
+    <!-- ko ifnot: Player == "player" -->
+    <span class="stat-label">Challenge</span>
+    <!-- /ko -->
+      <span data-bind="text: Challenge"></span>
 </div>
 
 <div class="Description" data-bind="visible: Description">
