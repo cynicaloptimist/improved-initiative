@@ -109,7 +109,6 @@
     }">
     </div>
     <!-- /ko -->
-
     <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
     <h2>Initiative Order</h2>
     <ul class="combatants" data-bind="with: Encounter">
@@ -141,14 +140,14 @@
     </ul>
     <!-- /ko -->
     <!-- ko foreach: PromptQueue.Prompts -->
-    <form class="prompt" data-bind="
-        submit: Resolve,
-        component: {
-            name: ComponentName,
-            params: {
-                prompt: $data
-            }
-        }">
+        <form class="prompt" data-bind="
+            submit: Resolve,
+            component: {
+                name: ComponentName,
+                params: {
+                    prompt: $data
+                }
+            }">
         </form>
 
         <!-- /ko -->
@@ -159,32 +158,31 @@
             </ul>
             <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
                 <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
+
                 <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
                 <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()" ><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span><span data-bind="text: TotalExperience"></span> XP</span>
             </div>
         </div>
-        </div>
-        <div class="right-column">
-            <div class="selected-combatant">
-                <!-- ko if: CombatantCommander.HasOneSelected -->
-                <h2>Selected Combatant</h2>
-                <div class="statblock" data-bind="
-component: { 
-name: 'defaultstatblock', 
-params:{ 
-    statBlock: CombatantCommander.StatBlock(),
-} 
-}">
+    </div>
+    <div class="right-column">
+        <div class="selected-combatant">
+            <!-- ko if: CombatantCommander.HasOneSelected -->
+            <h2>Selected Combatant</h2>
+            <div class="statblock" data-bind="
+                component: { 
+                    name: 'defaultstatblock', 
+                    params:{ 
+                        statBlock: CombatantCommander.StatBlock(),
+                    } 
+                }">
             </div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>
-            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, 
-text: CombatantCommander.Names">
+            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"></div>
+            <!-- /ko -->
         </div>
-        <!-- /ko -->
-        </div>
-        </div>
+    </div>
 </body>
-
 </html>

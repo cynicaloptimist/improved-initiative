@@ -34,7 +34,6 @@ module ImprovedInitiative {
     export class Encounter {
         constructor(promptQueue: PromptQueue) {
             this.Rules = new DefaultRules();
-            this.Combatants = ko.observableArray<Combatant>();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
             this.ActiveCombatantStatBlock = ko.computed(() => {
@@ -42,6 +41,12 @@ module ImprovedInitiative {
                     ? this.ActiveCombatant().StatBlock()
                     : StatBlock.Default();
             });
+
+            this.Difficulty = ko.computed(() => {
+                const enemyChallengeRatings = this.Combatants().filter(c => !c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => c.StatBlock().Challenge);
+                const playerLevels = this.Combatants().filter(c => c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => parseInt(c.StatBlock().Challenge));
+                return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
+            })
 
             var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
             if (autosavedEncounter) {
@@ -51,10 +56,11 @@ module ImprovedInitiative {
 
         Rules: IRules;
         TurnTimer = new TurnTimer();
-        Combatants: KnockoutObservableArray<Combatant>;
+        Combatants = ko.observableArray<Combatant>([]);
         CombatantCountsByName: KnockoutObservable<number>[];
         ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
+        Difficulty: KnockoutComputed<EncounterDifficulty>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
