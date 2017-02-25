@@ -19,8 +19,8 @@ module ImprovedInitiative {
 
             const appInsights = window["appInsights"];
             appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
-            appInsights.trackEvent("CustomCreatures", { Count: this.PCStatBlocks().length });
-            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.NPCStatBlocks().length});
+            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.PCStatBlocks().length });
+            appInsights.trackEvent("CustomCreatures", { Count: this.NPCStatBlocks().length});
         }
 
         NPCStatBlocks = ko.observableArray<StatBlockListing>([]);
