@@ -87,8 +87,9 @@ module ImprovedInitiative {
             this.displaySettings(true);
         }
 
-        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
-        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
+        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
+        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'));
+        DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));
         
         StartEncounter = () => {
             if(this.promptQueue.HasPrompt()){

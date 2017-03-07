@@ -74,6 +74,9 @@ module ImprovedInitiative {
 
         var displayTurnTimer = loadSetting("DisplayTurnTimer");
         displayTurnTimer.subscribe(params.encounterCommander.DisplayTurnTimer);
+
+        var displayDifficulty = loadSetting("DisplayDifficulty");
+        displayDifficulty.subscribe(params.encounterCommander.DisplayDifficulty);
         
         return {
             EncounterCommands: params.encounterCommander.Commands,
@@ -112,6 +115,7 @@ module ImprovedInitiative {
             AllowNegativeHP: loadSetting("AllowNegativeHP"),
             DisplayRoundCounter: displayRoundCounter,
             DisplayTurnTimer: displayTurnTimer,
+            DisplayDifficulty: displayDifficulty,
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),

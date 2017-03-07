@@ -161,7 +161,7 @@
 
                 <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
                 <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
-                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()"><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span>
+                <span class="encounter-challenge" data-bind="visible: EncounterCommander.DisplayDifficulty, with: Encounter.Difficulty()"><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span>
                 <span data-bind="text: TotalExperience"></span> XP</span>
             </div>
         </div>
