@@ -39,21 +39,38 @@ module ImprovedInitiative {
         "26": 90000, "27": 105000, "28": 120000, "29": 135000, "30": 155000
     }
 
-    const getXpMultiplier = (enemyCount: number) => {
+    const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
+
+    const getXpMultiplierRank = (enemyCount: number) => {
         if (enemyCount <= 1)
             return 1;
         if (enemyCount <= 2)
-            return 1.5;
-        if (enemyCount <= 6)
             return 2;
-        if (enemyCount <= 10)
-            return 2.5;
-        if (enemyCount <= 14)
+        if (enemyCount <= 6)
             return 3;
-        return 4;
+        if (enemyCount <= 10)
+            return 4;
+        if (enemyCount <= 14)
+            return 5;
+
+        return 6;
     }
 
-    const getModifiedXp = (enemyChallengeRatings: string []) => {
+    const getXpMultiplier = (enemyCount: number, playerCount: number) => {
+        const multiplierRank = getXpMultiplierRank(enemyCount);
+
+        if (playerCount < 3) {
+            return rankedXpMultipliers[multiplierRank + 1];
+        }
+
+        if (playerCount > 5) {
+            return rankedXpMultipliers[multiplierRank - 1];
+        }
+
+        return rankedXpMultipliers[multiplierRank];
+    }
+
+    const getModifiedXp = (enemyChallengeRatings: string [], playerCount: number) => {
         const totalXpBase = enemyChallengeRatings.reduce((currentSum, cr) => {
             if (xpAmountsByChallenge[cr]) {
                 return currentSum + xpAmountsByChallenge[cr];
@@ -61,9 +78,7 @@ module ImprovedInitiative {
             return currentSum;
         }, 0);
 
-        //TODO: handle rule for unusual party sizes (DMG:83)
-
-        return totalXpBase * getXpMultiplier(enemyChallengeRatings.length);
+        return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
     }
 
     const getDifficulty = (totalXp, playerLevels: number[]) => {
@@ -97,7 +112,7 @@ module ImprovedInitiative {
 
     export class DifficultyCalculator {
         static Calculate(enemyChallengeRatings: string[], playerLevels: number[]): EncounterDifficulty {
-            const totalXpWithEnemyCount = getModifiedXp(enemyChallengeRatings);
+            const totalXpWithEnemyCount = getModifiedXp(enemyChallengeRatings, playerLevels.length);
             return {
                 Difficulty: getDifficulty(totalXpWithEnemyCount, playerLevels),
                 TotalExperience: totalXpWithEnemyCount
