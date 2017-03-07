@@ -11,7 +11,7 @@
     <script type="text/javascript">
         var appInsights = window.appInsights || function (config) {
             function i(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = "AuthenticatedUserContext", h = "start", c = "stop", l = "Track", a = l + "Event", v = l + "Page", y = u.createElement(o), r, f; y.src = config.url || "https://az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(y); try { t.cookie = u.cookie } catch (p) { } for (t.queue = [], t.version = "1.0", r = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; r.length;)i("track" + r.pop()); return i("set" + s), i("clear" + s), i(h + a), i(c + a), i(h + v), i(c + v), i("flush"), config.disableExceptionTracking || (r = "onerror", i("_" + r), f = e[r], e[r] = function (config, i, u, e, o) { var s = f && f(config, i, u, e, o); return s !== !0 && t["_" + r](config, i, u, e, o), s }), t
-        } ({
+        }({
             instrumentationKey: "{{appInsightsKey}}",
             maxAjaxCallsPerView: 10
         });
@@ -73,8 +73,8 @@
         </div>
     </div>
     <div class="left-column">
-    <!-- ko if: EncounterCommander.ShowingLibraries -->
-    <div class="libraries" data-bind="
+        <!-- ko if: EncounterCommander.ShowingLibraries -->
+        <div class="libraries" data-bind="
         component: {
             name: 'libraries',
             params: {
@@ -82,21 +82,21 @@
                 encounterCommander: EncounterCommander
             }
         }">
-    </div>
-    <!-- /ko -->
-    <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
-    <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
-        <h2>Active Combatant</h2>
-        <div class="statblock" data-bind="
+        </div>
+        <!-- /ko -->
+        <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
+        <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
+            <h2>Active Combatant</h2>
+            <div class="statblock" data-bind="
     component: { 
         name: 'activestatblock', 
         params: { 
         statBlock: Encounter.ActiveCombatantStatBlock 
         } 
     }">
-    </div>
-    </div>
-    <!-- /ko -->
+            </div>
+        </div>
+        <!-- /ko -->
     </div>
     <div class="center-column">
         <!-- ko if: StatBlockEditor.EditableStatBlock() -->
@@ -107,20 +107,20 @@
             editor: StatBlockEditor
         }
     }">
-    </div>
-    <!-- /ko -->
-    <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
-    <h2>Initiative Order</h2>
-    <ul class="combatants" data-bind="with: Encounter">
-        <li class="combatant header">
-            <span class="initiative fa fa-forward"></span></span>
-            <span class="name">Combatant</span>
-            <span class="hp fa fa-heart"></span></span>
-            <span class="ac fa fa-shield"></span></span>
-            <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
-        </li>
-        <!-- ko foreach: Combatants -->
-        <li class="combatant" data-bind="
+        </div>
+        <!-- /ko -->
+        <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
+        <h2>Initiative Order</h2>
+        <ul class="combatants" data-bind="with: Encounter">
+            <li class="combatant header">
+                <span class="initiative fa fa-forward"></span></span>
+                <span class="name">Combatant</span>
+                <span class="hp fa fa-heart"></span></span>
+                <span class="ac fa fa-shield"></span></span>
+                <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
+            </li>
+            <!-- ko foreach: Combatants -->
+            <li class="combatant" data-bind="
         css: { 
             selected: $root.CombatantCommander.SelectedCombatants().indexOf($data) > -1, 
             active: $parent.ActiveCombatant() == $data 
@@ -137,9 +137,9 @@
         }">
             </li>
             <!-- /ko -->
-    </ul>
-    <!-- /ko -->
-    <!-- ko foreach: PromptQueue.Prompts -->
+        </ul>
+        <!-- /ko -->
+        <!-- ko foreach: PromptQueue.Prompts -->
         <form class="prompt" data-bind="
             submit: Resolve,
             component: {
@@ -161,7 +161,8 @@
 
                 <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
                 <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
-                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()" ><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span><span data-bind="text: TotalExperience"></span> XP</span>
+                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()"><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span>
+                <span data-bind="text: TotalExperience"></span> XP</span>
             </div>
         </div>
     </div>
@@ -185,4 +186,5 @@
         </div>
     </div>
 </body>
+
 </html>
