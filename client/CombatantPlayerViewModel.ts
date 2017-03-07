@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export class CombatantPlayerViewModel {
+    export class StaticCombatantViewModel {
         Name: string;
         HPDisplay: string;
         HPColor: string;

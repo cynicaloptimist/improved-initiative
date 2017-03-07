@@ -13,7 +13,7 @@ module ImprovedInitiative {
         InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
         Hidden: KnockoutObservable<boolean>;
-        StatBlock: KnockoutObservable<IStatBlock>;
+        StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter: boolean;
@@ -21,7 +21,7 @@ module ImprovedInitiative {
 
     export class Combatant implements Combatant {
         constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-            var statBlock: IStatBlock = jQuery.extend(StatBlock.Empty(), statBlockJson);
+            var statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
             if (savedCombatant) {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
@@ -52,7 +52,7 @@ module ImprovedInitiative {
         TemporaryHP = ko.observable(0);
         Tags = ko.observableArray<Tag>();
         Initiative = ko.observable(0);
-        StatBlock = ko.observable<IStatBlock>();
+        StatBlock = ko.observable<StatBlock>();
         Hidden = ko.observable(false);
 
         IndexLabel: number;
@@ -65,7 +65,7 @@ module ImprovedInitiative {
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
-        private processStatBlock(newStatBlock: IStatBlock, oldStatBlock?: IStatBlock) {
+        private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
             this.IsPlayerCharacter = newStatBlock.Player == "player";
             this.AC = newStatBlock.AC.Value;
@@ -76,8 +76,6 @@ module ImprovedInitiative {
             }
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         }
-
-        
 
         private processSavedCombatant(savedCombatant: SavedCombatant) {
             this.IndexLabel = savedCombatant.IndexLabel;
@@ -118,7 +116,7 @@ module ImprovedInitiative {
         }
 
         private calculateModifiers = () => {
-            var modifiers = StatBlock.Empty().Abilities;
+            var modifiers = StatBlock.Default().Abilities;
             for (var attribute in this.StatBlock().Abilities) {
                 modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities[attribute]);
             }

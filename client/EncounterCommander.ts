@@ -28,9 +28,9 @@ module ImprovedInitiative {
             }
         }
 
-        private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
+        private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: StatBlock) => {
             var listing = new StatBlockListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
-            Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
+            Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
                 this.library.PCStatBlocks.unshift(listing);
             } else {
@@ -39,7 +39,7 @@ module ImprovedInitiative {
         }
         
         CreateAndEditStatBlock = (library: string) => {
-            var statBlock = StatBlock.Empty();
+            var statBlock = StatBlock.Default();
             var newId = probablyUniqueString();
 
             if (library == "Players") {
@@ -67,8 +67,8 @@ module ImprovedInitiative {
             if (listing.Source == "server") {
                 listing.LoadStatBlock(this.duplicateAndEditStatBlock);
             } else {
-                this.statBlockEditor.EditStatBlock(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: IStatBlock) => {
-                    Store.Save<IStatBlock>(store, statBlockId, newStatBlock);
+                this.statBlockEditor.EditStatBlock(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: StatBlock) => {
+                    Store.Save<StatBlock>(store, statBlockId, newStatBlock);
                     listing.StatBlock(newStatBlock);
                 }, this.deleteSavedStatBlock);
             }
@@ -87,8 +87,9 @@ module ImprovedInitiative {
             this.displaySettings(true);
         }
 
-        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'))
-        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'))
+        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
+        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'));
+        DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));
         
         StartEncounter = () => {
             if(this.promptQueue.HasPrompt()){

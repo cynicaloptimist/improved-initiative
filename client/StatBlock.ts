@@ -24,18 +24,7 @@ module ImprovedInitiative {
         Usage?: string;
     }
 
-    export interface IHaveTrackerStats {
-        Id?: number;
-        Player?: string;
-        Type?: string;
-        Name: string;
-        HP: ValueAndNotes;
-        AC: ValueAndNotes;
-        InitiativeModifier?: number;
-        Abilities: AbilityScores;
-    }
-
-    export interface IStatBlock {
+    export interface StatBlock {
         Id: string;
         Name: string;
         Source: string;
@@ -63,7 +52,7 @@ module ImprovedInitiative {
     }
 
     export class StatBlock {
-        static Empty = (mutator?: (s: IStatBlock) => void): IStatBlock => {
+        static Default = (mutator?: (s: StatBlock) => void): StatBlock => {
             const statBlock = {
                 Id: '', Name: '', Source: '', Type: '',
                 HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
@@ -85,34 +74,5 @@ module ImprovedInitiative {
         }
 
         static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
-    }
-
-    export var SimplifyStatBlock: (statBlock: IStatBlock) => IStatBlock = (statBlock) => {
-        return {
-            Abilities: statBlock.Abilities,
-            AC: statBlock.AC,
-            Actions: [],
-            Challenge: statBlock.Challenge,
-            ConditionImmunities: [],
-            DamageImmunities: [],
-            DamageResistances: [],
-            DamageVulnerabilities: [],
-            HP: statBlock.HP,
-            InitiativeModifier: statBlock.InitiativeModifier,
-            Id: statBlock.Id,
-            Languages: [],
-            LegendaryActions: [],
-            Reactions: [],
-            Saves: [],
-            Senses: [],
-            Skills: [],
-            Speed: statBlock.Speed,
-            Name: statBlock.Name,
-            Source: statBlock.Source,
-            Player: statBlock.Player,
-            Traits: [],
-            Type: statBlock.Type,
-            Description: statBlock.Description
-        };
     }
 }

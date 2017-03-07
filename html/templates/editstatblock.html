@@ -49,9 +49,9 @@
     </p>
     <!-- /ko -->
     <p>
-        Challenge
+        <!-- ko if: Player() == "player" -->Level <!-- /ko -->
+        <!-- ko ifnot: Player() == "player" -->Challenge <!-- /ko -->
         <input type="text" data-bind="value: Challenge" />
-
     </p>
     <!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
     <hr />

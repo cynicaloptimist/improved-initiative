@@ -78,7 +78,7 @@ module ImprovedInitiative {
         }
 
         static ImportFromDnDAppFile(file: File) {
-            var callback = (statBlocks: IStatBlock[]) => {
+            var callback = (statBlocks: StatBlock[]) => {
                 statBlocks.forEach(c => {
                     this.Save(Store.StatBlocks, c.Name, c);
                 });

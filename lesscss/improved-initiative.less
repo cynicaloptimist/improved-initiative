@@ -495,6 +495,7 @@ input[type="file"] {
     }
     .stat-label {
         font-weight:bold;
+        margin-right: @medium-spacer;
     }
     .rollable {
         cursor: pointer;
@@ -544,6 +545,10 @@ input[type="file"] {
     border-radius: @medium-spacer;
 
     flex-shrink: 1;
+
+    .difficulty::after {
+        content: ": "
+    }
 
     .event-log {
         display: flex;

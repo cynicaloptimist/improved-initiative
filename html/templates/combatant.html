@@ -3,13 +3,15 @@
 <span class="hp" data-bind="click: EditHP, text: DisplayHP, style: { color: GetHPColor() }"></span>
 <span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
 <span class="tags">
-    <!--ko foreach: Combatant.Tags() -->
+<!--ko foreach: Combatant.Tags() -->
     <span class="tag">
-        <span data-bind="text: Text"></span><span class="fa fa-hourglass" data-bind="visible: HasDuration"></span><span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
+        <span data-bind="text: Text"></span>
+        <span class="fa fa-hourglass" data-bind="visible: HasDuration"></span>
+        <span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
     </span>
-    <!-- /ko -->
+<!-- /ko -->
 </span>
-<span class="buttons">
+    <span class="buttons">
     <span class="fa-clickable fa-tag" title="Add note" data-bind="click: AddTag"></span>
     <span class="fa-clickable" title="Hide/Reveal in Player Window" data-bind="click: ToggleHidden, css: HiddenClass"></span>
 </span>

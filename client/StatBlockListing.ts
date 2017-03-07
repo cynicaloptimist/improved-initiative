@@ -2,11 +2,11 @@ module ImprovedInitiative {
     export class StatBlockListing {
         Name: KnockoutObservable<string>;
         IsLoaded: boolean;
-        StatBlock: KnockoutObservable<IStatBlock>;
-        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: IStatBlock) {
+        StatBlock: KnockoutObservable<StatBlock>;
+        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: StatBlock) {
             this.Name = ko.observable(name);
             this.IsLoaded = !!statBlock;
-            this.StatBlock = ko.observable(statBlock || StatBlock.Empty(c => { c.Name = name }));
+            this.StatBlock = ko.observable(statBlock || StatBlock.Default(c => { c.Name = name }));
             this.StatBlock.subscribe(newStatBlock => {
                 this.Name(newStatBlock.Name);
                 this.Type = newStatBlock.Type;
@@ -20,7 +20,7 @@ module ImprovedInitiative {
             else {
                 $.getJSON(this.Link, (json) => {
                     this.IsLoaded = true;
-                    this.StatBlock($.extend(StatBlock.Empty(), json));
+                    this.StatBlock({ ...StatBlock.Default(), ...json });
                     callback(this);
                 });
             }

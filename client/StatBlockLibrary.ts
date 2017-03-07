@@ -4,7 +4,7 @@ module ImprovedInitiative {
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             
             Store.List(Store.PlayerCharacters).forEach(id => {
-                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.PlayerCharacters, id));
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
                 this.PCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
@@ -13,14 +13,14 @@ module ImprovedInitiative {
             }
 
             Store.List(Store.StatBlocks).forEach(id => {
-                var statBlock = $.extend(StatBlock.Empty(), Store.Load<IStatBlock>(Store.StatBlocks, id));
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
                 this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             })
 
             const appInsights = window["appInsights"];
             appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
-            appInsights.trackEvent("CustomCreatures", { Count: this.PCStatBlocks().length });
-            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.NPCStatBlocks().length});
+            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.PCStatBlocks().length });
+            appInsights.trackEvent("CustomCreatures", { Count: this.NPCStatBlocks().length});
         }
 
         NPCStatBlocks = ko.observableArray<StatBlockListing>([]);
@@ -37,9 +37,9 @@ module ImprovedInitiative {
         }
 
         AddSamplePlayersFromUrl = (url: string) => {
-            $.getJSON(url, (json: IStatBlock []) => {
+            $.getJSON(url, (json: StatBlock []) => {
                 json.forEach((statBlock, index) => {
-                    statBlock = $.extend(StatBlock.Empty(), statBlock);
+                    statBlock = { ...StatBlock.Default(), ...statBlock }
                     this.PCStatBlocks.push(new StatBlockListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
                 })
             });

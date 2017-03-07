@@ -5,7 +5,7 @@ module ImprovedInitiative {
 
     export interface SavedCombatant {
         Id: string;
-        StatBlock: IStatBlock;
+        StatBlock: StatBlock;
         MaxHP: number;
         CurrentHP: number;
         TemporaryHP: number;
@@ -34,14 +34,19 @@ module ImprovedInitiative {
     export class Encounter {
         constructor(promptQueue: PromptQueue) {
             this.Rules = new DefaultRules();
-            this.Combatants = ko.observableArray<Combatant>();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
             this.ActiveCombatantStatBlock = ko.computed(() => {
                 return this.ActiveCombatant()
                     ? this.ActiveCombatant().StatBlock()
-                    : StatBlock.Empty();
+                    : StatBlock.Default();
             });
+
+            this.Difficulty = ko.computed(() => {
+                const enemyChallengeRatings = this.Combatants().filter(c => !c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => c.StatBlock().Challenge);
+                const playerLevels = this.Combatants().filter(c => c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => parseInt(c.StatBlock().Challenge));
+                return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
+            })
 
             var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
             if (autosavedEncounter) {
@@ -51,10 +56,11 @@ module ImprovedInitiative {
 
         Rules: IRules;
         TurnTimer = new TurnTimer();
-        Combatants: KnockoutObservableArray<Combatant>;
+        Combatants = ko.observableArray<Combatant>([]);
         CombatantCountsByName: KnockoutObservable<number>[];
         ActiveCombatant: KnockoutObservable<Combatant>;
-        ActiveCombatantStatBlock: KnockoutComputed<IStatBlock>;
+        ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
+        Difficulty: KnockoutComputed<EncounterDifficulty>;
         State: KnockoutObservable<string> = ko.observable('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
@@ -67,20 +73,20 @@ module ImprovedInitiative {
         }
 
         ImportEncounter = (encounter) => {
-            const deepExtend = (a, b) => $.extend(true, {}, a, b);
+            const deepMerge = (a, b) => $.extend(true, {}, a, b);
             if (encounter.Combatants) {
                 encounter.Combatants.forEach(c => {
                     if (c.Id) {
                         $.ajax(`/statblocks/${c.Id}`)
                             .done(statBlockFromLibrary => {
-                                const modifiedStatBlockFromLibrary = deepExtend(statBlockFromLibrary, c);
+                                const modifiedStatBlockFromLibrary = deepMerge(statBlockFromLibrary, c);
                                 this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                             })
                             .fail(_ => {
-                                this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
+                                this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
                             })
                     } else {
-                        this.AddCombatantFromStatBlock(deepExtend(StatBlock.Empty(), c))
+                        this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
                     }
                 })
             }
@@ -116,13 +122,9 @@ module ImprovedInitiative {
             return newInitiative;
         }
 
-        AddCombatantFromStatBlock = (statBlockJson: IStatBlock, event?, savedCombatant?: SavedCombatant) => {
-            var combatant: Combatant;
-            if (statBlockJson.Player && statBlockJson.Player.toLocaleLowerCase() === 'player') {
-                combatant = new PlayerCharacter(statBlockJson, this, savedCombatant);
-            } else {
-                combatant = new Combatant(statBlockJson, this, savedCombatant);
-            }
+        AddCombatantFromStatBlock = (statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) => {
+            const combatant = new Combatant(statBlockJson, this, savedCombatant);
+
             if (event && event.altKey) {
                 combatant.Hidden(true);
             }
@@ -250,7 +252,7 @@ module ImprovedInitiative {
                         }
                         return true;
                     })
-                    .map<CombatantPlayerViewModel>(c => new CombatantPlayerViewModel(c))
+                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c))
             };
         }
 
