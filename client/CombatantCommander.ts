@@ -133,7 +133,10 @@ module ImprovedInitiative {
             return false;
         }
 
-        AddTag = () => {
+        AddTag = (combatantVM?: CombatantViewModel) => {
+            if (combatantVM instanceof CombatantViewModel) {
+                this.Select(combatantVM.Combatant);
+            }
             this.SelectedCombatants().forEach(c => c.ViewModel.AddTag(this.encounter))
             return false;
         }
