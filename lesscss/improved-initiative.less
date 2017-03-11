@@ -97,6 +97,22 @@ input[type="file"] {
     .button();
 }
 
+.hop {
+    animation-name: hop;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);
+}
+
+@keyframes hop {
+    20%, 30% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-5px);
+    }
+}
+
 .absolute-center {
     position:absolute;
     margin: auto;
@@ -129,9 +145,12 @@ input[type="file"] {
     .overlay-dialog();
     width: 450px;
     font-size: 150%;
+
     > * {
         margin: @small-spacer;
     }
+
+    .hop();
 }
 
 .settings {
@@ -233,19 +252,7 @@ input[type="file"] {
         bottom: -1/4 * @logo-size;
         right: -1/4 * @logo-size;
         
-        animation-name: hop;
-        animation-duration: 5s;
-        animation-iteration-count: infinite;
-        animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);;
-    }
-
-    @keyframes hop {
-        20%, 30% {
-            transform: translateY(0);
-        }
-        25% {
-            transform: translateY(-5px);
-        }
+        .hop();
     }
 }
 
