@@ -47,7 +47,7 @@ module ImprovedInitiative {
             
             this.CurrentStep = ko.computed(() => {
                 const index = this.stepIndex();
-                if (index) {
+                if (index !== null) {
                     return TutorialSteps[index].Message    
                 }
                 return "";
