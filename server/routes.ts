@@ -15,13 +15,13 @@ const pageRenderOptions = (encounterId: string) => ({
 
 const probablyUniqueString = (): string => {
     const chars = "1234567890abcdefghijkmnpqrstuvxyz";
-    let probablyUniqueString = "";
+    let str = "";
     for (let i = 0; i < 8; i++) {
         const index = Math.floor(Math.random() * chars.length);
-        probablyUniqueString += chars[index];
+        str += chars[index];
     }
 
-    return probablyUniqueString;
+    return str;
 };
 
 const initializeNewPlayerView = (playerViews) => {
@@ -46,14 +46,14 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded());
 
-    app.get("/", function(req, res) {
+    app.get("/", (req, res) => {
         res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews)));
     });
 
     app.get("/e/:id", (req, res) => {
         const session: any = req.session;
         const options = pageRenderOptions(req.params.id);
-        if (session.postedEncounter){
+        if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
         res.render("tracker", options);
@@ -85,7 +85,7 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         const newViewId = initializeNewPlayerView(playerViews);
         const session: any = req.session;
 
-        if (typeof req.body.Combatants === "string"){
+        if (typeof req.body.Combatants === "string") {
             session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) };
         } else {
             session.postedEncounter = req.body;
