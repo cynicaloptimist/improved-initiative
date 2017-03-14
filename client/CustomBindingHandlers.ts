@@ -116,9 +116,9 @@ module ImprovedInitiative {
                 var hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
                 var target = $(event.target);
-                var top = target.position().top;
-                var left = target.position().left + target.width();
-                var maxPopPosition = $(document).height() - popComponent.height();
+                var top = target.offset().top;
+                var left = target.offset().left + 5;
+                var maxPopPosition = $('body').outerHeight() - (popComponent.outerHeight() + 30);
                 if (top > maxPopPosition) {
                     top = maxPopPosition;
                 }
@@ -126,8 +126,10 @@ module ImprovedInitiative {
                 popComponent.css('top', top).select();
             })
 
-            popComponent.add(element).hover(() => { popComponent.show() },
-                () => { popComponent.hide() });
+            popComponent.add(element).hover(
+                () => { popComponent.show() },
+                () => { popComponent.hide() }
+            );
         },
         update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called once when the binding is first applied to an element,

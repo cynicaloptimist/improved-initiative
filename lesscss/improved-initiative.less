@@ -114,7 +114,6 @@ input[type="file"] {
 }
 
 .absolute-center {
-    position:absolute;
     margin: auto;
     left: 0;
     right: 0;
@@ -123,7 +122,7 @@ input[type="file"] {
 }
 
 .overlay-dialog {
-    position: absolute;
+    position: fixed;
     border-width: 2px;
     border-style: solid;
     border-radius: @border-radius;
@@ -134,7 +133,7 @@ input[type="file"] {
 .preview.statblock {
     .overlay-dialog();
     z-index: 3;
-    max-height: 100%;
+    max-height: 90%;
 }
 
 .tutorial-focus {
@@ -157,7 +156,7 @@ input[type="file"] {
     .overlay-dialog();
     .absolute-center();
     width: 500px;
-    height: 700px;
+    max-height: 700px;
 }
 
 .modal-blur {
@@ -259,6 +258,7 @@ input[type="file"] {
 #tracker {
     flex-direction: row;
     overflow:hidden;
+    align-items: stretch;
     
     .center-column {
         flex-grow:1;
@@ -276,7 +276,13 @@ input[type="file"] {
 }
 
 .libraries {
-    height: 100%;
+    >*:not(.library) {
+        flex-shrink: 0;
+    }
+
+    input {
+        cursor: text;
+    }
 
     .library-button {
         border-radius: @border-radius;
@@ -286,7 +292,9 @@ input[type="file"] {
 
     ul {
         overflow-y: auto;
+        flex-shrink: 1;
     }
+
     li {
         list-style-type: none;
         display:flex;
@@ -296,9 +304,6 @@ input[type="file"] {
                 flex-grow: 1;
             }
         }
-    }
-    input {
-        cursor: text;
     }
 
     .buttons {
