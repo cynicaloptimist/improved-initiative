@@ -1,4 +1,4 @@
-import fs = require('fs');
+import fs = require("fs");
 
 export interface StatBlock {
     Name: string;
@@ -15,17 +15,17 @@ export interface StatBlockListing {
 }
 
 const statblockSourceAbbreviations = {
-    "monster-manual": "mm"
-}
+    "monster-manual": "mm",
+};
 
-const toLowerCaseWithDashes = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, '-').replace(/[^a-z0-9-]/g, '');
+const toLowerCaseWithDashes = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, "-").replace(/[^a-z0-9-]/g, "");
 
 const createStatBlockId = (statBlockName: string, statblockSource: string) => {
     const sourceString = toLowerCaseWithDashes(statblockSource);
     const sourcePrefix = statblockSourceAbbreviations[sourceString] || sourceString;
     const statblockName = toLowerCaseWithDashes(statBlockName);
     return `${sourcePrefix}.${statblockName}`;
-}
+};
 
 export default class StatBlockLibrary {
     private _statBlocks: { [statBlockId: string]: StatBlock } = {};
@@ -39,7 +39,7 @@ export default class StatBlockLibrary {
                 throw `Couldn't read statBlock library ${filename}: ${err}`;
             }
 
-            var newStatBlocks = JSON.parse(buffer.toString());
+            let newStatBlocks = JSON.parse(buffer.toString());
             library.AddStatBlocks(newStatBlocks);
         });
 
@@ -47,14 +47,14 @@ export default class StatBlockLibrary {
     }
 
     protected AddStatBlocks(statBlocks: StatBlock[]) {
-        statBlocks.forEach(c => {
+        statBlocks.forEach((c) => {
             c.Id = createStatBlockId(c.Name, c.Source);
             this._statBlocks[c.Id] = c;
             this._statBlockListings.push({
                 Id: c.Id,
                 Name: c.Name,
                 Type: c.Type,
-                Link: '/statblocks/' + c.Id
+                Link: "/statblocks/" + c.Id,
             });
         });
     }

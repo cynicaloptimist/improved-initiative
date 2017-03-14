@@ -74,6 +74,12 @@ module ImprovedInitiative {
 
         ImportEncounter = (encounter) => {
             const deepMerge = (a, b) => $.extend(true, {}, a, b);
+            const defaultAdd = c => {
+                if (c.TotalInitiativeModifier !== undefined) {
+                    c.InitiativeModifier = c.TotalInitiativeModifier;
+                }
+                this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
+            }
             if (encounter.Combatants) {
                 encounter.Combatants.forEach(c => {
                     if (c.Id) {
@@ -82,11 +88,9 @@ module ImprovedInitiative {
                                 const modifiedStatBlockFromLibrary = deepMerge(statBlockFromLibrary, c);
                                 this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                             })
-                            .fail(_ => {
-                                this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
-                            })
+                            .fail(_ => defaultAdd(c))
                     } else {
-                        this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
+                        defaultAdd(c);
                     }
                 })
             }
