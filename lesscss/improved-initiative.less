@@ -25,6 +25,8 @@
     cursor: default;
     margin: 0;
 	padding: 0;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 html, body {
@@ -320,6 +322,7 @@ input[type="file"] {
 }
 .commands {
     .scrollframe {
+        max-width: none;
         width: @button-width + @scrollbar-width;
         overflow-x: hidden;
         overflow-y: scroll;
