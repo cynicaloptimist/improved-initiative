@@ -84,6 +84,9 @@ module ImprovedInitiative {
     const getDifficulty = (totalXp, playerLevels: number[]) => {
         if (playerLevels.length == 0)
             return "";
+        if (playerLevels.some(level => typeof level !== "number" || level < 1 || level > 20)) {
+            return "";
+        }
         
         const xpThresholds = {
             easy: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].easy, 0),
