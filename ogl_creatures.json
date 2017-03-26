@@ -13546,7 +13546,11 @@
             "Common",
             "Goblin"
         ],
+<<<<<<< HEAD
         "Challenge": "3",
+=======
+        "Challenge": "3 (700 XP)",
+>>>>>>> add_monsters
         "Traits": [
             {
                 "Name": "Martial Advantage",
@@ -13613,7 +13617,7 @@
             "Common",
             "Goblin"
         ],
-        "Challenge": "3",
+        "Challenge": "6 (2,300 XP)",
         "Traits": [
             {
                 "Name": "Martial Advantage",
