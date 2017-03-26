@@ -13546,11 +13546,7 @@
             "Common",
             "Goblin"
         ],
-<<<<<<< HEAD
-        "Challenge": "3",
-=======
         "Challenge": "3 (700 XP)",
->>>>>>> add_monsters
         "Traits": [
             {
                 "Name": "Martial Advantage",
@@ -17536,6 +17532,83 @@
             {
                 "Name": "Javelin",
                 "Content": "Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+                "Usage": ""
+            }
+        ],
+        "Reactions": [],
+        "LegendaryActions": [],
+        "Description": "",
+        "Player": ""
+    },
+    {
+        "Name": "Orc Captain",
+        "Source": "Volo's Guide to Monsters",
+        "Type": "Medium humanoid (orc), chaotic evil",
+        "HP": {
+            "Value": 52,
+            "Notes": "(8d8+16)"
+        },
+        "AC": {
+            "Value": 15,
+            "Notes": "(studded leather)"
+        },
+        "InitiativeModifier": 0,
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 11,
+            "Dex": 16,
+            "Con": 15,
+            "Int": 9,
+            "Wis": 11,
+            "Cha": 9
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [],
+        "ConditionImmunities": [],
+        "Saves": [],
+        "Skills": [
+            {
+                "Name": "Intimidation",
+                "Modifier": 2
+            }
+        ],
+        "Senses": [
+            "darkvision 60 ft."
+        ],
+        "Languages": [
+            "Common",
+            "Orc"
+        ],
+        "Challenge": "3 (700 XP)",
+        "Traits": [
+            {
+                "Name": "Cunning Action",
+                "Content": "As a bonus action, the orc can dash, disengage, or hide",
+                "Usage": ""
+            },
+            {
+                "Name": "Slayer",
+                "Content": "In the first round of combat, the orc has advantage on creatures that haven't taken a turn yet. If it hits a surprised creature, that is automatically a critical hit.",
+                "Usage": ""
+            }
+        ],
+        "Actions": [
+            {
+                "Name": "Scimitar",
+                "Content": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 13 (3d6 + 3) slashing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Dart",
+                "Content": "Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 10 (3d4 + 3) piercing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Veil of Shargaas",
+                "Content": "The orc catss darkness without any components. Wisdom is its spellcasiting ability.",
                 "Usage": ""
             }
         ],
@@ -26068,7 +26141,7 @@
             },
             {
                 "Name": "Greataxe",
-                "Content": "Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 14 (1d1 2 + 4 plus 1d8) slashing damage. ",
+                "Content": "Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 14 (1d12 + 4 plus 1d8) slashing damage. ",
                 "Usage": ""
             },
             {
