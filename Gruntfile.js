@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         removeComments: false,
       },
       client: {
-        src: ['client/*.ts'],
+        src: ['client/**/*.ts'],
         out: 'public/js/ImprovedInitiative.js',
         options: {
           fast: 'never',
