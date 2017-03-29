@@ -27,7 +27,7 @@ module ImprovedInitiative {
                 statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
                 this.Id = '' + savedCombatant.Id; //legacy Id may be a number
             } else {
-                statBlock.HP.Value = this.getMaxHP(statBlock.HP);
+                statBlock.HP.Value = this.getMaxHP(statBlock);
                 this.Id = statBlock.Id + '.' + probablyUniqueString();
             }
 
@@ -87,15 +87,15 @@ module ImprovedInitiative {
             this.Hidden(savedCombatant.Hidden);
         }
 
-        private getMaxHP(HP: ValueAndNotes) {
-            if (Store.Load(Store.User, "RollMonsterHp")) {
+        private getMaxHP(statBlock: StatBlock) {
+            if (Store.Load(Store.User, "RollMonsterHp") && statBlock.Player !== "player") {
                 try {
-                    return this.Encounter.Rules.RollDiceExpression(HP.Notes).Total;
+                    return this.Encounter.Rules.RollDiceExpression(statBlock.HP.Notes).Total;
                 } catch (e) {
-                    return HP.Value;
+                    return statBlock.HP.Value;
                 }
             }
-            return HP.Value;
+            return statBlock.HP.Value;
         }
 
         private setIndexLabel(oldName?: string) {
