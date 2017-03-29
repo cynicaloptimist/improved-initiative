@@ -47,7 +47,7 @@ module.exports = function (grunt) {
     less: {
       default: {
         files: {
-          "build/improved-initiative.less.css": ["lesscss/*.less"]
+          "public/css/improved-initiative.css": ["lesscss/improved-initiative.less"]
         }
       }
     },
@@ -79,13 +79,6 @@ module.exports = function (grunt) {
           'node_modules/markdown-it/dist/markdown-it.min.js'
         ],
         dest: 'public/js/dependencies.js'
-      },
-      css: {
-        src: [
-          'node_modules/awesomplete/awesomplete.css',
-          'build/improved-initiative.less.css'
-        ],
-        dest: 'public/css/improved-initiative.css'
       }
     },
     watch: {
@@ -99,7 +92,7 @@ module.exports = function (grunt) {
       },
       lesscss: {
         files: 'lesscss/*.less',
-        tasks: ['less', 'concat:css']
+        tasks: ['less']
       }
     },
     copy: {
@@ -111,8 +104,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build_dev', ['ts:client', 'ts:server', 'less', 'concat:js_dependencies', 'concat:css']);
-  grunt.registerTask('build_min', ['ts:client_prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min', 'concat:css']);
+  grunt.registerTask('build_dev', ['ts:client', 'ts:server', 'less', 'concat:js_dependencies']);
+  grunt.registerTask('build_min', ['ts:client_prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };
