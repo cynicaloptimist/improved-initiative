@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         }
       },
       client_prod: {
-        src: ['client/*.ts'],
+        src: ['client/**/*.ts'],
         out: 'build/ImprovedInitiative.js'
       },
       server: {
