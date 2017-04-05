@@ -83,15 +83,15 @@ module.exports = function (grunt) {
     },
     watch: {
       tsclient: {
-        files: 'client/*.ts',
+        files: 'client/**/*.ts',
         tasks: ['ts:client']
       },
       tsserver: {
-        files: 'server/*.ts',
+        files: 'server/**/*.ts',
         tasks: ['ts:server']
       },
       lesscss: {
-        files: 'lesscss/*.less',
+        files: 'lesscss/**/*.less',
         tasks: ['less']
       }
     },
