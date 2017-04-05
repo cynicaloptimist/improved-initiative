@@ -60,26 +60,44 @@ module ImprovedInitiative {
         }
     }
 
-    let statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-        var text = valueAccessor().toString();
+    const spells = {
+        "light": "I cast light!",
+        "sacred flame": "I cast sacred flame!",
+        "thaumaturgy": "I cast thaumaturgy!",
+        "bless": "I cast bless!",
+        "cure wounds": "I cast cure wounds!",
+        "sanctuary": "I cast sanctuary!",
+    };
+    
+    const findSpells = new RegExp(Object.keys(spells).join("|"), "gim");
 
-        var md = markdownit();
-        text = md.renderInline(text);
+    const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+        const originalText = valueAccessor().toString();
 
-        var rules: IRules = bindingContext.$root.Encounter.Rules;
-        var promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
-        var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
-        text = text.replace(findDice, match => {
-            return `<span class='rollable'>${match}</span>`;
-        });
+        const md = markdownit();
+        let text = md.renderInline(originalText);
+
+        const rules: IRules = bindingContext.$root.Encounter.Rules;
+        const promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
+        const findDice = new RegExp(rules.ValidDicePattern.source, 'g');
+        text = text
+            .replace(findDice, match => `<span class='rollable'>${match}</span>`)
+            .replace(findSpells, match => `<span class='spell'>${match}</span>`);
 
         $(element).html(text);
+        
         $(element).find('.rollable').on('click', (event) => {
             const diceExpression = event.target.innerHTML;
             const diceRoll = rules.RollDiceExpression(diceExpression);
             const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
                 _ => { }
             );
+            promptQueue.Add(prompt);
+        });
+
+        $(element).find('.spell').on('click', (event) => {
+            const spellName = event.target.innerHTML;
+            const prompt = new DefaultPrompt(spells[spellName], _ => { });
             promptQueue.Add(prompt);
         });
     };
@@ -94,7 +112,7 @@ module ImprovedInitiative {
             bindingContext['formatString'] = $(element).html();
         },
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-            var replacements = ko.unwrap(valueAccessor());
+            let replacements = ko.unwrap(valueAccessor());
             if (!(replacements instanceof Array)) {
                 replacements = [replacements];
             }
@@ -107,24 +125,25 @@ module ImprovedInitiative {
             // This will be called when the binding is first applied to an element
             // Set up any initial state, event handlers, etc. here
             //if (bindingContext.$data.init) bindingContext.$data.init(element, valueAccessor, allBindings, viewModel, bindingContext);
-            var params = valueAccessor();
-            var componentSelector: string = params.selector;
-            var popComponent = $(componentSelector).first();
+            const params = valueAccessor();
+            const componentSelector: string = params.selector;
+            const popComponent = $(componentSelector).first();
             popComponent.hide();
 
             $(element).on('mouseover', event => {
-                var hoveredElementData = ko.dataFor(event.target);
+                const hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
-                var target = $(event.target);
-                var top = target.offset().top;
-                var left = target.offset().left + 5;
-                var maxPopPosition = $('body').outerHeight() - (popComponent.outerHeight() + 30);
+                const target = $(event.target);
+                let top = target.offset().top;
+                const left = target.offset().left + 5;
+                const maxPopPosition = $('body').outerHeight() - (popComponent.outerHeight() + 30);
                 if (top > maxPopPosition) {
                     top = maxPopPosition;
                 }
-                popComponent.css('left', left);
-                popComponent.css('top', top).select();
-            })
+                popComponent.css('left', left)
+                    .css('top', top)
+                    .select();
+            });
 
             popComponent.add(element).hover(
                 () => { popComponent.show() },
