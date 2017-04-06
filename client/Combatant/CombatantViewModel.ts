@@ -9,7 +9,9 @@ module ImprovedInitiative {
                 } else {
                     return '{0}/{1}'.format(this.Combatant.CurrentHP(), this.Combatant.MaxHP);
                 }
-            })
+            });
+
+            this.Combatant.ViewModel = this;
         }
 
         ApplyDamage = (inputDamage: string) => {
