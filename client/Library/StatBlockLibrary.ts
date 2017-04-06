@@ -1,8 +1,15 @@
 module ImprovedInitiative {
     export class StatBlockLibrary {
         constructor() {
+            $.ajax("../statblocks/").done(this.AddStatBlockListings);
+            
             Store.List(Store.SavedEncounters).forEach(e => this.SavedEncounterIndex.push(e));
             
+            Store.List(Store.StatBlocks).forEach(id => {
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
+                this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+            });
+
             Store.List(Store.PlayerCharacters).forEach(id => {
                 var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
                 this.PCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
@@ -12,12 +19,6 @@ module ImprovedInitiative {
                 this.AddSamplePlayersFromUrl('/sample_players.json');
             }
 
-            Store.List(Store.StatBlocks).forEach(id => {
-                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-                this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-            });
-
-            $.ajax("../statblocks/").done(this.AddStatBlockListings);
             
             const appInsights = window["appInsights"];
             appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
