@@ -45,6 +45,7 @@
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
+    "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
     "typescript": "^2.1.4",
@@ -53,7 +54,7 @@
   },
   "scripts": {
     "postinstall": "typings install && grunt --no-color postinstall",
-    "start": "node server.js",
+    "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/"
   }
 }
