@@ -1,4 +1,11 @@
 module ImprovedInitiative {
+    interface PatreonPost {
+        title: string;
+        content: string;
+        url: string;
+        created_at: string;
+    }
+
     export var Settings = (params: {
         encounterCommander: EncounterCommander;
         combatantCommander: CombatantCommander;
@@ -22,8 +29,14 @@ module ImprovedInitiative {
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
 
+        const whatsNew = ko.observable("");
+        $.getJSON("/whatsnew/")
+            .done((latestPost: PatreonPost) => {
+                whatsNew(`<a href="${latestPost.url}" target="_blank">${latestPost.title}</a>`);
+            });
+
         const registerKeybindings = () => {
-            const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
+            const allCommands = [...params.encounterCommander.Commands, ...params.combatantCommander.Commands];
             Mousetrap.reset();
 
             Mousetrap.bind('backspace', e => {
@@ -43,7 +56,7 @@ module ImprovedInitiative {
         }
 
         registerKeybindings();
-        
+
         const saveAndClose = () => {
             registerKeybindings();
             params.settingsVisible(false);
@@ -77,11 +90,11 @@ module ImprovedInitiative {
 
         var displayDifficulty = loadSetting("DisplayDifficulty");
         displayDifficulty.subscribe(params.encounterCommander.DisplayDifficulty);
-        
+
         return {
             EncounterCommands: params.encounterCommander.Commands,
             CombatantCommands: params.combatantCommander.Commands,
-            
+
             CurrentTab: ko.observable<string>('about'),
             ExportData: () => {
                 var blob = Store.ExportAll();
@@ -119,6 +132,7 @@ module ImprovedInitiative {
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
+            WhatsNew: whatsNew,
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1),
             SaveAndClose: saveAndClose
