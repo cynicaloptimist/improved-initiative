@@ -68,6 +68,14 @@ module ImprovedInitiative {
         "cure wounds": "I cast cure wounds!",
         "sanctuary": "I cast sanctuary!",
     };
+
+    const spellNames = Object.keys(spells);
+    for (let i = 0; i < 100; i++){
+        //simulate having a huge library to experiment with runtime
+        spellNames.forEach(key => {
+            spells[`${key}${i}`] = spells[key];
+        });
+    }
     
     const findSpells = new RegExp(Object.keys(spells).join("|"), "gim");
 
