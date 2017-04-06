@@ -3,11 +3,19 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
+import request = require("request");
 
 import StatBlockLibrary from "./statblocklibrary";
 
+interface PatreonPost {
+    title: string;
+    content: string;
+    url: string;
+    created_at: string;
+}
+
 const pageRenderOptions = (encounterId: string) => ({
-    rootDirectory: "..",
+    rootDirectory: "../../",
     encounterId,
     appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
     postedEncounter: null,
@@ -37,9 +45,9 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     }
     app.engine("html", mustacheEngine);
     app.set("view engine", "html");
-    app.set("views", __dirname + "/html");
+    app.set("views", __dirname + "/../html");
 
-    app.use(express.static(__dirname + "/public"));
+    app.use(express.static(__dirname + "/../public"));
     app.use(session({
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
     }));
@@ -96,4 +104,17 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
 
     app.post("/launchencounter/", importEncounter);
     app.post("/importencounter/", importEncounter);
+
+    const url = process.env.PATREON_URL;
+    if (url) {
+        request.get(url,
+            (error, response, body) => {
+                const json: { data: PatreonPost[] } = JSON.parse(body);
+                const latestPost = json.data[0];
+                app.get("/whatsnew/", (req, res) => {
+                    res.json(latestPost);
+                });
+            });
+    }
+
 }
