@@ -15,8 +15,10 @@ module ImprovedInitiative {
             Store.List(Store.StatBlocks).forEach(id => {
                 var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
                 this.NPCStatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-            })
+            });
 
+            $.ajax("../statblocks/").done(this.AddStatBlockListings);
+            
             const appInsights = window["appInsights"];
             appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
             appInsights.trackEvent("CustomPlayerCharacters", { Count: this.PCStatBlocks().length });
