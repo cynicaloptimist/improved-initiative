@@ -81,12 +81,15 @@ module ImprovedInitiative {
         });
 
         text = text.replace(findSpell, match => {
-            return `<span class='spell'>${match}</span>`;
+            return `<span class='spell' data-spell='${match}'>${match}</span>`;
         });
 
         $(element).html(text);
-        $(element).find('.spell').on('hover', (event) => {
-            $(event.target).css('color', 'green');
+        $(element).find('.spell').on('click', (event) => {
+            const prompt = new DefaultPrompt(`<p>${JSON.stringify(event.target.dataset.spell)}</p>`,
+                _ => { }
+            );
+            promptQueue.Add(prompt);
         });
 
         $(element).html(text);
