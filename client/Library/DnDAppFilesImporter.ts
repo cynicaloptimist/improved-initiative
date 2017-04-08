@@ -1,6 +1,6 @@
 module ImprovedInitiative {
-    class StatBlockImporter{
-        constructor(private domElement: Element) { }
+    class Importer {
+        constructor(protected domElement: Element) { }
 
         getString(selector) {
             return $(this.domElement).find(selector).html() || '';
@@ -12,23 +12,6 @@ module ImprovedInitiative {
                 return parseInt(int);
             }
             return 0;
-        }
-
-        getType() {
-            return this.getString("size") + ' ' +
-                   this.getString("type") + ', ' +
-                   this.getString("alignment");
-        }
-
-        getAbilities() {
-            return {
-                Str: this.getInt("str"),
-                Dex: this.getInt("dex"),
-                Con: this.getInt("con"),
-                Int: this.getInt("int"),
-                Wis: this.getInt("wis"),
-                Cha: this.getInt("cha")
-            };
         }
 
         getValueAndNotes(selector: string) {
@@ -61,9 +44,27 @@ module ImprovedInitiative {
         getPowers(selector: string) {
             return $(this.domElement).find(selector).toArray().map(p => ({
                 Name: $(p).find('name').html(),
-                Content: $(p).find('text').map((i,e) => e.innerHTML).get().join('\n'),
+                Content: $(p).find('text').map((i, e) => e.innerHTML).get().join('\n'),
                 Usage: ''
             }))
+        }
+    }
+    class StatBlockImporter extends Importer {
+        getType() {
+            return this.getString("size") + ' ' +
+                this.getString("type") + ', ' +
+                this.getString("alignment");
+        }
+
+        getAbilities() {
+            return {
+                Str: this.getInt("str"),
+                Dex: this.getInt("dex"),
+                Con: this.getInt("con"),
+                Int: this.getInt("int"),
+                Wis: this.getInt("wis"),
+                Cha: this.getInt("cha")
+            };
         }
 
         public GetStatBlock() {
@@ -87,7 +88,7 @@ module ImprovedInitiative {
 
             statBlock.Skills = this.getCommaSeparatedModifiers("skill");
             statBlock.Saves = this.getCommaSeparatedModifiers("save");
-            
+
             statBlock.Traits = this.getPowers("trait");
             statBlock.Actions = this.getPowers("action");
             statBlock.Reactions = this.getPowers("reaction");
@@ -96,23 +97,77 @@ module ImprovedInitiative {
             return statBlock;
         }
     }
-    
-    function getStatBlocksFromXml(xmlString: string) {
+
+    interface Spell {
+        Name: string;
+        Level: number;
+        School: string;
+        Time: string;
+        Range: string;
+        Components: string[];
+        Duration: string;
+        Classes: string[];
+        Content: string;
+        Ritual: boolean;
+    }
+
+    class Spell {
+        static Default: () => Spell = () => {
+            return { Name: "", Level: 0, School: "", Time: "", Range: "", Components: [], Duration: "", Classes: [], Content: "", Ritual: false };
+        }
+    }
+
+    class SpellImporter extends Importer {
+        private static schoolsByInitial = {
+            "C": "Conjuration",
+        }
+
+        GetSpell = () => {
+            const spell = Spell.Default();
+            spell.Name = this.getString("name");
+            spell.Level = this.getInt("level");
+            const initial = this.getString("school");
+            spell.School = SpellImporter.schoolsByInitial[initial];
+            spell.Time = this.getString("time");
+            spell.Range = this.getString("range");
+            spell.Components = this.getCommaSeparatedStrings("components");
+            spell.Duration = this.getString("duration");
+            spell.Classes = this.getCommaSeparatedStrings("classes");
+            spell.Ritual = this.getString("ritual") === "YES";
+
+            spell.Content = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
+
+            return spell;
+        }
+    }
+
+    const getStatBlocksFromXml = (xmlString: string) => {
         return $(xmlString).find("monster").toArray().map(xmlDoc => {
             var importer = new StatBlockImporter(xmlDoc);
             return importer.GetStatBlock();
         });
     }
 
+    const getSpellsFromXml = (xmlString: string) => {
+        return $(xmlString).find("spell").toArray().map(xmlDoc => {
+            var importer = new SpellImporter(xmlDoc);
+            return importer.GetSpell();
+        });
+    }
+
+    const _importFileUsing = (importer: (fileName: string) => StatBlock[], xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) => {
+        const reader = new FileReader();
+        reader.onload = (event: any) => {
+            var xml: string = event.target.result;
+            var statBlocks = importer(xml);
+            callBack(statBlocks);
+        };
+        reader.readAsText(xmlFile);
+    }
+
     export class DnDAppFilesImporter {
-        public ImportFromXml(xmlFile: File, callBack: (statBlocks: StatBlock []) => void) {
-            var reader = new FileReader();
-            reader.onload = (event: any) => {
-                var xml: string = event.target.result;
-                var statBlocks = getStatBlocksFromXml(xml);
-                callBack(statBlocks);
-            };
-            reader.readAsText(xmlFile);
-        }
+        public ImportStatBlocksFromXml =
+        (xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) =>
+            _importFileUsing(getStatBlocksFromXml, xmlFile, callBack);
     }
 }
