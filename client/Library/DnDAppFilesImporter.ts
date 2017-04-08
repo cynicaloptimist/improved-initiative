@@ -104,7 +104,7 @@ module ImprovedInitiative {
         School: string;
         Time: string;
         Range: string;
-        Components: string[];
+        Components: string;
         Duration: string;
         Classes: string[];
         Content: string;
@@ -113,13 +113,20 @@ module ImprovedInitiative {
 
     class Spell {
         static Default: () => Spell = () => {
-            return { Name: "", Level: 0, School: "", Time: "", Range: "", Components: [], Duration: "", Classes: [], Content: "", Ritual: false };
+            return { Name: "", Level: 0, School: "", Time: "", Range: "", Components: "", Duration: "", Classes: [], Content: "", Ritual: false };
         }
     }
 
     class SpellImporter extends Importer {
-        private static schoolsByInitial = {
+        private static schoolsByInitials = {
+            "A": "Abjuration",
             "C": "Conjuration",
+            "D": "Divination",
+            "EN": "Enchantment",
+            "EV": "Evocation",
+            "I": "Illusion",
+            "N": "Necromancy",
+            "T": "Transmutation",
         }
 
         GetSpell = () => {
@@ -127,10 +134,10 @@ module ImprovedInitiative {
             spell.Name = this.getString("name");
             spell.Level = this.getInt("level");
             const initial = this.getString("school");
-            spell.School = SpellImporter.schoolsByInitial[initial];
+            spell.School = SpellImporter.schoolsByInitials[initial];
             spell.Time = this.getString("time");
             spell.Range = this.getString("range");
-            spell.Components = this.getCommaSeparatedStrings("components");
+            spell.Components = this.getString("components");
             spell.Duration = this.getString("duration");
             spell.Classes = this.getCommaSeparatedStrings("classes");
             spell.Ritual = this.getString("ritual") === "YES";
