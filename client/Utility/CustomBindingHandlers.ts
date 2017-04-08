@@ -86,7 +86,7 @@ module ImprovedInitiative {
 
         $(element).html(text);
         $(element).find('.spell').on('click', (event) => {
-            const prompt = new DefaultPrompt(`<p>${JSON.stringify(event.target.dataset.spell)}</p>`,
+            const prompt = new DefaultPrompt(`<p>${JSON.stringify($(event.target).attr('data-spell'))}</p>`,
                 _ => { }
             );
             promptQueue.Add(prompt);

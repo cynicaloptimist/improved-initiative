@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a6d074f6-ac31-42e8-975c-f93bab0ad829" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/CustomBindingHandlers.ts" afterPath="$PROJECT_DIR$/client/CustomBindingHandlers.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/html/tracker.html" afterPath="$PROJECT_DIR$/html/tracker.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/Utility/CustomBindingHandlers.ts" afterPath="$PROJECT_DIR$/client/Utility/CustomBindingHandlers.ts" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,15 +17,166 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="tracker.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tracker.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/html/tracker.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="400">
-              <caret line="203" column="46" lean-forward="false" selection-start-line="203" selection-start-column="46" selection-end-line="209" selection-end-column="56" />
+              <caret line="204" column="46" lean-forward="false" selection-start-line="204" selection-start-column="46" selection-end-line="210" selection-end-column="56" />
               <folding>
-                <marker date="1491675935000" expanded="true" signature="9076:9464" ph="..." />
-                <marker date="1491675935000" expanded="true" signature="9076:10111" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="6423:7419" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="6530:6598" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="6677:7404" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="7229:7385" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="7461:8220" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="7502:8209" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="7868:7887" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="8234:145522" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="8327:10435" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="8367:8400" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="8406:10395" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="8460:8509" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="8762:10344" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="9116:9504" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="9116:10151" ph="..." />
+                <marker date="1491676073000" expanded="true" signature="10217:10313" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="10483:145509" ph="{...}" />
+                <marker date="1491676073000" expanded="true" signature="10517:11156" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="11182:11884" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="11922:14928" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="14961:15842" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="15876:16861" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="16901:19564" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="19593:20847" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="20884:21466" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="21502:22499" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="22527:23278" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="23305:23916" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="23952:24810" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="24848:25900" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="25935:26895" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="26925:28521" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="28551:29642" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="29685:30416" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="30451:31242" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="31277:32236" ph="{&quot;casting_time&quot;: &quot;1 reaction, which you take when you see a creature within 60 feet of you casting a spell&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="32270:32884" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="32921:33850" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="33881:34933" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="34966:35694" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="35739:37415" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="37450:38193" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="38230:39329" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="39365:40669" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="40704:42106" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="42141:42987" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="43020:44119" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="44158:45869" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="45907:47799" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="47827:49890" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="49923:52399" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="52434:54364" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="54400:56206" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="56244:56995" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="57027:57692" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="57725:58622" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="58653:59606" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="59641:60497" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="60534:61879" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="61905:62612" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="62644:63367" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="63409:64251" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="64278:65826" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="65873:66931" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="66974:67469" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="67511:68315" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="68355:69241" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="69272:69834" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="69869:70660" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="70687:71532" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="71560:72413" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="72440:73184" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="73219:73861" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="73897:74892" ph="{&quot;casting_time&quot;: &quot;10 minutes&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="74926:75785" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="75817:76857" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="76889:77819" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="77850:78734" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="78769:82213" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="82250:82821" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="82856:83595" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="83623:84590" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="84631:85095" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="85126:86377" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="86405:87239" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="87276:88170" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="88208:89291" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="89324:89924" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="89956:90852" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="90888:91618" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="91653:92320" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="92354:94296" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="94335:95088" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="95120:95792" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="95832:96520" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="96558:98413" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="98440:99267" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="99302:100160" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="100197:101594" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="101627:102050" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="102093:102960" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="103008:103928" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="103959:104827" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="104862:105493" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="105531:106046" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="106084:106753" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="106793:107444" ph="{&quot;casting_time&quot;: &quot;10 minutes&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="107483:108719" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="108764:109234" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="109267:110654" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="110689:111342" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="111375:112177" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="112212:112742" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="112775:113358" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="113393:114797" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="114828:115417" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="115452:116093" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="116125:116953" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="116983:117977" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="118006:118612" ph="{&quot;casting_time&quot;: &quot;1 reaction, which you take when you are hit by an attack or targeted by the magic missile spell&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="118650:119181" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="119218:119966" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="119996:120667" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="120702:122012" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="122040:123364" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="123402:123848" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="123886:125051" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="125086:125702" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="125741:126958" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="126997:128136" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="128168:128738" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="128771:130294" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="130325:131287" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="131318:134942" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="134976:136096" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="136130:137124" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="137156:137982" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="138022:139039" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="139073:139756" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="139791:141069" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="141105:143095" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="143130:144099" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+                <marker date="1491676073000" expanded="true" signature="144125:145495" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CustomBindingHandlers.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/Utility/CustomBindingHandlers.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="400">
+              <caret line="88" column="98" lean-forward="false" selection-start-line="88" selection-start-column="98" selection-end-line="88" selection-end-column="98" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -35,18 +185,10 @@
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="335">
-              <caret line="39" column="23" lean-forward="false" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CustomBindingHandlers.ts" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/CustomBindingHandlers.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18386">
-              <caret line="1274" column="21" lean-forward="true" selection-start-line="1274" selection-start-column="21" selection-end-line="1274" selection-end-column="21" />
-              <folding />
+              <caret line="37" column="23" lean-forward="false" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+              <folding>
+                <marker date="1491676073000" expanded="true" signature="1468:1622" ph="{&quot;postinstall&quot;: &quot;typings install &amp;&amp; grunt --no-color postinstall&quot;...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -78,6 +220,7 @@
       <find>I</find>
       <find>Initiative</find>
       <find>Initiative Order</find>
+      <find>&lt;&lt;&lt;</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$</dir>
@@ -93,6 +236,7 @@
         <option value="$PROJECT_DIR$/launchserver.js" />
         <option value="$PROJECT_DIR$/client/CustomBindingHandlers.ts" />
         <option value="$PROJECT_DIR$/html/tracker.html" />
+        <option value="$PROJECT_DIR$/client/Utility/CustomBindingHandlers.ts" />
       </list>
     </option>
   </component>
@@ -208,12 +352,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1491669604459</updated>
-      <workItem from="1491669606413" duration="5628000" />
+      <workItem from="1491669606413" duration="5917000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5628000" />
+    <option name="totallyTimeSpent" value="5917000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
@@ -270,8 +414,10 @@
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="335">
-          <caret line="39" column="23" lean-forward="false" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
-          <folding />
+          <caret line="37" column="23" lean-forward="false" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+          <folding>
+            <marker date="1491676073000" expanded="true" signature="1468:1622" ph="{&quot;postinstall&quot;: &quot;typings install &amp;&amp; grunt --no-color postinstall&quot;...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -286,11 +432,160 @@
     <entry file="file://$PROJECT_DIR$/html/tracker.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="400">
-          <caret line="203" column="46" lean-forward="false" selection-start-line="203" selection-start-column="46" selection-end-line="209" selection-end-column="56" />
+          <caret line="204" column="46" lean-forward="false" selection-start-line="204" selection-start-column="46" selection-end-line="210" selection-end-column="56" />
           <folding>
-            <marker date="1491675935000" expanded="true" signature="9076:9464" ph="..." />
-            <marker date="1491675935000" expanded="true" signature="9076:10111" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="6423:7419" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="6530:6598" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="6677:7404" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="7229:7385" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="7461:8220" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="7502:8209" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="7868:7887" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="8234:145522" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="8327:10435" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="8367:8400" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="8406:10395" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="8460:8509" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="8762:10344" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="9116:9504" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="9116:10151" ph="..." />
+            <marker date="1491676073000" expanded="true" signature="10217:10313" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="10483:145509" ph="{...}" />
+            <marker date="1491676073000" expanded="true" signature="10517:11156" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="11182:11884" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="11922:14928" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="14961:15842" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="15876:16861" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="16901:19564" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="19593:20847" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="20884:21466" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="21502:22499" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="22527:23278" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="23305:23916" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="23952:24810" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="24848:25900" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="25935:26895" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="26925:28521" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="28551:29642" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="29685:30416" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="30451:31242" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="31277:32236" ph="{&quot;casting_time&quot;: &quot;1 reaction, which you take when you see a creature within 60 feet of you casting a spell&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="32270:32884" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="32921:33850" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="33881:34933" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="34966:35694" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="35739:37415" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="37450:38193" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="38230:39329" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="39365:40669" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="40704:42106" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="42141:42987" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="43020:44119" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="44158:45869" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="45907:47799" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="47827:49890" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="49923:52399" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="52434:54364" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="54400:56206" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="56244:56995" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="57027:57692" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="57725:58622" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="58653:59606" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="59641:60497" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="60534:61879" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="61905:62612" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="62644:63367" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="63409:64251" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="64278:65826" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="65873:66931" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="66974:67469" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="67511:68315" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="68355:69241" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="69272:69834" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="69869:70660" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="70687:71532" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="71560:72413" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="72440:73184" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="73219:73861" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="73897:74892" ph="{&quot;casting_time&quot;: &quot;10 minutes&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="74926:75785" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="75817:76857" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="76889:77819" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="77850:78734" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="78769:82213" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="82250:82821" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="82856:83595" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="83623:84590" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="84631:85095" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="85126:86377" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="86405:87239" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="87276:88170" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="88208:89291" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="89324:89924" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="89956:90852" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="90888:91618" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="91653:92320" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="92354:94296" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="94335:95088" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="95120:95792" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="95832:96520" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="96558:98413" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="98440:99267" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="99302:100160" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="100197:101594" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="101627:102050" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="102093:102960" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="103008:103928" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="103959:104827" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="104862:105493" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="105531:106046" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="106084:106753" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="106793:107444" ph="{&quot;casting_time&quot;: &quot;10 minutes&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="107483:108719" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="108764:109234" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="109267:110654" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="110689:111342" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="111375:112177" ph="{&quot;casting_time&quot;: &quot;1 minute&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="112212:112742" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="112775:113358" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="113393:114797" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="114828:115417" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="115452:116093" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="116125:116953" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="116983:117977" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="118006:118612" ph="{&quot;casting_time&quot;: &quot;1 reaction, which you take when you are hit by an attack or targeted by the magic missile spell&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="118650:119181" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="119218:119966" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="119996:120667" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="120702:122012" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="122040:123364" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="123402:123848" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="123886:125051" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="125086:125702" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="125741:126958" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="126997:128136" ph="{&quot;casting_time&quot;: &quot;1 bonus action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="128168:128738" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="128771:130294" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="130325:131287" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="131318:134942" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="134976:136096" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="136130:137124" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="137156:137982" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="138022:139039" ph="{&quot;casting_time&quot;: &quot;1 hour&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="139073:139756" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="139791:141069" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="141105:143095" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="143130:144099" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
+            <marker date="1491676073000" expanded="true" signature="144125:145495" ph="{&quot;casting_time&quot;: &quot;1 action&quot;...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/Utility/CustomBindingHandlers.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="88" column="98" lean-forward="false" selection-start-line="88" selection-start-column="98" selection-end-line="88" selection-end-column="98" />
+          <folding />
         </state>
       </provider>
     </entry>
