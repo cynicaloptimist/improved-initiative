@@ -70,7 +70,7 @@ module ImprovedInitiative {
         var promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
         var findDice = new RegExp(rules.ValidDicePattern.source, 'g');
 
-        var spellArray = Object.keys(spellObj).map(function(i, el){
+        var spellArray = Object.keys(spellObj).map(function(el, i){
             return el.toLowerCase();
         })
         var findSpell = new RegExp( ('\\b' + spellArray.join('\\b|\\b') + '\\b'), 'g')
