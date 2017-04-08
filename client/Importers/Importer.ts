@@ -50,37 +50,6 @@ module ImprovedInitiative {
         }
     }
 
-    class SpellImporter extends Importer {
-        private static schoolsByInitials = {
-            "A": "Abjuration",
-            "C": "Conjuration",
-            "D": "Divination",
-            "EN": "Enchantment",
-            "EV": "Evocation",
-            "I": "Illusion",
-            "N": "Necromancy",
-            "T": "Transmutation",
-        }
-
-        GetSpell = () => {
-            const spell = Spell.Default();
-            spell.Name = this.getString("name");
-            spell.Level = this.getInt("level");
-            const initial = this.getString("school");
-            spell.School = SpellImporter.schoolsByInitials[initial];
-            spell.Time = this.getString("time");
-            spell.Range = this.getString("range");
-            spell.Components = this.getString("components");
-            spell.Duration = this.getString("duration");
-            spell.Classes = this.getCommaSeparatedStrings("classes");
-            spell.Ritual = this.getString("ritual") === "YES";
-
-            spell.Content = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
-
-            return spell;
-        }
-    }
-
     const getStatBlocksFromXml = (xmlString: string) => {
         return $(xmlString).find("monster").toArray().map(xmlDoc => {
             var importer = new StatBlockImporter(xmlDoc);
@@ -95,12 +64,16 @@ module ImprovedInitiative {
         });
     }
 
-    const _importFileUsing = (importer: (fileName: string) => StatBlock[], xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) => {
+    const _importFileUsing = <T>(
+        importer: (fileName: string) => T [],
+        xmlFile: File,
+        callBack: (entities: T []) => void
+    ) => {
         const reader = new FileReader();
         reader.onload = (event: any) => {
             var xml: string = event.target.result;
-            var statBlocks = importer(xml);
-            callBack(statBlocks);
+            var entities = importer(xml);
+            callBack(entities);
         };
         reader.readAsText(xmlFile);
     }
@@ -109,5 +82,9 @@ module ImprovedInitiative {
         public ImportStatBlocksFromXml =
         (xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) =>
             _importFileUsing(getStatBlocksFromXml, xmlFile, callBack);
+
+        public ImportSpellsFromXml =
+        (xmlFile: File, callBack: (spells: Spell[]) => void) =>
+            _importFileUsing(getSpellsFromXml, xmlFile, callBack);
     }
 }
