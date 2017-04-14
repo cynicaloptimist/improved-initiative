@@ -129,9 +129,12 @@ module ImprovedInitiative {
         }
 
         PreviousTurn = () => {
+            if (!this.encounter.ActiveCombatant()) {
+                return;
+            }
             this.encounter.PreviousTurn();
             var currentCombatant = this.encounter.ActiveCombatant();
-            this.eventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.eventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);    
         }
 
         SaveEncounter = () => {
