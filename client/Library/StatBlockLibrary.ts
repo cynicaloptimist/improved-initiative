@@ -19,11 +19,10 @@ module ImprovedInitiative {
                 this.AddSamplePlayersFromUrl('/sample_players.json');
             }
 
-            
-            const appInsights = window["appInsights"];
-            appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length });
-            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.PCStatBlocks().length });
-            appInsights.trackEvent("CustomCreatures", { Count: this.NPCStatBlocks().length});
+            const appInsights: Client = window["appInsights"];
+            appInsights.trackEvent("SavedEncounters", { Count: this.SavedEncounterIndex().length.toString() });
+            appInsights.trackEvent("CustomPlayerCharacters", { Count: this.PCStatBlocks().length.toString() });
+            appInsights.trackEvent("CustomCreatures", { Count: this.NPCStatBlocks().length.toString()});
         }
 
         NPCStatBlocks = ko.observableArray<StatBlockListing>([]);
