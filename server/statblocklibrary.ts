@@ -1,30 +1,18 @@
 import fs = require("fs");
 
-export interface StatBlock {
-    Name: string;
-    Id: string;
-    Type: string;
-    Source: string;
-}
+import { StatBlock, StatBlockListing } from './StatBlock'
 
-export interface StatBlockListing {
-    Name: string;
-    Id: string;
-    Type: string;
-    Link: string;
-}
-
-const statblockSourceAbbreviations = {
+const sourceAbbreviations = {
     "monster-manual": "mm",
 };
 
 const toLowerCaseWithDashes = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, "-").replace(/[^a-z0-9-]/g, "");
 
-const createStatBlockId = (statBlockName: string, statblockSource: string) => {
-    const sourceString = toLowerCaseWithDashes(statblockSource);
-    const sourcePrefix = statblockSourceAbbreviations[sourceString] || sourceString;
-    const statblockName = toLowerCaseWithDashes(statBlockName);
-    return `${sourcePrefix}.${statblockName}`;
+const createId = (name: string, source: string) => {
+    const sourceString = toLowerCaseWithDashes(source);
+    const sourcePrefix = sourceAbbreviations[sourceString] || sourceString;
+    const lowerCaseName = toLowerCaseWithDashes(name);
+    return `${sourcePrefix}.${lowerCaseName}`;
 };
 
 export default class StatBlockLibrary {
@@ -48,7 +36,7 @@ export default class StatBlockLibrary {
 
     protected AddStatBlocks(statBlocks: StatBlock[]) {
         statBlocks.forEach((c) => {
-            c.Id = createStatBlockId(c.Name, c.Source);
+            c.Id = createId(c.Name, c.Source);
             this._statBlocks[c.Id] = c;
             this._statBlockListings.push({
                 Id: c.Id,
