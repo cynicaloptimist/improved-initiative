@@ -5,7 +5,8 @@ import mustacheExpress = require("mustache-express");
 import session = require("express-session");
 import request = require("request");
 
-import StatBlockLibrary from "./statblocklibrary";
+import Library from "./library";
+import { StatBlock } from "./statblock";
 
 interface PatreonPost {
     title: string;
@@ -38,7 +39,7 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-export default function (app: express.Express, statBlockLibrary: StatBlockLibrary, playerViews) {
+export default function (app: express.Express, statBlockLibrary: Library<StatBlock>, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
@@ -82,11 +83,11 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
     });
 
     app.get("/statblocks/", (req, res) => {
-        res.json(statBlockLibrary.GetStatBlockListings());
+        res.json(statBlockLibrary.GetListings());
     });
 
     app.get("/statblocks/:id", (req, res) => {
-        res.json(statBlockLibrary.GetStatBlockById(req.params.id));
+        res.json(statBlockLibrary.GetById(req.params.id));
     });
 
     const importEncounter = (req, res) => {
