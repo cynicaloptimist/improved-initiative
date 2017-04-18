@@ -17,14 +17,14 @@ module ImprovedInitiative {
             spell.Level = this.getInt("level");
             const initial = this.getString("school");
             spell.School = SpellImporter.schoolsByInitials[initial];
-            spell.Time = this.getString("time");
+            spell.CastingTime = this.getString("time");
             spell.Range = this.getString("range");
             spell.Components = this.getString("components");
             spell.Duration = this.getString("duration");
             spell.Classes = this.getCommaSeparatedStrings("classes");
             spell.Ritual = this.getString("ritual") === "YES";
 
-            spell.Content = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
+            spell.Description = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
 
             return spell;
         }
