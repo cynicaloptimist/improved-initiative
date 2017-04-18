@@ -14,7 +14,8 @@
     "Level": 0,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Aid",
@@ -30,7 +31,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Alarm",
@@ -47,7 +49,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Alter Self",
@@ -63,7 +66,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Animal Friendship",
@@ -80,7 +84,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Animal Messenger",
@@ -96,7 +101,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Animal Shapes",
@@ -110,7 +116,8 @@
     "Level": 8,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Animate Dead",
@@ -127,7 +134,8 @@
     "Level": 3,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Animate Objects",
@@ -143,7 +151,8 @@
     "Level": 5,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Antilife Shell",
@@ -158,7 +167,8 @@
     "Level": 5,
     "Range": "Self (10-foot radius)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Antimagic Field",
@@ -173,7 +183,8 @@
     "Level": 8,
     "Range": "Self (10-foot-radius sphere)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Antipathy/Sympathy",
@@ -189,7 +200,8 @@
     "Level": 8,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Arcane Eye",
@@ -206,7 +218,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Arcane Gate",
@@ -222,7 +235,8 @@
     "Level": 6,
     "Range": "500 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Arcane Lock",
@@ -238,7 +252,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Armor of Agathys",
@@ -252,7 +267,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Arms of Hadar",
@@ -266,7 +282,8 @@
     "Level": 1,
     "Range": "Self (10-foot radius)",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Astral Projection",
@@ -282,7 +299,8 @@
     "Level": 9,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Augury",
@@ -297,7 +315,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Aura of Life",
@@ -312,7 +331,8 @@
     "Level": 4,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Aura of Purity",
@@ -326,7 +346,8 @@
     "Level": 4,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Aura of Vitality",
@@ -341,7 +362,8 @@
     "Level": 3,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Awaken",
@@ -356,7 +378,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Bane",
@@ -372,7 +395,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Banishing Smite",
@@ -386,7 +410,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Banishment",
@@ -407,7 +432,8 @@
     "Level": 4,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Barkskin",
@@ -424,7 +450,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Beacon of Hope",
@@ -440,7 +467,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Beast Sense",
@@ -455,7 +483,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Bestow Curse",
@@ -472,7 +501,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Bigby's Hand",
@@ -486,7 +516,8 @@
     "Level": 5,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blade Barrier",
@@ -500,7 +531,8 @@
     "Level": 6,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blade Ward",
@@ -519,7 +551,8 @@
     "Level": 0,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Bless",
@@ -535,7 +568,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blight",
@@ -555,7 +589,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blinding Smite",
@@ -569,7 +604,8 @@
     "Level": 3,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blindness/Deafness",
@@ -589,7 +625,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blink",
@@ -607,7 +644,8 @@
     "Level": 3,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Blur",
@@ -625,7 +663,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Branding Smite",
@@ -639,7 +678,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Burning Hands",
@@ -657,7 +697,8 @@
     "Level": 1,
     "Range": "Self (15-foot cone)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Call Lightning",
@@ -673,7 +714,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Calm Emotions",
@@ -689,7 +731,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Chain Lightning",
@@ -704,7 +747,8 @@
     "Level": 6,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Charm Person",
@@ -724,7 +768,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Chill Touch",
@@ -740,7 +785,8 @@
     "Level": 0,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Chromatic Orb",
@@ -756,7 +802,8 @@
     "Level": 1,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Circle of Death",
@@ -772,7 +819,8 @@
     "Level": 6,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Circle of Power",
@@ -787,7 +835,8 @@
     "Level": 5,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Clairvoyance",
@@ -805,7 +854,8 @@
     "Level": 3,
     "Range": "1 mile",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Clone",
@@ -819,7 +869,8 @@
     "Level": 8,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Cloud of Daggers",
@@ -836,7 +887,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Cloudkill",
@@ -853,7 +905,8 @@
     "Level": 5,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Color Spray",
@@ -869,7 +922,8 @@
     "Level": 1,
     "Range": "Self (15-foot cone)",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Command",
@@ -887,7 +941,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Commune",
@@ -902,7 +957,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Commune with Nature",
@@ -920,7 +976,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Compelled Duel",
@@ -935,7 +992,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Comprehend Languages",
@@ -952,7 +1010,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Compulsion",
@@ -966,7 +1025,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Cone of Cold",
@@ -982,7 +1042,8 @@
     "Level": 5,
     "Range": "Self (60-foot cone)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Confusion",
@@ -1002,7 +1063,8 @@
     "Level": 4,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Animals",
@@ -1017,7 +1079,8 @@
     "Level": 3,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Barrage",
@@ -1031,7 +1094,8 @@
     "Level": 3,
     "Range": "Self (60-foot cone)",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Celestial",
@@ -1045,7 +1109,8 @@
     "Level": 7,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Elemental",
@@ -1061,7 +1126,8 @@
     "Level": 5,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Fey",
@@ -1076,7 +1142,8 @@
     "Level": 6,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Minor Elementals",
@@ -1091,7 +1158,8 @@
     "Level": 4,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Volley",
@@ -1105,7 +1173,8 @@
     "Level": 5,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Conjure Woodland Beings",
@@ -1120,7 +1189,8 @@
     "Level": 4,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Contact Other Plane",
@@ -1135,7 +1205,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Contagion",
@@ -1152,7 +1223,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Contingency",
@@ -1166,7 +1238,8 @@
     "Level": 6,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Continual Flame",
@@ -1183,7 +1256,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Control Water",
@@ -1201,7 +1275,8 @@
     "Level": 4,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Control Weather",
@@ -1217,7 +1292,8 @@
     "Level": 8,
     "Range": "Self (5-mile radius)",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Cordon of Arrows",
@@ -1231,7 +1307,8 @@
     "Level": 2,
     "Range": "5 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Counterspell",
@@ -1248,7 +1325,8 @@
     "Level": 3,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Create Food and Water",
@@ -1264,7 +1342,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Create or Destroy Water",
@@ -1279,7 +1358,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Create Undead",
@@ -1295,7 +1375,8 @@
     "Level": 6,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Creation",
@@ -1311,7 +1392,8 @@
     "Level": 5,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Crown of Madness",
@@ -1330,7 +1412,8 @@
     "Level": 2,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Crusader's Mantle",
@@ -1345,7 +1428,8 @@
     "Level": 3,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Cure Wounds",
@@ -1365,7 +1449,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dancing Lights",
@@ -1383,7 +1468,8 @@
     "Level": 0,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Darkness",
@@ -1402,7 +1488,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Darkvision",
@@ -1420,7 +1507,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Daylight",
@@ -1440,7 +1528,8 @@
     "Level": 3,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Death Ward",
@@ -1459,7 +1548,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Delayed Blast Fireball",
@@ -1474,7 +1564,8 @@
     "Level": 7,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Demiplane",
@@ -1489,7 +1580,8 @@
     "Level": 8,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Destructive Wave",
@@ -1504,7 +1596,8 @@
     "Level": 5,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Detect Evil and Good",
@@ -1519,7 +1612,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Detect Magic",
@@ -1540,7 +1634,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Detect Poison and Disease",
@@ -1557,7 +1652,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Detect Thoughts",
@@ -1574,7 +1670,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dimension Door",
@@ -1593,7 +1690,8 @@
     "Level": 4,
     "Range": "500 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Disguise Self",
@@ -1612,7 +1710,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Disintegrate",
@@ -1627,7 +1726,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dispel Evil and Good",
@@ -1642,7 +1742,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dispel Magic",
@@ -1666,7 +1767,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dissonant Whispers",
@@ -1681,7 +1783,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Divination",
@@ -1697,7 +1800,8 @@
     "Level": 4,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Divine Favor",
@@ -1712,7 +1816,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Divine Word",
@@ -1726,7 +1831,8 @@
     "Level": 7,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dominate Beast",
@@ -1744,7 +1850,8 @@
     "Level": 4,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dominate Monster",
@@ -1762,7 +1869,8 @@
     "Level": 8,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dominate Person",
@@ -1783,7 +1891,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Drawmij's Instant Summon",
@@ -1797,7 +1906,8 @@
     "Level": 6,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Dream",
@@ -1815,7 +1925,8 @@
     "Level": 5,
     "Range": "Special",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Druidcraft",
@@ -1829,7 +1940,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Earthquake",
@@ -1845,7 +1957,8 @@
     "Level": 8,
     "Range": "500 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Eldritch Blast",
@@ -1859,7 +1972,8 @@
     "Level": 0,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Elemental Weapon",
@@ -1873,7 +1987,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Enhance Ability",
@@ -1891,7 +2006,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Enlarge/Reduce",
@@ -1907,7 +2023,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Ensnaring Strike",
@@ -1922,7 +2039,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Entangle",
@@ -1936,7 +2054,8 @@
     "Level": 1,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Enthrall",
@@ -1951,7 +2070,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Etherealness",
@@ -1969,7 +2089,8 @@
     "Level": 7,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Evard's Black Tentacles",
@@ -1984,7 +2105,8 @@
     "Level": 4,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Expeditious Retreat",
@@ -2001,7 +2123,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Eyebite",
@@ -2018,7 +2141,8 @@
     "Level": 6,
     "Range": "Self",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fabricate",
@@ -2033,7 +2157,8 @@
     "Level": 4,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Faerie Fire",
@@ -2050,7 +2175,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "False Life",
@@ -2068,7 +2194,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fear",
@@ -2086,7 +2213,8 @@
     "Level": 3,
     "Range": "Self (30-foot cone)",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Feather Fall",
@@ -2102,7 +2230,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Feeblemind",
@@ -2120,7 +2249,8 @@
     "Level": 8,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Feign Death",
@@ -2138,7 +2268,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Find Familiar",
@@ -2152,7 +2283,8 @@
     "Level": 1,
     "Range": "10 feet",
     "Ritual": true,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Find Steed",
@@ -2166,7 +2298,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Find the Path",
@@ -2182,7 +2315,8 @@
     "Level": 6,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Find Traps",
@@ -2198,7 +2332,8 @@
     "Level": 2,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Finger of Death",
@@ -2214,7 +2349,8 @@
     "Level": 7,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fire Bolt",
@@ -2231,7 +2367,8 @@
     "Level": 0,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fire Shield",
@@ -2247,7 +2384,8 @@
     "Level": 4,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fire Storm",
@@ -2263,7 +2401,8 @@
     "Level": 7,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fireball",
@@ -2281,7 +2420,8 @@
     "Level": 3,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Flame Blade",
@@ -2295,7 +2435,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Flame Strike",
@@ -2313,7 +2454,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Flaming Sphere",
@@ -2329,7 +2471,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Flesh to Stone",
@@ -2344,7 +2487,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fly",
@@ -2361,7 +2505,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Fog Cloud",
@@ -2379,7 +2524,8 @@
     "Level": 1,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Forbiddance",
@@ -2393,7 +2539,8 @@
     "Level": 6,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Forcecage",
@@ -2409,7 +2556,8 @@
     "Level": 7,
     "Range": "100 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Foresight",
@@ -2426,7 +2574,8 @@
     "Level": 9,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Freedom of Movement",
@@ -2451,7 +2600,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Friends",
@@ -2470,7 +2620,8 @@
     "Level": 0,
     "Range": "Self",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Gaseous Form",
@@ -2488,7 +2639,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Gate",
@@ -2504,7 +2656,8 @@
     "Level": 9,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Geas",
@@ -2524,7 +2677,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Gentle Repose",
@@ -2539,7 +2693,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Giant Insect",
@@ -2553,7 +2708,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Glibness",
@@ -2568,7 +2724,8 @@
     "Level": 8,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Globe of Invulnerability",
@@ -2583,7 +2740,8 @@
     "Level": 6,
     "Range": "Self (10-foot radius)",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Glyph of Warding",
@@ -2601,7 +2759,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Goodberry",
@@ -2616,7 +2775,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Grasping Vine",
@@ -2632,7 +2792,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Grease",
@@ -2646,7 +2807,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Greater Invisibility",
@@ -2665,7 +2827,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Greater Restoration",
@@ -2681,7 +2844,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Guardian of Faith",
@@ -2699,7 +2863,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Guards and Wards",
@@ -2714,7 +2879,8 @@
     "Level": 6,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Guidance",
@@ -2729,7 +2895,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Guiding Bolt",
@@ -2743,7 +2910,8 @@
     "Level": 1,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Gust of Wind",
@@ -2761,7 +2929,8 @@
     "Level": 2,
     "Range": "Self (60-foot line)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hail of Thorns",
@@ -2775,7 +2944,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hallow",
@@ -2790,7 +2960,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hallucinatory Terrain",
@@ -2809,7 +2980,8 @@
     "Level": 4,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Harm",
@@ -2823,7 +2995,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Haste",
@@ -2841,7 +3014,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Heal",
@@ -2856,7 +3030,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Healing Word",
@@ -2872,7 +3047,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Heat Metal",
@@ -2887,7 +3063,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hellish Rebuke",
@@ -2902,7 +3079,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Heroes' Feast",
@@ -2917,7 +3095,8 @@
     "Level": 6,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Heroism",
@@ -2932,7 +3111,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hex",
@@ -2946,7 +3126,8 @@
     "Level": 1,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hold Monster",
@@ -2966,7 +3147,8 @@
     "Level": 5,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hold Person",
@@ -2988,7 +3170,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Holy Aura",
@@ -3002,7 +3185,8 @@
     "Level": 8,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hunger of Hadar",
@@ -3016,7 +3200,8 @@
     "Level": 3,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hunter's Mark",
@@ -3031,7 +3216,8 @@
     "Level": 1,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Hypnotic Pattern",
@@ -3049,7 +3235,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Ice Storm",
@@ -3069,7 +3256,8 @@
     "Level": 4,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Identify",
@@ -3085,7 +3273,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Illusory Script",
@@ -3102,7 +3291,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Imprisonment",
@@ -3117,7 +3307,8 @@
     "Level": 9,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Incendiary Cloud",
@@ -3132,7 +3323,8 @@
     "Level": 8,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Inflict Wounds",
@@ -3147,7 +3339,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Insect Plague",
@@ -3169,7 +3362,8 @@
     "Level": 5,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Invisibility",
@@ -3189,7 +3383,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Jump",
@@ -3207,7 +3402,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Knock",
@@ -3223,7 +3419,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Legend Lore",
@@ -3241,7 +3438,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Leomund's Secret Chest",
@@ -3257,7 +3455,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Leomund's Tiny Hut",
@@ -3273,7 +3472,8 @@
     "Level": 3,
     "Range": "Self (10-foot-radius hemisphere)",
     "Ritual": true,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Lesser Restoration",
@@ -3294,7 +3494,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Levitate",
@@ -3310,7 +3511,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Light",
@@ -3328,7 +3530,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Lightning Arrow",
@@ -3342,7 +3545,8 @@
     "Level": 3,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Lightning Bolt",
@@ -3359,7 +3563,8 @@
     "Level": 3,
     "Range": "Self (100-foot line)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Locate Animals or Plants",
@@ -3375,7 +3580,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Locate Creature",
@@ -3395,7 +3601,8 @@
     "Level": 4,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Locate Object",
@@ -3414,7 +3621,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Longstrider",
@@ -3432,7 +3640,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mage Armor",
@@ -3448,7 +3657,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mage Hand",
@@ -3467,7 +3677,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Magic Circle",
@@ -3486,7 +3697,8 @@
     "Level": 3,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Magic Jar",
@@ -3500,7 +3712,8 @@
     "Level": 6,
     "Range": "Self",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Magic Missile",
@@ -3517,7 +3730,8 @@
     "Level": 1,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Magic Mouth",
@@ -3533,7 +3747,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Magic Weapon",
@@ -3551,7 +3766,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Major Image",
@@ -3569,7 +3785,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mass Cure Wounds",
@@ -3586,7 +3803,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mass Heal",
@@ -3600,7 +3818,8 @@
     "Level": 9,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mass Healing Word",
@@ -3614,7 +3833,8 @@
     "Level": 3,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mass Suggestion",
@@ -3632,7 +3852,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Maze",
@@ -3646,7 +3867,8 @@
     "Level": 8,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Meld into Stone",
@@ -3662,7 +3884,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": true,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Melf's Acid Arrow",
@@ -3678,7 +3901,8 @@
     "Level": 2,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mending",
@@ -3696,7 +3920,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Message",
@@ -3714,7 +3939,8 @@
     "Level": 0,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Meteor Swarm",
@@ -3729,7 +3955,8 @@
     "Level": 9,
     "Range": "1 mile",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mind Blank",
@@ -3744,7 +3971,8 @@
     "Level": 8,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Minor Illusion",
@@ -3763,7 +3991,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mirage Arcane",
@@ -3780,7 +4009,8 @@
     "Level": 7,
     "Range": "Sight",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mirror Image",
@@ -3799,7 +4029,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mislead",
@@ -3815,7 +4046,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Misty Step",
@@ -3834,7 +4066,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Modify Memory",
@@ -3851,7 +4084,8 @@
     "Level": 5,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Moonbeam",
@@ -3866,7 +4100,8 @@
     "Level": 2,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mordenkainen's Faithful Hound",
@@ -3881,7 +4116,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mordenkainen's Magnificent Mansion",
@@ -3896,7 +4132,8 @@
     "Level": 7,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mordenkainen's Private Sanctum",
@@ -3912,7 +4149,8 @@
     "Level": 4,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Mordenkainen's Sword",
@@ -3927,7 +4165,8 @@
     "Level": 7,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Move Earth",
@@ -3943,7 +4182,8 @@
     "Level": 6,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Nondetection",
@@ -3961,7 +4201,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Nystul's Magic Aura",
@@ -3977,7 +4218,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Otiluke's Freezing Sphere",
@@ -3991,7 +4233,8 @@
     "Level": 6,
     "Range": "300 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Otiluke's Resilient Sphere",
@@ -4007,7 +4250,8 @@
     "Level": 4,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Otto's Irresistible Dance",
@@ -4023,7 +4267,8 @@
     "Level": 6,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Pass Without Trace",
@@ -4040,7 +4285,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Passwall",
@@ -4055,7 +4301,8 @@
     "Level": 5,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Phantasmal Force",
@@ -4074,7 +4321,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Phantasmal Killer",
@@ -4089,7 +4337,8 @@
     "Level": 4,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Phantom Steed",
@@ -4104,7 +4353,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Planar Ally",
@@ -4118,7 +4368,8 @@
     "Level": 6,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Planar Binding",
@@ -4136,7 +4387,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Plane Shift",
@@ -4154,7 +4406,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Plant Growth",
@@ -4173,7 +4426,8 @@
     "Level": 3,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Poison Spray",
@@ -4190,7 +4444,8 @@
     "Level": 0,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Polymorph",
@@ -4208,7 +4463,8 @@
     "Level": 4,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Power Word Heal",
@@ -4222,7 +4478,8 @@
     "Level": 9,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Power Word Kill",
@@ -4240,7 +4497,8 @@
     "Level": 9,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Power Word Stun",
@@ -4258,7 +4516,8 @@
     "Level": 8,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Prayer of Healing",
@@ -4272,7 +4531,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Prestidigitation",
@@ -4291,7 +4551,8 @@
     "Level": 0,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Prismatic Spray",
@@ -4306,7 +4567,8 @@
     "Level": 7,
     "Range": "Self (60 foot cone)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Prismatic Wall",
@@ -4320,7 +4582,8 @@
     "Level": 9,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Produce Flame",
@@ -4334,7 +4597,8 @@
     "Level": 0,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Programmed Illusion",
@@ -4350,7 +4614,8 @@
     "Level": 6,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Project Image",
@@ -4366,7 +4631,8 @@
     "Level": 7,
     "Range": "500 miles",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Protection from Energy",
@@ -4389,7 +4655,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Protection from Evil and Good",
@@ -4408,7 +4675,8 @@
     "Level": 1,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Protection from Poison",
@@ -4426,7 +4694,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Purify Food and Drink",
@@ -4442,7 +4711,8 @@
     "Level": 1,
     "Range": "10 feet",
     "Ritual": true,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Raise Dead",
@@ -4459,7 +4729,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Rary's Telepathic Bond",
@@ -4473,7 +4744,8 @@
     "Level": 5,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Ray of Enfeeblement",
@@ -4489,7 +4761,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Ray of Frost",
@@ -4506,7 +4779,8 @@
     "Level": 0,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Ray of Sickness",
@@ -4523,7 +4797,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Regenerate",
@@ -4539,7 +4814,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Reincarnate",
@@ -4553,7 +4829,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Remove Curse",
@@ -4571,7 +4848,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Resistance",
@@ -4586,7 +4864,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Resurrection",
@@ -4601,7 +4880,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Reverse Gravity",
@@ -4617,7 +4897,8 @@
     "Level": 7,
     "Range": "100 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Revivify",
@@ -4634,7 +4915,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Rope Trick",
@@ -4649,7 +4931,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sacred Flame",
@@ -4663,7 +4946,8 @@
     "Level": 0,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sanctuary",
@@ -4679,7 +4963,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Scorching Ray",
@@ -4697,7 +4982,8 @@
     "Level": 2,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Scrying",
@@ -4720,7 +5006,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Searing Smite",
@@ -4734,7 +5021,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "See Invisibility",
@@ -4751,7 +5039,8 @@
     "Level": 2,
     "Range": "Self",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Seeming",
@@ -4769,7 +5058,8 @@
     "Level": 5,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sending",
@@ -4786,7 +5076,8 @@
     "Level": 3,
     "Range": "Unlimited",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sequester",
@@ -4800,7 +5091,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shapechange",
@@ -4815,7 +5107,8 @@
     "Level": 9,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shatter",
@@ -4834,7 +5127,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shield",
@@ -4850,7 +5144,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shield of Faith",
@@ -4867,7 +5162,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shillelagh",
@@ -4881,7 +5177,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Shocking Grasp",
@@ -4898,7 +5195,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Silence",
@@ -4916,7 +5214,8 @@
     "Level": 2,
     "Range": "120 feet",
     "Ritual": true,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Silent Image",
@@ -4933,7 +5232,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Simulacrum",
@@ -4948,7 +5248,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sleep",
@@ -4966,7 +5267,8 @@
     "Level": 1,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sleet Storm",
@@ -4984,7 +5286,8 @@
     "Level": 3,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Slow",
@@ -5000,7 +5303,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Spare the Dying",
@@ -5014,7 +5318,8 @@
     "Level": 0,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Speak with Animals",
@@ -5032,7 +5337,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": true,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Speak with Dead",
@@ -5049,7 +5355,8 @@
     "Level": 3,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Speak with Plants",
@@ -5065,7 +5372,8 @@
     "Level": 3,
     "Range": "Self (30-foot radius)",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Spider Climb",
@@ -5085,7 +5393,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Spike Growth",
@@ -5103,7 +5412,8 @@
     "Level": 2,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Spirit Guardians",
@@ -5119,7 +5429,8 @@
     "Level": 3,
     "Range": "Self (15-foot-radius)",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Spiritual Weapon",
@@ -5135,7 +5446,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Staggering Smite",
@@ -5149,7 +5461,8 @@
     "Level": 4,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Stinking Cloud",
@@ -5168,7 +5481,8 @@
     "Level": 3,
     "Range": "90 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Stone Shape",
@@ -5187,7 +5501,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Stoneskin",
@@ -5209,7 +5524,8 @@
     "Level": 4,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Storm of Vengeance",
@@ -5223,7 +5539,8 @@
     "Level": 9,
     "Range": "Sight",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Suggestion",
@@ -5242,7 +5559,8 @@
     "Level": 2,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sunbeam",
@@ -5258,7 +5576,8 @@
     "Level": 6,
     "Range": "Self (60-foot line)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Sunburst",
@@ -5274,7 +5593,8 @@
     "Level": 8,
     "Range": "150 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Swift Quiver",
@@ -5288,7 +5608,8 @@
     "Level": 5,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Symbol",
@@ -5304,7 +5625,8 @@
     "Level": 7,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Tasha's Hideous Laughter",
@@ -5321,7 +5643,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Telekinesis",
@@ -5337,7 +5660,8 @@
     "Level": 5,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Telepathy",
@@ -5351,7 +5675,8 @@
     "Level": 8,
     "Range": "Unlimited",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Teleport",
@@ -5367,7 +5692,8 @@
     "Level": 7,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Teleportation Circle",
@@ -5384,7 +5710,8 @@
     "Level": 5,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Tenser's Floating Disk",
@@ -5398,7 +5725,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Thaumaturgy",
@@ -5412,7 +5740,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Thorn Whip",
@@ -5426,7 +5755,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Thunderous Smite",
@@ -5440,7 +5770,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Thunderwave",
@@ -5459,7 +5790,8 @@
     "Level": 1,
     "Range": "Self (15-foot cube)",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Time Stop",
@@ -5474,7 +5806,8 @@
     "Level": 9,
     "Range": "Self",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Tongues",
@@ -5492,7 +5825,8 @@
     "Level": 3,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Transport via Plants",
@@ -5506,7 +5840,8 @@
     "Level": 6,
     "Range": "10 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Tree Stride",
@@ -5524,7 +5859,8 @@
     "Level": 5,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "True Polymorph",
@@ -5540,7 +5876,8 @@
     "Level": 9,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "True Resurrection",
@@ -5555,7 +5892,8 @@
     "Level": 9,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "True Seeing",
@@ -5573,7 +5911,8 @@
     "Level": 6,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "True Strike",
@@ -5592,7 +5931,8 @@
     "Level": 0,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Divination"
+    "School": "Divination",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Tsunami",
@@ -5606,7 +5946,8 @@
     "Level": 8,
     "Range": "Sight",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Unseen Servant",
@@ -5622,7 +5963,8 @@
     "Level": 1,
     "Range": "60 feet",
     "Ritual": true,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Vampiric Touch",
@@ -5638,7 +5980,8 @@
     "Level": 3,
     "Range": "Self",
     "Ritual": false,
-    "School": "Necromancy"
+    "School": "Necromancy",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Vicious Mockery",
@@ -5652,7 +5995,8 @@
     "Level": 0,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wall of Fire",
@@ -5671,7 +6015,8 @@
     "Level": 4,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wall of Force",
@@ -5685,7 +6030,8 @@
     "Level": 5,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wall of Ice",
@@ -5699,7 +6045,8 @@
     "Level": 6,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wall of Stone",
@@ -5717,7 +6064,8 @@
     "Level": 5,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wall of Thorns",
@@ -5731,7 +6079,8 @@
     "Level": 6,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Warding Bond",
@@ -5746,7 +6095,8 @@
     "Level": 2,
     "Range": "Touch",
     "Ritual": false,
-    "School": "Abjuration"
+    "School": "Abjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Water Breathing",
@@ -5765,7 +6115,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Water Walk",
@@ -5785,7 +6136,8 @@
     "Level": 3,
     "Range": "30 feet",
     "Ritual": true,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Web",
@@ -5801,7 +6153,8 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Weird",
@@ -5816,7 +6169,8 @@
     "Level": 9,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Illusion"
+    "School": "Illusion",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wind Walk",
@@ -5830,7 +6184,8 @@
     "Level": 6,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Transmutation"
+    "School": "Transmutation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wind Wall",
@@ -5846,7 +6201,8 @@
     "Level": 3,
     "Range": "120 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wish",
@@ -5861,7 +6217,8 @@
     "Level": 9,
     "Range": "Self",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Witch Bolt",
@@ -5878,7 +6235,8 @@
     "Level": 1,
     "Range": "30 feet",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Word of Recall",
@@ -5892,7 +6250,8 @@
     "Level": 6,
     "Range": "5 feet",
     "Ritual": false,
-    "School": "Conjuration"
+    "School": "Conjuration",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Wrathful Smite",
@@ -5906,7 +6265,8 @@
     "Level": 1,
     "Range": "Self",
     "Ritual": false,
-    "School": "Evocation"
+    "School": "Evocation",
+    "Source": "Player's Handbook"
   },
   {
     "Name": "Zone of Truth",
