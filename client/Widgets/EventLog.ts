@@ -2,8 +2,8 @@ module ImprovedInitiative {
     export class EventLog {
         Events = ko.observableArray<string>();
         
-        LatestEvent = ko.computed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
-        EventsTail = ko.computed(() => this.Events().slice(0, this.Events().length - 1));
+        LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
+        EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
         
         AddEvent = (event: string) => {
             this.Events.push(event);

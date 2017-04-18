@@ -15,7 +15,7 @@ module ImprovedInitiative {
             });
         }
 
-        this.ToolTip = ko.computed(() => `${this.Description} [${this.KeyBinding}]`);
+        this.ToolTip = ko.pureComputed(() => `${this.Description} [${this.KeyBinding}]`);
 
         let keyBinding = Store.Load<string>(Store.KeyBindings, this.Description);
         if (keyBinding) {
@@ -55,7 +55,5 @@ module ImprovedInitiative {
         new Command('Apply Temporary HP', c.AddTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Select Next Combatant', c.SelectNext, 'j', 'fa-arrow-down', false),
         new Command('Select Previous Combatant', c.SelectPrevious, 'k', 'fa-arrow-up', false)        
-  ]
-    
-    
+  ]    
 }

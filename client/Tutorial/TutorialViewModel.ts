@@ -45,7 +45,7 @@ module ImprovedInitiative {
                 }
             });
             
-            this.CurrentStep = ko.computed(() => {
+            this.CurrentStep = ko.pureComputed(() => {
                 const index = this.stepIndex();
                 if (index !== null) {
                     return TutorialSteps[index].Message    
@@ -61,7 +61,7 @@ module ImprovedInitiative {
             this.showTutorial(false);
         }
 
-        CanGoNext = ko.computed(() => {
+        CanGoNext = ko.pureComputed(() => {
             const stepIndex = this.stepIndex();
             return stepIndex === null || !TutorialSteps[stepIndex].AwaitAction;
         });

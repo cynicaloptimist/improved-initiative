@@ -7,7 +7,7 @@ module ImprovedInitiative {
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
-        BlurVisible = ko.computed(() =>
+        BlurVisible = ko.pureComputed(() =>
             this.TutorialVisible() ||
             this.SettingsVisible()
         );
@@ -33,7 +33,7 @@ module ImprovedInitiative {
             }
         }
 
-        InterfaceState = ko.computed(() => {
+        InterfaceState = ko.pureComputed(() => {
             return [
                 this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
                 this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,

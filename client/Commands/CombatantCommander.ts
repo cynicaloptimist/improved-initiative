@@ -21,11 +21,11 @@ module ImprovedInitiative {
         Commands: Command[];
         SelectedCombatants: KnockoutObservableArray<Combatant> = ko.observableArray<Combatant>([]);
 
-        HasSelected = ko.computed(() => this.SelectedCombatants().length > 0);
-        HasOneSelected = ko.computed(() => this.SelectedCombatants().length === 1);
-        HasMultipleSelected = ko.computed(() => this.SelectedCombatants().length > 1);
+        HasSelected = ko.pureComputed(() => this.SelectedCombatants().length > 0);
+        HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
+        HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-        StatBlock: KnockoutComputed<StatBlock> = ko.computed(() => {
+        StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
             var selectedCombatants = this.SelectedCombatants();
             if (selectedCombatants.length == 1) {
                 return selectedCombatants[0].StatBlock();
@@ -34,7 +34,7 @@ module ImprovedInitiative {
             }
         });
 
-        Names: KnockoutComputed<string> = ko.computed(() =>
+        Names: KnockoutComputed<string> = ko.pureComputed(() =>
             this.SelectedCombatants()
                 .map(c => c.ViewModel.DisplayName())
                 .join(', ')

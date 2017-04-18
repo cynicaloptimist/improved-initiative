@@ -8,7 +8,7 @@ module ImprovedInitiative {
 
         SavedEncounterIndex: KnockoutObservableArray<string>;
 
-        GetPreviewStatBlock = ko.computed(() => {
+        GetPreviewStatBlock = ko.pureComputed(() => {
             return this.previewStatBlock() || StatBlock.Default();
         })
 
@@ -29,7 +29,7 @@ module ImprovedInitiative {
             this.DisplayTab(tabName);
         }
         
-        FilteredStatBlocks = ko.computed<StatBlockListing[]>(() => {
+        FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
             var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],
                 statBlocksWithFilterInType = [];
