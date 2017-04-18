@@ -8,11 +8,11 @@ import LaunchServer from "./launchserver";
 import ConfigureRoutes from "./routes";
 import ConfigureSockets from "./sockets";
 import Library from "./library";
-import { StatBlock } from "./statblock";
+import { StatBlock, GetStatBlockKeywords } from "./statblock";
 
 ConfigureAppInsights();
 
-const statBlockLibrary = Library.FromFile<StatBlock>("ogl_creatures.json", "/statblocks/");
+const statBlockLibrary = Library.FromFile<StatBlock>("ogl_creatures.json", "/statblocks/", GetStatBlockKeywords);
 const playerViews = [];
 
 const app = express();
