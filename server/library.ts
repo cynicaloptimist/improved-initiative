@@ -16,14 +16,13 @@ const createId = (name: string, source: string) => {
 export interface LibraryItem {
     Name: string;
     Id: string;
-    Type: string;
     Source: string;
 }
 
 export interface Listing {
     Name: string;
     Id: string;
-    Type: string;
+    Keywords: string [];
     Link: string;
 }
 
@@ -31,10 +30,10 @@ export default class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
     private listings: Listing[] = [];
 
-    constructor(private route: string) { };
+    constructor(private route: string, private getKeywords: (item: TItem) => string []) { };
 
-    static FromFile<I extends LibraryItem>(filename: string, route: string): Library<I> {
-        const library = new Library<I>(route);
+    static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string []): Library<I> {
+        const library = new Library<I>(route, getKeywords);
 
         fs.readFile(filename, (err, buffer) => {
             if (err) {
@@ -55,7 +54,7 @@ export default class Library<TItem extends LibraryItem> {
             const listing: Listing = {
                 Name: c.Name,
                 Id: c.Id,
-                Type: c.Type,
+                Keywords: this.getKeywords(c),
                 Link: this.route + c.Id,
             };
             this.listings.push(listing);
