@@ -380,7 +380,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Bigby's Hand",
+    "Name": "Arcane Hand",
     "CastingTime": "1 action",
     "Classes": [
       "Wizard"
@@ -626,23 +626,6 @@
     "Range": "120 feet",
     "Ritual": false,
     "School": "Necromancy",
-    "Source": "Player's Handbook"
-  },
-  {
-    "Name": "Chromatic Orb",
-    "CastingTime": "1 action",
-    "Classes": [
-      "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
-    ],
-    "Components": "V, S, M (a diamond worth at least 50 gp)",
-    "Description": "You hurl a 4-inch-diameter sphere of energy at a creature that you can see within range. You choose acid, cold, fire, lightning, poison, or thunder for the type of orb you create, and then make a ranged spell attack against the target. If the attack hits, the creature takes 3d8 damage of the type you chose. At Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
-    "Duration": "Instantaneous",
-    "Level": 1,
-    "Range": "90 feet",
-    "Ritual": false,
-    "School": "Evocation",
     "Source": "Player's Handbook"
   },
   {
@@ -1572,7 +1555,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Drawmij's Instant Summon",
+    "Name": "Instant Summon",
     "CastingTime": "1 minute",
     "Classes": [
       "Wizard"
@@ -1739,7 +1722,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Evard's Black Tentacles",
+    "Name": "Black Tentacles",
     "CastingTime": "1 action",
     "Classes": [
       "Warlock (Great Old One)",
@@ -2987,7 +2970,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Leomund's Secret Chest",
+    "Name": "Secret Chest",
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
@@ -3004,7 +2987,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Leomund's Tiny Hut",
+    "Name": "Tiny Hut",
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
@@ -3418,7 +3401,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Melf's Acid Arrow",
+    "Name": "Acid Arrow",
     "CastingTime": "1 action",
     "Classes": [
       "Druid (Swamp)",
@@ -3634,7 +3617,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Mordenkainen's Faithful Hound",
+    "Name": "Faithful Hound",
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
@@ -3650,7 +3633,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Mordenkainen's Magnificent Mansion",
+    "Name": "Magnificent Mansion",
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
@@ -3666,7 +3649,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Mordenkainen's Private Sanctum",
+    "Name": "Private Sanctum",
     "CastingTime": "10 minutes",
     "Classes": [
       "Artificer",
@@ -3683,7 +3666,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Mordenkainen's Sword",
+    "Name": "Arcane Sword",
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
@@ -3735,7 +3718,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Nystul's Magic Aura",
+    "Name": "Arcanist's Magic Aura",
     "CastingTime": "1 action",
     "Classes": [
       "Cleric (Arcana)",
@@ -3752,7 +3735,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Otiluke's Freezing Sphere",
+    "Name": "Freezing Sphere",
     "CastingTime": "1 action",
     "Classes": [
       "Wizard"
@@ -3767,7 +3750,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Otiluke's Resilient Sphere",
+    "Name": "Resilient Sphere",
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
@@ -3784,7 +3767,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Otto's Irresistible Dance",
+    "Name": "Irresistible Dance",
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
@@ -4228,7 +4211,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Rary's Telepathic Bond",
+    "Name": "Telepathic Bond",
     "CastingTime": "1 action",
     "Classes": [
       "Wizard"
@@ -5061,7 +5044,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Tasha's Hideous Laughter",
+    "Name": "Hideous Laughter",
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
@@ -5131,7 +5114,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Tenser's Floating Disk",
+    "Name": "Floating Disk",
     "CastingTime": "1 action",
     "Classes": [
       "Wizard"
