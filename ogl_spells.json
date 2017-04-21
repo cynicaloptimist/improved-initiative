@@ -4,9 +4,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You hurl a bubble of acid. Choose one creature within range, or choose two creatures within range that are within 5 feet of each other. A target must succeed on a Dexterity saving throw or take 1d6 acid damage.\n\nThis spells damage increases by 1d6 when you reach 5th Level (2d6), 11th level (3d6) and 17th level (4d6).",
@@ -40,8 +38,7 @@
     "Classes": [
       "Artificer",
       "Ranger",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a tiny bell and a piece of fine silver wire)",
     "Description": "You set an alarm against unwanted intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot cube. Until the spell ends, an alarm alerts you whenever a tiny or larger creature touches or enters the warded area. When you cast the spell, you can designate creatures that won't set off the alarm. You also choose whether the alarm is mental or audible.\n\nA mental alarm alerts you with a ping in your mind if you are within 1 mile of the warded area. This ping awakens you if you are sleeping.\n\nAn audible alarm produces the sound of a hand bell for 10 seconds within 60 feet.",
@@ -74,7 +71,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Nature)",
       "Druid",
       "Ranger"
     ],
@@ -124,8 +120,6 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Cleric",
-      "Cleric (Death)",
-      "Paladin (Oathbreaker)",
       "Wizard"
     ],
     "Components": "V, S, M (a drop of blood, a piece of flesh, and a pinch of bone dust)",
@@ -158,7 +152,6 @@
     "Name": "Antilife Shell",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Death)",
       "Druid"
     ],
     "Components": "V, S",
@@ -191,8 +184,7 @@
     "CastingTime": "1 hour",
     "Classes": [
       "Druid",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (either a lump of alum soaked in vinegar for the antipathy effect or a drop of honey for the sympathy effect)",
     "Description": "This spell attracts or repels creatures of your choice. You target something within range, either a Huge or smaller object or creature or an area that is no larger than a 200-foot cube. Then specify a kind of intelligent creature, such as red dragons, goblins, or vampires. You invest the target with an aura that either attracts or repels the specified creatures for the duration. Choose antipathy or sympathy as the aura's effect.\n\nAntipathy: The enchantment causes creatures of the kind you designated to feel an intense urge to leave the area and avoid the target. When such a creature can see the target or comes within 60 feet of it, the creature must succeed on a Wisdom saving throw or become frightened. The creature remains frightened while it can see the target or is within 60 feet of it. While frightened by the target, the creature must use its movement to move to the nearest safe spot from which it can't see the target. If the creature moves more than 60 feet from the target and can't see it, the creature is no longer frightened, but the creature becomes frightened again if it regains sight of the target or moves within 60 feet of it.\n\nSympathy: The enchantment causes the specified creatures to feel an intense urge to approach the target while within 60 feet of it or able to see it. When such a creature can see the target or comes within 60 feet of it, the creature must succeed on a Wisdom saving throw or use its movement on each of its turns to enter the area or move within reach of the target. When the creature has done so, it can't willingly move away from the target. If the target damages or otherwise harms an affected creature, the affected creature can make a Wisdom saving throw to end the effect, as described below.\n\nEnding the Effect: If an affected creature ends its turn while not within 60 feet of the target or able to see it, the creature makes a Wisdom saving throw. ON a successful save, the creature is no longer affected by the target and recognizes the feeling of repugnance or attraction as magical. In addition, a creature affected by the spells is allowed another Wisdom saving throw every 24 hours while the spell persists.\n\nA creature that successfully saves against this effect is immune to it for 1 minute, after which time it can be affected again.",
@@ -208,8 +200,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Cleric (Arcana)",
-      "Cleric (Knowledge)",
       "Wizard"
     ],
     "Components": "V, S, M (a bit of bat fur)",
@@ -226,8 +216,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (gold dust worth at least 25 gp, which the spell consumes)",
     "Description": "You touch a closed door, window, gate, chest, or other entryway, and it becomes locked for the duration. You and the creatures you designate when you cast this spell can open the object normally. You can also set a password that, when spoken within 5 feet of the object, suppresses this spell for 1 minute. Otherwise, it is impassable until it is broken or the spell is dispelled or suppressed. Casting knock on the object suppresses arcane lock for 10 minutes.\n\nWhile affected by this spell, the object is more difficult to break or force open; the DC to break it or pick any locks on it increases by 10.",
@@ -259,8 +248,7 @@
     "Name": "Augury",
     "CastingTime": "1 minute",
     "Classes": [
-      "Cleric",
-      "Cleric (Knowledge)"
+      "Cleric"
     ],
     "Components": "V, S, M (specially marked sticks, bones, or similar tokens worth at least 25 gp)",
     "Description": "By casting gem-inlaid sticks, rolling dragon bones, laying out ornate cards, or employing some other divining tool, you receive an omen from an otherworldly entity about the results of a specific course of action that you plan to take within the next 30 minutes. The DM chooses from the following possible omens.\n\n• Weal, for good results\n\n• Woe, for bad results\n\n• Weal and woe, for both good and bad results\n\n• Nothing, for results that aren't especially good or bad\n\nThe spell doesn't take into account any possible circumstances that might change the outcome, such as the casting of additional spells or the loss or gain of a companion.\n\nIf you cast the spell two or more times before completing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get a random reading. The DM makes this roll in secret.",
@@ -292,8 +280,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric",
-      "Paladin (Vengeance)"
+      "Cleric"
     ],
     "Components": "V, S, M (a drop of blood)",
     "Description": "Up to three creatures of your choice that you can see within range must make Charisma saving throws. Whenever a target that fails this saving throw makes an attack roll or a saving throw before the spell ends, the target must roll a d4 and subtract the number rolled from the attack roll or saving throw.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st.",
@@ -310,12 +297,9 @@
     "Classes": [
       "Cleric",
       "Paladin",
-      "Paladin (Crown)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (an item distasteful to the target)",
     "Description": "You attempt to send one creature that you can see within range to another place of existence. The target must succeed on a Charisma saving throw or be banished.\n\nIf the target is native to the plane of existence you're on, you banish the target to a harmless demiplane. While there, the target is incapacitated. The target remains there until the spell ends, at which point the target reappears in the space it left or in the nearest unoccupied space if that space is occupied.\n\nIf the target is native to a different plane of existence that the one you're on, the target is banished with a faint popping noise, returning to its home plane. If the spell ends before 1 minute has passed, the target reappears in the space it left or in the nearest unoccupied space if that space is occupied. Otherwise, the target doesn't return.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, you can target one additional creature for each slot level above 4th.",
@@ -330,9 +314,7 @@
     "Name": "Barkskin",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
-      "Druid (Forest)",
       "Ranger"
     ],
     "Components": "V, S, M (a handful of oak bark)",
@@ -348,9 +330,7 @@
     "Name": "Beacon of Hope",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Cleric (Life)",
-      "Paladin (Devotion)"
+      "Cleric"
     ],
     "Components": "V, S",
     "Description": "This spell bestows hope and vitality. Choose any number of creatures within range. For the duration, each target has advantage on Wisdom saving throws and death saving throws, and regains the maximum number of hit points possible from any healing.",
@@ -367,7 +347,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Paladin (Oathbreaker)",
       "Wizard"
     ],
     "Components": "V, S",
@@ -414,7 +393,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Cleric (Life)",
       "Paladin"
     ],
     "Components": "V, S, M (a sprinkling of holy water)",
@@ -430,10 +408,7 @@
     "Name": "Blight",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Death)",
       "Druid",
-      "Druid (Desert)",
-      "Paladin (Oathbreaker)",
       "Sorcerer",
       "Warlock",
       "Wizard"
@@ -453,10 +428,7 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Death)",
       "Sorcerer",
-      "Warlock (Fiend)",
-      "Warlock (Undying)",
       "Wizard"
     ],
     "Components": "V",
@@ -473,9 +445,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Cleric (Trickery)",
       "Sorcerer",
-      "Warlock (Archfey)",
       "Wizard"
     ],
     "Components": "V, S",
@@ -492,10 +462,8 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Druid (Desert)",
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V",
     "Description": "Your body becomes blurred, shifting and wavering to all who can see you. For the duration, any creature has disadvantage on attack rolls against you. An attacker is immune to this effect if it doesn't rely on sight, as with blindsight, or can see through illusions, as with truesight.",
@@ -525,11 +493,8 @@
     "Name": "Burning Hands",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Light)",
       "Sorcerer",
-      "Warlock (Fiend)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire ignites any flammable objects in the area that aren't being worn or carried.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.",
@@ -544,9 +509,7 @@
     "Name": "Call Lightning",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Tempest)",
-      "Druid",
-      "Druid (Forest)"
+      "Druid"
     ],
     "Components": "V, S",
     "Description": "A storm cloud appears in the shape of a cylinder that is 10 feet tall with a 60-foot radius, centered on a point you can see 100 feet directly above you. The spell fails if you can't see a point in the air where the storm cloud could appear (for example, if you are in a room that can't accommodate the cloud).\n\nWhen you cast the spell, choose a point you can see within range. A bolt of lightning flashes down from the cloud to that point. Each creature within 5 feet of that point must make a Dexterity saving throw. A creature takes 3d10 lightning damage on a failed save, or half as much damage on a successful one. On each of your turns until the spell ends, you can use your action to call down lightning in this way again, targeting the same point or a different one.\n\nIf you are outdoors in stormy conditions when you cast this spell, the spell gives you control over the existing storm instead of creating a new one. Under such conditions, the spell's damage increases by 1d10.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher level, the damage increases by 1d10 for each slot level above 3rd.",
@@ -562,8 +525,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric",
-      "Warlock (Archfey)"
+      "Cleric"
     ],
     "Components": "V, S",
     "Description": "You attempt to suppress strong emotions in a group of people. Each humanoid in a 20-foot-radius sphere centered on a point you choose within range must make a Charisma saving throw a creature can choose to fail this saving throw if it wishes. If a creature fails its saving throw, choose one of the following two effects.\n\nYou can suppress any effect causing a target to be charmed or frightened. When this spell ends, any suppressed effect resumes, provided that its duration has not expired in the meantime.\n\nAlternatively, you can make a target indifferent about creatures of your choice that it is hostile toward. This indifference ends if the target is attacked or harmed by a spell or if it witnesses any of its friends being harmed. When the spell ends, the creature becomes hostile again, unless the DM rules otherwise.",
@@ -595,12 +557,10 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Trickery)",
       "Druid",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
@@ -652,7 +612,6 @@
       "Bard",
       "Cleric",
       "Sorcerer",
-      "Warlock (Great Old One)",
       "Wizard"
     ],
     "Components": "V, S, M (a focus worth at least 100 gp, either a jeweled horn for hearing or a glass eye for scrying)",
@@ -683,8 +642,6 @@
     "Name": "Cloudkill",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Death)",
-      "Druid (Underdark)",
       "Sorcerer",
       "Wizard"
     ],
@@ -702,8 +659,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a pinch of powder or sand that is colored red, yellow, and blue)",
     "Description": "A dazzling array of flashing, colored light springs from your hand. Roll 6d10, the total is how many hit points of creatures this spell can effect. Creatures in a 15-foot cone originating from you are affected in ascending order of their current hit points (ignoring unconscious creatures and creatures that can't see).\n\nStarting with the creature that has the lowest current hit points, each creature affected by this spell is blinded until the spell ends. Subtract each creature's hit points from the total before moving on to the creature with the next lowest hit points. A creature's hit points must be equal to or less than the remaining total for the creature to be affected.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d10 for each slot level above 1st.",
@@ -719,10 +675,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Cleric (Knowledge)",
-      "Paladin",
-      "Paladin (Crown)",
-      "Warlock (Fiend)"
+      "Paladin"
     ],
     "Components": "V",
     "Description": "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn't understand your language, or if your command is directly harmful to it.\n\nSome typical commands and their effects follow. You might issue a command other than one described here. If you do so, the DM determines how the target behaves. If the target can't follow your command, the spell ends.\n\nApproach: The target moves toward you by the shortest and most direct route, ending its turn if it moves within 5 feet of you.\n\nDrop: The target drops whatever it is holding and then ends its turn.\n\nFlee: The target spends its turn moving away from you by the fastest available means.\n\nGrovel: The target falls prone and then ends its turn.\n\nHalt: The target doesn't move and takes no actions. A flying creature stays aloft, provided that it is able to do so. If it must move to stay aloft, it flies the minimum distance needed to remain in the air.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional creature for each slot level above 1st. The creatures must be within 30 feet of each other when you target them.",
@@ -737,8 +690,7 @@
     "Name": "Commune",
     "CastingTime": "1 minute",
     "Classes": [
-      "Cleric",
-      "Paladin (Devotion)"
+      "Cleric"
     ],
     "Components": "V, S, M (incense and a vial of holy or unholy water)",
     "Description": "You contact your deity or a divine proxy and ask up to three questions that can be answered with a yes or no. You must ask your questions before the spell ends. You receive a correct answer for each question.\n\nDivine beings aren't necessarily omniscient, so you might receive \"unclear\" as an answer if a question pertains to information that lies beyond the deity's knowledge. In a case where a one-word answer could be misleading or contrary to the deity's interests, the DM might offer a short phrase as an answer instead.\n\nIf you cast the spell two or more times before finishing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get no answer. The DM makes this roll in secret.",
@@ -754,9 +706,6 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Druid",
-      "Druid (Arctic)",
-      "Druid (Forest)",
-      "Paladin (Ancients)",
       "Ranger"
     ],
     "Components": "V, S",
@@ -805,7 +754,6 @@
     "Name": "Cone of Cold",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Arctic)",
       "Sorcerer",
       "Wizard"
     ],
@@ -823,12 +771,9 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Knowledge)",
       "Druid",
-      "Paladin (Oathbreaker)",
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (three nut shells)",
     "Description": "This spell assaults and twists creatures' minds, spawning delusions and provoking uncontrolled actions. Each creature in a 10-foot-radius sphere centered on a point you choose within range must succeed on a Wisdom saving throw when you cast this spell or be affected by it.\n\nAn affected target can't take reactions and must roll a d10 at the start of each of its turns to determine its behavior for that turn.\n\n1: The creature uses all its movement to move in a random direction. To determine the direction, roll a d8 and assign a direction to each die face. The creature doesn't take an action this turn.\n\n2-6: The creature doesn't move or take actions this turn.\n\n7-8: The creature uses its action to make a melee attack against a randomly determined creature within its reach. If there is no creature within its reach, the creature does nothing this turn.\n\n9-10: The creature can act and move normally.\n\nAt the end of its turns, an affected target can make a Wisdom saving throw. If it succeeds, this effect ends for that target.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, the radius of the sphere increases by 5 feet for each slot above 4th.",
@@ -875,7 +820,6 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Druid",
-      "Druid (Coast)",
       "Wizard"
     ],
     "Components": "V, S, M (burning incense for air, soft clay for earth, sulfur and phosphorus for fire, or water and sand for water)",
@@ -956,9 +900,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Druid",
-      "Paladin (Oathbreaker)",
-      "Warlock (Undying)"
+      "Druid"
     ],
     "Components": "V, S",
     "Description": "Your touch inflicts disease. Make a melee spell attack against a creature within your reach. On a hit, you afflict the creature with a disease of your choice from any of the ones described below.\n\nAt the end of each of the target's turns, it must make a Constitution saving throw. After failing three of these saving throws, the disease's effects last for the duration, and the creature stops making these saves. After succeeding on three of these saving throws, the creature recovers from the disease, and the spell ends.\n\nSince this spell induces a natural disease in its target, any effect that removes a disease or otherwise ameliorates a disease's effects apply to it.\n\nBlinding Sickness: Pain grips the creature's mind, and its eyes turn milky white. The creature has disadvantage on Wisdom checks and Wisdom saving throws and is blinded.\n\nFilth Fever: A raging fever sweeps through the creature's body. The creature has disadvantage on Strength checks, Strength saving throws, and attack rolls that use Strength.\n\nFlesh Rot: The creature's flesh decays. The creature has disadvantage on Charisma checks and vulnerability to all damage.\n\nMindfire: The creature's mind becomes feverish. The creature has disadvantage on Intelligence checks and Intelligence saving throws, and the creature behaves as if under the effects of the confusion spell during combat.\n\nSeizure: The creature is overcome with shaking. The creature has disadvantage on Dexterity checks, Dexterity saving throws, and attack rolls that use Dexterity.\n\nSlimy Doom: The creature begins to bleed uncontrollably. The creature has disadvantage on Constitution checks and Constitution saving throws. In addition, whenever the creature takes damage, it is stunned until the end of its next turn.",
@@ -990,8 +932,7 @@
     "Classes": [
       "Artificer",
       "Cleric",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (ruby dust worth 50 gp, which the spell consumes)",
     "Description": "A flame, equivalent in brightness to a torch, springs forth from an object that you touch. The effect looks like a regular flame, but it creates no heat and doesn't use oxygen. A continual flame can be covered or hidden but not smothered or quenched.",
@@ -1007,9 +948,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Cleric (Tempest)",
       "Druid",
-      "Druid (Coast)",
       "Wizard"
     ],
     "Components": "V, S, M (a drop of water and a pinch of dust)",
@@ -1044,8 +983,7 @@
     "Classes": [
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "S",
     "Description": "You attempt to interrupt a creature in the process of casting a spell. If the creature is casting a spell of 3rd level or lower, its spell fails and has no effect. If it is casting a spell of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a success, the creature's spell fails and has no effect.\n\nAt Higher Level. When you cast this spell using a spell slot of 4th level or higher, the interrupted spell has no effect if its level is less than or equal to the level of the spell slot you used.",
@@ -1061,7 +999,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Druid (Desert)",
       "Paladin"
     ],
     "Components": "V, S",
@@ -1111,8 +1048,7 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a tiny piece of matter of the same type of the item you plan to create)",
     "Description": "You pull wisps of shadow material from the Shadowfell to create a nonliving object of vegetable matter within range - soft goods, rope, wood, or something similar. You can also use this spell to create mineral objects such as stone, crystal, or metal. The object created must be no larger than a 5-foot cube, and the object must be of a form and material that you have seen before.\n\nThe duration depends on the object's material. If the object is composed of multiple materials, use the shortest duration.\n\nMaterial - Duration: \nVegetable matter - 1 day\nStone/crystal - 12 hours\nPrecious metals - 1 hour\nGems - 10 minutes\nAdamantine/Mithral - 1 minute\n\nUsing any material created by this spell as another spell's material component causes that spell to fail.\n\nAt Higher Levels: When you cast this spell using a spell slot of 6th level or higher, the cube increases by 5 feet for each slot level above 5th.",
@@ -1130,7 +1066,6 @@
       "Artificer",
       "Bard",
       "Cleric",
-      "Cleric (Life)",
       "Druid",
       "Paladin",
       "Ranger"
@@ -1150,9 +1085,7 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M",
     "Description": "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius.\n\nAs a bonus action on your turn, you can move the lights up to 60 feet to a new spot within range. A light must be within 20 feet of another light created by this spell, and a light winks out if it exceeds the spell's range.",
@@ -1167,12 +1100,9 @@
     "Name": "Darkness",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Swamp)",
-      "Paladin (Oathbreaker)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, M (bat fur and a drop of pitch or piece of coal)",
     "Description": "Magical darkness spreads from a point you choose within range to fill a 15-foot radius sphere for the duration. The darkness spreads around corners. A creature with darkvision can't see through this darkness, and nonmagical light can't illuminate it.\n\nIf the point you choose is on an object you are holding or one that isn't being worn or carried, the darkness emanates from the object and moves with it. Completely covering the source of the darkness with an opaque object, such as a bowl or a helm, blocks the darkness.\n\nIf any of this spell's area overlaps with an area of light created by a spell of 2nd level or lower, the spell that created the light is dispelled.",
@@ -1207,9 +1137,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Cleric (Light)",
       "Druid",
-      "Druid (Grassland)",
       "Paladin",
       "Ranger",
       "Sorcerer"
@@ -1229,10 +1157,7 @@
     "Classes": [
       "Artificer",
       "Cleric",
-      "Cleric (Death)",
-      "Cleric (Life)",
-      "Paladin",
-      "Warlock (Undying)"
+      "Paladin"
     ],
     "Components": "V, S",
     "Description": "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 hit points as a result of taking damage, the target instead drops to 1 hit point, and the spell ends. If the spell is still in effect when the target is subjected to an effect that would kill it instantaneously without dealing damage, that effect is instead negated against the target, and the spells ends.",
@@ -1297,7 +1222,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Arcana)",
       "Druid",
       "Paladin",
       "Ranger",
@@ -1337,7 +1261,6 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Warlock (Great Old One)",
       "Wizard"
     ],
     "Components": "V, S, M (a copper piece)",
@@ -1354,8 +1277,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Trickery)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Warlock",
       "Wizard"
@@ -1375,10 +1296,8 @@
     "Classes": [
       "Artificer",
       "Bard",
-      "Cleric (Trickery)",
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You make yourself, including your clothing, armor, weapons, and other belongings on your person, look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you.\n\nThe changes wrought by this spell fail to hold up to physical inspection. For example, if you use this spell to add a hat to your outfit, objects pass through the hat, and anyone who touches it would feel nothing or would feel your head and hair. If you use this spell to appear thinner than you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair.\n\nTo discern that you are disguised, a creature can use its action to inspect your appearance and must succeed on an Intelligence (Investigation) check against your spell save DC.",
@@ -1427,15 +1346,11 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Arcana)",
-      "Cleric (Trickery)",
       "Druid",
       "Paladin",
-      "Paladin (Devotion)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "Choose any creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, you automatically end the effects of a spell on the target if the spell's level is equal to or less than the level of the spell slot you used.",
@@ -1450,9 +1365,7 @@
     "Name": "Divination",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Druid (Forest)",
-      "Druid (Grassland)"
+      "Cleric"
     ],
     "Components": "V, S, M (incense and a sacrificial offering appropriate to your religion, together worth at least 25 gp, which the spell consumes)",
     "Description": "Your magic and an offering put you in contact with a god or a god's servants. You ask a single question concerning a specific goal, event, or activity to occur within 7 days. The DM offers a truthful reply. The reply might be a short phrase, a cryptic rhyme, or an omen.\n\nThe spell doesn't take into account any possible circumstances that might change the outcome, such as the casting of additional spells or the loss or gain of a companion.\n\nIf you cast this spell two or more times before finishing your next long rest, there is a cumulative 25 percent chance for each casting after the first that you get a random reading. The DM makes this roll in secret.",
@@ -1467,7 +1380,6 @@
     "Name": "Divine Favor",
     "CastingTime": "1 bonus action",
     "Classes": [
-      "Cleric (War)",
       "Paladin"
     ],
     "Components": "V, S",
@@ -1498,11 +1410,8 @@
     "Name": "Dominate Beast",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
-      "Sorcerer",
-      "Warlock (Archfey)",
-      "Warlock (Great Old One)"
+      "Sorcerer"
     ],
     "Components": "V, S",
     "Description": "You attempt to beguile a beast that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\n\nWhile the beast is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as Attack that creature, Run over there, or Fetch that object. If the creature completes the order and doesn't receive further direction from you, it defends and preserves itself to the best of its ability.\n\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn't do anything that you don't allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\n\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.\n\nAt Higher Levels: When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours.",
@@ -1520,8 +1429,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You attempt to beguile a creature that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\n\nWhile the creature is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as Attack that creature, Run over there, or Fetch that object. If the creature completes the order and doesn't receive further direction from you, it defends and preserves itself to the best of its ability.\n\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn't do anything that you don't allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\n\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.\n\nAt Higher Levels: When you cast this spell with a 9th-level spell slot, the duration is concentration, up to 8 hours.",
@@ -1537,13 +1445,8 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Trickery)",
-      "Paladin (Oathbreaker)",
       "Sorcerer",
-      "Warlock (Archfey)",
-      "Warlock (Great Old One)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You attempt to beguile a humanoid that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.\n\nWhile the target is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as Attack that creature, Run over there, or Fetch that object. If the creature completes the order and doesn't receive further direction from you, it defends and preserves itself to the best of its ability.\n\nYou can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn't do anything that you don't allow it to do. During this time you can also cause the creature to use a reaction, but this requires you to use your own reaction as well.\n\nEach time the target takes damage, it makes a new Wisdom saving throw against the spell. If the saving throw succeeds, the spell ends.\n\nAt Higher Levels: When you cast this spell using a 6th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 7th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 8th level or higher, the duration is concentration, up to 8 hours.",
@@ -1574,10 +1477,8 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
-      "Druid (Grassland)",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a handful of sand, a dab of ink, and a writing quill plucked from a sleeping bird)",
     "Description": "This spell shapes a creature's dreams. Choose a creature known to you as the target of this spell. The target must be on the same plane of existence as you. Creatures that don't sleep, such as elves, can't be contacted by this spell. You, or a willing creature you touch, enters a trance state, acting as a messenger. While in the trance, the messenger is aware of his or her surroundings, but can't take actions or move.\n\nIf the target is asleep, the messenger appears in the target's dreams and can converse with the target as long as it remains asleep, through the duration of the spell. The messenger can also shape the environment of the dream, creating landscapes, objects, and other images. The messenger can emerge from the trance at any time, ending the effect of the spell early. The target recalls the dream perfectly upon waking. If the target is awake when you cast the spell, the messenger knows it, and can either end the trance (and the spell) or wait for the target to fall asleep, at which point the messenger appears in the target's dreams.\n\nYou can make the messenger appear monstrous and terrifying to the target. If you do, the messenger can deliver a message of no more than ten words and then the target must make a Wisdom saving throw. On a failed save, echoes of the phantasmal monstrosity spawn a nightmare that lasts the duration of the target's sleep and prevents the target from gaining any benefit from that rest. In addition, when the target wakes up, it takes 3d6 psychic damage.\n\nIf you have a body part, lock of hair, clipping from a nail, or similar portion of the target's body, the target makes its saving throw with disadvantage.",
@@ -1725,7 +1626,6 @@
     "Name": "Black Tentacles",
     "CastingTime": "1 action",
     "Classes": [
-      "Warlock (Great Old One)",
       "Wizard"
     ],
     "Components": "V, S, M (a piece of tentacle from a giant octopus or a giant squid)",
@@ -1794,9 +1694,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Light)",
-      "Druid",
-      "Warlock (Archfey)"
+      "Druid"
     ],
     "Components": "V",
     "Description": "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice). Any creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. For the duration, objects and affected creatures shed dim light in a 10-foot radius.\n\nAny attack roll against an affected creature or object has advantage if the attacker can see it, and the affected creature or object can't benefit from being invisible.",
@@ -1812,9 +1710,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Cleric (Death)",
       "Sorcerer",
-      "Warlock (Undying)",
       "Wizard"
     ],
     "Components": "V, S, M (a small amount of alcohol or distilled spirits)",
@@ -1833,8 +1729,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a white feather or the heart of a hen)",
     "Description": "You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a Wisdom saving throw or drop whatever it is holding and become frightened for the duration.\n\nWhile frightened by this spell, a creature must take the Dash action and move away from you by the safest available route on each of its turns, unless there is nowhere to move. If the creature ends its turn in a location where it doesn't have line of sight to you, the creature can make a Wisdom saving throw. On a successful save, the spell ends for that creature.",
@@ -1869,8 +1764,7 @@
       "Bard",
       "Druid",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a handful of clay, crystal, glass, or mineral spheres)",
     "Description": "You blast the mind of a creature that you can see within range, attempting to shatter its intellect and personality. The target takes 4d6 psychic damage and must make an Intelligence saving throw.\n\nOn a failed save, the creature's Intelligence and Charisma scores become 1. The creature can't cast spells, activate magic items, understand language, or communicate in any intelligible way. The creature can, however, identify its friends, follow them, and even protect them.\n\nAt the end of every 30 days, the creature can repeat its saving throw against this spell. If it succeeds on its saving throw, the spell ends.\n\nThe spell can also be ended by greater restoration, heal or wish.",
@@ -1967,9 +1861,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.\n\nThis spell's damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).",
@@ -1984,9 +1876,7 @@
     "Name": "Fire Shield",
     "CastingTime": "1 action",
     "Classes": [
-      "Warlock (Fiend)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a bit of phosphorous or a firefly)",
     "Description": "Thin and wispy flames wreathe your body for the duration, shedding bright light in a 10-foot radius and dim light for an additional 10 feet. You can end the spell early by using an action to dismiss it.\n\nThe flames provide you with a warm shield or a chill shield, as you choose. The warm shield grants you resistance to cold damage, and the chill shield grants you resistance to fire damage.\n\nIn addition, whenever a creature within 5 feet of you hits you with a melee attack, the shield erupts with flame. The attacker takes 2d8 fire damage from a warm shield, or 2d8 cold damage from a cold shield.",
@@ -2018,11 +1908,8 @@
     "Name": "Fireball",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Light)",
       "Sorcerer",
-      "Warlock (Fiend)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a tiny ball of bat guano and sulfur)",
     "Description": "A bright streak flashes from your pointing finger to a point you choose within range then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot radius must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one.\n\nThe fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.",
@@ -2052,11 +1939,7 @@
     "Name": "Flame Strike",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Cleric (Light)",
-      "Cleric (War)",
-      "Paladin (Devotion)",
-      "Warlock (Fiend)"
+      "Cleric"
     ],
     "Components": "V, S, M (pinch of sulfur)",
     "Description": "A vertical column of divine fire roars down from the heavens in a location you specify. Each creature in a 10-foot radius, 40-foot-high cylinder centered on a point within range must make a Dexterity saving throw. A creature takes 4d6 fire damage and 4d6 radiant damage on a failed save, or half as much damage on a successful one.\n\nAt Higher Levels: When you cast this spell using a spell slot of 6th level or higher, the fire damage or the radiant damage (your choice) increases by 1d6 for each slot level above 5th.",
@@ -2071,7 +1954,6 @@
     "Name": "Flaming Sphere",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Light)",
       "Druid",
       "Wizard"
     ],
@@ -2122,7 +2004,6 @@
     "Name": "Fog Cloud",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Tempest)",
       "Druid",
       "Ranger",
       "Sorcerer",
@@ -2194,14 +2075,7 @@
       "Artificer",
       "Bard",
       "Cleric",
-      "Cleric (War)",
       "Druid",
-      "Druid (Arctic)",
-      "Druid (Coast)",
-      "Druid (Forest)",
-      "Druid (Grassland)",
-      "Druid (Swamp)",
-      "Paladin (Devotion)",
       "Ranger"
     ],
     "Components": "V, S, M (a leather strap, bound around the arm or a similar appendage)",
@@ -2218,7 +2092,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Druid (Underdark)",
       "Sorcerer",
       "Warlock",
       "Wizard"
@@ -2257,9 +2130,7 @@
       "Cleric",
       "Druid",
       "Paladin",
-      "Paladin (Crown)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V",
     "Description": "You place a magical command on a creature that you can see within range, forcing it to carry out some service or refrain from some action or course of activity as you decide. If the creature can understand you, it must succeed on a Wisdom saving throw or become charmed by you for the duration. While the creature is charmed by you, it takes 5d10 psychic damage each time it acts in a manner directly counter to your instructions, but no more than once each day. A creature that can't understand you is unaffected by the spell.\n\nYou can issue any command you choose, short of an activity that would result in certain death. Should you issue a suicidal command, the spell ends.\n\nYou can end the spell early by using an action to dismiss it. A remove curse, greater restoration, or wish spell also ends it.\n\nAt Higher Levels: When you cast this spell using a spell slot of 7th or 8th level, the duration is 1 year. When you cast this spell using a spell slot of the spell lasts until it is ended by one of the spells mentioned above.",
@@ -2340,8 +2211,7 @@
       "Artificer",
       "Bard",
       "Cleric",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (incense and powdered diamond worth at least 200 gp, which the spell consumes)",
     "Description": "When you cast this spell, you inscribe a glyph that harms other creatures, either upon a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph. If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place, if the object is moved more than 10 feet from where you cast this spell, the glyph is broken and the spell ends without being triggered.\n\nThe glyph is nearly invisible and requires a successful Intelligence (Investigation) check against your spell save DC to be found.\n\nYou decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or standing on the glyph, removing another object covering the glyph, approaching within a certain distance of the glyph, or manipulating the object on which the glyph is inscribed. For glyphs inscribed within an object, the most common triggers include opening that object, approaching within a certain distance of the object, or seeing or reading the glyph. Once a glyph is triggered, this spell ends.\n\nYou can further refine the trigger so the spell activates only under certain circumstances or according to physical characteristics (such as height or weight), creature kind (for example, the ward could be set to affect aberrations or drow), or alignment. You can also set conditions for creatures that don't trigger the glyph, such as those who say a certain password.\n\nWhen you inscribe the glyph, choose explosive runes or a spell glyph.\n\nExplosive Runes: When triggered, the glyph erupts with magical energy in a 20-foot-radius sphere centered on the glyph. The sphere spreads around corners. Each creature in the aura must make a Dexterity saving throw. A creature takes 5d8 acid, cold, fire, lightning, or thunder damage on a failed saving throw (your choice when you create the glyph), or half as much damage on a successful one.\n\nSpell Glyph: You can store a prepared spell of 3rd level or lower in the glyph by casting it as part of creating the glyph. The spell must target a single creature or an area. The spell being stored has no immediate effect when cast in this way. When the glyph is triggered, the stored spell is cast. If the spell has a target, it targets the creature that triggered the glyph. If the spell affects an area, the area is centered on that creature. If the spell summons hostile creatures or creates harmful objects or traps, they appear as close as possible to the intruder and attack it. If the spell requires concentration, it lasts until the end of its full duration.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the damage of an explosive runes glyph increases by 1d8 for each slot level above 3rd. If you create a spell glyph, you can store any spell of up to the same level as the slot you use for the glyph of warding.",
@@ -2388,11 +2258,8 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Druid (Underdark)",
       "Sorcerer",
-      "Warlock (Archfey)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You or a creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person.",
@@ -2424,11 +2291,7 @@
     "Name": "Guardian of Faith",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Cleric (Life)",
-      "Cleric (Light)",
-      "Paladin (Crown)",
-      "Paladin (Devotion)"
+      "Cleric"
     ],
     "Components": "V",
     "Description": "A Large spectral guardian appears and hovers for the duration in an unoccupied space of your choice that you can see within range. The guardian occupies that space and is indistinct except for a gleaming sword and shield emblazoned with the symbol of your deity.\n\nAny creature hostile to you that moves to a space within 10 feet of the guardian for the first time on a turn must succeed on a Dexterity saving throw. The creature takes 20 radiant damage on a failed save, or half as much damage on a successful one. The guardian vanishes when it has dealt a total of 60 damage.",
@@ -2490,11 +2353,9 @@
     "Name": "Gust of Wind",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Tempest)",
       "Druid",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a legume seed)",
     "Description": "A line of strong wind 60 feet long and 10 feet wide blasts from you in a direction you choose for the spell's duration. Each creature that starts its turn in the line must succeed on a Strength saving throw or be pushed 15 feet away from you in a direction following the line.\n\nAny creature in the line must spend 2 feet of movement for every 1 foot it moves when moving closer to you.\n\nThe gust disperses gas or vapor, and it extinguishes candles, torches, and similar unprotected flames in the area. It causes protected flames, such as those of lanterns, to dance wildly and has a 50 percent chance to extinguish them.\n\nAs a bonus action on each of your turns before the spell ends, you can change the direction in which the line blasts from you.",
@@ -2509,8 +2370,7 @@
     "Name": "Hallow",
     "CastingTime": "24 hours",
     "Classes": [
-      "Cleric",
-      "Warlock (Fiend)"
+      "Cleric"
     ],
     "Components": "V, S, M (herbs, oils, and incense worth at least 1,000 gp, which the spell consumes)",
     "Description": "You touch a point and infuse an area around it with holy (or unholy) power. The area can have a radius up to 60 feet, and the spell fails if the radius includes an area already under the effect a hallow spell. The affected area is subject to the following effects.\n\nFirst, celestials, elementals, fey, fiends, and undead can't enter the area, nor can such creatures charm, frighten, or possess creatures within it. Any creature charmed, frightened, or possessed by such a creature is no longer charmed, frightened, or possessed upon entering the area. You can exclude one or more of those types of creatures from this effect.\n\nSecond, you can bind an extra effect to the area. Choose the effect from the following list, or choose an effect offered by the DM. Some of these effects apply to creatures in the area, you can designate whether the effect applies to all creatures, creatures that follow a specific deity or leader, or creatures of a specific sort, such as ores or trolls. When a creature that would be affected enters the spell's area for the first time on a turn or starts its turn there, it can make a Charisma saving throw. On a success, the creature ignores the extra effect until it leaves the area.\n\nCourage: Affected creatures can't be frightened while in the area.\n\nDarkness: Darkness fills the area. Normal light, as well as magical light created by spells of a lower level than the slot you used to cast this spell, can't illuminate the area.\n\nDaylight: Bright light fills the area. Magical darkness created by spells of a lower level than the slot you used to cast this spell can't extinguish the light.\n\nEnergy Protection: Affected creatures in the area have resistance to one damage type of your choice, except for bludgeoning, piercing, or slashing.\n\nEnergy Vulnerability: Affected creatures in the area have vulnerability to one damage type of your choice, except for bludgeoning, piercing, or slashing.\n\nEverlasting Rest: Dead bodies interred in the area can't be turned into undead.\n\nExtradimensional Interference: Affected creatures can't move or travel using teleportation or by extradimensional or interplanar means.\n\nFear: Affected creatures are frightened while in the area.\n\nSilence: No sound can emanate from within the area, and no sound can reach into it.\n\nTongues: Affected creatures can communicate with any other creature in the area, even if they don't share a common language.",
@@ -2527,10 +2387,8 @@
     "Classes": [
       "Bard",
       "Druid",
-      "Druid (Desert)",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a stone, a twig, and a bit of green plant)",
     "Description": "You make natural terrain in a 150-foot cube in range look, sound, and smell like some other sort of natural terrain. Thus, open fields or a road can be made to resemble a swamp, hill, crevasse, or some other difficult or impassable terrain. A pond can be made to seem like a grassy meadow, a precipice like a gentle slope, or a rock-strewn gully like a wide and smooth road. Manufactured structures, equipment, and creatures within the area aren't changed in appearance.\n\nThe tactile characteristics of the terrain are unchanged, so creatures entering the area are likely to see through the illusion. If the difference isn't obvious by touch, a creature carefully examining the illusion can attempt an Intelligence (Investigation) check against your spell save DC to disbelieve it. A creature who discerns the illusion for what it is, sees it as a vague image superimposed on the terrain.",
@@ -2561,8 +2419,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Druid (Grassland)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Wizard"
     ],
@@ -2628,7 +2484,6 @@
     "Name": "Hellish Rebuke",
     "CastingTime": "1 reaction",
     "Classes": [
-      "Paladin (Oathbreaker)",
       "Warlock"
     ],
     "Components": "V, S",
@@ -2677,12 +2532,9 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (War)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small, straight piece of iron)",
     "Description": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target.\n\nAt Higher Levels: When you cast this spell using a spell slot of 6th level or higher, you can target on additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them.",
@@ -2700,12 +2552,9 @@
       "Bard",
       "Cleric",
       "Druid",
-      "Druid (Arctic)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small, straight piece of iron)",
     "Description": "Choose a humanoid that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target on additional humanoid for each slot level above 2nd. The humanoids must be within 30 feet of each other when you target them.",
@@ -2735,7 +2584,6 @@
     "Name": "Hunter's Mark",
     "CastingTime": "1 bonus action",
     "Classes": [
-      "Paladin (Vengeance)",
       "Ranger"
     ],
     "Components": "V",
@@ -2754,8 +2602,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "S, M (a glowing stick of incense or a crystal vial filled with phosphorescent material)",
     "Description": "You create a twisting pattern of colors that weaves through the air inside a 30-foot cube within range. The pattern appears for a moment and vanishes. Each creature in the area who sees the pattern must make a Wisdom saving throw. On a failed save, the creature becomes charmed for the duration. While charmed by this spell, the creature is incapacitated and has a speed of 0.\n\nThe spell ends for an affected creature if it takes any damage or if someone else uses an action to shake the creature out of its stupor.",
@@ -2770,13 +2617,9 @@
     "Name": "Ice Storm",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Tempest)",
       "Druid",
-      "Druid (Arctic)",
-      "Paladin (Ancients)",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a pinch of dust and a few drops of water)",
     "Description": "A hail of rock-hard ice pounds to the ground in a 20-foot-radius, 40-foot-high cylinder centered on a point within range. Each creature in the cylinder must make a Dexterity saving throw. A creature takes 2d8 bludgeoning damage and 4d6 cold damage on a failed save, or half as much damage on a successful one.\n\nHailstones turn the storm's area of effect into difficult terrain until the end of your next turn.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, the bludgeoning damage increases by 1d8 for each slot level above 4th.",
@@ -2792,7 +2635,6 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
-      "Cleric (Knowledge)",
       "Wizard"
     ],
     "Components": "V, S, M (a pearl worth at least 100 gp and an owl feather)",
@@ -2810,8 +2652,7 @@
     "Classes": [
       "Bard",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "S, M (a lead-based ink worth at least 10 gp, which the spell consumes)",
     "Description": "You write on parchment, paper, or some other suitable writing material and imbue it with a potent illusion that lasts for the duration.\n\nTo you and any creatures you designate when you cast the spell, the writing appears normal, written in your hand, and conveys whatever meaning you intended when you wrote the text. To all others, the writing appears as if it were written in an unknown or magical script that is unintelligible. Alternatively, you can cause the writing to appear to be an entirely different message, written in a different hand and language, though the language must be one you know.\n\nShould the spell be dispelled, the original script and the illusion both disappear.\n\nA creature with truesight can read the hidden message.",
@@ -2858,8 +2699,7 @@
     "Name": "Inflict Wounds",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Paladin (Oathbreaker)"
+      "Cleric"
     ],
     "Components": "V, S",
     "Description": "Make a melee spell attack against a creature you can reach. On a hit, the target takes 3d10 necrotic damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d10 for each slot level above 1st.",
@@ -2875,13 +2715,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Cleric (Nature)",
-      "Cleric (Tempest)",
       "Druid",
-      "Druid (Desert)",
-      "Druid (Grassland)",
-      "Druid (Swamp)",
-      "Druid (Underdark)",
       "Sorcerer"
     ],
     "Components": "V, S, M (a few grains of sugar, some kernels of grain, and a smear of fat)",
@@ -2899,11 +2733,9 @@
     "Classes": [
       "Artificer",
       "Bard",
-      "Druid (Grassland)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (an eyelash encased in gum arabic)",
     "Description": "A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person. The spell ends for a target that attacks or casts a spell.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd.",
@@ -2956,8 +2788,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Knowledge)",
-      "Warlock (Undying)",
       "Wizard"
     ],
     "Components": "V, S, M (incense worth at least 250 gp, which the spell consumes, and four ivory strips worth at least 50 gp each)",
@@ -2974,7 +2804,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Cleric (Arcana)",
       "Wizard"
     ],
     "Components": "V, S, M (an exquisite chest, 3 feet by 2 feet by 2 feet, constructed from rare materials worth at least 5,000 gp, and a Tiny replica made from the same materials worth at least 50 gp)",
@@ -2991,8 +2820,7 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small crystal bead)",
     "Description": "A 10-foot-radius immobile dome of force springs into existence around and above you and remains stationary for the duration. The spell ends if you leave its area.\n\nNine creatures of Medium size or smaller can fit inside the dome with you. The spell fails if its area includes a larger creature or more than nine creatures. Creatures and objects within the dome when you cast this spell can move through it freely. All other creatures and objects are barred from passing through it. Spells and other magical effects can't extend through the dome or be cast through it. The atmosphere inside the space is comfortable and dry, regardless of the weather outside.\n\nUntil the spell ends, you can command the interior to become dimly lit or dark. The dome is opaque from the outside, of any color you choose, but it is transparent from the inside.",
@@ -3010,10 +2838,8 @@
       "Artificer",
       "Bard",
       "Cleric",
-      "Cleric (Life)",
       "Druid",
       "Paladin",
-      "Paladin (Devotion)",
       "Ranger"
     ],
     "Components": "V, S",
@@ -3049,8 +2875,7 @@
       "Bard",
       "Cleric",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, M (a firefly or phosphorescent moss)",
     "Description": "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action.\n\nIf you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to avoid the spell.",
@@ -3065,10 +2890,8 @@
     "Name": "Lightning Bolt",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Mountain)",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a bit of fur and a rod of amber, crystal, or glass)",
     "Description": "A stroke of lightning forming a line of 100 feet long and 5 feet wide blasts out from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes 8d6 lightning damage on a failed save, or half as much damage on a successful one.\n\nThe lightning ignites flammable objects in the area that aren't being worn or carried.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot above 3rd.",
@@ -3103,7 +2926,6 @@
       "Bard",
       "Cleric",
       "Druid",
-      "Druid (Swamp)",
       "Paladin",
       "Ranger",
       "Wizard"
@@ -3161,8 +2983,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a piece of cured leather)",
     "Description": "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends. The target's base AC becomes 13 + its Dexterity modifier. The spell ends it if the target dons armor or if you dismiss the spell as an action.",
@@ -3180,9 +3001,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.\n\nYou can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial. You can move the hand up to 30 feet each time you use it.\n\nThe hand can't attack, activate magical items, or carry more than 10 pounds.",
@@ -3198,11 +3017,9 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Cleric",
-      "Cleric (Arcana)",
       "Paladin",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (holy water or powdered silver and iron worth at least 100 gp, which the spell consumes)",
     "Description": "You create a 10-foot-radius, 20-foot-tall cylinder of magical energy centered on a point on the ground that you can see within range. Glowing runes appear wherever the cylinder intersects with the floor or other surface.\n\nChoose one or more of the following types of creatures - celestials, elementals, fey, fiends, or undead. The circle affects a creature of the chosen type in the following ways.\n\n• The creature can't willingly enter the cylinder by nonmagical means. If the creature tries to use teleportation or interplanar travel to do so, it must first succeed on a Charisma saving throw.\n\n• The creature has disadvantage on attack rolls against targets within the cylinder.\n\n• Targets within the cylinder can't be charmed, frightened, or possessed by the creature.\n\nWhen you cast this spell, you can elect to cause its magic to operate in the reverse direction, preventing a creature of the specified type from leaving the cylinder and protecting targets outside it.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the duration increases by 1 hour for each slot level above 3rd.",
@@ -3232,10 +3049,8 @@
     "Name": "Magic Missile",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Arcana)",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4+1 force damage to its target. The darts all strike simultaneously and you can direct them to hit one creature or several.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the spell creates one more dart for each slot above 1st.",
@@ -3251,8 +3066,7 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small bit of honeycomb and jade dust worth at least 10 gp, which the spell consumes)",
     "Description": "You implant a message within an object in range, a message that is uttered when a trigger condition is met. Choose an object that you can see and that isn't being worn or carried by another creature. Then speak the message, which must be 25 words or less, though it can be delivered over as long as 10 minutes. Finally, determine the circumstance that will trigger the spell to deliver your message.\n\nWhen that circumstance occurs, a magical mouth appears on the object and recites the message in your voice and at the same volume you spoke. If the object you chose has a mouth or something that looks like a mouth (for example, the mouth of a statue), the magical mouth appears there so that words appear to come from the object's mouth. When you cast this spell, you can have the spell end after it delivers its message, or it can remain and repeats its message whenever the trigger occurs.\n\nThe triggering circumstance can be as general or as detailed as you like, though it must be based on visual or audible conditions that occur within 30 feet of the object. For example, you could instruct the mouth to speak when any creature moves within 30 feet of the object or when a silver bell rings within 30 feet of it.",
@@ -3268,8 +3082,6 @@
     "CastingTime": "1 bonus action",
     "Classes": [
       "Artificer",
-      "Cleric (Arcana)",
-      "Cleric (War)",
       "Paladin",
       "Wizard"
     ],
@@ -3289,8 +3101,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a bit of fleece)",
     "Description": "You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 20-foot cube. The image appears at a spot that you can see within range and lasts for the duration. It seems completely real, including sounds, smells, and temperature appropriate to the thing depicted. You can't create sufficient heat or cold to cause damage, a sound loud enough to deal thunder damage or deafen a creature, or a smell that might sicken a creature (like a troglodyte's stench).\n\nAs long as you are within range of the illusion, you can use your action to cause the image to move to any other spot within range. As the image changes location, you can alter its appearance so that its movements appear natural for the image. For example, if you create an image of a creature and move it, you can alter the image so that it appears to be walking. Similarly, you can cause the illusion to make different sounds at different times, even making it carry on a conversation, for example.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and its other sensory qualities become faint to the creature.\n\nAt Higher Levels: When you cast this spell using a spell slot of 6th level or higher, the spell lasts until dispelled, without requiring your concentration.",
@@ -3307,7 +3118,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Life)",
       "Druid"
     ],
     "Components": "V, S",
@@ -3356,8 +3166,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, M (a snake's tongue and either a bit of honeycomb or a drop of sweet oil)",
     "Description": "You suggest a course of activity (limited to a sentence or two) and magically influence up to twelve creatures of your choice that you can see within range and that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act automatically negates the effect of the spell.\n\nEach target must make a Wisdom saving throw. On a failed save, it pursues the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do.\n\nYou can also specify conditions that will trigger a special activity during the duration. For example, you might suggest that a group of soldiers give all their money to the first beggar they meet. If the condition isn't met before the spell ends, the activity isn't performed.\n\nIf you or any of your companions damage a creature affected by this spell, the spell ends for that creature.\n\nAt Higher Levels: When you cast this spell using a 7th-level spell slot, the duration is 10 days. When you use an 8th-level spell slot, the duration is 30 days. When you use a 9th-level spell slot, the duration is a year and a day.",
@@ -3388,8 +3197,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Druid",
-      "Druid (Mountain)"
+      "Druid"
     ],
     "Components": "V, S",
     "Description": "You step into a stone object or surface large enough to fully contain your body, melding yourself and all the equipment you carry with the stone for the duration. Using your movement, you step into the stone at a point you can touch. Nothing of your presence remains visible or otherwise detectable by nonmagical senses.\n\nWhile merged with the stone, you can't see what occurs outside it, and any Wisdom (Perception) checks you make to hear sounds outside it are made with disadvantage. You remain aware of the passage of time and can cast spells on yourself while merged in the stone. You can use your movement to leave the stone where you entered it, which ends the spell. You otherwise can't move.\n\nMinor physical damage to the stone doesn't harm you, but its partial destruction or a change in its shape (to the extent that you no longer fit within it) expels you and deals 6d6 bludgeoning damage to you. The stone's complete destruction (or transmutation into a different substance) expels you and deals 50 bludgeoning damage to you. If expelled, you fall prone in an unoccupied space closest to where you first entered.",
@@ -3404,9 +3212,7 @@
     "Name": "Acid Arrow",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Swamp)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (powdered rhubarb leaf and an adder's stomach)",
     "Description": "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. Make a ranged spell attack against the target. On a hit, the target takes 4d4 acid damage immediately and 2d4 acid damage at the end of its next turn. On a miss, the arrow splashes the target with acid for half as much of the initial damage and no damage at the end of its next turn.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, the damage (both initial and later) increases by 1d4 for each slot level above 2nd.",
@@ -3442,9 +3248,7 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a short piece of copper wire)",
     "Description": "You point your finger toward a creature within range and whisper a message. The target (and only the target) hears the message and can reply in a whisper that only you can hear.\n\nYou can cast this spell through solid objects if you are familiar with the target and know it is beyond the barrier. Magical silence, 1 foot of stone, 1 inch of common metal, a thin sheet of lead, or 3 feet of wood blocks the spell. The spell doesn't have to follow a straight line and can travel freely around corners or through openings.",
@@ -3494,9 +3298,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "S, M (a bit of fleece)",
     "Description": "You create a sound or an image of an object within range that lasts for the duration. The illusion also ends if you dismiss it as an action or cast this spell again.\n\nIf you create a sound, its volume can range from a whisper to a scream. It can be your voice, someone else's voice, a lion's roar, a beating of drums, or any other sound you choose. The sound continues unabated throughout the duration, or you can make discrete sounds at different times before the spell ends.\n\nIf you create an image of an object - such as a chair, muddy footprints, or a small chest - it must be no larger than a 5-foot cube. The image can't create sound, light, smell, or any other sensory effect. Physical interaction with the image reveals it to be an illusion, because things can pass through it.\n\nIf a creature uses its action to examine the sound or image, the creature can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the illusion becomes faint to the creature.",
@@ -3513,8 +3315,7 @@
     "Classes": [
       "Bard",
       "Druid",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You make terrain in an area up to 1 mile square look, sound, smell, and even feel like some other sort of terrain. The terrain's general shape remains the same, however. Open fields or a road could be made to resemble a swamp, hill, crevasse, or some other difficult or impassable terrain. A pond can be made to seem like a grassy meadow, a precipice like a gentle slope, or a rock-strewn gully like a wide and smooth road.\n\nSimilarly, you can alter the appearance of structures, or add them where none are present. The spell doesn't disguise, conceal, or add creatures.\n\nThe illusion includes audible, visual, tactile, and olfactory elements, so it can turn clear ground into difficult terrain (or vice versa) or otherwise impede movement through the area. Any piece of the illusory terrain (such as a rock or stick) that is removed from the spell's area disappears immediately.\n\nCreatures with truesight can see through the illusion to the terrain's true form, however, all other elements of the illusion remain, so while the creature is aware of the illusion's presence, the creature can still physically interact with the illusion.",
@@ -3529,12 +3330,9 @@
     "Name": "Mirror Image",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Trickery)",
-      "Druid (Coast)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real. You can use your action to dismiss the illusory duplicates.\n\nEach time a creature targets you with an attack during the spell's duration, roll a d20 to determine whether the attack instead targets one of your duplicates.\n\nIf you have three duplicates, you must roll a 6 or higher to change the attack's target to a duplicate. With two duplicates, you must roll an 8 or higher. With one duplicate, you must roll an 11 or higher.\n\nA duplicate's AC equals 10 + your Dexterity modifier. If an attack hits a duplicate, the duplicate is destroyed. A duplicate can be destroyed only by an attack that hits it. It ignores all other damage and effects. The spell ends when all three duplicates are destroyed.\n\nA creature is unaffected by this spell if it can't see, if it relies on senses other than sight, such as blindsight, or if it can perceive illusions as false, as with truesight.",
@@ -3550,8 +3348,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "S",
     "Description": "You become invisible at the same time that an illusory double of you appears where you are standing. The double lasts for the duration, but the invisibility ends if you attack or cast a spell.\n\nYou can use your action to move your illusory double up to twice your speed and make it gesture, speak, and behave in whatever way you choose. You can see through its eyes and hear through its ears as if you were located where it is. On each of your turns as a bonus action, you can switch from using its senses to using your own, or back again. While you are using its senses, you are blinded and deafened in regard to your own surroundings.",
@@ -3566,9 +3363,6 @@
     "Name": "Misty Step",
     "CastingTime": "1 bonus action",
     "Classes": [
-      "Druid (Coast)",
-      "Paladin (Ancients)",
-      "Paladin (Vengeance)",
       "Sorcerer",
       "Warlock",
       "Wizard"
@@ -3587,9 +3381,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Trickery)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You attempt to reshape another creature's memories. One creature that you can see must make a Wisdom saving throw. If you are fighting the creature, it has advantage on the saving throw. On a failed save, the target becomes charmed by you for the duration. The charmed target is incapacitated and unaware of its surroundings, though it can still hear you. If it takes any damage or is targeted by another spell, this spell ends, and none of the target's memories are modified.\n\nWhile this charm lasts, you can affect the target's memory of an event that it experienced within the last 24 hours and that lasted no more than 10 minutes. You can permanently eliminate all memory of the event, allow the target to recall the event with perfect clarity and exacting detail, change its memory of the details of the event, or create a memory of some other event.\n\nYou must speak to the target to describe how its memories are affected, and it must be able to understand your language for the modified memories to take root. Its mind fills in any gaps in the details of your description. If the spell ends before you have finished describing the modified memories, the creature's memory isn't altered. Otherwise, the modified memories take hold when the spell ends.\n\nA modified memory doesn't necessarily affect how a creature behaves, particularly if the memory contradicts the creature's natural inclinations, alignment, or beliefs. An illogical modified memory, such as implanting a memory of how much the creature enjoyed dousing itself in acid, is dismissed, perhaps as a bad dream. The DM might deem a modified memory too nonsensical to affect a creature in a significant manner.\n\nA remove curse or greater restoration spell cast on the target restores the creature's true memory.\n\nAt Higher Levels: If you cast this spell using a spell slot of 6th level or higher, you can alter the target's memories of an event that took place up to 7 days ago (6th level), 30 days ago (7th level), 1 year ago (8th level), or any time in the creature's past (9th level).",
@@ -3604,8 +3396,7 @@
     "Name": "Moonbeam",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid",
-      "Paladin (Ancients)"
+      "Druid"
     ],
     "Components": "V, S, M (several seeds of any moonseed plant and a piece of opalescent feldspar)",
     "Description": "A silvery beam of pale light shines down in a 5-foot radius, 40-foot-high cylinder centered on a point within range. Until the spell ends, dim light fills the cylinder.\n\nWhen a creature enters the spell's area for the first time on a turn or starts its turn there, it is engulfed in ghostly flames that cause searing pain, and it must make a Constitution saving throw. It takes 2d10 radiant damage on a failed save, or half as much damage on a successful one.\n\nA shapechanger makes its saving throw with disadvantage. If it fails, it also instantly reverts to its original form and can't assume a different form until it leaves the spell's light.\n\nOn each of your turns after you cast this spell, you can use an action to move the beam 60 feet in any direction.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d10 for each slot level above 2nd.",
@@ -3653,8 +3444,7 @@
     "CastingTime": "10 minutes",
     "Classes": [
       "Artificer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite)",
     "Description": "You make an area within range magically secure. The area is a cube that can be as small as 5 feet to as large as 100 feet on each side. The spell lasts for the duration or until you use an action to dismiss it.\n\nWhen you cast the spell, you decide what sort of security the spell provides, choosing any or all of the following properties.\n\n• Sound can't pass through the barrier at the edge of the warded area.\n\n• The barrier of the warded area appears dark and foggy, preventing vision (including darkvision) through it.\n\n• Sensors created by divination spells can't appear inside the protected area or pass through the barrier at its perimeter.\n\n• Creatures in the area can't be targeted by divination spells.\n\n• Nothing can teleport into or out of the warded area.\n\n• Planar travel is blocked within the warded area.\n\nCasting this spell on the same spot every day for a year makes this effect permanent.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, you can increase the size of the cube by 100 feet for each slot level beyond 4th. Thus you could protect a cube that can be up to 200 feet on one side by using a spell slot of 5th level.",
@@ -3703,10 +3493,8 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Knowledge)",
       "Ranger",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a pinch of diamond dust worth 25 gp sprinkled over the target, which the spell consumes)",
     "Description": "For the duration, you hide a target that you touch from divination magic. The target can be a willing creature or a place or an object no larger than 10 feet in any dimension. The target can't be targeted by any divination magic or perceived through magical scrying sensors.",
@@ -3721,9 +3509,7 @@
     "Name": "Arcanist's Magic Aura",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Arcana)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small square of silk)",
     "Description": "You place an illusion on a creature or an object you touch so that divination spells reveal false information about it. The target can be a willing creature or an object that isn't being carried or worn by another creature.\n\nWhen you cast the spell, choose one or both of the following effects. The effect lasts for the duration. If you cast this spell on the same creature or object every day for 30 days, placing the same effect on it each time, the illusion lasts until it is dispelled.\n\nFalse Aura: You change the way the target appears to spells and magical effects, such as detect magic, that detect magical auras. You can make a nonmagical object appear magical, a magical object appear nonmagical, or change the object's magical aura so that it appears to belong to a specific school of magic that you choose. When you use this effect on an object, you can make the false magic apparent to any creature that handles the item.\n\nMask: You change the way the target appears to spells and magical effects that detect creature types, such as a paladin's Divine Sense or the trigger of a symbol spell. You choose a creature type and other spells and magical effects treat the target as if it were a creature of that type or of that alignment.",
@@ -3754,8 +3540,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a hemispherical piece of clear crystal and a matching hemispherical piece of gum arabic)",
     "Description": "A sphere of shimmering force encloses a creature or object of Large size or smaller within range. An unwilling creature must make a Dexterity saving throw. On a failed save, the creature is enclosed for the duration.\n\nNothing, not physical objects, energy, or other spell effects, can pass through the barrier, in or out, though a creature in the sphere can breathe there. The sphere is immune to all damage, and a creature or object inside can't be damaged by attacks or effects originating from outside, nor can a creature inside the sphere damage anything outside it.\n\nThe sphere is weightless and just large enough to contain the creature or object inside. An enclosed creature can use its action to push against the sphere's walls and thus roll the sphere at up to half the creature's speed. Similarly, the globe can be picked up and moved by other creatures.\n\nA disintegrate spell targeting the globe destroys it without harming anything inside it.",
@@ -3771,8 +3556,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V",
     "Description": "Choose one creature that you can see within range. The target begins a comic dance in place - shuffling, tapping its feet, and capering for the duration. Creatures that can't be charmed are immune to this spell.\n\nA dancing creature must use all its movement to dance without leaving its space and has disadvantage on Dexterity saving throws and attack rolls. While the target is affected by this spell, other creatures have advantage on attack rolls against it. As an action, a dancing creature makes a Wisdom saving throw to regain control of itself. On a successful save, the spell ends.",
@@ -3787,9 +3571,7 @@
     "Name": "Pass Without Trace",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Trickery)",
       "Druid",
-      "Druid (Grassland)",
       "Ranger"
     ],
     "Components": "V, S, M (ashes from a burned leaf of mistletoe and a sprig of spruce)",
@@ -3805,7 +3587,6 @@
     "Name": "Passwall",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Mountain)",
       "Wizard"
     ],
     "Components": "V, S, M (a pinch of sesame seeds)",
@@ -3821,8 +3602,7 @@
     "Name": "Phantasmal Killer",
     "CastingTime": "1 action",
     "Classes": [
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You tap into the nightmares of a creature you can see within range and create an illusory manifestation of its deepest fears, visible only to that creature. The target must make a Wisdom saving throw. On a failed save, the target becomes frightened for the duration. At the end of each of the target's turns before the spell ends, the target must succeed on a Wisdom saving throw or take 4d10 psychic damage. On a successful save, the spell ends.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d10 for each slot level above 4th.",
@@ -3837,8 +3617,7 @@
     "Name": "Phantom Steed",
     "CastingTime": "1 minute",
     "Classes": [
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "A Large quasi-real, horse-like creature appears on the ground in an unoccupied space of your choice within range. You decide the creature's appearance, but it is equipped with a saddle, bit, and bridle. Any of the equipment created by the spell vanishes in a puff of smoke if it is carried more than 10 feet away from the steed.\n\nFor the duration, you or a creature you choose can ride the steed. The creature uses the statistics for a riding horse, except it has a speed of 100 feet and can travel 10 miles in an hour, or 13 miles at a fast pace. When the spell ends, the steed gradually fades, giving the rider 1 minute to dismount. The spell ends if you use an action to dismiss it or if the steed takes any damage.",
@@ -3870,7 +3649,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Arcana)",
       "Druid",
       "Wizard"
     ],
@@ -3906,12 +3684,8 @@
     "Name": "Plant Growth",
     "CastingTime": "1 action or 8 hours",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
-      "Druid (Forest)",
-      "Paladin (Ancients)",
-      "Ranger",
-      "Warlock (Archfey)"
+      "Ranger"
     ],
     "Components": "V, S",
     "Description": "This spell channels vitality into plants within a specific area. There are two possible uses for the spell, granting either immediate or long-term benefits.\n\nIf you cast this spell using 1 action, choose a point within range. All normal plants in a 100-foot radius centered on that point become thick and overgrown. A creature moving through the area must spend 4 feet of movement for every 1 foot it moves.\n\nYou can exclude one or more areas of any size within the spell's area from being affected.\n\nIf you cast this spell over 8 hours, you enrich the land. All plants in a half-mile radius centered on a point within range become enriched for 1 year. The plants yield twice the normal amount of food when harvested.",
@@ -3945,7 +3719,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Trickery)",
       "Druid",
       "Sorcerer",
       "Wizard"
@@ -3966,8 +3739,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V",
     "Description": "You utter a word of power that can compel one creature you can see within range to die instantly. If the creature you chose has 100 hit points or fewer, it dies. Otherwise, the spell has no effect.",
@@ -3985,8 +3757,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V",
     "Description": "You speak a word of power that can overwhelm the mind of one creature you can see within range, leaving it dumbfounded. If the target has 150 hit points or fewer, it is stunned. Otherwise, the spell has no effect.\n\nThe stunned target must make a Constitution saving throw at the end of each of its turns. On a successful save, this stunning effect ends.",
@@ -4019,9 +3790,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "This spell is a minor magical trick that novice spellcasters use for practice. You create one of the following magical effects within range.\n\n• You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.\n\n• You instantaneously light or snuff out a candle, a torch, or a small campfire.\n\n• You instantaneously clean or soil an object no larger than 1 cubic foot.\n\n• You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.\n\n• You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.\n\n• You create a nonmagical trinket or an illusory image that can fit in your hand and that lasts until the end of your next turn.\n\nIf you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time, and you can dismiss such an effect as an action.",
@@ -4083,8 +3852,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M",
     "Description": "You create an illusion of an object, a creature, or some other visible phenomenon within range that activates when a specific condition occurs. The illusion is imperceptible until then. It must be no larger than a 30-foot cube, and you decide when you cast the spell how the illusion behaves and what sounds it makes. This scripted performance can last up to 5 minutes.\n\nWhen the condition you specify occurs, the illusion springs into existence and performs in the manner you described. Once the illusion finishes performing, it disappears and remains dormant for 10 minutes. After this time, the illusion can be activated again.\n\nThe triggering condition can be as general or as detailed as you like, though it must be based on visual or audible conditions that occur within 30 feet of the area. For example, you could create an illusion of yourself to appear and warn off others who attempt to open a trapped door, or you could set the illusion to trigger only when a creature says the correct word or phrase.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and any noise it makes sounds hollow to the creature.",
@@ -4100,8 +3868,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small replica of you made from materials worth at least 5 gp)",
     "Description": "You create an illusory copy of yourself that lasts for the duration. The copy can appear at any location within range that you have seen before, regardless of intervening obstacles. The illusion looks and sounds like you but is intangible. If the illusion takes any damage, it disappears, and the spell ends.\n\nYou can use your action to move this illusion up to twice your speed, and make it gesture, speak, and behave in whatever way you choose. It mimics your mannerisms perfectly.\n\nYou can see through its eyes and hear through its ears as if you were in its space. On your turn as a bonus action, you can switch from using its senses to using your own, or back again. While you are using its senses, you are blinded and deafened in regard to your own surroundings.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image, and any noise it makes sounds hollow to the creature.",
@@ -4119,13 +3886,9 @@
       "Artificer",
       "Cleric",
       "Druid",
-      "Druid (Desert)",
-      "Paladin (Ancients)",
-      "Paladin (Vengeance)",
       "Ranger",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "For the duration, the willing creature you touch has resistance to one damage type of your choice - acid, cold, fire, lightning, or thunder.",
@@ -4142,10 +3905,8 @@
     "Classes": [
       "Cleric",
       "Paladin",
-      "Paladin (Devotion)",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (holy water or powdered silver and iron, which the spell consumes)",
     "Description": "Until the spell ends, one willing creature you touch is protected against certain types of creatures - aberrations, celestials, elementals, fey, fiends, and undead.\n\nThe protection grants several benefits. Creatures of those types have disadvantage on attack rolls against the target. The target also can't be charmed, frightened, or possessed by them. If the target is already charmed, frightened, or possessed by such a creature, the target has advantage on any new saving throw against the relevant effect.",
@@ -4198,7 +3959,6 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Life)",
       "Paladin"
     ],
     "Components": "V, S, M (a diamond worth at least 500 gp, which the spell consumes)",
@@ -4229,7 +3989,6 @@
     "Name": "Ray of Enfeeblement",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Death)",
       "Warlock",
       "Wizard"
     ],
@@ -4247,9 +4006,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn.\n\nThe spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
@@ -4299,8 +4056,7 @@
       "Cleric",
       "Paladin",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "At your touch, all curses affecting one creature or object end. If the object is a cursed magic item, its curse remains, but the spell breaks its owner's attunement to the object so it can be removed or discarded.",
@@ -4366,7 +4122,6 @@
     "Classes": [
       "Artificer",
       "Cleric",
-      "Cleric (Life)",
       "Paladin"
     ],
     "Components": "V, S, M (diamonds worth 300 gp, which the spell consumes)",
@@ -4414,8 +4169,7 @@
     "CastingTime": "1 bonus action",
     "Classes": [
       "Artificer",
-      "Cleric",
-      "Paladin (Devotion)"
+      "Cleric"
     ],
     "Components": "V, S, M (a small silver mirror)",
     "Description": "You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or a harmful spell must first make a Wisdom saving throw. On a failed save, the creature must choose a new target or lose the attack or spell. This spell doesn't protect the warded creature from area effects, such as the explosion of a fireball.\n\nIf the warded creature makes an attack or casts a spell that affects an enemy creature, this spell ends.",
@@ -4430,11 +4184,8 @@
     "Name": "Scorching Ray",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Light)",
       "Sorcerer",
-      "Warlock (Fiend)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "You create three rays of fire and hurl them at targets within range. You can hurl them at one target or several.\n\nMake a ranged spell attack for each ray. On a hit, the target takes 2d6 fire damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, you create one additional ray for each slot level above 2nd.",
@@ -4451,12 +4202,7 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Cleric (Knowledge)",
-      "Cleric (Light)",
       "Druid",
-      "Druid (Coast)",
-      "Druid (Swamp)",
-      "Paladin (Vengeance)",
       "Warlock",
       "Wizard"
     ],
@@ -4493,9 +4239,7 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Warlock (Archfey)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "This spell allows you to change the appearance of any number of creatures that you can see within range. You give each target you choose a new, illusory appearance. An unwilling target can make a Charisma saving throw, and if it succeeds, it is unaffected by this spell.\n\nThe spell disguises physical appearances as well as clothing, armor, weapons, and equipment. You can make each creature seem 1 foot shorter or taller and appear thin, fat, or in-between. You can't change a target's body type, so you must choose a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you. The spell lasts for the duration, unless you use your action to dismiss it sooner.\n\nThe changes wrought by this spell fail to hold up to physical inspections. For example, if you use this spell to add a hat to a creature's outfit objects pass through the hat, and anyone who touches it would feel nothing or would feel the creature's head and hair. If you use this spell to appear thinner then you are, the hand of someone who reaches out to touch you would bump into you while it was seemingly still in midair.\n\nA creature can use its action to inspect a target and make an Intelligence (Investigation) check against your spell save DC. If it succeeds, it becomes aware that the target is disguised.",
@@ -4511,9 +4255,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Cleric",
-      "Warlock (Great Old One)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (A short piece of fine copper wire)",
     "Description": "You send a short message of twenty-five words or less to a creature with you are familiar. The creature hears the message in its mind, recognizes you as the sender if it knows you, and can answer in a like manner immediately. The spell enables creatures with Intelligence scores of at least 1 to understand the meaning of your message.\n\nYou can send the message across any distance and even to other planes of existence, but if the target is on a different plane than you, there is a 5 percent chance that the message doesn't arrive.",
@@ -4560,11 +4302,9 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Tempest)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a chip of mica)",
     "Description": "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw.\n\nA nonmagical object that isn't being worn or carried also takes the damage if it's in the spell's area.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd.",
@@ -4580,8 +4320,7 @@
     "CastingTime": "1 reaction",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile.",
@@ -4598,7 +4337,6 @@
     "Classes": [
       "Artificer",
       "Cleric",
-      "Cleric (War)",
       "Paladin"
     ],
     "Components": "V, S, M (a small parchment with a bit of holy text written on it)",
@@ -4630,9 +4368,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack against the target. You have advantage on the attack roll if the target is wearing armor made of metal. On a hit, the target takes 1d8 lightning damage, and it can't take reactions until the start of its next turn.\n\nThe spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).",
@@ -4649,9 +4385,7 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Druid (Desert)",
-      "Ranger",
-      "Warlock (Undying)"
+      "Ranger"
     ],
     "Components": "V, S",
     "Description": "For the duration, no sound can be created within or pass through a 20-foot-radius sphere centered on a point you choose within range. Any creature or object entirely inside the sphere is immune to thunder damage, and creatures are deafened while entirely inside it. Casting a spell that includes a verbal component is impossible there.",
@@ -4668,8 +4402,7 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a bit of fleece)",
     "Description": "You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual, it isn't accompanied by sound, smell, or other sensory effects.\n\nYou can use your action to cause the image to move to any spot within range. As the image changes location, you can alter its appearance so that its movements appear natural for the image. For example, if you create an image of a creature and move it, you can alter the image so that it appears to be walking.\n\nPhysical interaction with the image reveals it to be an illusion, because things can pass through it. A creature that uses its action to examine the image can determine that it is an illusion with a successful Intelligence (Investigation) check against your spell save DC. If a creature discerns the illusion for what it is, the creature can see through the image.",
@@ -4684,8 +4417,7 @@
     "Name": "Simulacrum",
     "CastingTime": "12 hours",
     "Classes": [
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (snow or ice in quantities sufficient to made a life-size copy of the duplicated creature some hair, fingernail clippings, or other piece of that creature's body placed inside the snow or ice and powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell)",
     "Description": "You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature's hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates.\n\nThe simulacrum is friendly to you and creatures you designate. It obeys your spoken commands, moving and acting in accordance with your wishes and acting on your turn in combat. The simulacrum lacks the ability to learn or become more powerful, so it never increases its level or other abilities, nor can it regain expended spell slots.\n\nIf the simulacrum is damaged, you can repair it in an alchemical laboratory, using rare herbs and minerals worth 100 gp per hit point it regains. The simulacrum lasts until it drops to 0 hit points, at which point it reverts to snow and melts instantly.\n\nIf you cast this spell again, any currently active duplicates you created with this spell are instantly destroyed.",
@@ -4702,9 +4434,7 @@
     "Classes": [
       "Bard",
       "Sorcerer",
-      "Warlock (Archfey)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (a pinch of find sand, rose petals, or a cricket)",
     "Description": "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures).\n\nStarting with the creature that has the lowest current hit points, each creature affected by this spell falls unconscious until the spell ends, the sleeper takes damage, or someone uses an action to shake or slap the sleeper awake. Subtract each creature's hit points from the total before moving on to the creature with the next lowest hit points. A creature's hit points must be equal to or less than the remaining total for that creature to be affected.\n\nUndead and creatures immune to being charmed aren't affected by this spell.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, roll an additional 2d8 for each slot level above 1st.",
@@ -4719,9 +4449,7 @@
     "Name": "Sleet Storm",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Tempest)",
       "Druid",
-      "Druid (Arctic)",
       "Sorcerer",
       "Wizard"
     ],
@@ -4738,7 +4466,6 @@
     "Name": "Slow",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Arctic)",
       "Sorcerer",
       "Wizard"
     ],
@@ -4771,9 +4498,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Nature)",
       "Druid",
-      "Paladin (Ancients)",
       "Ranger"
     ],
     "Components": "V, S",
@@ -4790,9 +4515,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric",
-      "Cleric (Knowledge)",
-      "Warlock (Undying)"
+      "Cleric"
     ],
     "Components": "V, S, M (burning incense)",
     "Description": "You grant the semblance of life and intelligence to a corpse of your choice within range, allowing it to answer the questions you pose. The corpse must still have a mouth and can't be undead. The spell fails if the corpse was the target of this spell within the last 10 days.\n\nUntil the spell ends, you can ask the corpse up to five questions. The corpse knows only what it knew in life, including the languages it knew. Answers are usually brief, cryptic, or repetitive, and the corpse is under no compulsion to offer a truthful answer if you are hostile to it or it recognizes you as an enemy. This spell doesn't return the creature's soul to its body, only its animating spirit. Thus, the corpse can't learn new information, doesn't comprehend anything that has happened since it died, and can't speculate about future events.",
@@ -4825,9 +4548,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Druid (Forest)",
-      "Druid (Mountain)",
-      "Druid (Underdark)",
       "Sorcerer",
       "Warlock",
       "Wizard"
@@ -4845,10 +4565,7 @@
     "Name": "Spike Growth",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
-      "Druid (Arctic)",
-      "Druid (Mountain)",
       "Ranger"
     ],
     "Components": "V, S, M (seven sharp thorns or seven small twigs, each sharpened to a point)",
@@ -4864,9 +4581,7 @@
     "Name": "Spirit Guardians",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Cleric (War)",
-      "Paladin (Crown)"
+      "Cleric"
     ],
     "Components": "V, S, M (a holy symbol)",
     "Description": "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish.\n\nWhen you cast this spell, you can designate any number of creatures you can see to be unaffected by it. An affected creature's speed is halved in the area, and when the creature enters the area for the first time on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 radiant damage (if you are good or neutral) or 3d8 necrotic damage (if you are evil). On a successful save, the creature takes half as much damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for each slot level above 3rd.",
@@ -4881,9 +4596,7 @@
     "Name": "Spiritual Weapon",
     "CastingTime": "1 bonus action",
     "Classes": [
-      "Cleric",
-      "Cleric (Life)",
-      "Cleric (War)"
+      "Cleric"
     ],
     "Components": "V, S",
     "Description": "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again. When you cast the spell, you can make a melee spell attack against a creature within 5 feet of the weapon. On a hit, the target takes force damage equal to 1d8 + your spellcasting ability modifier.\n\nAs a bonus action on your turn, you can move the weapon up to 20 feet and repeat the attack against a creature within 5 feet of it.\n\nThe weapon can take whatever form you choose. Clerics of deities who are associated with a particular weapon (as St. Cuthbert is known for his mace and Thor for his hammer) make this spell's effect resemble that weapon.\n\nAt Higher Levels: When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above the 2nd.",
@@ -4899,10 +4612,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Druid (Swamp)",
-      "Druid (Underdark)",
       "Sorcerer",
-      "Warlock (Fiend)",
       "Wizard"
     ],
     "Components": "V, S, M (a rotten egg or several skunk cabbage leaves)",
@@ -4921,8 +4631,6 @@
       "Artificer",
       "Cleric",
       "Druid",
-      "Druid (Mountain)",
-      "Druid (Underdark)",
       "Wizard"
     ],
     "Components": "V, S, M (soft clay, which must be worked into roughly the desired shape of the stone object)",
@@ -4939,14 +4647,10 @@
     "CastingTime": "1 action",
     "Classes": [
       "Artificer",
-      "Cleric (War)",
       "Druid",
-      "Druid (Mountain)",
-      "Paladin (Ancients)",
       "Ranger",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (diamond dust worth 100 gp, which the spell consumes)",
     "Description": "This spell turns the flesh of a willing creature you touch as hard as stone. Until the spell ends, the target has resistance to nonmagical bludgeoning, piercing, and slashing damage.",
@@ -4977,11 +4681,9 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Knowledge)",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, M (a snake's tongue and either a bit of honeycomb or a drop of sweet oil)",
     "Description": "You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell.\n\nThe target must make a Wisdom saving throw. On a failed save, it purses the course of action you described to the best of its ability. The suggested course of action can continue for the entire duration. If the suggested activity can be completed in a shorter time, the spell ends when the subject finishes what it was asked to do.\n\nYou can also specify conditions that will trigger a special activity during the duration. For example, you might suggest that a knight give her warhorse to the first beggar she meets. If the condition isn't met before the spell expires, the activity isn't preformed.\n\nIf you or any of your companions damage the target, the spell ends.",
@@ -5048,9 +4750,7 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Warlock (Great Old One)",
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S, M (tiny tarts and a feather that waved in the air)",
     "Description": "A creature of your choice that you can see within range perceives everything as hilariously funny and falls into fits of laugher if this spell affects it. The target must succeed on a Wisdom saving throw or fall prone, becoming incapacitated and unable to stand up for the duration. A creature with an Intelligence score of 4 or less isn't affected.\n\nAt the end of each of its turns, and each time it takes damage, the target can make another Wisdom saving throw. The target has advantage on the saving throw if it's triggered by damage. On a success, the spell ends.",
@@ -5066,7 +4766,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Sorcerer",
-      "Warlock (Great Old One)",
       "Wizard"
     ],
     "Components": "V, S",
@@ -5100,7 +4799,6 @@
     "CastingTime": "1 minute",
     "Classes": [
       "Bard",
-      "Cleric (Arcana)",
       "Sorcerer",
       "Wizard"
     ],
@@ -5114,7 +4812,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Floating Disk",
+    "Name": "Tenser's Floating Disk",
     "CastingTime": "1 action",
     "Classes": [
       "Wizard"
@@ -5148,11 +4846,9 @@
     "CastingTime": "1 action",
     "Classes": [
       "Bard",
-      "Cleric (Tempest)",
       "Druid",
       "Sorcerer",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn't pushed.\n\nIn addition, unsecured objects that are completely within the area of effect are automatically pushed 10 feet away from you by the spell's effect, and the spell emits a thunderous boom audible out to 300 feet.\n\nAt Higher Levels: When you cast this spell using a spell slot of 2nd level or higher, the damage increases by 1d8 for each slot level above 1st.",
@@ -5217,10 +4913,7 @@
     "Name": "Tree Stride",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
-      "Druid (Forest)",
-      "Paladin (Ancients)",
       "Ranger"
     ],
     "Components": "V, S",
@@ -5291,9 +4984,7 @@
       "Bard",
       "Sorcerer",
       "Warlock",
-      "Wizard",
-      "Fighter (Eldritch Knight)",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "S",
     "Description": "You extend your hand and point a finger at a target in range. Your magic grants you a brief insight into the target's defenses. On your next turn, you gain advantage on your first attack roll against the target, provided that this spell hasn't ended.",
@@ -5325,7 +5016,6 @@
     "Name": "Vampiric Touch",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Death)",
       "Warlock",
       "Wizard"
     ],
@@ -5357,12 +5047,9 @@
     "Name": "Wall of Fire",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Light)",
       "Druid",
       "Sorcerer",
-      "Warlock (Fiend)",
-      "Wizard",
-      "Fighter (Eldritch Knight)"
+      "Wizard"
     ],
     "Components": "V, S, M (a small piece of phosphorus)",
     "Description": "You create a wall of fire on a solid surface within range. You can make the wall up to 60 feet long, 20 feet high, and 1 foot think, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot think. The wall is opaque and lasts for the duration.\n\nWhen the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save.\n\nOne side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn or ends its turn there. The other side of the wall deals no damage.\n\nAt Higher Levels: When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th.",
@@ -5408,8 +5095,6 @@
     "CastingTime": "1 action",
     "Classes": [
       "Druid",
-      "Druid (Desert)",
-      "Druid (Mountain)",
       "Sorcerer",
       "Wizard"
     ],
@@ -5441,8 +5126,7 @@
     "Name": "Warding Bond",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric",
-      "Paladin (Crown)"
+      "Cleric"
     ],
     "Components": "V, S, M (a pair of platinum rings worth at least 50 gp each, which you and target must wear for the duration)",
     "Description": "This spell wards a willing creature you touch and creates a mystic connection between you and the target until the spell ends. While the target is within 60 feet of you, it gains a +1 bonus to AC and saving throws, and it has resistance to all damage. Also, each time it takes damage, you take the same amount of damage.\n\nThe spell ends if you drop to 0 hit points or if you and the target become separated by more than 60 feet. It also ends if the spell is cast again on either of the connected creatures. You can also dismiss the spell as an action.",
@@ -5459,7 +5143,6 @@
     "Classes": [
       "Artificer",
       "Druid",
-      "Druid (Coast)",
       "Ranger",
       "Sorcerer",
       "Wizard"
@@ -5480,8 +5163,6 @@
       "Artificer",
       "Cleric",
       "Druid",
-      "Druid (Coast)",
-      "Druid (Swamp)",
       "Ranger",
       "Sorcerer"
     ],
@@ -5498,7 +5179,6 @@
     "Name": "Web",
     "CastingTime": "1 action",
     "Classes": [
-      "Druid (Underdark)",
       "Sorcerer",
       "Wizard"
     ],
@@ -5515,8 +5195,7 @@
     "Name": "Weird",
     "CastingTime": "1 action",
     "Classes": [
-      "Wizard",
-      "Rogue (Arcane Trickster)"
+      "Wizard"
     ],
     "Components": "V, S",
     "Description": "Drawing on the deepest fears of a group of creatures, you create illusory creatures in their minds, visible only to them. Each creature in a 30-foot-radius sphere centered on a point of your choice within range must make a Wisdom saving throw. On a failed save, a creature becomes frightened for the duration. The illusion calls on the creature's deepest fears, manifesting its worst nightmares as an implacable threat. At the end of each of the frightened creature's turns, it must succeed on a Wisdom saving throw or take 4d10 psychic damage. On a successful save, the spell ends for that creature.",
@@ -5546,7 +5225,6 @@
     "Name": "Wind Wall",
     "CastingTime": "1 action",
     "Classes": [
-      "Cleric (Nature)",
       "Druid",
       "Ranger"
     ],
@@ -5596,9 +5274,7 @@
     "Classes": [
       "Bard",
       "Cleric",
-      "Paladin",
-      "Paladin (Devotion)",
-      "Paladin (Crown)"
+      "Paladin"
     ],
     "Components": "V, S, M",
     "Description": "You create a magical zone that guards against deception in a 15-foot-radius sphere centered on a point of your choice within range. Until the spell ends, a creature that enters the spell's area for the first time on a turn or starts its turn there must make a Charisma saving throw. On a failed save, a creature can't speak a deliberate lie while in the radius. You know whether each creature succeeds or fails on its saving throw.\n\nAn affected creature is aware of the spell and can thus avoid answering questions to which it would normally respond with a lie. Such creatures can be evasive in its answers as long as it remains within the boundaries of the truth.",
