@@ -13,7 +13,7 @@ import { StatBlock, GetStatBlockKeywords } from "./statblock";
 ConfigureAppInsights();
 
 const statBlockLibrary = Library.FromFile<StatBlock>("ogl_creatures.json", "/statblocks/", GetStatBlockKeywords);
-const spellLibrary = Library.FromFile<Spell>("ogl_spells.json", "/spells/", GetSpellKeywords);
+//const spellLibrary = Library.FromFile<Spell>("ogl_spells.json", "/spells/", GetSpellKeywords);
 const playerViews = [];
 
 const app = express();
