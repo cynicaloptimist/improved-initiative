@@ -5,8 +5,7 @@ import mustacheExpress = require("mustache-express");
 import session = require("express-session");
 import request = require("request");
 
-import Library from "./library";
-import { StatBlock } from "./statblock";
+import { Library, StatBlock, Spell } from "./library";
 
 interface PatreonPost {
     title: string;
@@ -39,7 +38,7 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-export default function (app: express.Express, statBlockLibrary: Library<StatBlock>, playerViews) {
+export default function (app: express.Express, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
@@ -82,12 +81,20 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
         });
     });
 
-    app.get("/statblocks/", (req, res) => {
+    app.get(statBlockLibrary.Route(), (req, res) => {
         res.json(statBlockLibrary.GetListings());
     });
 
-    app.get("/statblocks/:id", (req, res) => {
+    app.get(statBlockLibrary.Route() + ":id", (req, res) => {
         res.json(statBlockLibrary.GetById(req.params.id));
+    });
+
+    app.get(spellLibrary.Route(), (req, res) => {
+        res.json(spellLibrary.GetListings());
+    });
+
+    app.get(spellLibrary.Route() + ":id", (req, res) => {
+        res.json(spellLibrary.GetById(req.params.id));
     });
 
     const importEncounter = (req, res) => {

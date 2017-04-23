@@ -7,19 +7,17 @@ import ConfigureAppInsights from "./configureappinsights";
 import LaunchServer from "./launchserver";
 import ConfigureRoutes from "./routes";
 import ConfigureSockets from "./sockets";
-import Library from "./library";
-import { StatBlock, GetStatBlockKeywords } from "./statblock";
+import * as L from "./library";
 
 ConfigureAppInsights();
-
-const statBlockLibrary = Library.FromFile<StatBlock>("ogl_creatures.json", "/statblocks/", GetStatBlockKeywords);
-//const spellLibrary = Library.FromFile<Spell>("ogl_spells.json", "/spells/", GetSpellKeywords);
-const playerViews = [];
 
 const app = express();
 const http = require("http").Server(app);
 
-ConfigureRoutes(app, statBlockLibrary, playerViews);
+const statBlockLibrary = L.Library.FromFile<L.StatBlock>("ogl_creatures.json", "/statblocks/", L.GetStatBlockKeywords);
+const spellLibrary = L.Library.FromFile<L.Spell>("ogl_spells.json", "/spells/", L.GetSpellKeywords);
+const playerViews = [];
+ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
 const io = socketIO(http);
 ConfigureSockets(io, playerViews);
