@@ -5282,6 +5282,7 @@
     "Level": 2,
     "Range": "60 feet",
     "Ritual": false,
-    "School": "Enchantment"
+    "School": "Enchantment",
+    "Source": "Player's Handbook"
   }
 ]

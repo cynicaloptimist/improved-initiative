@@ -3,14 +3,16 @@ import _ = require("lodash");
 
 const sourceAbbreviations = {
     "monster-manual": "mm",
+    "players-handbook": "phb"
 };
 
-const toLowerCaseWithDashes = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, "-").replace(/[^a-z0-9-]/g, "");
+//Lowercase, replace whitespace with dashes, remove non-word characters.
+const formatStringForId = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, "-").replace(/[^a-z0-9-]/g, "");
 
 const createId = (name: string, source: string) => {
-    const sourceString = toLowerCaseWithDashes(source);
+    const sourceString = formatStringForId(source);
     const sourcePrefix = sourceAbbreviations[sourceString] || sourceString;
-    const lowerCaseName = toLowerCaseWithDashes(name);
+    const lowerCaseName = formatStringForId(name);
     return `${sourcePrefix}.${lowerCaseName}`;
 };
 
@@ -44,7 +46,9 @@ export interface Spell {
     Source: string;
 }
 
-export const GetSpellKeywords = (spell: Spell) => _.concat(spell.Classes, spell.School);
+export const GetSpellKeywords = (spell: Spell) => {
+    return [ ...spell.Classes, spell.School]
+};
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
@@ -60,7 +64,7 @@ export class Library<TItem extends LibraryItem> {
                 throw `Couldn't read ${filename} as a library: ${err}`;
             }
 
-            let newItems: any [] = JSON.parse(buffer.toString());
+            const newItems: any [] = JSON.parse(buffer.toString());
             library.Add(newItems);
         });
 
@@ -69,6 +73,9 @@ export class Library<TItem extends LibraryItem> {
 
     private Add(items: any []) {
         items.forEach((c) => {
+            if (!(c.Name && c.Source)) {
+                throw `Missing Name or Source: Couldn't import ${JSON.stringify(c)}`;
+            }
             c.Id = createId(c.Name, c.Source);
             this.items[c.Id] = c;
             const listing: Listing = {
