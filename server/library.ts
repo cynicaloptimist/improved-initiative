@@ -1,5 +1,4 @@
 import fs = require("fs");
-import _ = require("lodash");
 
 const sourceAbbreviations = {
     "monster-manual": "mm",
@@ -25,7 +24,7 @@ export interface LibraryItem {
 export interface Listing {
     Name: string;
     Id: string;
-    Keywords: string [];
+    Keywords: string;
     Link: string;
 }
 
@@ -36,7 +35,7 @@ export interface StatBlock {
     Source: string;
 }
 
-export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.replace(/[^\w\s]/g, "").split(" ");
+export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
 export interface Spell {
     Name: string;
@@ -46,17 +45,15 @@ export interface Spell {
     Source: string;
 }
 
-export const GetSpellKeywords = (spell: Spell) => {
-    return [ ...spell.Classes, spell.School]
-};
+export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
     private listings: Listing[] = [];
     
-    constructor(private route: string, private getKeywords: (item: TItem) => string []) { };
+    constructor(private route: string, private getKeywords: (item: TItem) => string) { };
 
-    static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string []): Library<I> {
+    static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
         const library = new Library<I>(route, getKeywords);
 
         fs.readFile(filename, (err, buffer) => {

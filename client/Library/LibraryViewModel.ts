@@ -32,7 +32,7 @@ module ImprovedInitiative {
         FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
             var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],
-                statBlocksWithFilterInType = [];
+                statBlocksWithFilterInKeywords = [];
             var library = this.DisplayTab() == 'Players'
                 ? ko.unwrap(this.library.PCStatBlocks)
                 : ko.unwrap(this.library.NPCStatBlocks);
@@ -46,11 +46,11 @@ module ImprovedInitiative {
                     statBlocksWithFilterInName.push(c);
                     return;
                 }
-                if (c.Type.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInType.push(c);
+                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
+                    statBlocksWithFilterInKeywords.push(c);
                 }
             })
-            return statBlocksWithFilterInName.concat(statBlocksWithFilterInType);
+            return statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
         });
     }
 }
