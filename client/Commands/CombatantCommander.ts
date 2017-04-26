@@ -1,9 +1,6 @@
 module ImprovedInitiative {
     export class CombatantCommander {
-        constructor(private encounter: Encounter,
-            private promptQueue: PromptQueue,
-            private statBlockEditor: StatBlockEditor,
-            private eventLog: EventLog) {
+        constructor(private tracker: TrackerViewModel) {
             this.Commands = BuildCombatantCommandList(this);
 
             this.Commands.forEach(c => {
@@ -51,45 +48,45 @@ module ImprovedInitiative {
         }
 
         private selectByOffset = (offset: number) => {
-            var newIndex = this.encounter.Combatants.indexOf(this.SelectedCombatants()[0]) + offset;
+            var newIndex = this.tracker.Encounter.Combatants.indexOf(this.SelectedCombatants()[0]) + offset;
             if (newIndex < 0) {
                 newIndex = 0;
-            } else if (newIndex >= this.encounter.Combatants().length) {
-                newIndex = this.encounter.Combatants().length - 1;
+            } else if (newIndex >= this.tracker.Encounter.Combatants().length) {
+                newIndex = this.tracker.Encounter.Combatants().length - 1;
             }
             this.SelectedCombatants.removeAll()
-            this.SelectedCombatants.push(this.encounter.Combatants()[newIndex]);
+            this.SelectedCombatants.push(this.tracker.Encounter.Combatants()[newIndex]);
         }
 
         Remove = () => {
             var combatantsToRemove = this.SelectedCombatants.removeAll(),
-                indexOfFirstCombatantToRemove = this.encounter.Combatants.indexOf(combatantsToRemove[0]),
+                indexOfFirstCombatantToRemove = this.tracker.Encounter.Combatants.indexOf(combatantsToRemove[0]),
                 deletedCombatantNames = combatantsToRemove.map(c => c.StatBlock().Name);
 
-            if (this.encounter.Combatants().length > combatantsToRemove.length) {
-                while (combatantsToRemove.indexOf(this.encounter.ActiveCombatant()) > -1) {
-                    this.encounter.NextTurn();
+            if (this.tracker.Encounter.Combatants().length > combatantsToRemove.length) {
+                while (combatantsToRemove.indexOf(this.tracker.Encounter.ActiveCombatant()) > -1) {
+                    this.tracker.Encounter.NextTurn();
                 }
             }
 
-            this.encounter.Combatants.removeAll(combatantsToRemove);
+            this.tracker.Encounter.Combatants.removeAll(combatantsToRemove);
 
-            var allMyFriendsAreGone = name => this.encounter.Combatants().every(c => c.StatBlock().Name != name);
+            var allMyFriendsAreGone = name => this.tracker.Encounter.Combatants().every(c => c.StatBlock().Name != name);
 
             deletedCombatantNames.forEach(name => {
                 if (allMyFriendsAreGone(name)) {
-                    this.encounter.CombatantCountsByName[name](0);
+                    this.tracker.Encounter.CombatantCountsByName[name](0);
                 }
             });
 
-            if (indexOfFirstCombatantToRemove >= this.encounter.Combatants().length) {
-                indexOfFirstCombatantToRemove = this.encounter.Combatants().length - 1;
+            if (indexOfFirstCombatantToRemove >= this.tracker.Encounter.Combatants().length) {
+                indexOfFirstCombatantToRemove = this.tracker.Encounter.Combatants().length - 1;
             }
-            this.Select(this.encounter.Combatants()[indexOfFirstCombatantToRemove])
+            this.Select(this.tracker.Encounter.Combatants()[indexOfFirstCombatantToRemove])
 
-            this.eventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
+            this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
 
-            this.encounter.QueueEmitEncounter();
+            this.tracker.Encounter.QueueEmitEncounter();
         }
 
         SelectPrevious = () => {
@@ -108,11 +105,11 @@ module ImprovedInitiative {
                     const damage = response['damage'];
                     if (damage) {
                         selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage))
-                        this.eventLog.AddEvent(`${damage} damage applied to ${combatantNames}.`);
-                        this.encounter.QueueEmitEncounter();
+                        this.tracker.EventLog.AddEvent(`${damage} damage applied to ${combatantNames}.`);
+                        this.tracker.Encounter.QueueEmitEncounter();
                     }
                 });
-            this.promptQueue.Add(prompt);
+            this.tracker.PromptQueue.Add(prompt);
             return false;
         }
 
@@ -124,11 +121,11 @@ module ImprovedInitiative {
                     const thp = response['thp'];
                     if (thp) {
                         selectedCombatants.forEach(c => c.ViewModel.ApplyTemporaryHP(thp));
-                        this.eventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
-                        this.encounter.QueueEmitEncounter();
+                        this.tracker.EventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
+                        this.tracker.Encounter.QueueEmitEncounter();
                     }    
                 });
-            this.promptQueue.Add(prompt);
+            this.tracker.PromptQueue.Add(prompt);
 
             return false;
         }
@@ -137,7 +134,7 @@ module ImprovedInitiative {
             if (combatantVM instanceof CombatantViewModel) {
                 this.Select(combatantVM.Combatant);
             }
-            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag(this.encounter))
+            this.SelectedCombatants().forEach(c => c.ViewModel.AddTag(this.tracker.Encounter))
             return false;
         }
 
@@ -148,19 +145,19 @@ module ImprovedInitiative {
 
         MoveUp = () => {
             var combatant = this.SelectedCombatants()[0];
-            var index = this.encounter.Combatants.indexOf(combatant)
+            var index = this.tracker.Encounter.Combatants.indexOf(combatant)
             if (combatant && index > 0) {
-                var newInitiative = this.encounter.MoveCombatant(combatant, index - 1);
-                this.eventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
+                var newInitiative = this.tracker.Encounter.MoveCombatant(combatant, index - 1);
+                this.tracker.EventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
         MoveDown = () => {
             var combatant = this.SelectedCombatants()[0];
-            var index = this.encounter.Combatants.indexOf(combatant)
-            if (combatant && index < this.encounter.Combatants().length - 1) {
-                var newInitiative = this.encounter.MoveCombatant(combatant, index + 1);
-                this.eventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
+            var index = this.tracker.Encounter.Combatants.indexOf(combatant)
+            if (combatant && index < this.tracker.Encounter.Combatants().length - 1) {
+                var newInitiative = this.tracker.Encounter.MoveCombatant(combatant, index + 1);
+                this.tracker.EventLog.AddEvent(`${combatant.ViewModel.DisplayName()} initiative set to ${newInitiative}.`);
             }
         }
 
@@ -172,9 +169,9 @@ module ImprovedInitiative {
         EditStatBlock = () => {
             if (this.SelectedCombatants().length == 1) {
                 var selectedCombatant = this.SelectedCombatants()[0];
-                this.statBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
+                this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
                     selectedCombatant.StatBlock(newStatBlock);
-                    this.encounter.QueueEmitEncounter();
+                    this.tracker.Encounter.QueueEmitEncounter();
                 }, (_, __) => {
                     this.Remove();
                 })

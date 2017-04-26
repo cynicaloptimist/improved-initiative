@@ -21,9 +21,12 @@ module ImprovedInitiative {
             this.TutorialVisible(true);
         }
 
-        StatBlockLibrary = new StatBlockLibrary();
-        EncounterCommander = new EncounterCommander(this.Encounter, this.PromptQueue, this.StatBlockEditor, this.StatBlockLibrary, this.EventLog, this.SettingsVisible);
-        CombatantCommander = new CombatantCommander(this.Encounter, this.PromptQueue, this.StatBlockEditor, this.EventLog);
+        NPCLibrary = new NPCLibrary();
+        PCLibrary = new PCLibrary();
+        EncounterLibrary = new EncounterLibrary();
+
+        EncounterCommander = new EncounterCommander(this);
+        CombatantCommander = new CombatantCommander(this);
 
         ImportEncounterIfAvailable = () => {
             const encounterJSON = $('html')[0].getAttribute('postedEncounter');
