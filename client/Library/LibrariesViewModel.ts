@@ -1,8 +1,8 @@
 module ImprovedInitiative {
-    export class LibraryViewModel {
+    export class LibrariesViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
 
-        constructor(public EncounterCommander: EncounterCommander, private library: StatBlockLibrary) {
+        constructor(public EncounterCommander: EncounterCommander, private library: NPCLibrary) {
             this.SavedEncounterIndex = library.SavedEncounterIndex;
         }
 
@@ -35,7 +35,7 @@ module ImprovedInitiative {
                 statBlocksWithFilterInKeywords = [];
             var library = this.DisplayTab() == 'Players'
                 ? ko.unwrap(this.library.PCStatBlocks)
-                : ko.unwrap(this.library.NPCStatBlocks);
+                : ko.unwrap(this.library.StatBlocks);
                  
             if (filter.length == 0) {
                 return library;
