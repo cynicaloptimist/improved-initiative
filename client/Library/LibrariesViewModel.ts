@@ -1,16 +1,38 @@
 module ImprovedInitiative {
-    export class LibrariesViewModel {
+    export class NPCLibraryViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
-
         constructor(
-            public EncounterCommander: EncounterCommander,
-            private npcLibrary: NPCLibrary,
-            private pcLibrary: PCLibrary,
-            private encounterLibrary: EncounterLibrary) {
-            this.SavedEncounterIndex = encounterLibrary.SavedEncounterIndex;
-        }
+            private encounterCommander: EncounterCommander,
+            private library: NPCLibrary
+        ) { }
 
-        SavedEncounterIndex: KnockoutObservableArray<string>;
+        LibraryFilter = ko.observable("");
+
+        FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
+            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+                statBlocksWithFilterInName = [],
+                statBlocksWithFilterInKeywords = [];
+                 
+            if (filter.length == 0) {
+                return this.library.StatBlocks();
+            }
+
+            this.library.StatBlocks().forEach(c => {
+                if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
+                    statBlocksWithFilterInName.push(c);
+                    return;
+                }
+                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
+                    statBlocksWithFilterInKeywords.push(c);
+                }
+            })
+            return statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
+        });
+
+        ClickEntry = (entry: StatBlockListing) => this.encounterCommander.AddStatBlockFromListing(entry);
+        ClickEdit = (entry: StatBlockListing) => this.encounterCommander.EditStatBlock(entry);
+        ClickHide = () => this.encounterCommander.HideLibraries();
+        ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(false);
 
         GetPreviewStatBlock = ko.pureComputed(() => {
             return this.previewStatBlock() || StatBlock.Default();
@@ -22,39 +44,23 @@ module ImprovedInitiative {
                 this.previewStatBlock(listing.StatBlock());
             });
         }
+    }
+    
+    export class LibrariesViewModel {
 
-        DisplayTab = ko.observable('Creatures');
-        LibraryFilter = ko.observable('');
+        constructor(public EncounterCommander: EncounterCommander) { }
 
-        ChangeTab = tabName => () => {
-            if (tabName === 'Players') {
-                TutorialSpy('SelectPlayersTab');
+        Libraries = [
+            {
+                Name: "Creatures",
+                Component: "npclibrary"                
             }
-            this.DisplayTab(tabName);
-        }
-        
-        FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
-            var filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                statBlocksWithFilterInName = [],
-                statBlocksWithFilterInKeywords = [];
-            var library = this.DisplayTab() == 'Players'
-                ? ko.unwrap(this.pcLibrary.StatBlocks)
-                : ko.unwrap(this.npcLibrary.StatBlocks);
-                 
-            if (filter.length == 0) {
-                return library;
-            }
+        ];
 
-            library.forEach(c => {
-                if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInName.push(c);
-                    return;
-                }
-                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInKeywords.push(c);
-                }
-            })
-            return statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
-        });
+        SelectedLibrary = ko.observable(this.Libraries[0]);
+
+        TabClassName = library => library === this.SelectedLibrary() ? 'selected' : '';
+
+        LibraryComponent = () => this.SelectedLibrary().Component;
     }
 }

@@ -1,0 +1,13 @@
+<input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
+<ul class="library" data-bind="foreach: FilteredStatBlocks">
+    <li>
+        <span class="fa" data-bind="click: $parent.ClickEntry, text: Name"></span>
+        <span class="fa fa-edit" data-bind="click: $parent.ClickEdit"></span>
+        <span class="fa fa-search preview" data-bind="hoverPop: { selector: '.preview.statblock', data: $parent.PreviewStatBlock }"></span>
+    </li>
+</ul>
+<div class="buttons">
+    <span data-bind="click: ClickHide" title="Hide Libraries" class="button fa-chevron-up"></span>
+    <span data-bind="click: ClickAdd" title="Add new statblock" class="button fa-plus"></span>
+</div>
+<div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: GetPreviewStatBlock } }"></div>

@@ -33,11 +33,11 @@ module ImprovedInitiative {
             }
         }
         
-        CreateAndEditStatBlock = (library: string) => {
+        CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
             var statBlock = StatBlock.Default();
             var newId = probablyUniqueString();
 
-            if (library == "Players") {
+            if (isPlayerCharacter) {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
