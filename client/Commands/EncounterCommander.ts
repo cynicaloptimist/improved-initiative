@@ -137,12 +137,8 @@ module ImprovedInitiative {
                 response => {
                     const encounterName = response['encounterName'];
                     if (encounterName) {
-                        var savedEncounter = this.tracker.Encounter.Save(encounterName);
-                        var savedEncounters = this.tracker.EncounterLibrary.SavedEncounterIndex;
-                        if (savedEncounters.indexOf(encounterName) == -1) {
-                            savedEncounters.push(encounterName);
-                        }
-                        Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
+                        const savedEncounter = this.tracker.Encounter.Save(encounterName);
+                        this.tracker.EncounterLibrary.Save(encounterName, savedEncounter);
                         this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     }
                 });
@@ -150,15 +146,14 @@ module ImprovedInitiative {
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
+            const encounter = this.tracker.EncounterLibrary.Get(encounterName);
             this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
             this.tracker.EventLog.AddEvent(`Encounter loaded.`);
         }
 
         DeleteSavedEncounter = (encounterName: string) => {
             if (confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)) {
-                Store.Delete(Store.SavedEncounters, encounterName);
-                this.tracker.EncounterLibrary.SavedEncounterIndex.remove(encounterName);
+                this.tracker.EncounterLibrary.Delete(encounterName);
                 this.tracker.EventLog.AddEvent(`Encounter ${encounterName} deleted.`);
             }
         }

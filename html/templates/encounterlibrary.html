@@ -1,10 +1,11 @@
-<ul class="library" data-bind="foreach: SavedEncounterIndex">
-    <li data-bind="click: $parent.EncounterCommander.LoadEncounterByName">
-        <span class="fa" data-bind="text: $data"></span>
-        <span class="fa fa-trash" data-bind="click: $parent.EncounterCommander.DeleteSavedEncounter"></span>
+<input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
+<ul class="entries" data-bind="foreach: FilteredEncounters">
+    <li>
+        <span class="fa" data-bind="text: $data, click: $parent.ClickEntry"></span>
+        <span class="fa fa-trash" data-bind="click: $parent.ClickDelete"></span>
     </li>
 </ul>
 <div class="buttons">
-    <span data-bind="click: $parent.EncounterCommander.HideLibraries" title="Hide Libraries" class="button fa-chevron-up"></span>
-    <span data-bind="click: $parent.EncounterCommander.SaveEncounter" title="Add new statblock" class="button fa-plus"></span>
+    <span data-bind="click: ClickHide" title="Hide Libraries" class="button fa-chevron-up"></span>
+    <span data-bind="click: ClickAdd" title="Save current encounter" class="button fa-plus"></span>
 </div>

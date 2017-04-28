@@ -1,5 +1,5 @@
 <input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-<ul class="library" data-bind="foreach: FilteredStatBlocks">
+<ul class="entries" data-bind="foreach: FilteredStatBlocks">
     <li>
         <span class="fa" data-bind="click: $parent.ClickEntry, text: Name"></span>
         <span class="fa fa-edit" data-bind="click: $parent.ClickEdit"></span>
