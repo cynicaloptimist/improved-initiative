@@ -21,9 +21,7 @@ module ImprovedInitiative {
             this.TutorialVisible(true);
         }
 
-        NPCLibrary = new NPCLibrary();
-        PCLibrary = new PCLibrary();
-        EncounterLibrary = new EncounterLibrary();
+        Libraries = new Libraries();
 
         EncounterCommander = new EncounterCommander(this);
         CombatantCommander = new CombatantCommander(this);

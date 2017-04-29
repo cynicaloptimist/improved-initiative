@@ -2,24 +2,23 @@ module ImprovedInitiative {
     export class LibrariesViewModel {
         constructor(
             public EncounterCommander: EncounterCommander,
-            private npcLibrary: NPCLibrary,
-            private encounterLibrary: EncounterLibrary,
+            public Libraries: Libraries
         ) { }
 
-        Libraries = [
+        LibraryTabs = [
             {
                 Name: "Creatures",
                 Component: "npclibrary",
-                Library: this.npcLibrary
+                Library: this.Libraries.NPCs
             },
             {
                 Name: "Encounters",
                 Component: "encounterlibrary",
-                Library: this.encounterLibrary
+                Library: this.Libraries.Encounters
             }
         ];
 
-        SelectedTab = ko.observable(this.Libraries[0]);
+        SelectedTab = ko.observable(this.LibraryTabs[0]);
 
         TabClassName = library => library === this.SelectedTab() ? 'selected' : '';
     }

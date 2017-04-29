@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class Libraries {
-        PC = new PCLibrary();
-        NPC = new NPCLibrary();
-        Encounter = new EncounterLibrary();
+        PCs = new PCLibrary();
+        NPCs = new NPCLibrary();
+        Encounters = new EncounterLibrary();
     }
 }
