@@ -12,6 +12,7 @@ interface PatreonPost {
     content: string;
     url: string;
     created_at: string;
+    category: string;
 }
 
 const pageRenderOptions = (encounterId: string) => ({
@@ -118,11 +119,12 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
         request.get(url,
             (error, response, body) => {
                 const json: { data: PatreonPost[] } = JSON.parse(body);
-                const latestPost = json.data[0];
-                app.get("/whatsnew/", (req, res) => {
-                    res.json(latestPost);
-                });
+                if (json.data) {
+                    const latestPost = json.data.filter(d => d.category === "8")[0];
+                    app.get("/whatsnew/", (req, res) => {
+                        res.json(latestPost);
+                    });
+                }
             });
     }
-
 }
