@@ -1,6 +1,10 @@
 module ImprovedInitiative {
     export class SpellLibrary {
         Spells = ko.observableArray<SpellListing>([]);
+        SpellsByNameRegex = ko.computed(() => {
+            const allSpellNames = this.Spells().map(s => s.Name());
+            return new RegExp(allSpellNames.join("|"), "gim");
+        });
 
         constructor() {
             $.ajax("../spells/").done(this.addSpellListings);
