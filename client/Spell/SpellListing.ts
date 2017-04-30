@@ -6,10 +6,10 @@ module ImprovedInitiative {
         constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: string, spell?: Spell) {
             this.Name = ko.observable(name);
             this.IsLoaded = !!spell;
-            this.Spell = ko.observable(spell || { ...Spell.Default(), Name: spell.Name });
+            this.Spell = ko.observable(spell || { ...Spell.Default(), ...spell });
             this.Spell.subscribe(newSpell => {
                 this.Name(newSpell.Name);
-                this.Keywords = Spell.GetKeywords(spell);
+                this.Keywords = Spell.GetKeywords(newSpell);
             });
         }
 
