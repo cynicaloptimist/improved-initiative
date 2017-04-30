@@ -1,4 +1,5 @@
 import fs = require("fs");
+import path = require("path");
 
 const sourceAbbreviations = {
     "monster-manual": "mm",
@@ -56,9 +57,11 @@ export class Library<TItem extends LibraryItem> {
     static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
         const library = new Library<I>(route, getKeywords);
 
-        fs.readFile(filename, (err, buffer) => {
+        const filePath = path.join(__dirname, "..", filename);
+
+        fs.readFile(filePath, (err, buffer) => {
             if (err) {
-                throw `Couldn't read ${filename} as a library: ${err}`;
+                throw `Couldn't read ${filePath} as a library: ${err}`;
             }
 
             const newItems: any [] = JSON.parse(buffer.toString());
