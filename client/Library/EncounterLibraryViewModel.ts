@@ -15,7 +15,7 @@ module ImprovedInitiative {
                 return index;
             }
 
-            return index.filter(name => name.indexOf(filter) > -1);
+            return index.filter(name => name.toLocaleLowerCase().indexOf(filter) > -1);
         });
 
         ClickEntry = (name: string) => this.encounterCommander.LoadEncounterByName(name);
