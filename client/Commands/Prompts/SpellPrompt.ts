@@ -9,15 +9,16 @@ module ImprovedInitiative {
         SetDequeueCallback = callback => this.dequeue = callback;
         
         GetType = (spell: Spell) => {
+            const ritual = spell.Ritual ? ' (ritual)' : '';
             if (spell.Level === 0) {
-                return `${spell.School} cantrip`
+                return `${spell.School} cantrip${ritual}`
             }
             const numberSuffix = numberSuffixes[spell.School];
             if (numberSuffix) {
-                return `${numberSuffix}-level ${spell.School}`;
+                return `${numberSuffix}-level ${spell.School}${ritual}`;
             }
 
-            return `Level ${spell.Level} ${spell.School}`;
+            return `Level ${spell.Level} ${spell.School}${ritual}`;
         }
         
         constructor(listing: SpellListing) {
