@@ -12,11 +12,11 @@ module ImprovedInitiative {
             appInsights.trackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
 
             if (this.StatBlocks().length == 0) {
-                this.AddSamplePlayersFromUrl('/sample_players.json');
+                this.addSamplePlayersFromUrl('/sample_players.json');
             }
         }
 
-        AddSamplePlayersFromUrl = (url: string) => {
+        private addSamplePlayersFromUrl = (url: string) => {
             $.getJSON(url, (json: StatBlock[]) => {
                 json.forEach((statBlock, index) => {
                     statBlock = { ...StatBlock.Default(), ...statBlock }

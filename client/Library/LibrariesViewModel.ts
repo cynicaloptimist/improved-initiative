@@ -8,8 +8,13 @@ module ImprovedInitiative {
         LibraryTabs = [
             {
                 Name: "Creatures",
-                Component: "npclibrary",
+                Component: "statblocklibrary",
                 Library: this.Libraries.NPCs
+            },
+            {
+                Name: "Players",
+                Component: "statblocklibrary",
+                Library: this.Libraries.PCs
             },
             {
                 Name: "Encounters",

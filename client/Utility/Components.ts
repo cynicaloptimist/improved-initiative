@@ -39,7 +39,7 @@ module ImprovedInitiative {
         registerComponent('combatant', params => new CombatantViewModel(params.combatant, params.combatantCommander, params.addPrompt, params.logEvent));
         registerComponent('playerdisplaycombatant', params => params.combatant);
         registerComponent('libraries', params => new LibrariesViewModel(params.encounterCommander, params.libraries));
-        registerComponent('npclibrary', params => new NPCLibraryViewModel(params.encounterCommander, params.library));
+        registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
         registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.encounterCommander, params.library));
         registerComponent('defaultprompt', params => params.prompt);
         registerComponent('tagprompt', params => params.prompt);

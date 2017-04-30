@@ -1,9 +1,13 @@
 module ImprovedInitiative {
-    export class NPCLibraryViewModel {
+    export interface StatBlockLibrary {
+        StatBlocks: KnockoutObservableArray<StatBlockListing>
+    }
+    
+    export class StatBlockLibraryViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
         constructor(
             private encounterCommander: EncounterCommander,
-            private library: NPCLibrary
+            private library: StatBlockLibrary
         ) { }
 
         LibraryFilter = ko.observable("");
