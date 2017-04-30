@@ -60,25 +60,6 @@ module ImprovedInitiative {
         }
     }
 
-    const spells = {
-        "light": "I cast light!",
-        "sacred flame": "I cast sacred flame!",
-        "thaumaturgy": "I cast thaumaturgy!",
-        "bless": "I cast bless!",
-        "cure wounds": "I cast cure wounds!",
-        "sanctuary": "I cast sanctuary!",
-    };
-
-    const spellNames = Object.keys(spells);
-    for (let i = 0; i < 100; i++){
-        //simulate having a huge library to experiment with runtime
-        spellNames.forEach(key => {
-            spells[`${key}${i}`] = spells[key];
-        });
-    }
-    
-    const findSpells = new RegExp(Object.keys(spells).join("|"), "gim");
-
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
 
@@ -87,10 +68,15 @@ module ImprovedInitiative {
 
         const rules: IRules = bindingContext.$root.Encounter.Rules;
         const promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
+        const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
+        
         const findDice = new RegExp(rules.ValidDicePattern.source, 'g');
         text = text
-            .replace(findDice, match => `<span class='rollable'>${match}</span>`)
-            .replace(findSpells, match => `<span class='spell'>${match}</span>`);
+            .replace(findDice, match => `<span class='rollable'>${match}</span>`);
+        
+        if (text.toLocaleLowerCase().indexOf("spell") > -1) {
+            text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell'>${match}</span>`);
+        }
 
         $(element).html(text);
         
@@ -104,8 +90,8 @@ module ImprovedInitiative {
         });
 
         $(element).find('.spell').on('click', (event) => {
-            const spellName = event.target.innerHTML;
-            const prompt = new DefaultPrompt(spells[spellName], _ => { });
+            const spellName = event.target.innerHTML.toLocaleLowerCase();
+            const prompt = new SpellPrompt(spellLibrary.Spells().filter(s => s.Name().toLocaleLowerCase() === spellName)[0]);
             promptQueue.Add(prompt);
         });
     };
