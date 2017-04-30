@@ -13,6 +13,8 @@ module ImprovedInitiative {
     }
 
     export class Spell {
+        static GetKeywords = (spell: Spell) => [spell.Name, spell.School, ...spell.Classes].join(" ");
+
         static Default: () => Spell = () => {
             return {
                 Name: "",
@@ -26,6 +28,6 @@ module ImprovedInitiative {
                 Ritual: false,
                 School: "",
             };
-        }
+        };
     }
 }

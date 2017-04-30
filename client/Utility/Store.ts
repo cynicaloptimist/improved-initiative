@@ -2,13 +2,14 @@ module ImprovedInitiative {
     export class Store {
         private static _prefix = "ImprovedInitiative";
 
-        static PlayerCharacters: string = "PlayerCharacters";
-        static StatBlocks: string = "Creatures";
-        static SavedEncounters: string = "SavedEncounters";
-        static AutoSavedEncounters: string = "AutoSavedEncounters";
-        static User: string = "User";
-        static KeyBindings: string = "KeyBindings";
-        static ActionBar: string = "ActionBar";
+        static readonly PlayerCharacters = "PlayerCharacters";
+        static readonly StatBlocks = "Creatures";
+        static readonly Spells = "Spells";
+        static readonly SavedEncounters = "SavedEncounters";
+        static readonly AutoSavedEncounters = "AutoSavedEncounters";
+        static readonly User = "User";
+        static readonly KeyBindings = "KeyBindings";
+        static readonly ActionBar = "ActionBar";
 
         static List(listName: string): string[] {
             var listKey = `${Store._prefix}.${listName}`;
