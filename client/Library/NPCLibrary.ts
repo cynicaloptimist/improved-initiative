@@ -15,12 +15,12 @@ module ImprovedInitiative {
             appInsights.trackEvent("CustomCreatures", { Count: customCreatures.length.toString() });
         }
 
-        AddStatBlockListings = (listings: { Id: string, Name: string, Type: string, Link: string }[]) => {
+        AddStatBlockListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {
             listings.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
             ko.utils.arrayPushAll<StatBlockListing>(this.StatBlocks, listings.map(c => {
-                return new StatBlockListing(c.Id, c.Name, c.Type, c.Link, "server");
+                return new StatBlockListing(c.Id, c.Name, c.Keywords, c.Link, "server");
             }));
         }
     }

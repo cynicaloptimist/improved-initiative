@@ -29,6 +29,7 @@ module ImprovedInitiative {
         ImportEncounterIfAvailable = () => {
             const encounterJSON = $('html')[0].getAttribute('postedEncounter');
             if (encounterJSON) {
+                this.TutorialVisible(false);
                 const encounter: { Combatants: any[] } = JSON.parse(encounterJSON);
                 this.Encounter.ImportEncounter(encounter);
             }
