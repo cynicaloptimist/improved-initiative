@@ -13510,6 +13510,155 @@
         "Player": ""
     },
     {
+        "Name": "Hobgoblin Captain",
+        "Source": "Monster Manual",
+        "Type": "Medium humanoid (goblinoid), lawful evil",
+        "HP": {
+            "Value": 39,
+            "Notes": "(6d8+12)"
+        },
+        "AC": {
+            "Value": 17,
+            "Notes": "(half plate)"
+        },
+        "InitiativeModifier": 0,
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 15,
+            "Dex": 14,
+            "Con": 14,
+            "Int": 12,
+            "Wis": 10,
+            "Cha": 13
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [],
+        "ConditionImmunities": [],
+        "Saves": [],
+        "Skills": [],
+        "Senses": [
+            "darkvision 60 ft."
+        ],
+        "Languages": [
+            "Common",
+            "Goblin"
+        ],
+        "Challenge": "3 (700 XP)",
+        "Traits": [
+            {
+                "Name": "Martial Advantage",
+                "Content": "Once per turn, the hobgoblin can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 ft. of an ally of the hobgoblin that isn't incapacitated.",
+                "Usage": ""
+            }
+        ],
+        "Actions": [
+            {
+                "Name": "Greatsword",
+                "Content": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) piercing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Javelin",
+                "Content": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/ 120 ft., one target. Hit: 5 (1d6 + 2) piercing damage. ",
+                "Usage": ""
+            },
+            {
+                "Name": "Leadership (Recharges after a Short or Long Rest)",
+                "Content": "For 1 minute, the hobgoblin captain can utter a special command or warning whenever a nonhostile creature that it can see within 30 ft. of it makes an attack roll or a saving throw. The creature can add a d4 to its roll provided it can hear and understand the knight. A creature can benefit from only one Leadership die at a time. This effect ends if the knight is incapacitated.",
+                "Usage": ""
+            }
+        ],
+        "Reactions": [],
+        "LegendaryActions": [],
+        "Description": "",
+        "Player": ""
+    },
+    {
+        "Name": "Hobgoblin Warlord",
+        "Source": "Monster Manual",
+        "Type": "Medium humanoid (goblinoid), lawful evil",
+        "HP": {
+            "Value": 97,
+            "Notes": "(13d8+39)"
+        },
+        "AC": {
+            "Value": 20,
+            "Notes": "(plate + shield)"
+        },
+        "InitiativeModifier": 0,
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 16,
+            "Dex": 14,
+            "Con": 16,
+            "Int": 14,
+            "Wis": 11,
+            "Cha": 15
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [],
+        "ConditionImmunities": [],
+        "Saves": [],
+        "Skills": [],
+        "Senses": [
+            "darkvision 60 ft."
+        ],
+        "Languages": [
+            "Common",
+            "Goblin"
+        ],
+        "Challenge": "6 (2,300 XP)",
+        "Traits": [
+            {
+                "Name": "Martial Advantage",
+                "Content": "Once per turn, the hobgoblin can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 ft. of an ally of the hobgoblin that isn't incapacitated.",
+                "Usage": ""
+            }
+        ],
+        "Actions": [
+            {
+                "Name": "Multiattack",
+                "Content": "The hobgoblin makes three melee attacks. Alternatively, it can make two ranged attacks with its javelins",
+                "Usage": ""
+            },
+            {
+                "Name": "Longsword",
+                "Content": "Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Shield Bash",
+                "Content": "Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 5 (1d4 + 3) bludgeoning damage. If the target is Large or smaller, it must succeed on a DC 14 Strength saving throw or be knocked prone.",
+                "Usage": ""
+            },
+            {
+                "Name": "Javelin",
+                "Content": "Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/ 120 ft., one target. Hit: 5 (1d6 + 2) piercing damage. ",
+                "Usage": ""
+            },
+            {
+                "Name": "Leadership (Recharges after a Short or Long Rest)",
+                "Content": "For 1 minute, the hobgoblin captain can utter a special command or warning whenever a nonhostile creature that it can see within 30 ft. of it makes an attack roll or a saving throw. The creature can add a d4 to its roll provided it can hear and understand the knight. A creature can benefit from only one Leadership die at a time. This effect ends if the knight is incapacitated.",
+                "Usage": ""
+            }
+        ],
+        "Reactions": [{
+
+                "Name": "Parry",
+                "Content": "The hobgoblin adds 3 to its AC against one melee attack that would hit it. To do so, the hobgoblin must see the attacker and be wielding a melee weapon. ",
+                "Usage": ""
+            }],
+        "LegendaryActions": [],
+        "Description": "",
+        "Player": ""
+    },
+    {
         "Name": "Homunculus",
         "Source": "Monster Manual",
         "Type": "Tiny construct, neutral",
@@ -17383,6 +17532,83 @@
             {
                 "Name": "Javelin",
                 "Content": "Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 6 (1d6 + 3) piercing damage.",
+                "Usage": ""
+            }
+        ],
+        "Reactions": [],
+        "LegendaryActions": [],
+        "Description": "",
+        "Player": ""
+    },
+    {
+        "Name": "Orc Captain",
+        "Source": "Volo's Guide to Monsters",
+        "Type": "Medium humanoid (orc), chaotic evil",
+        "HP": {
+            "Value": 52,
+            "Notes": "(8d8+16)"
+        },
+        "AC": {
+            "Value": 15,
+            "Notes": "(studded leather)"
+        },
+        "InitiativeModifier": 0,
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 11,
+            "Dex": 16,
+            "Con": 15,
+            "Int": 9,
+            "Wis": 11,
+            "Cha": 9
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [],
+        "ConditionImmunities": [],
+        "Saves": [],
+        "Skills": [
+            {
+                "Name": "Intimidation",
+                "Modifier": 2
+            }
+        ],
+        "Senses": [
+            "darkvision 60 ft."
+        ],
+        "Languages": [
+            "Common",
+            "Orc"
+        ],
+        "Challenge": "3 (700 XP)",
+        "Traits": [
+            {
+                "Name": "Cunning Action",
+                "Content": "As a bonus action, the orc can dash, disengage, or hide",
+                "Usage": ""
+            },
+            {
+                "Name": "Slayer",
+                "Content": "In the first round of combat, the orc has advantage on creatures that haven't taken a turn yet. If it hits a surprised creature, that is automatically a critical hit.",
+                "Usage": ""
+            }
+        ],
+        "Actions": [
+            {
+                "Name": "Scimitar",
+                "Content": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 13 (3d6 + 3) slashing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Dart",
+                "Content": "Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 10 (3d4 + 3) piercing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Veil of Shargaas",
+                "Content": "The orc catss darkness without any components. Wisdom is its spellcasiting ability.",
                 "Usage": ""
             }
         ],
@@ -25838,6 +26064,95 @@
                 "Name": "Slam",
                 "Content": "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.",
                 "Usage": ""
+            }
+        ],
+        "Reactions": [],
+        "LegendaryActions": [],
+        "Description": "",
+        "Player": ""
+    },
+    {
+        "Name": "Orc War Chief",
+        "Source": "Monster Manual",
+        "Type": "Medium humanoid, chaotic evil",
+        "HP": {
+            "Value": 93,
+            "Notes": "(11d8+44)"
+        },
+        "AC": {
+            "Value": 16,
+            "Notes": "(chain mail)"
+        },
+        "InitiativeModifier": 0,
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 18,
+            "Dex": 12,
+            "Con": 18,
+            "Int": 11,
+            "Wis":11,
+            "Cha": 16
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [],
+        "ConditionImmunities": [],
+        "Saves": [
+            {
+                "Name": "Wis",
+                "Modifier": 2
+            },
+            {
+                "Name": "Str",
+                "Modifier": 6
+            },
+            {
+                "Name": "Con",
+                "Modifier": 6
+            }
+        ],
+        "Skills": [],
+        "Senses": [
+            "darkvision 60 ft."
+        ],
+        "Languages": [
+            "Common, Orc"
+        ],
+        "Challenge": "4 (1,100 XP)",
+        "Traits": [
+            {
+                "Name": "Aggressive",
+                "Content": "As a bonus action, the ore can move up to its speed toward a hostile creature that it can see.",
+                "Usage": ""
+            },
+            {
+                "Name": "Gruumsh's Fury",
+                "Content": "The ore deals an extra 4 (ld8) damage when it hits with a weapon attack (included in the attacks).",
+                "Usage": ""
+            }
+        ],
+        "Actions": [
+            {
+                "Name": "Multiattack",
+                "Content": "The ore makes two attacks with its greataxe or its spear. ",
+                "Usage": ""
+            },
+            {
+                "Name": "Greataxe",
+                "Content": "Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 14 (1d12 + 4 plus 1d8) slashing damage. ",
+                "Usage": ""
+            },
+            {
+                "Name": "Spear",
+                "Content": "Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20{60 ft., one target. Hit: 12 (1d6 + 4 plus 1d8) piercing damage, or 13 (2d8 + 4) piercing damage if used with two hands to make a melee attack. ",
+                "Usage": ""
+            },
+            {
+                "Name": "Battle Cry",
+                "Content": "Each creature of the war chief's choice that is within 30 feet of it, can hear it, and not already affected by Battle Cry gain advantage on attack rolls until the start of the war chief's next turn . The war chief can then make one attack as a bonus action. ",
+                "Usage": "1/Day"
             }
         ],
         "Reactions": [],
