@@ -69,12 +69,10 @@ module ImprovedInitiative {
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
         
-        const findDice = new RegExp(rules.ValidDicePattern.source, 'g');
-        text = text
-            .replace(findDice, match => `<span class='rollable'>${match}</span>`);
+        text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
         
         if (text.toLocaleLowerCase().indexOf("spell") > -1) {
-            text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell'>${match}</span>`);
+            text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell-reference'>${match}</span>`);
         }
 
         $(element).html(text);
@@ -84,7 +82,7 @@ module ImprovedInitiative {
             encounterCommander.RollDice(diceExpression);
         });
 
-        $(element).find('.spell').on('click', (event) => {
+        $(element).find('.spell-reference').on('click', (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
             const spell = spellLibrary.Spells().filter(s => s.Name().toLocaleLowerCase() === spellName)[0];
             encounterCommander.ReferenceSpell(spell);

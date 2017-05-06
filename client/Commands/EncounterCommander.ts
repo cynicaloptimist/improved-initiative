@@ -85,7 +85,7 @@ module ImprovedInitiative {
         }
 
         RollDice = (diceExpression: string) => {
-            const diceRoll = this.tracker.Encounter.Rules.RollDiceExpression(diceExpression);
+            const diceRoll = Dice.RollDiceExpression(diceExpression);
             const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
                 _ => { }
             );
