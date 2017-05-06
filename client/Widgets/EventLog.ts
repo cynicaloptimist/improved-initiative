@@ -23,9 +23,11 @@ module ImprovedInitiative {
 
         ShowFullLog = ko.observable<boolean>(false);
 
+        private element = $('.event-log');
+        
         private scrollToBottomOfLog = () => {
-            let scrollHeight = $('.event-log')[0].scrollHeight;
-            $('.event-log').scrollTop(scrollHeight);
+            let scrollHeight = this.element[0].scrollHeight;
+            this.element.scrollTop(scrollHeight);
         }
     }
 }
