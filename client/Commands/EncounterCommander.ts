@@ -84,6 +84,19 @@ module ImprovedInitiative {
             this.tracker.SettingsVisible(true);
         }
 
+        RollDice = (diceExpression: string) => {
+            const diceRoll = this.tracker.Encounter.Rules.RollDiceExpression(diceExpression);
+            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
+                _ => { }
+            );
+            this.tracker.PromptQueue.Add(prompt);
+        }
+
+        ReferenceSpell = (spellListing: SpellListing) => {
+            const prompt = new SpellPrompt(spellListing);
+            this.tracker.PromptQueue.Add(prompt);
+        }
+
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
         DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'));
         DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));

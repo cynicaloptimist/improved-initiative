@@ -63,11 +63,10 @@ module ImprovedInitiative {
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
 
-        const md = markdownit();
-        let text = md.renderInline(originalText);
+        let text = markdownit().renderInline(originalText);
 
         const rules: IRules = bindingContext.$root.Encounter.Rules;
-        const promptQueue: PromptQueue = bindingContext.$root.PromptQueue;
+        const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
         
         const findDice = new RegExp(rules.ValidDicePattern.source, 'g');
@@ -82,17 +81,13 @@ module ImprovedInitiative {
         
         $(element).find('.rollable').on('click', (event) => {
             const diceExpression = event.target.innerHTML;
-            const diceRoll = rules.RollDiceExpression(diceExpression);
-            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
-                _ => { }
-            );
-            promptQueue.Add(prompt);
+            encounterCommander.RollDice(diceExpression);
         });
 
         $(element).find('.spell').on('click', (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
-            const prompt = new SpellPrompt(spellLibrary.Spells().filter(s => s.Name().toLocaleLowerCase() === spellName)[0]);
-            promptQueue.Add(prompt);
+            const spell = spellLibrary.Spells().filter(s => s.Name().toLocaleLowerCase() === spellName)[0];
+            encounterCommander.ReferenceSpell(spell);
         });
     };
 
