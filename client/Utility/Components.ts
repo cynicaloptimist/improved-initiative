@@ -41,6 +41,7 @@ module ImprovedInitiative {
         registerComponent('libraries', params => new LibrariesViewModel(params.encounterCommander, params.libraries));
         registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
         registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.encounterCommander, params.library));
+        registerComponent('spelllibrary', params => new SpellLibraryViewModel(params.encounterCommander, params.library));
         registerComponent('defaultprompt', params => params.prompt);
         registerComponent('tagprompt', params => params.prompt);
         registerComponent('initiativeprompt', params => params.prompt);

@@ -20,6 +20,11 @@ module ImprovedInitiative {
                 Name: "Encounters",
                 Component: "encounterlibrary",
                 Library: this.Libraries.Encounters
+            },
+            {
+                Name: "Spells",
+                Component: "spelllibrary",
+                Library: this.Libraries.Spells
             }
         ];
 
