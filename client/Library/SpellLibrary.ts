@@ -6,7 +6,7 @@ module ImprovedInitiative {
             if (allSpellNames.length === 0) {
                 return new RegExp('a^');
             }
-            return new RegExp(allSpellNames.join("|"), "gim");
+            return new RegExp(`\\b(${allSpellNames.join("|")})\\b`, "gim");
         });
 
         constructor() {
