@@ -3,14 +3,13 @@ module ImprovedInitiative {
         
         Name: KnockoutObservable<string>;
         
-        private isLoaded: boolean;
         private loadPromise: JQueryXHR;
         private statBlock: KnockoutObservable<StatBlock>;
 
-        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: string, statBlock?: StatBlock) {
+        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: "server" | "localStorage", statBlock?: StatBlock) {
             this.Name = ko.observable(name);
-            this.isLoaded = !!statBlock;
-            this.statBlock = ko.observable(statBlock || StatBlock.Default());
+            this.statBlock = ko.observable(statBlock);
+
             this.statBlock.subscribe(newStatBlock => {
                 this.Name(newStatBlock.Name);
                 this.Keywords = newStatBlock.Type;
@@ -18,7 +17,7 @@ module ImprovedInitiative {
         }
 
         GetStatBlockAsync = (callback: (statBlock: StatBlock) => void) => {
-            if (this.isLoaded) {
+            if (this.statBlock() !== undefined) {
                 callback(this.statBlock());
                 return;
             }
@@ -30,14 +29,13 @@ module ImprovedInitiative {
             }
 
             this.loadPromise = $.getJSON(this.Link, (json) => {
-                this.isLoaded = true;
-                this.statBlock({ ...StatBlock.Default(), ...json });
-                callback(this.statBlock());
+                const statBlock = { ...StatBlock.Default(), ...json };
+                this.statBlock(statBlock);
+                callback(statBlock);
             });
         }
 
         SetStatBlock = (statBlock: StatBlock) => {
-            this.isLoaded = true;
             this.statBlock(statBlock);
         }
     }
