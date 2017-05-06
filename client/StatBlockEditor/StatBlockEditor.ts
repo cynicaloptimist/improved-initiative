@@ -125,8 +125,8 @@ module ImprovedInitiative {
         }
     }
 
-    ko.components.register('editstatblock', {
+    ko.components.register('statblockeditor', {
         viewModel: params => params.editor,
-        template: { name: 'editstatblock' }
+        template: { name: 'statblockeditor' }
     });
 }
