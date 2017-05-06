@@ -23,13 +23,18 @@
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'" class="tab keybindings">
     <h2>Encounter Commands</h2>
+    <div class="command-options-labels">
+        <span class="hotkey-label">Hotkey</span>
+        <span class="toolbar-label">Show on Toolbar</span>
+    </div>
     <!--ko foreach: EncounterCommands -->
     <div>
         <span class="command-description" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
-        <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
-        <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
-        />
+        <label class="toolbar-setting">
+            <i class="fa" data-bind="css: ActionBarIcon"></i>
+            <input type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar" />
+        </label>
     </div>
     <!--/ko -->
     <h2>Combatant Commands</h2>
@@ -37,9 +42,10 @@
     <div>
         <span class="command-description" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
-        <span class="fa actionbaricon" data-bind="css: ActionBarIcon"></span>
-        <input class="showonactionbar" title="Show on Action Bar" type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
-        />
+        <label class="toolbar-setting">
+            <i class="fa" data-bind="css: ActionBarIcon"></i>
+            <input type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar" />
+        </label>
     </div>
     <!--/ko -->
 </div>

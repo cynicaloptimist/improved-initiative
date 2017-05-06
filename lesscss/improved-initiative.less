@@ -468,20 +468,37 @@ input[type="file"] {
         align-self: flex-end;
     }
 
+    .command-options-labels {
+        position: absolute;
+        align-self: flex-end;
+        font-style: italic;
+    }
+
+    .toolbar-label, .toolbar-setting {
+        text-align: center;
+        width: 75px;
+        i {
+            width: 30px;
+        }
+    }
+
+    .hotkey-label, .keybinding {
+        text-align: center;
+        width: 100px; 
+    }
+
     .keybindings >div {
         flex-direction: row;
         flex-shrink: 0;
         align-items: center;
-        span {
+        
+        >span, >label {
             padding:@small-spacer;
-            &.command-description {
-                flex-grow:1;
-            }
-            &.actionbaricon {
-                width: 20px;
-                text-align: center;
-            }
         }
+    }
+
+    .command-description {
+        flex-grow:1;
     }
 
     .options p {
