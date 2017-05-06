@@ -139,19 +139,20 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <!-- ko foreach: PromptQueue.Prompts -->
-        <form class="prompt" data-bind="
-            submit: Resolve,
-            component: {
-                name: ComponentName,
-                params: {
-                    prompt: $data
-                }
-            }">
-        </form>
+        <div class="prompts">
+            <!-- ko foreach: PromptQueue.Prompts -->
+            <form class="prompt" data-bind="
+                submit: Resolve,
+                component: {
+                    name: ComponentName,
+                    params: {
+                        prompt: $data
+                    }
+                }">
+            </form>
 
-        <!-- /ko -->
-        <div class="flex-spacer"></div>
+            <!-- /ko -->
+        </div>
 
         <div class="combat-footer">
             <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">

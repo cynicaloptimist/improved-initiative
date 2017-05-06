@@ -26,7 +26,6 @@
 * {
     font-family: 'Josefin Sans', sans-serif;
     position:relative;
-    cursor: default;
     margin: 0;
 	padding: 0;
 }
@@ -37,6 +36,7 @@ html, body {
     max-width: 100%;
     display:flex;
     flex-direction:column;
+    cursor: default;
 }
 
 div {
@@ -70,11 +70,6 @@ ul.bulleted {
     padding-left:40px;
 }
 
-div.flex-spacer {
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
 input[type="number"] {
     width: 40px;
 }
@@ -93,11 +88,12 @@ input[type="file"] {
 }
 
 .fa-clickable {
-	cursor:pointer;
+	cursor: pointer;
 	.fa();
 }
 
 .button() {
+    cursor: pointer;
     .fa();
     padding: 10px;
     text-align:center;
@@ -609,7 +605,7 @@ input[type="file"] {
 }
 
 .combatants {
-    flex-shrink: 1;
+    flex-shrink: 0;
     overflow-y: auto;
 }
 
@@ -656,9 +652,15 @@ input[type="file"] {
     }
 }
 
+.prompts {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
 .prompt {
     .recessed();
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
 
@@ -692,7 +694,6 @@ input[type="file"] {
 .prompt .spell {
     flex-flow: column;
     align-self: stretch;
-    overflow-y: auto;
     label {
         font-weight: bold;
         padding-right: @medium-spacer;
