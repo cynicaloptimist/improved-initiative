@@ -28,7 +28,7 @@ module ImprovedInitiative {
             return spellsWithFilterInName.concat(spellsWithFilterInKeywords);
         });
 
-        //ClickEntry = (entry: SpellListing) => this.encounterCommander.CheckSpell(entry);
+        ClickEntry = (entry: SpellListing) => this.encounterCommander.ReferenceSpell(entry);
         //ClickEdit = (entry: SpellListing) => this.encounterCommander.EditSpell(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
         //ClickAdd = () => this.encounterCommander.CreateAndEditSpell(false);
