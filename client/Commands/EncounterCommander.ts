@@ -9,9 +9,9 @@ module ImprovedInitiative {
         }
 
         AddStatBlockFromListing = (listing: StatBlockListing, event?) => {
-            listing.LoadStatBlock(listing => {
-                this.tracker.Encounter.AddCombatantFromStatBlock(listing.StatBlock(), event);
-                this.tracker.EventLog.AddEvent(`${listing.Name()} added to combat.`);
+            listing.GetStatBlockAsync(statBlock => {
+                this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
+                this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
             });
         }
 
@@ -49,26 +49,22 @@ module ImprovedInitiative {
             }
         }
         
-        private duplicateAndEditStatBlock = (listing: StatBlockListing) => {
-            var statBlock = listing.StatBlock();
+        private duplicateAndEditStatBlock = (statBlock: StatBlock) => {
             var newId = probablyUniqueString();
-
-            if (statBlock.Player == "player") {
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
-            } else {
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
-            }
+            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
         }
         
         EditStatBlock = (listing: StatBlockListing) => {
-            if (listing.Source == "server") {
-                listing.LoadStatBlock(this.duplicateAndEditStatBlock);
-            } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-                    Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-                    listing.StatBlock(newStatBlock);
-                }, this.deleteSavedStatBlock);
-            }
+            listing.GetStatBlockAsync(statBlock => {
+                if (listing.Source == "server") {
+                    this.duplicateAndEditStatBlock(statBlock);
+                } else {
+                    this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
+                        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
+                        listing.SetStatBlock(newStatBlock);
+                    }, this.deleteSavedStatBlock);
+                }
+            });
         }
 
         ShowingLibraries = ko.observable(true);

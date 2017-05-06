@@ -44,8 +44,8 @@ module ImprovedInitiative {
 
         PreviewStatBlock = (listing: StatBlockListing) => {
             this.previewStatBlock(null);
-            listing.LoadStatBlock(listing => {
-                this.previewStatBlock(listing.StatBlock());
+            listing.GetStatBlockAsync(statBlock => {
+                this.previewStatBlock(statBlock);
             });
         }
     }

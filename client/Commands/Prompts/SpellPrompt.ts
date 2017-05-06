@@ -22,7 +22,7 @@ module ImprovedInitiative {
         }
         
         constructor(listing: SpellListing) {
-            listing.LoadSpell(listing => this.Spell(listing.Spell()));
+            listing.GetSpellAsync(spell => this.Spell(spell));
         }
 
         Resolve = () => this.dequeue();

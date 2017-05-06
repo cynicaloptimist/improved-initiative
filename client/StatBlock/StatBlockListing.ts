@@ -1,29 +1,44 @@
 module ImprovedInitiative {
     export class StatBlockListing {
+        
         Name: KnockoutObservable<string>;
-        IsLoaded: boolean;
-        StatBlock: KnockoutObservable<StatBlock>;
+        
+        private isLoaded: boolean;
+        private loadPromise: JQueryXHR;
+        private statBlock: KnockoutObservable<StatBlock>;
+
         constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: string, statBlock?: StatBlock) {
             this.Name = ko.observable(name);
-            this.IsLoaded = !!statBlock;
-            this.StatBlock = ko.observable(statBlock || { ...StatBlock.Default(), ...statBlock });
-            this.StatBlock.subscribe(newStatBlock => {
+            this.isLoaded = !!statBlock;
+            this.statBlock = ko.observable(statBlock || StatBlock.Default());
+            this.statBlock.subscribe(newStatBlock => {
                 this.Name(newStatBlock.Name);
                 this.Keywords = newStatBlock.Type;
             });
         }
 
-        LoadStatBlock = (callback: (listing: StatBlockListing) => void) => {
-            if (this.IsLoaded) {
-                callback(this);
+        GetStatBlockAsync = (callback: (statBlock: StatBlock) => void) => {
+            if (this.isLoaded) {
+                callback(this.statBlock());
+                return;
             }
-            else {
-                $.getJSON(this.Link, (json) => {
-                    this.IsLoaded = true;
-                    this.StatBlock({ ...StatBlock.Default(), ...json });
-                    callback(this);
+            if (this.loadPromise) {
+                this.loadPromise.then(() => {
+                    callback(this.statBlock());
                 });
+                return;
             }
+
+            this.loadPromise = $.getJSON(this.Link, (json) => {
+                this.isLoaded = true;
+                this.statBlock({ ...StatBlock.Default(), ...json });
+                callback(this.statBlock());
+            });
+        }
+
+        SetStatBlock = (statBlock: StatBlock) => {
+            this.isLoaded = true;
+            this.statBlock(statBlock);
         }
     }
 }
