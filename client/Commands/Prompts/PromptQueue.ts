@@ -12,6 +12,7 @@ module ImprovedInitiative {
                 }
             });
             this.Prompts.push(prompt);
+            $(prompt.InputSelector).last().select();
         }
 
         HasPrompt = ko.pureComputed(() => {
