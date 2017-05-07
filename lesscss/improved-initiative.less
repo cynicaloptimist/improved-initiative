@@ -606,6 +606,7 @@ input[type="file"] {
         flex-direction: column;
         flex-grow: 1;
         overflow-y: auto;
+        min-height: @large-spacer;
     }
 
     .footer-bar {
@@ -613,9 +614,7 @@ input[type="file"] {
         flex-direction: row;
         justify-content: flex-end;
 
-        cursor: pointer;
-
-        >span {
+        >span, >i {
             padding-right: @medium-spacer;
         }
     }

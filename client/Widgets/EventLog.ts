@@ -20,6 +20,8 @@ module ImprovedInitiative {
             }
         }
 
+        ToggleCSS = () => this.ShowFullLog() ? 'fa-chevron-down' : 'fa-chevron-up';
+
         ShowFullLog = ko.observable<boolean>(false);
 
         private element = $('.event-log');

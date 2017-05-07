@@ -166,10 +166,11 @@
 
         <div class="combat-footer">
             <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">
-                <li data-bind="text: $data"></li>
+                <li data-bind="html: $data"></li>
             </ul>
-            <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
-                <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
+            <div class="footer-bar">
+                <i class="fa-clickable" data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"></i>
+                <span class="latest-event" data-bind="html: EventLog.LatestEvent"></span>
 
                 <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
                 <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
