@@ -1,0 +1,23 @@
+<h2>Edit Spell</h2>
+<div class="editor-type">
+    Editor:
+    <label>
+        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Form</label>
+    <label>
+        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
+</div>
+<!-- ko if: EditorType() == 'basic' -->
+<div class="stats" data-bind="with: EditableSpell">
+    <p>Name <input class="name" type="text" data-bind="value: Name" />
+    </p>
+    <p>Source <input class="type" type="text" data-bind="value: Source" />
+    </p>
+</div>
+<!-- /ko -->
+<!-- ko if: EditorType() == 'advanced' -->
+<textarea class="json-editor" spellcheck="false" data-bind="value: JsonSpell"></textarea>
+<!-- /ko -->
+<div class="buttons">
+    <div data-bind="click: SaveSpell"><span class="button fa-save"></span></div>
+    <div data-bind="click: DeleteSpell"><span class="button fa-trash"></span></div>
+</div>
