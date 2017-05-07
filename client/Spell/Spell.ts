@@ -2,6 +2,7 @@ module ImprovedInitiative {
     export interface Spell {
         Id: string;
         Name: string;
+        Source: string;
         Level: number;
         School: string;
         CastingTime: string;
@@ -20,6 +21,7 @@ module ImprovedInitiative {
             return {
                 Id: probablyUniqueString(),
                 Name: "",
+                Source: "",
                 CastingTime: "",
                 Classes: [],
                 Components: "",

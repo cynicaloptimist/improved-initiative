@@ -68,7 +68,7 @@ module ImprovedInitiative {
         }
 
         CreateAndEditSpell = () => {
-            const newSpell = { ...Spell.Default(), Name: "New Spell" };
+            const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom" };
             this.tracker.SpellEditor.EditSpell(
                 newSpell,
                 this.libraries.Spells.AddOrUpdateSpell,
