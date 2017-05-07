@@ -3,10 +3,24 @@ module ImprovedInitiative {
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
         StatBlockEditor = new StatBlockEditor();
+        SpellEditor = new SpellEditor();
         Encounter = new Encounter(this.PromptQueue);
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
+
+        CenterColumn = ko.pureComputed(() => {
+            const editStatBlock = this.StatBlockEditor.HasStatBlock();
+            const editSpell = this.SpellEditor.HasSpell();
+            if (editStatBlock) {
+                return "statblockeditor";
+            }
+            if (editSpell) {
+                return "spelleditor";
+            }
+            return "combat";
+        });
+
         BlurVisible = ko.pureComputed(() =>
             this.TutorialVisible() ||
             this.SettingsVisible()

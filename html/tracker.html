@@ -99,7 +99,7 @@
         <!-- /ko -->
     </div>
     <div class="center-column">
-        <!-- ko if: StatBlockEditor.EditableStatBlock() -->
+        <!-- ko if: CenterColumn() === "statblockeditor" -->
         <div class="editor" data-bind="
     component: {
         name: 'statblockeditor',
@@ -109,7 +109,7 @@
     }">
         </div>
         <!-- /ko -->
-        <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
+        <!-- ko if: CenterColumn() === "combat" -->
         <h2>Initiative Order</h2>
         <ul class="combatants" data-bind="with: Encounter">
             <li class="combatant header">
