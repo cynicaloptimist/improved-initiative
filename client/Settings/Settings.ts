@@ -1,11 +1,4 @@
 module ImprovedInitiative {
-    interface PatreonPost {
-        title: string;
-        content: string;
-        url: string;
-        created_at: string;
-    }
-
     export var Settings = (params: {
         encounterCommander: EncounterCommander;
         combatantCommander: CombatantCommander;
@@ -28,12 +21,6 @@ module ImprovedInitiative {
             "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
             "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
         ];
-
-        const whatsNew = ko.observable("");
-        $.getJSON("/whatsnew/")
-            .done((latestPost: PatreonPost) => {
-                whatsNew(`<a href="${latestPost.url}" target="_blank">${latestPost.title}</a>`);
-            });
 
         const registerKeybindings = () => {
             const allCommands = [...params.encounterCommander.Commands, ...params.combatantCommander.Commands];
@@ -132,7 +119,6 @@ module ImprovedInitiative {
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
             Tip: ko.pureComputed(() => tips[currentTipIndex() % tips.length]),
-            WhatsNew: whatsNew,
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1),
             SaveAndClose: saveAndClose

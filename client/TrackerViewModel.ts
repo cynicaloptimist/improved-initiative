@@ -1,4 +1,11 @@
 module ImprovedInitiative {
+    interface PatreonPost {
+        title: string;
+        content: string;
+        url: string;
+        created_at: string;
+    }
+    
     export class TrackerViewModel {
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
@@ -47,6 +54,13 @@ module ImprovedInitiative {
                 const encounter: { Combatants: any[] } = JSON.parse(encounterJSON);
                 this.Encounter.ImportEncounter(encounter);
             }
+        }
+
+        GetWhatsNewIfAvailable = () => {
+            $.getJSON("/whatsnew/")
+                .done((latestPost: PatreonPost) => {
+                    this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.url}" target="_blank">${latestPost.title}</a>`);
+            });
         }
 
         InterfaceState = ko.pureComputed(() => {

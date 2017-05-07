@@ -7,6 +7,7 @@ module ImprovedInitiative {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
             viewModel.ImportEncounterIfAvailable();
+            viewModel.GetWhatsNewIfAvailable();
         }
         if ($('#playerview').length) {
             var encounterId = $('html')[0].getAttribute('encounterId');
