@@ -59,7 +59,7 @@ module ImprovedInitiative {
 
         DeleteSpell = () => {
             if (confirm(`Delete your custom spell ${this.spell.Name}? This cannot be undone.`)) {
-                this.deleteCallback(this.spell.Name);
+                this.deleteCallback(this.spell.Id);
                 this.EditableSpell(null);
             }
         }

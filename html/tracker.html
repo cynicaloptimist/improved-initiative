@@ -109,6 +109,16 @@
     }">
         </div>
         <!-- /ko -->
+        <!-- ko if: CenterColumn() === "spelleditor" -->
+        <div class="editor" data-bind="
+    component: {
+        name: 'spelleditor',
+        params: {
+            editor: SpellEditor
+        }
+    }">
+        </div>
+        <!-- /ko -->
         <!-- ko if: CenterColumn() === "combat" -->
         <h2>Initiative Order</h2>
         <ul class="combatants" data-bind="with: Encounter">

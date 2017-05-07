@@ -67,6 +67,15 @@ module ImprovedInitiative {
             });
         }
 
+        CreateAndEditSpell = () => {
+            const newSpell = { ...Spell.Default(), Name: "New Spell" };
+            this.tracker.SpellEditor.EditSpell(
+                newSpell,
+                this.libraries.Spells.AddOrUpdateSpell,
+                this.libraries.Spells.DeleteSpellById
+            );
+        }
+
         EditSpell = (listing: SpellListing) => {
              listing.GetSpellAsync(spell => {
                  this.tracker.SpellEditor.EditSpell(

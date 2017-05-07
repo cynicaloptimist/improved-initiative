@@ -29,8 +29,8 @@ module ImprovedInitiative {
         });
 
         ClickEntry = (entry: SpellListing) => this.encounterCommander.ReferenceSpell(entry);
-        //ClickEdit = (entry: SpellListing) => this.encounterCommander.EditSpell(entry);
+        ClickEdit = (entry: SpellListing) => this.encounterCommander.EditSpell(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
-        //ClickAdd = () => this.encounterCommander.CreateAndEditSpell(false);
+        ClickAdd = () => this.encounterCommander.CreateAndEditSpell();
     }
 }
