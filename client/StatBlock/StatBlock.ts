@@ -69,6 +69,6 @@ module ImprovedInitiative {
             Player: ''
         });
 
-        static readonly AbilityNames = Object.keys(StatBlock.Default().Abilities);
+        static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
     }
 }

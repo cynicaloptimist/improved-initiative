@@ -56,7 +56,7 @@ module ImprovedInitiative {
         
         EditStatBlock = (listing: StatBlockListing) => {
             listing.GetStatBlockAsync(statBlock => {
-                if (listing.Source == "server") {
+                if (listing.Source === "server") {
                     this.duplicateAndEditStatBlock(statBlock);
                 } else {
                     this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
@@ -64,6 +64,16 @@ module ImprovedInitiative {
                         listing.SetStatBlock(newStatBlock);
                     }, this.deleteSavedStatBlock);
                 }
+            });
+        }
+
+        EditSpell = (listing: SpellListing) => {
+             listing.GetSpellAsync(spell => {
+                 this.tracker.SpellEditor.EditSpell(
+                     spell,
+                     this.libraries.Spells.AddOrUpdateSpell,
+                     this.libraries.Spells.DeleteSpellById
+                 );
             });
         }
 

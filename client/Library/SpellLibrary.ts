@@ -30,5 +30,17 @@ module ImprovedInitiative {
                 return new SpellListing(c.Id, c.Name, c.Keywords, c.Link, "server");
             }));
         }
+
+        public AddOrUpdateSpell(spell: Spell) {
+            this.Spells.remove(listing => listing.Id === spell.Id);
+            const listing = new SpellListing(spell.Id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell);
+            this.Spells.push(listing);
+            Store.Save(Store.Spells, spell.Id, spell);
+        }
+
+        public DeleteSpellById(id: string) {
+            this.Spells.remove(listing => listing.Id === id);
+            Store.Delete(Store.Spells, id);
+        }
     }
 }
