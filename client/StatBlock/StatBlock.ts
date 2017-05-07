@@ -53,7 +53,7 @@ module ImprovedInitiative {
 
     export class StatBlock {
         static Default = (): StatBlock => ({
-            Id: '', Name: '', Source: '', Type: '',
+            Id: probablyUniqueString(), Name: '', Source: '', Type: '',
             HP: { Value: 1, Notes: '1d1+0' }, AC: { Value: 10, Notes: '' },
             InitiativeModifier: 0,
             Speed: [],
@@ -69,6 +69,6 @@ module ImprovedInitiative {
             Player: ''
         });
 
-        static AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"]
+        static readonly AbilityNames = Object.keys(StatBlock.Default().Abilities);
     }
 }

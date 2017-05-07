@@ -72,7 +72,7 @@ export class Library<TItem extends LibraryItem> {
     }
 
     private Add(items: any []) {
-        items.forEach((c) => {
+        items.forEach(c => {
             if (!(c.Name && c.Source)) {
                 throw `Missing Name or Source: Couldn't import ${JSON.stringify(c)}`;
             }

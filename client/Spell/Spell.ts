@@ -1,5 +1,6 @@
 module ImprovedInitiative {
     export interface Spell {
+        Id: string;
         Name: string;
         Level: number;
         School: string;
@@ -17,6 +18,7 @@ module ImprovedInitiative {
 
         static Default: () => Spell = () => {
             return {
+                Id: probablyUniqueString(),
                 Name: "",
                 CastingTime: "",
                 Classes: [],
