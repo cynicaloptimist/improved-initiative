@@ -8,10 +8,26 @@
 </div>
 <!-- ko if: EditorType() == 'basic' -->
 <div class="stats" data-bind="with: EditableSpell">
-    <p>Name <input class="name" type="text" data-bind="value: Name" />
+    <p>Name <input type="text" data-bind="value: Name" />
     </p>
-    <p>Source <input class="type" type="text" data-bind="value: Source" />
+    <p>Source <input type="text" data-bind="value: Source" />
     </p>
+    <p>School <input type="text" data-bind="value: School" />
+    </p>
+    <p>Casting Time <input type="text" data-bind="value: CastingTime" />
+    </p>
+    <p>Ritual <input type="checkbox" data-bind="checked: Ritual" /></p>
+    <p>Range <input type="text" data-bind="value: Range" />
+    </p>
+    <p>Components <input type="text" data-bind="value: Components" />
+    </p>
+    <p>Duration <input type="text" data-bind="value: Duration" />
+    </p>
+    <p>Classes <input type="text" data-bind="value: Classes" />
+    <p>Description</p>
+    <textarea data-bind="value: Description"></textarea>
+    </p>
+    
 </div>
 <!-- /ko -->
 <!-- ko if: EditorType() == 'advanced' -->

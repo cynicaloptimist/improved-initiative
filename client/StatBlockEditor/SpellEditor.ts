@@ -34,6 +34,10 @@ module ImprovedInitiative {
         private unMakeEditable = (editableSpell: any) => {
             let unObservableSpell = ko.toJS(editableSpell);
             delete unObservableSpell.__ko_mapping__;
+            const classes = unObservableSpell.Classes;
+            if (typeof classes === "string") {
+                unObservableSpell.Classes = classes.split(",").map(s => s.trim());
+            }
             return unObservableSpell;
         }
 
