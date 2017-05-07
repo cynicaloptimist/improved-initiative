@@ -20,7 +20,7 @@ module ImprovedInitiative {
             }
         }
 
-        ToggleCSS = () => this.ShowFullLog() ? 'fa-chevron-down' : 'fa-chevron-up';
+        ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
 
         ShowFullLog = ko.observable<boolean>(false);
 
