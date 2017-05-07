@@ -7,7 +7,6 @@ module ImprovedInitiative {
         
         AddEvent = (event: string) => {
             this.Events.push(event);
-            this.scrollToBottomOfLog();
         }
 
         ToggleFullLog = () => {
