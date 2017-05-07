@@ -361,7 +361,7 @@ input[type="file"] {
     }
 }
 
-.editor {
+.statblock-editor, .spell-editor {
     flex-grow: 1;
 
     textarea {
@@ -372,17 +372,7 @@ input[type="file"] {
     input, textarea, p {
         font-size: medium;
         line-height: 1.4em;
-
         margin-left: @medium-spacer;
-        &[type="text"] {
-            width: 100px;
-        }
-        &[type="number"] {
-            width: 40px;
-        }
-        &.name, &.type, &.source {
-            width:200px;
-        }
     }
 
     .editor-type {
@@ -390,6 +380,26 @@ input[type="file"] {
         flex-shrink:0;
     }
 
+    .fa-clickable {
+        margin-left: @medium-spacer;
+    }
+
+    .json-editor {
+        flex-grow:1;
+        font-family: Courier New, Courier, monospace;
+    }
+    
+    .buttons {
+        flex-direction: row;
+        flex-shrink:0;
+        justify-content: flex-end;
+        .button {
+            margin: 1px;
+        }
+    }
+}
+
+.statblock-editor {
     .stats {
         display: block;
         overflow-y: auto;
@@ -415,21 +425,15 @@ input[type="file"] {
         }
     }
 
-    .fa-clickable {
-        margin-left: @medium-spacer;
-    }
-
-    .json-editor {
-        flex-grow:1;
-        font-family: Courier New, Courier, monospace;
-    }
-    
-    .buttons {
-        flex-direction: row;
-        flex-shrink:0;
-        justify-content: flex-end;
-        .button {
-            margin: 1px;
+    input {
+        &[type="text"] {
+            width: 100px;
+        }
+        &[type="number"] {
+            width: 40px;
+        }
+        &.name, &.type, &.source {
+            width:200px;
         }
     }
 }
