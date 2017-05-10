@@ -12,7 +12,7 @@ interface PatreonPost {
     content: string;
     url: string;
     created_at: string;
-    category: string;
+    was_posted_by_campaign_owner: boolean;
 }
 
 const pageRenderOptions = (encounterId: string) => ({
@@ -120,7 +120,7 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
             (error, response, body) => {
                 const json: { data: PatreonPost[] } = JSON.parse(body);
                 if (json.data) {
-                    const latestPost = json.data.filter(d => d.category === "8")[0];
+                    const latestPost = json.data.filter(d => d.was_posted_by_campaign_owner)[0];
                     app.get("/whatsnew/", (req, res) => {
                         res.json(latestPost);
                     });
