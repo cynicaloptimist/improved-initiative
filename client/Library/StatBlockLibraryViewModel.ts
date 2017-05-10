@@ -1,6 +1,7 @@
 module ImprovedInitiative {
     export interface StatBlockLibrary {
         StatBlocks: KnockoutObservableArray<StatBlockListing>
+        ContainsPlayerCharacters: boolean;
     }
     
     export class StatBlockLibraryViewModel {
@@ -36,7 +37,7 @@ module ImprovedInitiative {
         ClickEntry = (entry: StatBlockListing) => this.encounterCommander.AddStatBlockFromListing(entry);
         ClickEdit = (entry: StatBlockListing) => this.encounterCommander.EditStatBlock(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
-        ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(false);
+        ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
 
         GetPreviewStatBlock = ko.pureComputed(() => {
             return this.previewStatBlock() || StatBlock.Default();

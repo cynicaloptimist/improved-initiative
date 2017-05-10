@@ -1,6 +1,7 @@
 module ImprovedInitiative {
     export class PCLibrary {
         StatBlocks = ko.observableArray<StatBlockListing>([]);
+        ContainsPlayerCharacters = true;
 
         constructor() {
             Store.List(Store.PlayerCharacters).forEach(id => {

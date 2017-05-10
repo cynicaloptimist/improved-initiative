@@ -1,6 +1,7 @@
 module ImprovedInitiative {
     export class NPCLibrary {
         StatBlocks = ko.observableArray<StatBlockListing>([]);
+        ContainsPlayerCharacters = false;
 
         constructor() {
             $.ajax("../statblocks/").done(this.AddStatBlockListings);
