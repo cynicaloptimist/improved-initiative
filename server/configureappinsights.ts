@@ -5,7 +5,7 @@ const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
         return true;
     }
     const data = <ContractsModule.RequestData>envelope.data.baseData;
-    return data.name.indexOf("socket.io") === -1;
+    return data.url.indexOf("socket.io") === -1;
 }
 
 export default function () {
