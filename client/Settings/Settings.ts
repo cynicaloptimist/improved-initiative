@@ -23,7 +23,7 @@ module ImprovedInitiative {
         ];
 
         const registerKeybindings = () => {
-            const allCommands = [ ...params.encounterCommander.Commands, ...params.combatantCommander.Commands ];
+            const allCommands = [...params.encounterCommander.Commands, ...params.combatantCommander.Commands];
             Mousetrap.reset();
 
             Mousetrap.bind('backspace', e => {
@@ -43,7 +43,7 @@ module ImprovedInitiative {
         }
 
         registerKeybindings();
-        
+
         const saveAndClose = () => {
             registerKeybindings();
             params.settingsVisible(false);
@@ -77,11 +77,11 @@ module ImprovedInitiative {
 
         var displayDifficulty = loadSetting("DisplayDifficulty");
         displayDifficulty.subscribe(params.encounterCommander.DisplayDifficulty);
-        
+
         return {
             EncounterCommands: params.encounterCommander.Commands,
             CombatantCommands: params.combatantCommander.Commands,
-            
+
             CurrentTab: ko.observable<string>('about'),
             ExportData: () => {
                 var blob = Store.ExportAll();
@@ -118,7 +118,7 @@ module ImprovedInitiative {
             DisplayDifficulty: displayDifficulty,
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
-            Tip: ko.computed(() => tips[currentTipIndex() % tips.length]),
+            Tip: ko.pureComputed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1),
             SaveAndClose: saveAndClose

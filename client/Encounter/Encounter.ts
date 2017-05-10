@@ -36,13 +36,13 @@ module ImprovedInitiative {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
-            this.ActiveCombatantStatBlock = ko.computed(() => {
+            this.ActiveCombatantStatBlock = ko.pureComputed(() => {
                 return this.ActiveCombatant()
                     ? this.ActiveCombatant().StatBlock()
                     : StatBlock.Default();
             });
 
-            this.Difficulty = ko.computed(() => {
+            this.Difficulty = ko.pureComputed(() => {
                 const enemyChallengeRatings = this.Combatants().filter(c => !c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => c.StatBlock().Challenge);
                 const playerLevels = this.Combatants().filter(c => c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => parseInt(c.StatBlock().Challenge));
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);

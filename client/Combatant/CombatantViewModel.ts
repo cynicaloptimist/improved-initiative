@@ -9,7 +9,9 @@ module ImprovedInitiative {
                 } else {
                     return '{0}/{1}'.format(this.Combatant.CurrentHP(), this.Combatant.MaxHP);
                 }
-            })
+            });
+
+            this.Combatant.ViewModel = this;
         }
 
         ApplyDamage = (inputDamage: string) => {
@@ -107,7 +109,7 @@ module ImprovedInitiative {
             this.PromptUser(prompt);
         }
 
-        HiddenClass = ko.computed(() => {
+        HiddenClass = ko.pureComputed(() => {
             return this.Combatant.Hidden() ? 'fa-eye-slash' : 'fa-eye';
         })
 
@@ -122,7 +124,7 @@ module ImprovedInitiative {
             this.Combatant.Encounter.QueueEmitEncounter();
         }
 
-        DisplayName = ko.computed(() => {
+        DisplayName = ko.pureComputed(() => {
             var alias = ko.unwrap(this.Combatant.Alias),
                 name = ko.unwrap(this.Combatant.StatBlock).Name,
                 combatantCount = ko.unwrap(this.Combatant.Encounter.CombatantCountsByName[name]),

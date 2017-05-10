@@ -1,0 +1,12 @@
+<div class="spell" data-bind="with: Spell">
+    <h3 data-bind="text: Name"></h3>
+    <p class="spell-type" data-bind="text: $parent.GetType($data)"></p>
+    <p><label>Casting Time:</label><span data-bind="text: CastingTime"></span></p>
+    <p><label>Range:</label><span data-bind="text: Range"></span></p>
+    <p><label>Components:</label><span data-bind="text: Components"></span></p>
+    <p><label>Duration:</label><span data-bind="text: Duration"></span></p>
+    <p><label>Classes:</label><span data-bind="text: Classes.join(', ')"></span></p>
+    <p data-bind="statBlockText: Description"></p>
+    <p class="spell-source">Source: <span data-bind="text: Source"></span></p>
+</div>
+<button type='submit' class='fa fa-check button'></button>

@@ -26,7 +26,6 @@
 * {
     font-family: 'Josefin Sans', sans-serif;
     position:relative;
-    cursor: default;
     margin: 0;
 	padding: 0;
 }
@@ -37,6 +36,7 @@ html, body {
     max-width: 100%;
     display:flex;
     flex-direction:column;
+    cursor: default;
 }
 
 div {
@@ -70,11 +70,6 @@ ul.bulleted {
     padding-left:40px;
 }
 
-div.flex-spacer {
-    flex-grow: 1;
-    flex-shrink: 1;
-}
-
 input[type="number"] {
     width: 40px;
 }
@@ -93,11 +88,12 @@ input[type="file"] {
 }
 
 .fa-clickable {
-	cursor:pointer;
+	cursor: pointer;
 	.fa();
 }
 
 .button() {
+    cursor: pointer;
     .fa();
     padding: 10px;
     text-align:center;
@@ -108,6 +104,12 @@ input[type="file"] {
 
 .button {
     .button();
+}
+
+.rollable, .spell-reference {
+    cursor: pointer;
+    border-bottom: 1px dashed;
+    margin-bottom: -1px;
 }
 
 .hop {
@@ -359,7 +361,7 @@ input[type="file"] {
     }
 }
 
-.editor {
+.statblock-editor, .spell-editor {
     flex-grow: 1;
 
     textarea {
@@ -370,17 +372,7 @@ input[type="file"] {
     input, textarea, p {
         font-size: medium;
         line-height: 1.4em;
-
         margin-left: @medium-spacer;
-        &[type="text"] {
-            width: 100px;
-        }
-        &[type="number"] {
-            width: 40px;
-        }
-        &.name, &.type, &.source {
-            width:200px;
-        }
     }
 
     .editor-type {
@@ -388,6 +380,26 @@ input[type="file"] {
         flex-shrink:0;
     }
 
+    .fa-clickable {
+        margin-left: @medium-spacer;
+    }
+
+    .json-editor {
+        flex-grow:1;
+        font-family: Courier New, Courier, monospace;
+    }
+    
+    .buttons {
+        flex-direction: row;
+        flex-shrink:0;
+        justify-content: flex-end;
+        .button {
+            margin: 1px;
+        }
+    }
+}
+
+.statblock-editor {
     .stats {
         display: block;
         overflow-y: auto;
@@ -413,21 +425,15 @@ input[type="file"] {
         }
     }
 
-    .fa-clickable {
-        margin-left: @medium-spacer;
-    }
-
-    .json-editor {
-        flex-grow:1;
-        font-family: Courier New, Courier, monospace;
-    }
-    
-    .buttons {
-        flex-direction: row;
-        flex-shrink:0;
-        justify-content: flex-end;
-        .button {
-            margin: 1px;
+    input {
+        &[type="text"] {
+            width: 100px;
+        }
+        &[type="number"] {
+            width: 40px;
+        }
+        &.name, &.type, &.source {
+            width:200px;
         }
     }
 }
@@ -458,25 +464,45 @@ input[type="file"] {
             padding: @medium-spacer;
         }
     }
+    .whatsnew a {
+        font-weight: bold;
+    }
     
     .repeat-tutorial {
         align-self: flex-end;
+    }
+
+    .command-options-labels {
+        position: absolute;
+        align-self: flex-end;
+        font-style: italic;
+    }
+
+    .toolbar-label, .toolbar-setting {
+        text-align: center;
+        width: 75px;
+        i {
+            width: 30px;
+        }
+    }
+
+    .hotkey-label, .keybinding {
+        text-align: center;
+        width: 100px; 
     }
 
     .keybindings >div {
         flex-direction: row;
         flex-shrink: 0;
         align-items: center;
-        span {
+        
+        >span, >label {
             padding:@small-spacer;
-            &.command-description {
-                flex-grow:1;
-            }
-            &.actionbaricon {
-                width: 20px;
-                text-align: center;
-            }
         }
+    }
+
+    .command-description {
+        flex-grow:1;
     }
 
     .options p {
@@ -524,10 +550,8 @@ input[type="file"] {
         font-weight:bold;
         margin-right: @medium-spacer;
     }
-    .rollable {
-        cursor: pointer;
-        border-bottom: 1px dashed;
-        margin-bottom: -1px;
+    .power-content {
+        white-space: pre-line;
     }
     
     .Abilities {
@@ -582,6 +606,7 @@ input[type="file"] {
         flex-direction: column;
         flex-grow: 1;
         overflow-y: auto;
+        min-height: @large-spacer;
     }
 
     .footer-bar {
@@ -589,9 +614,7 @@ input[type="file"] {
         flex-direction: row;
         justify-content: flex-end;
 
-        cursor: pointer;
-
-        >span {
+        >span, >i {
             padding-right: @medium-spacer;
         }
     }
@@ -603,7 +626,7 @@ input[type="file"] {
 }
 
 .combatants {
-    flex-shrink: 1;
+    flex-shrink: 0;
     overflow-y: auto;
 }
 
@@ -650,9 +673,15 @@ input[type="file"] {
     }
 }
 
+.prompts {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
 .prompt {
     .recessed();
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
 
@@ -680,6 +709,26 @@ input[type="file"] {
                 margin: @small-spacer;
             }
         }
+    }
+}
+
+.prompt .spell {
+    flex-flow: column;
+    align-self: stretch;
+    label {
+        font-weight: bold;
+        padding-right: @medium-spacer;
+    }
+    .spell-type {
+        font-style: italic;
+    }
+    .spell-source {
+        font-style: italic;
+        font-size: small;
+    }
+    p {
+        padding-top: @small-spacer;
+        white-space: pre-wrap;
     }
 }
     

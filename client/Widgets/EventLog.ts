@@ -2,12 +2,11 @@ module ImprovedInitiative {
     export class EventLog {
         Events = ko.observableArray<string>();
         
-        LatestEvent = ko.computed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
-        EventsTail = ko.computed(() => this.Events().slice(0, this.Events().length - 1));
+        LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
+        EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
         
         AddEvent = (event: string) => {
             this.Events.push(event);
-            this.scrollToBottomOfLog();
         }
 
         ToggleFullLog = () => {
@@ -21,11 +20,15 @@ module ImprovedInitiative {
             }
         }
 
+        ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
+
         ShowFullLog = ko.observable<boolean>(false);
 
+        private element = $('.event-log');
+        
         private scrollToBottomOfLog = () => {
-            let scrollHeight = $('.event-log')[0].scrollHeight;
-            $('.event-log').scrollTop(scrollHeight);
+            let scrollHeight = this.element[0].scrollHeight;
+            this.element.scrollTop(scrollHeight);
         }
     }
 }

@@ -1,30 +1,27 @@
 module ImprovedInitiative {
     export class EncounterCommander {
         Commands: Command[];
-        
-        constructor(private encounter: Encounter,
-            private promptQueue: PromptQueue,
-            private statBlockEditor: StatBlockEditor,
-            private library: StatBlockLibrary,
-            private eventLog: EventLog,
-            private displaySettings: KnockoutObservable<boolean>) {
+        private libraries: Libraries;
+
+        constructor(private tracker: TrackerViewModel) {
             this.Commands = BuildEncounterCommandList(this);
+            this.libraries = tracker.Libraries;
         }
 
         AddStatBlockFromListing = (listing: StatBlockListing, event?) => {
-            listing.LoadStatBlock(listing => {
-                this.encounter.AddCombatantFromStatBlock(listing.StatBlock(), event);
-                this.eventLog.AddEvent(`${listing.Name()} added to combat.`);
+            listing.GetStatBlockAsync(statBlock => {
+                this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
+                this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
             });
         }
 
         private deleteSavedStatBlock = (library: string, id: string) => {
             Store.Delete(library, id);
             if (library == Store.PlayerCharacters) {
-                this.library.PCStatBlocks.remove(c => c.Id == id);
+                this.libraries.PCs.StatBlocks.remove(c => c.Id == id);
             }
             if (library == Store.StatBlocks) {
-                this.library.NPCStatBlocks.remove(c => c.Id == id);
+                this.libraries.NPCs.StatBlocks.remove(c => c.Id == id);
             }
         }
 
@@ -32,46 +29,61 @@ module ImprovedInitiative {
             var listing = new StatBlockListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
             Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
-                this.library.PCStatBlocks.unshift(listing);
+                this.libraries.PCs.StatBlocks.unshift(listing);
             } else {
-                this.library.NPCStatBlocks.unshift(listing);
+                this.libraries.NPCs.StatBlocks.unshift(listing);
             }
         }
         
-        CreateAndEditStatBlock = (library: string) => {
+        CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
             var statBlock = StatBlock.Default();
             var newId = probablyUniqueString();
 
-            if (library == "Players") {
+            if (isPlayerCharacter) {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
-                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             } else {
                 statBlock.Name = "New Creature";
-                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
             }
         }
         
-        private duplicateAndEditStatBlock = (listing: StatBlockListing) => {
-            var statBlock = listing.StatBlock();
+        private duplicateAndEditStatBlock = (statBlock: StatBlock) => {
             var newId = probablyUniqueString();
-
-            if (statBlock.Player == "player") {
-                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
-            } else {
-                this.statBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
-            }
+            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
         }
         
         EditStatBlock = (listing: StatBlockListing) => {
-            if (listing.Source == "server") {
-                listing.LoadStatBlock(this.duplicateAndEditStatBlock);
-            } else {
-                this.statBlockEditor.EditStatBlock(listing.Id, listing.StatBlock(), (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-                    Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-                    listing.StatBlock(newStatBlock);
-                }, this.deleteSavedStatBlock);
-            }
+            listing.GetStatBlockAsync(statBlock => {
+                if (listing.Source === "server") {
+                    this.duplicateAndEditStatBlock(statBlock);
+                } else {
+                    this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
+                        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
+                        listing.SetStatBlock(newStatBlock);
+                    }, this.deleteSavedStatBlock);
+                }
+            });
+        }
+
+        CreateAndEditSpell = () => {
+            const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom" };
+            this.tracker.SpellEditor.EditSpell(
+                newSpell,
+                this.libraries.Spells.AddOrUpdateSpell,
+                this.libraries.Spells.DeleteSpellById
+            );
+        }
+
+        EditSpell = (listing: SpellListing) => {
+             listing.GetSpellAsync(spell => {
+                 this.tracker.SpellEditor.EditSpell(
+                     spell,
+                     this.libraries.Spells.AddOrUpdateSpell,
+                     this.libraries.Spells.DeleteSpellById
+                 );
+            });
         }
 
         ShowingLibraries = ko.observable(true);
@@ -79,12 +91,25 @@ module ImprovedInitiative {
         HideLibraries = () => this.ShowingLibraries(false);
         
         LaunchPlayerWindow = () => {
-            window.open(`/p/${this.encounter.EncounterId}`, 'Player View');
+            window.open(`/p/${this.tracker.Encounter.EncounterId}`, 'Player View');
         }
 
         ShowSettings = () => {
             TutorialSpy("ShowSettings");
-            this.displaySettings(true);
+            this.tracker.SettingsVisible(true);
+        }
+
+        RollDice = (diceExpression: string) => {
+            const diceRoll = Dice.RollDiceExpression(diceExpression);
+            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
+                _ => { }
+            );
+            this.tracker.PromptQueue.Add(prompt);
+        }
+
+        ReferenceSpell = (spellListing: SpellListing) => {
+            const prompt = new SpellPrompt(spellListing);
+            this.tracker.PromptQueue.Add(prompt);
         }
 
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
@@ -92,46 +117,49 @@ module ImprovedInitiative {
         DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));
         
         StartEncounter = () => {
-            if(this.promptQueue.HasPrompt()){
-                this.promptQueue.AnimatePrompt();
+            if(this.tracker.PromptQueue.HasPrompt()){
+                this.tracker.PromptQueue.AnimatePrompt();
                 return;
             }
 
-            if (this.encounter.State() == 'inactive') {
-                this.encounter.RollInitiative(this.promptQueue);
+            if (this.tracker.Encounter.State() == 'inactive') {
+                this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
 
                 ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
             }
             
             this.HideLibraries();
 
-            this.eventLog.AddEvent("Encounter started.");
+            this.tracker.EventLog.AddEvent("Encounter started.");
         }
 
         EndEncounter = () => {
-            this.encounter.EndEncounter();
-            this.eventLog.AddEvent("Encounter ended.");
+            this.tracker.Encounter.EndEncounter();
+            this.tracker.EventLog.AddEvent("Encounter ended.");
         }
 
         RerollInitiative = () => {
-            this.encounter.RollInitiative(this.promptQueue);
+            this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
         }
 
         ClearEncounter = () => {
-            this.encounter.ClearEncounter();
-            this.eventLog.AddEvent("All combatants removed from encounter.");
+            this.tracker.Encounter.ClearEncounter();
+            this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
         }
 
         NextTurn = () => {
-            this.encounter.NextTurn();
-            var currentCombatant = this.encounter.ActiveCombatant();
-            this.eventLog.AddEvent(`Start of turn for ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.tracker.Encounter.NextTurn();
+            var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+            this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.ViewModel.DisplayName()}.`);
         }
 
         PreviousTurn = () => {
-            this.encounter.PreviousTurn();
-            var currentCombatant = this.encounter.ActiveCombatant();
-            this.eventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
+            if (!this.tracker.Encounter.ActiveCombatant()) {
+                return;
+            }
+            this.tracker.Encounter.PreviousTurn();
+            var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);    
         }
 
         SaveEncounter = () => {
@@ -139,29 +167,24 @@ module ImprovedInitiative {
                 response => {
                     const encounterName = response['encounterName'];
                     if (encounterName) {
-                        var savedEncounter = this.encounter.Save(encounterName);
-                        var savedEncounters = this.library.SavedEncounterIndex;
-                        if (savedEncounters.indexOf(encounterName) == -1) {
-                            savedEncounters.push(encounterName);
-                        }
-                        Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
-                        this.eventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                        const savedEncounter = this.tracker.Encounter.Save(encounterName);
+                        this.libraries.Encounters.Save(encounterName, savedEncounter);
+                        this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     }
                 });
-            this.promptQueue.Add(prompt);
+            this.tracker.PromptQueue.Add(prompt);
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            var encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
-            this.encounter.LoadSavedEncounter(encounter, this.promptQueue);
-            this.eventLog.AddEvent(`Encounter loaded.`);
+            const encounter = this.libraries.Encounters.Get(encounterName);
+            this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
+            this.tracker.EventLog.AddEvent(`Encounter loaded.`);
         }
 
         DeleteSavedEncounter = (encounterName: string) => {
             if (confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)) {
-                Store.Delete(Store.SavedEncounters, encounterName);
-                this.library.SavedEncounterIndex.remove(encounterName);
-                this.eventLog.AddEvent(`Encounter ${encounterName} deleted.`);
+                this.libraries.Encounters.Delete(encounterName);
+                this.tracker.EventLog.AddEvent(`Encounter ${encounterName} deleted.`);
             }
         }
     }

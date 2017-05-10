@@ -1,29 +1,42 @@
 module ImprovedInitiative {
     export class StatBlockListing {
+        
         Name: KnockoutObservable<string>;
-        IsLoaded: boolean;
-        StatBlock: KnockoutObservable<StatBlock>;
-        constructor(public Id: string, name: string, public Type: string, public Link: string, public Source: string, statBlock?: StatBlock) {
+        
+        private loadPromise: JQueryXHR;
+        private statBlock: KnockoutObservable<StatBlock>;
+
+        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: "server" | "localStorage", statBlock?: StatBlock) {
             this.Name = ko.observable(name);
-            this.IsLoaded = !!statBlock;
-            this.StatBlock = ko.observable(statBlock || StatBlock.Default(c => { c.Name = name }));
-            this.StatBlock.subscribe(newStatBlock => {
+            this.statBlock = ko.observable(statBlock);
+
+            this.statBlock.subscribe(newStatBlock => {
                 this.Name(newStatBlock.Name);
-                this.Type = newStatBlock.Type;
+                this.Keywords = newStatBlock.Type;
             });
         }
 
-        LoadStatBlock = (callback: (listing: StatBlockListing) => void) => {
-            if (this.IsLoaded) {
-                callback(this);
+        GetStatBlockAsync = (callback: (statBlock: StatBlock) => void) => {
+            if (this.statBlock() !== undefined) {
+                callback(this.statBlock());
+                return;
             }
-            else {
-                $.getJSON(this.Link, (json) => {
-                    this.IsLoaded = true;
-                    this.StatBlock({ ...StatBlock.Default(), ...json });
-                    callback(this);
+            if (this.loadPromise) {
+                this.loadPromise.then(() => {
+                    callback(this.statBlock());
                 });
+                return;
             }
+
+            this.loadPromise = $.getJSON(this.Link, (json) => {
+                const statBlock = { ...StatBlock.Default(), ...json };
+                this.statBlock(statBlock);
+                callback(statBlock);
+            });
+        }
+
+        SetStatBlock = (statBlock: StatBlock) => {
+            this.statBlock(statBlock);
         }
     }
 }

@@ -90,7 +90,7 @@ module ImprovedInitiative {
         private getMaxHP(statBlock: StatBlock) {
             if (Store.Load(Store.User, "RollMonsterHp") && statBlock.Player !== "player") {
                 try {
-                    return this.Encounter.Rules.RollDiceExpression(statBlock.HP.Notes).Total;
+                    return Dice.RollDiceExpression(statBlock.HP.Notes).Total;
                 } catch (e) {
                     return statBlock.HP.Value;
                 }
@@ -123,6 +123,6 @@ module ImprovedInitiative {
             return modifiers;
         }
 
-        GetInitiativeRoll = () => this.Encounter.Rules.Check(this.InitiativeBonus);
+        GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
     }
 }

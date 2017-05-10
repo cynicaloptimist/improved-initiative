@@ -59,6 +59,10 @@ module ImprovedInitiative {
     const getXpMultiplier = (enemyCount: number, playerCount: number) => {
         const multiplierRank = getXpMultiplierRank(enemyCount);
 
+        if (playerCount === 0) {
+            return rankedXpMultipliers[multiplierRank];
+        }
+        
         if (playerCount < 3) {
             return rankedXpMultipliers[multiplierRank + 1];
         }

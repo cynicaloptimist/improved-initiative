@@ -6,8 +6,8 @@ module ImprovedInitiative {
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
-            $.ajax("../statblocks/").done(viewModel.StatBlockLibrary.AddStatBlockListings);
             viewModel.ImportEncounterIfAvailable();
+            viewModel.GetWhatsNewIfAvailable();
         }
         if ($('#playerview').length) {
             var encounterId = $('html')[0].getAttribute('encounterId');

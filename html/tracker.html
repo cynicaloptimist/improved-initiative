@@ -78,8 +78,8 @@
         component: {
             name: 'libraries',
             params: {
-                library: StatBlockLibrary,
-                encounterCommander: EncounterCommander
+                encounterCommander: EncounterCommander,
+                libraries: Libraries
             }
         }">
         </div>
@@ -99,17 +99,27 @@
         <!-- /ko -->
     </div>
     <div class="center-column">
-        <!-- ko if: StatBlockEditor.EditableStatBlock() -->
-        <div class="editor" data-bind="
+        <!-- ko if: CenterColumn() === "statblockeditor" -->
+        <div class="statblock-editor" data-bind="
     component: {
-        name: 'editstatblock',
+        name: 'statblockeditor',
         params: {
             editor: StatBlockEditor
         }
     }">
         </div>
         <!-- /ko -->
-        <!-- ko ifnot: StatBlockEditor.EditableStatBlock() -->
+        <!-- ko if: CenterColumn() === "spelleditor" -->
+        <div class="spell-editor" data-bind="
+    component: {
+        name: 'spelleditor',
+        params: {
+            editor: SpellEditor
+        }
+    }">
+        </div>
+        <!-- /ko -->
+        <!-- ko if: CenterColumn() === "combat" -->
         <h2>Initiative Order</h2>
         <ul class="combatants" data-bind="with: Encounter">
             <li class="combatant header">
@@ -139,31 +149,42 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <!-- ko foreach: PromptQueue.Prompts -->
-        <form class="prompt" data-bind="
-            submit: Resolve,
-            component: {
-                name: ComponentName,
-                params: {
-                    prompt: $data
-                }
-            }">
-        </form>
+        <div class="prompts">
+            <!-- ko foreach: PromptQueue.Prompts -->
+            <form class="prompt" data-bind="
+                submit: Resolve,
+                component: {
+                    name: ComponentName,
+                    params: {
+                        prompt: $data
+                    }
+                }">
+            </form>
 
-        <!-- /ko -->
-        <div class="flex-spacer"></div>
+            <!-- /ko -->
+        </div>
 
         <div class="combat-footer">
             <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">
-                <li data-bind="text: $data"></li>
+                <li data-bind="html: $data"></li>
             </ul>
-            <div class="footer-bar" data-bind="click: EventLog.ToggleFullLog">
-                <span class="latest-event" data-bind="text: EventLog.LatestEvent"></span>
-
-                <span class="turn-timer" data-bind="visible: EncounterCommander.DisplayTurnTimer, text: Encounter.TurnTimer.Readout"></span>
-                <span class="round-counter" data-bind="visible: EncounterCommander.DisplayRoundCounter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
-                <span class="encounter-challenge" data-bind="visible: EncounterCommander.DisplayDifficulty, with: Encounter.Difficulty()"><span class="difficulty" data-bind="visible: Difficulty, text: Difficulty"></span>
-                <span data-bind="text: TotalExperience"></span> XP</span>
+            <div class="footer-bar">
+                <i class="fa-clickable" data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"></i>
+                <span class="latest-event" data-bind="html: EventLog.LatestEvent"></span>
+                <!-- ko if: EncounterCommander.DisplayTurnTimer -->
+                    <span class="turn-timer" data-bind="text: Encounter.TurnTimer.Readout"></span>
+                <!-- /ko -->
+                <!-- ko if: EncounterCommander.DisplayRoundCounter -->
+                    <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+                <!-- /ko -->
+                <!-- ko if: EncounterCommander.DisplayDifficulty -->
+                    <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()">
+                        <!-- ko if: Difficulty -->
+                            <span class="difficulty" data-bind="text: Difficulty"></span>
+                        <!-- /ko -->
+                        <span data-bind="text: TotalExperience"></span> XP
+                    </span>
+                <!-- /ko -->
             </div>
         </div>
     </div>

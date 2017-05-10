@@ -3,11 +3,20 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
+import request = require("request");
 
-import StatBlockLibrary from "./statblocklibrary";
+import { Library, StatBlock, Spell } from "./library";
+
+interface PatreonPost {
+    title: string;
+    content: string;
+    url: string;
+    created_at: string;
+    category: string;
+}
 
 const pageRenderOptions = (encounterId: string) => ({
-    rootDirectory: "..",
+    rootDirectory: "../../",
     encounterId,
     appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
     postedEncounter: null,
@@ -30,16 +39,16 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-export default function (app: express.Express, statBlockLibrary: StatBlockLibrary, playerViews) {
+export default function (app: express.Express, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
     app.engine("html", mustacheEngine);
     app.set("view engine", "html");
-    app.set("views", __dirname + "/html");
+    app.set("views", __dirname + "/../html");
 
-    app.use(express.static(__dirname + "/public"));
+    app.use(express.static(__dirname + "/../public"));
     app.use(session({
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
     }));
@@ -73,12 +82,20 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
         });
     });
 
-    app.get("/statblocks/", (req, res) => {
-        res.json(statBlockLibrary.GetStatBlockListings());
+    app.get(statBlockLibrary.Route(), (req, res) => {
+        res.json(statBlockLibrary.GetListings());
     });
 
-    app.get("/statblocks/:id", (req, res) => {
-        res.json(statBlockLibrary.GetStatBlockById(req.params.id));
+    app.get(statBlockLibrary.Route() + ":id", (req, res) => {
+        res.json(statBlockLibrary.GetById(req.params.id));
+    });
+
+    app.get(spellLibrary.Route(), (req, res) => {
+        res.json(spellLibrary.GetListings());
+    });
+
+    app.get(spellLibrary.Route() + ":id", (req, res) => {
+        res.json(spellLibrary.GetById(req.params.id));
     });
 
     const importEncounter = (req, res) => {
@@ -96,4 +113,18 @@ export default function (app: express.Express, statBlockLibrary: StatBlockLibrar
 
     app.post("/launchencounter/", importEncounter);
     app.post("/importencounter/", importEncounter);
+
+    const url = process.env.PATREON_URL;
+    if (url) {
+        request.get(url,
+            (error, response, body) => {
+                const json: { data: PatreonPost[] } = JSON.parse(body);
+                if (json.data) {
+                    const latestPost = json.data.filter(d => d.category === "8")[0];
+                    app.get("/whatsnew/", (req, res) => {
+                        res.json(latestPost);
+                    });
+                }
+            });
+    }
 }
