@@ -1,11 +1,14 @@
 import appInsights = require("applicationinsights");
 
 const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
-    if (envelope.data.baseType !== "Microsoft.ApplicationInsights.RequestData") {
-        return true;
-    }
     const data = <ContractsModule.RequestData>envelope.data.baseData;
-    return data.url.indexOf("socket.io") === -1;
+    if (data.url) {
+        return data.url.indexOf("socket.io") === -1;
+    }
+    if (data.name) {
+        return data.name.indexOf("socket.io") === -1;
+    }
+    return true;
 }
 
 export default function () {
