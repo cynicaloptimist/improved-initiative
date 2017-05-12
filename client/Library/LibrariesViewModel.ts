@@ -1,10 +1,5 @@
 module ImprovedInitiative {
     export class LibrariesViewModel {
-        constructor(
-            public EncounterCommander: EncounterCommander,
-            public Libraries: Libraries
-        ) { }
-
         LibraryTabs = [
             {
                 Name: "Creatures",
@@ -31,5 +26,18 @@ module ImprovedInitiative {
         SelectedTab = ko.observable(this.LibraryTabs[0]);
 
         TabClassName = library => library === this.SelectedTab() ? 'selected' : '';
+
+        constructor(
+            public EncounterCommander: EncounterCommander,
+            public Libraries: Libraries
+        ) { 
+            this.SelectedTab.subscribe(t => {
+                if (t.Name === "Players") {
+                    TutorialSpy("SelectPlayersTab");
+                }
+            })
+        }
+
+        
     }
 }
