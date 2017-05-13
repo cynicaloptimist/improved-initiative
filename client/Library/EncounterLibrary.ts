@@ -5,8 +5,7 @@ module ImprovedInitiative {
         constructor() {
             Store.List(Store.SavedEncounters).forEach(e => this.Index.push(e));
 
-            const appInsights: Client = window["appInsights"];
-            appInsights.trackEvent("SavedEncounters", { Count: this.Index().length.toString() });
+            window.appInsights.trackEvent("SavedEncounters", { Count: this.Index().length.toString() });
         }
 
         Save = (encounterName: string, savedEncounter: SavedEncounter<SavedCombatant>) => {

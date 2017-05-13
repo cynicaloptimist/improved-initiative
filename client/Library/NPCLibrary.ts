@@ -12,8 +12,7 @@ module ImprovedInitiative {
                 this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
-            const appInsights: Client = window["appInsights"];
-            appInsights.trackEvent("CustomCreatures", { Count: customCreatures.length.toString() });
+            window.appInsights.trackEvent("CustomCreatures", { Count: customCreatures.length.toString() });
         }
 
         AddStatBlockListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {

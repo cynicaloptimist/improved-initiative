@@ -1,8 +1,6 @@
 /// <reference path="../../typings/globals/moment/index.d.ts" />
 
 module ImprovedInitiative {
-    const appInsights = window["appInsights"];
-
     export interface SavedCombatant {
         Id: string;
         StatBlock: StatBlock;
@@ -136,7 +134,7 @@ module ImprovedInitiative {
 
             this.QueueEmitEncounter();
             
-            appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
+            window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
             
             return combatant;
         }
@@ -162,7 +160,7 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
-            appInsights.trackEvent("TurnCompleted");
+            window.appInsights.trackEvent("TurnCompleted");
             const activeCombatant = this.ActiveCombatant();
 
             let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;

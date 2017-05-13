@@ -1,5 +1,4 @@
 module ImprovedInitiative {
-    const appInsights = window["appInsights"];
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
         constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
@@ -26,14 +25,14 @@ module ImprovedInitiative {
             }
 
             if (damage > 0) {
-                appInsights.trackEvent("DamageApplied", { Amount: damage });
+                window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
                 tempHP -= damage;
                 if (tempHP < 0) {
                     currHP += tempHP;
                     tempHP = 0;
                 }
                 if (currHP <= 0 && !allowNegativeHP) {
-                    appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
+                    window.appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
                     currHP = 0;
                 }
             } else {
