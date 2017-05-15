@@ -2,11 +2,11 @@ import appInsights = require("applicationinsights");
 
 const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
     const data = <ContractsModule.RequestData>envelope.data.baseData;
-    if (data.url) {
-        return data.url.indexOf("socket.io") === -1;
+    if (data.url && data.url.indexOf("socket.io") > -1) {
+        return false;        
     }
-    if (data.name) {
-        return data.name.indexOf("socket.io") === -1;
+    if (data.name && data.name.indexOf("socket.io") > -1) {
+        return false;
     }
     return true;
 }
