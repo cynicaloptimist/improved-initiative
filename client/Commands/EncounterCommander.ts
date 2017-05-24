@@ -86,9 +86,8 @@ module ImprovedInitiative {
             });
         }
 
-        ShowingLibraries = ko.observable(true);
-        ShowLibraries = () => this.ShowingLibraries(true);
-        HideLibraries = () => this.ShowingLibraries(false);
+        ShowLibraries = () => this.tracker.LibrariesVisible(true);
+        HideLibraries = () => this.tracker.LibrariesVisible(false);
         
         LaunchPlayerWindow = () => {
             window.open(`/p/${this.tracker.Encounter.EncounterId}`, 'Player View');

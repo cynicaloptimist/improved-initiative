@@ -15,6 +15,8 @@ module ImprovedInitiative {
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
+        LibrariesVisible = ko.observable(true);
+        
 
         CenterColumn = ko.pureComputed(() => {
             const editStatBlock = this.StatBlockEditor.HasStatBlock();
@@ -67,7 +69,7 @@ module ImprovedInitiative {
             return [
                 this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
                 this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,
-                this.EncounterCommander.ShowingLibraries() ? 'showing-libraries' : null,
+                this.LibrariesVisible() ? 'showing-libraries' : null,
                 this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
             ].filter(s => s).join(' ');
         });
