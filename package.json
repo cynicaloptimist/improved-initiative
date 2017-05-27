@@ -39,7 +39,6 @@
     "font-awesome": "^4.5.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-connect": "^0.10.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.0.1",
@@ -64,7 +63,6 @@
     "ts-loader": "^2.1.0",
     "typescript": "^2.1.4",
     "typings": "2.1.0",
-    "uglify-js": "^2.7.4",
     "webpack": "^2.6.1"
   },
   "scripts": {
