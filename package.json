@@ -24,7 +24,6 @@
     "@types/knockout": "^3.4.40",
     "@types/lodash": "^4.14.64",
     "@types/mime": "0.0.29",
-    "@types/moment": "^2.13.0",
     "@types/mousetrap": "^1.5.33",
     "@types/node": "^7.0.22",
     "@types/request": "0.0.43",

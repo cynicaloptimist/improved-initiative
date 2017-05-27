@@ -10,4 +10,5 @@ public/fonts/*
 .vscode
 .baseDir
 !Gruntfile.js
+!webpack.config.js
 !test/test.js

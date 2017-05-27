@@ -1,3 +1,6 @@
+import * as $ from "jquery";
+import * as ko from "knockout";
+
 import { RegisterComponents } from "./Utility/Components";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { PlayerViewModel } from "./PlayerViewModel";

@@ -1,7 +1,7 @@
 import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
-import { toModifierString } from "../../Utility/ToolBox";
+import { toModifierString } from "../../Utility/Toolbox";
 import { registerComponent } from "../../Utility/Components";
 
 export class InitiativePrompt implements Prompt {
