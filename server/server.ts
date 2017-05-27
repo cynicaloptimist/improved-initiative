@@ -1,7 +1,5 @@
-/// <reference path="../typings/index.d.ts" />
-
-import socketIO = require("socket.io");
-import express = require("express");
+import * as socketIO from "socket.io";
+import * as express from "express";
 
 import ConfigureAppInsights from "./configureappinsights";
 import LaunchServer from "./launchserver";

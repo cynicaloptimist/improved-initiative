@@ -1,9 +1,8 @@
-import express = require("express");
-
-import bodyParser = require("body-parser");
-import mustacheExpress = require("mustache-express");
-import session = require("express-session");
-import request = require("request");
+import * as express from "express";
+import * as mustacheExpress from "mustache-express";
+import * as bodyParser from "body-parser";
+import * as session from "express-session";
+import * as request from "request";
 
 import { Library, StatBlock, Spell } from "./library";
 

@@ -1,4 +1,4 @@
-import appInsights = require("applicationinsights");
+import * as appInsights from "applicationinsights";
 
 const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
     const data: ContractsModule.RequestData = <ContractsModule.RequestData>envelope.data.baseData;

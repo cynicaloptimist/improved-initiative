@@ -17,6 +17,20 @@
     "sinon": "^1.15.4"
   },
   "dependencies": {
+    "@types/applicationinsights": "^0.15.33",
+    "@types/express-serve-static-core": "^4.0.45",
+    "@types/file-saver": "0.0.1",
+    "@types/jquery": "^2.0.45",
+    "@types/knockout": "^3.4.40",
+    "@types/lodash": "^4.14.64",
+    "@types/mime": "0.0.29",
+    "@types/moment": "^2.13.0",
+    "@types/mousetrap": "^1.5.33",
+    "@types/node": "^7.0.22",
+    "@types/request": "0.0.43",
+    "@types/serve-static": "^1.7.31",
+    "@types/socket.io": "^1.4.29",
+    "@types/socket.io-client": "^1.4.29",
     "applicationinsights": "^0.19.0",
     "awesomplete": "^1.1.1",
     "body-parser": "^1.14.1",
@@ -48,9 +62,11 @@
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
+    "ts-loader": "^2.1.0",
     "typescript": "^2.1.4",
     "typings": "2.1.0",
-    "uglify-js": "^2.7.4"
+    "uglify-js": "^2.7.4",
+    "webpack": "^2.6.1"
   },
   "scripts": {
     "postinstall": "typings install && grunt --no-color postinstall",
