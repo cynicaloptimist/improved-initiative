@@ -1,50 +1,51 @@
-module ImprovedInitiative {
-    export class StatBlockImporter extends Importer {
-        getType() {
-            return this.getString("size") + ' ' +
-                this.getString("type") + ', ' +
-                this.getString("alignment");
-        }
+import { Importer } from "./Importer";
+import { StatBlock } from "../StatBlock/StatBlock";
 
-        getAbilities() {
-            return {
-                Str: this.getInt("str"),
-                Dex: this.getInt("dex"),
-                Con: this.getInt("con"),
-                Int: this.getInt("int"),
-                Wis: this.getInt("wis"),
-                Cha: this.getInt("cha")
-            };
-        }
+export class StatBlockImporter extends Importer {
+    getType() {
+        return this.getString("size") + ' ' +
+            this.getString("type") + ', ' +
+            this.getString("alignment");
+    }
 
-        public GetStatBlock() {
-            var statBlock = StatBlock.Default();
+    getAbilities() {
+        return {
+            Str: this.getInt("str"),
+            Dex: this.getInt("dex"),
+            Con: this.getInt("con"),
+            Int: this.getInt("int"),
+            Wis: this.getInt("wis"),
+            Cha: this.getInt("cha")
+        };
+    }
 
-            statBlock.Name = this.getString("name");
-            statBlock.Type = this.getType();
-            statBlock.Abilities = this.getAbilities();
+    public GetStatBlock() {
+        var statBlock = StatBlock.Default();
 
-            statBlock.HP = this.getValueAndNotes("hp");
-            statBlock.AC = this.getValueAndNotes("ac");
-            statBlock.Challenge = this.getString("cr");
+        statBlock.Name = this.getString("name");
+        statBlock.Type = this.getType();
+        statBlock.Abilities = this.getAbilities();
 
-            statBlock.Speed = this.getCommaSeparatedStrings("speed");
-            statBlock.ConditionImmunities = this.getCommaSeparatedStrings("conditionImmune");
-            statBlock.DamageImmunities = this.getCommaSeparatedStrings("immune");
-            statBlock.DamageResistances = this.getCommaSeparatedStrings("resist");
-            statBlock.DamageVulnerabilities = this.getCommaSeparatedStrings("vulnerable");
-            statBlock.Senses = this.getCommaSeparatedStrings("senses");
-            statBlock.Languages = this.getCommaSeparatedStrings("languages");
+        statBlock.HP = this.getValueAndNotes("hp");
+        statBlock.AC = this.getValueAndNotes("ac");
+        statBlock.Challenge = this.getString("cr");
 
-            statBlock.Skills = this.getCommaSeparatedModifiers("skill");
-            statBlock.Saves = this.getCommaSeparatedModifiers("save");
+        statBlock.Speed = this.getCommaSeparatedStrings("speed");
+        statBlock.ConditionImmunities = this.getCommaSeparatedStrings("conditionImmune");
+        statBlock.DamageImmunities = this.getCommaSeparatedStrings("immune");
+        statBlock.DamageResistances = this.getCommaSeparatedStrings("resist");
+        statBlock.DamageVulnerabilities = this.getCommaSeparatedStrings("vulnerable");
+        statBlock.Senses = this.getCommaSeparatedStrings("senses");
+        statBlock.Languages = this.getCommaSeparatedStrings("languages");
 
-            statBlock.Traits = this.getPowers("trait");
-            statBlock.Actions = this.getPowers("action");
-            statBlock.Reactions = this.getPowers("reaction");
-            statBlock.LegendaryActions = this.getPowers("legendary");
+        statBlock.Skills = this.getCommaSeparatedModifiers("skill");
+        statBlock.Saves = this.getCommaSeparatedModifiers("save");
 
-            return statBlock;
-        }
+        statBlock.Traits = this.getPowers("trait");
+        statBlock.Actions = this.getPowers("action");
+        statBlock.Reactions = this.getPowers("reaction");
+        statBlock.LegendaryActions = this.getPowers("legendary");
+
+        return statBlock;
     }
 }

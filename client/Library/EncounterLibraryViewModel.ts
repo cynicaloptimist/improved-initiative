@@ -1,26 +1,30 @@
-module ImprovedInitiative {
-    export class EncounterLibraryViewModel {
-        constructor(
-            private encounterCommander: EncounterCommander,
-            private library: EncounterLibrary
-        ) { }
+import { EncounterCommander } from "../Commands/EncounterCommander";
+import { EncounterLibrary } from "./EncounterLibrary";
+import { registerComponent } from "../Utility/Components";
 
-        LibraryFilter = ko.observable("");
+export class EncounterLibraryViewModel {
+    constructor(
+        private encounterCommander: EncounterCommander,
+        private library: EncounterLibrary
+    ) { }
 
-        FilteredEncounters = ko.pureComputed<string []>(() => {
-            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                index = this.library.Index();
-                 
-            if (filter.length == 0) {
-                return index;
-            }
+    LibraryFilter = ko.observable("");
 
-            return index.filter(name => name.toLocaleLowerCase().indexOf(filter) > -1);
-        });
+    FilteredEncounters = ko.pureComputed<string[]>(() => {
+        const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+            index = this.library.Index();
 
-        ClickEntry = (name: string) => this.encounterCommander.LoadEncounterByName(name);
-        ClickDelete = (name: string) => this.encounterCommander.DeleteSavedEncounter(name);
-        ClickHide = () => this.encounterCommander.HideLibraries();
-        ClickAdd = () => this.encounterCommander.SaveEncounter();
-    }
+        if (filter.length == 0) {
+            return index;
+        }
+
+        return index.filter(name => name.toLocaleLowerCase().indexOf(filter) > -1);
+    });
+
+    ClickEntry = (name: string) => this.encounterCommander.LoadEncounterByName(name);
+    ClickDelete = (name: string) => this.encounterCommander.DeleteSavedEncounter(name);
+    ClickHide = () => this.encounterCommander.HideLibraries();
+    ClickAdd = () => this.encounterCommander.SaveEncounter();
 }
+
+registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.encounterCommander, params.library));

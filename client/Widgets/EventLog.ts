@@ -1,34 +1,32 @@
-module ImprovedInitiative {
-    export class EventLog {
-        Events = ko.observableArray<string>();
-        
-        LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
-        EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
-        
-        AddEvent = (event: string) => {
-            this.Events.push(event);
+export class EventLog {
+    Events = ko.observableArray<string>();
+
+    LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
+    EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
+
+    AddEvent = (event: string) => {
+        this.Events.push(event);
+    }
+
+    ToggleFullLog = () => {
+        if (this.ShowFullLog()) {
+            this.ShowFullLog(false);
+            $('.combatants').css('flex-shrink', 1);
+        } else {
+            this.ShowFullLog(true);
+            $('.combatants').css('flex-shrink', 0);
+            this.scrollToBottomOfLog();
         }
+    }
 
-        ToggleFullLog = () => {
-            if(this.ShowFullLog()) {
-                this.ShowFullLog(false);
-                $('.combatants').css('flex-shrink', 1);
-            } else {
-                this.ShowFullLog(true);
-                $('.combatants').css('flex-shrink', 0);
-                this.scrollToBottomOfLog();
-            }
-        }
+    ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
 
-        ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
+    ShowFullLog = ko.observable<boolean>(false);
 
-        ShowFullLog = ko.observable<boolean>(false);
+    private element = $('.event-log');
 
-        private element = $('.event-log');
-        
-        private scrollToBottomOfLog = () => {
-            let scrollHeight = this.element[0].scrollHeight;
-            this.element.scrollTop(scrollHeight);
-        }
+    private scrollToBottomOfLog = () => {
+        let scrollHeight = this.element[0].scrollHeight;
+        this.element.scrollTop(scrollHeight);
     }
 }

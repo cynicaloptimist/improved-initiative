@@ -1,4 +1,7 @@
-/// <reference path="../typings/index.d.ts" />
+import { RegisterComponents } from "./Utility/Components";
+import { TrackerViewModel } from "./TrackerViewModel";
+import { PlayerViewModel } from "./PlayerViewModel";
+import { LauncherViewModel } from "./LauncherViewModel";
 
 module ImprovedInitiative {
     $(() => {

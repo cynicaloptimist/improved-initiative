@@ -1,37 +1,37 @@
-module ImprovedInitiative {
-    export interface Spell {
-        Id: string;
-        Name: string;
-        Source: string;
-        Level: number;
-        School: string;
-        CastingTime: string;
-        Range: string;
-        Components: string;
-        Duration: string;
-        Classes: string[];
-        Description: string;
-        Ritual: boolean;
-    }
+import { probablyUniqueString } from "../Utility/Toolbox";
 
-    export class Spell {
-        static GetKeywords = (spell: Spell) => [spell.Name, spell.School, ...spell.Classes].join(" ");
+export interface Spell {
+    Id: string;
+    Name: string;
+    Source: string;
+    Level: number;
+    School: string;
+    CastingTime: string;
+    Range: string;
+    Components: string;
+    Duration: string;
+    Classes: string[];
+    Description: string;
+    Ritual: boolean;
+}
 
-        static Default: () => Spell = () => {
-            return {
-                Id: probablyUniqueString(),
-                Name: "",
-                Source: "",
-                CastingTime: "",
-                Classes: [],
-                Components: "",
-                Description: "",
-                Duration: "",
-                Level: 0,
-                Range: "",
-                Ritual: false,
-                School: "",
-            };
+export class Spell {
+    static GetKeywords = (spell: Spell) => [spell.Name, spell.School, ...spell.Classes].join(" ");
+
+    static Default: () => Spell = () => {
+        return {
+            Id: probablyUniqueString(),
+            Name: "",
+            Source: "",
+            CastingTime: "",
+            Classes: [],
+            Components: "",
+            Description: "",
+            Duration: "",
+            Level: 0,
+            Range: "",
+            Ritual: false,
+            School: "",
         };
-    }
+    };
 }

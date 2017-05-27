@@ -1,37 +1,37 @@
-module ImprovedInitiative {
-    export class PromptQueue {
-        constructor() {}
+import { Prompt } from "./Prompt";
 
-        Prompts = ko.observableArray<Prompt>();
-        
-        Add = (prompt: Prompt) => {
-            prompt.SetDequeueCallback(() => {
-                this.Prompts.remove(prompt)
-                if (this.HasPrompt()) {
-                    $(this.Prompts()[0].InputSelector).first().select();
-                }
-            });
-            this.Prompts.push(prompt);
-            $(prompt.InputSelector).last().select();
-        }
+export class PromptQueue {
+    constructor() { }
 
-        HasPrompt = ko.pureComputed(() => {
-            return this.Prompts().length > 0;
-        });
+    Prompts = ko.observableArray<Prompt>();
 
-        AnimatePrompt = () => {
-            if (!this.HasPrompt()) {
-                return;
+    Add = (prompt: Prompt) => {
+        prompt.SetDequeueCallback(() => {
+            this.Prompts.remove(prompt)
+            if (this.HasPrompt()) {
+                $(this.Prompts()[0].InputSelector).first().select();
             }
-            const opts = { duration: 200 };
-            const up = { "margin-bottom": "+=10" };
-            const down = { "margin-bottom": "-=10" };
-            $('.prompt')
-                .animate(up, opts)
-                .animate(down, opts)
-                .find(this.Prompts()[0].InputSelector)
-                .first()
-                .select();
+        });
+        this.Prompts.push(prompt);
+        $(prompt.InputSelector).last().select();
+    }
+
+    HasPrompt = ko.pureComputed(() => {
+        return this.Prompts().length > 0;
+    });
+
+    AnimatePrompt = () => {
+        if (!this.HasPrompt()) {
+            return;
         }
+        const opts = { duration: 200 };
+        const up = { "margin-bottom": "+=10" };
+        const down = { "margin-bottom": "-=10" };
+        $('.prompt')
+            .animate(up, opts)
+            .animate(down, opts)
+            .find(this.Prompts()[0].InputSelector)
+            .first()
+            .select();
     }
 }

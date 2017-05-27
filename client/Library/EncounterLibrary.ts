@@ -1,28 +1,30 @@
-module ImprovedInitiative {
-    export class EncounterLibrary {
-        Index = ko.observableArray<string>([]);
+import { SavedEncounter, SavedCombatant } from "../Encounter/Encounter";
+import { Store } from "../Utility/Store";
+import { getClient } from "../Utility/ApplicationInsights";
 
-        constructor() {
-            Store.List(Store.SavedEncounters).forEach(e => this.Index.push(e));
+export class EncounterLibrary {
+    Index = ko.observableArray<string>([]);
 
-            window.appInsights.trackEvent("SavedEncounters", { Count: this.Index().length.toString() });
+    constructor() {
+        Store.List(Store.SavedEncounters).forEach(e => this.Index.push(e));
+
+        getClient().trackEvent("SavedEncounters", { Count: this.Index().length.toString() });
+    }
+
+    Save = (encounterName: string, savedEncounter: SavedEncounter<SavedCombatant>) => {
+        if (this.Index().indexOf(encounterName) === -1) {
+            this.Index.push(encounterName);
         }
 
-        Save = (encounterName: string, savedEncounter: SavedEncounter<SavedCombatant>) => {
-            if (this.Index().indexOf(encounterName) === -1) {
-                this.Index.push(encounterName);
-            }
-                        
-            Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
-        }
+        Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
+    }
 
-        Delete = (encounterName: string) => {
-            this.Index.remove(encounterName);
-            Store.Delete(Store.SavedEncounters, encounterName);
-        }
+    Delete = (encounterName: string) => {
+        this.Index.remove(encounterName);
+        Store.Delete(Store.SavedEncounters, encounterName);
+    }
 
-        Get = (encounterName: string) => {
-            return Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
-        }
+    Get = (encounterName: string) => {
+        return Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, encounterName);
     }
 }

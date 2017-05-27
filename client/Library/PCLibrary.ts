@@ -1,28 +1,31 @@
-module ImprovedInitiative {
-    export class PCLibrary {
-        StatBlocks = ko.observableArray<StatBlockListing>([]);
-        ContainsPlayerCharacters = true;
+import { Store } from "../Utility/Store";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlockListing } from "../StatBlock/StatBlockListing";
+import { getClient } from "../Utility/ApplicationInsights";
 
-        constructor() {
-            Store.List(Store.PlayerCharacters).forEach(id => {
-                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-                this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-            });
+export class PCLibrary {
+    StatBlocks = ko.observableArray<StatBlockListing>([]);
+    ContainsPlayerCharacters = true;
 
-            window.appInsights.trackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
+    constructor() {
+        Store.List(Store.PlayerCharacters).forEach(id => {
+            var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
+            this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+        });
 
-            if (this.StatBlocks().length == 0) {
-                this.addSamplePlayersFromUrl('/sample_players.json');
-            }
+        getClient().trackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
+
+        if (this.StatBlocks().length == 0) {
+            this.addSamplePlayersFromUrl('/sample_players.json');
         }
+    }
 
-        private addSamplePlayersFromUrl = (url: string) => {
-            $.getJSON(url, (json: StatBlock[]) => {
-                json.forEach((statBlock, index) => {
-                    statBlock = { ...StatBlock.Default(), ...statBlock }
-                    this.StatBlocks.push(new StatBlockListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-                })
-            });
-        }
+    private addSamplePlayersFromUrl = (url: string) => {
+        $.getJSON(url, (json: StatBlock[]) => {
+            json.forEach((statBlock, index) => {
+                statBlock = { ...StatBlock.Default(), ...statBlock }
+                this.StatBlocks.push(new StatBlockListing(index.toString(), statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+            })
+        });
     }
 }
