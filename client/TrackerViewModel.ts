@@ -16,7 +16,8 @@ module ImprovedInitiative {
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
         LibrariesVisible = ko.observable(true);
-        
+        ToolbarWide = ko.observable(true);
+        ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar");
 
         CenterColumn = ko.pureComputed(() => {
             const editStatBlock = this.StatBlockEditor.HasStatBlock();

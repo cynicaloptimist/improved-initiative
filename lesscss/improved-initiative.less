@@ -333,20 +333,21 @@ input[type="file"] {
         }
     }
 }
-.commands {
+
+.toolbar {
     .scrollframe {
         max-width: none;
-        width: @button-width + @scrollbar-width;
+        //width: @button-width + @scrollbar-width;
         overflow-x: hidden;
         overflow-y: scroll;
     }
 
-    width: @button-width;
+    //width: @button-width;
     overflow: hidden;
     flex-shrink: 0;
 }
 
-.commands .scrollframe > div {
+.toolbar .scrollframe > div {
     &.commands-combatant {
         margin-top:10px;
         padding-top:10px;
@@ -358,6 +359,19 @@ input[type="file"] {
 
     .button {
         margin: 1px 0;
+    }
+}
+
+.toolbar-wide {
+    .scrollframe {
+        width: auto;
+    }
+    width: auto;
+    .button {
+        text-align: left;
+        &:before {
+            width: @button-width;
+        }
     }
 }
 
