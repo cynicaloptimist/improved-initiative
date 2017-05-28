@@ -79,6 +79,6 @@ export class TrackerViewModel {
             this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,
             this.LibrariesVisible() ? 'showing-libraries' : null,
             this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
-        ].filter(s => s).join(' ');
+        ].filter(s => !!s).join(' ');
     });
 }
