@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as ko from "knockout";
 
 const pendingComponents: JQueryXHR[] = [];
 
