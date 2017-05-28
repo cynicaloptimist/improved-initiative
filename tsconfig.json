@@ -2,8 +2,5 @@
     "compilerOptions": {
         "target": "ES5",
         "sourceMap": true
-    },
-    "include": [
-        "server/**/*.ts"
-    ]
+    }
 }
