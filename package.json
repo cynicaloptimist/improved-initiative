@@ -13,7 +13,6 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
-    "requirejs": "^2.1.17",
     "sinon": "^1.15.4"
   },
   "dependencies": {
@@ -47,7 +46,7 @@
     "grunt-mocha-test": "^0.12.7",
     "grunt-open": "^0.2.3",
     "grunt-ts": "^5.5.1",
-    "jquery": "^2.1.4",
+    "jquery": "^3.2.1",
     "knockout": "^3.4.0",
     "knockout-mapping": "^2.6.0",
     "less": "^2.5.0",
@@ -58,15 +57,14 @@
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
     "request": "^2.81.0",
-    "socket.io": "^1.7.1",
-    "socket.io-client": "^1.7.1",
+    "socket.io": "^2.0.1",
+    "socket.io-client": "^2.0.1",
     "ts-loader": "^2.1.0",
-    "typescript": "^2.1.4",
-    "typings": "2.1.0",
+    "typescript": "^2.3.3",
     "webpack": "^2.6.1"
   },
   "scripts": {
-    "postinstall": "typings install && grunt --no-color postinstall",
+    "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/"
   }
