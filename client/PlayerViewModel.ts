@@ -1,3 +1,5 @@
+import * as io from "socket.io-client";
+
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
 import { TurnTimer } from "./Widgets/TurnTimer";
 import { SavedEncounter } from "./Encounter/Encounter";

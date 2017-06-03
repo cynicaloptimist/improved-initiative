@@ -1,3 +1,5 @@
+import * as io from "socket.io-client";
+
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Combatant } from "../Combatant/Combatant";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
