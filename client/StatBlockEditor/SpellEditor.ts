@@ -1,4 +1,3 @@
-import { registerComponent } from "../Utility/Components";
 import { Spell } from "../Spell/Spell";
 
 export class SpellEditor {
@@ -70,5 +69,3 @@ export class SpellEditor {
         }
     }
 }
-
-registerComponent('spelleditor', params => params.editor);

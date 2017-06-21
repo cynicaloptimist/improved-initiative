@@ -1,7 +1,9 @@
+import * as Mousetrap from "mousetrap";
+import { saveAs } from "browser-filesaver";
+
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Store } from "../Utility/Store";
-import { registerComponent } from "../Utility/Components";
 
 export var Settings = (params: {
     encounterCommander: EncounterCommander;
@@ -128,5 +130,3 @@ export var Settings = (params: {
         SaveAndClose: saveAndClose
     }
 }
-
-registerComponent('settings', Settings);

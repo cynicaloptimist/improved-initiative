@@ -1,7 +1,6 @@
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "./SpellLibrary";
 import { SpellListing } from "../Spell/SpellListing";
-import { registerComponent } from "../Utility/Components";
 
 export class SpellLibraryViewModel {
     constructor(
@@ -37,5 +36,3 @@ export class SpellLibraryViewModel {
     ClickHide = () => this.encounterCommander.HideLibraries();
     ClickAdd = () => this.encounterCommander.CreateAndEditSpell();
 }
-
-registerComponent('spelllibrary', params => new SpellLibraryViewModel(params.encounterCommander, params.library));

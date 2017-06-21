@@ -1,7 +1,6 @@
 import { StatBlockListing } from "../StatBlock/StatBlockListing";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { EncounterCommander } from "../Commands/EncounterCommander";
-import { registerComponent } from "../Utility/Components";
 
 export interface StatBlockLibrary {
     StatBlocks: KnockoutObservableArray<StatBlockListing>
@@ -54,5 +53,3 @@ export class StatBlockLibraryViewModel {
         });
     }
 }
-
-registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));

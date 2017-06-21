@@ -1,4 +1,3 @@
-import { registerComponent } from "../Utility/Components";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "./Libraries";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
@@ -42,5 +41,3 @@ export class LibrariesViewModel {
         })
     }
 }
-
-registerComponent('libraries', params => new LibrariesViewModel(params.encounterCommander, params.libraries));

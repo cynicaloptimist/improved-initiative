@@ -2,7 +2,6 @@ import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { toModifierString } from "../../Utility/Toolbox";
-import { registerComponent } from "../../Utility/Components";
 
 export class InitiativePrompt implements Prompt {
     InputSelector = '.response';
@@ -41,5 +40,3 @@ export class InitiativePrompt implements Prompt {
     Resolve = _ => { };
     SetDequeueCallback = callback => this.dequeue = callback;
 }
-
-registerComponent('initiativeprompt', params => params.prompt);

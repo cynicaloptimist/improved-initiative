@@ -1,5 +1,3 @@
-import { registerComponent } from "../../Utility/Components";
-
 export interface Prompt {
     InputSelector: string;
     ComponentName: string;
@@ -25,5 +23,3 @@ export class DefaultPrompt implements Prompt {
         this.dequeue();
     }
 }
-
-registerComponent('defaultprompt', params => params.prompt);

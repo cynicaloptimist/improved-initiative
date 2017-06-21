@@ -1,4 +1,3 @@
-import { registerComponent } from "../Utility/Components";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 import { Store } from "../Utility/Store";
@@ -128,5 +127,3 @@ export class StatBlockEditor {
         return NaN;
     }
 }
-
-registerComponent('statblockeditor', params => params.editor);

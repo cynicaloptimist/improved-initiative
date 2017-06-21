@@ -1,7 +1,6 @@
 import { TutorialSteps } from "./TutorialSteps";
 import { Store } from "../Utility/Store";
 import { getClient } from "../Utility/ApplicationInsights";
-import { registerComponent } from "../Utility/Components";
 
 export const TutorialSpy = ko.observable<string>(null);
 
@@ -81,5 +80,3 @@ export class TutorialViewModel {
         }
     }
 }
-
-registerComponent('tutorial', params => new TutorialViewModel(params));

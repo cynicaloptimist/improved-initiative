@@ -1,6 +1,5 @@
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { EncounterLibrary } from "./EncounterLibrary";
-import { registerComponent } from "../Utility/Components";
 
 export class EncounterLibraryViewModel {
     constructor(
@@ -26,5 +25,3 @@ export class EncounterLibraryViewModel {
     ClickHide = () => this.encounterCommander.HideLibraries();
     ClickAdd = () => this.encounterCommander.SaveEncounter();
 }
-
-registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.encounterCommander, params.library));

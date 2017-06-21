@@ -3,7 +3,6 @@ import { Conditions } from "../../Rules/Conditions";
 import { Combatant } from "../../Combatant/Combatant";
 import { Tag, StartOfTurn, EndOfTurn } from "../../Combatant/Tag";
 import { Encounter } from "../../Encounter/Encounter";
-import { registerComponent } from "../../Utility/Components";
 
 export class TagPrompt implements Prompt {
     InputSelector = '.response';
@@ -60,5 +59,3 @@ export class TagPrompt implements Prompt {
         };
     }
 }
-
-registerComponent('tagprompt', params => params.prompt);

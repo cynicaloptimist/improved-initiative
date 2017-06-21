@@ -1,5 +1,11 @@
 import * as _ from "lodash";
-import * as ko from "knockout";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { EncounterLibraryViewModel } from "../Library/EncounterLibraryViewModel";
+import { LibrariesViewModel } from "../Library/LibrariesViewModel";
+import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
+import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel";
+import { Settings } from "../Settings/Settings";
+import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 
 const pendingComponents: JQueryXHR[] = [];
 
@@ -7,7 +13,7 @@ export const ComponentLoader = {
     AfterComponentLoaded: (callback: (() => void)) => $.when(...pendingComponents).always(callback)
 }
 
-export const registerComponent = (name: string, viewModel: any) => ko.components.register(
+const registerComponent = (name: string, viewModel: any) => ko.components.register(
     name,
     {
         viewModel,
@@ -36,4 +42,20 @@ export var RegisterComponents = () => {
     };
 
     ko.components.loaders.unshift(templateLoader);
+    registerComponent('combatant', params => new CombatantViewModel(params.combatant, params.combatantCommander, params.addPrompt, params.logEvent));
+    registerComponent('playerdisplaycombatant', params => params.combatant);
+    registerComponent('initiativeprompt', params => params.prompt);
+    registerComponent('defaultprompt', params => params.prompt);
+    registerComponent('spellprompt', params => params.prompt);
+    registerComponent('tagprompt', params => params.prompt);
+    registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.encounterCommander, params.library));
+    registerComponent('libraries', params => new LibrariesViewModel(params.encounterCommander, params.libraries));
+    registerComponent('spelllibrary', params => new SpellLibraryViewModel(params.encounterCommander, params.library));
+    registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
+    registerComponent('settings', Settings);
+    registerComponent('defaultstatblock', params => params.statBlock);
+    registerComponent('activestatblock', params => params.statBlock);
+    registerComponent('spelleditor', params => params.editor);
+    registerComponent('statblockeditor', params => params.editor);
+    registerComponent('tutorial', params => new TutorialViewModel(params));
 }

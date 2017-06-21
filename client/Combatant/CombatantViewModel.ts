@@ -6,7 +6,6 @@ import { Prompt, DefaultPrompt } from "../Commands/Prompts/Prompt";
 import { TagPrompt } from "../Commands/Prompts/TagPrompt";
 import { Store } from "../Utility/Store";
 import { getClient } from "../Utility/ApplicationInsights";
-import { registerComponent } from "../Utility/Components";
 
 export class CombatantViewModel {
     DisplayHP: KnockoutComputed<string>;
@@ -155,5 +154,3 @@ export class CombatantViewModel {
         this.Combatant.Encounter.QueueEmitEncounter();
     };
 }
-
-registerComponent('combatant', params => new CombatantViewModel(params.combatant, params.combatantCommander, params.addPrompt, params.logEvent));

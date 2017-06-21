@@ -1,7 +1,6 @@
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 import { Store } from "../Utility/Store";
-import { registerComponent } from "../Utility/Components";
 
 export class StaticCombatantViewModel {
     Name: string;
@@ -60,5 +59,3 @@ export class StaticCombatantViewModel {
         return "rgb(" + red + "," + green + ",0)";
     }
 }
-
-registerComponent('playerdisplaycombatant', params => params.combatant);

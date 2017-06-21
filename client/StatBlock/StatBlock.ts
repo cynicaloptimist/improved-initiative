@@ -1,5 +1,4 @@
 import { probablyUniqueString } from "../Utility/Toolbox";
-import { registerComponent } from "../Utility/Components";
 
 export interface AbilityScores {
     Str: number;
@@ -73,7 +72,3 @@ export class StatBlock {
 
     static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
 }
-
-registerComponent('defaultstatblock', params => params.statBlock);
-registerComponent('activestatblock', params => params.statBlock);
-    
