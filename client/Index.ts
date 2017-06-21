@@ -1,5 +1,5 @@
-import * as $ from "jquery";
-import * as ko from "knockout";
+/// <reference path="../node_modules/@types/jquery/index.d.ts" />
+/// <reference path="../node_modules/@types/knockout/index.d.ts" />
 
 import { RegisterComponents } from "./Utility/Components";
 import { TrackerViewModel } from "./TrackerViewModel";
