@@ -1,7 +1,7 @@
 <div class="tabs">
-    <span data-bind="click: CurrentTab.with('about'), css: { selected: CurrentTab() == 'about' }">About</span>
-    <span data-bind="click: CurrentTab.with('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
-    <span data-bind="click: CurrentTab.with('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
+    <span data-bind="click: CurrentTab.bind(null, 'about'), css: { selected: CurrentTab() == 'about' }">About</span>
+    <span data-bind="click: CurrentTab.bind(null, 'keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
+    <span data-bind="click: CurrentTab.bind(null, 'options'), css: { selected: CurrentTab() == 'options' }">Options</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <div><p><strong>Improved Initiative</strong> was created by <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>.
