@@ -19,6 +19,8 @@
 @button-inner: 18px;
 @border-radius: 5px;
 
+@fixed-column-width: 350px;
+
 @scrollbar-width: 17px;
 
 //elements
@@ -285,7 +287,7 @@ input[type="file"] {
     .left-column, .right-column, .preview.statblock {
         .recessed();
 
-        width: 350px;
+        width: @fixed-column-width;
         flex-shrink: 0;
     }
 }
@@ -333,20 +335,8 @@ input[type="file"] {
         }
     }
 }
-.commands {
-    .scrollframe {
-        max-width: none;
-        width: @button-width + @scrollbar-width;
-        overflow-x: hidden;
-        overflow-y: scroll;
-    }
 
-    width: @button-width;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.commands .scrollframe > div {
+.toolbar .scrollframe > div {
     &.commands-combatant {
         margin-top:10px;
         padding-top:10px;
@@ -358,6 +348,37 @@ input[type="file"] {
 
     .button {
         margin: 1px 0;
+    }
+}
+
+.toolbar-narrow {
+    .scrollframe {
+        max-width: none;
+        width: @button-width + @scrollbar-width;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    width: @button-width;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    .command-name {
+        display: none;
+    }
+}
+
+.toolbar-wide {
+    .button {
+        text-align: left;
+        &:before {
+            width: @button-inner + @border-radius * 2;
+            text-align: center;
+            display: inline-block;
+        }
+    }
+    .command-name {
+        display: inline-block;
     }
 }
 

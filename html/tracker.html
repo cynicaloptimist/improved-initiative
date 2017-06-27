@@ -50,25 +50,25 @@
         }
     ">
     </div>
-    <div class="commands">
+    <div class="toolbar" data-bind="css: ToolbarClass">
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
-                <span class="button" data-bind="
-                    visible: ShowOnActionBar,
-                    css: ActionBarIcon,
+                <div class="button" data-bind="
+                    visible: ShowOnActionBar, 
                     attr: { title: ToolTip },
-                    click: ActionBinding
-                ">
-                </span>
+                    click: ActionBinding">
+                    <span class="fa" data-bind="css: ActionBarIcon"></span>
+                    <span class="command-name" data-bind="text: Description"></span>
+                </div>
             </div>
             <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
-                <span class="button" data-bind="
-                    visible: ShowOnActionBar,
-                    css: ActionBarIcon,
+                <div class="button" data-bind="
+                    visible: ShowOnActionBar, 
                     attr: { title: ToolTip },
-                    click: ActionBinding
-                ">
-                </span>
+                    click: ActionBinding">
+                    <span class="fa" data-bind="css: ActionBarIcon"></span>
+                    <span class="command-name" data-bind="text: Description"></span>
+                </div>
             </div>
         </div>
     </div>

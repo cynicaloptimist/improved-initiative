@@ -98,6 +98,10 @@ module ImprovedInitiative {
             this.tracker.SettingsVisible(true);
         }
 
+        ToggleToolbarWidth = () => {
+            this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
+        }
+
         RollDice = (diceExpression: string) => {
             const diceRoll = Dice.RollDiceExpression(diceExpression);
             const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
