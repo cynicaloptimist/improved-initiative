@@ -33,7 +33,7 @@ module ImprovedInitiative {
                     // internet explorer
                     e.returnValue = false;
                 }
-            })
+            });
 
             allCommands.forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);

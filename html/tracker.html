@@ -149,18 +149,18 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <div class="prompts">
-            <!-- ko foreach: PromptQueue.Prompts -->
+        <div class="prompts" data-bind="with: PromptQueue">
+            <!-- ko foreach: Prompts -->
             <form class="prompt" data-bind="
                 submit: Resolve,
                 component: {
                     name: ComponentName,
                     params: {
-                        prompt: $data
+                        prompt: $data,
                     }
-                }">
+                },
+                afterRender: $parent.UpdateDom">
             </form>
-
             <!-- /ko -->
         </div>
 
