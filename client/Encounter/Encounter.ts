@@ -41,8 +41,16 @@ module ImprovedInitiative {
             });
 
             this.Difficulty = ko.pureComputed(() => {
-                const enemyChallengeRatings = this.Combatants().filter(c => !c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => c.StatBlock().Challenge);
-                const playerLevels = this.Combatants().filter(c => c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => parseInt(c.StatBlock().Challenge));
+                const enemyChallengeRatings =
+                    this.Combatants()
+                        .filter(c => !c.IsPlayerCharacter)    
+                        .filter(c => c.StatBlock().Challenge)    
+                        .map(c => c.StatBlock().Challenge);
+                const playerLevels =
+                    this.Combatants()
+                        .filter(c => c.IsPlayerCharacter)
+                        .filter(c => c.StatBlock().Challenge)    
+                        .map(c => c.StatBlock().Challenge);
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
             })
 
