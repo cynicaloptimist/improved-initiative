@@ -174,7 +174,8 @@ module ImprovedInitiative {
                     this.tracker.Encounter.QueueEmitEncounter();
                 }, (_, __) => {
                     this.Remove();
-                })
+                },
+                    "instance");
             }
         }
     }

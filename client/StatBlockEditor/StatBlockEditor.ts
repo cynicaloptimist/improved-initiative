@@ -3,8 +3,9 @@ module ImprovedInitiative {
         private saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void;
         private deleteCallback: (library: string, id: string) => void;
         private statBlock: StatBlock;
-
-        EditorType = ko.observable<string>('basic');
+        
+        EditMode = ko.observable<"instance" | "global">();
+        EditorType = ko.observable<"basic" | "advanced">("basic");
         JsonStatBlock = ko.observable<string>();
         EditableStatBlock = ko.observable(null);
 
@@ -13,33 +14,34 @@ module ImprovedInitiative {
         EditStatBlock = (statBlockId: string,
             statBlock: StatBlock,
             saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
-            deleteCallback: (library: string, id: string) => void) => {
-            
+            deleteCallback: (library: string, id: string) => void,
+            editMode: "instance" | "global") => {
+
             statBlock.Id = statBlockId;
             this.statBlock = { ...StatBlock.Default(), ...statBlock }
 
             this.EditableStatBlock(this.makeEditable(this.statBlock));
             this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
-            
+
             this.saveCallback = saveCallback;
             this.deleteCallback = deleteCallback;
+            this.EditMode(editMode);
         }
 
-        
         private makeEditable = (statBlock: StatBlock) => {
             let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
             let modifierLists = ['Saves', 'Skills'];
             let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
-            
+
             let observableStatBlock = ko['mapping'].fromJS(this.statBlock);
-            
+
             let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
                 for (let arrayName of arrayNames) {
                     let array = observableStatBlock[arrayName];
                     array(array().map(item => {
                         return new RemovableArrayValue(array, item);
                     }));
-                    
+
                     array.AddEmpty = () => {
                         array.push(new RemovableArrayValue(array, makeEmptyValue()))
                     };
@@ -52,18 +54,18 @@ module ImprovedInitiative {
                 Name: ko.observable(''),
                 Modifier: ko.observable('')
             }));
-            
+
             makeRemovableArrays(traitLists, () => ({
                 Name: ko.observable(''),
                 Content: ko.observable(''),
                 Usage: ko.observable('')
             }))
-            
+
             return observableStatBlock;
         }
 
         private unMakeEditable = (editableStatBlock: any) => {
-            for (let key in editableStatBlock) {  
+            for (let key in editableStatBlock) {
                 if (key == "HP") {
                     var hpInt = parseInt(editableStatBlock[key].Value());
                     editableStatBlock[key].Value(hpInt);
@@ -100,7 +102,7 @@ module ImprovedInitiative {
             if (this.EditorType() === 'basic') {
                 $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
             }
-            
+
             this.saveCallback(this.statBlockLibrary(), this.statBlock.Id, editedStatBlock);
             this.EditableStatBlock(null);
         }
