@@ -67,7 +67,7 @@ module ImprovedInitiative {
         ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
         Difficulty: KnockoutComputed<EncounterDifficulty>;
-        State: KnockoutObservable<string> = ko.observable('inactive');
+        State: KnockoutObservable<"active"|"inactive"> = ko.observable<"active"|"inactive">('inactive');
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
