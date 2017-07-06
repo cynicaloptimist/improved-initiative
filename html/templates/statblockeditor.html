@@ -8,10 +8,10 @@
 </div>
 <div class="edit-mode">Edit Mode:
 <!-- ko if: EditMode() === "instance" -->
-<strong>Single</strong>
+<span class="fa fa-user" title="Editing the statblock of a single combatant">Single</span>
 <!-- /ko -->
 <!-- ko if: EditMode() === "global" -->
-<strong>Library</strong>
+<span class="fa fa-address-book" title="Editing this statblock in your library">Library</span>
 <!-- /ko -->
 </div>
 <!-- ko if: EditorType() === 'basic' -->
@@ -85,6 +85,7 @@
 <textarea class="json-editor" spellcheck="false" data-bind="value: JsonStatBlock"></textarea>
 <!-- /ko -->
 <div class="buttons">
-    <div data-bind="click: SaveStatBlock"><span class="button fa-save"></span></div>
-    <div data-bind="click: DeleteStatBlock"><span class="button fa-trash"></span></div>
+    <div data-bind="click: SaveStatBlock" title="Save changes to statblock"><span class="button fa-save"></span></div>
+    <div data-bind="click: RevertStatBlock" title="Cancel and revert statblock"><span class="button fa-close"></span></div>
+    <div data-bind="click: DeleteStatBlock" title="Delete statblock"><span class="button fa-trash"></span></div>
 </div>

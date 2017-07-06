@@ -67,6 +67,10 @@ module ImprovedInitiative {
                 this.EditableSpell(null);
             }
         }
+
+        RevertSpell = () => {
+            this.EditableSpell(null);
+        }
     }
 
     ko.components.register('spelleditor', {

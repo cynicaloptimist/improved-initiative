@@ -114,6 +114,10 @@ module ImprovedInitiative {
             }
         }
 
+        RevertStatBlock = () => {
+            this.EditableStatBlock(null);
+        }
+
         private statBlockLibrary(): string {
             return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.StatBlocks
         }

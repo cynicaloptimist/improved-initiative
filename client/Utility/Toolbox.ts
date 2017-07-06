@@ -70,6 +70,8 @@ var PostJSON = (url: string, data: any, success: (data: any) => void) =>
     });
 
 var probablyUniqueString = (): string => {
+    //string contains only easily relayable characters for forward 
+    //compatability with speech-based data transfer ;-)
     var chars = '1234567890abcdefghijkmnpqrstuvxyz';
     var probablyUniqueString = ''
     for (var i = 0; i < 8; i++) {
