@@ -35,9 +35,11 @@ module ImprovedInitiative {
             this.TutorialVisible() ||
             this.SettingsVisible()
         );
+
         CloseSettings = () => {
             this.SettingsVisible(false);
         };
+
         RepeatTutorial = () => {
             this.Encounter.EndEncounter();
             this.EncounterCommander.ShowLibraries();
@@ -74,5 +76,34 @@ module ImprovedInitiative {
                 this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
             ].filter(s => s).join(' ');
         });
+
+        private contextualCommandSuggestion = () => {
+            const encounterEmpty = this.Encounter.Combatants().length === 0;
+            const librariesVisible = this.LibrariesVisible();
+            const encounterActive = this.Encounter.State() === "active";
+
+            if(encounterEmpty){
+                if(librariesVisible) {
+                    //No creatures, Library open: Creature listing
+                    return "listing";
+                } else {
+                    //No creatures, library closed: Add Creatures
+                    return "add-creatures";
+                }
+            }
+
+            if(!encounterActive) {
+                //Creatures, encounter stopped: Start Encounter
+                return "start-encounter";
+            }
+            
+            if(librariesVisible) {
+                //Creatures, library open, encounter active: Hide Libraries
+                return "hide-libraries";
+            }
+
+            //Creatures, library closed, encounter active: Next turn
+            return "next-turn";
+        }
     }
 }
