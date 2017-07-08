@@ -146,6 +146,10 @@ module ImprovedInitiative {
             }
             this.Combatants.push(combatant);
 
+            if (this.State() === "active") {
+                //viewmodel is initialized asynchronously, so timeout for workaround.
+                setTimeout(() => combatant.ViewModel.EditInitiative(), 10);
+            }
             this.QueueEmitEncounter();
             
             window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
