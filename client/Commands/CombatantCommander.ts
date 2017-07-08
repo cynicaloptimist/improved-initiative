@@ -104,8 +104,14 @@ module ImprovedInitiative {
                 response => {
                     const damage = response['damage'];
                     if (damage) {
-                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage))
-                        this.tracker.EventLog.AddEvent(`${damage} damage applied to ${combatantNames}.`);
+                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage));
+                        const damageNum = parseInt(damage);
+                        if (damageNum > 0) {
+                            this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
+                        }
+                        if (damageNum < 0) {
+                            this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
+                        }
                         this.tracker.Encounter.QueueEmitEncounter();
                     }
                 });
