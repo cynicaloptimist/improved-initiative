@@ -51,14 +51,24 @@ module ImprovedInitiative {
     }
 
     const getStatBlocksFromXml = (xmlString: string) => {
-        return $(xmlString).find("monster").toArray().map(xmlDoc => {
+        const statBlocks = $(xmlString).find("monster").toArray();
+        if (statBlocks.length === 0) {
+            alert("Could not retrieve any statblocks from the file. Please ensure that a valid DnDAppFile XML file is used.");
+        }
+
+        return statBlocks.map(xmlDoc => {
             var importer = new StatBlockImporter(xmlDoc);
             return importer.GetStatBlock();
         });
     }
 
     const getSpellsFromXml = (xmlString: string) => {
-        return $(xmlString).find("spell").toArray().map(xmlDoc => {
+        const spells = $(xmlString).find("spell").toArray();
+        if (spells.length === 0) {
+            alert("Could not retrieve any spells from the file. Please ensure that a valid DnDAppFile XML file is used.");
+        }
+        
+        return spells.map(xmlDoc => {
             var importer = new SpellImporter(xmlDoc);
             return importer.GetSpell();
         });
@@ -73,7 +83,10 @@ module ImprovedInitiative {
         reader.onload = (event: any) => {
             var xml: string = event.target.result;
             var entities = importer(xml);
-            callBack(entities);
+            if (entities.length) {
+                callBack(entities);
+                location.reload();    
+            }
         };
         reader.readAsText(xmlFile);
     }

@@ -86,13 +86,7 @@ module ImprovedInitiative {
             };
 
             if (confirm(`Import all statblocks in ${file.name} and reload?`)) {
-                try {
-                    new DnDAppFilesImporter().ImportStatBlocksFromXml(file, callback);
-                    location.reload();
-                } catch (error) {
-                    alert(`There was a problem importing ${file.name}: ${error}`);
-                    return;
-                }
+                new DnDAppFilesImporter().ImportStatBlocksFromXml(file, callback);
             }
         }
 
