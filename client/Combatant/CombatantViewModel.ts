@@ -85,7 +85,10 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            let message = `Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`;
+            const currentInitiative = this.Combatant.Initiative();
+            const modifier = this.Combatant.InitiativeBonus.toModifierString();
+            let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll(); 
+            let message = `Set initiative for ${this.DisplayName()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
             if (this.Combatant.InitiativeGroup()) {
                 message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;
             }
