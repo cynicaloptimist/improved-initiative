@@ -39,7 +39,7 @@
     <p data-bind="css: $data">
         <span data-bind="text: $data"></span>
         <!-- ko foreach: $parent[$data] -->
-        <input type="text" data-bind="value: Value.Name">
+        <input class="name" type="text" data-bind="value: Value.Name">
         <input type="number" data-bind="value: Value.Modifier">
         <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         <!-- /ko -->
@@ -50,7 +50,7 @@
     <p data-bind="css: $data">
         <span data-bind="uiText: $data"></span>
         <!-- ko foreach: $parent[$data] -->
-        <input type="text" data-bind="value: Value"></span>
+        <input class="name" type="text" data-bind="value: Value"></span>
         <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         <!-- /ko -->
         <span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span></p>
@@ -67,12 +67,12 @@
         <p data-bind="uiText: $data"></p>
         <!-- ko foreach: $parent[$data] -->
         <div>
-            <input type="text" data-bind="value: Value.Name">
+            <input class="name" type="text" data-bind="value: Value.Name">
             <textarea data-bind="value: Value.Content"></textarea>
             <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         </div>
         <!-- /ko -->
-        <div><span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</span></div>
+        <div class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</div>
     </div>
     <!-- /ko -->
     <div class="description">

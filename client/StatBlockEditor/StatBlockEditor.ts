@@ -42,8 +42,13 @@ module ImprovedInitiative {
                         return new RemovableArrayValue(array, item);
                     }));
 
-                    array.AddEmpty = () => {
+                    array.AddEmpty = (_, event: Event) => {
                         array.push(new RemovableArrayValue(array, makeEmptyValue()))
+                        $(event.target)
+                            .parent()
+                            .find("input.name")
+                            .last()
+                            .select();
                     };
                 }
             }
