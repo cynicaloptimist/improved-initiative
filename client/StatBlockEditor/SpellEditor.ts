@@ -41,6 +41,10 @@ module ImprovedInitiative {
             return unObservableSpell;
         }
 
+        SelectInput = () => {
+            $(".stats input.name").select();
+        }
+
         SaveSpell = () => {
             let editedSpell: Spell = Spell.Default();
 

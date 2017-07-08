@@ -87,6 +87,10 @@ module ImprovedInitiative {
             return unObservableStatBlock;
         }
 
+        SelectInput = () => {
+            $(".stats input.name").select();
+        }
+
         SaveStatBlock = () => {
             let editedStatBlock: StatBlock = StatBlock.Default();
 

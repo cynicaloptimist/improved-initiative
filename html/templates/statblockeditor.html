@@ -15,7 +15,7 @@
 <!-- /ko -->
 </div>
 <!-- ko if: EditorType() === 'basic' -->
-<div class="stats" data-bind="with: EditableStatBlock">
+<div class="stats" data-bind="with: EditableStatBlock, afterRender: SelectInput">
     <p>Name <input class="name" type="text" data-bind="value: Name" />
     </p>
     <p>Source <input class="type" type="text" data-bind="value: Source" />
