@@ -123,6 +123,7 @@ module ImprovedInitiative {
         }
 
         MoveCombatant = (combatant: Combatant, index: number) => {
+            combatant.InitiativeGroup(null);
             var currentPosition = this.Combatants().indexOf(combatant);
             var newInitiative = combatant.Initiative();
             var passedCombatant = this.Combatants()[index];
