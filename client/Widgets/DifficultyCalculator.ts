@@ -80,15 +80,20 @@ module ImprovedInitiative {
         return rankedXpMultipliers[multiplierRank];
     }
 
-    const getModifiedXp = (enemyChallengeRatings: string[], playerCount: number) => {
-        const totalXpBase = enemyChallengeRatings.reduce((currentSum, cr) => {
+    const getTotalXpBase = (challengeRatings: string[]) =>
+        challengeRatings.reduce((currentSum, cr) => {
             if (xpAmountsByChallenge[cr]) {
                 return currentSum + xpAmountsByChallenge[cr];
             }
             return currentSum;
         }, 0);
 
-        return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
+    const getModifiedXp = (enemyChallengeRatings: string[], playerCount: number) => {
+        const totalXpBase = getTotalXpBase(enemyChallengeRatings);
+        if (playerCount > 0) {
+            return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
+        }
+        return totalXpBase;
     }
 
     const getDifficulty = (totalXp, playerLevels: number[]) => {
@@ -120,16 +125,20 @@ module ImprovedInitiative {
 
     export interface EncounterDifficulty {
         Difficulty: string;
-        TotalExperience: number;
+        EarnedExperience: number;
+        EffectiveExperience: number;
     }
 
     export class DifficultyCalculator {
         static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
             const playerLevelTotals = playerLevels.map(getTotalLevel);
-            const totalXpWithEnemyCount = getModifiedXp(enemyChallengeRatings, playerLevels.length);
+            const totalXpBase = getTotalXpBase(enemyChallengeRatings);
+            const modifiedXp = getModifiedXp(enemyChallengeRatings, playerLevels.length);
+
             return {
-                Difficulty: getDifficulty(totalXpWithEnemyCount, playerLevelTotals),
-                TotalExperience: totalXpWithEnemyCount
+                Difficulty: getDifficulty(modifiedXp, playerLevelTotals),
+                EarnedExperience: totalXpBase,
+                EffectiveExperience: modifiedXp
             }
         }
     }
