@@ -3,7 +3,7 @@ module ImprovedInitiative {
         private saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void;
         private deleteCallback: (library: string, id: string) => void;
         private statBlock: StatBlock;
-        
+
         EditMode = ko.observable<"instance" | "global">();
         EditorType = ko.observable<"basic" | "advanced">("basic");
         JsonStatBlock = ko.observable<string>();
@@ -15,7 +15,8 @@ module ImprovedInitiative {
             statBlock: StatBlock,
             saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
             deleteCallback: (library: string, id: string) => void,
-            editMode: "instance" | "global") => {
+            editMode: "instance" | "global"
+        ) => {
 
             statBlock.Id = statBlockId;
             this.statBlock = { ...StatBlock.Default(), ...statBlock }

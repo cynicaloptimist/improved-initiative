@@ -49,12 +49,14 @@ module ImprovedInitiative {
 
             this.Initiative.subscribe(newInitiative => {
                 const groupId = this.InitiativeGroup();
-                if (groupId) {
+                if (!this.updatingGroup && groupId) {
+                    this.updatingGroup = true;
                     this.Encounter.Combatants().forEach(combatant => {
                         if (combatant.InitiativeGroup() === groupId) {
                             combatant.Initiative(newInitiative);
                         }
-                    })
+                    });
+                    this.updatingGroup = false;
                 }
             })
         }
@@ -77,6 +79,8 @@ module ImprovedInitiative {
         InitiativeBonus: number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
+
+        private updatingGroup = false;
 
         private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
