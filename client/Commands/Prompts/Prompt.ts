@@ -18,6 +18,9 @@ module ImprovedInitiative {
             const inputs = $(form).find(this.InputSelector);
             const inputsById = {};
             inputs.map((_, element) => {
+                if ($(element).prop("checked") && $(element).attr("name")) {
+                    inputsById[$(element).attr("name")] = $(element).val();
+                }
                 inputsById[element.id] = $(element).val();
             });
             this.resolve(inputsById);

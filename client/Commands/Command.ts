@@ -46,14 +46,15 @@ module ImprovedInitiative {
     
     export var BuildCombatantCommandList: (c: CombatantCommander) => Command [] = c => [
         new Command('Damage/Heal', c.EditHP, 't', 'fa-plus-circle'),
+        new Command('Apply Temporary HP', c.AddTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Add Note', c.AddTag, 'g', 'fa-tag', false),
         new Command('Remove from Encounter', c.Remove, 'del', 'fa-remove'),
         new Command('Rename', c.EditName, 'f2', 'fa-i-cursor'),
         new Command('Edit Statblock', c.EditStatBlock, 'alt+e', 'fa-edit', false),
-        new Command('Edit Initiative', c.EditInitiative, 'alt+i', 'fa-play-circle-o'),
+        new Command('Edit Initiative', c.EditInitiative, 'alt+i', 'fa-play-circle-o', false),
+        new Command('Link Initiative', c.LinkInitiative, 'alt+l', 'fa-link', false),
         new Command('Move Down', c.MoveDown, 'alt+j', 'fa-angle-double-down'),
         new Command('Move Up', c.MoveUp, 'alt+k', 'fa-angle-double-up'),
-        new Command('Apply Temporary HP', c.AddTemporaryHP, 'alt+t', 'fa-medkit'),
         new Command('Select Next', c.SelectNext, 'j', 'fa-arrow-down', false),
         new Command('Select Previous', c.SelectPrevious, 'k', 'fa-arrow-up', false)        
   ]    

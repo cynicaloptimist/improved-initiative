@@ -8,6 +8,7 @@ module ImprovedInitiative {
         CurrentHP: number;
         TemporaryHP: number;
         Initiative: number;
+        InitiativeGroup?: string;
         Alias: string;
         IndexLabel: number;
         Tags: string[] | SavedTag[];
@@ -238,6 +239,7 @@ module ImprovedInitiative {
                         CurrentHP: c.CurrentHP(),
                         TemporaryHP: c.TemporaryHP(),
                         Initiative: c.Initiative(),
+                        InitiativeGroup: c.InitiativeGroup(),
                         Alias: c.Alias(),
                         IndexLabel: c.IndexLabel,
                         Tags: c.Tags().map(t => ({

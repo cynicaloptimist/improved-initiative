@@ -12,6 +12,7 @@ module ImprovedInitiative {
         Tags: KnockoutObservableArray<Tag>;
         InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
+        InitiativeGroup: KnockoutObservable<string>;
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
@@ -45,6 +46,17 @@ module ImprovedInitiative {
             if (savedCombatant) {
                 this.processSavedCombatant(savedCombatant);
             }
+
+            this.Initiative.subscribe(newInitiative => {
+                const groupId = this.InitiativeGroup();
+                if (groupId) {
+                    this.Encounter.Combatants().forEach(combatant => {
+                        if (combatant.InitiativeGroup() === groupId) {
+                            combatant.Initiative(newInitiative);
+                        }
+                    })
+                }
+            })
         }
 
         Id = probablyUniqueString();
@@ -52,6 +64,7 @@ module ImprovedInitiative {
         TemporaryHP = ko.observable(0);
         Tags = ko.observableArray<Tag>();
         Initiative = ko.observable(0);
+        InitiativeGroup = ko.observable<string>(null);
         StatBlock = ko.observable<StatBlock>();
         Hidden = ko.observable(false);
 
@@ -82,6 +95,7 @@ module ImprovedInitiative {
             this.CurrentHP(savedCombatant.CurrentHP);
             this.TemporaryHP(savedCombatant.TemporaryHP);
             this.Initiative(savedCombatant.Initiative);
+            this.InitiativeGroup(savedCombatant.InitiativeGroup || null);
             this.Alias(savedCombatant.Alias);
             this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
             this.Hidden(savedCombatant.Hidden);

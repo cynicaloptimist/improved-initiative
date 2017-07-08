@@ -149,6 +149,24 @@ module ImprovedInitiative {
             return false;
         }
 
+        LinkInitiative = () => {
+            const selected = this.SelectedCombatants();
+            if (selected.length <= 1) {
+                const prompt = new DefaultPrompt(`Select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.`,
+                    _ => { });
+                this.tracker.PromptQueue.Add(prompt);
+                return;
+            }
+            const highestInitiative = selected.map(c => c.Initiative()).sort((a,b) => b-a)[0];
+            const initiativeGroup = probablyUniqueString();
+            selected.forEach(s => {
+                s.Initiative(highestInitiative);
+                s.InitiativeGroup(initiativeGroup);
+            });
+
+            this.tracker.Encounter.SortByInitiative();
+        }
+
         MoveUp = () => {
             var combatant = this.SelectedCombatants()[0];
             var index = this.tracker.Encounter.Combatants.indexOf(combatant)

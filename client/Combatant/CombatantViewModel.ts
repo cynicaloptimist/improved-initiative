@@ -67,6 +67,12 @@ module ImprovedInitiative {
             this.Combatant.Encounter.SortByInitiative();
         }
 
+        InitiativeClass = ko.computed(() => {
+            if (this.Combatant.InitiativeGroup()) {
+                return "fa fa-link";
+            }
+        });
+
         GetHPColor = () => {
             var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
             var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
@@ -79,10 +85,18 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            const prompt = new DefaultPrompt(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
+            let message = `Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`;
+            if (this.Combatant.InitiativeGroup()) {
+                message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;
+            }
+            const prompt = new DefaultPrompt(message,
                 response => {
                     const initiative = response['initiative'];
+                    const breakLink = response['break-link'] === "break";
                     if (initiative) {
+                        if (breakLink) {
+                            this.Combatant.InitiativeGroup(null);
+                        }
                         this.ApplyInitiative(initiative);
                         this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
                         this.Combatant.Encounter.QueueEmitEncounter();
