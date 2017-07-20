@@ -1,7 +1,12 @@
 module ImprovedInitiative {
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
+        constructor(
+            public Combatant: Combatant,
+            public CombatantCommander: CombatantCommander,
+            public PromptUser: (prompt: Prompt) => void,
+            public LogEvent: (message: string) => void
+        ) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);

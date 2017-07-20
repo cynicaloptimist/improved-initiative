@@ -157,7 +157,7 @@ module ImprovedInitiative {
                 this.tracker.PromptQueue.Add(prompt);
                 return;
             }
-            const highestInitiative = selected.map(c => c.Initiative()).sort((a,b) => b-a)[0];
+            const highestInitiative = selected.map(c => c.Initiative()).sort((a, b) => b - a)[0];
             const initiativeGroup = probablyUniqueString();
             selected.forEach(s => {
                 s.Initiative(highestInitiative);
