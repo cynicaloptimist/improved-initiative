@@ -77,6 +77,7 @@ module ImprovedInitiative {
         AC: number;
         AbilityModifiers: AbilityScores;
         InitiativeBonus: number;
+        ConcentrationBonus: number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
@@ -92,6 +93,7 @@ module ImprovedInitiative {
                 newStatBlock.InitiativeModifier = 0;
             }
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
+            this.ConcentrationBonus = this.AbilityModifiers.Con;
         }
 
         private processSavedCombatant(savedCombatant: SavedCombatant) {
@@ -142,5 +144,6 @@ module ImprovedInitiative {
         }
 
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+        GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
     }
 }
