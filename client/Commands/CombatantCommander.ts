@@ -119,6 +119,13 @@ module ImprovedInitiative {
             return false;
         }
 
+        CheckConcentration = (combatant: Combatant, damageAmount: number) => {
+            setTimeout(() => {
+                const prompt = new ConcentrationPrompt(combatant, damageAmount);
+                this.tracker.PromptQueue.Add(prompt);
+            }, 1);
+        }
+
         AddTemporaryHP = () => {
             const selectedCombatants = this.SelectedCombatants();
             const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ');
@@ -129,7 +136,7 @@ module ImprovedInitiative {
                         selectedCombatants.forEach(c => c.ViewModel.ApplyTemporaryHP(thp));
                         this.tracker.EventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
                         this.tracker.Encounter.QueueEmitEncounter();
-                    }    
+                    }
                 });
             this.tracker.PromptQueue.Add(prompt);
 
