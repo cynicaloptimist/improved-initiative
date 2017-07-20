@@ -23,7 +23,8 @@ module ImprovedInitiative {
                 healing = -damage,
                 currHP = this.Combatant.CurrentHP(),
                 tempHP = this.Combatant.TemporaryHP(),
-                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP"),
+                autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
 
             if (isNaN(damage)) {
                 return
@@ -31,7 +32,7 @@ module ImprovedInitiative {
 
             if (damage > 0) {
                 window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
-                if (this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
+                if (autoCheckConcentration && this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
                     this.CombatantCommander.CheckConcentration(this.Combatant, damage);    
                 }
                 tempHP -= damage;
