@@ -2,7 +2,7 @@ module ImprovedInitiative {
     export class TagPrompt implements Prompt {
         InputSelector = '.response';
         ComponentName = 'tagprompt';
-        private dequeueCallback;
+        private dequeueCallback: () => void;
 
         Combatants: Combatant[] = [];
         Conditions = Object.keys(Conditions);

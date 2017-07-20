@@ -31,6 +31,9 @@ module ImprovedInitiative {
 
             if (damage > 0) {
                 window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
+                if (this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
+                    this.CombatantCommander.CheckConcentration(this.Combatant, damage);    
+                }
                 tempHP -= damage;
                 if (tempHP < 0) {
                     currHP += tempHP;
@@ -92,7 +95,7 @@ module ImprovedInitiative {
         EditInitiative = () => {
             const currentInitiative = this.Combatant.Initiative();
             const modifier = this.Combatant.InitiativeBonus.toModifierString();
-            let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll(); 
+            let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
             let message = `Set initiative for ${this.DisplayName()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
             if (this.Combatant.InitiativeGroup()) {
                 message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;
