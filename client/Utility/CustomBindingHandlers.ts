@@ -14,6 +14,7 @@ module ImprovedInitiative {
     ko.bindingHandlers.focusOnRender = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
             ComponentLoader.AfterComponentLoaded(() => {
+                $(element).find(valueAccessor()).get(0).focus();
                 $(element).find(valueAccessor()).first().select();
             });
         }
