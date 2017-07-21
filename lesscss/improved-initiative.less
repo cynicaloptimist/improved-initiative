@@ -89,6 +89,16 @@ input[type="file"] {
     }
 }
 
+.fa-text {
+    .fa();
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bold;
+    &:before {
+        font-family: FontAwesome;
+        margin-right: @medium-spacer;
+    }
+}
+
 .fa-clickable {
 	cursor: pointer;
 	.fa();
@@ -96,7 +106,7 @@ input[type="file"] {
 
 .button() {
     cursor: pointer;
-    .fa();
+    display: inline-block;
     padding: 10px;
     text-align:center;
     
@@ -402,12 +412,6 @@ input[type="file"] {
 
     .editor-type, .edit-mode {
         display: block;
-        .fa {
-            font-weight: bold;
-            &:before {
-                padding-right: @medium-spacer;
-            }
-        }
     }
 
     .fa-clickable {
