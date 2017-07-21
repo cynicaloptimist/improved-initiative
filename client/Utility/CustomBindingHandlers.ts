@@ -6,7 +6,6 @@ interface KnockoutBindingHandlers {
     onEnter: KnockoutBindingHandler;
     uiText: KnockoutBindingHandler;
     statBlockText: KnockoutBindingHandler;
-    format: KnockoutBindingHandler;
     hoverPop: KnockoutBindingHandler;
     awesomplete: KnockoutBindingHandler;
 }
@@ -92,19 +91,6 @@ module ImprovedInitiative {
     ko.bindingHandlers.statBlockText = {
         init: statBlockTextHandler,
         update: statBlockTextHandler
-    }
-
-    ko.bindingHandlers.format = {
-        init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-            bindingContext['formatString'] = $(element).html();
-        },
-        update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-            let replacements = ko.unwrap(valueAccessor());
-            if (!(replacements instanceof Array)) {
-                replacements = [replacements];
-            }
-            $(element).html(bindingContext['formatString'].format(replacements));
-        }
     }
 
     ko.bindingHandlers.hoverPop = {
