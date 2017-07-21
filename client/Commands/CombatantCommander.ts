@@ -59,8 +59,8 @@ module ImprovedInitiative {
         }
 
         Remove = () => {
-            var combatantsToRemove = this.SelectedCombatants.removeAll(),
-                indexOfFirstCombatantToRemove = this.tracker.Encounter.Combatants.indexOf(combatantsToRemove[0]),
+            const combatantsToRemove = this.SelectedCombatants.removeAll(),
+                firstDeletedIndex = this.tracker.Encounter.Combatants.indexOf(combatantsToRemove[0]),
                 deletedCombatantNames = combatantsToRemove.map(c => c.StatBlock().Name);
 
             if (this.tracker.Encounter.Combatants().length > combatantsToRemove.length) {
@@ -71,7 +71,9 @@ module ImprovedInitiative {
 
             this.tracker.Encounter.Combatants.removeAll(combatantsToRemove);
 
-            var allMyFriendsAreGone = name => this.tracker.Encounter.Combatants().every(c => c.StatBlock().Name != name);
+            const remainingCombatants = this.tracker.Encounter.Combatants();
+
+            var allMyFriendsAreGone = name => remainingCombatants.every(c => c.StatBlock().Name != name);
 
             deletedCombatantNames.forEach(name => {
                 if (allMyFriendsAreGone(name)) {
@@ -79,10 +81,15 @@ module ImprovedInitiative {
                 }
             });
 
-            if (indexOfFirstCombatantToRemove >= this.tracker.Encounter.Combatants().length) {
-                indexOfFirstCombatantToRemove = this.tracker.Encounter.Combatants().length - 1;
+            if (remainingCombatants.length > 0) {
+                const newSelectionIndex =
+                    firstDeletedIndex > remainingCombatants.length ?
+                        remainingCombatants.length - 1 :
+                        firstDeletedIndex;
+                this.Select(this.tracker.Encounter.Combatants()[newSelectionIndex])
+            } else {
+                this.tracker.Encounter.EndEncounter();
             }
-            this.Select(this.tracker.Encounter.Combatants()[indexOfFirstCombatantToRemove])
 
             this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
 
