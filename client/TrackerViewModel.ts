@@ -1,11 +1,18 @@
 module ImprovedInitiative {
-    interface PatreonPost {
+    interface PatreonPostAttributes {
         title: string;
         content: string;
         url: string;
         created_at: string;
+        was_posted_by_campaign_owner: boolean;
     }
-    
+
+    interface PatreonPost {
+        attributes: PatreonPostAttributes;
+        id: string;
+        type: string;
+    }
+
     export class TrackerViewModel {
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
@@ -64,8 +71,8 @@ module ImprovedInitiative {
         GetWhatsNewIfAvailable = () => {
             $.getJSON("/whatsnew/")
                 .done((latestPost: PatreonPost) => {
-                    this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.url}" target="_blank">${latestPost.title}</a>`);
-            });
+                    this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`);
+                });
         }
 
         InterfaceState = ko.pureComputed(() => {
@@ -82,8 +89,8 @@ module ImprovedInitiative {
             const librariesVisible = this.LibrariesVisible();
             const encounterActive = this.Encounter.State() === "active";
 
-            if(encounterEmpty){
-                if(librariesVisible) {
+            if (encounterEmpty) {
+                if (librariesVisible) {
                     //No creatures, Library open: Creature listing
                     return "listing";
                 } else {
@@ -92,12 +99,12 @@ module ImprovedInitiative {
                 }
             }
 
-            if(!encounterActive) {
+            if (!encounterActive) {
                 //Creatures, encounter stopped: Start Encounter
                 return "start-encounter";
             }
-            
-            if(librariesVisible) {
+
+            if (librariesVisible) {
                 //Creatures, library open, encounter active: Hide Libraries
                 return "hide-libraries";
             }

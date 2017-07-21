@@ -7,12 +7,18 @@ import request = require("request");
 
 import { Library, StatBlock, Spell } from "./library";
 
-interface PatreonPost {
+interface PatreonPostAttributes {
     title: string;
     content: string;
     url: string;
     created_at: string;
     was_posted_by_campaign_owner: boolean;
+}
+
+interface PatreonPost {
+    attributes: PatreonPostAttributes;
+    id: string;
+    type: string;
 }
 
 const pageRenderOptions = (encounterId: string) => ({
@@ -120,7 +126,7 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
             (error, response, body) => {
                 const json: { data: PatreonPost[] } = JSON.parse(body);
                 if (json.data) {
-                    const latestPost = json.data.filter(d => d.was_posted_by_campaign_owner)[0];
+                    const latestPost = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
                     app.get("/whatsnew/", (req, res) => {
                         res.json(latestPost);
                     });
