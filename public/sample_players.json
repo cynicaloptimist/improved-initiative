@@ -45,7 +45,7 @@
     "Reactions": [],
     "LegendaryActions": [],
     "Player": "player",
-    "Challenge": 1
+    "Challenge": "1"
   },
   {
     "Name": "Shem",
@@ -93,7 +93,7 @@
     "Reactions": [],
     "LegendaryActions": [],
     "Player": "player",
-    "Challenge": 1
+    "Challenge": "1"
   },
   {
     "Name": "Underfoot",
@@ -141,7 +141,7 @@
     "Reactions": [],
     "LegendaryActions": [],
     "Player": "player",
-    "Challenge": 1
+    "Challenge": "1"
   },
   {
     "Name": "Ellumyr",
@@ -189,6 +189,6 @@
     "Reactions": [],
     "LegendaryActions": [],
     "Player": "player",
-    "Challenge": 1
+    "Challenge": "1"
   }
 ]
