@@ -34,7 +34,7 @@ module ImprovedInitiative {
                 this.libraries.NPCs.StatBlocks.unshift(listing);
             }
         }
-        
+
         CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
             var statBlock = StatBlock.Default();
             var newId = probablyUniqueString();
@@ -42,18 +42,18 @@ module ImprovedInitiative {
             if (isPlayerCharacter) {
                 statBlock.Name = "New Player Character";
                 statBlock.Player = "player";
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
             } else {
                 statBlock.Name = "New Creature";
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
             }
         }
-        
+
         private duplicateAndEditStatBlock = (statBlock: StatBlock) => {
             var newId = probablyUniqueString();
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { });
+            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
         }
-        
+
         EditStatBlock = (listing: StatBlockListing) => {
             listing.GetStatBlockAsync(statBlock => {
                 if (listing.Source === "server") {
@@ -62,7 +62,8 @@ module ImprovedInitiative {
                     this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
                         Store.Save<StatBlock>(store, statBlockId, newStatBlock);
                         listing.SetStatBlock(newStatBlock);
-                    }, this.deleteSavedStatBlock);
+                    }, this.deleteSavedStatBlock,
+                        "global");
                 }
             });
         }
@@ -77,19 +78,18 @@ module ImprovedInitiative {
         }
 
         EditSpell = (listing: SpellListing) => {
-             listing.GetSpellAsync(spell => {
-                 this.tracker.SpellEditor.EditSpell(
-                     spell,
-                     this.libraries.Spells.AddOrUpdateSpell,
-                     this.libraries.Spells.DeleteSpellById
-                 );
+            listing.GetSpellAsync(spell => {
+                this.tracker.SpellEditor.EditSpell(
+                    spell,
+                    this.libraries.Spells.AddOrUpdateSpell,
+                    this.libraries.Spells.DeleteSpellById
+                );
             });
         }
 
-        ShowingLibraries = ko.observable(true);
-        ShowLibraries = () => this.ShowingLibraries(true);
-        HideLibraries = () => this.ShowingLibraries(false);
-        
+        ShowLibraries = () => this.tracker.LibrariesVisible(true);
+        HideLibraries = () => this.tracker.LibrariesVisible(false);
+
         LaunchPlayerWindow = () => {
             window.open(`/p/${this.tracker.Encounter.EncounterId}`, 'Player View');
         }
@@ -97,6 +97,10 @@ module ImprovedInitiative {
         ShowSettings = () => {
             TutorialSpy("ShowSettings");
             this.tracker.SettingsVisible(true);
+        }
+
+        ToggleToolbarWidth = () => {
+            this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
         }
 
         RollDice = (diceExpression: string) => {
@@ -115,9 +119,9 @@ module ImprovedInitiative {
         DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
         DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'));
         DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));
-        
+
         StartEncounter = () => {
-            if(this.tracker.PromptQueue.HasPrompt()){
+            if (this.tracker.PromptQueue.HasPrompt()) {
                 this.tracker.PromptQueue.AnimatePrompt();
                 return;
             }
@@ -127,7 +131,7 @@ module ImprovedInitiative {
 
                 ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
             }
-            
+
             this.HideLibraries();
 
             this.tracker.EventLog.AddEvent("Encounter started.");
@@ -159,7 +163,7 @@ module ImprovedInitiative {
             }
             this.tracker.Encounter.PreviousTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
-            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);    
+            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
         }
 
         SaveEncounter = () => {

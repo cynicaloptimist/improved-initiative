@@ -8,6 +8,7 @@ module ImprovedInitiative {
         <li>A charmed creature can’t Attack the charmer or target the charmer with harmful Abilities or magical effects.</li>
         <li>The charmer has advantage on any ability check to interact socially with the creature.</li>
         </ul>`,
+        "Concentrating": ``,
         "Deafened": `<ul>
         <li>A deafened creature can’t hear and automatically fails any ability check that requires hearing.</li>
         </ul>`,

@@ -39,6 +39,12 @@ module ImprovedInitiative {
         "26": 90000, "27": 105000, "28": 120000, "29": 135000, "30": 155000
     }
 
+    const getTotalLevel = (levels: string) =>
+        levels
+            .match(/\d+/g)
+            .map(i => parseInt(i))
+            .reduce((p, c) => p + c, 0);
+
     const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
 
     const getXpMultiplierRank = (enemyCount: number) => {
@@ -62,7 +68,7 @@ module ImprovedInitiative {
         if (playerCount === 0) {
             return rankedXpMultipliers[multiplierRank];
         }
-        
+
         if (playerCount < 3) {
             return rankedXpMultipliers[multiplierRank + 1];
         }
@@ -74,15 +80,20 @@ module ImprovedInitiative {
         return rankedXpMultipliers[multiplierRank];
     }
 
-    const getModifiedXp = (enemyChallengeRatings: string [], playerCount: number) => {
-        const totalXpBase = enemyChallengeRatings.reduce((currentSum, cr) => {
+    const getTotalXpBase = (challengeRatings: string[]) =>
+        challengeRatings.reduce((currentSum, cr) => {
             if (xpAmountsByChallenge[cr]) {
                 return currentSum + xpAmountsByChallenge[cr];
             }
             return currentSum;
         }, 0);
 
-        return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
+    const getModifiedXp = (enemyChallengeRatings: string[], playerCount: number) => {
+        const totalXpBase = getTotalXpBase(enemyChallengeRatings);
+        if (playerCount > 0) {
+            return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
+        }
+        return totalXpBase;
     }
 
     const getDifficulty = (totalXp, playerLevels: number[]) => {
@@ -91,7 +102,7 @@ module ImprovedInitiative {
         if (playerLevels.some(level => typeof level !== "number" || level < 1 || level > 20)) {
             return "";
         }
-        
+
         const xpThresholds = {
             easy: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].easy, 0),
             medium: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].medium, 0),
@@ -101,28 +112,33 @@ module ImprovedInitiative {
 
         if (totalXp > xpThresholds.deadly)
             return "Deadly";
-        if (totalXp > xpThresholds.hard) 
+        if (totalXp > xpThresholds.hard)
             return "Hard";
         if (totalXp > xpThresholds.medium)
             return "Medium";
         if (totalXp > xpThresholds.easy)
             return "Easy";
-            
+
         return "Trivial";
     }
-    
+
 
     export interface EncounterDifficulty {
         Difficulty: string;
-        TotalExperience: number;
+        EarnedExperience: number;
+        EffectiveExperience: number;
     }
 
     export class DifficultyCalculator {
-        static Calculate(enemyChallengeRatings: string[], playerLevels: number[]): EncounterDifficulty {
-            const totalXpWithEnemyCount = getModifiedXp(enemyChallengeRatings, playerLevels.length);
+        static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
+            const playerLevelTotals = playerLevels.map(getTotalLevel);
+            const totalXpBase = getTotalXpBase(enemyChallengeRatings);
+            const modifiedXp = getModifiedXp(enemyChallengeRatings, playerLevels.length);
+
             return {
-                Difficulty: getDifficulty(totalXpWithEnemyCount, playerLevels),
-                TotalExperience: totalXpWithEnemyCount
+                Difficulty: getDifficulty(modifiedXp, playerLevelTotals),
+                EarnedExperience: totalXpBase,
+                EffectiveExperience: modifiedXp
             }
         }
     }

@@ -41,6 +41,10 @@ module ImprovedInitiative {
             return unObservableSpell;
         }
 
+        SelectInput = () => {
+            $(".stats input.name").select();
+        }
+
         SaveSpell = () => {
             let editedSpell: Spell = Spell.Default();
 
@@ -66,6 +70,10 @@ module ImprovedInitiative {
                 this.deleteCallback(this.spell.Id);
                 this.EditableSpell(null);
             }
+        }
+
+        RevertSpell = () => {
+            this.EditableSpell(null);
         }
     }
 

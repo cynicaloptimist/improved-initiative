@@ -12,12 +12,26 @@ module ImprovedInitiative {
                 }
             });
             this.Prompts.push(prompt);
-            $(prompt.InputSelector).last().select();
+        }
+
+        UpdateDom = (element: HTMLFormElement, valueAccessor, allBindings, viewModel, bindingContext) => {
+            $(element).keyup(e => {
+                if (e.keyCode == 27) { 
+                    this.Dismiss();
+                }
+            });
+            $(element).find(viewModel.InputSelector).last().select();
         }
 
         HasPrompt = ko.pureComputed(() => {
             return this.Prompts().length > 0;
         });
+
+        Dismiss = () => {
+            if (this.HasPrompt()) {
+                this.Prompts.remove(this.Prompts()[0])    
+            }
+        }
 
         AnimatePrompt = () => {
             if (!this.HasPrompt()) {

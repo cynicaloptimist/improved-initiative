@@ -50,30 +50,30 @@
         }
     ">
     </div>
-    <div class="commands">
+    <div class="toolbar" data-bind="css: ToolbarClass">
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
-                <span class="button" data-bind="
-                    visible: ShowOnActionBar,
-                    css: ActionBarIcon,
+                <div class="button" data-bind="
+                    visible: ShowOnActionBar, 
                     attr: { title: ToolTip },
-                    click: ActionBinding
-                ">
-                </span>
+                    click: ActionBinding">
+                    <span class="fa" data-bind="css: ActionBarIcon"></span>
+                    <span class="command-name" data-bind="text: Description"></span>
+                </div>
             </div>
             <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
-                <span class="button" data-bind="
-                    visible: ShowOnActionBar,
-                    css: ActionBarIcon,
+                <div class="button" data-bind="
+                    visible: ShowOnActionBar, 
                     attr: { title: ToolTip },
-                    click: ActionBinding
-                ">
-                </span>
+                    click: ActionBinding">
+                    <span class="fa" data-bind="css: ActionBarIcon"></span>
+                    <span class="command-name" data-bind="text: Description"></span>
+                </div>
             </div>
         </div>
     </div>
     <div class="left-column">
-        <!-- ko if: EncounterCommander.ShowingLibraries -->
+        <!-- ko if: LibrariesVisible -->
         <div class="libraries" data-bind="
         component: {
             name: 'libraries',
@@ -84,7 +84,7 @@
         }">
         </div>
         <!-- /ko -->
-        <!-- ko ifnot: EncounterCommander.ShowingLibraries -->
+        <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
@@ -123,10 +123,10 @@
         <h2>Initiative Order</h2>
         <ul class="combatants" data-bind="with: Encounter">
             <li class="combatant header">
-                <span class="initiative fa fa-forward"></span></span>
+                <span class="initiative fa" data-bind="css: StateIcon, attr: { title: StateTip }"></span>
                 <span class="name">Combatant</span>
-                <span class="hp fa fa-heart"></span></span>
-                <span class="ac fa fa-shield"></span></span>
+                <span class="hp fa fa-heart"></span>
+                <span class="ac fa fa-shield"></span>
                 <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
             </li>
             <!-- ko foreach: Combatants -->
@@ -149,18 +149,18 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <div class="prompts">
-            <!-- ko foreach: PromptQueue.Prompts -->
+        <div class="prompts" data-bind="with: PromptQueue">
+            <!-- ko foreach: Prompts -->
             <form class="prompt" data-bind="
                 submit: Resolve,
                 component: {
                     name: ComponentName,
                     params: {
-                        prompt: $data
+                        prompt: $data,
                     }
-                }">
+                },
+                afterRender: $parent.UpdateDom">
             </form>
-
             <!-- /ko -->
         </div>
 
@@ -172,18 +172,18 @@
                 <i class="fa-clickable" data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"></i>
                 <span class="latest-event" data-bind="html: EventLog.LatestEvent"></span>
                 <!-- ko if: EncounterCommander.DisplayTurnTimer -->
-                    <span class="turn-timer" data-bind="text: Encounter.TurnTimer.Readout"></span>
+                <span class="turn-timer" data-bind="text: Encounter.TurnTimer.Readout"></span>
                 <!-- /ko -->
                 <!-- ko if: EncounterCommander.DisplayRoundCounter -->
-                    <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
+                <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
                 <!-- /ko -->
                 <!-- ko if: EncounterCommander.DisplayDifficulty -->
-                    <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()">
+                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()">
                         <!-- ko if: Difficulty -->
                             <span class="difficulty" data-bind="text: Difficulty"></span>
-                        <!-- /ko -->
-                        <span data-bind="text: TotalExperience"></span> XP
-                    </span>
+                <!-- /ko -->
+                    <span data-bind="text: EarnedExperience"></span> XP
+                </span>
                 <!-- /ko -->
             </div>
         </div>

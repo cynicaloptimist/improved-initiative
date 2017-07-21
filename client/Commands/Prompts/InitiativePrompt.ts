@@ -10,11 +10,25 @@ module ImprovedInitiative {
             const toPrompt = (combatant: Combatant) => ({
                 Id: combatant.Id,
                 Prompt: `${combatant.ViewModel.DisplayName()} (${combatant.InitiativeBonus.toModifierString()}): `,
+                Css: combatant.InitiativeGroup() !== null ? 'fa fa-link' : '',
                 PreRoll: combatant.GetInitiativeRoll()
             });
 
-            this.PlayerCharacters = combatants.filter(c => c.IsPlayerCharacter).map(toPrompt);
-            this.NonPlayerCharacters = combatants.filter(c => !c.IsPlayerCharacter).map(toPrompt);
+            const groups = []
+
+            const byGroup = combatants.filter(combatant => {
+                const group = combatant.InitiativeGroup();
+                if (group) {
+                    if (groups.indexOf(group) > -1) {
+                        return false;
+                    }
+                    groups.push(group);
+                }
+                return true;
+            })
+
+            this.PlayerCharacters = byGroup.filter(c => c.IsPlayerCharacter).map(toPrompt);
+            this.NonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter).map(toPrompt);
 
             this.Resolve = (form: HTMLFormElement) => {
                 const inputs = $(form).find(this.InputSelector);
@@ -23,8 +37,10 @@ module ImprovedInitiative {
                     responsesById[element.id] = $(element).val();
                 });
                 const applyInitiative = (combatant: Combatant) => {
-                    const initiativeRoll = parseInt(responsesById[`initiative-${combatant.Id}`]);
-                    combatant.Initiative(initiativeRoll);
+                    const response = responsesById[`initiative-${combatant.Id}`];
+                    if (response) {
+                        combatant.Initiative(parseInt(response));
+                    }
                 };
                 combatants.forEach(applyInitiative);
                 startEncounter();

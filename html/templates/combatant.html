@@ -1,4 +1,4 @@
-<span data-bind="text: Combatant.Initiative" title="Initiative Roll" class="initiative"></span>
+<span data-bind="text: Combatant.Initiative, css: InitiativeClass" title="Initiative Roll" class="initiative"></span>
 <span class="name" data-bind="text: DisplayName, attr: {title: DisplayName }"></span>
 <span class="hp" data-bind="click: EditHP, text: DisplayHP, style: { color: GetHPColor() }"></span>
 <span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>

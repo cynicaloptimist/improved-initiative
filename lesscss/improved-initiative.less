@@ -19,6 +19,8 @@
 @button-inner: 18px;
 @border-radius: 5px;
 
+@fixed-column-width: 350px;
+
 @scrollbar-width: 17px;
 
 //elements
@@ -42,8 +44,10 @@ html, body {
 div {
     display:flex;
     flex-direction:column;
-    max-height: 100%;
-    max-width: 100%;
+    & > * {
+        max-height: 100%;
+        max-width: 100%;
+    }
 }
 
 a, a * {
@@ -87,6 +91,16 @@ input[type="file"] {
     }
 }
 
+.fa-text {
+    .fa();
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bold;
+    &:before {
+        font-family: FontAwesome;
+        margin-right: @medium-spacer;
+    }
+}
+
 .fa-clickable {
 	cursor: pointer;
 	.fa();
@@ -94,7 +108,7 @@ input[type="file"] {
 
 .button() {
     cursor: pointer;
-    .fa();
+    display: inline-block;
     padding: 10px;
     text-align:center;
     
@@ -174,6 +188,10 @@ input[type="file"] {
     max-height: 700px;
 }
 
+.social-media {
+    display: none;
+}
+
 .modal-blur {
     position: fixed;
     z-index: 1;
@@ -216,7 +234,7 @@ input[type="file"] {
         flex-grow:1;
         margin: 0 30px;
     }
-    
+
     .start {
         .recessed();
 
@@ -257,7 +275,7 @@ input[type="file"] {
     }
     
     @logo-size: 40px;
-    .patreon-logo {
+    .pledge-logo {
         img {
             width: @logo-size;
         }
@@ -285,7 +303,7 @@ input[type="file"] {
     .left-column, .right-column, .preview.statblock {
         .recessed();
 
-        width: 350px;
+        width: @fixed-column-width;
         flex-shrink: 0;
     }
 }
@@ -333,20 +351,8 @@ input[type="file"] {
         }
     }
 }
-.commands {
-    .scrollframe {
-        max-width: none;
-        width: @button-width + @scrollbar-width;
-        overflow-x: hidden;
-        overflow-y: scroll;
-    }
 
-    width: @button-width;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.commands .scrollframe > div {
+.toolbar .scrollframe > div {
     &.commands-combatant {
         margin-top:10px;
         padding-top:10px;
@@ -358,6 +364,37 @@ input[type="file"] {
 
     .button {
         margin: 1px 0;
+    }
+}
+
+.toolbar-narrow {
+    .scrollframe {
+        max-width: none;
+        width: @button-width + @scrollbar-width;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    width: @button-width;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    .command-name {
+        display: none;
+    }
+}
+
+.toolbar-wide {
+    .button {
+        text-align: left;
+        &:before {
+            width: @button-inner + @border-radius * 2;
+            text-align: center;
+            display: inline-block;
+        }
+    }
+    .command-name {
+        display: inline-block;
     }
 }
 
@@ -375,9 +412,8 @@ input[type="file"] {
         margin-left: @medium-spacer;
     }
 
-    .editor-type {
-        flex-direction: row;
-        flex-shrink:0;
+    .editor-type, .edit-mode {
+        display: block;
     }
 
     .fa-clickable {
@@ -514,7 +550,7 @@ input[type="file"] {
         align-self: flex-end;
     }
 
-    .patreon-logo {
+    .pledge-logo {
         height: 1.4em;
     }
 }
@@ -641,12 +677,16 @@ input[type="file"] {
     }
     
     &.header {
-        padding: @medium-spacer;
+        padding: @medium-spacer 0;
     }
 
     .initiative {
         width: 30px;
         text-align: center;
+        &.fa-link:before{
+            font-size: 60%;
+            vertical-align: top;
+        }
     }
 
     .name {
@@ -731,7 +771,7 @@ input[type="file"] {
         white-space: pre-wrap;
     }
 }
-    
+
 #playerview {
     margin: 0;
 

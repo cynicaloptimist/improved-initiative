@@ -33,7 +33,7 @@ module ImprovedInitiative {
                     // internet explorer
                     e.returnValue = false;
                 }
-            })
+            });
 
             allCommands.forEach(b => {
                 Mousetrap.bind(b.KeyBinding, b.ActionBinding);
@@ -62,7 +62,13 @@ module ImprovedInitiative {
         }
 
         var loadSetting = (settingName: string, defaultSetting?) => {
-            var setting = ko.observable(Store.Load(Store.User, settingName) || defaultSetting);
+            var currentSetting = Store.Load(Store.User, settingName);
+
+            if (defaultSetting !== undefined && currentSetting === null) {
+                 Store.Save(Store.User, settingName, defaultSetting);
+            }
+
+            var setting = ko.observable(currentSetting || defaultSetting);
             setting.subscribe(newValue => {
                 Store.Save(Store.User, settingName, newValue);
             });
@@ -113,6 +119,7 @@ module ImprovedInitiative {
             HpVerbosity: loadSetting("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: loadSetting("HideMonstersOutsideEncounter"),
             AllowNegativeHP: loadSetting("AllowNegativeHP"),
+            AutoCheckConcentration: loadSetting("AutoCheckConcentration", true),
             DisplayRoundCounter: displayRoundCounter,
             DisplayTurnTimer: displayTurnTimer,
             DisplayDifficulty: displayDifficulty,

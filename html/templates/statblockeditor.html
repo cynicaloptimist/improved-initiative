@@ -6,8 +6,16 @@
     <label>
         <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
 </div>
-<!-- ko if: EditorType() == 'basic' -->
-<div class="stats" data-bind="with: EditableStatBlock">
+<div class="edit-mode">Edit Mode:
+<!-- ko if: EditMode() === "instance" -->
+<span class="fa-text fa-user" title="Editing the statblock of a single combatant">Single</span>
+<!-- /ko -->
+<!-- ko if: EditMode() === "global" -->
+<span class="fa-text fa-address-book" title="Editing this statblock in your library">Library</span>
+<!-- /ko -->
+</div>
+<!-- ko if: EditorType() === 'basic' -->
+<div class="stats" data-bind="with: EditableStatBlock, afterRender: SelectInput">
     <p>Name <input class="name" type="text" data-bind="value: Name" />
     </p>
     <p>Source <input class="type" type="text" data-bind="value: Source" />
@@ -31,7 +39,7 @@
     <p data-bind="css: $data">
         <span data-bind="text: $data"></span>
         <!-- ko foreach: $parent[$data] -->
-        <input type="text" data-bind="value: Value.Name">
+        <input class="name" type="text" data-bind="value: Value.Name">
         <input type="number" data-bind="value: Value.Modifier">
         <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         <!-- /ko -->
@@ -42,7 +50,7 @@
     <p data-bind="css: $data">
         <span data-bind="uiText: $data"></span>
         <!-- ko foreach: $parent[$data] -->
-        <input type="text" data-bind="value: Value"></span>
+        <input class="name" type="text" data-bind="value: Value"></span>
         <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         <!-- /ko -->
         <span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span></p>
@@ -59,12 +67,12 @@
         <p data-bind="uiText: $data"></p>
         <!-- ko foreach: $parent[$data] -->
         <div>
-            <input type="text" data-bind="value: Value.Name">
+            <input class="name" type="text" data-bind="value: Value.Name">
             <textarea data-bind="value: Value.Content"></textarea>
             <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         </div>
         <!-- /ko -->
-        <div><span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</span></div>
+        <div class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty">Add New</div>
     </div>
     <!-- /ko -->
     <div class="description">
@@ -73,10 +81,11 @@
     </div>
 </div>
 <!-- /ko -->
-<!-- ko if: EditorType() == 'advanced' -->
+<!-- ko if: EditorType() === 'advanced' -->
 <textarea class="json-editor" spellcheck="false" data-bind="value: JsonStatBlock"></textarea>
 <!-- /ko -->
 <div class="buttons">
-    <div data-bind="click: SaveStatBlock"><span class="button fa-save"></span></div>
-    <div data-bind="click: DeleteStatBlock"><span class="button fa-trash"></span></div>
+    <div data-bind="click: SaveStatBlock" title="Save changes to statblock"><span class="button fa fa-save"></span></div>
+    <div data-bind="click: RevertStatBlock" title="Cancel and revert statblock"><span class="button fa fa-close"></span></div>
+    <div data-bind="click: DeleteStatBlock" title="Delete statblock"><span class="button fa fa-trash"></span></div>
 </div>

@@ -1,7 +1,12 @@
 module ImprovedInitiative {
     export class CombatantViewModel {
         DisplayHP: KnockoutComputed<string>;
-        constructor(public Combatant: Combatant, public CombatantCommander: CombatantCommander, public PromptUser: (prompt: Prompt) => void, public LogEvent: (message: string) => void) {
+        constructor(
+            public Combatant: Combatant,
+            public CombatantCommander: CombatantCommander,
+            public PromptUser: (prompt: Prompt) => void,
+            public LogEvent: (message: string) => void
+        ) {
             this.DisplayHP = ko.pureComputed(() => {
                 if (this.Combatant.TemporaryHP()) {
                     return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
@@ -18,7 +23,8 @@ module ImprovedInitiative {
                 healing = -damage,
                 currHP = this.Combatant.CurrentHP(),
                 tempHP = this.Combatant.TemporaryHP(),
-                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP"),
+                autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
 
             if (isNaN(damage)) {
                 return
@@ -26,6 +32,9 @@ module ImprovedInitiative {
 
             if (damage > 0) {
                 window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
+                if (autoCheckConcentration && this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
+                    this.CombatantCommander.CheckConcentration(this.Combatant, damage);    
+                }
                 tempHP -= damage;
                 if (tempHP < 0) {
                     currHP += tempHP;
@@ -67,6 +76,12 @@ module ImprovedInitiative {
             this.Combatant.Encounter.SortByInitiative();
         }
 
+        InitiativeClass = ko.computed(() => {
+            if (this.Combatant.InitiativeGroup()) {
+                return "fa fa-link";
+            }
+        });
+
         GetHPColor = () => {
             var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
             var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
@@ -79,10 +94,21 @@ module ImprovedInitiative {
         }
 
         EditInitiative = () => {
-            const prompt = new DefaultPrompt(`Update initiative for ${this.DisplayName()}: <input id='initiative' class='response' type='number' />`,
+            const currentInitiative = this.Combatant.Initiative();
+            const modifier = this.Combatant.InitiativeBonus.toModifierString();
+            let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
+            let message = `Set initiative for ${this.DisplayName()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
+            if (this.Combatant.InitiativeGroup()) {
+                message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;
+            }
+            const prompt = new DefaultPrompt(message,
                 response => {
                     const initiative = response['initiative'];
+                    const breakLink = response['break-link'] === "break";
                     if (initiative) {
+                        if (breakLink) {
+                            this.Combatant.InitiativeGroup(null);
+                        }
                         this.ApplyInitiative(initiative);
                         this.LogEvent(`${this.DisplayName()} initiative set to ${initiative}.`);
                         this.Combatant.Encounter.QueueEmitEncounter();

@@ -12,6 +12,7 @@ module ImprovedInitiative {
         Tags: KnockoutObservableArray<Tag>;
         InitiativeBonus: number;
         Initiative: KnockoutObservable<number>;
+        InitiativeGroup: KnockoutObservable<string>;
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
@@ -45,6 +46,19 @@ module ImprovedInitiative {
             if (savedCombatant) {
                 this.processSavedCombatant(savedCombatant);
             }
+
+            this.Initiative.subscribe(newInitiative => {
+                const groupId = this.InitiativeGroup();
+                if (!this.updatingGroup && groupId) {
+                    this.updatingGroup = true;
+                    this.Encounter.Combatants().forEach(combatant => {
+                        if (combatant.InitiativeGroup() === groupId) {
+                            combatant.Initiative(newInitiative);
+                        }
+                    });
+                    this.updatingGroup = false;
+                }
+            })
         }
 
         Id = probablyUniqueString();
@@ -52,6 +66,7 @@ module ImprovedInitiative {
         TemporaryHP = ko.observable(0);
         Tags = ko.observableArray<Tag>();
         Initiative = ko.observable(0);
+        InitiativeGroup = ko.observable<string>(null);
         StatBlock = ko.observable<StatBlock>();
         Hidden = ko.observable(false);
 
@@ -62,8 +77,11 @@ module ImprovedInitiative {
         AC: number;
         AbilityModifiers: AbilityScores;
         InitiativeBonus: number;
+        ConcentrationBonus: number;
         ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
+
+        private updatingGroup = false;
 
         private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
             this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
@@ -75,6 +93,7 @@ module ImprovedInitiative {
                 newStatBlock.InitiativeModifier = 0;
             }
             this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
+            this.ConcentrationBonus = this.AbilityModifiers.Con;
         }
 
         private processSavedCombatant(savedCombatant: SavedCombatant) {
@@ -82,6 +101,7 @@ module ImprovedInitiative {
             this.CurrentHP(savedCombatant.CurrentHP);
             this.TemporaryHP(savedCombatant.TemporaryHP);
             this.Initiative(savedCombatant.Initiative);
+            this.InitiativeGroup(savedCombatant.InitiativeGroup || null);
             this.Alias(savedCombatant.Alias);
             this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
             this.Hidden(savedCombatant.Hidden);
@@ -124,5 +144,6 @@ module ImprovedInitiative {
         }
 
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+        GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
     }
 }

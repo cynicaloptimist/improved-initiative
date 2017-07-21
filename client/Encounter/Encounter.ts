@@ -8,6 +8,7 @@ module ImprovedInitiative {
         CurrentHP: number;
         TemporaryHP: number;
         Initiative: number;
+        InitiativeGroup?: string;
         Alias: string;
         IndexLabel: number;
         Tags: string[] | SavedTag[];
@@ -41,8 +42,16 @@ module ImprovedInitiative {
             });
 
             this.Difficulty = ko.pureComputed(() => {
-                const enemyChallengeRatings = this.Combatants().filter(c => !c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => c.StatBlock().Challenge);
-                const playerLevels = this.Combatants().filter(c => c.IsPlayerCharacter && c.StatBlock().Challenge).map(c => parseInt(c.StatBlock().Challenge));
+                const enemyChallengeRatings =
+                    this.Combatants()
+                        .filter(c => !c.IsPlayerCharacter)    
+                        .filter(c => c.StatBlock().Challenge)    
+                        .map(c => c.StatBlock().Challenge);
+                const playerLevels =
+                    this.Combatants()
+                        .filter(c => c.IsPlayerCharacter)
+                        .filter(c => c.StatBlock().Challenge)    
+                        .map(c => c.StatBlock().Challenge);
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
             })
 
@@ -59,10 +68,16 @@ module ImprovedInitiative {
         ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
         Difficulty: KnockoutComputed<EncounterDifficulty>;
-        State: KnockoutObservable<string> = ko.observable('inactive');
+        
+        State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">('inactive');
+        StateIcon = ko.computed(() => this.State() === "active" ? 'fa-play' : 'fa-pause');
+        StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
+        
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
+
+        
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
@@ -108,6 +123,7 @@ module ImprovedInitiative {
         }
 
         MoveCombatant = (combatant: Combatant, index: number) => {
+            combatant.InitiativeGroup(null);
             var currentPosition = this.Combatants().indexOf(combatant);
             var newInitiative = combatant.Initiative();
             var passedCombatant = this.Combatants()[index];
@@ -132,6 +148,10 @@ module ImprovedInitiative {
             }
             this.Combatants.push(combatant);
 
+            if (this.State() === "active") {
+                //viewmodel is initialized asynchronously, so timeout for workaround.
+                setTimeout(() => combatant.ViewModel.EditInitiative(), 10);
+            }
             this.QueueEmitEncounter();
             
             window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
@@ -220,6 +240,7 @@ module ImprovedInitiative {
                         CurrentHP: c.CurrentHP(),
                         TemporaryHP: c.TemporaryHP(),
                         Initiative: c.Initiative(),
+                        InitiativeGroup: c.InitiativeGroup(),
                         Alias: c.Alias(),
                         IndexLabel: c.IndexLabel,
                         Tags: c.Tags().map(t => ({
