@@ -104,24 +104,31 @@ module ImprovedInitiative {
             this.selectByOffset(1);
         }
 
-        EditHP = () => {
-            const selectedCombatants = this.SelectedCombatants();
+        EditHP: {
+            (): boolean;
+            (suggestedCombatants: Combatant[], suggestedDamage: number, suggester: string): boolean;
+        } = (suggestedCombatants?: Combatant | Combatant[], suggestedDamage?: number, suggester?: string) => {
+            const selectedCombatants = (Array.isArray(suggestedCombatants)) ? suggestedCombatants : this.SelectedCombatants();
             const combatantNames = selectedCombatants.map(c => c.ViewModel.DisplayName()).join(', ')
-            const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
-                response => {
-                    const damage = response['damage'];
-                    if (damage) {
-                        selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage));
-                        const damageNum = parseInt(damage);
-                        if (damageNum > 0) {
-                            this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
-                        }
-                        if (damageNum < 0) {
-                            this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
-                        }
-                        this.tracker.Encounter.QueueEmitEncounter();
+
+            const callback = response => {
+                const damage = response['damage'];
+                if (damage) {
+                    selectedCombatants.forEach(c => c.ViewModel.ApplyDamage(damage));
+                    const damageNum = parseInt(damage);
+                    if (damageNum > 0) {
+                        this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
                     }
-                });
+                    if (damageNum < 0) {
+                        this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
+                    }
+                    this.tracker.Encounter.QueueEmitEncounter();
+                }
+            }
+
+            const prompt = (typeof suggestedDamage === "number") ? new AcceptDamagePrompt(combatantNames, suggestedDamage, suggester, callback) :
+                                                                   new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`, callback);
+
             this.tracker.PromptQueue.Add(prompt);
             return false;
         }
