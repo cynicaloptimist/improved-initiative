@@ -31,7 +31,7 @@ module ImprovedInitiative {
     }
 
     export class Encounter {
-        constructor(promptQueue: PromptQueue) {
+        constructor(promptQueue: PromptQueue, public Socket: SocketIOClient.Socket) {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
@@ -75,7 +75,6 @@ module ImprovedInitiative {
         
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
-        Socket: SocketIOClient.Socket = io();
 
         
 
