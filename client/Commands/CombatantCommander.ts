@@ -41,7 +41,7 @@ module ImprovedInitiative {
             if (!data) {
                 return;
             }
-            if (!(e && e.ctrlKey)) {
+            if (!(e && e.ctrlKey || e && e.metaKey)) {
                 this.SelectedCombatants.removeAll();
             }
             this.SelectedCombatants.push(data);
