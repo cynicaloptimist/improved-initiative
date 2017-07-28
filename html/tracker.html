@@ -26,6 +26,18 @@
 </head>
 
 <body id="tracker" data-bind="css: InterfaceState">
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+    <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
     <div class="modal-blur" data-bind="visible: BlurVisible, click: CloseSettings"></div>
 
     <div class="settings" data-bind="
@@ -182,7 +194,7 @@
                         <!-- ko if: Difficulty -->
                             <span class="difficulty" data-bind="text: Difficulty"></span>
                 <!-- /ko -->
-                    <span data-bind="text: EarnedExperience"></span> XP
+                <span data-bind="text: EarnedExperience"></span> XP
                 </span>
                 <!-- /ko -->
             </div>
