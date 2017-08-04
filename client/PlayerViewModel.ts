@@ -9,6 +9,8 @@ module ImprovedInitiative {
 
         Socket: SocketIOClient.Socket = io();
 
+        PlayerSuggestion = new PlayerSuggestion(this.Socket, this.EncounterId);
+
         constructor() {
             this.Socket.on('update encounter', (encounter) => {
                 this.LoadEncounter(encounter)
@@ -40,6 +42,10 @@ module ImprovedInitiative {
             if (activeCombatantElement) {
                 activeCombatantElement.scrollIntoView(false);        
             }
+        }
+
+        ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+            this.PlayerSuggestion.Show(combatant);
         }
     }
 }

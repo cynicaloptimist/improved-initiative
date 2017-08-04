@@ -188,6 +188,13 @@ input[type="file"] {
     max-height: 700px;
 }
 
+.damage-suggestion {
+    .overlay-dialog();
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .social-media {
     display: none;
 }
@@ -561,6 +568,18 @@ input[type="file"] {
     span {
         padding: 1px @medium-spacer;
         border-radius: 0px @border-radius 0px 0px;
+    }
+}
+
+.damage-suggestion {
+    font-size: initial;
+
+    .tip {
+        font-size: smaller;
+    }
+
+    form {
+        padding-bottom: @large-spacer;
     }
 }
 

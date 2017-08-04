@@ -49,6 +49,7 @@ input, textarea {
 .prompt,
 .settings,
 .tutorial, 
+.damage-suggestion,
 .start, 
 .footer {
     .colors(@primary-black, @primary-white);
@@ -119,6 +120,12 @@ input, textarea {
     }
 }
 
+.damage-suggestion {
+    .tip {
+        color: lighten(@primary-black, 50);
+    }
+}
+
 .tabs span {
     background-color: @active-white;
     &:hover {
@@ -166,11 +173,5 @@ input, textarea {
         .hp:hover {
             background-color: initial;
         }
-    }
-}
-
-#playerview {
-    .hp:hover {
-        background-color: initial;
     }
 }

@@ -49,5 +49,6 @@ module ImprovedInitiative {
         registerComponent('spellprompt', params => params.prompt);
         registerComponent('acceptdamageprompt', params => params.prompt);
         registerComponent('tutorial', params => new TutorialViewModel(params));
+        registerComponent('playersuggestion', params => params.suggestion);
     }
 }
