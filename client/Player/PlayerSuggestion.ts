@@ -19,13 +19,16 @@ module ImprovedInitiative {
         Show = (combatant: StaticCombatantViewModel) => {
             this.Combatant(combatant);
             this.SuggestionVisible(true);
-            $("input[name=suggestedDamage]").first().select();
+            $("input[name=suggestedDamage]").first().focus();
         }
 
         Resolve = (form: HTMLFormElement) => {
-            const value = $(form).find("[name=suggestedDamage]").first().val();
-            console.log(this.Combatant().Name);
-            this.Socket.emit("suggest damage", this.EncounterId, [this.Combatant().Id], parseInt(value, 10), "Player");
+            const element = $(form).find("[name=suggestedDamage]").first();
+            const value = parseInt(element.val(), 10);
+            if (!isNaN(value) && value !== 0) {
+                this.Socket.emit("suggest damage", this.EncounterId, [this.Combatant().Id], value, "Player");
+            }
+            element.val("");
             this.Close();
         }
 
