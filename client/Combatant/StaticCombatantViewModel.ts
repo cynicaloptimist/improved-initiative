@@ -7,6 +7,7 @@ module ImprovedInitiative {
         Id: string;
         Tags: Tag[];
         IsPlayerCharacter: boolean;
+        AllowSuggestions: boolean;
 
         constructor(combatant: Combatant) {
             this.Name = combatant.ViewModel ? combatant.ViewModel.DisplayName() :
@@ -17,6 +18,7 @@ module ImprovedInitiative {
             this.Initiative = combatant.Initiative();
             this.IsPlayerCharacter = combatant.IsPlayerCharacter;
             this.Tags = combatant.Tags();
+            this.AllowSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
         }
 
         private GetHPDisplay(combatant: Combatant): string {

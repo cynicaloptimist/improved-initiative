@@ -125,6 +125,7 @@ module ImprovedInitiative {
             DisplayDifficulty: displayDifficulty,
             PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
             PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
+            PlayerViewAllowPlayerSuggestions: loadSetting("PlayerViewAllowPlayerSuggestions", false),
             Tip: ko.pureComputed(() => tips[currentTipIndex() % tips.length]),
             NextTip: cycleTipIndex.bind(1),
             PreviousTip: cycleTipIndex.bind(-1),
