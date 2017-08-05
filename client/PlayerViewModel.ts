@@ -9,7 +9,7 @@ module ImprovedInitiative {
 
         Socket: SocketIOClient.Socket = io();
 
-        PlayerSuggestion = new PlayerSuggestion(this.Socket, this.EncounterId);
+        CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
 
         constructor() {
             this.Socket.on('update encounter', (encounter) => {
@@ -45,7 +45,7 @@ module ImprovedInitiative {
         }
 
         ShowSuggestion = (combatant: StaticCombatantViewModel) => {
-            this.PlayerSuggestion.Show(combatant);
+            this.CombatantSuggestor.Show(combatant);
         }
     }
 }

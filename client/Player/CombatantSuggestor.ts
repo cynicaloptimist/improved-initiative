@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export class PlayerSuggestion {
+    export class CombatantSuggestor {
         constructor(
             public Socket: SocketIOClient.Socket,
             public EncounterId: string

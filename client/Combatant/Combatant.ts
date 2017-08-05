@@ -145,13 +145,5 @@ module ImprovedInitiative {
 
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
         GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
-        GetSavingThrowRoll = (type: keyof AbilityScores) => {
-            const potentialSave = this.StatBlock().Saves.filter(s => s.Name === type);
-            const saveModifier = (potentialSave.length > 0) ? potentialSave[0].Modifier : this.AbilityModifiers[type];
-            return this.Encounter.Rules.AbilityCheck(saveModifier)
-        }
-        CheckTrait = (traitName: string) => {
-            return this.StatBlock().Traits.filter(t => t.Name === traitName).length > 0
-        }
     }
 }
