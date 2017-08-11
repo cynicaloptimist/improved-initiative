@@ -9,8 +9,7 @@ module ImprovedInitiative {
         IsPlayerCharacter: boolean;
 
         constructor(combatant: Combatant) {
-            this.Name = combatant.ViewModel ? combatant.ViewModel.DisplayName() :
-                combatant.StatBlock().Name;
+            this.Name = combatant.DisplayName();
             this.Id = combatant.Id;
             this.HPDisplay = this.GetHPDisplay(combatant);
             this.HPColor = this.GetHPColor(combatant);

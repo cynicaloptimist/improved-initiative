@@ -133,28 +133,25 @@
         <!-- /ko -->
         <!-- ko if: CenterColumn() === "combat" -->
         <h2>Initiative Order</h2>
-        <ul class="combatants" data-bind="with: Encounter">
+        <ul class="combatants">
             <li class="combatant header">
-                <span class="initiative fa" data-bind="css: StateIcon, attr: { title: StateTip }"></span>
+                <span class="initiative fa" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span>
                 <span class="name">Combatant</span>
                 <span class="hp fa fa-heart"></span>
                 <span class="ac fa fa-shield"></span>
                 <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
             </li>
-            <!-- ko foreach: Combatants -->
+            <!-- ko foreach: CombatantViewModels -->
             <li class="combatant" data-bind="
         css: { 
-            selected: $root.CombatantCommander.SelectedCombatants().indexOf($data) > -1, 
-            active: $parent.ActiveCombatant() == $data 
+            selected: IsSelected, 
+            active: IsActive
         },
         click: $root.CombatantCommander.Select,
         component: {
             name: 'combatant',
             params: { 
-                combatant: $data, 
-                combatantCommander: $root.CombatantCommander, 
-                addPrompt: $root.PromptQueue.Add, 
-                logEvent: $root.EventLog.AddEvent 
+                viewModel: $data
             }
         }">
             </li>

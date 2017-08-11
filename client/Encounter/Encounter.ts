@@ -31,7 +31,11 @@ module ImprovedInitiative {
     }
 
     export class Encounter {
-        constructor(promptQueue: PromptQueue) {
+        constructor(
+            promptQueue: PromptQueue,
+            private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
+            private removeCombatant: (vm: CombatantViewModel) => void
+        ) {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
@@ -44,13 +48,13 @@ module ImprovedInitiative {
             this.Difficulty = ko.pureComputed(() => {
                 const enemyChallengeRatings =
                     this.Combatants()
-                        .filter(c => !c.IsPlayerCharacter)    
-                        .filter(c => c.StatBlock().Challenge)    
+                        .filter(c => !c.IsPlayerCharacter)
+                        .filter(c => c.StatBlock().Challenge)
                         .map(c => c.StatBlock().Challenge);
                 const playerLevels =
                     this.Combatants()
                         .filter(c => c.IsPlayerCharacter)
-                        .filter(c => c.StatBlock().Challenge)    
+                        .filter(c => c.StatBlock().Challenge)
                         .map(c => c.StatBlock().Challenge);
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
             })
@@ -68,16 +72,16 @@ module ImprovedInitiative {
         ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
         Difficulty: KnockoutComputed<EncounterDifficulty>;
-        
+
         State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">('inactive');
         StateIcon = ko.computed(() => this.State() === "active" ? 'fa-play' : 'fa-pause');
         StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
-        
+
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
 
-        
+
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
@@ -147,15 +151,16 @@ module ImprovedInitiative {
                 combatant.Hidden(true);
             }
             this.Combatants.push(combatant);
+            const viewModel = this.buildCombatantViewModel(combatant);
 
             if (this.State() === "active") {
-                //viewmodel is initialized asynchronously, so timeout for workaround.
-                setTimeout(() => combatant.ViewModel.EditInitiative(), 10);
+                viewModel.EditInitiative();
             }
+
             this.QueueEmitEncounter();
-            
+
             window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
-            
+
             return combatant;
         }
 
@@ -246,7 +251,7 @@ module ImprovedInitiative {
                         Tags: c.Tags().map(t => ({
                             Text: t.Text,
                             DurationRemaining: t.DurationRemaining(),
-                            DurationTiming: t.DurationTiming,  
+                            DurationTiming: t.DurationTiming,
                             DurationCombatantId: t.DurationCombatantId
                         })),
                         Hidden: c.Hidden(),

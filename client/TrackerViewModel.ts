@@ -16,9 +16,25 @@ module ImprovedInitiative {
     export class TrackerViewModel {
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
+        Libraries = new Libraries();
         StatBlockEditor = new StatBlockEditor();
         SpellEditor = new SpellEditor();
-        Encounter = new Encounter(this.PromptQueue);
+        EncounterCommander = new EncounterCommander(this);
+        CombatantCommander = new CombatantCommander(this);
+
+        CombatantViewModels = ko.observableArray([]);
+
+        private addCombatantViewModel = (combatant: Combatant) => {
+            const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
+            this.CombatantViewModels.push(vm);
+            return vm;
+        }
+
+        private removeCombatantViewModel = (vm: CombatantViewModel) => {
+            this.CombatantViewModels.remove(vm);
+        }
+        
+        Encounter = new Encounter(this.PromptQueue, this.addCombatantViewModel, this.removeCombatantViewModel);
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
@@ -53,11 +69,6 @@ module ImprovedInitiative {
             this.SettingsVisible(false);
             this.TutorialVisible(true);
         }
-
-        Libraries = new Libraries();
-
-        EncounterCommander = new EncounterCommander(this);
-        CombatantCommander = new CombatantCommander(this);
 
         ImportEncounterIfAvailable = () => {
             const encounterJSON = $('html')[0].getAttribute('postedEncounter');

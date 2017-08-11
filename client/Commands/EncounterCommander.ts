@@ -154,7 +154,7 @@ module ImprovedInitiative {
         NextTurn = () => {
             this.tracker.Encounter.NextTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
-            this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.DisplayName()}.`);
         }
 
         PreviousTurn = () => {
@@ -163,7 +163,7 @@ module ImprovedInitiative {
             }
             this.tracker.Encounter.PreviousTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
-            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.DisplayName()}.`);
         }
 
         SaveEncounter = () => {

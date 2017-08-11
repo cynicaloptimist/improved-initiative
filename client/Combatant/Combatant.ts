@@ -16,7 +16,6 @@ module ImprovedInitiative {
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
-        ViewModel: CombatantViewModel;
         IsPlayerCharacter: boolean;
     }
 
@@ -58,7 +57,7 @@ module ImprovedInitiative {
                     });
                     this.updatingGroup = false;
                 }
-            })
+            });
         }
 
         Id = probablyUniqueString();
@@ -78,7 +77,6 @@ module ImprovedInitiative {
         AbilityModifiers: AbilityScores;
         InitiativeBonus: number;
         ConcentrationBonus: number;
-        ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
         private updatingGroup = false;
@@ -145,5 +143,21 @@ module ImprovedInitiative {
 
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
         GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
+
+        DisplayName = ko.pureComputed(() => {
+            var alias = ko.unwrap(this.Alias),
+                name = ko.unwrap(this.StatBlock).Name,
+                combatantCount = ko.unwrap(this.Encounter.CombatantCountsByName[name]),
+                index = this.IndexLabel;
+
+            if (alias) {
+                return alias;
+            }
+            if (combatantCount > 1) {
+                return name + " " + index;
+            }
+
+            return name;
+        });
     }
 }

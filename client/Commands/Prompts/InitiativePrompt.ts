@@ -9,7 +9,7 @@ module ImprovedInitiative {
         constructor(combatants: Combatant[], startEncounter: () => void) {
             const toPrompt = (combatant: Combatant) => ({
                 Id: combatant.Id,
-                Prompt: `${combatant.ViewModel.DisplayName()} (${combatant.InitiativeBonus.toModifierString()}): `,
+                Prompt: `${combatant.DisplayName()} (${combatant.InitiativeBonus.toModifierString()}): `,
                 Css: combatant.InitiativeGroup() !== null ? 'fa fa-link' : '',
                 PreRoll: combatant.GetInitiativeRoll()
             });
