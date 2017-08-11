@@ -64,9 +64,10 @@ module ImprovedInitiative {
                 deletedCombatantNames = combatantsToRemove.map(c => c.Combatant.StatBlock().Name);
 
             if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
-                const activeCombatant = this.tracker.Encounter.ActiveCombatant();
+                let activeCombatant = this.tracker.Encounter.ActiveCombatant();
                 while (combatantsToRemove.some(c => c.Combatant === activeCombatant)){
                     this.tracker.Encounter.NextTurn();
+                    activeCombatant = this.tracker.Encounter.ActiveCombatant();
                 }
             }
 
