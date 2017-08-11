@@ -148,6 +148,7 @@ module ImprovedInitiative {
 
         ClearEncounter = () => {
             this.tracker.Encounter.ClearEncounter();
+            this.tracker.CombatantViewModels([]);
             this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
         }
 
