@@ -674,11 +674,24 @@ input[type="file"] {
     overflow-y: auto;
 }
 
+@keyframes slide-from-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
 .combatant {
     display: flex;
     padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
+
+    &.animate {
+        animation: slide-from-left 0.5s;
+    }
 
     &.active .name {
         font-weight:bold;

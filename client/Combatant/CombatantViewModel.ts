@@ -2,7 +2,7 @@ module ImprovedInitiative {
     export class CombatantViewModel {
         HP: KnockoutComputed<string>;
         Name: KnockoutComputed<string>;
-        DisplayHP: KnockoutComputed<string>;
+        IsNew = ko.observable(true);
 
         constructor(
             public Combatant: Combatant,
@@ -18,6 +18,8 @@ module ImprovedInitiative {
                 }
             });
             this.Name = Combatant.DisplayName;
+
+            setTimeout(() => this.IsNew(false), 500);
         }
 
         ApplyDamage(inputDamage: string){
