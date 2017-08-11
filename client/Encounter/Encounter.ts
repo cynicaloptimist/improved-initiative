@@ -34,7 +34,8 @@ module ImprovedInitiative {
         constructor(
             promptQueue: PromptQueue,
             private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-            private removeCombatant: (vm: CombatantViewModel) => void
+            private removeCombatant: (vm: CombatantViewModel) => void,
+            private sortByInitiative: () => void
         ) {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
@@ -81,13 +82,7 @@ module ImprovedInitiative {
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
 
-
-
-        SortByInitiative = () => {
-            this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
-                (r.InitiativeBonus - l.InitiativeBonus));
-            this.QueueEmitEncounter();
-        }
+        SortByInitiative = () => this.sortByInitiative();
 
         ImportEncounter = (encounter) => {
             const deepMerge = (a, b) => $.extend(true, {}, a, b);
@@ -124,24 +119,6 @@ module ImprovedInitiative {
         QueueEmitEncounter = () => {
             clearTimeout(this.emitEncounterTimeoutID);
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
-        }
-
-        MoveCombatant = (combatant: Combatant, index: number) => {
-            combatant.InitiativeGroup(null);
-            var currentPosition = this.Combatants().indexOf(combatant);
-            var newInitiative = combatant.Initiative();
-            var passedCombatant = this.Combatants()[index];
-            if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < combatant.Initiative()) {
-                newInitiative = passedCombatant.Initiative();
-            }
-            if (index < currentPosition && passedCombatant && passedCombatant.Initiative() > combatant.Initiative()) {
-                newInitiative = passedCombatant.Initiative();
-            }
-            this.Combatants.remove(combatant);
-            this.Combatants.splice(index, 0, combatant);
-            combatant.Initiative(newInitiative);
-            this.QueueEmitEncounter();
-            return newInitiative;
         }
 
         AddCombatantFromStatBlock = (statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) => {

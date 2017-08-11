@@ -76,7 +76,7 @@ module ImprovedInitiative {
 
             const remainingCombatants = this.tracker.CombatantViewModels();
 
-            var allMyFriendsAreGone = name => remainingCombatants.every(c => c.StatBlock().Name != name);
+            var allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
 
             deletedCombatantNames.forEach(name => {
                 if (allMyFriendsAreGone(name)) {
@@ -188,7 +188,7 @@ module ImprovedInitiative {
             var combatant = this.SelectedCombatants()[0];
             var index = this.tracker.CombatantViewModels().indexOf(combatant)
             if (combatant && index > 0) {
-                var newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index - 1);
+                var newInitiative = this.MoveCombatant(combatant, index - 1);
                 this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
             }
         }
@@ -197,9 +197,29 @@ module ImprovedInitiative {
             var combatant = this.SelectedCombatants()[0];
             var index = this.tracker.CombatantViewModels().indexOf(combatant)
             if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
-                var newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index + 1);
+                var newInitiative = this.MoveCombatant(combatant, index + 1);
                 this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
             }
+        }
+
+        MoveCombatant = (vm: CombatantViewModel, index: number) => {
+            vm.Combatant.InitiativeGroup(null);
+            const currentPosition = this.tracker.CombatantViewModels().indexOf(vm);
+            const passedCombatant = this.tracker.CombatantViewModels()[index];
+            const initiative = vm.Combatant.Initiative();
+            let newInitiative = initiative;
+            if (index > currentPosition && passedCombatant && passedCombatant.Combatant.Initiative() < initiative) {
+                newInitiative = passedCombatant.Combatant.Initiative();
+            }
+            if (index < currentPosition && passedCombatant && passedCombatant.Combatant.Initiative() > initiative) {
+                newInitiative = passedCombatant.Combatant.Initiative();
+            }
+
+            this.tracker.CombatantViewModels.remove(vm);
+            this.tracker.CombatantViewModels.splice(index, 0, vm);
+            vm.Combatant.Initiative(newInitiative);
+            vm.Combatant.Encounter.QueueEmitEncounter();
+            return newInitiative;
         }
 
         EditName = () => {
