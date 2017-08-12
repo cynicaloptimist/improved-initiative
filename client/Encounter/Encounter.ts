@@ -119,12 +119,12 @@ module ImprovedInitiative {
             Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
         }
 
-        QueueEmitEncounter = () => {
+        QueueEmitEncounter() {
             clearTimeout(this.emitEncounterTimeoutID);
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
         }
 
-        AddCombatantFromStatBlock = (statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) => {
+        AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
             const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
             if (event && event.altKey) {
@@ -144,8 +144,9 @@ module ImprovedInitiative {
             return combatant;
         }
 
-        MoveCombatant = (combatant: Combatant, index: number) => {
+        MoveCombatant(combatant: Combatant, index: number) {
             combatant.InitiativeGroup(null);
+            this.CleanInitiativeGroups();
             const currentPosition = this.Combatants().indexOf(combatant);
             const passedCombatant = this.Combatants()[index];
             const initiative = combatant.Initiative();
@@ -162,6 +163,16 @@ module ImprovedInitiative {
             combatant.Initiative(newInitiative);
             combatant.Encounter.QueueEmitEncounter();
             return newInitiative;
+        }
+
+        CleanInitiativeGroups() {
+            const combatants = this.Combatants();
+            combatants.forEach(combatant => {
+                const group = combatant.InitiativeGroup();
+                if (group && combatants.filter(c => c.InitiativeGroup() === group).length < 2) {
+                    combatant.InitiativeGroup(null);
+                }
+            });
         }
 
         StartEncounter = () => {

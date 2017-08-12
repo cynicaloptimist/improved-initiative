@@ -22,7 +22,7 @@ module ImprovedInitiative {
             setTimeout(() => this.IsNew(false), 500);
         }
 
-        ApplyDamage(inputDamage: string){
+        ApplyDamage(inputDamage: string) {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 currHP = this.Combatant.CurrentHP(),
@@ -37,7 +37,7 @@ module ImprovedInitiative {
             if (damage > 0) {
                 window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
                 if (autoCheckConcentration && this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
-                    this.CombatantCommander.CheckConcentration(this.Combatant, damage);    
+                    this.CombatantCommander.CheckConcentration(this.Combatant, damage);
                 }
                 tempHP -= damage;
                 if (tempHP < 0) {
@@ -59,7 +59,7 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(tempHP);
         }
 
-        ApplyTemporaryHP(inputTHP: string){
+        ApplyTemporaryHP(inputTHP: string) {
             var newTemporaryHP = parseInt(inputTHP),
                 currentTemporaryHP = this.Combatant.TemporaryHP();
 
@@ -74,7 +74,7 @@ module ImprovedInitiative {
             this.Combatant.TemporaryHP(currentTemporaryHP);
         }
 
-        ApplyInitiative(inputInitiative: string){
+        ApplyInitiative(inputInitiative: string) {
             const initiative = parseInt(inputInitiative);
             this.Combatant.Initiative(initiative);
             this.Combatant.Encounter.SortByInitiative();
@@ -86,18 +86,18 @@ module ImprovedInitiative {
             }
         });
 
-        GetHPColor(){
+        GetHPColor() {
             var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
             var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
             return "rgb(" + red + "," + green + ",0)";
         }
 
-        EditHP(){
+        EditHP() {
             this.CombatantCommander.Select(this);
             this.CombatantCommander.EditHP();
         }
 
-        EditInitiative(){
+        EditInitiative() {
             const currentInitiative = this.Combatant.Initiative();
             const modifier = this.Combatant.InitiativeBonus.toModifierString();
             let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
@@ -112,6 +112,7 @@ module ImprovedInitiative {
                     if (initiative) {
                         if (breakLink) {
                             this.Combatant.InitiativeGroup(null);
+                            this.Combatant.Encounter.CleanInitiativeGroups();
                         }
                         this.ApplyInitiative(initiative);
                         this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
@@ -121,7 +122,7 @@ module ImprovedInitiative {
             this.PromptUser(prompt);
         }
 
-        EditName(){
+        EditName() {
             var currentName = this.Name();
             const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
                 response => {
@@ -151,7 +152,7 @@ module ImprovedInitiative {
             return this.Combatant === activeCombatant;
         });
 
-        ToggleHidden(data, event){
+        ToggleHidden(data, event) {
             if (this.Combatant.Hidden()) {
                 this.Combatant.Hidden(false);
                 this.LogEvent(`${this.Name()} revealed in player view.`);
@@ -162,12 +163,12 @@ module ImprovedInitiative {
             this.Combatant.Encounter.QueueEmitEncounter();
         }
 
-        AddTag(encounter: Encounter){
+        AddTag(encounter: Encounter) {
             const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
             this.PromptUser(prompt);
         }
 
-        RemoveTag(tag: Tag){
+        RemoveTag(tag: Tag) {
             this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
             this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
             this.Combatant.Encounter.QueueEmitEncounter();

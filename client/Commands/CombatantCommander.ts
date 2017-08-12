@@ -1,4 +1,9 @@
 module ImprovedInitiative {
+    interface PendingLinkInitiative {
+        combatant: CombatantViewModel;
+        prompt: DefaultPrompt;
+    }
+        
     export class CombatantCommander {
         constructor(private tracker: TrackerViewModel) {
             this.Commands = BuildCombatantCommandList(this);
@@ -41,11 +46,18 @@ module ImprovedInitiative {
             if (!data) {
                 return;
             }
+            const pendingLink = this.pendingLinkInitiative();
+            if (pendingLink) {
+                this.linkCombatantInitiatives([data, pendingLink.combatant]);
+                pendingLink.prompt.Resolve(null);
+            }
             if (!(e && e.ctrlKey || e && e.metaKey)) {
                 this.SelectedCombatants.removeAll();
             }
             this.SelectedCombatants.push(data);
         }
+
+        private pendingLinkInitiative = ko.observable<PendingLinkInitiative>(null);
 
         private selectByOffset = (offset: number) => {
             var newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
@@ -166,22 +178,32 @@ module ImprovedInitiative {
             return false;
         }
 
-        LinkInitiative = () => {
-            const selected = this.SelectedCombatants();
-            if (selected.length <= 1) {
-                const message = `Select another combatant to link initiative. <br /><em>Tip:</em> You can select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.`;
-                const prompt = new DefaultPrompt(message, _ => { });
-                this.tracker.PromptQueue.Add(prompt);
-                return;
-            }
-            const highestInitiative = selected.map(c => c.Combatant.Initiative()).sort((a, b) => b - a)[0];
+        private linkCombatantInitiatives = (combatants: CombatantViewModel[]) => {
+            this.pendingLinkInitiative(null);
+            const highestInitiative = combatants.map(c => c.Combatant.Initiative()).sort((a, b) => b - a)[0];
             const initiativeGroup = probablyUniqueString();
-            selected.forEach(s => {
+
+            combatants.forEach(s => {
                 s.Combatant.Initiative(highestInitiative);
                 s.Combatant.InitiativeGroup(initiativeGroup);
             });
+            this.tracker.Encounter.CleanInitiativeGroups();
 
             this.tracker.Encounter.SortByInitiative();
+        }
+
+        LinkInitiative = () => {
+            const selected = this.SelectedCombatants();
+
+            if (selected.length <= 1) {
+                const message = `<p>Select another combatant to link initiative. <br /><em>Tip:</em> You can select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.</p>`;
+                const prompt = new DefaultPrompt(message, _ => this.pendingLinkInitiative(null));
+                this.tracker.PromptQueue.Add(prompt);
+                this.pendingLinkInitiative({ combatant: selected[0], prompt: prompt });
+                return;
+            }
+
+            this.linkCombatantInitiatives(selected);
         }
 
         MoveUp = () => {
