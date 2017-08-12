@@ -57,8 +57,6 @@ module ImprovedInitiative {
             this.SelectedCombatants.push(data);
         }
 
-        private pendingLinkInitiative = ko.observable<PendingLinkInitiative>(null);
-
         private selectByOffset = (offset: number) => {
             var newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
             if (newIndex < 0) {
@@ -177,6 +175,8 @@ module ImprovedInitiative {
             this.SelectedCombatants().forEach(c => c.EditInitiative())
             return false;
         }
+
+        private pendingLinkInitiative = ko.observable<PendingLinkInitiative>(null);
 
         private linkCombatantInitiatives = (combatants: CombatantViewModel[]) => {
             this.pendingLinkInitiative(null);
