@@ -124,7 +124,7 @@ module ImprovedInitiative {
 
         IsSelected = ko.pureComputed(() => {
             return this.CombatantCommander.SelectedCombatants().some(c => c === this);
-        })
+        });
 
         IsActive = ko.pureComputed(() => {
             const activeCombatant = this.Combatant.Encounter.ActiveCombatant();
@@ -137,7 +137,7 @@ module ImprovedInitiative {
                 this.LogEvent(`${this.Name()} revealed in player view.`);
             } else {
                 this.Combatant.Hidden(true);
-                this.LogEvent(`${this.Name()} revealed in player view.`);
+                this.LogEvent(`${this.Name()} hidden in player view.`);
             }
             this.Combatant.Encounter.QueueEmitEncounter();
         }
