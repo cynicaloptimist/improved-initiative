@@ -34,8 +34,7 @@ module ImprovedInitiative {
         constructor(
             promptQueue: PromptQueue,
             private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-            private removeCombatant: (vm: CombatantViewModel) => void,
-            private sortByInitiative: () => void
+            private removeCombatant: (vm: CombatantViewModel) => void
         ) {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
@@ -82,7 +81,11 @@ module ImprovedInitiative {
         EncounterId = $('html')[0].getAttribute('encounterId');
         Socket: SocketIOClient.Socket = io();
 
-        SortByInitiative = () => this.sortByInitiative();
+        SortByInitiative = () => {
+            this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
+                (r.InitiativeBonus - l.InitiativeBonus));
+            this.QueueEmitEncounter();
+        }
 
         ImportEncounter = (encounter) => {
             const deepMerge = (a, b) => $.extend(true, {}, a, b);
@@ -139,6 +142,26 @@ module ImprovedInitiative {
             window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
             return combatant;
+        }
+
+        MoveCombatant = (combatant: Combatant, index: number) => {
+            combatant.InitiativeGroup(null);
+            const currentPosition = this.Combatants().indexOf(combatant);
+            const passedCombatant = this.Combatants()[index];
+            const initiative = combatant.Initiative();
+            let newInitiative = initiative;
+            if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < initiative) {
+                newInitiative = passedCombatant.Initiative();
+            }
+            if (index < currentPosition && passedCombatant && passedCombatant.Initiative() > initiative) {
+                newInitiative = passedCombatant.Initiative();
+            }
+
+            this.Combatants.remove(combatant);
+            this.Combatants.splice(index, 0, combatant);
+            combatant.Initiative(newInitiative);
+            combatant.Encounter.QueueEmitEncounter();
+            return newInitiative;
         }
 
         StartEncounter = () => {

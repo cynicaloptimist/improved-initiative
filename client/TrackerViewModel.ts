@@ -23,7 +23,7 @@ module ImprovedInitiative {
         CombatantCommander = new CombatantCommander(this);
 
         CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
-
+        
         private addCombatantViewModel = (combatant: Combatant) => {
             const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
             this.CombatantViewModels.push(vm);
@@ -34,17 +34,16 @@ module ImprovedInitiative {
             this.CombatantViewModels.remove(vm);
         }
 
-        SortByInitiative = () => {
-            this.CombatantViewModels.sort((l, r) => (r.Combatant.Initiative() - l.Combatant.Initiative()) ||
-                (r.Combatant.InitiativeBonus - l.Combatant.InitiativeBonus));
-            this.Encounter.QueueEmitEncounter();
-        }
-
         Encounter = new Encounter(
             this.PromptQueue,
             this.addCombatantViewModel,
-            this.removeCombatantViewModel,
-            this.SortByInitiative
+            this.removeCombatantViewModel
+        );
+
+        OrderedCombatants = ko.computed(() =>
+            this.CombatantViewModels().sort(
+                (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
+            )
         );
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
