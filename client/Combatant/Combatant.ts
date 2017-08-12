@@ -144,6 +144,43 @@ module ImprovedInitiative {
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
         GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
+        ApplyDamage(damage: number) {
+            let currHP = this.CurrentHP(),
+                tempHP = this.TemporaryHP(),
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
+
+            tempHP -= damage;
+            if (tempHP < 0) {
+                currHP += tempHP;
+                tempHP = 0;
+            }
+
+            if (currHP <= 0 && !allowNegativeHP) {
+                window.appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
+                currHP = 0;
+            }
+
+            this.CurrentHP(currHP);
+            this.TemporaryHP(tempHP);
+        }
+
+        ApplyHealing(healing: number) {
+            let currHP = this.CurrentHP();
+
+            currHP += healing;
+            if (currHP > this.MaxHP) {
+                currHP = this.MaxHP;
+            }
+
+            this.CurrentHP(currHP);
+        }
+
+        ApplyTemporaryHP(tempHP: number) {
+            if (tempHP > this.TemporaryHP()) {
+                this.TemporaryHP(tempHP);
+            }
+        }
+
         DisplayName = ko.pureComputed(() => {
             var alias = ko.unwrap(this.Alias),
                 name = ko.unwrap(this.StatBlock).Name,

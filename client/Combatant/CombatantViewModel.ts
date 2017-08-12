@@ -25,9 +25,7 @@ module ImprovedInitiative {
         ApplyDamage(inputDamage: string) {
             var damage = parseInt(inputDamage),
                 healing = -damage,
-                currHP = this.Combatant.CurrentHP(),
-                tempHP = this.Combatant.TemporaryHP(),
-                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP"),
+                
                 autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
 
             if (isNaN(damage)) {
@@ -39,39 +37,20 @@ module ImprovedInitiative {
                 if (autoCheckConcentration && this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
                     this.CombatantCommander.CheckConcentration(this.Combatant, damage);
                 }
-                tempHP -= damage;
-                if (tempHP < 0) {
-                    currHP += tempHP;
-                    tempHP = 0;
-                }
-                if (currHP <= 0 && !allowNegativeHP) {
-                    window.appInsights.trackEvent("CombatantDefeated", { Name: this.Name() });
-                    currHP = 0;
-                }
+                this.Combatant.ApplyDamage(damage);
             } else {
-                currHP += healing;
-                if (currHP > this.Combatant.MaxHP) {
-                    currHP = this.Combatant.MaxHP;
-                }
+                this.Combatant.ApplyHealing(healing);
             }
-
-            this.Combatant.CurrentHP(currHP);
-            this.Combatant.TemporaryHP(tempHP);
         }
 
         ApplyTemporaryHP(inputTHP: string) {
-            var newTemporaryHP = parseInt(inputTHP),
-                currentTemporaryHP = this.Combatant.TemporaryHP();
+            var newTemporaryHP = parseInt(inputTHP);
 
             if (isNaN(newTemporaryHP)) {
                 return
             }
 
-            if (newTemporaryHP > currentTemporaryHP) {
-                currentTemporaryHP = newTemporaryHP;
-            }
-
-            this.Combatant.TemporaryHP(currentTemporaryHP);
+            this.Combatant.ApplyTemporaryHP(newTemporaryHP);
         }
 
         ApplyInitiative(inputInitiative: string) {
