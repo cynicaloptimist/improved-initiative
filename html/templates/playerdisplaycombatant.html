@@ -2,7 +2,7 @@
 <div class="name">
     <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>
-<div class="hp" data-bind="style: { pointerEvents: AllowSuggestions ? 'initial' : 'none' }">
+<div class="hp" data-bind="css: { 'disable-hover': $root.DisallowSuggestions }">
     <span data-bind="click: $root.ShowSuggestion, html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
 </div>
 <div class="tags" data-bind="foreach: Tags">

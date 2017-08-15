@@ -24,9 +24,10 @@ module ImprovedInitiative {
 
     export interface SavedEncounter<T> {
         Name: string;
-        ActiveCombatantId: string;
+        ActiveCombatantId: string | number;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
+        AllowPlayerSuggestions?: boolean;
         Combatants: T[];
     }
 
@@ -255,7 +256,7 @@ module ImprovedInitiative {
             };
         }
 
-        SavePlayerDisplay = (name?: string) => {
+        SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             var activeCombatant = this.ActiveCombatant();
             var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
@@ -264,6 +265,7 @@ module ImprovedInitiative {
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
                 RoundCounter: roundCounter,
                 DisplayTurnTimer: Store.Load(Store.User, "PlayerViewDisplayTurnTimer"),
+                AllowPlayerSuggestions: Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions"),
                 Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {

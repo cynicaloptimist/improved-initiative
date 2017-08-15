@@ -6,6 +6,7 @@ module ImprovedInitiative {
         RoundCounter = ko.observable();
         TurnTimer = new TurnTimer();
         DisplayTurnTimer = ko.observable(false);
+        DisallowSuggestions = ko.observable(true);
 
         Socket: SocketIOClient.Socket = io();
 
@@ -23,6 +24,7 @@ module ImprovedInitiative {
             this.Combatants(encounter.Combatants);
             this.DisplayTurnTimer(encounter.DisplayTurnTimer);
             this.RoundCounter(encounter.RoundCounter)
+            this.DisallowSuggestions(!encounter.AllowPlayerSuggestions);
 
             if(encounter.ActiveCombatantId != (this.ActiveCombatant() || {Id: -1}).Id){
                 this.TurnTimer.Reset();
@@ -45,6 +47,9 @@ module ImprovedInitiative {
         }
 
         ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+            if (this.DisallowSuggestions()) {
+                return;
+            }
             this.CombatantSuggestor.Show(combatant);
         }
     }

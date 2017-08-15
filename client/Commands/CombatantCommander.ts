@@ -133,6 +133,10 @@ module ImprovedInitiative {
         }
 
         SuggestEditHP = (suggestedCombatants: Combatant[], suggestedDamage: number, suggester: string) => {
+            const allowPlayerSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
+            if (!allowPlayerSuggestions) {
+                return;
+            }
             const combatantNames = suggestedCombatants.map(c => c.ViewModel.DisplayName()).join(', ');
 
             const callback = this.CreateEditHPCallback(suggestedCombatants, combatantNames);
