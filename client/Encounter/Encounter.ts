@@ -24,15 +24,17 @@ module ImprovedInitiative {
 
     export interface SavedEncounter<T> {
         Name: string;
-        ActiveCombatantId: string;
+        ActiveCombatantId: string | number;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
+        AllowPlayerSuggestions?: boolean;
         Combatants: T[];
     }
 
     export class Encounter {
         constructor(
             promptQueue: PromptQueue,
+            private Socket: SocketIOClient.Socket,
             private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
             private removeCombatant: (vm: CombatantViewModel) => void
         ) {
@@ -79,7 +81,6 @@ module ImprovedInitiative {
 
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
-        Socket: SocketIOClient.Socket = io();
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
@@ -272,7 +273,7 @@ module ImprovedInitiative {
             };
         }
 
-        SavePlayerDisplay = (name?: string) => {
+        SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             var activeCombatant = this.ActiveCombatant();
             var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
@@ -280,7 +281,8 @@ module ImprovedInitiative {
                 Name: name || this.EncounterId,
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
                 RoundCounter: roundCounter,
-                DisplayTurnTimer: Store.Load(Store.User, "PlayerViewDisplayTurnTimer"),
+                DisplayTurnTimer: Store.Load<boolean>(Store.User, "PlayerViewDisplayTurnTimer"),
+                AllowPlayerSuggestions: Store.Load<boolean>(Store.User, "PlayerViewAllowPlayerSuggestions"),
                 Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {

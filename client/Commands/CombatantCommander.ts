@@ -117,9 +117,28 @@ module ImprovedInitiative {
             this.selectByOffset(1);
         }
 
+        private CreateEditHPCallback = (combatants: CombatantViewModel[]) => {
+            const combatantNames = combatants.map(c => c.Name()).join(', ');
+            return (response) => {
+                const damage = response['damage'];
+                if (damage) {
+                    combatants.forEach(c => c.ApplyDamage(damage));
+                    const damageNum = parseInt(damage);
+                    if (damageNum > 0) {
+                        this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
+                    }
+                    if (damageNum < 0) {
+                        this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
+                    }
+                    this.tracker.Encounter.QueueEmitEncounter();
+                }
+            }
+        }
+
         EditHP = () => {
             const selectedCombatants = this.SelectedCombatants();
-            const combatantNames = selectedCombatants.map(c => c.Name()).join(', ')
+            const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
+            const callback = this.CreateEditHPCallback(selectedCombatants);
             const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
                 response => {
                     const damage = response['damage'];
@@ -135,6 +154,22 @@ module ImprovedInitiative {
                         this.tracker.Encounter.QueueEmitEncounter();
                     }
                 });
+            this.tracker.PromptQueue.Add(prompt);
+            return false;
+        }
+
+        SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
+            const allowPlayerSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
+            
+            if (!allowPlayerSuggestions) {
+                return;
+            }
+
+            const callback = this.CreateEditHPCallback(suggestedCombatants);
+
+            const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
+            const prompt = new AcceptDamagePrompt(combatantNames, suggestedDamage, suggester, callback);
+
             this.tracker.PromptQueue.Add(prompt);
             return false;
         }

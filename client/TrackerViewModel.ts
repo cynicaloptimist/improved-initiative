@@ -14,6 +14,17 @@ module ImprovedInitiative {
     }
 
     export class TrackerViewModel {
+        constructor() {
+            this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
+                const suggestedCombatants = this.Encounter.Combatants().filter(c => suggestedCombatantIds.indexOf(c.Id) > -1);
+                this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
+            });
+
+            this.Socket.emit("join encounter", this.Encounter.EncounterId);
+        }
+
+        Socket = io();
+
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
         Libraries = new Libraries();
@@ -36,6 +47,7 @@ module ImprovedInitiative {
 
         Encounter = new Encounter(
             this.PromptQueue,
+            this.Socket,
             this.addCombatantViewModel,
             this.removeCombatantViewModel
         );
