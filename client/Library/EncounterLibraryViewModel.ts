@@ -10,7 +10,7 @@ module ImprovedInitiative {
         FilteredEncounters = ko.pureComputed<string []>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 index = this.library.Index();
-                 
+
             if (filter.length == 0) {
                 return index;
             }

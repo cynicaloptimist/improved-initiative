@@ -3,7 +3,7 @@ module ImprovedInitiative {
         StatBlocks: KnockoutObservableArray<StatBlockListing>
         ContainsPlayerCharacters: boolean;
     }
-    
+
     export class StatBlockLibraryViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
         constructor(
@@ -17,7 +17,7 @@ module ImprovedInitiative {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],
                 statBlocksWithFilterInKeywords = [];
-                 
+
             if (filter.length == 0) {
                 return this.library.StatBlocks();
             }

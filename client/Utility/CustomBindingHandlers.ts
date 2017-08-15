@@ -69,15 +69,15 @@ module ImprovedInitiative {
         const rules: IRules = bindingContext.$root.Encounter.Rules;
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
-        
+
         text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
-        
+
         if ((name + text).toLocaleLowerCase().indexOf("spell") > -1) {
             text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell-reference'>${match}</span>`);
         }
 
         $(element).html(text);
-        
+
         $(element).find('.rollable').on('click', (event) => {
             const diceExpression = event.target.innerHTML;
             encounterCommander.RollDice(diceExpression);
@@ -130,7 +130,7 @@ module ImprovedInitiative {
             // and again whenever any observables/computeds that are accessed change
             // Update the DOM element based on the supplied values here.
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
-      
+
         }
     }
 

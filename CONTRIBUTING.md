@@ -20,7 +20,7 @@ I'll try to provide a short list of guidelines here (adapted from [TypeScript Co
 
 ## Style
 * Use arrow functions over anonymous function expressions.
-* Only surround arrow function parameters when necessary. 
+* Only surround arrow function parameters when necessary.
 For example, (x) => x + x is wrong but the following are correct:
 `x => x + x`
 `(x,y) => x + y`
@@ -28,7 +28,7 @@ For example, (x) => x + x is wrong but the following are correct:
 * Use const whenever possible.
 * Always surround loop and conditional bodies with curly braces.
 * Open curly braces always go on the same line as whatever necessitates them.
-* Parenthesized constructs should have no surrounding whitespace. 
+* Parenthesized constructs should have no surrounding whitespace.
 * A single space follows commas, colons, and semicolons in those constructs. For example:
 `for (var i = 0, n = str.length; i < 10; i++) { }`
 `if (x < 10) { }`

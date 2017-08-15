@@ -26,7 +26,7 @@ module ImprovedInitiative {
         ko.components.loaders.unshift(templateLoader);
 
         const registerComponent = (name: string, viewModel: any) => ko.components.register(
-            name, 
+            name,
             {
                 viewModel,
                 template: { name }

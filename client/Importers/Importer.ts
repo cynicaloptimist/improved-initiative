@@ -67,7 +67,7 @@ module ImprovedInitiative {
         if (spells.length === 0) {
             alert("Could not retrieve any spells from the file. Please ensure that a valid DnDAppFile XML file is used.");
         }
-        
+
         return spells.map(xmlDoc => {
             var importer = new SpellImporter(xmlDoc);
             return importer.GetSpell();
@@ -85,7 +85,7 @@ module ImprovedInitiative {
             var entities = importer(xml);
             if (entities.length) {
                 callBack(entities);
-                location.reload();    
+                location.reload();
             }
         };
         reader.readAsText(xmlFile);

@@ -25,7 +25,7 @@ module ImprovedInitiative {
         ApplyDamage(inputDamage: string) {
             var damage = parseInt(inputDamage),
                 healing = -damage,
-                
+
                 autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
 
             if (isNaN(damage)) {

@@ -15,17 +15,17 @@ module ImprovedInitiative {
             saveCallback: (newSpell: Spell) => void,
             deleteCallback: (id: string) => void
         ) => {
-            
+
             this.spell = { ...Spell.Default(), ...spell }
 
             this.EditableSpell(this.makeEditable(this.spell));
             this.JsonSpell(JSON.stringify(this.spell, null, 2));
-            
+
             this.saveCallback = saveCallback;
             this.deleteCallback = deleteCallback;
         }
 
-        
+
         private makeEditable = (spell: Spell) => {
             let observableSpell = ko['mapping'].fromJS(this.spell);
             return observableSpell;
@@ -60,7 +60,7 @@ module ImprovedInitiative {
             if (this.EditorType() === 'basic') {
                 $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));
             }
-            
+
             this.saveCallback(editedSpell);
             this.EditableSpell(null);
         }

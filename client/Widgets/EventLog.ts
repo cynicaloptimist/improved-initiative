@@ -1,10 +1,10 @@
 module ImprovedInitiative {
     export class EventLog {
         Events = ko.observableArray<string>();
-        
+
         LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
         EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
-        
+
         AddEvent = (event: string) => {
             this.Events.push(event);
         }
@@ -25,7 +25,7 @@ module ImprovedInitiative {
         ShowFullLog = ko.observable<boolean>(false);
 
         private element = $('.event-log');
-        
+
         private scrollToBottomOfLog = () => {
             let scrollHeight = this.element[0].scrollHeight;
             this.element.scrollTop(scrollHeight);

@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class SpellListing {
         Name: KnockoutObservable<string>;
-        
+
         private spell: KnockoutObservable<Spell>;
 
         constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: string, spell?: Spell) {

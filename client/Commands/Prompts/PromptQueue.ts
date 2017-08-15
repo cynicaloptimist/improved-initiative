@@ -3,7 +3,7 @@ module ImprovedInitiative {
         constructor() {}
 
         Prompts = ko.observableArray<Prompt>();
-        
+
         Add = (prompt: Prompt) => {
             prompt.SetDequeueCallback(() => {
                 this.Prompts.remove(prompt)
@@ -16,7 +16,7 @@ module ImprovedInitiative {
 
         UpdateDom = (element: HTMLFormElement, valueAccessor, allBindings, viewModel, bindingContext) => {
             $(element).keyup(e => {
-                if (e.keyCode == 27) { 
+                if (e.keyCode == 27) {
                     this.Dismiss();
                 }
             });
@@ -29,7 +29,7 @@ module ImprovedInitiative {
 
         Dismiss = () => {
             if (this.HasPrompt()) {
-                this.Prompts.remove(this.Prompts()[0])    
+                this.Prompts.remove(this.Prompts()[0])
             }
         }
 

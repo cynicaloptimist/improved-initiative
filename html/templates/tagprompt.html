@@ -1,11 +1,11 @@
 <div class='add-tag'>
     <div>
-        Add a note to <span data-bind="text: DisplayName"></span>: 
+        Add a note to <span data-bind="text: DisplayName"></span>:
         <input id='tag-text' class='response' data-bind="awesomplete: Conditions" />
         <div class="button fa fa-hourglass" data-bind="click: ToggleAdvanced"></div>
     </div>
     <div class='tag-advanced' data-bind="visible: Advanced">
-        ...until 
+        ...until
         <select id='tag-timing' class='response'>
             <option value="start">start of</option>
             <option value="end">end of</option>

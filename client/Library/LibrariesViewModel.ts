@@ -30,7 +30,7 @@ module ImprovedInitiative {
         constructor(
             public EncounterCommander: EncounterCommander,
             public Libraries: Libraries
-        ) { 
+        ) {
             this.SelectedTab.subscribe(t => {
                 if (t.Name === "Players") {
                     TutorialSpy("SelectPlayersTab");
@@ -38,6 +38,6 @@ module ImprovedInitiative {
             })
         }
 
-        
+
     }
 }
