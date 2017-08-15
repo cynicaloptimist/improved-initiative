@@ -6,7 +6,7 @@ module ImprovedInitiative {
         ) {}
 
         SuggestionVisible = ko.observable(false);
-        Combatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable();
+        Combatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable(null);
 
         Name = ko.pureComputed(() => {
             if (!this.Combatant()) {

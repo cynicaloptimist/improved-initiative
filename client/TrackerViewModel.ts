@@ -16,7 +16,7 @@ module ImprovedInitiative {
     export class TrackerViewModel {
         constructor() {
             this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
-                const suggestedCombatants = this.Encounter.Combatants().filter(c => suggestedCombatantIds.indexOf(c.Id) > -1);
+                const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
                 this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
             });
 
