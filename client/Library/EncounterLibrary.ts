@@ -12,7 +12,7 @@ module ImprovedInitiative {
             if (this.Index().indexOf(encounterName) === -1) {
                 this.Index.push(encounterName);
             }
-                        
+
             Store.Save(Store.SavedEncounters, encounterName, savedEncounter);
         }
 

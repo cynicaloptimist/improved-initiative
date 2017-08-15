@@ -1,8 +1,8 @@
 module ImprovedInitiative {
     export class StatBlockListing {
-        
+
         Name: KnockoutObservable<string>;
-        
+
         private loadPromise: JQueryXHR;
         private statBlock: KnockoutObservable<StatBlock>;
 

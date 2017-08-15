@@ -11,7 +11,7 @@ module ImprovedInitiative {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 spellsWithFilterInName = [],
                 spellsWithFilterInKeywords = [];
-                 
+
             if (filter.length == 0) {
                 return this.library.Spells();
             }

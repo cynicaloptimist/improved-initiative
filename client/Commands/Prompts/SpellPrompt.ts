@@ -1,13 +1,13 @@
 module ImprovedInitiative {
     const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
-        
+
     export class SpellPrompt implements Prompt {
         private dequeue = () => { };
         InputSelector = "button";
         ComponentName = "spellprompt";
         Spell = ko.observable(Spell.Default());
         SetDequeueCallback = callback => this.dequeue = callback;
-        
+
         GetType = (spell: Spell) => {
             const ritual = spell.Ritual ? ' (ritual)' : '';
             if (spell.Level === 0) {
@@ -20,7 +20,7 @@ module ImprovedInitiative {
 
             return `Level ${spell.Level} ${spell.School}${ritual}`;
         }
-        
+
         constructor(listing: SpellListing) {
             listing.GetSpellAsync(spell => this.Spell(spell));
         }

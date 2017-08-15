@@ -46,12 +46,12 @@ export interface Spell {
     Source: string;
 }
 
-export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
+export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" ");
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
     private listings: Listing[] = [];
-    
+
     constructor(private route: string, private getKeywords: (item: TItem) => string) { };
 
     static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {

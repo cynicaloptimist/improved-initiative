@@ -1,7 +1,7 @@
 var expect = chai.expect;
 
 describe("ViewModel", () => {
-    
+
     beforeEach(() => {
         vm = new ImprovedInitiative.TrackerViewModel();
         creatureStatBlock = ImprovedInitiative.StatBlock.Empty();

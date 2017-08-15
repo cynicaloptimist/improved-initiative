@@ -39,7 +39,7 @@ module ImprovedInitiative {
 
             const howMany = (typeof match[1] == 'undefined') ? 1 : parseInt(match[1]);
             const dieSize = parseInt(match[2]);
-            
+
             const rolls = [];
             for (let i = 0; i < howMany; i++) {
                 rolls[i] = Math.ceil(Math.random() * dieSize);

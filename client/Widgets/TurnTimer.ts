@@ -10,7 +10,7 @@ module ImprovedInitiative {
             }
             this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
         }
-        
+
         Stop = () => {
             clearInterval(this.intervalToken);
             this.elapsedSeconds(0);
@@ -28,7 +28,7 @@ module ImprovedInitiative {
                 paddedSeconds = '0' + paddedSeconds;
             }
 
-            return time.minutes() + ':' + paddedSeconds;            
+            return time.minutes() + ':' + paddedSeconds;
         });
     }
 }

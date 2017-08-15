@@ -42,7 +42,7 @@ module ImprovedInitiative {
         ScrollToActiveCombatant = () => {
             var activeCombatantElement = $('.active')[0];
             if (activeCombatantElement) {
-                activeCombatantElement.scrollIntoView(false);        
+                activeCombatantElement.scrollIntoView(false);
             }
         }
 

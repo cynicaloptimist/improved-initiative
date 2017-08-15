@@ -34,7 +34,7 @@ module ImprovedInitiative {
         CombatantCommander = new CombatantCommander(this);
 
         CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
-        
+
         private addCombatantViewModel = (combatant: Combatant) => {
             const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
             this.CombatantViewModels.push(vm);

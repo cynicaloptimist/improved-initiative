@@ -3,7 +3,7 @@ module ImprovedInitiative {
         combatant: CombatantViewModel;
         prompt: DefaultPrompt;
     }
-        
+
     export class CombatantCommander {
         constructor(private tracker: TrackerViewModel) {
             this.Commands = BuildCombatantCommandList(this);
@@ -160,7 +160,7 @@ module ImprovedInitiative {
 
         SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
             const allowPlayerSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
-            
+
             if (!allowPlayerSuggestions) {
                 return;
             }

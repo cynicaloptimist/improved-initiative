@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.css">
     <meta name="description" content="Track your heroes' fight on the Improved Initiative player view."></meta>
     <meta property="og:image" content="img/improved-initiative-transparent-darkgreen.png"></meta>
-    
+
     <title>Player View - Improved Initiative</title>
 
     <script type="text/javascript">
@@ -47,8 +47,8 @@
     <ul class="combatants">
         <!-- ko foreach: Combatants -->
         <li class="combatant" data-bind="
-        css: { active: $parent.ActiveCombatant() == $data, 
-                playercharacter: $data.IsPlayerCharacter }, 
+        css: { active: $parent.ActiveCombatant() == $data,
+                playercharacter: $data.IsPlayerCharacter },
         component: {
             name: 'playerdisplaycombatant',
             params: { combatant: $data }

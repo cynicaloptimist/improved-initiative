@@ -40,24 +40,24 @@
     <div class="modal-blur" data-bind="visible: BlurVisible, click: CloseSettings"></div>
 
     <div class="settings" data-bind="
-        visible: SettingsVisible, 
-        component: { 
+        visible: SettingsVisible,
+        component: {
             name: 'settings',
-            params: { 
+            params: {
                 settingsVisible: SettingsVisible,
                 repeatTutorial: RepeatTutorial,
-                encounterCommander: EncounterCommander, 
-                combatantCommander: CombatantCommander 
-            } 
+                encounterCommander: EncounterCommander,
+                combatantCommander: CombatantCommander
+            }
         }">
     </div>
     <div class="tutorial" data-bind="
-        visible: TutorialVisible, 
-        component: { 
+        visible: TutorialVisible,
+        component: {
             name: 'tutorial',
             params: {
                 showTutorial: TutorialVisible
-            } 
+            }
         }
     ">
     </div>
@@ -65,7 +65,7 @@
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
                 <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
+                    visible: ShowOnActionBar,
                     attr: { title: ToolTip },
                     click: ActionBinding">
                     <span class="fa" data-bind="css: ActionBarIcon"></span>
@@ -74,7 +74,7 @@
             </div>
             <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
                 <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
+                    visible: ShowOnActionBar,
                     attr: { title: ToolTip },
                     click: ActionBinding">
                     <span class="fa" data-bind="css: ActionBarIcon"></span>
@@ -99,11 +99,11 @@
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
             <div class="statblock" data-bind="
-    component: { 
-        name: 'activestatblock', 
-        params: { 
-        statBlock: Encounter.ActiveCombatantStatBlock() 
-        } 
+    component: {
+        name: 'activestatblock',
+        params: {
+        statBlock: Encounter.ActiveCombatantStatBlock()
+        }
     }">
             </div>
         </div>
@@ -142,15 +142,15 @@
             </li>
             <!-- ko foreach: OrderedCombatants -->
             <li class="combatant" data-bind="
-        css: { 
-            selected: IsSelected, 
+        css: {
+            selected: IsSelected,
             active: IsActive,
             animate: IsNew
         },
         click: $root.CombatantCommander.Select,
         component: {
             name: 'combatant',
-            params: { 
+            params: {
                 viewModel: $data
             }
         }">
@@ -202,11 +202,11 @@
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
             <div class="statblock" data-bind="
-                component: { 
-                    name: 'defaultstatblock', 
-                    params:{ 
+                component: {
+                    name: 'defaultstatblock',
+                    params:{
                         statBlock: CombatantCommander.StatBlock(),
-                    } 
+                    }
                 }">
             </div>
             <!-- /ko -->
