@@ -24,7 +24,7 @@ module ImprovedInitiative {
 
     export interface SavedEncounter<T> {
         Name: string;
-        ActiveCombatantId: string | number;
+        ActiveCombatantId: string;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
         AllowPlayerSuggestions?: boolean;
@@ -279,7 +279,7 @@ module ImprovedInitiative {
             var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
                 Name: name || this.EncounterId,
-                ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
+                ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: roundCounter,
                 DisplayTurnTimer: Store.Load<boolean>(Store.User, "PlayerViewDisplayTurnTimer"),
                 AllowPlayerSuggestions: Store.Load<boolean>(Store.User, "PlayerViewAllowPlayerSuggestions"),
