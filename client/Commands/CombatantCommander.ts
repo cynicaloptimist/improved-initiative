@@ -162,13 +162,10 @@ module ImprovedInitiative {
             const allowPlayerSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
             
             if (!allowPlayerSuggestions) {
-                return;
+                return false;
             }
 
-            const callback = this.CreateEditHPCallback(suggestedCombatants);
-
-            const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
-            const prompt = new AcceptDamagePrompt(combatantNames, suggestedDamage, suggester, callback);
+            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester);
 
             this.tracker.PromptQueue.Add(prompt);
             return false;
