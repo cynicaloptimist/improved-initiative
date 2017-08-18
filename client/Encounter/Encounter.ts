@@ -27,11 +27,17 @@ module ImprovedInitiative {
         ActiveCombatantId: string;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
+        AllowPlayerSuggestions?: boolean;
         Combatants: T[];
     }
 
     export class Encounter {
-        constructor(promptQueue: PromptQueue) {
+        constructor(
+            promptQueue: PromptQueue,
+            private Socket: SocketIOClient.Socket,
+            private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
+            private removeCombatant: (vm: CombatantViewModel) => void
+        ) {
             this.Rules = new DefaultRules();
             this.CombatantCountsByName = [];
             this.ActiveCombatant = ko.observable<Combatant>();
@@ -44,13 +50,13 @@ module ImprovedInitiative {
             this.Difficulty = ko.pureComputed(() => {
                 const enemyChallengeRatings =
                     this.Combatants()
-                        .filter(c => !c.IsPlayerCharacter)    
-                        .filter(c => c.StatBlock().Challenge)    
+                        .filter(c => !c.IsPlayerCharacter)
+                        .filter(c => c.StatBlock().Challenge)
                         .map(c => c.StatBlock().Challenge);
                 const playerLevels =
                     this.Combatants()
                         .filter(c => c.IsPlayerCharacter)
-                        .filter(c => c.StatBlock().Challenge)    
+                        .filter(c => c.StatBlock().Challenge)
                         .map(c => c.StatBlock().Challenge);
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
             })
@@ -68,16 +74,13 @@ module ImprovedInitiative {
         ActiveCombatant: KnockoutObservable<Combatant>;
         ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
         Difficulty: KnockoutComputed<EncounterDifficulty>;
-        
+
         State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">('inactive');
         StateIcon = ko.computed(() => this.State() === "active" ? 'fa-play' : 'fa-pause');
         StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
-        
+
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = $('html')[0].getAttribute('encounterId');
-        Socket: SocketIOClient.Socket = io();
-
-        
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
@@ -117,46 +120,60 @@ module ImprovedInitiative {
             Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
         }
 
-        QueueEmitEncounter = () => {
+        QueueEmitEncounter() {
             clearTimeout(this.emitEncounterTimeoutID);
             this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
         }
 
-        MoveCombatant = (combatant: Combatant, index: number) => {
-            combatant.InitiativeGroup(null);
-            var currentPosition = this.Combatants().indexOf(combatant);
-            var newInitiative = combatant.Initiative();
-            var passedCombatant = this.Combatants()[index];
-            if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < combatant.Initiative()) {
-                newInitiative = passedCombatant.Initiative();
-            }
-            if (index < currentPosition && passedCombatant && passedCombatant.Initiative() > combatant.Initiative()) {
-                newInitiative = passedCombatant.Initiative();
-            }
-            this.Combatants.remove(combatant);
-            this.Combatants.splice(index, 0, combatant);
-            combatant.Initiative(newInitiative);
-            this.QueueEmitEncounter();
-            return newInitiative;
-        }
-
-        AddCombatantFromStatBlock = (statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) => {
+        AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
             const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
             if (event && event.altKey) {
                 combatant.Hidden(true);
             }
             this.Combatants.push(combatant);
+            const viewModel = this.buildCombatantViewModel(combatant);
 
             if (this.State() === "active") {
-                //viewmodel is initialized asynchronously, so timeout for workaround.
-                setTimeout(() => combatant.ViewModel.EditInitiative(), 10);
+                viewModel.EditInitiative();
             }
+
             this.QueueEmitEncounter();
-            
+
             window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
-            
+
             return combatant;
+        }
+
+        MoveCombatant(combatant: Combatant, index: number) {
+            combatant.InitiativeGroup(null);
+            this.CleanInitiativeGroups();
+            const currentPosition = this.Combatants().indexOf(combatant);
+            const passedCombatant = this.Combatants()[index];
+            const initiative = combatant.Initiative();
+            let newInitiative = initiative;
+            if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < initiative) {
+                newInitiative = passedCombatant.Initiative();
+            }
+            if (index < currentPosition && passedCombatant && passedCombatant.Initiative() > initiative) {
+                newInitiative = passedCombatant.Initiative();
+            }
+
+            this.Combatants.remove(combatant);
+            this.Combatants.splice(index, 0, combatant);
+            combatant.Initiative(newInitiative);
+            combatant.Encounter.QueueEmitEncounter();
+            return newInitiative;
+        }
+
+        CleanInitiativeGroups() {
+            const combatants = this.Combatants();
+            combatants.forEach(combatant => {
+                const group = combatant.InitiativeGroup();
+                if (group && combatants.filter(c => c.InitiativeGroup() === group).length < 2) {
+                    combatant.InitiativeGroup(null);
+                }
+            });
         }
 
         StartEncounter = () => {
@@ -246,7 +263,7 @@ module ImprovedInitiative {
                         Tags: c.Tags().map(t => ({
                             Text: t.Text,
                             DurationRemaining: t.DurationRemaining(),
-                            DurationTiming: t.DurationTiming,  
+                            DurationTiming: t.DurationTiming,
                             DurationCombatantId: t.DurationCombatantId
                         })),
                         Hidden: c.Hidden(),
@@ -256,15 +273,16 @@ module ImprovedInitiative {
             };
         }
 
-        SavePlayerDisplay = (name?: string) => {
+        SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
             var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
             var activeCombatant = this.ActiveCombatant();
             var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
                 Name: name || this.EncounterId,
-                ActiveCombatantId: activeCombatant ? activeCombatant.Id : -1,
+                ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: roundCounter,
-                DisplayTurnTimer: Store.Load(Store.User, "PlayerViewDisplayTurnTimer"),
+                DisplayTurnTimer: Store.Load<boolean>(Store.User, "PlayerViewDisplayTurnTimer"),
+                AllowPlayerSuggestions: Store.Load<boolean>(Store.User, "PlayerViewAllowPlayerSuggestions"),
                 Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {

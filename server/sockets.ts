@@ -15,6 +15,13 @@ export default function(io: SocketIO.Server, playerViews) {
             socket.join(id);
         });
 
+        socket.on("suggest damage", function (id, suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) {
+            if (id !== encounterId) {
+                return;
+            }
+            socket.broadcast.to(encounterId).emit("suggest damage", suggestedCombatantIds, suggestedDamage, suggester);
+        });
+
         socket.on("disconnect", function () {
             io.in(encounterId).clients((error, clients) => {
                 if (clients.length == 0) {

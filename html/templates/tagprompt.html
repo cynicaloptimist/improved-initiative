@@ -11,7 +11,7 @@
             <option value="end">end of</option>
         </select>
         <select id='tag-timing-id' class='response' data-bind="foreach: Combatants">
-            <option data-bind="value: Id, text: ViewModel.DisplayName, selected: $parent.IsActive"></option>
+            <option data-bind="value: Id, text: DisplayName, selected: $parent.IsActive"></option>
         </select>'s turn in <input type='number' id='tag-duration' class='response' value='1' /> round
     </div>
 </div>

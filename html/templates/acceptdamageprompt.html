@@ -1,0 +1,8 @@
+<div class='accept-damage'>
+    <p data-bind="html: Prompt"></p>
+</div>
+<div data-bind="focusOnRender: InputSelector">
+    <button type='submit' class='acceptfull fa-text fa-check button' data-bind="click: AcceptFull">Yes</button>
+    <button class='acceptnone fa-text fa-close button'>No</button>
+    <button class='accepthalf fa-text fa-adjust button' data-bind="click: AcceptHalf">Half</button>
+</div>

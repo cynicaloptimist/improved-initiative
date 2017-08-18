@@ -188,6 +188,13 @@ input[type="file"] {
     max-height: 700px;
 }
 
+.damage-suggestion {
+    .overlay-dialog();
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .social-media {
     display: none;
 }
@@ -550,8 +557,16 @@ input[type="file"] {
         align-self: flex-end;
     }
 
-    .pledge-logo {
-        height: 1.4em;
+    .support {
+        flex-direction: row;
+        align-items: center;
+        > * {
+            margin: @small-spacer;
+        }
+    }
+
+    .pledge img {
+        height: 30px;
     }
 }
 
@@ -561,6 +576,18 @@ input[type="file"] {
     span {
         padding: 1px @medium-spacer;
         border-radius: 0px @border-radius 0px 0px;
+    }
+}
+
+.damage-suggestion {
+    font-size: initial;
+
+    .tip {
+        font-size: smaller;
+    }
+
+    form {
+        padding-bottom: @large-spacer;
     }
 }
 
@@ -666,11 +693,24 @@ input[type="file"] {
     overflow-y: auto;
 }
 
+@keyframes slide-from-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
 .combatant {
     display: flex;
     padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
+
+    &.animate {
+        animation: slide-from-left 0.5s;
+    }
 
     &.active .name {
         font-weight:bold;

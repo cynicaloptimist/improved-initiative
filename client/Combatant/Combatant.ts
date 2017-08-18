@@ -16,7 +16,6 @@ module ImprovedInitiative {
         Hidden: KnockoutObservable<boolean>;
         StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
-        ViewModel: CombatantViewModel;
         IsPlayerCharacter: boolean;
     }
 
@@ -58,7 +57,7 @@ module ImprovedInitiative {
                     });
                     this.updatingGroup = false;
                 }
-            })
+            });
         }
 
         Id = probablyUniqueString();
@@ -78,7 +77,6 @@ module ImprovedInitiative {
         AbilityModifiers: AbilityScores;
         InitiativeBonus: number;
         ConcentrationBonus: number;
-        ViewModel: CombatantViewModel;
         IsPlayerCharacter = false;
 
         private updatingGroup = false;
@@ -145,5 +143,58 @@ module ImprovedInitiative {
 
         GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
         GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
+
+        ApplyDamage(damage: number) {
+            let currHP = this.CurrentHP(),
+                tempHP = this.TemporaryHP(),
+                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
+
+            tempHP -= damage;
+            if (tempHP < 0) {
+                currHP += tempHP;
+                tempHP = 0;
+            }
+
+            if (currHP <= 0 && !allowNegativeHP) {
+                window.appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
+                currHP = 0;
+            }
+
+            this.CurrentHP(currHP);
+            this.TemporaryHP(tempHP);
+        }
+
+        ApplyHealing(healing: number) {
+            let currHP = this.CurrentHP();
+
+            currHP += healing;
+            if (currHP > this.MaxHP) {
+                currHP = this.MaxHP;
+            }
+
+            this.CurrentHP(currHP);
+        }
+
+        ApplyTemporaryHP(tempHP: number) {
+            if (tempHP > this.TemporaryHP()) {
+                this.TemporaryHP(tempHP);
+            }
+        }
+
+        DisplayName = ko.pureComputed(() => {
+            var alias = ko.unwrap(this.Alias),
+                name = ko.unwrap(this.StatBlock).Name,
+                combatantCount = ko.unwrap(this.Encounter.CombatantCountsByName[name]),
+                index = this.IndexLabel;
+
+            if (alias) {
+                return alias;
+            }
+            if (combatantCount > 1) {
+                return name + " " + index;
+            }
+
+            return name;
+        });
     }
 }

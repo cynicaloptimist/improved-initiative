@@ -20,7 +20,7 @@ module ImprovedInitiative {
             const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : '';
 
             this.Combatants = encounter.Combatants();
-            this.DisplayName = targetCombatant.ViewModel.DisplayName();
+            this.DisplayName = targetCombatant.DisplayName();
 
             this.IsActive = (combatant: Combatant) => {
                 return combatant.Id === activeCombatantId;

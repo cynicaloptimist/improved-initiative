@@ -36,7 +36,7 @@ module ImprovedInitiative {
         registerComponent('settings', Settings);
         registerComponent('defaultstatblock', params => params.statBlock);
         registerComponent('activestatblock', params => params.statBlock);
-        registerComponent('combatant', params => new CombatantViewModel(params.combatant, params.combatantCommander, params.addPrompt, params.logEvent));
+        registerComponent('combatant', params => params.viewModel);
         registerComponent('playerdisplaycombatant', params => params.combatant);
         registerComponent('libraries', params => new LibrariesViewModel(params.encounterCommander, params.libraries));
         registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
@@ -47,6 +47,8 @@ module ImprovedInitiative {
         registerComponent('concentrationprompt', params => params.prompt);
         registerComponent('initiativeprompt', params => params.prompt);
         registerComponent('spellprompt', params => params.prompt);
+        registerComponent('acceptdamageprompt', params => params.prompt);
         registerComponent('tutorial', params => new TutorialViewModel(params));
+        registerComponent('playersuggestion', params => params.suggestion);
     }
 }

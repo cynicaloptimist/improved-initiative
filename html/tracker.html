@@ -26,6 +26,17 @@
 </head>
 
 <body id="tracker" data-bind="css: InterfaceState">
+    <div id="fb-root"></div>
+    <script>
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
     <div class="modal-blur" data-bind="visible: BlurVisible, click: CloseSettings"></div>
 
     <div class="settings" data-bind="
@@ -121,28 +132,26 @@
         <!-- /ko -->
         <!-- ko if: CenterColumn() === "combat" -->
         <h2>Initiative Order</h2>
-        <ul class="combatants" data-bind="with: Encounter">
+        <ul class="combatants">
             <li class="combatant header">
-                <span class="initiative fa" data-bind="css: StateIcon, attr: { title: StateTip }"></span>
+                <span class="initiative fa" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span>
                 <span class="name">Combatant</span>
                 <span class="hp fa fa-heart"></span>
                 <span class="ac fa fa-shield"></span>
                 <span title="Add notes to a creature to keep track of conditions or other effects." class="tags">Notes</span>
             </li>
-            <!-- ko foreach: Combatants -->
+            <!-- ko foreach: OrderedCombatants -->
             <li class="combatant" data-bind="
         css: { 
-            selected: $root.CombatantCommander.SelectedCombatants().indexOf($data) > -1, 
-            active: $parent.ActiveCombatant() == $data 
+            selected: IsSelected, 
+            active: IsActive,
+            animate: IsNew
         },
         click: $root.CombatantCommander.Select,
         component: {
             name: 'combatant',
             params: { 
-                combatant: $data, 
-                combatantCommander: $root.CombatantCommander, 
-                addPrompt: $root.PromptQueue.Add, 
-                logEvent: $root.EventLog.AddEvent 
+                viewModel: $data
             }
         }">
             </li>
@@ -182,7 +191,7 @@
                         <!-- ko if: Difficulty -->
                             <span class="difficulty" data-bind="text: Difficulty"></span>
                 <!-- /ko -->
-                    <span data-bind="text: EarnedExperience"></span> XP
+                <span data-bind="text: EarnedExperience"></span> XP
                 </span>
                 <!-- /ko -->
             </div>

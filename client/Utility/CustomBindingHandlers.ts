@@ -62,6 +62,7 @@ module ImprovedInitiative {
 
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
+        const name = viewModel.Name || null;
 
         let text = markdownit().renderInline(originalText);
 
@@ -71,7 +72,7 @@ module ImprovedInitiative {
         
         text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
         
-        if (text.toLocaleLowerCase().indexOf("spell") > -1) {
+        if ((name + text).toLocaleLowerCase().indexOf("spell") > -1) {
             text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell-reference'>${match}</span>`);
         }
 

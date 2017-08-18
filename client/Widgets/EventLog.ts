@@ -24,6 +24,15 @@ module ImprovedInitiative {
 
         ShowFullLog = ko.observable<boolean>(false);
 
+        LogHPChange = (damage: number, combatantNames: string) => {
+            if (damage > 0) {
+                this.AddEvent(`${damage} damage applied to ${combatantNames}.`);
+            }
+            if (damage < 0) {
+                this.AddEvent(`${-damage} HP restored to ${combatantNames}.`);
+            }
+        }
+
         private element = $('.event-log');
         
         private scrollToBottomOfLog = () => {

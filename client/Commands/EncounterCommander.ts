@@ -135,26 +135,38 @@ module ImprovedInitiative {
             this.HideLibraries();
 
             this.tracker.EventLog.AddEvent("Encounter started.");
+
+            return false;
         }
 
         EndEncounter = () => {
             this.tracker.Encounter.EndEncounter();
             this.tracker.EventLog.AddEvent("Encounter ended.");
+
+            return false;
         }
 
         RerollInitiative = () => {
             this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+
+            return false;
         }
 
         ClearEncounter = () => {
             this.tracker.Encounter.ClearEncounter();
+            this.tracker.CombatantViewModels([]);
+            this.tracker.CombatantCommander.SelectedCombatants([]);
             this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
+
+            return false;
         }
 
         NextTurn = () => {
             this.tracker.Encounter.NextTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
-            this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.DisplayName()}.`);
+
+            return false;
         }
 
         PreviousTurn = () => {
@@ -163,7 +175,9 @@ module ImprovedInitiative {
             }
             this.tracker.Encounter.PreviousTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
-            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.ViewModel.DisplayName()}.`);
+            this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.DisplayName()}.`);
+
+            return false;
         }
 
         SaveEncounter = () => {

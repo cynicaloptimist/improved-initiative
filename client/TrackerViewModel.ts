@@ -14,11 +14,49 @@ module ImprovedInitiative {
     }
 
     export class TrackerViewModel {
+        constructor() {
+            this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
+                const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
+                this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
+            });
+
+            this.Socket.emit("join encounter", this.Encounter.EncounterId);
+        }
+
+        Socket = io();
+
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
+        Libraries = new Libraries();
         StatBlockEditor = new StatBlockEditor();
         SpellEditor = new SpellEditor();
-        Encounter = new Encounter(this.PromptQueue);
+        EncounterCommander = new EncounterCommander(this);
+        CombatantCommander = new CombatantCommander(this);
+
+        CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
+        
+        private addCombatantViewModel = (combatant: Combatant) => {
+            const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
+            this.CombatantViewModels.push(vm);
+            return vm;
+        }
+
+        private removeCombatantViewModel = (vm: CombatantViewModel) => {
+            this.CombatantViewModels.remove(vm);
+        }
+
+        Encounter = new Encounter(
+            this.PromptQueue,
+            this.Socket,
+            this.addCombatantViewModel,
+            this.removeCombatantViewModel
+        );
+
+        OrderedCombatants = ko.computed(() =>
+            this.CombatantViewModels().sort(
+                (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
+            )
+        );
 
         TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
         SettingsVisible = ko.observable(false);
@@ -53,11 +91,6 @@ module ImprovedInitiative {
             this.SettingsVisible(false);
             this.TutorialVisible(true);
         }
-
-        Libraries = new Libraries();
-
-        EncounterCommander = new EncounterCommander(this);
-        CombatantCommander = new CombatantCommander(this);
 
         ImportEncounterIfAvailable = () => {
             const encounterJSON = $('html')[0].getAttribute('postedEncounter');
