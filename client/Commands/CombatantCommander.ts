@@ -117,8 +117,7 @@ module ImprovedInitiative {
             this.selectByOffset(1);
         }
 
-        private CreateEditHPCallback = (combatants: CombatantViewModel[]) => {
-            const combatantNames = combatants.map(c => c.Name()).join(', ');
+        private CreateEditHPCallback = (combatants: CombatantViewModel[], combatantNames: string) => {
             return (response) => {
                 const damage = response['damage'];
                 if (damage) {
@@ -138,22 +137,8 @@ module ImprovedInitiative {
         EditHP = () => {
             const selectedCombatants = this.SelectedCombatants();
             const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
-            const callback = this.CreateEditHPCallback(selectedCombatants);
-            const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`,
-                response => {
-                    const damage = response['damage'];
-                    if (damage) {
-                        selectedCombatants.forEach(c => c.ApplyDamage(damage));
-                        const damageNum = parseInt(damage);
-                        if (damageNum > 0) {
-                            this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
-                        }
-                        if (damageNum < 0) {
-                            this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
-                        }
-                        this.tracker.Encounter.QueueEmitEncounter();
-                    }
-                });
+            const callback = this.CreateEditHPCallback(selectedCombatants, combatantNames);
+            const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`, callback);
             this.tracker.PromptQueue.Add(prompt);
             return false;
         }
