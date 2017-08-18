@@ -145,8 +145,7 @@ module ImprovedInitiative {
                 return false;
             }
 
-            const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
-            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester, this.tracker.EventLog.LogHPChange);
+            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester, this.tracker);
 
             this.tracker.PromptQueue.Add(prompt);
             return false;
