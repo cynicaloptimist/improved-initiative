@@ -14,20 +14,22 @@ module ImprovedInitiative {
         AcceptFull: () => void;
         AcceptHalf: () => void;
 
-        constructor(suggestedCombatants: CombatantViewModel [], damageAmount: number, suggester: string) {
+        constructor(suggestedCombatants: CombatantViewModel [], damageAmount: number, suggester: string, logDamage: (damage: number, names: string) => void) {
             const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
             const displayType = (damageAmount < 0) ? "healing" : "damage";
             const displayNumber = (damageAmount < 0) ? -damageAmount : damageAmount;
             this.Prompt = `Accept ${displayNumber} ${displayType} to ${combatantNames} from ${suggester}?`;
 
             this.AcceptFull = () => {
-                suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()))
+                suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()));
+                logDamage(damageAmount, combatantNames);
                 this.dequeueCallback();
             }
 
             this.AcceptHalf = () => {
-                const halfDamage = Math.floor(damageAmount / 2).toString();
-                suggestedCombatants.forEach(c => c.ApplyDamage(halfDamage));
+                const halfDamage = Math.floor(damageAmount / 2);
+                suggestedCombatants.forEach(c => c.ApplyDamage(halfDamage.toString()));
+                logDamage(halfDamage, combatantNames);
                 this.dequeueCallback();
             }
         }

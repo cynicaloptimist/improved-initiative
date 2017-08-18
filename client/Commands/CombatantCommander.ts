@@ -123,12 +123,7 @@ module ImprovedInitiative {
                 if (damage) {
                     combatants.forEach(c => c.ApplyDamage(damage));
                     const damageNum = parseInt(damage);
-                    if (damageNum > 0) {
-                        this.tracker.EventLog.AddEvent(`${damageNum} damage applied to ${combatantNames}.`);
-                    }
-                    if (damageNum < 0) {
-                        this.tracker.EventLog.AddEvent(`${-damageNum} HP restored to ${combatantNames}.`);
-                    }
+                    this.tracker.EventLog.LogHPChange(damageNum, combatantNames);
                     this.tracker.Encounter.QueueEmitEncounter();
                 }
             }
@@ -150,7 +145,8 @@ module ImprovedInitiative {
                 return false;
             }
 
-            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester);
+            const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
+            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester, this.tracker.EventLog.LogHPChange);
 
             this.tracker.PromptQueue.Add(prompt);
             return false;
