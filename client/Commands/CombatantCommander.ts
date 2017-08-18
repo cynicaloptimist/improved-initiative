@@ -145,10 +145,7 @@ module ImprovedInitiative {
                 return false;
             }
 
-            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester, (damage: number, names: string) => {
-                this.tracker.EventLog.LogHPChange(damage, names);
-                this.tracker.Encounter.QueueEmitEncounter();
-            });
+            const prompt = new AcceptDamagePrompt(suggestedCombatants, suggestedDamage, suggester, this.tracker);
 
             this.tracker.PromptQueue.Add(prompt);
             return false;
