@@ -147,7 +147,7 @@ module ImprovedInitiative {
             this.PromptUser(prompt);
         }
 
-        RemoveTag(tag: Tag) {
+        RemoveTag = (tag: Tag) => {
             this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
             this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
             this.Combatant.Encounter.QueueEmitEncounter();
