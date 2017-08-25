@@ -1,8 +1,8 @@
 import express = require("express");
 import request = require("request");
 import patreon = require('patreon');
-const patreonAPI = patreon.default;
-const patreonOAuth = patreon.oauth;
+
+const OAuthClient = patreon.oauth(process.env.PATREON_CLIENT_ID, process.env.PATREON_CLIENT_SECRET);
 
 interface PatreonPostAttributes {
     title: string;
@@ -19,29 +19,23 @@ interface PatreonPost {
 }
 
 export const configureLogin = (app: express.Express) => {
-    if (!process.env.PATREON_CLIENT_ID) {
-        return;
-    }
-
     const redirectPath = "/r/patreon";
     const redirectUri = process.env.BASE_URL + redirectPath;
 
-    app.get("/r/patreon", (req, res) => {
+    app.get(redirectPath, (req, res) => {
         const code = req.body.code,
             state = req.body.state;
 
-        const opts = {
-            code,
-            grant_type: "authorization_code",
-            client_id: process.env.PATREON_CLIENT_ID,
-            client_secret: process.env.PATREON_CLIENT_SECRET,
-            redirect_uri: redirectUri
-        };
+        OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
+            const APIClient = patreon.default(tokens.access_token);
+            APIClient(`/current_user`, function (currentUserError, apiResponse) {
+                if (currentUserError) {
+                    console.error(currentUserError)
+                    res.end(currentUserError)
+                }
 
-        request.post("api.patreon.com/oauth2/token", opts, (error, response, body) => {
-            const accessToken = body.access_token,
-                refreshToken = body.refresh_token;
-
+                res.end(apiResponse);
+            });
         });
     });
 }
