@@ -42,7 +42,7 @@ export const configureLogin = (app: express.Express) => {
                     return;
                 }
 
-                res.end(apiResponse);
+                res.json(apiResponse);
             });
         });
     });
