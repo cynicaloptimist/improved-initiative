@@ -27,11 +27,18 @@ export const configureLogin = (app: express.Express) => {
             state = req.body.state;
 
         OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
+            if (tokensError) {
+                console.error(tokensError);
+                res.end(tokensError);
+                return;
+            }
+
             const APIClient = patreon.default(tokens.access_token);
             APIClient(`/current_user`, function (currentUserError, apiResponse) {
                 if (currentUserError) {
-                    console.error(currentUserError)
-                    res.end(currentUserError)
+                    console.error(currentUserError);
+                    res.end(currentUserError);
+                    return;
                 }
 
                 res.end(apiResponse);
