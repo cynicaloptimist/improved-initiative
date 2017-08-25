@@ -1,25 +1,11 @@
+import request = require("request");
 import express = require("express");
-
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
-import request = require("request");
 
 import { Library, StatBlock, Spell } from "./library";
-
-interface PatreonPostAttributes {
-    title: string;
-    content: string;
-    url: string;
-    created_at: string;
-    was_posted_by_campaign_owner: boolean;
-}
-
-interface PatreonPost {
-    attributes: PatreonPostAttributes;
-    id: string;
-    type: string;
-}
+import { configureLogin, getNews } from "./patreon";
 
 const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "../../",
@@ -120,17 +106,6 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
     app.post("/launchencounter/", importEncounter);
     app.post("/importencounter/", importEncounter);
 
-    const url = process.env.PATREON_URL;
-    if (url) {
-        request.get(url,
-            (error, response, body) => {
-                const json: { data: PatreonPost[] } = JSON.parse(body);
-                if (json.data) {
-                    const latestPost = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
-                    app.get("/whatsnew/", (req, res) => {
-                        res.json(latestPost);
-                    });
-                }
-            });
-    }
+    configureLogin(app);
+    getNews(app);
 }
