@@ -23,8 +23,9 @@ export const configureLogin = (app: express.Express) => {
     const redirectUri = process.env.BASE_URL + redirectPath;
 
     app.get(redirectPath, (req, res) => {
-        const code = req.body.code,
-            state = req.body.state;
+        console.log("Got redirect");
+        const code = req.query.code,
+            state = req.query.state;
 
         OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
             if (tokensError) {
