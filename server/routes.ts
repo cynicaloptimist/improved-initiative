@@ -25,6 +25,8 @@ const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "../../",
     encounterId,
     appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
+    baseUrl: process.env.BASE_URL || "",
+    patreonClientId: process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID",
     postedEncounter: null,
 });
 
@@ -83,9 +85,7 @@ export default function (app: express.Express, statBlockLibrary: Library<StatBlo
     });
 
     app.get("/templates/:name", (req, res) => {
-        res.render(`templates/${req.params.name}`, {
-            rootDirectory: "..",
-        });
+        res.render(`templates/${req.params.name}`, pageRenderOptions(""));
     });
 
     app.get(statBlockLibrary.Route(), (req, res) => {
