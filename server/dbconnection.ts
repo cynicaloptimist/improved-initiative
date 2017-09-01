@@ -5,7 +5,7 @@ interface Db extends mongo.Db {
     users: mongo.Collection;
 }
     
-export const initializeDb = () => {
+export const initialize = () => {
     if (!process.env.DB_CONNECTION_STRING) {
         console.error("No connection string found.");
         return;
