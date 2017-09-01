@@ -36,11 +36,11 @@ interface ApiResponse {
     })[];
 }
 
-export const configureLogin = (app: express.Express) => {
+export const configureLogin = (app: express.Application) => {
     const redirectPath = "/r/patreon";
     const redirectUri = process.env.BASE_URL + redirectPath;
 
-    app.get(redirectPath, (req, res) => {
+    app.get(redirectPath, (req, res: express.Response) => {
         console.log("Got redirect");
         const code = req.query.code,
             state = req.query.state;
@@ -64,13 +64,13 @@ export const configureLogin = (app: express.Express) => {
                 const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
                 const standing = hasStorage ? "pledge" : "none";
 
-                DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing);
+                DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing, res);
             });
         });
     });
 }
 
-export const getNews = (app: express.Express) => {
+export const getNews = (app: express.Application) => {
     if (!process.env.PATREON_URL) {
         return;
     }

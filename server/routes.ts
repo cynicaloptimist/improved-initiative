@@ -33,7 +33,7 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-export default function (app: express.Express, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
+export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     let mustacheEngine = mustacheExpress();
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;

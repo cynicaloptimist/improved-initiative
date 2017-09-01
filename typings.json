@@ -1,6 +1,7 @@
 {
   "name": "improved-initiative",
   "dependencies": {
+    "express": "registry:npm/express#4.14.0+20170217205433",
     "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161228005052",
     "lodash": "registry:npm/lodash#4.0.0+20161015015725",
     "mime": "registry:npm/mime#1.3.0+20160723033700",
