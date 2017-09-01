@@ -1,21 +1,39 @@
 import express = require("express");
 import request = require("request");
-import patreon = require('patreon');
+import patreon = require("patreon");
+import * as DB from "./dbconnection";
 
 const OAuthClient = patreon.oauth(process.env.PATREON_CLIENT_ID, process.env.PATREON_CLIENT_SECRET);
+const storageRewardIds = ["1322253", "1937132"];
 
-interface PatreonPostAttributes {
-    title: string;
-    content: string;
-    url: string;
-    created_at: string;
-    was_posted_by_campaign_owner: boolean;
-}
-
-interface PatreonPost {
-    attributes: PatreonPostAttributes;
+interface Post {
+    attributes: {
+        title: string;
+        content: string;
+        url: string;
+        created_at: string;
+        was_posted_by_campaign_owner: boolean;
+    };
     id: string;
     type: string;
+}
+
+interface Pledge {
+    id: string;
+    type: "pledge";
+    relationships: {
+        reward: { data: { id: string; } }
+    }
+}
+
+interface ApiResponse {
+    data: {
+        id: string;
+    };
+    included: (Pledge | {
+        id: string;
+        type: string;
+    })[];
 }
 
 export const configureLogin = (app: express.Express) => {
@@ -35,14 +53,18 @@ export const configureLogin = (app: express.Express) => {
             }
 
             const APIClient = patreon.default(tokens.access_token);
-            APIClient(`/current_user`, function (currentUserError, apiResponse) {
+            APIClient(`/current_user`, function (currentUserError, apiResponse: ApiResponse) {
                 if (currentUserError) {
                     console.error(currentUserError);
                     res.end(currentUserError);
                     return;
                 }
 
-                res.json(apiResponse);
+                const userRewards = apiResponse.included.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
+                const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
+                const standing = hasStorage ? "pledge" : "none";
+
+                DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing);
             });
         });
     });
@@ -55,7 +77,7 @@ export const getNews = (app: express.Express) => {
 
     request.get(process.env.PATREON_URL,
         (error, response, body) => {
-            const json: { data: PatreonPost[] } = JSON.parse(body);
+            const json: { data: Post[] } = JSON.parse(body);
             if (json.data) {
                 const latestPost = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
                 app.get("/whatsnew/", (req, res) => {
