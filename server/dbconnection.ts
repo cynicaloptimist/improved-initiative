@@ -7,13 +7,9 @@ export const initialize = () => {
         return;
     }
 
-    client.connect(process.env.DB_CONNECTION_STRING, function (err, db: Db) {
+    client.connect(process.env.DB_CONNECTION_STRING, function (err, db) {
         if (err) {
-            return;
-        }
-
-        if (!db.users) {
-            db.createCollection("users");
+            console.log(err);
         }
     });
 };
