@@ -42,6 +42,7 @@
     "markdown-it": "^7.0.1",
     "minimist": "^1.2.0",
     "moment": "^2.16.0",
+    "mongodb": "^2.2.31",
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
