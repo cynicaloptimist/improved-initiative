@@ -44,10 +44,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     app.use(express.static(__dirname + "/../public"));
     app.use(session({
+        resave: false,
+        saveUninitialized: true,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
     }));
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req, res) => {
         res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews)));
