@@ -3,7 +3,6 @@ import request = require("request");
 import patreon = require("patreon");
 import * as DB from "./dbconnection";
 
-const OAuthClient = patreon.oauth(process.env.PATREON_CLIENT_ID, process.env.PATREON_CLIENT_SECRET);
 const storageRewardIds = ["1322253", "1937132"];
 
 interface Post {
@@ -41,9 +40,10 @@ export const configureLogin = (app: express.Application) => {
     const redirectUri = process.env.BASE_URL + redirectPath;
 
     app.get(redirectPath, (req, res: express.Response) => {
-        console.log("Got redirect");
-        const code = req.query.code,
-            state = req.query.state;
+        const code = req.query.code;
+        const state = req.query.state;
+        
+        const OAuthClient = patreon.oauth(process.env.PATREON_CLIENT_ID, process.env.PATREON_CLIENT_SECRET);
 
         OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
             if (tokensError) {

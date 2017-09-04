@@ -3,6 +3,7 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
+import dbSession = require('connect-mongodb-session');
 
 import { Library, StatBlock, Spell } from "./library";
 import { configureLogin, getNews } from "./patreon";
@@ -34,7 +35,18 @@ const initializeNewPlayerView = (playerViews) => {
 };
 
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
-    let mustacheEngine = mustacheExpress();
+    const mustacheEngine = mustacheExpress();
+    const MongoDBStore = dbSession(session);
+    
+    if (process.env.DB_CONNECTION_STRING) {
+        var store = new MongoDBStore(
+        {
+            uri: process.env.DB_CONNECTION_STRING,
+            collection: 'sessions'
+        });
+    }
+    
+    
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
@@ -44,9 +56,10 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     app.use(express.static(__dirname + "/../public"));
     app.use(session({
+        store: store || null,
+        secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
         saveUninitialized: true,
-        secret: process.env.SESSION_SECRET || probablyUniqueString(),
     }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
