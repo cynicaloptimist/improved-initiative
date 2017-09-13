@@ -2976,7 +2976,7 @@
             },
             {
                 "Name": "Cold Breath (Recharge 5-6)",
-                "Content": "The dragon exhales an icy blast in a 90-foot cone. Each creature in that area must make a DC 22 Constitution saving throw, taking 72 (l6d8) cold damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The dragon exhales an icy blast in a 90-foot cone. Each creature in that area must make a DC 22 Constitution saving throw, taking 72 (16d8) cold damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
@@ -14430,7 +14430,7 @@
             },
             {
                 "Name": "Poison Breath (Recharge 5-6)",
-                "Content": "The golem exhales poisonous gas in a 15-foot cone. Each creature in that area must make a DC 19 Constitution saving throw, taking 45 (l0d8) poison damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The golem exhales poisonous gas in a 15-foot cone. Each creature in that area must make a DC 19 Constitution saving throw, taking 45 (10d8) poison damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
@@ -18986,7 +18986,7 @@
             },
             {
                 "Name": "Fire Breath (Recharge 5-6)",
-                "Content": "The dragon exhales fire in a 15-foot cone. Each creature in that area must make a DC l3 Dexterity saving throw, taking 24 (7d6) fire damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The dragon exhales fire in a 15-foot cone. Each creature in that area must make a DC 13 Dexterity saving throw, taking 24 (7d6) fire damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
