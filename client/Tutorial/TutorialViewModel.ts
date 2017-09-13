@@ -16,8 +16,13 @@ module ImprovedInitiative {
 
                 const nextStep = TutorialSteps[newStepIndex];
                 const focusSelector = nextStep.RaiseSelector;
-                $(focusSelector).addClass('tutorial-focus');
-                const position = nextStep.CalculatePosition($(focusSelector));
+                const focusedElements = $(focusSelector);
+                if (focusedElements.length === 0) {
+                    console.error("Tutorial binding broken");
+                    return;
+                }
+                focusedElements.addClass('tutorial-focus');
+                const position = nextStep.CalculatePosition(focusedElements);
                 if (newStepIndex == 0) {
                     $('.tutorial').css(position);
                 }
