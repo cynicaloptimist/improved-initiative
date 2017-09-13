@@ -9764,6 +9764,7 @@
     },
     {
         "Name": "Ghoul",
+        "Source": "Monster Manual",
         "Type": "Medium undead, chaotic evil",
         "HP": {
             "Value": 22,
