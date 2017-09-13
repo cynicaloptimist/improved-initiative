@@ -9614,11 +9614,15 @@
             "Cha": 8
         },
         "DamageVulnerabilities": [],
-        "DamageResistances": [],
-        "DamageImmunities": [
+        "DamageResistances": [
             "necrotic"
         ],
+        "DamageImmunities": [
+            "poison"
+        ],
         "ConditionImmunities": [
+            "charmed",
+            "exhaustion",
             "poisoned"
         ],
         "Saves": [],
@@ -9757,6 +9761,63 @@
         "LegendaryActions": [],
         "Description": "",
         "Player": ""
+    },
+    {
+        "Name": "Ghoul",
+        "Type": "Medium undead, chaotic evil",
+        "HP": {
+            "Value": 22,
+            "Notes": "(5d8)"
+        },
+        "AC": {
+            "Value": 12,
+            "Notes": ""
+        },
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 13,
+            "Dex": 15,
+            "Con": 10,
+            "Int": 7,
+            "Wis": 10,
+            "Cha": 6
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [
+            "poison"
+        ],
+        "ConditionImmunities": [
+            "charmed",
+            "exhaustion",
+            "poisoned"
+        ],
+        "Saves": [],
+        "Skills": [],
+        "Senses": [
+            "darkvision 60 ft.",
+            "passive Perception 10"
+        ],
+        "Languages": [
+            "Common"
+        ],
+        "Challenge": "1",
+        "Traits": [],
+        "Actions": [
+            {
+                "Name": "Bite",
+                "Content": "Melee Weapon Attack: +2 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) piercing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Claws",
+                "Content": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage. If the target is a creature other than an elf or undead, it must succeed on a DC 10 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+                "Usage": ""
+            }
+        ],
+        "LegendaryActions": []
     },
     {
         "Name": "Giant Ape",
