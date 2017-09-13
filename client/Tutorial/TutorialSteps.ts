@@ -43,7 +43,7 @@ module ImprovedInitiative {
         },
         {
             Message: "Press 'alt-r' or <strong>click 'Start Encounter'</strong> to roll initiative.",
-            RaiseSelector: ".button.fa-play",
+            RaiseSelector: ".button.fa-play--button",
             AwaitAction: "ShowInitiativeDialog",
             CalculatePosition: elements => {
                 const element = elements.last();
@@ -67,7 +67,7 @@ module ImprovedInitiative {
         //{ Advance turn },
         {
             Message: "Click 'Settings' to set keyboard shortcuts and see advanced features, or choose <strong>End Tutorial</strong>.",
-            RaiseSelector: ".button.fa-gear",
+            RaiseSelector: ".button.fa-gear--button",
             AwaitAction: "ShowSettings",
             CalculatePosition: elements => {
                 const element = elements.last();

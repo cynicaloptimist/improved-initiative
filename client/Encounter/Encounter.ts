@@ -52,12 +52,12 @@ module ImprovedInitiative {
                     this.Combatants()
                         .filter(c => !c.IsPlayerCharacter)
                         .filter(c => c.StatBlock().Challenge)
-                        .map(c => c.StatBlock().Challenge);
+                        .map(c => c.StatBlock().Challenge.toString());
                 const playerLevels =
                     this.Combatants()
                         .filter(c => c.IsPlayerCharacter)
                         .filter(c => c.StatBlock().Challenge)
-                        .map(c => c.StatBlock().Challenge);
+                        .map(c => c.StatBlock().Challenge.toString());
                 return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
             })
 

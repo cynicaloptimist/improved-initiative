@@ -2976,7 +2976,7 @@
             },
             {
                 "Name": "Cold Breath (Recharge 5-6)",
-                "Content": "The dragon exhales an icy blast in a 90-foot cone. Each creature in that area must make a DC 22 Constitution saving throw, taking 72 (l6d8) cold damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The dragon exhales an icy blast in a 90-foot cone. Each creature in that area must make a DC 22 Constitution saving throw, taking 72 (16d8) cold damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
@@ -9614,11 +9614,15 @@
             "Cha": 8
         },
         "DamageVulnerabilities": [],
-        "DamageResistances": [],
-        "DamageImmunities": [
+        "DamageResistances": [
             "necrotic"
         ],
+        "DamageImmunities": [
+            "poison"
+        ],
         "ConditionImmunities": [
+            "charmed",
+            "exhaustion",
             "poisoned"
         ],
         "Saves": [],
@@ -9757,6 +9761,64 @@
         "LegendaryActions": [],
         "Description": "",
         "Player": ""
+    },
+    {
+        "Name": "Ghoul",
+        "Source": "Monster Manual",
+        "Type": "Medium undead, chaotic evil",
+        "HP": {
+            "Value": 22,
+            "Notes": "(5d8)"
+        },
+        "AC": {
+            "Value": 12,
+            "Notes": ""
+        },
+        "Speed": [
+            "30 ft."
+        ],
+        "Abilities": {
+            "Str": 13,
+            "Dex": 15,
+            "Con": 10,
+            "Int": 7,
+            "Wis": 10,
+            "Cha": 6
+        },
+        "DamageVulnerabilities": [],
+        "DamageResistances": [],
+        "DamageImmunities": [
+            "poison"
+        ],
+        "ConditionImmunities": [
+            "charmed",
+            "exhaustion",
+            "poisoned"
+        ],
+        "Saves": [],
+        "Skills": [],
+        "Senses": [
+            "darkvision 60 ft.",
+            "passive Perception 10"
+        ],
+        "Languages": [
+            "Common"
+        ],
+        "Challenge": "1",
+        "Traits": [],
+        "Actions": [
+            {
+                "Name": "Bite",
+                "Content": "Melee Weapon Attack: +2 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) piercing damage.",
+                "Usage": ""
+            },
+            {
+                "Name": "Claws",
+                "Content": "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage. If the target is a creature other than an elf or undead, it must succeed on a DC 10 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.",
+                "Usage": ""
+            }
+        ],
+        "LegendaryActions": []
     },
     {
         "Name": "Giant Ape",
@@ -14369,7 +14431,7 @@
             },
             {
                 "Name": "Poison Breath (Recharge 5-6)",
-                "Content": "The golem exhales poisonous gas in a 15-foot cone. Each creature in that area must make a DC 19 Constitution saving throw, taking 45 (l0d8) poison damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The golem exhales poisonous gas in a 15-foot cone. Each creature in that area must make a DC 19 Constitution saving throw, taking 45 (10d8) poison damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
@@ -18925,7 +18987,7 @@
             },
             {
                 "Name": "Fire Breath (Recharge 5-6)",
-                "Content": "The dragon exhales fire in a 15-foot cone. Each creature in that area must make a DC l3 Dexterity saving throw, taking 24 (7d6) fire damage on a failed save, or half as much damage on a successful one.",
+                "Content": "The dragon exhales fire in a 15-foot cone. Each creature in that area must make a DC 13 Dexterity saving throw, taking 24 (7d6) fire damage on a failed save, or half as much damage on a successful one.",
                 "Usage": ""
             }
         ],
