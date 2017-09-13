@@ -14,7 +14,7 @@ export const initialize = () => {
     });
 };
 
-export const upsertUser = (patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res) => {
+export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res){
     if (!process.env.DB_CONNECTION_STRING) {
         console.error("No connection string found.");
         return;
@@ -48,5 +48,35 @@ export const upsertUser = (patreonId: string, accessKey: string, refreshKey: str
     });
 }
 
+export function getSettings(patreonId: string, callBack: (settings: any) => void) {
+    if (!process.env.DB_CONNECTION_STRING) {
+        console.error("No connection string found.");
+        //return null;
+    }
+
+    client.connect(process.env.DB_CONNECTION_STRING)
+        .then((db: mongo.Db) => {
+            const users = db.collection("users");
+            users.findOne({ patreonId }).then(user => {
+                callBack(user.settings || {});
+            });
+        });
+}
+
+export function setSettings(patreonId, settings) {
+    if (!process.env.DB_CONNECTION_STRING) {
+        console.error("No connection string found.");
+        //return null;
+    }
+
+    client.connect(process.env.DB_CONNECTION_STRING)
+        .then((db: mongo.Db) => {
+            const users = db.collection("users");
+            users.updateOne(
+                { patreonId },
+                { settings }
+            );
+        });
+}
 
 

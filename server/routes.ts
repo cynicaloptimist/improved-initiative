@@ -7,6 +7,7 @@ import dbSession = require('connect-mongodb-session');
 
 import { Library, StatBlock, Spell } from "./library";
 import { configureLogin, getNews } from "./patreon";
+import * as DB from "./dbconnection";
 
 const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "../../",
@@ -105,9 +106,31 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         res.json(spellLibrary.GetById(req.params.id));
     });
 
+    app.get("/my/settings", (req, res) => {
+        if (!req.session.patreonId) {
+            res.sendStatus(403);
+            return;
+        }
+
+        DB.getSettings(req.session.patreonId, settings => {
+            res.json(settings);
+        });
+    });
+
+    app.post("/my/settings", (req, res) => {
+        if (!req.session.patreonId) {
+            res.sendStatus(403);
+            return;
+        }
+
+        const newSettings = req.body.settings;
+
+        DB.setSettings(req.session.patreonId, newSettings);
+    });
+
     const importEncounter = (req, res) => {
         const newViewId = initializeNewPlayerView(playerViews);
-        const session: any = req.session;
+        const session = req.session;
 
         if (typeof req.body.Combatants === "string") {
             session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) };

@@ -64,6 +64,8 @@ export const configureLogin = (app: express.Application) => {
                 const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
                 const standing = hasStorage ? "pledge" : "none";
 
+                req.session.patreonId = apiResponse.data.id;
+
                 DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing, res);
             });
         });
