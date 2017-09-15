@@ -47,7 +47,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         });
     }
     
-    
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
