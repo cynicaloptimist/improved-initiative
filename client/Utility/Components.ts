@@ -33,7 +33,7 @@ module ImprovedInitiative {
             }
         )
 
-        registerComponent('settings', Settings);
+        registerComponent('settings', SettingsViewModel);
         registerComponent('defaultstatblock', params => params.statBlock);
         registerComponent('activestatblock', params => params.statBlock);
         registerComponent('combatant', params => params.viewModel);
