@@ -20,6 +20,7 @@ module ImprovedInitiative {
         "Actual HP",
         "Colored Label",
         "Monochrome Label",
+        "Damage Taken",
         "Hide All"
     ];
 

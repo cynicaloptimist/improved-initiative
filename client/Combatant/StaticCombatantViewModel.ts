@@ -33,6 +33,10 @@ module ImprovedInitiative {
                 return '';
             }
 
+            if (monsterHpVerbosity == "Damage Taken") {
+                return (combatant.CurrentHP() - combatant.MaxHP).toString();
+            }
+
             if (combatant.CurrentHP() <= 0) {
                 return "<span class='defeatedHP'>Defeated</span>";
             } else if (combatant.CurrentHP() < combatant.MaxHP / 2) {
@@ -47,7 +51,8 @@ module ImprovedInitiative {
             var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
             if (!combatant.IsPlayerCharacter &&
                    (monsterHpVerbosity == "Monochrome Label" ||
-                    monsterHpVerbosity == "Hide All")) {
+                    monsterHpVerbosity == "Hide All" ||
+                    monsterHpVerbosity == "Damage Taken")) {
                 return "auto";
             }
             var green = Math.floor((combatant.CurrentHP() / combatant.MaxHP) * 170);
