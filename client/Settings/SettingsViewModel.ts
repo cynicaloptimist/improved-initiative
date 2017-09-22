@@ -38,26 +38,6 @@ module ImprovedInitiative {
         return setting;
     }
 
-    const registerKeybindings = (encounterCommander: EncounterCommander, combatantCommander: CombatantCommander) => {
-        const allCommands = [...encounterCommander.Commands, ...combatantCommander.Commands];
-        Mousetrap.reset();
-
-        Mousetrap.bind('backspace', e => {
-            if (e.preventDefault) {
-                e.preventDefault();
-            } else {
-                // internet explorer
-                e.returnValue = false;
-            }
-        });
-
-        allCommands.forEach(b => {
-            Mousetrap.bind(b.KeyBinding, b.ActionBinding);
-            Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
-            Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
-        });
-    }
-
     export class SettingsViewModel {
         SaveAndClose: () => void;
 
@@ -102,15 +82,40 @@ module ImprovedInitiative {
 
         RepeatTutorial: () => void;
 
-        constructor(encounterCommander: EncounterCommander,
-            combatantCommander: CombatantCommander,
+        private registerKeybindings = () => {
+            const allCommands = [...this.encounterCommander.Commands, ...this.combatantCommander.Commands];
+            Mousetrap.reset();
+    
+            Mousetrap.bind('backspace', e => {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    // internet explorer
+                    e.returnValue = false;
+                }
+            });
+    
+            allCommands.forEach(b => {
+                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
+                Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
+                Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
+            });
+        }
+
+        private postSettings() {
+            
+        }
+
+        constructor(private encounterCommander: EncounterCommander,
+            private combatantCommander: CombatantCommander,
             settingsVisible: KnockoutObservable<boolean>,
             repeatTutorial: () => void,
         ) {
-            registerKeybindings(encounterCommander, combatantCommander);
+            this.registerKeybindings();
 
             const saveAndClose = () => {
-                registerKeybindings(encounterCommander, combatantCommander);
+                this.registerKeybindings();
+                this.postSettings();
                 settingsVisible(false);
             }
 
