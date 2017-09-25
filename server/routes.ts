@@ -59,7 +59,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         store: store || null,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
     }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
