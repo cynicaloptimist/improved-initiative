@@ -31,8 +31,6 @@ module ImprovedInitiative {
     }
 
     export class SettingsViewModel {
-        SaveAndClose: () => void;
-
         PreviousTip: any;
         NextTip: any;
         Tip: KnockoutComputed<string>;
@@ -98,18 +96,20 @@ module ImprovedInitiative {
             //todo
         }
 
-        constructor(private encounterCommander: EncounterCommander,
+        SaveAndClose() {
+            this.registerKeybindings();
+            this.postSettings();
+            this.settingsVisible(false);
+        }
+
+        constructor(
+            private trackerSettings: KnockoutObservable<Settings>,
+            private encounterCommander: EncounterCommander,
             private combatantCommander: CombatantCommander,
-            settingsVisible: KnockoutObservable<boolean>,
-            repeatTutorial: () => void,
+            private settingsVisible: KnockoutObservable<boolean>,
+            private repeatTutorial: () => void,
         ) {
             this.registerKeybindings();
-
-            const saveAndClose = () => {
-                this.registerKeybindings();
-                this.postSettings();
-                settingsVisible(false);
-            }
 
             const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
@@ -152,8 +152,6 @@ module ImprovedInitiative {
             this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
             this.NextTip = cycleTipIndex.bind(1);
             this.PreviousTip = cycleTipIndex.bind(-1);
-
-            this.SaveAndClose = saveAndClose;
         }
     }
 }
