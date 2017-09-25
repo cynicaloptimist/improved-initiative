@@ -1,7 +1,6 @@
 module ImprovedInitiative {
     export interface Settings {
-        EncounterCommands: CommandSetting[];
-        CombatantCommands: CommandSetting[];
+        Commands: CommandSetting[];
         Rules: {
             RollMonsterHp: boolean;
             AllowNegativeHP: boolean;
@@ -30,28 +29,51 @@ module ImprovedInitiative {
         "Hide All"
     ];
 
-    export function GetDefaultSettings(): Settings {
+    function getSetting<T>(settingName: string, def: T): T {
+        const setting = Store.Load<T>(Store.User, settingName);
+        if (setting === undefined) {
+            return def;
+        }
+        return setting;
+    }
+
+    function getSettingsFromLocalStorage(): Settings {
+        const commandNames = Store.List(Store.KeyBindings);
+        const commands: CommandSetting[] = commandNames.map(n => {
+            return {
+                Name: n,
+                KeyBinding: Store.Load<string>(Store.KeyBindings, n),
+                ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
+            }
+        });
+
         return {
-            EncounterCommands: [],
-            CombatantCommands: [],
+            Commands: commands,
             Rules: {
-                RollMonsterHp: false,
-                AllowNegativeHP: false,
-                AutoCheckConcentration: true
+                RollMonsterHp: getSetting<boolean>("RollMonsterHP", false),
+                AllowNegativeHP: getSetting<boolean>("AllowNegativeHP", false),
+                AutoCheckConcentration: getSetting<boolean>("AutoCheckConcentration", true)
             },
             TrackerView: {
-                DisplayRoundCounter: false,
-                DisplayTurnTimer: false,
-                DisplayDifficulty: false,
+                DisplayRoundCounter: getSetting<boolean>("DisplayRoundCounter", false),
+                DisplayTurnTimer: getSetting<boolean>("DisplayTurnTimer", false),
+                DisplayDifficulty: getSetting<boolean>("DisplayDifficulty", false)
             },
             PlayerView: {
-                AllowPlayerSuggestions: false,
-                MonsterHPVerbosity: "Colored Label",
-                HideMonstersOutsideEncounter: false,
-                DisplayRoundCounter: false,
-                DisplayTurnTimer: false
+                AllowPlayerSuggestions: getSetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
+                MonsterHPVerbosity: getSetting<string>("MonsterHPVerbosity", "Colored Label"),
+                HideMonstersOutsideEncounter: getSetting<boolean>("HideMonstersOutsideEncounter", false),
+                DisplayRoundCounter: getSetting<boolean>("PlayerViewDisplayRoundCounter", false),
+                DisplayTurnTimer: getSetting<boolean>("PlayerViewDisplayTurnTimer", false)
             },
             Version: "1.0.0" //TODO: Populate with package version
         }
+    }
+
+    export function InitializeSettings(): KnockoutObservable<Settings> {
+        const localSettings = getSettingsFromLocalStorage();
+        const settings = ko.observable<Settings>(localSettings);
+        
+        return settings;
     }
 }

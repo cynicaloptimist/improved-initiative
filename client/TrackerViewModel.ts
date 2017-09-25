@@ -25,7 +25,7 @@ module ImprovedInitiative {
 
         Socket = io();
 
-        Settings = ko.observable<Settings>(GetDefaultSettings());
+        Settings = InitializeSettings();
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
         Libraries = new Libraries();
