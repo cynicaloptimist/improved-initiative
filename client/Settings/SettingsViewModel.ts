@@ -16,14 +16,6 @@ module ImprovedInitiative {
         "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
     ];
 
-    const hpVerbosityOptions = [
-        "Actual HP",
-        "Colored Label",
-        "Monochrome Label",
-        "Damage Taken",
-        "Hide All"
-    ];
-
     const loadSetting = (settingName: string, defaultSetting?) => {
         var currentSetting = Store.Load(Store.User, settingName);
 
@@ -103,7 +95,7 @@ module ImprovedInitiative {
         }
 
         private postSettings() {
-            
+            //todo
         }
 
         constructor(private encounterCommander: EncounterCommander,
