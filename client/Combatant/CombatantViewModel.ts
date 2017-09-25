@@ -26,7 +26,7 @@ module ImprovedInitiative {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 
-                autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
+                autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
 
             if (isNaN(damage)) {
                 return

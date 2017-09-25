@@ -19,7 +19,7 @@ module ImprovedInitiative {
         }
 
         private GetHPDisplay(combatant: Combatant): string {
-            var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
+            var monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
 
             if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
                 if (combatant.TemporaryHP()) {
@@ -48,7 +48,7 @@ module ImprovedInitiative {
         }
 
         private GetHPColor = (combatant: Combatant) => {
-            var monsterHpVerbosity = Store.Load(Store.User, "MonsterHPVerbosity");
+            var monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
             if (!combatant.IsPlayerCharacter &&
                    (monsterHpVerbosity == "Monochrome Label" ||
                     monsterHpVerbosity == "Hide All" ||

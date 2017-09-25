@@ -16,20 +16,6 @@ module ImprovedInitiative {
         "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
     ];
 
-    const loadSetting = (settingName: string, defaultSetting?) => {
-        var currentSetting = Store.Load(Store.User, settingName);
-
-        if (defaultSetting !== undefined && currentSetting === null) {
-            Store.Save(Store.User, settingName, defaultSetting);
-        }
-
-        var setting = ko.observable(currentSetting || defaultSetting);
-        setting.subscribe(newValue => {
-            Store.Save(Store.User, settingName, newValue);
-        });
-        return setting;
-    }
-
     export class SettingsViewModel {
         PreviousTip: any;
         NextTip: any;
@@ -92,12 +78,44 @@ module ImprovedInitiative {
             });
         }
 
+        private getUpdatedSettings(): Settings {
+            const getCommandSetting = (command: Command): CommandSetting => ({
+                Name: command.Description,
+                KeyBinding: command.KeyBinding,
+                ShowOnActionBar: command.ShowOnActionBar()
+            });
+
+            return {
+                Commands: [...this.EncounterCommands, ...this.CombatantCommands].map(getCommandSetting),
+                Rules: {
+                    AllowNegativeHP: this.AllowNegativeHP(),
+                    AutoCheckConcentration: this.AutoCheckConcentration(),
+                    RollMonsterHp: this.RollHp()
+                },
+                TrackerView: {
+                    DisplayDifficulty: this.DisplayDifficulty(),
+                    DisplayRoundCounter: this.DisplayRoundCounter(),
+                    DisplayTurnTimer: this.DisplayTurnTimer()
+                },
+                PlayerView: {
+                    AllowPlayerSuggestions: this.PlayerViewAllowPlayerSuggestions(),
+                    DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
+                    DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
+                    HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
+                    MonsterHPVerbosity: this.HpVerbosity()
+                },
+                Version: "1.0.0" //TODO: auto generate this line
+            }
+        }
+        
         private postSettings() {
             //todo
         }
 
         SaveAndClose() {
             this.registerKeybindings();
+            const newSettings = this.getUpdatedSettings();
+            CurrentSettings(newSettings);
             this.postSettings();
             this.settingsVisible(false);
         }
@@ -127,26 +145,22 @@ module ImprovedInitiative {
 
             this.RepeatTutorial = repeatTutorial;
 
-            this.RollHp = loadSetting("RollMonsterHP");
-            this.HpVerbosity = loadSetting("MonsterHPVerbosity", "Colored Label");
+            const currentSettings = CurrentSettings();
+
+            this.RollHp = ko.observable(currentSettings.Rules.RollMonsterHp);
+            this.AllowNegativeHP = ko.observable(currentSettings.Rules.AllowNegativeHP);
+            this.AutoCheckConcentration = ko.observable(currentSettings.Rules.AutoCheckConcentration);
+
+            this.DisplayRoundCounter = ko.observable(currentSettings.TrackerView.DisplayRoundCounter);
+            this.DisplayTurnTimer = ko.observable(currentSettings.TrackerView.DisplayTurnTimer);
+            this.DisplayDifficulty = ko.observable(currentSettings.TrackerView.DisplayDifficulty);
+
+            this.HpVerbosity = ko.observable(currentSettings.PlayerView.MonsterHPVerbosity);
             this.HpVerbosityOptions = hpVerbosityOptions;
-
-            this.HideMonstersOutsideEncounter = loadSetting("HideMonstersOutsideEncounter");
-            this.AllowNegativeHP = loadSetting("AllowNegativeHP");
-            this.AutoCheckConcentration = loadSetting("AutoCheckConcentration", true);
-
-            this.DisplayRoundCounter = loadSetting("DisplayRoundCounter");
-            this.DisplayRoundCounter.subscribe(encounterCommander.DisplayRoundCounter);
-
-            this.DisplayTurnTimer = loadSetting("DisplayTurnTimer");
-            this.DisplayTurnTimer.subscribe(encounterCommander.DisplayTurnTimer);
-            
-            this.DisplayDifficulty = loadSetting("DisplayDifficulty");
-            this.DisplayDifficulty.subscribe(encounterCommander.DisplayDifficulty)
-
-            this.PlayerViewDisplayRoundCounter = loadSetting("PlayerViewDisplayRoundCounter", false);
-            this.PlayerViewDisplayTurnTimer = loadSetting("PlayerViewDisplayTurnTimer", false);
-            this.PlayerViewAllowPlayerSuggestions = loadSetting("PlayerViewAllowPlayerSuggestions", false);
+            this.HideMonstersOutsideEncounter = ko.observable(currentSettings.PlayerView.HideMonstersOutsideEncounter);
+            this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);;
+            this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
+            this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
             this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
             this.NextTip = cycleTipIndex.bind(1);

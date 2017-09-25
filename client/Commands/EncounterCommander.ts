@@ -116,9 +116,9 @@ module ImprovedInitiative {
             this.tracker.PromptQueue.Add(prompt);
         }
 
-        DisplayRoundCounter = ko.observable(Store.Load(Store.User, 'DisplayRoundCounter'));
-        DisplayTurnTimer = ko.observable(Store.Load(Store.User, 'DisplayTurnTimer'));
-        DisplayDifficulty = ko.observable(Store.Load(Store.User, 'DisplayDifficulty'));
+        DisplayRoundCounter = ko.computed(() => CurrentSettings().TrackerView.DisplayRoundCounter);
+        DisplayTurnTimer = ko.computed(() => CurrentSettings().TrackerView.DisplayTurnTimer);
+        DisplayDifficulty = ko.computed(() => CurrentSettings().TrackerView.DisplayDifficulty);
 
         StartEncounter = () => {
             if (this.tracker.PromptQueue.HasPrompt()) {
