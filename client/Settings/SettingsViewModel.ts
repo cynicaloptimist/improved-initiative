@@ -103,7 +103,6 @@ module ImprovedInitiative {
         }
 
         constructor(
-            private trackerSettings: KnockoutObservable<Settings>,
             private encounterCommander: EncounterCommander,
             private combatantCommander: CombatantCommander,
             private settingsVisible: KnockoutObservable<boolean>,

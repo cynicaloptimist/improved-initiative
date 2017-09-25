@@ -1,4 +1,5 @@
 module ImprovedInitiative {
+    export const CurrentSettings = ko.observable(InitializeSettings());
     export interface Settings {
         Commands: CommandSetting[];
         Rules: {

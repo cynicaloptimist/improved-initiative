@@ -25,7 +25,6 @@ module ImprovedInitiative {
 
         Socket = io();
 
-        Settings = InitializeSettings();
         PromptQueue = new PromptQueue();
         EventLog = new EventLog();
         Libraries = new Libraries();
