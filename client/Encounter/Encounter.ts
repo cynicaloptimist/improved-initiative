@@ -274,15 +274,14 @@ module ImprovedInitiative {
         }
 
         SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
-            var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
+            var hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
             var activeCombatant = this.ActiveCombatant();
-            var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
                 Name: name || this.EncounterId,
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-                RoundCounter: roundCounter,
-                DisplayTurnTimer: Store.Load<boolean>(Store.User, "PlayerViewDisplayTurnTimer"),
-                AllowPlayerSuggestions: Store.Load<boolean>(Store.User, "PlayerViewAllowPlayerSuggestions"),
+                RoundCounter: this.RoundCounter(),
+                DisplayTurnTimer: CurrentSettings().PlayerView.DisplayTurnTimer,
+                AllowPlayerSuggestions: CurrentSettings().PlayerView.AllowPlayerSuggestions,
                 Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {
