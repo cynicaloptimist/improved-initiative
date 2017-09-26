@@ -116,6 +116,7 @@ module ImprovedInitiative {
             this.registerKeybindings();
             const newSettings = this.getUpdatedSettings();
             CurrentSettings(newSettings);
+            Store.Save(Store.User, "Settings", newSettings);
             this.postSettings();
             this.settingsVisible(false);
         }

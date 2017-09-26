@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    export const CurrentSettings = InitializeSettings();
+    export const CurrentSettings = ko.observable<Settings>();
     export interface Settings {
         Commands: CommandSetting[];
         Rules: {
@@ -38,7 +38,7 @@ module ImprovedInitiative {
         return setting;
     }
 
-    function getSettingsFromLocalStorage(): Settings {
+    function getLegacySettings(): Settings {
         const commandNames = Store.List(Store.KeyBindings);
         const commands: CommandSetting[] = commandNames.map(n => {
             return {
@@ -71,10 +71,13 @@ module ImprovedInitiative {
         }
     }
 
-    export function InitializeSettings(): KnockoutObservable<Settings> {
-        const localSettings = getSettingsFromLocalStorage();
-        const settings = ko.observable<Settings>(localSettings);
-        
-        return settings;
+    export function InitializeSettings() {
+        const localSettings = Store.Load<Settings>(Store.User, "Settings");
+        if (localSettings) {
+            CurrentSettings(localSettings);
+        } else {
+            const legacySettings = getLegacySettings();
+            CurrentSettings(legacySettings)
+        }
     }
 }

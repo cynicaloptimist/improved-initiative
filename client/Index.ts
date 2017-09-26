@@ -3,6 +3,7 @@
 module ImprovedInitiative {
     $(() => {
         RegisterComponents();
+        InitializeSettings();
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
