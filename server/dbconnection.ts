@@ -1,13 +1,14 @@
 import mongo = require("mongodb");
 const client = mongo.MongoClient;
+const connectionString = process.env.DB_CONNECTION_STRING
 
 export const initialize = () => {
-    if (!process.env.DB_CONNECTION_STRING) {
+    if (!connectionString) {
         console.error("No connection string found.");
         return;
     }
 
-    client.connect(process.env.DB_CONNECTION_STRING, function (err, db) {
+    client.connect(connectionString, function (err, db) {
         if (err) {
             console.log(err);
         }
@@ -15,12 +16,12 @@ export const initialize = () => {
 };
 
 export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res){
-    if (!process.env.DB_CONNECTION_STRING) {
+    if (!connectionString) {
         console.error("No connection string found.");
         return;
     }
 
-    client.connect(process.env.DB_CONNECTION_STRING, function (err, db: mongo.Db) {
+    client.connect(connectionString, function (err, db: mongo.Db) {
         if (err) {
             res.json(err);
             return;
@@ -49,12 +50,12 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
 }
 
 export function getSettings(patreonId: string, callBack: (settings: any) => void) {
-    if (!process.env.DB_CONNECTION_STRING) {
+    if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    client.connect(process.env.DB_CONNECTION_STRING)
+    client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             users.findOne({ patreonId }).then(user => {
@@ -64,12 +65,12 @@ export function getSettings(patreonId: string, callBack: (settings: any) => void
 }
 
 export function setSettings(patreonId, settings) {
-    if (!process.env.DB_CONNECTION_STRING) {
+    if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    client.connect(process.env.DB_CONNECTION_STRING)
+    client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             users.updateOne(

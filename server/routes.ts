@@ -9,12 +9,16 @@ import { Library, StatBlock, Spell } from "./library";
 import { configureLogin, getNews } from "./patreon";
 import * as DB from "./dbconnection";
 
+const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
+const baseUrl = process.env.BASE_URL || "";
+const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
+
 const pageRenderOptions = (encounterId: string) => ({
     rootDirectory: "../../",
     encounterId,
-    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
-    baseUrl: process.env.BASE_URL || "",
-    patreonClientId: process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID",
+    appInsightsKey,
+    baseUrl,
+    patreonClientId,
     postedEncounter: null,
 });
 

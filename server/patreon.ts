@@ -4,6 +4,10 @@ import patreon = require("patreon");
 import * as DB from "./dbconnection";
 
 const storageRewardIds = ["1322253", "1937132"];
+const baseUrl = process.env.BASE_URL,
+    patreonClientId = process.env.PATREON_CLIENT_ID,
+    patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
+    patreonUrl = process.env.PATREON_URL;
 
 interface Post {
     attributes: {
@@ -37,13 +41,13 @@ interface ApiResponse {
 
 export const configureLogin = (app: express.Application) => {
     const redirectPath = "/r/patreon";
-    const redirectUri = process.env.BASE_URL + redirectPath;
+    const redirectUri = baseUrl + redirectPath;
 
     app.get(redirectPath, (req, res: express.Response) => {
         const code = req.query.code;
         const state = req.query.state;
         
-        const OAuthClient = patreon.oauth(process.env.PATREON_CLIENT_ID, process.env.PATREON_CLIENT_SECRET);
+        const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
 
         OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
             if (tokensError) {
@@ -73,11 +77,11 @@ export const configureLogin = (app: express.Application) => {
 }
 
 export const getNews = (app: express.Application) => {
-    if (!process.env.PATREON_URL) {
+    if (!patreonUrl) {
         return;
     }
 
-    request.get(process.env.PATREON_URL,
+    request.get(patreonUrl,
         (error, response, body) => {
             const json: { data: Post[] } = JSON.parse(body);
             if (json.data) {

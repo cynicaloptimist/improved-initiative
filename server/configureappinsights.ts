@@ -1,4 +1,5 @@
 import appInsights = require("applicationinsights");
+const instrumentationKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
 
 const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
     const data: ContractsModule.RequestData = <ContractsModule.RequestData>envelope.data.baseData;
@@ -12,9 +13,8 @@ const filterSocketReporting = (envelope: ContractsModule.Envelope) => {
 }
 
 export default function () {
-    if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
-        
-        const client: any = appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY).getClient();
+    if (instrumentationKey) {
+        const client: any = appInsights.setup(instrumentationKey).getClient();
         client.addTelemetryProcessor(filterSocketReporting);
         appInsights.start();
     }
