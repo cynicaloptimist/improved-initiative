@@ -8,6 +8,8 @@ module ImprovedInitiative {
         static readonly SavedEncounters = "SavedEncounters";
         static readonly AutoSavedEncounters = "AutoSavedEncounters";
         static readonly User = "User";
+
+        //Legacy
         static readonly KeyBindings = "KeyBindings";
         static readonly ActionBar = "ActionBar";
 

@@ -58,26 +58,6 @@ module ImprovedInitiative {
 
         RepeatTutorial: () => void;
 
-        private registerKeybindings = () => {
-            const allCommands = [...this.encounterCommander.Commands, ...this.combatantCommander.Commands];
-            Mousetrap.reset();
-    
-            Mousetrap.bind('backspace', e => {
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    // internet explorer
-                    e.returnValue = false;
-                }
-            });
-    
-            allCommands.forEach(b => {
-                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
-                Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
-                Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
-            });
-        }
-
         private getUpdatedSettings(): Settings {
             const getCommandSetting = (command: Command): CommandSetting => ({
                 Name: command.Description,
@@ -113,7 +93,6 @@ module ImprovedInitiative {
         }
 
         SaveAndClose() {
-            this.registerKeybindings();
             const newSettings = this.getUpdatedSettings();
             CurrentSettings(newSettings);
             Store.Save(Store.User, "Settings", newSettings);
@@ -127,8 +106,6 @@ module ImprovedInitiative {
             private settingsVisible: KnockoutObservable<boolean>,
             private repeatTutorial: () => void,
         ) {
-            this.registerKeybindings();
-
             const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
             function cycleTipIndex() {

@@ -71,6 +71,28 @@ module ImprovedInitiative {
         }
     }
 
+    function configureCommands(newSettings: Settings, commands: Command []) {
+        Mousetrap.reset();
+
+        Mousetrap.bind('backspace', e => {
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                // internet explorer
+                e.returnValue = false;
+            }
+        });
+
+        newSettings.Commands.forEach(b => {
+            const matchedCommands = commands.filter(c => c.Description == b.Name);
+            if (matchedCommands.length !== 1) {
+                throw `Couldn't bind command: ${b.Name}`;
+            }
+            Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
+            matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
+        });
+    }
+
     export function InitializeSettings() {
         const localSettings = Store.Load<Settings>(Store.User, "Settings");
         if (localSettings) {
@@ -79,5 +101,10 @@ module ImprovedInitiative {
             const legacySettings = getLegacySettings();
             CurrentSettings(legacySettings)
         }
+    }
+
+    export function ConfigureCommands(commands: Command[]) {
+        configureCommands(CurrentSettings(), commands);
+        CurrentSettings.subscribe(newSettings => configureCommands(newSettings, commands));
     }
 }
