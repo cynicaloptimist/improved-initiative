@@ -13,12 +13,13 @@ const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 
-const pageRenderOptions = (encounterId: string) => ({
+const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     rootDirectory: "../../",
     encounterId,
     appInsightsKey,
     baseUrl,
     patreonClientId,
+    hasStorage: session.hasStorage || false,
     postedEncounter: null,
 });
 
@@ -69,12 +70,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req, res) => {
-        res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews)));
+        res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
     });
 
     app.get("/e/:id", (req, res) => {
         const session: any = req.session;
-        const options = pageRenderOptions(req.params.id);
+        const options = pageRenderOptions(req.params.id, req.session);
         if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
@@ -82,7 +83,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/p/:id", (req, res) => {
-        res.render("playerview", pageRenderOptions(req.params.id));
+        res.render("playerview", pageRenderOptions(req.params.id, req.session));
     });
 
     app.get("/playerviews/:id", (req, res) => {
@@ -90,7 +91,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/templates/:name", (req, res) => {
-        res.render(`templates/${req.params.name}`, pageRenderOptions(""));
+        res.render(`templates/${req.params.name}`, pageRenderOptions("", req.session));
     });
 
     app.get(statBlockLibrary.Route(), (req, res) => {

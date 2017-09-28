@@ -69,6 +69,7 @@ export const configureLogin = (app: express.Application) => {
                 const standing = hasStorage ? "pledge" : "none";
 
                 req.session.patreonId = apiResponse.data.id;
+                req.session.hasStorage = hasStorage;
 
                 DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing, res);
             });
