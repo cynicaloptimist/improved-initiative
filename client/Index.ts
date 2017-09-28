@@ -2,6 +2,7 @@
 
 module ImprovedInitiative {
     $(() => {
+        LoadEnvironment()
         RegisterComponents();
         InitializeSettings();
         if ($('#tracker').length) {
@@ -11,7 +12,7 @@ module ImprovedInitiative {
             viewModel.GetWhatsNewIfAvailable();
         }
         if ($('#playerview').length) {
-            var encounterId = $('html')[0].getAttribute('encounterId');
+            var encounterId = env.EncounterId;
             var playerViewModel = new PlayerViewModel();
             playerViewModel.LoadEncounterFromServer(encounterId);
             ko.applyBindings(playerViewModel, document.body);

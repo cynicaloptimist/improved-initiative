@@ -80,7 +80,7 @@ module ImprovedInitiative {
         StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
 
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
-        EncounterId = $('html')[0].getAttribute('encounterId');
+        EncounterId = env.EncounterId;
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||

@@ -2,7 +2,7 @@ module ImprovedInitiative {
     export class PlayerViewModel {
         Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
         ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
-        EncounterId = $('html')[0].getAttribute('encounterId');
+        EncounterId = env.EncounterId;
         RoundCounter = ko.observable();
         TurnTimer = new TurnTimer();
         DisplayTurnTimer = ko.observable(false);

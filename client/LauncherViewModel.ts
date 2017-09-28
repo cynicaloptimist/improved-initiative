@@ -3,7 +3,7 @@ module ImprovedInitiative {
         constructor() {
         }
 
-        GeneratedEncounterId = $('html')[0].getAttribute('encounterId');
+        GeneratedEncounterId = env.EncounterId;
         JoinEncounterInput = ko.observable<string>('');
 
         StartEncounter = () => {
