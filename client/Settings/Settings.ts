@@ -95,11 +95,18 @@ module ImprovedInitiative {
 
     export function InitializeSettings() {
         const localSettings = Store.Load<Settings>(Store.User, "Settings");
+
         if (localSettings) {
             CurrentSettings(localSettings);
         } else {
             const legacySettings = getLegacySettings();
             CurrentSettings(legacySettings)
+        }
+
+        if (env.HasStorage) {
+            $.getJSON('/my/settings', (data, status) => {
+                CurrentSettings(data);
+            });
         }
     }
 

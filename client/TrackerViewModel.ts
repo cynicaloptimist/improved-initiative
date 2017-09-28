@@ -95,10 +95,9 @@ module ImprovedInitiative {
         }
 
         ImportEncounterIfAvailable = () => {
-            const encounterJSON = env.PostedEncounter;
-            if (encounterJSON) {
+            const encounter = env.PostedEncounter;
+            if (encounter) {
                 this.TutorialVisible(false);
-                const encounter: { Combatants: any[] } = JSON.parse(encounterJSON);
                 this.Encounter.ImportEncounter(encounter);
             }
         }

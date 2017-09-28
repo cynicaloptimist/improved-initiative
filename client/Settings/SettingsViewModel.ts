@@ -88,15 +88,17 @@ module ImprovedInitiative {
             }
         }
         
-        private postSettings() {
-            //todo
+        private postSettings(newSettings: Settings) {
+            if (env.HasStorage) {
+                $.post('/my/settings', newSettings);
+            }
         }
 
         SaveAndClose() {
             const newSettings = this.getUpdatedSettings();
             CurrentSettings(newSettings);
             Store.Save(Store.User, "Settings", newSettings);
-            this.postSettings();
+            this.postSettings(newSettings);
             this.settingsVisible(false);
         }
 
