@@ -9,7 +9,7 @@ module ImprovedInitiative {
         IsPlayerCharacter: boolean;
 
         constructor(combatant: Combatant) {
-            this.Name = combatant.DisplayName();
+            this.Name = this.GetName(combatant);
             this.Id = combatant.Id;
             this.HPDisplay = this.GetHPDisplay(combatant);
             this.HPColor = this.GetHPColor(combatant);
@@ -53,6 +53,14 @@ module ImprovedInitiative {
             var green = Math.floor((combatant.CurrentHP() / combatant.MaxHP) * 170);
             var red = Math.floor((combatant.MaxHP - combatant.CurrentHP()) / combatant.MaxHP * 170);
             return "rgb(" + red + "," + green + ",0)";
+        }
+
+        private GetName = (combatant: Combatant) => {
+            if (combatant.NameHidden()) {
+                return '???';
+            } else {
+                return combatant.DisplayName();
+            }
         }
     }
 }

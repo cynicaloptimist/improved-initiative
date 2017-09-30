@@ -122,6 +122,10 @@ module ImprovedInitiative {
             return this.Combatant.Hidden() ? 'fa-eye-slash' : 'fa-eye';
         });
 
+        NameHiddenClass = ko.pureComputed(() => {
+            return this.Combatant.NameHidden() ? 'fa-question' : 'fa-info';
+        });
+
         IsSelected = ko.pureComputed(() => {
             return this.CombatantCommander.SelectedCombatants().some(c => c === this);
         });
@@ -138,6 +142,17 @@ module ImprovedInitiative {
             } else {
                 this.Combatant.Hidden(true);
                 this.LogEvent(`${this.Name()} hidden in player view.`);
+            }
+            this.Combatant.Encounter.QueueEmitEncounter();
+        }
+
+        ToggleNameHidden(data, event) {
+            if (this.Combatant.NameHidden()) {
+                this.Combatant.NameHidden(false);
+                this.LogEvent(`${this.Name()} name revealed in player view.`);
+            } else {
+                this.Combatant.NameHidden(true);
+                this.LogEvent(`${this.Name()} name hidden in player view.`);
             }
             this.Combatant.Encounter.QueueEmitEncounter();
         }

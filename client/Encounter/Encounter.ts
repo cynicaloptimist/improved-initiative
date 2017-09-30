@@ -14,6 +14,7 @@ module ImprovedInitiative {
         Tags: string[] | SavedTag[];
         Hidden: boolean;
         InterfaceVersion: string;
+        NameHidden: boolean;
     }
     export interface SavedTag {
         Text: string;
@@ -267,7 +268,8 @@ module ImprovedInitiative {
                             DurationCombatantId: t.DurationCombatantId
                         })),
                         Hidden: c.Hidden(),
-                        InterfaceVersion: "1.0"
+                        InterfaceVersion: "1.0",
+                        NameHidden: c.NameHidden()
                     }
                 })
             };

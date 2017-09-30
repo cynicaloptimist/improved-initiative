@@ -17,6 +17,7 @@ module ImprovedInitiative {
         StatBlock: KnockoutObservable<StatBlock>;
         GetInitiativeRoll: () => number;
         IsPlayerCharacter: boolean;
+        NameHidden: KnockoutObservable<boolean>;
     }
 
     export class Combatant implements Combatant {
@@ -68,6 +69,7 @@ module ImprovedInitiative {
         InitiativeGroup = ko.observable<string>(null);
         StatBlock = ko.observable<StatBlock>();
         Hidden = ko.observable(false);
+        NameHidden = ko.observable(false);
 
         IndexLabel: number;
         MaxHP: number;
@@ -103,6 +105,7 @@ module ImprovedInitiative {
             this.Alias(savedCombatant.Alias);
             this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
             this.Hidden(savedCombatant.Hidden);
+            this.NameHidden(savedCombatant.NameHidden);
         }
 
         private getMaxHP(statBlock: StatBlock) {
