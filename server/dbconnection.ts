@@ -15,36 +15,29 @@ export const initialize = () => {
     });
 };
 
-export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res?){
+export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string){
     if (!connectionString) {
         console.error("No connection string found.");
         return;
     }
 
-    client.connect(connectionString, function (err, db: mongo.Db) {
-        if (err) {
-            res && res.json(err);
-            return;
-        }
-
+    return client.connect(connectionString)
+        .then((db: mongo.Db) => {
         const users = db.collection("users");
-        users.updateOne(
+        return users.updateOne(
             {
                 patreonId
             },
             {
-                patreonId,
-                accessKey,
-                refreshKey,
-                accountStatus
+                $set: {
+                    patreonId,
+                    accessKey,
+                    refreshKey,
+                    accountStatus
+                }
             },
             {
                 upsert: true
-            }, (err, result) => {
-                if (err) {
-                    res && res.json(err);
-                }
-                res && res.json(result);
             });
     });
 }
