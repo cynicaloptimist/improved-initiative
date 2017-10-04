@@ -9,7 +9,7 @@ module ImprovedInitiative {
                 this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
 
-            window.appInsights.trackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
+            Metrics.TrackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
 
             if (this.StatBlocks().length == 0) {
                 this.addSamplePlayersFromUrl('/sample_players.json');

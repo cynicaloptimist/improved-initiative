@@ -140,7 +140,7 @@ module ImprovedInitiative {
 
             this.QueueEmitEncounter();
 
-            window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
+            Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
             return combatant;
         }
@@ -197,7 +197,7 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
-            window.appInsights.trackEvent("TurnCompleted");
+            Metrics.TrackEvent("TurnCompleted");
             const activeCombatant = this.ActiveCombatant();
 
             let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;

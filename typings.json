@@ -10,7 +10,6 @@
     "serve-static": "registry:dt/serve-static#1.7.1+20161128184045"
   },
   "globalDependencies": {
-    "applicationinsights": "registry:dt/applicationinsights#0.15.12+20161119044246",
     "express-session": "registry:dt/express-session#0.0.0+20161119044246",
     "filesaver": "registry:dt/filesaver#0.0.0+20160622185141",
     "jquery": "registry:dt/jquery#1.10.0+20170104155652",

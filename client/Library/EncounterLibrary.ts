@@ -5,7 +5,7 @@ module ImprovedInitiative {
         constructor() {
             Store.List(Store.SavedEncounters).forEach(e => this.Index.push(e));
 
-            window.appInsights.trackEvent("SavedEncounters", { Count: this.Index().length.toString() });
+            Metrics.TrackEvent("SavedEncounters", { Count: this.Index().length.toString() });
         }
 
         Save = (encounterName: string, savedEncounter: SavedEncounter<SavedCombatant>) => {

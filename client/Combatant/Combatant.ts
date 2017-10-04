@@ -157,7 +157,7 @@ module ImprovedInitiative {
             }
 
             if (currHP <= 0 && !allowNegativeHP) {
-                window.appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
+                Metrics.TrackEvent("CombatantDefeated", { Name: this.DisplayName() });
                 currHP = 0;
             }
 

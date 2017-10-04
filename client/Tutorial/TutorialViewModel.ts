@@ -72,7 +72,7 @@ module ImprovedInitiative {
         });
 
         Next = () => {
-            window.appInsights.trackEvent("StepCompleted", { step: this.stepIndex().toString() });
+            Metrics.TrackEvent("StepCompleted", { step: this.stepIndex().toString() });
             const nextStepIndex = this.stepIndex() + 1;
 
             if (nextStepIndex < TutorialSteps.length) {

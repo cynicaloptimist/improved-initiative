@@ -18,7 +18,7 @@ module ImprovedInitiative {
                 this.Spells.push(new SpellListing(id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell));
             });
 
-            window.appInsights.trackEvent("CustomSpells", { Count: customSpells.length.toString() });
+            Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
         }
 
         private addSpellListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {
