@@ -12,6 +12,7 @@ import * as DB from "./dbconnection";
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
+const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 
 const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     rootDirectory: "../../",
@@ -69,7 +70,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get("/", (req, res) => {
+    app.get("/", (req: Express.Request, res) => {
+        if (defaultAccountLevel === "accountsync") {
+            req.session.patreonId = "default";
+            req.session.hasStorage = true;
+            DB.upsertUser(req.session.patreonId, "accesskey", "refreshkey", "pledge")
+        }
         res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
     });
 
@@ -121,15 +127,19 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         });
     });
 
-    app.post("/my/settings", (req, res) => {
+    app.post("/my/settings", (req, res: express.Response) => {
         if (!req.session.patreonId) {
             res.sendStatus(403);
             return;
         }
 
-        const newSettings = req.body.settings;
+        const newSettings = req.body;
 
-        DB.setSettings(req.session.patreonId, newSettings);
+        if (newSettings.Version) {
+            DB.setSettings(req.session.patreonId, newSettings, (a, b) => {
+                res.sendStatus(200)
+            });
+        }
     });
 
     const importEncounter = (req, res) => {

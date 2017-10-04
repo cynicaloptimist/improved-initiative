@@ -15,7 +15,7 @@ export const initialize = () => {
     });
 };
 
-export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res){
+export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string, res?){
     if (!connectionString) {
         console.error("No connection string found.");
         return;
@@ -23,7 +23,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
 
     client.connect(connectionString, function (err, db: mongo.Db) {
         if (err) {
-            res.json(err);
+            res && res.json(err);
             return;
         }
 
@@ -42,9 +42,9 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                 upsert: true
             }, (err, result) => {
                 if (err) {
-                    res.json(err);
+                    res && res.json(err);
                 }
-                res.json(result);
+                res && res.json(result);
             });
     });
 }
@@ -59,12 +59,12 @@ export function getSettings(patreonId: string, callBack: (settings: any) => void
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             users.findOne({ patreonId }).then(user => {
-                callBack(user.settings || {});
-            });
+                callBack(user && user.settings || {});
+            }).catch(err => console.error(err));
         });
 }
 
-export function setSettings(patreonId, settings) {
+export function setSettings(patreonId, settings, callback) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -75,8 +75,8 @@ export function setSettings(patreonId, settings) {
             const users = db.collection("users");
             users.updateOne(
                 { patreonId },
-                { settings }
-            );
+                { $set: { settings } }
+            ).then(callback);
         });
 }
 

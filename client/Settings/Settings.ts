@@ -104,8 +104,11 @@ module ImprovedInitiative {
         }
 
         if (env.HasStorage) {
-            $.getJSON('/my/settings', (data, status) => {
-                CurrentSettings(data);
+            $.getJSON('/my/settings', (data: Settings, status) => {
+                console.log(data);
+                if (data.Version) {
+                    CurrentSettings(data);    
+                }
             });
         }
     }

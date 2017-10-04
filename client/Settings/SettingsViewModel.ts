@@ -90,7 +90,14 @@ module ImprovedInitiative {
         
         private postSettings(newSettings: Settings) {
             if (env.HasStorage) {
-                $.post('/my/settings', newSettings);
+                $.ajax(
+                    '/my/settings',
+                    {
+                        data: JSON.stringify(newSettings),
+                        contentType: 'application/json',
+                        type: 'POST'
+                    }
+                ).done(s => console.log(`Saving settings: ${s}`));
             }
         }
 
