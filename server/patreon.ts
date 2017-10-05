@@ -43,7 +43,7 @@ export const configureLogin = (app: express.Application) => {
     const redirectPath = "/r/patreon";
     const redirectUri = baseUrl + redirectPath;
 
-    app.get(redirectPath, (req, res: express.Response) => {
+    app.get(redirectPath, (req: express.Request & Express.Request, res: express.Response) => {
         const code = req.query.code;
         const state = req.query.state;
         
