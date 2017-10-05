@@ -41,6 +41,10 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
+const verifyStorage = (req: Express.Request) => {
+    return req.session && req.session.hasStorage;
+}
+
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
@@ -117,29 +121,43 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/my/settings", (req, res) => {
-        if (!req.session.patreonId) {
-            res.sendStatus(403);
-            return;
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
         }
 
-        DB.getSettings(req.session.patreonId, settings => {
-            res.json(settings);
+        return DB.getSettings(req.session.patreonId, settings => {
+            return res.json(settings);
+        }).catch(err => {
+            return res.sendStatus(500);
         });
     });
 
     app.post("/my/settings", (req, res: express.Response) => {
-        if (!req.session.patreonId) {
-            res.sendStatus(403);
-            return;
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
         }
-
+        
         const newSettings = req.body;
 
         if (newSettings.Version) {
-            DB.setSettings(req.session.patreonId, newSettings, (a, b) => {
-                res.sendStatus(200)
+            return DB.setSettings(req.session.patreonId, newSettings).then(r => {
+                return res.sendStatus(200);
             });
+        } else {
+            return res.status(400).send("Invalid settings object, requires Version number.");
         }
+    });
+
+    app.get("/my/creatures", (req, res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+
+        return DB.getCreatures(req.session.patreonId, creatures => {
+            return res.json(creatures);
+        }).catch(err => {
+            return res.sendStatus(500);
+        });
     });
 
     const importEncounter = (req, res) => {

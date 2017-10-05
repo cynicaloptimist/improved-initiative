@@ -3,6 +3,8 @@ import request = require("request");
 import patreon = require("patreon");
 import * as DB from "./dbconnection";
 
+import { User } from "./user";
+
 const storageRewardIds = ["1322253", "1937132"];
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,

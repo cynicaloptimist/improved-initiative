@@ -2,6 +2,9 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING
 
+import { Listing } from "./library";
+import { User } from "./user";
+
 export const initialize = () => {
     if (!connectionString) {
         console.error("No connection string found.");
@@ -48,29 +51,54 @@ export function getSettings(patreonId: string, callBack: (settings: any) => void
         //return null;
     }
 
-    client.connect(connectionString)
+    return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            users.findOne({ patreonId }).then(user => {
+            return users.findOne({ patreonId }).then((user: User) => {
                 callBack(user && user.settings || {});
-            }).catch(err => console.error(err));
+            });
         });
 }
 
-export function setSettings(patreonId, settings, callback) {
+export function setSettings(patreonId, settings) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    client.connect(connectionString)
+    return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            users.updateOne(
+            return users.updateOne(
                 { patreonId },
                 { $set: { settings } }
-            ).then(callback);
+            );
         });
 }
 
+export function getCreatures(patreonId: string, callBack: (creatures: Listing []) => void) {
+    if (!connectionString) {
+        console.error("No connection string found.");
+        //return null;
+    }
 
+    return client.connect(connectionString)
+        .then((db: mongo.Db) => {
+            const users = db.collection("users");
+            return users.findOne({ patreonId }).then((user: User) => {
+                if (!user.creatures) {
+                    callBack([]);
+                } else {
+                    const listings = user.creatures.map(c => ({
+                        Name: c.Name,
+                        Id: c.Id,
+                        Keywords: c.Keywords,
+                        Link: `/my/creatures/${c.Id}`
+                    }));
+                    callBack(listings);
+                }
+
+                callBack(user && user.settings || {});
+            });
+        });
+}
