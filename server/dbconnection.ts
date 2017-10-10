@@ -85,9 +85,11 @@ export function getCreatures(patreonId: string, callBack: (creatures: Listing[])
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.findOne({ patreonId }).then((user: User) => {
+            return users
+                .findOne({ patreonId })
+                .then((user: User) => {
                 if (!user.creatures) {
-                    callBack([]);
+                    return callBack([]);
                 } else {
                     const listings = user.creatures.map(c => ({
                         Name: c.Name,
@@ -95,10 +97,8 @@ export function getCreatures(patreonId: string, callBack: (creatures: Listing[])
                         Keywords: c.Keywords,
                         Link: `/my/creatures/${c.Id}`
                     }));
-                    callBack(listings);
+                    return callBack(listings);
                 }
-
-                callBack(user && user.settings || {});
             });
         });
 }
