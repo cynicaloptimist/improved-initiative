@@ -5,6 +5,9 @@ import * as DB from "./dbconnection";
 
 import { User } from "./user";
 
+type Req = Express.Request & express.Request;
+type Res = Express.Response & express.Response;
+
 const storageRewardIds = ["1322253", "1937132"];
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
@@ -41,17 +44,49 @@ interface ApiResponse {
     })[];
 }
 
-export const configureLogin = (app: express.Application) => {
+interface TokensResponse {
+    access_token: string;
+    refresh_token: string;
+    expires_in: string;
+    scope: string;
+    token_type: string;
+}
+
+function handleCurrentUser (req: Req, res: Res, tokens: TokensResponse){
+    return (currentUserError, apiResponse: ApiResponse) => {
+        if (currentUserError) {
+            console.error(currentUserError);
+            res.end(currentUserError);
+            return;
+        }
+
+        const userRewards = apiResponse.included.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
+        const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
+        const standing = hasStorage ? "pledge" : "none";
+
+        req.session.patreonId = apiResponse.data.id;
+        req.session.hasStorage = hasStorage;
+
+        DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
+            .then(result => {
+                res.redirect('/');
+            }).catch(err => {
+                console.error(err);
+            });
+    }
+}
+
+export function configureLoginRedirect(app: express.Application){
     const redirectPath = "/r/patreon";
     const redirectUri = baseUrl + redirectPath;
 
-    app.get(redirectPath, (req: express.Request & Express.Request, res: express.Response) => {
+    app.get(redirectPath, (req: Req, res: Res) => {
         const code = req.query.code;
         const state = req.query.state;
-        
+
         const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
 
-        OAuthClient.getTokens(code, redirectUri, (tokensError, tokens) => {
+        OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {
             if (tokensError) {
                 console.error(tokensError);
                 res.end(tokensError);
@@ -59,32 +94,12 @@ export const configureLogin = (app: express.Application) => {
             }
 
             const APIClient = patreon.default(tokens.access_token);
-            APIClient(`/current_user`, function (currentUserError, apiResponse: ApiResponse) {
-                if (currentUserError) {
-                    console.error(currentUserError);
-                    res.end(currentUserError);
-                    return;
-                }
-
-                const userRewards = apiResponse.included.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
-                const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
-                const standing = hasStorage ? "pledge" : "none";
-
-                req.session.patreonId = apiResponse.data.id;
-                req.session.hasStorage = hasStorage;
-
-                DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
-                    .then(result => {
-                        res.redirect('/');
-                    }).catch(err => {
-                        console.error(err);
-                    });
-            });
+            APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
         });
     });
 }
 
-export const getNews = (app: express.Application) => {
+export function getNews(app: express.Application){
     if (!patreonUrl) {
         return;
     }
