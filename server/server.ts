@@ -1,16 +1,11 @@
-/// <reference path="../typings/index.d.ts" />
-
 import socketIO = require("socket.io");
 import express = require("express");
 
-import ConfigureAppInsights from "./configureappinsights";
 import LaunchServer from "./launchserver";
 import ConfigureRoutes from "./routes";
 import ConfigureSockets from "./sockets";
 import * as L from "./library";
 import * as DB from "./dbconnection";
-
-ConfigureAppInsights();
 
 const app = express();
 const http = require("http").Server(app);

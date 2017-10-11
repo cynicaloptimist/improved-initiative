@@ -1,5 +1,3 @@
-/// <reference path="../../typings/globals/moment/index.d.ts" />
-
 module ImprovedInitiative {
     export interface SavedCombatant {
         Id: string;

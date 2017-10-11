@@ -22,7 +22,7 @@ module ImprovedInitiative {
                     return;
                 }
                 focusedElements.addClass('tutorial-focus');
-                const position = nextStep.CalculatePosition(focusedElements);
+                const position: any = nextStep.CalculatePosition(focusedElements);
                 if (newStepIndex == 0) {
                     $('.tutorial').css(position);
                 }

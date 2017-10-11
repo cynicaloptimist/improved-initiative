@@ -1,3 +1,5 @@
+declare var moment;
+
 module ImprovedInitiative {
     export class TurnTimer {
         private elapsedSeconds = ko.observable(0);
