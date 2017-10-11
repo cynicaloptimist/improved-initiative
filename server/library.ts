@@ -23,6 +23,7 @@ export interface LibraryItem {
 }
 
 export interface Listing {
+    Version: string;
     Name: string;
     Id: string;
     Keywords: string;
@@ -30,6 +31,7 @@ export interface Listing {
 }
 
 export interface StatBlock {
+    Version: string;
     Name: string;
     Id: string;
     Type: string;
@@ -83,6 +85,7 @@ export class Library<TItem extends LibraryItem> {
                 Id: c.Id,
                 Keywords: this.getKeywords(c),
                 Link: this.route + c.Id,
+                Version: "1.0.0"
             };
             this.listings.push(listing);
         });

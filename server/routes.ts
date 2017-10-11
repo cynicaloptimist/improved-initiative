@@ -79,7 +79,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     
     app.get("/", (req: Req, res: Res) => {
         if (defaultAccountLevel === "accountsync") {
-            req.session.patreonId = "default";
+            req.session.patreonId = "default_obj";
             req.session.hasStorage = true;
             DB.upsertUser(req.session.patreonId, "accesskey", "refreshkey", "pledge")
         }
@@ -159,7 +159,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         return DB.getCreatures(req.session.patreonId, creatures => {
             return res.json(creatures);
         }).catch(err => {
-            return res.sendStatus(500);
+            return res.status(500).send(err);
         });
     });
 
@@ -185,8 +185,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.sendStatus(403);
         }
 
+        if (!req.body.StatBlock) {
+            return res.status(400).send("Missing StatBlock");
+        }
+
         return DB.saveCreature(req.session.patreonId, req.body.StatBlock, result => {
-            return res.sendStatus(201);
+            return res.sendStatus(201);    
         }).catch(err => {
             return res.sendStatus(500);
         });

@@ -36,7 +36,13 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         patreonId,
                         accessKey,
                         refreshKey,
-                        accountStatus
+                        accountStatus,
+                    },
+                    $setOnInsert: {
+                        creatures: {},
+                        spells: {},
+                        encounters: {},
+                        options: {},
                     }
                 },
                 {
@@ -88,18 +94,25 @@ export function getCreatures(patreonId: string, callBack: (creatures: Listing[])
             return users
                 .findOne({ patreonId })
                 .then((user: User) => {
-                if (!user.creatures) {
-                    return callBack([]);
-                } else {
-                    const listings = user.creatures.map(c => ({
-                        Name: c.Name,
-                        Id: c.Id,
-                        Keywords: c.Keywords,
-                        Link: `/my/creatures/${c.Id}`
-                    }));
-                    return callBack(listings);
-                }
-            });
+                    if (!user) {
+                        throw "User not found";
+                    }
+                    if (!user.creatures) {
+                        return callBack([]);
+                    } else {
+                        const listings = Object.keys(user.creatures).map(key => {
+                            const c = user.creatures[key];
+                            return {
+                                Name: c.Name,
+                                Id: c.Id,
+                                Keywords: c.Type,
+                                Version: c.Version,
+                                Link: `/my/creatures/${c.Id}`,
+                            }
+                        });
+                        return callBack(listings);
+                    }
+                });
         });
 }
 
@@ -112,31 +125,43 @@ export function getCreature(patreonId: string, creatureId: string, callBack: (cr
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.findOne({ patreonId })
+            const projection = {
+                [`creatures.${creatureId}`]: 1
+            };
+
+            return users
+                .findOne({ patreonId }, projection)
                 .then((user: User) => {
-                    callBack(user.creatures[creatureId])
+                    if (!user) {
+                        throw "User not found";
+                    }
+                    callBack(user.creatures[creatureId]);
                 });
         });
 }
 
-export function saveCreature(patreonId: string, creature: StatBlock, callBack: (creature: StatBlock) => void) {
+export function saveCreature(patreonId: string, creature: StatBlock, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    if (!creature.Id) {
-        throw "No ID on creature";
+    if (!creature.Id || !creature.Version) {
+        throw "Creature missing Id or Version";
     }
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.updateOne({ patreonId },
+            return users.updateOne(
+                { patreonId },
                 {
-                    [`creatures.${creature.Id}`]: creature
+                    $set: {
+                        [`creatures.${creature.Id}`]: creature
+                    }
                 }
-            )
-                .then();
+            ).then(result => {
+                callBack(result.modifiedCount);
+            });
         });
 }
