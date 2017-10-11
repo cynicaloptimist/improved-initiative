@@ -52,7 +52,7 @@ interface TokensResponse {
     token_type: string;
 }
 
-function handleCurrentUser (req: Req, res: Res, tokens: TokensResponse){
+function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
     return (currentUserError, apiResponse: ApiResponse) => {
         if (currentUserError) {
             console.error(currentUserError);
@@ -76,7 +76,7 @@ function handleCurrentUser (req: Req, res: Res, tokens: TokensResponse){
     }
 }
 
-export function configureLoginRedirect(app: express.Application){
+export function configureLoginRedirect(app: express.Application) {
     const redirectPath = "/r/patreon";
     const redirectUri = baseUrl + redirectPath;
 
@@ -99,20 +99,31 @@ export function configureLoginRedirect(app: express.Application){
     });
 }
 
-export function getNews(app: express.Application){
+function updateLatestPost(latestPost: { post: Post }) {
+    return request.get(patreonUrl,
+        (error, response, body) => {
+            const json: { data: Post[] } = JSON.parse(body);
+            if (json.data) {
+                latestPost.post = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
+            }
+        });
+}
+
+export function startNewsUpdates(app: express.Application) {
+    const latest: { post: Post } = { post: null };
     if (!patreonUrl) {
         return;
     }
 
-    request.get(patreonUrl,
-        (error, response, body) => {
-            const json: { data: Post[] } = JSON.parse(body);
-            if (json.data) {
-                const latestPost = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
-                app.get("/whatsnew/", (req, res) => {
-                    res.json(latestPost);
-                });
-            }
-        });
+    updateLatestPost(latest);
+
+    app.get('/updatenews/', (req: Req, res: Res) => {
+        updateLatestPost(latest);
+        res.sendStatus(200);
+    });
+
+    app.get("/whatsnew/", (req, res) => {
+        res.json(latest.post);
+    });
 }
 

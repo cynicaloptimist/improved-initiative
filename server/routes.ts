@@ -6,7 +6,7 @@ import session = require("express-session");
 import dbSession = require('connect-mongodb-session');
 
 import { Library, StatBlock, Spell } from "./library";
-import { configureLoginRedirect, getNews } from "./patreon";
+import { configureLoginRedirect, startNewsUpdates } from "./patreon";
 import * as DB from "./dbconnection";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
@@ -213,5 +213,5 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.post("/importencounter/", importEncounter);
 
     configureLoginRedirect(app);
-    getNews(app);
+    startNewsUpdates(app);
 }
