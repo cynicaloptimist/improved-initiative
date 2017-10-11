@@ -81,21 +81,25 @@ export function configureLoginRedirect(app: express.Application) {
     const redirectUri = baseUrl + redirectPath;
 
     app.get(redirectPath, (req: Req, res: Res) => {
-        const code = req.query.code;
-        const state = req.query.state;
-
-        const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
-
-        OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {
-            if (tokensError) {
-                console.error(tokensError);
-                res.end(tokensError);
-                return;
-            }
-
-            const APIClient = patreon.default(tokens.access_token);
-            APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
-        });
+        try {
+            const code = req.query.code;
+            const state = req.query.state;
+    
+            const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
+    
+            OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {
+                if (tokensError) {
+                    console.error(tokensError);
+                    res.end(tokensError);
+                    return;
+                }
+    
+                const APIClient = patreon.default(tokens.access_token);
+                APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
+            });
+        } catch (e) {
+            res.status(500).send(e);
+        }
     });
 }
 
