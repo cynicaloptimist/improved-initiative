@@ -180,7 +180,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         });
     });
 
-    app.post("/my/creatures/:id", (req, res: Res) => {
+    app.post("/my/creatures/", (req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
