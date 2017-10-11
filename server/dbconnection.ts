@@ -60,7 +60,8 @@ export function getSettings(patreonId: string, callBack: (settings: any) => void
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.findOne({ patreonId }).then((user: User) => {
+            const projection = { settings: true };
+            return users.findOne({ patreonId }, projection).then((user: User) => {
                 callBack(user && user.settings || {});
             });
         });
@@ -126,7 +127,7 @@ export function getCreature(patreonId: string, creatureId: string, callBack: (cr
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             const projection = {
-                [`creatures.${creatureId}`]: 1
+                [`creatures.${creatureId}`]: true
             };
 
             return users
