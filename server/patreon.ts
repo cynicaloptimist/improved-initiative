@@ -60,7 +60,9 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
-        const userRewards = apiResponse.included.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
+        const relationships = apiResponse.included || [];
+
+        const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
         const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
         const standing = hasStorage ? "pledge" : "none";
 
