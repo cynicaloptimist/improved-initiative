@@ -192,7 +192,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         return DB.saveCreature(req.session.patreonId, req.body.StatBlock, result => {
             return res.sendStatus(201);    
         }).catch(err => {
-            return res.sendStatus(500);
+            return res.status(500).send(err);
         });
     });
 

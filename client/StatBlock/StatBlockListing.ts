@@ -1,12 +1,12 @@
 module ImprovedInitiative {
     export class StatBlockListing {
-        
+
         Name: KnockoutObservable<string>;
-        
+
         private loadPromise: JQueryXHR;
         private statBlock: KnockoutObservable<StatBlock>;
 
-        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: "server" | "localStorage", statBlock?: StatBlock) {
+        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: "server" | "account" | "localStorage", statBlock?: StatBlock) {
             this.Name = ko.observable(name);
             this.statBlock = ko.observable(statBlock);
 
@@ -37,6 +37,13 @@ module ImprovedInitiative {
 
         SetStatBlock = (statBlock: StatBlock) => {
             this.statBlock(statBlock);
+            if (env.HasStorage && (this.Source === "account" || this.Source === "localStorage")) {
+                $.ajax("/my/creatures/", {
+                    data: JSON.stringify({ StatBlock: statBlock }),
+                    contentType: 'application/json',
+                    type: 'POST'
+                }).done(s => console.log(`Saving creature: ${s}`));
+            }
         }
     }
 }

@@ -49,6 +49,7 @@ module ImprovedInitiative {
         LegendaryActions: NameAndContent[];
         Description: string;
         Player: string;
+        Version: string;
     }
 
     export class StatBlock {
@@ -66,7 +67,8 @@ module ImprovedInitiative {
             Reactions: [],
             LegendaryActions: [],
             Description: '',
-            Player: ''
+            Player: '',
+            Version: '1.0.0',
         });
 
         static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
