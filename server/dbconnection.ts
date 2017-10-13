@@ -60,10 +60,12 @@ export function getSettings(userId: string, callBack: (settings: any) => void) {
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            const projection = { settings: true };
-            return users.findOne({ _id: userId }, projection).then((user: User) => {
-                callBack(user && user.settings || {});
-            });
+            return users.findOne(
+                { _id: userId },
+                { fields: { settings: true } })
+                .then((user: User) => {
+                    callBack(user && user.settings || {});
+                });
         });
 }
 
@@ -126,12 +128,14 @@ export function getCreature(userId: string, creatureId: string, callBack: (creat
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            const projection = {
-                [`creatures.${creatureId}`]: true
-            };
 
             return users
-                .findOne({ _id: userId }, projection)
+                .findOne({ _id: userId },
+                {
+                    fields: {
+                        [`creatures.${creatureId}`]: true
+                    }
+                })
                 .then((user: User) => {
                     if (!user) {
                         throw "User not found";

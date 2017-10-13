@@ -57,7 +57,7 @@
     "markdown-it": "^7.0.1",
     "minimist": "^1.2.0",
     "moment": "^2.16.0",
-    "mongodb": "^2.2.31",
+    "mongodb": "^2.2.33",
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.1",
@@ -65,7 +65,7 @@
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
-    "typescript": "^2.1.4",
+    "typescript": "^2.5.3",
     "uglify-js": "^2.7.4"
   },
   "scripts": {
