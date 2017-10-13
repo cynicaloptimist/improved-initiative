@@ -27,7 +27,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.updateOne(
+            return users.findOneAndUpdate(
                 {
                     patreonId
                 },
@@ -51,7 +51,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
         });
 }
 
-export function getSettings(patreonId: string, callBack: (settings: any) => void) {
+export function getSettings(userId: string, callBack: (settings: any) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -61,13 +61,13 @@ export function getSettings(patreonId: string, callBack: (settings: any) => void
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             const projection = { settings: true };
-            return users.findOne({ patreonId }, projection).then((user: User) => {
+            return users.findOne({ _id: userId }, projection).then((user: User) => {
                 callBack(user && user.settings || {});
             });
         });
 }
 
-export function setSettings(patreonId, settings) {
+export function setSettings(userId, settings) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -77,13 +77,13 @@ export function setSettings(patreonId, settings) {
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             return users.updateOne(
-                { patreonId },
+                { _id: userId },
                 { $set: { settings } }
             );
         });
 }
 
-export function getCreatures(patreonId: string, callBack: (creatures: Listing[]) => void) {
+export function getCreatures(userId: string, callBack: (creatures: Listing[]) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -93,7 +93,7 @@ export function getCreatures(patreonId: string, callBack: (creatures: Listing[])
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             return users
-                .findOne({ patreonId })
+                .findOne({ _id: userId })
                 .then((user: User) => {
                     if (!user) {
                         throw "User not found";
@@ -117,7 +117,7 @@ export function getCreatures(patreonId: string, callBack: (creatures: Listing[])
         });
 }
 
-export function getCreature(patreonId: string, creatureId: string, callBack: (creature: StatBlock) => void) {
+export function getCreature(userId: string, creatureId: string, callBack: (creature: StatBlock) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -131,7 +131,7 @@ export function getCreature(patreonId: string, creatureId: string, callBack: (cr
             };
 
             return users
-                .findOne({ patreonId }, projection)
+                .findOne({ _id: userId }, projection)
                 .then((user: User) => {
                     if (!user) {
                         throw "User not found";
@@ -141,7 +141,7 @@ export function getCreature(patreonId: string, creatureId: string, callBack: (cr
         });
 }
 
-export function saveCreature(patreonId: string, creature: StatBlock, callBack: (result: number) => void) {
+export function saveCreature(userId: string, creature: StatBlock, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -155,7 +155,7 @@ export function saveCreature(patreonId: string, creature: StatBlock, callBack: (
         .then((db: mongo.Db) => {
             const users = db.collection("users");
             return users.updateOne(
-                { patreonId },
+                { _id: userId },
                 {
                     $set: {
                         [`creatures.${creature.Id}`]: creature

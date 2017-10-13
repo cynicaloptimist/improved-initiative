@@ -79,11 +79,15 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     
     app.get("/", (req: Req, res: Res) => {
         if (defaultAccountLevel === "accountsync") {
-            req.session.patreonId = "default_obj";
             req.session.hasStorage = true;
-            DB.upsertUser(req.session.patreonId, "accesskey", "refreshkey", "pledge")
+            DB.upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
+                .then(result => {
+                    req.session.userId = result.value._id;
+                    res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                });
+        } else {
+            res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
         }
-        res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
     });
 
     app.get("/e/:id", (req: Req, res: Res) => {
@@ -128,7 +132,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.sendStatus(403);
         }
 
-        return DB.getSettings(req.session.patreonId, settings => {
+        return DB.getSettings(req.session.userId, settings => {
             return res.json(settings);
         }).catch(err => {
             return res.sendStatus(500);
@@ -143,7 +147,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         const newSettings = req.body;
 
         if (newSettings.Version) {
-            return DB.setSettings(req.session.patreonId, newSettings).then(r => {
+            return DB.setSettings(req.session.userId, newSettings).then(r => {
                 return res.sendStatus(200);
             });
         } else {
@@ -156,7 +160,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.sendStatus(403);
         }
 
-        return DB.getCreatures(req.session.patreonId, creatures => {
+        return DB.getCreatures(req.session.userId, creatures => {
             return res.json(creatures);
         }).catch(err => {
             return res.status(500).send(err);
@@ -168,7 +172,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.sendStatus(403);
         }
 
-        return DB.getCreature(req.session.patreonId, req.params.id, creature => {
+        return DB.getCreature(req.session.userId, req.params.id, creature => {
             if (creature) {
                 return res.json(creature);    
             } else {
@@ -189,7 +193,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.status(400).send("Missing StatBlock");
         }
 
-        return DB.saveCreature(req.session.patreonId, req.body.StatBlock, result => {
+        return DB.saveCreature(req.session.userId, req.body.StatBlock, result => {
             return res.sendStatus(201);    
         }).catch(err => {
             return res.status(500).send(err);

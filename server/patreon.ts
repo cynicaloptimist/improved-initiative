@@ -67,11 +67,11 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
         const standing = hasStorage ? "pledge" : "none";
 
-        req.session.patreonId = apiResponse.data.id;
         req.session.hasStorage = hasStorage;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
             .then(result => {
+                req.session.userId = result.value._id;
                 res.redirect(`/e/${state}`);
             }).catch(err => {
                 console.error(err);
