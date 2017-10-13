@@ -60,6 +60,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
+        const state = req.query.state;
         const relationships = apiResponse.included || [];
 
         const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
@@ -71,7 +72,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
             .then(result => {
-                res.redirect('/');
+                res.redirect(`/e/${state}`);
             }).catch(err => {
                 console.error(err);
             });
@@ -85,8 +86,7 @@ export function configureLoginRedirect(app: express.Application) {
     app.get(redirectPath, (req: Req, res: Res) => {
         try {
             const code = req.query.code;
-            const state = req.query.state;
-    
+            
             const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
     
             OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {

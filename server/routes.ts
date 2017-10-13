@@ -44,7 +44,7 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-const verifyStorage = (req: Express.Request) => {
+const verifyStorage = (req: Req) => {
     return req.session && req.session.hasStorage;
 }
 
