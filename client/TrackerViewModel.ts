@@ -34,6 +34,7 @@ module ImprovedInitiative {
         SpellEditor = new SpellEditor();
         EncounterCommander = new EncounterCommander(this);
         CombatantCommander = new CombatantCommander(this);
+        AccountClient = new AccountClient();
 
         CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
         

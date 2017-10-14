@@ -37,12 +37,8 @@ module ImprovedInitiative {
 
         SetStatBlock = (statBlock: StatBlock) => {
             this.statBlock(statBlock);
-            if (env.HasStorage && (this.Source === "account" || this.Source === "localStorage")) {
-                $.ajax("/my/creatures/", {
-                    data: JSON.stringify({ StatBlock: statBlock }),
-                    contentType: 'application/json',
-                    type: 'POST'
-                }).done(s => console.log(`Saving creature: ${s}`));
+            if (this.Source === "account" || this.Source === "localStorage") {
+                new AccountClient().SaveCreature(statBlock);
             }
         }
     }

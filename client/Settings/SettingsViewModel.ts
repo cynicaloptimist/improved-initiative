@@ -88,24 +88,11 @@ module ImprovedInitiative {
             }
         }
         
-        private postSettings(newSettings: Settings) {
-            if (env.HasStorage) {
-                $.ajax(
-                    '/my/settings',
-                    {
-                        data: JSON.stringify(newSettings),
-                        contentType: 'application/json',
-                        type: 'POST'
-                    }
-                ).done(s => console.log(`Saving settings: ${s}`));
-            }
-        }
-
         SaveAndClose() {
             const newSettings = this.getUpdatedSettings();
             CurrentSettings(newSettings);
             Store.Save(Store.User, "Settings", newSettings);
-            this.postSettings(newSettings);
+            new AccountClient().SaveSettings(newSettings);
             this.settingsVisible(false);
         }
 

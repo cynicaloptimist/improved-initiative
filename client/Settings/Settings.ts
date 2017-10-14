@@ -30,7 +30,7 @@ module ImprovedInitiative {
         "Hide All"
     ];
 
-    function getSetting<T>(settingName: string, def: T): T {
+    function getLegacySetting<T>(settingName: string, def: T): T {
         const setting = Store.Load<T>(Store.User, settingName);
         if (setting === undefined) {
             return def;
@@ -51,27 +51,27 @@ module ImprovedInitiative {
         return {
             Commands: commands,
             Rules: {
-                RollMonsterHp: getSetting<boolean>("RollMonsterHP", false),
-                AllowNegativeHP: getSetting<boolean>("AllowNegativeHP", false),
-                AutoCheckConcentration: getSetting<boolean>("AutoCheckConcentration", true)
+                RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
+                AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
+                AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true)
             },
             TrackerView: {
-                DisplayRoundCounter: getSetting<boolean>("DisplayRoundCounter", false),
-                DisplayTurnTimer: getSetting<boolean>("DisplayTurnTimer", false),
-                DisplayDifficulty: getSetting<boolean>("DisplayDifficulty", false)
+                DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
+                DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
+                DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
             },
             PlayerView: {
-                AllowPlayerSuggestions: getSetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
-                MonsterHPVerbosity: getSetting<string>("MonsterHPVerbosity", "Colored Label"),
-                HideMonstersOutsideEncounter: getSetting<boolean>("HideMonstersOutsideEncounter", false),
-                DisplayRoundCounter: getSetting<boolean>("PlayerViewDisplayRoundCounter", false),
-                DisplayTurnTimer: getSetting<boolean>("PlayerViewDisplayTurnTimer", false)
+                AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
+                MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
+                HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
+                DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
+                DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false)
             },
             Version: "1.0.0" //TODO: Populate with package version
         }
     }
 
-    function configureCommands(newSettings: Settings, commands: Command []) {
+    function configureCommands(newSettings: Settings, commands: Command[]) {
         Mousetrap.reset();
 
         Mousetrap.bind('backspace', e => {
@@ -103,14 +103,12 @@ module ImprovedInitiative {
             CurrentSettings(legacySettings)
         }
 
-        if (env.HasStorage) {
-            $.getJSON('/my/settings', (data: Settings, status) => {
-                console.log(data);
-                if (data.Version) {
-                    CurrentSettings(data);    
-                }
-            });
-        }
+        new AccountClient().GetSettings((data: Settings) => {
+            console.log(data);
+            if (data.Version) {
+                CurrentSettings(data);
+            }
+        });
     }
 
     export function ConfigureCommands(commands: Command[]) {
