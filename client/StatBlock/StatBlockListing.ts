@@ -1,4 +1,13 @@
 module ImprovedInitiative {
+    type Source = "server" | "account" | "localStorage";
+    export class StatBlockListingStatic {
+        Name: string;
+        Id: string;
+        Keywords: string;
+        Link: string;
+        Source: Source;
+    }
+    
     export class StatBlockListing {
 
         Name: KnockoutObservable<string>;
@@ -6,7 +15,7 @@ module ImprovedInitiative {
         private loadPromise: JQueryXHR;
         private statBlock: KnockoutObservable<StatBlock>;
 
-        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: "server" | "account" | "localStorage", statBlock?: StatBlock) {
+        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: Source, statBlock?: StatBlock) {
             this.Name = ko.observable(name);
             this.statBlock = ko.observable(statBlock);
 
@@ -38,7 +47,9 @@ module ImprovedInitiative {
         SetStatBlock = (statBlock: StatBlock) => {
             this.statBlock(statBlock);
             if (this.Source === "account" || this.Source === "localStorage") {
-                new AccountClient().SaveStatBlock(statBlock);
+                if (statBlock.Player !== "player") {
+                    new AccountClient().SaveStatBlock(statBlock);    
+                }
             }
         }
     }

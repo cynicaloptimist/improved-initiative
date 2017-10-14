@@ -5,17 +5,19 @@ module ImprovedInitiative {
 
         constructor() {
             $.ajax("../statblocks/").done(this.AddStatBlockListings);
+            const gotCreatures = new AccountClient().GetStatBlocks(this.AddStatBlockListings);
 
-            const customCreatures = Store.List(Store.StatBlocks);
-            customCreatures.forEach(id => {
-                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-                this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-            });
-
-            Metrics.TrackEvent("CustomCreatures", { Count: customCreatures.length.toString() });
+            if (!gotCreatures) {
+                const customCreatures = Store.List(Store.StatBlocks);
+                customCreatures.forEach(id => {
+                    var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
+                    this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                });
+                Metrics.TrackEvent("LocalCustomCreatures", { Count: customCreatures.length.toString() });
+            }
         }
 
-        AddStatBlockListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {
+        AddStatBlockListings = (listings: StatBlockListingStatic[]) => {
             listings.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });

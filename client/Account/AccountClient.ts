@@ -1,3 +1,4 @@
+
 module ImprovedInitiative {
     function post(url: string, data: object) {
         return $.ajax({
@@ -10,35 +11,45 @@ module ImprovedInitiative {
     }
     export class AccountClient {
         SaveSettings(settings: Settings) {
-            if (env.HasStorage) {
-                post('/my/settings', settings)
-                    .done(s => console.log(`Saving settings: ${s}`));
+            if (!env.HasStorage) {
+                return false;
             }
+
+            post('/my/settings', settings)
+                .done(s => console.log(`Saving settings: ${s}`));
+            
+            return true;
         }
 
         GetSettings(callBack: (s: Settings) => void) {
-            if (env.HasStorage) {
-                $.getJSON('/my/settings', callBack);
+            if (!env.HasStorage) {
+                return false;
             }
+
+            $.getJSON('/my/settings', callBack);
+
+            return true;
         }
 
         SaveStatBlock(statBlock: StatBlock) {
-            if (env.HasStorage) {
-                post('/my/creatures', statBlock)
-                    .done(s => console.log(`Saving creature: ${s}`));
+            if (!env.HasStorage) {
+                return false;
             }
+
+            post('/my/creatures', statBlock)
+                .done(s => console.log(`Saving creature: ${s}`));
+            
+            return true;
         }
 
-        GetStatBlocks(callBack: (s: StatBlock[]) => void) {
-            if (env.HasStorage) {
-                $.getJSON('/my/creatures', callBack);
+        GetStatBlocks(callBack: (s: StatBlockListingStatic[]) => void) {
+            if (!env.HasStorage) {
+                return false;
             }
-        }
 
-        GetStatBlock(callBack: (s: StatBlock) => void) {
-            if (env.HasStorage) {
-                $.getJSON('/my/creatures', callBack);
-            }
+            $.getJSON('/my/creatures', callBack);
+
+            return true;
         }
     }
 }
