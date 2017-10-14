@@ -59,16 +59,6 @@ Function.prototype.with = function(...params: any[]) {
     return partial;
 };
 
-var PostJSON = (url: string, data: any, success: (data: any) => void) =>
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: JSON.stringify(data),
-        success: success,
-        dataType: "json",
-        contentType: "application/json"
-    });
-
 var probablyUniqueString = (): string => {
     //string contains only easily relayable characters for forward 
     //compatability with speech-based data transfer ;-)
