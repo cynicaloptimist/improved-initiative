@@ -38,7 +38,7 @@ module ImprovedInitiative {
         SetStatBlock = (statBlock: StatBlock) => {
             this.statBlock(statBlock);
             if (this.Source === "account" || this.Source === "localStorage") {
-                new AccountClient().SaveCreature(statBlock);
+                new AccountClient().SaveStatBlock(statBlock);
             }
         }
     }

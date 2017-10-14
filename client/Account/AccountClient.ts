@@ -22,10 +22,22 @@ module ImprovedInitiative {
             }
         }
 
-        SaveCreature(statBlock: StatBlock) {
+        SaveStatBlock(statBlock: StatBlock) {
             if (env.HasStorage) {
                 post('/my/creatures', statBlock)
                     .done(s => console.log(`Saving creature: ${s}`));
+            }
+        }
+
+        GetStatBlocks(callBack: (s: StatBlock[]) => void) {
+            if (env.HasStorage) {
+                $.getJSON('/my/creatures', callBack);
+            }
+        }
+
+        GetStatBlock(callBack: (s: StatBlock) => void) {
+            if (env.HasStorage) {
+                $.getJSON('/my/creatures', callBack);
             }
         }
     }
