@@ -39,7 +39,8 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         accountStatus,
                     },
                     $setOnInsert: {
-                        creatures: {},
+                        statblocks: {},
+                        playercharacters: {},
                         spells: {},
                         encounters: {},
                         options: {},
@@ -85,7 +86,7 @@ export function setSettings(userId, settings) {
         });
 }
 
-export function getCreatures(userId: string, callBack: (creatures: Listing[]) => void) {
+export function getStatBlocks(userId: string, callBack: (statblocks: Listing[]) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -100,17 +101,17 @@ export function getCreatures(userId: string, callBack: (creatures: Listing[]) =>
                     if (!user) {
                         throw "User not found";
                     }
-                    if (!user.creatures) {
+                    if (!user.statblocks) {
                         return callBack([]);
                     } else {
-                        const listings = Object.keys(user.creatures).map(key => {
-                            const c = user.creatures[key];
+                        const listings = Object.keys(user.statblocks).map(key => {
+                            const c = user.statblocks[key];
                             return {
                                 Name: c.Name,
                                 Id: c.Id,
                                 Keywords: c.Type,
                                 Version: c.Version,
-                                Link: `/my/creatures/${c.Id}`,
+                                Link: `/my/statblocks/${c.Id}`,
                             }
                         });
                         return callBack(listings);
@@ -119,7 +120,7 @@ export function getCreatures(userId: string, callBack: (creatures: Listing[]) =>
         });
 }
 
-export function getCreature(userId: string, creatureId: string, callBack: (creature: StatBlock) => void) {
+export function getStatBlock(userId: string, statBlockId: string, callBack: (statBlock: StatBlock) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -133,26 +134,26 @@ export function getCreature(userId: string, creatureId: string, callBack: (creat
                 .findOne({ _id: userId },
                 {
                     fields: {
-                        [`creatures.${creatureId}`]: true
+                        [`statblocks.${statBlockId}`]: true
                     }
                 })
                 .then((user: User) => {
                     if (!user) {
                         throw "User not found";
                     }
-                    callBack(user.creatures[creatureId]);
+                    callBack(user.statblocks[statBlockId]);
                 });
         });
 }
 
-export function saveCreature(userId: string, creature: StatBlock, callBack: (result: number) => void) {
+export function saveStatBlock(userId: string, statblock: StatBlock, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    if (!creature.Id || !creature.Version) {
-        throw "Creature missing Id or Version";
+    if (!statblock.Id || !statblock.Version) {
+        throw "StatBlock missing Id or Version";
     }
 
     return client.connect(connectionString)
@@ -162,7 +163,7 @@ export function saveCreature(userId: string, creature: StatBlock, callBack: (res
                 { _id: userId },
                 {
                     $set: {
-                        [`creatures.${creature.Id}`]: creature
+                        [`statblocks.${statblock.Id}`]: statblock
                     }
                 }
             ).then(result => {

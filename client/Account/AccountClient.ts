@@ -36,8 +36,8 @@ module ImprovedInitiative {
                 return false;
             }
 
-            post('/my/creatures', statBlock)
-                .done(s => console.log(`Saving creature: ${s}`));
+            post('/my/statblocks', statBlock)
+                .done(s => console.log(`Saving statblocks: ${s}`));
             
             return true;
         }
@@ -47,7 +47,7 @@ module ImprovedInitiative {
                 return false;
             }
 
-            $.getJSON('/my/creatures', callBack);
+            $.getJSON('/my/statblocks', callBack);
 
             return true;
         }

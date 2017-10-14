@@ -4,18 +4,18 @@ module ImprovedInitiative {
         ContainsPlayerCharacters = false;
 
         constructor() {
-            const gotCreatures = new AccountClient().GetStatBlocks(myListings => {
+            const gotStatBlocks = new AccountClient().GetStatBlocks(myListings => {
                 this.AddStatBlockListings(myListings);
                 $.ajax("../statblocks/").done(this.AddStatBlockListings);
             });
 
-            if (!gotCreatures) {
-                const customCreatures = Store.List(Store.StatBlocks);
-                customCreatures.forEach(id => {
+            if (!gotStatBlocks) {
+                const localStatBlocks = Store.List(Store.StatBlocks);
+                localStatBlocks.forEach(id => {
                     var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
                     this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
                 });
-                Metrics.TrackEvent("LocalCustomCreatures", { Count: customCreatures.length.toString() });
+                Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
             }
         }
 

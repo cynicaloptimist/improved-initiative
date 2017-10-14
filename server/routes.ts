@@ -155,26 +155,26 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         }
     });
 
-    app.get("/my/creatures", (req: Req, res: Res) => {
+    app.get("/my/statblocks", (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
 
-        return DB.getCreatures(req.session.userId, creatures => {
-            return res.json(creatures);
+        return DB.getStatBlocks(req.session.userId, statBlocks => {
+            return res.json(statBlocks);
         }).catch(err => {
             return res.status(500).send(err);
         });
     });
 
-    app.get("/my/creatures/:id", (req: Req, res: Res) => {
+    app.get("/my/statblocks/:id", (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
 
-        return DB.getCreature(req.session.userId, req.params.id, creature => {
-            if (creature) {
-                return res.json(creature);    
+        return DB.getStatBlock(req.session.userId, req.params.id, statBlock => {
+            if (statBlock) {
+                return res.json(statBlock);    
             } else {
                 return res.sendStatus(404);
             }
@@ -184,7 +184,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         });
     });
 
-    app.post("/my/creatures/", (req, res: Res) => {
+    app.post("/my/statblocks/", (req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
@@ -193,7 +193,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.status(400).send("Missing StatBlock");
         }
 
-        return DB.saveCreature(req.session.userId, req.body.StatBlock, result => {
+        return DB.saveStatBlock(req.session.userId, req.body.StatBlock, result => {
             return res.sendStatus(201);    
         }).catch(err => {
             return res.status(500).send(err);
