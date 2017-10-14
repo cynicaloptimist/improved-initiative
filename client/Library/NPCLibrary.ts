@@ -4,8 +4,10 @@ module ImprovedInitiative {
         ContainsPlayerCharacters = false;
 
         constructor() {
-            $.ajax("../statblocks/").done(this.AddStatBlockListings);
-            const gotCreatures = new AccountClient().GetStatBlocks(this.AddStatBlockListings);
+            const gotCreatures = new AccountClient().GetStatBlocks(myListings => {
+                this.AddStatBlockListings(myListings);
+                $.ajax("../statblocks/").done(this.AddStatBlockListings);
+            });
 
             if (!gotCreatures) {
                 const customCreatures = Store.List(Store.StatBlocks);
