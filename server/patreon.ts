@@ -60,7 +60,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
-        const state = req.query.state;
+        const encounterId = JSON.parse(req.query.state);
         const relationships = apiResponse.included || [];
 
         const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
@@ -72,7 +72,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
             .then(user => {
                 req.session.userId = user._id;
-                res.redirect(`/e/${state}`);
+                res.redirect(`/e/${encounterId}`);
             }).catch(err => {
                 console.error(err);
             });
