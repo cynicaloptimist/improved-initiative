@@ -185,6 +185,35 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         });
     });
 
+    app.get("/my/playercharacters/:id", (req: Req, res: Res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+
+        return DB.getEntity<StatBlock>("playercharacters", req.session.userId, req.params.id, statBlock => {
+            if (statBlock) {
+                return res.json(statBlock);    
+            } else {
+                return res.sendStatus(404);
+            }
+            
+        }).catch(err => {
+            return res.sendStatus(500);
+        });
+    });
+
+    app.post("/my/playercharacters/", (req, res: Res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+
+        return DB.saveEntity("playercharacters", req.session.userId, req.body, result => {
+            return res.sendStatus(201);    
+        }).catch(err => {
+            return res.status(500).send(err);
+        });
+    });
+
     const importEncounter = (req, res: Res) => {
         const newViewId = initializeNewPlayerView(playerViews);
         const session = req.session;

@@ -18,11 +18,17 @@ module ImprovedInitiative {
                 statBlocksWithFilterInName = [],
                 statBlocksWithFilterInKeywords = [];
                  
-            if (filter.length == 0) {
-                return this.library.StatBlocks();
-            }
+            const sortOrder: EntitySource[] = ["account", "localStorage", "server"];
+            const sortedStatBlocks = this.library.StatBlocks().sort(
+                (a, b) => {
+                    if (a.Source == b.Source) {
+                        return a.Name().localeCompare(b.Name());
+                    }
+                    return sortOrder.indexOf(a.Source) - sortOrder.indexOf(b.Source);
+                }
+            )
 
-            this.library.StatBlocks().forEach(c => {
+            sortedStatBlocks.forEach(c => {
                 if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
                     statBlocksWithFilterInName.push(c);
                     return;

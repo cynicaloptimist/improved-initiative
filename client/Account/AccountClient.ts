@@ -37,7 +37,18 @@ module ImprovedInitiative {
             }
 
             post('/my/statblocks', statBlock)
-                .done(s => console.log(`Saving statblocks: ${s}`));
+                .done(s => console.log(`Saving statblock: ${s}`));
+            
+            return true;
+        }
+
+        SavePlayerCharacter(playerCharacter: StatBlock) {
+            if (!env.HasStorage) {
+                return false;
+            }
+
+            post('/my/playercharacters', playerCharacter)
+                .done(s => console.log(`Saving playerCharacter: ${s}`));
             
             return true;
         }
