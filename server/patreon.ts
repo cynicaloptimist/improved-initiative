@@ -60,7 +60,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
-        const encounterId = JSON.parse(req.query.state);
+        const encounterId = req.query.state.replace('"', '');
         const relationships = apiResponse.included || [];
 
         const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
