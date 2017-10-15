@@ -2,7 +2,7 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING
 
-import { Listing, StatBlock } from "./library";
+import { Listing, StatBlock, LibraryItem } from "./library";
 import { User } from "./user";
 
 export const initialize = () => {
@@ -43,16 +43,21 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         playercharacters: {},
                         spells: {},
                         encounters: {},
-                        options: {},
+                        settings: {},
                     }
                 },
                 {
                     upsert: true
+                })
+                .then(res => {
+                    return users.findOne<User>({
+                        patreonId
+                    });
                 });
         });
 }
 
-export function getSettings(userId: string, callBack: (settings: any) => void) {
+export function getAccount(userId: string, callBack: (userWithListings: any) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -61,13 +66,43 @@ export function getSettings(userId: string, callBack: (settings: any) => void) {
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection("users");
-            return users.findOne(
-                { _id: userId },
-                { fields: { settings: true } })
+            return users.findOne({ _id: userId })
                 .then((user: User) => {
-                    callBack(user && user.settings || {});
+                    const userWithListings = {
+                        settings: user.settings,
+                        statblocks: getStatBlockListings(user.statblocks),
+                        playercharacters: getPlayerCharacterListings(user.playercharacters)
+                    }
+
+                    callBack(userWithListings);
                 });
         });
+}
+
+function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): Listing [] {
+    return Object.keys(statBlocks).map(key => {
+        const c = statBlocks[key];
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            Keywords: c.Type,
+            Version: c.Version,
+            Link: `/my/statblocks/${c.Id}`,
+        }
+    });
+}
+
+function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): Listing [] {
+    return Object.keys(playerCharacters).map(key => {
+        const c = playerCharacters[key];
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            Keywords: c.Type,
+            Version: c.Version,
+            Link: `/my/playercharacters/${c.Id}`,
+        }
+    });
 }
 
 export function setSettings(userId, settings) {
@@ -86,41 +121,9 @@ export function setSettings(userId, settings) {
         });
 }
 
-export function getStatBlocks(userId: string, callBack: (statblocks: Listing[]) => void) {
-    if (!connectionString) {
-        console.error("No connection string found.");
-        //return null;
-    }
+type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection("users");
-            return users
-                .findOne({ _id: userId })
-                .then((user: User) => {
-                    if (!user) {
-                        throw "User not found";
-                    }
-                    if (!user.statblocks) {
-                        return callBack([]);
-                    } else {
-                        const listings = Object.keys(user.statblocks).map(key => {
-                            const c = user.statblocks[key];
-                            return {
-                                Name: c.Name,
-                                Id: c.Id,
-                                Keywords: c.Type,
-                                Version: c.Version,
-                                Link: `/my/statblocks/${c.Id}`,
-                            }
-                        });
-                        return callBack(listings);
-                    }
-                });
-        });
-}
-
-export function getStatBlock(userId: string, statBlockId: string, callBack: (statBlock: StatBlock) => void) {
+export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: T) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -134,26 +137,26 @@ export function getStatBlock(userId: string, statBlockId: string, callBack: (sta
                 .findOne({ _id: userId },
                 {
                     fields: {
-                        [`statblocks.${statBlockId}`]: true
+                        [`${entityPath}.${entityId}`]: true
                     }
                 })
                 .then((user: User) => {
                     if (!user) {
                         throw "User not found";
                     }
-                    callBack(user.statblocks[statBlockId]);
+                    callBack(user[entityPath][entityId]);
                 });
         });
 }
 
-export function saveStatBlock(userId: string, statblock: StatBlock, callBack: (result: number) => void) {
+export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
     }
 
-    if (!statblock.Id || !statblock.Version) {
-        throw "StatBlock missing Id or Version";
+    if (!entity.Id || !entity.Version) {
+        throw "Entity missing Id or Version";
     }
 
     return client.connect(connectionString)
@@ -163,7 +166,7 @@ export function saveStatBlock(userId: string, statblock: StatBlock, callBack: (r
                 { _id: userId },
                 {
                     $set: {
-                        [`statblocks.${statblock.Id}`]: statblock
+                        [`${entityPath}.${entity.Id}`]: entity
                     }
                 }
             ).then(result => {

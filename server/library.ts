@@ -17,6 +17,7 @@ const createId = (name: string, source: string) => {
 };
 
 export interface LibraryItem {
+    Version: string;
     Name: string;
     Id: string;
     Source: string;
@@ -41,6 +42,7 @@ export interface StatBlock {
 export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
 export interface Spell {
+    Version: string;
     Name: string;
     Id: string;
     School: string;
