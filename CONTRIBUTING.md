@@ -9,6 +9,7 @@ I'll try to provide a short list of guidelines here (adapted from [TypeScript Co
 ## General
 * Open pull requests against the `development` branch.
 * Link your pull request to at least one open issue (ideally exactly one).
+* If there is no open issue for your PR, open one first for discussion before submitting any code.
 * When appropriate, encapsulate your code in its own class, in its own file.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
 * Ensure your PR is deploy-ready, as `development` auto-deploys to the [public dev server](http://improved-initiative-dev.azurewebsites.net/)
