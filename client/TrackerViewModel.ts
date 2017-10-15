@@ -23,6 +23,28 @@ module ImprovedInitiative {
             });
 
             this.Socket.emit("join encounter", this.Encounter.EncounterId);
+
+            this.AccountClient.GetAccount(account => {
+                if (!account) {
+                    return;
+                }
+
+                this.HandleAccountSync(account);
+            })
+        }
+
+        private HandleAccountSync(account: Account) {
+            if (account.settings && account.settings.Version) {
+                CurrentSettings(account.settings);
+            }
+
+            if (account.statblocks) {
+                this.Libraries.NPCs.AddStatBlockListings(account.statblocks, "account");
+            }
+
+            if (account.playercharacters) {
+                this.Libraries.PCs.AddStatBlockListings(account.playercharacters, "account");
+            }
         }
 
         Socket = io();

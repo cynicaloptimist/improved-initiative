@@ -10,6 +10,16 @@ module ImprovedInitiative {
         });
     }
     export class AccountClient {
+        GetAccount(callBack: (user: any) => void) {
+            if (!env.HasStorage) {
+                return false;
+            }
+            
+            $.getJSON("/my").done(callBack);
+
+            return true;
+        }
+
         SaveSettings(settings: Settings) {
             if (!env.HasStorage) {
                 return false;
@@ -21,16 +31,6 @@ module ImprovedInitiative {
             return true;
         }
 
-        GetSettings(callBack: (s: Settings) => void) {
-            if (!env.HasStorage) {
-                return false;
-            }
-
-            $.getJSON('/my/settings', callBack);
-
-            return true;
-        }
-
         SaveStatBlock(statBlock: StatBlock) {
             if (!env.HasStorage) {
                 return false;
@@ -39,16 +39,6 @@ module ImprovedInitiative {
             post('/my/statblocks', statBlock)
                 .done(s => console.log(`Saving statblocks: ${s}`));
             
-            return true;
-        }
-
-        GetStatBlocks(callBack: (s: StatBlockListingStatic[]) => void) {
-            if (!env.HasStorage) {
-                return false;
-            }
-
-            $.getJSON('/my/statblocks', callBack);
-
             return true;
         }
     }

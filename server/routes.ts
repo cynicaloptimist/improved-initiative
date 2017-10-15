@@ -127,17 +127,17 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         res.json(spellLibrary.GetById(req.params.id));
     });
 
-    app.get("/my/settings", (req: Req, res: Res) => {
+    app.get("/my", (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
 
-        return DB.getSettings(req.session.userId, settings => {
-            return res.json(settings);
+        return DB.getAccount(req.session.userId, account => {
+            return res.json(account);
         }).catch(err => {
             return res.sendStatus(500);
         });
-    });
+    })
 
     app.post("/my/settings", (req, res: express.Response) => {
         if (!verifyStorage(req)) {

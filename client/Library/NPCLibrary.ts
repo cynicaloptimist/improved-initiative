@@ -4,27 +4,22 @@ module ImprovedInitiative {
         ContainsPlayerCharacters = false;
 
         constructor() {
-            const gotStatBlocks = new AccountClient().GetStatBlocks(myListings => {
-                this.AddStatBlockListings(myListings);
-                $.ajax("../statblocks/").done(this.AddStatBlockListings);
-            });
+            $.ajax("../statblocks/").done(s => this.AddStatBlockListings(s, "server"));
 
-            if (!gotStatBlocks) {
-                const localStatBlocks = Store.List(Store.StatBlocks);
-                localStatBlocks.forEach(id => {
-                    var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-                    this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
-                });
-                Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
-            }
+            const localStatBlocks = Store.List(Store.StatBlocks);
+            localStatBlocks.forEach(id => {
+                var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
+                this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+            });
+            Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
         }
 
-        AddStatBlockListings = (listings: StatBlockListingStatic[]) => {
+        AddStatBlockListings = (listings: StatBlockListingStatic[], source: EntitySource) => {
             listings.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
             ko.utils.arrayPushAll<StatBlockListing>(this.StatBlocks, listings.map(c => {
-                return new StatBlockListing(c.Id, c.Name, c.Keywords, c.Link, "server");
+                return new StatBlockListing(c.Id, c.Name, c.Keywords, c.Link, source);
             }));
         }
     }

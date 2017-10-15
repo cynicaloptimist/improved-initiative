@@ -102,13 +102,6 @@ module ImprovedInitiative {
             const legacySettings = getLegacySettings();
             CurrentSettings(legacySettings)
         }
-
-        new AccountClient().GetSettings((data: Settings) => {
-            console.log(data);
-            if (data.Version) {
-                CurrentSettings(data);
-            }
-        });
     }
 
     export function ConfigureCommands(commands: Command[]) {

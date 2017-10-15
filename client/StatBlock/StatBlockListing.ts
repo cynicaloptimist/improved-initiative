@@ -1,11 +1,11 @@
 module ImprovedInitiative {
-    type Source = "server" | "account" | "localStorage";
+    export type EntitySource = "server" | "account" | "localStorage";
     export class StatBlockListingStatic {
         Name: string;
         Id: string;
         Keywords: string;
         Link: string;
-        Source: Source;
+        Source: EntitySource;
     }
     
     export class StatBlockListing {
@@ -15,7 +15,7 @@ module ImprovedInitiative {
         private loadPromise: JQueryXHR;
         private statBlock: KnockoutObservable<StatBlock>;
 
-        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: Source, statBlock?: StatBlock) {
+        constructor(public Id: string, name: string, public Keywords: string, public Link: string, public Source: EntitySource, statBlock?: StatBlock) {
             this.Name = ko.observable(name);
             this.statBlock = ko.observable(statBlock);
 
