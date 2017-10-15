@@ -2,13 +2,15 @@ module ImprovedInitiative {
     interface Environment {
         EncounterId: string;
         PostedEncounter: { Combatants: any[] };
+        IsLoggedIn: boolean;
         HasStorage: boolean;
     }
 
     export const env: Environment = {
         EncounterId: null,
         PostedEncounter: null,
-        HasStorage: null
+        HasStorage: false,
+        IsLoggedIn: false
     };
 
     export function LoadEnvironment() {
@@ -18,5 +20,6 @@ module ImprovedInitiative {
             env.PostedEncounter = JSON.parse(encounterJSON);
         }
         env.HasStorage = $('html')[0].getAttribute('hasStorage') == "true";
+        env.IsLoggedIn = $('html')[0].getAttribute('isLoggedIn') == "true";
     };
 }

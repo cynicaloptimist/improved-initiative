@@ -23,6 +23,7 @@ const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     appInsightsKey,
     baseUrl,
     patreonClientId,
+    isLoggedIn: session.isLoggedIn || false,
     hasStorage: session.hasStorage || false,
     postedEncounter: null,
 });

@@ -68,6 +68,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         const standing = hasStorage ? "pledge" : "none";
 
         req.session.hasStorage = hasStorage;
+        req.session.isLoggedIn = true;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
             .then(user => {
