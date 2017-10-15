@@ -70,8 +70,8 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         req.session.hasStorage = hasStorage;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
-            .then(result => {
-                req.session.userId = result.value._id;
+            .then(user => {
+                req.session.userId = user._id;
                 res.redirect(`/e/${state}`);
             }).catch(err => {
                 console.error(err);

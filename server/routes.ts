@@ -82,7 +82,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             req.session.hasStorage = true;
             DB.upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
-                    req.session.userId = result.value._id;
+                    req.session.userId = result._id;
                     res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
                 });
         } else {
@@ -155,24 +155,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         }
     });
 
-    app.get("/my/statblocks", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.getStatBlocks(req.session.userId, statBlocks => {
-            return res.json(statBlocks);
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
-    });
-
     app.get("/my/statblocks/:id", (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
 
-        return DB.getStatBlock(req.session.userId, req.params.id, statBlock => {
+        return DB.getEntity<StatBlock>("statblocks", req.session.userId, req.params.id, statBlock => {
             if (statBlock) {
                 return res.json(statBlock);    
             } else {
@@ -189,11 +177,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             return res.sendStatus(403);
         }
 
-        if (!req.body.StatBlock) {
-            return res.status(400).send("Missing StatBlock");
-        }
-
-        return DB.saveStatBlock(req.session.userId, req.body.StatBlock, result => {
+        return DB.saveEntity("statblocks", req.session.userId, req.body, result => {
             return res.sendStatus(201);    
         }).catch(err => {
             return res.status(500).send(err);
