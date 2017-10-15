@@ -26,7 +26,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
-            const users = db.collection("users");
+            const users = db.collection<User>("users");
             return users.findOneAndUpdate(
                 {
                     patreonId
@@ -50,7 +50,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                     upsert: true
                 })
                 .then(res => {
-                    return users.findOne<User>({
+                    return users.findOne({
                         patreonId
                     });
                 });
@@ -65,7 +65,7 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
-            const users = db.collection("users");
+            const users = db.collection<User>("users");
             return users.findOne({ _id: userId })
                 .then((user: User) => {
                     const userWithListings = {
@@ -113,7 +113,7 @@ export function setSettings(userId, settings) {
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
-            const users = db.collection("users");
+            const users = db.collection<User>("users");
             return users.updateOne(
                 { _id: userId },
                 { $set: { settings } }
@@ -131,7 +131,7 @@ export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: s
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
-            const users = db.collection("users");
+            const users = db.collection<User>("users");
 
             return users
                 .findOne({ _id: userId },
@@ -161,7 +161,7 @@ export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId
 
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
-            const users = db.collection("users");
+            const users = db.collection<User>("users");
             return users.updateOne(
                 { _id: userId },
                 {
