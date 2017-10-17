@@ -85,7 +85,7 @@ function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): Listing
         return {
             Name: c.Name,
             Id: c.Id,
-            Keywords: c.Type,
+            SearchHint: c.Type,
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
         }
@@ -98,7 +98,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
         return {
             Name: c.Name,
             Id: c.Id,
-            Keywords: c.Type,
+            SearchHint: c.Type,
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
         }

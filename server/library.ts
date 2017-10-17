@@ -24,11 +24,10 @@ export interface LibraryItem {
 }
 
 export interface Listing {
-    Version: string;
-    Name: string;
     Id: string;
-    Keywords: string;
     Link: string;
+    Name: string;
+    SearchHint: string;
 }
 
 export interface StatBlock {
@@ -85,9 +84,8 @@ export class Library<TItem extends LibraryItem> {
             const listing: Listing = {
                 Name: c.Name,
                 Id: c.Id,
-                Keywords: this.getKeywords(c),
-                Link: this.route + c.Id,
-                Version: "1.0.0"
+                SearchHint: this.getKeywords(c),
+                Link: this.route + c.Id
             };
             this.listings.push(listing);
         });
