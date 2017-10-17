@@ -24,9 +24,7 @@ module ImprovedInitiative {
         private clearCache = () => this.filterCache = {};
 
         FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
-            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                statBlocksWithFilterInName = [],
-                statBlocksWithFilterInKeywords = [];
+            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase();
 
             if (this.filterCache[filter]) {
                 return this.filterCache[filter];
@@ -34,31 +32,7 @@ module ImprovedInitiative {
 
             const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || this.library.StatBlocks();
 
-            const dedupedStatBlocks: KeyValueSet<Listing<StatBlock>> = {};
-            const sourceRankings: ListingSource[] = ["account", "localStorage", "server"];
-            parentSubset.forEach(newListing => {
-                const currentListing = dedupedStatBlocks[newListing.Name];
-                if (currentListing) {
-                    const hasBetterSource = (sourceRankings.indexOf(newListing.Source) < sourceRankings.indexOf(currentListing.Source));
-                    if (hasBetterSource) {
-                        dedupedStatBlocks[newListing.Name] = newListing;
-                    }
-                } else {
-                    dedupedStatBlocks[newListing.Name] = newListing;
-                }
-            })
-            
-            Object.keys(dedupedStatBlocks).sort().forEach(i => {
-                const listing = dedupedStatBlocks[i];
-                if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInName.push(listing);
-                }
-                else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInKeywords.push(listing);
-                }
-            });
-
-            const finalList = statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
+            const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
 
             this.filterCache[filter] = finalList;
             

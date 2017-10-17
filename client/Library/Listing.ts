@@ -1,6 +1,37 @@
 module ImprovedInitiative {
     export type ListingSource = "server" | "account" | "localStorage";
     
+    export function DedupeByRankAndFilterListings<T extends Listing<any>>(parentSubset: T[], filter: string) {
+        const byName: T[] = [];
+        const bySearchHint: T[] = [];
+        const dedupedStatBlocks: KeyValueSet<T> = {};
+        const sourceRankings: ListingSource[] = ["account", "localStorage", "server"];
+
+        parentSubset.forEach(newListing => {
+            const currentListing = dedupedStatBlocks[newListing.Name];
+            if (currentListing) {
+                const hasBetterSource = (sourceRankings.indexOf(newListing.Source) < sourceRankings.indexOf(currentListing.Source));
+                if (hasBetterSource) {
+                    dedupedStatBlocks[newListing.Name] = newListing;
+                }
+            } else {
+                dedupedStatBlocks[newListing.Name] = newListing;
+            }
+        })
+        
+        Object.keys(dedupedStatBlocks).sort().forEach(i => {
+            const listing = dedupedStatBlocks[i];
+            if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
+                byName.push(listing);
+            }
+            else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
+                bySearchHint.push(listing);
+            }
+        });
+
+        return byName.concat(bySearchHint);
+    }
+    
     export interface Listing<T extends { Name?: string }> {
         Value: KnockoutObservable<T>;
         Id: string;
