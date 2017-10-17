@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     export interface StatBlockLibrary {
-        StatBlocks: KnockoutObservableArray<StatBlockListing>
+        StatBlocks: KnockoutObservableArray<Listing<StatBlock>>
         ContainsPlayerCharacters: boolean;
     }
 
@@ -20,10 +20,10 @@ module ImprovedInitiative {
 
         LibraryFilter = ko.observable("");
 
-        private filterCache: KeyValueSet<StatBlockListing[]> = {};
+        private filterCache: KeyValueSet<Listing<StatBlock>[]> = {};
         private clearCache = () => this.filterCache = {};
 
-        FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
+        FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],
                 statBlocksWithFilterInKeywords = [];
@@ -34,26 +34,26 @@ module ImprovedInitiative {
 
             const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || this.library.StatBlocks();
 
-            const dedupedStatBlocks: KeyValueSet<StatBlockListing> = {};
-            const sourceRankings: EntitySource[] = ["account", "localStorage", "server"];
+            const dedupedStatBlocks: KeyValueSet<Listing<StatBlock>> = {};
+            const sourceRankings: ListingSource[] = ["account", "localStorage", "server"];
             parentSubset.forEach(newListing => {
-                const currentListing = dedupedStatBlocks[newListing.Name()];
+                const currentListing = dedupedStatBlocks[newListing.Name];
                 if (currentListing) {
                     const hasBetterSource = (sourceRankings.indexOf(newListing.Source) < sourceRankings.indexOf(currentListing.Source));
                     if (hasBetterSource) {
-                        dedupedStatBlocks[newListing.Name()] = newListing;
+                        dedupedStatBlocks[newListing.Name] = newListing;
                     }
                 } else {
-                    dedupedStatBlocks[newListing.Name()] = newListing;
+                    dedupedStatBlocks[newListing.Name] = newListing;
                 }
             })
             
             Object.keys(dedupedStatBlocks).sort().forEach(i => {
                 const listing = dedupedStatBlocks[i];
-                if (listing.Name().toLocaleLowerCase().indexOf(filter) > -1) {
+                if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
                     statBlocksWithFilterInName.push(listing);
                 }
-                else if (listing.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
+                else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
                     statBlocksWithFilterInKeywords.push(listing);
                 }
             });
@@ -65,8 +65,8 @@ module ImprovedInitiative {
             return finalList;
         });
 
-        ClickEntry = (entry: StatBlockListing) => this.encounterCommander.AddStatBlockFromListing(entry);
-        ClickEdit = (entry: StatBlockListing) => this.encounterCommander.EditStatBlock(entry);
+        ClickEntry = (entry: Listing<StatBlock>) => this.encounterCommander.AddStatBlockFromListing(entry);
+        ClickEdit = (entry: Listing<StatBlock>) => this.encounterCommander.EditStatBlock(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
         ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
 
@@ -74,9 +74,9 @@ module ImprovedInitiative {
             return this.previewStatBlock() || StatBlock.Default();
         })
 
-        PreviewStatBlock = (listing: StatBlockListing) => {
+        PreviewStatBlock = (listing: Listing<StatBlock>) => {
             this.previewStatBlock(null);
-            listing.GetStatBlockAsync(statBlock => {
+            listing.GetAsync(statBlock => {
                 this.previewStatBlock(statBlock);
             });
         }

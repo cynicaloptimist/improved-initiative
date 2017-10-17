@@ -8,8 +8,8 @@ module ImprovedInitiative {
             this.libraries = tracker.Libraries;
         }
 
-        AddStatBlockFromListing = (listing: StatBlockListing, event?) => {
-            listing.GetStatBlockAsync(statBlock => {
+        AddStatBlockFromListing = (listing: Listing<StatBlock>, event?) => {
+            listing.GetAsync(statBlock => {
                 this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
                 this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
             });
@@ -26,7 +26,7 @@ module ImprovedInitiative {
         }
 
         private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-            var listing = new StatBlockListing(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
+            var listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
             Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
                 this.libraries.PCs.StatBlocks.unshift(listing);
@@ -54,14 +54,14 @@ module ImprovedInitiative {
             this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
         }
 
-        EditStatBlock = (listing: StatBlockListing) => {
-            listing.GetStatBlockAsync(statBlock => {
+        EditStatBlock = (listing: Listing<StatBlock>) => {
+            listing.GetAsync(statBlock => {
                 if (listing.Source === "server") {
                     this.duplicateAndEditStatBlock(statBlock);
                 } else {
                     this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
                         Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-                        listing.SetStatBlock(newStatBlock);
+                        listing.Value(newStatBlock);
                     }, this.deleteSavedStatBlock,
                         "global");
                 }

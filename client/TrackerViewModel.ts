@@ -43,7 +43,7 @@ module ImprovedInitiative {
             }
 
             if (account.playercharacters) {
-                this.Libraries.PCs.AddStatBlockListings(account.playercharacters, "account");
+                this.Libraries.PCs.AddListings(account.playercharacters, "account");
             }
         }
 

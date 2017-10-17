@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     export class NPCLibrary {
-        StatBlocks = ko.observableArray<StatBlockListing>([]);
+        StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
         ContainsPlayerCharacters = false;
 
         constructor() {
@@ -9,14 +9,14 @@ module ImprovedInitiative {
             const localStatBlocks = Store.List(Store.StatBlocks);
             localStatBlocks.forEach(id => {
                 var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-                this.StatBlocks.push(new StatBlockListing(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
             });
             Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
         }
 
-        AddStatBlockListings = (listings: StatBlockListingStatic[], source: EntitySource) => {
-            ko.utils.arrayPushAll<StatBlockListing>(this.StatBlocks, listings.map(c => {
-                return new StatBlockListing(c.Id, c.Name, c.Keywords, c.Link, source);
+        AddStatBlockListings = (listings: Listing<StatBlock>[], source: ListingSource) => {
+            ko.utils.arrayPushAll<Listing<StatBlock>>(this.StatBlocks, listings.map(c => {
+                return new Listing<StatBlock>(c.Id, c.Name, c.SearchHint, c.Link, source);
             }));
         }
     }

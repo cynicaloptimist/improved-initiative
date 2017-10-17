@@ -27,16 +27,22 @@ module ImprovedInitiative {
         Value = ko.observable<T>();
         
         GetAsync(callback: (item: T) => void) {
-            $.getJSON(this.Link).done(item => {
-                this.Value(item);
+            if (this.Value()) {
                 callback(this.Value());
-            });
+            } else {
+                $.getJSON(this.Link).done(item => {
+                    this.Value(item);
+                    callback(this.Value());
+                });
+            }
         }
 
         CurrentName = ko.computed(() => {
-            if (this.Value() !== undefined) {
-                this.CurrentName()
+            const current = this.Value();
+            if (current !== undefined) {
+                return current.Name || this.Name;
             }
+            return this.Name;
         })
     }
 }
