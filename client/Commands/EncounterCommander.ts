@@ -77,8 +77,8 @@ module ImprovedInitiative {
             );
         }
 
-        EditSpell = (listing: SpellListing) => {
-            listing.GetSpellAsync(spell => {
+        EditSpell = (listing: Listing<Spell>) => {
+            listing.GetAsync(spell => {
                 this.tracker.SpellEditor.EditSpell(
                     spell,
                     this.libraries.Spells.AddOrUpdateSpell,
@@ -111,7 +111,7 @@ module ImprovedInitiative {
             this.tracker.PromptQueue.Add(prompt);
         }
 
-        ReferenceSpell = (spellListing: SpellListing) => {
+        ReferenceSpell = (spellListing: Listing<Spell>) => {
             const prompt = new SpellPrompt(spellListing);
             this.tracker.PromptQueue.Add(prompt);
         }

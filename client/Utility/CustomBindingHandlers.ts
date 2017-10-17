@@ -85,7 +85,7 @@ module ImprovedInitiative {
 
         $(element).find('.spell-reference').on('click', (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
-            const spell = spellLibrary.Spells().filter(s => s.Name().toLocaleLowerCase() === spellName)[0];
+            const spell = spellLibrary.Spells().filter(s => s.CurrentName().toLocaleLowerCase() === spellName)[0];
             encounterCommander.ReferenceSpell(spell);
         });
     };

@@ -1,8 +1,8 @@
 module ImprovedInitiative {
     export class SpellLibrary {
-        Spells = ko.observableArray<SpellListing>([]);
+        Spells = ko.observableArray<Listing<Spell>>([]);
         SpellsByNameRegex = ko.computed(() => {
-            const allSpellNames = this.Spells().map(s => s.Name());
+            const allSpellNames = this.Spells().map(s => s.Name);
             if (allSpellNames.length === 0) {
                 return new RegExp('a^');
             }
@@ -15,7 +15,7 @@ module ImprovedInitiative {
             const customSpells = Store.List(Store.Spells);
             customSpells.forEach(id => {
                 var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-                this.Spells.push(new SpellListing(id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell));
+                this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell));
             });
 
             Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
@@ -25,14 +25,14 @@ module ImprovedInitiative {
             listings.sort((c1, c2) => {
                 return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
             });
-            ko.utils.arrayPushAll<SpellListing>(this.Spells, listings.map(c => {
-                return new SpellListing(c.Id, c.Name, c.Keywords, c.Link, "server");
+            ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
+                return new Listing<Spell>(c.Id, c.Name, c.Keywords, c.Link, "server");
             }));
         }
 
         public AddOrUpdateSpell = (spell: Spell) => {
             this.Spells.remove(listing => listing.Source === "localStorage" && listing.Id === spell.Id);
-            const listing = new SpellListing(spell.Id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell);
+            const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell);
             this.Spells.unshift(listing);
             Store.Save(Store.Spells, spell.Id, spell);
         }

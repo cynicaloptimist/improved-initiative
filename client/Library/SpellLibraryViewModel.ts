@@ -7,7 +7,7 @@ module ImprovedInitiative {
 
         LibraryFilter = ko.observable("");
 
-        FilteredSpells = ko.pureComputed<SpellListing[]>(() => {
+        FilteredSpells = ko.pureComputed<Listing<Spell>[]>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 spellsWithFilterInName = [],
                 spellsWithFilterInKeywords = [];
@@ -17,19 +17,19 @@ module ImprovedInitiative {
             }
 
             this.library.Spells().forEach(c => {
-                if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
+                if (c.CurrentName().toLocaleLowerCase().indexOf(filter) > -1) {
                     spellsWithFilterInName.push(c);
                     return;
                 }
-                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
+                if (c.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
                     spellsWithFilterInKeywords.push(c);
                 }
             })
             return spellsWithFilterInName.concat(spellsWithFilterInKeywords);
         });
 
-        ClickEntry = (entry: SpellListing) => this.encounterCommander.ReferenceSpell(entry);
-        ClickEdit = (entry: SpellListing) => this.encounterCommander.EditSpell(entry);
+        ClickEntry = (entry: Listing<Spell>) => this.encounterCommander.ReferenceSpell(entry);
+        ClickEdit = (entry: Listing<Spell>) => this.encounterCommander.EditSpell(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
         ClickAdd = () => this.encounterCommander.CreateAndEditSpell();
     }
