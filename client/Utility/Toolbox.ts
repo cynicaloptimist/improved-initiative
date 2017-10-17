@@ -14,6 +14,10 @@ interface Function {
     with: (...params: any[]) => ((...params: any[]) => any)
 }
 
+interface KeyValueSet<T> {
+    [key: string]: T;
+}
+
 Array.prototype.remove = function (item) {
     const index = this.indexOf(item);
     if (index > -1) {

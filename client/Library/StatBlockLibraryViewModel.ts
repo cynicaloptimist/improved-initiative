@@ -3,41 +3,66 @@ module ImprovedInitiative {
         StatBlocks: KnockoutObservableArray<StatBlockListing>
         ContainsPlayerCharacters: boolean;
     }
-    
+
     export class StatBlockLibraryViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
         constructor(
             private encounterCommander: EncounterCommander,
             private library: StatBlockLibrary
-        ) { }
+        ) {
+            this.LibraryFilter.subscribe(n => {
+                if (n === "") {
+                    this.clearCache();
+                }
+            });
+            this.library.StatBlocks.subscribe(this.clearCache);
+         }
 
         LibraryFilter = ko.observable("");
+
+        private filterCache: KeyValueSet<StatBlockListing[]> = {};
+        private clearCache = () => this.filterCache = {};
 
         FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
                 statBlocksWithFilterInName = [],
                 statBlocksWithFilterInKeywords = [];
-                 
-            const sortOrder: EntitySource[] = ["account", "localStorage", "server"];
-            const sortedStatBlocks = this.library.StatBlocks().sort(
-                (a, b) => {
-                    if (a.Source == b.Source) {
-                        return a.Name().localeCompare(b.Name());
-                    }
-                    return sortOrder.indexOf(a.Source) - sortOrder.indexOf(b.Source);
-                }
-            )
 
-            sortedStatBlocks.forEach(c => {
-                if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInName.push(c);
-                    return;
-                }
-                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInKeywords.push(c);
+            if (this.filterCache[filter]) {
+                return this.filterCache[filter];
+            }
+
+            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || this.library.StatBlocks();
+
+            const dedupedStatBlocks: KeyValueSet<StatBlockListing> = {};
+            const sourceRankings: EntitySource[] = ["account", "localStorage", "server"];
+            parentSubset.forEach(newListing => {
+                const currentListing = dedupedStatBlocks[newListing.Name()];
+                if (currentListing) {
+                    const hasBetterSource = (sourceRankings.indexOf(newListing.Source) < sourceRankings.indexOf(currentListing.Source));
+                    if (hasBetterSource) {
+                        dedupedStatBlocks[newListing.Name()] = newListing;
+                    }
+                } else {
+                    dedupedStatBlocks[newListing.Name()] = newListing;
                 }
             })
-            return statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
+            
+            Object.keys(dedupedStatBlocks).sort().forEach(i => {
+                const listing = dedupedStatBlocks[i];
+                if (listing.Name().toLocaleLowerCase().indexOf(filter) > -1) {
+                    statBlocksWithFilterInName.push(listing);
+                }
+                else if (listing.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
+                    statBlocksWithFilterInKeywords.push(listing);
+                }
+            });
+
+            const finalList = statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
+
+            this.filterCache[filter] = finalList;
+            
+            return finalList;
         });
 
         ClickEntry = (entry: StatBlockListing) => this.encounterCommander.AddStatBlockFromListing(entry);

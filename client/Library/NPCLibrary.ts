@@ -15,9 +15,6 @@ module ImprovedInitiative {
         }
 
         AddStatBlockListings = (listings: StatBlockListingStatic[], source: EntitySource) => {
-            listings.sort((c1, c2) => {
-                return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
-            });
             ko.utils.arrayPushAll<StatBlockListing>(this.StatBlocks, listings.map(c => {
                 return new StatBlockListing(c.Id, c.Name, c.Keywords, c.Link, source);
             }));
