@@ -4,13 +4,15 @@ module ImprovedInitiative {
         PostedEncounter: { Combatants: any[] };
         IsLoggedIn: boolean;
         HasStorage: boolean;
+        PatreonLoginUrl: string;
     }
 
     export const env: Environment = {
         EncounterId: null,
         PostedEncounter: null,
         HasStorage: false,
-        IsLoggedIn: false
+        IsLoggedIn: false,
+        PatreonLoginUrl: "http://www.patreon.com/"
     };
 
     export function LoadEnvironment() {
@@ -21,5 +23,8 @@ module ImprovedInitiative {
         }
         env.HasStorage = $('html')[0].getAttribute('hasStorage') == "true";
         env.IsLoggedIn = $('html')[0].getAttribute('isLoggedIn') == "true";
+        if (window["patreonUrl"]) {
+            env.PatreonLoginUrl = window["patreonUrl"]
+        }
     };
 }

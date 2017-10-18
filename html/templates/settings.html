@@ -110,7 +110,7 @@
     <!-- /ko -->
     <!-- ko ifnot: IsLoggedIn -->
         <p>Log in with Patreon to access patron benefits. Account Sync allows you to access your custom statblocks and encounters from anywhere!</p>
-        <a class="login button" href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{baseUrl}}/r/patreon&state='{{encounterId}}'">Log In with Patreon</a>
+        <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>

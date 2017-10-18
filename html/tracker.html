@@ -10,6 +10,9 @@
 
     <title>Combat Tracker - Improved Initiative</title>
 
+    <script type="text/javascript">
+        window.patreonUrl = 'http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{{baseUrl}}}/r/patreon&state={{encounterId}}';
+    </script>
     <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
     <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
 </head>
@@ -51,7 +54,7 @@
     ">
     </div>
     <!-- ko if: DisplayLogin -->
-        <a class="login button" href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{baseUrl}}/r/patreon&state='{{encounterId}}'">Log In with Patreon</a>
+        <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
     <div class="toolbar" data-bind="css: ToolbarClass">
         <div class="scrollframe">

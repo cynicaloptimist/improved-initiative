@@ -36,8 +36,10 @@ module ImprovedInitiative {
         CombatantCommands: Command[];
         CurrentTab = ko.observable<string>('about');
         RollHp: KnockoutObservable<boolean>;
-        IsLoggedIn: boolean = env.IsLoggedIn;
-        HasStorage: boolean = env.HasStorage;
+
+        IsLoggedIn = env.IsLoggedIn;
+        HasStorage = env.HasStorage;
+        PatreonLoginUrl = env.PatreonLoginUrl;
         
         ExportData = () => {
             var blob = Store.ExportAll();

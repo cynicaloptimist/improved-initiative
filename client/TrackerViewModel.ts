@@ -133,6 +133,8 @@ module ImprovedInitiative {
                 });
         }
 
+        PatreonLoginUrl = env.PatreonLoginUrl;
+
         InterfaceState = ko.pureComputed(() => {
             return [
                 this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
