@@ -88,6 +88,7 @@ module ImprovedInitiative {
         LibrariesVisible = ko.observable(true);
         ToolbarWide = ko.observable(false);
         ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
+        DisplayLogin = !env.IsLoggedIn;
 
         CenterColumn = ko.pureComputed(() => {
             const editStatBlock = this.StatBlockEditor.HasStatBlock();

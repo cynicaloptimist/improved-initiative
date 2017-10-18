@@ -50,6 +50,9 @@
         }
     ">
     </div>
+    <!-- ko if: DisplayLogin -->
+        <a class="login button" href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{baseUrl}}/r/patreon&state='{{encounterId}}'">Log In with Patreon</a>
+    <!-- /ko -->
     <div class="toolbar" data-bind="css: ToolbarClass">
         <div class="scrollframe">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
@@ -188,7 +191,6 @@
         </div>
     </div>
     <div class="right-column">
-        <p><a href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{baseUrl}}/r/patreon&state='{{encounterId}}'">Login</a></p>
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>

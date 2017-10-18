@@ -81,6 +81,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.get("/", (req: Req, res: Res) => {
         if (defaultAccountLevel === "accountsync") {
             req.session.hasStorage = true;
+            req.session.isLoggedIn = true;
             DB.upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
