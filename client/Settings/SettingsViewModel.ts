@@ -37,7 +37,8 @@ module ImprovedInitiative {
         CurrentTab = ko.observable<string>('about');
         RollHp: KnockoutObservable<boolean>;
         IsLoggedIn: boolean = env.IsLoggedIn;
-
+        HasStorage: boolean = env.HasStorage;
+        
         ExportData = () => {
             var blob = Store.ExportAll();
             saveAs(blob, 'improved-initiative.json');

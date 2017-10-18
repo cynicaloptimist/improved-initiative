@@ -101,10 +101,16 @@
 </div>
 <div data-bind="visible: CurrentTab() == 'account'" class="tab account">
     <!-- ko if: IsLoggedIn -->
-        <p>Logged in :-)</p>
+        <!-- ko if: HasStorage -->
+            <p>Account Sync is enabled. Thank you for your pledge!</p>
+        <!-- /ko -->
+        <!-- ko ifnot: HasStorage -->
+            <p>You're logged in with Patreon, but you're not at the <a href="https://www.patreon.com/bePatron?c=716070&rid=1322253" target="_blank">Account Sync</a> reward level.</p>
+        <!-- /ko -->
     <!-- /ko -->
     <!-- ko ifnot: IsLoggedIn -->
-        <p>Not logged in :-(</p>
+        <p>Log in with Patreon to access patron benefits. Account Sync allows you to access your custom statblocks and encounters from anywhere!</p>
+        <a class="login button" href="http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{baseUrl}}/r/patreon&state='{{encounterId}}'">Log In with Patreon</a>
     <!-- /ko -->
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
