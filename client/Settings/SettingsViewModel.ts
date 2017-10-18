@@ -36,6 +36,7 @@ module ImprovedInitiative {
         CombatantCommands: Command[];
         CurrentTab = ko.observable<string>('about');
         RollHp: KnockoutObservable<boolean>;
+        IsLoggedIn: boolean = env.IsLoggedIn;
 
         ExportData = () => {
             var blob = Store.ExportAll();

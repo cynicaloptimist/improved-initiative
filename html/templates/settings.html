@@ -2,6 +2,7 @@
     <span data-bind="click: CurrentTab.with('about'), css: { selected: CurrentTab() == 'about' }">About</span>
     <span data-bind="click: CurrentTab.with('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
     <span data-bind="click: CurrentTab.with('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
+    <span data-bind="click: CurrentTab.with('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <div>
@@ -97,5 +98,13 @@
     <p>Allow players to suggest damage/healing:
         <input type="checkbox" data-bind="checked: PlayerViewAllowPlayerSuggestions" />
     </p>
+</div>
+<div data-bind="visible: CurrentTab() == 'account'" class="tab account">
+    <!-- ko if: IsLoggedIn -->
+        <p>Logged in :-)</p>
+    <!-- /ko -->
+    <!-- ko ifnot: IsLoggedIn -->
+        <p>Not logged in :-(</p>
+    <!-- /ko -->
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
