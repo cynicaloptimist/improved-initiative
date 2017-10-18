@@ -2,6 +2,7 @@ module ImprovedInitiative {
     export class EncounterCommander {
         Commands: Command[];
         private libraries: Libraries;
+        private accountClient = new AccountClient();
 
         constructor(private tracker: TrackerViewModel) {
             this.Commands = BuildEncounterCommandList(this);
@@ -30,10 +31,24 @@ module ImprovedInitiative {
             Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
                 this.libraries.PCs.StatBlocks.unshift(listing);
+                this.accountClient.SavePlayerCharacter(newStatBlock);
             } else {
                 this.libraries.NPCs.StatBlocks.unshift(listing);
+                this.accountClient.SaveStatBlock(newStatBlock);
             }
         }
+
+        private saveEditedStatBlock = (listing: Listing<StatBlock>) =>
+            (store: string, statBlockId: string, newStatBlock: StatBlock) => {
+                Store.Save<StatBlock>(store, statBlockId, newStatBlock);
+                listing.Value(newStatBlock);
+                if (store == Store.PlayerCharacters) {
+                    this.accountClient.SavePlayerCharacter(newStatBlock);
+                } else {
+                    this.accountClient.SaveStatBlock(newStatBlock);
+                }
+            }
+
 
         CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
             var statBlock = StatBlock.Default();
@@ -49,21 +64,13 @@ module ImprovedInitiative {
             }
         }
 
-        private duplicateAndEditStatBlock = (statBlock: StatBlock) => {
-            var newId = probablyUniqueString();
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
-        }
-
         EditStatBlock = (listing: Listing<StatBlock>) => {
             listing.GetAsync(statBlock => {
                 if (listing.Source === "server") {
-                    this.duplicateAndEditStatBlock(statBlock);
+                    var newId = probablyUniqueString();
+                    this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
                 } else {
-                    this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-                        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-                        listing.Value(newStatBlock);
-                    }, this.deleteSavedStatBlock,
-                        "global");
+                    this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
                 }
             });
         }
