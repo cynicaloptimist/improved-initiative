@@ -12,6 +12,37 @@ const verifyStorage = (req: Req) => {
     return req.session && req.session.hasStorage;
 }
 
+function configureEntityRoute<T>(app: express.Application, route: DB.EntityPath) {
+    app.get(`/my/${route}/:id`, (req: Req, res: Res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+    
+        return DB.getEntity<T>(route, req.session.userId, req.params.id, entity => {
+            if (entity) {
+                return res.json(entity);    
+            } else {
+                return res.sendStatus(404);
+            }
+            
+        }).catch(err => {
+            return res.sendStatus(500);
+        });
+    });
+    
+    app.post(`/my/${route}/`, (req, res: Res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+    
+        return DB.saveEntity(route, req.session.userId, req.body, result => {
+            return res.sendStatus(201);    
+        }).catch(err => {
+            return res.status(500).send(err);
+        });
+    });
+}
+
 export default function(app: express.Application) {
     app.get("/my", (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
@@ -41,61 +72,6 @@ export default function(app: express.Application) {
         }
     });
     
-    app.get("/my/statblocks/:id", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-    
-        return DB.getEntity<StatBlock>("statblocks", req.session.userId, req.params.id, statBlock => {
-            if (statBlock) {
-                return res.json(statBlock);    
-            } else {
-                return res.sendStatus(404);
-            }
-            
-        }).catch(err => {
-            return res.sendStatus(500);
-        });
-    });
-    
-    app.post("/my/statblocks/", (req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-    
-        return DB.saveEntity("statblocks", req.session.userId, req.body, result => {
-            return res.sendStatus(201);    
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
-    });
-    
-    app.get("/my/playercharacters/:id", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-    
-        return DB.getEntity<StatBlock>("playercharacters", req.session.userId, req.params.id, statBlock => {
-            if (statBlock) {
-                return res.json(statBlock);    
-            } else {
-                return res.sendStatus(404);
-            }
-            
-        }).catch(err => {
-            return res.sendStatus(500);
-        });
-    });
-    
-    app.post("/my/playercharacters/", (req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-    
-        return DB.saveEntity("playercharacters", req.session.userId, req.body, result => {
-            return res.sendStatus(201);    
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
-    });
+    configureEntityRoute(app, "statblocks");
+    configureEntityRoute(app, "playercharacters");
 }
