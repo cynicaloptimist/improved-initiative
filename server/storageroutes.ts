@@ -84,4 +84,6 @@ export default function(app: express.Application) {
     
     configureEntityRoute(app, "statblocks");
     configureEntityRoute(app, "playercharacters");
+    configureEntityRoute(app, "spells");
+    configureEntityRoute(app, "encounters");
 }
