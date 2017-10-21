@@ -51,6 +51,22 @@ function configureEntityRoute<T extends LibraryItem>(app: express.Application, r
             return res.status(400).send("Missing Version");
         }
     });
+
+    app.delete(`/my/${route}/:id`, (req: Req, res: Res) => {
+        if (!verifyStorage(req)) {
+            return res.sendStatus(403);
+        }
+        
+        return DB.deleteEntity<T>(route, req.session.userId, req.params.id, result => {
+            if (!result) {
+                return res.sendStatus(404);    
+            }
+            
+            return res.sendStatus(204);
+        }).catch(err => {
+            return res.status(500).send(err);
+        });
+    });
 }
 
 export default function(app: express.Application) {
