@@ -3,6 +3,7 @@ import express = require("express");
 
 import LaunchServer from "./launchserver";
 import ConfigureRoutes from "./routes";
+import ConfigureStorageRoutes from "./storageroutes";
 import ConfigureSockets from "./sockets";
 import * as L from "./library";
 import * as DB from "./dbconnection";
@@ -15,6 +16,7 @@ const statBlockLibrary = L.Library.FromFile<L.StatBlock>("ogl_creatures.json", "
 const spellLibrary = L.Library.FromFile<L.Spell>("ogl_spells.json", "/spells/", L.GetSpellKeywords);
 const playerViews = [];
 ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+ConfigureStorageRoutes(app);
 
 const io = socketIO(http);
 ConfigureSockets(io, playerViews);

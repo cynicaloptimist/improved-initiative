@@ -7,7 +7,7 @@ import dbSession = require('connect-mongodb-session');
 
 import { Library, StatBlock, Spell } from "./library";
 import { configureLoginRedirect, startNewsUpdates } from "./patreon";
-import * as DB from "./dbconnection";
+import { upsertUser } from "./dbconnection";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
@@ -45,22 +45,19 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-const verifyStorage = (req: Req) => {
-    return req.session && req.session.hasStorage;
-}
 
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
-    
+
     if (process.env.DB_CONNECTION_STRING) {
         var store = new MongoDBStore(
-        {
-            uri: process.env.DB_CONNECTION_STRING,
-            collection: 'sessions'
-        });
+            {
+                uri: process.env.DB_CONNECTION_STRING,
+                collection: 'sessions'
+            });
     }
-    
+
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
@@ -77,12 +74,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-    
+
     app.get("/", (req: Req, res: Res) => {
         if (defaultAccountLevel === "accountsync") {
             req.session.hasStorage = true;
             req.session.isLoggedIn = true;
-            DB.upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
+            upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
                     res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
@@ -127,92 +124,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     app.get(spellLibrary.Route() + ":id", (req: Req, res: Res) => {
         res.json(spellLibrary.GetById(req.params.id));
-    });
-
-    app.get("/my", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.getAccount(req.session.userId, account => {
-            return res.json(account);
-        }).catch(err => {
-            return res.sendStatus(500);
-        });
-    })
-
-    app.post("/my/settings", (req, res: express.Response) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-        
-        const newSettings = req.body;
-
-        if (newSettings.Version) {
-            return DB.setSettings(req.session.userId, newSettings).then(r => {
-                return res.sendStatus(200);
-            });
-        } else {
-            return res.status(400).send("Invalid settings object, requires Version number.");
-        }
-    });
-
-    app.get("/my/statblocks/:id", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.getEntity<StatBlock>("statblocks", req.session.userId, req.params.id, statBlock => {
-            if (statBlock) {
-                return res.json(statBlock);    
-            } else {
-                return res.sendStatus(404);
-            }
-            
-        }).catch(err => {
-            return res.sendStatus(500);
-        });
-    });
-
-    app.post("/my/statblocks/", (req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.saveEntity("statblocks", req.session.userId, req.body, result => {
-            return res.sendStatus(201);    
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
-    });
-
-    app.get("/my/playercharacters/:id", (req: Req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.getEntity<StatBlock>("playercharacters", req.session.userId, req.params.id, statBlock => {
-            if (statBlock) {
-                return res.json(statBlock);    
-            } else {
-                return res.sendStatus(404);
-            }
-            
-        }).catch(err => {
-            return res.sendStatus(500);
-        });
-    });
-
-    app.post("/my/playercharacters/", (req, res: Res) => {
-        if (!verifyStorage(req)) {
-            return res.sendStatus(403);
-        }
-
-        return DB.saveEntity("playercharacters", req.session.userId, req.body, result => {
-            return res.sendStatus(201);    
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
     });
 
     const importEncounter = (req, res: Res) => {
