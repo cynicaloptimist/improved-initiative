@@ -1,7 +1,7 @@
 import request = require("request");
 import express = require("express");
 
-import { Library, StatBlock, Spell } from "./library";
+import { Library, StatBlock, Spell, LibraryItem } from "./library";
 import * as DB from "./dbconnection";
 
 type Req = Express.Request & express.Request;
@@ -12,7 +12,7 @@ const verifyStorage = (req: Req) => {
     return req.session && req.session.hasStorage;
 }
 
-function configureEntityRoute<T>(app: express.Application, route: DB.EntityPath) {
+function configureEntityRoute<T extends LibraryItem>(app: express.Application, route: DB.EntityPath) {
     app.get(`/my/${route}/:id`, (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
@@ -34,12 +34,22 @@ function configureEntityRoute<T>(app: express.Application, route: DB.EntityPath)
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
-    
-        return DB.saveEntity(route, req.session.userId, req.body, result => {
-            return res.sendStatus(201);    
-        }).catch(err => {
-            return res.status(500).send(err);
-        });
+
+        if (req.body.Version) {
+            return DB.saveEntity<T>(route, req.session.userId, req.body, result => {
+                return res.sendStatus(201);    
+            }).catch(err => {
+                return res.status(500).send(err);
+            });
+        } else if (req.body.length) {
+            return DB.saveEntitySet<T>(route, req.session.userId, req.body, result => {
+                return res.sendStatus(201);    
+            }).catch(err => {
+                return res.status(500).send(err);
+            });
+        } else {
+            return res.status(400).send("Missing Version");
+        }
     });
 }
 
