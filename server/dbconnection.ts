@@ -108,7 +108,6 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
 export function setSettings(userId, settings) {
     if (!connectionString) {
         console.error("No connection string found.");
-        //return null;
     }
 
     return client.connect(connectionString)
@@ -126,7 +125,6 @@ export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encount
 export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: T) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
-        //return null;
     }
 
     return client.connect(connectionString)
@@ -146,6 +144,28 @@ export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: s
                     }
                     callBack(user[entityPath][entityId]);
                 });
+        });
+}
+
+export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (result: number) => void) {
+    if (!connectionString) {
+        console.error("No connection string found.");
+    }
+
+    return client.connect(connectionString)
+        .then((db: mongo.Db) => {
+            const users = db.collection<User>("users");
+
+            return users.updateOne(
+                { _id: userId },
+                {
+                    $unset: {
+                        [`${entityPath}.${entityId}`]: ""
+                    }
+                }
+            ).then(result => {
+                callBack(result.modifiedCount);
+            });
         });
 }
 
