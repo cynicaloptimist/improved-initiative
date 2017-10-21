@@ -174,3 +174,38 @@ export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId
             });
         });
 }
+
+export function saveEntitySet<T extends LibraryItem>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
+    if (!connectionString) {
+        console.error("No connection string found.");
+        //return null;
+    }
+
+    for (const entity of entities) {
+        if (!entity.Id || !entity.Version) {
+            throw "Entity missing Id or Version";
+        }
+    }
+    
+
+    return client.connect(connectionString)
+        .then((db: mongo.Db) => {
+            const users = db.collection<User>("users");
+            return users.findOne({ _id: userId })
+                .then(u => {
+                    const updatedEntities = u[entityPath];
+                    for (const entity of entities) {
+                        updatedEntities[entity.Id] = entity;
+                    }
+                    return users.updateOne(
+                        { _id: userId },
+                        {
+                            $set: {
+                                [`${entityPath}`]: updatedEntities
+                            }
+                        });
+            }).then(result => {
+                callBack(result.modifiedCount);
+            });
+        });
+}
