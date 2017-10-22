@@ -4,31 +4,31 @@ module ImprovedInitiative {
         return ;
     }
 
-    function saveEntity<T extends object>(entity: T, route: string) {
+    function saveEntity<T extends object>(entity: T, entityType: string) {
         if (!env.HasStorage) {
             return false;
         }
 
         $.ajax({
             type: "POST",
-            url: route,
+            url: `/my/${entityType}/`,
             data: JSON.stringify(entity),
             dataType: "json",
             contentType: "application/json"
-        }).then(s => console.log(`Saving ${route} entity: ${s}`));
+        }).then(s => console.log(`Saving ${entityType} entity: ${s}`));
         
         return true;
     }
 
-    function deleteEntity(entityId: string, route: string) {
+    function deleteEntity(entityId: string, entityType: string) {
         if (!env.HasStorage) {
             return false;
         }
 
         $.ajax({
             type: "DELETE",
-            url: `/my/${route}/${entityId}`,
-        }).done(s => console.log(`Deleting ${route} entity: ${s}`));
+            url: `/my/${entityType}/${entityId}`,
+        }).done(s => console.log(`Deleting ${entityType} entity: ${s}`));
         
         return true;
     }
@@ -45,22 +45,22 @@ module ImprovedInitiative {
         }
 
         SaveSettings(settings: Settings) {
-            saveEntity<Settings>(settings, '/my/settings');
+            saveEntity<Settings>(settings, 'settings');
         }
 
         SaveStatBlock(statBlock: StatBlock) {
-            saveEntity<StatBlock>(statBlock, '/my/statblocks');
+            saveEntity<StatBlock>(statBlock, 'statblocks');
         }
 
         DeleteStatBlock(statBlockId: string) {
-            deleteEntity(statBlockId, '/my/statblocks')
+            deleteEntity(statBlockId, 'statblocks')
         }
         SavePlayerCharacter(playerCharacter: StatBlock) {
-            saveEntity<StatBlock>(playerCharacter, '/my/playercharacters');
+            saveEntity<StatBlock>(playerCharacter, 'playercharacters');
         }
 
         DeletePlayerCharacter(statBlockId: string) {
-            deleteEntity(statBlockId, '/my/playercharacters')
+            deleteEntity(statBlockId, 'playercharacters')
         }
     }
 }
