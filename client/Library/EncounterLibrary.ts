@@ -18,13 +18,20 @@ module ImprovedInitiative {
             if (this.Index().indexOf(listing) === -1) {
                 this.Index.push(listing);
             }
-                        
-            Store.Save(Store.SavedEncounters, listing.CurrentName(), savedEncounter);
+
+            Store.Save(Store.SavedEncounters, listing.Id, savedEncounter);
         }
 
-        Delete = (encounterName: string) => {
-            this.Index.remove(e => e.Name === encounterName);
-            Store.Delete(Store.SavedEncounters, encounterName);
+        DeleteByName = (encounterName: string) => {
+            let encounterId = encounterName;
+            this.Index.remove(e => {
+                if (e.Name === encounterName) {
+                    encounterId = e.Id;
+                    return true;
+                }
+                return false;
+            });
+            Store.Delete(Store.SavedEncounters, encounterId);
         }
 
         Get = (encounterName: string, callBack: (encounter: SavedEncounter<SavedCombatant>) => void) => {
@@ -42,5 +49,5 @@ module ImprovedInitiative {
             combatantNames,
             Store.SavedEncounters,
             'localStorage');
-    }    
+    }
 }

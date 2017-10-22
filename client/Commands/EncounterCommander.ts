@@ -210,7 +210,7 @@ module ImprovedInitiative {
 
         DeleteSavedEncounter = (encounterName: string) => {
             if (confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)) {
-                this.libraries.Encounters.Delete(encounterName);
+                this.libraries.Encounters.DeleteByName(encounterName);
                 this.tracker.EventLog.AddEvent(`Encounter ${encounterName} deleted.`);
             }
         }
