@@ -9,13 +9,14 @@ module ImprovedInitiative {
 
         FilteredEncounters = ko.pureComputed<string []>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                index = this.library.Index();
+                index = this.library.Index().map(i => i.CurrentName());
                  
             if (filter.length == 0) {
                 return index;
             }
 
-            return index.filter(name => name.toLocaleLowerCase().indexOf(filter) > -1);
+            //TODO: Use SearchHint for this filter and return listings
+            return index.filter(listing => listing.toLocaleLowerCase().indexOf(filter) > -1);
         });
 
         ClickEntry = (name: string) => this.encounterCommander.LoadEncounterByName(name);

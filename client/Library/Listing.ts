@@ -1,6 +1,6 @@
 module ImprovedInitiative {
     export type ListingSource = "server" | "account" | "localStorage";
-    
+
     export function DedupeByRankAndFilterListings<T extends Listing<any>>(parentSubset: T[], filter: string) {
         const byName: T[] = [];
         const bySearchHint: T[] = [];
@@ -18,7 +18,7 @@ module ImprovedInitiative {
                 dedupedStatBlocks[newListing.Name] = newListing;
             }
         })
-        
+
         Object.keys(dedupedStatBlocks).sort().forEach(i => {
             const listing = dedupedStatBlocks[i];
             if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
@@ -31,7 +31,7 @@ module ImprovedInitiative {
 
         return byName.concat(bySearchHint);
     }
-    
+
     export interface Listing<T extends { Name?: string }> {
         Value: KnockoutObservable<T>;
         Id: string;
@@ -49,23 +49,28 @@ module ImprovedInitiative {
             public Link: string,
             public Source: ListingSource,
             value?: T
-        ) { 
+        ) {
             if (value) {
                 this.Value(value);
             }
-         }
+        }
 
         Value = ko.observable<T>();
-        
+
         GetAsync(callback: (item: T) => void) {
             if (this.Value()) {
-                callback(this.Value());
-            } else {
-                $.getJSON(this.Link).done(item => {
-                    this.Value(item);
-                    callback(this.Value());
-                });
+                return callback(this.Value());
             }
+
+            if (this.Source === "localStorage") {
+                return callback(Store.Load(this.Link, this.Id));
+            }
+
+            $.getJSON(this.Link).done(item => {
+                this.Value(item);
+                callback(this.Value());
+            });
+
         }
 
         CurrentName = ko.computed(() => {

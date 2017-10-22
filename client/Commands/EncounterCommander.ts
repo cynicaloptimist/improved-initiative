@@ -27,7 +27,7 @@ module ImprovedInitiative {
         }
 
         private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-            var listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, null, "localStorage", newStatBlock);
+            const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, store, "localStorage", newStatBlock);
             Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
                 this.libraries.PCs.StatBlocks.unshift(listing);
@@ -193,7 +193,7 @@ module ImprovedInitiative {
                     const encounterName = response['encounterName'];
                     if (encounterName) {
                         const savedEncounter = this.tracker.Encounter.Save(encounterName);
-                        this.libraries.Encounters.Save(encounterName, savedEncounter);
+                        this.libraries.Encounters.Save(savedEncounter);
                         this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     }
                 });
@@ -201,9 +201,11 @@ module ImprovedInitiative {
         }
 
         LoadEncounterByName = (encounterName: string) => {
-            const encounter = this.libraries.Encounters.Get(encounterName);
-            this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
-            this.tracker.EventLog.AddEvent(`Encounter loaded.`);
+            const encounter = this.libraries.Encounters.Get(encounterName,
+                encounter => {
+                    this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
+                    this.tracker.EventLog.AddEvent(`Encounter loaded.`);
+                });
         }
 
         DeleteSavedEncounter = (encounterName: string) => {
