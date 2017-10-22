@@ -9,7 +9,7 @@ module ImprovedInitiative {
             const localStatBlocks = Store.List(Store.StatBlocks);
             localStatBlocks.forEach(id => {
                 var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-                this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, null, "localStorage", statBlock));
+                this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage", statBlock));
             });
             Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
         }

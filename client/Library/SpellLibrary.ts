@@ -15,7 +15,7 @@ module ImprovedInitiative {
             const customSpells = Store.List(Store.Spells);
             customSpells.forEach(id => {
                 var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-                this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell));
+                this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell));
             });
 
             Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
@@ -32,7 +32,7 @@ module ImprovedInitiative {
 
         public AddOrUpdateSpell = (spell: Spell) => {
             this.Spells.remove(listing => listing.Source === "localStorage" && listing.Id === spell.Id);
-            const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell);
+            const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
             this.Spells.unshift(listing);
             Store.Save(Store.Spells, spell.Id, spell);
         }
