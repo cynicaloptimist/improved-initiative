@@ -16,13 +16,13 @@ module ImprovedInitiative {
             });
         }
 
-        private deleteSavedStatBlock = (library: string, id: string) => {
-            Store.Delete(library, id);
+        private deleteSavedStatBlock = (library: string, statBlockId: string) => {
+            Store.Delete(library, statBlockId);
             if (library == Store.PlayerCharacters) {
-                this.libraries.PCs.StatBlocks.remove(c => c.Id == id);
+                this.libraries.PCs.DeleteListing(statBlockId);
             }
             if (library == Store.StatBlocks) {
-                this.libraries.NPCs.StatBlocks.remove(c => c.Id == id);
+                this.libraries.NPCs.DeleteListing(statBlockId);
             }
         }
 

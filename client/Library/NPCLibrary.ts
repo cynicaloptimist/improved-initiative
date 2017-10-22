@@ -19,5 +19,10 @@ module ImprovedInitiative {
                 return new Listing<StatBlock>(c.Id, c.Name, c.SearchHint, c.Link, source);
             }));
         }
+
+        DeleteListing = (id: string) => {
+            this.StatBlocks.remove(s => s.Id == id);
+            new AccountClient().DeleteStatBlock(id);
+        }
     }
 }
