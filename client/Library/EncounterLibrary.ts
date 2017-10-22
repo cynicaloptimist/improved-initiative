@@ -5,7 +5,7 @@ module ImprovedInitiative {
         constructor() {
             Store.List(Store.SavedEncounters).forEach(e => {
                 const encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e);
-                const listing = listingFrom(encounter);
+                const listing = listingFrom(encounter, e);
                 this.Index.push(listing);
             });
 
@@ -33,11 +33,11 @@ module ImprovedInitiative {
         }
     }
 
-    function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>) {
-        const encounterId = probablyUniqueString();
+    function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId?: string) {
+        const listingId = encounterId || probablyUniqueString();
         const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
         return new Listing<SavedEncounter<SavedCombatant>>(
-            encounterId,
+            listingId,
             savedEncounter.Name,
             combatantNames,
             Store.SavedEncounters,
