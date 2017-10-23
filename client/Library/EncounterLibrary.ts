@@ -19,11 +19,13 @@ module ImprovedInitiative {
                 this.Encounters.push(listing);
             }
             
+            new AccountClient().SaveEncounter(savedEncounter);
             Store.Save(Store.SavedEncounters, listing.Id, savedEncounter);
         }
 
         Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
             this.Encounters.remove(listing);
+            new AccountClient().DeleteEncounter(listing.Id);
             Store.Delete(Store.SavedEncounters, listing.Id);
         }
     }

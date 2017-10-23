@@ -53,15 +53,23 @@ module ImprovedInitiative {
         }
 
         DeleteStatBlock(statBlockId: string) {
-            deleteEntity(statBlockId, 'statblocks')
+            deleteEntity(statBlockId, 'statblocks');
         }
-        
+
         SavePlayerCharacter(playerCharacter: StatBlock) {
             saveEntity<StatBlock>(playerCharacter, 'playercharacters');
         }
 
         DeletePlayerCharacter(statBlockId: string) {
-            deleteEntity(statBlockId, 'playercharacters')
+            deleteEntity(statBlockId, 'playercharacters');
+        }
+
+        SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
+            saveEntity<SavedEncounter<SavedCombatant>>(encounter, 'encounters');
+        }
+
+        DeleteEncounter(encounterId: string) {
+            deleteEntity(encounterId, 'encounters');
         }
     }
 }
