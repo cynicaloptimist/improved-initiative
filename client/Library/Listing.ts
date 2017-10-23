@@ -32,6 +32,13 @@ module ImprovedInitiative {
         return byName.concat(bySearchHint);
     }
 
+    export interface ServerListing {
+        Id: string;
+        Link: string;
+        Name: string;
+        SearchHint: string;
+    }
+    
     export interface Listing<T extends { Name?: string }> {
         Value: KnockoutObservable<T>;
         Id: string;
