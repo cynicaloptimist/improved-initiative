@@ -27,6 +27,7 @@ module ImprovedInitiative {
         DisplayTurnTimer?: boolean;
         AllowPlayerSuggestions?: boolean;
         Combatants: T[];
+        Version: string;
     }
 
     export class Encounter {
@@ -265,9 +266,10 @@ module ImprovedInitiative {
                             DurationCombatantId: t.DurationCombatantId
                         })),
                         Hidden: c.Hidden(),
-                        InterfaceVersion: "1.0"
+                        InterfaceVersion: "1.0.0"
                     }
-                })
+                }),
+                Version: "1.0.0"
             };
         }
 
@@ -290,7 +292,8 @@ module ImprovedInitiative {
                         }
                         return true;
                     })
-                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c))
+                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c)),
+                Version: "1.0.0"
             };
         }
 
