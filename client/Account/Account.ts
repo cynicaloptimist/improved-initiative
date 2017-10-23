@@ -3,5 +3,6 @@ module ImprovedInitiative {
         settings: Settings;
         statblocks: ServerListing[];
         playercharacters: ServerListing[];
+        encounters: ServerListing[];
     }
 }

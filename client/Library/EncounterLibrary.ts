@@ -12,6 +12,13 @@ module ImprovedInitiative {
             Metrics.TrackEvent("SavedEncounters", { Count: this.Encounters().length.toString() });
         }
 
+        AddListings(listings: ServerListing[], source: ListingSource) {
+            ko.utils.arrayPushAll<Listing<SavedEncounter<SavedCombatant>>>(
+                this.Encounters,
+                listings.map(l => new Listing(l.Id, l.Name, l.SearchHint, l.Link, source))
+            );
+        }
+
         Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
             const listing = listingFrom(savedEncounter);
 

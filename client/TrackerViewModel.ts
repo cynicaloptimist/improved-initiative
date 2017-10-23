@@ -45,6 +45,10 @@ module ImprovedInitiative {
             if (account.playercharacters) {
                 this.Libraries.PCs.AddListings(account.playercharacters, "account");
             }
+
+            if (account.encounters) {
+                this.Libraries.Encounters.AddListings(account.encounters, "account");
+            }
         }
 
         Socket = io();
