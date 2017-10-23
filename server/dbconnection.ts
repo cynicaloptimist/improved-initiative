@@ -71,7 +71,8 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                     const userWithListings = {
                         settings: user.settings,
                         statblocks: getStatBlockListings(user.statblocks),
-                        playercharacters: getPlayerCharacterListings(user.playercharacters)
+                        playercharacters: getPlayerCharacterListings(user.playercharacters),
+                        encounters: getEncounterListings(user.encounters)
                     }
 
                     callBack(userWithListings);
@@ -101,6 +102,19 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
             SearchHint: c.Type,
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
+        }
+    });
+}
+
+function getEncounterListings(encounters: { [key: string]: LibraryItem }): Listing [] {
+    return Object.keys(encounters).map(key => {
+        const c = encounters[key];
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            SearchHint: "",
+            Version: c.Version,
+            Link: `/my/encounters/${c.Id}`,
         }
     });
 }
