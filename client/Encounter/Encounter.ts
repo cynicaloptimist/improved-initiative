@@ -21,6 +21,7 @@ module ImprovedInitiative {
     }
 
     export interface SavedEncounter<T> {
+        Id: string;
         Name: string;
         ActiveCombatantId: string;
         RoundCounter?: number;
@@ -116,7 +117,7 @@ module ImprovedInitiative {
 
         private EmitEncounter = () => {
             this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
-            Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
+            Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
         }
 
         QueueEmitEncounter() {
@@ -242,10 +243,11 @@ module ImprovedInitiative {
             this.durationTags.push(tag);
         }
 
-        Save: (name?: string) => SavedEncounter<SavedCombatant> = (name?: string) => {
+        Save: (name: string) => SavedEncounter<SavedCombatant> = (name?: string) => {
             var activeCombatant = this.ActiveCombatant();
             return {
-                Name: name || this.EncounterId,
+                Name: name,
+                Id: this.EncounterId || probablyUniqueString(),
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 Combatants: this.Combatants().map<SavedCombatant>(c => {
@@ -273,11 +275,12 @@ module ImprovedInitiative {
             };
         }
 
-        SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
+        SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
             var hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
             var activeCombatant = this.ActiveCombatant();
             return {
-                Name: name || this.EncounterId,
+                Name: this.EncounterId,
+                Id: this.EncounterId,
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 DisplayTurnTimer: CurrentSettings().PlayerView.DisplayTurnTimer,
