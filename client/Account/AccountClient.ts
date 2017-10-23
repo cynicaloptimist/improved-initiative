@@ -55,6 +55,7 @@ module ImprovedInitiative {
         DeleteStatBlock(statBlockId: string) {
             deleteEntity(statBlockId, 'statblocks')
         }
+        
         SavePlayerCharacter(playerCharacter: StatBlock) {
             saveEntity<StatBlock>(playerCharacter, 'playercharacters');
         }

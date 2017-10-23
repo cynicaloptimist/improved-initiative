@@ -200,18 +200,17 @@ module ImprovedInitiative {
             this.tracker.PromptQueue.Add(prompt);
         }
 
-        LoadEncounterByName = (encounterName: string) => {
-            const encounter = this.libraries.Encounters.Get(encounterName,
-                encounter => {
-                    this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
-                    this.tracker.EventLog.AddEvent(`Encounter loaded.`);
-                });
+        LoadEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+            listing.GetAsync(encounter => {
+                this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
+                this.tracker.EventLog.AddEvent(`Encounter loaded.`);
+            });
         }
 
-        DeleteSavedEncounter = (encounterName: string) => {
-            if (confirm(`Delete saved encounter "${encounterName}"? This cannot be undone.`)) {
-                this.libraries.Encounters.DeleteByName(encounterName);
-                this.tracker.EventLog.AddEvent(`Encounter ${encounterName} deleted.`);
+        DeleteSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+            if (confirm(`Delete saved encounter "${listing.CurrentName()}"? This cannot be undone.`)) {
+                this.libraries.Encounters.Delete(listing);
+                this.tracker.EventLog.AddEvent(`Encounter ${listing.CurrentName()} deleted.`);
             }
         }
     }

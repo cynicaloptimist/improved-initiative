@@ -7,20 +7,27 @@ module ImprovedInitiative {
 
         LibraryFilter = ko.observable("");
 
-        FilteredEncounters = ko.pureComputed<string []>(() => {
-            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                index = this.library.Index().map(i => i.CurrentName());
-                 
-            if (filter.length == 0) {
-                return index;
+        private filterCache: KeyValueSet<Listing<SavedEncounter<SavedCombatant>>[]> = {};
+        private clearCache = () => this.filterCache = {};
+
+        FilteredEncounters = ko.pureComputed<Listing<SavedEncounter<SavedCombatant>> []>(() => {
+            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase();
+
+            if (this.filterCache[filter]) {
+                return this.filterCache[filter];
             }
 
-            //TODO: Use SearchHint for this filter and return listings
-            return index.filter(listing => listing.toLocaleLowerCase().indexOf(filter) > -1);
+            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || this.library.Encounters();
+
+            const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
+
+            this.filterCache[filter] = finalList;
+            
+            return finalList;
         });
 
-        ClickEntry = (name: string) => this.encounterCommander.LoadEncounterByName(name);
-        ClickDelete = (name: string) => this.encounterCommander.DeleteSavedEncounter(name);
+        ClickEntry = (listing: Listing<SavedEncounter<SavedCombatant>>) => this.encounterCommander.LoadEncounter(listing);
+        ClickDelete = (listing: Listing<SavedEncounter<SavedCombatant>>) => this.encounterCommander.DeleteSavedEncounter(listing);
         ClickHide = () => this.encounterCommander.HideLibraries();
         ClickAdd = () => this.encounterCommander.SaveEncounter();
     }
