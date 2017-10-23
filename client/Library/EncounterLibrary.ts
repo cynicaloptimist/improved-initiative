@@ -23,7 +23,7 @@ module ImprovedInitiative {
         }
 
         Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
-            this.Encounters.remove(listing)
+            this.Encounters.remove(listing);
             Store.Delete(Store.SavedEncounters, listing.Id);
         }
     }

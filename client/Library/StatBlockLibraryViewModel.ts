@@ -16,7 +16,7 @@ module ImprovedInitiative {
                 }
             });
             this.library.StatBlocks.subscribe(this.clearCache);
-         }
+        }
 
         LibraryFilter = ko.observable("");
 
@@ -24,18 +24,19 @@ module ImprovedInitiative {
         private clearCache = () => this.filterCache = {};
 
         FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
-            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase();
+            const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+                statblocks = this.library.StatBlocks();
 
             if (this.filterCache[filter]) {
                 return this.filterCache[filter];
             }
 
-            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || this.library.StatBlocks();
+            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || statblocks;
 
             const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
 
             this.filterCache[filter] = finalList;
-            
+
             return finalList;
         });
 
