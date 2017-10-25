@@ -52,16 +52,6 @@
     <!--/ko -->
 </div>
 <div data-bind="visible: CurrentTab() == 'options'" class="tab options">
-    <h3>Data</h3>
-    <p>Export your user data as JSON:
-        <span class="button" data-bind="click: ExportData">Download File</span>
-    </p>
-    <p>Import an exported user data file:
-        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
-    </p>
-    <p>Import statblocks from DnDAppFile:
-        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
-    </p>
     <h3>Rules</h3>
     <p>Roll monster HP when adding to combat:
         <input type="checkbox" data-bind="checked: RollHp" />
@@ -100,6 +90,17 @@
     </p>
 </div>
 <div data-bind="visible: CurrentTab() == 'account'" class="tab account">
+    <h3>Local Data</h3>
+    <p>Export your user data as JSON:
+        <span class="button" data-bind="click: ExportData">Download File</span>
+    </p>
+    <p>Import an exported user data file:
+        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
+    </p>
+    <p>Import statblocks from DnDAppFile:
+        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
+    </p>
+    <h3>Account Sync</h3>
     <!-- ko if: IsLoggedIn -->
         <!-- ko if: HasStorage -->
             <p>Account Sync is enabled. Thank you for your pledge!</p>
