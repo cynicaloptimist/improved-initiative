@@ -72,6 +72,7 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                         settings: user.settings,
                         statblocks: getStatBlockListings(user.statblocks),
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
+                        spells: getSpellListings(user.spells),
                         encounters: getEncounterListings(user.encounters)
                     }
 
@@ -106,13 +107,26 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
     });
 }
 
-function getEncounterListings(encounters: { [key: string]: LibraryItem }): Listing [] {
+function getSpellListings(spells: { [key: string]: LibraryItem }): Listing [] {
+    return Object.keys(spells).map(key => {
+        const c = spells[key];
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            SearchHint: "",//TODO
+            Version: c.Version,
+            Link: `/my/spells/${c.Id}`,
+        }
+    });
+}
+
+function getEncounterListings(encounters: { [key: string]: LibraryItem }): Listing[] {
     return Object.keys(encounters).map(key => {
         const c = encounters[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: "",
+            SearchHint: "",//TODO
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
         }
