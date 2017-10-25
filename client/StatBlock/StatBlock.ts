@@ -24,9 +24,7 @@ module ImprovedInitiative {
         Usage?: string;
     }
 
-    export interface StatBlock {
-        Id: string;
-        Name: string;
+    export interface StatBlock extends Listable {
         Source: string;
         Type: string;
         HP: ValueAndNotes;
@@ -49,7 +47,6 @@ module ImprovedInitiative {
         LegendaryActions: NameAndContent[];
         Description: string;
         Player: string;
-        Version: string;
     }
 
     export class StatBlock {

@@ -20,15 +20,12 @@ module ImprovedInitiative {
         DurationCombatantId: string;
     }
 
-    export interface SavedEncounter<T> {
-        Id: string;
-        Name: string;
+    export interface SavedEncounter<T> extends Listable {
         ActiveCombatantId: string;
         RoundCounter?: number;
         DisplayTurnTimer?: boolean;
         AllowPlayerSuggestions?: boolean;
         Combatants: T[];
-        Version: string;
     }
 
     export class Encounter {

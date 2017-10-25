@@ -38,8 +38,14 @@ module ImprovedInitiative {
         Name: string;
         SearchHint: string;
     }
+
+    export interface Listable {
+        Id: string;
+        Version: string;
+        Name: string;
+    }
     
-    export interface Listing<T extends { Name?: string }> {
+    export interface Listing<T extends Listable> {
         Value: KnockoutObservable<T>;
         Id: string;
         Link: string;
@@ -48,7 +54,7 @@ module ImprovedInitiative {
         SearchHint: string;
     }
 
-    export class Listing<T extends { Name?: string }> {
+    export class Listing<T extends Listable> {
         constructor(
             public Id: string,
             public Name: string,
