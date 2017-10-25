@@ -36,11 +36,8 @@ module ImprovedInitiative {
         CombatantCommands: Command[];
         CurrentTab = ko.observable<string>('about');
         RollHp: KnockoutObservable<boolean>;
+        AccountViewModel = new AccountViewModel(this.libraries);
 
-        IsLoggedIn = env.IsLoggedIn;
-        HasStorage = env.HasStorage;
-        PatreonLoginUrl = env.PatreonLoginUrl;
-        
         ExportData = () => {
             var blob = Store.ExportAll();
             saveAs(blob, 'improved-initiative.json');
@@ -103,6 +100,7 @@ module ImprovedInitiative {
         constructor(
             private encounterCommander: EncounterCommander,
             private combatantCommander: CombatantCommander,
+            private libraries: Libraries,
             private settingsVisible: KnockoutObservable<boolean>,
             private repeatTutorial: () => void,
         ) {
