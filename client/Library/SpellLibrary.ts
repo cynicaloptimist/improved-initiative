@@ -15,7 +15,7 @@ module ImprovedInitiative {
             const customSpells = Store.List(Store.Spells);
             customSpells.forEach(id => {
                 var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-                this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell));
+                this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage"));
             });
 
             Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
