@@ -240,11 +240,11 @@ module ImprovedInitiative {
             this.durationTags.push(tag);
         }
 
-        Save: (name: string) => SavedEncounter<SavedCombatant> = (name?: string) => {
+        Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
             var activeCombatant = this.ActiveCombatant();
             return {
                 Name: name,
-                Id: this.EncounterId || probablyUniqueString(),
+                Id: this.EncounterId || Encounter.UpdateNameForId(name),
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 Combatants: this.Combatants().map<SavedCombatant>(c => {
@@ -295,6 +295,10 @@ module ImprovedInitiative {
                     .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c)),
                 Version: "1.0.0"
             };
+        }
+
+        static UpdateNameForId(name: string) {
+            return name.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
         }
 
         private static updateLegacySavedCreature = savedCreature => {
