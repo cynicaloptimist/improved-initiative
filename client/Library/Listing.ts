@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export type ListingSource = "server" | "account" | "localStorage";
 
-    export function DedupeByRankAndFilterListings<T extends Listing<any>>(parentSubset: T[], filter: string) {
+    export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(parentSubset: T[], filter: string) {
         const byName: T[] = [];
         const bySearchHint: T[] = [];
         const dedupedStatBlocks: KeyValueSet<T> = {};
