@@ -193,6 +193,10 @@ export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId
         throw "Entity missing Id or Version";
     }
 
+    if (entity.Id.indexOf(".") > -1) {
+        throw "Entity Id cannot contain .";
+    }
+
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection<User>("users");
