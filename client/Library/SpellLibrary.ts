@@ -35,11 +35,13 @@ module ImprovedInitiative {
             const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
             this.Spells.unshift(listing);
             Store.Save(Store.Spells, spell.Id, spell);
+            new AccountClient().SaveSpell(spell);
         }
 
         public DeleteSpellById = (id: string) => {
             this.Spells.remove(listing => listing.Id === id);
             Store.Delete(Store.Spells, id);
+            new AccountClient().DeleteSpell(id);
         }
     }
 }

@@ -1,9 +1,5 @@
 
 module ImprovedInitiative {
-    function post(url: string, data: object) {
-        return ;
-    }
-
     function saveEntity<T extends object>(entity: T, entityType: string) {
         if (!env.HasStorage) {
             return false;
@@ -70,6 +66,14 @@ module ImprovedInitiative {
 
         DeleteEncounter(encounterId: string) {
             deleteEntity(encounterId, 'encounters');
+        }
+
+        SaveSpell(spell: Spell) {
+            saveEntity<Spell>(spell, 'spells');
+        }
+
+        DeleteSpell(spellId: string) {
+            deleteEntity(spellId, 'spells');
         }
     }
 }
