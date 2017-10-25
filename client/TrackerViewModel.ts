@@ -46,6 +46,10 @@ module ImprovedInitiative {
                 this.Libraries.PCs.AddListings(account.playercharacters, "account");
             }
 
+            if (account.spells) {
+                this.Libraries.Spells.AddListings(account.spells, "account");
+            }
+
             if (account.encounters) {
                 this.Libraries.Encounters.AddListings(account.encounters, "account");
             }

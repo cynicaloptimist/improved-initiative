@@ -10,7 +10,7 @@ module ImprovedInitiative {
         });
 
         constructor() {
-            $.ajax("../spells/").done(this.addSpellListings);
+            $.ajax("../spells/").done(listings => this.AddListings(listings, "server"));
 
             const customSpells = Store.List(Store.Spells);
             customSpells.forEach(id => {
@@ -21,12 +21,9 @@ module ImprovedInitiative {
             Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
         }
 
-        private addSpellListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {
-            listings.sort((c1, c2) => {
-                return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
-            });
+        AddListings = (listings: ServerListing[], source: ListingSource) => {
             ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
-                return new Listing<Spell>(c.Id, c.Name, c.Keywords, c.Link, "server");
+                return new Listing<Spell>(c.Id, c.Name, c.SearchHint, c.Link, source);
             }));
         }
 
