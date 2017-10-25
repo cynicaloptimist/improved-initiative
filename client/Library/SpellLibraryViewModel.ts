@@ -3,29 +3,35 @@ module ImprovedInitiative {
         constructor(
             private encounterCommander: EncounterCommander,
             private library: SpellLibrary
-        ) { }
+        ) {
+            this.LibraryFilter.subscribe(n => {
+                if (n === "") {
+                    this.clearCache();
+                }
+            });
+            this.library.Spells.subscribe(this.clearCache);
+        }
 
         LibraryFilter = ko.observable("");
 
+        private filterCache: KeyValueSet<Listing<Spell>[]> = {};
+        private clearCache = () => this.filterCache = {};
+
         FilteredSpells = ko.pureComputed<Listing<Spell>[]>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                spellsWithFilterInName = [],
-                spellsWithFilterInKeywords = [];
-                 
-            if (filter.length == 0) {
-                return this.library.Spells();
+                spells = this.library.Spells();
+
+            if (this.filterCache[filter]) {
+                return this.filterCache[filter];
             }
 
-            this.library.Spells().forEach(c => {
-                if (c.CurrentName().toLocaleLowerCase().indexOf(filter) > -1) {
-                    spellsWithFilterInName.push(c);
-                    return;
-                }
-                if (c.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
-                    spellsWithFilterInKeywords.push(c);
-                }
-            })
-            return spellsWithFilterInName.concat(spellsWithFilterInKeywords);
+            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || spells;
+
+            const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
+
+            this.filterCache[filter] = finalList;
+
+            return finalList;
         });
 
         ClickEntry = (entry: Listing<Spell>) => this.encounterCommander.ReferenceSpell(entry);
