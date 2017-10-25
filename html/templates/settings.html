@@ -112,6 +112,9 @@
                     <li>Encounters: <span data-bind="text: SyncedEncounters"></span></li>
                 </ul>
                 <span class="button" data-bind="click: SyncAll">Backup and Sync local data</span>
+                <!-- ko if: SyncError -->
+                <pre data-bind="text: SyncError"></pre>
+                <!-- /ko -->
             <!-- /ko -->
             <!-- ko ifnot: HasStorage -->
                 <p>You're logged in with Patreon, but you're not at the <a href="https://www.patreon.com/bePatron?c=716070&rid=1322253" target="_blank">Account Sync</a> reward level.</p>

@@ -16,6 +16,15 @@ module ImprovedInitiative {
         SyncedSpells = ko.computed(() => getCounts(this.libraries.Spells.Spells()));
         SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
 
-        SyncAll = () => alert("not implemented");
+        SyncAll() {
+            this.SyncError("");
+            var blob = Store.ExportAll();
+            //saveAs(blob, 'improved-initiative.json');
+            new AccountClient().SaveAll(this.libraries, err => {
+                this.SyncError(this.SyncError() + "\n" + JSON.stringify(err));
+            });
+        };
+
+        SyncError = ko.observable("");
     }
 }
