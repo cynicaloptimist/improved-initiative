@@ -1,16 +1,16 @@
 module ImprovedInitiative {
-    export type ListingSource = "server" | "account" | "localStorage";
+    export type ListingOrigin = "server" | "account" | "localStorage";
 
     export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(parentSubset: T[], filter: string) {
         const byName: T[] = [];
         const bySearchHint: T[] = [];
         const dedupedStatBlocks: KeyValueSet<T> = {};
-        const sourceRankings: ListingSource[] = ["account", "localStorage", "server"];
+        const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
 
         parentSubset.forEach(newListing => {
             const currentListing = dedupedStatBlocks[newListing.Name];
             if (currentListing) {
-                const hasBetterSource = (sourceRankings.indexOf(newListing.Source) < sourceRankings.indexOf(currentListing.Source));
+                const hasBetterSource = (sourceRankings.indexOf(newListing.Origin) < sourceRankings.indexOf(currentListing.Origin));
                 if (hasBetterSource) {
                     dedupedStatBlocks[newListing.Name] = newListing;
                 }
@@ -49,7 +49,7 @@ module ImprovedInitiative {
         Id: string;
         Link: string;
         Name: string;
-        Source: ListingSource;
+        Origin: ListingOrigin;
         SearchHint: string;
     }
 
@@ -59,7 +59,7 @@ module ImprovedInitiative {
             public Name: string,
             public SearchHint: string,
             public Link: string,
-            public Source: ListingSource,
+            public Origin: ListingOrigin,
             value?: T
         ) {
             if (value) {
@@ -76,7 +76,7 @@ module ImprovedInitiative {
                 return callback(this.value());
             }
 
-            if (this.Source === "localStorage") {
+            if (this.Origin === "localStorage") {
                 return callback(Store.Load(this.Link, this.Id));
             }
 

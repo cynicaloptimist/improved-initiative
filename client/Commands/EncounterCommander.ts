@@ -66,7 +66,7 @@ module ImprovedInitiative {
 
         EditStatBlock = (listing: Listing<StatBlock>) => {
             listing.GetAsync(statBlock => {
-                if (listing.Source === "server") {
+                if (listing.Origin === "server") {
                     var newId = probablyUniqueString();
                     this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
                 } else {

@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     function getCounts<T extends Listable>(items: Listing<T>[]) {
-        const localCount = items.filter(c => c.Source === "localStorage").length;
-        const accountCount = items.filter(c => c.Source === "account").length;
+        const localCount = items.filter(c => c.Origin === "localStorage").length;
+        const accountCount = items.filter(c => c.Origin === "account").length;
         return `${localCount} local, ${accountCount} synced`;
     }
     export class AccountViewModel {

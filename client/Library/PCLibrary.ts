@@ -25,7 +25,7 @@ module ImprovedInitiative {
             });
         }
 
-        AddListings = (listings: ServerListing[], source: ListingSource) => {
+        AddListings = (listings: ServerListing[], source: ListingOrigin) => {
             ko.utils.arrayPushAll<Listing<StatBlock>>(this.StatBlocks, listings.map(c => {
                 return new Listing<StatBlock>(c.Id, c.Name, c.SearchHint, c.Link, source);
             }));

@@ -21,14 +21,14 @@ module ImprovedInitiative {
             Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
         }
 
-        AddListings = (listings: ServerListing[], source: ListingSource) => {
+        AddListings = (listings: ServerListing[], source: ListingOrigin) => {
             ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
                 return new Listing<Spell>(c.Id, c.Name, c.SearchHint, c.Link, source);
             }));
         }
 
         public AddOrUpdateSpell = (spell: Spell) => {
-            this.Spells.remove(listing => listing.Source === "localStorage" && listing.Id === spell.Id);
+            this.Spells.remove(listing => listing.Origin === "localStorage" && listing.Id === spell.Id);
             const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
             this.Spells.unshift(listing);
             Store.Save(Store.Spells, spell.Id, spell);

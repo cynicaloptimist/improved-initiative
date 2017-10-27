@@ -2,7 +2,7 @@
 <ul class="entries" data-bind="foreach: FilteredSpells">
     <li>
         <span class="fa" data-bind="click: $parent.ClickEntry, text: Name"></span>
-        <!-- ko if: Source === "account" -->
+        <!-- ko if: Origin === "account" -->
         <span class="fa fa-cloud" title="Synced with your Patreon account"></span>
         <!-- /ko -->
         <span class="fa fa-edit" data-bind="click: $parent.ClickEdit"></span>
