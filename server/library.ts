@@ -30,26 +30,27 @@ export interface Listing {
     SearchHint: string;
 }
 
-export interface StatBlock {
-    Version: string;
-    Name: string;
-    Id: string;
+export interface StatBlock extends LibraryItem {
     Type: string;
-    Source: string;
 }
 
 export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
-export interface Spell {
-    Version: string;
-    Name: string;
-    Id: string;
+export interface Spell extends LibraryItem {
     School: string;
     Classes: string[];
-    Source: string;
 }
 
 export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
+
+interface Combatant {
+    Alias: string;
+}
+export interface SavedEncounter extends LibraryItem {
+    Combatants: Combatant [];
+}
+
+export const GetEncounterKeywords = (encounter: SavedEncounter) => encounter.Combatants.map(c => c.Alias).join(" "); 
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
