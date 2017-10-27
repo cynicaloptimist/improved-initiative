@@ -90,7 +90,7 @@ module ImprovedInitiative {
     function sanitizeItems(items: Listable[]) {
         return items.map(i => {
             if (!i.Id) {
-                i.Id = Encounter.UpdateNameForId(i.Name);
+                i.Id = SavedEncounter.UpdateNameForId(i.Name);
             } else {
                 i.Id = i.Id.replace(".", "_");
             }
