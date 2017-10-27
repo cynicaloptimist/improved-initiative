@@ -244,7 +244,7 @@ module ImprovedInitiative {
             var activeCombatant = this.ActiveCombatant();
             return {
                 Name: name,
-                Id: this.EncounterId || Encounter.UpdateNameForId(name),
+                Id: Encounter.UpdateNameForId(name),
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 Combatants: this.Combatants().map<SavedCombatant>(c => {
