@@ -4,7 +4,7 @@ module ImprovedInitiative {
 
         constructor() {
             Store.List(Store.SavedEncounters).forEach(e => {
-                const encounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e);
+                const encounter = SavedEncounter.UpdateLegacySavedEncounter(Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e));
                 const listing = listingFrom(encounter, e);
                 this.Encounters.push(listing);
             });
