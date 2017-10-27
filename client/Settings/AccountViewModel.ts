@@ -19,7 +19,7 @@ module ImprovedInitiative {
         SyncAll() {
             this.SyncError("");
             var blob = Store.ExportAll();
-            //saveAs(blob, 'improved-initiative.json');
+            saveAs(blob, 'improved-initiative.json');
             new AccountClient().SaveAll(this.libraries, err => {
                 this.SyncError(this.SyncError() + "\n" + JSON.stringify(err));
             });
