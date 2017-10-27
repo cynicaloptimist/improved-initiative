@@ -41,7 +41,7 @@ module ImprovedInitiative {
         private saveEditedStatBlock = (listing: Listing<StatBlock>) =>
             (store: string, statBlockId: string, newStatBlock: StatBlock) => {
                 Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-                listing.Value(newStatBlock);
+                listing.SetValue(newStatBlock);
                 if (store == Store.PlayerCharacters) {
                     this.accountClient.SavePlayerCharacter(newStatBlock);
                 } else {

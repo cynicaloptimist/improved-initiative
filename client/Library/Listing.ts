@@ -46,7 +46,6 @@ module ImprovedInitiative {
     }
     
     export interface Listing<T extends Listable> {
-        Value: KnockoutObservable<T>;
         Id: string;
         Link: string;
         Name: string;
@@ -64,30 +63,31 @@ module ImprovedInitiative {
             value?: T
         ) {
             if (value) {
-                this.Value(value);
+                this.value(value);
             }
         }
 
-        Value = ko.observable<T>();
+        private value = ko.observable<T>();
 
-        GetAsync(callback: (item: T) => void) {
-            if (this.Value()) {
-                return callback(this.Value());
+        SetValue = value => this.value(value);
+
+        GetAsync(callback: (item: T) => any) {
+            if (this.value()) {
+                return callback(this.value());
             }
 
             if (this.Source === "localStorage") {
                 return callback(Store.Load(this.Link, this.Id));
             }
 
-            $.getJSON(this.Link).done(item => {
-                this.Value(item);
-                callback(this.Value());
+            return $.getJSON(this.Link).done(item => {
+                this.value(item);
+                return callback(item);
             });
-
         }
 
         CurrentName = ko.computed(() => {
-            const current = this.Value();
+            const current = this.value();
             if (current !== undefined) {
                 return current.Name || this.Name;
             }
