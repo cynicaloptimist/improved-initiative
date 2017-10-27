@@ -82,7 +82,8 @@ module ImprovedInitiative {
         const local = items.filter(i => i.Source === "localStorage");
         const synced = items.filter(i => i.Source === "account");
         const unsynced = local.filter(l => !synced.some(s => s.Name == l.Name));
-        const unsyncedItems = unsynced.map(l => l.Value()).filter(v => v);
+        const unsyncedItems = [];
+        unsynced.forEach(l => l.GetAsync(i => unsyncedItems.push(i)));
         return unsyncedItems;
     }
 
