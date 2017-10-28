@@ -2,7 +2,7 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING
 
-import { Listing, StatBlock, LibraryItem } from "./library";
+import * as L from "./library";
 import { User } from "./user";
 
 export const initialize = () => {
@@ -81,52 +81,52 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): Listing [] {
+function getStatBlockListings(statBlocks: { [key: string]: L.StatBlock }): L.Listing [] {
     return Object.keys(statBlocks).map(key => {
         const c = statBlocks[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: c.Type,
+            SearchHint: L.GetStatBlockKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
         }
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): Listing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: L.StatBlock }): L.Listing [] {
     return Object.keys(playerCharacters).map(key => {
         const c = playerCharacters[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: c.Type,
+            SearchHint: L.GetStatBlockKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
         }
     });
 }
 
-function getSpellListings(spells: { [key: string]: LibraryItem }): Listing [] {
+function getSpellListings(spells: { [key: string]: L.Spell }): L.Listing [] {
     return Object.keys(spells).map(key => {
         const c = spells[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: "",//TODO
+            SearchHint: L.GetSpellKeywords(c),//TODO
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
         }
     });
 }
 
-function getEncounterListings(encounters: { [key: string]: LibraryItem }): Listing[] {
+function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): L.Listing[] {
     return Object.keys(encounters).map(key => {
         const c = encounters[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: "",//TODO
+            SearchHint: L.GetEncounterKeywords(c),//TODO
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
         }
@@ -197,7 +197,7 @@ export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId
         });
 }
 
-export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
+export function saveEntity<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -227,7 +227,7 @@ export function saveEntity<T extends LibraryItem>(entityPath: EntityPath, userId
         });
 }
 
-export function saveEntitySet<T extends LibraryItem>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
+export function saveEntitySet<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
