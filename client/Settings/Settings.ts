@@ -86,7 +86,7 @@ module ImprovedInitiative {
         newSettings.Commands.forEach(b => {
             const matchedCommands = commands.filter(c => c.Description == b.Name);
             if (matchedCommands.length !== 1) {
-                throw `Couldn't bind command: ${b.Name}`;
+                console.warn(`Couldn't bind command: ${b.Name}`);
             }
             Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
             matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
