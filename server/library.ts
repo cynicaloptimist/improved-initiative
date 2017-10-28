@@ -50,7 +50,7 @@ export interface SavedEncounter extends LibraryItem {
     Combatants: Combatant [];
 }
 
-export const GetEncounterKeywords = (encounter: SavedEncounter) => encounter.Combatants.map(c => c.Alias).join(" "); 
+export const GetEncounterKeywords = (encounter: SavedEncounter) => (encounter.Combatants || []).map(c => c.Alias).join(" "); 
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
