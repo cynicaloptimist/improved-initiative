@@ -23,39 +23,39 @@ module ImprovedInitiative {
         }
 
         SaveSettings(settings: Settings) {
-            saveEntity<Settings>(settings, 'settings');
+            return saveEntity<Settings>(settings, 'settings');
         }
 
         SaveStatBlock(statBlock: StatBlock) {
-            saveEntity<StatBlock>(statBlock, 'statblocks');
+            return saveEntity<StatBlock>(statBlock, 'statblocks');
         }
 
         DeleteStatBlock(statBlockId: string) {
-            deleteEntity(statBlockId, 'statblocks');
+            return deleteEntity(statBlockId, 'statblocks');
         }
 
         SavePlayerCharacter(playerCharacter: StatBlock) {
-            saveEntity<StatBlock>(playerCharacter, 'playercharacters');
+            return saveEntity<StatBlock>(playerCharacter, 'playercharacters');
         }
 
         DeletePlayerCharacter(statBlockId: string) {
-            deleteEntity(statBlockId, 'playercharacters');
+            return deleteEntity(statBlockId, 'playercharacters');
         }
 
         SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
-            saveEntity<SavedEncounter<SavedCombatant>>(encounter, 'encounters');
+            return saveEntity<SavedEncounter<SavedCombatant>>(encounter, 'encounters');
         }
 
         DeleteEncounter(encounterId: string) {
-            deleteEntity(encounterId, 'encounters');
+            return deleteEntity(encounterId, 'encounters');
         }
 
         SaveSpell(spell: Spell) {
-            saveEntity<Spell>(spell, 'spells');
+            return saveEntity<Spell>(spell, 'spells');
         }
 
         DeleteSpell(spellId: string) {
-            deleteEntity(spellId, 'spells');
+            return deleteEntity(spellId, 'spells');
         }
     }
 
@@ -70,7 +70,7 @@ module ImprovedInitiative {
             data: JSON.stringify(entity),
             dataType: "json",
             contentType: "application/json"
-        }).then(s => console.log(`Saving ${entityType} entity: ${s}`));
+        });
     }
 
     function prepareForSync(items: Listing<Listable>[]) {
@@ -115,7 +115,7 @@ module ImprovedInitiative {
             dataType: "json",
             contentType: "application/json",
             error: (e, text) => errorsCallback(text)
-        }).then(s => console.log(`Saving ${entityType} entity: ${s}`));
+        });
     }
 
     function deleteEntity(entityId: string, entityType: string) {
@@ -126,6 +126,6 @@ module ImprovedInitiative {
         return $.ajax({
             type: "DELETE",
             url: `/my/${entityType}/${entityId}`,
-        }).done(s => console.log(`Deleting ${entityType} entity: ${s}`));
+        });
     }
 }
