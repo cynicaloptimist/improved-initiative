@@ -3,7 +3,7 @@ module ImprovedInitiative {
     export class AccountClient {
         GetAccount(callBack: (user: any) => void) {
             if (!env.HasStorage) {
-                return false;
+                return emptyPromise();
             }
             
             $.getJSON("/my").done(callBack);
@@ -13,7 +13,7 @@ module ImprovedInitiative {
 
         SaveAll(libraries: Libraries, errorsCallback: (error: any) => void) {
             if (!env.HasStorage) {
-                return false;
+                return emptyPromise();
             }
             
             saveEntitySet(prepareForSync(libraries.NPCs.StatBlocks()), "statblocks", errorsCallback);
@@ -63,9 +63,15 @@ module ImprovedInitiative {
         }
     }
 
+    function emptyPromise(): JQuery.jqXHR {
+        const d: any = $.Deferred(); //TODO: anything but this.
+        d.resolve(null);
+        return d;
+    }
+
     function saveEntity<T extends object>(entity: T, entityType: string) {
         if (!env.HasStorage) {
-            return null;
+            return emptyPromise();
         }
 
         return $.ajax({
@@ -108,7 +114,7 @@ module ImprovedInitiative {
 
     function saveEntitySet<Listable>(entitySet: Listable [], entityType: string, errorsCallback: (message: string) => void) {
         if (!env.HasStorage || !entitySet.length) {
-            return null;
+            return emptyPromise();
         }
 
         return $.ajax({
@@ -122,7 +128,7 @@ module ImprovedInitiative {
 
     function deleteEntity(entityId: string, entityType: string) {
         if (!env.HasStorage) {
-            return null;
+            return emptyPromise();
         }
 
         return $.ajax({
