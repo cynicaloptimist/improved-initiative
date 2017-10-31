@@ -17,14 +17,14 @@ module ImprovedInitiative {
         SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
 
         SyncAll() {
-            this.SyncError("");
+            this.SyncMessage("");
             var blob = Store.ExportAll();
             saveAs(blob, 'improved-initiative.json');
             new AccountClient().SaveAll(this.libraries, err => {
-                this.SyncError(this.SyncError() + "\n" + JSON.stringify(err));
+                this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
             });
         };
 
-        SyncError = ko.observable("");
+        SyncMessage = ko.observable("");
     }
 }

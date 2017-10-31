@@ -112,8 +112,8 @@
                     <li>Encounters: <span data-bind="text: SyncedEncounters"></span></li>
                 </ul>
                 <span class="button" data-bind="click: SyncAll">Backup and Sync local data</span>
-                <!-- ko if: SyncError -->
-                <pre data-bind="text: SyncError"></pre>
+                <!-- ko if: SyncMessage -->
+                <pre data-bind="text: SyncMessage"></pre>
                 <!-- /ko -->
             <!-- /ko -->
             <!-- ko ifnot: HasStorage -->

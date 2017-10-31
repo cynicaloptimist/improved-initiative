@@ -1,25 +1,30 @@
 
 module ImprovedInitiative {
+    const BATCH_SIZE = 10;
     export class AccountClient {
         GetAccount(callBack: (user: any) => void) {
             if (!env.HasStorage) {
                 return emptyPromise();
             }
-            
+
             $.getJSON("/my").done(callBack);
 
             return true;
         }
 
-        SaveAll(libraries: Libraries, errorsCallback: (error: any) => void) {
+        SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
             if (!env.HasStorage) {
                 return emptyPromise();
             }
-            
-            saveEntitySet(prepareForSync(libraries.NPCs.StatBlocks()), "statblocks", errorsCallback);
-            saveEntitySet(prepareForSync(libraries.PCs.StatBlocks()), "playercharacters", errorsCallback);
-            saveEntitySet(prepareForSync(libraries.Spells.Spells()), "spells", errorsCallback);
-            saveEntitySet(prepareForSync(libraries.Encounters.Encounters()), "encounters", errorsCallback);
+
+            $.when(
+                saveEntitySet(prepareForSync(libraries.NPCs.StatBlocks()), "statblocks", messageCallback),
+                saveEntitySet(prepareForSync(libraries.PCs.StatBlocks()), "playercharacters", messageCallback),
+                saveEntitySet(prepareForSync(libraries.Spells.Spells()), "spells", messageCallback),
+                saveEntitySet(prepareForSync(libraries.Encounters.Encounters()), "encounters", messageCallback)
+            ).done(_ => {
+                messageCallback("Account Sync complete.");
+            });
         }
 
         SaveSettings(settings: Settings) {
@@ -103,7 +108,7 @@ module ImprovedInitiative {
             } else {
                 i.Id = i.Id.replace(".", "_");
             }
-            
+
             if (!i.Version) {
                 i.Version = "legacy";
             }
@@ -112,18 +117,30 @@ module ImprovedInitiative {
         });
     }
 
-    function saveEntitySet<Listable>(entitySet: Listable [], entityType: string, errorsCallback: (message: string) => void) {
+    function saveEntitySet<Listable>(entitySet: Listable[], entityType: string, messageCallback: (message: string) => void) {
         if (!env.HasStorage || !entitySet.length) {
             return emptyPromise();
         }
 
-        return $.ajax({
-            type: "POST",
-            url: `/my/${entityType}/`,
-            data: JSON.stringify(entitySet),
-            contentType: "application/json",
-            error: (e, text) => errorsCallback(text)
-        });
+        const uploadByBatch = (remaining: Listable[]) => {
+            const batch = remaining.slice(0, BATCH_SIZE);
+            return $.ajax({
+                type: "POST",
+                url: `/my/${entityType}/`,
+                data: JSON.stringify(batch),
+                contentType: "application/json",
+                error: (e, text) => messageCallback(text)
+            }).then(r => {
+                messageCallback(`Syncing, ${remaining.length} items remaining...`);
+                const next = remaining.slice(BATCH_SIZE);
+                if (!next.length) {
+                    return r;
+                }
+                return uploadByBatch(next);
+            });
+        }
+
+        return uploadByBatch(entitySet);
     }
 
     function deleteEntity(entityId: string, entityType: string) {
