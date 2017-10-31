@@ -57,6 +57,10 @@ module ImprovedInitiative {
         DeleteSpell(spellId: string) {
             return deleteEntity(spellId, 'spells');
         }
+
+        static SanitizeForId(name: string) {
+            return name.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
+        }
     }
 
     function saveEntity<T extends object>(entity: T, entityType: string) {
@@ -89,7 +93,7 @@ module ImprovedInitiative {
     function sanitizeItems(items: Listable[]) {
         return items.map(i => {
             if (!i.Id) {
-                i.Id = SavedEncounter.UpdateNameForId(i.Name);
+                i.Id = AccountClient.SanitizeForId(i.Name);
             } else {
                 i.Id = i.Id.replace(".", "_");
             }

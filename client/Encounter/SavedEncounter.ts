@@ -50,9 +50,5 @@ module ImprovedInitiative {
             }
             return savedEncounter;
         }
-
-        static UpdateNameForId(name: string) {
-            return name.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
-        }
     }
 }
