@@ -1,8 +1,8 @@
-/// <reference path="../typings/index.d.ts" />
-
 module ImprovedInitiative {
     $(() => {
+        LoadEnvironment()
         RegisterComponents();
+        InitializeSettings();
         if ($('#tracker').length) {
             var viewModel = new TrackerViewModel();
             ko.applyBindings(viewModel, document.body);
@@ -10,7 +10,7 @@ module ImprovedInitiative {
             viewModel.GetWhatsNewIfAvailable();
         }
         if ($('#playerview').length) {
-            var encounterId = $('html')[0].getAttribute('encounterId');
+            var encounterId = env.EncounterId;
             var playerViewModel = new PlayerViewModel();
             playerViewModel.LoadEncounterFromServer(encounterId);
             ko.applyBindings(playerViewModel, document.body);

@@ -26,14 +26,14 @@ module ImprovedInitiative {
             var damage = parseInt(inputDamage),
                 healing = -damage,
                 
-                autoCheckConcentration = Store.Load(Store.User, "AutoCheckConcentration");
+                autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
 
             if (isNaN(damage)) {
                 return
             }
 
             if (damage > 0) {
-                window.appInsights.trackEvent("DamageApplied", { Amount: damage.toString() });
+                Metrics.TrackEvent("DamageApplied", { Amount: damage.toString() });
                 if (autoCheckConcentration && this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)) {
                     this.CombatantCommander.CheckConcentration(this.Combatant, damage);
                 }

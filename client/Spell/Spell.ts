@@ -1,7 +1,5 @@
 module ImprovedInitiative {
-    export interface Spell {
-        Id: string;
-        Name: string;
+    export interface Spell extends Listable {
         Source: string;
         Level: number;
         School: string;
@@ -20,6 +18,7 @@ module ImprovedInitiative {
         static Default: () => Spell = () => {
             return {
                 Id: probablyUniqueString(),
+                Version: "1.0.0",
                 Name: "",
                 Source: "",
                 CastingTime: "",

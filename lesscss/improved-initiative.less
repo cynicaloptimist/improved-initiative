@@ -1,5 +1,5 @@
-@import url("http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
-@import url("http://fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
+@import url("//fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
+@import url("//fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
 
 @import "colors.less";
 @import (reference) "node_modules/font-awesome/less/variables.less";
@@ -111,6 +111,7 @@ input[type="file"] {
     display: inline-block;
     padding: 10px;
     text-align:center;
+    text-decoration: none;
     
 	border-radius: @border-radius;
     border: 0;
@@ -156,17 +157,17 @@ input[type="file"] {
     border-style: solid;
     border-radius: @border-radius;
     padding: @medium-spacer;
-    z-index: 2;
+    z-index: 3;
 }
 
 .preview.statblock {
     .overlay-dialog();
-    z-index: 3;
+    z-index: 4;
     max-height: 90%;
 }
 
 .tutorial-focus {
-    z-index: 2;
+    z-index: 3;
 }
 
 .tutorial {
@@ -179,6 +180,17 @@ input[type="file"] {
     }
 
     .hop();
+}
+
+body>.login.button {
+    display: block;
+    position: fixed;
+    bottom: 0px;
+    right: @large-spacer;
+    z-index: 1;
+
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .settings {
@@ -201,7 +213,7 @@ input[type="file"] {
 
 .modal-blur {
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     left: 0;
     top: 0;
     width: 100%;
@@ -605,6 +617,7 @@ input[type="file"] {
     >div {
         flex-direction:row;
         flex-wrap: wrap;
+        max-height: none;
         span {
             padding-right: @small-spacer;
         }

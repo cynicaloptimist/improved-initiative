@@ -106,7 +106,8 @@ module ImprovedInitiative {
         }
 
         private getMaxHP(statBlock: StatBlock) {
-            if (Store.Load(Store.User, "RollMonsterHp") && statBlock.Player !== "player") {
+            const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
+            if (rollMonsterHp && statBlock.Player !== "player") {
                 try {
                     return Dice.RollDiceExpression(statBlock.HP.Notes).Total;
                 } catch (e) {
@@ -147,7 +148,7 @@ module ImprovedInitiative {
         ApplyDamage(damage: number) {
             let currHP = this.CurrentHP(),
                 tempHP = this.TemporaryHP(),
-                allowNegativeHP = Store.Load(Store.User, "AllowNegativeHP");
+                allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
 
             tempHP -= damage;
             if (tempHP < 0) {
@@ -156,7 +157,7 @@ module ImprovedInitiative {
             }
 
             if (currHP <= 0 && !allowNegativeHP) {
-                window.appInsights.trackEvent("CombatantDefeated", { Name: this.DisplayName() });
+                Metrics.TrackEvent("CombatantDefeated", { Name: this.DisplayName() });
                 currHP = 0;
             }
 

@@ -139,7 +139,7 @@ module ImprovedInitiative {
         }
 
         SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
-            const allowPlayerSuggestions = Store.Load(Store.User, "PlayerViewAllowPlayerSuggestions");
+            const allowPlayerSuggestions = CurrentSettings().PlayerView.AllowPlayerSuggestions;
             
             if (!allowPlayerSuggestions) {
                 return false;

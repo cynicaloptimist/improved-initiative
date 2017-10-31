@@ -14,6 +14,10 @@ interface Function {
     with: (...params: any[]) => ((...params: any[]) => any)
 }
 
+interface KeyValueSet<T> {
+    [key: string]: T;
+}
+
 Array.prototype.remove = function (item) {
     const index = this.indexOf(item);
     if (index > -1) {
@@ -58,16 +62,6 @@ Function.prototype.with = function(...params: any[]) {
     partial.prototype = Object.create(this.prototype);
     return partial;
 };
-
-var PostJSON = (url: string, data: any, success: (data: any) => void) =>
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: JSON.stringify(data),
-        success: success,
-        dataType: "json",
-        contentType: "application/json"
-    });
 
 var probablyUniqueString = (): string => {
     //string contains only easily relayable characters for forward 

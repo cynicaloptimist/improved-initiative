@@ -15,7 +15,7 @@ module ImprovedInitiative {
         constructor(combatant: Combatant, damageAmount: number) {
             const concentrationDC = damageAmount > 20 ? Math.floor(damageAmount / 2) : 10;
             const autoRoll = combatant.GetConcentrationRoll();
-            this.Prompt = `${combatant.DisplayName()} DC <strong>${concentrationDC}</strong> concentration check (consitution save). Auto-roll: <strong>${autoRoll}</strong>`;
+            this.Prompt = `${combatant.DisplayName()} DC <strong>${concentrationDC}</strong> concentration check (Constitution save). Auto-roll: <strong>${autoRoll}</strong>`;
 
             this.FailCheck = () => {
                 combatant.Tags()

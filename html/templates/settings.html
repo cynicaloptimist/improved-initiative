@@ -2,6 +2,7 @@
     <span data-bind="click: CurrentTab.with('about'), css: { selected: CurrentTab() == 'about' }">About</span>
     <span data-bind="click: CurrentTab.with('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
     <span data-bind="click: CurrentTab.with('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
+    <span data-bind="click: CurrentTab.with('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <div>
@@ -51,16 +52,6 @@
     <!--/ko -->
 </div>
 <div data-bind="visible: CurrentTab() == 'options'" class="tab options">
-    <h3>Data</h3>
-    <p>Export your user data as JSON:
-        <span class="button" data-bind="click: ExportData">Download File</span>
-    </p>
-    <p>Import an exported user data file:
-        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
-    </p>
-    <p>Import creatures from DnDAppFile:
-        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
-    </p>
     <h3>Rules</h3>
     <p>Roll monster HP when adding to combat:
         <input type="checkbox" data-bind="checked: RollHp" />
@@ -97,5 +88,42 @@
     <p>Allow players to suggest damage/healing:
         <input type="checkbox" data-bind="checked: PlayerViewAllowPlayerSuggestions" />
     </p>
+</div>
+<div data-bind="visible: CurrentTab() == 'account'" class="tab account">
+    <h3>Local Data</h3>
+    <p>Export your user data as JSON:
+        <span class="button" data-bind="click: ExportData">Download File</span>
+    </p>
+    <p>Import an exported user data file:
+        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
+    </p>
+    <p>Import statblocks from DnDAppFile:
+        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
+    </p>
+    <!-- ko with: AccountViewModel -->
+        <h3>Account Sync</h3>
+        <!-- ko if: IsLoggedIn -->
+            <!-- ko if: HasStorage -->
+                <p>Account Sync is enabled.</p>
+                <ul>
+                    <li>Creatures: <span data-bind="text: SyncedCreatures"></span></li>
+                    <li>Players: <span data-bind="text: SyncedPlayers"></span></li>
+                    <li>Spells: <span data-bind="text: SyncedSpells"></span></li>
+                    <li>Encounters: <span data-bind="text: SyncedEncounters"></span></li>
+                </ul>
+                <span class="button" data-bind="click: SyncAll">Backup and Sync local data</span>
+                <!-- ko if: SyncMessage -->
+                <pre data-bind="text: SyncMessage"></pre>
+                <!-- /ko -->
+            <!-- /ko -->
+            <!-- ko ifnot: HasStorage -->
+                <p>You're logged in with Patreon, but you're not at the <a href="https://www.patreon.com/bePatron?c=716070&rid=1322253" target="_blank">Account Sync</a> reward level.</p>
+            <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko ifnot: IsLoggedIn -->
+            <p>Log in with Patreon to access patron benefits. Account Sync allows you to access your custom statblocks and encounters from anywhere!</p>
+            <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
+        <!-- /ko -->
+    <!-- /ko -->
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>

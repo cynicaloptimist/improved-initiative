@@ -1,135 +1,112 @@
 module ImprovedInitiative {
-    export var Settings = (params: {
-        encounterCommander: EncounterCommander;
-        combatantCommander: CombatantCommander;
-        settingsVisible: KnockoutObservable<boolean>;
-        repeatTutorial: () => void;
-    }) => {
-        var tips = [
-            "You can view command list and set keybindings on the 'Commands' tab.",
-            "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
-            "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
-            "You can use the player view URL to track your combat on any device.",
-            "Editing a creature after it has been added to combat will only change that individual creature.",
-            "You can restore a creature's hit points by applying negative damage to it.",
-            "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-            "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
-            "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
-            "Moving a creature in the initiative order will automatically adjust their initiative count.",
-            "The active creature will have its traits and actions displayed first for ease of reference.",
-            "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
-            "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
-            "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
-        ];
-
-        const registerKeybindings = () => {
-            const allCommands = [...params.encounterCommander.Commands, ...params.combatantCommander.Commands];
-            Mousetrap.reset();
-
-            Mousetrap.bind('backspace', e => {
-                if (e.preventDefault) {
-                    e.preventDefault();
-                } else {
-                    // internet explorer
-                    e.returnValue = false;
-                }
-            });
-
-            allCommands.forEach(b => {
-                Mousetrap.bind(b.KeyBinding, b.ActionBinding);
-                Store.Save<string>(Store.KeyBindings, b.Description, b.KeyBinding);
-                Store.Save<boolean>(Store.ActionBar, b.Description, b.ShowOnActionBar());
-            });
+    export const CurrentSettings = ko.observable<Settings>();
+    export interface Settings {
+        Commands: CommandSetting[];
+        Rules: {
+            RollMonsterHp: boolean;
+            AllowNegativeHP: boolean;
+            AutoCheckConcentration: boolean;
         }
-
-        registerKeybindings();
-
-        const saveAndClose = () => {
-            registerKeybindings();
-            params.settingsVisible(false);
+        TrackerView: {
+            DisplayRoundCounter: boolean;
+            DisplayTurnTimer: boolean;
+            DisplayDifficulty: boolean;
         }
+        PlayerView: {
+            AllowPlayerSuggestions: boolean;
+            MonsterHPVerbosity: string;
+            HideMonstersOutsideEncounter: boolean;
+            DisplayRoundCounter: boolean;
+            DisplayTurnTimer: boolean;
+        }
+        Version: string;
+    }
 
-        const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
+    export const hpVerbosityOptions = [
+        "Actual HP",
+        "Colored Label",
+        "Monochrome Label",
+        "Damage Taken",
+        "Hide All"
+    ];
 
-        function cycleTipIndex() {
-            var newIndex = currentTipIndex() + this;
-            if (newIndex < 0) {
-                newIndex = tips.length - 1;
-            } else if (newIndex > tips.length - 1) {
-                newIndex = 0;
+    function getLegacySetting<T>(settingName: string, def: T): T {
+        const setting = Store.Load<T>(Store.User, settingName);
+        if (setting === undefined) {
+            return def;
+        }
+        return setting;
+    }
+
+    function getLegacySettings(): Settings {
+        const commandNames = Store.List(Store.KeyBindings);
+        const commands: CommandSetting[] = commandNames.map(n => {
+            return {
+                Name: n,
+                KeyBinding: Store.Load<string>(Store.KeyBindings, n),
+                ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
             }
-            currentTipIndex(newIndex);
-        }
-
-        var loadSetting = (settingName: string, defaultSetting?) => {
-            var currentSetting = Store.Load(Store.User, settingName);
-
-            if (defaultSetting !== undefined && currentSetting === null) {
-                 Store.Save(Store.User, settingName, defaultSetting);
-            }
-
-            var setting = ko.observable(currentSetting || defaultSetting);
-            setting.subscribe(newValue => {
-                Store.Save(Store.User, settingName, newValue);
-            });
-            return setting;
-        }
-
-        var displayRoundCounter = loadSetting("DisplayRoundCounter");
-        displayRoundCounter.subscribe(params.encounterCommander.DisplayRoundCounter);
-
-        var displayTurnTimer = loadSetting("DisplayTurnTimer");
-        displayTurnTimer.subscribe(params.encounterCommander.DisplayTurnTimer);
-
-        var displayDifficulty = loadSetting("DisplayDifficulty");
-        displayDifficulty.subscribe(params.encounterCommander.DisplayDifficulty);
+        });
 
         return {
-            EncounterCommands: params.encounterCommander.Commands,
-            CombatantCommands: params.combatantCommander.Commands,
-
-            CurrentTab: ko.observable<string>('about'),
-            ExportData: () => {
-                var blob = Store.ExportAll();
-                saveAs(blob, 'improved-initiative.json');
+            Commands: commands,
+            Rules: {
+                RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
+                AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
+                AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true)
             },
-            ImportData: (_, event) => {
-                var file = event.target.files[0];
-                if (file) {
-                    Store.ImportAll(file);
-                }
+            TrackerView: {
+                DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
+                DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
+                DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
             },
-
-            ImportDndAppFile: (_, event) => {
-                var file = event.target.files[0];
-                if (file) {
-                    Store.ImportFromDnDAppFile(file);
-                }
+            PlayerView: {
+                AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
+                MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
+                HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
+                DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
+                DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false)
             },
-
-            RepeatTutorial: params.repeatTutorial,
-
-            RollHp: loadSetting("RollMonsterHp"),
-            HpVerbosityOptions: [
-                "Actual HP",
-                "Colored Label",
-                "Monochrome Label",
-                "Hide All"
-            ],
-            HpVerbosity: loadSetting("MonsterHPVerbosity", "Colored Label"),
-            HideMonstersOutsideEncounter: loadSetting("HideMonstersOutsideEncounter"),
-            AllowNegativeHP: loadSetting("AllowNegativeHP"),
-            AutoCheckConcentration: loadSetting("AutoCheckConcentration", true),
-            DisplayRoundCounter: displayRoundCounter,
-            DisplayTurnTimer: displayTurnTimer,
-            DisplayDifficulty: displayDifficulty,
-            PlayerViewDisplayRoundCounter: loadSetting("PlayerViewDisplayRoundCounter", false),
-            PlayerViewDisplayTurnTimer: loadSetting("PlayerViewDisplayTurnTimer", false),
-            PlayerViewAllowPlayerSuggestions: loadSetting("PlayerViewAllowPlayerSuggestions", false),
-            Tip: ko.pureComputed(() => tips[currentTipIndex() % tips.length]),
-            NextTip: cycleTipIndex.bind(1),
-            PreviousTip: cycleTipIndex.bind(-1),
-            SaveAndClose: saveAndClose
+            Version: "1.0.0" //TODO: Populate with package version
         }
+    }
+
+    function configureCommands(newSettings: Settings, commands: Command[]) {
+        Mousetrap.reset();
+
+        Mousetrap.bind('backspace', e => {
+            if (e.preventDefault) {
+                e.preventDefault();
+            } else {
+                // internet explorer
+                e.returnValue = false;
+            }
+        });
+
+        newSettings.Commands.forEach(b => {
+            const matchedCommands = commands.filter(c => c.Description == b.Name);
+            if (matchedCommands.length !== 1) {
+                console.warn(`Couldn't bind command: ${b.Name}`);
+                return;
+            }
+            Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
+            matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
+        });
+    }
+
+    export function InitializeSettings() {
+        const localSettings = Store.Load<Settings>(Store.User, "Settings");
+
+        if (localSettings) {
+            CurrentSettings(localSettings);
+        } else {
+            const legacySettings = getLegacySettings();
+            CurrentSettings(legacySettings)
+        }
+    }
+
+    export function ConfigureCommands(commands: Command[]) {
+        configureCommands(CurrentSettings(), commands);
+        CurrentSettings.subscribe(newSettings => configureCommands(newSettings, commands));
     }
 }

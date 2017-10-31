@@ -1,41 +1,47 @@
 module ImprovedInitiative {
     export interface StatBlockLibrary {
-        StatBlocks: KnockoutObservableArray<StatBlockListing>
+        StatBlocks: KnockoutObservableArray<Listing<StatBlock>>
         ContainsPlayerCharacters: boolean;
     }
-    
+
     export class StatBlockLibraryViewModel {
         private previewStatBlock: KnockoutObservable<StatBlock> = ko.observable(null);
         constructor(
             private encounterCommander: EncounterCommander,
             private library: StatBlockLibrary
-        ) { }
+        ) {
+            this.LibraryFilter.subscribe(n => {
+                if (n === "") {
+                    this.clearCache();
+                }
+            });
+            this.library.StatBlocks.subscribe(this.clearCache);
+        }
 
         LibraryFilter = ko.observable("");
 
-        FilteredStatBlocks = ko.pureComputed<StatBlockListing[]>(() => {
+        private filterCache: KeyValueSet<Listing<StatBlock>[]> = {};
+        private clearCache = () => this.filterCache = {};
+
+        FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
             const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
-                statBlocksWithFilterInName = [],
-                statBlocksWithFilterInKeywords = [];
-                 
-            if (filter.length == 0) {
-                return this.library.StatBlocks();
+                statblocks = this.library.StatBlocks();
+
+            if (this.filterCache[filter]) {
+                return this.filterCache[filter];
             }
 
-            this.library.StatBlocks().forEach(c => {
-                if (c.Name().toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInName.push(c);
-                    return;
-                }
-                if (c.Keywords.toLocaleLowerCase().indexOf(filter) > -1) {
-                    statBlocksWithFilterInKeywords.push(c);
-                }
-            })
-            return statBlocksWithFilterInName.concat(statBlocksWithFilterInKeywords);
+            const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || statblocks;
+
+            const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
+
+            this.filterCache[filter] = finalList;
+
+            return finalList;
         });
 
-        ClickEntry = (entry: StatBlockListing) => this.encounterCommander.AddStatBlockFromListing(entry);
-        ClickEdit = (entry: StatBlockListing) => this.encounterCommander.EditStatBlock(entry);
+        ClickEntry = (entry: Listing<StatBlock>) => this.encounterCommander.AddStatBlockFromListing(entry);
+        ClickEdit = (entry: Listing<StatBlock>) => this.encounterCommander.EditStatBlock(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
         ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
 
@@ -43,9 +49,9 @@ module ImprovedInitiative {
             return this.previewStatBlock() || StatBlock.Default();
         })
 
-        PreviewStatBlock = (listing: StatBlockListing) => {
+        PreviewStatBlock = (listing: Listing<StatBlock>) => {
             this.previewStatBlock(null);
-            listing.GetStatBlockAsync(statBlock => {
+            listing.GetAsync(statBlock => {
                 this.previewStatBlock(statBlock);
             });
         }

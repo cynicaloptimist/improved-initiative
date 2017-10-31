@@ -1,30 +1,30 @@
+import request = require("request");
 import express = require("express");
-
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
-import request = require("request");
+import dbSession = require('connect-mongodb-session');
 
 import { Library, StatBlock, Spell } from "./library";
+import { configureLoginRedirect, startNewsUpdates } from "./patreon";
+import { upsertUser } from "./dbconnection";
 
-interface PatreonPostAttributes {
-    title: string;
-    content: string;
-    url: string;
-    created_at: string;
-    was_posted_by_campaign_owner: boolean;
-}
+const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
+const baseUrl = process.env.BASE_URL || "";
+const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
+const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 
-interface PatreonPost {
-    attributes: PatreonPostAttributes;
-    id: string;
-    type: string;
-}
+type Req = Express.Request & express.Request;
+type Res = Express.Response & express.Response;
 
-const pageRenderOptions = (encounterId: string) => ({
+const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     rootDirectory: "../../",
     encounterId,
-    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
+    appInsightsKey,
+    baseUrl,
+    patreonClientId,
+    isLoggedIn: session.isLoggedIn || false,
+    hasStorage: session.hasStorage || false,
     postedEncounter: null,
 });
 
@@ -45,8 +45,19 @@ const initializeNewPlayerView = (playerViews) => {
     return encounterId;
 };
 
-export default function (app: express.Server, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
-    let mustacheEngine = mustacheExpress();
+
+export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
+    const mustacheEngine = mustacheExpress();
+    const MongoDBStore = dbSession(session);
+
+    if (process.env.DB_CONNECTION_STRING) {
+        var store = new MongoDBStore(
+            {
+                uri: process.env.DB_CONNECTION_STRING,
+                collection: 'sessions'
+            });
+    }
+
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
@@ -56,57 +67,68 @@ export default function (app: express.Server, statBlockLibrary: Library<StatBloc
 
     app.use(express.static(__dirname + "/../public"));
     app.use(session({
+        store: store || null,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
+        resave: false,
+        saveUninitialized: false,
     }));
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded());
+    app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get("/", (req, res) => {
-        res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews)));
+    app.get("/", (req: Req, res: Res) => {
+        if (defaultAccountLevel === "accountsync") {
+            req.session.hasStorage = true;
+            req.session.isLoggedIn = true;
+            upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
+                .then(result => {
+                    req.session.userId = result._id;
+                    res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                });
+        } else {
+            res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+        }
     });
 
-    app.get("/e/:id", (req, res) => {
+    app.get("/e/:id", (req: Req, res: Res) => {
         const session: any = req.session;
-        const options = pageRenderOptions(req.params.id);
+        const options = pageRenderOptions(req.params.id, req.session);
         if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
         res.render("tracker", options);
     });
 
-    app.get("/p/:id", (req, res) => {
-        res.render("playerview", pageRenderOptions(req.params.id));
+    app.get("/p/:id", (req: Req, res: Res) => {
+        res.render("playerview", pageRenderOptions(req.params.id, req.session));
     });
 
-    app.get("/playerviews/:id", (req, res) => {
+    app.get("/playerviews/:id", (req: Req, res: Res) => {
         res.json(playerViews[req.params.id]);
     });
 
-    app.get("/templates/:name", (req, res) => {
-        res.render(`templates/${req.params.name}`, {
-            rootDirectory: "..",
-        });
+    app.get("/templates/:name", (req: Req, res: Res) => {
+        res.render(`templates/${req.params.name}`, pageRenderOptions("", req.session));
     });
 
-    app.get(statBlockLibrary.Route(), (req, res) => {
+    app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
         res.json(statBlockLibrary.GetListings());
     });
 
-    app.get(statBlockLibrary.Route() + ":id", (req, res) => {
+    app.get(statBlockLibrary.Route() + ":id", (req: Req, res: Res) => {
         res.json(statBlockLibrary.GetById(req.params.id));
     });
 
-    app.get(spellLibrary.Route(), (req, res) => {
+    app.get(spellLibrary.Route(), (req: Req, res: Res) => {
         res.json(spellLibrary.GetListings());
     });
 
-    app.get(spellLibrary.Route() + ":id", (req, res) => {
+    app.get(spellLibrary.Route() + ":id", (req: Req, res: Res) => {
         res.json(spellLibrary.GetById(req.params.id));
     });
 
-    const importEncounter = (req, res) => {
+    const importEncounter = (req, res: Res) => {
         const newViewId = initializeNewPlayerView(playerViews);
-        const session: any = req.session;
+        const session = req.session;
 
         if (typeof req.body.Combatants === "string") {
             session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) };
@@ -120,17 +142,6 @@ export default function (app: express.Server, statBlockLibrary: Library<StatBloc
     app.post("/launchencounter/", importEncounter);
     app.post("/importencounter/", importEncounter);
 
-    const url = process.env.PATREON_URL;
-    if (url) {
-        request.get(url,
-            (error, response, body) => {
-                const json: { data: PatreonPost[] } = JSON.parse(body);
-                if (json.data) {
-                    const latestPost = json.data.filter(d => d.attributes.was_posted_by_campaign_owner)[0];
-                    app.get("/whatsnew/", (req, res) => {
-                        res.json(latestPost);
-                    });
-                }
-            });
-    }
+    configureLoginRedirect(app);
+    startNewsUpdates(app);
 }

@@ -1,35 +1,5 @@
-/// <reference path="../../typings/globals/moment/index.d.ts" />
-
 module ImprovedInitiative {
-    export interface SavedCombatant {
-        Id: string;
-        StatBlock: StatBlock;
-        MaxHP: number;
-        CurrentHP: number;
-        TemporaryHP: number;
-        Initiative: number;
-        InitiativeGroup?: string;
-        Alias: string;
-        IndexLabel: number;
-        Tags: string[] | SavedTag[];
-        Hidden: boolean;
-        InterfaceVersion: string;
-    }
-    export interface SavedTag {
-        Text: string;
-        DurationRemaining: number;
-        DurationTiming: DurationTiming;
-        DurationCombatantId: string;
-    }
 
-    export interface SavedEncounter<T> {
-        Name: string;
-        ActiveCombatantId: string;
-        RoundCounter?: number;
-        DisplayTurnTimer?: boolean;
-        AllowPlayerSuggestions?: boolean;
-        Combatants: T[];
-    }
 
     export class Encounter {
         constructor(
@@ -80,7 +50,7 @@ module ImprovedInitiative {
         StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
 
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
-        EncounterId = $('html')[0].getAttribute('encounterId');
+        EncounterId = env.EncounterId;
 
         SortByInitiative = () => {
             this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
@@ -117,7 +87,7 @@ module ImprovedInitiative {
 
         private EmitEncounter = () => {
             this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
-            Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save());
+            Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
         }
 
         QueueEmitEncounter() {
@@ -140,7 +110,7 @@ module ImprovedInitiative {
 
             this.QueueEmitEncounter();
 
-            window.appInsights.trackEvent("CombatantAdded", { Name: statBlockJson.Name });
+            Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
             return combatant;
         }
@@ -197,7 +167,7 @@ module ImprovedInitiative {
         }
 
         NextTurn = () => {
-            window.appInsights.trackEvent("TurnCompleted");
+            Metrics.TrackEvent("TurnCompleted");
             const activeCombatant = this.ActiveCombatant();
 
             let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
@@ -243,10 +213,11 @@ module ImprovedInitiative {
             this.durationTags.push(tag);
         }
 
-        Save: (name?: string) => SavedEncounter<SavedCombatant> = (name?: string) => {
+        Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
             var activeCombatant = this.ActiveCombatant();
             return {
-                Name: name || this.EncounterId,
+                Name: name,
+                Id: AccountClient.SanitizeForId(name),
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
                 RoundCounter: this.RoundCounter(),
                 Combatants: this.Combatants().map<SavedCombatant>(c => {
@@ -267,22 +238,23 @@ module ImprovedInitiative {
                             DurationCombatantId: t.DurationCombatantId
                         })),
                         Hidden: c.Hidden(),
-                        InterfaceVersion: "1.0"
+                        InterfaceVersion: "1.0.0"
                     }
-                })
+                }),
+                Version: "1.0.0"
             };
         }
 
-        SavePlayerDisplay = (name?: string): SavedEncounter<StaticCombatantViewModel> => {
-            var hideMonstersOutsideEncounter = Store.Load(Store.User, "HideMonstersOutsideEncounter");
+        SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
+            var hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
             var activeCombatant = this.ActiveCombatant();
-            var roundCounter = Store.Load(Store.User, "PlayerViewDisplayRoundCounter") ? this.RoundCounter() : null;
             return {
-                Name: name || this.EncounterId,
+                Name: this.EncounterId,
+                Id: this.EncounterId,
                 ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-                RoundCounter: roundCounter,
-                DisplayTurnTimer: Store.Load<boolean>(Store.User, "PlayerViewDisplayTurnTimer"),
-                AllowPlayerSuggestions: Store.Load<boolean>(Store.User, "PlayerViewAllowPlayerSuggestions"),
+                RoundCounter: this.RoundCounter(),
+                DisplayTurnTimer: CurrentSettings().PlayerView.DisplayTurnTimer,
+                AllowPlayerSuggestions: CurrentSettings().PlayerView.AllowPlayerSuggestions,
                 Combatants: this.Combatants()
                     .filter(c => {
                         if (c.Hidden()) {
@@ -293,34 +265,13 @@ module ImprovedInitiative {
                         }
                         return true;
                     })
-                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c))
+                    .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c)),
+                Version: "1.0.0"
             };
         }
 
-        private static updateLegacySavedCreature = savedCreature => {
-            if (!savedCreature.StatBlock) {
-                savedCreature.StatBlock = savedCreature["Statblock"];
-            }
-            if (!savedCreature.Id) {
-                savedCreature.Id = probablyUniqueString();
-            }
-        }
-
-        private static updateLegacySavedEncounter = savedEncounter => {
-            savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
-            savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
-
-            savedEncounter.Combatants.forEach(Encounter.updateLegacySavedCreature)
-
-            let legacyCombatantIndex = savedEncounter["ActiveCreatureIndex"];
-            if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
-                savedEncounter.ActiveCombatantId = savedEncounter.Combatants[legacyCombatantIndex].Id;
-            }
-            return savedEncounter;
-        }
-
         LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPromptQueue: PromptQueue) => {
-            savedEncounter = Encounter.updateLegacySavedEncounter(savedEncounter);
+            savedEncounter = SavedEncounter.UpdateLegacySavedEncounter(savedEncounter);
 
             let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
             let currentEncounterIsActive = this.State() == 'active';
@@ -351,11 +302,9 @@ module ImprovedInitiative {
         }
 
         ClearEncounter = () => {
-            if (confirm("Remove all creatures and end encounter?")) {
-                this.Combatants.removeAll();
-                this.CombatantCountsByName = [];
-                this.EndEncounter();
-            }
+            this.Combatants.removeAll();
+            this.CombatantCountsByName = [];
+            this.EndEncounter();
         }
     }
 }

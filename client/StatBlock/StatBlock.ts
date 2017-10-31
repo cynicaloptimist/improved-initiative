@@ -24,9 +24,7 @@ module ImprovedInitiative {
         Usage?: string;
     }
 
-    export interface StatBlock {
-        Id: string;
-        Name: string;
+    export interface StatBlock extends Listable {
         Source: string;
         Type: string;
         HP: ValueAndNotes;
@@ -66,7 +64,8 @@ module ImprovedInitiative {
             Reactions: [],
             LegendaryActions: [],
             Description: '',
-            Player: ''
+            Player: '',
+            Version: '1.0.0',
         });
 
         static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];

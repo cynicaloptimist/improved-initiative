@@ -21,8 +21,8 @@ module ImprovedInitiative {
             return `Level ${spell.Level} ${spell.School}${ritual}`;
         }
         
-        constructor(listing: SpellListing) {
-            listing.GetSpellAsync(spell => this.Spell(spell));
+        constructor(listing: Listing<Spell>) {
+            listing.GetAsync(spell => this.Spell(spell));
         }
 
         Resolve = () => this.dequeue();

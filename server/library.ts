@@ -17,36 +17,40 @@ const createId = (name: string, source: string) => {
 };
 
 export interface LibraryItem {
+    Version: string;
     Name: string;
     Id: string;
     Source: string;
 }
 
 export interface Listing {
-    Name: string;
     Id: string;
-    Keywords: string;
     Link: string;
+    Name: string;
+    SearchHint: string;
 }
 
-export interface StatBlock {
-    Name: string;
-    Id: string;
+export interface StatBlock extends LibraryItem {
     Type: string;
-    Source: string;
 }
 
 export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
-export interface Spell {
-    Name: string;
-    Id: string;
+export interface Spell extends LibraryItem {
     School: string;
     Classes: string[];
-    Source: string;
 }
 
 export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
+
+interface Combatant {
+    Alias: string;
+}
+export interface SavedEncounter extends LibraryItem {
+    Combatants: Combatant [];
+}
+
+export const GetEncounterKeywords = (encounter: SavedEncounter) => (encounter.Combatants || []).map(c => c.Alias).join(" "); 
 
 export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
@@ -81,8 +85,8 @@ export class Library<TItem extends LibraryItem> {
             const listing: Listing = {
                 Name: c.Name,
                 Id: c.Id,
-                Keywords: this.getKeywords(c),
-                Link: this.route + c.Id,
+                SearchHint: this.getKeywords(c),
+                Link: this.route + c.Id
             };
             this.listings.push(listing);
         });

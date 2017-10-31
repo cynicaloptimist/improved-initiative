@@ -22,7 +22,7 @@ module ImprovedInitiative {
                     return;
                 }
                 focusedElements.addClass('tutorial-focus');
-                const position = nextStep.CalculatePosition(focusedElements);
+                const position: any = nextStep.CalculatePosition(focusedElements);
                 if (newStepIndex == 0) {
                     $('.tutorial').css(position);
                 }
@@ -72,7 +72,7 @@ module ImprovedInitiative {
         });
 
         Next = () => {
-            window.appInsights.trackEvent("StepCompleted", { step: this.stepIndex().toString() });
+            Metrics.TrackEvent("StepCompleted", { step: this.stepIndex().toString() });
             const nextStepIndex = this.stepIndex() + 1;
 
             if (nextStepIndex < TutorialSteps.length) {

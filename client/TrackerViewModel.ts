@@ -15,12 +15,44 @@ module ImprovedInitiative {
 
     export class TrackerViewModel {
         constructor() {
+            ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
+
             this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
                 const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
                 this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
             });
 
             this.Socket.emit("join encounter", this.Encounter.EncounterId);
+
+            this.AccountClient.GetAccount(account => {
+                if (!account) {
+                    return;
+                }
+
+                this.HandleAccountSync(account);
+            })
+        }
+
+        private HandleAccountSync(account: Account) {
+            if (account.settings && account.settings.Version) {
+                CurrentSettings(account.settings);
+            }
+
+            if (account.statblocks) {
+                this.Libraries.NPCs.AddStatBlockListings(account.statblocks, "account");
+            }
+
+            if (account.playercharacters) {
+                this.Libraries.PCs.AddListings(account.playercharacters, "account");
+            }
+
+            if (account.spells) {
+                this.Libraries.Spells.AddListings(account.spells, "account");
+            }
+
+            if (account.encounters) {
+                this.Libraries.Encounters.AddListings(account.encounters, "account");
+            }
         }
 
         Socket = io();
@@ -32,6 +64,7 @@ module ImprovedInitiative {
         SpellEditor = new SpellEditor();
         EncounterCommander = new EncounterCommander(this);
         CombatantCommander = new CombatantCommander(this);
+        AccountClient = new AccountClient();
 
         CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
         
@@ -63,6 +96,7 @@ module ImprovedInitiative {
         LibrariesVisible = ko.observable(true);
         ToolbarWide = ko.observable(false);
         ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
+        DisplayLogin = !env.IsLoggedIn;
 
         CenterColumn = ko.pureComputed(() => {
             const editStatBlock = this.StatBlockEditor.HasStatBlock();
@@ -93,10 +127,9 @@ module ImprovedInitiative {
         }
 
         ImportEncounterIfAvailable = () => {
-            const encounterJSON = $('html')[0].getAttribute('postedEncounter');
-            if (encounterJSON) {
+            const encounter = env.PostedEncounter;
+            if (encounter) {
                 this.TutorialVisible(false);
-                const encounter: { Combatants: any[] } = JSON.parse(encounterJSON);
                 this.Encounter.ImportEncounter(encounter);
             }
         }
@@ -107,6 +140,8 @@ module ImprovedInitiative {
                     this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`);
                 });
         }
+
+        PatreonLoginUrl = env.PatreonLoginUrl;
 
         InterfaceState = ko.pureComputed(() => {
             return [
