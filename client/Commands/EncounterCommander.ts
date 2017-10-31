@@ -182,10 +182,12 @@ module ImprovedInitiative {
         }
 
         ClearEncounter = () => {
-            this.tracker.Encounter.ClearEncounter();
-            this.tracker.CombatantViewModels([]);
-            this.tracker.CombatantCommander.SelectedCombatants([]);
-            this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
+            if (confirm("Remove all creatures and end encounter?")) {
+                this.tracker.Encounter.ClearEncounter();
+                this.tracker.CombatantViewModels([]);
+                this.tracker.CombatantCommander.SelectedCombatants([]);
+                this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
+            }
 
             return false;
         }

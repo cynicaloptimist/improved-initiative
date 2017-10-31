@@ -1,5 +1,5 @@
 module ImprovedInitiative {
-    
+
 
     export class Encounter {
         constructor(
@@ -302,11 +302,9 @@ module ImprovedInitiative {
         }
 
         ClearEncounter = () => {
-            if (confirm("Remove all creatures and end encounter?")) {
-                this.Combatants.removeAll();
-                this.CombatantCountsByName = [];
-                this.EndEncounter();
-            }
+            this.Combatants.removeAll();
+            this.CombatantCountsByName = [];
+            this.EndEncounter();
         }
     }
 }
