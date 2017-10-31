@@ -25,13 +25,21 @@ module ImprovedInitiative {
             if (this.Encounters().indexOf(listing) === -1) {
                 this.Encounters.push(listing);
             }
-            
-            new AccountClient().SaveEncounter(savedEncounter);
             Store.Save(Store.SavedEncounters, listing.Id, savedEncounter);
+
+            new AccountClient().SaveEncounter(savedEncounter)
+                .then(r => {
+                    if (!r) return;
+                    const accountListing = listingFrom(savedEncounter, listing.Id);
+                    accountListing.Origin = "account";
+                    accountListing.Link = `/my/encounters/${accountListing.Id}`;
+                    this.Encounters.push(accountListing);
+                });
+
         }
 
         Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
-            this.Encounters.remove(listing);
+            this.Encounters.remove(l => l.Id == listing.Id);
             new AccountClient().DeleteEncounter(listing.Id);
             Store.Delete(Store.SavedEncounters, listing.Id);
         }
