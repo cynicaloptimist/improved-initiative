@@ -131,7 +131,7 @@ module ImprovedInitiative {
                 contentType: "application/json",
                 error: (e, text) => messageCallback(text)
             }).then(r => {
-                messageCallback(`Syncing, ${remaining.length} items remaining...`);
+                messageCallback(`Syncing, ${remaining.length} ${entityType} remaining...`);
                 const next = remaining.slice(BATCH_SIZE);
                 if (!next.length) {
                     return r;
