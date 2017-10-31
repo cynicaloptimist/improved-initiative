@@ -68,7 +68,6 @@ module ImprovedInitiative {
             type: "POST",
             url: `/my/${entityType}/`,
             data: JSON.stringify(entity),
-            dataType: "json",
             contentType: "application/json"
         });
     }
@@ -112,7 +111,6 @@ module ImprovedInitiative {
             type: "POST",
             url: `/my/${entityType}/`,
             data: JSON.stringify(entitySet),
-            dataType: "json",
             contentType: "application/json",
             error: (e, text) => errorsCallback(text)
         });
