@@ -30,11 +30,21 @@ module ImprovedInitiative {
             const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, store, "localStorage", newStatBlock);
             Store.Save<StatBlock>(store, statBlockId, newStatBlock);
             if (store == Store.PlayerCharacters) {
-                this.libraries.PCs.StatBlocks.unshift(listing);
-                this.accountClient.SavePlayerCharacter(newStatBlock);
+                this.libraries.PCs.StatBlocks.push(listing);
+                this.accountClient.SavePlayerCharacter(newStatBlock)
+                    .then(r => {
+                        if (!r) return;
+                        const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                        this.libraries.PCs.StatBlocks.push(accountListing);
+                    });
             } else {
-                this.libraries.NPCs.StatBlocks.unshift(listing);
-                this.accountClient.SaveStatBlock(newStatBlock);
+                this.libraries.NPCs.StatBlocks.push(listing);
+                this.accountClient.SaveStatBlock(newStatBlock)
+                    .then(r => {
+                        if (!r) return;
+                        const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                        this.libraries.NPCs.StatBlocks.push(accountListing);
+                    });
             }
         }
 
@@ -43,9 +53,21 @@ module ImprovedInitiative {
                 Store.Save<StatBlock>(store, statBlockId, newStatBlock);
                 listing.SetValue(newStatBlock);
                 if (store == Store.PlayerCharacters) {
-                    this.accountClient.SavePlayerCharacter(newStatBlock);
+                    this.accountClient.SavePlayerCharacter(newStatBlock)
+                        .then(r => {
+                            if (!r) return;
+                            if (listing.Origin === "account") return;
+                            const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                            this.libraries.PCs.StatBlocks.push(accountListing);
+                        });
                 } else {
-                    this.accountClient.SaveStatBlock(newStatBlock);
+                    this.accountClient.SaveStatBlock(newStatBlock)
+                        .then(r => {
+                            if (!r) return;
+                            if (listing.Origin === "account") return;
+                            const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                            this.libraries.NPCs.StatBlocks.push(accountListing);
+                        });
                 }
             }
 
