@@ -28,6 +28,7 @@ module ImprovedInitiative {
         }
 
         public AddOrUpdateSpell = (spell: Spell) => {
+            spell.Id = AccountClient.SanitizeForId(spell.Id);
             this.Spells.remove(listing => listing.Id === spell.Id);
             const listing = new Listing<Spell>(spell.Id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
             this.Spells.push(listing);
