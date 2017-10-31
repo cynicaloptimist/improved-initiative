@@ -58,8 +58,8 @@ module ImprovedInitiative {
             return deleteEntity(spellId, 'spells');
         }
 
-        static SanitizeForId(name: string) {
-            return name.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
+        static SanitizeForId(str: string) {
+            return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
         }
     }
 
