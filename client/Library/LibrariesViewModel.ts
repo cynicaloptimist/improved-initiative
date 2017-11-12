@@ -28,6 +28,7 @@ module ImprovedInitiative {
         TabClassName = library => library === this.SelectedTab() ? 'selected' : '';
 
         constructor(
+            public Tracker: TrackerViewModel,
             public EncounterCommander: EncounterCommander,
             public Libraries: Libraries
         ) { 

@@ -1,7 +1,7 @@
 module ImprovedInitiative {
     export class EncounterLibraryViewModel {
         constructor(
-            private encounterCommander: EncounterCommander,
+            private tracker: TrackerViewModel,
             private library: EncounterLibrary
         ) {
             this.LibraryFilter.subscribe(n => {
