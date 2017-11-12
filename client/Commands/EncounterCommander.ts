@@ -9,7 +9,7 @@ module ImprovedInitiative {
             this.libraries = tracker.Libraries;
         }
 
-        AddStatBlockFromListing = (listing: Listing<StatBlock>, event?) => {
+        AddStatBlockFromListing = (listing: Listing<StatBlock>, event: JQuery.Event) => {
             listing.GetAsync(statBlock => {
                 this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
                 this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
