@@ -134,9 +134,7 @@ module ImprovedInitiative {
 
         RollDice = (diceExpression: string) => {
             const diceRoll = Dice.RollDiceExpression(diceExpression);
-            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`,
-                _ => { }
-            );
+            const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`);
             this.tracker.PromptQueue.Add(prompt);
         }
 
@@ -192,6 +190,19 @@ module ImprovedInitiative {
             return false;
         }
 
+        SaveEncounter = () => {
+            const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
+                response => {
+                    const encounterName = response['encounterName'];
+                    if (encounterName) {
+                        const savedEncounter = this.tracker.Encounter.Save(encounterName);
+                        this.libraries.Encounters.Save(savedEncounter);
+                        this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                    }
+                });
+            this.tracker.PromptQueue.Add(prompt);
+        }
+
         NextTurn = () => {
             this.tracker.Encounter.NextTurn();
             var currentCombatant = this.tracker.Encounter.ActiveCombatant();
@@ -209,33 +220,6 @@ module ImprovedInitiative {
             this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.DisplayName()}.`);
 
             return false;
-        }
-
-        SaveEncounter = () => {
-            const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-                response => {
-                    const encounterName = response['encounterName'];
-                    if (encounterName) {
-                        const savedEncounter = this.tracker.Encounter.Save(encounterName);
-                        this.libraries.Encounters.Save(savedEncounter);
-                        this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
-                    }
-                });
-            this.tracker.PromptQueue.Add(prompt);
-        }
-
-        LoadEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
-            listing.GetAsync(encounter => {
-                this.tracker.Encounter.LoadSavedEncounter(encounter, this.tracker.PromptQueue);
-                this.tracker.EventLog.AddEvent(`Encounter loaded.`);
-            });
-        }
-
-        DeleteSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
-            if (confirm(`Delete saved encounter "${listing.CurrentName()}"? This cannot be undone.`)) {
-                this.libraries.Encounters.Delete(listing);
-                this.tracker.EventLog.AddEvent(`Encounter ${listing.CurrentName()} deleted.`);
-            }
         }
     }
 }
