@@ -110,7 +110,7 @@ input[type="file"] {
     cursor: pointer;
     display: inline-block;
     padding: 10px;
-    text-align:center;
+    text-align: center;
     text-decoration: none;
     
 	border-radius: @border-radius;
@@ -768,12 +768,14 @@ body>.login.button {
 
 .prompts {
     flex-grow: 1;
+    align-items: flex-end;
     overflow-y: auto;
 }
 
 .prompt {
     .recessed();
     display: flex;
+    
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
@@ -781,6 +783,7 @@ body>.login.button {
     div {
         display: flex;
         flex-flow: row;
+        margin: @medium-spacer;
     }
 
     li {
