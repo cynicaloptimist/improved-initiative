@@ -1,36 +1,34 @@
 declare var moment;
 
-module ImprovedInitiative {
-    export class TurnTimer {
-        private elapsedSeconds = ko.observable(0);
-        private incrementElapsedSeconds = () => this.elapsedSeconds(this.elapsedSeconds() + 1);
-        private intervalToken = null;
+export class TurnTimer {
+    private elapsedSeconds = ko.observable(0);
+    private incrementElapsedSeconds = () => this.elapsedSeconds(this.elapsedSeconds() + 1);
+    private intervalToken = null;
 
-        Start = () => {
-            if(this.intervalToken) {
-                this.Stop();
-            }
-            this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
-        }
-        
-        Stop = () => {
-            clearInterval(this.intervalToken);
-            this.elapsedSeconds(0);
-        }
-
-        Reset = () => {
+    Start = () => {
+        if (this.intervalToken) {
             this.Stop();
-            this.Start();
+        }
+        this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
+    }
+
+    Stop = () => {
+        clearInterval(this.intervalToken);
+        this.elapsedSeconds(0);
+    }
+
+    Reset = () => {
+        this.Stop();
+        this.Start();
+    }
+
+    Readout = ko.pureComputed(() => {
+        let time = moment.duration({ seconds: this.elapsedSeconds() });
+        let paddedSeconds = time.seconds().toString();
+        if (paddedSeconds.length < 2) {
+            paddedSeconds = '0' + paddedSeconds;
         }
 
-        Readout = ko.pureComputed(() => {
-            let time = moment.duration({seconds: this.elapsedSeconds()});
-            let paddedSeconds = time.seconds().toString();
-            if(paddedSeconds.length < 2){
-                paddedSeconds = '0' + paddedSeconds;
-            }
-
-            return time.minutes() + ':' + paddedSeconds;            
-        });
-    }
+        return time.minutes() + ':' + paddedSeconds;
+    });
 }
