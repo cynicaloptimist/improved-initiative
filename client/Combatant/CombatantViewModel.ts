@@ -56,7 +56,7 @@ module ImprovedInitiative {
         ApplyInitiative(inputInitiative: string) {
             const initiative = parseInt(inputInitiative);
             this.Combatant.Initiative(initiative);
-            this.Combatant.Encounter.SortByInitiative();
+            this.Combatant.Encounter.SortByInitiative(true);
         }
 
         InitiativeClass = ko.computed(() => {
