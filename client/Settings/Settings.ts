@@ -93,6 +93,7 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
             return;
         }
         Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
+        matchedCommands[0].KeyBinding = b.KeyBinding;
         matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
     });
 }
