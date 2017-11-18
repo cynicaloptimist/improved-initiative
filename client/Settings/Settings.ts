@@ -91,6 +91,7 @@ module ImprovedInitiative {
             }
             Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
             matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
+            matchedCommands[0].KeyBinding = b.KeyBinding;
         });
     }
 
