@@ -779,9 +779,13 @@ body>.login.button {
     align-items: center;
     justify-content: space-between;
 
-    div, p {
+    div {
         display: flex;
         flex-flow: row;
+        margin: @medium-spacer;
+    }
+
+    p {
         margin: @medium-spacer;
     }
 
@@ -792,17 +796,19 @@ body>.login.button {
     ul {
         max-height: 120px;
         overflow-y: auto;
+        margin: @medium-spacer;
     }
 
-    .add-tag {
-        flex-flow: column;
-        align-items: flex-start;
-        div {
-            flex-flow: row;
-            align-items: baseline;
-            > * {
-                margin: @small-spacer;
-            }
+}
+
+.prompt .add-tag {
+    flex-flow: column;
+    align-items: flex-start;
+    div {
+        flex-flow: row;
+        align-items: baseline;
+        > * {
+            margin: @small-spacer;
         }
     }
 }
@@ -825,6 +831,10 @@ body>.login.button {
         padding: @small-spacer;
         white-space: pre-wrap;
     }
+}
+
+.prompt .roll-initiative {
+    align-items: center;
 }
 
 #playerview {
