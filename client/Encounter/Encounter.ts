@@ -52,9 +52,14 @@ module ImprovedInitiative {
         RoundCounter: KnockoutObservable<number> = ko.observable(0);
         EncounterId = env.EncounterId;
 
-        SortByInitiative = () => {
-            this.Combatants.sort((l, r) => (r.Initiative() - l.Initiative()) ||
-                (r.InitiativeBonus - l.InitiativeBonus));
+        SortByInitiative = (stable: boolean = false) => {
+            this.Combatants.sort((l, r) => {
+                if (stable) {
+                    return r.Initiative() - l.Initiative()
+                }
+
+                return (r.Initiative() - l.Initiative()) || (r.InitiativeBonus - l.InitiativeBonus)
+            });
             this.QueueEmitEncounter();
         }
 

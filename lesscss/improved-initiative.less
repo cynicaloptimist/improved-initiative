@@ -18,6 +18,7 @@
 @button-width: 42px;
 @button-inner: 18px;
 @border-radius: 5px;
+@prompt-minimum-height: 42px;
 
 @fixed-column-width: 350px;
 
@@ -110,7 +111,7 @@ input[type="file"] {
     cursor: pointer;
     display: inline-block;
     padding: 10px;
-    text-align:center;
+    text-align: center;
     text-decoration: none;
     
 	border-radius: @border-radius;
@@ -702,7 +703,6 @@ body>.login.button {
 }
 
 .combatants {
-    flex-shrink: 0;
     overflow-y: auto;
 }
 
@@ -768,19 +768,31 @@ body>.login.button {
 
 .prompts {
     flex-grow: 1;
+    align-items: flex-end;
     overflow-y: auto;
+    &:not(.empty){
+        min-height: @prompt-minimum-height + (@medium-spacer * 4);
+    }
 }
 
 .prompt {
     .recessed();
     display: flex;
+    
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
 
+    min-height: @prompt-minimum-height;
+
     div {
         display: flex;
         flex-flow: row;
+        margin: @medium-spacer;
+    }
+
+    p {
+        margin: @medium-spacer;
     }
 
     li {
@@ -790,17 +802,19 @@ body>.login.button {
     ul {
         max-height: 120px;
         overflow-y: auto;
+        margin: @medium-spacer;
     }
 
-    .add-tag {
-        flex-flow: column;
-        align-items: flex-start;
-        div {
-            flex-flow: row;
-            align-items: baseline;
-            > * {
-                margin: @small-spacer;
-            }
+}
+
+.prompt .add-tag {
+    flex-flow: column;
+    align-items: flex-start;
+    div {
+        flex-flow: row;
+        align-items: baseline;
+        > * {
+            margin: @small-spacer;
         }
     }
 }
@@ -820,9 +834,13 @@ body>.login.button {
         font-size: small;
     }
     p {
-        padding-top: @small-spacer;
+        padding: @small-spacer;
         white-space: pre-wrap;
     }
+}
+
+.prompt .roll-initiative {
+    align-items: center;
 }
 
 #playerview {

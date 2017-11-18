@@ -40,7 +40,7 @@ module ImprovedInitiative {
             return finalList;
         });
 
-        ClickEntry = (entry: Listing<StatBlock>) => this.encounterCommander.AddStatBlockFromListing(entry);
+        ClickEntry = (entry: Listing<StatBlock>, event: JQuery.Event) => this.encounterCommander.AddStatBlockFromListing(entry, event);
         ClickEdit = (entry: Listing<StatBlock>) => this.encounterCommander.EditStatBlock(entry);
         ClickHide = () => this.encounterCommander.HideLibraries();
         ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);

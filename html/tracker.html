@@ -86,6 +86,7 @@
         component: {
             name: 'libraries',
             params: {
+                tracker: $data,
                 encounterCommander: EncounterCommander,
                 libraries: Libraries
             }
@@ -155,7 +156,7 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <div class="prompts" data-bind="with: PromptQueue">
+        <div class="prompts" data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}">
             <!-- ko foreach: Prompts -->
             <form class="prompt" data-bind="
                 submit: Resolve,
