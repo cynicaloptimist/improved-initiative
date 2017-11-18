@@ -63,7 +63,13 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         const encounterId = req.query.state.replace(/['"]/g,"");
         const relationships = apiResponse.included || [];
 
-        const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => r.relationships.reward.data.id);
+        const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => {
+            if (r.relationships && r.relationships.reward && r.relationships.reward.data) {
+                return r.relationships.reward.data.id;
+            } else {
+                return "none";
+            }
+        });
         const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
         const standing = hasStorage ? "pledge" : "none";
 
