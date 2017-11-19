@@ -63,7 +63,7 @@ Function.prototype.with = function(...params: any[]) {
     return partial;
 };
 
-var probablyUniqueString = (): string => {
+export function probablyUniqueString(): string {
     //string contains only easily relayable characters for forward 
     //compatability with speech-based data transfer ;-)
     var chars = '1234567890abcdefghijkmnpqrstuvxyz';

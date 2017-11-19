@@ -5,6 +5,7 @@ import { SavedCombatant } from "../Encounter/SavedEncounter";
 import { CurrentSettings } from "../Settings/Settings";
 import { Dice } from "../Rules/Rules";
 import { Metrics } from "../Utility/Metrics";
+import { probablyUniqueString } from "../Utility/Toolbox";
 
 export interface Combatant {
     Id: string;

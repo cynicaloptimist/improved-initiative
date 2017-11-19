@@ -8,6 +8,7 @@ import { CurrentSettings } from "../Settings/Settings";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { Combatant } from "../Combatant/Combatant";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
+import { probablyUniqueString } from "../Utility/Toolbox";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;

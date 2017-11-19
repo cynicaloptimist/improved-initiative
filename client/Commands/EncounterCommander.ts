@@ -12,6 +12,7 @@ import { DefaultPrompt } from "./Prompts/Prompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 import { CurrentSettings } from "../Settings/Settings";
 import { ComponentLoader } from "../Utility/Components";
+import { probablyUniqueString } from "../Utility/Toolbox";
 
 export class EncounterCommander {
     Commands: Command[];
