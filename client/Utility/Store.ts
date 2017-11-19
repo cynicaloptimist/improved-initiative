@@ -1,5 +1,5 @@
 import { StatBlock } from "../StatBlock/StatBlock";
-import { DnDAppFilesImporter } from "../Importers/Importer";
+import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
 export class Store {
     private static _prefix = "ImprovedInitiative";
