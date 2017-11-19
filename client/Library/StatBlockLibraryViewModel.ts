@@ -1,6 +1,7 @@
 import { Listing, DedupeByRankAndFilterListings } from "./Listing";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { EncounterCommander } from "../Commands/EncounterCommander";
+import { KeyValueSet } from "../Utility/Toolbox";
 
 export interface StatBlockLibrary {
     StatBlocks: KnockoutObservableArray<Listing<StatBlock>>

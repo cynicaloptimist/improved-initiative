@@ -4,6 +4,7 @@ import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel"
 import { EncounterLibraryViewModel } from "../Library/EncounterLibraryViewModel";
 import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
+import { removeFirst } from "./Toolbox";
 
 const pendingComponents: JQueryXHR[] = [];
 
@@ -23,7 +24,7 @@ export var RegisterComponents = () => {
                     ko.components.defaultLoader.loadTemplate(name, markupString, callback);
                 });
                 pendingComponents.push(request);
-                request.always(_ => pendingComponents.remove(request));
+                request.always(_ => removeFirst(pendingComponents, request));
             } else {
                 // Unrecognized config format. Let another loader handle it.
                 callback(null);

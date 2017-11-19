@@ -7,6 +7,7 @@ import { Encounter } from "../Encounter/Encounter";
 import { TagPrompt } from "../Commands/Prompts/TagPrompt";
 import { Tag } from "./Tag";
 import { Metrics } from "../Utility/Metrics";
+import { toModifierString } from "../Utility/Toolbox";
 
 export class CombatantViewModel {
     HP: KnockoutComputed<string>;
@@ -21,9 +22,9 @@ export class CombatantViewModel {
     ) {
         this.HP = ko.pureComputed(() => {
             if (this.Combatant.TemporaryHP()) {
-                return '{0}+{1}/{2}'.format(this.Combatant.CurrentHP(), this.Combatant.TemporaryHP(), this.Combatant.MaxHP);
+                return `${this.Combatant.CurrentHP()}+${this.Combatant.TemporaryHP()}/${this.Combatant.MaxHP}`;
             } else {
-                return '{0}/{1}'.format(this.Combatant.CurrentHP(), this.Combatant.MaxHP);
+                return `${this.Combatant.CurrentHP()}/${this.Combatant.MaxHP}`;
             }
         });
         this.Name = Combatant.DisplayName;
@@ -87,7 +88,7 @@ export class CombatantViewModel {
 
     EditInitiative() {
         const currentInitiative = this.Combatant.Initiative();
-        const modifier = this.Combatant.InitiativeBonus.toModifierString();
+        const modifier = toModifierString(this.Combatant.InitiativeBonus);
         let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
         let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
         if (this.Combatant.InitiativeGroup()) {

@@ -2,6 +2,7 @@ import { Listing, DedupeByRankAndFilterListings } from "./Listing";
 import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { EncounterLibrary } from "./EncounterLibrary";
+import { KeyValueSet } from "../Utility/Toolbox";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 

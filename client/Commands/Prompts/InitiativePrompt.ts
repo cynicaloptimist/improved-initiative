@@ -1,6 +1,7 @@
 import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
+import { toModifierString } from "../../Utility/Toolbox";
 
 export class InitiativePrompt implements Prompt {
     InputSelector = '.response';
@@ -12,7 +13,7 @@ export class InitiativePrompt implements Prompt {
     constructor(combatants: Combatant[], startEncounter: () => void) {
         const toPrompt = (combatant: Combatant) => ({
             Id: combatant.Id,
-            Prompt: `${combatant.DisplayName()} (${combatant.InitiativeBonus.toModifierString()}): `,
+            Prompt: `${combatant.DisplayName()} (${toModifierString(combatant.InitiativeBonus)}): `,
             Css: combatant.InitiativeGroup() !== null ? 'fa fa-link' : '',
             PreRoll: combatant.GetInitiativeRoll()
         });

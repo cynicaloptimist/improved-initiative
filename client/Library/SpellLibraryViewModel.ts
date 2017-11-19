@@ -2,6 +2,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "./SpellLibrary";
 import { Listing, DedupeByRankAndFilterListings } from "./Listing";
 import { Spell } from "../Spell/Spell";
+import { KeyValueSet } from "../Utility/Toolbox";
 
 export class SpellLibraryViewModel {
     constructor(

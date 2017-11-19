@@ -26,9 +26,9 @@ export class StaticCombatantViewModel {
 
         if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
             if (combatant.TemporaryHP()) {
-                return '{0}+{1}/{2}'.format(combatant.CurrentHP(), combatant.TemporaryHP(), combatant.MaxHP);
+                return `${combatant.CurrentHP()}+${combatant.TemporaryHP()}/${combatant.MaxHP}`;
             } else {
-                return '{0}/{1}'.format(combatant.CurrentHP(), combatant.MaxHP);
+                return `${combatant.CurrentHP()}/${combatant.MaxHP}`;
             }
         }
 
