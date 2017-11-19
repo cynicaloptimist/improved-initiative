@@ -66,8 +66,10 @@
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
+    "ts-loader": "^3.1.1",
     "typescript": "^2.6.1",
-    "uglify-js": "^2.7.4"
+    "uglify-js": "^2.7.4",
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "postinstall": "grunt --no-color postinstall",
