@@ -67,6 +67,7 @@ export class SettingsViewModel {
     }
 
     RepeatTutorial: () => void;
+    SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
     private getUpdatedSettings(): Settings {
         const getCommandSetting = (command: Command): CommandSetting => ({
