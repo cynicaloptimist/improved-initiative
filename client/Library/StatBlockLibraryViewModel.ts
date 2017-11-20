@@ -49,9 +49,13 @@ export class StatBlockLibraryViewModel {
     ClickHide = () => this.encounterCommander.HideLibraries();
     ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
 
-    GetPreviewStatBlock = ko.pureComputed(() => {
+    PreviewVisible = ko.computed(() => {
+        return this.previewStatBlock() !== null;
+    });
+    
+    GetPreviewStatBlock = ko.computed(() => {
         return this.previewStatBlock() || StatBlock.Default();
-    })
+    });
 
     PreviewStatBlock = (listing: Listing<StatBlock>) => {
         this.previewStatBlock(null);
