@@ -4,19 +4,10 @@ import { TextAssets } from "./TextAssets";
 import { IRules, Dice } from "../Rules/Rules";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "../Library/SpellLibrary";
+import { toModifierString } from "./Toolbox";
 
 declare var markdownit: any;
 declare var Awesomplete: any;
-
-interface KnockoutBindingHandlers {
-    focusOnRender: KnockoutBindingHandler;
-    afterRender: KnockoutBindingHandler;
-    onEnter: KnockoutBindingHandler;
-    uiText: KnockoutBindingHandler;
-    statBlockText: KnockoutBindingHandler;
-    hoverPop: KnockoutBindingHandler;
-    awesomplete: KnockoutBindingHandler;
-}
 
 export function RegisterBindingHandlers() {
     ko.bindingHandlers.focusOnRender = {
@@ -65,6 +56,16 @@ export function RegisterBindingHandlers() {
                 $(element).html(valueAccessor());
             }
     
+        }
+    }
+
+    ko.bindingHandlers.modifierFromAbilityScore = {
+        update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+            const abilityScore = valueAccessor();
+            if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
+                const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
+                $(element).html(modifier);
+            }
         }
     }
     

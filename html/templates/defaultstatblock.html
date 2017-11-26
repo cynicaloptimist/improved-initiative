@@ -27,7 +27,7 @@
         <div class="stat-label" data-bind="text: $data"></div>
         <div class="score" data-bind="css: $data, text: $parent.Abilities[$data]"></div>
         <div class="modifier" data-bind="css: $data, 
-      statBlockText: $root.Encounter.Rules.GetModifierFromScore($parent.Abilities[$data]).toModifierString()">
+            modifierFromAbilityScore: $parent.Abilities[$data]">
         </div>
     </div>
 </div>
