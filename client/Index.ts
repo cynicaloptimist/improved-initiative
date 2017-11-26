@@ -1,12 +1,14 @@
 import { LoadEnvironment, env } from "./Environment";
 import { RegisterComponents } from "./Utility/Components";
+import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { PlayerViewModel } from "./PlayerViewModel";
 import { LauncherViewModel } from "./LauncherViewModel";
 
 $(() => {
-    LoadEnvironment()
+    LoadEnvironment();
+    RegisterBindingHandlers();
     RegisterComponents();
     InitializeSettings();
     if ($('#tracker').length) {
