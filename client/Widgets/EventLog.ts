@@ -11,10 +11,8 @@ export class EventLog {
     ToggleFullLog = () => {
         if (this.ShowFullLog()) {
             this.ShowFullLog(false);
-            $('.combatants').css('flex-shrink', 1);
         } else {
             this.ShowFullLog(true);
-            $('.combatants').css('flex-shrink', 0);
             this.scrollToBottomOfLog();
         }
     }
