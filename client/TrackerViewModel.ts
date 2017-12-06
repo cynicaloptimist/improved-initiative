@@ -143,13 +143,16 @@ module ImprovedInitiative {
 
         PatreonLoginUrl = env.PatreonLoginUrl;
 
-        InterfaceState = ko.pureComputed(() => {
-            return [
-                this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
-                this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,
-                this.LibrariesVisible() ? 'showing-libraries' : null,
-                this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
-            ].filter(s => s).join(' ');
+        InterfacePriority = ko.pureComputed(() => {
+            if (this.LibrariesVisible()) {
+                return "show-left-center-right";
+            }
+
+            if (this.CombatantCommander.HasSelected()) {
+                return "show-right-center-left";
+            }
+
+            return "show-center-right-left";
         });
 
         private contextualCommandSuggestion = () => {
