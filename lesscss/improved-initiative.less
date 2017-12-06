@@ -15,7 +15,7 @@
 @medium-spacer: 5px;
 @large-spacer: 15px;
 
-@button-width: 42px;
+@button-size: 42px;
 @button-inner: 18px;
 @button-padding: 10px;
 @border-radius: 5px;
@@ -172,6 +172,14 @@ input[type="file"] {
     .overlay-dialog();
     z-index: 4;
     max-height: 90%;
+}
+
+.selected-combatant, .libraries {
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }
 
 .tutorial-focus {
@@ -404,12 +412,12 @@ body>.login.button {
 .toolbar-narrow {
     .scrollframe {
         max-width: none;
-        width: @button-width + @scrollbar-width;
+        width: @button-size + @scrollbar-width;
         overflow-x: hidden;
         overflow-y: scroll;
     }
 
-    width: @button-width;
+    width: @button-size;
     overflow: hidden;
     
     .command-name {

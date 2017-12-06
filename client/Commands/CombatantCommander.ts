@@ -117,6 +117,10 @@ module ImprovedInitiative {
             this.selectByOffset(1);
         }
 
+        Deselect = () => {
+            this.SelectedCombatants([]);
+        }
+
         private CreateEditHPCallback = (combatants: CombatantViewModel[], combatantNames: string) => {
             return (response) => {
                 const damage = response['damage'];
