@@ -38,7 +38,5 @@ module ImprovedInitiative {
                 }
             })
         }
-
-        
     }
 }
