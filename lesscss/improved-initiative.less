@@ -292,6 +292,7 @@ body>.login.button {
     }
     .footer-spacer {
         flex-grow: 1;
+        flex-shrink: 1;
     }
     .footer {
         .recessed();
@@ -350,9 +351,11 @@ body>.login.button {
     }
 
     .library {
+        flex-grow: 1;
         flex-shrink: 1;        
         ul {
             overflow-y: auto;
+            flex-grow: 1;
             flex-shrink: 1;
         }
     }
@@ -364,6 +367,7 @@ body>.login.button {
             .library-button();
             &:first-child {
                 flex-grow: 1;
+                flex-shrink: 1;
             }
         }
     }
@@ -430,6 +434,7 @@ body>.login.button {
 
     textarea {
         flex-grow: 1;
+        flex-shrink: 1;
         height: 50px;
     }
 
@@ -894,8 +899,4 @@ body>.login.button {
     }
 }
 
-@media (max-width: 800px), (max-height: 560px) {
-    .logo {
-        display: none;
-    }
-}
+@import "responsive.less";
