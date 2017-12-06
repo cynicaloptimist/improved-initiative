@@ -17,6 +17,7 @@
 
 @button-width: 42px;
 @button-inner: 18px;
+@button-padding: 10px;
 @border-radius: 5px;
 @prompt-minimum-height: 42px;
 
@@ -115,7 +116,7 @@ input[type="file"] {
 .button() {
     cursor: pointer;
     display: inline-block;
-    padding: 10px;
+    padding: @button-padding;
     text-align: center;
     text-decoration: none;
     
@@ -326,6 +327,7 @@ body>.login.button {
     .center-column {
         flex-grow:1;
         flex-shrink:1;
+        margin: @small-spacer;
         background-image: url('../img/improved-initiative-transparent-darkgreen.png');
         background-position: center bottom 20px;
         background-repeat: no-repeat;
@@ -348,6 +350,7 @@ body>.login.button {
         border-radius: @border-radius;
         padding: @small-spacer;
         margin: 1px;
+        overflow-x: hidden;
     }
 
     .library {
@@ -807,7 +810,9 @@ body>.login.button {
     div {
         display: flex;
         flex-flow: row;
+        flex-shrink: 1;
         margin: @medium-spacer;
+        align-items: center;
     }
 
     p {
