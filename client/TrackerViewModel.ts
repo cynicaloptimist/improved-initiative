@@ -96,6 +96,15 @@ module ImprovedInitiative {
         LibrariesVisible = ko.observable(true);
         ToolbarWide = ko.observable(false);
         ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
+        ToolbarWidth = (el: HTMLElement) => {
+            if (this.ToolbarWide()) {
+                return "";
+            } else {
+                const width = el.parentElement.offsetWidth + el.offsetWidth - el.clientWidth;
+                return width.toString() + "px";
+            }
+        }
+
         DisplayLogin = !env.IsLoggedIn;
 
         CenterColumn = ko.pureComputed(() => {

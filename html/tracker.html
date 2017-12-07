@@ -58,7 +58,7 @@
         <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
     <div class="toolbar" data-bind="css: ToolbarClass">
-        <div class="scrollframe">
+        <div class="scrollframe" data-bind="style: { width: ToolbarWidth($element) }">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
                 <div class="button" data-bind="
                     visible: ShowOnActionBar, 
