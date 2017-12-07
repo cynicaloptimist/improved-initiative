@@ -6,13 +6,17 @@
 
 //Narrow
 @media(max-width: 1200px) {
-    #tracker {
-        .left-column, .right-column, .preview.statblock {
-            width: 300px;
-        }
+    @touch-button-padding: 15px;
 
-        .entries span, input, .combatant {
-            padding: @button-padding;
+    #tracker {
+        .entries span, input, .combatant, .button {
+            padding: @touch-button-padding;
+        }
+        .toolbar-narrow {
+            width: 52px;
+            .scrollframe {
+                width: 68px;
+            }
         }
     }
 
@@ -23,6 +27,12 @@
     }
 
     #tracker.show-right-center-left {
+        .left-column {
+            display: none;
+        }
+    }
+
+    #tracker.show-center-right-left {
         .left-column {
             display: none;
         }
