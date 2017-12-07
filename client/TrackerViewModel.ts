@@ -144,6 +144,10 @@ module ImprovedInitiative {
         PatreonLoginUrl = env.PatreonLoginUrl;
 
         InterfacePriority = ko.pureComputed(() => {
+            if (this.CenterColumn() !== "combat" || this.PromptQueue.HasPrompt()) {
+                return "show-center-right-left";
+            }
+
             if (this.LibrariesVisible()) {
                 return "show-left-center-right";
             }
