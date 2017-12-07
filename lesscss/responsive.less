@@ -4,7 +4,7 @@
     }
 }
 
-//Narrow
+//Two columns
 @media(max-width: 1200px) {
     @touch-button-padding: 15px;
 
@@ -39,14 +39,22 @@
     }
 }
 
+@media(max-width:900px) {
+    #tracker {
+        .combatant .name {
+            width: 25%;
+        }
+
+        .left-column, .right-column, .preview.statblock {
+            width: 300px;
+        }
+    }
+}
+
 //One column
-@media(max-width: 750px) {
+@media(max-width: 700px) {
     body>.login.button {
         display: none;
-    }
-
-    .combatant .name {
-        width: 25%;
     }
 
     #tracker.show-left-center-right {
