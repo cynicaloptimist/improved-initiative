@@ -9,6 +9,7 @@ import { Library, StatBlock, Spell } from "./library";
 import { configureLoginRedirect, startNewsUpdates } from "./patreon";
 import { upsertUser } from "./dbconnection";
 import configureStorageRoutes from "./storageroutes";
+import configureMetricsRoutes from "./metrics";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
@@ -145,5 +146,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     configureLoginRedirect(app);
     configureStorageRoutes(app);
+    configureMetricsRoutes(app);
     startNewsUpdates(app);
 }
