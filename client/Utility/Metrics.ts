@@ -5,6 +5,13 @@ module ImprovedInitiative {
             if (data !== undefined) {
                 console.table(data);
             }
+
+            $.ajax({
+                type: "POST",
+                url: `/recordEvent/${name}`,
+                data: JSON.stringify(data || {}),
+                contentType: "application/json"
+            });
         }
     }
 }
