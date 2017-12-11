@@ -81,14 +81,22 @@ module ImprovedInitiative {
         }
 
         static ImportFromDnDAppFile(file: File) {
-            var callback = (statBlocks: StatBlock[]) => {
+            const statBlocksCallback = (statBlocks: StatBlock[]) => {
                 statBlocks.forEach(c => {
                     this.Save(Store.StatBlocks, c.Name, c);
                 });
             };
 
-            if (confirm(`Import all statblocks in ${file.name} and reload?`)) {
-                new DnDAppFilesImporter().ImportStatBlocksFromXml(file, callback);
+            const spellsCallback = (spells: Spell[]) => {
+                spells.forEach(c => {
+                    this.Save(Store.Spells, c.Name, c);
+                });
+            };
+
+            if (confirm(`Import all statblocks and spells in ${file.name} and reload?`)) {
+                const importer = new DnDAppFilesImporter();
+
+                importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
             }
         }
 

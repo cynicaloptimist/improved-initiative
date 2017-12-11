@@ -52,9 +52,6 @@ module ImprovedInitiative {
 
     const getStatBlocksFromXml = (xmlString: string) => {
         const statBlocks = $(xmlString).find("monster").toArray();
-        if (statBlocks.length === 0) {
-            alert("Could not retrieve any statblocks from the file. Please ensure that a valid DnDAppFile XML file is used.");
-        }
 
         return statBlocks.map(xmlDoc => {
             var importer = new StatBlockImporter(xmlDoc);
@@ -64,10 +61,7 @@ module ImprovedInitiative {
 
     const getSpellsFromXml = (xmlString: string) => {
         const spells = $(xmlString).find("spell").toArray();
-        if (spells.length === 0) {
-            alert("Could not retrieve any spells from the file. Please ensure that a valid DnDAppFile XML file is used.");
-        }
-        
+
         return spells.map(xmlDoc => {
             var importer = new SpellImporter(xmlDoc);
             return importer.GetSpell();
@@ -75,9 +69,9 @@ module ImprovedInitiative {
     }
 
     const _importFileUsing = <T>(
-        importer: (fileName: string) => T [],
+        importer: (fileName: string) => T[],
         xmlFile: File,
-        callBack: (entities: T []) => void
+        callBack: (entities: T[]) => void
     ) => {
         const reader = new FileReader();
         reader.onload = (event: any) => {
@@ -85,19 +79,38 @@ module ImprovedInitiative {
             var entities = importer(xml);
             if (entities.length) {
                 callBack(entities);
-                location.reload();    
+                location.reload();
             }
         };
         reader.readAsText(xmlFile);
     }
 
     export class DnDAppFilesImporter {
-        public ImportStatBlocksFromXml =
-        (xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) =>
-            _importFileUsing(getStatBlocksFromXml, xmlFile, callBack);
+        public ImportEntitiesFromXml =
+            (xmlFile: File, statBlocksCallback: (statBlocks: StatBlock[]) => void, spellsCallback: (spells: Spell[]) => void) => {
+                const reader = new FileReader();
 
-        public ImportSpellsFromXml =
-        (xmlFile: File, callBack: (spells: Spell[]) => void) =>
-            _importFileUsing(getSpellsFromXml, xmlFile, callBack);
+                reader.onload = (event: any) => {
+                    const xml: string = event.target.result;
+                    const statBlocks = getStatBlocksFromXml(xml);
+                    const spells = getSpellsFromXml(xml);
+
+                    if (statBlocks.length) {
+                        statBlocksCallback(statBlocks);
+                    }
+
+                    if (spells.length) {
+                        spellsCallback(spells);
+                    }
+
+                    if (spells.length || statBlocks.length) {
+                        location.reload();
+                    } else {
+                        alert(`Could not retrieve any statblocks or spells from ${xmlFile.name}. Please ensure that a valid DnDAppFile XML file is used.`);
+                    }
+                };
+
+                reader.readAsText(xmlFile);
+            }
     }
 }
