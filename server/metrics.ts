@@ -14,12 +14,16 @@ export default function (app: express.Application) {
     });
 
     app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
+        if (!keenProjectId || !keenWriteKey) {
+            return res.status(501).send("No metrics pipeline configured.");
+        }
+
         const eventName = req.params.eventName;
         const eventData = req.body || {};
         eventData.sessionId = req.session.id;
         eventData.userId = req.session.userId || null;
         keenClient.recordEvent(eventName, eventData);
 
-        res.sendStatus(201);
+        return res.sendStatus(200);
     });
 }
