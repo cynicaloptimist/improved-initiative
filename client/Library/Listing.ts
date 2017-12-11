@@ -79,7 +79,13 @@ export class Listing<T extends Listable> {
         }
 
         if (this.Origin === "localStorage") {
-            return callback(Store.Load(this.Link, this.Id));
+            const item = Store.Load<T>(this.Link, this.Id);
+
+            if (item !== null) {
+                return callback(item);
+            } else {
+                console.error(`Couldn't load item keyed '${this.Id}' from localStorage.`);
+            }
         }
 
         return $.getJSON(this.Link).done(item => {

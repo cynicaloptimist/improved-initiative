@@ -111,6 +111,15 @@ export class TrackerViewModel {
     LibrariesVisible = ko.observable(true);
     ToolbarWide = ko.observable(false);
     ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
+    ToolbarWidth = (el: HTMLElement) => {
+        if (this.ToolbarWide()) {
+            return "";
+        } else {
+            const width = el.parentElement.offsetWidth + el.offsetWidth - el.clientWidth;
+            return width.toString() + "px";
+        }
+    }
+
     DisplayLogin = !env.IsLoggedIn;
 
     CenterColumn = ko.pureComputed(() => {
@@ -157,14 +166,21 @@ export class TrackerViewModel {
     }
 
     PatreonLoginUrl = env.PatreonLoginUrl;
+    
+    InterfacePriority = ko.pureComputed(() => {
+        if (this.CenterColumn() !== "combat" || this.PromptQueue.HasPrompt()) {
+            return "show-center-right-left";
+        }
 
-    InterfaceState = ko.pureComputed(() => {
-        return [
-            this.StatBlockEditor.HasStatBlock() ? 'editing-statblock' : null,
-            this.CombatantCommander.HasSelected() ? 'combatant-selected' : null,
-            this.LibrariesVisible() ? 'showing-libraries' : null,
-            this.Encounter.State() === "active" ? 'encounter-active' : 'encounter-inactive'
-        ].filter(s => s).join(' ');
+        if (this.LibrariesVisible()) {
+            return "show-left-center-right";
+        }
+
+        if (this.CombatantCommander.HasSelected()) {
+            return "show-right-center-left";
+        }
+
+        return "show-center-right-left";
     });
 
     private contextualCommandSuggestion = () => {

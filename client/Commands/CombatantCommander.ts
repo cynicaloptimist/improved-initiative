@@ -120,6 +120,10 @@ export class CombatantCommander {
         this.tracker.Encounter.QueueEmitEncounter();
     }
 
+    Deselect = () => {
+        this.SelectedCombatants([]);
+    }
+
     SelectPrevious = () => {
         this.selectByOffset(-1);
     }

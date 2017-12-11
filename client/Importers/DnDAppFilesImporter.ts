@@ -27,28 +27,31 @@ const getSpellsFromXml = (xmlString: string) => {
     });
 }
 
-const _importFileUsing = <T>(
-    importer: (fileName: string) => T[],
-    xmlFile: File,
-    callBack: (entities: T[]) => void
-) => {
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-        var xml: string = event.target.result;
-        var entities = importer(xml);
-        if (entities.length) {
-            callBack(entities);
-            location.reload();
-        }
-    };
-    reader.readAsText(xmlFile);
-}
 export class DnDAppFilesImporter {
-    public ImportStatBlocksFromXml =
-        (xmlFile: File, callBack: (statBlocks: StatBlock[]) => void) =>
-            _importFileUsing(getStatBlocksFromXml, xmlFile, callBack);
+    public ImportEntitiesFromXml =
+        (xmlFile: File, statBlocksCallback: (statBlocks: StatBlock[]) => void, spellsCallback: (spells: Spell[]) => void) => {
+            const reader = new FileReader();
 
-    public ImportSpellsFromXml =
-        (xmlFile: File, callBack: (spells: Spell[]) => void) =>
-            _importFileUsing(getSpellsFromXml, xmlFile, callBack);
+            reader.onload = (event: any) => {
+                const xml: string = event.target.result;
+                const statBlocks = getStatBlocksFromXml(xml);
+                const spells = getSpellsFromXml(xml);
+
+                if (statBlocks.length) {
+                    statBlocksCallback(statBlocks);
+                }
+
+                if (spells.length) {
+                    spellsCallback(spells);
+                }
+
+                if (spells.length || statBlocks.length) {
+                    location.reload();
+                } else {
+                    alert(`Could not retrieve any statblocks or spells from ${xmlFile.name}. Please ensure that a valid DnDAppFile XML file is used.`);
+                }
+            };
+
+            reader.readAsText(xmlFile);
+        }
 }

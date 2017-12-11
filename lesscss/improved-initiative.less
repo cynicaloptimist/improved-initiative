@@ -15,8 +15,9 @@
 @medium-spacer: 5px;
 @large-spacer: 15px;
 
-@button-width: 42px;
+@button-size: 42px;
 @button-inner: 18px;
+@button-padding: 10px;
 @border-radius: 5px;
 @prompt-minimum-height: 42px;
 
@@ -115,7 +116,7 @@ input[type="file"] {
 .button() {
     cursor: pointer;
     display: inline-block;
-    padding: 10px;
+    padding: @button-padding;
     text-align: center;
     text-decoration: none;
     
@@ -171,6 +172,14 @@ input[type="file"] {
     .overlay-dialog();
     z-index: 4;
     max-height: 90%;
+}
+
+.selected-combatant, .libraries {
+    .close {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }
 
 .tutorial-focus {
@@ -282,7 +291,8 @@ body>.login.button {
             flex-direction: row;
         }
         .button, input {
-            flex-grow:1;
+            flex-grow: 1;
+            flex-shrink: 1;
             margin: @medium-spacer;
         }
     }
@@ -291,6 +301,7 @@ body>.login.button {
     }
     .footer-spacer {
         flex-grow: 1;
+        flex-shrink: 1;
     }
     .footer {
         .recessed();
@@ -323,6 +334,8 @@ body>.login.button {
     
     .center-column {
         flex-grow:1;
+        flex-shrink:1;
+        margin: @small-spacer;
         background-image: url('../img/improved-initiative-transparent-darkgreen.png');
         background-position: center bottom 20px;
         background-repeat: no-repeat;
@@ -345,12 +358,15 @@ body>.login.button {
         border-radius: @border-radius;
         padding: @small-spacer;
         margin: 1px;
+        overflow-x: hidden;
     }
 
     .library {
+        flex-grow: 1;
         flex-shrink: 1;        
         ul {
             overflow-y: auto;
+            flex-grow: 1;
             flex-shrink: 1;
         }
     }
@@ -358,10 +374,13 @@ body>.login.button {
     li {
         list-style-type: none;
         display:flex;
+        overflow-x: hidden;
+
         span {
             .library-button();
             &:first-child {
                 flex-grow: 1;
+                flex-shrink: 1;
             }
         }
     }
@@ -395,12 +414,12 @@ body>.login.button {
 .toolbar-narrow {
     .scrollframe {
         max-width: none;
-        width: @button-width + @scrollbar-width;
+        width: @button-size;
         overflow-x: hidden;
         overflow-y: scroll;
     }
 
-    width: @button-width;
+    width: @button-size;
     overflow: hidden;
     
     .command-name {
@@ -424,16 +443,17 @@ body>.login.button {
 
 .statblock-editor, .spell-editor {
     flex-grow: 1;
+    flex-shrink: 1;
 
     textarea {
         flex-grow: 1;
+        flex-shrink: 1;
         height: 50px;
     }
 
     input, textarea, p {
         font-size: medium;
         line-height: 1.4em;
-        margin-left: @medium-spacer;
     }
 
     .editor-type, .edit-mode {
@@ -705,7 +725,8 @@ body>.login.button {
     }
 
     .latest-event {
-        flex-grow:1;
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 
 }
@@ -767,6 +788,7 @@ body>.login.button {
 
     .tags {
         flex-grow:1;
+        flex-shrink: 1;
     }
 
     .buttons {
@@ -797,7 +819,9 @@ body>.login.button {
     div {
         display: flex;
         flex-flow: row;
+        flex-shrink: 1;
         margin: @medium-spacer;
+        align-items: center;
     }
 
     p {
@@ -830,6 +854,7 @@ body>.login.button {
 }
 
 .prompt .spell {
+    flex-shrink: 1;
     flex-flow: column;
     align-self: stretch;
     label {
@@ -888,8 +913,4 @@ body>.login.button {
     }
 }
 
-@media (max-width: 800px), (max-height: 560px) {
-    .logo {
-        display: none;
-    }
-}
+@import "responsive.less";
