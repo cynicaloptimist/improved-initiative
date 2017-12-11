@@ -17,18 +17,18 @@
         }
     }
 
-    #tracker.show-left-center-right {
+    #tracker.show-left-center-right, 
+    #tracker.show-center-left-right {
         .right-column {
             display: none;
         }
-    }
 
-    #tracker.show-right-center-left {
         .left-column {
-            display: none;
+            order: 3;
         }
     }
 
+    #tracker.show-right-center-left,
     #tracker.show-center-right-left {
         .left-column {
             display: none;
@@ -78,7 +78,8 @@
         }
     }
 
-    #tracker.show-center-right-left {
+    #tracker.show-center-right-left,
+    #tracker.show-center-left-right {
         .left-column, .right-column {
             display: none;
         }

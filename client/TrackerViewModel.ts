@@ -180,6 +180,10 @@ export class TrackerViewModel {
             return "show-right-center-left";
         }
 
+        if (this.Encounter.State() == "active") {
+            return "show-center-left-right";
+        }
+
         return "show-center-right-left";
     });
 
