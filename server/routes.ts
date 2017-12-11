@@ -8,6 +8,7 @@ import dbSession = require('connect-mongodb-session');
 import { Library, StatBlock, Spell } from "./library";
 import { configureLoginRedirect, startNewsUpdates } from "./patreon";
 import { upsertUser } from "./dbconnection";
+import configureStorageRoutes from "./storageroutes";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
@@ -143,5 +144,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.post("/importencounter/", importEncounter);
 
     configureLoginRedirect(app);
+    configureStorageRoutes(app);
     startNewsUpdates(app);
 }
