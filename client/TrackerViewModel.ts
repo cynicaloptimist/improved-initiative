@@ -12,6 +12,7 @@ import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { Combatant } from "./Combatant/Combatant";
 import { Encounter } from "./Encounter/Encounter";
 import { Store } from "./Utility/Store";
+import { Metrics } from "./Utility/Metrics";
 import { env } from "./Environment";
 
 interface PatreonPostAttributes {
@@ -45,7 +46,9 @@ export class TrackerViewModel {
             }
 
             this.HandleAccountSync(account);
-        })
+        });
+
+        Metrics.TrackLoad();
     }
 
     private HandleAccountSync(account: Account) {

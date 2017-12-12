@@ -1,7 +1,6 @@
 import { Listing, ServerListing, ListingOrigin } from "./Listing";
 import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
 import { Store } from "../Utility/Store";
-import { Metrics } from "../Utility/Metrics";
 import { AccountClient } from "../Account/AccountClient";
 import { probablyUniqueString } from "../Utility/Toolbox";
 
@@ -14,8 +13,6 @@ export class EncounterLibrary {
             const listing = listingFrom(encounter, e);
             this.Encounters.push(listing);
         });
-
-        Metrics.TrackEvent("SavedEncounters", { Count: this.Encounters().length.toString() });
     }
 
     AddListings(listings: ServerListing[], source: ListingOrigin) {

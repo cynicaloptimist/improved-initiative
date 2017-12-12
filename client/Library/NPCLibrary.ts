@@ -1,7 +1,6 @@
 import { Listing, ServerListing, ListingOrigin } from "./Listing";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Store } from "../Utility/Store";
-import { Metrics } from "../Utility/Metrics";
 import { AccountClient } from "../Account/AccountClient";
 
 export class NPCLibrary {
@@ -16,7 +15,6 @@ export class NPCLibrary {
             var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
             this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage"));
         });
-        Metrics.TrackEvent("LocalStatBlocks", { Count: localStatBlocks.length.toString() });
     }
 
     AddStatBlockListings = (listings: ServerListing[], source: ListingOrigin) => {

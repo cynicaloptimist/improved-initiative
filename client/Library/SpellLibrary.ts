@@ -1,7 +1,6 @@
 import { Listing, ServerListing, ListingOrigin } from "./Listing";
 import { Spell } from "../Spell/Spell";
 import { Store } from "../Utility/Store";
-import { Metrics } from "../Utility/Metrics";
 import { AccountClient } from "../Account/AccountClient";
 
 export class SpellLibrary {
@@ -22,8 +21,6 @@ export class SpellLibrary {
             var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
             this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage"));
         });
-
-        Metrics.TrackEvent("CustomSpells", { Count: customSpells.length.toString() });
     }
 
     AddListings = (listings: ServerListing[], source: ListingOrigin) => {

@@ -1,7 +1,6 @@
 import { Listing, ServerListing, ListingOrigin } from "./Listing";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Store } from "../Utility/Store";
-import { Metrics } from "../Utility/Metrics";
 import { AccountClient } from "../Account/AccountClient";
 
 export class PCLibrary {
@@ -13,8 +12,6 @@ export class PCLibrary {
             var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
             this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.PlayerCharacters, "localStorage"));
         });
-
-        Metrics.TrackEvent("CustomPlayerCharacters", { Count: this.StatBlocks().length.toString() });
 
         if (this.StatBlocks().length == 0) {
             this.addSamplePlayersFromUrl('/sample_players.json');
