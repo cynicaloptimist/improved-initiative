@@ -186,7 +186,6 @@ export class Encounter {
     }
 
     NextTurn = () => {
-        Metrics.TrackEvent("TurnCompleted");
         const activeCombatant = this.ActiveCombatant();
 
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
