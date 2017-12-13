@@ -24,6 +24,9 @@ module.exports = function (grunt) {
       },
     },
     webpack: {
+      options: {
+        keepalive: false
+      },
       prod: require('./webpack.config.prod'),
       dev: require('./webpack.config')
     },
@@ -75,10 +78,6 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      tsclient: {
-        files: 'client/**/*.ts',
-        tasks: ['webpack:dev']
-      },
       tsserver: {
         files: 'server/**/*.ts',
         tasks: ['ts:server']
