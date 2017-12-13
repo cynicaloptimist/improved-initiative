@@ -1,69 +1,22 @@
-interface Array<T> {
-    remove: (item: T) => void;
-}
-
-interface String {
-    format: (...arguments: any[]) => string;
-}
-
-interface Number {
-    toModifierString: () => string;
-}
-
-interface Function {
-    with: (...params: any[]) => ((...params: any[]) => any)
-}
-
-interface KeyValueSet<T> {
+export interface KeyValueSet<T> {
     [key: string]: T;
 }
 
-Array.prototype.remove = function (item) {
-    const index = this.indexOf(item);
+export function removeFirst<T>(array: T[], item: T) {
+    const index = array.indexOf(item);
     if (index > -1) {
-        this.splice(index, 1);
+        array.splice(index, 1);
     }
 }
 
-Number.prototype.toModifierString = function() {
-    if (this >= 0) {
-        return `+${this}`
+export function toModifierString(number: number): string {
+    if (number >= 0) {
+        return `+${number}`;
     }
-    return this
+    return number.toString();
 }
 
-String.prototype.format = function() {
-    var args;
-    if (arguments[0] instanceof Array) {
-        args = arguments[0];
-    } else {
-        args = arguments;
-    }
-    return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function(m, n) {
-        if (m == "{{") { return "{"; }
-        if (m == "}}") { return "}"; }
-        if (args[n] === null || args[n] === undefined) {
-            return "{" + n + "}";
-        }
-        return args[n];
-    });
-};
-
-Function.prototype.with = function(...params: any[]) {
-    if (typeof this !== "function") {
-        throw new TypeError("Function.prototype.with needs to be called on a function");
-    }
-    var slice = Array.prototype.slice,
-        args = slice.call(arguments),
-        fn = this,
-        partial = function() {
-            return fn.apply(this, args.concat(slice.call(arguments)));
-        };
-    partial.prototype = Object.create(this.prototype);
-    return partial;
-};
-
-var probablyUniqueString = (): string => {
+export function probablyUniqueString(): string {
     //string contains only easily relayable characters for forward 
     //compatability with speech-based data transfer ;-)
     var chars = '1234567890abcdefghijkmnpqrstuvxyz';

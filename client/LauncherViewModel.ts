@@ -1,26 +1,28 @@
-module ImprovedInitiative {
-    export class LauncherViewModel {
-        constructor() {
-        }
+import { env } from "./Environment";
+import { Metrics } from "./Utility/Metrics";
 
-        GeneratedEncounterId = env.EncounterId;
-        JoinEncounterInput = ko.observable<string>('');
+export class LauncherViewModel {
+    constructor() {
+        Metrics.TrackEvent('LandingPageLoad');
+    }
 
-        StartEncounter = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
-        }
+    GeneratedEncounterId = env.EncounterId;
+    JoinEncounterInput = ko.observable<string>('');
 
-        JoinEncounter = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            if (encounterId) {
-                window.location.href = `p/${encounterId}`;
-            }
-        }
+    StartEncounter = () => {
+        var encounterId = this.JoinEncounterInput().split('/').pop();
+        window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
+    }
 
-        JoinEncounterButtonClass = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            return encounterId ? 'enabled' : 'disabled';
+    JoinEncounter = () => {
+        var encounterId = this.JoinEncounterInput().split('/').pop();
+        if (encounterId) {
+            window.location.href = `p/${encounterId}`;
         }
+    }
+
+    JoinEncounterButtonClass = () => {
+        var encounterId = this.JoinEncounterInput().split('/').pop();
+        return encounterId ? 'enabled' : 'disabled';
     }
 }

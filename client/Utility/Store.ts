@@ -1,108 +1,118 @@
-module ImprovedInitiative {
-    export class Store {
-        private static _prefix = "ImprovedInitiative";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { Spell } from "../Spell/Spell";
+import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
-        static readonly PlayerCharacters = "PlayerCharacters";
-        static readonly StatBlocks = "Creatures";
-        static readonly Spells = "Spells";
-        static readonly SavedEncounters = "SavedEncounters";
-        static readonly AutoSavedEncounters = "AutoSavedEncounters";
-        static readonly User = "User";
+export class Store {
+    private static _prefix = "ImprovedInitiative";
 
-        //Legacy
-        static readonly KeyBindings = "KeyBindings";
-        static readonly ActionBar = "ActionBar";
+    static readonly PlayerCharacters = "PlayerCharacters";
+    static readonly StatBlocks = "Creatures";
+    static readonly Spells = "Spells";
+    static readonly SavedEncounters = "SavedEncounters";
+    static readonly AutoSavedEncounters = "AutoSavedEncounters";
+    static readonly User = "User";
 
-        static List(listName: string): string[] {
-            var listKey = `${Store._prefix}.${listName}`;
-            var list = Store.load(listKey);
-            if (list && list.constructor === Array) {
-                return list;
-            }
-            Store.save(listKey, []);
-            return [];
+    //Legacy
+    static readonly KeyBindings = "KeyBindings";
+    static readonly ActionBar = "ActionBar";
+
+    static List(listName: string): string[] {
+        var listKey = `${Store._prefix}.${listName}`;
+        var list = Store.load(listKey);
+        if (list && list.constructor === Array) {
+            return list;
         }
-
-        static Save<T>(listName: string, key: string, value: T) {
-            if (typeof (key) !== "string") {
-                throw `Can't save to non-string key ${key}`;
-            }
-            var listKey = `${Store._prefix}.${listName}`;
-            var fullKey = `${Store._prefix}.${listName}.${key}`;
-            var list = Store.List(listName);
-            if (list.indexOf(key) == -1) {
-                list.push(key);
-                Store.save(listKey, list);
-            }
-            Store.save(fullKey, value);
-        }
-
-        static Load<T>(listName: string, key: string): T {
-            var fullKey = `${Store._prefix}.${listName}.${key}`;
-            return Store.load(fullKey);
-        }
-
-        static Delete<T>(listName: string, key: string) {
-            var listKey = `${Store._prefix}.${listName}`;
-            var fullKey = `${Store._prefix}.${listName}.${key}`;
-            var list = Store.List(listName);
-            var keyIndex = list.indexOf(key);
-            if (keyIndex != -1) {
-                list.splice(keyIndex, 1);
-                Store.save(listKey, list);
-            }
-            localStorage.removeItem(fullKey);
-        }
-
-        static ExportAll() {
-            return new Blob([JSON.stringify(localStorage, null, 2)],
-                { type: 'application/json' });
-        }
-
-        static ImportAll(file: File) {
-            var reader = new FileReader();
-            reader.onload = (event: any) => {
-                var json = event.target.result;
-                try {
-                    var importedStorage = JSON.parse(json);
-                } catch (error) {
-                    alert(`There was a problem importing ${file.name}: ${error}`);
-                    return;
-                }
-                if (confirm(`Replace your Improved Initiative data with imported ${file.name} and reload?`)) {
-                    localStorage.clear();
-                    for (var key in importedStorage) {
-                        localStorage.setItem(key, importedStorage[key]);
-                    }
-                    location.reload();
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        static ImportFromDnDAppFile(file: File) {
-            var callback = (statBlocks: StatBlock[]) => {
-                statBlocks.forEach(c => {
-                    this.Save(Store.StatBlocks, c.Name, c);
-                });
-            };
-
-            if (confirm(`Import all statblocks in ${file.name} and reload?`)) {
-                new DnDAppFilesImporter().ImportStatBlocksFromXml(file, callback);
-            }
-        }
-
-        static ExportStatBlocks() {
-            var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
-            return new Blob([JSON.stringify(statBlocks, null, 2)],
-                { type: 'application/json' });
-        }
-
-        private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-        private static load = (key) => {
-            var value = localStorage.getItem(key);
-            if (value === "undefined") { return null; }
-            return JSON.parse(value);
-        };
+        Store.save(listKey, []);
+        return [];
     }
+
+    static Save<T>(listName: string, key: string, value: T) {
+        if (typeof (key) !== "string") {
+            throw `Can't save to non-string key ${key}`;
+        }
+        var listKey = `${Store._prefix}.${listName}`;
+        var fullKey = `${Store._prefix}.${listName}.${key}`;
+        var list = Store.List(listName);
+        if (list.indexOf(key) == -1) {
+            list.push(key);
+            Store.save(listKey, list);
+        }
+        Store.save(fullKey, value);
+    }
+
+    static Load<T>(listName: string, key: string): T {
+        var fullKey = `${Store._prefix}.${listName}.${key}`;
+        return Store.load(fullKey);
+    }
+
+    static Delete<T>(listName: string, key: string) {
+        var listKey = `${Store._prefix}.${listName}`;
+        var fullKey = `${Store._prefix}.${listName}.${key}`;
+        var list = Store.List(listName);
+        var keyIndex = list.indexOf(key);
+        if (keyIndex != -1) {
+            list.splice(keyIndex, 1);
+            Store.save(listKey, list);
+        }
+        localStorage.removeItem(fullKey);
+    }
+
+    static ExportAll() {
+        return new Blob([JSON.stringify(localStorage, null, 2)],
+            { type: 'application/json' });
+    }
+
+    static ImportAll(file: File) {
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+            var json = event.target.result;
+            try {
+                var importedStorage = JSON.parse(json);
+            } catch (error) {
+                alert(`There was a problem importing ${file.name}: ${error}`);
+                return;
+            }
+            if (confirm(`Replace your Improved Initiative data with imported ${file.name} and reload?`)) {
+                localStorage.clear();
+                for (var key in importedStorage) {
+                    localStorage.setItem(key, importedStorage[key]);
+                }
+                location.reload();
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    static ImportFromDnDAppFile(file: File) {
+        const statBlocksCallback = (statBlocks: StatBlock[]) => {
+            statBlocks.forEach(c => {
+                this.Save(Store.StatBlocks, c.Name, c);
+            });
+        };
+
+        const spellsCallback = (spells: Spell[]) => {
+            spells.forEach(c => {
+                this.Save(Store.Spells, c.Name, c);
+            });
+        };
+
+        if (confirm(`Import all statblocks and spells in ${file.name} and reload?`)) {
+            const importer = new DnDAppFilesImporter();
+
+            importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+        }
+    }
+
+    static ExportStatBlocks() {
+        var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
+        return new Blob([JSON.stringify(statBlocks, null, 2)],
+            { type: 'application/json' });
+    }
+
+    private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+    private static load = (key) => {
+        var value = localStorage.getItem(key);
+        if (value === "undefined") { return null; }
+        return JSON.parse(value);
+    };
 }

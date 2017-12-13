@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -51,7 +51,9 @@
     "grunt-mocha-test": "^0.12.7",
     "grunt-open": "^0.2.3",
     "grunt-ts": "^5.5.1",
+    "grunt-webpack": "^3.0.2",
     "jquery": "^2.1.4",
+    "keen-tracking": "^1.4.0",
     "knockout": "^3.4.0",
     "knockout-mapping": "^2.6.0",
     "less": "^2.5.0",
@@ -66,8 +68,10 @@
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
-    "typescript": "^2.5.3",
-    "uglify-js": "^2.7.4"
+    "ts-loader": "^3.1.1",
+    "typescript": "^2.6.1",
+    "uglify-js": "^2.7.4",
+    "webpack": "^3.8.1"
   },
   "scripts": {
     "postinstall": "grunt --no-color postinstall",

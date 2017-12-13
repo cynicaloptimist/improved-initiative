@@ -13,4 +13,6 @@
     <span data-bind="click: ClickHide" title="Hide Libraries" class="button fa fa-chevron-up"></span>
     <span data-bind="click: ClickAdd" title="Add new statblock" class="button fa fa-plus"></span>
 </div>
+<!-- ko if: PreviewVisible -->
 <div class="preview statblock" data-bind="component: { name: 'defaultstatblock', params: { statBlock: GetPreviewStatBlock } }"></div>
+<!-- /ko -->

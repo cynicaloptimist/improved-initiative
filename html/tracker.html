@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.js"></script>
 </head>
 
-<body id="tracker" data-bind="css: InterfaceState">
+<body id="tracker" data-bind="css: InterfacePriority">
     <div id="fb-root"></div>
     <script>
         (function (d, s, id) {
@@ -58,7 +58,7 @@
         <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
     <div class="toolbar" data-bind="css: ToolbarClass">
-        <div class="scrollframe">
+        <div class="scrollframe" data-bind="style: { width: ToolbarWidth($element) }">
             <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
                 <div class="button" data-bind="
                     visible: ShowOnActionBar, 
@@ -199,6 +199,7 @@
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
+            <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
             <div class="statblock" data-bind="
                 component: { 
                     name: 'defaultstatblock', 
@@ -210,6 +211,7 @@
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>
+            <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
             <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"></div>
             <!-- /ko -->
         </div>

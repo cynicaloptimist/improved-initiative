@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -13,18 +14,6 @@ module.exports = function (grunt) {
       options: {
         removeComments: false,
       },
-      client: {
-        src: ['client/**/*.ts'],
-        out: 'public/js/ImprovedInitiative.js',
-        options: {
-          fast: 'never',
-          inlineSources: true
-        }
-      },
-      client_prod: {
-        src: ['client/**/*.ts'],
-        out: 'build/ImprovedInitiative.js'
-      },
       server: {
         src: ['server/*.ts'],
         outDir: 'server/',
@@ -33,6 +22,13 @@ module.exports = function (grunt) {
           target: 'es5'
         }
       },
+    },
+    webpack: {
+      options: {
+        keepalive: false
+      },
+      prod: require('./webpack.config.prod'),
+      dev: require('./webpack.config')
     },
     uglify: {
       options: {
@@ -82,10 +78,6 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      tsclient: {
-        files: 'client/**/*.ts',
-        tasks: ['ts:client']
-      },
       tsserver: {
         files: 'server/**/*.ts',
         tasks: ['ts:server']
@@ -104,8 +96,8 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build_dev', ['ts:client', 'ts:server', 'less', 'concat:js_dependencies']);
-  grunt.registerTask('build_min', ['ts:client_prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min']);
+  grunt.registerTask('build_dev', ['webpack:dev', 'ts:server', 'less', 'concat:js_dependencies']);
+  grunt.registerTask('build_min', ['webpack:prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };

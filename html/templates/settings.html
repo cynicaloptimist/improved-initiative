@@ -1,8 +1,8 @@
 <div class="tabs">
-    <span data-bind="click: CurrentTab.with('about'), css: { selected: CurrentTab() == 'about' }">About</span>
-    <span data-bind="click: CurrentTab.with('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
-    <span data-bind="click: CurrentTab.with('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
-    <span data-bind="click: CurrentTab.with('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
+    <span data-bind="click: SelectTab('about'), css: { selected: CurrentTab() == 'about' }">About</span>
+    <span data-bind="click: SelectTab('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
+    <span data-bind="click: SelectTab('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
+    <span data-bind="click: SelectTab('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <div>
@@ -97,7 +97,7 @@
     <p>Import an exported user data file:
         <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
     </p>
-    <p>Import statblocks from DnDAppFile:
+    <p>Import statblocks and spells from DnDAppFile:
         <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
     </p>
     <!-- ko with: AccountViewModel -->

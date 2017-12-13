@@ -1,16 +1,15 @@
+import { TrackerViewModel } from "../TrackerViewModel";
+import { ComponentLoader } from "./Components";
+import { TextAssets } from "./TextAssets";
+import { IRules, Dice } from "../Rules/Rules";
+import { EncounterCommander } from "../Commands/EncounterCommander";
+import { SpellLibrary } from "../Library/SpellLibrary";
+import { toModifierString } from "./Toolbox";
+
 declare var markdownit: any;
+declare var Awesomplete: any;
 
-interface KnockoutBindingHandlers {
-    focusOnRender: KnockoutBindingHandler;
-    afterRender: KnockoutBindingHandler;
-    onEnter: KnockoutBindingHandler;
-    uiText: KnockoutBindingHandler;
-    statBlockText: KnockoutBindingHandler;
-    hoverPop: KnockoutBindingHandler;
-    awesomplete: KnockoutBindingHandler;
-}
-
-module ImprovedInitiative {
+export function RegisterBindingHandlers() {
     ko.bindingHandlers.focusOnRender = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
             ComponentLoader.AfterComponentLoaded(() => {
@@ -19,14 +18,14 @@ module ImprovedInitiative {
             });
         }
     }
-
+    
     ko.bindingHandlers.afterRender = {
-        init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called when the binding is first applied to an element
             // Set up any initial state, event handlers, etc. here
             //if (bindingContext.$data.init) bindingContext.$data.init(element, valueAccessor, allBindings, viewModel, bindingContext);
         },
-        update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called once when the binding is first applied to an element,
             // and again whenever any observables/computeds that are accessed change
             // Update the DOM element based on the supplied values here.
@@ -34,7 +33,7 @@ module ImprovedInitiative {
             valueAccessor()(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
     }
-
+    
     ko.bindingHandlers.onEnter = {
         init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             var callback = valueAccessor();
@@ -48,7 +47,7 @@ module ImprovedInitiative {
             });
         }
     };
-
+    
     ko.bindingHandlers.uiText = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             if (TextAssets[valueAccessor()]) {
@@ -56,47 +55,57 @@ module ImprovedInitiative {
             } else {
                 $(element).html(valueAccessor());
             }
-
+    
         }
     }
 
+    ko.bindingHandlers.modifierFromAbilityScore = {
+        update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
+            const abilityScore = valueAccessor();
+            if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
+                const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
+                $(element).html(modifier);
+            }
+        }
+    }
+    
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
         const name = viewModel.Name || null;
-
+    
         let text = markdownit().renderInline(originalText);
-
+    
         const rules: IRules = bindingContext.$root.Encounter.Rules;
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
-        
+    
         text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
-        
+    
         if ((name + text).toLocaleLowerCase().indexOf("spell") > -1) {
             text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell-reference'>${match}</span>`);
         }
-
+    
         $(element).html(text);
-        
+    
         $(element).find('.rollable').on('click', (event) => {
             const diceExpression = event.target.innerHTML;
             encounterCommander.RollDice(diceExpression);
         });
-
+    
         $(element).find('.spell-reference').on('click', (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
             const spell = spellLibrary.Spells().filter(s => s.CurrentName().toLocaleLowerCase() === spellName)[0];
             encounterCommander.ReferenceSpell(spell);
         });
     };
-
+    
     ko.bindingHandlers.statBlockText = {
         init: statBlockTextHandler,
         update: statBlockTextHandler
     }
-
+    
     ko.bindingHandlers.hoverPop = {
-        init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called when the binding is first applied to an element
             // Set up any initial state, event handlers, etc. here
             //if (bindingContext.$data.init) bindingContext.$data.init(element, valueAccessor, allBindings, viewModel, bindingContext);
@@ -104,7 +113,7 @@ module ImprovedInitiative {
             const componentSelector: string = params.selector;
             const popComponent = $(componentSelector).first();
             popComponent.hide();
-
+    
             $(element).on('mouseover', event => {
                 const hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
@@ -119,22 +128,21 @@ module ImprovedInitiative {
                     .css('top', top)
                     .select();
             });
-
+    
             popComponent.add(element).hover(
                 () => { popComponent.show() },
                 () => { popComponent.hide() }
             );
         },
-        update: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+        update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called once when the binding is first applied to an element,
             // and again whenever any observables/computeds that are accessed change
             // Update the DOM element based on the supplied values here.
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
-      
+    
         }
     }
-
-    declare var Awesomplete: any;
+    
     ko.bindingHandlers.awesomplete = {
         init: (element, valueAccessor) => {
             new Awesomplete(element, {
@@ -142,7 +150,7 @@ module ImprovedInitiative {
                 minChars: 1,
                 autoFirst: true
             });
-
+    
             $(element).select();
         }
     }
