@@ -3,7 +3,7 @@ import { Metrics } from "./Utility/Metrics";
 
 export class LauncherViewModel {
     constructor() {
-        Metrics.TrackEvent('LandingPage');
+        Metrics.TrackEvent('LandingPageLoad');
     }
 
     GeneratedEncounterId = env.EncounterId;
