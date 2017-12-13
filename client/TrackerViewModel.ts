@@ -144,6 +144,7 @@ export class TrackerViewModel {
 
     CloseSettings = () => {
         this.SettingsVisible(false);
+        this.TutorialVisible(false);
     };
 
     RepeatTutorial = () => {
