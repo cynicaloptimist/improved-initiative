@@ -212,7 +212,7 @@ body>.login.button {
 .settings {
     .overlay-dialog();
     .absolute-center();
-    width: 500px;
+    max-width: 500px;
     max-height: 700px;
 }
 
@@ -344,7 +344,9 @@ body>.login.button {
     .left-column, .right-column, .preview.statblock {
         .recessed();
 
-        width: @fixed-column-width;
+        max-width: @fixed-column-width;
+        flex-grow:1;
+        flex-shrink:1;
     }
 }
 
