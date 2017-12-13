@@ -1,7 +1,9 @@
 import { env } from "./Environment";
+import { Metrics } from "./Utility/Metrics";
 
 export class LauncherViewModel {
     constructor() {
+        Metrics.TrackEvent('LandingPage');
     }
 
     GeneratedEncounterId = env.EncounterId;
