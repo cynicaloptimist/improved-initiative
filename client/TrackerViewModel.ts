@@ -171,12 +171,16 @@ export class TrackerViewModel {
     PatreonLoginUrl = env.PatreonLoginUrl;
     
     InterfacePriority = ko.pureComputed(() => {
-        if (this.CenterColumn() !== "combat" || this.PromptQueue.HasPrompt()) {
+        if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
             return "show-center-right-left";
         }
 
         if (this.LibrariesVisible()) {
             return "show-left-center-right";
+        }
+
+        if (this.PromptQueue.HasPrompt()) {
+            return "show-center-right-left";
         }
 
         if (this.CombatantCommander.HasSelected()) {
