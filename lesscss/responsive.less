@@ -47,10 +47,11 @@
 }
 
 //One column
-@media(max-width: 700px) {
+@media(max-width: 650px) {
     #tracker.show-left-center-right {
         .left-column {
             width: auto;
+            max-width: initial;
             flex-grow: 1;
             flex-shrink: 1;
         }
@@ -63,6 +64,7 @@
     #tracker.show-right-center-left {
         .right-column {
             width: auto;
+            max-width: initial;
             flex-grow: 1;
             flex-shrink: 1;
         }
