@@ -5,10 +5,6 @@ import { Spell } from "../Spell/Spell";
 
 const getStatBlocksFromXml = (xmlString: string) => {
     const statBlocks = $(xmlString).find("monster").toArray();
-    if (statBlocks.length === 0) {
-        alert("Could not retrieve any statblocks from the file. Please ensure that a valid DnDAppFile XML file is used.");
-    }
-
     return statBlocks.map(xmlDoc => {
         var importer = new StatBlockImporter(xmlDoc);
         return importer.GetStatBlock();
@@ -17,10 +13,6 @@ const getStatBlocksFromXml = (xmlString: string) => {
 
 const getSpellsFromXml = (xmlString: string) => {
     const spells = $(xmlString).find("spell").toArray();
-    if (spells.length === 0) {
-        alert("Could not retrieve any spells from the file. Please ensure that a valid DnDAppFile XML file is used.");
-    }
-
     return spells.map(xmlDoc => {
         var importer = new SpellImporter(xmlDoc);
         return importer.GetSpell();
