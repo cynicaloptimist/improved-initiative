@@ -50,11 +50,12 @@
 //One column
 @media(max-width: 650px) {
     .tutorial {
-        position: fixed; 
+        position: fixed !important; 
         top: auto !important;
-        bottom: 0 !important;
+        bottom: @medium-spacer !important;
+        left: @medium-spacer !important;
         right: 0 !important;
-        left: 0 !important;
+        max-width: 90%;
     }
 
     #tracker.show-left-center-right {
