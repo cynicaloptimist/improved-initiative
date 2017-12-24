@@ -71,7 +71,10 @@ export function RegisterBindingHandlers() {
             const abilityScore = valueAccessor();
             if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
                 const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
-                $(element).html(modifier);
+                const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
+        
+                $(element).html(modifier).addClass('rollable');
+                makeDiceClickable($(element), encounterCommander);
             }
         }
     }
