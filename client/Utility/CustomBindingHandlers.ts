@@ -59,12 +59,22 @@ export function RegisterBindingHandlers() {
         }
     }
 
+    function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: EncounterCommander) {
+        el.on('click', (event) => {
+            const diceExpression = event.target.innerHTML;
+            encounterCommander.RollDice(diceExpression);
+        });
+    }
+
     ko.bindingHandlers.modifierFromAbilityScore = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             const abilityScore = valueAccessor();
             if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
                 const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
-                $(element).html(modifier);
+                const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
+        
+                $(element).html(modifier).addClass('rollable');
+                makeDiceClickable($(element), encounterCommander);
             }
         }
     }
@@ -87,10 +97,7 @@ export function RegisterBindingHandlers() {
     
         $(element).html(text);
     
-        $(element).find('.rollable').on('click', (event) => {
-            const diceExpression = event.target.innerHTML;
-            encounterCommander.RollDice(diceExpression);
-        });
+        makeDiceClickable($(element).find('.rollable'), encounterCommander);
     
         $(element).find('.spell-reference').on('click', (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
