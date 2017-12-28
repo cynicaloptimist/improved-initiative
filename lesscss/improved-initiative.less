@@ -821,61 +821,61 @@ body>.login.button {
     div.default-query {
         flex-direction: row;
     }
-}
 
-.prompt .add-tag {
-    flex-flow: column;
-    align-items: flex-start;
-    div {
-        flex-flow: row;
-        align-items: baseline;
-        > * {
-            margin: @small-spacer;
+    .add-tag {
+        flex-flow: column;
+        align-items: flex-start;
+        div {
+            flex-flow: row;
+            align-items: baseline;
+            > * {
+                margin: @small-spacer;
+            }
         }
     }
-}
 
-.prompt .spell {
-    flex-shrink: 1;
-    flex-flow: column;
-    align-self: stretch;
-    label {
-        font-weight: bold;
-        padding-right: @medium-spacer;
+    .spell {
+        flex-shrink: 1;
+        flex-flow: column;
+        align-self: stretch;
+        label {
+            font-weight: bold;
+            padding-right: @medium-spacer;
+        }
+        .spell-type {
+            font-style: italic;
+        }
+        .spell-source {
+            font-style: italic;
+            font-size: small;
+        }
+        p {
+            padding: @small-spacer;
+            white-space: pre-wrap;
+        }
     }
-    .spell-type {
-        font-style: italic;
-    }
-    .spell-source {
-        font-style: italic;
-        font-size: small;
-    }
-    p {
-        padding: @small-spacer;
-        white-space: pre-wrap;
-    }
-}
 
-.prompt .roll-initiative {
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-shrink: 1;
-    align-items: center;
-    ul {
-        text-align: right;
-        list-style-type: none;
-        padding: @medium-spacer;
+    .roll-initiative {
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-shrink: 1;
+        align-items: center;
+        ul {
+            text-align: right;
+            list-style-type: none;
+            padding: @medium-spacer;
+        }
     }
-}
 
-.prompt .check-concentration {
-    flex-shrink: 1;
-}
+    .check-concentration {
+        flex-shrink: 1;
+    }
 
-.prompt .accept-damage-options, .prompt .check-concentration-options {
-    flex-direction: row;
-    button {
-        margin: @small-spacer;
+    .accept-damage-options, .check-concentration-options {
+        flex-direction: row;
+        button {
+            margin: @small-spacer;
+        }
     }
 }
 
