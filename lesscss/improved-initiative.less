@@ -188,6 +188,7 @@ input[type="file"] {
 
 .tutorial {
     .overlay-dialog();
+    z-index: 4;
     width: 450px;
     font-size: 150%;
 
@@ -345,8 +346,7 @@ body>.login.button {
         .recessed();
 
         max-width: @fixed-column-width;
-        flex-grow:1;
-        flex-shrink:1;
+        width: @fixed-column-width;
     }
 }
 
@@ -502,20 +502,20 @@ body>.login.button {
             align-items: flex-start;
         }
         input[type="text"] {
-            width: 200px;
+            max-width: 200px;
             height: 50px;
         }
     }
 
     input {
         &[type="text"] {
-            width: 100px;
+            max-width: 100px;
         }
         &[type="number"] {
-            width: 40px;
+            max-width: 40px;
         }
         &.name, &.type, &.source {
-            width:200px;
+            max-width:200px;
         }
     }
 }
@@ -818,66 +818,65 @@ body>.login.button {
 
     min-height: @prompt-minimum-height;
 
-    div {
-        display: flex;
-        flex-flow: row;
+    div.default-query {
+        flex-direction: row;
+    }
+
+    .add-tag {
+        flex-flow: column;
+        align-items: flex-start;
+        div {
+            flex-flow: row;
+            align-items: baseline;
+            > * {
+                margin: @small-spacer;
+            }
+        }
+    }
+
+    .spell {
         flex-shrink: 1;
-        margin: @medium-spacer;
+        flex-flow: column;
+        align-self: stretch;
+        label {
+            font-weight: bold;
+            padding-right: @medium-spacer;
+        }
+        .spell-type {
+            font-style: italic;
+        }
+        .spell-source {
+            font-style: italic;
+            font-size: small;
+        }
+        p {
+            padding: @small-spacer;
+            white-space: pre-wrap;
+        }
+    }
+
+    .roll-initiative {
+        flex-direction: row;
+        flex-wrap: wrap;
+        flex-shrink: 1;
         align-items: center;
+        ul {
+            text-align: right;
+            list-style-type: none;
+            padding: @medium-spacer;
+        }
     }
 
-    p {
-        margin: @medium-spacer;
-    }
-
-    li {
-        text-align: right;
-        list-style: none;
-    }
-    ul {
-        max-height: 120px;
-        overflow-y: auto;
+    .check-concentration {
         flex-shrink: 1;
-        margin: @medium-spacer;
     }
 
-}
-
-.prompt .add-tag {
-    flex-flow: column;
-    align-items: flex-start;
-    div {
-        flex-flow: row;
-        align-items: baseline;
-        > * {
+    .accept-damage-options, .check-concentration-options {
+        flex-direction: row;
+        button {
             margin: @small-spacer;
         }
     }
-}
-
-.prompt .spell {
-    flex-shrink: 1;
-    flex-flow: column;
-    align-self: stretch;
-    label {
-        font-weight: bold;
-        padding-right: @medium-spacer;
-    }
-    .spell-type {
-        font-style: italic;
-    }
-    .spell-source {
-        font-style: italic;
-        font-size: small;
-    }
-    p {
-        padding: @small-spacer;
-        white-space: pre-wrap;
-    }
-}
-
-.prompt .roll-initiative {
-    align-items: center;
 }
 
 #playerview {

@@ -7,32 +7,41 @@
         <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
 </div>
 <div class="edit-mode">Edit Mode:
-<!-- ko if: EditMode() === "instance" -->
-<span class="fa-text fa-user" title="Editing the statblock of a single combatant">Single</span>
-<!-- /ko -->
-<!-- ko if: EditMode() === "global" -->
-<span class="fa-text fa-address-book" title="Editing this statblock in your library">Library</span>
-<!-- /ko -->
+    <!-- ko if: EditMode() === "instance" -->
+    <span class="fa-text fa-user" title="Editing the statblock of a single combatant">Single</span>
+    <!-- /ko -->
+    <!-- ko if: EditMode() === "global" -->
+    <span class="fa-text fa-address-book" title="Editing this statblock in your library">Library</span>
+    <!-- /ko -->
 </div>
 <!-- ko if: EditorType() === 'basic' -->
 <div class="stats" data-bind="with: EditableStatBlock, afterRender: SelectInput">
-    <p>Name <input class="name" type="text" data-bind="value: Name" />
+    <p>Name
+        <input class="name" type="text" data-bind="value: Name" />
     </p>
-    <p>Source <input class="type" type="text" data-bind="value: Source" />
+    <p>Source
+        <input class="type" type="text" data-bind="value: Source" />
     </p>
-    <p>Type <input class="type" type="text" data-bind="value: Type" />
+    <p>Type
+        <input class="type" type="text" data-bind="value: Type" />
     </p>
     <p>
-        HP <input type="number" data-bind="value: HP.Value" /><input type="text" data-bind="value: HP.Notes" /> 
-        AC <input type="number" data-bind="value: AC.Value" /><input type="text" data-bind="value: AC.Notes" />
+        HP
+        <input type="number" data-bind="value: HP.Value" />
+        <input type="text" data-bind="value: HP.Notes" /> </p>
+    <p>
+        AC
+        <input type="number" data-bind="value: AC.Value" />
+        <input type="text" data-bind="value: AC.Notes" />
     </p>
-    <p> Initiative Modifier <span title="added to Dexterity Mod to calculate total Initiative Bonus">(?)</span>
+    <p> Initiative Modifier
+        <span title="added to Dexterity Mod to calculate total Initiative Bonus">(?)</span>
         <input type="number" data-bind="value: InitiativeModifier" />
     </p>
     <div class="Abilities">
         <p data-bind="foreach: ['Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha']">
-        <span data-bind="text: $data"></span>
-        <input type="number" class="score" data-bind="value: $parent.Abilities[$data]" />
+            <span data-bind="text: $data"></span>
+            <input type="number" class="score" data-bind="value: $parent.Abilities[$data]" />
         </p>
     </div>
     <!-- ko foreach: ['Saves', 'Skills'] -->
@@ -50,15 +59,19 @@
     <p data-bind="css: $data">
         <span data-bind="uiText: $data"></span>
         <!-- ko foreach: $parent[$data] -->
-        <input class="name" type="text" data-bind="value: Value"></span>
+        <input class="name" type="text" data-bind="value: Value">
+        </span>
         <span class="fa-clickable fa-remove" data-bind="click: Remove"></span>
         <!-- /ko -->
-        <span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span></p>
+        <span class="fa-clickable fa-plus" data-bind="click: $parent[$data].AddEmpty"></span>
+    </p>
     </p>
     <!-- /ko -->
     <p>
-        <!-- ko if: Player() == "player" -->Level <!-- /ko -->
-        <!-- ko ifnot: Player() == "player" -->Challenge <!-- /ko -->
+        <!-- ko if: Player() == "player" -->Level
+        <!-- /ko -->
+        <!-- ko ifnot: Player() == "player" -->Challenge
+        <!-- /ko -->
         <input type="text" data-bind="value: Challenge" />
     </p>
     <!-- ko foreach: ['Traits','Actions','Reactions','LegendaryActions'] -->
@@ -85,7 +98,13 @@
 <textarea class="json-editor" spellcheck="false" data-bind="value: JsonStatBlock"></textarea>
 <!-- /ko -->
 <div class="buttons">
-    <div data-bind="click: SaveStatBlock" title="Save changes to statblock"><span class="button fa fa-save"></span></div>
-    <div data-bind="click: RevertStatBlock" title="Cancel and revert statblock"><span class="button fa fa-close"></span></div>
-    <div data-bind="click: DeleteStatBlock" title="Delete statblock"><span class="button fa fa-trash"></span></div>
+    <div data-bind="click: SaveStatBlock" title="Save changes to statblock">
+        <span class="button fa fa-save"></span>
+    </div>
+    <div data-bind="click: RevertStatBlock" title="Cancel and revert statblock">
+        <span class="button fa fa-close"></span>
+    </div>
+    <div data-bind="click: DeleteStatBlock" title="Delete statblock">
+        <span class="button fa fa-trash"></span>
+    </div>
 </div>

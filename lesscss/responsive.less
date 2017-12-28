@@ -10,12 +10,7 @@
         display: none;
     }
 
-    @touch-button-padding: 15px;
-
     #tracker {
-        .entries span, input, .combatant, .button {
-            padding: @touch-button-padding;
-        }
         .toolbar-narrow {
             width: 52px;
         }
@@ -47,15 +42,30 @@
 
         .left-column, .right-column, .preview.statblock {
             width: 300px;
+            max-width: 300px;
         }
     }
 }
 
 //One column
-@media(max-width: 700px) {
+@media(max-width: 650px) {
+    .tutorial {
+        position: fixed !important; 
+        top: auto !important;
+        bottom: @medium-spacer !important;
+        left: @medium-spacer !important;
+        right: 0 !important;
+        max-width: 90%;
+    }
+
+    .fa-search.preview {
+        display: none;
+    }
+
     #tracker.show-left-center-right {
         .left-column {
             width: auto;
+            max-width: initial;
             flex-grow: 1;
             flex-shrink: 1;
         }
@@ -68,6 +78,7 @@
     #tracker.show-right-center-left {
         .right-column {
             width: auto;
+            max-width: initial;
             flex-grow: 1;
             flex-shrink: 1;
         }

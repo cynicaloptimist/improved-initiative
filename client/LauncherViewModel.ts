@@ -3,7 +3,11 @@ import { Metrics } from "./Utility/Metrics";
 
 export class LauncherViewModel {
     constructor() {
-        Metrics.TrackEvent('LandingPageLoad');
+        const pageLoadData = {
+            referrer: document.referrer,
+            userAgent: navigator.userAgent
+        }
+        Metrics.TrackEvent('LandingPageLoad', pageLoadData);
     }
 
     GeneratedEncounterId = env.EncounterId;
