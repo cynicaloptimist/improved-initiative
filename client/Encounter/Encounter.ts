@@ -23,7 +23,7 @@ export class Encounter {
         private removeCombatant: (vm: CombatantViewModel) => void
     ) {
         this.Rules = new DefaultRules();
-        this.CombatantCountsByName = {};
+        this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();
         this.ActiveCombatantStatBlock = ko.pureComputed(() => {
             return this.ActiveCombatant()
@@ -54,7 +54,7 @@ export class Encounter {
     Rules: IRules;
     TurnTimer = new TurnTimer();
     Combatants = ko.observableArray<Combatant>([]);
-    CombatantCountsByName: { [name: string]: KnockoutObservable<number> };
+    CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
     ActiveCombatant: KnockoutObservable<Combatant>;
     ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
     Difficulty: KnockoutComputed<EncounterDifficulty>;
@@ -321,7 +321,7 @@ export class Encounter {
 
     ClearEncounter = () => {
         this.Combatants.removeAll();
-        this.CombatantCountsByName = {};
+        this.CombatantCountsByName({});
         this.EndEncounter();
     }
 }

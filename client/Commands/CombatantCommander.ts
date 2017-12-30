@@ -101,7 +101,9 @@ export class CombatantCommander {
 
         deletedCombatantNames.forEach(name => {
             if (allMyFriendsAreGone(name)) {
-                this.tracker.Encounter.CombatantCountsByName[name](0);
+                const combatantCountsByName = this.tracker.Encounter.CombatantCountsByName();
+                delete combatantCountsByName[name];
+                this.tracker.Encounter.CombatantCountsByName(combatantCountsByName);
             }
         });
 

@@ -127,19 +127,25 @@ export class Combatant implements Combatant {
 
     private setIndexLabel(oldName?: string) {
         var name = this.StatBlock().Name,
-            counts = this.Encounter.CombatantCountsByName;
+            counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
             return;
         }
+        
+        if (!counts[oldName]) {
+            counts[oldName] = 1;
+        }
         if (oldName) {
-            counts[oldName](counts[oldName]() - 1);
+            counts[oldName] = counts[oldName] - 1;
         }
+
         if (!counts[name]) {
-            counts[name] = ko.observable(1);
+            counts[name] = 1;
         } else {
-            counts[name](counts[name]() + 1);
+            counts[name] = counts[name] + 1;
         }
-        this.IndexLabel = counts[name]();
+        this.IndexLabel = counts[name];
+        this.Encounter.CombatantCountsByName(counts);
     }
 
     private calculateModifiers = () => {
@@ -191,9 +197,9 @@ export class Combatant implements Combatant {
     }
 
     DisplayName = ko.pureComputed(() => {
-        var alias = ko.unwrap(this.Alias),
+        const alias = ko.unwrap(this.Alias),
             name = ko.unwrap(this.StatBlock).Name,
-            combatantCount = ko.unwrap(this.Encounter.CombatantCountsByName[name]),
+            combatantCount = this.Encounter.CombatantCountsByName()[name],
             index = this.IndexLabel;
 
         if (alias) {
