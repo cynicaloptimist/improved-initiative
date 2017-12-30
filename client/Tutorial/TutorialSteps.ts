@@ -12,7 +12,7 @@ export interface TutorialStep {
 
 export const TutorialSteps: TutorialStep[] = [
     {
-        Message: "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to load its stat block.",
+        Message: "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
         RaiseSelector: ".left-column",
         CalculatePosition: elements => {
             const left = elements.offset().left + elements.outerWidth() + 10;
@@ -65,7 +65,7 @@ export const TutorialSteps: TutorialStep[] = [
     //{ Apply damage },
     //{ Advance turn },
     {
-        Message: "Click 'Settings' to set keyboard shortcuts and see advanced features, or choose <strong>End Tutorial</strong>.",
+        Message: "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
         RaiseSelector: ".button.fa-gear--button",
         AwaitAction: "ShowSettings",
         CalculatePosition: elements => {
