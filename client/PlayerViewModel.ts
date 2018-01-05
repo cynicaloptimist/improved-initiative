@@ -10,6 +10,7 @@ export class PlayerViewModel {
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
+    private imageCounter = ko.observable();
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
@@ -46,6 +47,7 @@ export class PlayerViewModel {
         this.combatants(encounter.Combatants);
         this.turnTimerVisible(encounter.DisplayTurnTimer);
         this.roundCounter(encounter.RoundCounter);
+        this.imageCounter(encounter.ImageCount);
         this.allowSuggestions(encounter.AllowPlayerSuggestions);
 
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {

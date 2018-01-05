@@ -1,7 +1,9 @@
 <div data-bind="text: Initiative" class="initiative"></div>
-<div class="portrait" data-bind="if: Img">
-        <img  data-bind="if: Img, attr:{src: Img}">
-</div>
+<span data-bind="if: $root.ImageCount">
+    <div  class="portrait" data-bind="if: Img">
+        <img  data-bind="attr:{src: Img}">
+    </div>
+</span>
 <div class="name">
     <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>

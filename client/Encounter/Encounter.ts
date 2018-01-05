@@ -31,6 +31,8 @@ export class Encounter {
                 : StatBlock.Default();
         });
 
+        this.UpdateImageCount();
+
         this.Difficulty = ko.pureComputed(() => {
             const enemyChallengeRatings =
                 this.Combatants()
@@ -64,6 +66,7 @@ export class Encounter {
     public StateTip = ko.computed(() => this.State() === "active" ? "Encounter Active" : "Encounter Inactive");
 
     public RoundCounter: KnockoutObservable<number> = ko.observable(0);
+    public ImageCount: KnockoutObservable<number> = ko.observable(0);
     public EncounterId = env.EncounterId;
 
     public SortByInitiative = (stable = false) => {
@@ -114,13 +117,22 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
+    UpdateImageCount = () => {
+         this.ImageCount((this.Combatants().filter(c => c.Img)).length);
+    }
+
+  public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
         if (event && event.altKey) {
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
+
+        if (combatant.Img.length > 0){
+          this.ImageCount(this.ImageCount() + 1);
+        }
+
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
@@ -271,6 +283,7 @@ export class Encounter {
             Id: this.EncounterId,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
+            ImageCount: this.ImageCount(),
             DisplayTurnTimer: CurrentSettings().PlayerView.DisplayTurnTimer,
             AllowPlayerSuggestions: CurrentSettings().PlayerView.AllowPlayerSuggestions,
             Combatants: this.Combatants()
@@ -322,6 +335,7 @@ export class Encounter {
     public ClearEncounter = () => {
         this.Combatants.removeAll();
         this.CombatantCountsByName({});
+        this.ImageCount(0)
         this.EndEncounter();
     }
 }
