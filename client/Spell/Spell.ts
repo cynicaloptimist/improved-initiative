@@ -15,9 +15,9 @@ export interface Spell extends Listable {
 }
 
 export class Spell {
-    static GetKeywords = (spell: Spell) => [spell.Name, spell.School, ...spell.Classes].join(" ");
+    public static GetKeywords = (spell: Spell) => [spell.Name, spell.School, ...spell.Classes].join(" ");
 
-    static Default: () => Spell = () => {
+    public static Default: () => Spell = () => {
         return {
             Id: probablyUniqueString(),
             Version: "1.0.0",

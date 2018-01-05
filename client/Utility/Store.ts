@@ -5,18 +5,18 @@ import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 export class Store {
     private static _prefix = "ImprovedInitiative";
 
-    static readonly PlayerCharacters = "PlayerCharacters";
-    static readonly StatBlocks = "Creatures";
-    static readonly Spells = "Spells";
-    static readonly SavedEncounters = "SavedEncounters";
-    static readonly AutoSavedEncounters = "AutoSavedEncounters";
-    static readonly User = "User";
+    public static readonly PlayerCharacters = "PlayerCharacters";
+    public static readonly StatBlocks = "Creatures";
+    public static readonly Spells = "Spells";
+    public static readonly SavedEncounters = "SavedEncounters";
+    public static readonly AutoSavedEncounters = "AutoSavedEncounters";
+    public static readonly User = "User";
 
     //Legacy
-    static readonly KeyBindings = "KeyBindings";
-    static readonly ActionBar = "ActionBar";
+    public static readonly KeyBindings = "KeyBindings";
+    public static readonly ActionBar = "ActionBar";
 
-    static List(listName: string): string[] {
+    public static List(listName: string): string[] {
         var listKey = `${Store._prefix}.${listName}`;
         var list = Store.load(listKey);
         if (list && list.constructor === Array) {
@@ -26,7 +26,7 @@ export class Store {
         return [];
     }
 
-    static Save<T>(listName: string, key: string, value: T) {
+    public static Save<T>(listName: string, key: string, value: T) {
         if (typeof (key) !== "string") {
             throw `Can't save to non-string key ${key}`;
         }
@@ -40,12 +40,12 @@ export class Store {
         Store.save(fullKey, value);
     }
 
-    static Load<T>(listName: string, key: string): T {
+    public static Load<T>(listName: string, key: string): T {
         var fullKey = `${Store._prefix}.${listName}.${key}`;
         return Store.load(fullKey);
     }
 
-    static Delete<T>(listName: string, key: string) {
+    public static Delete<T>(listName: string, key: string) {
         var listKey = `${Store._prefix}.${listName}`;
         var fullKey = `${Store._prefix}.${listName}.${key}`;
         var list = Store.List(listName);
@@ -57,12 +57,12 @@ export class Store {
         localStorage.removeItem(fullKey);
     }
 
-    static ExportAll() {
+    public static ExportAll() {
         return new Blob([JSON.stringify(localStorage, null, 2)],
             { type: "application/json" });
     }
 
-    static ImportAll(file: File) {
+    public static ImportAll(file: File) {
         var reader = new FileReader();
         reader.onload = (event: any) => {
             var json = event.target.result;
@@ -83,7 +83,7 @@ export class Store {
         reader.readAsText(file);
     }
 
-    static ImportFromDnDAppFile(file: File) {
+    public static ImportFromDnDAppFile(file: File) {
         const statBlocksCallback = (statBlocks: StatBlock[]) => {
             statBlocks.forEach(c => {
                 this.Save(Store.StatBlocks, c.Name, c);
@@ -103,7 +103,7 @@ export class Store {
         }
     }
 
-    static ExportStatBlocks() {
+    public static ExportStatBlocks() {
         var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
         return new Blob([JSON.stringify(statBlocks, null, 2)],
             { type: "application/json" });

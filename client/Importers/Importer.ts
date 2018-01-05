@@ -1,11 +1,11 @@
 export class Importer {
     constructor(protected domElement: Element) { }
 
-    getString(selector) {
+    public getString(selector) {
         return $(this.domElement).find(selector).html() || "";
     }
 
-    getInt(selector) {
+    public getInt(selector) {
         var int = $(this.domElement).find(selector).html();
         if (int) {
             return parseInt(int);
@@ -13,7 +13,7 @@ export class Importer {
         return 0;
     }
 
-    getValueAndNotes(selector: string) {
+    public getValueAndNotes(selector: string) {
         var valueAndNotes = this.getString(selector).match(/([\d]+) ?(.*)/);
         return {
             Value: parseInt(valueAndNotes[1]),
@@ -21,7 +21,7 @@ export class Importer {
         }
     }
 
-    getCommaSeparatedStrings(selector: string) {
+    public getCommaSeparatedStrings(selector: string) {
         var commaDelimitedString = this.getString(selector);
         if (commaDelimitedString.length > 0) {
             return commaDelimitedString.split(/, ?/);
@@ -29,7 +29,7 @@ export class Importer {
         return [];
     }
 
-    getCommaSeparatedModifiers(selector: string) {
+    public getCommaSeparatedModifiers(selector: string) {
         var entries = this.getCommaSeparatedStrings(selector);
         return entries.map(e => {
             var nameAndModifier = e.split(" ");
@@ -40,7 +40,7 @@ export class Importer {
         })
     }
 
-    getPowers(selector: string) {
+    public getPowers(selector: string) {
         return $(this.domElement).find(selector).toArray().map(p => ({
             Name: $(p).find("name").html(),
             Content: $(p).find("text").map((i, e) => e.innerHTML).get().join("\n"),

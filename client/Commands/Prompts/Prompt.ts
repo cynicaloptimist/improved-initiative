@@ -9,13 +9,13 @@ type PromptResolver = (responses: { [id: string]: string }) => void;
 
 export class DefaultPrompt implements Prompt {
     private dequeue = () => { };
-    InputSelector = ".response";
-    ComponentName = "defaultprompt";
-    SetDequeueCallback = callback => this.dequeue = callback;
+    public InputSelector = ".response";
+    public ComponentName = "defaultprompt";
+    public SetDequeueCallback = callback => this.dequeue = callback;
 
     constructor(public Query: string, private resolve: PromptResolver = () => { }) { }
 
-    Resolve = (form: HTMLFormElement) => {
+    public Resolve = (form: HTMLFormElement) => {
         const inputs = $(form).find(this.InputSelector);
         const inputsById = {};
         inputs.map((_, element) => {

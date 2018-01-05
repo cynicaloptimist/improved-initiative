@@ -51,22 +51,22 @@ export class Encounter {
         }
     }
 
-    Rules: IRules;
-    TurnTimer = new TurnTimer();
-    Combatants = ko.observableArray<Combatant>([]);
-    CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
-    ActiveCombatant: KnockoutObservable<Combatant>;
-    ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
-    Difficulty: KnockoutComputed<EncounterDifficulty>;
+    public Rules: IRules;
+    public TurnTimer = new TurnTimer();
+    public Combatants = ko.observableArray<Combatant>([]);
+    public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
+    public ActiveCombatant: KnockoutObservable<Combatant>;
+    public ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
+    public Difficulty: KnockoutComputed<EncounterDifficulty>;
 
-    State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">("inactive");
-    StateIcon = ko.computed(() => this.State() === "active" ? "fa-play" : "fa-pause");
-    StateTip = ko.computed(() => this.State() === "active" ? "Encounter Active" : "Encounter Inactive");
+    public State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">("inactive");
+    public StateIcon = ko.computed(() => this.State() === "active" ? "fa-play" : "fa-pause");
+    public StateTip = ko.computed(() => this.State() === "active" ? "Encounter Active" : "Encounter Inactive");
 
-    RoundCounter: KnockoutObservable<number> = ko.observable(0);
-    EncounterId = env.EncounterId;
+    public RoundCounter: KnockoutObservable<number> = ko.observable(0);
+    public EncounterId = env.EncounterId;
 
-    SortByInitiative = (stable: boolean = false) => {
+    public SortByInitiative = (stable: boolean = false) => {
         this.Combatants.sort((l, r) => {
             if (stable) {
                 return r.Initiative() - l.Initiative()
@@ -77,7 +77,7 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-    ImportEncounter = (encounter) => {
+    public ImportEncounter = (encounter) => {
         const deepMerge = (a, b) => $.extend(true, {}, a, b);
         const defaultAdd = c => {
             if (c.TotalInitiativeModifier !== undefined) {
@@ -109,12 +109,12 @@ export class Encounter {
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
     }
 
-    QueueEmitEncounter() {
+    public QueueEmitEncounter() {
         clearTimeout(this.emitEncounterTimeoutID);
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
+    public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
         if (event && event.altKey) {
@@ -134,7 +134,7 @@ export class Encounter {
         return combatant;
     }
 
-    MoveCombatant(combatant: Combatant, index: number) {
+    public MoveCombatant(combatant: Combatant, index: number) {
         combatant.InitiativeGroup(null);
         this.CleanInitiativeGroups();
         const currentPosition = this.Combatants().indexOf(combatant);
@@ -155,7 +155,7 @@ export class Encounter {
         return newInitiative;
     }
 
-    CleanInitiativeGroups() {
+    public CleanInitiativeGroups() {
         const combatants = this.Combatants();
         combatants.forEach(combatant => {
             const group = combatant.InitiativeGroup();
@@ -165,7 +165,7 @@ export class Encounter {
         });
     }
 
-    StartEncounter = () => {
+    public StartEncounter = () => {
         this.SortByInitiative();
         this.State("active");
         this.RoundCounter(1);
@@ -174,18 +174,18 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-    EndEncounter = () => {
+    public EndEncounter = () => {
         this.State("inactive");
         this.ActiveCombatant(null);
         this.TurnTimer.Stop();
         this.QueueEmitEncounter();
     }
 
-    RollInitiative = (promptQueue: PromptQueue) => {
+    public RollInitiative = (promptQueue: PromptQueue) => {
         promptQueue.Add(new InitiativePrompt(this.Combatants(), this.StartEncounter));
     }
 
-    NextTurn = () => {
+    public NextTurn = () => {
         const activeCombatant = this.ActiveCombatant();
 
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
@@ -214,7 +214,7 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-    PreviousTurn = () => {
+    public PreviousTurn = () => {
         var previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
         if (previousIndex < 0) {
             previousIndex = this.Combatants().length - 1;
@@ -227,11 +227,11 @@ export class Encounter {
 
     private durationTags: Tag[] = [];
 
-    AddDurationTag = (tag: Tag) => {
+    public AddDurationTag = (tag: Tag) => {
         this.durationTags.push(tag);
     }
 
-    Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
+    public Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
         var activeCombatant = this.ActiveCombatant();
         return {
             Name: name,
@@ -263,7 +263,7 @@ export class Encounter {
         };
     }
 
-    SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
+    public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
         var hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
         var activeCombatant = this.ActiveCombatant();
         return {
@@ -288,7 +288,7 @@ export class Encounter {
         };
     }
 
-    LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPromptQueue: PromptQueue) => {
+    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPromptQueue: PromptQueue) => {
         savedEncounter = SavedEncounter.UpdateLegacySavedEncounter(savedEncounter);
 
         let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
@@ -319,7 +319,7 @@ export class Encounter {
         }
     }
 
-    ClearEncounter = () => {
+    public ClearEncounter = () => {
         this.Combatants.removeAll();
         this.CombatantCountsByName({});
         this.EndEncounter();

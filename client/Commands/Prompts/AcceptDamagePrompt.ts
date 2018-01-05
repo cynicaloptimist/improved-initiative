@@ -3,18 +3,18 @@ import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
 import { TrackerViewModel } from "../../TrackerViewModel";
 
 export class AcceptDamagePrompt implements Prompt {
-    InputSelector = ".acceptfull";
-    ComponentName = "acceptdamageprompt";
-    Prompt: string;
+    public InputSelector = ".acceptfull";
+    public ComponentName = "acceptdamageprompt";
+    public Prompt: string;
     private dequeueCallback: () => void;
 
-    SetDequeueCallback = callback => this.dequeueCallback = callback;
+    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
-    Resolve = (form: HTMLFormElement) => {
+    public Resolve = (form: HTMLFormElement) => {
         this.dequeueCallback();
     };
-    AcceptFull: () => void;
-    AcceptHalf: () => void;
+    public AcceptFull: () => void;
+    public AcceptHalf: () => void;
 
     constructor(suggestedCombatants: CombatantViewModel[], damageAmount: number, suggester: string, tracker: TrackerViewModel) {
         const combatantNames = suggestedCombatants.map(c => c.Name()).join(", ");

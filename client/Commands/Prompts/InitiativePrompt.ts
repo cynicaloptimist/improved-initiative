@@ -4,10 +4,10 @@ import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { toModifierString } from "../../Utility/Toolbox";
 
 export class InitiativePrompt implements Prompt {
-    InputSelector = ".response";
-    ComponentName = "initiativeprompt";
-    PlayerCharacters = [];
-    NonPlayerCharacters = [];
+    public InputSelector = ".response";
+    public ComponentName = "initiativeprompt";
+    public PlayerCharacters = [];
+    public NonPlayerCharacters = [];
     private dequeue;
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
@@ -53,6 +53,6 @@ export class InitiativePrompt implements Prompt {
         }
     }
 
-    Resolve = _ => { };
-    SetDequeueCallback = callback => this.dequeue = callback;
+    public Resolve = _ => { };
+    public SetDequeueCallback = callback => this.dequeue = callback;
 }

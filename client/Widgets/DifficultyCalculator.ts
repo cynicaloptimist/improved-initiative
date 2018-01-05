@@ -129,7 +129,7 @@ export interface EncounterDifficulty {
 }
 
 export class DifficultyCalculator {
-    static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
+    public static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
         const playerLevelTotals = playerLevels.map(getTotalLevel);
         const totalXpBase = getTotalXpBase(enemyChallengeRatings);
         const modifiedXp = getModifiedXp(enemyChallengeRatings, playerLevels.length);

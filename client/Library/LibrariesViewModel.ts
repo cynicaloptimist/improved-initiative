@@ -4,7 +4,7 @@ import { Libraries } from "./Libraries";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 
 export class LibrariesViewModel {
-    LibraryTabs = [
+    public LibraryTabs = [
         {
             Name: "Creatures",
             Component: "statblocklibrary",
@@ -27,9 +27,9 @@ export class LibrariesViewModel {
         }
     ];
 
-    SelectedTab = ko.observable(this.LibraryTabs[0]);
+    public SelectedTab = ko.observable(this.LibraryTabs[0]);
 
-    TabClassName = library => library === this.SelectedTab() ? "selected" : "";
+    public TabClassName = library => library === this.SelectedTab() ? "selected" : "";
 
     constructor(
         public Tracker: TrackerViewModel,

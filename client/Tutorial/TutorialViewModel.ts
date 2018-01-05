@@ -11,8 +11,8 @@ export class TutorialViewModel {
     private stepIndex = ko.observable<number>(null);
     private showTutorial: KnockoutObservable<boolean>;
 
-    CurrentStep: KnockoutComputed<string>;
-    Position: KnockoutComputed<Position>;
+    public CurrentStep: KnockoutComputed<string>;
+    public Position: KnockoutComputed<Position>;
     constructor(params: { showTutorial: KnockoutObservable<boolean> }) {
         this.stepIndex.subscribe(newStepIndex => {
             $(".tutorial-focus").removeClass("tutorial-focus");
@@ -62,19 +62,19 @@ export class TutorialViewModel {
         });
     }
 
-    End = () => {
+    public End = () => {
         this.stepIndex(0);
         $(".tutorial-focus").removeClass("tutorial-focus");
         Store.Save(Store.User, "SkipIntro", true);
         this.showTutorial(false);
     }
 
-    CanGoNext = ko.pureComputed(() => {
+    public CanGoNext = ko.pureComputed(() => {
         const stepIndex = this.stepIndex();
         return stepIndex === null || !TutorialSteps[stepIndex].AwaitAction;
     });
 
-    Next = () => {
+    public Next = () => {
         Metrics.TrackEvent("StepCompleted", { step: this.stepIndex().toString() });
         const nextStepIndex = this.stepIndex() + 1;
 

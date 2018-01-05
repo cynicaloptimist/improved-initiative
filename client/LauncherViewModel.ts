@@ -10,22 +10,22 @@ export class LauncherViewModel {
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
     }
 
-    GeneratedEncounterId = env.EncounterId;
-    JoinEncounterInput = ko.observable<string>("");
+    public GeneratedEncounterId = env.EncounterId;
+    public JoinEncounterInput = ko.observable<string>("");
 
-    StartEncounter = () => {
+    public StartEncounter = () => {
         var encounterId = this.JoinEncounterInput().split("/").pop();
         window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
     }
 
-    JoinEncounter = () => {
+    public JoinEncounter = () => {
         var encounterId = this.JoinEncounterInput().split("/").pop();
         if (encounterId) {
             window.location.href = `p/${encounterId}`;
         }
     }
 
-    JoinEncounterButtonClass = () => {
+    public JoinEncounterButtonClass = () => {
         var encounterId = this.JoinEncounterInput().split("/").pop();
         return encounterId ? "enabled" : "disabled";
     }

@@ -5,17 +5,17 @@ import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 
 export class PlayerViewModel {
-    Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
-    ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
-    EncounterId = env.EncounterId;
-    RoundCounter = ko.observable();
-    TurnTimer = new TurnTimer();
-    DisplayTurnTimer = ko.observable(false);
-    AllowSuggestions = ko.observable(false);
+    public Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+    public ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
+    public EncounterId = env.EncounterId;
+    public RoundCounter = ko.observable();
+    public TurnTimer = new TurnTimer();
+    public DisplayTurnTimer = ko.observable(false);
+    public AllowSuggestions = ko.observable(false);
 
-    Socket: SocketIOClient.Socket = io();
+    public Socket: SocketIOClient.Socket = io();
 
-    CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
+    public CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
 
     constructor() {
         this.Socket.on("update encounter", (encounter) => {
@@ -25,7 +25,7 @@ export class PlayerViewModel {
         this.Socket.emit("join encounter", this.EncounterId);
     }
 
-    LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+    public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.Combatants(encounter.Combatants);
         this.DisplayTurnTimer(encounter.DisplayTurnTimer);
         this.RoundCounter(encounter.RoundCounter)
@@ -40,18 +40,18 @@ export class PlayerViewModel {
         }
     }
 
-    LoadEncounterFromServer = (encounterId: string) => {
+    public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
     }
 
-    ScrollToActiveCombatant = () => {
+    public ScrollToActiveCombatant = () => {
         var activeCombatantElement = $(".active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }
     }
 
-    ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+    public ShowSuggestion = (combatant: StaticCombatantViewModel) => {
         if (!this.AllowSuggestions()) {
             return;
         }

@@ -31,14 +31,14 @@ export class CombatantCommander {
         });
     }
 
-    Commands: Command[];
-    SelectedCombatants: KnockoutObservableArray<CombatantViewModel> = ko.observableArray<CombatantViewModel>([]);
+    public Commands: Command[];
+    public SelectedCombatants: KnockoutObservableArray<CombatantViewModel> = ko.observableArray<CombatantViewModel>([]);
 
-    HasSelected = ko.pureComputed(() => this.SelectedCombatants().length > 0);
-    HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
-    HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
+    public HasSelected = ko.pureComputed(() => this.SelectedCombatants().length > 0);
+    public HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
+    public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-    StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
+    public StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
         var selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
             return selectedCombatants[0].Combatant.StatBlock();
@@ -47,13 +47,13 @@ export class CombatantCommander {
         }
     });
 
-    Names: KnockoutComputed<string> = ko.pureComputed(() =>
+    public Names: KnockoutComputed<string> = ko.pureComputed(() =>
         this.SelectedCombatants()
             .map(c => c.Name())
             .join(", ")
     );
 
-    Select = (data: CombatantViewModel, e?: MouseEvent) => {
+    public Select = (data: CombatantViewModel, e?: MouseEvent) => {
         if (!data) {
             return;
         }
@@ -79,7 +79,7 @@ export class CombatantCommander {
         this.SelectedCombatants.push(this.tracker.CombatantViewModels()[newIndex]);
     }
 
-    Remove = () => {
+    public Remove = () => {
         const combatantsToRemove = this.SelectedCombatants.removeAll(),
             firstDeletedIndex = this.tracker.CombatantViewModels().indexOf(combatantsToRemove[0]),
             deletedCombatantNames = combatantsToRemove.map(c => c.Combatant.StatBlock().Name);
@@ -122,15 +122,15 @@ export class CombatantCommander {
         this.tracker.Encounter.QueueEmitEncounter();
     }
 
-    Deselect = () => {
+    public Deselect = () => {
         this.SelectedCombatants([]);
     }
 
-    SelectPrevious = () => {
+    public SelectPrevious = () => {
         this.selectByOffset(-1);
     }
 
-    SelectNext = () => {
+    public SelectNext = () => {
         this.selectByOffset(1);
     }
 
@@ -146,7 +146,7 @@ export class CombatantCommander {
         }
     }
 
-    EditHP = () => {
+    public EditHP = () => {
         const selectedCombatants = this.SelectedCombatants();
         const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const callback = this.CreateEditHPCallback(selectedCombatants, combatantNames);
@@ -155,7 +155,7 @@ export class CombatantCommander {
         return false;
     }
 
-    SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
+    public SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
         const allowPlayerSuggestions = CurrentSettings().PlayerView.AllowPlayerSuggestions;
 
         if (!allowPlayerSuggestions) {
@@ -168,14 +168,14 @@ export class CombatantCommander {
         return false;
     }
 
-    CheckConcentration = (combatant: Combatant, damageAmount: number) => {
+    public CheckConcentration = (combatant: Combatant, damageAmount: number) => {
         setTimeout(() => {
             const prompt = new ConcentrationPrompt(combatant, damageAmount);
             this.tracker.PromptQueue.Add(prompt);
         }, 1);
     }
 
-    AddTemporaryHP = () => {
+    public AddTemporaryHP = () => {
         const selectedCombatants = this.SelectedCombatants();
         const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const prompt = new DefaultPrompt(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
@@ -192,7 +192,7 @@ export class CombatantCommander {
         return false;
     }
 
-    AddTag = (combatantVM?: CombatantViewModel) => {
+    public AddTag = (combatantVM?: CombatantViewModel) => {
         if (combatantVM instanceof CombatantViewModel) {
             this.Select(combatantVM);
         }
@@ -200,7 +200,7 @@ export class CombatantCommander {
         return false;
     }
 
-    EditInitiative = () => {
+    public EditInitiative = () => {
         this.SelectedCombatants().forEach(c => c.EditInitiative())
         return false;
     }
@@ -221,7 +221,7 @@ export class CombatantCommander {
         this.tracker.Encounter.SortByInitiative();
     }
 
-    LinkInitiative = () => {
+    public LinkInitiative = () => {
         const selected = this.SelectedCombatants();
 
         if (selected.length <= 1) {
@@ -235,7 +235,7 @@ export class CombatantCommander {
         this.linkCombatantInitiatives(selected);
     }
 
-    MoveUp = () => {
+    public MoveUp = () => {
         const combatant = this.SelectedCombatants()[0];
         const index = this.tracker.CombatantViewModels().indexOf(combatant)
         if (combatant && index > 0) {
@@ -244,7 +244,7 @@ export class CombatantCommander {
         }
     }
 
-    MoveDown = () => {
+    public MoveDown = () => {
         const combatant = this.SelectedCombatants()[0];
         const index = this.tracker.CombatantViewModels().indexOf(combatant)
         if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
@@ -253,12 +253,12 @@ export class CombatantCommander {
         }
     }
 
-    EditName = () => {
+    public EditName = () => {
         this.SelectedCombatants().forEach(c => c.EditName())
         return false;
     }
 
-    EditStatBlock = () => {
+    public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             var selectedCombatant = this.SelectedCombatants()[0];
             this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {

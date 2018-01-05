@@ -23,14 +23,14 @@ export class Tag implements Tag {
         this.Remove = () => combatant.Tags.remove(this);
     }
 
-    Decrement = () => {
+    public Decrement = () => {
         const d = this.DurationRemaining();
         if (d > 0) {
             this.DurationRemaining(d - 1);
         }
     }
 
-    Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
+    public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
     public static getLegacyTags = (tags: (any)[], combatant: Combatant): Tag[] => {
         return tags.map(tag => {

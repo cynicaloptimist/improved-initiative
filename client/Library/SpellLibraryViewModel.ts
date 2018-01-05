@@ -17,12 +17,12 @@ export class SpellLibraryViewModel {
         this.library.Spells.subscribe(this.clearCache);
     }
 
-    LibraryFilter = ko.observable("");
+    public LibraryFilter = ko.observable("");
 
     private filterCache: KeyValueSet<Listing<Spell>[]> = {};
     private clearCache = () => this.filterCache = {};
 
-    FilteredSpells = ko.pureComputed<Listing<Spell>[]>(() => {
+    public FilteredSpells = ko.pureComputed<Listing<Spell>[]>(() => {
         const filter = (ko.unwrap(this.LibraryFilter) || "").toLocaleLowerCase(),
             spells = this.library.Spells();
 
@@ -39,8 +39,8 @@ export class SpellLibraryViewModel {
         return finalList;
     });
 
-    ClickEntry = (entry: Listing<Spell>) => this.encounterCommander.ReferenceSpell(entry);
-    ClickEdit = (entry: Listing<Spell>) => this.encounterCommander.EditSpell(entry);
-    ClickHide = () => this.encounterCommander.HideLibraries();
-    ClickAdd = () => this.encounterCommander.CreateAndEditSpell();
+    public ClickEntry = (entry: Listing<Spell>) => this.encounterCommander.ReferenceSpell(entry);
+    public ClickEdit = (entry: Listing<Spell>) => this.encounterCommander.EditSpell(entry);
+    public ClickHide = () => this.encounterCommander.HideLibraries();
+    public ClickAdd = () => this.encounterCommander.CreateAndEditSpell();
 }

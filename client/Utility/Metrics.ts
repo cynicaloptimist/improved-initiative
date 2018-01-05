@@ -1,7 +1,7 @@
 import { Store } from "./Store";
 
 export class Metrics {
-    static TrackLoad(): void {
+    public static TrackLoad(): void {
         const counts = {
             Encounters: Store.List(Store.SavedEncounters).length,
             NpcStatBlocks: Store.List(Store.StatBlocks).length,
@@ -12,7 +12,7 @@ export class Metrics {
         Metrics.TrackEvent("AppLoad", counts);
     }
 
-    static TrackEvent(name: string, data?: object): void {
+    public static TrackEvent(name: string, data?: object): void {
         console.log(`Event ${name}`);
         if (data !== undefined) {
             console.table(data);

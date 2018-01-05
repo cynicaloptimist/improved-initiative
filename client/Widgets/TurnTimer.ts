@@ -5,24 +5,24 @@ export class TurnTimer {
     private incrementElapsedSeconds = () => this.elapsedSeconds(this.elapsedSeconds() + 1);
     private intervalToken = null;
 
-    Start = () => {
+    public Start = () => {
         if (this.intervalToken) {
             this.Stop();
         }
         this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
     }
 
-    Stop = () => {
+    public Stop = () => {
         clearInterval(this.intervalToken);
         this.elapsedSeconds(0);
     }
 
-    Reset = () => {
+    public Reset = () => {
         this.Stop();
         this.Start();
     }
 
-    Readout = ko.pureComputed(() => {
+    public Readout = ko.pureComputed(() => {
         let time = moment.duration({ seconds: this.elapsedSeconds() });
         let paddedSeconds = time.seconds().toString();
         if (paddedSeconds.length < 2) {

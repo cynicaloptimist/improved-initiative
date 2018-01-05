@@ -68,24 +68,24 @@ export class Combatant implements Combatant {
         });
     }
 
-    Id = probablyUniqueString();
-    Alias = ko.observable("");
-    TemporaryHP = ko.observable(0);
-    Tags = ko.observableArray<Tag>();
-    Initiative = ko.observable(0);
-    InitiativeGroup = ko.observable<string>(null);
-    StatBlock = ko.observable<StatBlock>();
-    Hidden = ko.observable(false);
+    public Id = probablyUniqueString();
+    public Alias = ko.observable("");
+    public TemporaryHP = ko.observable(0);
+    public Tags = ko.observableArray<Tag>();
+    public Initiative = ko.observable(0);
+    public InitiativeGroup = ko.observable<string>(null);
+    public StatBlock = ko.observable<StatBlock>();
+    public Hidden = ko.observable(false);
 
-    IndexLabel: number;
-    MaxHP: number;
-    CurrentHP: KnockoutObservable<number>;
-    PlayerDisplayHP: KnockoutComputed<string>;
-    AC: number;
-    AbilityModifiers: AbilityScores;
-    InitiativeBonus: number;
-    ConcentrationBonus: number;
-    IsPlayerCharacter = false;
+    public IndexLabel: number;
+    public MaxHP: number;
+    public CurrentHP: KnockoutObservable<number>;
+    public PlayerDisplayHP: KnockoutComputed<string>;
+    public AC: number;
+    public AbilityModifiers: AbilityScores;
+    public InitiativeBonus: number;
+    public ConcentrationBonus: number;
+    public IsPlayerCharacter = false;
 
     private updatingGroup = false;
 
@@ -156,10 +156,10 @@ export class Combatant implements Combatant {
         return modifiers;
     }
 
-    GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
-    GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
+    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+    public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
-    ApplyDamage(damage: number) {
+    public ApplyDamage(damage: number) {
         let currHP = this.CurrentHP(),
             tempHP = this.TemporaryHP(),
             allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
@@ -179,7 +179,7 @@ export class Combatant implements Combatant {
         this.TemporaryHP(tempHP);
     }
 
-    ApplyHealing(healing: number) {
+    public ApplyHealing(healing: number) {
         let currHP = this.CurrentHP();
 
         currHP += healing;
@@ -190,13 +190,13 @@ export class Combatant implements Combatant {
         this.CurrentHP(currHP);
     }
 
-    ApplyTemporaryHP(tempHP: number) {
+    public ApplyTemporaryHP(tempHP: number) {
         if (tempHP > this.TemporaryHP()) {
             this.TemporaryHP(tempHP);
         }
     }
 
-    DisplayName = ko.pureComputed(() => {
+    public DisplayName = ko.pureComputed(() => {
         const alias = ko.unwrap(this.Alias),
             name = ko.unwrap(this.StatBlock).Name,
             combatantCount = this.Encounter.CombatantCountsByName()[name],

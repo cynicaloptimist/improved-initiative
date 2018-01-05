@@ -1,6 +1,7 @@
 {
     "rules": {
         "no-console": false,
-        "quotemark": [true, "double"]
+        "quotemark": [true, "double"],
+        "member-access": true 
     }
 }

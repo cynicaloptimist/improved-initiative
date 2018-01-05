@@ -5,13 +5,13 @@ export class SpellEditor {
     private deleteCallback: (id: string) => void;
     private spell: Spell;
 
-    EditorType = ko.observable<"basic" | "advanced">("basic");
-    JsonSpell = ko.observable<string>();
-    EditableSpell = ko.observable(null);
+    public EditorType = ko.observable<"basic" | "advanced">("basic");
+    public JsonSpell = ko.observable<string>();
+    public EditableSpell = ko.observable(null);
 
-    HasSpell = ko.pureComputed(() => this.EditableSpell() !== null);
+    public HasSpell = ko.pureComputed(() => this.EditableSpell() !== null);
 
-    EditSpell = (
+    public EditSpell = (
         spell: Spell,
         saveCallback: (newSpell: Spell) => void,
         deleteCallback: (id: string) => void
@@ -42,11 +42,11 @@ export class SpellEditor {
         return unObservableSpell;
     }
 
-    SelectInput = () => {
+    public SelectInput = () => {
         $(".stats input.name").select();
     }
 
-    SaveSpell = () => {
+    public SaveSpell = () => {
         let editedSpell: Spell = Spell.Default();
 
         if (this.EditorType() === "advanced") {
@@ -66,14 +66,14 @@ export class SpellEditor {
         this.EditableSpell(null);
     }
 
-    DeleteSpell = () => {
+    public DeleteSpell = () => {
         if (confirm(`Delete your custom spell ${this.spell.Name}? This cannot be undone.`)) {
             this.deleteCallback(this.spell.Id);
             this.EditableSpell(null);
         }
     }
 
-    RevertSpell = () => {
+    public RevertSpell = () => {
         this.EditableSpell(null);
     }
 }

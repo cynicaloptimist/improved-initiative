@@ -13,16 +13,16 @@ function getCounts<T extends Listable>(items: Listing<T>[]) {
 export class AccountViewModel {
     constructor(private libraries: Libraries) { }
 
-    IsLoggedIn = env.IsLoggedIn;
-    HasStorage = env.HasStorage;
-    PatreonLoginUrl = env.PatreonLoginUrl;
+    public IsLoggedIn = env.IsLoggedIn;
+    public HasStorage = env.HasStorage;
+    public PatreonLoginUrl = env.PatreonLoginUrl;
 
-    SyncedCreatures = ko.computed(() => getCounts(this.libraries.NPCs.StatBlocks()));
-    SyncedPlayers = ko.computed(() => getCounts(this.libraries.PCs.StatBlocks()));
-    SyncedSpells = ko.computed(() => getCounts(this.libraries.Spells.Spells()));
-    SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
+    public SyncedCreatures = ko.computed(() => getCounts(this.libraries.NPCs.StatBlocks()));
+    public SyncedPlayers = ko.computed(() => getCounts(this.libraries.PCs.StatBlocks()));
+    public SyncedSpells = ko.computed(() => getCounts(this.libraries.Spells.Spells()));
+    public SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
 
-    SyncAll() {
+    public SyncAll() {
         this.SyncMessage("");
         var blob = Store.ExportAll();
         saveAs(blob, "improved-initiative.json");
@@ -31,5 +31,5 @@ export class AccountViewModel {
         });
     };
 
-    SyncMessage = ko.observable("");
+    public SyncMessage = ko.observable("");
 }

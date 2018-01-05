@@ -26,48 +26,48 @@ const tips = [
 ];
 
 export class SettingsViewModel {
-    PreviousTip: any;
-    NextTip: any;
-    Tip: KnockoutComputed<string>;
+    public PreviousTip: any;
+    public NextTip: any;
+    public Tip: KnockoutComputed<string>;
 
-    PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
-    PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
-    PlayerViewDisplayRoundCounter: KnockoutObservable<boolean>;
-    DisplayDifficulty: KnockoutObservable<boolean>;
-    DisplayTurnTimer: KnockoutObservable<boolean>;
-    DisplayRoundCounter: KnockoutObservable<boolean>;
-    AutoCheckConcentration: KnockoutObservable<boolean>;
-    AllowNegativeHP: KnockoutObservable<boolean>;
-    HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
-    HpVerbosityOptions: string[];
-    HpVerbosity: KnockoutObservable<string>;
-    EncounterCommands: Command[];
-    CombatantCommands: Command[];
-    CurrentTab = ko.observable<string>("about");
-    RollHp: KnockoutObservable<boolean>;
-    AccountViewModel = new AccountViewModel(this.libraries);
+    public PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
+    public PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
+    public PlayerViewDisplayRoundCounter: KnockoutObservable<boolean>;
+    public DisplayDifficulty: KnockoutObservable<boolean>;
+    public DisplayTurnTimer: KnockoutObservable<boolean>;
+    public DisplayRoundCounter: KnockoutObservable<boolean>;
+    public AutoCheckConcentration: KnockoutObservable<boolean>;
+    public AllowNegativeHP: KnockoutObservable<boolean>;
+    public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
+    public HpVerbosityOptions: string[];
+    public HpVerbosity: KnockoutObservable<string>;
+    public EncounterCommands: Command[];
+    public CombatantCommands: Command[];
+    public CurrentTab = ko.observable<string>("about");
+    public RollHp: KnockoutObservable<boolean>;
+    public AccountViewModel = new AccountViewModel(this.libraries);
 
-    ExportData = () => {
+    public ExportData = () => {
         var blob = Store.ExportAll();
         saveAs(blob, "improved-initiative.json");
     }
 
-    ImportData = (_, event) => {
+    public ImportData = (_, event) => {
         var file = event.target.files[0];
         if (file) {
             Store.ImportAll(file);
         }
     }
 
-    ImportDndAppFile = (_, event) => {
+    public ImportDndAppFile = (_, event) => {
         var file = event.target.files[0];
         if (file) {
             Store.ImportFromDnDAppFile(file);
         }
     }
 
-    RepeatTutorial: () => void;
-    SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
+    public RepeatTutorial: () => void;
+    public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
     private getUpdatedSettings(): Settings {
         const getCommandSetting = (command: Command): CommandSetting => ({
@@ -99,7 +99,7 @@ export class SettingsViewModel {
         }
     }
 
-    SaveAndClose() {
+    public SaveAndClose() {
         const newSettings = this.getUpdatedSettings();
         CurrentSettings(newSettings);
         Store.Save(Store.User, "Settings", newSettings);

@@ -6,10 +6,10 @@ export class CombatantSuggestor {
         public EncounterId: string
     ) { }
 
-    SuggestionVisible = ko.observable(false);
-    Combatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable(null);
+    public SuggestionVisible = ko.observable(false);
+    public Combatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable(null);
 
-    Name = ko.pureComputed(() => {
+    public Name = ko.pureComputed(() => {
         if (!this.Combatant()) {
             return "";
         } else {
@@ -17,13 +17,13 @@ export class CombatantSuggestor {
         }
     })
 
-    Show = (combatant: StaticCombatantViewModel) => {
+    public Show = (combatant: StaticCombatantViewModel) => {
         this.Combatant(combatant);
         this.SuggestionVisible(true);
         $("input[name=suggestedDamage]").first().focus();
     }
 
-    Resolve = (form: HTMLFormElement) => {
+    public Resolve = (form: HTMLFormElement) => {
         const element = $(form).find("[name=suggestedDamage]").first();
         const value = parseInt(element.val().toString(), 10);
         if (!isNaN(value) && value !== 0) {
@@ -33,7 +33,7 @@ export class CombatantSuggestor {
         this.Close();
     }
 
-    Close = () => {
+    public Close = () => {
         this.SuggestionVisible(false);
     }
 }

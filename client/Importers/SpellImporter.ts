@@ -13,7 +13,7 @@ export class SpellImporter extends Importer {
         "T": "Transmutation",
     }
 
-    GetSpell = () => {
+    public GetSpell = () => {
         const spell = Spell.Default();
         spell.Name = this.getString("name");
         spell.Level = this.getInt("level");

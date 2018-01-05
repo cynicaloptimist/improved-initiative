@@ -2,13 +2,13 @@ import { Importer } from "./Importer";
 import { StatBlock } from "../StatBlock/StatBlock";
 
 export class StatBlockImporter extends Importer {
-    getType() {
+    public getType() {
         return this.getString("size") + " " +
             this.getString("type") + ", " +
             this.getString("alignment");
     }
 
-    getAbilities() {
+    public getAbilities() {
         return {
             Str: this.getInt("str"),
             Dex: this.getInt("dex"),

@@ -1,14 +1,14 @@
 export class EventLog {
-    Events = ko.observableArray<string>();
+    public Events = ko.observableArray<string>();
 
-    LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
-    EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
+    public LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
+    public EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
 
-    AddEvent = (event: string) => {
+    public AddEvent = (event: string) => {
         this.Events.push(event);
     }
 
-    ToggleFullLog = () => {
+    public ToggleFullLog = () => {
         if (this.ShowFullLog()) {
             this.ShowFullLog(false);
         } else {
@@ -17,11 +17,11 @@ export class EventLog {
         }
     }
 
-    ToggleCSS = () => this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up";
+    public ToggleCSS = () => this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up";
 
-    ShowFullLog = ko.observable<boolean>(false);
+    public ShowFullLog = ko.observable<boolean>(false);
 
-    LogHPChange = (damage: number, combatantNames: string) => {
+    public LogHPChange = (damage: number, combatantNames: string) => {
         if (damage > 0) {
             this.AddEvent(`${damage} damage applied to ${combatantNames}.`);
         }

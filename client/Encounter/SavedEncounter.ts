@@ -42,7 +42,7 @@ function updateLegacySavedCreature(savedCreature: any) {
 }
 
 export class SavedEncounter<T> {
-    static UpdateLegacySavedEncounter(savedEncounter: any) {
+    public static UpdateLegacySavedEncounter(savedEncounter: any) {
         savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
         savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
 

@@ -5,19 +5,19 @@ import { Tag, EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
 import { Conditions } from "../../Rules/Conditions";
 
 export class TagPrompt implements Prompt {
-    InputSelector = ".response";
-    ComponentName = "tagprompt";
+    public InputSelector = ".response";
+    public ComponentName = "tagprompt";
     private dequeueCallback: () => void;
 
-    Combatants: Combatant[] = [];
-    Conditions = Object.keys(Conditions);
-    DisplayName: string;
-    IsActive: (combatant: Combatant) => boolean;
-    Resolve = _ => { }
-    SetDequeueCallback = callback => this.dequeueCallback = callback;
+    public Combatants: Combatant[] = [];
+    public Conditions = Object.keys(Conditions);
+    public DisplayName: string;
+    public IsActive: (combatant: Combatant) => boolean;
+    public Resolve = _ => { }
+    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
-    Advanced = ko.observable(false);
-    ToggleAdvanced = () => this.Advanced(!this.Advanced());
+    public Advanced = ko.observable(false);
+    public ToggleAdvanced = () => this.Advanced(!this.Advanced());
 
     constructor(encounter: Encounter,
         targetCombatant: Combatant,

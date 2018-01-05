@@ -10,9 +10,9 @@ import { Metrics } from "../Utility/Metrics";
 import { toModifierString } from "../Utility/Toolbox";
 
 export class CombatantViewModel {
-    HP: KnockoutComputed<string>;
-    Name: KnockoutComputed<string>;
-    IsNew = ko.observable(true);
+    public HP: KnockoutComputed<string>;
+    public Name: KnockoutComputed<string>;
+    public IsNew = ko.observable(true);
 
     constructor(
         public Combatant: Combatant,
@@ -32,7 +32,7 @@ export class CombatantViewModel {
         setTimeout(() => this.IsNew(false), 500);
     }
 
-    ApplyDamage(inputDamage: string) {
+    public ApplyDamage(inputDamage: string) {
         var damage = parseInt(inputDamage),
             healing = -damage,
 
@@ -53,7 +53,7 @@ export class CombatantViewModel {
         }
     }
 
-    ApplyTemporaryHP(inputTHP: string) {
+    public ApplyTemporaryHP(inputTHP: string) {
         var newTemporaryHP = parseInt(inputTHP);
 
         if (isNaN(newTemporaryHP)) {
@@ -63,30 +63,30 @@ export class CombatantViewModel {
         this.Combatant.ApplyTemporaryHP(newTemporaryHP);
     }
 
-    ApplyInitiative(inputInitiative: string) {
+    public ApplyInitiative(inputInitiative: string) {
         const initiative = parseInt(inputInitiative);
         this.Combatant.Initiative(initiative);
         this.Combatant.Encounter.SortByInitiative(true);
     }
 
-    InitiativeClass = ko.computed(() => {
+    public InitiativeClass = ko.computed(() => {
         if (this.Combatant.InitiativeGroup()) {
             return "fa fa-link";
         }
     });
 
-    GetHPColor() {
+    public GetHPColor() {
         var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
         var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
         return "rgb(" + red + "," + green + ",0)";
     }
 
-    EditHP() {
+    public EditHP() {
         this.CombatantCommander.Select(this);
         this.CombatantCommander.EditHP();
     }
 
-    EditInitiative() {
+    public EditInitiative() {
         const currentInitiative = this.Combatant.Initiative();
         const modifier = toModifierString(this.Combatant.InitiativeBonus);
         let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
@@ -111,7 +111,7 @@ export class CombatantViewModel {
         this.PromptUser(prompt);
     }
 
-    EditName() {
+    public EditName() {
         var currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
@@ -128,20 +128,20 @@ export class CombatantViewModel {
         this.PromptUser(prompt);
     }
 
-    HiddenClass = ko.pureComputed(() => {
+    public HiddenClass = ko.pureComputed(() => {
         return this.Combatant.Hidden() ? "fa-eye-slash" : "fa-eye";
     });
 
-    IsSelected = ko.pureComputed(() => {
+    public IsSelected = ko.pureComputed(() => {
         return this.CombatantCommander.SelectedCombatants().some(c => c === this);
     });
 
-    IsActive = ko.pureComputed(() => {
+    public IsActive = ko.pureComputed(() => {
         const activeCombatant = this.Combatant.Encounter.ActiveCombatant();
         return this.Combatant === activeCombatant;
     });
 
-    ToggleHidden(data, event) {
+    public ToggleHidden(data, event) {
         if (this.Combatant.Hidden()) {
             this.Combatant.Hidden(false);
             this.LogEvent(`${this.Name()} revealed in player view.`);
@@ -152,12 +152,12 @@ export class CombatantViewModel {
         this.Combatant.Encounter.QueueEmitEncounter();
     }
 
-    AddTag(encounter: Encounter) {
+    public AddTag(encounter: Encounter) {
         const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
         this.PromptUser(prompt);
     }
 
-    RemoveTag = (tag: Tag) => {
+    public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
         this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
         this.Combatant.Encounter.QueueEmitEncounter();

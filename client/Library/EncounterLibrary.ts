@@ -5,7 +5,7 @@ import { AccountClient } from "../Account/AccountClient";
 import { probablyUniqueString } from "../Utility/Toolbox";
 
 export class EncounterLibrary {
-    Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);
+    public Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);
 
     constructor() {
         Store.List(Store.SavedEncounters).forEach(e => {
@@ -15,14 +15,14 @@ export class EncounterLibrary {
         });
     }
 
-    AddListings(listings: ServerListing[], source: ListingOrigin) {
+    public AddListings(listings: ServerListing[], source: ListingOrigin) {
         ko.utils.arrayPushAll<Listing<SavedEncounter<SavedCombatant>>>(
             this.Encounters,
             listings.map(l => new Listing(l.Id, l.Name, l.SearchHint, l.Link, source))
         );
     }
 
-    Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+    public Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
         const listing = listingFrom(savedEncounter);
 
         if (this.Encounters().indexOf(listing) === -1) {
@@ -41,7 +41,7 @@ export class EncounterLibrary {
 
     }
 
-    Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+    public Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
         this.Encounters.remove(l => l.Id == listing.Id);
         new AccountClient().DeleteEncounter(listing.Id);
         Store.Delete(Store.SavedEncounters, listing.Id);

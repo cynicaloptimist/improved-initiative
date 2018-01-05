@@ -4,8 +4,8 @@ import { Store } from "../Utility/Store";
 import { AccountClient } from "../Account/AccountClient";
 
 export class SpellLibrary {
-    Spells = ko.observableArray<Listing<Spell>>([]);
-    SpellsByNameRegex = ko.computed(() => {
+    public Spells = ko.observableArray<Listing<Spell>>([]);
+    public SpellsByNameRegex = ko.computed(() => {
         const allSpellNames = this.Spells().map(s => s.Name);
         if (allSpellNames.length === 0) {
             return new RegExp("a^");
@@ -23,7 +23,7 @@ export class SpellLibrary {
         });
     }
 
-    AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+    public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
             return new Listing<Spell>(c.Id, c.Name, c.SearchHint, c.Link, source);
         }));

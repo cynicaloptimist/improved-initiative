@@ -20,9 +20,9 @@ export class RollResult {
 }
 
 export class Dice {
-    static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/
-    static readonly GlobalDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/g
-    static readonly RollDiceExpression = (expression: string) => {
+    public static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/
+    public static readonly GlobalDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/g
+    public static readonly RollDiceExpression = (expression: string) => {
         //Taken from http://codereview.stackexchange.com/a/40996
         const match = Dice.ValidDicePattern.exec(expression);
         if (!match) {
@@ -49,11 +49,11 @@ export class Dice {
 }
 
 export class DefaultRules implements IRules {
-    GetModifierFromScore = (abilityScore: number) => {
+    public GetModifierFromScore = (abilityScore: number) => {
         return Math.floor((abilityScore - 10) / 2);
     }
-    AbilityCheck = (...mods: number[]) => {
+    public AbilityCheck = (...mods: number[]) => {
         return Math.ceil(Math.random() * 20) + (mods.length ? mods.reduce((p, c) => p + c) : 0);
     }
-    EnemyHPTransparency = "whenBloodied";
+    public EnemyHPTransparency = "whenBloodied";
 }

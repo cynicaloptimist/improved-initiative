@@ -8,7 +8,7 @@ import { env } from "../Environment";
 
 const BATCH_SIZE = 10;
 export class AccountClient {
-    GetAccount(callBack: (user: any) => void) {
+    public GetAccount(callBack: (user: any) => void) {
         if (!env.HasStorage) {
             return emptyPromise();
         }
@@ -18,7 +18,7 @@ export class AccountClient {
         return true;
     }
 
-    SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
+    public SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
         if (!env.HasStorage) {
             return emptyPromise();
         }
@@ -33,43 +33,43 @@ export class AccountClient {
         });
     }
 
-    SaveSettings(settings: Settings) {
+    public SaveSettings(settings: Settings) {
         return saveEntity<Settings>(settings, "settings");
     }
 
-    SaveStatBlock(statBlock: StatBlock) {
+    public SaveStatBlock(statBlock: StatBlock) {
         return saveEntity<StatBlock>(statBlock, "statblocks");
     }
 
-    DeleteStatBlock(statBlockId: string) {
+    public DeleteStatBlock(statBlockId: string) {
         return deleteEntity(statBlockId, "statblocks");
     }
 
-    SavePlayerCharacter(playerCharacter: StatBlock) {
+    public SavePlayerCharacter(playerCharacter: StatBlock) {
         return saveEntity<StatBlock>(playerCharacter, "playercharacters");
     }
 
-    DeletePlayerCharacter(statBlockId: string) {
+    public DeletePlayerCharacter(statBlockId: string) {
         return deleteEntity(statBlockId, "playercharacters");
     }
 
-    SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
+    public SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
         return saveEntity<SavedEncounter<SavedCombatant>>(encounter, "encounters");
     }
 
-    DeleteEncounter(encounterId: string) {
+    public DeleteEncounter(encounterId: string) {
         return deleteEntity(encounterId, "encounters");
     }
 
-    SaveSpell(spell: Spell) {
+    public SaveSpell(spell: Spell) {
         return saveEntity<Spell>(spell, "spells");
     }
 
-    DeleteSpell(spellId: string) {
+    public DeleteSpell(spellId: string) {
         return deleteEntity(spellId, "spells");
     }
 
-    static SanitizeForId(str: string) {
+    public static SanitizeForId(str: string) {
         return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, "");
     }
 }

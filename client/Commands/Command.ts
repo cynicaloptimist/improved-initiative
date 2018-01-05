@@ -3,8 +3,8 @@ import { EncounterCommander } from "./EncounterCommander";
 import { CombatantCommander } from "./CombatantCommander";
 
 export class Command {
-    ShowOnActionBar: KnockoutObservable<boolean>;
-    ToolTip: KnockoutComputed<string>;
+    public ShowOnActionBar: KnockoutObservable<boolean>;
+    public ToolTip: KnockoutComputed<string>;
     constructor(public Description: string,
         public ActionBinding: () => any,
         public KeyBinding: string = "",

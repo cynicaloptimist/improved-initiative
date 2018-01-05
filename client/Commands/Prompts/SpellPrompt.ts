@@ -6,12 +6,12 @@ const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", 
 
 export class SpellPrompt implements Prompt {
     private dequeue = () => { };
-    InputSelector = "button";
-    ComponentName = "spellprompt";
-    Spell = ko.observable(Spell.Default());
-    SetDequeueCallback = callback => this.dequeue = callback;
+    public InputSelector = "button";
+    public ComponentName = "spellprompt";
+    public Spell = ko.observable(Spell.Default());
+    public SetDequeueCallback = callback => this.dequeue = callback;
 
-    GetType = (spell: Spell) => {
+    public GetType = (spell: Spell) => {
         const ritual = spell.Ritual ? " (ritual)" : "";
         if (spell.Level === 0) {
             return `${spell.School} cantrip${ritual}`
@@ -28,5 +28,5 @@ export class SpellPrompt implements Prompt {
         listing.GetAsync(spell => this.Spell(spell));
     }
 
-    Resolve = () => this.dequeue();
+    public Resolve = () => this.dequeue();
 }

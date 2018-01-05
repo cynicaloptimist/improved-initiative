@@ -52,7 +52,7 @@ export interface StatBlock extends Listable {
 }
 
 export class StatBlock {
-    static Default = (): StatBlock => ({
+    public static Default = (): StatBlock => ({
         Id: probablyUniqueString(), Name: "", Source: "", Type: "",
         HP: { Value: 1, Notes: "1d1+0" }, AC: { Value: 10, Notes: "" },
         InitiativeModifier: 0,
@@ -70,5 +70,5 @@ export class StatBlock {
         Version: "1.0.0",
     });
 
-    static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
+    public static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
 }

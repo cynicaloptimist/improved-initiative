@@ -71,9 +71,9 @@ export class Listing<T extends Listable> {
 
     private value = ko.observable<T>();
 
-    SetValue = value => this.value(value);
+    public SetValue = value => this.value(value);
 
-    GetAsync(callback: (item: T) => any) {
+    public GetAsync(callback: (item: T) => any) {
         if (this.value()) {
             return callback(this.value());
         }
@@ -94,7 +94,7 @@ export class Listing<T extends Listable> {
         });
     }
 
-    CurrentName = ko.computed(() => {
+    public CurrentName = ko.computed(() => {
         const current = this.value();
         if (current !== undefined) {
             return current.Name || this.Name;

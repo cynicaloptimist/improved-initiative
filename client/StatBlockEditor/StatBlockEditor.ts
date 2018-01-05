@@ -7,14 +7,14 @@ export class StatBlockEditor {
     private deleteCallback: (library: string, id: string) => void;
     private statBlock: StatBlock;
 
-    EditMode = ko.observable<"instance" | "global">();
-    EditorType = ko.observable<"basic" | "advanced">("basic");
-    JsonStatBlock = ko.observable<string>();
-    EditableStatBlock = ko.observable(null);
+    public EditMode = ko.observable<"instance" | "global">();
+    public EditorType = ko.observable<"basic" | "advanced">("basic");
+    public JsonStatBlock = ko.observable<string>();
+    public EditableStatBlock = ko.observable(null);
 
-    HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
+    public HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
 
-    EditStatBlock = (statBlockId: string,
+    public EditStatBlock = (statBlockId: string,
         statBlock: StatBlock,
         saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
         deleteCallback: (library: string, id: string) => void,
@@ -96,11 +96,11 @@ export class StatBlockEditor {
         return unObservableStatBlock;
     }
 
-    SelectInput = () => {
+    public SelectInput = () => {
         $(".stats input.name").select();
     }
 
-    SaveStatBlock = () => {
+    public SaveStatBlock = () => {
         let editedStatBlock: StatBlock = StatBlock.Default();
 
         if (this.EditorType() === "advanced") {
@@ -120,14 +120,14 @@ export class StatBlockEditor {
         this.EditableStatBlock(null);
     }
 
-    DeleteStatBlock = () => {
+    public DeleteStatBlock = () => {
         if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
             this.deleteCallback(this.statBlockLibrary(), this.statBlock.Id);
             this.EditableStatBlock(null);
         }
     }
 
-    RevertStatBlock = () => {
+    public RevertStatBlock = () => {
         this.EditableStatBlock(null);
     }
 
