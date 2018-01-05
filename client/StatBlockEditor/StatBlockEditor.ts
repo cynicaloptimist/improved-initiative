@@ -33,11 +33,11 @@ export class StatBlockEditor {
     }
 
     private makeEditable = (statBlock: StatBlock) => {
-        let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
-        let modifierLists = ['Saves', 'Skills'];
-        let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
+        let stringLists = ["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"];
+        let modifierLists = ["Saves", "Skills"];
+        let traitLists = ["Traits", "Actions", "Reactions", "LegendaryActions"];
 
-        let observableStatBlock = ko['mapping'].fromJS(this.statBlock);
+        let observableStatBlock = ko["mapping"].fromJS(this.statBlock);
 
         let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
             for (let arrayName of arrayNames) {
@@ -57,17 +57,17 @@ export class StatBlockEditor {
             }
         }
 
-        makeRemovableArrays(stringLists, () => '');
+        makeRemovableArrays(stringLists, () => "");
 
         makeRemovableArrays(modifierLists, () => ({
-            Name: ko.observable(''),
-            Modifier: ko.observable('')
+            Name: ko.observable(""),
+            Modifier: ko.observable("")
         }));
 
         makeRemovableArrays(traitLists, () => ({
-            Name: ko.observable(''),
-            Content: ko.observable(''),
-            Usage: ko.observable('')
+            Name: ko.observable(""),
+            Content: ko.observable(""),
+            Usage: ko.observable("")
         }))
 
         return observableStatBlock;
@@ -85,7 +85,7 @@ export class StatBlockEditor {
             }
 
             let maybeArray = editableStatBlock[key];
-            if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === 'function') {
+            if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === "function") {
                 editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
                     return e.Value;
                 }));
@@ -103,7 +103,7 @@ export class StatBlockEditor {
     SaveStatBlock = () => {
         let editedStatBlock: StatBlock = StatBlock.Default();
 
-        if (this.EditorType() === 'advanced') {
+        if (this.EditorType() === "advanced") {
             try {
                 var statBlockFromJSON = JSON.parse(this.JsonStatBlock());
             } catch (error) {
@@ -112,7 +112,7 @@ export class StatBlockEditor {
             }
             $.extend(editedStatBlock, statBlockFromJSON)
         }
-        if (this.EditorType() === 'basic') {
+        if (this.EditorType() === "basic") {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
         }
 
@@ -132,7 +132,7 @@ export class StatBlockEditor {
     }
 
     private statBlockLibrary(): string {
-        return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.StatBlocks
+        return this.statBlock.Player == "player" ? Store.PlayerCharacters : Store.StatBlocks
     }
 
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {
@@ -144,7 +144,7 @@ export class StatBlockEditor {
     }
 }
 
-ko.components.register('statblockeditor', {
+ko.components.register("statblockeditor", {
     viewModel: params => params.editor,
-    template: { name: 'statblockeditor' }
+    template: { name: "statblockeditor" }
 });

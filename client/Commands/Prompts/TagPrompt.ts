@@ -5,8 +5,8 @@ import { Tag, EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
 import { Conditions } from "../../Rules/Conditions";
 
 export class TagPrompt implements Prompt {
-    InputSelector = '.response';
-    ComponentName = 'tagprompt';
+    InputSelector = ".response";
+    ComponentName = "tagprompt";
     private dequeueCallback: () => void;
 
     Combatants: Combatant[] = [];
@@ -22,7 +22,7 @@ export class TagPrompt implements Prompt {
     constructor(encounter: Encounter,
         targetCombatant: Combatant,
         logEvent: (s: string) => void) {
-        const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : '';
+        const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : "";
 
         this.Combatants = encounter.Combatants();
         this.DisplayName = targetCombatant.DisplayName();
@@ -37,14 +37,14 @@ export class TagPrompt implements Prompt {
             inputs.map((_, element) => {
                 responsesById[element.id] = $(element).val();
             });
-            const text: string = responsesById['tag-text'];
+            const text: string = responsesById["tag-text"];
             if (text.length) {
                 let tag = new Tag(text, targetCombatant);
 
                 if (this.Advanced()) {
-                    const duration = parseInt(responsesById['tag-duration']);
-                    const timing = responsesById['tag-timing'] == 'end' ? EndOfTurn : StartOfTurn;
-                    const timingId = responsesById['tag-timing-id'];
+                    const duration = parseInt(responsesById["tag-duration"]);
+                    const timing = responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
+                    const timingId = responsesById["tag-timing-id"];
 
                     tag = new Tag(text, targetCombatant, duration, timing, timingId);
                     encounter.AddDurationTag(tag);

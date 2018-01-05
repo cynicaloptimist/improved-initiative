@@ -109,7 +109,7 @@ export class TrackerViewModel {
         )
     );
 
-    TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
+    TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
     SettingsVisible = ko.observable(false);
     LibrariesVisible = ko.observable(true);
     ToolbarWide = ko.observable(false);

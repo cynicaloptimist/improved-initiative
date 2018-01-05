@@ -96,8 +96,8 @@ export class CombatantViewModel {
         }
         const prompt = new DefaultPrompt(message,
             response => {
-                const initiative = response['initiative'];
-                const breakLink = response['break-link'] === "break";
+                const initiative = response["initiative"];
+                const breakLink = response["break-link"] === "break";
                 if (initiative) {
                     if (breakLink) {
                         this.Combatant.InitiativeGroup(null);
@@ -115,7 +115,7 @@ export class CombatantViewModel {
         var currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
-                const alias = response['alias'];
+                const alias = response["alias"];
                 this.Combatant.Alias(alias);
                 if (alias) {
                     this.LogEvent(`${currentName} alias changed to ${alias}.`);
@@ -129,7 +129,7 @@ export class CombatantViewModel {
     }
 
     HiddenClass = ko.pureComputed(() => {
-        return this.Combatant.Hidden() ? 'fa-eye-slash' : 'fa-eye';
+        return this.Combatant.Hidden() ? "fa-eye-slash" : "fa-eye";
     });
 
     IsSelected = ko.pureComputed(() => {

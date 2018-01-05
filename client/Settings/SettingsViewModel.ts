@@ -43,13 +43,13 @@ export class SettingsViewModel {
     HpVerbosity: KnockoutObservable<string>;
     EncounterCommands: Command[];
     CombatantCommands: Command[];
-    CurrentTab = ko.observable<string>('about');
+    CurrentTab = ko.observable<string>("about");
     RollHp: KnockoutObservable<boolean>;
     AccountViewModel = new AccountViewModel(this.libraries);
 
     ExportData = () => {
         var blob = Store.ExportAll();
-        saveAs(blob, 'improved-initiative.json');
+        saveAs(blob, "improved-initiative.json");
     }
 
     ImportData = (_, event) => {

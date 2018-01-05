@@ -77,7 +77,7 @@ function getLegacySettings(): Settings {
 function configureCommands(newSettings: Settings, commands: Command[]) {
     Mousetrap.reset();
 
-    Mousetrap.bind('backspace', e => {
+    Mousetrap.bind("backspace", e => {
         if (e.preventDefault) {
             e.preventDefault();
         } else {

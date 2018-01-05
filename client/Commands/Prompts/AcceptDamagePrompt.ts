@@ -3,8 +3,8 @@ import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
 import { TrackerViewModel } from "../../TrackerViewModel";
 
 export class AcceptDamagePrompt implements Prompt {
-    InputSelector = '.acceptfull';
-    ComponentName = 'acceptdamageprompt';
+    InputSelector = ".acceptfull";
+    ComponentName = "acceptdamageprompt";
     Prompt: string;
     private dequeueCallback: () => void;
 
@@ -17,7 +17,7 @@ export class AcceptDamagePrompt implements Prompt {
     AcceptHalf: () => void;
 
     constructor(suggestedCombatants: CombatantViewModel[], damageAmount: number, suggester: string, tracker: TrackerViewModel) {
-        const combatantNames = suggestedCombatants.map(c => c.Name()).join(', ');
+        const combatantNames = suggestedCombatants.map(c => c.Name()).join(", ");
         const displayType = (damageAmount < 0) ? "healing" : "damage";
         const displayNumber = (damageAmount < 0) ? -damageAmount : damageAmount;
         this.Prompt = `Accept ${displayNumber} ${displayType} to ${combatantNames} from ${suggester}?`;

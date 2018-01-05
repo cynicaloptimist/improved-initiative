@@ -59,7 +59,7 @@ export class Store {
 
     static ExportAll() {
         return new Blob([JSON.stringify(localStorage, null, 2)],
-            { type: 'application/json' });
+            { type: "application/json" });
     }
 
     static ImportAll(file: File) {
@@ -106,7 +106,7 @@ export class Store {
     static ExportStatBlocks() {
         var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
         return new Blob([JSON.stringify(statBlocks, null, 2)],
-            { type: 'application/json' });
+            { type: "application/json" });
     }
 
     private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));

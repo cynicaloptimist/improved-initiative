@@ -14,7 +14,7 @@ export class PCLibrary {
         });
 
         if (this.StatBlocks().length == 0) {
-            this.addSamplePlayersFromUrl('/sample_players.json');
+            this.addSamplePlayersFromUrl("/sample_players.json");
         }
     }
 

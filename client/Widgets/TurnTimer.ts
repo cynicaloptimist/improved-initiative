@@ -26,9 +26,9 @@ export class TurnTimer {
         let time = moment.duration({ seconds: this.elapsedSeconds() });
         let paddedSeconds = time.seconds().toString();
         if (paddedSeconds.length < 2) {
-            paddedSeconds = '0' + paddedSeconds;
+            paddedSeconds = "0" + paddedSeconds;
         }
 
-        return time.minutes() + ':' + paddedSeconds;
+        return time.minutes() + ":" + paddedSeconds;
     });
 }

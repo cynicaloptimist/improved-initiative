@@ -17,7 +17,7 @@ export class EventLog {
         }
     }
 
-    ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
+    ToggleCSS = () => this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up";
 
     ShowFullLog = ko.observable<boolean>(false);
 
@@ -30,7 +30,7 @@ export class EventLog {
         }
     }
 
-    private element = $('.event-log');
+    private element = $(".event-log");
 
     private scrollToBottomOfLog = () => {
         let scrollHeight = this.element[0].scrollHeight;

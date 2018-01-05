@@ -25,7 +25,7 @@ export class EncounterLibraryViewModel {
     private clearCache = () => this.filterCache = {};
 
     FilteredEncounters = ko.pureComputed<EncounterListing[]>(() => {
-        const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+        const filter = (ko.unwrap(this.LibraryFilter) || "").toLocaleLowerCase(),
             encounters = this.library.Encounters();
 
         if (this.filterCache[filter]) {

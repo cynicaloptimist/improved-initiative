@@ -4,8 +4,8 @@ import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { toModifierString } from "../../Utility/Toolbox";
 
 export class InitiativePrompt implements Prompt {
-    InputSelector = '.response';
-    ComponentName = 'initiativeprompt';
+    InputSelector = ".response";
+    ComponentName = "initiativeprompt";
     PlayerCharacters = [];
     NonPlayerCharacters = [];
     private dequeue;
@@ -14,7 +14,7 @@ export class InitiativePrompt implements Prompt {
         const toPrompt = (combatant: Combatant) => ({
             Id: combatant.Id,
             Prompt: `${combatant.DisplayName()} (${toModifierString(combatant.InitiativeBonus)}): `,
-            Css: combatant.InitiativeGroup() !== null ? 'fa fa-link' : '',
+            Css: combatant.InitiativeGroup() !== null ? "fa fa-link" : "",
             PreRoll: combatant.GetInitiativeRoll()
         });
 

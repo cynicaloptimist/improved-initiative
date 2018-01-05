@@ -56,9 +56,9 @@ export const TutorialSteps: TutorialStep[] = [
         RaiseSelector: ".prompt",
         AwaitAction: "CompleteInitiativeRolls",
         CalculatePosition: elements => {
-            const element = elements.add('.combat-footer').first();
+            const element = elements.add(".combat-footer").first();
             const left = element.offset().left;
-            const top = element.offset().top - ($('.tutorial').outerHeight() + 10);
+            const top = element.offset().top - ($(".tutorial").outerHeight() + 10);
             return { left, top };
         }
     },

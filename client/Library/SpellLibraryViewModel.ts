@@ -23,7 +23,7 @@ export class SpellLibraryViewModel {
     private clearCache = () => this.filterCache = {};
 
     FilteredSpells = ko.pureComputed<Listing<Spell>[]>(() => {
-        const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+        const filter = (ko.unwrap(this.LibraryFilter) || "").toLocaleLowerCase(),
             spells = this.library.Spells();
 
         if (this.filterCache[filter]) {

@@ -26,7 +26,7 @@ export class SpellImporter extends Importer {
         spell.Classes = this.getCommaSeparatedStrings("classes");
         spell.Ritual = this.getString("ritual") === "YES";
 
-        spell.Description = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
+        spell.Description = $(this.domElement).find("text").map((i, e) => e.innerHTML).get().join("\n");
 
         return spell;
     }

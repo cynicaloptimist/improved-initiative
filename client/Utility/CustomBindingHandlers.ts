@@ -60,7 +60,7 @@ export function RegisterBindingHandlers() {
     }
 
     function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: EncounterCommander) {
-        el.on('click', (event) => {
+        el.on("click", (event) => {
             const diceExpression = event.target.innerHTML;
             encounterCommander.RollDice(diceExpression);
         });
@@ -73,7 +73,7 @@ export function RegisterBindingHandlers() {
                 const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
                 const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         
-                $(element).html(modifier).addClass('rollable');
+                $(element).html(modifier).addClass("rollable");
                 makeDiceClickable($(element), encounterCommander);
             }
         }
@@ -97,9 +97,9 @@ export function RegisterBindingHandlers() {
     
         $(element).html(text);
     
-        makeDiceClickable($(element).find('.rollable'), encounterCommander);
+        makeDiceClickable($(element).find(".rollable"), encounterCommander);
     
-        $(element).find('.spell-reference').on('click', (event) => {
+        $(element).find(".spell-reference").on("click", (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
             const spell = spellLibrary.Spells().filter(s => s.CurrentName().toLocaleLowerCase() === spellName)[0];
             encounterCommander.ReferenceSpell(spell);
@@ -121,18 +121,18 @@ export function RegisterBindingHandlers() {
             const popComponent = $(componentSelector).first();
             popComponent.hide();
     
-            $(element).on('mouseover', event => {
+            $(element).on("mouseover", event => {
                 const hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
                 const target = $(event.target);
                 let top = target.offset().top;
                 const left = target.offset().left + 5;
-                const maxPopPosition = $('body').outerHeight() - (popComponent.outerHeight() + 30);
+                const maxPopPosition = $("body").outerHeight() - (popComponent.outerHeight() + 30);
                 if (top > maxPopPosition) {
                     top = maxPopPosition;
                 }
-                popComponent.css('left', left)
-                    .css('top', top)
+                popComponent.css("left", left)
+                    .css("top", top)
                     .select();
             });
     

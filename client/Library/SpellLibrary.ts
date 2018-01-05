@@ -8,7 +8,7 @@ export class SpellLibrary {
     SpellsByNameRegex = ko.computed(() => {
         const allSpellNames = this.Spells().map(s => s.Name);
         if (allSpellNames.length === 0) {
-            return new RegExp('a^');
+            return new RegExp("a^");
         }
         return new RegExp(`\\b(${allSpellNames.join("|")})\\b`, "gim");
     });

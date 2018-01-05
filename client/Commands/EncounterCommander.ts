@@ -135,7 +135,7 @@ export class EncounterCommander {
     HideLibraries = () => this.tracker.LibrariesVisible(false);
 
     LaunchPlayerWindow = () => {
-        window.open(`/p/${this.tracker.Encounter.EncounterId}`, 'Player View');
+        window.open(`/p/${this.tracker.Encounter.EncounterId}`, "Player View");
     }
 
     ShowSettings = () => {
@@ -168,7 +168,7 @@ export class EncounterCommander {
             return;
         }
 
-        if (this.tracker.Encounter.State() == 'inactive') {
+        if (this.tracker.Encounter.State() == "inactive") {
             this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
 
             ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
@@ -208,7 +208,7 @@ export class EncounterCommander {
     SaveEncounter = () => {
         const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
             response => {
-                const encounterName = response['encounterName'];
+                const encounterName = response["encounterName"];
                 if (encounterName) {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName);
                     this.libraries.Encounters.Save(savedEncounter);

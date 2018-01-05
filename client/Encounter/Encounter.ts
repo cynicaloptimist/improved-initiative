@@ -59,9 +59,9 @@ export class Encounter {
     ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
     Difficulty: KnockoutComputed<EncounterDifficulty>;
 
-    State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">('inactive');
-    StateIcon = ko.computed(() => this.State() === "active" ? 'fa-play' : 'fa-pause');
-    StateTip = ko.computed(() => this.State() === "active" ? 'Encounter Active' : 'Encounter Inactive');
+    State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">("inactive");
+    StateIcon = ko.computed(() => this.State() === "active" ? "fa-play" : "fa-pause");
+    StateTip = ko.computed(() => this.State() === "active" ? "Encounter Active" : "Encounter Inactive");
 
     RoundCounter: KnockoutObservable<number> = ko.observable(0);
     EncounterId = env.EncounterId;
@@ -105,7 +105,7 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
-        this.Socket.emit('update encounter', this.EncounterId, this.SavePlayerDisplay());
+        this.Socket.emit("update encounter", this.EncounterId, this.SavePlayerDisplay());
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
     }
 
@@ -167,7 +167,7 @@ export class Encounter {
 
     StartEncounter = () => {
         this.SortByInitiative();
-        this.State('active');
+        this.State("active");
         this.RoundCounter(1);
         this.ActiveCombatant(this.Combatants()[0]);
         this.TurnTimer.Start();
@@ -175,7 +175,7 @@ export class Encounter {
     }
 
     EndEncounter = () => {
-        this.State('inactive');
+        this.State("inactive");
         this.ActiveCombatant(null);
         this.TurnTimer.Stop();
         this.QueueEmitEncounter();
@@ -278,7 +278,7 @@ export class Encounter {
                     if (c.Hidden()) {
                         return false;
                     }
-                    if (hideMonstersOutsideEncounter && this.State() == 'inactive' && !c.IsPlayerCharacter) {
+                    if (hideMonstersOutsideEncounter && this.State() == "inactive" && !c.IsPlayerCharacter) {
                         return false;
                     }
                     return true;
@@ -292,7 +292,7 @@ export class Encounter {
         savedEncounter = SavedEncounter.UpdateLegacySavedEncounter(savedEncounter);
 
         let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
-        let currentEncounterIsActive = this.State() == 'active';
+        let currentEncounterIsActive = this.State() == "active";
 
         savedEncounter.Combatants.forEach(c => {
             let combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
@@ -311,7 +311,7 @@ export class Encounter {
         }
         else {
             if (savedEncounterIsActive) {
-                this.State('active');
+                this.State("active");
                 this.ActiveCombatant(this.Combatants().filter(c => c.Id == savedEncounter.ActiveCombatantId).pop());
                 this.TurnTimer.Start();
             }

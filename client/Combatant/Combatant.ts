@@ -33,10 +33,10 @@ export class Combatant implements Combatant {
 
         if (savedCombatant) {
             statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
-            this.Id = '' + savedCombatant.Id; //legacy Id may be a number
+            this.Id = "" + savedCombatant.Id; //legacy Id may be a number
         } else {
             statBlock.HP.Value = this.getMaxHP(statBlock);
-            this.Id = statBlock.Id + '.' + probablyUniqueString();
+            this.Id = statBlock.Id + "." + probablyUniqueString();
         }
 
         this.StatBlock(statBlock);
@@ -69,7 +69,7 @@ export class Combatant implements Combatant {
     }
 
     Id = probablyUniqueString();
-    Alias = ko.observable('');
+    Alias = ko.observable("");
     TemporaryHP = ko.observable(0);
     Tags = ko.observableArray<Tag>();
     Initiative = ko.observable(0);

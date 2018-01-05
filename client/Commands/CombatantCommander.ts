@@ -50,7 +50,7 @@ export class CombatantCommander {
     Names: KnockoutComputed<string> = ko.pureComputed(() =>
         this.SelectedCombatants()
             .map(c => c.Name())
-            .join(', ')
+            .join(", ")
     );
 
     Select = (data: CombatantViewModel, e?: MouseEvent) => {
@@ -117,7 +117,7 @@ export class CombatantCommander {
             this.tracker.Encounter.EndEncounter();
         }
 
-        this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
+        this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(", ")} removed from encounter.`);
 
         this.tracker.Encounter.QueueEmitEncounter();
     }
@@ -136,7 +136,7 @@ export class CombatantCommander {
 
     private CreateEditHPCallback = (combatants: CombatantViewModel[], combatantNames: string) => {
         return (response) => {
-            const damage = response['damage'];
+            const damage = response["damage"];
             if (damage) {
                 combatants.forEach(c => c.ApplyDamage(damage));
                 const damageNum = parseInt(damage);
@@ -148,7 +148,7 @@ export class CombatantCommander {
 
     EditHP = () => {
         const selectedCombatants = this.SelectedCombatants();
-        const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
+        const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const callback = this.CreateEditHPCallback(selectedCombatants, combatantNames);
         const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`, callback);
         this.tracker.PromptQueue.Add(prompt);
@@ -177,10 +177,10 @@ export class CombatantCommander {
 
     AddTemporaryHP = () => {
         const selectedCombatants = this.SelectedCombatants();
-        const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
+        const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const prompt = new DefaultPrompt(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
             response => {
-                const thp = response['thp'];
+                const thp = response["thp"];
                 if (thp) {
                     selectedCombatants.forEach(c => c.ApplyTemporaryHP(thp));
                     this.tracker.EventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);

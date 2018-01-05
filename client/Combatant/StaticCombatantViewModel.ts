@@ -33,7 +33,7 @@ export class StaticCombatantViewModel {
         }
 
         if (monsterHpVerbosity == "Hide All") {
-            return '';
+            return "";
         }
 
         if (monsterHpVerbosity == "Damage Taken") {

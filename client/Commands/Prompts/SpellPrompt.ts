@@ -12,7 +12,7 @@ export class SpellPrompt implements Prompt {
     SetDequeueCallback = callback => this.dequeue = callback;
 
     GetType = (spell: Spell) => {
-        const ritual = spell.Ritual ? ' (ritual)' : '';
+        const ritual = spell.Ritual ? " (ritual)" : "";
         if (spell.Level === 0) {
             return `${spell.School} cantrip${ritual}`
         }

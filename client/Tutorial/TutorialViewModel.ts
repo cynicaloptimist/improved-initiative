@@ -15,7 +15,7 @@ export class TutorialViewModel {
     Position: KnockoutComputed<Position>;
     constructor(params: { showTutorial: KnockoutObservable<boolean> }) {
         this.stepIndex.subscribe(newStepIndex => {
-            $('.tutorial-focus').removeClass('tutorial-focus');
+            $(".tutorial-focus").removeClass("tutorial-focus");
 
             const nextStep = TutorialSteps[newStepIndex];
             const focusSelector = nextStep.RaiseSelector;
@@ -24,13 +24,13 @@ export class TutorialViewModel {
                 console.error("Tutorial binding broken");
                 return;
             }
-            focusedElements.addClass('tutorial-focus');
+            focusedElements.addClass("tutorial-focus");
             const position: any = nextStep.CalculatePosition(focusedElements);
             if (newStepIndex == 0) {
-                $('.tutorial').css(position);
+                $(".tutorial").css(position);
             }
             else {
-                $('.tutorial').animate(position);
+                $(".tutorial").animate(position);
             }
         });
 
@@ -64,8 +64,8 @@ export class TutorialViewModel {
 
     End = () => {
         this.stepIndex(0);
-        $('.tutorial-focus').removeClass('tutorial-focus');
-        Store.Save(Store.User, 'SkipIntro', true);
+        $(".tutorial-focus").removeClass("tutorial-focus");
+        Store.Save(Store.User, "SkipIntro", true);
         this.showTutorial(false);
     }
 

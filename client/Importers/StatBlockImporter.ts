@@ -3,8 +3,8 @@ import { StatBlock } from "../StatBlock/StatBlock";
 
 export class StatBlockImporter extends Importer {
     getType() {
-        return this.getString("size") + ' ' +
-            this.getString("type") + ', ' +
+        return this.getString("size") + " " +
+            this.getString("type") + ", " +
             this.getString("alignment");
     }
 

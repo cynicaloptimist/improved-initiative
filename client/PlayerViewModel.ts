@@ -18,11 +18,11 @@ export class PlayerViewModel {
     CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
 
     constructor() {
-        this.Socket.on('update encounter', (encounter) => {
+        this.Socket.on("update encounter", (encounter) => {
             this.LoadEncounter(encounter)
         })
 
-        this.Socket.emit('join encounter', this.EncounterId);
+        this.Socket.emit("join encounter", this.EncounterId);
     }
 
     LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
@@ -45,7 +45,7 @@ export class PlayerViewModel {
     }
 
     ScrollToActiveCombatant = () => {
-        var activeCombatantElement = $('.active')[0];
+        var activeCombatantElement = $(".active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }

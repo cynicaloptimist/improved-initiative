@@ -56,5 +56,5 @@ function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId
         savedEncounter.Name,
         combatantNames,
         Store.SavedEncounters,
-        'localStorage');
+        "localStorage");
 }

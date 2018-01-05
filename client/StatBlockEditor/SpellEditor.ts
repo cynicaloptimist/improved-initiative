@@ -5,7 +5,7 @@ export class SpellEditor {
     private deleteCallback: (id: string) => void;
     private spell: Spell;
 
-    EditorType = ko.observable<'basic' | 'advanced'>('basic');
+    EditorType = ko.observable<"basic" | "advanced">("basic");
     JsonSpell = ko.observable<string>();
     EditableSpell = ko.observable(null);
 
@@ -28,7 +28,7 @@ export class SpellEditor {
 
 
     private makeEditable = (spell: Spell) => {
-        let observableSpell = ko['mapping'].fromJS(this.spell);
+        let observableSpell = ko["mapping"].fromJS(this.spell);
         return observableSpell;
     }
 
@@ -49,7 +49,7 @@ export class SpellEditor {
     SaveSpell = () => {
         let editedSpell: Spell = Spell.Default();
 
-        if (this.EditorType() === 'advanced') {
+        if (this.EditorType() === "advanced") {
             try {
                 var spellFromJSON = JSON.parse(this.JsonSpell());
             } catch (error) {
@@ -58,7 +58,7 @@ export class SpellEditor {
             }
             $.extend(editedSpell, spellFromJSON)
         }
-        if (this.EditorType() === 'basic') {
+        if (this.EditorType() === "basic") {
             $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));
         }
 
@@ -78,7 +78,7 @@ export class SpellEditor {
     }
 }
 
-ko.components.register('spelleditor', {
+ko.components.register("spelleditor", {
     viewModel: params => params.editor,
-    template: { name: 'spelleditor' }
+    template: { name: "spelleditor" }
 });

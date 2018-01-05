@@ -28,7 +28,7 @@ export class StatBlockLibraryViewModel {
     private clearCache = () => this.filterCache = {};
 
     FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
-        const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+        const filter = (ko.unwrap(this.LibraryFilter) || "").toLocaleLowerCase(),
             statblocks = this.library.StatBlocks();
 
         if (this.filterCache[filter]) {

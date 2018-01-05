@@ -41,7 +41,7 @@ export class PromptQueue {
         const opts = { duration: 200 };
         const up = { "margin-bottom": "+=10" };
         const down = { "margin-bottom": "-=10" };
-        $('.prompt')
+        $(".prompt")
             .animate(up, opts)
             .animate(down, opts)
             .find(this.Prompts()[0].InputSelector)

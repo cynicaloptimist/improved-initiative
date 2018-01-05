@@ -9,7 +9,7 @@ export class Metrics {
             Spells: Store.List(Store.Spells).length
         };
 
-        Metrics.TrackEvent('AppLoad', counts);
+        Metrics.TrackEvent("AppLoad", counts);
     }
 
     static TrackEvent(name: string, data?: object): void {

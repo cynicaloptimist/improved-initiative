@@ -25,7 +25,7 @@ export class AccountViewModel {
     SyncAll() {
         this.SyncMessage("");
         var blob = Store.ExportAll();
-        saveAs(blob, 'improved-initiative.json');
+        saveAs(blob, "improved-initiative.json");
         new AccountClient().SaveAll(this.libraries, err => {
             this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
         });

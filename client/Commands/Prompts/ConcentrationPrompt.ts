@@ -3,8 +3,8 @@ import { Combatant } from "../../Combatant/Combatant";
 
 export class ConcentrationPrompt implements Prompt {
     static Tag = "Concentrating"
-    InputSelector = '.passcheck';
-    ComponentName = 'concentrationprompt';
+    InputSelector = ".passcheck";
+    ComponentName = "concentrationprompt";
     Prompt: string;
     private dequeueCallback: () => void;
 

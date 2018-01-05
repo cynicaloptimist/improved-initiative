@@ -29,7 +29,7 @@ export class LibrariesViewModel {
 
     SelectedTab = ko.observable(this.LibraryTabs[0]);
 
-    TabClassName = library => library === this.SelectedTab() ? 'selected' : '';
+    TabClassName = library => library === this.SelectedTab() ? "selected" : "";
 
     constructor(
         public Tracker: TrackerViewModel,

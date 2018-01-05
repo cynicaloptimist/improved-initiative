@@ -16,7 +16,7 @@ export var RegisterComponents = () => {
     var templateLoader = {
         loadTemplate: function (name, templateConfig, callback) {
             if (templateConfig.name) {
-                var fullUrl = '/templates/' + templateConfig.name;
+                var fullUrl = "/templates/" + templateConfig.name;
                 const request = $.get(fullUrl, function (markupString) {
                     // We need an array of DOM nodes, not a string.
                     // We can use the default loader to convert to the
@@ -42,21 +42,21 @@ export var RegisterComponents = () => {
         }
     )
 
-    registerComponent('settings', params => new SettingsViewModel(params.encounterCommander, params.combatantCommander, params.libraries, params.settingsVisible, params.repeatTutorial));
-    registerComponent('defaultstatblock', params => params.statBlock);
-    registerComponent('activestatblock', params => params.statBlock);
-    registerComponent('combatant', params => params.viewModel);
-    registerComponent('playerdisplaycombatant', params => params.combatant);
-    registerComponent('libraries', params => new LibrariesViewModel(params.tracker, params.encounterCommander, params.libraries));
-    registerComponent('statblocklibrary', params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
-    registerComponent('encounterlibrary', params => new EncounterLibraryViewModel(params.tracker, params.library));
-    registerComponent('spelllibrary', params => new SpellLibraryViewModel(params.encounterCommander, params.library));
-    registerComponent('defaultprompt', params => params.prompt);
-    registerComponent('tagprompt', params => params.prompt);
-    registerComponent('concentrationprompt', params => params.prompt);
-    registerComponent('initiativeprompt', params => params.prompt);
-    registerComponent('spellprompt', params => params.prompt);
-    registerComponent('acceptdamageprompt', params => params.prompt);
-    registerComponent('tutorial', params => new TutorialViewModel(params));
-    registerComponent('playersuggestion', params => params.suggestion);
+    registerComponent("settings", params => new SettingsViewModel(params.encounterCommander, params.combatantCommander, params.libraries, params.settingsVisible, params.repeatTutorial));
+    registerComponent("defaultstatblock", params => params.statBlock);
+    registerComponent("activestatblock", params => params.statBlock);
+    registerComponent("combatant", params => params.viewModel);
+    registerComponent("playerdisplaycombatant", params => params.combatant);
+    registerComponent("libraries", params => new LibrariesViewModel(params.tracker, params.encounterCommander, params.libraries));
+    registerComponent("statblocklibrary", params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
+    registerComponent("encounterlibrary", params => new EncounterLibraryViewModel(params.tracker, params.library));
+    registerComponent("spelllibrary", params => new SpellLibraryViewModel(params.encounterCommander, params.library));
+    registerComponent("defaultprompt", params => params.prompt);
+    registerComponent("tagprompt", params => params.prompt);
+    registerComponent("concentrationprompt", params => params.prompt);
+    registerComponent("initiativeprompt", params => params.prompt);
+    registerComponent("spellprompt", params => params.prompt);
+    registerComponent("acceptdamageprompt", params => params.prompt);
+    registerComponent("tutorial", params => new TutorialViewModel(params));
+    registerComponent("playersuggestion", params => params.suggestion);
 }
