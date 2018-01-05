@@ -3,13 +3,14 @@ import { Combatant } from "./Combatant";
 import { CurrentSettings } from "../Settings/Settings";
 
 export class StaticCombatantViewModel {
-    public Name: string;
-    public HPDisplay: string;
-    public HPColor: string;
-    public Initiative: number;
-    public Id: string;
-    public Tags: Tag[];
-    public IsPlayerCharacter: boolean;
+    Name: string;
+    HPDisplay: string;
+    HPColor: string;
+    Initiative: number;
+    Id: string;
+    Tags: Tag[];
+    IsPlayerCharacter: boolean;
+    Img: string;
 
     constructor(combatant: Combatant) {
         this.Name = combatant.DisplayName();
@@ -19,6 +20,7 @@ export class StaticCombatantViewModel {
         this.Initiative = combatant.Initiative();
         this.IsPlayerCharacter = combatant.IsPlayerCharacter;
         this.Tags = combatant.Tags();
+        this.Img = combatant.Img;
     }
 
     private GetHPDisplay(combatant: Combatant): string {

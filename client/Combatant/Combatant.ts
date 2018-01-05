@@ -25,6 +25,7 @@ export interface Combatant {
     StatBlock: KnockoutObservable<StatBlock>;
     GetInitiativeRoll: () => number;
     IsPlayerCharacter: boolean;
+    Img: string;
 }
 
 export class Combatant implements Combatant {
@@ -68,6 +69,7 @@ export class Combatant implements Combatant {
         });
     }
 
+<<<<<<< HEAD
     public Id = probablyUniqueString();
     public Alias = ko.observable("");
     public TemporaryHP = ko.observable(0);
@@ -86,12 +88,14 @@ export class Combatant implements Combatant {
     public InitiativeBonus: number;
     public ConcentrationBonus: number;
     public IsPlayerCharacter = false;
+    public Img: string;
 
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
         this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
         this.IsPlayerCharacter = newStatBlock.Player == "player";
+        this.Img = newStatBlock.Img;
         this.AC = newStatBlock.AC.Value;
         this.MaxHP = newStatBlock.HP.Value;
         this.AbilityModifiers = this.calculateModifiers();
