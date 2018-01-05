@@ -7,10 +7,10 @@ export class Command {
     public ToolTip: KnockoutComputed<string>;
     constructor(public Description: string,
         public ActionBinding: () => any,
-        public KeyBinding: string = "",
-        public ActionBarIcon: string = "",
-        showOnActionBar: boolean = true,
-        public LockOnActionBar: boolean = false) {
+        public KeyBinding = "",
+        public ActionBarIcon = "",
+        showOnActionBar = true,
+        public LockOnActionBar = false) {
         this.ShowOnActionBar = ko.observable(showOnActionBar);
         if (LockOnActionBar) {
             this.ShowOnActionBar.subscribe(_ => {

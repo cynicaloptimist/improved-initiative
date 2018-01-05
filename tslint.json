@@ -2,6 +2,7 @@
     "rules": {
         "no-console": false,
         "quotemark": [true, "double"],
-        "member-access": true 
+        "member-access": true,
+        "no-inferrable-types": true
     }
 }

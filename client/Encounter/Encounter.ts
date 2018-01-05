@@ -66,7 +66,7 @@ export class Encounter {
     public RoundCounter: KnockoutObservable<number> = ko.observable(0);
     public EncounterId = env.EncounterId;
 
-    public SortByInitiative = (stable: boolean = false) => {
+    public SortByInitiative = (stable = false) => {
         this.Combatants.sort((l, r) => {
             if (stable) {
                 return r.Initiative() - l.Initiative()
