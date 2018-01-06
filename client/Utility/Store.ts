@@ -66,8 +66,9 @@ export class Store {
         let reader = new FileReader();
         reader.onload = (event: any) => {
             let json = event.target.result;
+            let importedStorage = {};
             try {
-                let importedStorage = JSON.parse(json);
+                importedStorage = JSON.parse(json);
             } catch (error) {
                 alert(`There was a problem importing ${file.name}: ${error}`);
                 return;

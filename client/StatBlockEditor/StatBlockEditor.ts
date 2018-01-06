@@ -104,8 +104,9 @@ export class StatBlockEditor {
         let editedStatBlock: StatBlock = StatBlock.Default();
 
         if (this.EditorType() === "advanced") {
+            let statBlockFromJSON = {};
             try {
-                let statBlockFromJSON = JSON.parse(this.JsonStatBlock());
+                statBlockFromJSON = JSON.parse(this.JsonStatBlock());
             } catch (error) {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;
