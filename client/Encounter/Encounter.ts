@@ -43,7 +43,7 @@ export class Encounter {
                     .filter(c => c.StatBlock().Challenge)
                     .map(c => c.StatBlock().Challenge.toString());
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
-        })
+        });
 
         let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
@@ -69,10 +69,10 @@ export class Encounter {
     public SortByInitiative = (stable = false) => {
         this.Combatants.sort((l, r) => {
             if (stable) {
-                return r.Initiative() - l.Initiative()
+                return r.Initiative() - l.Initiative();
             }
 
-            return (r.Initiative() - l.Initiative()) || (r.InitiativeBonus - l.InitiativeBonus)
+            return (r.Initiative() - l.Initiative()) || (r.InitiativeBonus - l.InitiativeBonus);
         });
         this.QueueEmitEncounter();
     }
@@ -83,8 +83,8 @@ export class Encounter {
             if (c.TotalInitiativeModifier !== undefined) {
                 c.InitiativeModifier = c.TotalInitiativeModifier;
             }
-            this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c))
-        }
+            this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c));
+        };
         if (encounter.Combatants) {
             encounter.Combatants.forEach(c => {
                 if (c.Id) {
@@ -93,11 +93,11 @@ export class Encounter {
                             const modifiedStatBlockFromLibrary = deepMerge(statBlockFromLibrary, c);
                             this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
                         })
-                        .fail(_ => defaultAdd(c))
+                        .fail(_ => defaultAdd(c));
                 } else {
                     defaultAdd(c);
                 }
-            })
+            });
         }
 
     }
@@ -257,7 +257,7 @@ export class Encounter {
                     })),
                     Hidden: c.Hidden(),
                     InterfaceVersion: "1.0.0"
-                }
+                };
             }),
             Version: "1.0.0"
         };
@@ -303,7 +303,7 @@ export class Encounter {
                 if (tag.HasDuration) {
                     this.AddDurationTag(tag);
                 }
-            })
+            });
         });
 
         if (currentEncounterIsActive) {

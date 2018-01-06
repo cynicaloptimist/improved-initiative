@@ -17,7 +17,7 @@ export class SpellEditor {
         deleteCallback: (id: string) => void
     ) => {
 
-        this.spell = { ...Spell.Default(), ...spell }
+        this.spell = { ...Spell.Default(), ...spell };
 
         this.EditableSpell(this.makeEditable(this.spell));
         this.JsonSpell(JSON.stringify(this.spell, null, 2));
@@ -56,7 +56,7 @@ export class SpellEditor {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;
             }
-            $.extend(editedSpell, spellFromJSON)
+            $.extend(editedSpell, spellFromJSON);
         }
         if (this.EditorType() === "basic") {
             $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));

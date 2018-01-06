@@ -29,7 +29,7 @@ export class AccountViewModel {
         new AccountClient().SaveAll(this.libraries, err => {
             this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
         });
-    };
+    }
 
     public SyncMessage = ko.observable("");
 }

@@ -15,7 +15,7 @@ export class CombatantSuggestor {
         } else {
             return this.Combatant().Name;
         }
-    })
+    });
 
     public Show = (combatant: StaticCombatantViewModel) => {
         this.Combatant(combatant);

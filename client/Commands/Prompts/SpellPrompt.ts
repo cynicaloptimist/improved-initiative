@@ -14,7 +14,7 @@ export class SpellPrompt implements Prompt {
     public GetType = (spell: Spell) => {
         const ritual = spell.Ritual ? " (ritual)" : "";
         if (spell.Level === 0) {
-            return `${spell.School} cantrip${ritual}`
+            return `${spell.School} cantrip${ritual}`;
         }
         const numberSuffix = numberSuffixes[spell.School];
         if (numberSuffix) {

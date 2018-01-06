@@ -96,7 +96,7 @@ export class SettingsViewModel {
                 MonsterHPVerbosity: this.HpVerbosity()
             },
             Version: "1.0.0" //TODO: auto generate this line
-        }
+        };
     }
 
     public SaveAndClose() {
@@ -144,7 +144,7 @@ export class SettingsViewModel {
         this.HpVerbosity = ko.observable(currentSettings.PlayerView.MonsterHPVerbosity);
         this.HpVerbosityOptions = hpVerbosityOptions;
         this.HideMonstersOutsideEncounter = ko.observable(currentSettings.PlayerView.HideMonstersOutsideEncounter);
-        this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);;
+        this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 

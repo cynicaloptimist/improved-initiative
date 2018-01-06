@@ -11,7 +11,7 @@ export class SpellImporter extends Importer {
         "I": "Illusion",
         "N": "Necromancy",
         "T": "Transmutation",
-    }
+    };
 
     public GetSpell = () => {
         const spell = Spell.Default();

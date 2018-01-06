@@ -7,7 +7,7 @@ export class PromptQueue {
 
     public Add = (prompt: Prompt) => {
         prompt.SetDequeueCallback(() => {
-            this.Prompts.remove(prompt)
+            this.Prompts.remove(prompt);
             if (this.HasPrompt()) {
                 $(this.Prompts()[0].InputSelector).first().select();
             }
@@ -30,7 +30,7 @@ export class PromptQueue {
 
     public Dismiss = () => {
         if (this.HasPrompt()) {
-            this.Prompts.remove(this.Prompts()[0])
+            this.Prompts.remove(this.Prompts()[0]);
         }
     }
 

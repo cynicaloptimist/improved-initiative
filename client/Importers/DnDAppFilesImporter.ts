@@ -9,7 +9,7 @@ const getStatBlocksFromXml = (xmlString: string) => {
         let importer = new StatBlockImporter(xmlDoc);
         return importer.GetStatBlock();
     });
-}
+};
 
 const getSpellsFromXml = (xmlString: string) => {
     const spells = $(xmlString).find("spell").toArray();
@@ -17,7 +17,7 @@ const getSpellsFromXml = (xmlString: string) => {
         let importer = new SpellImporter(xmlDoc);
         return importer.GetSpell();
     });
-}
+};
 
 export class DnDAppFilesImporter {
     public ImportEntitiesFromXml =

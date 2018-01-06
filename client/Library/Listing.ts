@@ -19,7 +19,7 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
         } else {
             dedupedStatBlocks[newListing.Name] = newListing;
         }
-    })
+    });
 
     Object.keys(dedupedStatBlocks).sort().forEach(i => {
         const listing = dedupedStatBlocks[i];
@@ -100,5 +100,5 @@ export class Listing<T extends Listable> {
             return current.Name || this.Name;
         }
         return this.Name;
-    })
+    });
 }

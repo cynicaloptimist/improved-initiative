@@ -2,7 +2,7 @@ import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 
 export class ConcentrationPrompt implements Prompt {
-    public static Tag = "Concentrating"
+    public static Tag = "Concentrating";
     public InputSelector = ".passcheck";
     public ComponentName = "concentrationprompt";
     public Prompt: string;
@@ -11,7 +11,7 @@ export class ConcentrationPrompt implements Prompt {
     public SetDequeueCallback = callback => this.dequeueCallback = callback;
     public Resolve = (form: HTMLFormElement) => {
         this.dequeueCallback();
-    };
+    }
     public FailCheck: () => void;
 
     constructor(combatant: Combatant, damageAmount: number) {
@@ -24,6 +24,6 @@ export class ConcentrationPrompt implements Prompt {
                 .filter(t => t.Text === ConcentrationPrompt.Tag)
                 .forEach(tag => combatant.Tags.remove(tag));
             this.dequeueCallback();
-        }
+        };
     }
 }

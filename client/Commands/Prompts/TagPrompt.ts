@@ -13,7 +13,7 @@ export class TagPrompt implements Prompt {
     public Conditions = Object.keys(Conditions);
     public DisplayName: string;
     public IsActive: (combatant: Combatant) => boolean;
-    public Resolve = _ => { }
+    public Resolve = _ => { };
     public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     public Advanced = ko.observable(false);

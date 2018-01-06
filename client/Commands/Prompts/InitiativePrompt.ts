@@ -18,7 +18,7 @@ export class InitiativePrompt implements Prompt {
             PreRoll: combatant.GetInitiativeRoll()
         });
 
-        const groups = []
+        const groups = [];
 
         const byGroup = combatants.filter(combatant => {
             const group = combatant.InitiativeGroup();
@@ -29,7 +29,7 @@ export class InitiativePrompt implements Prompt {
                 groups.push(group);
             }
             return true;
-        })
+        });
 
         this.PlayerCharacters = byGroup.filter(c => c.IsPlayerCharacter).map(toPrompt);
         this.NonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter).map(toPrompt);
@@ -50,7 +50,7 @@ export class InitiativePrompt implements Prompt {
             startEncounter();
             TutorialSpy("CompleteInitiativeRolls");
             this.dequeue();
-        }
+        };
     }
 
     public Resolve = _ => { };

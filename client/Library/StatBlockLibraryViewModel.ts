@@ -4,7 +4,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { KeyValueSet } from "../Utility/Toolbox";
 
 export interface StatBlockLibrary {
-    StatBlocks: KnockoutObservableArray<Listing<StatBlock>>
+    StatBlocks: KnockoutObservableArray<Listing<StatBlock>>;
     ContainsPlayerCharacters: boolean;
 }
 

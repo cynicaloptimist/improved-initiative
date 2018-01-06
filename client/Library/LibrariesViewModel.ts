@@ -40,6 +40,6 @@ export class LibrariesViewModel {
             if (t.Name === "Players") {
                 TutorialSpy("SelectPlayersTab");
             }
-        })
+        });
     }
 }

@@ -6,22 +6,22 @@ export interface IRules {
 
 export class RollResult {
     constructor(public Rolls: number[], public Modifier: number) { }
-    get Total(): number { return this.Rolls.reduce((p, c) => c + p, 0) + this.Modifier; };
+    get Total(): number { return this.Rolls.reduce((p, c) => c + p, 0) + this.Modifier; }
     get String(): string {
         let output = `[${this.Rolls}]`;
         if (this.Modifier > 0) {
-            output += ` + ${this.Modifier}`
+            output += ` + ${this.Modifier}`;
         }
         if (this.Modifier < 0) {
-            output += ` - ${-this.Modifier}`
+            output += ` - ${-this.Modifier}`;
         }
         return output + ` = ${this.Total}`;
     }
 }
 
 export class Dice {
-    public static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/
-    public static readonly GlobalDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/g
+    public static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/;
+    public static readonly GlobalDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/g;
     public static readonly RollDiceExpression = (expression: string) => {
         //Taken from http://codereview.stackexchange.com/a/40996
         const match = Dice.ValidDicePattern.exec(expression);
@@ -29,7 +29,7 @@ export class Dice {
             throw "Invalid dice notation: " + expression;
         }
 
-        const isLooseModifier = typeof match[4] == "string"
+        const isLooseModifier = typeof match[4] == "string";
         if (match[4]) {
             const modifier = parseInt(match[4].replace(/[\s]*/g, ""));
             const d20Roll = Math.ceil(Math.random() * 20);

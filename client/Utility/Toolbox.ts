@@ -20,7 +20,7 @@ export function probablyUniqueString(): string {
     //string contains only easily relayable characters for forward 
     //compatability with speech-based data transfer ;-)
     let chars = "1234567890abcdefghijkmnpqrstuvxyz";
-    let probablyUniqueString = ""
+    let probablyUniqueString = "";
     for (let i = 0; i < 8; i++) {
         let index = Math.floor(Math.random() * chars.length);
         probablyUniqueString += chars[index];

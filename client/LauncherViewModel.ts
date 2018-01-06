@@ -6,7 +6,7 @@ export class LauncherViewModel {
         const pageLoadData = {
             referrer: document.referrer,
             userAgent: navigator.userAgent
-        }
+        };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
     }
 

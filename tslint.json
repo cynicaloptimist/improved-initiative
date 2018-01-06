@@ -6,6 +6,7 @@
         "no-internal-module": true,
         "no-var-keyword": true,
         "curly": [true, "ignore-same-line"],
-        "no-use-before-declare": true
+        "no-use-before-declare": true,
+        "semicolon": true
     }
 }

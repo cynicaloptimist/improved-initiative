@@ -9,19 +9,19 @@ export interface Settings {
         RollMonsterHp: boolean;
         AllowNegativeHP: boolean;
         AutoCheckConcentration: boolean;
-    }
+    };
     TrackerView: {
         DisplayRoundCounter: boolean;
         DisplayTurnTimer: boolean;
         DisplayDifficulty: boolean;
-    }
+    };
     PlayerView: {
         AllowPlayerSuggestions: boolean;
         MonsterHPVerbosity: string;
         HideMonstersOutsideEncounter: boolean;
         DisplayRoundCounter: boolean;
         DisplayTurnTimer: boolean;
-    }
+    };
     Version: string;
 }
 
@@ -48,7 +48,7 @@ function getLegacySettings(): Settings {
             Name: n,
             KeyBinding: Store.Load<string>(Store.KeyBindings, n),
             ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
-        }
+        };
     });
 
     return {
@@ -71,7 +71,7 @@ function getLegacySettings(): Settings {
             DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false)
         },
         Version: "1.0.0" //TODO: Populate with package version
-    }
+    };
 }
 
 function configureCommands(newSettings: Settings, commands: Command[]) {
@@ -105,7 +105,7 @@ export function InitializeSettings() {
         CurrentSettings(localSettings);
     } else {
         const legacySettings = getLegacySettings();
-        CurrentSettings(legacySettings)
+        CurrentSettings(legacySettings);
     }
 }
 

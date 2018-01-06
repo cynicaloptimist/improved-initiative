@@ -39,7 +39,7 @@ export class CombatantViewModel {
             autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
 
         if (isNaN(damage)) {
-            return
+            return;
         }
 
         if (damage > 0) {
@@ -57,7 +57,7 @@ export class CombatantViewModel {
         let newTemporaryHP = parseInt(inputTHP);
 
         if (isNaN(newTemporaryHP)) {
-            return
+            return;
         }
 
         this.Combatant.ApplyTemporaryHP(newTemporaryHP);
@@ -107,7 +107,7 @@ export class CombatantViewModel {
                     this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
                     this.Combatant.Encounter.QueueEmitEncounter();
                 }
-            })
+            });
         this.PromptUser(prompt);
     }
 
@@ -161,5 +161,5 @@ export class CombatantViewModel {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
         this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
         this.Combatant.Encounter.QueueEmitEncounter();
-    };
+    }
 }

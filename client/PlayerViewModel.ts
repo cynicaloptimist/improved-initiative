@@ -19,8 +19,8 @@ export class PlayerViewModel {
 
     constructor() {
         this.Socket.on("update encounter", (encounter) => {
-            this.LoadEncounter(encounter)
-        })
+            this.LoadEncounter(encounter);
+        });
 
         this.Socket.emit("join encounter", this.EncounterId);
     }
@@ -28,7 +28,7 @@ export class PlayerViewModel {
     public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.Combatants(encounter.Combatants);
         this.DisplayTurnTimer(encounter.DisplayTurnTimer);
-        this.RoundCounter(encounter.RoundCounter)
+        this.RoundCounter(encounter.RoundCounter);
         this.AllowSuggestions(encounter.AllowPlayerSuggestions);
 
         if (encounter.ActiveCombatantId != (this.ActiveCombatant() || { Id: -1 }).Id) {

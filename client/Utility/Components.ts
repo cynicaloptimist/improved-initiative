@@ -10,7 +10,7 @@ const pendingComponents: JQueryXHR[] = [];
 
 export const ComponentLoader = {
     AfterComponentLoaded: (callback: (() => void)) => $.when(...pendingComponents).always(callback)
-}
+};
 
 export let RegisterComponents = () => {
     let templateLoader = {
@@ -40,7 +40,7 @@ export let RegisterComponents = () => {
             viewModel,
             template: { name }
         }
-    )
+    );
 
     registerComponent("settings", params => new SettingsViewModel(params.encounterCommander, params.combatantCommander, params.libraries, params.settingsVisible, params.repeatTutorial));
     registerComponent("defaultstatblock", params => params.statBlock);
@@ -59,4 +59,4 @@ export let RegisterComponents = () => {
     registerComponent("acceptdamageprompt", params => params.prompt);
     registerComponent("tutorial", params => new TutorialViewModel(params));
     registerComponent("playersuggestion", params => params.suggestion);
-}
+};

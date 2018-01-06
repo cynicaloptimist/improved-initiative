@@ -23,6 +23,6 @@ export function LoadEnvironment() {
     env.HasStorage = $("html")[0].getAttribute("hasStorage") == "true";
     env.IsLoggedIn = $("html")[0].getAttribute("isLoggedIn") == "true";
     if (window["patreonUrl"]) {
-        env.PatreonLoginUrl = window["patreonUrl"]
+        env.PatreonLoginUrl = window["patreonUrl"];
     }
-};
+}

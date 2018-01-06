@@ -4,4 +4,4 @@ export let TextAssets = {
     "DamageResistances": "Damage Resistances",
     "DamageImmunities": "Damage Immunities",
     "ConditionImmunities": "Condition Immunities"
-}
+};

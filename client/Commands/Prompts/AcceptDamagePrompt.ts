@@ -12,7 +12,7 @@ export class AcceptDamagePrompt implements Prompt {
 
     public Resolve = (form: HTMLFormElement) => {
         this.dequeueCallback();
-    };
+    }
     public AcceptFull: () => void;
     public AcceptHalf: () => void;
 
@@ -27,7 +27,7 @@ export class AcceptDamagePrompt implements Prompt {
             tracker.EventLog.LogHPChange(damageAmount, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
             this.dequeueCallback();
-        }
+        };
 
         this.AcceptHalf = () => {
             const halfDamage = Math.floor(damageAmount / 2);
@@ -35,6 +35,6 @@ export class AcceptDamagePrompt implements Prompt {
             tracker.EventLog.LogHPChange(halfDamage, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
             this.dequeueCallback();
-        }
+        };
     }
 }

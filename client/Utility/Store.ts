@@ -114,5 +114,5 @@ export class Store {
         let value = localStorage.getItem(key);
         if (value === "undefined") { return null; }
         return JSON.parse(value);
-    };
+    }
 }

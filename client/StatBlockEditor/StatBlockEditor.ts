@@ -22,7 +22,7 @@ export class StatBlockEditor {
     ) => {
 
         statBlock.Id = statBlockId;
-        this.statBlock = { ...StatBlock.Default(), ...statBlock }
+        this.statBlock = { ...StatBlock.Default(), ...statBlock };
 
         this.EditableStatBlock(this.makeEditable(this.statBlock));
         this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
@@ -47,7 +47,7 @@ export class StatBlockEditor {
                 }));
 
                 array.AddEmpty = (_, event: Event) => {
-                    array.push(new RemovableArrayValue(array, makeEmptyValue()))
+                    array.push(new RemovableArrayValue(array, makeEmptyValue()));
                     $(event.target)
                         .parent()
                         .find("input.name")
@@ -55,7 +55,7 @@ export class StatBlockEditor {
                         .select();
                 };
             }
-        }
+        };
 
         makeRemovableArrays(stringLists, () => "");
 
@@ -68,7 +68,7 @@ export class StatBlockEditor {
             Name: ko.observable(""),
             Content: ko.observable(""),
             Usage: ko.observable("")
-        }))
+        }));
 
         return observableStatBlock;
     }
@@ -110,7 +110,7 @@ export class StatBlockEditor {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;
             }
-            $.extend(editedStatBlock, statBlockFromJSON)
+            $.extend(editedStatBlock, statBlockFromJSON);
         }
         if (this.EditorType() === "basic") {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
@@ -132,7 +132,7 @@ export class StatBlockEditor {
     }
 
     private statBlockLibrary(): string {
-        return this.statBlock.Player == "player" ? Store.PlayerCharacters : Store.StatBlocks
+        return this.statBlock.Player == "player" ? Store.PlayerCharacters : Store.StatBlocks;
     }
 
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {

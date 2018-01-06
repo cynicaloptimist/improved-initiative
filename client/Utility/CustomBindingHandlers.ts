@@ -17,7 +17,7 @@ export function RegisterBindingHandlers() {
                 $(element).find(valueAccessor()).first().select();
             });
         }
-    }
+    };
     
     ko.bindingHandlers.afterRender = {
         init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -32,7 +32,7 @@ export function RegisterBindingHandlers() {
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
             valueAccessor()(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
-    }
+    };
     
     ko.bindingHandlers.onEnter = {
         init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
@@ -51,13 +51,13 @@ export function RegisterBindingHandlers() {
     ko.bindingHandlers.uiText = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             if (TextAssets[valueAccessor()]) {
-                $(element).html(TextAssets[valueAccessor()])
+                $(element).html(TextAssets[valueAccessor()]);
             } else {
                 $(element).html(valueAccessor());
             }
     
         }
-    }
+    };
 
     function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: EncounterCommander) {
         el.on("click", (event) => {
@@ -77,7 +77,7 @@ export function RegisterBindingHandlers() {
                 makeDiceClickable($(element), encounterCommander);
             }
         }
-    }
+    };
     
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
@@ -109,7 +109,7 @@ export function RegisterBindingHandlers() {
     ko.bindingHandlers.statBlockText = {
         init: statBlockTextHandler,
         update: statBlockTextHandler
-    }
+    };
     
     ko.bindingHandlers.hoverPop = {
         init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -137,8 +137,8 @@ export function RegisterBindingHandlers() {
             });
     
             popComponent.add(element).hover(
-                () => { popComponent.show() },
-                () => { popComponent.hide() }
+                () => { popComponent.show(); },
+                () => { popComponent.hide(); }
             );
         },
         update: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
@@ -148,7 +148,7 @@ export function RegisterBindingHandlers() {
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
     
         }
-    }
+    };
     
     ko.bindingHandlers.awesomplete = {
         init: (element, valueAccessor) => {
@@ -160,5 +160,5 @@ export function RegisterBindingHandlers() {
     
             $(element).select();
         }
-    }
+    };
 }

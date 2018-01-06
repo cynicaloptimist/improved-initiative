@@ -45,7 +45,7 @@ export let BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c =
     new Command("Previous Turn", c.PreviousTurn, "alt+n", "fa-step-backward"),
     new Command("Save Encounter", c.SaveEncounter, "alt+s", "fa-save"),
     new Command("Settings", c.ShowSettings, "?", "fa-gear", true, true)
-]
+];
 
 export let BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c => [
     new Command("Damage/Heal", c.EditHP, "t", "fa-plus-circle"),
@@ -60,4 +60,4 @@ export let BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c =
     new Command("Move Up", c.MoveUp, "alt+k", "fa-angle-double-up"),
     new Command("Select Next", c.SelectNext, "j", "fa-arrow-down", false),
     new Command("Select Previous", c.SelectPrevious, "k", "fa-arrow-up", false)
-]
+];

@@ -33,5 +33,5 @@ export class Spell {
             Ritual: false,
             School: "",
         };
-    };
+    }
 }

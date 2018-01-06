@@ -144,7 +144,7 @@ function saveEntitySet<Listable>(entitySet: Listable[], entityType: string, mess
             }
             return uploadByBatch(next);
         });
-    }
+    };
 
     return uploadByBatch(entitySet);
 }

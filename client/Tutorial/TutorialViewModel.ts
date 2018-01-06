@@ -49,14 +49,14 @@ export class TutorialViewModel {
 
         this.showTutorial.subscribe(v => {
             if (v) {
-                this.stepIndex(0)
+                this.stepIndex(0);
             }
         });
 
         this.CurrentStep = ko.pureComputed(() => {
             const index = this.stepIndex();
             if (index !== null) {
-                return TutorialSteps[index].Message
+                return TutorialSteps[index].Message;
             }
             return "";
         });

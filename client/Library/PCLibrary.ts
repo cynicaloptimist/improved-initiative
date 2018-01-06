@@ -21,9 +21,9 @@ export class PCLibrary {
     private addSamplePlayersFromUrl = (url: string) => {
         $.getJSON(url, (json: StatBlock[]) => {
             json.forEach((statBlock, index) => {
-                statBlock = { ...StatBlock.Default(), ...statBlock }
+                statBlock = { ...StatBlock.Default(), ...statBlock };
                 this.StatBlocks.push(new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Type, null, "server", statBlock));
-            })
+            });
         });
     }
 

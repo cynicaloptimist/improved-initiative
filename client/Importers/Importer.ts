@@ -18,7 +18,7 @@ export class Importer {
         return {
             Value: parseInt(valueAndNotes[1]),
             Notes: valueAndNotes[2] || ""
-        }
+        };
     }
 
     public getCommaSeparatedStrings(selector: string) {
@@ -36,8 +36,8 @@ export class Importer {
             return {
                 Name: nameAndModifier[0],
                 Modifier: parseInt(nameAndModifier[1])
-            }
-        })
+            };
+        });
     }
 
     public getPowers(selector: string) {
@@ -45,6 +45,6 @@ export class Importer {
             Name: $(p).find("name").html(),
             Content: $(p).find("text").map((i, e) => e.innerHTML).get().join("\n"),
             Usage: ""
-        }))
+        }));
     }
 }

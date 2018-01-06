@@ -75,7 +75,7 @@ export class CombatantCommander {
         } else if (newIndex >= this.tracker.CombatantViewModels().length) {
             newIndex = this.tracker.CombatantViewModels().length - 1;
         }
-        this.SelectedCombatants.removeAll()
+        this.SelectedCombatants.removeAll();
         this.SelectedCombatants.push(this.tracker.CombatantViewModels()[newIndex]);
     }
 
@@ -112,7 +112,7 @@ export class CombatantCommander {
                 firstDeletedIndex > remainingCombatants.length ?
                     remainingCombatants.length - 1 :
                     firstDeletedIndex;
-            this.Select(this.tracker.CombatantViewModels()[newSelectionIndex])
+            this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
         } else {
             this.tracker.Encounter.EndEncounter();
         }
@@ -143,7 +143,7 @@ export class CombatantCommander {
                 this.tracker.EventLog.LogHPChange(damageNum, combatantNames);
                 this.tracker.Encounter.QueueEmitEncounter();
             }
-        }
+        };
     }
 
     public EditHP = () => {
@@ -196,12 +196,12 @@ export class CombatantCommander {
         if (combatantVM instanceof CombatantViewModel) {
             this.Select(combatantVM);
         }
-        this.SelectedCombatants().forEach(c => c.AddTag(this.tracker.Encounter))
+        this.SelectedCombatants().forEach(c => c.AddTag(this.tracker.Encounter));
         return false;
     }
 
     public EditInitiative = () => {
-        this.SelectedCombatants().forEach(c => c.EditInitiative())
+        this.SelectedCombatants().forEach(c => c.EditInitiative());
         return false;
     }
 
@@ -237,7 +237,7 @@ export class CombatantCommander {
 
     public MoveUp = () => {
         const combatant = this.SelectedCombatants()[0];
-        const index = this.tracker.CombatantViewModels().indexOf(combatant)
+        const index = this.tracker.CombatantViewModels().indexOf(combatant);
         if (combatant && index > 0) {
             const newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index - 1);
             this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
@@ -246,7 +246,7 @@ export class CombatantCommander {
 
     public MoveDown = () => {
         const combatant = this.SelectedCombatants()[0];
-        const index = this.tracker.CombatantViewModels().indexOf(combatant)
+        const index = this.tracker.CombatantViewModels().indexOf(combatant);
         if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
             const newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index + 1);
             this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
@@ -254,7 +254,7 @@ export class CombatantCommander {
     }
 
     public EditName = () => {
-        this.SelectedCombatants().forEach(c => c.EditName())
+        this.SelectedCombatants().forEach(c => c.EditName());
         return false;
     }
 
