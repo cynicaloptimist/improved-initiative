@@ -136,10 +136,12 @@ export class StatBlockEditor {
     }
 
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {
-        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
             return Number(value);
-        if (defaultValue !== null)
+        }
+        if (defaultValue !== null) {
             return defaultValue;
+        }
         return NaN;
     }
 }

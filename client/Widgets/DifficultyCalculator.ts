@@ -47,16 +47,21 @@ const getTotalLevel = (levels: string) =>
 const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
 
 const getXpMultiplierRank = (enemyCount: number) => {
-    if (enemyCount <= 1)
+    if (enemyCount <= 1) {
         return 1;
-    if (enemyCount <= 2)
+    }
+    if (enemyCount <= 2) {
         return 2;
-    if (enemyCount <= 6)
+    }
+    if (enemyCount <= 6) {
         return 3;
-    if (enemyCount <= 10)
+    }
+    if (enemyCount <= 10) {
         return 4;
-    if (enemyCount <= 14)
+    }
+    if (enemyCount <= 14) {
         return 5;
+    }
 
     return 6;
 }
@@ -96,8 +101,9 @@ const getModifiedXp = (enemyChallengeRatings: string[], playerCount: number) => 
 }
 
 const getDifficulty = (totalXp, playerLevels: number[]) => {
-    if (playerLevels.length == 0)
+    if (playerLevels.length == 0) {
         return "";
+    }
     if (playerLevels.some(level => typeof level !== "number" || level < 1 || level > 20)) {
         return "";
     }
@@ -109,14 +115,18 @@ const getDifficulty = (totalXp, playerLevels: number[]) => {
         deadly: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].deadly, 0),
     }
 
-    if (totalXp > xpThresholds.deadly)
+    if (totalXp > xpThresholds.deadly) {
         return "Deadly";
-    if (totalXp > xpThresholds.hard)
+    }
+    if (totalXp > xpThresholds.hard) {
         return "Hard";
-    if (totalXp > xpThresholds.medium)
+    }
+    if (totalXp > xpThresholds.medium) {
         return "Medium";
-    if (totalXp > xpThresholds.easy)
+    }
+    if (totalXp > xpThresholds.easy) {
         return "Easy";
+    }
 
     return "Trivial";
 }
