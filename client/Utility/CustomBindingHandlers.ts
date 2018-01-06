@@ -36,9 +36,9 @@ export function RegisterBindingHandlers() {
     
     ko.bindingHandlers.onEnter = {
         init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
-            var callback = valueAccessor();
+            let callback = valueAccessor();
             $(element).keypress(event => {
-                var keyCode = (event.which ? event.which : event.keyCode);
+                let keyCode = (event.which ? event.which : event.keyCode);
                 if (keyCode === 13) {
                     callback.call(viewModel);
                     return false;

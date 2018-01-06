@@ -45,7 +45,7 @@ export class Encounter {
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         })
 
-        var autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
+        let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, promptQueue);
         }
@@ -215,7 +215,7 @@ export class Encounter {
     }
 
     public PreviousTurn = () => {
-        var previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
+        let previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
         if (previousIndex < 0) {
             previousIndex = this.Combatants().length - 1;
             this.RoundCounter(this.RoundCounter() - 1);
@@ -232,7 +232,7 @@ export class Encounter {
     }
 
     public Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
-        var activeCombatant = this.ActiveCombatant();
+        let activeCombatant = this.ActiveCombatant();
         return {
             Name: name,
             Id: AccountClient.SanitizeForId(name),
@@ -264,8 +264,8 @@ export class Encounter {
     }
 
     public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
-        var hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-        var activeCombatant = this.ActiveCombatant();
+        let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
+        let activeCombatant = this.ActiveCombatant();
         return {
             Name: this.EncounterId,
             Id: this.EncounterId,

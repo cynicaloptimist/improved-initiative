@@ -33,7 +33,7 @@ export class CombatantViewModel {
     }
 
     public ApplyDamage(inputDamage: string) {
-        var damage = parseInt(inputDamage),
+        let damage = parseInt(inputDamage),
             healing = -damage,
 
             autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
@@ -54,7 +54,7 @@ export class CombatantViewModel {
     }
 
     public ApplyTemporaryHP(inputTHP: string) {
-        var newTemporaryHP = parseInt(inputTHP);
+        let newTemporaryHP = parseInt(inputTHP);
 
         if (isNaN(newTemporaryHP)) {
             return
@@ -76,8 +76,8 @@ export class CombatantViewModel {
     });
 
     public GetHPColor() {
-        var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
-        var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
+        let green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
+        let red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
         return "rgb(" + red + "," + green + ",0)";
     }
 
@@ -112,7 +112,7 @@ export class CombatantViewModel {
     }
 
     public EditName() {
-        var currentName = this.Name();
+        let currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
                 const alias = response["alias"];

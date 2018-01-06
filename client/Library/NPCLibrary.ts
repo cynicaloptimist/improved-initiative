@@ -12,7 +12,7 @@ export class NPCLibrary {
 
         const localStatBlocks = Store.List(Store.StatBlocks);
         localStatBlocks.forEach(id => {
-            var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
+            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
             this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage"));
         });
     }

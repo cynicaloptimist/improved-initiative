@@ -3,6 +3,7 @@
         "quotemark": [true, "double"],
         "member-access": true,
         "no-inferrable-types": true,
-        "no-internal-module": true
+        "no-internal-module": true,
+        "no-var-keyword": true
     }
 }

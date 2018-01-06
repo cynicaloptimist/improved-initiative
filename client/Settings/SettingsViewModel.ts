@@ -48,19 +48,19 @@ export class SettingsViewModel {
     public AccountViewModel = new AccountViewModel(this.libraries);
 
     public ExportData = () => {
-        var blob = Store.ExportAll();
+        let blob = Store.ExportAll();
         saveAs(blob, "improved-initiative.json");
     }
 
     public ImportData = (_, event) => {
-        var file = event.target.files[0];
+        let file = event.target.files[0];
         if (file) {
             Store.ImportAll(file);
         }
     }
 
     public ImportDndAppFile = (_, event) => {
-        var file = event.target.files[0];
+        let file = event.target.files[0];
         if (file) {
             Store.ImportFromDnDAppFile(file);
         }
@@ -117,7 +117,7 @@ export class SettingsViewModel {
         const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
         function cycleTipIndex() {
-            var newIndex = currentTipIndex() + this;
+            let newIndex = currentTipIndex() + this;
             if (newIndex < 0) {
                 newIndex = tips.length - 1;
             } else if (newIndex > tips.length - 1) {

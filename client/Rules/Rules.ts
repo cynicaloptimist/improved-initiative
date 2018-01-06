@@ -8,7 +8,7 @@ export class RollResult {
     constructor(public Rolls: number[], public Modifier: number) { }
     get Total(): number { return this.Rolls.reduce((p, c) => c + p, 0) + this.Modifier; };
     get String(): string {
-        var output = `[${this.Rolls}]`;
+        let output = `[${this.Rolls}]`;
         if (this.Modifier > 0) {
             output += ` + ${this.Modifier}`
         }

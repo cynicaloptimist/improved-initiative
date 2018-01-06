@@ -14,19 +14,19 @@ export class LauncherViewModel {
     public JoinEncounterInput = ko.observable<string>("");
 
     public StartEncounter = () => {
-        var encounterId = this.JoinEncounterInput().split("/").pop();
+        let encounterId = this.JoinEncounterInput().split("/").pop();
         window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
     }
 
     public JoinEncounter = () => {
-        var encounterId = this.JoinEncounterInput().split("/").pop();
+        let encounterId = this.JoinEncounterInput().split("/").pop();
         if (encounterId) {
             window.location.href = `p/${encounterId}`;
         }
     }
 
     public JoinEncounterButtonClass = () => {
-        var encounterId = this.JoinEncounterInput().split("/").pop();
+        let encounterId = this.JoinEncounterInput().split("/").pop();
         return encounterId ? "enabled" : "disabled";
     }
 }

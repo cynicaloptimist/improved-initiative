@@ -9,7 +9,7 @@ export class PCLibrary {
 
     constructor() {
         Store.List(Store.PlayerCharacters).forEach(id => {
-            var statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
+            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
             this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.PlayerCharacters, "localStorage"));
         });
 

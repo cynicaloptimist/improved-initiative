@@ -88,8 +88,8 @@ export class EncounterCommander {
 
 
     public CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
-        var statBlock = StatBlock.Default();
-        var newId = probablyUniqueString();
+        let statBlock = StatBlock.Default();
+        let newId = probablyUniqueString();
 
         if (isPlayerCharacter) {
             statBlock.Name = "New Player Character";
@@ -104,7 +104,7 @@ export class EncounterCommander {
     public EditStatBlock = (listing: Listing<StatBlock>) => {
         listing.GetAsync(statBlock => {
             if (listing.Origin === "server") {
-                var newId = probablyUniqueString();
+                let newId = probablyUniqueString();
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
             } else {
                 this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
@@ -220,7 +220,7 @@ export class EncounterCommander {
 
     public NextTurn = () => {
         this.tracker.Encounter.NextTurn();
-        var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+        let currentCombatant = this.tracker.Encounter.ActiveCombatant();
         this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.DisplayName()}.`);
 
         return false;
@@ -231,7 +231,7 @@ export class EncounterCommander {
             return;
         }
         this.tracker.Encounter.PreviousTurn();
-        var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+        let currentCombatant = this.tracker.Encounter.ActiveCombatant();
         this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.DisplayName()}.`);
 
         return false;

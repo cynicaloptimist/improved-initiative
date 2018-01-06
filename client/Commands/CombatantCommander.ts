@@ -20,11 +20,11 @@ export class CombatantCommander {
         this.Commands = BuildCombatantCommandList(this);
 
         this.Commands.forEach(c => {
-            var keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
+            let keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
             if (keyBinding) {
                 c.KeyBinding = keyBinding;
             }
-            var showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
+            let showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
             if (showOnActionBar != null) {
                 c.ShowOnActionBar(showOnActionBar);
             }
@@ -39,7 +39,7 @@ export class CombatantCommander {
     public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
     public StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
-        var selectedCombatants = this.SelectedCombatants();
+        let selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
             return selectedCombatants[0].Combatant.StatBlock();
         } else {
@@ -69,7 +69,7 @@ export class CombatantCommander {
     }
 
     private selectByOffset = (offset: number) => {
-        var newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
+        let newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
         if (newIndex < 0) {
             newIndex = 0;
         } else if (newIndex >= this.tracker.CombatantViewModels().length) {
@@ -97,7 +97,7 @@ export class CombatantCommander {
 
         const remainingCombatants = this.tracker.CombatantViewModels();
 
-        var allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
+        let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
 
         deletedCombatantNames.forEach(name => {
             if (allMyFriendsAreGone(name)) {
@@ -260,7 +260,7 @@ export class CombatantCommander {
 
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
-            var selectedCombatant = this.SelectedCombatants()[0];
+            let selectedCombatant = this.SelectedCombatants()[0];
             this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
                 selectedCombatant.Combatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();

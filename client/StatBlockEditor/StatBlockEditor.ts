@@ -76,11 +76,11 @@ export class StatBlockEditor {
     private unMakeEditable = (editableStatBlock: any) => {
         for (let key in editableStatBlock) {
             if (key == "HP") {
-                var hpInt = parseInt(editableStatBlock[key].Value());
+                let hpInt = parseInt(editableStatBlock[key].Value());
                 editableStatBlock[key].Value(hpInt);
             }
             if (key == "InitiativeModifier") {
-                var initInt = parseInt(editableStatBlock[key]());
+                let initInt = parseInt(editableStatBlock[key]());
                 editableStatBlock[key](initInt);
             }
 
@@ -105,7 +105,7 @@ export class StatBlockEditor {
 
         if (this.EditorType() === "advanced") {
             try {
-                var statBlockFromJSON = JSON.parse(this.JsonStatBlock());
+                let statBlockFromJSON = JSON.parse(this.JsonStatBlock());
             } catch (error) {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;

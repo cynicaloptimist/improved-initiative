@@ -51,7 +51,7 @@ export class SpellEditor {
 
         if (this.EditorType() === "advanced") {
             try {
-                var spellFromJSON = JSON.parse(this.JsonSpell());
+                let spellFromJSON = JSON.parse(this.JsonSpell());
             } catch (error) {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;

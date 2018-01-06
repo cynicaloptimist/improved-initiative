@@ -12,11 +12,11 @@ export const ComponentLoader = {
     AfterComponentLoaded: (callback: (() => void)) => $.when(...pendingComponents).always(callback)
 }
 
-export var RegisterComponents = () => {
-    var templateLoader = {
+export let RegisterComponents = () => {
+    let templateLoader = {
         loadTemplate: function (name, templateConfig, callback) {
             if (templateConfig.name) {
-                var fullUrl = "/templates/" + templateConfig.name;
+                let fullUrl = "/templates/" + templateConfig.name;
                 const request = $.get(fullUrl, function (markupString) {
                     // We need an array of DOM nodes, not a string.
                     // We can use the default loader to convert to the

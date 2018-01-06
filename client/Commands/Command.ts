@@ -33,7 +33,7 @@ export class Command {
     }
 }
 
-export var BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c => [
+export let BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c => [
     new Command("Toggle Menu", c.ToggleToolbarWidth, "alt+m", "fa-bars", true, true),
     new Command("Start Encounter", c.StartEncounter, "alt+r", "fa-play"),
     new Command("End Encounter", c.EndEncounter, "alt+e", "fa-stop"),
@@ -47,7 +47,7 @@ export var BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c =
     new Command("Settings", c.ShowSettings, "?", "fa-gear", true, true)
 ]
 
-export var BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c => [
+export let BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c => [
     new Command("Damage/Heal", c.EditHP, "t", "fa-plus-circle"),
     new Command("Apply Temporary HP", c.AddTemporaryHP, "alt+t", "fa-medkit"),
     new Command("Add Note", c.AddTag, "g", "fa-tag", false),

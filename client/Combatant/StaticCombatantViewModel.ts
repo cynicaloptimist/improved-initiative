@@ -22,7 +22,7 @@ export class StaticCombatantViewModel {
     }
 
     private GetHPDisplay(combatant: Combatant): string {
-        var monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
+        let monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
 
         if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
             if (combatant.TemporaryHP()) {
@@ -51,15 +51,15 @@ export class StaticCombatantViewModel {
     }
 
     private GetHPColor = (combatant: Combatant) => {
-        var monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
+        let monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
         if (!combatant.IsPlayerCharacter &&
             (monsterHpVerbosity == "Monochrome Label" ||
                 monsterHpVerbosity == "Hide All" ||
                 monsterHpVerbosity == "Damage Taken")) {
             return "auto";
         }
-        var green = Math.floor((combatant.CurrentHP() / combatant.MaxHP) * 170);
-        var red = Math.floor((combatant.MaxHP - combatant.CurrentHP()) / combatant.MaxHP * 170);
+        let green = Math.floor((combatant.CurrentHP() / combatant.MaxHP) * 170);
+        let red = Math.floor((combatant.MaxHP - combatant.CurrentHP()) / combatant.MaxHP * 170);
         return "rgb(" + red + "," + green + ",0)";
     }
 }

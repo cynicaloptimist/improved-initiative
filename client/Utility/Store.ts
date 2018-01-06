@@ -17,8 +17,8 @@ export class Store {
     public static readonly ActionBar = "ActionBar";
 
     public static List(listName: string): string[] {
-        var listKey = `${Store._prefix}.${listName}`;
-        var list = Store.load(listKey);
+        let listKey = `${Store._prefix}.${listName}`;
+        let list = Store.load(listKey);
         if (list && list.constructor === Array) {
             return list;
         }
@@ -30,9 +30,9 @@ export class Store {
         if (typeof (key) !== "string") {
             throw `Can't save to non-string key ${key}`;
         }
-        var listKey = `${Store._prefix}.${listName}`;
-        var fullKey = `${Store._prefix}.${listName}.${key}`;
-        var list = Store.List(listName);
+        let listKey = `${Store._prefix}.${listName}`;
+        let fullKey = `${Store._prefix}.${listName}.${key}`;
+        let list = Store.List(listName);
         if (list.indexOf(key) == -1) {
             list.push(key);
             Store.save(listKey, list);
@@ -41,15 +41,15 @@ export class Store {
     }
 
     public static Load<T>(listName: string, key: string): T {
-        var fullKey = `${Store._prefix}.${listName}.${key}`;
+        let fullKey = `${Store._prefix}.${listName}.${key}`;
         return Store.load(fullKey);
     }
 
     public static Delete<T>(listName: string, key: string) {
-        var listKey = `${Store._prefix}.${listName}`;
-        var fullKey = `${Store._prefix}.${listName}.${key}`;
-        var list = Store.List(listName);
-        var keyIndex = list.indexOf(key);
+        let listKey = `${Store._prefix}.${listName}`;
+        let fullKey = `${Store._prefix}.${listName}.${key}`;
+        let list = Store.List(listName);
+        let keyIndex = list.indexOf(key);
         if (keyIndex != -1) {
             list.splice(keyIndex, 1);
             Store.save(listKey, list);
@@ -63,18 +63,18 @@ export class Store {
     }
 
     public static ImportAll(file: File) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = (event: any) => {
-            var json = event.target.result;
+            let json = event.target.result;
             try {
-                var importedStorage = JSON.parse(json);
+                let importedStorage = JSON.parse(json);
             } catch (error) {
                 alert(`There was a problem importing ${file.name}: ${error}`);
                 return;
             }
             if (confirm(`Replace your Improved Initiative data with imported ${file.name} and reload?`)) {
                 localStorage.clear();
-                for (var key in importedStorage) {
+                for (let key in importedStorage) {
                     localStorage.setItem(key, importedStorage[key]);
                 }
                 location.reload();
@@ -104,14 +104,14 @@ export class Store {
     }
 
     public static ExportStatBlocks() {
-        var statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
+        let statBlocks = this.List(Store.StatBlocks).map(id => Store.Load(Store.StatBlocks, id));
         return new Blob([JSON.stringify(statBlocks, null, 2)],
             { type: "application/json" });
     }
 
     private static save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
     private static load = (key) => {
-        var value = localStorage.getItem(key);
+        let value = localStorage.getItem(key);
         if (value === "undefined") { return null; }
         return JSON.parse(value);
     };

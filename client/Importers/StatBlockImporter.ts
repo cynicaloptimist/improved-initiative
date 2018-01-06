@@ -20,7 +20,7 @@ export class StatBlockImporter extends Importer {
     }
 
     public GetStatBlock() {
-        var statBlock = StatBlock.Default();
+        let statBlock = StatBlock.Default();
 
         statBlock.Name = this.getString("name");
         statBlock.Type = this.getType();

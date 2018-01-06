@@ -29,7 +29,7 @@ export interface Combatant {
 
 export class Combatant implements Combatant {
     constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-        var statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
+        let statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
         if (savedCombatant) {
             statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
@@ -126,7 +126,7 @@ export class Combatant implements Combatant {
     }
 
     private setIndexLabel(oldName?: string) {
-        var name = this.StatBlock().Name,
+        let name = this.StatBlock().Name,
             counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
             return;
@@ -149,8 +149,8 @@ export class Combatant implements Combatant {
     }
 
     private calculateModifiers = () => {
-        var modifiers = StatBlock.Default().Abilities;
-        for (var attribute in this.StatBlock().Abilities) {
+        let modifiers = StatBlock.Default().Abilities;
+        for (let attribute in this.StatBlock().Abilities) {
             modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities[attribute]);
         }
         return modifiers;
