@@ -1,14 +1,4 @@
-<input class="filter-library" placeholder="Filter..." data-bind="textInput: LibraryFilter" />
-<ul class="entries" data-bind="foreach: FilteredEncounters">
-    <li>
-        <span class="fa" data-bind="text: CurrentName(), click: $parent.ClickEntry"></span>
-        <!-- ko if: Origin === "account" -->
-        <span class="fa fa-cloud" title="Synced with your Patreon account"></span>
-        <!-- /ko -->
-        <span class="fa fa-trash" data-bind="click: $parent.ClickDelete"></span>
-    </li>
-</ul>
-<div class="buttons">
-    <span data-bind="click: ClickHide" title="Hide Libraries" class="button fa fa-chevron-up"></span>
-    <span data-bind="click: ClickAdd" title="Save current encounter" class="button fa fa-plus"></span>
-</div>
+<div data-bind="react: {
+    component: EncounterLibraryViewModel,
+    props: {}
+}"></div>

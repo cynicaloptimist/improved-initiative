@@ -1,7 +1,7 @@
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { LibrariesViewModel } from "../Library/LibrariesViewModel";
 import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel";
-import { EncounterLibraryViewModel } from "../Library/EncounterLibraryViewModel";
+import { EncounterLibraryViewModelWrapper } from "../Library/EncounterLibraryViewModelWrapper";
 import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 import { removeFirst } from "./Toolbox";
@@ -49,7 +49,7 @@ export let RegisterComponents = () => {
     registerComponent("playerdisplaycombatant", params => params.combatant);
     registerComponent("libraries", params => new LibrariesViewModel(params.tracker, params.encounterCommander, params.libraries));
     registerComponent("statblocklibrary", params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
-    registerComponent("encounterlibrary", params => new EncounterLibraryViewModel(params.tracker, params.library));
+    registerComponent("encounterlibrary", params => new EncounterLibraryViewModelWrapper());
     registerComponent("spelllibrary", params => new SpellLibraryViewModel(params.encounterCommander, params.library));
     registerComponent("defaultprompt", params => params.prompt);
     registerComponent("tagprompt", params => params.prompt);
