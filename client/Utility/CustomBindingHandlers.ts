@@ -5,11 +5,27 @@ import { IRules, Dice } from "../Rules/Rules";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { toModifierString } from "./Toolbox";
+import { createElement } from "react";
+import { render as renderReact } from "react-dom";
 
 declare var markdownit: any;
 declare var Awesomplete: any;
 
 export function RegisterBindingHandlers() {
+    const reactHandler = ko.bindingHandlers.react = {
+        init: function () {
+            return { controlsDescendantBindings: true };
+        },
+    
+        update: function (el, valueAccessor, allBindings) {
+            const reactOptions = ko.unwrap(valueAccessor());
+            const component = reactOptions.component;
+            const props = ko.toJS(reactOptions.props);
+    
+            renderReact(createElement(component, props), el);
+        }
+    };
+
     ko.bindingHandlers.focusOnRender = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
             ComponentLoader.AfterComponentLoaded(() => {
@@ -18,7 +34,7 @@ export function RegisterBindingHandlers() {
             });
         }
     };
-    
+
     ko.bindingHandlers.afterRender = {
         init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called when the binding is first applied to an element
@@ -33,7 +49,7 @@ export function RegisterBindingHandlers() {
             valueAccessor()(element, valueAccessor, allBindings, viewModel, bindingContext);
         }
     };
-    
+
     ko.bindingHandlers.onEnter = {
         init: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             let callback = valueAccessor();
@@ -47,7 +63,7 @@ export function RegisterBindingHandlers() {
             });
         }
     };
-    
+
     ko.bindingHandlers.uiText = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
             if (TextAssets[valueAccessor()]) {
@@ -55,7 +71,7 @@ export function RegisterBindingHandlers() {
             } else {
                 $(element).html(valueAccessor());
             }
-    
+
         }
     };
 
@@ -72,45 +88,45 @@ export function RegisterBindingHandlers() {
             if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
                 const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
                 const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
-        
+
                 $(element).html(modifier).addClass("rollable");
                 makeDiceClickable($(element), encounterCommander);
             }
         }
     };
-    
+
     const statBlockTextHandler = (element: any, valueAccessor: () => string, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) => {
         const originalText = valueAccessor().toString();
         const name = viewModel.Name || null;
-    
+
         let text = markdownit().renderInline(originalText);
-    
+
         const rules: IRules = bindingContext.$root.Encounter.Rules;
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
-    
+
         text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
-    
+
         if ((name + text).toLocaleLowerCase().indexOf("spell") > -1) {
             text = text.replace(spellLibrary.SpellsByNameRegex(), match => `<span class='spell-reference'>${match}</span>`);
         }
-    
+
         $(element).html(text);
-    
+
         makeDiceClickable($(element).find(".rollable"), encounterCommander);
-    
+
         $(element).find(".spell-reference").on("click", (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();
             const spell = spellLibrary.Spells().filter(s => s.CurrentName().toLocaleLowerCase() === spellName)[0];
             encounterCommander.ReferenceSpell(spell);
         });
     };
-    
+
     ko.bindingHandlers.statBlockText = {
         init: statBlockTextHandler,
         update: statBlockTextHandler
     };
-    
+
     ko.bindingHandlers.hoverPop = {
         init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
             // This will be called when the binding is first applied to an element
@@ -120,7 +136,7 @@ export function RegisterBindingHandlers() {
             const componentSelector: string = params.selector;
             const popComponent = $(componentSelector).first();
             popComponent.hide();
-    
+
             $(element).on("mouseover", event => {
                 const hoveredElementData = ko.dataFor(event.target);
                 params.data(hoveredElementData);
@@ -135,7 +151,7 @@ export function RegisterBindingHandlers() {
                     .css("top", top)
                     .select();
             });
-    
+
             popComponent.add(element).hover(
                 () => { popComponent.show(); },
                 () => { popComponent.hide(); }
@@ -146,10 +162,10 @@ export function RegisterBindingHandlers() {
             // and again whenever any observables/computeds that are accessed change
             // Update the DOM element based on the supplied values here.
             //if (bindingContext.$data.update) bindingContext.$data.update(element, valueAccessor, allBindings, viewModel, bindingContext);
-    
+
         }
     };
-    
+
     ko.bindingHandlers.awesomplete = {
         init: (element, valueAccessor) => {
             new Awesomplete(element, {
@@ -157,7 +173,7 @@ export function RegisterBindingHandlers() {
                 minChars: 1,
                 autoFirst: true
             });
-    
+
             $(element).select();
         }
     };
