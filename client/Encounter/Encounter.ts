@@ -118,7 +118,7 @@ export class Encounter {
     }
 
     UpdateImageCount = () => {
-         this.ImageCount((this.Combatants().filter(c => c.Img)).length);
+         this.ImageCount((this.Combatants().filter(c => c.ImageURL)).length);
     }
 
   public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
@@ -129,7 +129,7 @@ export class Encounter {
         }
         this.Combatants.push(combatant);
 
-        if (combatant.Img.length > 0){
+        if (combatant.ImageURL.length > 0){
           this.ImageCount(this.ImageCount() + 1);
         }
 

@@ -49,7 +49,7 @@ export interface StatBlock extends Listable {
     LegendaryActions: NameAndContent[];
     Description: string;
     Player: string;
-    Img: string;
+    ImageURL: string;
 }
 
 export class StatBlock {
@@ -69,7 +69,7 @@ export class StatBlock {
         Description: '',
         Player: '',
         Version: '1.0.0',
-        Img: '',
+        ImageURL: '',
     });
 
     public static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];
