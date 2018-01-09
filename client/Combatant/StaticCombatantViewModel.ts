@@ -20,7 +20,7 @@ export class StaticCombatantViewModel {
         this.Initiative = combatant.Initiative();
         this.IsPlayerCharacter = combatant.IsPlayerCharacter;
         this.Tags = combatant.Tags();
-        this.ImageURL = combatant.ImageURL;
+        this.ImageURL = combatant.ImageURL();
     }
 
     private GetHPDisplay(combatant: Combatant): string {

@@ -118,7 +118,7 @@ export class Encounter {
     }
 
     UpdateImageCount = () => {
-         this.ImageCount((this.Combatants().filter(c => c.ImageURL)).length);
+         this.ImageCount((this.Combatants().filter(c => c.ImageURL()).length));
     }
 
   public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
@@ -129,7 +129,7 @@ export class Encounter {
         }
         this.Combatants.push(combatant);
 
-        if (combatant.ImageURL.length > 0){
+        if (combatant.ImageURL()){
           this.ImageCount(this.ImageCount() + 1);
         }
 
@@ -268,6 +268,7 @@ export class Encounter {
                         DurationCombatantId: t.DurationCombatantId
                     })),
                     Hidden: c.Hidden(),
+                    ImageURL: c.ImageURL(),
                     InterfaceVersion: "1.0.0"
                 };
             }),

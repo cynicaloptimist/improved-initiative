@@ -16,6 +16,7 @@ export interface SavedCombatant {
     Tags: string[] | SavedTag[];
     Hidden: boolean;
     InterfaceVersion: string;
+    ImageURL: string;
 }
 export interface SavedTag {
     Text: string;
