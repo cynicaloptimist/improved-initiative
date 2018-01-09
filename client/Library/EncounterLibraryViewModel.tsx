@@ -5,10 +5,14 @@ import { EncounterLibrary } from "./EncounterLibrary";
 import { KeyValueSet } from "../Utility/Toolbox";
 import * as React from "react";
 
-type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
-
-export class EncounterLibraryViewModel extends React.Component {
+export type EncounterLibraryViewModelProps = { library: EncounterLibrary };
+export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps> {
     public render() {
-        return <p>Hello World!</p>;
+        const listings = this.props.library.Encounters();
+        return (
+            <ul>
+                {listings.map(l => <li>{l.CurrentName()}</li>)}
+            </ul>
+        );
     }
 }
