@@ -4,15 +4,16 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { KeyValueSet } from "../Utility/Toolbox";
 import { EncounterLibraryViewModel, EncounterLibraryViewModelProps } from "./Components/EncounterLibraryViewModel";
-import { EncounterCommander } from "../Commands/EncounterCommander";
 import { StatBlockLibrary } from "./StatBlockLibraryViewModel";
+import { Encounter } from "../Encounter/Encounter";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 
 export class EncounterLibraryViewModelWrapper {
-    constructor(encounterCommander: EncounterCommander, library: EncounterLibrary) {
+    constructor(tracker: TrackerViewModel, library: EncounterLibrary) {
         this.props = {
-            library
+            library,
+            tracker
         };
      }
     private encounterLibraryViewModel = EncounterLibraryViewModel;

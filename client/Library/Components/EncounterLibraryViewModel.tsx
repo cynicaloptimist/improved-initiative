@@ -1,26 +1,25 @@
 import * as React from "react";
 import { ListingViewModel } from "./Listing";
 import { EncounterLibrary } from "../EncounterLibrary";
-import { Encounter } from "../../Encounter/Encounter";
 import { SavedEncounter, SavedCombatant } from "../../Encounter/SavedEncounter";
 import { Listing } from "../Listing";
+import { TrackerViewModel } from "../../TrackerViewModel";
 
 export type EncounterLibraryViewModelProps = {
-    encounter: Encounter;
+    tracker: TrackerViewModel;
     library: EncounterLibrary
 };
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps> {
-    private add(savedEncounter: SavedEncounter<SavedCombatant>) {
-        this.props.encounter.LoadSavedEncounter(savedEncounter);
-    }
-    
     public render() {
         const listings = this.props.library.Encounters();
 
-        
+        const add = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+            this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter);
+        };
+
         return (
             <ul>
-                {listings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={this.add} listing={l} />)}
+                {listings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={add} listing={l} />)}
             </ul>
         );
     }
