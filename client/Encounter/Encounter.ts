@@ -47,7 +47,7 @@ export class Encounter {
 
         let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
-            this.LoadSavedEncounter(autosavedEncounter, promptQueue);
+            this.LoadSavedEncounter(autosavedEncounter);
         }
     }
 
@@ -288,7 +288,7 @@ export class Encounter {
         };
     }
 
-    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, userPromptQueue: PromptQueue) => {
+    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
         savedEncounter = SavedEncounter.UpdateLegacySavedEncounter(savedEncounter);
 
         let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;

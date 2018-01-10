@@ -32,7 +32,9 @@ export class EncounterLibrary {
 
         new AccountClient().SaveEncounter(savedEncounter)
             .then(r => {
-                if (!r) return;
+                if (!r) {
+                    return;
+                }
                 const accountListing = listingFrom(savedEncounter, listing.Id);
                 accountListing.Origin = "account";
                 accountListing.Link = `/my/encounters/${accountListing.Id}`;
