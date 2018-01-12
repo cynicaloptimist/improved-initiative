@@ -13,13 +13,17 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     public render() {
         const listings = this.props.library.Encounters();
 
-        const add = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+        const loadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
             this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter);
         };
 
+        const deleteListing = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+            this.props.library.Delete(listing);   
+        };
+
         return (
-            <ul>
-                {listings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={add} listing={l} />)}
+            <ul className = "listings">
+                {listings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
         );
     }

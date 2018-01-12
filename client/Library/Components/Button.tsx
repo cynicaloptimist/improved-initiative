@@ -1,12 +1,15 @@
 import * as React from "react";
 
 export interface ButtonProps {
-    name: string;
+    text?: string;
+    faClass?: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
 }
 
 export class Button extends React.Component<ButtonProps> {
     public render() {
-        return <span className="fa" onClick={this.props.onClick}>{this.props.name}</span>;
+        const text = this.props.text || "";
+        const className = this.props.faClass ? `fa fa-${this.props.faClass}` : 'fa';
+        return <span className={className} onClick={this.props.onClick}>{text}</span>;
     } 
 }
