@@ -13,18 +13,18 @@ export interface ListingProps<T extends Listable>  {
 }
 
 export class ListingViewModel<T extends Listable> extends React.Component<ListingProps<T>> {
-    private getListingAndAdd = () => {
+    private addFn = () => {
         this.props.onAdd(this.props.listing);
     }
 
-    private getListingAndEdit = () => {
+    private deleteFn = () => {
         this.props.onDelete(this.props.listing);
     }
 
     public render() {
         return <li key={this.props.listing.Id}>
-            <Button text={this.props.name} onClick={this.getListingAndAdd}/>
-            <Button faClass="trash" onClick={this.getListingAndEdit}/>
+            <Button text={this.props.name} onClick={this.addFn}/>
+            <Button faClass="trash" onClick={this.deleteFn}/>
         </li>;
     }
 }
