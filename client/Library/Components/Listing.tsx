@@ -6,13 +6,15 @@ import { Button } from "./Button";
 export interface ListingProps<T extends Listable>  {
     name: string;
     listing: Listing<T>;
-    onAdd: (item: T) => void;
-    onDelete: (listing: Listing<T>) => void;
+    onAdd: (listing: Listing<T>) => void;
+    onDelete?: (listing: Listing<T>) => void;
+    onEdit?: (listing: Listing<T>) => void;
+    onPreview?: (listing: Listing<T>) => void;
 }
 
 export class ListingViewModel<T extends Listable> extends React.Component<ListingProps<T>> {
     private getListingAndAdd = () => {
-        this.props.listing.GetAsync(this.props.onAdd);
+        this.props.onAdd(this.props.listing);
     }
 
     private getListingAndEdit = () => {

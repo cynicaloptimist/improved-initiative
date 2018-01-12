@@ -13,8 +13,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     public render() {
         const listings = this.props.library.Encounters();
 
-        const loadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-            this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter);
+        const loadSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+            listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
         };
 
         const deleteListing = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
