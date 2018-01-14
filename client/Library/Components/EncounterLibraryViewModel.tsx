@@ -15,7 +15,9 @@ interface State {
 }
 
 export class LibraryFilter extends React.Component<{}> {
-
+    public render() {
+        return "";
+    }
 }
 
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps, State> {
