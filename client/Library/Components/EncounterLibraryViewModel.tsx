@@ -18,7 +18,9 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         };
 
         const deleteListing = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+            if (confirm(`Delete saved encounter "${listing.CurrentName()}"?`)) {
             this.props.library.Delete(listing);   
+            }
         };
 
         return (
