@@ -4,6 +4,7 @@ import { EncounterLibrary } from "../EncounterLibrary";
 import { SavedEncounter, SavedCombatant } from "../../Encounter/SavedEncounter";
 import { Listing } from "../Listing";
 import { TrackerViewModel } from "../../TrackerViewModel";
+import { LibraryFilter } from "./LibraryFilter";
 
 export type EncounterLibraryViewModelProps = {
     tracker: TrackerViewModel;
@@ -14,20 +15,6 @@ interface State {
     filter: string;
 }
 
-
-interface LibraryFilterProps {
-    applyFilterFn: (filter: string) => void;
-}
-
-export class LibraryFilter extends React.Component<LibraryFilterProps> {
-    public render() {
-        const applyFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-            this.props.applyFilterFn(event.currentTarget.value);
-        };
-
-        return <input className="filter-library" placeholder="Filter..." onChange={applyFilter} />;
-    }
-}
 
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps, State> {
     constructor(props) {
