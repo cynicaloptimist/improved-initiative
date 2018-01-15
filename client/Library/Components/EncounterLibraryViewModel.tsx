@@ -11,12 +11,21 @@ export type EncounterLibraryViewModelProps = {
 };
 
 interface State {
-    listings: Listing<SavedEncounter<SavedCombatant>>[];
+    filter: string;
 }
 
-export class LibraryFilter extends React.Component<{}> {
+
+interface LibraryFilterProps {
+    applyFilterFn: (filter: string) => void;
+}
+
+export class LibraryFilter extends React.Component<LibraryFilterProps> {
     public render() {
-        return "";
+        const applyFilter: React.KeyboardEventHandler<HTMLInputElement> = (event: React.KeyboardEvent<HTMLInputElement>) => {
+            this.props.applyFilterFn(event.currentTarget.value);
+        };
+        
+        return <input className="filter-library" placeholder="Filter..." onKeyUp={applyFilter} />;
     }
 }
 
@@ -24,10 +33,12 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     constructor(props) {
         super(props);
         this.state = {
-            listings: this.props.library.Encounters()
+            filter: ""
         };
     }
     public render() {
+        const filteredListings = this.props.library.Encounters();
+
         const loadSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
             listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
         };
@@ -39,9 +50,9 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         };
 
         return ([
-            <LibraryFilter />,
+            <LibraryFilter applyFilterFn={filter => this.setState({ filter })}/>,
             <ul className="listings">
-                {this.state.listings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
+                {filteredListings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
         ]);
     }
