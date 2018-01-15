@@ -2,7 +2,7 @@ import * as React from "react";
 import { ListingViewModel } from "./Listing";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { SavedEncounter, SavedCombatant } from "../../Encounter/SavedEncounter";
-import { Listing } from "../Listing";
+import { Listing, DedupeByRankAndFilterListings } from "../Listing";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { LibraryFilter } from "./LibraryFilter";
 
@@ -15,7 +15,6 @@ interface State {
     filter: string;
 }
 
-
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps, State> {
     constructor(props) {
         super(props);
@@ -24,7 +23,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         };
     }
     public render() {
-        const filteredListings = this.props.library.Encounters();
+        const filteredListings = DedupeByRankAndFilterListings(this.props.library.Encounters(), this.state.filter);
 
         const loadSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
             listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
