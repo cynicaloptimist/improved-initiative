@@ -43,6 +43,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             </ul>
             <div className="buttons">
                 <Button faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)} />
+                <Button faClass="plus" onClick={() => this.props.tracker.EncounterCommander.SaveEncounter()} />
             </div>
         </React.Fragment>);
     }
