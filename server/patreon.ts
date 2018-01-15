@@ -9,6 +9,8 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 const storageRewardIds = ["1322253", "1937132"];
+const epicRewardIds = ["1937132"];
+
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
     patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
@@ -31,7 +33,7 @@ interface Pledge {
     type: "pledge";
     relationships: {
         reward: { data: { id: string; } }
-    }
+    };
 }
 
 interface ApiResponse {
@@ -83,7 +85,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             }).catch(err => {
                 console.error(err);
             });
-    }
+    };
 }
 
 export function configureLoginRedirect(app: express.Application) {
