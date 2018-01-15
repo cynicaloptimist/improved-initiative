@@ -5,6 +5,7 @@ import { SavedEncounter, SavedCombatant } from "../../Encounter/SavedEncounter";
 import { Listing, DedupeByRankAndFilterListings } from "../Listing";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { LibraryFilter } from "./LibraryFilter";
+import { Button } from "./Button";
 
 export type EncounterLibraryViewModelProps = {
     tracker: TrackerViewModel;
@@ -40,6 +41,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             <ul className="listings">
                 {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
+            <Button faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)}/>
         </React.Fragment>);
     }
 }
