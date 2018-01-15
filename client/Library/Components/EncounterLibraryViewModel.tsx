@@ -38,7 +38,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         return ([
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })}/>,
             <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
+                {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
         ]);
     }
