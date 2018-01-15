@@ -41,7 +41,9 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             <ul className="listings">
                 {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
-            <Button faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)}/>
+            <div className="buttons">
+                <Button faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)} />
+            </div>
         </React.Fragment>);
     }
 }
