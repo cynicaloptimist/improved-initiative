@@ -21,11 +21,11 @@ interface LibraryFilterProps {
 
 export class LibraryFilter extends React.Component<LibraryFilterProps> {
     public render() {
-        const applyFilter: React.KeyboardEventHandler<HTMLInputElement> = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const applyFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
             this.props.applyFilterFn(event.currentTarget.value);
         };
-        
-        return <input className="filter-library" placeholder="Filter..." onKeyUp={applyFilter} />;
+
+        return <input className="filter-library" placeholder="Filter..." onChange={applyFilter} />;
     }
 }
 
