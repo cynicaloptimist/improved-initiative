@@ -72,10 +72,13 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
                 return "none";
             }
         });
+
         const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
+        const hasEpicInitiative = userRewards.some(id => epicRewardIds.indexOf(id) !== -1);
         const standing = hasStorage ? "pledge" : "none";
 
         req.session.hasStorage = hasStorage;
+        req.session.hasEpicInitiative = hasEpicInitiative;
         req.session.isLoggedIn = true;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
@@ -132,7 +135,7 @@ export function startNewsUpdates(app: express.Application) {
 
     updateLatestPost(latest);
 
-    app.get('/updatenews/', (req: Req, res: Res) => {
+    app.get("/updatenews/", (req: Req, res: Res) => {
         updateLatestPost(latest);
         res.sendStatus(200);
     });

@@ -3,7 +3,7 @@ import express = require("express");
 import bodyParser = require("body-parser");
 import mustacheExpress = require("mustache-express");
 import session = require("express-session");
-import dbSession = require('connect-mongodb-session');
+import dbSession = require("connect-mongodb-session");
 
 import { Library, StatBlock, Spell } from "./library";
 import { configureLoginRedirect, startNewsUpdates } from "./patreon";
@@ -27,6 +27,7 @@ const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     patreonClientId,
     isLoggedIn: session.isLoggedIn || false,
     hasStorage: session.hasStorage || false,
+    hasEpicInitiative: session.hasEpicInitiative || false,
     postedEncounter: null,
 });
 
@@ -56,7 +57,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         var store = new MongoDBStore(
             {
                 uri: process.env.DB_CONNECTION_STRING,
-                collection: 'sessions'
+                collection: "sessions"
             });
     }
 
