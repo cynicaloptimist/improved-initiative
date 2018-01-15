@@ -7,7 +7,7 @@ interface LibraryFilterProps {
 export class LibraryFilter extends React.Component<LibraryFilterProps> {
     public render() {
         const applyFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-            this.props.applyFilterFn(event.currentTarget.value);
+            this.props.applyFilterFn(event.currentTarget.value.toLocaleLowerCase());
         };
 
         return <input className="filter-library" placeholder="Filter..." onChange={applyFilter} />;
