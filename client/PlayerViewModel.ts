@@ -10,7 +10,7 @@ export class PlayerViewModel {
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
     private turnTimer = new TurnTimer();
-    private turnTimerVisibility = ko.observable(false);
+    private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
 
     private socket: SocketIOClient.Socket = io();
@@ -25,9 +25,14 @@ export class PlayerViewModel {
         this.socket.emit("join encounter", this.encounterId);
     }
 
+    public LoadEncounterFromServer = (encounterId: string) => {
+        $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
+    }
+
+
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
-        this.turnTimerVisibility(encounter.DisplayTurnTimer);
+        this.turnTimerVisible(encounter.DisplayTurnTimer);
         this.roundCounter(encounter.RoundCounter);
         this.allowSuggestions(encounter.AllowPlayerSuggestions);
 
@@ -38,10 +43,6 @@ export class PlayerViewModel {
             this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
             setTimeout(this.ScrollToActiveCombatant, 1);
         }
-    }
-
-    public LoadEncounterFromServer = (encounterId: string) => {
-        $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
     }
 
     private ScrollToActiveCombatant = () => {

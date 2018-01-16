@@ -14,7 +14,7 @@
 </head>
 
 <body id="playerview">
-    <!-- ko with: CombatantSuggestor -->
+    <!-- ko with: combatantSuggestor -->
     <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
     <div class="damage-suggestion" data-bind="
         visible: SuggestionVisible,
@@ -33,9 +33,9 @@
         <div class="tags"><span class="fa fa-tag"></span></div>
     </div>
     <ul class="combatants">
-        <!-- ko foreach: Combatants -->
+        <!-- ko foreach: combatants -->
         <li class="combatant" data-bind="
-        css: { active: $parent.ActiveCombatant() == $data, 
+        css: { active: $parent.activeCombatant() == $data, 
                 playercharacter: $data.IsPlayerCharacter }, 
         component: {
             name: 'playerdisplaycombatant',
@@ -45,9 +45,10 @@
         <!-- /ko -->
     </ul>
     <!-- ko if: (RoundCounter() || DisplayTurnTimer()) -->
+    <!-- ko if: (roundCounter() || turnTimerVisible()) -->
     <div class="combat-footer">
-        <span class="turn-timer" data-bind="visible: DisplayTurnTimer, text: TurnTimer.Readout"></span>
-        <span class="round-counter" data-bind="visible: RoundCounter">Current Round: <span data-bind="text: RoundCounter"></span></span>
+        <span class="turn-timer" data-bind="visible: turnTimerVisible, text: turnTimer.Readout"></span>
+        <span class="round-counter" data-bind="visible: roundCounter">Current Round: <span data-bind="text: roundCounter"></span></span>
     </div>
     <!-- /ko -->
 </body>
