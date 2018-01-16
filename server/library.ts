@@ -56,9 +56,9 @@ export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
     private listings: Listing[] = [];
     
-    constructor(private route: string, private getKeywords: (item: TItem) => string) { };
+    constructor(private route: string, private getKeywords: (item: TItem) => string) { }
 
-    static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
+    public static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
         const library = new Library<I>(route, getKeywords);
 
         const filePath = path.join(__dirname, "..", filename);

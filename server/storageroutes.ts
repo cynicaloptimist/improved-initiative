@@ -10,7 +10,7 @@ type Res = Express.Response & express.Response;
 
 const verifyStorage = (req: Req) => {
     return req.session && req.session.hasStorage;
-}
+};
 
 function configureEntityRoute<T extends LibraryItem>(app: express.Application, route: DB.EntityPath) {
     app.get(`/my/${route}/:id`, (req: Req, res: Res) => {
@@ -80,7 +80,7 @@ export default function(app: express.Application) {
         }).catch(err => {
             return res.sendStatus(500);
         });
-    })
+    });
     
     app.post("/my/settings", (req, res: express.Response) => {
         if (!verifyStorage(req)) {

@@ -54,7 +54,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     const MongoDBStore = dbSession(session);
 
     if (process.env.DB_CONNECTION_STRING) {
-        var store = new MongoDBStore(
+        let store = new MongoDBStore(
             {
                 uri: process.env.DB_CONNECTION_STRING,
                 collection: "sessions"

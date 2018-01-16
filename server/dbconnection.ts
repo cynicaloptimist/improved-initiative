@@ -1,6 +1,6 @@
 import mongo = require("mongodb");
 const client = mongo.MongoClient;
-const connectionString = process.env.DB_CONNECTION_STRING
+const connectionString = process.env.DB_CONNECTION_STRING;
 
 import * as L from "./library";
 import { User } from "./user";
@@ -74,7 +74,7 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
                         spells: getSpellListings(user.spells),
                         encounters: getEncounterListings(user.encounters)
-                    }
+                    };
 
                     callBack(userWithListings);
                 });
@@ -90,7 +90,7 @@ function getStatBlockListings(statBlocks: { [key: string]: L.StatBlock }): L.Lis
             SearchHint: L.GetStatBlockKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
-        }
+        };
     });
 }
 
@@ -103,7 +103,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: L.StatBlo
             SearchHint: L.GetStatBlockKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
-        }
+        };
     });
 }
 
@@ -116,7 +116,7 @@ function getSpellListings(spells: { [key: string]: L.Spell }): L.Listing [] {
             SearchHint: L.GetSpellKeywords(c),//TODO
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
-        }
+        };
     });
 }
 
@@ -129,7 +129,7 @@ function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): 
             SearchHint: L.GetEncounterKeywords(c),//TODO
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
-        }
+        };
     });
 }
 
