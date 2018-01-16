@@ -52,9 +52,10 @@ const initializeNewPlayerView = (playerViews) => {
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
+    let store = null;
 
     if (process.env.DB_CONNECTION_STRING) {
-        let store = new MongoDBStore(
+        store = new MongoDBStore(
             {
                 uri: process.env.DB_CONNECTION_STRING,
                 collection: "sessions"
