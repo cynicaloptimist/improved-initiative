@@ -5,37 +5,37 @@ import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 
 export class PlayerViewModel {
-    public Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
-    public ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
-    public EncounterId = env.EncounterId;
-    public RoundCounter = ko.observable();
-    public TurnTimer = new TurnTimer();
-    public DisplayTurnTimer = ko.observable(false);
-    public AllowSuggestions = ko.observable(false);
+    private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+    private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
+    private encounterId = env.EncounterId;
+    private roundCounter = ko.observable();
+    private turnTimer = new TurnTimer();
+    private turnTimerVisibility = ko.observable(false);
+    private allowSuggestions = ko.observable(false);
 
-    public Socket: SocketIOClient.Socket = io();
+    private socket: SocketIOClient.Socket = io();
 
-    public CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
+    private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
     constructor() {
-        this.Socket.on("update encounter", (encounter) => {
+        this.socket.on("update encounter", (encounter) => {
             this.LoadEncounter(encounter);
         });
 
-        this.Socket.emit("join encounter", this.EncounterId);
+        this.socket.emit("join encounter", this.encounterId);
     }
 
-    public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
-        this.Combatants(encounter.Combatants);
-        this.DisplayTurnTimer(encounter.DisplayTurnTimer);
-        this.RoundCounter(encounter.RoundCounter);
-        this.AllowSuggestions(encounter.AllowPlayerSuggestions);
+    private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+        this.combatants(encounter.Combatants);
+        this.turnTimerVisibility(encounter.DisplayTurnTimer);
+        this.roundCounter(encounter.RoundCounter);
+        this.allowSuggestions(encounter.AllowPlayerSuggestions);
 
-        if (encounter.ActiveCombatantId != (this.ActiveCombatant() || { Id: -1 }).Id) {
-            this.TurnTimer.Reset();
+        if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
+            this.turnTimer.Reset();
         }
         if (encounter.ActiveCombatantId) {
-            this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
+            this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
             setTimeout(this.ScrollToActiveCombatant, 1);
         }
     }
@@ -44,17 +44,17 @@ export class PlayerViewModel {
         $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
     }
 
-    public ScrollToActiveCombatant = () => {
+    private ScrollToActiveCombatant = () => {
         let activeCombatantElement = $(".active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }
     }
 
-    public ShowSuggestion = (combatant: StaticCombatantViewModel) => {
-        if (!this.AllowSuggestions()) {
+    private ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+        if (!this.allowSuggestions()) {
             return;
         }
-        this.CombatantSuggestor.Show(combatant);
+        this.combatantSuggestor.Show(combatant);
     }
 }
