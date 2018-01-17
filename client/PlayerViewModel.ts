@@ -5,6 +5,7 @@ import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 
 export class PlayerViewModel {
+    private userStylesheet: HTMLStyleElement;
     private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
@@ -23,12 +24,23 @@ export class PlayerViewModel {
         });
 
         this.socket.emit("join encounter", this.encounterId);
+
+        this.InitializeStylesheet();
     }
 
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
     }
 
+    private InitializeStylesheet() {
+        const style = document.createElement("style");
+        style.type = "text/css";
+        this.userStylesheet = document.getElementsByTagName("head")[0].appendChild(style);
+    }
+
+    private LoadStylesheet(css: string) {
+        this.userStylesheet.innerHTML = css;
+    }
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
