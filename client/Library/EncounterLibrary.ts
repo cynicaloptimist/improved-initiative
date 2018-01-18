@@ -3,13 +3,14 @@ import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
 import { Store } from "../Utility/Store";
 import { AccountClient } from "../Account/AccountClient";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 
 export class EncounterLibrary {
     public Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);
 
     constructor() {
         Store.List(Store.SavedEncounters).forEach(e => {
-            const encounter = SavedEncounter.UpdateLegacySavedEncounter(Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e));
+            const encounter = UpdateLegacySavedEncounter(Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e));
             const listing = listingFrom(encounter, e);
             this.Encounters.push(listing);
         });

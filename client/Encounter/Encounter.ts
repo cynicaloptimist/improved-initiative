@@ -14,6 +14,7 @@ import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
 import { AccountClient } from "../Account/AccountClient";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 import { CurrentSettings } from "../Settings/Settings";
+import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
 
 export class Encounter {
     constructor(
@@ -289,7 +290,7 @@ export class Encounter {
     }
 
     public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-        savedEncounter = SavedEncounter.UpdateLegacySavedEncounter(savedEncounter);
+        savedEncounter = UpdateLegacySavedEncounter(savedEncounter);
 
         let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         let currentEncounterIsActive = this.State() == "active";
