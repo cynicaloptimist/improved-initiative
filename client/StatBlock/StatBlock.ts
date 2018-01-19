@@ -52,6 +52,8 @@ export interface StatBlock extends Listable {
 }
 
 export class StatBlock {
+    public static GetKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
+
     public static Default = (): StatBlock => ({
         Id: probablyUniqueString(), Name: "", Source: "", Type: "",
         HP: { Value: 1, Notes: "1d1+0" }, AC: { Value: 10, Notes: "" },
