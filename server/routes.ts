@@ -5,12 +5,13 @@ import mustacheExpress = require("mustache-express");
 import session = require("express-session");
 import dbSession = require("connect-mongodb-session");
 
-import { Library, Spell } from "./library";
+import { Library } from "./library";
 import { configureLoginRedirect, startNewsUpdates } from "./patreon";
 import { upsertUser } from "./dbconnection";
 import configureStorageRoutes from "./storageroutes";
 import configureMetricsRoutes from "./metrics";
 import { StatBlock } from "../client/StatBlock/StatBlock";
+import { Spell } from "../client/Spell/Spell";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";

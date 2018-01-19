@@ -1,7 +1,7 @@
 import request = require("request");
 import express = require("express");
 
-import { Library, Spell, LibraryItem } from "./library";
+import { Library, LibraryItem } from "./library";
 import * as DB from "./dbconnection";
 
 type Req = Express.Request & express.Request;

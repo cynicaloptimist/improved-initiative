@@ -5,6 +5,7 @@ const connectionString = process.env.DB_CONNECTION_STRING;
 import * as L from "./library";
 import { User } from "./user";
 import { StatBlock } from "../client/StatBlock/StatBlock";
+import { Spell } from "../client/Spell/Spell";
 
 export const initialize = () => {
     if (!connectionString) {
@@ -108,13 +109,13 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
     });
 }
 
-function getSpellListings(spells: { [key: string]: L.Spell }): L.Listing [] {
+function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
     return Object.keys(spells).map(key => {
         const c = spells[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: L.GetSpellKeywords(c),//TODO
+            SearchHint: Spell.GetKeywords(c),//TODO
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
         };

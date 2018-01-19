@@ -30,13 +30,6 @@ export interface Listing {
     SearchHint: string;
 }
 
-export interface Spell extends LibraryItem {
-    School: string;
-    Classes: string[];
-}
-
-export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
-
 interface Combatant {
     Alias: string;
 }
