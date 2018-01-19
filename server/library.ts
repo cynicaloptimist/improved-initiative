@@ -30,12 +30,6 @@ export interface Listing {
     SearchHint: string;
 }
 
-export interface StatBlock extends LibraryItem {
-    Type: string;
-}
-
-export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
-
 export interface Spell extends LibraryItem {
     School: string;
     Classes: string[];

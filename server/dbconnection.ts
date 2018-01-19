@@ -4,6 +4,7 @@ const connectionString = process.env.DB_CONNECTION_STRING;
 
 import * as L from "./library";
 import { User } from "./user";
+import { StatBlock } from "../client/StatBlock/StatBlock";
 
 export const initialize = () => {
     if (!connectionString) {
@@ -81,26 +82,26 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: L.StatBlock }): L.Listing [] {
+function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): L.Listing [] {
     return Object.keys(statBlocks).map(key => {
         const c = statBlocks[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: L.GetStatBlockKeywords(c),
+            SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
         };
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: L.StatBlock }): L.Listing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): L.Listing [] {
     return Object.keys(playerCharacters).map(key => {
         const c = playerCharacters[key];
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: L.GetStatBlockKeywords(c),
+            SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
         };
