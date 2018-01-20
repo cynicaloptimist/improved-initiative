@@ -698,9 +698,12 @@ body>.login.button {
         }
     }
     .Image {
-        display: block;
         width: 100%;
-        height: auto;
+        max-height: 300px;
+    }
+
+    .Image img {
+        object-fit: scale-down;
     }
 }
 

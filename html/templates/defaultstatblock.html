@@ -1,3 +1,7 @@
+<div class="Image" data-bind="visible: ImageURL">
+  <img data-bind="attr:{src: ImageURL}">
+</div>
+
 <h3 class="Name" data-bind="text: Name"></h3>
 
 <div class="Source" data-bind="text: Source"></div>
@@ -80,8 +84,4 @@
 <div class="Description" data-bind="visible: Description">
     <h4>Description</h4>
     <span data-bind="statBlockText: Description"></span>
-</div>
-
-<div class="Image" data-bind="visible: ImageURL">
-    <img data-bind="attr:{src: ImageURL}">
 </div>
