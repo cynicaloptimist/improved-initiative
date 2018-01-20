@@ -1,7 +1,7 @@
 <div data-bind="text: Initiative" class="initiative"></div>
 <span data-bind="if: $root.ImageCount">
     <div  class="portrait" data-bind="if: ImageURL">
-        <img  data-bind="attr:{src: ImageURL}">
+        <img  data-bind="attr:{src: ImageURL}, click: function(){ $root.ShowImageModal(Id, true)}">
     </div>
 </span>
 <div class="name">
