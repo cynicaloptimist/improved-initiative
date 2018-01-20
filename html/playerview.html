@@ -15,13 +15,13 @@
 
 <body id="playerview">
 
-    <div id="imgModal" class="modal" data-bind="visible: ImageModalVisible, click: CloseImageModal">
+    <div id="imgModal" class="modal" data-bind="visible: imageModalVisible, click: CloseImageModal()">
         <span class="close">&times;</span>
-        <img  class="modal-content" data-bind="attr:{src: ImageModalURL}">
+        <img  class="modal-content" data-bind="attr:{src: imageModalURL}">
         <div id="caption" >
-            <span data-bind="text: ImageModalName"></span>
-            (<span data-bind="html: ImageModalHPDisplay" ></span>)
-            <span  data-bind="foreach: ImageModalTags">
+            <span data-bind="text: imageModalName"></span>
+            (<span data-bind="html: imageModalHPDisplay" ></span>)
+            <span  data-bind="foreach: imageModalTags">
                         <span data-bind="text: Text"></span>
                 </span>
         </div>
@@ -57,7 +57,6 @@
         </li>
         <!-- /ko -->
     </ul>
-    <!-- ko if: (RoundCounter() || DisplayTurnTimer()) -->
     <!-- ko if: (roundCounter() || turnTimerVisible()) -->
     <div class="combat-footer">
         <span class="turn-timer" data-bind="visible: turnTimerVisible, text: turnTimer.Readout"></span>

@@ -120,7 +120,6 @@ export class CombatantCommander {
         this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(", ")} removed from encounter.`);
 
         this.tracker.Encounter.QueueEmitEncounter();
-        this.tracker.Encounter.UpdateImageCount();
     }
 
     public Deselect = () => {

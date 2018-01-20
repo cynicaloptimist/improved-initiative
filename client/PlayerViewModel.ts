@@ -11,7 +11,7 @@ export class PlayerViewModel {
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
-    private imageCounter = ko.observable();
+    private imageCount: KnockoutObservable<number> = ko.observable(0);
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
@@ -47,15 +47,11 @@ export class PlayerViewModel {
         this.userStylesheet = document.getElementsByTagName("head")[0].appendChild(style);
     }
 
-    private LoadStylesheet(css: string) {
-        this.userStylesheet.innerHTML = css;
-    }
-
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
+        this.imageCount((this.combatants().filter(c => c.ImageURL).length));
         this.turnTimerVisible(encounter.DisplayTurnTimer);
         this.roundCounter(encounter.RoundCounter);
-        this.imageCounter(encounter.ImageCount);
         this.allowSuggestions(encounter.AllowPlayerSuggestions);
 
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
@@ -86,17 +82,17 @@ export class PlayerViewModel {
         this.combatantSuggestor.Show(combatant);
     }
 
-    ShowImageModal = (SelectedId:string, didClick:boolean) => {
+    private ShowImageModal = (SelectedId:string, didClick:boolean) => {
         if (didClick) this.imageModalIsViewing(true);
-        var Combatant = this.Combatants().filter(c => c.Id == SelectedId).pop();
-        this.imageModalName(Combatant.Name);
-        this.imageModalHPDisplay(Combatant.HPDisplay);
-        this.imageModalURL(Combatant.ImageURL);
-        this.imageModalTags(Combatant.Tags);
+        var combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
+        this.imageModalName(didClick?combatant.Name:'Start of Turn: '+combatant.Name);
+        this.imageModalHPDisplay(combatant.HPDisplay);
+        this.imageModalURL(combatant.ImageURL);
+        this.imageModalTags(combatant.Tags);
         this.imageModalVisible(true);
     }
 
-    CloseImageModal = () => {
+    private CloseImageModal = () => {
         this.imageModalVisible(false);
         this.imageModalIsViewing(false);
         clearTimeout(this.imageModalTimer);

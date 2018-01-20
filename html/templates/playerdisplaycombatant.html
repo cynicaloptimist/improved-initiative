@@ -1,5 +1,5 @@
 <div data-bind="text: Initiative" class="initiative"></div>
-<span data-bind="if: $root.ImageCount">
+<span data-bind="if: $root.imageCount">
     <div  class="portrait" data-bind="if: ImageURL">
         <img  data-bind="attr:{src: ImageURL}, click: function(){ $root.ShowImageModal(Id, true)}">
     </div>
@@ -7,7 +7,7 @@
 <div class="name">
     <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>
-<div class="hp" data-bind="css: { 'disable-hover': !$root.AllowSuggestions() }">
+<div class="hp" data-bind="css: { 'disable-hover': !$root.allowSuggestions() }">
     <span data-bind="click: $root.ShowSuggestion, html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
 </div>
 <div class="tags" data-bind="foreach: Tags">
