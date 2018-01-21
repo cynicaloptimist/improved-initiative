@@ -14,6 +14,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { Store } from "./Utility/Store";
 import { Metrics } from "./Utility/Metrics";
 import { env } from "./Environment";
+import { PlayerViewClient } from "./Player/PlayerViewClient";
 
 interface PatreonPostAttributes {
     title: string;
@@ -38,7 +39,8 @@ export class TrackerViewModel {
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
         });
 
-        this.Socket.emit("join encounter", this.Encounter.EncounterId);
+        const playerViewClient = new PlayerViewClient(this.Socket);
+        playerViewClient.JoinEncounter(this.Encounter.EncounterId);
 
         this.AccountClient.GetAccount(account => {
             if (!account) {
