@@ -3,6 +3,7 @@ import { env } from "./Environment";
 import { TurnTimer } from "./Widgets/TurnTimer";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
+import { PlayerView } from "../common/PlayerView";
 
 export class PlayerViewModel {
     private userStylesheet: HTMLStyleElement;
@@ -29,7 +30,9 @@ export class PlayerViewModel {
     }
 
     public LoadEncounterFromServer = (encounterId: string) => {
-        $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
+        $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
+            this.LoadEncounter(playerView.encounterState);
+        });
     }
 
     private InitializeStylesheet() {

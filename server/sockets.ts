@@ -1,15 +1,14 @@
-import { SavedEncounter } from "../client/Encounter/SavedEncounter";
-import { StaticCombatantViewModel } from "../client/Combatant/StaticCombatantViewModel";
+import { PlayerView } from "../common/PlayerView";
 
-export default function(io: SocketIO.Server, playerViews) {
+export default function (io: SocketIO.Server, playerViews: { [encounterId: string]: PlayerView }) {
     io.on("connection", function (socket: SocketIO.Socket) {
 
         let encounterId = null;
 
-        socket.on("update encounter", function (id: string, updatedEncounter: SavedEncounter<StaticCombatantViewModel>) {
+        socket.on("update encounter", function (id: string, updatedEncounter: {}) {
             encounterId = id;
             socket.join(encounterId);
-            playerViews[encounterId] = updatedEncounter;
+            playerViews[encounterId].encounterState = updatedEncounter;
             socket.broadcast.to(encounterId).emit("update encounter", updatedEncounter);
         });
 

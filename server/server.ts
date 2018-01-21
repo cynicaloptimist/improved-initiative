@@ -15,7 +15,7 @@ DB.initialize();
 
 const statBlockLibrary = L.Library.FromFile<StatBlock>("ogl_creatures.json", "/statblocks/", StatBlock.GetKeywords);
 const spellLibrary = L.Library.FromFile<Spell>("ogl_spells.json", "/spells/", Spell.GetKeywords);
-const playerViews = [];
+const playerViews = {};
 ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
 const io = socketIO(http);
