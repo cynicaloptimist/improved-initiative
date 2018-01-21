@@ -45,6 +45,7 @@ export class SettingsViewModel {
     public CombatantCommands: Command[];
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
+    public PlayerViewCustomCSS: KnockoutObservable<string>;
     public AccountViewModel = new AccountViewModel(this.libraries);
 
     public ExportData = () => {
@@ -93,7 +94,8 @@ export class SettingsViewModel {
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
-                MonsterHPVerbosity: this.HpVerbosity()
+                MonsterHPVerbosity: this.HpVerbosity(),
+                CustomCSS: this.PlayerViewCustomCSS()
             },
             Version: "1.0.0" //TODO: auto generate this line
         };
@@ -147,6 +149,8 @@ export class SettingsViewModel {
         this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
+
+        this.PlayerViewCustomCSS = ko.observable(currentSettings.PlayerView.CustomCSS);
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
