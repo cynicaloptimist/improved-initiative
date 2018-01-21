@@ -21,6 +21,7 @@ export interface Settings {
         HideMonstersOutsideEncounter: boolean;
         DisplayRoundCounter: boolean;
         DisplayTurnTimer: boolean;
+        CustomCSS: string;
     };
     Version: string;
 }
@@ -39,6 +40,31 @@ function getLegacySetting<T>(settingName: string, def: T): T {
         return def;
     }
     return setting;
+}
+
+function getDefaultSettings(): Settings {
+    return {
+        Commands: [],
+        Rules: {
+            RollMonsterHp: false,
+            AllowNegativeHP: false,
+            AutoCheckConcentration: true
+        },
+        TrackerView: {
+            DisplayRoundCounter: false,
+            DisplayTurnTimer: false,
+            DisplayDifficulty: false
+        },
+        PlayerView: {
+            AllowPlayerSuggestions: false,
+            MonsterHPVerbosity: "Colored Label",
+            HideMonstersOutsideEncounter: false,
+            DisplayRoundCounter: false,
+            DisplayTurnTimer: false,
+            CustomCSS: ""
+        },
+        Version: "1.2.0" //TODO: Populate with package version
+    };
 }
 
 function getLegacySettings(): Settings {
@@ -68,9 +94,10 @@ function getLegacySettings(): Settings {
             MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
-            DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false)
+            DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
+            CustomCSS: ""
         },
-        Version: "1.0.0" //TODO: Populate with package version
+        Version: "1.2.0" //TODO: Populate with package version
     };
 }
 
@@ -98,11 +125,20 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
     });
 }
 
+function updateSettings(settings: any): Settings {
+    const result = getDefaultSettings();
+    const version = result.Version;
+    $.extend(true, result, settings);
+    result.Version = version;
+    return result;
+}
+
 export function InitializeSettings() {
-    const localSettings = Store.Load<Settings>(Store.User, "Settings");
+    const localSettings = Store.Load<any>(Store.User, "Settings");
 
     if (localSettings) {
-        CurrentSettings(localSettings);
+        const updatedSettings = updateSettings(localSettings);
+        CurrentSettings(updatedSettings);
     } else {
         const legacySettings = getLegacySettings();
         CurrentSettings(legacySettings);
