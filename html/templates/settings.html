@@ -3,6 +3,7 @@
     <span data-bind="click: SelectTab('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
     <span data-bind="click: SelectTab('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
     <span data-bind="click: SelectTab('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
+    <span data-bind="click: SelectTab('epicInitiative'), css: { selected: CurrentTab() == 'epicInitiative' }">Epic Initiative</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
     <div>
@@ -125,5 +126,8 @@
             <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
         <!-- /ko -->
     <!-- /ko -->
+</div>
+<div data-bind="visible: CurrentTab() == 'epicInitiative'" class="tab epicInitiative">
+    Epic Initiative
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
