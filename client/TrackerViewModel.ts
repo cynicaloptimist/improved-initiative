@@ -33,7 +33,7 @@ interface PatreonPost {
 export class TrackerViewModel {
     constructor() {
         ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
-
+        
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
             const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
@@ -43,6 +43,9 @@ export class TrackerViewModel {
         playerViewClient.JoinEncounter(this.Encounter.EncounterId);
         playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
         playerViewClient.UpdateCSS(this.Encounter.EncounterId, CurrentSettings().PlayerView.CustomCSS);
+        CurrentSettings.subscribe(v => {
+            playerViewClient.UpdateCSS(this.Encounter.EncounterId, v.PlayerView.CustomCSS);
+        });
 
         this.AccountClient.GetAccount(account => {
             if (!account) {
