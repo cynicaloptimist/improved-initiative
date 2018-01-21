@@ -6,7 +6,7 @@ import session = require("express-session");
 import dbSession = require("connect-mongodb-session");
 
 import { Library } from "./library";
-import { configureLoginRedirect, startNewsUpdates } from "./patreon";
+import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
 import { upsertUser } from "./dbconnection";
 import configureStorageRoutes from "./storageroutes";
 import configureMetricsRoutes from "./metrics";
@@ -149,6 +149,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.post("/importencounter/", importEncounter);
 
     configureLoginRedirect(app);
+    configureLogout(app);
     configureStorageRoutes(app);
     configureMetricsRoutes(app);
     startNewsUpdates(app);
