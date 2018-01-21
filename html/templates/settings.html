@@ -128,6 +128,20 @@
     <!-- /ko -->
 </div>
 <div data-bind="visible: CurrentTab() == 'epicInitiative'" class="tab epicInitiative">
-    Epic Initiative
+    <h3>Epic Initiative</h3>
+    <!-- ko with: AccountViewModel -->
+        <!-- ko if: IsLoggedIn -->
+            <!-- ko if: HasEpicInitiative -->
+                <p>Epic Initiative is enabled.</p>
+            <!-- /ko -->
+            <!-- ko ifnot: HasEpicInitiative -->
+            <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level.</p>
+            <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko ifnot: IsLoggedIn -->
+            <p>Log in with Patreon to access patron benefits. Epic Initiative allows you to customize your Player View's appearance with custom colors, fonts, and other CSS features.</p>
+            <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
+        <!-- /ko -->
+    <!-- /ko -->
 </div>
 <div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
