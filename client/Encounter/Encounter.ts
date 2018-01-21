@@ -15,8 +15,10 @@ import { AccountClient } from "../Account/AccountClient";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 import { CurrentSettings } from "../Settings/Settings";
 import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
+import { PlayerViewClient } from "../Player/PlayerViewClient";
 
 export class Encounter {
+    private playerViewClient: PlayerViewClient;
     constructor(
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
@@ -50,6 +52,8 @@ export class Encounter {
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter);
         }
+
+        this.playerViewClient = new PlayerViewClient(this.Socket);
     }
 
     public Rules: IRules;
@@ -106,7 +110,7 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
-        this.Socket.emit("update encounter", this.EncounterId, this.SavePlayerDisplay());
+        this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
     }
 
