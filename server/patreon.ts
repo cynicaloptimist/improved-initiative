@@ -117,6 +117,18 @@ export function configureLoginRedirect(app: express.Application) {
     });
 }
 
+export function configureLogout(app: express.Application) {
+    const logoutPath = "/logout";
+    app.get(logoutPath, (req: Req, res: Res) => {
+        req.session.destroy(err => {
+            if (err) {
+                console.error(err);
+            }
+            return res.redirect(baseUrl);
+        });
+    });
+}
+
 function updateLatestPost(latestPost: { post: Post }) {
     return request.get(patreonUrl,
         (error, response, body) => {
