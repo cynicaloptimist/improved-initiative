@@ -82,8 +82,14 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req: Req, res: Res) => {
-        if (defaultAccountLevel === "accountsync") {
-            req.session.hasStorage = true;
+        if (defaultAccountLevel) {
+            if (defaultAccountLevel === "accountsync") {
+                req.session.hasStorage = true;
+            }
+            if (defaultAccountLevel === "epicinitiative") {
+                req.session.hasStorage = true;
+                req.session.hasEpicInitiative = true;
+            }
             req.session.isLoggedIn = true;
             upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
