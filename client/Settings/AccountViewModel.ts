@@ -15,6 +15,7 @@ export class AccountViewModel {
 
     public IsLoggedIn = env.IsLoggedIn;
     public HasStorage = env.HasStorage;
+    public HasEpicInitiative = env.HasEpicInitiative;
     public PatreonLoginUrl = env.PatreonLoginUrl;
 
     public SyncedCreatures = ko.computed(() => getCounts(this.libraries.NPCs.StatBlocks()));
