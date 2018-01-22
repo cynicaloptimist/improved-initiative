@@ -157,7 +157,7 @@ export class SettingsViewModel {
         this.currentCSS = currentSettings.PlayerView.CustomCSS;
         const updateCurrentCSS = (css: string) => {
             this.currentCSS = css;
-        }
+        };
         this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: this.currentCSS, updateCurrentCSS });
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
