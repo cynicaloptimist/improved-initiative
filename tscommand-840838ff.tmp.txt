@@ -1,0 +1,1 @@
+server\dbconnection.ts server\launchserver.ts server\library.ts server\metrics.ts server\patreon.ts server\routes.ts server\server.ts server\sockets.ts server\storageroutes.ts server\user.ts --sourcemap --target ES5 --module commonjs

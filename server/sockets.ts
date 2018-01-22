@@ -24,7 +24,6 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
 
         socket.on("update custom CSS", (id: string, updatedCSS: string) => {
             joinEncounter(id);
-            console.log(`${id} - custom CSS: ${updatedCSS}`);
             playerViews[encounterId].customCSS = updatedCSS;
             socket.broadcast.to(encounterId).emit("custom CSS updated", updatedCSS);
         });
