@@ -23,6 +23,9 @@ export class PlayerViewModel {
         this.socket.on("update encounter", (encounter) => {
             this.LoadEncounter(encounter);
         });
+        this.socket.on("custom CSS updated", (customCSS: string) => {
+            this.LoadStylesheet(customCSS);
+        });
 
         this.socket.emit("join encounter", this.encounterId);
 
@@ -32,6 +35,7 @@ export class PlayerViewModel {
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
             this.LoadEncounter(playerView.encounterState);
+            this.LoadStylesheet(playerView.customCSS);
         });
     }
 
