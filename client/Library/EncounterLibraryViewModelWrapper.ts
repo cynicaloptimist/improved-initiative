@@ -6,16 +6,17 @@ import { KeyValueSet } from "../Utility/Toolbox";
 import { EncounterLibraryViewModel, EncounterLibraryViewModelProps } from "./Components/EncounterLibraryViewModel";
 import { StatBlockLibrary } from "./StatBlockLibraryViewModel";
 import { Encounter } from "../Encounter/Encounter";
+import * as React from "react";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 
 export class EncounterLibraryViewModelWrapper {
     constructor(tracker: TrackerViewModel, library: EncounterLibrary) {
-        this.props = {
+        const props = {
             library,
             tracker
         };
-     }
-    private encounterLibraryViewModel = EncounterLibraryViewModel;
-    private props: EncounterLibraryViewModelProps;
+        this.component = React.createElement(EncounterLibraryViewModel, props);
+    }
+    private component: React.ComponentElement<any, EncounterLibraryViewModel>;
 }
