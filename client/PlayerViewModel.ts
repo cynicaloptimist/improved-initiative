@@ -20,7 +20,7 @@ export class PlayerViewModel {
     private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
     constructor() {
-        this.socket.on("update encounter", (encounter) => {
+        this.socket.on("encounter updated", (encounter) => {
             this.LoadEncounter(encounter);
         });
         this.socket.on("custom CSS updated", (customCSS: string) => {

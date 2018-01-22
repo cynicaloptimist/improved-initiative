@@ -19,7 +19,7 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
         socket.on("update encounter", function (id: string, updatedEncounter: {}) {
             joinEncounter(id);
             playerViews[encounterId].encounterState = updatedEncounter;
-            socket.broadcast.to(encounterId).emit("update encounter", updatedEncounter);
+            socket.broadcast.to(encounterId).emit("encounter updated", updatedEncounter);
         });
 
         socket.on("update custom CSS", (id: string, updatedCSS: string) => {
