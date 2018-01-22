@@ -69,6 +69,7 @@
     "mustache-express": "^1.2.1",
     "patreon": "^0.1.0",
     "react": "^16.2.0",
+    "react-color-picker": "^4.0.2",
     "react-dom": "^16.2.0",
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
