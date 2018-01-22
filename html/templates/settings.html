@@ -133,18 +133,7 @@
     <!-- ko with: AccountViewModel -->
         <!-- ko if: IsLoggedIn -->
             <!-- ko if: HasEpicInitiative -->
-            <!-- ko with: $parent.customCSSEditor -->
-                <p>Epic Initiative is enabled.</p>
-                <div class="editor-type">
-                    Editor:
-                    <label>
-                        <input type="radio" name="editor-type" value="basic" data-bind="checked: editorType" />Basic</label>
-                    <label>
-                        <input type="radio" name="editor-type" value="CSS" data-bind="checked: editorType" />CSS</label>
-                </div>
-                
-                <textarea data-bind="value: manualCSS"></textarea>
-            <!-- /ko -->
+            <div data-bind="react: { component: $parent.customCSSEditor }"></div>
             <!-- /ko -->
             <!-- ko ifnot: HasEpicInitiative -->
             <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level.</p>

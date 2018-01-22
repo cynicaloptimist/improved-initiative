@@ -7,6 +7,8 @@ import { AccountViewModel } from "../Settings/AccountViewModel";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Libraries } from "../Library/Libraries";
+import { CustomCSSEditor } from "./components/CustomCSSEditor";
+import * as React from "react";
 
 const tips = [
     "You can view command list and set keybindings on the 'Commands' tab.",
@@ -96,7 +98,7 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.customCSSEditor.GetCSS()
+                CustomCSS: this.customCSSEditor.state.manualCSS
             },
             Version: "1.2.0" //TODO: auto generate this line
         };
@@ -151,7 +153,7 @@ export class SettingsViewModel {
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
-        this.customCSSEditor = new CustomCSSEditor(currentSettings.PlayerView.CustomCSS);
+        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: currentSettings.PlayerView.CustomCSS });
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
@@ -159,15 +161,4 @@ export class SettingsViewModel {
     }
 
     
-}
-class CustomCSSEditor {
-    constructor(currentCSS: string) {
-        this.manualCSS(currentCSS);
-    }
-
-    public GetCSS() {
-        return this.manualCSS();
-    }
-    private manualCSS = ko.observable<string>("");
-    private editorType = ko.observable<"basic" | "CSS">("basic");
 }
