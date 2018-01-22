@@ -13,16 +13,17 @@ const tips = [
     "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
     "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
     "You can use the player view URL to track your combat on any device.",
-    "Editing a creature after it has been added to combat will only change that individual creature.",
+    "Editing a creature after it has been added to combat will only change that individual combatant.",
     "You can restore a creature's hit points by applying negative damage to it.",
     "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-    "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
+    "Clicking a creature while holding 'alt' will hide it from the player view when adding it to combat.",
     "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
     "Moving a creature in the initiative order will automatically adjust their initiative count.",
     "The active creature will have its traits and actions displayed first for ease of reference.",
     "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
     "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
-    "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
+    "A creature tagged as 'Concentrating' will prompt for a Constitution saving throw when it takes damage. You can disable this feature in the settings.",
+    "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>"
 ];
 
 export class SettingsViewModel {
