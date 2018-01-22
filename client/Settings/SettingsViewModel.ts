@@ -49,7 +49,8 @@ export class SettingsViewModel {
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
     public AccountViewModel = new AccountViewModel(this.libraries);
-    private customCSSEditor: CustomCSSEditor;
+    private customCSSEditor: React.ComponentElement<any, CustomCSSEditor>;
+    private currentCSS: string;
     
     public ExportData = () => {
         let blob = Store.ExportAll();
@@ -98,7 +99,7 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.customCSSEditor.state.manualCSS
+                CustomCSS: this.currentCSS
             },
             Version: "1.2.0" //TODO: auto generate this line
         };
@@ -153,7 +154,11 @@ export class SettingsViewModel {
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
-        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: currentSettings.PlayerView.CustomCSS });
+        this.currentCSS = currentSettings.PlayerView.CustomCSS;
+        const updateCurrentCSS = (css: string) => {
+            this.currentCSS = css;
+        }
+        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: this.currentCSS, updateCurrentCSS });
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
