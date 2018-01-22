@@ -46,9 +46,9 @@ export class SettingsViewModel {
     public CombatantCommands: Command[];
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
-    public PlayerViewCustomCSS: KnockoutObservable<string>;
     public AccountViewModel = new AccountViewModel(this.libraries);
-
+    private customCSSEditor: CustomCSSEditor;
+    
     public ExportData = () => {
         let blob = Store.ExportAll();
         saveAs(blob, "improved-initiative.json");
@@ -96,9 +96,9 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.PlayerViewCustomCSS()
+                CustomCSS: this.customCSSEditor.GetCSS()
             },
-            Version: "1.0.0" //TODO: auto generate this line
+            Version: "1.2.0" //TODO: auto generate this line
         };
     }
 
@@ -151,10 +151,23 @@ export class SettingsViewModel {
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
-        this.PlayerViewCustomCSS = ko.observable(currentSettings.PlayerView.CustomCSS);
+        this.customCSSEditor = new CustomCSSEditor(currentSettings.PlayerView.CustomCSS);
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
         this.PreviousTip = cycleTipIndex.bind(-1);
     }
+
+    
+}
+class CustomCSSEditor {
+    constructor(currentCSS: string) {
+        this.manualCSS(currentCSS);
+    }
+
+    public GetCSS() {
+        return this.manualCSS();
+    }
+    private manualCSS = ko.observable<string>("");
+    private editorType = ko.observable<"basic" | "CSS">("basic");
 }
