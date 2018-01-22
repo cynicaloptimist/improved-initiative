@@ -5,26 +5,36 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
 
         let encounterId = null;
 
-        socket.on("update encounter", function (id: string, updatedEncounter: {}) {
+        function joinEncounter(id) {
             encounterId = id;
-            socket.join(encounterId);
+            socket.join(id);
+            if (playerViews[encounterId] === undefined) {
+                playerViews[encounterId] = {
+                    encounterState: null,
+                    customCSS: ""
+                };
+            }
+        }
+
+        socket.on("update encounter", function (id: string, updatedEncounter: {}) {
+            joinEncounter(id);
             playerViews[encounterId].encounterState = updatedEncounter;
             socket.broadcast.to(encounterId).emit("update encounter", updatedEncounter);
         });
 
         socket.on("update custom CSS", (id: string, updatedCSS: string) => {
-            console.log(`${id} - custom css: ${updatedCSS}`);
+            joinEncounter(id);
+            console.log(`${id} - custom CSS: ${updatedCSS}`);
+            playerViews[encounterId].customCSS = updatedCSS;
+            socket.broadcast.to(encounterId).emit("custom CSS updated", updatedCSS);
         });
 
         socket.on("join encounter", function (id: string) {
-            encounterId = id;
-            socket.join(id);
+            joinEncounter(id);
         });
 
         socket.on("suggest damage", function (id: string, suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) {
-            if (id !== encounterId) {
-                return;
-            }
+            joinEncounter(id);
             socket.broadcast.to(encounterId).emit("suggest damage", suggestedCombatantIds, suggestedDamage, suggester);
         });
 
