@@ -117,8 +117,13 @@ export class Combatant implements Combatant {
         const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
         if (rollMonsterHp && statBlock.Player !== "player") {
             try {
-                return Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+                if (rolledHP > 0) {
+                    return rolledHP;
+                }
+                return 1;
             } catch (e) {
+                console.error(e);
                 return statBlock.HP.Value;
             }
         }
