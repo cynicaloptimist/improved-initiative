@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
+import { SketchPicker } from "react-color";
 
 interface CustomCSSEditorProps {
     currentCSS: string;
@@ -25,7 +26,8 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
     public render() {
         return <div className="custom-css-editor">
             <p>Epic Initiative is enabled.</p>
-            <textarea rows={10} onChange={this.updateCSS}>{this.props.currentCSS}</textarea>
+            <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
+            <SketchPicker />
         </div>;
     }
 }
