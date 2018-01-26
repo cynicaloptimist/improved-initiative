@@ -83,19 +83,28 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     app.get("/", (req: Req, res: Res) => {
         if (defaultAccountLevel) {
+
             if (defaultAccountLevel === "accountsync") {
                 req.session.hasStorage = true;
             }
+
             if (defaultAccountLevel === "epicinitiative") {
                 req.session.hasStorage = true;
                 req.session.hasEpicInitiative = true;
             }
+
             req.session.isLoggedIn = true;
-            upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
+
+            if (process.env.DB_CONNECTION_STRING) {
+                upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
                     res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
                 });
+            } else {
+                req.session.userId = probablyUniqueString();
+                res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+            }
         } else {
             res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
         }

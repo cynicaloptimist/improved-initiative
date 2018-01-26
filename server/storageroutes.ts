@@ -7,9 +7,10 @@ import * as DB from "./dbconnection";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
+const dbAvailable = !!process.env.DB_CONNECTION_STRING;
 
 const verifyStorage = (req: Req) => {
-    return req.session && req.session.hasStorage;
+    return dbAvailable && req.session && req.session.hasStorage;
 };
 
 function configureEntityRoute<T extends LibraryItem>(app: express.Application, route: DB.EntityPath) {
