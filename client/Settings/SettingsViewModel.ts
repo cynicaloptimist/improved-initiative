@@ -1,6 +1,6 @@
 import { Command } from "../Commands/Command";
 import { Store } from "../Utility/Store";
-import { Settings, CurrentSettings, hpVerbosityOptions } from "./Settings";
+import { Settings, CurrentSettings, hpVerbosityOptions, PlayerViewCustomStyles } from "./Settings";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { AccountClient } from "../Account/AccountClient";
 import { AccountViewModel } from "../Settings/AccountViewModel";
@@ -49,8 +49,10 @@ export class SettingsViewModel {
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
     public AccountViewModel = new AccountViewModel(this.libraries);
+
     private customCSSEditor: React.ComponentElement<any, CustomCSSEditor>;
     private currentCSS: string;
+    private currentCustomStyles: PlayerViewCustomStyles;
     
     public ExportData = () => {
         let blob = Store.ExportAll();
@@ -99,7 +101,8 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.currentCSS
+                CustomCSS: this.currentCSS,
+                CustomStyles: this.currentCustomStyles
             },
             Version: "1.2.0" //TODO: auto generate this line
         };
@@ -155,10 +158,13 @@ export class SettingsViewModel {
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
         this.currentCSS = currentSettings.PlayerView.CustomCSS;
-        const updateCurrentCSS = (css: string) => {
+        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
+        const updateCurrentCSS = (css: string, styles: PlayerViewCustomStyles) => {
             this.currentCSS = css;
+            this.currentCustomStyles = styles;
         };
-        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: this.currentCSS, updateCurrentCSS });
+
+        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: this.currentCSS, currentCustomStyles: this.currentCustomStyles, updateCurrentCSS });
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);

@@ -1,11 +1,14 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
 import { SketchPicker } from "react-color";
+import { PlayerViewCustomStyles } from "../Settings";
 
 interface CustomCSSEditorProps {
     currentCSS: string;
+    currentStyles: PlayerViewCustomStyles;
     updateCurrentCSS: (css: string) => void;
 }
+
 interface State {
     manualCSS: string;
 }
