@@ -3,6 +3,16 @@ import { Store } from "../Utility/Store";
 import { Command } from "../Commands/Command";
 
 export const CurrentSettings = ko.observable<Settings>();
+
+export interface PlayerViewCustomStyles {
+    mainBackground: string;
+    combatantBackground: string;
+    combatantText: string;
+    headerBackground: string;
+    headerText: string;
+    font: string;
+}
+
 export interface Settings {
     Commands: CommandSetting[];
     Rules: {
@@ -22,6 +32,7 @@ export interface Settings {
         DisplayRoundCounter: boolean;
         DisplayTurnTimer: boolean;
         CustomCSS: string;
+        CustomStyles: PlayerViewCustomStyles;
     };
     Version: string;
 }
@@ -61,7 +72,15 @@ function getDefaultSettings(): Settings {
             HideMonstersOutsideEncounter: false,
             DisplayRoundCounter: false,
             DisplayTurnTimer: false,
-            CustomCSS: ""
+            CustomCSS: "",
+            CustomStyles: {
+                combatantBackground: "",
+                combatantText: "",
+                font: "",
+                headerBackground: "",
+                headerText: "",
+                mainBackground: ""
+            }
         },
         Version: "1.2.0" //TODO: Populate with package version
     };
@@ -76,6 +95,7 @@ function getLegacySettings(): Settings {
             ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
         };
     });
+    const defaultSettings = getDefaultSettings();
 
     return {
         Commands: commands,
@@ -95,9 +115,10 @@ function getLegacySettings(): Settings {
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
-            CustomCSS: ""
+            CustomCSS: defaultSettings.PlayerView.CustomCSS,
+            CustomStyles: defaultSettings.PlayerView.CustomStyles
         },
-        Version: "1.2.0" //TODO: Populate with package version
+        Version: defaultSettings.Version
     };
 }
 
@@ -125,7 +146,7 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
     });
 }
 
-function settingsRequireUpdateToVersion(settingsVersion: string, targetVersion: string) {
+function updateToSemanticVersionIsRequired(settingsVersion: string, targetVersion: string) {
     const settingsVersionParts = settingsVersion.split(".").map(n => parseInt(n));
     const targetVersionParts = targetVersion.split(".").map(n => parseInt(n));
     if (settingsVersionParts[0] < targetVersionParts[0]) {
@@ -151,8 +172,9 @@ function settingsRequireUpdateToVersion(settingsVersion: string, targetVersion: 
 
 function updateSettings(settings: any): Settings {
     const defaultSettings = getDefaultSettings();
-    if (settingsRequireUpdateToVersion(settings.Version, "1.2.0")) {
+    if (updateToSemanticVersionIsRequired(settings.Version, "1.2.0")) {
         settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
+        settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
     }
     return settings;
 }
