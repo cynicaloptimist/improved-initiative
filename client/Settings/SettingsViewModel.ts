@@ -7,7 +7,7 @@ import { AccountViewModel } from "../Settings/AccountViewModel";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Libraries } from "../Library/Libraries";
-import { CustomCSSEditor } from "./components/CustomCSSEditor";
+import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 import * as React from "react";
 
 const tips = [
@@ -157,19 +157,30 @@ export class SettingsViewModel {
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
-        this.currentCSS = currentSettings.PlayerView.CustomCSS;
-        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
-        const updateCurrentCSS = (css: string, styles: PlayerViewCustomStyles) => {
-            this.currentCSS = css;
-            this.currentCustomStyles = styles;
-        };
-
-        this.customCSSEditor = React.createElement(CustomCSSEditor, { currentCSS: this.currentCSS, currentCustomStyles: this.currentCustomStyles, updateCurrentCSS });
-
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
         this.PreviousTip = cycleTipIndex.bind(-1);
+
+        this.createCustomCSSEditorComponent(currentSettings);
     }
 
-    
+    private createCustomCSSEditorComponent(currentSettings: Settings) {
+        const currentCSS = currentSettings.PlayerView.CustomCSS;
+        const currentStyles = currentSettings.PlayerView.CustomStyles;
+        const updateCSS = (css: string) => {
+            this.currentCSS = css;
+        };
+        const updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
+            this.currentCustomStyles[name] = value;
+        };
+
+        const customCSSEditorProps: CustomCSSEditorProps = {
+            currentCSS,
+            currentStyles,
+            updateCSS,
+            updateStyle
+        };
+
+        this.customCSSEditor = React.createElement(CustomCSSEditor, customCSSEditorProps);
+    }
 }
