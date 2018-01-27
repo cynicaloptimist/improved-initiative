@@ -26,8 +26,10 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
     public render() {
         return <div className="custom-css-editor">
             <p>Epic Initiative is enabled.</p>
+            <h4>Colors</h4>
+            <SketchPicker width="210px" />
+            <h4>Additional CSS</h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
-            <SketchPicker />
         </div>;
     }
 }
