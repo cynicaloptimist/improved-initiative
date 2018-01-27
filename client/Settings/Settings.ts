@@ -125,12 +125,36 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
     });
 }
 
+function settingsRequireUpdateToVersion(settingsVersion: string, targetVersion: string) {
+    const settingsVersionParts = settingsVersion.split(".").map(n => parseInt(n));
+    const targetVersionParts = targetVersion.split(".").map(n => parseInt(n));
+    if (settingsVersionParts[0] < targetVersionParts[0]) {
+        return true;
+    }
+    if (settingsVersionParts[0] > targetVersionParts[0]) {
+        return false;
+    }
+    if (settingsVersionParts[1] < targetVersionParts[1]) {
+        return true;
+    }
+    if (settingsVersionParts[1] > targetVersionParts[1]) {
+        return false;
+    }
+    if (settingsVersionParts[2] < targetVersionParts[2]) {
+        return true;
+    }
+    if (settingsVersionParts[2] > targetVersionParts[2]) {
+        return false;
+    }
+    return false;
+}
+
 function updateSettings(settings: any): Settings {
-    const result = getDefaultSettings();
-    const version = result.Version;
-    $.extend(true, result, settings);
-    result.Version = version;
-    return result;
+    const defaultSettings = getDefaultSettings();
+    if (settingsRequireUpdateToVersion(settings.Version, "1.2.0")) {
+        settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
+    }
+    return settings;
 }
 
 export function InitializeSettings() {
