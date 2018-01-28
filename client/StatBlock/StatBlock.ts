@@ -1,5 +1,5 @@
-import { Listable } from "../Library/Listing";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { Listable } from "../../common/Listable";
 
 export interface AbilityScores {
     Str: number;

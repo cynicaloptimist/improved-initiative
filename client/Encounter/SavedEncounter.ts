@@ -1,6 +1,6 @@
-import { Listable } from "../Library/Listing";
 import { DurationTiming } from "../Combatant/Tag";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { Listable } from "../../common/Listable";
 
 export interface SavedCombatant {
     Id: string;

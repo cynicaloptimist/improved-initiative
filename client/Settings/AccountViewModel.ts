@@ -2,7 +2,8 @@ import { Libraries } from "../Library/Libraries";
 import { env } from "../Environment";
 import { Store } from "../Utility/Store";
 import { AccountClient } from "../Account/AccountClient";
-import { Listable, Listing } from "../Library/Listing";
+import { Listing } from "../Library/Listing";
+import { Listable } from "../../common/Listable";
 
 function getCounts<T extends Listable>(items: Listing<T>[]) {
     const localCount = items.filter(c => c.Origin === "localStorage").length;

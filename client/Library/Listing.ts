@@ -1,5 +1,6 @@
 import { Store } from "../Utility/Store";
 import { KeyValueSet } from "../Utility/Toolbox";
+import { Listable } from "../../common/Listable";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
@@ -39,12 +40,6 @@ export interface ServerListing {
     Link: string;
     Name: string;
     SearchHint: string;
-}
-
-export interface Listable {
-    Id: string;
-    Version: string;
-    Name: string;
 }
 
 export interface Listing<T extends Listable> {

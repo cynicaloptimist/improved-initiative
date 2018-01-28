@@ -2,9 +2,10 @@ import { Libraries } from "../Library/Libraries";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
 import { Spell } from "../Spell/Spell";
-import { Listing, Listable } from "../Library/Listing";
+import { Listing } from "../Library/Listing";
 import { Settings } from "../Settings/Settings";
 import { env } from "../Environment";
+import { Listable } from "../../common/Listable";
 
 const BATCH_SIZE = 10;
 export class AccountClient {
