@@ -26,8 +26,6 @@ export interface SavedTag {
 export interface SavedEncounter<T> extends Listable {
     ActiveCombatantId: string;
     RoundCounter?: number;
-    DisplayTurnTimer?: boolean;
-    AllowPlayerSuggestions?: boolean;
     Combatants: T[];
 }
 

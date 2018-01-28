@@ -276,8 +276,6 @@ export class Encounter {
             Id: this.EncounterId,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            DisplayTurnTimer: CurrentSettings().PlayerView.DisplayTurnTimer,
-            AllowPlayerSuggestions: CurrentSettings().PlayerView.AllowPlayerSuggestions,
             Combatants: this.Combatants()
                 .filter(c => {
                     if (c.Hidden()) {
