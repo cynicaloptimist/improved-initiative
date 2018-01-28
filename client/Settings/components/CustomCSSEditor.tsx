@@ -20,15 +20,8 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
     constructor(props: CustomCSSEditorProps) {
         super(props);
         this.state = {
-            manualCSS: "",
-            styles: {
-                combatantBackground: "",
-                combatantText: "",
-                font: "",
-                headerBackground: "",
-                headerText: "",
-                mainBackground: ""
-            },
+            manualCSS: this.props.currentCSS,
+            styles: this.props.currentStyles,
             selectedStyle: null
         };
     }
