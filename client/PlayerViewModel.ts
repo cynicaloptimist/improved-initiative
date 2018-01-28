@@ -5,6 +5,7 @@ import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewSettings, PlayerViewCustomStyles } from "../common/PlayerViewSettings";
+import * as Color from "color";
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
@@ -89,8 +90,22 @@ export class PlayerViewModel {
 
 function CSSFrom(customStyles: PlayerViewCustomStyles): string {
     const declarations = [];
+
     if (customStyles.combatantText) {
         declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
     }
+
+    if (customStyles.combatantBackground) {
+        const baseColor = Color(customStyles.combatantBackground);
+        let zebraColor;
+        if (baseColor.isDark()) {
+            zebraColor = baseColor.lighten(0.1).string();
+        } else {
+            zebraColor = baseColor.darken(0.1).string();
+        }
+        declarations.push(`li.combatant { background-color: ${customStyles.combatantBackground}; }`);
+        declarations.push(`li.combatant:nth-child(2n) { background-color: ${zebraColor}; }`);
+    }
+
     return declarations.join(" ");
 }
