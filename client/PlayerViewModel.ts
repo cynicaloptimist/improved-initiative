@@ -7,7 +7,7 @@ import { PlayerView } from "../common/PlayerView";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 
 export class PlayerViewModel {
-    private userStylesheet: HTMLStyleElement;
+    private additionalUserCSS: HTMLStyleElement;
     private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
@@ -31,7 +31,7 @@ export class PlayerViewModel {
 
         this.socket.emit("join encounter", this.encounterId);
 
-        this.InitializeStylesheet();
+        this.InitializeStylesheets();
     }
 
     public LoadEncounterFromServer = (encounterId: string) => {
@@ -41,14 +41,14 @@ export class PlayerViewModel {
         });
     }
 
-    private InitializeStylesheet() {
-        const style = document.createElement("style");
-        style.type = "text/css";
-        this.userStylesheet = document.getElementsByTagName("head")[0].appendChild(style);
+    private InitializeStylesheets() {
+        const additionalCSSElement = document.createElement("style");
+        additionalCSSElement.type = "text/css";
+        this.additionalUserCSS = document.getElementsByTagName("head")[0].appendChild(additionalCSSElement);
     }
 
     private LoadSettings(settings: PlayerViewSettings) {
-        this.userStylesheet.innerHTML = settings.CustomCSS;
+        this.additionalUserCSS.innerHTML = settings.CustomCSS;
         this.allowSuggestions(settings.AllowPlayerSuggestions);
         this.turnTimerVisible(settings.DisplayTurnTimer);
         this.roundCounterVisible(settings.DisplayRoundCounter);
