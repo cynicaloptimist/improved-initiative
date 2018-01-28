@@ -4,7 +4,7 @@ import { TurnTimer } from "./Widgets/TurnTimer";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { PlayerView } from "../common/PlayerView";
-import { PlayerViewSettings } from "../common/PlayerViewSettings";
+import { PlayerViewSettings, PlayerViewCustomStyles } from "../common/PlayerViewSettings";
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
@@ -53,6 +53,7 @@ export class PlayerViewModel {
     }
 
     private LoadSettings(settings: PlayerViewSettings) {
+        this.userStyles.innerHTML = CSSFrom(settings.CustomStyles);
         this.additionalUserCSS.innerHTML = settings.CustomCSS;
         this.allowSuggestions(settings.AllowPlayerSuggestions);
         this.turnTimerVisible(settings.DisplayTurnTimer);
@@ -84,4 +85,8 @@ export class PlayerViewModel {
         }
         this.combatantSuggestor.Show(combatant);
     }
+}
+
+function CSSFrom(customStyles: PlayerViewCustomStyles): string {
+    return "";
 }
