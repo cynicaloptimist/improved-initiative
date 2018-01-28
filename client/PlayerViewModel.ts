@@ -4,6 +4,7 @@ import { TurnTimer } from "./Widgets/TurnTimer";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { PlayerView } from "../common/PlayerView";
+import { PlayerViewSettings } from "../common/PlayerViewSettings";
 
 export class PlayerViewModel {
     private userStylesheet: HTMLStyleElement;
@@ -20,11 +21,11 @@ export class PlayerViewModel {
     private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
     constructor() {
-        this.socket.on("encounter updated", (encounter) => {
+        this.socket.on("encounter updated", (encounter: SavedEncounter<StaticCombatantViewModel>) => {
             this.LoadEncounter(encounter);
         });
-        this.socket.on("custom CSS updated", (customCSS: string) => {
-            this.LoadStylesheet(customCSS);
+        this.socket.on("settings updated", (settings: PlayerViewSettings) => {
+            this.LoadSettings(settings);
         });
 
         this.socket.emit("join encounter", this.encounterId);
@@ -35,7 +36,7 @@ export class PlayerViewModel {
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
             this.LoadEncounter(playerView.encounterState);
-            this.LoadStylesheet(playerView.customCSS);
+            this.LoadSettings(playerView.settings);
         });
     }
 
@@ -45,16 +46,17 @@ export class PlayerViewModel {
         this.userStylesheet = document.getElementsByTagName("head")[0].appendChild(style);
     }
 
-    private LoadStylesheet(css: string) {
-        this.userStylesheet.innerHTML = css;
+    private LoadSettings(settings: PlayerViewSettings) {
+        this.userStylesheet.innerHTML = settings.CustomCSS;
+        this.turnTimerVisible(settings.DisplayTurnTimer);
+        if (!settings.DisplayRoundCounter) {
+            this.roundCounter(null);
+        }
+        this.allowSuggestions(settings.AllowPlayerSuggestions);
     }
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
-        this.turnTimerVisible(encounter.DisplayTurnTimer);
-        this.roundCounter(encounter.RoundCounter);
-        this.allowSuggestions(encounter.AllowPlayerSuggestions);
-
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
             this.turnTimer.Reset();
         }

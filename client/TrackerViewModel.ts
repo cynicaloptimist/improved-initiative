@@ -42,9 +42,9 @@ export class TrackerViewModel {
         const playerViewClient = new PlayerViewClient(this.Socket);
         playerViewClient.JoinEncounter(this.Encounter.EncounterId);
         playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
-        playerViewClient.UpdateCSS(this.Encounter.EncounterId, CurrentSettings().PlayerView.CustomCSS);
+        playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
         CurrentSettings.subscribe(v => {
-            playerViewClient.UpdateCSS(this.Encounter.EncounterId, v.PlayerView.CustomCSS);
+            playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
         this.AccountClient.GetAccount(account => {

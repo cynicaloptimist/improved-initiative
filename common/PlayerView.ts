@@ -1,4 +1,6 @@
+import { PlayerViewSettings } from "../common/PlayerViewSettings";
+
 export interface PlayerView {
     encounterState: any;
-    customCSS: string;
+    settings: PlayerViewSettings;
 }

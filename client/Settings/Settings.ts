@@ -1,27 +1,9 @@
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 import { Command } from "../Commands/Command";
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 
 export const CurrentSettings = ko.observable<Settings>();
-
-export interface PlayerViewSettings {
-    AllowPlayerSuggestions: boolean;
-    MonsterHPVerbosity: string;
-    HideMonstersOutsideEncounter: boolean;
-    DisplayRoundCounter: boolean;
-    DisplayTurnTimer: boolean;
-    CustomCSS: string;
-    CustomStyles: PlayerViewCustomStyles;
-}
-
-export interface PlayerViewCustomStyles {
-    mainBackground: string;
-    combatantBackground: string;
-    combatantText: string;
-    headerBackground: string;
-    headerText: string;
-    font: string;
-}
 
 export interface Settings {
     Commands: CommandSetting[];

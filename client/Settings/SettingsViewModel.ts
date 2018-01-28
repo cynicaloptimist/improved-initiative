@@ -1,6 +1,6 @@
 import { Command } from "../Commands/Command";
 import { Store } from "../Utility/Store";
-import { Settings, CurrentSettings, hpVerbosityOptions, PlayerViewCustomStyles } from "./Settings";
+import { Settings, CurrentSettings, hpVerbosityOptions } from "./Settings";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { AccountClient } from "../Account/AccountClient";
 import { AccountViewModel } from "../Settings/AccountViewModel";
@@ -8,6 +8,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Libraries } from "../Library/Libraries";
 import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
+import { PlayerViewSettings, PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
 import * as React from "react";
 
 const tips = [

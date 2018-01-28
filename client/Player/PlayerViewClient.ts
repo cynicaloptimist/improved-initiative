@@ -1,6 +1,6 @@
 import { SavedEncounter } from "../Encounter/SavedEncounter";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
-
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 
 export class PlayerViewClient {
     constructor(private socket: SocketIOClient.Socket) { }
@@ -13,7 +13,7 @@ export class PlayerViewClient {
         this.socket.emit("update encounter", encounterId, updatedEncounter);
     }
 
-    public UpdateCSS(encounterId: string, updatedCSS: string) {
-        this.socket.emit("update custom CSS", encounterId, updatedCSS);
+    public UpdateSettings(encounterId: string, updatedSettings: PlayerViewSettings) {
+        this.socket.emit("update settings", encounterId, updatedSettings);
     }
 }

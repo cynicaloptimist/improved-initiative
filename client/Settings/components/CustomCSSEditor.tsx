@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
 import { SketchPicker, ColorResult } from "react-color";
-import { PlayerViewCustomStyles } from "../Settings";
+import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
 
 export interface CustomCSSEditorProps {
     currentCSS: string;

@@ -1,4 +1,5 @@
 import { PlayerView } from "../common/PlayerView";
+import { PlayerViewSettings } from "../client/Settings/Settings";
 
 export default function (io: SocketIO.Server, playerViews: { [encounterId: string]: PlayerView }) {
     io.on("connection", function (socket: SocketIO.Socket) {
@@ -11,7 +12,7 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
             if (playerViews[encounterId] === undefined) {
                 playerViews[encounterId] = {
                     encounterState: null,
-                    customCSS: ""
+                    settings: null
                 };
             }
         }
@@ -22,10 +23,10 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
             socket.broadcast.to(encounterId).emit("encounter updated", updatedEncounter);
         });
 
-        socket.on("update custom CSS", (id: string, updatedCSS: string) => {
+        socket.on("update settings", (id: string, updatedSettings: PlayerViewSettings) => {
             joinEncounter(id);
-            playerViews[encounterId].customCSS = updatedCSS;
-            socket.broadcast.to(encounterId).emit("custom CSS updated", updatedCSS);
+            playerViews[encounterId].settings = updatedSettings;
+            socket.broadcast.to(encounterId).emit("settings updated", updatedSettings);
         });
 
         socket.on("join encounter", function (id: string) {
