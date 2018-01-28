@@ -88,5 +88,9 @@ export class PlayerViewModel {
 }
 
 function CSSFrom(customStyles: PlayerViewCustomStyles): string {
-    return "";
+    const declarations = [];
+    if (customStyles.combatantText) {
+        declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
+    }
+    return declarations.join(" ");
 }
