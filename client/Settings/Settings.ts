@@ -189,6 +189,8 @@ export function InitializeSettings() {
         const legacySettings = getLegacySettings();
         CurrentSettings(legacySettings);
     }
+
+    Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
 }
 
 export function ConfigureCommands(commands: Command[]) {
