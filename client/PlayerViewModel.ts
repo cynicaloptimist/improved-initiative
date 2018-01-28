@@ -12,6 +12,7 @@ export class PlayerViewModel {
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
+    private roundCounterVisible = ko.observable(false);
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
@@ -48,15 +49,14 @@ export class PlayerViewModel {
 
     private LoadSettings(settings: PlayerViewSettings) {
         this.userStylesheet.innerHTML = settings.CustomCSS;
-        this.turnTimerVisible(settings.DisplayTurnTimer);
-        if (!settings.DisplayRoundCounter) {
-            this.roundCounter(null);
-        }
         this.allowSuggestions(settings.AllowPlayerSuggestions);
+        this.turnTimerVisible(settings.DisplayTurnTimer);
+        this.roundCounterVisible(settings.DisplayRoundCounter);
     }
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
+        this.roundCounter(encounter.RoundCounter);
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
             this.turnTimer.Reset();
         }

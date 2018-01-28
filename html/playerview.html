@@ -44,10 +44,10 @@
         </li>
         <!-- /ko -->
     </ul>
-    <!-- ko if: (roundCounter() || turnTimerVisible()) -->
+    <!-- ko if: (roundCounterVisible() || turnTimerVisible()) -->
     <div class="combat-footer">
         <span class="turn-timer" data-bind="visible: turnTimerVisible, text: turnTimer.Readout"></span>
-        <span class="round-counter" data-bind="visible: roundCounter">Current Round: <span data-bind="text: roundCounter"></span></span>
+        <span class="round-counter" data-bind="visible: roundCounterVisible">Current Round: <span data-bind="text: roundCounter"></span></span>
     </div>
     <!-- /ko -->
 </body>
