@@ -13,6 +13,7 @@ export interface CustomCSSEditorProps {
 interface State {
     manualCSS: string;
     combatantTextColor: string;
+    selectedStyle: keyof PlayerViewCustomStyles | null;
 }
 
 export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State> {
@@ -21,6 +22,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
         this.state = {
             manualCSS: "",
             combatantTextColor: "",
+            selectedStyle: "combatantText"
         };
     }
 
@@ -33,6 +35,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
         this.setState({
             combatantTextColor: color.hex
         });
+        this.props.updateStyle(this.state.selectedStyle, color.hex);
     }
 
     public render() {
@@ -40,7 +43,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
             <p>Epic Initiative is enabled.</p>
             <h4>Colors</h4>
             <p>Combatant Text: <ColorBlock color={this.state.combatantTextColor} /></p>
-            <SketchPicker width="210px" />
+            <SketchPicker width="210px" onChangeComplete={this.handleChangeComplete} />
             <h4>Additional CSS</h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
         </div>;
@@ -54,9 +57,10 @@ class ColorBlock extends React.Component<{ color: string }, {}> {
     public render() {
         const style = {
             display: "inline-block",
-            width: "20px",
-            height: "20px",
+            width: "18px",
+            height: "18px",
             border: "1px black solid",
+            verticalAlign: "middle",
             backgroundColor: this.props.color
         };
         return <span style={style} />;
