@@ -43,7 +43,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
             <p>Epic Initiative is enabled.</p>
             <h4>Colors</h4>
             <p>Combatant Text: <ColorBlock color={this.state.combatantTextColor} /></p>
-            <SketchPicker width="210px" onChangeComplete={this.handleChangeComplete} />
+            <SketchPicker width="210px" color={this.state.combatantTextColor} onChangeComplete={this.handleChangeComplete} />
             <h4>Additional CSS</h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
         </div>;
