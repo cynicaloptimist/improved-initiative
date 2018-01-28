@@ -8,6 +8,7 @@ import { PlayerViewSettings } from "../common/PlayerViewSettings";
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
+    private userStyles: HTMLStyleElement;
     private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
@@ -42,9 +43,13 @@ export class PlayerViewModel {
     }
 
     private InitializeStylesheets() {
+        const userStylesElement = document.createElement("style");
         const additionalCSSElement = document.createElement("style");
+        userStylesElement.type = "text/css";
         additionalCSSElement.type = "text/css";
-        this.additionalUserCSS = document.getElementsByTagName("head")[0].appendChild(additionalCSSElement);
+        const headElement = document.getElementsByTagName("head")[0];
+        this.userStyles = headElement.appendChild(userStylesElement);
+        this.additionalUserCSS = headElement.appendChild(additionalCSSElement);
     }
 
     private LoadSettings(settings: PlayerViewSettings) {
