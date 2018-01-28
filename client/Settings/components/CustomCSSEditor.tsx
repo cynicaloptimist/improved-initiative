@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
-import { SketchPicker, ColorResult, SketchPickerProps } from "react-color";
+import { SketchPicker, ColorResult } from "react-color";
 import { PlayerViewCustomStyles } from "../Settings";
 
 export interface CustomCSSEditorProps {
@@ -53,10 +53,12 @@ class ColorBlock extends React.Component<{ color: string }, {}> {
     }
     public render() {
         const style = {
+            display: "inline-block",
             width: "20px",
             height: "20px",
+            border: "1px black solid",
             backgroundColor: this.props.color
         };
-        return <div style={style} />;
+        return <span style={style} />;
     }
 }
