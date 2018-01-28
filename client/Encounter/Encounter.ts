@@ -12,7 +12,7 @@ import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
 import { AccountClient } from "../Account/AccountClient";
-import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
+import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
 import { CurrentSettings } from "../Settings/Settings";
 import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
@@ -286,7 +286,7 @@ export class Encounter {
                     }
                     return true;
                 })
-                .map<StaticCombatantViewModel>(c => new StaticCombatantViewModel(c)),
+                .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
             Version: "1.0.0"
         };
     }
