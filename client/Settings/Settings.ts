@@ -4,6 +4,16 @@ import { Command } from "../Commands/Command";
 
 export const CurrentSettings = ko.observable<Settings>();
 
+export interface PlayerViewSettings {
+    AllowPlayerSuggestions: boolean;
+    MonsterHPVerbosity: string;
+    HideMonstersOutsideEncounter: boolean;
+    DisplayRoundCounter: boolean;
+    DisplayTurnTimer: boolean;
+    CustomCSS: string;
+    CustomStyles: PlayerViewCustomStyles;
+}
+
 export interface PlayerViewCustomStyles {
     mainBackground: string;
     combatantBackground: string;
@@ -25,15 +35,7 @@ export interface Settings {
         DisplayTurnTimer: boolean;
         DisplayDifficulty: boolean;
     };
-    PlayerView: {
-        AllowPlayerSuggestions: boolean;
-        MonsterHPVerbosity: string;
-        HideMonstersOutsideEncounter: boolean;
-        DisplayRoundCounter: boolean;
-        DisplayTurnTimer: boolean;
-        CustomCSS: string;
-        CustomStyles: PlayerViewCustomStyles;
-    };
+    PlayerView: PlayerViewSettings;
     Version: string;
 }
 
