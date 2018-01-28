@@ -165,8 +165,8 @@ export class SettingsViewModel {
     }
 
     private createCustomCSSEditorComponent(currentSettings: Settings) {
-        const currentCSS = currentSettings.PlayerView.CustomCSS;
-        const currentStyles = currentSettings.PlayerView.CustomStyles;
+        this.currentCSS = currentSettings.PlayerView.CustomCSS;
+        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
         const updateCSS = (css: string) => {
             this.currentCSS = css;
         };
@@ -175,8 +175,8 @@ export class SettingsViewModel {
         };
 
         const customCSSEditorProps: CustomCSSEditorProps = {
-            currentCSS,
-            currentStyles,
+            currentCSS: this.currentCSS,
+            currentStyles: this.currentCustomStyles,
             updateCSS,
             updateStyle
         };
