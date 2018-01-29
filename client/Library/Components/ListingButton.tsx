@@ -1,13 +1,13 @@
 import * as React from "react";
 
-export interface ButtonProps {
+interface Props {
     text?: string;
     faClass?: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
 }
 
-export class Button extends React.Component<ButtonProps> {
+export class ListingButton extends React.Component<Props> {
     public render() {
         const text = this.props.text || "";
         const className = this.props.faClass ? `fa fa-${this.props.faClass}` : "fa";
