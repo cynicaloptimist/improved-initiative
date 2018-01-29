@@ -19,6 +19,6 @@ export class ColorBlock extends React.Component<ColorBlockProps, {}> {
         if (this.props.selected) {
             className += " s-selected";
         }
-        return <span className="c-color-block" style={style} onClick={this.props.click} />;
+        return <span className={className} style={style} onClick={this.props.click} />;
     }
 }
