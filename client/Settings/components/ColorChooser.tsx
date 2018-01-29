@@ -45,7 +45,7 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
     }
 
     private getLabelAndOption(label: string, style: keyof PlayerViewCustomStyles) {
-        return <p>{label}: <ColorBlock color={this.state.styles[style]} click={this.bindClickToSelectStyle(style)} /></p>;
+        return <p>{label}: <ColorBlock color={this.state.styles[style]} click={this.bindClickToSelectStyle(style)} selected={this.state.selectedStyle == style} /></p>;
     }
 
     public render() {
