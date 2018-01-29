@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
+import { Button } from "../../Components/Button";
 import { ColorBlock } from "./ColorBlock";
 
 interface ColorChooserProps {
@@ -34,6 +35,15 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
         return () => this.setState({ selectedStyle: style });
     }
 
+    private clearSelectedStyle = () => {
+        const updatedState = {
+            styles: { ...this.state.styles, [this.state.selectedStyle]: "" }
+        };
+
+        this.setState(updatedState);
+        this.props.updateStyle(this.state.selectedStyle, "");
+    }
+
     public render() {
         return <div className="c-color-chooser">
             <div>
@@ -42,8 +52,15 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
                 <p>Background: <ColorBlock color={this.state.styles.combatantBackground} click={this.bindClickToSelectStyle("combatantBackground")} /></p>
                 <p>Header Text: <ColorBlock color={this.state.styles.headerText} click={this.bindClickToSelectStyle("headerText")} /></p>
                 <p>Background: <ColorBlock color={this.state.styles.headerBackground} click={this.bindClickToSelectStyle("headerBackground")} /></p>
-            <p>Main Background: <ColorBlock color={this.state.styles.mainBackground} click={this.bindClickToSelectStyle("mainBackground")} /></p>
-            {this.state.selectedStyle !== null && <SketchPicker width="210px" color={this.state.styles[this.state.selectedStyle]} onChangeComplete={this.handleChangeComplete} />}
+                <p>Main Background: <ColorBlock color={this.state.styles.mainBackground} click={this.bindClickToSelectStyle("mainBackground")} /></p>
+            </div>
+            {
+                this.state.selectedStyle !== null &&
+                <div>
+                    <SketchPicker width="210px" color={this.state.styles[this.state.selectedStyle]} onChangeComplete={this.handleChangeComplete} />
+                    <Button text="Clear" onClick={this.clearSelectedStyle} />
+                </div>
+            }
         </div>;
     }
 }
