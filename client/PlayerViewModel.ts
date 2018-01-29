@@ -110,5 +110,17 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
         declarations.push(`li.combatant.active { background-color: ${activeColor}; }`);
     }
 
+    if (customStyles.headerText) {
+        declarations.push(`.combatant.header, .combat-footer { color: ${customStyles.headerText}; }`);
+    }
+
+    if (customStyles.headerBackground) {
+        declarations.push(`.combatant.header, .combat-footer { background-color: ${customStyles.headerBackground}; border-color: ${customStyles.headerBackground} }`);
+    }
+
+    if (customStyles.mainBackground) {
+        declarations.push(`#playerview { background-color: ${customStyles.mainBackground}; background-image: none; }`);
+    }
+
     return declarations.join(" ");
 }
