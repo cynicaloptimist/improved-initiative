@@ -1,7 +1,7 @@
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
 import * as React from "react";
 import { ColorResult, SketchPicker } from "react-color";
-import { ColorBlock } from "./CustomCSSEditor";
+import { ColorBlock } from "./ColorBlock";
 
 interface ColorChooserProps {
     currentStyles: PlayerViewCustomStyles;
