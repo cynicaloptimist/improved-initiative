@@ -110,6 +110,10 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
         declarations.push(`li.combatant.active { background-color: ${activeColor}; }`);
     }
 
+    if (customStyles.activeCombatantIndicator) {
+        declarations.push(`.combatant.active { border-color: ${customStyles.activeCombatantIndicator} }`);
+    }
+
     if (customStyles.headerText) {
         declarations.push(`.combatant.header, .combat-footer { color: ${customStyles.headerText}; }`);
     }

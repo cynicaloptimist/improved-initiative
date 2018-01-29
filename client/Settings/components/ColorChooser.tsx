@@ -54,6 +54,7 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
                 <h4>Colors</h4>
                 {this.getLabelAndOption("Combatant Text", "combatantText")}
                 {this.getLabelAndOption("Background", "combatantBackground")}
+                {this.getLabelAndOption("Active Combatant Indicator", "activeCombatantIndicator")}
                 {this.getLabelAndOption("Header Text", "headerText")}
                 {this.getLabelAndOption("Background", "headerBackground")}
                 {this.getLabelAndOption("Main Background", "mainBackground")}

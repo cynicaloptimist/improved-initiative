@@ -60,6 +60,7 @@ function getDefaultSettings(): Settings {
             CustomStyles: {
                 combatantBackground: "",
                 combatantText: "",
+                activeCombatantIndicator: "",
                 font: "",
                 headerBackground: "",
                 headerText: "",

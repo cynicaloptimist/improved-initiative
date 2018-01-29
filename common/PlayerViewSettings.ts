@@ -12,6 +12,7 @@ export interface PlayerViewCustomStyles {
     mainBackground: string;
     combatantBackground: string;
     combatantText: string;
+    activeCombatantIndicator: string;
     headerBackground: string;
     headerText: string;
     font: string;
