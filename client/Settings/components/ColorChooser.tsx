@@ -10,7 +10,7 @@ interface ColorChooserProps {
 }
 interface ColorChooserState {
     styles: PlayerViewCustomStyles;
-    selectedStyle: keyof PlayerViewCustomStyles | null;
+    selectedStyle: keyof PlayerViewCustomStyles;
 }
 
 export class ColorChooser extends React.Component<ColorChooserProps, ColorChooserState> {
@@ -18,7 +18,7 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
         super(props);
         this.state = {
             styles: this.props.currentStyles,
-            selectedStyle: null
+            selectedStyle: "combatantText"
         };
     }
 
