@@ -1,7 +1,7 @@
-import { Listing, ServerListing, ListingOrigin } from "./Listing";
+import { AccountClient } from "../Account/AccountClient";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Store } from "../Utility/Store";
-import { AccountClient } from "../Account/AccountClient";
+import { Listing, ListingOrigin, ServerListing } from "./Listing";
 
 export class PCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);

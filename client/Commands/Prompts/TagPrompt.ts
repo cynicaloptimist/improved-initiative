@@ -1,8 +1,8 @@
-import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
+import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Encounter } from "../../Encounter/Encounter";
-import { Tag, EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
 import { Conditions } from "../../Rules/Conditions";
+import { Prompt } from "./Prompt";
 
 export class TagPrompt implements Prompt {
     public InputSelector = ".response";

@@ -1,6 +1,6 @@
-import { StatBlock } from "../StatBlock/StatBlock";
-import { Spell } from "../Spell/Spell";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
 
 export class Store {
     private static _prefix = "ImprovedInitiative";

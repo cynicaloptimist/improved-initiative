@@ -1,13 +1,13 @@
-import { Combatant } from "./Combatant";
 import { CombatantCommander } from "../Commands/CombatantCommander";
-import { Prompt, DefaultPrompt } from "../Commands/Prompts/Prompt";
-import { CurrentSettings } from "../Settings/Settings";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
-import { Encounter } from "../Encounter/Encounter";
+import { DefaultPrompt, Prompt } from "../Commands/Prompts/Prompt";
 import { TagPrompt } from "../Commands/Prompts/TagPrompt";
-import { Tag } from "./Tag";
+import { Encounter } from "../Encounter/Encounter";
+import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { toModifierString } from "../Utility/Toolbox";
+import { Combatant } from "./Combatant";
+import { Tag } from "./Tag";
 
 export class CombatantViewModel {
     public HP: KnockoutComputed<string>;

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { MouseEvent } from "react";
+import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
 import { Button } from "./Button";
-import { Listable } from "../../../common/Listable";
 
 export interface ListingProps<T extends Listable> {
     name: string;

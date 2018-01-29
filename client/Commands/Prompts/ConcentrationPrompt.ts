@@ -1,5 +1,5 @@
-import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
+import { Prompt } from "./Prompt";
 
 export class ConcentrationPrompt implements Prompt {
     public static Tag = "Concentrating";

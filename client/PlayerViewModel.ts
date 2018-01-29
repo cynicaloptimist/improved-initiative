@@ -1,11 +1,11 @@
-import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
-import { env } from "./Environment";
-import { TurnTimer } from "./Widgets/TurnTimer";
-import { CombatantSuggestor } from "./Player/CombatantSuggestor";
-import { SavedEncounter } from "./Encounter/SavedEncounter";
-import { PlayerView } from "../common/PlayerView";
-import { PlayerViewSettings, PlayerViewCustomStyles } from "../common/PlayerViewSettings";
 import * as Color from "color";
+import { PlayerView } from "../common/PlayerView";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
+import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
+import { SavedEncounter } from "./Encounter/SavedEncounter";
+import { env } from "./Environment";
+import { CombatantSuggestor } from "./Player/CombatantSuggestor";
+import { TurnTimer } from "./Widgets/TurnTimer";
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;

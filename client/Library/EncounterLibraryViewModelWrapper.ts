@@ -1,12 +1,12 @@
-import { Listing, DedupeByRankAndFilterListings } from "./Listing";
-import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
+import * as React from "react";
+import { Encounter } from "../Encounter/Encounter";
+import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { EncounterLibrary } from "./EncounterLibrary";
 import { KeyValueSet } from "../Utility/Toolbox";
 import { EncounterLibraryViewModel, EncounterLibraryViewModelProps } from "./Components/EncounterLibraryViewModel";
+import { EncounterLibrary } from "./EncounterLibrary";
+import { DedupeByRankAndFilterListings, Listing } from "./Listing";
 import { StatBlockLibrary } from "./StatBlockLibraryViewModel";
-import { Encounter } from "../Encounter/Encounter";
-import * as React from "react";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 

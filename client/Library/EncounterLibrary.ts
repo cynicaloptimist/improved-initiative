@@ -1,9 +1,9 @@
-import { Listing, ServerListing, ListingOrigin } from "./Listing";
-import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
-import { Store } from "../Utility/Store";
 import { AccountClient } from "../Account/AccountClient";
-import { probablyUniqueString } from "../Utility/Toolbox";
+import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
+import { Store } from "../Utility/Store";
+import { probablyUniqueString } from "../Utility/Toolbox";
+import { Listing, ListingOrigin, ServerListing } from "./Listing";
 
 export class EncounterLibrary {
     public Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);

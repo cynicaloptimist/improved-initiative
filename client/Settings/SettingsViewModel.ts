@@ -1,15 +1,15 @@
-import { Command } from "../Commands/Command";
-import { Store } from "../Utility/Store";
-import { Settings, CurrentSettings, hpVerbosityOptions } from "./Settings";
-import { CommandSetting } from "../Commands/CommandSetting";
-import { AccountClient } from "../Account/AccountClient";
-import { AccountViewModel } from "../Settings/AccountViewModel";
-import { EncounterCommander } from "../Commands/EncounterCommander";
-import { CombatantCommander } from "../Commands/CombatantCommander";
-import { Libraries } from "../Library/Libraries";
-import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
-import { PlayerViewSettings, PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
 import * as React from "react";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { AccountClient } from "../Account/AccountClient";
+import { CombatantCommander } from "../Commands/CombatantCommander";
+import { Command } from "../Commands/Command";
+import { CommandSetting } from "../Commands/CommandSetting";
+import { EncounterCommander } from "../Commands/EncounterCommander";
+import { Libraries } from "../Library/Libraries";
+import { AccountViewModel } from "../Settings/AccountViewModel";
+import { Store } from "../Utility/Store";
+import { hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
+import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 
 const tips = [
     "You can view command list and set keybindings on the 'Commands' tab.",

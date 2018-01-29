@@ -1,6 +1,6 @@
-import { TutorialSteps } from "./TutorialSteps";
-import { Store } from "../Utility/Store";
 import { Metrics } from "../Utility/Metrics";
+import { Store } from "../Utility/Store";
+import { TutorialSteps } from "./TutorialSteps";
 
 export const TutorialSpy = ko.observable<string>(null);
 

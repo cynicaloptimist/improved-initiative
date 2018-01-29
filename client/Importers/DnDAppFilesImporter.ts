@@ -1,7 +1,7 @@
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
 import { SpellImporter } from "./SpellImporter";
 import { StatBlockImporter } from "./StatBlockImporter";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { Spell } from "../Spell/Spell";
 
 const getStatBlocksFromXml = (xmlString: string) => {
     const statBlocks = $(xmlString).find("monster").toArray();

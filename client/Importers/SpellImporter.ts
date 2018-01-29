@@ -1,5 +1,5 @@
-import { Importer } from "./Importer";
 import { Spell } from "../Spell/Spell";
+import { Importer } from "./Importer";
 
 export class SpellImporter extends Importer {
     private static schoolsByInitials = {

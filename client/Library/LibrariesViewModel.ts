@@ -1,7 +1,7 @@
-import { TrackerViewModel } from "../TrackerViewModel";
 import { EncounterCommander } from "../Commands/EncounterCommander";
-import { Libraries } from "./Libraries";
+import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { Libraries } from "./Libraries";
 
 export class LibrariesViewModel {
     public LibraryTabs = [

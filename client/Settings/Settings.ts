@@ -1,7 +1,7 @@
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
-import { Command } from "../Commands/Command";
-import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 
 export const CurrentSettings = ko.observable<Settings>();
 

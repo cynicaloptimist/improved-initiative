@@ -1,12 +1,25 @@
 {
     "rules": {
-        "quotemark": [true, "double"],
+        "quotemark": [
+            true,
+            "double"
+        ],
         "member-access": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-var-keyword": true,
-        "curly": [true, "ignore-same-line"],
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
         "no-use-before-declare": true,
-        "semicolon": true
+        "semicolon": true,
+        "ordered-imports": [
+            true,
+            {
+                "import-sources-order": "lowercase-last",
+                "named-imports-order": "lowercase-first"
+            }
+        ]
     }
 }

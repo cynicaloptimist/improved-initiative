@@ -1,8 +1,8 @@
-import { SettingsViewModel } from "../Settings/SettingsViewModel";
-import { LibrariesViewModel } from "../Library/LibrariesViewModel";
-import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel";
 import { EncounterLibraryViewModelWrapper } from "../Library/EncounterLibraryViewModelWrapper";
+import { LibrariesViewModel } from "../Library/LibrariesViewModel";
 import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
+import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel";
+import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 import { removeFirst } from "./Toolbox";
 

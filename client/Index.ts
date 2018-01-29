@@ -1,10 +1,10 @@
-import { LoadEnvironment, env } from "./Environment";
-import { RegisterComponents } from "./Utility/Components";
-import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
+import { env, LoadEnvironment } from "./Environment";
+import { LauncherViewModel } from "./LauncherViewModel";
+import { PlayerViewModel } from "./PlayerViewModel";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
-import { PlayerViewModel } from "./PlayerViewModel";
-import { LauncherViewModel } from "./LauncherViewModel";
+import { RegisterComponents } from "./Utility/Components";
+import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 
 $(() => {
     LoadEnvironment();

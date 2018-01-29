@@ -1,6 +1,6 @@
-import { Tag } from "./Tag";
-import { Combatant } from "./Combatant";
 import { CurrentSettings } from "../Settings/Settings";
+import { Combatant } from "./Combatant";
+import { Tag } from "./Tag";
 
 export interface StaticCombatantViewModel {
     Name: string;

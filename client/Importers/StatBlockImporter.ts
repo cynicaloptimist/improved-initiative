@@ -1,5 +1,5 @@
-import { Importer } from "./Importer";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
     public getType() {

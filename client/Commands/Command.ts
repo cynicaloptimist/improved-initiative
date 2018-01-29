@@ -1,6 +1,6 @@
 import { Store } from "../Utility/Store";
-import { EncounterCommander } from "./EncounterCommander";
 import { CombatantCommander } from "./CombatantCommander";
+import { EncounterCommander } from "./EncounterCommander";
 
 export class Command {
     public ShowOnActionBar: KnockoutObservable<boolean>;

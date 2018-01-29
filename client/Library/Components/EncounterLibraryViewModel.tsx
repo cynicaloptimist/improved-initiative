@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ListingViewModel } from "./Listing";
-import { EncounterLibrary } from "../EncounterLibrary";
-import { SavedEncounter, SavedCombatant } from "../../Encounter/SavedEncounter";
-import { Listing, DedupeByRankAndFilterListings } from "../Listing";
+import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../../TrackerViewModel";
-import { LibraryFilter } from "./LibraryFilter";
+import { EncounterLibrary } from "../EncounterLibrary";
+import { DedupeByRankAndFilterListings, Listing } from "../Listing";
 import { Button } from "./Button";
+import { LibraryFilter } from "./LibraryFilter";
+import { ListingViewModel } from "./Listing";
 
 export type EncounterLibraryViewModelProps = {
     tracker: TrackerViewModel;

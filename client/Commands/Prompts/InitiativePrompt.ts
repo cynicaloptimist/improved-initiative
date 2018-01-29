@@ -1,7 +1,7 @@
-import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { toModifierString } from "../../Utility/Toolbox";
+import { Prompt } from "./Prompt";
 
 export class InitiativePrompt implements Prompt {
     public InputSelector = ".response";

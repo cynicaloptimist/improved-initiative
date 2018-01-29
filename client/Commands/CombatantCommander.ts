@@ -1,14 +1,14 @@
-import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { DefaultPrompt } from "./Prompts/Prompt";
-import { TrackerViewModel } from "../TrackerViewModel";
-import { BuildCombatantCommandList, Command } from "./Command";
-import { Store } from "../Utility/Store";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { CurrentSettings } from "../Settings/Settings";
-import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { Combatant } from "../Combatant/Combatant";
-import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { CurrentSettings } from "../Settings/Settings";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { Store } from "../Utility/Store";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { BuildCombatantCommandList, Command } from "./Command";
+import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
+import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
+import { DefaultPrompt } from "./Prompts/Prompt";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;

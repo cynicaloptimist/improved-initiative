@@ -1,6 +1,6 @@
+import { Listable } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 import { KeyValueSet } from "../Utility/Toolbox";
-import { Listable } from "../../common/Listable";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 

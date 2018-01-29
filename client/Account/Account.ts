@@ -1,5 +1,5 @@
-import { Settings } from "../Settings/Settings";
 import { ServerListing } from "../Library/Listing";
+import { Settings } from "../Settings/Settings";
 
 export interface Account {
     settings: Settings;

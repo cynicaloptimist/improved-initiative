@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
-import { SketchPicker, ColorResult } from "react-color";
+import { ColorResult, SketchPicker } from "react-color";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
 import { ColorChooser } from "./ColorChooser";
 

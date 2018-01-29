@@ -1,21 +1,21 @@
-import { IRules, DefaultRules } from "../Rules/Rules";
-import { Combatant } from "../Combatant/Combatant";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { EncounterDifficulty, DifficultyCalculator } from "../Widgets/DifficultyCalculator";
-import { Store } from "../Utility/Store";
-import { SavedEncounter, SavedCombatant } from "./SavedEncounter";
-import { env } from "../Environment";
-import { PromptQueue } from "../Commands/Prompts/PromptQueue";
-import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { TurnTimer } from "../Widgets/TurnTimer";
-import { Metrics } from "../Utility/Metrics";
-import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
-import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
 import { AccountClient } from "../Account/AccountClient";
+import { Combatant } from "../Combatant/Combatant";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
-import { CurrentSettings } from "../Settings/Settings";
-import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
+import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
+import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
+import { PromptQueue } from "../Commands/Prompts/PromptQueue";
+import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
+import { DefaultRules, IRules } from "../Rules/Rules";
+import { CurrentSettings } from "../Settings/Settings";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { Metrics } from "../Utility/Metrics";
+import { Store } from "../Utility/Store";
+import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
+import { TurnTimer } from "../Widgets/TurnTimer";
+import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
+import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;

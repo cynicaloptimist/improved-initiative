@@ -1,12 +1,12 @@
+import { createElement } from "react";
+import { render as renderReact } from "react-dom";
+import { EncounterCommander } from "../Commands/EncounterCommander";
+import { SpellLibrary } from "../Library/SpellLibrary";
+import { Dice, IRules } from "../Rules/Rules";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { ComponentLoader } from "./Components";
 import { TextAssets } from "./TextAssets";
-import { IRules, Dice } from "../Rules/Rules";
-import { EncounterCommander } from "../Commands/EncounterCommander";
-import { SpellLibrary } from "../Library/SpellLibrary";
 import { toModifierString } from "./Toolbox";
-import { createElement } from "react";
-import { render as renderReact } from "react-dom";
 
 declare var markdownit: any;
 declare var Awesomplete: any;

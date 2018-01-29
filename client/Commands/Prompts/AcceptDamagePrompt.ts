@@ -1,6 +1,6 @@
-import { Prompt } from "./Prompt";
 import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
 import { TrackerViewModel } from "../../TrackerViewModel";
+import { Prompt } from "./Prompt";
 
 export class AcceptDamagePrompt implements Prompt {
     public InputSelector = ".acceptfull";

@@ -1,5 +1,5 @@
-import { Combatant } from "./Combatant";
 import { SavedTag } from "../Encounter/SavedEncounter";
+import { Combatant } from "./Combatant";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";
 export const EndOfTurn: DurationTiming = "EndOfTurn";

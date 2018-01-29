@@ -1,20 +1,20 @@
-import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { Account } from "./Account/Account";
-import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { EventLog } from "./Widgets/EventLog";
-import { Libraries } from "./Library/Libraries";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
-import { SpellEditor } from "./StatBlockEditor/SpellEditor";
-import { EncounterCommander } from "./Commands/EncounterCommander";
-import { CombatantCommander } from "./Commands/CombatantCommander";
 import { AccountClient } from "./Account/AccountClient";
-import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { Combatant } from "./Combatant/Combatant";
+import { CombatantViewModel } from "./Combatant/CombatantViewModel";
+import { CombatantCommander } from "./Commands/CombatantCommander";
+import { EncounterCommander } from "./Commands/EncounterCommander";
+import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
-import { Store } from "./Utility/Store";
-import { Metrics } from "./Utility/Metrics";
 import { env } from "./Environment";
+import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import { SpellEditor } from "./StatBlockEditor/SpellEditor";
+import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { Metrics } from "./Utility/Metrics";
+import { Store } from "./Utility/Store";
+import { EventLog } from "./Widgets/EventLog";
 
 interface PatreonPostAttributes {
     title: string;

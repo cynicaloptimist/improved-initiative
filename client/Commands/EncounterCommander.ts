@@ -1,18 +1,18 @@
-import { Command, BuildEncounterCommandList } from "./Command";
-import { Libraries } from "../Library/Libraries";
 import { AccountClient } from "../Account/AccountClient";
-import { TrackerViewModel } from "../TrackerViewModel";
+import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { Store } from "../Utility/Store";
-import { Spell } from "../Spell/Spell";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Dice } from "../Rules/Rules";
+import { CurrentSettings } from "../Settings/Settings";
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { ComponentLoader } from "../Utility/Components";
+import { Store } from "../Utility/Store";
+import { probablyUniqueString } from "../Utility/Toolbox";
+import { BuildEncounterCommandList, Command } from "./Command";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
-import { CurrentSettings } from "../Settings/Settings";
-import { ComponentLoader } from "../Utility/Components";
-import { probablyUniqueString } from "../Utility/Toolbox";
 
 export class EncounterCommander {
     public Commands: Command[];

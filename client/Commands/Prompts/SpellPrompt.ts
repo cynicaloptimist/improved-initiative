@@ -1,6 +1,6 @@
-import { Prompt } from "./Prompt";
-import { Spell } from "../../Spell/Spell";
 import { Listing } from "../../Library/Listing";
+import { Spell } from "../../Spell/Spell";
+import { Prompt } from "./Prompt";
 
 const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
 
