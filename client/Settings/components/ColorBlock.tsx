@@ -6,13 +6,8 @@ export class ColorBlock extends React.Component<{ color: string, click: () => vo
     }
     public render() {
         const style = {
-            display: "inline-block",
-            width: "18px",
-            height: "18px",
-            border: "1px black solid",
-            verticalAlign: "middle",
             backgroundColor: this.props.color
         };
-        return <span style={style} onClick={this.props.click} />;
+        return <span className="c-colorBlock" style={style} onClick={this.props.click} />;
     }
 }
