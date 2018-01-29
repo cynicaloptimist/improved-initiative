@@ -157,6 +157,20 @@ input, textarea {
     }
 }
 
+#tracker .combatant {
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-light;
+    }
+
+    .hp:hover {
+        background-color: @hover-red;
+    }
+}
+
 .combatant {
     .colors(@primary-black, @primary-white, transparent);
 
@@ -167,18 +181,6 @@ input, textarea {
     &.active {
         border-color: @active-green;
         background-color: @active-white;
-    }
-
-    &:hover {
-        background-color: @hover-white;
-    }
-
-    &.selected {
-        background-color: @selected-light;
-    }
-
-    .hp:hover:not(.disable-hover) {
-        background-color: @hover-red;
     }
 
     &.header {
