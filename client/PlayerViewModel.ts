@@ -97,14 +97,17 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
 
     if (customStyles.combatantBackground) {
         const baseColor = Color(customStyles.combatantBackground);
-        let zebraColor;
+        let zebraColor = "", activeColor = "";
         if (baseColor.isDark()) {
             zebraColor = baseColor.lighten(0.1).string();
+            activeColor = baseColor.lighten(0.2).string();
         } else {
             zebraColor = baseColor.darken(0.1).string();
+            activeColor = baseColor.darken(0.2).string();
         }
         declarations.push(`li.combatant { background-color: ${customStyles.combatantBackground}; }`);
         declarations.push(`li.combatant:nth-child(2n) { background-color: ${zebraColor}; }`);
+        declarations.push(`li.combatant.active { background-color: ${activeColor}; }`);
     }
 
     return declarations.join(" ");
