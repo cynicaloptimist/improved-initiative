@@ -928,12 +928,24 @@ body>.login.button {
     }
 }
 
-.c-colorBlock {
+.c-color-block {
+    cursor: pointer;
     display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 1px black solid;
+    width: 16px;
+    height: 16px;
+    border: 1px black solid;//todo: move
+    border-radius: 3px;
     vertical-align: middle;
+    margin: @small-spacer @medium-spacer @medium-spacer @small-spacer;
+
+    &:hover {
+        border-color: white;//todo: move
+    }
+}
+
+.c-color-chooser {
+    flex-flow: row;
+    
 }
 
 @import "responsive.less";

@@ -8,6 +8,6 @@ export class ColorBlock extends React.Component<{ color: string, click: () => vo
         const style = {
             backgroundColor: this.props.color
         };
-        return <span className="c-colorBlock" style={style} onClick={this.props.click} />;
+        return <span className="c-color-block" style={style} onClick={this.props.click} />;
     }
 }
