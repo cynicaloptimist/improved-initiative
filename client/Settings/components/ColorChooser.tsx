@@ -44,15 +44,19 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
         this.props.updateStyle(this.state.selectedStyle, "");
     }
 
+    private getLabelAndOption(label: string, style: keyof PlayerViewCustomStyles) {
+        return <p>{label}: <ColorBlock color={this.state.styles[style]} click={this.bindClickToSelectStyle(style)} /></p>;
+    }
+
     public render() {
         return <div className="c-color-chooser">
             <div>
                 <h4>Colors</h4>
-                <p>Combatant Text: <ColorBlock color={this.state.styles.combatantText} click={this.bindClickToSelectStyle("combatantText")} /></p>
-                <p>Background: <ColorBlock color={this.state.styles.combatantBackground} click={this.bindClickToSelectStyle("combatantBackground")} /></p>
-                <p>Header Text: <ColorBlock color={this.state.styles.headerText} click={this.bindClickToSelectStyle("headerText")} /></p>
-                <p>Background: <ColorBlock color={this.state.styles.headerBackground} click={this.bindClickToSelectStyle("headerBackground")} /></p>
-                <p>Main Background: <ColorBlock color={this.state.styles.mainBackground} click={this.bindClickToSelectStyle("mainBackground")} /></p>
+                {this.getLabelAndOption("Combatant Text", "combatantText")}
+                {this.getLabelAndOption("Background", "combatantBackground")}
+                {this.getLabelAndOption("Header Text", "headerText")}
+                {this.getLabelAndOption("Background", "headerBackground")}
+                {this.getLabelAndOption("Main Background", "mainBackground")}
             </div>
             {
                 this.state.selectedStyle !== null &&
