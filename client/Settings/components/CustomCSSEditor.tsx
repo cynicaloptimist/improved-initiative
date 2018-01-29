@@ -50,6 +50,9 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
             <h4>Colors</h4>
             <p>Combatant Text: <ColorBlock color={this.state.styles.combatantText} click={this.bindClickToSelectStyle("combatantText")} /></p>
             <p>Combatant Background: <ColorBlock color={this.state.styles.combatantBackground} click={this.bindClickToSelectStyle("combatantBackground")} /></p>
+            <p>Header Text: <ColorBlock color={this.state.styles.headerText} click={this.bindClickToSelectStyle("headerText")} /></p>
+            <p>Header Background: <ColorBlock color={this.state.styles.headerBackground} click={this.bindClickToSelectStyle("headerBackground")} /></p>
+            <p>Main Background: <ColorBlock color={this.state.styles.mainBackground} click={this.bindClickToSelectStyle("mainBackground")} /></p>
             {this.state.selectedStyle !== null && <SketchPicker width="210px" color={this.state.styles[this.state.selectedStyle]} onChangeComplete={this.handleChangeComplete} />}
             <h4>Additional CSS</h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
