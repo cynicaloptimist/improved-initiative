@@ -1,5 +1,5 @@
 import { PlayerView } from "../common/PlayerView";
-import { PlayerViewSettings } from "../client/Settings/Settings";
+import { PlayerViewSettings } from "../common/PlayerViewSettings";
 
 export default function (io: SocketIO.Server, playerViews: { [encounterId: string]: PlayerView }) {
     io.on("connection", function (socket: SocketIO.Socket) {
