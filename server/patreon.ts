@@ -1,6 +1,6 @@
 import express = require("express");
-import request = require("request");
 import patreon = require("patreon");
+import request = require("request");
 import * as DB from "./dbconnection";
 
 import { User } from "./user";

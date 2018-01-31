@@ -1,17 +1,17 @@
-import request = require("request");
-import express = require("express");
 import bodyParser = require("body-parser");
-import mustacheExpress = require("mustache-express");
-import session = require("express-session");
 import dbSession = require("connect-mongodb-session");
+import express = require("express");
+import session = require("express-session");
+import mustacheExpress = require("mustache-express");
+import request = require("request");
 
-import { Library } from "./library";
-import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
-import { upsertUser } from "./dbconnection";
-import configureStorageRoutes from "./storageroutes";
-import configureMetricsRoutes from "./metrics";
-import { StatBlock } from "../client/StatBlock/StatBlock";
 import { Spell } from "../client/Spell/Spell";
+import { StatBlock } from "../client/StatBlock/StatBlock";
+import { upsertUser } from "./dbconnection";
+import { Library } from "./library";
+import configureMetricsRoutes from "./metrics";
+import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
+import configureStorageRoutes from "./storageroutes";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
@@ -82,7 +82,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req: Req, res: Res) => {
-        if (defaultAccountLevel) {
+        if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
                 req.session.hasStorage = true;
