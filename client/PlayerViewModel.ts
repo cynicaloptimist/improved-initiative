@@ -126,5 +126,9 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
         declarations.push(`#playerview { background-color: ${customStyles.mainBackground}; background-image: none; }`);
     }
 
+    if (customStyles.font) {
+        declarations.push(`* { font-family: "${customStyles.font}", sans-serif; }`);
+    }
+
     return declarations.join(" ");
 }

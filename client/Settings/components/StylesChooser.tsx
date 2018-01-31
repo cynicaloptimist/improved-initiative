@@ -38,7 +38,7 @@ export class StylesChooser extends React.Component<ColorChooserProps, ColorChoos
         };
 
         this.setState(updatedState);
-        this.props.updateStyle(this.state.selectedStyle, fontName);
+        this.props.updateStyle("font", fontName);
     }
 
     private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
