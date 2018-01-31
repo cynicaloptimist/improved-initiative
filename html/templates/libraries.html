@@ -1,6 +1,3 @@
-<h2>Library</h2>
-<div class="close button fa fa-close" data-bind="click: EncounterCommander.HideLibraries"></div>
-<div class="tabs" data-bind="foreach: LibraryTabs">
-    <span data-bind="click: $parent.SelectedTab, css: $parent.TabClassName($data), text: Name"></span>
-</div>
-<div class="library" data-bind="component: { name: SelectedTab().Component, params: { tracker: Tracker, encounterCommander: EncounterCommander, library: SelectedTab().Library } }"></div>
+<div data-bind="react: {
+    component: component
+}"></div>
