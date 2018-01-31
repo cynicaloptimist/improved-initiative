@@ -2,7 +2,7 @@ import * as React from "react";
 import { ChangeEvent } from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
-import { ColorChooser } from "./ColorChooser";
+import { StylesChooser } from "./StylesChooser";
 
 export interface CustomCSSEditorProps {
     currentCSS: string;
@@ -31,7 +31,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
     public render() {
         return <div className="custom-css-editor">
             <p>Epic Initiative is enabled.</p>
-            <ColorChooser currentStyles={this.props.currentStyles} updateStyle={this.props.updateStyle} />
+            <StylesChooser currentStyles={this.props.currentStyles} updateStyle={this.props.updateStyle} />
             <h4>Additional CSS</h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.props.currentCSS} />
         </div>;

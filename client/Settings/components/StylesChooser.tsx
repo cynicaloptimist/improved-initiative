@@ -13,7 +13,7 @@ interface ColorChooserState {
     selectedStyle: keyof PlayerViewCustomStyles;
 }
 
-export class ColorChooser extends React.Component<ColorChooserProps, ColorChooserState> {
+export class StylesChooser extends React.Component<ColorChooserProps, ColorChooserState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,7 +44,6 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
         this.props.updateStyle(this.state.selectedStyle, "");
     }
 
-    private getLabelAndOption(label: string, style: keyof PlayerViewCustomStyles) {
         return <p>{label}: <ColorBlock color={this.state.styles[style]} click={this.bindClickToSelectStyle(style)} selected={this.state.selectedStyle == style} /></p>;
     }
 
@@ -52,12 +51,6 @@ export class ColorChooser extends React.Component<ColorChooserProps, ColorChoose
         return <div className="c-color-chooser">
             <div>
                 <h4>Colors</h4>
-                {this.getLabelAndOption("Combatant Text", "combatantText")}
-                {this.getLabelAndOption("Background", "combatantBackground")}
-                {this.getLabelAndOption("Active Combatant Indicator", "activeCombatantIndicator")}
-                {this.getLabelAndOption("Header Text", "headerText")}
-                {this.getLabelAndOption("Background", "headerBackground")}
-                {this.getLabelAndOption("Main Background", "mainBackground")}
             </div>
             {
                 this.state.selectedStyle !== null &&
