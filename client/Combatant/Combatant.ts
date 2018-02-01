@@ -1,11 +1,11 @@
 import { Encounter } from "../Encounter/Encounter";
-import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
-import { Tag } from "./Tag";
 import { SavedCombatant } from "../Encounter/SavedEncounter";
-import { CurrentSettings } from "../Settings/Settings";
 import { Dice } from "../Rules/Rules";
+import { CurrentSettings } from "../Settings/Settings";
+import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { Tag } from "./Tag";
 
 export interface Combatant {
     Id: string;
@@ -29,14 +29,14 @@ export interface Combatant {
 
 export class Combatant implements Combatant {
     constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-        var statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
+        let statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
         if (savedCombatant) {
             statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
-            this.Id = '' + savedCombatant.Id; //legacy Id may be a number
+            this.Id = "" + savedCombatant.Id; //legacy Id may be a number
         } else {
             statBlock.HP.Value = this.getMaxHP(statBlock);
-            this.Id = statBlock.Id + '.' + probablyUniqueString();
+            this.Id = statBlock.Id + "." + probablyUniqueString();
         }
 
         this.StatBlock(statBlock);
@@ -68,24 +68,24 @@ export class Combatant implements Combatant {
         });
     }
 
-    Id = probablyUniqueString();
-    Alias = ko.observable('');
-    TemporaryHP = ko.observable(0);
-    Tags = ko.observableArray<Tag>();
-    Initiative = ko.observable(0);
-    InitiativeGroup = ko.observable<string>(null);
-    StatBlock = ko.observable<StatBlock>();
-    Hidden = ko.observable(false);
+    public Id = probablyUniqueString();
+    public Alias = ko.observable("");
+    public TemporaryHP = ko.observable(0);
+    public Tags = ko.observableArray<Tag>();
+    public Initiative = ko.observable(0);
+    public InitiativeGroup = ko.observable<string>(null);
+    public StatBlock = ko.observable<StatBlock>();
+    public Hidden = ko.observable(false);
 
-    IndexLabel: number;
-    MaxHP: number;
-    CurrentHP: KnockoutObservable<number>;
-    PlayerDisplayHP: KnockoutComputed<string>;
-    AC: number;
-    AbilityModifiers: AbilityScores;
-    InitiativeBonus: number;
-    ConcentrationBonus: number;
-    IsPlayerCharacter = false;
+    public IndexLabel: number;
+    public MaxHP: number;
+    public CurrentHP: KnockoutObservable<number>;
+    public PlayerDisplayHP: KnockoutComputed<string>;
+    public AC: number;
+    public AbilityModifiers: AbilityScores;
+    public InitiativeBonus: number;
+    public ConcentrationBonus: number;
+    public IsPlayerCharacter = false;
 
     private updatingGroup = false;
 
@@ -117,8 +117,13 @@ export class Combatant implements Combatant {
         const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
         if (rollMonsterHp && statBlock.Player !== "player") {
             try {
-                return Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+                if (rolledHP > 0) {
+                    return rolledHP;
+                }
+                return 1;
             } catch (e) {
+                console.error(e);
                 return statBlock.HP.Value;
             }
         }
@@ -126,34 +131,40 @@ export class Combatant implements Combatant {
     }
 
     private setIndexLabel(oldName?: string) {
-        var name = this.StatBlock().Name,
-            counts = this.Encounter.CombatantCountsByName;
+        let name = this.StatBlock().Name,
+            counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
             return;
         }
+        
+        if (!counts[oldName]) {
+            counts[oldName] = 1;
+        }
         if (oldName) {
-            counts[oldName](counts[oldName]() - 1);
+            counts[oldName] = counts[oldName] - 1;
         }
+
         if (!counts[name]) {
-            counts[name] = ko.observable(1);
+            counts[name] = 1;
         } else {
-            counts[name](counts[name]() + 1);
+            counts[name] = counts[name] + 1;
         }
-        this.IndexLabel = counts[name]();
+        this.IndexLabel = counts[name];
+        this.Encounter.CombatantCountsByName(counts);
     }
 
     private calculateModifiers = () => {
-        var modifiers = StatBlock.Default().Abilities;
-        for (var attribute in this.StatBlock().Abilities) {
+        let modifiers = StatBlock.Default().Abilities;
+        for (let attribute in this.StatBlock().Abilities) {
             modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities[attribute]);
         }
         return modifiers;
     }
 
-    GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
-    GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
+    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+    public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
-    ApplyDamage(damage: number) {
+    public ApplyDamage(damage: number) {
         let currHP = this.CurrentHP(),
             tempHP = this.TemporaryHP(),
             allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
@@ -173,7 +184,7 @@ export class Combatant implements Combatant {
         this.TemporaryHP(tempHP);
     }
 
-    ApplyHealing(healing: number) {
+    public ApplyHealing(healing: number) {
         let currHP = this.CurrentHP();
 
         currHP += healing;
@@ -184,16 +195,16 @@ export class Combatant implements Combatant {
         this.CurrentHP(currHP);
     }
 
-    ApplyTemporaryHP(tempHP: number) {
+    public ApplyTemporaryHP(tempHP: number) {
         if (tempHP > this.TemporaryHP()) {
             this.TemporaryHP(tempHP);
         }
     }
 
-    DisplayName = ko.pureComputed(() => {
-        var alias = ko.unwrap(this.Alias),
+    public DisplayName = ko.pureComputed(() => {
+        const alias = ko.unwrap(this.Alias),
             name = ko.unwrap(this.StatBlock).Name,
-            combatantCount = ko.unwrap(this.Encounter.CombatantCountsByName[name]),
+            combatantCount = this.Encounter.CombatantCountsByName()[name],
             index = this.IndexLabel;
 
         if (alias) {

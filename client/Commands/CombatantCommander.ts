@@ -1,14 +1,14 @@
-import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { DefaultPrompt } from "./Prompts/Prompt";
-import { TrackerViewModel } from "../TrackerViewModel";
-import { BuildCombatantCommandList, Command } from "./Command";
-import { Store } from "../Utility/Store";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { CurrentSettings } from "../Settings/Settings";
-import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { Combatant } from "../Combatant/Combatant";
-import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { CurrentSettings } from "../Settings/Settings";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { Store } from "../Utility/Store";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { BuildCombatantCommandList, Command } from "./Command";
+import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
+import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
+import { DefaultPrompt } from "./Prompts/Prompt";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;
@@ -20,26 +20,26 @@ export class CombatantCommander {
         this.Commands = BuildCombatantCommandList(this);
 
         this.Commands.forEach(c => {
-            var keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
+            let keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
             if (keyBinding) {
                 c.KeyBinding = keyBinding;
             }
-            var showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
+            let showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
             if (showOnActionBar != null) {
                 c.ShowOnActionBar(showOnActionBar);
             }
         });
     }
 
-    Commands: Command[];
-    SelectedCombatants: KnockoutObservableArray<CombatantViewModel> = ko.observableArray<CombatantViewModel>([]);
+    public Commands: Command[];
+    public SelectedCombatants: KnockoutObservableArray<CombatantViewModel> = ko.observableArray<CombatantViewModel>([]);
 
-    HasSelected = ko.pureComputed(() => this.SelectedCombatants().length > 0);
-    HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
-    HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
+    public HasSelected = ko.pureComputed(() => this.SelectedCombatants().length > 0);
+    public HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
+    public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-    StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
-        var selectedCombatants = this.SelectedCombatants();
+    public StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
+        let selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
             return selectedCombatants[0].Combatant.StatBlock();
         } else {
@@ -47,13 +47,13 @@ export class CombatantCommander {
         }
     });
 
-    Names: KnockoutComputed<string> = ko.pureComputed(() =>
+    public Names: KnockoutComputed<string> = ko.pureComputed(() =>
         this.SelectedCombatants()
             .map(c => c.Name())
-            .join(', ')
+            .join(", ")
     );
 
-    Select = (data: CombatantViewModel, e?: MouseEvent) => {
+    public Select = (data: CombatantViewModel, e?: MouseEvent) => {
         if (!data) {
             return;
         }
@@ -69,17 +69,17 @@ export class CombatantCommander {
     }
 
     private selectByOffset = (offset: number) => {
-        var newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
+        let newIndex = this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) + offset;
         if (newIndex < 0) {
             newIndex = 0;
         } else if (newIndex >= this.tracker.CombatantViewModels().length) {
             newIndex = this.tracker.CombatantViewModels().length - 1;
         }
-        this.SelectedCombatants.removeAll()
+        this.SelectedCombatants.removeAll();
         this.SelectedCombatants.push(this.tracker.CombatantViewModels()[newIndex]);
     }
 
-    Remove = () => {
+    public Remove = () => {
         const combatantsToRemove = this.SelectedCombatants.removeAll(),
             firstDeletedIndex = this.tracker.CombatantViewModels().indexOf(combatantsToRemove[0]),
             deletedCombatantNames = combatantsToRemove.map(c => c.Combatant.StatBlock().Name);
@@ -97,11 +97,13 @@ export class CombatantCommander {
 
         const remainingCombatants = this.tracker.CombatantViewModels();
 
-        var allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
+        let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
 
         deletedCombatantNames.forEach(name => {
             if (allMyFriendsAreGone(name)) {
-                this.tracker.Encounter.CombatantCountsByName[name](0);
+                const combatantCountsByName = this.tracker.Encounter.CombatantCountsByName();
+                delete combatantCountsByName[name];
+                this.tracker.Encounter.CombatantCountsByName(combatantCountsByName);
             }
         });
 
@@ -110,50 +112,50 @@ export class CombatantCommander {
                 firstDeletedIndex > remainingCombatants.length ?
                     remainingCombatants.length - 1 :
                     firstDeletedIndex;
-            this.Select(this.tracker.CombatantViewModels()[newSelectionIndex])
+            this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
         } else {
             this.tracker.Encounter.EndEncounter();
         }
 
-        this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(', ')} removed from encounter.`);
+        this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(", ")} removed from encounter.`);
 
         this.tracker.Encounter.QueueEmitEncounter();
     }
 
-    Deselect = () => {
+    public Deselect = () => {
         this.SelectedCombatants([]);
     }
 
-    SelectPrevious = () => {
+    public SelectPrevious = () => {
         this.selectByOffset(-1);
     }
 
-    SelectNext = () => {
+    public SelectNext = () => {
         this.selectByOffset(1);
     }
 
     private CreateEditHPCallback = (combatants: CombatantViewModel[], combatantNames: string) => {
         return (response) => {
-            const damage = response['damage'];
+            const damage = response["damage"];
             if (damage) {
                 combatants.forEach(c => c.ApplyDamage(damage));
                 const damageNum = parseInt(damage);
                 this.tracker.EventLog.LogHPChange(damageNum, combatantNames);
                 this.tracker.Encounter.QueueEmitEncounter();
             }
-        }
+        };
     }
 
-    EditHP = () => {
+    public EditHP = () => {
         const selectedCombatants = this.SelectedCombatants();
-        const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
+        const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const callback = this.CreateEditHPCallback(selectedCombatants, combatantNames);
         const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`, callback);
         this.tracker.PromptQueue.Add(prompt);
         return false;
     }
 
-    SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
+    public SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
         const allowPlayerSuggestions = CurrentSettings().PlayerView.AllowPlayerSuggestions;
 
         if (!allowPlayerSuggestions) {
@@ -166,19 +168,19 @@ export class CombatantCommander {
         return false;
     }
 
-    CheckConcentration = (combatant: Combatant, damageAmount: number) => {
+    public CheckConcentration = (combatant: Combatant, damageAmount: number) => {
         setTimeout(() => {
             const prompt = new ConcentrationPrompt(combatant, damageAmount);
             this.tracker.PromptQueue.Add(prompt);
         }, 1);
     }
 
-    AddTemporaryHP = () => {
+    public AddTemporaryHP = () => {
         const selectedCombatants = this.SelectedCombatants();
-        const combatantNames = selectedCombatants.map(c => c.Name()).join(', ');
+        const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const prompt = new DefaultPrompt(`Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
             response => {
-                const thp = response['thp'];
+                const thp = response["thp"];
                 if (thp) {
                     selectedCombatants.forEach(c => c.ApplyTemporaryHP(thp));
                     this.tracker.EventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
@@ -190,16 +192,16 @@ export class CombatantCommander {
         return false;
     }
 
-    AddTag = (combatantVM?: CombatantViewModel) => {
+    public AddTag = (combatantVM?: CombatantViewModel) => {
         if (combatantVM instanceof CombatantViewModel) {
             this.Select(combatantVM);
         }
-        this.SelectedCombatants().forEach(c => c.AddTag(this.tracker.Encounter))
+        this.SelectedCombatants().forEach(c => c.AddTag(this.tracker.Encounter));
         return false;
     }
 
-    EditInitiative = () => {
-        this.SelectedCombatants().forEach(c => c.EditInitiative())
+    public EditInitiative = () => {
+        this.SelectedCombatants().forEach(c => c.EditInitiative());
         return false;
     }
 
@@ -219,7 +221,7 @@ export class CombatantCommander {
         this.tracker.Encounter.SortByInitiative();
     }
 
-    LinkInitiative = () => {
+    public LinkInitiative = () => {
         const selected = this.SelectedCombatants();
 
         if (selected.length <= 1) {
@@ -233,32 +235,32 @@ export class CombatantCommander {
         this.linkCombatantInitiatives(selected);
     }
 
-    MoveUp = () => {
+    public MoveUp = () => {
         const combatant = this.SelectedCombatants()[0];
-        const index = this.tracker.CombatantViewModels().indexOf(combatant)
+        const index = this.tracker.CombatantViewModels().indexOf(combatant);
         if (combatant && index > 0) {
             const newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index - 1);
             this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
         }
     }
 
-    MoveDown = () => {
+    public MoveDown = () => {
         const combatant = this.SelectedCombatants()[0];
-        const index = this.tracker.CombatantViewModels().indexOf(combatant)
+        const index = this.tracker.CombatantViewModels().indexOf(combatant);
         if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
             const newInitiative = this.tracker.Encounter.MoveCombatant(combatant.Combatant, index + 1);
             this.tracker.EventLog.AddEvent(`${combatant.Name()} initiative set to ${newInitiative}.`);
         }
     }
 
-    EditName = () => {
-        this.SelectedCombatants().forEach(c => c.EditName())
+    public EditName = () => {
+        this.SelectedCombatants().forEach(c => c.EditName());
         return false;
     }
 
-    EditStatBlock = () => {
+    public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
-            var selectedCombatant = this.SelectedCombatants()[0];
+            let selectedCombatant = this.SelectedCombatants()[0];
             this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
                 selectedCombatant.Combatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();

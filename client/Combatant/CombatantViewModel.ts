@@ -1,18 +1,18 @@
-import { Combatant } from "./Combatant";
 import { CombatantCommander } from "../Commands/CombatantCommander";
-import { Prompt, DefaultPrompt } from "../Commands/Prompts/Prompt";
-import { CurrentSettings } from "../Settings/Settings";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
-import { Encounter } from "../Encounter/Encounter";
+import { DefaultPrompt, Prompt } from "../Commands/Prompts/Prompt";
 import { TagPrompt } from "../Commands/Prompts/TagPrompt";
-import { Tag } from "./Tag";
+import { Encounter } from "../Encounter/Encounter";
+import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { toModifierString } from "../Utility/Toolbox";
+import { Combatant } from "./Combatant";
+import { Tag } from "./Tag";
 
 export class CombatantViewModel {
-    HP: KnockoutComputed<string>;
-    Name: KnockoutComputed<string>;
-    IsNew = ko.observable(true);
+    public HP: KnockoutComputed<string>;
+    public Name: KnockoutComputed<string>;
+    public IsNew = ko.observable(true);
 
     constructor(
         public Combatant: Combatant,
@@ -32,14 +32,14 @@ export class CombatantViewModel {
         setTimeout(() => this.IsNew(false), 500);
     }
 
-    ApplyDamage(inputDamage: string) {
-        var damage = parseInt(inputDamage),
+    public ApplyDamage(inputDamage: string) {
+        let damage = parseInt(inputDamage),
             healing = -damage,
 
             autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
 
         if (isNaN(damage)) {
-            return
+            return;
         }
 
         if (damage > 0) {
@@ -53,40 +53,40 @@ export class CombatantViewModel {
         }
     }
 
-    ApplyTemporaryHP(inputTHP: string) {
-        var newTemporaryHP = parseInt(inputTHP);
+    public ApplyTemporaryHP(inputTHP: string) {
+        let newTemporaryHP = parseInt(inputTHP);
 
         if (isNaN(newTemporaryHP)) {
-            return
+            return;
         }
 
         this.Combatant.ApplyTemporaryHP(newTemporaryHP);
     }
 
-    ApplyInitiative(inputInitiative: string) {
+    public ApplyInitiative(inputInitiative: string) {
         const initiative = parseInt(inputInitiative);
         this.Combatant.Initiative(initiative);
         this.Combatant.Encounter.SortByInitiative(true);
     }
 
-    InitiativeClass = ko.computed(() => {
+    public InitiativeClass = ko.computed(() => {
         if (this.Combatant.InitiativeGroup()) {
             return "fa fa-link";
         }
     });
 
-    GetHPColor() {
-        var green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
-        var red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
+    public GetHPColor() {
+        let green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
+        let red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
         return "rgb(" + red + "," + green + ",0)";
     }
 
-    EditHP() {
+    public EditHP() {
         this.CombatantCommander.Select(this);
         this.CombatantCommander.EditHP();
     }
 
-    EditInitiative() {
+    public EditInitiative() {
         const currentInitiative = this.Combatant.Initiative();
         const modifier = toModifierString(this.Combatant.InitiativeBonus);
         let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
@@ -96,8 +96,8 @@ export class CombatantViewModel {
         }
         const prompt = new DefaultPrompt(message,
             response => {
-                const initiative = response['initiative'];
-                const breakLink = response['break-link'] === "break";
+                const initiative = response["initiative"];
+                const breakLink = response["break-link"] === "break";
                 if (initiative) {
                     if (breakLink) {
                         this.Combatant.InitiativeGroup(null);
@@ -107,15 +107,15 @@ export class CombatantViewModel {
                     this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
                     this.Combatant.Encounter.QueueEmitEncounter();
                 }
-            })
+            });
         this.PromptUser(prompt);
     }
 
-    EditName() {
-        var currentName = this.Name();
+    public EditName() {
+        let currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
-                const alias = response['alias'];
+                const alias = response["alias"];
                 this.Combatant.Alias(alias);
                 if (alias) {
                     this.LogEvent(`${currentName} alias changed to ${alias}.`);
@@ -128,20 +128,20 @@ export class CombatantViewModel {
         this.PromptUser(prompt);
     }
 
-    HiddenClass = ko.pureComputed(() => {
-        return this.Combatant.Hidden() ? 'fa-eye-slash' : 'fa-eye';
+    public HiddenClass = ko.pureComputed(() => {
+        return this.Combatant.Hidden() ? "fa-eye-slash" : "fa-eye";
     });
 
-    IsSelected = ko.pureComputed(() => {
+    public IsSelected = ko.pureComputed(() => {
         return this.CombatantCommander.SelectedCombatants().some(c => c === this);
     });
 
-    IsActive = ko.pureComputed(() => {
+    public IsActive = ko.pureComputed(() => {
         const activeCombatant = this.Combatant.Encounter.ActiveCombatant();
         return this.Combatant === activeCombatant;
     });
 
-    ToggleHidden(data, event) {
+    public ToggleHidden(data, event) {
         if (this.Combatant.Hidden()) {
             this.Combatant.Hidden(false);
             this.LogEvent(`${this.Name()} revealed in player view.`);
@@ -152,14 +152,14 @@ export class CombatantViewModel {
         this.Combatant.Encounter.QueueEmitEncounter();
     }
 
-    AddTag(encounter: Encounter) {
+    public AddTag(encounter: Encounter) {
         const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
         this.PromptUser(prompt);
     }
 
-    RemoveTag = (tag: Tag) => {
+    public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
         this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
         this.Combatant.Encounter.QueueEmitEncounter();
-    };
+    }
 }

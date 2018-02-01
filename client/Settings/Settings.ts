@@ -1,27 +1,23 @@
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
-import { Command } from "../Commands/Command";
 
 export const CurrentSettings = ko.observable<Settings>();
+
 export interface Settings {
     Commands: CommandSetting[];
     Rules: {
         RollMonsterHp: boolean;
         AllowNegativeHP: boolean;
         AutoCheckConcentration: boolean;
-    }
+    };
     TrackerView: {
         DisplayRoundCounter: boolean;
         DisplayTurnTimer: boolean;
         DisplayDifficulty: boolean;
-    }
-    PlayerView: {
-        AllowPlayerSuggestions: boolean;
-        MonsterHPVerbosity: string;
-        HideMonstersOutsideEncounter: boolean;
-        DisplayRoundCounter: boolean;
-        DisplayTurnTimer: boolean;
-    }
+    };
+    PlayerView: PlayerViewSettings;
     Version: string;
 }
 
@@ -41,6 +37,40 @@ function getLegacySetting<T>(settingName: string, def: T): T {
     return setting;
 }
 
+function getDefaultSettings(): Settings {
+    return {
+        Commands: [],
+        Rules: {
+            RollMonsterHp: false,
+            AllowNegativeHP: false,
+            AutoCheckConcentration: true
+        },
+        TrackerView: {
+            DisplayRoundCounter: false,
+            DisplayTurnTimer: false,
+            DisplayDifficulty: false
+        },
+        PlayerView: {
+            AllowPlayerSuggestions: false,
+            MonsterHPVerbosity: "Colored Label",
+            HideMonstersOutsideEncounter: false,
+            DisplayRoundCounter: false,
+            DisplayTurnTimer: false,
+            CustomCSS: "",
+            CustomStyles: {
+                combatantBackground: "",
+                combatantText: "",
+                activeCombatantIndicator: "",
+                font: "",
+                headerBackground: "",
+                headerText: "",
+                mainBackground: ""
+            }
+        },
+        Version: "1.2.0" //TODO: Populate with package version
+    };
+}
+
 function getLegacySettings(): Settings {
     const commandNames = Store.List(Store.KeyBindings);
     const commands: CommandSetting[] = commandNames.map(n => {
@@ -48,8 +78,9 @@ function getLegacySettings(): Settings {
             Name: n,
             KeyBinding: Store.Load<string>(Store.KeyBindings, n),
             ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
-        }
+        };
     });
+    const defaultSettings = getDefaultSettings();
 
     return {
         Commands: commands,
@@ -68,16 +99,18 @@ function getLegacySettings(): Settings {
             MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
-            DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false)
+            DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
+            CustomCSS: defaultSettings.PlayerView.CustomCSS,
+            CustomStyles: defaultSettings.PlayerView.CustomStyles
         },
-        Version: "1.0.0" //TODO: Populate with package version
-    }
+        Version: defaultSettings.Version
+    };
 }
 
 function configureCommands(newSettings: Settings, commands: Command[]) {
     Mousetrap.reset();
 
-    Mousetrap.bind('backspace', e => {
+    Mousetrap.bind("backspace", e => {
         if (e.preventDefault) {
             e.preventDefault();
         } else {
@@ -98,15 +131,51 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
     });
 }
 
+function updateToSemanticVersionIsRequired(settingsVersion: string, targetVersion: string) {
+    const settingsVersionParts = settingsVersion.split(".").map(n => parseInt(n));
+    const targetVersionParts = targetVersion.split(".").map(n => parseInt(n));
+    if (settingsVersionParts[0] < targetVersionParts[0]) {
+        return true;
+    }
+    if (settingsVersionParts[0] > targetVersionParts[0]) {
+        return false;
+    }
+    if (settingsVersionParts[1] < targetVersionParts[1]) {
+        return true;
+    }
+    if (settingsVersionParts[1] > targetVersionParts[1]) {
+        return false;
+    }
+    if (settingsVersionParts[2] < targetVersionParts[2]) {
+        return true;
+    }
+    if (settingsVersionParts[2] > targetVersionParts[2]) {
+        return false;
+    }
+    return false;
+}
+
+function updateSettings(settings: any): Settings {
+    const defaultSettings = getDefaultSettings();
+    if (updateToSemanticVersionIsRequired(settings.Version, "1.2.0")) {
+        settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
+        settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
+    }
+    return settings;
+}
+
 export function InitializeSettings() {
-    const localSettings = Store.Load<Settings>(Store.User, "Settings");
+    const localSettings = Store.Load<any>(Store.User, "Settings");
 
     if (localSettings) {
-        CurrentSettings(localSettings);
+        const updatedSettings = updateSettings(localSettings);
+        CurrentSettings(updatedSettings);
     } else {
         const legacySettings = getLegacySettings();
-        CurrentSettings(legacySettings)
+        CurrentSettings(legacySettings);
     }
+
+    Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
 }
 
 export function ConfigureCommands(commands: Command[]) {

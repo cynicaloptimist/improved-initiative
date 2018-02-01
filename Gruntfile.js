@@ -1,7 +1,6 @@
 module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-webpack');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -16,7 +15,6 @@ module.exports = function (grunt) {
       },
       server: {
         src: ['server/*.ts'],
-        outDir: 'server/',
         options: {
           module: 'commonjs',
           target: 'es5'
@@ -29,16 +27,6 @@ module.exports = function (grunt) {
       },
       prod: require('./webpack.config.prod'),
       dev: require('./webpack.config')
-    },
-    uglify: {
-      options: {
-        mangle: false
-      },
-      prod: {
-        files: {
-          'public/js/ImprovedInitiative.js': ['build/ImprovedInitiative.js']
-        }
-      }
     },
     less: {
       default: {
@@ -97,7 +85,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_dev', ['webpack:dev', 'ts:server', 'less', 'concat:js_dependencies']);
-  grunt.registerTask('build_min', ['webpack:prod', 'uglify', 'ts:server', 'less', 'concat:js_dependencies_min']);
+  grunt.registerTask('build_min', ['webpack:prod', 'ts:server', 'less', 'concat:js_dependencies_min']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };

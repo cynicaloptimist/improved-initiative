@@ -1,19 +1,20 @@
-import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { Account } from "./Account/Account";
-import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { EventLog } from "./Widgets/EventLog";
-import { Libraries } from "./Library/Libraries";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
-import { SpellEditor } from "./StatBlockEditor/SpellEditor";
-import { EncounterCommander } from "./Commands/EncounterCommander";
-import { CombatantCommander } from "./Commands/CombatantCommander";
 import { AccountClient } from "./Account/AccountClient";
-import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { Combatant } from "./Combatant/Combatant";
+import { CombatantViewModel } from "./Combatant/CombatantViewModel";
+import { CombatantCommander } from "./Commands/CombatantCommander";
+import { EncounterCommander } from "./Commands/EncounterCommander";
+import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
-import { Store } from "./Utility/Store";
-import { Metrics } from "./Utility/Metrics";
 import { env } from "./Environment";
+import { Libraries } from "./Library/Libraries";
+import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import { SpellEditor } from "./StatBlockEditor/SpellEditor";
+import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { Metrics } from "./Utility/Metrics";
+import { Store } from "./Utility/Store";
+import { EventLog } from "./Widgets/EventLog";
 
 interface PatreonPostAttributes {
     title: string;
@@ -32,13 +33,19 @@ interface PatreonPost {
 export class TrackerViewModel {
     constructor() {
         ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
-
+        
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
             const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
         });
 
-        this.Socket.emit("join encounter", this.Encounter.EncounterId);
+        const playerViewClient = new PlayerViewClient(this.Socket);
+        playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+        playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
+        playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
+        CurrentSettings.subscribe(v => {
+            playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
+        });
 
         this.AccountClient.GetAccount(account => {
             if (!account) {
@@ -73,18 +80,18 @@ export class TrackerViewModel {
         }
     }
 
-    Socket = io();
+    public Socket = io();
 
-    PromptQueue = new PromptQueue();
-    EventLog = new EventLog();
-    Libraries = new Libraries();
-    StatBlockEditor = new StatBlockEditor();
-    SpellEditor = new SpellEditor();
-    EncounterCommander = new EncounterCommander(this);
-    CombatantCommander = new CombatantCommander(this);
-    AccountClient = new AccountClient();
+    public PromptQueue = new PromptQueue();
+    public EventLog = new EventLog();
+    public Libraries = new Libraries();
+    public StatBlockEditor = new StatBlockEditor();
+    public SpellEditor = new SpellEditor();
+    public EncounterCommander = new EncounterCommander(this);
+    public CombatantCommander = new CombatantCommander(this);
+    public AccountClient = new AccountClient();
 
-    CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
+    public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     private addCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
@@ -96,25 +103,25 @@ export class TrackerViewModel {
         this.CombatantViewModels.remove(vm);
     }
 
-    Encounter = new Encounter(
+    public Encounter = new Encounter(
         this.PromptQueue,
         this.Socket,
         this.addCombatantViewModel,
         this.removeCombatantViewModel
     );
 
-    OrderedCombatants = ko.computed(() =>
+    public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
             (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
         )
     );
 
-    TutorialVisible = ko.observable(!Store.Load(Store.User, 'SkipIntro'));
-    SettingsVisible = ko.observable(false);
-    LibrariesVisible = ko.observable(true);
-    ToolbarWide = ko.observable(false);
-    ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
-    ToolbarWidth = (el: HTMLElement) => {
+    public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
+    public SettingsVisible = ko.observable(false);
+    public LibrariesVisible = ko.observable(true);
+    public ToolbarWide = ko.observable(false);
+    public ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
+    public ToolbarWidth = (el: HTMLElement) => {
         if (this.ToolbarWide()) {
             return "";
         } else {
@@ -123,9 +130,9 @@ export class TrackerViewModel {
         }
     }
 
-    DisplayLogin = !env.IsLoggedIn;
+    public DisplayLogin = !env.IsLoggedIn;
 
-    CenterColumn = ko.pureComputed(() => {
+    public CenterColumn = ko.pureComputed(() => {
         const editStatBlock = this.StatBlockEditor.HasStatBlock();
         const editSpell = this.SpellEditor.HasSpell();
         if (editStatBlock) {
@@ -137,24 +144,24 @@ export class TrackerViewModel {
         return "combat";
     });
 
-    BlurVisible = ko.pureComputed(() =>
+    public BlurVisible = ko.pureComputed(() =>
         this.TutorialVisible() ||
         this.SettingsVisible()
     );
 
-    CloseSettings = () => {
+    public CloseSettings = () => {
         this.SettingsVisible(false);
         //this.TutorialVisible(false);
-    };
+    }
 
-    RepeatTutorial = () => {
+    public RepeatTutorial = () => {
         this.Encounter.EndEncounter();
         this.EncounterCommander.ShowLibraries();
         this.SettingsVisible(false);
         this.TutorialVisible(true);
     }
 
-    ImportEncounterIfAvailable = () => {
+    public ImportEncounterIfAvailable = () => {
         const encounter = env.PostedEncounter;
         if (encounter) {
             this.TutorialVisible(false);
@@ -162,16 +169,16 @@ export class TrackerViewModel {
         }
     }
 
-    GetWhatsNewIfAvailable = () => {
+    public GetWhatsNewIfAvailable = () => {
         $.getJSON("/whatsnew/")
             .done((latestPost: PatreonPost) => {
                 this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`);
             });
     }
 
-    PatreonLoginUrl = env.PatreonLoginUrl;
+    public PatreonLoginUrl = env.PatreonLoginUrl;
     
-    InterfacePriority = ko.pureComputed(() => {
+    public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
             return "show-center-right-left";
         }

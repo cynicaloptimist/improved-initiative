@@ -1,5 +1,6 @@
-import { StatBlock, Listing } from "./library";
+import { Listing } from "./library";
 import mongo = require("mongodb");
+import { StatBlock } from "../client/StatBlock/StatBlock";
 
 export interface User {
     _id: mongo.ObjectID;

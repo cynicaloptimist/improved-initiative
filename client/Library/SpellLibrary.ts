@@ -1,14 +1,14 @@
-import { Listing, ServerListing, ListingOrigin } from "./Listing";
+import { AccountClient } from "../Account/AccountClient";
 import { Spell } from "../Spell/Spell";
 import { Store } from "../Utility/Store";
-import { AccountClient } from "../Account/AccountClient";
+import { Listing, ListingOrigin, ServerListing } from "./Listing";
 
 export class SpellLibrary {
-    Spells = ko.observableArray<Listing<Spell>>([]);
-    SpellsByNameRegex = ko.computed(() => {
+    public Spells = ko.observableArray<Listing<Spell>>([]);
+    public SpellsByNameRegex = ko.computed(() => {
         const allSpellNames = this.Spells().map(s => s.Name);
         if (allSpellNames.length === 0) {
-            return new RegExp('a^');
+            return new RegExp("a^");
         }
         return new RegExp(`\\b(${allSpellNames.join("|")})\\b`, "gim");
     });
@@ -18,12 +18,12 @@ export class SpellLibrary {
 
         const customSpells = Store.List(Store.Spells);
         customSpells.forEach(id => {
-            var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
+            let spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
             this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage"));
         });
     }
 
-    AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+    public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
             return new Listing<Spell>(c.Id, c.Name, c.SearchHint, c.Link, source);
         }));

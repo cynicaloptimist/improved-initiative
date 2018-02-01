@@ -7,14 +7,14 @@ export class StatBlockEditor {
     private deleteCallback: (library: string, id: string) => void;
     private statBlock: StatBlock;
 
-    EditMode = ko.observable<"instance" | "global">();
-    EditorType = ko.observable<"basic" | "advanced">("basic");
-    JsonStatBlock = ko.observable<string>();
-    EditableStatBlock = ko.observable(null);
+    public EditMode = ko.observable<"instance" | "global">();
+    public EditorType = ko.observable<"basic" | "advanced">("basic");
+    public JsonStatBlock = ko.observable<string>();
+    public EditableStatBlock = ko.observable(null);
 
-    HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
+    public HasStatBlock = ko.pureComputed(() => this.EditableStatBlock() !== null);
 
-    EditStatBlock = (statBlockId: string,
+    public EditStatBlock = (statBlockId: string,
         statBlock: StatBlock,
         saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
         deleteCallback: (library: string, id: string) => void,
@@ -22,7 +22,7 @@ export class StatBlockEditor {
     ) => {
 
         statBlock.Id = statBlockId;
-        this.statBlock = { ...StatBlock.Default(), ...statBlock }
+        this.statBlock = { ...StatBlock.Default(), ...statBlock };
 
         this.EditableStatBlock(this.makeEditable(this.statBlock));
         this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
@@ -33,11 +33,11 @@ export class StatBlockEditor {
     }
 
     private makeEditable = (statBlock: StatBlock) => {
-        let stringLists = ['Speed', 'Senses', 'DamageVulnerabilities', 'DamageResistances', 'DamageImmunities', 'ConditionImmunities', 'Languages'];
-        let modifierLists = ['Saves', 'Skills'];
-        let traitLists = ['Traits', 'Actions', 'Reactions', 'LegendaryActions'];
+        let stringLists = ["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"];
+        let modifierLists = ["Saves", "Skills"];
+        let traitLists = ["Traits", "Actions", "Reactions", "LegendaryActions"];
 
-        let observableStatBlock = ko['mapping'].fromJS(this.statBlock);
+        let observableStatBlock = ko["mapping"].fromJS(this.statBlock);
 
         let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
             for (let arrayName of arrayNames) {
@@ -47,7 +47,7 @@ export class StatBlockEditor {
                 }));
 
                 array.AddEmpty = (_, event: Event) => {
-                    array.push(new RemovableArrayValue(array, makeEmptyValue()))
+                    array.push(new RemovableArrayValue(array, makeEmptyValue()));
                     $(event.target)
                         .parent()
                         .find("input.name")
@@ -55,20 +55,20 @@ export class StatBlockEditor {
                         .select();
                 };
             }
-        }
+        };
 
-        makeRemovableArrays(stringLists, () => '');
+        makeRemovableArrays(stringLists, () => "");
 
         makeRemovableArrays(modifierLists, () => ({
-            Name: ko.observable(''),
-            Modifier: ko.observable('')
+            Name: ko.observable(""),
+            Modifier: ko.observable("")
         }));
 
         makeRemovableArrays(traitLists, () => ({
-            Name: ko.observable(''),
-            Content: ko.observable(''),
-            Usage: ko.observable('')
-        }))
+            Name: ko.observable(""),
+            Content: ko.observable(""),
+            Usage: ko.observable("")
+        }));
 
         return observableStatBlock;
     }
@@ -76,16 +76,16 @@ export class StatBlockEditor {
     private unMakeEditable = (editableStatBlock: any) => {
         for (let key in editableStatBlock) {
             if (key == "HP") {
-                var hpInt = parseInt(editableStatBlock[key].Value());
+                let hpInt = parseInt(editableStatBlock[key].Value());
                 editableStatBlock[key].Value(hpInt);
             }
             if (key == "InitiativeModifier") {
-                var initInt = parseInt(editableStatBlock[key]());
+                let initInt = parseInt(editableStatBlock[key]());
                 editableStatBlock[key](initInt);
             }
 
             let maybeArray = editableStatBlock[key];
-            if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === 'function') {
+            if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === "function") {
                 editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
                     return e.Value;
                 }));
@@ -96,23 +96,24 @@ export class StatBlockEditor {
         return unObservableStatBlock;
     }
 
-    SelectInput = () => {
+    public SelectInput = () => {
         $(".stats input.name").select();
     }
 
-    SaveStatBlock = () => {
+    public SaveStatBlock = () => {
         let editedStatBlock: StatBlock = StatBlock.Default();
 
-        if (this.EditorType() === 'advanced') {
+        if (this.EditorType() === "advanced") {
+            let statBlockFromJSON = {};
             try {
-                var statBlockFromJSON = JSON.parse(this.JsonStatBlock());
+                statBlockFromJSON = JSON.parse(this.JsonStatBlock());
             } catch (error) {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;
             }
-            $.extend(editedStatBlock, statBlockFromJSON)
+            $.extend(editedStatBlock, statBlockFromJSON);
         }
-        if (this.EditorType() === 'basic') {
+        if (this.EditorType() === "basic") {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
         }
 
@@ -120,31 +121,33 @@ export class StatBlockEditor {
         this.EditableStatBlock(null);
     }
 
-    DeleteStatBlock = () => {
+    public DeleteStatBlock = () => {
         if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
             this.deleteCallback(this.statBlockLibrary(), this.statBlock.Id);
             this.EditableStatBlock(null);
         }
     }
 
-    RevertStatBlock = () => {
+    public RevertStatBlock = () => {
         this.EditableStatBlock(null);
     }
 
     private statBlockLibrary(): string {
-        return this.statBlock.Player == 'player' ? Store.PlayerCharacters : Store.StatBlocks
+        return this.statBlock.Player == "player" ? Store.PlayerCharacters : Store.StatBlocks;
     }
 
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {
-        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value))
+        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
             return Number(value);
-        if (defaultValue !== null)
+        }
+        if (defaultValue !== null) {
             return defaultValue;
+        }
         return NaN;
     }
 }
 
-ko.components.register('statblockeditor', {
+ko.components.register("statblockeditor", {
     viewModel: params => params.editor,
-    template: { name: 'statblockeditor' }
+    template: { name: "statblockeditor" }
 });

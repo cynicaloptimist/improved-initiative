@@ -30,19 +30,6 @@ export interface Listing {
     SearchHint: string;
 }
 
-export interface StatBlock extends LibraryItem {
-    Type: string;
-}
-
-export const GetStatBlockKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
-
-export interface Spell extends LibraryItem {
-    School: string;
-    Classes: string[];
-}
-
-export const GetSpellKeywords = (spell: Spell) => [...spell.Classes, spell.School].join(" "); 
-
 interface Combatant {
     Alias: string;
 }
@@ -56,9 +43,9 @@ export class Library<TItem extends LibraryItem> {
     private items: { [id: string]: TItem } = {};
     private listings: Listing[] = [];
     
-    constructor(private route: string, private getKeywords: (item: TItem) => string) { };
+    constructor(private route: string, private getKeywords: (item: TItem) => string) { }
 
-    static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
+    public static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
         const library = new Library<I>(route, getKeywords);
 
         const filePath = path.join(__dirname, "..", filename);

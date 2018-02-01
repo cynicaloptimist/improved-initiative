@@ -1,14 +1,14 @@
-import { Importer } from "./Importer";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
-    getType() {
-        return this.getString("size") + ' ' +
-            this.getString("type") + ', ' +
+    public getType() {
+        return this.getString("size") + " " +
+            this.getString("type") + ", " +
             this.getString("alignment");
     }
 
-    getAbilities() {
+    public getAbilities() {
         return {
             Str: this.getInt("str"),
             Dex: this.getInt("dex"),
@@ -20,7 +20,7 @@ export class StatBlockImporter extends Importer {
     }
 
     public GetStatBlock() {
-        var statBlock = StatBlock.Default();
+        let statBlock = StatBlock.Default();
 
         statBlock.Name = this.getString("name");
         statBlock.Type = this.getType();

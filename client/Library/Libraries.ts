@@ -1,11 +1,11 @@
-import { PCLibrary } from "./PCLibrary";
-import { NPCLibrary } from "./NPCLibrary";
 import { EncounterLibrary } from "./EncounterLibrary";
+import { NPCLibrary } from "./NPCLibrary";
+import { PCLibrary } from "./PCLibrary";
 import { SpellLibrary } from "./SpellLibrary";
 
 export class Libraries {
-    PCs = new PCLibrary();
-    NPCs = new NPCLibrary();
-    Encounters = new EncounterLibrary();
-    Spells = new SpellLibrary();
+    public PCs = new PCLibrary();
+    public NPCs = new NPCLibrary();
+    public Encounters = new EncounterLibrary();
+    public Spells = new SpellLibrary();
 }

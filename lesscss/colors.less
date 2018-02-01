@@ -157,6 +157,20 @@ input, textarea {
     }
 }
 
+#tracker .combatant:not(.header) {
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-light;
+    }
+
+    .hp:hover {
+        background-color: @hover-red;
+    }
+}
+
 .combatant {
     .colors(@primary-black, @primary-white, transparent);
 
@@ -169,22 +183,7 @@ input, textarea {
         background-color: @active-white;
     }
 
-    &:hover {
-        background-color: @hover-white;
-    }
-
-    &.selected {
-        background-color: @selected-light;
-    }
-
-    .hp:hover:not(.disable-hover) {
-        background-color: @hover-red;
-    }
-
     &.header {
         .colors(@primary-white, @primary-black, @primary-black);
-        .hp:hover {
-            background-color: initial;
-        }
     }
 }

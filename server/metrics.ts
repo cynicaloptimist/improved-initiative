@@ -1,6 +1,6 @@
 import express = require("express");
 
-import KeenTracking = require('keen-tracking');
+import KeenTracking = require("keen-tracking");
 const keenProjectId = process.env.KEEN_PROJECT_ID || "";
 const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
 

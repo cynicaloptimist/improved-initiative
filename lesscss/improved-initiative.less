@@ -124,7 +124,7 @@ input[type="file"] {
     border: 0;
 }
 
-.button {
+.button, .c-button {
     .button();
 }
 
@@ -175,7 +175,7 @@ input[type="file"] {
 }
 
 .selected-combatant, .libraries {
-    .close {
+    .fa-close {
         position: absolute;
         right: 0;
         top: 0;
@@ -521,6 +521,10 @@ body>.login.button {
 }
 
 .settings {
+    .button {
+        margin: @small-spacer;
+    }
+
     .tab {
         border-width: 1px;
         border-style: solid;
@@ -609,6 +613,15 @@ body>.login.button {
 
     .pledge img {
         height: 30px;
+    }
+}
+
+.sketch-picker {
+    .flexbox-fix {
+        flex-direction: row;
+    }
+    .flexbox-fix > div {
+        display: initial;
     }
 }
 
@@ -885,7 +898,7 @@ body>.login.button {
 
     font-size: 150%;
 
-    background-image: url('../img/improved-initiative-transparent_darkgreen.png');
+    background-image: url('../img/improved-initiative-transparent-darkgreen.png');
     background-position: center bottom 20px;
     background-repeat: no-repeat;
 
@@ -913,6 +926,30 @@ body>.login.button {
             padding-right: @medium-spacer;
         }
     }
+}
+
+.c-color-block {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px black solid;//todo: move
+    border-radius: 3px;
+    vertical-align: middle;
+    margin: @small-spacer @medium-spacer @medium-spacer @small-spacer;
+
+    &.s-selected {
+        border-color: white;
+    }
+    
+    &:hover {
+        border-color: gray;//todo: move
+    }
+}
+
+.c-color-chooser {
+    flex-flow: row;
+    justify-content: space-between;
 }
 
 @import "responsive.less";

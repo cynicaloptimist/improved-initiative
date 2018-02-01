@@ -1,10 +1,10 @@
-import { Listing, DedupeByRankAndFilterListings } from "./Listing";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { EncounterCommander } from "../Commands/EncounterCommander";
+import { StatBlock } from "../StatBlock/StatBlock";
 import { KeyValueSet } from "../Utility/Toolbox";
+import { DedupeByRankAndFilterListings, Listing } from "./Listing";
 
 export interface StatBlockLibrary {
-    StatBlocks: KnockoutObservableArray<Listing<StatBlock>>
+    StatBlocks: KnockoutObservableArray<Listing<StatBlock>>;
     ContainsPlayerCharacters: boolean;
 }
 
@@ -22,13 +22,13 @@ export class StatBlockLibraryViewModel {
         this.library.StatBlocks.subscribe(this.clearCache);
     }
 
-    LibraryFilter = ko.observable("");
+    public LibraryFilter = ko.observable("");
 
     private filterCache: KeyValueSet<Listing<StatBlock>[]> = {};
     private clearCache = () => this.filterCache = {};
 
-    FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
-        const filter = (ko.unwrap(this.LibraryFilter) || '').toLocaleLowerCase(),
+    public FilteredStatBlocks = ko.pureComputed<Listing<StatBlock>[]>(() => {
+        const filter = (ko.unwrap(this.LibraryFilter) || "").toLocaleLowerCase(),
             statblocks = this.library.StatBlocks();
 
         if (this.filterCache[filter]) {
@@ -44,20 +44,20 @@ export class StatBlockLibraryViewModel {
         return finalList;
     });
 
-    ClickEntry = (entry: Listing<StatBlock>, event: JQuery.Event) => this.encounterCommander.AddStatBlockFromListing(entry, event);
-    ClickEdit = (entry: Listing<StatBlock>) => this.encounterCommander.EditStatBlock(entry);
-    ClickHide = () => this.encounterCommander.HideLibraries();
-    ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
+    public ClickEntry = (entry: Listing<StatBlock>, event: JQuery.Event) => this.encounterCommander.AddStatBlockFromListing(entry, event);
+    public ClickEdit = (entry: Listing<StatBlock>) => this.encounterCommander.EditStatBlock(entry);
+    public ClickHide = () => this.encounterCommander.HideLibraries();
+    public ClickAdd = () => this.encounterCommander.CreateAndEditStatBlock(this.library.ContainsPlayerCharacters);
 
-    PreviewVisible = ko.computed(() => {
+    public PreviewVisible = ko.computed(() => {
         return this.previewStatBlock() !== null;
     });
     
-    GetPreviewStatBlock = ko.computed(() => {
+    public GetPreviewStatBlock = ko.computed(() => {
         return this.previewStatBlock() || StatBlock.Default();
     });
 
-    PreviewStatBlock = (listing: Listing<StatBlock>) => {
+    public PreviewStatBlock = (listing: Listing<StatBlock>) => {
         this.previewStatBlock(null);
         listing.GetAsync(statBlock => {
             this.previewStatBlock(statBlock);

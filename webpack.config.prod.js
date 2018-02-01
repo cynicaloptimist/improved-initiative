@@ -1,4 +1,5 @@
 const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: './client/Index.ts',
@@ -12,10 +13,13 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'ImprovedInitiative.js',
-    path: path.resolve(__dirname, 'build')
-  }
+    path: path.resolve(__dirname, 'public', 'js')
+  },
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 };

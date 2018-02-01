@@ -1,5 +1,5 @@
-import { Combatant } from "./Combatant";
 import { SavedTag } from "../Encounter/SavedEncounter";
+import { Combatant } from "./Combatant";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";
 export const EndOfTurn: DurationTiming = "EndOfTurn";
@@ -17,20 +17,20 @@ export interface Tag {
 }
 
 export class Tag implements Tag {
-    constructor(public Text: string, combatant: Combatant, duration = -1, public DurationTiming = StartOfTurn, public DurationCombatantId = '') {
+    constructor(public Text: string, combatant: Combatant, duration = -1, public DurationTiming = StartOfTurn, public DurationCombatantId = "") {
         this.HasDuration = (duration > -1);
         this.DurationRemaining = ko.observable(duration);
         this.Remove = () => combatant.Tags.remove(this);
     }
 
-    Decrement = () => {
+    public Decrement = () => {
         const d = this.DurationRemaining();
         if (d > 0) {
             this.DurationRemaining(d - 1);
         }
     }
 
-    Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
+    public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
     public static getLegacyTags = (tags: (any)[], combatant: Combatant): Tag[] => {
         return tags.map(tag => {

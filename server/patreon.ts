@@ -1,6 +1,6 @@
 import express = require("express");
-import request = require("request");
 import patreon = require("patreon");
+import request = require("request");
 import * as DB from "./dbconnection";
 
 import { User } from "./user";
@@ -9,6 +9,8 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 const storageRewardIds = ["1322253", "1937132"];
+const epicRewardIds = ["1937132"];
+
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
     patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
@@ -31,7 +33,7 @@ interface Pledge {
     type: "pledge";
     relationships: {
         reward: { data: { id: string; } }
-    }
+    };
 }
 
 interface ApiResponse {
@@ -70,10 +72,13 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
                 return "none";
             }
         });
+
         const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
+        const hasEpicInitiative = userRewards.some(id => epicRewardIds.indexOf(id) !== -1);
         const standing = hasStorage ? "pledge" : "none";
 
         req.session.hasStorage = hasStorage;
+        req.session.hasEpicInitiative = hasEpicInitiative;
         req.session.isLoggedIn = true;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
@@ -83,7 +88,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             }).catch(err => {
                 console.error(err);
             });
-    }
+    };
 }
 
 export function configureLoginRedirect(app: express.Application) {
@@ -112,6 +117,18 @@ export function configureLoginRedirect(app: express.Application) {
     });
 }
 
+export function configureLogout(app: express.Application) {
+    const logoutPath = "/logout";
+    app.get(logoutPath, (req: Req, res: Res) => {
+        req.session.destroy(err => {
+            if (err) {
+                console.error(err);
+            }
+            return res.redirect(baseUrl);
+        });
+    });
+}
+
 function updateLatestPost(latestPost: { post: Post }) {
     return request.get(patreonUrl,
         (error, response, body) => {
@@ -130,7 +147,7 @@ export function startNewsUpdates(app: express.Application) {
 
     updateLatestPost(latest);
 
-    app.get('/updatenews/', (req: Req, res: Res) => {
+    app.get("/updatenews/", (req: Req, res: Res) => {
         updateLatestPost(latest);
         res.sendStatus(200);
     });

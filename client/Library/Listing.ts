@@ -1,3 +1,4 @@
+import { Listable } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 import { KeyValueSet } from "../Utility/Toolbox";
 
@@ -19,7 +20,7 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
         } else {
             dedupedStatBlocks[newListing.Name] = newListing;
         }
-    })
+    });
 
     Object.keys(dedupedStatBlocks).sort().forEach(i => {
         const listing = dedupedStatBlocks[i];
@@ -39,12 +40,6 @@ export interface ServerListing {
     Link: string;
     Name: string;
     SearchHint: string;
-}
-
-export interface Listable {
-    Id: string;
-    Version: string;
-    Name: string;
 }
 
 export interface Listing<T extends Listable> {
@@ -71,9 +66,9 @@ export class Listing<T extends Listable> {
 
     private value = ko.observable<T>();
 
-    SetValue = value => this.value(value);
+    public SetValue = value => this.value(value);
 
-    GetAsync(callback: (item: T) => any) {
+    public GetAsync(callback: (item: T) => any) {
         if (this.value()) {
             return callback(this.value());
         }
@@ -94,11 +89,11 @@ export class Listing<T extends Listable> {
         });
     }
 
-    CurrentName = ko.computed(() => {
+    public CurrentName = ko.computed(() => {
         const current = this.value();
         if (current !== undefined) {
             return current.Name || this.Name;
         }
         return this.Name;
-    })
+    });
 }

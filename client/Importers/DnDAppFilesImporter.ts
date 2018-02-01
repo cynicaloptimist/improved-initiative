@@ -1,23 +1,23 @@
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
 import { SpellImporter } from "./SpellImporter";
 import { StatBlockImporter } from "./StatBlockImporter";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { Spell } from "../Spell/Spell";
 
 const getStatBlocksFromXml = (xmlString: string) => {
     const statBlocks = $(xmlString).find("monster").toArray();
     return statBlocks.map(xmlDoc => {
-        var importer = new StatBlockImporter(xmlDoc);
+        let importer = new StatBlockImporter(xmlDoc);
         return importer.GetStatBlock();
     });
-}
+};
 
 const getSpellsFromXml = (xmlString: string) => {
     const spells = $(xmlString).find("spell").toArray();
     return spells.map(xmlDoc => {
-        var importer = new SpellImporter(xmlDoc);
+        let importer = new SpellImporter(xmlDoc);
         return importer.GetSpell();
     });
-}
+};
 
 export class DnDAppFilesImporter {
     public ImportEntitiesFromXml =

@@ -1,5 +1,5 @@
-import { Importer } from "./Importer";
 import { Spell } from "../Spell/Spell";
+import { Importer } from "./Importer";
 
 export class SpellImporter extends Importer {
     private static schoolsByInitials = {
@@ -11,9 +11,9 @@ export class SpellImporter extends Importer {
         "I": "Illusion",
         "N": "Necromancy",
         "T": "Transmutation",
-    }
+    };
 
-    GetSpell = () => {
+    public GetSpell = () => {
         const spell = Spell.Default();
         spell.Name = this.getString("name");
         spell.Level = this.getInt("level");
@@ -26,7 +26,7 @@ export class SpellImporter extends Importer {
         spell.Classes = this.getCommaSeparatedStrings("classes");
         spell.Ritual = this.getString("ritual") === "YES";
 
-        spell.Description = $(this.domElement).find('text').map((i, e) => e.innerHTML).get().join('\n');
+        spell.Description = $(this.domElement).find("text").map((i, e) => e.innerHTML).get().join("\n");
 
         return spell;
     }

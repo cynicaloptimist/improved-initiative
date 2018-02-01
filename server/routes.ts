@@ -1,15 +1,17 @@
-import request = require("request");
-import express = require("express");
 import bodyParser = require("body-parser");
-import mustacheExpress = require("mustache-express");
+import dbSession = require("connect-mongodb-session");
+import express = require("express");
 import session = require("express-session");
-import dbSession = require('connect-mongodb-session');
+import mustacheExpress = require("mustache-express");
+import request = require("request");
 
-import { Library, StatBlock, Spell } from "./library";
-import { configureLoginRedirect, startNewsUpdates } from "./patreon";
+import { Spell } from "../client/Spell/Spell";
+import { StatBlock } from "../client/StatBlock/StatBlock";
 import { upsertUser } from "./dbconnection";
-import configureStorageRoutes from "./storageroutes";
+import { Library } from "./library";
 import configureMetricsRoutes from "./metrics";
+import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
+import configureStorageRoutes from "./storageroutes";
 
 const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
@@ -27,6 +29,7 @@ const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     patreonClientId,
     isLoggedIn: session.isLoggedIn || false,
     hasStorage: session.hasStorage || false,
+    hasEpicInitiative: session.hasEpicInitiative || false,
     postedEncounter: null,
 });
 
@@ -51,12 +54,13 @@ const initializeNewPlayerView = (playerViews) => {
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
+    let store = null;
 
     if (process.env.DB_CONNECTION_STRING) {
-        var store = new MongoDBStore(
+        store = new MongoDBStore(
             {
                 uri: process.env.DB_CONNECTION_STRING,
-                collection: 'sessions'
+                collection: "sessions"
             });
     }
 
@@ -78,14 +82,29 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req: Req, res: Res) => {
-        if (defaultAccountLevel === "accountsync") {
-            req.session.hasStorage = true;
+        if (defaultAccountLevel !== "free") {
+
+            if (defaultAccountLevel === "accountsync") {
+                req.session.hasStorage = true;
+            }
+
+            if (defaultAccountLevel === "epicinitiative") {
+                req.session.hasStorage = true;
+                req.session.hasEpicInitiative = true;
+            }
+
             req.session.isLoggedIn = true;
-            upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
+
+            if (process.env.DB_CONNECTION_STRING) {
+                upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
                     res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
                 });
+            } else {
+                req.session.userId = probablyUniqueString();
+                res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+            }
         } else {
             res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
         }
@@ -145,6 +164,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.post("/importencounter/", importEncounter);
 
     configureLoginRedirect(app);
+    configureLogout(app);
     configureStorageRoutes(app);
     configureMetricsRoutes(app);
     startNewsUpdates(app);

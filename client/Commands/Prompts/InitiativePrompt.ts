@@ -1,24 +1,24 @@
-import { Prompt } from "./Prompt";
 import { Combatant } from "../../Combatant/Combatant";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { toModifierString } from "../../Utility/Toolbox";
+import { Prompt } from "./Prompt";
 
 export class InitiativePrompt implements Prompt {
-    InputSelector = '.response';
-    ComponentName = 'initiativeprompt';
-    PlayerCharacters = [];
-    NonPlayerCharacters = [];
+    public InputSelector = ".response";
+    public ComponentName = "initiativeprompt";
+    public PlayerCharacters = [];
+    public NonPlayerCharacters = [];
     private dequeue;
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
         const toPrompt = (combatant: Combatant) => ({
             Id: combatant.Id,
             Prompt: `${combatant.DisplayName()} (${toModifierString(combatant.InitiativeBonus)}): `,
-            Css: combatant.InitiativeGroup() !== null ? 'fa fa-link' : '',
+            Css: combatant.InitiativeGroup() !== null ? "fa fa-link" : "",
             PreRoll: combatant.GetInitiativeRoll()
         });
 
-        const groups = []
+        const groups = [];
 
         const byGroup = combatants.filter(combatant => {
             const group = combatant.InitiativeGroup();
@@ -29,7 +29,7 @@ export class InitiativePrompt implements Prompt {
                 groups.push(group);
             }
             return true;
-        })
+        });
 
         this.PlayerCharacters = byGroup.filter(c => c.IsPlayerCharacter).map(toPrompt);
         this.NonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter).map(toPrompt);
@@ -50,9 +50,9 @@ export class InitiativePrompt implements Prompt {
             startEncounter();
             TutorialSpy("CompleteInitiativeRolls");
             this.dequeue();
-        }
+        };
     }
 
-    Resolve = _ => { };
-    SetDequeueCallback = callback => this.dequeue = callback;
+    public Resolve = _ => { };
+    public SetDequeueCallback = callback => this.dequeue = callback;
 }

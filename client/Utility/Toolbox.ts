@@ -19,10 +19,10 @@ export function toModifierString(number: number): string {
 export function probablyUniqueString(): string {
     //string contains only easily relayable characters for forward 
     //compatability with speech-based data transfer ;-)
-    var chars = '1234567890abcdefghijkmnpqrstuvxyz';
-    var probablyUniqueString = ''
-    for (var i = 0; i < 8; i++) {
-        var index = Math.floor(Math.random() * chars.length);
+    let chars = "1234567890abcdefghijkmnpqrstuvxyz";
+    let probablyUniqueString = "";
+    for (let i = 0; i < 8; i++) {
+        let index = Math.floor(Math.random() * chars.length);
         probablyUniqueString += chars[index];
     }
     

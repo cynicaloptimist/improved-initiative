@@ -1,14 +1,15 @@
-import { Libraries } from "../Library/Libraries";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { SavedEncounter, SavedCombatant } from "../Encounter/SavedEncounter";
-import { Spell } from "../Spell/Spell";
-import { Listing, Listable } from "../Library/Listing";
-import { Settings } from "../Settings/Settings";
+import { Listable } from "../../common/Listable";
+import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { env } from "../Environment";
+import { Libraries } from "../Library/Libraries";
+import { Listing } from "../Library/Listing";
+import { Settings } from "../Settings/Settings";
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
 
 const BATCH_SIZE = 10;
 export class AccountClient {
-    GetAccount(callBack: (user: any) => void) {
+    public GetAccount(callBack: (user: any) => void) {
         if (!env.HasStorage) {
             return emptyPromise();
         }
@@ -18,7 +19,7 @@ export class AccountClient {
         return true;
     }
 
-    SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
+    public SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
         if (!env.HasStorage) {
             return emptyPromise();
         }
@@ -33,44 +34,44 @@ export class AccountClient {
         });
     }
 
-    SaveSettings(settings: Settings) {
-        return saveEntity<Settings>(settings, 'settings');
+    public SaveSettings(settings: Settings) {
+        return saveEntity<Settings>(settings, "settings");
     }
 
-    SaveStatBlock(statBlock: StatBlock) {
-        return saveEntity<StatBlock>(statBlock, 'statblocks');
+    public SaveStatBlock(statBlock: StatBlock) {
+        return saveEntity<StatBlock>(statBlock, "statblocks");
     }
 
-    DeleteStatBlock(statBlockId: string) {
-        return deleteEntity(statBlockId, 'statblocks');
+    public DeleteStatBlock(statBlockId: string) {
+        return deleteEntity(statBlockId, "statblocks");
     }
 
-    SavePlayerCharacter(playerCharacter: StatBlock) {
-        return saveEntity<StatBlock>(playerCharacter, 'playercharacters');
+    public SavePlayerCharacter(playerCharacter: StatBlock) {
+        return saveEntity<StatBlock>(playerCharacter, "playercharacters");
     }
 
-    DeletePlayerCharacter(statBlockId: string) {
-        return deleteEntity(statBlockId, 'playercharacters');
+    public DeletePlayerCharacter(statBlockId: string) {
+        return deleteEntity(statBlockId, "playercharacters");
     }
 
-    SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
-        return saveEntity<SavedEncounter<SavedCombatant>>(encounter, 'encounters');
+    public SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
+        return saveEntity<SavedEncounter<SavedCombatant>>(encounter, "encounters");
     }
 
-    DeleteEncounter(encounterId: string) {
-        return deleteEntity(encounterId, 'encounters');
+    public DeleteEncounter(encounterId: string) {
+        return deleteEntity(encounterId, "encounters");
     }
 
-    SaveSpell(spell: Spell) {
-        return saveEntity<Spell>(spell, 'spells');
+    public SaveSpell(spell: Spell) {
+        return saveEntity<Spell>(spell, "spells");
     }
 
-    DeleteSpell(spellId: string) {
-        return deleteEntity(spellId, 'spells');
+    public DeleteSpell(spellId: string) {
+        return deleteEntity(spellId, "spells");
     }
 
-    static SanitizeForId(str: string) {
-        return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, '');
+    public static SanitizeForId(str: string) {
+        return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, "");
     }
 }
 
@@ -144,7 +145,7 @@ function saveEntitySet<Listable>(entitySet: Listable[], entityType: string, mess
             }
             return uploadByBatch(next);
         });
-    }
+    };
 
     return uploadByBatch(entitySet);
 }

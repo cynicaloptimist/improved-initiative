@@ -1,5 +1,5 @@
 export class CommandSetting {
-    Name: string;
-    KeyBinding: string;
-    ShowOnActionBar: boolean;
+    public Name: string;
+    public KeyBinding: string;
+    public ShowOnActionBar: boolean;
 }

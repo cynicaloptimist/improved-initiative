@@ -6,27 +6,27 @@ export class LauncherViewModel {
         const pageLoadData = {
             referrer: document.referrer,
             userAgent: navigator.userAgent
-        }
-        Metrics.TrackEvent('LandingPageLoad', pageLoadData);
+        };
+        Metrics.TrackEvent("LandingPageLoad", pageLoadData);
     }
 
-    GeneratedEncounterId = env.EncounterId;
-    JoinEncounterInput = ko.observable<string>('');
+    public GeneratedEncounterId = env.EncounterId;
+    public JoinEncounterInput = ko.observable<string>("");
 
-    StartEncounter = () => {
-        var encounterId = this.JoinEncounterInput().split('/').pop();
+    public StartEncounter = () => {
+        let encounterId = this.JoinEncounterInput().split("/").pop();
         window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
     }
 
-    JoinEncounter = () => {
-        var encounterId = this.JoinEncounterInput().split('/').pop();
+    public JoinEncounter = () => {
+        let encounterId = this.JoinEncounterInput().split("/").pop();
         if (encounterId) {
             window.location.href = `p/${encounterId}`;
         }
     }
 
-    JoinEncounterButtonClass = () => {
-        var encounterId = this.JoinEncounterInput().split('/').pop();
-        return encounterId ? 'enabled' : 'disabled';
+    public JoinEncounterButtonClass = () => {
+        let encounterId = this.JoinEncounterInput().split("/").pop();
+        return encounterId ? "enabled" : "disabled";
     }
 }

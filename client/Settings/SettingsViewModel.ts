@@ -1,73 +1,81 @@
-import { Command } from "../Commands/Command";
-import { Store } from "../Utility/Store";
-import { Settings, CurrentSettings, hpVerbosityOptions } from "./Settings";
-import { CommandSetting } from "../Commands/CommandSetting";
+import * as React from "react";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
-import { AccountViewModel } from "../Settings/AccountViewModel";
-import { EncounterCommander } from "../Commands/EncounterCommander";
 import { CombatantCommander } from "../Commands/CombatantCommander";
+import { Command } from "../Commands/Command";
+import { CommandSetting } from "../Commands/CommandSetting";
+import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
+import { AccountViewModel } from "../Settings/AccountViewModel";
+import { Store } from "../Utility/Store";
+import { hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
+import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 
 const tips = [
     "You can view command list and set keybindings on the 'Commands' tab.",
     "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
     "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
     "You can use the player view URL to track your combat on any device.",
-    "Editing a creature after it has been added to combat will only change that individual creature.",
+    "Editing a creature after it has been added to combat will only change that individual combatant.",
     "You can restore a creature's hit points by applying negative damage to it.",
     "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-    "Clicking a creature holding 'alt' will hide it from the player view when adding it to combat.",
+    "Clicking a creature while holding 'alt' will hide it from the player view when adding it to combat.",
     "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
     "Moving a creature in the initiative order will automatically adjust their initiative count.",
     "The active creature will have its traits and actions displayed first for ease of reference.",
     "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
     "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
-    "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it at <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>Github.</a>"
+    "A creature tagged as 'Concentrating' will prompt for a Constitution saving throw when it takes damage. You can disable this feature in the settings.",
+    "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>"
 ];
 
 export class SettingsViewModel {
-    PreviousTip: any;
-    NextTip: any;
-    Tip: KnockoutComputed<string>;
+    public PreviousTip: any;
+    public NextTip: any;
+    public Tip: KnockoutComputed<string>;
 
-    PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
-    PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
-    PlayerViewDisplayRoundCounter: KnockoutObservable<boolean>;
-    DisplayDifficulty: KnockoutObservable<boolean>;
-    DisplayTurnTimer: KnockoutObservable<boolean>;
-    DisplayRoundCounter: KnockoutObservable<boolean>;
-    AutoCheckConcentration: KnockoutObservable<boolean>;
-    AllowNegativeHP: KnockoutObservable<boolean>;
-    HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
-    HpVerbosityOptions: string[];
-    HpVerbosity: KnockoutObservable<string>;
-    EncounterCommands: Command[];
-    CombatantCommands: Command[];
-    CurrentTab = ko.observable<string>('about');
-    RollHp: KnockoutObservable<boolean>;
-    AccountViewModel = new AccountViewModel(this.libraries);
+    public PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
+    public PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
+    public PlayerViewDisplayRoundCounter: KnockoutObservable<boolean>;
+    public DisplayDifficulty: KnockoutObservable<boolean>;
+    public DisplayTurnTimer: KnockoutObservable<boolean>;
+    public DisplayRoundCounter: KnockoutObservable<boolean>;
+    public AutoCheckConcentration: KnockoutObservable<boolean>;
+    public AllowNegativeHP: KnockoutObservable<boolean>;
+    public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
+    public HpVerbosityOptions: string[];
+    public HpVerbosity: KnockoutObservable<string>;
+    public EncounterCommands: Command[];
+    public CombatantCommands: Command[];
+    public CurrentTab = ko.observable<string>("about");
+    public RollHp: KnockoutObservable<boolean>;
+    public AccountViewModel = new AccountViewModel(this.libraries);
 
-    ExportData = () => {
-        var blob = Store.ExportAll();
-        saveAs(blob, 'improved-initiative.json');
+    private customCSSEditor: React.ComponentElement<any, CustomCSSEditor>;
+    private currentCSS: string;
+    private currentCustomStyles: PlayerViewCustomStyles;
+    
+    public ExportData = () => {
+        let blob = Store.ExportAll();
+        saveAs(blob, "improved-initiative.json");
     }
 
-    ImportData = (_, event) => {
-        var file = event.target.files[0];
+    public ImportData = (_, event) => {
+        let file = event.target.files[0];
         if (file) {
             Store.ImportAll(file);
         }
     }
 
-    ImportDndAppFile = (_, event) => {
-        var file = event.target.files[0];
+    public ImportDndAppFile = (_, event) => {
+        let file = event.target.files[0];
         if (file) {
             Store.ImportFromDnDAppFile(file);
         }
     }
 
-    RepeatTutorial: () => void;
-    SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
+    public RepeatTutorial: () => void;
+    public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
     private getUpdatedSettings(): Settings {
         const getCommandSetting = (command: Command): CommandSetting => ({
@@ -93,13 +101,15 @@ export class SettingsViewModel {
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
-                MonsterHPVerbosity: this.HpVerbosity()
+                MonsterHPVerbosity: this.HpVerbosity(),
+                CustomCSS: this.currentCSS,
+                CustomStyles: this.currentCustomStyles
             },
-            Version: "1.0.0" //TODO: auto generate this line
-        }
+            Version: "1.2.0" //TODO: auto generate this line
+        };
     }
 
-    SaveAndClose() {
+    public SaveAndClose() {
         const newSettings = this.getUpdatedSettings();
         CurrentSettings(newSettings);
         Store.Save(Store.User, "Settings", newSettings);
@@ -117,7 +127,7 @@ export class SettingsViewModel {
         const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
         function cycleTipIndex() {
-            var newIndex = currentTipIndex() + this;
+            let newIndex = currentTipIndex() + this;
             if (newIndex < 0) {
                 newIndex = tips.length - 1;
             } else if (newIndex > tips.length - 1) {
@@ -144,12 +154,34 @@ export class SettingsViewModel {
         this.HpVerbosity = ko.observable(currentSettings.PlayerView.MonsterHPVerbosity);
         this.HpVerbosityOptions = hpVerbosityOptions;
         this.HideMonstersOutsideEncounter = ko.observable(currentSettings.PlayerView.HideMonstersOutsideEncounter);
-        this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);;
+        this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);
         this.PreviousTip = cycleTipIndex.bind(-1);
+
+        this.createCustomCSSEditorComponent(currentSettings);
+    }
+
+    private createCustomCSSEditorComponent(currentSettings: Settings) {
+        this.currentCSS = currentSettings.PlayerView.CustomCSS;
+        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
+        const updateCSS = (css: string) => {
+            this.currentCSS = css;
+        };
+        const updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
+            this.currentCustomStyles[name] = value;
+        };
+
+        const customCSSEditorProps: CustomCSSEditorProps = {
+            currentCSS: this.currentCSS,
+            currentStyles: this.currentCustomStyles,
+            updateCSS,
+            updateStyle
+        };
+
+        this.customCSSEditor = React.createElement(CustomCSSEditor, customCSSEditorProps);
     }
 }

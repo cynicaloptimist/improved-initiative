@@ -1,60 +1,134 @@
+import * as Color from "color";
+import { PlayerView } from "../common/PlayerView";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
-import { env } from "./Environment";
-import { TurnTimer } from "./Widgets/TurnTimer";
-import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
+import { env } from "./Environment";
+import { CombatantSuggestor } from "./Player/CombatantSuggestor";
+import { TurnTimer } from "./Widgets/TurnTimer";
 
 export class PlayerViewModel {
-    Combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
-    ActiveCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
-    EncounterId = env.EncounterId;
-    RoundCounter = ko.observable();
-    TurnTimer = new TurnTimer();
-    DisplayTurnTimer = ko.observable(false);
-    AllowSuggestions = ko.observable(false);
+    private additionalUserCSS: HTMLStyleElement;
+    private userStyles: HTMLStyleElement;
+    private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+    private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
+    private encounterId = env.EncounterId;
+    private roundCounter = ko.observable();
+    private roundCounterVisible = ko.observable(false);
+    private turnTimer = new TurnTimer();
+    private turnTimerVisible = ko.observable(false);
+    private allowSuggestions = ko.observable(false);
 
-    Socket: SocketIOClient.Socket = io();
+    private socket: SocketIOClient.Socket = io();
 
-    CombatantSuggestor = new CombatantSuggestor(this.Socket, this.EncounterId);
+    private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
     constructor() {
-        this.Socket.on('update encounter', (encounter) => {
-            this.LoadEncounter(encounter)
-        })
+        this.socket.on("encounter updated", (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+            this.LoadEncounter(encounter);
+        });
+        this.socket.on("settings updated", (settings: PlayerViewSettings) => {
+            this.LoadSettings(settings);
+        });
 
-        this.Socket.emit('join encounter', this.EncounterId);
+        this.socket.emit("join encounter", this.encounterId);
+
+        this.InitializeStylesheets();
     }
 
-    LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
-        this.Combatants(encounter.Combatants);
-        this.DisplayTurnTimer(encounter.DisplayTurnTimer);
-        this.RoundCounter(encounter.RoundCounter)
-        this.AllowSuggestions(encounter.AllowPlayerSuggestions);
+    public LoadEncounterFromServer = (encounterId: string) => {
+        $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
+            this.LoadEncounter(playerView.encounterState);
+            this.LoadSettings(playerView.settings);
+        });
+    }
 
-        if (encounter.ActiveCombatantId != (this.ActiveCombatant() || { Id: -1 }).Id) {
-            this.TurnTimer.Reset();
+    private InitializeStylesheets() {
+        const userStylesElement = document.createElement("style");
+        const additionalCSSElement = document.createElement("style");
+        userStylesElement.type = "text/css";
+        additionalCSSElement.type = "text/css";
+        const headElement = document.getElementsByTagName("head")[0];
+        this.userStyles = headElement.appendChild(userStylesElement);
+        this.additionalUserCSS = headElement.appendChild(additionalCSSElement);
+    }
+
+    private LoadSettings(settings: PlayerViewSettings) {
+        this.userStyles.innerHTML = CSSFrom(settings.CustomStyles);
+        this.additionalUserCSS.innerHTML = settings.CustomCSS;
+        this.allowSuggestions(settings.AllowPlayerSuggestions);
+        this.turnTimerVisible(settings.DisplayTurnTimer);
+        this.roundCounterVisible(settings.DisplayRoundCounter);
+    }
+
+    private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+        this.combatants(encounter.Combatants);
+        this.roundCounter(encounter.RoundCounter);
+        if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
+            this.turnTimer.Reset();
         }
         if (encounter.ActiveCombatantId) {
-            this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
+            this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
             setTimeout(this.ScrollToActiveCombatant, 1);
         }
     }
 
-    LoadEncounterFromServer = (encounterId: string) => {
-        $.ajax(`../playerviews/${encounterId}`).done(this.LoadEncounter);
-    }
-
-    ScrollToActiveCombatant = () => {
-        var activeCombatantElement = $('.active')[0];
+    private ScrollToActiveCombatant = () => {
+        let activeCombatantElement = $(".active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }
     }
 
-    ShowSuggestion = (combatant: StaticCombatantViewModel) => {
-        if (!this.AllowSuggestions()) {
+    private ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+        if (!this.allowSuggestions()) {
             return;
         }
-        this.CombatantSuggestor.Show(combatant);
+        this.combatantSuggestor.Show(combatant);
     }
+}
+
+function CSSFrom(customStyles: PlayerViewCustomStyles): string {
+    const declarations = [];
+
+    if (customStyles.combatantText) {
+        declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
+    }
+
+    if (customStyles.combatantBackground) {
+        const baseColor = Color(customStyles.combatantBackground);
+        let zebraColor = "", activeColor = "";
+        if (baseColor.isDark()) {
+            zebraColor = baseColor.lighten(0.1).string();
+            activeColor = baseColor.lighten(0.2).string();
+        } else {
+            zebraColor = baseColor.darken(0.1).string();
+            activeColor = baseColor.darken(0.2).string();
+        }
+        declarations.push(`li.combatant { background-color: ${customStyles.combatantBackground}; }`);
+        declarations.push(`li.combatant:nth-child(2n) { background-color: ${zebraColor}; }`);
+        declarations.push(`li.combatant.active { background-color: ${activeColor}; }`);
+    }
+
+    if (customStyles.activeCombatantIndicator) {
+        declarations.push(`.combatant.active { border-color: ${customStyles.activeCombatantIndicator} }`);
+    }
+
+    if (customStyles.headerText) {
+        declarations.push(`.combatant.header, .combat-footer { color: ${customStyles.headerText}; }`);
+    }
+
+    if (customStyles.headerBackground) {
+        declarations.push(`.combatant.header, .combat-footer { background-color: ${customStyles.headerBackground}; border-color: ${customStyles.headerBackground} }`);
+    }
+
+    if (customStyles.mainBackground) {
+        declarations.push(`#playerview { background-color: ${customStyles.mainBackground}; background-image: none; }`);
+    }
+
+    if (customStyles.font) {
+        declarations.push(`* { font-family: "${customStyles.font}", sans-serif; }`);
+    }
+
+    return declarations.join(" ");
 }

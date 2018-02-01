@@ -1,21 +1,21 @@
-import { Command, BuildEncounterCommandList } from "./Command";
-import { Libraries } from "../Library/Libraries";
 import { AccountClient } from "../Account/AccountClient";
-import { TrackerViewModel } from "../TrackerViewModel";
+import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { StatBlock } from "../StatBlock/StatBlock";
-import { Store } from "../Utility/Store";
-import { Spell } from "../Spell/Spell";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Dice } from "../Rules/Rules";
+import { CurrentSettings } from "../Settings/Settings";
+import { Spell } from "../Spell/Spell";
+import { StatBlock } from "../StatBlock/StatBlock";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { ComponentLoader } from "../Utility/Components";
+import { Store } from "../Utility/Store";
+import { probablyUniqueString } from "../Utility/Toolbox";
+import { BuildEncounterCommandList, Command } from "./Command";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
-import { CurrentSettings } from "../Settings/Settings";
-import { ComponentLoader } from "../Utility/Components";
-import { probablyUniqueString } from "../Utility/Toolbox";
 
 export class EncounterCommander {
-    Commands: Command[];
+    public Commands: Command[];
     private libraries: Libraries;
     private accountClient = new AccountClient();
 
@@ -24,7 +24,7 @@ export class EncounterCommander {
         this.libraries = tracker.Libraries;
     }
 
-    AddStatBlockFromListing = (listing: Listing<StatBlock>, event: JQuery.Event) => {
+    public AddStatBlockFromListing = (listing: Listing<StatBlock>, event: JQuery.Event) => {
         listing.GetAsync(statBlock => {
             this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
@@ -87,9 +87,9 @@ export class EncounterCommander {
         }
 
 
-    CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
-        var statBlock = StatBlock.Default();
-        var newId = probablyUniqueString();
+    public CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
+        let statBlock = StatBlock.Default();
+        let newId = probablyUniqueString();
 
         if (isPlayerCharacter) {
             statBlock.Name = "New Player Character";
@@ -101,10 +101,10 @@ export class EncounterCommander {
         }
     }
 
-    EditStatBlock = (listing: Listing<StatBlock>) => {
+    public EditStatBlock = (listing: Listing<StatBlock>) => {
         listing.GetAsync(statBlock => {
             if (listing.Origin === "server") {
-                var newId = probablyUniqueString();
+                let newId = probablyUniqueString();
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
             } else {
                 this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
@@ -112,7 +112,7 @@ export class EncounterCommander {
         });
     }
 
-    CreateAndEditSpell = () => {
+    public CreateAndEditSpell = () => {
         const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom", Id: probablyUniqueString() };
         this.tracker.SpellEditor.EditSpell(
             newSpell,
@@ -121,7 +121,7 @@ export class EncounterCommander {
         );
     }
 
-    EditSpell = (listing: Listing<Spell>) => {
+    public EditSpell = (listing: Listing<Spell>) => {
         listing.GetAsync(spell => {
             this.tracker.SpellEditor.EditSpell(
                 spell,
@@ -131,44 +131,44 @@ export class EncounterCommander {
         });
     }
 
-    ShowLibraries = () => this.tracker.LibrariesVisible(true);
-    HideLibraries = () => this.tracker.LibrariesVisible(false);
+    public ShowLibraries = () => this.tracker.LibrariesVisible(true);
+    public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
-    LaunchPlayerWindow = () => {
-        window.open(`/p/${this.tracker.Encounter.EncounterId}`, 'Player View');
+    public LaunchPlayerWindow = () => {
+        window.open(`/p/${this.tracker.Encounter.EncounterId}`, "Player View");
     }
 
-    ShowSettings = () => {
+    public ShowSettings = () => {
         TutorialSpy("ShowSettings");
         this.tracker.SettingsVisible(true);
     }
 
-    ToggleToolbarWidth = () => {
+    public ToggleToolbarWidth = () => {
         this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
     }
 
-    RollDice = (diceExpression: string) => {
+    public RollDice = (diceExpression: string) => {
         const diceRoll = Dice.RollDiceExpression(diceExpression);
         const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`);
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    ReferenceSpell = (spellListing: Listing<Spell>) => {
+    public ReferenceSpell = (spellListing: Listing<Spell>) => {
         const prompt = new SpellPrompt(spellListing);
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    DisplayRoundCounter = ko.computed(() => CurrentSettings().TrackerView.DisplayRoundCounter);
-    DisplayTurnTimer = ko.computed(() => CurrentSettings().TrackerView.DisplayTurnTimer);
-    DisplayDifficulty = ko.computed(() => CurrentSettings().TrackerView.DisplayDifficulty);
+    public DisplayRoundCounter = ko.computed(() => CurrentSettings().TrackerView.DisplayRoundCounter);
+    public DisplayTurnTimer = ko.computed(() => CurrentSettings().TrackerView.DisplayTurnTimer);
+    public DisplayDifficulty = ko.computed(() => CurrentSettings().TrackerView.DisplayDifficulty);
 
-    StartEncounter = () => {
+    public StartEncounter = () => {
         if (this.tracker.PromptQueue.HasPrompt()) {
             this.tracker.PromptQueue.AnimatePrompt();
             return;
         }
 
-        if (this.tracker.Encounter.State() == 'inactive') {
+        if (this.tracker.Encounter.State() == "inactive") {
             this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
 
             ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
@@ -181,20 +181,20 @@ export class EncounterCommander {
         return false;
     }
 
-    EndEncounter = () => {
+    public EndEncounter = () => {
         this.tracker.Encounter.EndEncounter();
         this.tracker.EventLog.AddEvent("Encounter ended.");
 
         return false;
     }
 
-    RerollInitiative = () => {
+    public RerollInitiative = () => {
         this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
 
         return false;
     }
 
-    ClearEncounter = () => {
+    public ClearEncounter = () => {
         if (confirm("Remove all creatures and end encounter?")) {
             this.tracker.Encounter.ClearEncounter();
             this.tracker.CombatantViewModels([]);
@@ -205,10 +205,10 @@ export class EncounterCommander {
         return false;
     }
 
-    SaveEncounter = () => {
+    public SaveEncounter = () => {
         const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
             response => {
-                const encounterName = response['encounterName'];
+                const encounterName = response["encounterName"];
                 if (encounterName) {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName);
                     this.libraries.Encounters.Save(savedEncounter);
@@ -218,20 +218,20 @@ export class EncounterCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    NextTurn = () => {
+    public NextTurn = () => {
         this.tracker.Encounter.NextTurn();
-        var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+        let currentCombatant = this.tracker.Encounter.ActiveCombatant();
         this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.DisplayName()}.`);
 
         return false;
     }
 
-    PreviousTurn = () => {
+    public PreviousTurn = () => {
         if (!this.tracker.Encounter.ActiveCombatant()) {
             return;
         }
         this.tracker.Encounter.PreviousTurn();
-        var currentCombatant = this.tracker.Encounter.ActiveCombatant();
+        let currentCombatant = this.tracker.Encounter.ActiveCombatant();
         this.tracker.EventLog.AddEvent(`Initiative rewound to ${currentCombatant.DisplayName()}.`);
 
         return false;

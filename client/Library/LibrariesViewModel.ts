@@ -1,10 +1,10 @@
-import { TrackerViewModel } from "../TrackerViewModel";
 import { EncounterCommander } from "../Commands/EncounterCommander";
-import { Libraries } from "./Libraries";
+import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { Libraries } from "./Libraries";
 
 export class LibrariesViewModel {
-    LibraryTabs = [
+    public LibraryTabs = [
         {
             Name: "Creatures",
             Component: "statblocklibrary",
@@ -27,9 +27,9 @@ export class LibrariesViewModel {
         }
     ];
 
-    SelectedTab = ko.observable(this.LibraryTabs[0]);
+    public SelectedTab = ko.observable(this.LibraryTabs[0]);
 
-    TabClassName = library => library === this.SelectedTab() ? 'selected' : '';
+    public TabClassName = library => library === this.SelectedTab() ? "selected" : "";
 
     constructor(
         public Tracker: TrackerViewModel,
@@ -40,6 +40,6 @@ export class LibrariesViewModel {
             if (t.Name === "Players") {
                 TutorialSpy("SelectPlayersTab");
             }
-        })
+        });
     }
 }

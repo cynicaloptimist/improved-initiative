@@ -26,7 +26,7 @@ const xpThresholdsByLevel: { [level: number]: XpThresholds } = {
     18: { easy: 2100, medium: 4200, hard: 6300, deadly: 9500 },
     19: { easy: 2400, medium: 4900, hard: 7300, deadly: 10900 },
     20: { easy: 2800, medium: 5700, hard: 8500, deadly: 12700 }
-}
+};
 
 const xpAmountsByChallenge = {
     "0": 0, "1/8": 25, "1/4": 50, "1/2": 100,
@@ -36,7 +36,7 @@ const xpAmountsByChallenge = {
     "16": 15000, "17": 18000, "18": 20000, "19": 22000, "20": 25000,
     "21": 33000, "22": 41000, "23": 50000, "24": 62000, "25": 75000,
     "26": 90000, "27": 105000, "28": 120000, "29": 135000, "30": 155000
-}
+};
 
 const getTotalLevel = (levels: string) =>
     levels
@@ -47,19 +47,24 @@ const getTotalLevel = (levels: string) =>
 const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
 
 const getXpMultiplierRank = (enemyCount: number) => {
-    if (enemyCount <= 1)
+    if (enemyCount <= 1) {
         return 1;
-    if (enemyCount <= 2)
+    }
+    if (enemyCount <= 2) {
         return 2;
-    if (enemyCount <= 6)
+    }
+    if (enemyCount <= 6) {
         return 3;
-    if (enemyCount <= 10)
+    }
+    if (enemyCount <= 10) {
         return 4;
-    if (enemyCount <= 14)
+    }
+    if (enemyCount <= 14) {
         return 5;
+    }
 
     return 6;
-}
+};
 
 const getXpMultiplier = (enemyCount: number, playerCount: number) => {
     const multiplierRank = getXpMultiplierRank(enemyCount);
@@ -77,7 +82,7 @@ const getXpMultiplier = (enemyCount: number, playerCount: number) => {
     }
 
     return rankedXpMultipliers[multiplierRank];
-}
+};
 
 const getTotalXpBase = (challengeRatings: string[]) =>
     challengeRatings.reduce((currentSum, cr) => {
@@ -93,11 +98,12 @@ const getModifiedXp = (enemyChallengeRatings: string[], playerCount: number) => 
         return totalXpBase * getXpMultiplier(enemyChallengeRatings.length, playerCount);
     }
     return totalXpBase;
-}
+};
 
 const getDifficulty = (totalXp, playerLevels: number[]) => {
-    if (playerLevels.length == 0)
+    if (playerLevels.length == 0) {
         return "";
+    }
     if (playerLevels.some(level => typeof level !== "number" || level < 1 || level > 20)) {
         return "";
     }
@@ -107,19 +113,23 @@ const getDifficulty = (totalXp, playerLevels: number[]) => {
         medium: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].medium, 0),
         hard: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].hard, 0),
         deadly: playerLevels.reduce((p, c) => p + xpThresholdsByLevel[c].deadly, 0),
+    };
+
+    if (totalXp > xpThresholds.deadly) {
+        return "Deadly";
+    }
+    if (totalXp > xpThresholds.hard) {
+        return "Hard";
+    }
+    if (totalXp > xpThresholds.medium) {
+        return "Medium";
+    }
+    if (totalXp > xpThresholds.easy) {
+        return "Easy";
     }
 
-    if (totalXp > xpThresholds.deadly)
-        return "Deadly";
-    if (totalXp > xpThresholds.hard)
-        return "Hard";
-    if (totalXp > xpThresholds.medium)
-        return "Medium";
-    if (totalXp > xpThresholds.easy)
-        return "Easy";
-
     return "Trivial";
-}
+};
 
 
 export interface EncounterDifficulty {
@@ -129,7 +139,7 @@ export interface EncounterDifficulty {
 }
 
 export class DifficultyCalculator {
-    static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
+    public static Calculate(enemyChallengeRatings: string[], playerLevels: string[]): EncounterDifficulty {
         const playerLevelTotals = playerLevels.map(getTotalLevel);
         const totalXpBase = getTotalXpBase(enemyChallengeRatings);
         const modifiedXp = getModifiedXp(enemyChallengeRatings, playerLevels.length);
@@ -138,6 +148,6 @@ export class DifficultyCalculator {
             Difficulty: getDifficulty(modifiedXp, playerLevelTotals),
             EarnedExperience: totalXpBase,
             EffectiveExperience: modifiedXp
-        }
+        };
     }
 }
