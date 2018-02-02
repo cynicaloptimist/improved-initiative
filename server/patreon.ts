@@ -1,4 +1,5 @@
 import express = require("express");
+import * as _ from "lodash";
 import patreon = require("patreon");
 import request = require("request");
 import * as DB from "./dbconnection";
@@ -73,8 +74,8 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             }
         });
 
-        const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
-        const hasEpicInitiative = userRewards.some(id => epicRewardIds.indexOf(id) !== -1);
+        const hasStorage = _.intersection(userRewards, storageRewardIds).length > 0;
+        const hasEpicInitiative = _.intersection(userRewards, epicRewardIds).length > 0;
         const standing = hasStorage ? "pledge" : "none";
 
         req.session.hasStorage = hasStorage;
