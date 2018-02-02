@@ -15,7 +15,8 @@ const epicRewardIds = ["1937132"];
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
     patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
-    patreonUrl = process.env.PATREON_URL;
+    patreonUrl = process.env.PATREON_URL,
+    epicPatreonIds = (process.env.PATREON_ADDITIONAL_EPIC_USERIDS || "").split(",").map(s => s.trim());
 
 interface Post {
     attributes: {
@@ -63,7 +64,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
-        const encounterId = req.query.state.replace(/['"]/g,"");
+        const encounterId = req.query.state.replace(/['"]/g, "");
         const relationships = apiResponse.included || [];
 
         const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => {
@@ -75,8 +76,12 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         });
 
         const hasStorage = _.intersection(userRewards, storageRewardIds).length > 0;
-        const hasEpicInitiative = _.intersection(userRewards, epicRewardIds).length > 0;
-        const standing = hasStorage ? "pledge" : "none";
+        const hasEpicInitiative = _.intersection(userRewards, epicRewardIds).length > 0 ||
+            _.intersection(apiResponse.data.id, epicPatreonIds).length > 0;
+        const standing =
+            hasEpicInitiative ? "epic" :
+                hasStorage ? "pledge" :
+                    "none";
 
         req.session.hasStorage = hasStorage;
         req.session.hasEpicInitiative = hasEpicInitiative;
@@ -99,16 +104,16 @@ export function configureLoginRedirect(app: express.Application) {
     app.get(redirectPath, (req: Req, res: Res) => {
         try {
             const code = req.query.code;
-            
+
             const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
-    
+
             OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {
                 if (tokensError) {
                     console.error(tokensError);
                     res.end(tokensError);
                     return;
                 }
-    
+
                 const APIClient = patreon.default(tokens.access_token);
                 APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
             });
