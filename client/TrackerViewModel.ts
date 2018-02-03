@@ -18,6 +18,8 @@ import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
+import { Toolbar } from "./Commands/components/Toolbar";
+import * as React from "react";
 
 interface PatreonPostAttributes {
     title: string;
@@ -216,6 +218,8 @@ export class TrackerViewModel {
 
         return "show-center-right-left";
     });
+
+    private toolbarComponent = React.createElement(Toolbar, {});
 
     private contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
