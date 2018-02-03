@@ -28,6 +28,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
         const commandToButton = c => <Button onClick={c.ActionBinding} additionalClassNames={c.ActionBarIcon} />;
         const encounterCommandButtons = this.props.encounterCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
         const combatantCommandButtons = this.props.combatantCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
+        //TODO: Ensure subscription to ShowOnActionBar changes
 
         return <div className={className}>
             <div className="commands-encounter">
