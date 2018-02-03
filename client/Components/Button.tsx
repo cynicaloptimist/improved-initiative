@@ -10,7 +10,10 @@ export interface ButtonProps {
 export class Button extends React.Component<ButtonProps> {
     public render() {
         const text = this.props.text || "";
-        const className = this.props.faClass ? `c-button fa fa-${this.props.faClass}` : "c-button fa";
-        return <div className={className} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>{text}</div>;
+        const classNames = ["c-button", "fa"];
+        if(this.props.faClass){
+            classNames.push(`fa-${this.props.faClass}`);
+        }
+        return <span className={classNames.join(" ")} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>{text}</span>;
     } 
 }
