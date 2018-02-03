@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Button } from "../../Components/Button";
+import { Command } from "../Command";
 
 interface ToolbarProps {
-
+    encounterCommands: Command [];
+    combatantCommands: Command [];
 }
 
 interface ToolbarState {

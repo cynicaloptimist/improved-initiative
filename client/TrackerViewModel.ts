@@ -38,7 +38,7 @@ interface PatreonPost {
 export class TrackerViewModel {
     constructor() {
         ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
-        
+
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
             const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
@@ -191,7 +191,7 @@ export class TrackerViewModel {
     }
 
     public PatreonLoginUrl = env.PatreonLoginUrl;
-    
+
     public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
             return "show-center-right-left";
@@ -219,7 +219,11 @@ export class TrackerViewModel {
         return "show-center-right-left";
     });
 
-    private toolbarComponent = React.createElement(Toolbar, {});
+    private toolbarComponent: React.ComponentElement<any, Toolbar> = React.createElement(Toolbar,
+        {
+            encounterCommands: this.EncounterCommander.Commands,
+            combatantCommands: this.CombatantCommander.Commands
+        });;
 
     private contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
