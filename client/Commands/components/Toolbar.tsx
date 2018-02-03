@@ -1,11 +1,24 @@
 import * as React from "react";
 
-export interface ToolbarProps {
+interface ToolbarProps {
 
 }
 
-export class Toolbar extends React.Component<ToolbarProps> {
+interface ToolbarState {
+    displayWide: boolean;
+}
+
+export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
+    constructor(props: ToolbarProps){
+        super(props);
+        this.setState({
+            displayWide: false
+        });
+    }
+
     public render() {
-        return "TOOLBAR";
-    } 
+        const className = this.state.displayWide ? "toolbar s-wide" : "toolbar s-narrow";
+        return <div className={className}>
+        </div>;
+    }
 }
