@@ -25,8 +25,17 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
 
     public render() {
         const className = this.state.displayWide ? "toolbar s-wide" : "toolbar s-narrow";
+        const commandToButton = c => <Button onClick={c.ActionBinding} additionalClassNames={c.ActionBarIcon} />;
+        const encounterCommandButtons = this.props.encounterCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
+        const combatantCommandButtons = this.props.combatantCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
+
         return <div className={className}>
-            <Button faClass="menu" onClick={this.toggleWidth} />
+            <div className="commands-encounter">
+                {encounterCommandButtons}
+            </div>
+            <div className="commands-combatant">
+                {combatantCommandButtons}
+            </div>
         </div>;
     }
 }
