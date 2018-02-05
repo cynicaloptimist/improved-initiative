@@ -36,7 +36,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             }
         };
 
-        return (<React.Fragment>
+        return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
                 {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
@@ -45,6 +45,6 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 <ListingButton faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)} />
                 <ListingButton faClass="plus" onClick={() => this.props.tracker.EncounterCommander.SaveEncounter()} />
             </div>
-        </React.Fragment>);
+        </div>);
     }
 }
