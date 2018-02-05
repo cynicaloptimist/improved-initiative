@@ -5,7 +5,7 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { KeyValueSet } from "../Utility/Toolbox";
 import { EncounterLibraryViewModel, EncounterLibraryViewModelProps } from "./Components/EncounterLibraryViewModel";
 import { EncounterLibrary } from "./EncounterLibrary";
-import { DedupeByRankAndFilterListings, Listing } from "./Listing";
+import { Listing } from "./Listing";
 import { StatBlockLibrary } from "./StatBlockLibraryViewModel";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;

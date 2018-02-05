@@ -3,7 +3,8 @@ import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { KeyValueSet } from "../../Utility/Toolbox";
 import { EncounterLibrary } from "../EncounterLibrary";
-import { DedupeByRankAndFilterListings, Listing } from "../Listing";
+import { FilterCache } from "../FilterCache";
+import { Listing } from "../Listing";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
@@ -23,31 +24,13 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         this.state = {
             filter: ""
         };
-    }
-    
-    
-    private filterCache: KeyValueSet<Listing<SavedEncounter<SavedCombatant>>[]> = {};
-    private clearCache = () => this.filterCache = {};
-
-    private getFilteredStatBlocks = () => {
-        const filter = this.state.filter,
-            statblocks = this.props.library.Encounters();
-
-        if (this.filterCache[filter]) {
-            return this.filterCache[filter];
-        }
-
-        const parentSubset = this.filterCache[filter.substr(0, filter.length - 1)] || statblocks;
-
-        const finalList = DedupeByRankAndFilterListings(parentSubset, filter);
-
-        this.filterCache[filter] = finalList;
-
-        return finalList;
+        this.filterCache = new FilterCache(this.props.library.Encounters());
     }
 
+    private filterCache: FilterCache<Listing<SavedEncounter<SavedCombatant>>>;
+    
     public render() {
-        const filteredListings = this.getFilteredStatBlocks();
+        const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
         const loadSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
             listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
