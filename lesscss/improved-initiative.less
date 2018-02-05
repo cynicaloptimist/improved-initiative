@@ -625,11 +625,12 @@ body>.login.button {
     }
 }
 
-.tabs {
-    display:block;
+.tabs, .c-tabs {
+    flex-flow: row wrap;
     margin: @medium-spacer @small-spacer 0px @small-spacer;
     span {
         padding: 1px @medium-spacer;
+        margin-right: @small-spacer;
         border-radius: 0px @border-radius 0px 0px;
     }
 }

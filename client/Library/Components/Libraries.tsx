@@ -21,24 +21,35 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
 
     public render() {
-        const selectedLibrary = <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />
+        const selectedLibrary = <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />;
+        const libraryOptions = ["Creatures", "Players", "Encounters", "Spells"];
 
         return <React.Fragment>
             <h2>Library</h2>
             <Button faClass="close" onClick={this.hideLibraries} />
-            <Tabs />
+            <Tabs options={libraryOptions} onChoose={o => console.log(o)} />
             {selectedLibrary}
         </React.Fragment>;
     }
 }
 
-interface TabsProps {}
+interface TabsProps {
+    options: string[];
+    selected?: string;
+    onChoose: (option: string) => void;
+}
 interface TabsState {}
 class Tabs extends React.Component<TabsProps, TabsState> {
     constructor(props) {
         super(props);
     }
     public render() {
-        return "";
+        const spanElements = this.props.options.map(
+            option => <span onClick={() => this.props.onChoose(option)}>{option}</span>
+        );
+
+        return <div className="c-tabs">
+            {spanElements}
+        </div>;
     }
 }
