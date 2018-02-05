@@ -157,7 +157,7 @@ input, textarea {
     }
 }
 
-#tracker .combatant {
+#tracker .combatant:not(.header) {
     &:hover {
         background-color: @hover-white;
     }
@@ -185,8 +185,5 @@ input, textarea {
 
     &.header {
         .colors(@primary-white, @primary-black, @primary-black);
-        .hp:hover {
-            background-color: initial;
-        }
     }
 }
