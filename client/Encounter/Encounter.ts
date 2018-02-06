@@ -172,8 +172,10 @@ export class Encounter {
 
     public StartEncounter = () => {
         this.SortByInitiative();
+        if (this.State() == "inactive") {
+            this.RoundCounter(1);
+        }
         this.State("active");
-        this.RoundCounter(1);
         this.ActiveCombatant(this.Combatants()[0]);
         this.TurnTimer.Start();
         this.QueueEmitEncounter();
