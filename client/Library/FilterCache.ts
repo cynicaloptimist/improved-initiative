@@ -39,8 +39,7 @@ export class FilterCache<T extends Listing<Listable>> {
     }
 
     private filterCache: KeyValueSet<T[]> = {};
-    private clearCache = () => this.filterCache = {};
-
+    
     public GetFilteredEntries = (filter: string) => {
         if (this.filterCache[filter]) {
             return this.filterCache[filter];
