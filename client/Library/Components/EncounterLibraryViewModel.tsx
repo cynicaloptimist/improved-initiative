@@ -1,7 +1,6 @@
 import * as React from "react";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../../TrackerViewModel";
-import { KeyValueSet } from "../../Utility/Toolbox";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
