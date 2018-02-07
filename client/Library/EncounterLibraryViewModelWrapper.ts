@@ -5,8 +5,6 @@ import { EncounterLibraryViewModel } from "./Components/EncounterLibraryViewMode
 import { EncounterLibrary } from "./EncounterLibrary";
 import { Listing } from "./Listing";
 
-type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
-
 export class EncounterLibraryViewModelWrapper {
     constructor(tracker: TrackerViewModel, library: EncounterLibrary) {
         const props = {
