@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { MouseEvent } from "react";
 import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
 import { ListingButton } from "./ListingButton";

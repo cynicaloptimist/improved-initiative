@@ -1,7 +1,6 @@
 import * as React from "react";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { LibrariesProps } from "./Components/Libraries";
 import { Libraries as LibrariesComponent } from "./Components/Libraries";
 import { Libraries } from "./Libraries";

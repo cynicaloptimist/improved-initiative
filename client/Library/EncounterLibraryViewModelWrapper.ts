@@ -1,12 +1,9 @@
 import * as React from "react";
-import { Encounter } from "../Encounter/Encounter";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { KeyValueSet } from "../Utility/Toolbox";
-import { EncounterLibraryViewModel, EncounterLibraryViewModelProps } from "./Components/EncounterLibraryViewModel";
+import { EncounterLibraryViewModel } from "./Components/EncounterLibraryViewModel";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { Listing } from "./Listing";
-import { StatBlockLibrary } from "./StatBlockLibraryViewModel";
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 
