@@ -2,9 +2,11 @@
 import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Button } from "../../Components/Button";
+import { Tabs } from "../../Components/Tabs";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
+
 
 export interface LibrariesProps {
     encounterCommander: EncounterCommander;
@@ -42,26 +44,5 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
             <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} />
             {libraries[this.state.selectedLibrary]}
         </React.Fragment>;
-    }
-}
-
-interface TabsProps {
-    options: string[];
-    selected?: string;
-    onChoose: (option: string) => void;
-}
-interface TabsState {}
-class Tabs extends React.Component<TabsProps, TabsState> {
-    constructor(props) {
-        super(props);
-    }
-    public render() {
-        const spanElements = this.props.options.map(
-            option => <span onClick={() => this.props.onChoose(option)}>{option}</span>
-        );
-
-        return <div className="c-tabs">
-            {spanElements}
-        </div>;
     }
 }
