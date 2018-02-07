@@ -23,7 +23,7 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private removeCombatant: (vm: CombatantViewModel) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel []) => void
     ) {
         this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
@@ -137,6 +137,11 @@ export class Encounter {
         Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
         return combatant;
+    }
+
+    public RemoveCombatantsByViewModel(combatantViewModels: CombatantViewModel[]) {
+        this.Combatants.removeAll(combatantViewModels.map(vm => vm.Combatant));
+        this.handleRemoveCombatantViewModels(combatantViewModels);
     }
 
     public MoveCombatant(combatant: Combatant, index: number) {

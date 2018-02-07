@@ -99,15 +99,15 @@ export class TrackerViewModel {
         return vm;
     }
 
-    private removeCombatantViewModel = (vm: CombatantViewModel) => {
-        this.CombatantViewModels.remove(vm);
+    private removeCombatantViewModels = (viewModels: CombatantViewModel []) => {
+        this.CombatantViewModels.removeAll(viewModels);
     }
 
     public Encounter = new Encounter(
         this.PromptQueue,
         this.Socket,
         this.addCombatantViewModel,
-        this.removeCombatantViewModel
+        this.removeCombatantViewModels
     );
 
     public OrderedCombatants = ko.computed(() =>
