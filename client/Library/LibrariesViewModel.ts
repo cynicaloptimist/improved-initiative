@@ -6,7 +6,7 @@ import { Libraries as LibrariesComponent } from "./Components/Libraries";
 import { Libraries } from "./Libraries";
 
 export class LibrariesViewModel {
-    private component: React.ComponentElement<any, LibrariesComponent>;
+    public component: React.ComponentElement<any, LibrariesComponent>;
     constructor(
         tracker: TrackerViewModel,
         encounterCommander: EncounterCommander,
