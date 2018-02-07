@@ -11,24 +11,31 @@ import { ListingButton } from "./ListingButton";
 
 export type EncounterLibraryViewModelProps = {
     tracker: TrackerViewModel;
-    library: EncounterLibrary
+    library: EncounterLibrary;
 };
 
 interface State {
     filter: string;
+    allListings: Listing<SavedEncounter<SavedCombatant>>[];
 }
 
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps, State> {
-    constructor(props) {
+    constructor(props: EncounterLibraryViewModelProps) {
         super(props);
         this.state = {
-            filter: ""
+            filter: "",
+            allListings: props.library.Encounters()
         };
         this.filterCache = new FilterCache(this.props.library.Encounters());
+
+        props.library.Encounters.subscribe(newEncounters => {
+            this.filterCache = new FilterCache(newEncounters);
+            this.setState({ allListings: newEncounters });
+        });
     }
 
     private filterCache: FilterCache<Listing<SavedEncounter<SavedCombatant>>>;
-    
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
