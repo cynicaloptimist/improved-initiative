@@ -13,6 +13,8 @@ export type EncounterLibraryViewModelProps = {
     library: EncounterLibrary;
 };
 
+type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
+
 interface State {
     filter: string;
 }
@@ -31,16 +33,16 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         });
     }
 
-    private filterCache: FilterCache<Listing<SavedEncounter<SavedCombatant>>>;
+    private filterCache: FilterCache<EncounterListing>;
 
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
-        const loadSavedEncounter = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+        const loadSavedEncounter = (listing: EncounterListing) => {
             listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
         };
 
-        const deleteListing = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
+        const deleteListing = (listing: EncounterListing) => {
             if (confirm(`Delete saved encounter "${listing.CurrentName()}"?`)) {
                 this.props.library.Delete(listing);
             }
