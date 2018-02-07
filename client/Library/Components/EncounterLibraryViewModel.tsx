@@ -16,7 +16,6 @@ export type EncounterLibraryViewModelProps = {
 
 interface State {
     filter: string;
-    allListings: Listing<SavedEncounter<SavedCombatant>>[];
 }
 
 export class EncounterLibraryViewModel extends React.Component<EncounterLibraryViewModelProps, State> {
@@ -24,13 +23,12 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         super(props);
         this.state = {
             filter: "",
-            allListings: props.library.Encounters()
         };
         this.filterCache = new FilterCache(this.props.library.Encounters());
 
         props.library.Encounters.subscribe(newEncounters => {
             this.filterCache = new FilterCache(newEncounters);
-            this.setState({ allListings: newEncounters });
+            this.forceUpdate();
         });
     }
 
