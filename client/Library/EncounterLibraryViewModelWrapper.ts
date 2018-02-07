@@ -13,5 +13,5 @@ export class EncounterLibraryViewModelWrapper {
         };
         this.component = React.createElement(EncounterLibraryViewModel, props);
     }
-    private component: React.ComponentElement<any, EncounterLibraryViewModel>;
+    public component: React.ComponentElement<any, EncounterLibraryViewModel>;
 }
