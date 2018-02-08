@@ -69,7 +69,7 @@ export class StatBlock {
         LegendaryActions: [],
         Description: "",
         Player: "",
-        Version: "1.0.0",
+        Version: process.env.VERSION,
     })
 
     public static readonly AbilityNames = ["Str", "Dex", "Con", "Cha", "Int", "Wis"];

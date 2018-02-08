@@ -105,7 +105,7 @@ export class SettingsViewModel {
                 CustomCSS: this.currentCSS,
                 CustomStyles: this.currentCustomStyles
             },
-            Version: "1.2.0" //TODO: auto generate this line
+            Version: process.env.VERSION
         };
     }
 

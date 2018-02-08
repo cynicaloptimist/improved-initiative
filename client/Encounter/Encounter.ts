@@ -268,10 +268,10 @@ export class Encounter {
                         DurationCombatantId: t.DurationCombatantId
                     })),
                     Hidden: c.Hidden(),
-                    InterfaceVersion: "1.0.0"
+                    InterfaceVersion: process.env.VERSION
                 };
             }),
-            Version: "1.0.0"
+            Version: process.env.VERSION
         };
     }
 
@@ -294,7 +294,7 @@ export class Encounter {
                     return true;
                 })
                 .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
-            Version: "1.0.0"
+            Version: process.env.VERSION
         };
     }
 
