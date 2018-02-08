@@ -8,7 +8,7 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
-import { Libraries as LibrariesComponent, LibrariesProps } from "./Library/Components/Libraries";
+import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
