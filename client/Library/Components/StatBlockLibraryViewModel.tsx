@@ -46,7 +46,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedStatBlock} listing={l} />)}
+                {filteredListings.map(l => <ListingViewModel
+                    key={l.Id}
+                    name={l.CurrentName()}
+                    onAdd={loadSavedStatBlock}
+                    onEdit={(l: Listing<StatBlock>) => this.props.encounterCommander.EditStatBlock(l)}
+                    listing={l} />)}
             </ul>
             <div className="buttons">
                 <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
