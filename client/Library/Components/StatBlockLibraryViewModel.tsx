@@ -40,6 +40,11 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
     }
 
+    private editStatBlock = (l: Listing<StatBlock>) => {
+        l.CurrentName.subscribe(_ => this.forceUpdate());
+        this.props.encounterCommander.EditStatBlock(l);
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
@@ -50,7 +55,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     key={l.Id}
                     name={l.CurrentName()}
                     onAdd={this.loadSavedStatBlock}
-                    onEdit={(l: Listing<StatBlock>) => this.props.encounterCommander.EditStatBlock(l)}
+                    onEdit={this.editStatBlock}
                     listing={l} />)}
             </ul>
             <div className="buttons">
