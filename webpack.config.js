@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './client/Index.ts',
@@ -14,10 +15,16 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'ImprovedInitiative.js',
     path: path.resolve(__dirname, 'public', 'js')
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify("development"),
+      'process.env.VERSION': JSON.stringify(require("./package.json").version)
+    })
+  ]
 };

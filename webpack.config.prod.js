@@ -1,6 +1,7 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
+const webpack = require('webpack');
+  
 module.exports = {
   entry: './client/Index.ts',
   module: {
@@ -20,6 +21,10 @@ module.exports = {
     path: path.resolve(__dirname, 'public', 'js')
   },
   plugins: [
-    new UglifyJSPlugin()
+    new UglifyJSPlugin(),
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": "production",
+      "process.env.VERSION": JSON.stringify(require("./package.json").version)
+    })
   ]
 };
