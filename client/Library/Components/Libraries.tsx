@@ -5,13 +5,18 @@ import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { EncounterLibrary } from "../EncounterLibrary";
+import { NPCLibrary } from "../NPCLibrary";
+import { PCLibrary } from "../PCLibrary";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
+import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 
 export interface LibrariesProps {
     encounterCommander: EncounterCommander;
     tracker: TrackerViewModel;
     encounterLibrary: EncounterLibrary;
+    pcLibrary: PCLibrary;
+    npcLibrary: NPCLibrary;
 }
 
 interface LibrariesState {
@@ -31,7 +36,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     
     public render() {
         const libraries = {
-            Creatures: <div>Creatures</div>,
+            Creatures: <StatBlockLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
             Players: <div>Players</div>,
             Encounters: <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />,
             Spells: <div>Spells</div>,
