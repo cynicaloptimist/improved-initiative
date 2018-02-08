@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -7,6 +8,7 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
+import { Libraries as LibrariesComponent, LibrariesProps } from "./Library/Components/Libraries";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
@@ -92,6 +94,14 @@ export class TrackerViewModel {
     public AccountClient = new AccountClient();
 
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
+
+    public librariesComponent = React.createElement(LibrariesComponent, {
+        tracker: this,
+        encounterCommander: this.EncounterCommander,
+        encounterLibrary: this.Libraries.Encounters,
+        npcLibrary: this.Libraries.NPCs,
+        pcLibrary: this.Libraries.PCs
+    });
 
     private addCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);

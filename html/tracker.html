@@ -84,16 +84,9 @@
     </div>
     <div class="left-column">
         <!-- ko if: LibrariesVisible -->
-        <div class="libraries" data-bind="
-        component: {
-            name: 'libraries',
-            params: {
-                tracker: $data,
-                encounterCommander: EncounterCommander,
-                libraries: Libraries
-            }
-        }">
-        </div>
+        <div data-bind="react: {
+            component: librariesComponent
+        }"></div>
         <!-- /ko -->
         <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">

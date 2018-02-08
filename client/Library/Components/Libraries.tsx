@@ -43,11 +43,11 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
         };
 
 
-        return <React.Fragment>
+        return <div className="libraries">
             <h2>Library</h2>
             <Button faClass="close" onClick={this.hideLibraries} />
             <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} />
             {libraries[this.state.selectedLibrary]}
-        </React.Fragment>;
+        </div>;
     }
 }
