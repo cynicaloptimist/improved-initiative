@@ -36,12 +36,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private filterCache: FilterCache<StatBlockListing>;
 
+    private loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
+        this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
-
-        const loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
-            this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
-        };
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
@@ -49,7 +49,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 {filteredListings.map(l => <ListingViewModel
                     key={l.Id}
                     name={l.CurrentName()}
-                    onAdd={loadSavedStatBlock}
+                    onAdd={this.loadSavedStatBlock}
                     onEdit={(l: Listing<StatBlock>) => this.props.encounterCommander.EditStatBlock(l)}
                     listing={l} />)}
             </ul>
