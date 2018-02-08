@@ -46,7 +46,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
         return <React.Fragment>
             <h2>Library</h2>
             <Button faClass="close" onClick={this.hideLibraries} />
-            <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} />
+            <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} selected={this.state.selectedLibrary} />
             {libraries[this.state.selectedLibrary]}
         </React.Fragment>;
     }
