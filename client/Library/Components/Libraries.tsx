@@ -37,7 +37,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     public render() {
         const libraries = {
             Creatures: <StatBlockLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
-            Players: <div>Players</div>,
+            Players: <StatBlockLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
             Encounters: <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />,
             Spells: <div>Spells</div>,
         };
