@@ -14,7 +14,7 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
     }
     public render() {
         const spanElements = this.props.options.map(
-            option => <span className={this.props.selected == option ? "s-selected" : ""} onClick={() => this.props.onChoose(option)}>{option}</span>
+            (option, i) => <span key={i} className={this.props.selected == option ? "s-selected" : ""} onClick={() => this.props.onChoose(option)}>{option}</span>
         );
 
         return <div className="c-tabs">
