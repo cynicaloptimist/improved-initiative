@@ -18,6 +18,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
     filter: string;
+    previewStatBlock: StatBlock;
 }
 
 export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryViewModelProps, State> {
@@ -25,6 +26,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         super(props);
         this.state = {
             filter: "",
+            previewStatBlock: null,
         };
         this.filterCache = new FilterCache(this.props.library.StatBlocks());
 
@@ -45,6 +47,10 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         this.props.encounterCommander.EditStatBlock(l);
     }
 
+    private previewStatblock = (l: Listing<StatBlock>) => {
+        l.GetAsync(statBlock => this.setState({ previewStatBlock: statBlock }));
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
@@ -56,12 +62,14 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     name={l.CurrentName()}
                     onAdd={this.loadSavedStatBlock}
                     onEdit={this.editStatBlock}
+                    onPreview={this.previewStatblock}
                     listing={l} />)}
             </ul>
             <div className="buttons">
                 <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
+            {this.state.previewStatBlock && this.state.previewStatBlock.Name}
         </div>);
     }
 }
