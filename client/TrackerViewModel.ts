@@ -49,7 +49,7 @@ export class TrackerViewModel {
             playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
-        this.AccountClient.GetAccount(account => {
+        new AccountClient().GetAccount(account => {
             if (!account) {
                 return;
             }
@@ -91,8 +91,7 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
-    public AccountClient = new AccountClient();
-
+    
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     public librariesComponent = React.createElement(LibrariesComponent, {
