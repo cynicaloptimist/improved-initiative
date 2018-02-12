@@ -2,6 +2,7 @@ import bodyParser = require("body-parser");
 import dbSession = require("connect-mongodb-session");
 import express = require("express");
 import session = require("express-session");
+import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 import request = require("request");
 
@@ -77,6 +78,10 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            secure: true,
+            maxAge: moment.duration(1, "weeks").asMilliseconds(),
+        }
     }));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
