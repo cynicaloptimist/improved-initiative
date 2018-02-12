@@ -22,6 +22,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         this.state = {
             filter: ""
         };
+        this.props.library.Encounters.subscribe(newEncounters => this.forceUpdate());
     }
     public render() {
         const filteredListings = DedupeByRankAndFilterListings(this.props.library.Encounters(), this.state.filter);
