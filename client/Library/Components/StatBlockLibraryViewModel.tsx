@@ -83,6 +83,9 @@ class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState>
         super(props);
     }
     public render() {
-        return this.props.statBlock.Name;
+        const statBlock = this.props.statBlock;
+        return <div className="c-statblock">
+            <h3 className="Name">{statBlock.Name}</h3>
+        </div>;
     }
 }
