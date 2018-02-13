@@ -1,5 +1,6 @@
 import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
@@ -74,18 +75,3 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 }
 
-interface StatBlockProps {
-    statBlock: StatBlock;
-}
-interface StatBlockState { }
-class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    constructor(props) {
-        super(props);
-    }
-    public render() {
-        const statBlock = this.props.statBlock;
-        return <div className="c-statblock">
-            <h3 className="Name">{statBlock.Name}</h3>
-        </div>;
-    }
-}
