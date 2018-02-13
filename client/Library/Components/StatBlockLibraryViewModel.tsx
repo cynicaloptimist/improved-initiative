@@ -29,16 +29,24 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             filter: "",
             previewedStatBlock: null,
         };
-        this.filterCache = new FilterCache(this.props.library.StatBlocks());
 
-        props.library.StatBlocks.subscribe(newStatBlocks => {
+        this.filterCache = new FilterCache(this.props.library.StatBlocks());
+    }
+
+    public componentDidMount() {
+        this.librarySubscription = this.props.library.StatBlocks.subscribe(newStatBlocks => {
             this.filterCache = new FilterCache(newStatBlocks);
             this.forceUpdate();
         });
     }
 
-    private filterCache: FilterCache<StatBlockListing>;
+    public componentWillUnmount() {
+        this.librarySubscription.dispose();
+    }
 
+    private filterCache: FilterCache<StatBlockListing>;
+    private librarySubscription: KnockoutSubscription;
+    
     private loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
         this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
     }
