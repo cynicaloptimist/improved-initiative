@@ -10,6 +10,7 @@ export interface ListingProps<T extends Listable> {
     onDelete?: (listing: Listing<T>) => void;
     onEdit?: (listing: Listing<T>) => void;
     onPreview?: (listing: Listing<T>) => void;
+    onPreviewEnd?: (listing: Listing<T>) => void;
 }
 
 export class ListingViewModel<T extends Listable> extends React.Component<ListingProps<T>> {
@@ -19,13 +20,14 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
     private deleteFn = () => this.props.onDelete(this.props.listing);
     private editFn = () => this.props.onEdit(this.props.listing);
     private previewFn = () => this.props.onPreview(this.props.listing);
+    private previewEndFn = () => this.props.onPreviewEnd(this.props.listing);
 
     public render() {
         return <li>
             <ListingButton text={this.props.name} onClick={this.addFn} />
             {this.props.onEdit && <ListingButton faClass="edit" onClick={this.editFn} />}
             {this.props.onDelete && <ListingButton faClass="trash" onClick={this.deleteFn} />}
-            {this.props.onPreview && <ListingButton faClass="search" onClick={this.previewFn} onMouseOver={this.previewFn} />}
+            {this.props.onPreview && <ListingButton faClass="search" onClick={this.previewFn} onMouseOver={this.previewFn} onMouseOut={this.previewEndFn} />}
         </li>;
     }
 }

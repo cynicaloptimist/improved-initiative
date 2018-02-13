@@ -60,6 +60,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         l.GetAsync(statBlock => this.setState({ previewedStatBlock: statBlock }));
     }
 
+    private endPreview = (l => this.setState({ previewedStatBlock: null }));
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
@@ -72,6 +74,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     onAdd={this.loadSavedStatBlock}
                     onEdit={this.editStatBlock}
                     onPreview={this.previewStatblock}
+                    onPreviewEnd={this.endPreview}
                     listing={l} />)}
             </ul>
             <div className="buttons">
