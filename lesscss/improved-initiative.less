@@ -168,7 +168,7 @@ input[type="file"] {
     flex-shrink: 1;
 }
 
-.preview.statblock {
+.preview.statblock, .library .c-statblock {
     .overlay-dialog();
     z-index: 4;
     max-height: 90%;
@@ -342,7 +342,7 @@ body>.login.button {
         background-repeat: no-repeat;
     }
     
-    .left-column, .right-column, .preview.statblock {
+    .left-column, .right-column, .preview.statblock, .c-statblock {
         .recessed();
 
         max-width: @fixed-column-width;
