@@ -18,7 +18,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
     filter: string;
-    previewStatBlock: StatBlock;
+    previewedStatBlock: StatBlock;
 }
 
 export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryViewModelProps, State> {
@@ -26,7 +26,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         super(props);
         this.state = {
             filter: "",
-            previewStatBlock: null,
+            previewedStatBlock: null,
         };
         this.filterCache = new FilterCache(this.props.library.StatBlocks());
 
@@ -48,7 +48,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 
     private previewStatblock = (l: Listing<StatBlock>) => {
-        l.GetAsync(statBlock => this.setState({ previewStatBlock: statBlock }));
+        l.GetAsync(statBlock => this.setState({ previewedStatBlock: statBlock }));
     }
 
     public render() {
@@ -69,7 +69,20 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
-            {this.state.previewStatBlock && this.state.previewStatBlock.Name}
+            {this.state.previewedStatBlock && <StatBlockComponent statBlock={this.state.previewedStatBlock} />}
         </div>);
+    }
+}
+
+interface StatBlockProps {
+    statBlock: StatBlock;
+}
+interface StatBlockState { }
+class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
+    constructor(props) {
+        super(props);
+    }
+    public render() {
+        return this.props.statBlock.Name;
     }
 }
