@@ -32,22 +32,24 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     }
 
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
-    private selectLibrary = (library: string) => this.setState({ selectedLibrary: library });
+    private selectLibrary = (library: string) =>
+        this.setState({ selectedLibrary: library });
     
     public render() {
         const libraries = {
-            Creatures: <StatBlockLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
-            Players: <StatBlockLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
+            Creatures: <StatBlockLibraryViewModel key="creatures" encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
+            Players: <StatBlockLibraryViewModel key="players" encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
             Encounters: <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />,
             Spells: <div>Spells</div>,
         };
 
+        const selectedLibrary = libraries[this.state.selectedLibrary];
 
         return <React.Fragment>
             <h2>Library</h2>
             <Button faClass="close" onClick={this.hideLibraries} />
             <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} selected={this.state.selectedLibrary} />
-            {libraries[this.state.selectedLibrary]}
+            {selectedLibrary}
         </React.Fragment>;
     }
 }
