@@ -23,6 +23,7 @@ interface State {
     previewedStatBlock: StatBlock;
     previewIconHovered: boolean;
     previewWindowHovered: boolean;
+    previewPosition: { left: number; top: number; };
 }
 
 export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryViewModelProps, State> {
@@ -32,7 +33,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             filter: "",
             previewedStatBlock: null,
             previewIconHovered: false,
-            previewWindowHovered: false
+            previewWindowHovered: false,
+            previewPosition: { left: 0, top: 0 }
         };
 
         this.filterCache = new FilterCache(this.props.library.StatBlocks());
@@ -61,11 +63,13 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         this.props.encounterCommander.EditStatBlock(l);
     }
 
-    private previewStatblock = (l: Listing<StatBlock>) => {
+    private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
+        const previewPosition = { left: e.clientX, top: e.clientY };
         l.GetAsync(statBlock => {
             this.setState({
                 previewIconHovered: true,
-                previewedStatBlock: statBlock
+                previewedStatBlock: statBlock,
+                previewPosition
             });
         });
     }

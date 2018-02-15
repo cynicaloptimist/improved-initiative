@@ -9,7 +9,7 @@ export interface ListingProps<T extends Listable> {
     onAdd: (listing: Listing<T>, modified: boolean) => void;
     onDelete?: (listing: Listing<T>) => void;
     onEdit?: (listing: Listing<T>) => void;
-    onPreview?: (listing: Listing<T>) => void;
+    onPreview?: (listing: Listing<T>, e: React.MouseEvent<HTMLDivElement>) => void;
     onPreviewOut?: (listing: Listing<T>) => void;
 }
 
@@ -19,7 +19,7 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
     }
     private deleteFn = () => this.props.onDelete(this.props.listing);
     private editFn = () => this.props.onEdit(this.props.listing);
-    private previewFn = () => this.props.onPreview(this.props.listing);
+    private previewFn = e => this.props.onPreview(this.props.listing, e);
     private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
 
     public render() {
