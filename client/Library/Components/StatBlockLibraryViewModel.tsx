@@ -62,10 +62,17 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 
     private previewStatblock = (l: Listing<StatBlock>) => {
-        l.GetAsync(statBlock => this.setState({ previewedStatBlock: statBlock }));
+        l.GetAsync(statBlock => {
+            this.setState({
+                previewIconHovered: true,
+                previewedStatBlock: statBlock
+            });
+        });
     }
 
-    private endPreview = (l => this.setState({ previewedStatBlock: null }));
+    private onPreviewOut = (l => {
+        this.setState({ previewIconHovered: false });
+    });
 
     private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
         console.log(e.type);
@@ -73,6 +80,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
+        const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
@@ -83,14 +91,14 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     onAdd={this.loadSavedStatBlock}
                     onEdit={this.editStatBlock}
                     onPreview={this.previewStatblock}
-                    onPreviewOut={this.endPreview}
+                    onPreviewOut={this.onPreviewOut}
                     listing={l} />)}
             </ul>
             <div className="buttons">
                 <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
-            {this.state.previewedStatBlock &&
+            {previewVisible &&
                 <Overlay handleMouseEvents={this.handlePreviewMouseEvent}>
                     <StatBlockComponent statBlock={this.state.previewedStatBlock} />
                 </Overlay>
