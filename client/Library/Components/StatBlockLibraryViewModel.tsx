@@ -79,7 +79,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     onAdd={this.loadSavedStatBlock}
                     onEdit={this.editStatBlock}
                     onPreview={this.previewStatblock}
-                    onPreviewEnd={this.endPreview}
+                    onPreviewOut={this.endPreview}
                     listing={l} />)}
             </ul>
             <div className="buttons">
