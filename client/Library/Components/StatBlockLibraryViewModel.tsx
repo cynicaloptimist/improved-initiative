@@ -64,7 +64,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
-        const previewPosition = { left: e.clientX, top: e.clientY };
+        const rect = e.currentTarget.getBoundingClientRect();
+        const previewPosition = {
+            left: rect.left + rect.width,
+            top: rect.top
+        };
+        
         l.GetAsync(statBlock => {
             this.setState({
                 previewIconHovered: true,
