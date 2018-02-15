@@ -75,7 +75,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     });
 
     private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
-        console.log(e.type);
+        if (e.type === "mouseenter") {
+            this.setState({ previewWindowHovered: true });
+        }
+        if (e.type === "mouseleave") {
+            this.setState({ previewWindowHovered: false });
+        }
     }
 
     public render() {
