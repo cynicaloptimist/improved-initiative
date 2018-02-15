@@ -168,10 +168,19 @@ input[type="file"] {
     flex-shrink: 1;
 }
 
-.preview.statblock, .library .c-statblock {
+.preview.statblock {
     .overlay-dialog();
     z-index: 4;
     max-height: 90%;
+}
+
+.c-overlay {
+    position: fixed;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: @border-radius;
+    flex-shrink: 1;
+    z-index: 4;
 }
 
 .selected-combatant, .libraries {
@@ -342,7 +351,7 @@ body>.login.button {
         background-repeat: no-repeat;
     }
     
-    .left-column, .right-column, .preview.statblock, .c-statblock {
+    .left-column, .right-column, .preview.statblock {
         .recessed();
 
         max-width: @fixed-column-width;
@@ -633,6 +642,11 @@ body>.login.button {
         margin-right: @small-spacer;
         border-radius: 0px @border-radius 0px 0px;
     }
+}
+
+.c-statblock {
+    max-width: @fixed-column-width;
+    width: @fixed-column-width;
 }
 
 .damage-suggestion {

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";
 import { FilterCache } from "../FilterCache";
@@ -46,7 +47,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private filterCache: FilterCache<StatBlockListing>;
     private librarySubscription: KnockoutSubscription;
-    
+
     private loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
         this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
     }
@@ -81,8 +82,11 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
-            {this.state.previewedStatBlock && <StatBlockComponent statBlock={this.state.previewedStatBlock} />}
+            {this.state.previewedStatBlock &&
+                <Overlay>
+                    <StatBlockComponent statBlock={this.state.previewedStatBlock} />
+                </Overlay>
+            }
         </div>);
     }
 }
-
