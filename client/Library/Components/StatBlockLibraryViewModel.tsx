@@ -104,7 +104,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
             {previewVisible &&
-                <Overlay handleMouseEvents={this.handlePreviewMouseEvent}>
+                <Overlay handleMouseEvents={this.handlePreviewMouseEvent} maxHeightPx={300}>
                     <StatBlockComponent statBlock={this.state.previewedStatBlock} />
                 </Overlay>
             }
