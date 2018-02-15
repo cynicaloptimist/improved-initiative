@@ -21,6 +21,8 @@ type StatBlockListing = Listing<StatBlock>;
 interface State {
     filter: string;
     previewedStatBlock: StatBlock;
+    previewIconHovered: boolean;
+    previewWindowHovered: boolean;
 }
 
 export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryViewModelProps, State> {
@@ -29,6 +31,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         this.state = {
             filter: "",
             previewedStatBlock: null,
+            previewIconHovered: false,
+            previewWindowHovered: false
         };
 
         this.filterCache = new FilterCache(this.props.library.StatBlocks());
