@@ -63,6 +63,10 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private endPreview = (l => this.setState({ previewedStatBlock: null }));
 
+    private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
+        console.log(e.type);
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
@@ -83,7 +87,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
             {this.state.previewedStatBlock &&
-                <Overlay>
+                <Overlay handleMouseEvents={this.handlePreviewMouseEvent}>
                     <StatBlockComponent statBlock={this.state.previewedStatBlock} />
                 </Overlay>
             }

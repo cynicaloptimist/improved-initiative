@@ -32,8 +32,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     }
 
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
-    private selectLibrary = (library: string) =>
-        this.setState({ selectedLibrary: library });
+    private selectLibrary = (library: string) => this.setState({ selectedLibrary: library });
     
     public render() {
         const libraries = {
