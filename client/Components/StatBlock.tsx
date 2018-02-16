@@ -11,6 +11,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
     constructor(props) {
         super(props);
     }
+
+    private enrichText = (text: string) => {
+        //TODO: Move CustomBindingHandlers.ts#statBlockTextHandler logic here.
+        return text;
+    }
     public render() {
         const statBlock = this.props.statBlock;
         return <div className="c-statblock">
