@@ -16,8 +16,14 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         //TODO: Move CustomBindingHandlers.ts#statBlockTextHandler logic here.
         return text;
     }
+
+    private signModifier = (modifier: number) => (modifier >= 0 ? "+" : "-") + modifier;
+
     public render() {
         const statBlock = this.props.statBlock;
+
+        const modifierTypes: ("Saves" | "Skills")[] = ["Saves", "Skills"];
+
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
@@ -50,6 +56,16 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                         <div className={"modifier " + abilityName}>{"TODO"}</div>
                     </div>
                 )}
+            </div>
+            <div className="modifiers">
+                {modifierTypes
+                    .filter(modifierType => statBlock[modifierType].length > 0)
+                    .map(modifierType => statBlock[modifierType].length > 0 &&
+                        <div className={modifierType}>
+                            <span className="stat-label">{modifierType}</span>
+                            {statBlock[modifierType].map(modifier => <span>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>)}
+                        </div>
+                    )}
             </div>
         </div>;
     }
