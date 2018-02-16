@@ -31,6 +31,12 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 <span className="notes">{this.enrichText(statBlock.AC.Notes)}</span>
             </div>
 
+            <div className="HP">
+                <span className="stat-label">Hit Points</span>
+                <span>{statBlock.HP.Value}</span>
+                <span className="notes">{this.enrichText(statBlock.HP.Notes)}</span>
+            </div>
+
         </div>;
     }
 }
