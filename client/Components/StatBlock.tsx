@@ -42,6 +42,15 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 <span>{statBlock.Speed.join(", ")}</span>
             </div>
 
+            <div className="Abilities">
+                {Object.keys(statBlock.Abilities).map(abilityName =>
+                    <div>
+                        <div className="stat-label">{abilityName}</div>
+                        <div className={"score " + abilityName}>{statBlock.Abilities[abilityName]}</div>
+                        <div className={"modifier " + abilityName}>{"TODO"}</div>
+                    </div>
+                )}
+            </div>
         </div>;
     }
 }
