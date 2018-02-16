@@ -15,6 +15,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         const statBlock = this.props.statBlock;
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
+            <div className="Source">{statBlock.Source}</div>
+            <div className="Type">{statBlock.Type}</div>
+
+            <hr />
+
         </div>;
     }
 }
