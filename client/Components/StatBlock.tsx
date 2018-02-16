@@ -37,6 +37,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 <span className="notes">{this.enrichText(statBlock.HP.Notes)}</span>
             </div>
 
+            <div className="speed">
+                <span className="stat-label">Speed</span>
+                <span>{statBlock.Speed.join(", ")}</span>
+            </div>
+
         </div>;
     }
 }
