@@ -22,7 +22,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
     public render() {
         const statBlock = this.props.statBlock;
 
-        const modifierTypes: ("Saves" | "Skills")[] = ["Saves", "Skills"];
+        const modifierTypes = [
+            { name: "Saves", data: statBlock.Saves },
+            { name: "Skills", data: statBlock.Skills }
+        ];
+        
 
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
@@ -57,13 +61,14 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     </div>
                 )}
             </div>
+
             <div className="modifiers">
                 {modifierTypes
-                    .filter(modifierType => statBlock[modifierType].length > 0)
-                    .map(modifierType => statBlock[modifierType].length > 0 &&
-                        <div className={modifierType}>
-                            <span className="stat-label">{modifierType}</span>
-                            {statBlock[modifierType].map(modifier => <span>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>)}
+                    .filter(modifierType => modifierType.data.length > 0)
+                    .map(modifierType => modifierType.data.length > 0 &&
+                        <div className={modifierType.name}>
+                            <span className="stat-label">{modifierType.name}</span>
+                            {modifierType.data.map(modifier => <span>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>)}
                         </div>
                     )}
             </div>
