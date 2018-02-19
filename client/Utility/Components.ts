@@ -1,4 +1,3 @@
-import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 import { removeFirst } from "./Toolbox";
@@ -44,7 +43,6 @@ export let RegisterComponents = () => {
     registerComponent("activestatblock", params => params.statBlock);
     registerComponent("combatant", params => params.viewModel);
     registerComponent("playerdisplaycombatant", params => params.combatant);
-    registerComponent("spelllibrary", params => new SpellLibraryViewModel(params.encounterCommander, params.library));
     registerComponent("defaultprompt", params => params.prompt);
     registerComponent("tagprompt", params => params.prompt);
     registerComponent("concentrationprompt", params => params.prompt);
