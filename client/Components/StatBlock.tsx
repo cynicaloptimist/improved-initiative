@@ -74,7 +74,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 {Object.keys(statBlock.Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
                     const abilityModifier = this.signModifier(rules.GetModifierFromScore(abilityScore));
-                    return <div>
+                    return <div key={abilityName}>
                         <div className="stat-label">{abilityName}</div>
                         <div className={"score " + abilityName}>{abilityScore}</div>
                         <div className={"modifier " + abilityName}>{abilityModifier}</div>
@@ -86,9 +86,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 {modifierTypes
                     .filter(modifierType => modifierType.data.length > 0)
                     .map(modifierType =>
-                        <div className={modifierType.name}>
+                        <div key={modifierType.name} className={modifierType.name}>
                             <span className="stat-label">{modifierType.name}</span>
-                            {modifierType.data.map(modifier => <span>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>)}
+                            {modifierType.data.map(modifier =>
+                                <span key={modifier.Name}>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>
+                            )}
                         </div>
                     )}
             </div>
@@ -97,7 +99,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 {keywordSetTypes
                     .filter(keywordSetType => keywordSetType.data.length > 0)
                     .map(keywordSetType =>
-                        <div className={keywordSetType.name}>
+                        <div key={keywordSetType.name} className={keywordSetType.name}>
                             <span className="stat-label">{keywordSetType.name}</span>
                             {keywordSetType.data.join(", ")}
                         </div>
@@ -118,10 +120,10 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             {powerTypes
                 .filter(powerType => powerType.data.length > 0)
                 .map(powerType =>
-                    <div className={powerType.name}>
+                    <div key={powerType.name} className={powerType.name}>
                         <h4 className="stat-label">{powerType.name}</h4>
                         {powerType.data.map(power =>
-                            <div>
+                            <div key={power.Name}>
                                 <span className="stat-label">{power.Name}</span>
                                 {power.Usage && <span className="stat-label">{power.Usage}</span>}
                                 <span className="power-content">{this.enrichText(power.Content)}</span>
