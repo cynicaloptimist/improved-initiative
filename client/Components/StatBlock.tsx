@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DefaultRules } from "../Rules/Rules";
 import { StatBlock } from "../StatBlock/StatBlock";
 
 interface StatBlockProps {
@@ -43,6 +44,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Legendary Actions", data: statBlock.LegendaryActions },
         ];
 
+        const rules = new DefaultRules();
+
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
@@ -68,13 +71,15 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             </div>
 
             <div className="Abilities">
-                {Object.keys(statBlock.Abilities).map(abilityName =>
-                    <div>
+                {Object.keys(statBlock.Abilities).map(abilityName => {
+                    const abilityScore = statBlock.Abilities[abilityName];
+                    const abilityModifier = this.signModifier(rules.GetModifierFromScore(abilityScore));
+                    return <div>
                         <div className="stat-label">{abilityName}</div>
-                        <div className={"score " + abilityName}>{statBlock.Abilities[abilityName]}</div>
-                        <div className={"modifier " + abilityName}>{"TODO"}</div>
-                    </div>
-                )}
+                        <div className={"score " + abilityName}>{abilityScore}</div>
+                        <div className={"modifier " + abilityName}>{abilityModifier}</div>
+                    </div>;
+                })}
             </div>
 
             <div className="modifiers">
