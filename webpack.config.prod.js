@@ -23,7 +23,7 @@ module.exports = {
   plugins: [
     new UglifyJSPlugin(),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": "production",
+      "process.env.NODE_ENV": JSON.stringify("production"),
       "process.env.VERSION": JSON.stringify(require("./package.json").version)
     })
   ]
