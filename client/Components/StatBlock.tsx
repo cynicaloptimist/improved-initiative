@@ -124,6 +124,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                         )}
                     </div>
                 )}
+
+            {statBlock.Description && <div className="Description">{this.enrichText(statBlock.Description)}</div>}
         </div>;
     }
 }
