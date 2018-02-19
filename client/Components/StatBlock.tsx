@@ -92,6 +92,16 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     )}
             </div>
 
+            {statBlock.Challenge &&
+                <div className="Challenge">
+                    <span className="stat-label">
+                        {statBlock.Player == "player" ?
+                            "Level" : "Challenge"}</span>
+                    <span>{statBlock.Challenge}</span>
+                </div>
+            }
+
+            <hr />
         </div>;
     }
 }
