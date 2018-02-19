@@ -36,6 +36,13 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Languages", data: statBlock.Languages },
         ];
 
+        const powerTypes = [
+            { name: "Traits", data: statBlock.Traits },
+            { name: "Actions", data: statBlock.Actions },
+            { name: "Reactions", data: statBlock.Reactions },
+            { name: "Legendary Actions", data: statBlock.LegendaryActions },
+        ];
+
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
@@ -102,6 +109,21 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             }
 
             <hr />
+
+            {powerTypes
+                .filter(powerType => powerType.data.length > 0)
+                .map(powerType =>
+                    <div className={powerType.name}>
+                        <h4 className="stat-label">{powerType.name}</h4>
+                        {powerType.data.map(power =>
+                            <div>
+                                <span className="stat-label">{power.Name}</span>
+                                {power.Usage && <span className="stat-label">{power.Usage}</span>}
+                                <span className="power-content">{this.enrichText(power.Content)}</span>
+                            </div>
+                        )}
+                    </div>
+                )}
         </div>;
     }
 }
