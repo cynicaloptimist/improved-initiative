@@ -24,7 +24,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
 
         const modifierTypes = [
             { name: "Saves", data: statBlock.Saves },
-            { name: "Skills", data: statBlock.Skills }
+            { name: "Skills", data: statBlock.Skills },
         ];
 
         const keywordSetTypes = [
@@ -73,7 +73,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="modifiers">
                 {modifierTypes
                     .filter(modifierType => modifierType.data.length > 0)
-                    .map(modifierType => modifierType.data.length > 0 &&
+                    .map(modifierType =>
                         <div className={modifierType.name}>
                             <span className="stat-label">{modifierType.name}</span>
                             {modifierType.data.map(modifier => <span>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>)}
@@ -84,7 +84,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="keyword-sets">
                 {keywordSetTypes
                     .filter(keywordSetType => keywordSetType.data.length > 0)
-                    .map(keywordSetType => keywordSetType.data.length > 0 &&
+                    .map(keywordSetType =>
                         <div className={keywordSetType.name}>
                             <span className="stat-label">{keywordSetType.name}</span>
                             {keywordSetType.data.join(", ")}
