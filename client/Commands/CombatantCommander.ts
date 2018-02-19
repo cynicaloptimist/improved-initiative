@@ -92,9 +92,8 @@ export class CombatantCommander {
             }
         }
 
-        this.tracker.CombatantViewModels.removeAll(combatantsToRemove);
-        this.tracker.Encounter.Combatants.removeAll(combatantsToRemove.map(c => c.Combatant));
-
+        this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
+        
         const remainingCombatants = this.tracker.CombatantViewModels();
 
         let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);

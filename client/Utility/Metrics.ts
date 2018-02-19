@@ -12,11 +12,15 @@ export class Metrics {
         Metrics.TrackEvent("AppLoad", counts);
     }
 
-    public static TrackEvent(name: string, data?: object): void {
+    public static TrackEvent(name: string, data: any = {}): void {
         console.log(`Event ${name}`);
-        if (data !== undefined) {
+        if (data !== {}) {
             console.table(data);
         }
+
+        data.referrer = { url: document.referrer };
+        data.page = { url: document.URL };
+        data.localTime = new Date().toString();
 
         $.ajax({
             type: "POST",

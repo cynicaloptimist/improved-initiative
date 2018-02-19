@@ -1,7 +1,8 @@
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Spell } from "../Spell/Spell";
 import { KeyValueSet } from "../Utility/Toolbox";
-import { DedupeByRankAndFilterListings, Listing } from "./Listing";
+import { DedupeByRankAndFilterListings } from "./FilterCache";
+import { Listing } from "./Listing";
 import { SpellLibrary } from "./SpellLibrary";
 
 export class SpellLibraryViewModel {

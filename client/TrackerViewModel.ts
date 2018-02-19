@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -7,6 +8,7 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
+import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
@@ -47,7 +49,7 @@ export class TrackerViewModel {
             playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
-        this.AccountClient.GetAccount(account => {
+        new AccountClient().GetAccount(account => {
             if (!account) {
                 return;
             }
@@ -89,9 +91,17 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
-    public AccountClient = new AccountClient();
-
+    
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
+
+    public librariesComponent = React.createElement(LibrariesComponent, {
+        tracker: this,
+        encounterCommander: this.EncounterCommander,
+        encounterLibrary: this.Libraries.Encounters,
+        npcLibrary: this.Libraries.NPCs,
+        pcLibrary: this.Libraries.PCs,
+        spellLibrary: this.Libraries.Spells
+    });
 
     private addCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
@@ -99,15 +109,15 @@ export class TrackerViewModel {
         return vm;
     }
 
-    private removeCombatantViewModel = (vm: CombatantViewModel) => {
-        this.CombatantViewModels.remove(vm);
+    private removeCombatantViewModels = (viewModels: CombatantViewModel []) => {
+        this.CombatantViewModels.removeAll(viewModels);
     }
 
     public Encounter = new Encounter(
         this.PromptQueue,
         this.Socket,
         this.addCombatantViewModel,
-        this.removeCombatantViewModel
+        this.removeCombatantViewModels
     );
 
     public OrderedCombatants = ko.computed(() =>

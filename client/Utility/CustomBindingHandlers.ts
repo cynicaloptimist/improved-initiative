@@ -1,4 +1,3 @@
-import { createElement } from "react";
 import { render as renderReact } from "react-dom";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "../Library/SpellLibrary";

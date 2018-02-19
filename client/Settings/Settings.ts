@@ -67,7 +67,7 @@ function getDefaultSettings(): Settings {
                 mainBackground: ""
             }
         },
-        Version: "1.2.0" //TODO: Populate with package version
+        Version: process.env.VERSION
     };
 }
 

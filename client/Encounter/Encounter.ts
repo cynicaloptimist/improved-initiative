@@ -23,7 +23,7 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private removeCombatant: (vm: CombatantViewModel) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel []) => void
     ) {
         this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
@@ -119,10 +119,10 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock(statBlockJson: StatBlock, event?, savedCombatant?: SavedCombatant) {
+    public AddCombatantFromStatBlock(statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
-        if (event && event.altKey) {
+        if (hideOnAdd) {
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
@@ -137,6 +137,11 @@ export class Encounter {
         Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
         return combatant;
+    }
+
+    public RemoveCombatantsByViewModel(combatantViewModels: CombatantViewModel[]) {
+        this.Combatants.removeAll(combatantViewModels.map(vm => vm.Combatant));
+        this.handleRemoveCombatantViewModels(combatantViewModels);
     }
 
     public MoveCombatant(combatant: Combatant, index: number) {
@@ -172,8 +177,10 @@ export class Encounter {
 
     public StartEncounter = () => {
         this.SortByInitiative();
+        if (this.State() == "inactive") {
+            this.RoundCounter(1);
+        }
         this.State("active");
-        this.RoundCounter(1);
         this.ActiveCombatant(this.Combatants()[0]);
         this.TurnTimer.Start();
         this.QueueEmitEncounter();
@@ -261,10 +268,10 @@ export class Encounter {
                         DurationCombatantId: t.DurationCombatantId
                     })),
                     Hidden: c.Hidden(),
-                    InterfaceVersion: "1.0.0"
+                    InterfaceVersion: process.env.VERSION
                 };
             }),
-            Version: "1.0.0"
+            Version: process.env.VERSION
         };
     }
 
@@ -287,7 +294,7 @@ export class Encounter {
                     return true;
                 })
                 .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
-            Version: "1.0.0"
+            Version: process.env.VERSION
         };
     }
 

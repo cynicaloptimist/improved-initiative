@@ -24,9 +24,9 @@ export class EncounterCommander {
         this.libraries = tracker.Libraries;
     }
 
-    public AddStatBlockFromListing = (listing: Listing<StatBlock>, event: JQuery.Event) => {
+    public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
         listing.GetAsync(statBlock => {
-            this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
+            this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
     }

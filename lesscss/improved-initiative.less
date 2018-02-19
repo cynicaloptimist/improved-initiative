@@ -174,6 +174,15 @@ input[type="file"] {
     max-height: 90%;
 }
 
+.c-overlay {
+    position: fixed;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: @border-radius;
+    flex-shrink: 1;
+    z-index: 4;
+}
+
 .selected-combatant, .libraries {
     .fa-close {
         position: absolute;
@@ -625,13 +634,21 @@ body>.login.button {
     }
 }
 
-.tabs {
-    display:block;
+.tabs, .c-tabs {
+    flex-flow: row wrap;
     margin: @medium-spacer @small-spacer 0px @small-spacer;
     span {
         padding: 1px @medium-spacer;
+        margin-right: @small-spacer;
         border-radius: 0px @border-radius 0px 0px;
     }
+}
+
+.c-statblock {
+    max-width: @fixed-column-width;
+    width: @fixed-column-width;
+    flex-shrink: 1;
+    overflow-y: auto;
 }
 
 .damage-suggestion {
@@ -646,7 +663,7 @@ body>.login.button {
     }
 }
 
-.statblock {
+.statblock, .c-statblock {
     display:block;
     padding:@small-spacer;
     line-height: 1.4em;

@@ -7,6 +7,44 @@ const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
+const addons = [
+    {
+        "name": "keen:ip_to_geo",
+        "input": {
+            "ip": "ipAddress"
+        },
+        "output": "geo"
+    },
+    {
+        "name": "keen:url_parser",
+        "input": {
+            "url": "page.url"
+        },
+        "output": "url.info"
+    },
+    {
+        "name": "keen:url_parser",
+        "input": {
+            "url": "referrer.url"
+        },
+        "output": "referrer.info"
+    },
+    {
+        "name": "keen:date_time_parser",
+        "input": {
+            "date_time": "keen.timestamp"
+        },
+        "output": "time.utc"
+    },
+    {
+        "name": "keen:date_time_parser",
+        "input": {
+            "date_time": "localTime"
+        },
+        "output": "time.local"
+    }
+];
+
 export default function (app: express.Application) {
     const keenClient = new KeenTracking({
         projectId: keenProjectId,
@@ -22,6 +60,8 @@ export default function (app: express.Application) {
         const eventData = req.body || {};
         eventData.sessionId = req.session.id;
         eventData.userId = req.session.userId || null;
+        eventData.ipAddress = req.ip;
+        eventData.addons = addons;
         keenClient.recordEvent(eventName, eventData);
 
         return res.sendStatus(200);
