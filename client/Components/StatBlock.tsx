@@ -26,7 +26,15 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Saves", data: statBlock.Saves },
             { name: "Skills", data: statBlock.Skills }
         ];
-        
+
+        const keywordSetTypes = [
+            { name: "Senses", data: statBlock.Senses },
+            { name: "Damage Vulnerabilities", data: statBlock.DamageVulnerabilities },
+            { name: "Damage Resistances", data: statBlock.DamageResistances },
+            { name: "Damage Immunities", data: statBlock.DamageImmunities },
+            { name: "Condition Immunities", data: statBlock.ConditionImmunities },
+            { name: "Languages", data: statBlock.Languages },
+        ];
 
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
@@ -72,6 +80,18 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                         </div>
                     )}
             </div>
+
+            <div className="keyword-sets">
+                {keywordSetTypes
+                    .filter(keywordSetType => keywordSetType.data.length > 0)
+                    .map(keywordSetType => keywordSetType.data.length > 0 &&
+                        <div className={keywordSetType.name}>
+                            <span className="stat-label">{keywordSetType.name}</span>
+                            {keywordSetType.data.join(", ")}
+                        </div>
+                    )}
+            </div>
+
         </div>;
     }
 }
