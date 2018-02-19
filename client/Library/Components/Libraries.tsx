@@ -7,7 +7,9 @@ import { TrackerViewModel } from "../../TrackerViewModel";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { NPCLibrary } from "../NPCLibrary";
 import { PCLibrary } from "../PCLibrary";
+import { SpellLibrary } from "../SpellLibrary";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
+import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
 import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 
@@ -17,6 +19,7 @@ export interface LibrariesProps {
     encounterLibrary: EncounterLibrary;
     pcLibrary: PCLibrary;
     npcLibrary: NPCLibrary;
+    spellLibrary: SpellLibrary;
 }
 
 interface LibrariesState {
@@ -39,7 +42,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
             Creatures: <StatBlockLibraryViewModel key="creatures" encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
             Players: <StatBlockLibraryViewModel key="players" encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
             Encounters: <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />,
-            Spells: <div>Spells</div>,
+            Spells: <SpellLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.spellLibrary}/>,
         };
 
         const selectedLibrary = libraries[this.state.selectedLibrary];

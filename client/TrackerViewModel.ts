@@ -99,7 +99,8 @@ export class TrackerViewModel {
         encounterCommander: this.EncounterCommander,
         encounterLibrary: this.Libraries.Encounters,
         npcLibrary: this.Libraries.NPCs,
-        pcLibrary: this.Libraries.PCs
+        pcLibrary: this.Libraries.PCs,
+        spellLibrary: this.Libraries.Spells
     });
 
     private addCombatantViewModel = (combatant: Combatant) => {
