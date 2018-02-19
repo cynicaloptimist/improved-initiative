@@ -9,9 +9,6 @@ interface TabsProps {
 interface TabsState { }
 
 export class Tabs extends React.Component<TabsProps, TabsState> {
-    constructor(props) {
-        super(props);
-    }
     public render() {
         const spanElements = this.props.options.map(
             (option, i) => <span key={i} className={this.props.selected == option ? "s-selected" : ""} onClick={() => this.props.onChoose(option)}>{option}</span>

@@ -7,9 +7,6 @@ interface ColorBlockProps {
 }
 
 export class ColorBlock extends React.Component<ColorBlockProps, {}> {
-    constructor(props) {
-        super(props);
-    }
     public render() {
         const style = {
             backgroundColor: this.props.color

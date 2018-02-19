@@ -33,7 +33,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
             selectedLibrary: "Creatures"
         };
     }
-
+    
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
     private selectLibrary = (library: string) => this.setState({ selectedLibrary: library });
     

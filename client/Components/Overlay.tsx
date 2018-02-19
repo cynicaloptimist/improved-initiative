@@ -10,9 +10,6 @@ interface OverlayProps {
 interface OverlayState { }
 
 export class Overlay extends React.Component<OverlayProps, OverlayState> {
-    constructor(props) {
-        super(props);
-    }
     public render() {
         const style: React.CSSProperties = {
             maxHeight: this.props.maxHeightPx || "100%",

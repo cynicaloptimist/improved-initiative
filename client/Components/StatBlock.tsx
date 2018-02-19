@@ -9,10 +9,6 @@ interface StatBlockProps {
 interface StatBlockState { }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    constructor(props) {
-        super(props);
-    }
-
     private enrichText = (text: string) => {
         //TODO: Move CustomBindingHandlers.ts#statBlockTextHandler logic here.
         return text;
