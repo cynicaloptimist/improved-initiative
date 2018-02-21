@@ -12,6 +12,7 @@ import { Libraries as LibrariesComponent } from "./Library/Components/Libraries"
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { Metrics } from "./Utility/Metrics";
@@ -94,11 +95,6 @@ export class TrackerViewModel {
     
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
-    public librariesComponent = React.createElement(LibrariesComponent, {
-        encounterCommander: this.EncounterCommander,
-        libraries: this.Libraries,
-    });
-
     private addCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
         this.CombatantViewModels.push(vm);
@@ -115,6 +111,12 @@ export class TrackerViewModel {
         this.addCombatantViewModel,
         this.removeCombatantViewModels
     );
+
+    public librariesComponent = React.createElement(LibrariesComponent, {
+        encounterCommander: this.EncounterCommander,
+        libraries: this.Libraries,
+        statBlockTextEnricher: new StatBlockTextEnricher(this.EncounterCommander.RollDice, this.Libraries.Spells, this.Encounter.Rules)
+    });
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(

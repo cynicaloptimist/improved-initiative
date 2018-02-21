@@ -3,6 +3,7 @@ import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";
+import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { NPCLibrary } from "../NPCLibrary";
@@ -14,6 +15,7 @@ import { ListingButton } from "./ListingButton";
 export type StatBlockLibraryViewModelProps = {
     encounterCommander: EncounterCommander;
     library: PCLibrary | NPCLibrary;
+    statBlockTextEnricher: StatBlockTextEnricher;
 };
 
 type StatBlockListing = Listing<StatBlock>;
@@ -118,7 +120,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 maxHeightPx={300}
                 left={this.state.previewPosition.left}
                 top={this.state.previewPosition.top}>
-                    <StatBlockComponent statBlock={this.state.previewedStatBlock} />
+                    <StatBlockComponent statBlock={this.state.previewedStatBlock} enricher={this.props.statBlockTextEnricher} />
                 </Overlay>
             }
         </div>);

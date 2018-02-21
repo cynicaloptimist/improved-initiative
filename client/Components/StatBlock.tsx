@@ -1,23 +1,25 @@
 import * as React from "react";
-import { DefaultRules } from "../Rules/Rules";
+import { Listing } from "../Library/Listing";
+import { SpellLibrary } from "../Library/SpellLibrary";
+import { DefaultRules, Dice, IRules } from "../Rules/Rules";
+import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 
 interface StatBlockProps {
     statBlock: StatBlock;
+    enricher: StatBlockTextEnricher;
 }
 
 interface StatBlockState { }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    private enrichText = (text: string) => {
-        //TODO: Move CustomBindingHandlers.ts#statBlockTextHandler logic here.
-        return text;
-    }
-
-    private signModifier = (modifier: number) => (modifier >= 0 ? "+" : "-") + modifier;
+    private signModifier = (modifier: number) => (modifier >= 0 ? "+" : "") + modifier;
 
     public render() {
         const statBlock = this.props.statBlock;
+        const rules = new DefaultRules();
+        const enricher = this.props.enricher;//new StatBlockTextEnricher(dice => console.log(dice), new SpellLibrary(), rules);
 
         const modifierTypes = [
             { name: "Saves", data: statBlock.Saves },
@@ -40,8 +42,6 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Legendary Actions", data: statBlock.LegendaryActions },
         ];
 
-        const rules = new DefaultRules();
-
         return <div className="c-statblock">
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
@@ -52,13 +52,13 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="AC">
                 <span className="stat-label">Armor Class</span>
                 <span>{statBlock.AC.Value}</span>
-                <span className="notes">{this.enrichText(statBlock.AC.Notes)}</span>
+                <span className="notes">{enricher.EnrichText(statBlock.AC.Notes)}</span>
             </div>
 
             <div className="HP">
                 <span className="stat-label">Hit Points</span>
                 <span>{statBlock.HP.Value}</span>
-                <span className="notes">{this.enrichText(statBlock.HP.Notes)}</span>
+                <span className="notes">{enricher.EnrichText(statBlock.HP.Notes)}</span>
             </div>
 
             <div className="speed">
@@ -122,13 +122,13 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                             <div key={power.Name}>
                                 <span className="stat-label">{power.Name}</span>
                                 {power.Usage && <span className="stat-label">{power.Usage}</span>}
-                                <span className="power-content">{this.enrichText(power.Content)}</span>
+                                <span className="power-content">{enricher.EnrichText(power.Content)}</span>
                             </div>
                         )}
                     </div>
                 )}
 
-            {statBlock.Description && <div className="Description">{this.enrichText(statBlock.Description)}</div>}
+            {statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>}
         </div>;
     }
 }

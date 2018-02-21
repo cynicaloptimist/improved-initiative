@@ -3,6 +3,7 @@ import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
+import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
@@ -12,6 +13,7 @@ import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 export interface LibrariesProps {
     encounterCommander: EncounterCommander;
+    statBlockTextEnricher: StatBlockTextEnricher;
     libraries: LibrarySet;
 }
 
@@ -35,11 +37,13 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
             Creatures: <StatBlockLibraryViewModel
                 key="creatures"
                 encounterCommander={this.props.encounterCommander}
-                library={this.props.libraries.NPCs} />,
+                library={this.props.libraries.NPCs}
+                statBlockTextEnricher={this.props.statBlockTextEnricher}/>,
             Players: <StatBlockLibraryViewModel
                 key="players"
                 encounterCommander={this.props.encounterCommander}
-                library={this.props.libraries.PCs} />,
+                library={this.props.libraries.PCs}
+                statBlockTextEnricher={this.props.statBlockTextEnricher}/>,
             Encounters: <EncounterLibraryViewModel
                 encounterCommander={this.props.encounterCommander}
                 library={this.props.libraries.Encounters} />,
