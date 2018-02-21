@@ -4,7 +4,6 @@ import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
-import { TrackerViewModel } from "../../TrackerViewModel";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
 import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
