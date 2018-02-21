@@ -4,10 +4,7 @@ import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { TrackerViewModel } from "../../TrackerViewModel";
-import { EncounterLibrary } from "../EncounterLibrary";
-import { NPCLibrary } from "../NPCLibrary";
-import { PCLibrary } from "../PCLibrary";
-import { SpellLibrary } from "../SpellLibrary";
+import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
 import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
 import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
@@ -15,10 +12,7 @@ import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 export interface LibrariesProps {
     encounterCommander: EncounterCommander;
-    encounterLibrary: EncounterLibrary;
-    pcLibrary: PCLibrary;
-    npcLibrary: NPCLibrary;
-    spellLibrary: SpellLibrary;
+    libraries: LibrarySet;
 }
 
 interface LibrariesState {
@@ -38,10 +32,20 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     
     public render() {
         const libraries = {
-            Creatures: <StatBlockLibraryViewModel key="creatures" encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
-            Players: <StatBlockLibraryViewModel key="players" encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
-            Encounters: <EncounterLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.encounterLibrary} />,
-            Spells: <SpellLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.spellLibrary}/>,
+            Creatures: <StatBlockLibraryViewModel
+                key="creatures"
+                encounterCommander={this.props.encounterCommander}
+                library={this.props.libraries.NPCs} />,
+            Players: <StatBlockLibraryViewModel
+                key="players"
+                encounterCommander={this.props.encounterCommander}
+                library={this.props.libraries.PCs} />,
+            Encounters: <EncounterLibraryViewModel
+                encounterCommander={this.props.encounterCommander}
+                library={this.props.libraries.Encounters} />,
+            Spells: <SpellLibraryViewModel
+                encounterCommander={this.props.encounterCommander}
+                library={this.props.libraries.Spells} />,
         };
 
         const selectedLibrary = libraries[this.state.selectedLibrary];

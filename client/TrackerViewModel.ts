@@ -96,10 +96,7 @@ export class TrackerViewModel {
 
     public librariesComponent = React.createElement(LibrariesComponent, {
         encounterCommander: this.EncounterCommander,
-        encounterLibrary: this.Libraries.Encounters,
-        npcLibrary: this.Libraries.NPCs,
-        pcLibrary: this.Libraries.PCs,
-        spellLibrary: this.Libraries.Spells
+        libraries: this.Libraries,
     });
 
     private addCombatantViewModel = (combatant: Combatant) => {
