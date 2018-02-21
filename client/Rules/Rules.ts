@@ -21,7 +21,7 @@ export class RollResult {
 
 export class Dice {
     public static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/;
-    public static readonly GlobalDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/g;
+    public static readonly GlobalDicePattern = /(\d+d\d+(?:[\s]*[+-][\s]*\d+)?|[+-][\s]*\d+)/g;
     public static readonly RollDiceExpression = (expression: string) => {
         //Taken from http://codereview.stackexchange.com/a/40996
         const match = Dice.ValidDicePattern.exec(expression);
