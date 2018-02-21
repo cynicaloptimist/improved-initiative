@@ -95,7 +95,6 @@ export class TrackerViewModel {
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     public librariesComponent = React.createElement(LibrariesComponent, {
-        tracker: this,
         encounterCommander: this.EncounterCommander,
         encounterLibrary: this.Libraries.Encounters,
         npcLibrary: this.Libraries.NPCs,

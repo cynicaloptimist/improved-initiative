@@ -1,4 +1,5 @@
 import * as React from "react";
+import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { EncounterLibrary } from "../EncounterLibrary";
@@ -9,7 +10,7 @@ import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
 
 export type EncounterLibraryViewModelProps = {
-    tracker: TrackerViewModel;
+    encounterCommander: EncounterCommander;
     library: EncounterLibrary;
 };
 
@@ -40,7 +41,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
 
         const loadSavedEncounter = (listing: EncounterListing) => {
-            listing.GetAsync(savedEncounter => this.props.tracker.Encounter.LoadSavedEncounter(savedEncounter));
+            listing.GetAsync(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
         };
 
         const deleteListing = (listing: EncounterListing) => {
@@ -55,8 +56,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 {filteredListings.map(l => <ListingViewModel key={l.Id} name={l.CurrentName()} onAdd={loadSavedEncounter} onDelete={deleteListing} listing={l} />)}
             </ul>
             <div className="buttons">
-                <ListingButton faClass="chevron-up" onClick={() => this.props.tracker.LibrariesVisible(false)} />
-                <ListingButton faClass="plus" onClick={() => this.props.tracker.EncounterCommander.SaveEncounter()} />
+                <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
+                <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.SaveEncounter()} />
             </div>
         </div>);
     }

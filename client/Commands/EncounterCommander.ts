@@ -1,4 +1,5 @@
 import { AccountClient } from "../Account/AccountClient";
+import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { Dice } from "../Rules/Rules";
@@ -216,6 +217,10 @@ export class EncounterCommander {
                 }
             });
         this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public LoadEncounter = (savedEncounter: any) => {
+        this.tracker.Encounter.LoadSavedEncounter(UpdateLegacySavedEncounter(savedEncounter));
     }
 
     public NextTurn = () => {

@@ -15,7 +15,6 @@ import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 export interface LibrariesProps {
     encounterCommander: EncounterCommander;
-    tracker: TrackerViewModel;
     encounterLibrary: EncounterLibrary;
     pcLibrary: PCLibrary;
     npcLibrary: NPCLibrary;
@@ -41,7 +40,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
         const libraries = {
             Creatures: <StatBlockLibraryViewModel key="creatures" encounterCommander={this.props.encounterCommander} library={this.props.npcLibrary} />,
             Players: <StatBlockLibraryViewModel key="players" encounterCommander={this.props.encounterCommander} library={this.props.pcLibrary} />,
-            Encounters: <EncounterLibraryViewModel tracker={this.props.tracker} library={this.props.encounterLibrary} />,
+            Encounters: <EncounterLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.encounterLibrary} />,
             Spells: <SpellLibraryViewModel encounterCommander={this.props.encounterCommander} library={this.props.spellLibrary}/>,
         };
 

@@ -15,7 +15,6 @@ import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
-import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;
@@ -299,13 +298,11 @@ export class Encounter {
     }
 
     public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-        savedEncounter = UpdateLegacySavedEncounter(savedEncounter);
-
-        let savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
-        let currentEncounterIsActive = this.State() == "active";
+        const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
+        const currentEncounterIsActive = this.State() == "active";
 
         savedEncounter.Combatants.forEach(c => {
-            let combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
+            const combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
