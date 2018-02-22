@@ -115,7 +115,11 @@ export class TrackerViewModel {
     public librariesComponent = React.createElement(LibrariesComponent, {
         encounterCommander: this.EncounterCommander,
         libraries: this.Libraries,
-        statBlockTextEnricher: new StatBlockTextEnricher(this.EncounterCommander.RollDice, this.Libraries.Spells, this.Encounter.Rules)
+        statBlockTextEnricher: new StatBlockTextEnricher(
+            this.EncounterCommander.RollDice,
+            this.EncounterCommander.ReferenceSpell,
+            this.Libraries.Spells,
+            this.Encounter.Rules)
     });
 
     public OrderedCombatants = ko.computed(() =>
