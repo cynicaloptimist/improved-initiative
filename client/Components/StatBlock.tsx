@@ -16,7 +16,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
     public render() {
         const statBlock = this.props.statBlock;
         const rules = new DefaultRules();
-        const enricher = this.props.enricher;//new StatBlockTextEnricher(dice => console.log(dice), new SpellLibrary(), rules);
+        const enricher = this.props.enricher;
 
         const modifierTypes = [
             { name: "Saves", data: statBlock.Saves },
