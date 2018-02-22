@@ -1,6 +1,17 @@
 import * as React from "react";
+import * as ReactReplace from "react-string-replace-recursively";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Dice, IRules } from "../Rules/Rules";
+
+interface ReplaceConfig {
+    [name: string]: {
+        pattern: RegExp;
+        matcherFn: (rawText: string, processed: string, key: string) => JSX.Element;
+        ignore?: string[];
+    };
+}
+
+type ReactReplace = (config: ReplaceConfig) => (input: string) => JSX.Element[];
 
 export class StatBlockTextEnricher {
     constructor(
@@ -10,15 +21,17 @@ export class StatBlockTextEnricher {
     ) { }
 
     public EnrichText = (text: string, name = "") => {
-        const splitText = text.split(Dice.GlobalDicePattern);
-
-        const withDiceEnriched = splitText.map((token, i) => {
-            if (Dice.ValidDicePattern.test(token)) {
-                return <span className="rollable" key={i} onClick={() => this.rollDice(token)}>{token}</span>;
+        const replaceConfig: ReplaceConfig = {
+            "diceExpression": {
+                pattern: Dice.GlobalDicePattern,
+                matcherFn: function (rawText, processed, key) {
+                    return <span className="rollable" key={key} onClick={() => this.rollDice(processed)}>{processed}</span>;
+                },
             }
-            return token;
-        });
+        };
 
-        return withDiceEnriched;
+        const replacer = ReactReplace(replaceConfig);
+
+        return replacer(text);
     }
 }

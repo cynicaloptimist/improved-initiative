@@ -75,6 +75,7 @@
     "react": "^16.2.0",
     "react-color": "^2.13.8",
     "react-dom": "^16.2.0",
+    "react-string-replace-recursively": "^0.1.27",
     "request": "^2.81.0",
     "socket.io": "^1.7.1",
     "socket.io-client": "^1.7.1",
