@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import * as Markdown from "markdown-it";
 import * as React from "react";
 import * as ReactReplace from "react-string-replace-recursively";
 import { Listing } from "../Library/Listing";
@@ -47,6 +48,8 @@ export class StatBlockTextEnricher {
 
         const replacer = ReactReplace(replaceConfig);
 
-        return replacer(text);
+        const markdownText = Markdown().renderInline(text);
+
+        return replacer(markdownText);
     }
 }
