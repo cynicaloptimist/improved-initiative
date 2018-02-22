@@ -8,10 +8,12 @@ export class PCLibrary {
     public ContainsPlayerCharacters = true;
 
     constructor() {
-        Store.List(Store.PlayerCharacters).forEach(id => {
+        const listings = Store.List(Store.PlayerCharacters).map(id => {
             let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-            this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.PlayerCharacters, "localStorage"));
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.PlayerCharacters, "localStorage");
         });
+
+        ko.utils.arrayPushAll(this.StatBlocks, listings);
 
         if (this.StatBlocks().length == 0) {
             this.addSamplePlayersFromUrl("/sample_players.json");
@@ -20,10 +22,11 @@ export class PCLibrary {
 
     private addSamplePlayersFromUrl = (url: string) => {
         $.getJSON(url, (json: StatBlock[]) => {
-            json.forEach((statBlock, index) => {
+            const listings = json.map((statBlock, index) => {
                 statBlock = { ...StatBlock.Default(), ...statBlock };
-                this.StatBlocks.push(new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Type, null, "server", statBlock));
+                return new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Type, null, "server", statBlock);
             });
+            ko.utils.arrayPushAll(this.StatBlocks, listings);
         });
     }
 

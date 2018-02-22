@@ -11,10 +11,11 @@ export class NPCLibrary {
         $.ajax("../statblocks/").done(s => this.AddStatBlockListings(s, "server"));
 
         const localStatBlocks = Store.List(Store.StatBlocks);
-        localStatBlocks.forEach(id => {
+        const listings = localStatBlocks.map(id => {
             let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-            this.StatBlocks.push(new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage"));
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage");
         });
+        ko.utils.arrayPushAll(this.StatBlocks, listings);
     }
 
     public AddStatBlockListings = (listings: ServerListing[], source: ListingOrigin) => {
