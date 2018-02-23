@@ -34,7 +34,7 @@ export class EncounterCommander {
     }
 
     public QuickAddStatBlock = () => {
-        const prompt = new QuickAddPromptWrapper();
+        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
         this.tracker.PromptQueue.Add(prompt);
     }
 

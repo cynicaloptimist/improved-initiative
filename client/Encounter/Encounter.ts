@@ -118,7 +118,7 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock(statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) {
+    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) => {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
         if (hideOnAdd) {
