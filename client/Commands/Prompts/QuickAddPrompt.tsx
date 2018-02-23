@@ -5,7 +5,6 @@ import { Prompt } from "./Prompt";
 
 const promptClassName = "p-quick-add";
 const inputClassName = promptClassName + "-input";
-const nameInputId = promptClassName + "-name";
 
 interface QuickAddPromptProps { }
 interface QuickAddPromptState { }
@@ -16,10 +15,16 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
     }
 
     public render() {
-        return <div className={promptClassName}>
-            <input ref={i => this.focusInput = i} id={nameInputId} className={inputClassName} type="text" placeholder="Name..." />
+        return <React.Fragment>
+            <div className={promptClassName}>
+                Quick Add Combatant    
+                <input ref={i => this.focusInput = i} name="name" className={inputClassName} type="text" placeholder="Name" />
+                <input className={inputClassName} name="hp" type="number" placeholder="Max HP" />
+                <input className={inputClassName} name="ac" type="number" placeholder="AC" />
+                <input className={inputClassName} name="initiative" type="number" placeholder="Initiative Bonus" />
+            </div>
             <button type="submit" className="fa fa-check button"></button>
-        </div>;
+        </React.Fragment>;
     }
 }
 
@@ -28,13 +33,22 @@ export class QuickAddPromptWrapper implements Prompt {
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
-    constructor(private addStatBlock: (statBlock: StatBlock) => void) {
-
-    }
+    constructor(private addStatBlock: (statBlock: StatBlock) => void) { }
 
     public Resolve = (form: HTMLFormElement) => {
-        const nameElement = $(form).find("#" + nameInputId);
-        const statBlock = { ...StatBlock.Default(), Name: nameElement.val().toString() };
+        const name = $(form).find("[name='name']").val().toString() || "New Combatant";
+        const maxHP = parseInt($(form).find("[name='hp']").val().toString()) || 1;
+        const ac = parseInt($(form).find("[name='ac']").val().toString()) || 10;
+        const initiative = parseInt($(form).find("[name='initiative']").val().toString()) || 0;
+
+        const statBlock: StatBlock = {
+            ...StatBlock.Default(),
+            Name: name,
+            HP: { Value: maxHP, Notes: "" },
+            AC: { Value: ac, Notes: "" },
+            InitiativeModifier: initiative,            
+        };
+
         this.addStatBlock(statBlock);
         this.dequeueCallback();
     }
