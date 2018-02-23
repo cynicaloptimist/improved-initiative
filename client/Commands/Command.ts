@@ -40,6 +40,7 @@ export let BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c =
     new Command("Reroll Initiative", c.RerollInitiative, "alt+shift+i", "fa-refresh", false),
     new Command("Clear Encounter", c.ClearEncounter, "alt+del", "fa-trash"),
     new Command("Open Library", c.ShowLibraries, "alt+a", "fa-user-plus"),
+    new Command("Quick Add Combatant", c.QuickAddStatBlock, "alt+q", "fa-asterisk"),
     new Command("Show Player Window", c.LaunchPlayerWindow, "alt+w", "fa-users"),
     new Command("Next Turn", c.NextTurn, "n", "fa-step-forward"),
     new Command("Previous Turn", c.PreviousTurn, "alt+n", "fa-step-backward"),
