@@ -13,6 +13,7 @@ import { Store } from "../Utility/Store";
 import { probablyUniqueString } from "../Utility/Toolbox";
 import { BuildEncounterCommandList, Command } from "./Command";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class EncounterCommander {
@@ -30,6 +31,11 @@ export class EncounterCommander {
             this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
+    }
+
+    public QuickAddStatBlock = () => {
+        const prompt = new QuickAddPromptWrapper();
+        this.tracker.PromptQueue.Add(prompt);
     }
 
     private deleteSavedStatBlock = (library: string, statBlockId: string) => {
