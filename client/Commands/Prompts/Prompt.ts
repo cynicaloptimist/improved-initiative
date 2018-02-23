@@ -5,7 +5,7 @@ export interface Prompt {
     SetDequeueCallback: (callback: () => void) => void;
 }
 
-type PromptResolver = (responses: { [id: string]: string }) => void;
+export type PromptResolver = (responses: { [id: string]: string }) => void;
 
 export class DefaultPrompt implements Prompt {
     private dequeue = () => { };
