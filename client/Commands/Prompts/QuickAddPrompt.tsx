@@ -15,16 +15,14 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
     }
 
     public render() {
-        return <React.Fragment>
-            <div className={promptClassName}>
-                Quick Add Combatant    
-                <input ref={i => this.focusInput = i} name="name" className={inputClassName} type="text" placeholder="Name" />
-                <input className={inputClassName} name="hp" type="number" placeholder="Max HP" />
-                <input className={inputClassName} name="ac" type="number" placeholder="AC" />
-                <input className={inputClassName} name="initiative" type="number" placeholder="Initiative Bonus" />
-            </div>
+        return <div className={promptClassName}>
+            Quick Add Combatant
+            <input ref={i => this.focusInput = i} name="name" className={inputClassName} type="text" placeholder="Name" />
+            <input className={inputClassName} name="hp" type="number" placeholder="HP" />
+            <input className={inputClassName} name="ac" type="number" placeholder="AC" />
+            <input className={inputClassName} name="initiative" type="number" placeholder="Init" />
             <button type="submit" className="fa fa-check button"></button>
-        </React.Fragment>;
+        </div>;
     }
 }
 
@@ -46,7 +44,7 @@ export class QuickAddPromptWrapper implements Prompt {
             Name: name,
             HP: { Value: maxHP, Notes: "" },
             AC: { Value: ac, Notes: "" },
-            InitiativeModifier: initiative,            
+            InitiativeModifier: initiative,
         };
 
         this.addStatBlock(statBlock);
