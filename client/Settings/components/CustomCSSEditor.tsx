@@ -31,7 +31,7 @@ export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State
         return <div className="custom-css-editor">
             <p>Epic Initiative is enabled.</p>
             <StylesChooser currentStyles={this.props.currentStyles} updateStyle={this.props.updateStyle} />
-            <h4>Additional CSS</h4>
+            <h4>Additional CSS <strong>(experimental)</strong></h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.state.manualCSS} />
         </div>;
     }

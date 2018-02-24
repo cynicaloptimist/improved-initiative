@@ -69,21 +69,22 @@ export class StylesChooser extends React.Component<ColorChooserProps, ColorChoos
     }
 
     public render() {
-        return <div className="c-color-chooser">
-            <div>
+        return <div className="c-styles-chooser">
+            <div className="c-styles-chooser-inputs">
                 <h4>Colors</h4>
                 {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
-                {this.getLabelAndColorBlock("Background", "combatantBackground")}
+                {this.getLabelAndColorBlock("Combatant Background", "combatantBackground")}
                 {this.getLabelAndColorBlock("Active Combatant Indicator", "activeCombatantIndicator")}
                 {this.getLabelAndColorBlock("Header Text", "headerText")}
-                {this.getLabelAndColorBlock("Background", "headerBackground")}
+                {this.getLabelAndColorBlock("Header Background", "headerBackground")}
                 {this.getLabelAndColorBlock("Main Background", "mainBackground")}
+                <h4>Other Styles</h4>
                 <p><span style={{ fontFamily: this.state.styles.font }}>Font:</span> <input onBlur={this.handleFontChange} /></p>
                 <p>Background Image URL: <input onBlur={this.handleBackgroundUrlChange} /></p>
             </div>
             {
                 this.state.selectedStyle !== null &&
-                <div>
+                <div className="c-styles-chooser-color-wheel">
                     <SketchPicker width="210px" color={this.state.styles[this.state.selectedStyle]} onChangeComplete={this.handleChangeComplete} />
                     <Button text="Clear" onClick={this.clearSelectedStyle} />
                 </div>
