@@ -56,7 +56,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
     let store = null;
-
+    
     if (process.env.DB_CONNECTION_STRING) {
         store = new MongoDBStore(
             {
@@ -67,6 +67,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
+
     }
     app.engine("html", mustacheEngine);
     app.set("view engine", "html");
@@ -79,7 +80,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         resave: false,
         saveUninitialized: false,
         cookie: {
-            secure: true,
+            secure: process.env.NODE_ENV === "production",
             maxAge: moment.duration(1, "weeks").asMilliseconds(),
         }
     }));
