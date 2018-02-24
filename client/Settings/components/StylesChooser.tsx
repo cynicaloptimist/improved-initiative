@@ -41,6 +41,16 @@ export class StylesChooser extends React.Component<ColorChooserProps, ColorChoos
         this.props.updateStyle("font", fontName);
     }
 
+    private handleBackgroundUrlChange = (event: React.FocusEvent<HTMLInputElement>) => {
+        const backgroundUrl = event.currentTarget.value;
+        const updatedState = {
+            styles: { ...this.state.styles, backgroundUrl: backgroundUrl }
+        };
+
+        this.setState(updatedState);
+        this.props.updateStyle("backgroundUrl", backgroundUrl);
+    }
+
     private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
         return () => this.setState({ selectedStyle: style });
     }
@@ -68,7 +78,8 @@ export class StylesChooser extends React.Component<ColorChooserProps, ColorChoos
                 {this.getLabelAndColorBlock("Header Text", "headerText")}
                 {this.getLabelAndColorBlock("Background", "headerBackground")}
                 {this.getLabelAndColorBlock("Main Background", "mainBackground")}
-                <p><span style={ { fontFamily: this.state.styles.font } }>Font:</span> <input onBlur={this.handleFontChange} /></p>
+                <p><span style={{ fontFamily: this.state.styles.font }}>Font:</span> <input onBlur={this.handleFontChange} /></p>
+                <p>Background Image URL: <input onBlur={this.handleBackgroundUrlChange} /></p>
             </div>
             {
                 this.state.selectedStyle !== null &&

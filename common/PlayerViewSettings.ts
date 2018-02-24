@@ -15,5 +15,6 @@ export interface PlayerViewCustomStyles {
     activeCombatantIndicator: string;
     headerBackground: string;
     headerText: string;
+    backgroundUrl: string;
     font: string;
 }

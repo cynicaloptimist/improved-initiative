@@ -64,7 +64,8 @@ function getDefaultSettings(): Settings {
                 font: "",
                 headerBackground: "",
                 headerText: "",
-                mainBackground: ""
+                mainBackground: "",
+                backgroundUrl: "",
             }
         },
         Version: process.env.VERSION
@@ -161,6 +162,11 @@ function updateSettings(settings: any): Settings {
         settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
         settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
     }
+
+    if (updateToSemanticVersionIsRequired(settings.Version, "1.2.2")) {
+        settings.PlayerView.CustomStyles.backgroundUrl = defaultSettings.PlayerView.CustomStyles.backgroundUrl;
+    }
+
     return settings;
 }
 
