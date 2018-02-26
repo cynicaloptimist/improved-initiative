@@ -1,6 +1,6 @@
 export interface IRules {
     GetModifierFromScore: (attribute: number) => number;
-    AbilityCheck: (...mods: number[]) => number;
+    AbilityCheck: (mod: number) => number;
     EnemyHPTransparency: string;
 }
 
@@ -77,8 +77,8 @@ export class DefaultRules implements IRules {
     public GetModifierFromScore = (abilityScore: number) => {
         return Math.floor((abilityScore - 10) / 2);
     }
-    public AbilityCheck = (...mods: number[]) => {
-        return Math.ceil(Math.random() * 20) + (mods.length ? mods.reduce((p, c) => p + c) : 0);
+    public AbilityCheck = (mod = 0) => {
+        return Math.ceil(Math.random() * 20) + mod;
     }
     public EnemyHPTransparency = "whenBloodied";
 }
