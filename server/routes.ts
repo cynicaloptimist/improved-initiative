@@ -88,6 +88,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req: Req, res: Res) => {
+        const renderOptions = pageRenderOptions(initializeNewPlayerView(playerViews), req.session);
         if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
@@ -105,14 +106,14 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
                 upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
-                    res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                    res.render("landing", renderOptions);
                 });
             } else {
                 req.session.userId = probablyUniqueString();
-                res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                res.render("landing", renderOptions);
             }
         } else {
-            res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+            res.render("landing", renderOptions);
         }
     });
 
