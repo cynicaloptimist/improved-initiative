@@ -11,12 +11,17 @@ export class InitiativePrompt implements Prompt {
     private dequeue;
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
-        const toPrompt = (combatant: Combatant) => ({
-            Id: combatant.Id,
-            Prompt: `${combatant.DisplayName()} (${toModifierString(combatant.InitiativeBonus)}): `,
-            Css: combatant.InitiativeGroup() !== null ? "fa fa-link" : "",
-            PreRoll: combatant.GetInitiativeRoll()
-        });
+        const toPrompt = (combatant: Combatant) => {
+            const initiativeBonus = toModifierString(combatant.InitiativeBonus);
+            const advantageIndicator = combatant.StatBlock().InitiativeAdvantage ? "[adv]" : "";
+
+            return {
+                Id: combatant.Id,
+                Prompt: `${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `,
+                Css: combatant.InitiativeGroup() !== null ? "fa fa-link" : "",
+                PreRoll: combatant.GetInitiativeRoll()
+            };
+        };
 
         const groups = [];
 
