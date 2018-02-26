@@ -152,7 +152,8 @@ export class CombatantCommander {
         const selectedCombatants = this.SelectedCombatants();
         const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
         const callback = this.CreateEditHPCallback(selectedCombatants, combatantNames);
-        const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' />`, callback);
+        const latestRollTotal = this.latestRoll && this.latestRoll.Total;
+        const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' value='${latestRollTotal}'/>`, callback);
         this.tracker.PromptQueue.Add(prompt);
         return false;
     }
