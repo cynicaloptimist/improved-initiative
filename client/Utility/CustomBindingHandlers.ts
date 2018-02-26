@@ -1,4 +1,5 @@
 import { render as renderReact } from "react-dom";
+import { CombatantCommander } from "../Commands/CombatantCommander";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Dice, IRules } from "../Rules/Rules";
@@ -73,7 +74,7 @@ export function RegisterBindingHandlers() {
         }
     };
 
-    function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: EncounterCommander) {
+    function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: CombatantCommander) {
         el.on("click", (event) => {
             const diceExpression = event.target.innerHTML;
             encounterCommander.RollDice(diceExpression);
@@ -85,7 +86,7 @@ export function RegisterBindingHandlers() {
             const abilityScore = valueAccessor();
             if (abilityScore !== undefined && bindingContext.$root.Encounter !== undefined) {
                 const modifier = toModifierString(bindingContext.$root.Encounter.Rules.GetModifierFromScore(abilityScore));
-                const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
+                const encounterCommander: CombatantCommander = bindingContext.$root.CombatantCommander;
 
                 $(element).html(modifier).addClass("rollable");
                 makeDiceClickable($(element), encounterCommander);
@@ -101,6 +102,7 @@ export function RegisterBindingHandlers() {
 
         const rules: IRules = bindingContext.$root.Encounter.Rules;
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
+        const combatantCommander: CombatantCommander = bindingContext.$root.CombatantCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;
 
         text = text.replace(Dice.GlobalDicePattern, match => `<span class='rollable'>${match}</span>`);
@@ -111,7 +113,7 @@ export function RegisterBindingHandlers() {
 
         $(element).html(text);
 
-        makeDiceClickable($(element).find(".rollable"), encounterCommander);
+        makeDiceClickable($(element).find(".rollable"), combatantCommander);
 
         $(element).find(".spell-reference").on("click", (event) => {
             const spellName = event.target.innerHTML.toLocaleLowerCase();

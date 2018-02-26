@@ -2,7 +2,6 @@ import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
@@ -152,12 +151,6 @@ export class EncounterCommander {
 
     public ToggleToolbarWidth = () => {
         this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
-    }
-
-    public RollDice = (diceExpression: string) => {
-        const diceRoll = Dice.RollDiceExpression(diceExpression);
-        const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.FormattedString} <input class='response' type='number' value='${diceRoll.Total}' />`);
-        this.tracker.PromptQueue.Add(prompt);
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {

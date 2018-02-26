@@ -1,5 +1,6 @@
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -268,5 +269,11 @@ export class CombatantCommander {
             },
                 "instance");
         }
+    }
+
+    public RollDice = (diceExpression: string) => {
+        const diceRoll = Dice.RollDiceExpression(diceExpression);
+        const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.FormattedString} <input class='response' type='number' value='${diceRoll.Total}' />`);
+        this.tracker.PromptQueue.Add(prompt);
     }
 }

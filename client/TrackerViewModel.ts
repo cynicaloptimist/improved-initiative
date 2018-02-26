@@ -116,7 +116,7 @@ export class TrackerViewModel {
         encounterCommander: this.EncounterCommander,
         libraries: this.Libraries,
         statBlockTextEnricher: new StatBlockTextEnricher(
-            this.EncounterCommander.RollDice,
+            this.CombatantCommander.RollDice,
             this.EncounterCommander.ReferenceSpell,
             this.Libraries.Spells,
             this.Encounter.Rules)
