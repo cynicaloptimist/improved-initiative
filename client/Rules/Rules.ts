@@ -2,7 +2,7 @@ import * as _ from "lodash";
 
 export interface IRules {
     GetModifierFromScore: (attribute: number) => number;
-    AbilityCheck: (mod: number) => number;
+    AbilityCheck: (mod?: number, advantageType?: "advantage" | "disadvantage") => number;
     EnemyHPTransparency: string;
 }
 
