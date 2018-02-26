@@ -1,6 +1,6 @@
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { Dice } from "../Rules/Rules";
+import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -53,6 +53,8 @@ export class CombatantCommander {
             .map(c => c.Name())
             .join(", ")
     );
+
+    private latestRoll: RollResult;
 
     public Select = (data: CombatantViewModel, e?: MouseEvent) => {
         if (!data) {
@@ -273,6 +275,7 @@ export class CombatantCommander {
 
     public RollDice = (diceExpression: string) => {
         const diceRoll = Dice.RollDiceExpression(diceExpression);
+        this.latestRoll = diceRoll;
         const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.FormattedString} <input class='response' type='number' value='${diceRoll.Total}' />`);
         this.tracker.PromptQueue.Add(prompt);
     }
