@@ -67,23 +67,29 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
-
     }
+
     app.engine("html", mustacheEngine);
     app.set("view engine", "html");
     app.set("views", __dirname + "/../html");
 
     app.use(express.static(__dirname + "/../public"));
+
+    const cookie = {
+        secure: process.env.NODE_ENV == "production",
+        maxAge: moment.duration(1, "weeks").asMilliseconds(),
+    };
+
+    console.log(JSON.stringify(cookie));
+
     app.use(session({
         store: store || null,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
         saveUninitialized: false,
-        cookie: {
-            secure: process.env.NODE_ENV === "production",
-            maxAge: moment.duration(1, "weeks").asMilliseconds(),
-        }
+        cookie
     }));
+
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
