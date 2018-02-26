@@ -161,7 +161,8 @@ export class Combatant implements Combatant {
         return modifiers;
     }
 
-    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus, this.StatBlock().InitiativeAdvantage ? "advantage" : null);
+    
     public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
     public ApplyDamage(damage: number) {
