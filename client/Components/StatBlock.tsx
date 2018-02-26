@@ -2,6 +2,7 @@ import * as React from "react";
 import { DefaultRules } from "../Rules/Rules";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
+import { toModifierString } from "../Utility/Toolbox";
 
 interface StatBlockProps {
     statBlock: StatBlock;
@@ -11,8 +12,6 @@ interface StatBlockProps {
 interface StatBlockState { }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    private signModifier = (modifier: number) => (modifier >= 0 ? "+" : "") + modifier;
-
     public render() {
         const statBlock = this.props.statBlock;
         const rules = new DefaultRules();
@@ -66,7 +65,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="Abilities">
                 {Object.keys(statBlock.Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
-                    const abilityModifier = this.signModifier(rules.GetModifierFromScore(abilityScore));
+                    const abilityModifier = toModifierString(rules.GetModifierFromScore(abilityScore));
                     return <div key={abilityName}>
                         <div className="stat-label">{abilityName}</div>
                         <div className={"score " + abilityName}>{abilityScore}</div>
@@ -82,7 +81,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                         <div key={modifierType.name} className={modifierType.name}>
                             <span className="stat-label">{modifierType.name}</span>
                             {modifierType.data.map((modifier, i) =>
-                                <span key={i + modifier.Name}>{modifier.Name}{this.signModifier(modifier.Modifier)} </span>
+                                <span key={i + modifier.Name}>{modifier.Name}{toModifierString(modifier.Modifier)} </span>
                             )}
                         </div>
                     )}
