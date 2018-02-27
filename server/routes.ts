@@ -79,8 +79,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         maxAge: moment.duration(1, "weeks").asMilliseconds(),
     };
 
-    console.log(JSON.stringify(cookie));
-
     app.use(session({
         store: store || null,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
