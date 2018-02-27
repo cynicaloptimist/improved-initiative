@@ -163,7 +163,7 @@ function updateSettings(settings: any): Settings {
         settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
     }
 
-    if (updateToSemanticVersionIsRequired(settings.Version, "1.2.3")) {
+    if (updateToSemanticVersionIsRequired(settings.Version, "1.3.0")) {
         settings.PlayerView.CustomStyles.backgroundUrl = defaultSettings.PlayerView.CustomStyles.backgroundUrl;
     }
 
