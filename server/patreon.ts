@@ -76,14 +76,18 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         });
 
         const hasStorage = _.intersection(userRewards, storageRewardIds).length > 0;
-        const hasEpicInitiative = _.intersection(userRewards, epicRewardIds).length > 0 ||
-            _.intersection(apiResponse.data.id, epicPatreonIds).length > 0;
+
+        const hasEpicInitiativePromo = _.includes(epicPatreonIds, apiResponse.data.id);
+        const hasEpicInitiativeSubscription = _.intersection(userRewards, epicRewardIds).length > 0;
+
+        const hasEpicInitiative = hasEpicInitiativePromo || hasEpicInitiativeSubscription;
+
         const standing =
             hasEpicInitiative ? "epic" :
                 hasStorage ? "pledge" :
                     "none";
 
-        req.session.hasStorage = hasStorage;
+        req.session.hasStorage = hasEpicInitiative || hasStorage;
         req.session.hasEpicInitiative = hasEpicInitiative;
         req.session.isLoggedIn = true;
 
