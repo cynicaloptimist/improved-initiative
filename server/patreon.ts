@@ -75,6 +75,8 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             }
         });
 
+        console.log(`api response: ${JSON.stringify(apiResponse.data)}`);
+
         const hasStorageReward = _.intersection(userRewards, storageRewardIds).length > 0;
 
         const hasEpicInitiativePromo = _.includes(epicPatreonIds, apiResponse.data.id);
