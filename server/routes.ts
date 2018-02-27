@@ -76,7 +76,6 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(express.static(__dirname + "/../public"));
 
     const cookie = {
-        secure: process.env.NODE_ENV == "production",
         maxAge: moment.duration(1, "weeks").asMilliseconds(),
     };
 
