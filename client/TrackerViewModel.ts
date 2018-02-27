@@ -200,7 +200,10 @@ export class TrackerViewModel {
         }
 
         if (this.PromptQueue.HasPrompt()) {
-            return "show-center-right-left";
+            if (this.CombatantCommander.HasSelected()) {
+                return "show-center-right-left";
+            }
+            return "show-center-left-right";
         }
 
         if (this.CombatantCommander.HasSelected()) {
