@@ -3,6 +3,7 @@ import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
+import { env } from "../../Environment";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
@@ -19,7 +20,7 @@ export interface LibrariesProps {
 interface LibrariesState {
     selectedLibrary: string;
 }
- 
+
 export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     constructor(props) {
         super(props);
@@ -27,22 +28,22 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
             selectedLibrary: "Creatures"
         };
     }
-    
+
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
     private selectLibrary = (library: string) => this.setState({ selectedLibrary: library });
-    
+
     public render() {
         const libraries = {
             Creatures: <StatBlockLibraryViewModel
                 key="creatures"
                 encounterCommander={this.props.encounterCommander}
                 library={this.props.libraries.NPCs}
-                statBlockTextEnricher={this.props.statBlockTextEnricher}/>,
+                statBlockTextEnricher={this.props.statBlockTextEnricher} />,
             Players: <StatBlockLibraryViewModel
                 key="players"
                 encounterCommander={this.props.encounterCommander}
                 library={this.props.libraries.PCs}
-                statBlockTextEnricher={this.props.statBlockTextEnricher}/>,
+                statBlockTextEnricher={this.props.statBlockTextEnricher} />,
             Encounters: <EncounterLibraryViewModel
                 encounterCommander={this.props.encounterCommander}
                 library={this.props.libraries.Encounters} />,
@@ -53,8 +54,10 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
 
         const selectedLibrary = libraries[this.state.selectedLibrary];
 
+        const hasAccountSync = env.HasStorage;
+
         return <React.Fragment>
-            <h2>Library</h2>
+            <h2>{hasAccountSync && <span className="fa fa-cloud" title="Account Sync is enabled" />} Library</h2>
             <Button faClass="close" onClick={this.hideLibraries} />
             <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} selected={this.state.selectedLibrary} />
             {selectedLibrary}
