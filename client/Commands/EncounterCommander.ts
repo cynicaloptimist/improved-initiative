@@ -111,7 +111,7 @@ export class EncounterCommander {
         listing.GetAsync(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, this.deleteSavedStatBlock, "global");
             } else {
                 this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
             }
