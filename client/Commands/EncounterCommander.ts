@@ -38,7 +38,6 @@ export class EncounterCommander {
     }
 
     private deleteSavedStatBlock = (library: string, statBlockId: string) => {
-        Store.Delete(library, statBlockId);
         if (library == Store.PlayerCharacters) {
             this.libraries.PCs.DeleteListing(statBlockId);
         }

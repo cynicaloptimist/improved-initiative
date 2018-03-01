@@ -38,6 +38,7 @@ export class PCLibrary {
 
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
+        Store.Delete(Store.PlayerCharacters, id);
         new AccountClient().DeletePlayerCharacter(id);
     }
 }
