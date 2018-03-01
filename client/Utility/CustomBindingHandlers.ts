@@ -74,10 +74,10 @@ export function RegisterBindingHandlers() {
         }
     };
 
-    function makeDiceClickable(el: JQuery<HTMLElement>, encounterCommander: CombatantCommander) {
+    function makeDiceClickable(el: JQuery<HTMLElement>, combatantCommander: CombatantCommander) {
         el.on("click", (event) => {
             const diceExpression = event.target.innerHTML;
-            encounterCommander.RollDice(diceExpression);
+            combatantCommander.RollDice(diceExpression);
         });
     }
 
