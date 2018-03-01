@@ -24,7 +24,7 @@ export class EncounterLibrary {
     }
 
     public Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-        const listing = listingFrom(savedEncounter);
+        const listing = listingFrom(savedEncounter, savedEncounter.Id);
 
         if (this.Encounters().indexOf(listing) === -1) {
             this.Encounters.push(listing);
@@ -51,7 +51,7 @@ export class EncounterLibrary {
     }
 }
 
-function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId?: string) {
+function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) {
     const listingId = encounterId || probablyUniqueString();
     const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
     return new Listing<SavedEncounter<SavedCombatant>>(
