@@ -115,7 +115,7 @@ function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: Spell.GetKeywords(c),//TODO
+            SearchHint: Spell.GetKeywords(c),
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
         };
@@ -128,7 +128,7 @@ function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): 
         return {
             Name: c.Name,
             Id: c.Id,
-            SearchHint: L.GetEncounterKeywords(c),//TODO
+            SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
         };
