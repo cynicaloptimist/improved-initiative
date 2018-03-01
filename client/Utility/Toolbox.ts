@@ -30,22 +30,15 @@ export function probablyUniqueString(): string {
 }
 
 export function combatantCountsByName<T>(name: string, counts: T, oldName?: string): T {
-    console.log("name", name);
-    console.log("oldName", oldName);
-
     if (name == oldName) { return counts; }
-
     if (oldName) {
         if (!counts[oldName]) { counts[oldName] = 1; }
         counts[oldName] = counts[oldName] - 1;
     }
-
     if (!counts[name]) {
         counts[name] = 1;
     } else {
         counts[name] = counts[name] + 1;
     }
-
-    console.log("counts", counts);
     return counts;
 }

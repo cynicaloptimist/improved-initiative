@@ -15,6 +15,7 @@ import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
+import { combatantCountsByName } from "../Utility/Toolbox";
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;
@@ -49,7 +50,7 @@ export class Encounter {
 
         let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
-            this.LoadSavedEncounter(autosavedEncounter);
+            this.LoadSavedEncounter(autosavedEncounter, true);
         }
 
         this.playerViewClient = new PlayerViewClient(this.Socket);
@@ -297,12 +298,18 @@ export class Encounter {
         };
     }
 
-    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
         const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 
         savedEncounter.Combatants.forEach(c => {
             const combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
+            if (!autosavedEncounter) {
+                let name = combatant.StatBlock().Name;
+                let counts = combatantCountsByName(name, this.CombatantCountsByName(), name);
+                combatant.IndexLabel = counts[name];
+                this.CombatantCountsByName(counts);
+            }
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
