@@ -25,16 +25,23 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         this.state = {
             filter: "",
         };
-        
-        this.filterCache = new FilterCache(this.props.library.Encounters());
 
-        props.library.Encounters.subscribe(newEncounters => {
+        this.filterCache = new FilterCache(this.props.library.Encounters());
+    }
+
+    private librarySubscription: KnockoutSubscription;
+    private filterCache: FilterCache<EncounterListing>;
+
+    public componentDidMount() {
+        this.librarySubscription = this.props.library.Encounters.subscribe(newEncounters => {
             this.filterCache = new FilterCache(newEncounters);
             this.forceUpdate();
         });
     }
 
-    private filterCache: FilterCache<EncounterListing>;
+    public componentWillUnmount() {
+        this.librarySubscription.dispose();
+    }
 
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
