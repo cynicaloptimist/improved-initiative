@@ -4,9 +4,10 @@ Thanks for your interest in contributing to Improved Initiative! It means a lot 
 
 If this is your first time contributing to an open source project, don't sweat it. It's my first time maintaining an open source project. We'll learn together- look over [this article](https://opensource.guide/how-to-contribute/) for some general advice.
 
-I'll try to provide a short list of guidelines here (adapted from [TypeScript Coding Guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)). This is not an exhaustive guide, so please be willing to make requested modifications to your code.
+## Guidelines
+Here is a short list of coding guidelines (adapted from [TypeScript Coding Guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)). This is not an exhaustive guide, so please be willing to make requested modifications to your code.
 
-## General
+### General
 * Open pull requests against the `development` branch.
 * Link your pull request to at least one open issue (ideally exactly one).
 * If there is no open issue for your PR, open one first for discussion before submitting any code.
@@ -14,14 +15,14 @@ I'll try to provide a short list of guidelines here (adapted from [TypeScript Co
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
 * Ensure your PR is deploy-ready, as `development` auto-deploys to the [public dev server](http://improved-initiative-dev.azurewebsites.net/)
 
-## Names
+### Names
 * Use PascalCase for type names and public methods.
 * Do not use "I" as a prefix for interface names.
 * Use camelCase for local variables and private properties.
 * Do not use "_" as a prefix for private properties.
 * Use whole words in names when possible.
 
-## Style
+### Style
 * Use arrow functions over anonymous function expressions.
 * Only surround arrow function parameters when necessary. 
 For example, (x) => x + x is wrong but the following are correct:
@@ -34,3 +35,6 @@ For example, (x) => x + x is wrong but the following are correct:
     * Don't use html `style` attributes
     * Put JSON structures in their own file
     * Encapsulate html in templates
+
+## Epic Initiative
+While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to my [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. Be aware that code that you contribute may wind up "locked behind the paywall" if it covers functionality that I'm planning to build for Epic Initiative. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.
