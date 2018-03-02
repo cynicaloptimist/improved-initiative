@@ -5,6 +5,7 @@ import { CurrentSettings } from "../Settings/Settings";
 import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { probablyUniqueString } from "../Utility/Toolbox";
+import { combatantCountsByName } from "../Utility/Toolbox";
 import { Tag } from "./Tag";
 
 export interface Combatant {
@@ -131,24 +132,8 @@ export class Combatant implements Combatant {
     }
 
     private setIndexLabel(oldName?: string) {
-        let name = this.StatBlock().Name,
-            counts = this.Encounter.CombatantCountsByName();
-        if (name == oldName) {
-            return;
-        }
-        
-        if (!counts[oldName]) {
-            counts[oldName] = 1;
-        }
-        if (oldName) {
-            counts[oldName] = counts[oldName] - 1;
-        }
-
-        if (!counts[name]) {
-            counts[name] = 1;
-        } else {
-            counts[name] = counts[name] + 1;
-        }
+        let name = this.StatBlock().Name;
+        let counts = combatantCountsByName(name, this.Encounter.CombatantCountsByName(), oldName);
         this.IndexLabel = counts[name];
         this.Encounter.CombatantCountsByName(counts);
     }
