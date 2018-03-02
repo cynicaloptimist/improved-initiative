@@ -12,10 +12,10 @@ import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
+import { combatantCountsByName, probablyUniqueString } from "../Utility/Toolbox";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
-import { combatantCountsByName } from "../Utility/Toolbox";
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;
@@ -309,8 +309,12 @@ export class Encounter {
         const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 
-        savedEncounter.Combatants.forEach(c => {
-            const combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c, !autosavedEncounter);
+        savedEncounter.Combatants.forEach(savedCombatant => {
+            if (this.Combatants().some(c => c.Id == savedCombatant.Id)) {
+                savedCombatant.Id = probablyUniqueString();
+            }
+
+            const combatant = this.AddCombatantFromStatBlock(savedCombatant.StatBlock, null, savedCombatant, !autosavedEncounter);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
