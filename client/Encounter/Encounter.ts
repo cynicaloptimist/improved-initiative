@@ -216,18 +216,6 @@ export class Encounter {
 
         const nextCombatant = this.Combatants()[nextIndex];
 
-        this.durationTags
-            .filter(t =>
-                t.DurationRemaining() == 0 && (
-                    (t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == EndOfTurn) ||
-                    (t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == StartOfTurn)
-                )
-            )
-            .forEach(t => {
-                t.Remove();
-                this.durationTags.splice(this.durationTags.indexOf(t), 1);
-            });
-
         this.ActiveCombatant(nextCombatant);
         this.TurnTimer.Reset();
         this.QueueEmitEncounter();

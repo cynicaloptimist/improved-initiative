@@ -19,16 +19,13 @@ export interface Tag {
 export class Tag implements Tag {
     constructor(public Text: string, combatant: Combatant, duration = -1, public DurationTiming = StartOfTurn, public DurationCombatantId = "") {
         this.HasDuration = (duration > -1);
-        this.DurationRemaining = ko.observable(duration);
+        this.DurationRemaining(duration);
         this.Remove = () => combatant.Tags.remove(this);
     }
 
-    public Decrement = () => {
-        const d = this.DurationRemaining();
-        if (d > 0) {
-            this.DurationRemaining(d - 1);
-        }
-    }
+    public DurationRemaining: KnockoutObservable<number> = ko.observable(0);
+
+    public Decrement = () => this.DurationRemaining(this.DurationRemaining() - 1);
 
     public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
