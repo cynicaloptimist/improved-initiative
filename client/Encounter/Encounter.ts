@@ -240,6 +240,12 @@ export class Encounter {
 
     public Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
         let activeCombatant = this.ActiveCombatant();
+        this.durationTags
+            .filter(t => !t.Visible())
+            .forEach(t => {
+                t.Remove();
+                this.durationTags.splice(this.durationTags.indexOf(t), 1);
+            });
         return {
             Name: name,
             Id: AccountClient.SanitizeForId(name),
