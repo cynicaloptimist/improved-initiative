@@ -119,8 +119,15 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) => {
+    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant, relabel?: boolean) => {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
+
+        if (relabel) {
+            let name = combatant.StatBlock().Name;
+            let counts = combatantCountsByName(name, this.CombatantCountsByName(), name);
+            combatant.IndexLabel = counts[name];
+            this.CombatantCountsByName(counts);
+        }
 
         if (hideOnAdd) {
             combatant.Hidden(true);
@@ -303,13 +310,7 @@ export class Encounter {
         const currentEncounterIsActive = this.State() == "active";
 
         savedEncounter.Combatants.forEach(c => {
-            const combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c);
-            if (!autosavedEncounter) {
-                let name = combatant.StatBlock().Name;
-                let counts = combatantCountsByName(name, this.CombatantCountsByName(), name);
-                combatant.IndexLabel = counts[name];
-                this.CombatantCountsByName(counts);
-            }
+            const combatant = this.AddCombatantFromStatBlock(c.StatBlock, null, c, !autosavedEncounter);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
