@@ -11,6 +11,7 @@ export interface Tag {
     DurationRemaining: KnockoutObservable<number>;
     DurationTiming: DurationTiming;
     DurationCombatantId: string;
+    Visible: KnockoutComputed<boolean>;
     Remove: () => void;
     Decrement: () => void;
     Increment: () => void;
@@ -19,15 +20,17 @@ export interface Tag {
 export class Tag implements Tag {
     constructor(public Text: string, combatant: Combatant, duration = -1, public DurationTiming = StartOfTurn, public DurationCombatantId = "") {
         this.HasDuration = (duration > -1);
-        this.DurationRemaining(duration);
+        this.DurationRemaining = ko.observable(duration);;
         this.Remove = () => combatant.Tags.remove(this);
     }
-
-    public DurationRemaining: KnockoutObservable<number> = ko.observable(0);
 
     public Decrement = () => this.DurationRemaining(this.DurationRemaining() - 1);
 
     public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
+
+    public Visible = ko.pureComputed(() => {
+        return !this.HasDuration || this.DurationRemaining() > 0;
+    });
 
     public static getLegacyTags = (tags: (any)[], combatant: Combatant): Tag[] => {
         return tags.map(tag => {
