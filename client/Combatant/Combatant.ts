@@ -111,6 +111,13 @@ export class Combatant implements Combatant {
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
+
+        const indexLabelCollides = this.Encounter.Combatants()
+            .some(c => c.DisplayName() == this.DisplayName());
+        if (indexLabelCollides) {
+            this.updateIndexLabel(savedCombatant.StatBlock.Name);
+        }
+        
     }
 
     private getMaxHP(statBlock: StatBlock) {
