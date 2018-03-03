@@ -133,9 +133,14 @@ export class Combatant implements Combatant {
     private updateIndexLabel(oldName?: string) {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
-        if (name == oldName) { return counts; }
+        if (name == oldName) { 
+            this.IndexLabel = counts[name];
+            return;
+        }
         if (oldName) {
-            if (!counts[oldName]) { counts[oldName] = 1; }
+            if (!counts[oldName]) {
+                counts[oldName] = 1;
+            }
             counts[oldName] = counts[oldName] - 1;
         }
         if (!counts[name]) {
