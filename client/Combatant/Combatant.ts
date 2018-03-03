@@ -90,7 +90,7 @@ export class Combatant implements Combatant {
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-        this.UpdateIndexLabel(oldStatBlock && oldStatBlock.Name);
+        this.updateIndexLabel(oldStatBlock && oldStatBlock.Name);
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
         this.MaxHP = newStatBlock.HP.Value;
@@ -130,7 +130,7 @@ export class Combatant implements Combatant {
         return statBlock.HP.Value;
     }
 
-    public UpdateIndexLabel(oldName?: string) {
+    private updateIndexLabel(oldName?: string) {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) { return counts; }
