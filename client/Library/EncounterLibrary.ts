@@ -9,11 +9,11 @@ export class EncounterLibrary {
     public Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);
 
     constructor() {
-        Store.List(Store.SavedEncounters).forEach(e => {
+        const listings = Store.List(Store.SavedEncounters).map(e => {
             const encounter = UpdateLegacySavedEncounter(Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e));
-            const listing = listingFrom(encounter, e);
-            this.Encounters.push(listing);
+            return listingFrom(encounter, e);
         });
+        ko.utils.arrayPushAll(this.Encounters, listings);
     }
 
     public AddListings(listings: ServerListing[], source: ListingOrigin) {
@@ -24,7 +24,7 @@ export class EncounterLibrary {
     }
 
     public Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-        const listing = listingFrom(savedEncounter);
+        const listing = listingFrom(savedEncounter, savedEncounter.Id);
 
         if (this.Encounters().indexOf(listing) === -1) {
             this.Encounters.push(listing);
@@ -51,7 +51,7 @@ export class EncounterLibrary {
     }
 }
 
-function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId?: string) {
+function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) {
     const listingId = encounterId || probablyUniqueString();
     const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
     return new Listing<SavedEncounter<SavedCombatant>>(

@@ -1,4 +1,5 @@
 import express = require("express");
+import * as _ from "lodash";
 import patreon = require("patreon");
 import request = require("request");
 import * as DB from "./dbconnection";
@@ -14,7 +15,8 @@ const epicRewardIds = ["1937132"];
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
     patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
-    patreonUrl = process.env.PATREON_URL;
+    patreonUrl = process.env.PATREON_URL,
+    epicPatreonIds = (process.env.PATREON_ADDITIONAL_EPIC_USERIDS || "").split(",").map(s => s.trim());
 
 interface Post {
     attributes: {
@@ -62,7 +64,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             return;
         }
 
-        const encounterId = req.query.state.replace(/['"]/g,"");
+        const encounterId = req.query.state.replace(/['"]/g, "");
         const relationships = apiResponse.included || [];
 
         const userRewards = relationships.filter(i => i.type === "pledge").map((r: Pledge) => {
@@ -73,11 +75,21 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
             }
         });
 
-        const hasStorage = userRewards.some(id => storageRewardIds.indexOf(id) !== -1);
-        const hasEpicInitiative = userRewards.some(id => epicRewardIds.indexOf(id) !== -1);
-        const standing = hasStorage ? "pledge" : "none";
+        console.log(`api response: ${JSON.stringify(apiResponse.data)}`);
 
-        req.session.hasStorage = hasStorage;
+        const hasStorageReward = _.intersection(userRewards, storageRewardIds).length > 0;
+
+        const hasEpicInitiativePromo = _.includes(epicPatreonIds, apiResponse.data.id);
+        const hasEpicInitiativeReward = _.intersection(userRewards, epicRewardIds).length > 0;
+
+        const hasEpicInitiative = hasEpicInitiativePromo || hasEpicInitiativeReward;
+
+        const standing =
+            hasEpicInitiative ? "epic" :
+                hasStorageReward ? "pledge" :
+                    "none";
+
+        req.session.hasStorage = hasEpicInitiative || hasStorageReward;
         req.session.hasEpicInitiative = hasEpicInitiative;
         req.session.isLoggedIn = true;
 
@@ -98,16 +110,16 @@ export function configureLoginRedirect(app: express.Application) {
     app.get(redirectPath, (req: Req, res: Res) => {
         try {
             const code = req.query.code;
-            
+
             const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
-    
+
             OAuthClient.getTokens(code, redirectUri, (tokensError, tokens: TokensResponse) => {
                 if (tokensError) {
                     console.error(tokensError);
                     res.end(tokensError);
                     return;
                 }
-    
+
                 const APIClient = patreon.default(tokens.access_token);
                 APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
             });

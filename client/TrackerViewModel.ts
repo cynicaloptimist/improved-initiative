@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -7,9 +8,11 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
+import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { Metrics } from "./Utility/Metrics";
@@ -47,7 +50,7 @@ export class TrackerViewModel {
             playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
-        this.AccountClient.GetAccount(account => {
+        new AccountClient().GetAccount(account => {
             if (!account) {
                 return;
             }
@@ -89,8 +92,7 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
-    public AccountClient = new AccountClient();
-
+    
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     private addCombatantViewModel = (combatant: Combatant) => {
@@ -99,16 +101,26 @@ export class TrackerViewModel {
         return vm;
     }
 
-    private removeCombatantViewModel = (vm: CombatantViewModel) => {
-        this.CombatantViewModels.remove(vm);
+    private removeCombatantViewModels = (viewModels: CombatantViewModel []) => {
+        this.CombatantViewModels.removeAll(viewModels);
     }
 
     public Encounter = new Encounter(
         this.PromptQueue,
         this.Socket,
         this.addCombatantViewModel,
-        this.removeCombatantViewModel
+        this.removeCombatantViewModels
     );
+
+    public librariesComponent = React.createElement(LibrariesComponent, {
+        encounterCommander: this.EncounterCommander,
+        libraries: this.Libraries,
+        statBlockTextEnricher: new StatBlockTextEnricher(
+            this.CombatantCommander.RollDice,
+            this.EncounterCommander.ReferenceSpell,
+            this.Libraries.Spells,
+            this.Encounter.Rules)
+    });
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
@@ -188,7 +200,10 @@ export class TrackerViewModel {
         }
 
         if (this.PromptQueue.HasPrompt()) {
-            return "show-center-right-left";
+            if (this.CombatantCommander.HasSelected()) {
+                return "show-center-right-left";
+            }
+            return "show-center-left-right";
         }
 
         if (this.CombatantCommander.HasSelected()) {

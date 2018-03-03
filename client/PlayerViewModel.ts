@@ -123,7 +123,14 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
     }
 
     if (customStyles.mainBackground) {
-        declarations.push(`#playerview { background-color: ${customStyles.mainBackground}; background-image: none; }`);
+        declarations.push(`#playerview { background-color: ${customStyles.mainBackground}; }`);
+        if (!customStyles.backgroundUrl) {
+            declarations.push(`#playerview { background-image: none; }`);
+        }
+    }
+
+    if (customStyles.backgroundUrl) {
+        declarations.push(`#playerview { background-image: url(${customStyles.backgroundUrl}); }`);
     }
 
     if (customStyles.font) {

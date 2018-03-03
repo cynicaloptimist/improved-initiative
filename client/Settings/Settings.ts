@@ -64,10 +64,11 @@ function getDefaultSettings(): Settings {
                 font: "",
                 headerBackground: "",
                 headerText: "",
-                mainBackground: ""
+                mainBackground: "",
+                backgroundUrl: "",
             }
         },
-        Version: "1.2.0" //TODO: Populate with package version
+        Version: process.env.VERSION
     };
 }
 
@@ -161,6 +162,11 @@ function updateSettings(settings: any): Settings {
         settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
         settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
     }
+
+    if (updateToSemanticVersionIsRequired(settings.Version, "1.3.0")) {
+        settings.PlayerView.CustomStyles.backgroundUrl = defaultSettings.PlayerView.CustomStyles.backgroundUrl;
+    }
+
     return settings;
 }
 

@@ -89,7 +89,7 @@ export class CombatantViewModel {
     public EditInitiative() {
         const currentInitiative = this.Combatant.Initiative();
         const modifier = toModifierString(this.Combatant.InitiativeBonus);
-        let preRoll = this.Combatant.Initiative() || this.Combatant.GetInitiativeRoll();
+        let preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
         let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
         if (this.Combatant.InitiativeGroup()) {
             message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;

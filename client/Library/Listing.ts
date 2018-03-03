@@ -1,39 +1,7 @@
 import { Listable } from "../../common/Listable";
 import { Store } from "../Utility/Store";
-import { KeyValueSet } from "../Utility/Toolbox";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
-
-export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(parentSubset: T[], filter: string) {
-    const byName: T[] = [];
-    const bySearchHint: T[] = [];
-    const dedupedStatBlocks: KeyValueSet<T> = {};
-    const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
-
-    parentSubset.forEach(newListing => {
-        const currentListing = dedupedStatBlocks[newListing.Name];
-        if (currentListing) {
-            const hasBetterSource = (sourceRankings.indexOf(newListing.Origin) < sourceRankings.indexOf(currentListing.Origin));
-            if (hasBetterSource) {
-                dedupedStatBlocks[newListing.Name] = newListing;
-            }
-        } else {
-            dedupedStatBlocks[newListing.Name] = newListing;
-        }
-    });
-
-    Object.keys(dedupedStatBlocks).sort().forEach(i => {
-        const listing = dedupedStatBlocks[i];
-        if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
-            byName.push(listing);
-        }
-        else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
-            bySearchHint.push(listing);
-        }
-    });
-
-    return byName.concat(bySearchHint);
-}
 
 export interface ServerListing {
     Id: string;

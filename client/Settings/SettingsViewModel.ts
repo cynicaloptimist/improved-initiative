@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
@@ -105,7 +105,7 @@ export class SettingsViewModel {
                 CustomCSS: this.currentCSS,
                 CustomStyles: this.currentCustomStyles
             },
-            Version: "1.2.0" //TODO: auto generate this line
+            Version: process.env.VERSION
         };
     }
 

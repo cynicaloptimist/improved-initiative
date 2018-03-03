@@ -25,6 +25,6 @@ export function probablyUniqueString(): string {
         let index = Math.floor(Math.random() * chars.length);
         probablyUniqueString += chars[index];
     }
-    
+
     return probablyUniqueString;
 }

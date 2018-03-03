@@ -1,7 +1,7 @@
 import { AccountClient } from "../Account/AccountClient";
+import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
@@ -12,6 +12,7 @@ import { Store } from "../Utility/Store";
 import { probablyUniqueString } from "../Utility/Toolbox";
 import { BuildEncounterCommandList, Command } from "./Command";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class EncounterCommander {
@@ -24,15 +25,19 @@ export class EncounterCommander {
         this.libraries = tracker.Libraries;
     }
 
-    public AddStatBlockFromListing = (listing: Listing<StatBlock>, event: JQuery.Event) => {
+    public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
         listing.GetAsync(statBlock => {
-            this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, event);
+            this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
     }
 
+    public QuickAddStatBlock = () => {
+        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
+        this.tracker.PromptQueue.Add(prompt);
+    }
+
     private deleteSavedStatBlock = (library: string, statBlockId: string) => {
-        Store.Delete(library, statBlockId);
         if (library == Store.PlayerCharacters) {
             this.libraries.PCs.DeleteListing(statBlockId);
         }
@@ -105,7 +110,7 @@ export class EncounterCommander {
         listing.GetAsync(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, this.deleteSavedStatBlock, "global");
             } else {
                 this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
             }
@@ -145,12 +150,6 @@ export class EncounterCommander {
 
     public ToggleToolbarWidth = () => {
         this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
-    }
-
-    public RollDice = (diceExpression: string) => {
-        const diceRoll = Dice.RollDiceExpression(diceExpression);
-        const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.String} <input class='response' type='number' value='${diceRoll.Total}' />`);
-        this.tracker.PromptQueue.Add(prompt);
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {
@@ -216,6 +215,10 @@ export class EncounterCommander {
                 }
             });
         this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public LoadEncounter = (savedEncounter: any) => {
+        this.tracker.Encounter.LoadSavedEncounter(UpdateLegacySavedEncounter(savedEncounter));
     }
 
     public NextTurn = () => {

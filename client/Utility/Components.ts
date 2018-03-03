@@ -1,7 +1,3 @@
-import { EncounterLibraryViewModelWrapper } from "../Library/EncounterLibraryViewModelWrapper";
-import { LibrariesViewModel } from "../Library/LibrariesViewModel";
-import { SpellLibraryViewModel } from "../Library/SpellLibraryViewModel";
-import { StatBlockLibraryViewModel } from "../Library/StatBlockLibraryViewModel";
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 import { removeFirst } from "./Toolbox";
@@ -47,16 +43,13 @@ export let RegisterComponents = () => {
     registerComponent("activestatblock", params => params.statBlock);
     registerComponent("combatant", params => params.viewModel);
     registerComponent("playerdisplaycombatant", params => params.combatant);
-    registerComponent("libraries", params => new LibrariesViewModel(params.tracker, params.encounterCommander, params.libraries));
-    registerComponent("statblocklibrary", params => new StatBlockLibraryViewModel(params.encounterCommander, params.library));
-    registerComponent("encounterlibrary", params => new EncounterLibraryViewModelWrapper(params.tracker, params.library));
-    registerComponent("spelllibrary", params => new SpellLibraryViewModel(params.encounterCommander, params.library));
     registerComponent("defaultprompt", params => params.prompt);
     registerComponent("tagprompt", params => params.prompt);
     registerComponent("concentrationprompt", params => params.prompt);
     registerComponent("initiativeprompt", params => params.prompt);
     registerComponent("spellprompt", params => params.prompt);
     registerComponent("acceptdamageprompt", params => params.prompt);
+    registerComponent("reactprompt", params => params.prompt);
     registerComponent("tutorial", params => new TutorialViewModel(params));
     registerComponent("playersuggestion", params => params.suggestion);
 };

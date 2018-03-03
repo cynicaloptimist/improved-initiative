@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { AccountClient } from "../Account/AccountClient";
 import { Spell } from "../Spell/Spell";
 import { Store } from "../Utility/Store";
@@ -6,7 +7,7 @@ import { Listing, ListingOrigin, ServerListing } from "./Listing";
 export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
     public SpellsByNameRegex = ko.computed(() => {
-        const allSpellNames = this.Spells().map(s => s.Name);
+        const allSpellNames = this.Spells().map(s => _.escapeRegExp(s.Name));
         if (allSpellNames.length === 0) {
             return new RegExp("a^");
         }
@@ -17,10 +18,12 @@ export class SpellLibrary {
         $.ajax("../spells/").done(listings => this.AddListings(listings, "server"));
 
         const customSpells = Store.List(Store.Spells);
-        customSpells.forEach(id => {
+        const newListings = customSpells.map(id => {
             let spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-            this.Spells.push(new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage"));
+            return new Listing<Spell>(id, spell.Name, Spell.GetKeywords(spell), Store.Spells, "localStorage");
         });
+
+        ko.utils.arrayPushAll(this.Spells, newListings);
     }
 
     public AddListings = (listings: ServerListing[], source: ListingOrigin) => {

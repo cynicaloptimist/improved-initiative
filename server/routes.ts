@@ -2,6 +2,7 @@ import bodyParser = require("body-parser");
 import dbSession = require("connect-mongodb-session");
 import express = require("express");
 import session = require("express-session");
+import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 import request = require("request");
 
@@ -13,7 +14,6 @@ import configureMetricsRoutes from "./metrics";
 import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
 import configureStorageRoutes from "./storageroutes";
 
-const appInsightsKey = process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "";
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
@@ -24,7 +24,6 @@ type Res = Express.Response & express.Response;
 const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     rootDirectory: "../../",
     encounterId,
-    appInsightsKey,
     baseUrl,
     patreonClientId,
     isLoggedIn: session.isLoggedIn || false,
@@ -55,7 +54,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
     let store = null;
-
+    
     if (process.env.DB_CONNECTION_STRING) {
         store = new MongoDBStore(
             {
@@ -67,21 +66,30 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     if (process.env.NODE_ENV === "development") {
         mustacheEngine.cache._max = 0;
     }
+
     app.engine("html", mustacheEngine);
     app.set("view engine", "html");
     app.set("views", __dirname + "/../html");
 
     app.use(express.static(__dirname + "/../public"));
+
+    const cookie = {
+        maxAge: moment.duration(1, "weeks").asMilliseconds(),
+    };
+
     app.use(session({
         store: store || null,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
         saveUninitialized: false,
+        cookie
     }));
+
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
     app.get("/", (req: Req, res: Res) => {
+        const renderOptions = pageRenderOptions(initializeNewPlayerView(playerViews), req.session);
         if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
@@ -99,14 +107,14 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
                 upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
                     req.session.userId = result._id;
-                    res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                    res.render("landing", renderOptions);
                 });
             } else {
                 req.session.userId = probablyUniqueString();
-                res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+                res.render("landing", renderOptions);
             }
         } else {
-            res.render("landing", pageRenderOptions(initializeNewPlayerView(playerViews), req.session));
+            res.render("landing", renderOptions);
         }
     });
 

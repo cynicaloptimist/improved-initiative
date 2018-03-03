@@ -44,7 +44,7 @@ input, textarea {
 
 .left-column, 
 .right-column, 
-.statblock, 
+.statblock, .c-statblock,
 .toolbar, 
 .prompt,
 .settings,
@@ -83,13 +83,13 @@ input, textarea {
 }
 
 .library {
-    li:nth-child(2n-1) span{
+    .listings li:nth-child(2n-1) span{
         background-color: @zebra-white;
         &:hover {
             background-color: @hover-white;
         }
     }
-    span:hover {
+    .listings span:hover {
         background-color: @hover-white;
     }
 }
@@ -139,12 +139,12 @@ input, textarea {
     }
 }
 
-.tabs span {
+.tabs span, .c-tabs span {
     background-color: @active-white;
     &:hover {
         background-color: @hover-white;
     }
-    &.selected {
+    &.selected, &.s-selected {
         background-color: @primary-green;
         color: @primary-white;
     }

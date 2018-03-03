@@ -90,7 +90,7 @@ export class Combatant implements Combatant {
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-        this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
+        this.updateIndexLabel(oldStatBlock && oldStatBlock.Name);
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
         this.MaxHP = newStatBlock.HP.Value;
@@ -111,6 +111,13 @@ export class Combatant implements Combatant {
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
+
+        const indexLabelCollides = this.Encounter.Combatants()
+            .some(c => c.DisplayName() == this.DisplayName());
+        if (indexLabelCollides) {
+            this.updateIndexLabel(savedCombatant.StatBlock.Name);
+        }
+        
     }
 
     private getMaxHP(statBlock: StatBlock) {
@@ -130,25 +137,25 @@ export class Combatant implements Combatant {
         return statBlock.HP.Value;
     }
 
-    private setIndexLabel(oldName?: string) {
-        let name = this.StatBlock().Name,
-            counts = this.Encounter.CombatantCountsByName();
-        if (name == oldName) {
+    private updateIndexLabel(oldName?: string) {
+        const name = this.StatBlock().Name;
+        const counts = this.Encounter.CombatantCountsByName();
+        if (name == oldName) { 
+            this.IndexLabel = counts[name];
             return;
         }
-        
-        if (!counts[oldName]) {
-            counts[oldName] = 1;
-        }
         if (oldName) {
+            if (!counts[oldName]) {
+                counts[oldName] = 1;
+            }
             counts[oldName] = counts[oldName] - 1;
         }
-
         if (!counts[name]) {
             counts[name] = 1;
         } else {
             counts[name] = counts[name] + 1;
         }
+        
         this.IndexLabel = counts[name];
         this.Encounter.CombatantCountsByName(counts);
     }
@@ -161,7 +168,8 @@ export class Combatant implements Combatant {
         return modifiers;
     }
 
-    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus);
+    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus, this.StatBlock().InitiativeAdvantage ? "advantage" : null);
+
     public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
     public ApplyDamage(damage: number) {
