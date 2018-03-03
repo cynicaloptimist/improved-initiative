@@ -5,7 +5,6 @@ import { CurrentSettings } from "../Settings/Settings";
 import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { probablyUniqueString } from "../Utility/Toolbox";
-import { combatantCountsByName } from "../Utility/Toolbox";
 import { Tag } from "./Tag";
 
 export interface Combatant {
@@ -91,7 +90,7 @@ export class Combatant implements Combatant {
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-        this.setIndexLabel(oldStatBlock && oldStatBlock.Name);
+        this.UpdateIndexLabel(oldStatBlock && oldStatBlock.Name);
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
         this.MaxHP = newStatBlock.HP.Value;
@@ -131,9 +130,20 @@ export class Combatant implements Combatant {
         return statBlock.HP.Value;
     }
 
-    private setIndexLabel(oldName?: string) {
-        let name = this.StatBlock().Name;
-        let counts = combatantCountsByName(name, this.Encounter.CombatantCountsByName(), oldName);
+    public UpdateIndexLabel(oldName?: string) {
+        const name = this.StatBlock().Name;
+        const counts = this.Encounter.CombatantCountsByName();
+        if (name == oldName) { return counts; }
+        if (oldName) {
+            if (!counts[oldName]) { counts[oldName] = 1; }
+            counts[oldName] = counts[oldName] - 1;
+        }
+        if (!counts[name]) {
+            counts[name] = 1;
+        } else {
+            counts[name] = counts[name] + 1;
+        }
+        
         this.IndexLabel = counts[name];
         this.Encounter.CombatantCountsByName(counts);
     }
@@ -147,7 +157,7 @@ export class Combatant implements Combatant {
     }
 
     public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus, this.StatBlock().InitiativeAdvantage ? "advantage" : null);
-    
+
     public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
     public ApplyDamage(damage: number) {

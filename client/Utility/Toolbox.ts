@@ -28,17 +28,3 @@ export function probablyUniqueString(): string {
 
     return probablyUniqueString;
 }
-
-export function combatantCountsByName(name: string, counts: { [name: string]: number }, oldName?: string): { [name: string]: number } {
-    if (name == oldName) { return counts; }
-    if (oldName) {
-        if (!counts[oldName]) { counts[oldName] = 1; }
-        counts[oldName] = counts[oldName] - 1;
-    }
-    if (!counts[name]) {
-        counts[name] = 1;
-    } else {
-        counts[name] = counts[name] + 1;
-    }
-    return counts;
-}

@@ -12,7 +12,7 @@ import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
-import { combatantCountsByName, probablyUniqueString } from "../Utility/Toolbox";
+import { probablyUniqueString } from "../Utility/Toolbox";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
@@ -119,15 +119,8 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant, relabel?: boolean) => {
+    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) => {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
-
-        if (relabel) {
-            let name = combatant.StatBlock().Name;
-            let counts = combatantCountsByName(name, this.CombatantCountsByName(), name);
-            combatant.IndexLabel = counts[name];
-            this.CombatantCountsByName(counts);
-        }
 
         if (hideOnAdd) {
             combatant.Hidden(true);
@@ -314,7 +307,7 @@ export class Encounter {
                 savedCombatant.Id = probablyUniqueString();
             }
 
-            const combatant = this.AddCombatantFromStatBlock(savedCombatant.StatBlock, null, savedCombatant, !autosavedEncounter);
+            const combatant = this.AddCombatantFromStatBlock(savedCombatant.StatBlock, null, savedCombatant);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
