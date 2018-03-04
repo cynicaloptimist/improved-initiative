@@ -61,7 +61,7 @@ export default function (app: express.Application) {
         eventData.sessionId = req.session.id;
         eventData.userId = req.session.userId || null;
         eventData.ipAddress = req.ip;
-        eventData.addons = addons;
+        eventData.keen = { addons };
         keenClient.recordEvent(eventName, eventData);
 
         return res.sendStatus(200);
