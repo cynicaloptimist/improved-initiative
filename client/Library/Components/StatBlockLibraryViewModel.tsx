@@ -62,7 +62,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private editStatBlock = (l: Listing<StatBlock>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.encounterCommander.EditStatBlock(l);
+        this.props.encounterCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters);
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {

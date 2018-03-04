@@ -3,8 +3,8 @@ import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 import { Store } from "../Utility/Store";
 
 export class StatBlockEditor {
-    private saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void;
-    private deleteCallback: (library: string, id: string) => void;
+    private saveCallback: (newStatBlock: StatBlock) => void;
+    private deleteCallback: () => void;
     private statBlock: StatBlock;
     private statBlockId: string;
 
@@ -17,8 +17,8 @@ export class StatBlockEditor {
 
     public EditStatBlock = (statBlockId: string,
         statBlock: StatBlock,
-        saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void,
-        deleteCallback: (library: string, id: string) => void,
+        saveCallback: (newStatBlock: StatBlock) => void,
+        deleteCallback: () => void,
         editMode: "instance" | "global"
     ) => {
 
@@ -136,23 +136,19 @@ export class StatBlockEditor {
 
         editedStatBlock.Id = this.statBlockId;
 
-        this.saveCallback(this.statBlockLibrary(), this.statBlockId, editedStatBlock);
+        this.saveCallback(editedStatBlock);
         this.EditableStatBlock(null);
     }
 
     public DeleteStatBlock = () => {
         if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
-            this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
+            this.deleteCallback();
             this.EditableStatBlock(null);
         }
     }
 
     public RevertStatBlock = () => {
         this.EditableStatBlock(null);
-    }
-
-    private statBlockLibrary(): string {
-        return this.statBlock.Player == "player" ? Store.PlayerCharacters : Store.StatBlocks;
     }
 
     private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {

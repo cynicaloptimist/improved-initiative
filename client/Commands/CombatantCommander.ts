@@ -264,10 +264,10 @@ export class CombatantCommander {
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0];
-            this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
+            this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (newStatBlock) => {
                 selectedCombatant.Combatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();
-            }, (_, __) => {
+            }, () => {
                 this.Remove();
             },
                 "instance");

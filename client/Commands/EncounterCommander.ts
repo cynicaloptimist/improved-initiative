@@ -37,7 +37,7 @@ export class EncounterCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    private deleteSavedStatBlock = (library: string, statBlockId: string) => {
+    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
         if (library == Store.PlayerCharacters) {
             this.libraries.PCs.DeleteListing(statBlockId);
         }
@@ -46,7 +46,7 @@ export class EncounterCommander {
         }
     }
 
-    private saveNewStatBlock = (store: string, statBlockId: string, newStatBlock: StatBlock) => {
+    private createSaveNewStatBlockCallback = (store: string, statBlockId: string) => (newStatBlock: StatBlock) => {
         const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, store, "localStorage", newStatBlock);
         Store.Save<StatBlock>(store, statBlockId, newStatBlock);
         if (store == Store.PlayerCharacters) {
@@ -68,28 +68,28 @@ export class EncounterCommander {
         }
     }
 
-    private saveEditedStatBlock = (listing: Listing<StatBlock>) =>
-        (store: string, statBlockId: string, newStatBlock: StatBlock) => {
-            Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-            listing.SetValue(newStatBlock);
-            if (store == Store.PlayerCharacters) {
-                this.accountClient.SavePlayerCharacter(newStatBlock)
-                    .then(r => {
-                        if (!r) return;
-                        if (listing.Origin === "account") return;
-                        const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
-                        this.libraries.PCs.StatBlocks.push(accountListing);
-                    });
-            } else {
-                this.accountClient.SaveStatBlock(newStatBlock)
-                    .then(r => {
-                        if (!r) return;
-                        if (listing.Origin === "account") return;
-                        const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
-                        this.libraries.NPCs.StatBlocks.push(accountListing);
-                    });
-            }
+    private createSaveEditedStatBlockCallback = (store: string, listing: Listing<StatBlock>) => (newStatBlock: StatBlock) => {
+        const statBlockId = listing.Id;
+        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
+        listing.SetValue(newStatBlock);
+        if (store == Store.PlayerCharacters) {
+            this.accountClient.SavePlayerCharacter(newStatBlock)
+                .then(r => {
+                    if (!r) return;
+                    if (listing.Origin === "account") return;
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                    this.libraries.PCs.StatBlocks.push(accountListing);
+                });
+        } else {
+            this.accountClient.SaveStatBlock(newStatBlock)
+                .then(r => {
+                    if (!r) return;
+                    if (listing.Origin === "account") return;
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                    this.libraries.NPCs.StatBlocks.push(accountListing);
+                });
         }
+    }
 
 
     public CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
@@ -99,20 +99,21 @@ export class EncounterCommander {
         if (isPlayerCharacter) {
             statBlock.Name = "New Player Character";
             statBlock.Player = "player";
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
+            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(Store.PlayerCharacters, newId), () => { }, "global");
         } else {
             statBlock.Name = "New Creature";
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, () => { }, "global");
+            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(Store.StatBlocks, newId), () => { }, "global");
         }
     }
 
-    public EditStatBlock = (listing: Listing<StatBlock>) => {
+    public EditStatBlock = (listing: Listing<StatBlock>, isPlayerCharacter: boolean) => {
+        const store = isPlayerCharacter ? Store.PlayerCharacters : Store.StatBlocks;
         listing.GetAsync(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.saveNewStatBlock, this.deleteSavedStatBlock, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(store, newId), () => { }, "global");
             } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.saveEditedStatBlock(listing), this.deleteSavedStatBlock, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.createSaveEditedStatBlockCallback(store, listing), this.deleteSavedStatBlock(store, listing.Id), "global");
             }
         });
     }
