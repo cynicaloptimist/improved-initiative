@@ -74,24 +74,39 @@ export class StatBlockEditor {
     }
 
     private unMakeEditable = (editableStatBlock: any) => {
-        for (let key in editableStatBlock) {
+        for (const key in editableStatBlock) {
             if (key == "HP") {
                 let hpInt = parseInt(editableStatBlock[key].Value());
+                if (isNaN(hpInt)) {
+                    hpInt = 1;
+                }
                 editableStatBlock[key].Value(hpInt);
             }
+
+            if (key == "AC") {
+                let acInt = parseInt(editableStatBlock[key].Value());
+                if (isNaN(acInt)) {
+                    acInt = 10;
+                }
+                editableStatBlock[key].Value(acInt);
+            }
+            
             if (key == "InitiativeModifier") {
                 let initInt = parseInt(editableStatBlock[key]());
+                if (isNaN(initInt)) {
+                    initInt = 0;
+                }
                 editableStatBlock[key](initInt);
             }
 
-            let maybeArray = editableStatBlock[key];
+            const maybeArray = editableStatBlock[key];
             if (ko.isObservable(maybeArray) && maybeArray() !== null && typeof maybeArray().push === "function") {
                 editableStatBlock[key] = ko.observableArray(maybeArray().map(e => {
                     return e.Value;
                 }));
             }
         }
-        let unObservableStatBlock = ko.toJS(editableStatBlock);
+        const unObservableStatBlock = ko.toJS(editableStatBlock);
         delete unObservableStatBlock.__ko_mapping__;
         return unObservableStatBlock;
     }
