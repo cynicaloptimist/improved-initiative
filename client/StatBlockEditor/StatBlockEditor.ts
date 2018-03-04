@@ -6,6 +6,7 @@ export class StatBlockEditor {
     private saveCallback: (library: string, id: string, newStatBlock: StatBlock) => void;
     private deleteCallback: (library: string, id: string) => void;
     private statBlock: StatBlock;
+    private statBlockId: string;
 
     public EditMode = ko.observable<"instance" | "global">();
     public EditorType = ko.observable<"basic" | "advanced">("basic");
@@ -21,8 +22,9 @@ export class StatBlockEditor {
         editMode: "instance" | "global"
     ) => {
 
-        statBlock.Id = statBlockId;
+        this.statBlockId = statBlockId;
         this.statBlock = { ...StatBlock.Default(), ...statBlock };
+        delete this.statBlock.Id;
 
         this.EditableStatBlock(this.makeEditable(this.statBlock));
         this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
@@ -132,13 +134,15 @@ export class StatBlockEditor {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
         }
 
-        this.saveCallback(this.statBlockLibrary(), this.statBlock.Id, editedStatBlock);
+        editedStatBlock.Id = this.statBlockId;
+
+        this.saveCallback(this.statBlockLibrary(), this.statBlockId, editedStatBlock);
         this.EditableStatBlock(null);
     }
 
     public DeleteStatBlock = () => {
         if (confirm(`Delete your custom statblock for ${this.statBlock.Name}? This cannot be undone.`)) {
-            this.deleteCallback(this.statBlockLibrary(), this.statBlock.Id);
+            this.deleteCallback(this.statBlockLibrary(), this.statBlockId);
             this.EditableStatBlock(null);
         }
     }
