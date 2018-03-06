@@ -2,7 +2,7 @@ export interface KeyValueSet<T> {
     [key: string]: T;
 }
 
-export function removeFirst<T>(array: T[], item: T) {
+function removeFirst<T>(array: T[], item: T) {
     const index = array.indexOf(item);
     if (index > -1) {
         array.splice(index, 1);

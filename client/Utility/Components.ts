@@ -1,4 +1,4 @@
-import { removeFirst } from "../../common/Toolbox";
+import * as _ from "lodash";
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 
@@ -20,7 +20,7 @@ export let RegisterComponents = () => {
                     ko.components.defaultLoader.loadTemplate(name, markupString, callback);
                 });
                 pendingComponents.push(request);
-                request.always(_ => removeFirst(pendingComponents, request));
+                request.always(() => _.pull(pendingComponents, request));
             } else {
                 // Unrecognized config format. Let another loader handle it.
                 callback(null);
