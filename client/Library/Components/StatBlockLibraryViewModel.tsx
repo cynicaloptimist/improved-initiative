@@ -71,14 +71,21 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             left: rect.left + rect.width,
             top: rect.top
         };
+
+        const statBlockOutline: StatBlock = {
+            ...StatBlock.Default(),
+            Name: l.CurrentName(),
+        };
+
         this.setState({
+            previewedStatBlock: statBlockOutline,
             previewIconHovered: true,
+            previewPosition,
         });
 
         l.GetAsync(statBlock => {
             this.setState({
                 previewedStatBlock: statBlock,
-                previewPosition
             });
         });
     }
