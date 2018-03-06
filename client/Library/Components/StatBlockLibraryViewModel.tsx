@@ -33,7 +33,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         super(props);
         this.state = {
             filter: "",
-            previewedStatBlock: null,
+            previewedStatBlock: StatBlock.Default(),
             previewIconHovered: false,
             previewWindowHovered: false,
             previewPosition: { left: 0, top: 0 }
