@@ -35,7 +35,15 @@ export class StatBlockTextEnricher {
         }
     }
 
-    public GetModifierFromAbilityScore = (score: number) => toModifierString(this.rules.GetModifierFromScore(score));
+    public GetEnrichedModifierFromAbilityScore = (score: number) => {
+        const modifier = this.rules.GetModifierFromScore(score);
+        return this.EnrichModifier(modifier);
+    }
+
+    public EnrichModifier = (modifier: number) => {
+        const modifierString = toModifierString(modifier);
+        return <span className="rollable" onClick={() => this.rollDice(modifierString)}>{modifierString}</span>;
+    }
 
     public EnrichText = (text: string, name = "") => {
         const replaceConfig: ReplaceConfig = {

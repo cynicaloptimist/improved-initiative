@@ -1,5 +1,4 @@
 import * as React from "react";
-import { toModifierString } from "../../common/Toolbox";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 
@@ -63,7 +62,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="Abilities">
                 {Object.keys(statBlock.Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
-                    const abilityModifier = enricher.GetModifierFromAbilityScore(abilityScore);
+                    const abilityModifier = enricher.GetEnrichedModifierFromAbilityScore(abilityScore);
                     return <div key={abilityName}>
                         <div className="stat-label">{abilityName}</div>
                         <div className={"score " + abilityName}>{abilityScore}</div>
@@ -79,7 +78,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                         <div key={modifierType.name} className={modifierType.name}>
                             <span className="stat-label">{modifierType.name}</span>
                             {modifierType.data.map((modifier, i) =>
-                                <span key={i + modifier.Name}>{modifier.Name}{toModifierString(modifier.Modifier)} </span>
+                                <span key={i + modifier.Name}>{modifier.Name}{enricher.EnrichModifier(modifier.Modifier)} </span>
                             )}
                         </div>
                     )}
