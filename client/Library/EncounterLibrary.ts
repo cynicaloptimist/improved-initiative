@@ -1,8 +1,8 @@
+import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Store } from "../Utility/Store";
-import { probablyUniqueString } from "../Utility/Toolbox";
 import { Listing, ListingOrigin, ServerListing } from "./Listing";
 
 export class EncounterLibrary {

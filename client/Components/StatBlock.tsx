@@ -1,8 +1,8 @@
 import * as React from "react";
+import { toModifierString } from "../../common/Toolbox";
 import { DefaultRules } from "../Rules/Rules";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
-import { toModifierString } from "../Utility/Toolbox";
 
 interface StatBlockProps {
     statBlock: StatBlock;

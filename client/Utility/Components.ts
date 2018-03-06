@@ -1,6 +1,6 @@
+import { removeFirst } from "../../common/Toolbox";
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
-import { removeFirst } from "./Toolbox";
 
 const pendingComponents: JQueryXHR[] = [];
 

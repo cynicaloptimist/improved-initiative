@@ -8,6 +8,7 @@ import request = require("request");
 
 import { Spell } from "../client/Spell/Spell";
 import { StatBlock } from "../client/StatBlock/StatBlock";
+import { probablyUniqueString } from "../client/Utility/Toolbox";
 import { upsertUser } from "./dbconnection";
 import { Library } from "./library";
 import configureMetricsRoutes from "./metrics";
@@ -32,23 +33,11 @@ const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     postedEncounter: null,
 });
 
-const probablyUniqueString = (): string => {
-    const chars = "1234567890abcdefghijkmnpqrstuvxyz";
-    let str = "";
-    for (let i = 0; i < 8; i++) {
-        const index = Math.floor(Math.random() * chars.length);
-        str += chars[index];
-    }
-
-    return str;
-};
-
 const initializeNewPlayerView = (playerViews) => {
     const encounterId = probablyUniqueString();
     playerViews[encounterId] = {};
     return encounterId;
 };
-
 
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
     const mustacheEngine = mustacheExpress();

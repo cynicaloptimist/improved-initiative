@@ -1,4 +1,4 @@
-import { probablyUniqueString } from "../Utility/Toolbox";
+import { probablyUniqueString } from "../../common/Toolbox";
 
 function updateLegacySavedCreature(savedCreature: any) {
     if (!savedCreature.StatBlock) {
