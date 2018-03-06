@@ -1,6 +1,5 @@
 import * as React from "react";
 import { toModifierString } from "../../common/Toolbox";
-import { DefaultRules } from "../Rules/Rules";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 
@@ -14,7 +13,6 @@ interface StatBlockState { }
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
     public render() {
         const statBlock = this.props.statBlock;
-        const rules = new DefaultRules();
         const enricher = this.props.enricher;
 
         const modifierTypes = [
@@ -65,7 +63,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <div className="Abilities">
                 {Object.keys(statBlock.Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
-                    const abilityModifier = toModifierString(rules.GetModifierFromScore(abilityScore));
+                    const abilityModifier = enricher.GetModifierFromAbilityScore(abilityScore);
                     return <div key={abilityName}>
                         <div className="stat-label">{abilityName}</div>
                         <div className={"score " + abilityName}>{abilityScore}</div>
