@@ -71,10 +71,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             left: rect.left + rect.width,
             top: rect.top
         };
+        this.setState({
+            previewIconHovered: true,
+        });
 
         l.GetAsync(statBlock => {
             this.setState({
-                previewIconHovered: true,
                 previewedStatBlock: statBlock,
                 previewPosition
             });
