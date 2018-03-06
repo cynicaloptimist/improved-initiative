@@ -27,4 +27,5 @@ $(() => {
         let launcherViewModel = new LauncherViewModel();
         ko.applyBindings(launcherViewModel, document.body);
     }
+    $(".loading-splash").hide();
 });

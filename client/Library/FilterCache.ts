@@ -1,5 +1,5 @@
 import { Listable } from "../../common/Listable";
-import { KeyValueSet } from "../Utility/Toolbox";
+import { KeyValueSet } from "../../common/Toolbox";
 import { Listing, ListingOrigin } from "./Listing";
 
 export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(parentSubset: T[], filter: string) {

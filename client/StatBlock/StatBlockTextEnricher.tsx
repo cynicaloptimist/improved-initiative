@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import * as Markdown from "markdown-it";
 import * as React from "react";
 import * as ReactReplace from "react-string-replace-recursively";
+import { toModifierString } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Dice, IRules } from "../Rules/Rules";
@@ -32,6 +33,16 @@ export class StatBlockTextEnricher {
         if (listing) {
             this.referenceSpellListing(listing);
         }
+    }
+
+    public GetEnrichedModifierFromAbilityScore = (score: number) => {
+        const modifier = this.rules.GetModifierFromScore(score);
+        return this.EnrichModifier(modifier);
+    }
+
+    public EnrichModifier = (modifier: number) => {
+        const modifierString = toModifierString(modifier);
+        return <span className="rollable" onClick={() => this.rollDice(modifierString)}>{modifierString}</span>;
     }
 
     public EnrichText = (text: string, name = "") => {

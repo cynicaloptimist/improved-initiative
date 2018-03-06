@@ -1,3 +1,4 @@
+import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
@@ -12,7 +13,6 @@ import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
-import { probablyUniqueString } from "../Utility/Toolbox";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";

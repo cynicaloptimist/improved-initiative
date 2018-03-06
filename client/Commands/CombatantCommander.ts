@@ -1,3 +1,4 @@
+import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { Dice, RollResult } from "../Rules/Rules";
@@ -5,7 +6,6 @@ import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Store } from "../Utility/Store";
-import { probablyUniqueString } from "../Utility/Toolbox";
 import { BuildCombatantCommandList, Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
@@ -264,10 +264,10 @@ export class CombatantCommander {
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0];
-            this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (_, __, newStatBlock) => {
+            this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (newStatBlock) => {
                 selectedCombatant.Combatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();
-            }, (_, __) => {
+            }, () => {
                 this.Remove();
             },
                 "instance");

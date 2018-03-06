@@ -4,6 +4,7 @@ export class SpellEditor {
     private saveCallback: (newSpell: Spell) => void;
     private deleteCallback: (id: string) => void;
     private spell: Spell;
+    private spellId: string;
 
     public EditorType = ko.observable<"basic" | "advanced">("basic");
     public JsonSpell = ko.observable<string>();
@@ -17,7 +18,9 @@ export class SpellEditor {
         deleteCallback: (id: string) => void
     ) => {
 
+        this.spellId = spell.Id;
         this.spell = { ...Spell.Default(), ...spell };
+        delete this.spell.Id;
 
         this.EditableSpell(this.makeEditable(this.spell));
         this.JsonSpell(JSON.stringify(this.spell, null, 2));
@@ -63,13 +66,15 @@ export class SpellEditor {
             $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));
         }
 
+        editedSpell.Id = this.spellId;
+
         this.saveCallback(editedSpell);
         this.EditableSpell(null);
     }
 
     public DeleteSpell = () => {
         if (confirm(`Delete your custom spell ${this.spell.Name}? This cannot be undone.`)) {
-            this.deleteCallback(this.spell.Id);
+            this.deleteCallback(this.spellId);
             this.EditableSpell(null);
         }
     }

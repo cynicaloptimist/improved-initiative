@@ -33,7 +33,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         super(props);
         this.state = {
             filter: "",
-            previewedStatBlock: null,
+            previewedStatBlock: StatBlock.Default(),
             previewIconHovered: false,
             previewWindowHovered: false,
             previewPosition: { left: 0, top: 0 }
@@ -62,7 +62,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private editStatBlock = (l: Listing<StatBlock>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.encounterCommander.EditStatBlock(l);
+        this.props.encounterCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters);
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
@@ -72,11 +72,20 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             top: rect.top
         };
 
+        const statBlockOutline: StatBlock = {
+            ...StatBlock.Default(),
+            Name: l.CurrentName(),
+        };
+
+        this.setState({
+            previewedStatBlock: statBlockOutline,
+            previewIconHovered: true,
+            previewPosition,
+        });
+
         l.GetAsync(statBlock => {
             this.setState({
-                previewIconHovered: true,
                 previewedStatBlock: statBlock,
-                previewPosition
             });
         });
     }

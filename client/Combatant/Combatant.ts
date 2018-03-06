@@ -1,10 +1,10 @@
+import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { SavedCombatant } from "../Encounter/SavedEncounter";
 import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
 import { Metrics } from "../Utility/Metrics";
-import { probablyUniqueString } from "../Utility/Toolbox";
 import { Tag } from "./Tag";
 
 export interface Combatant {
