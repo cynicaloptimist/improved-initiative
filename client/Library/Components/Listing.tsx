@@ -27,7 +27,7 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
             <ListingButton text={this.props.name} onClick={this.addFn} />
             {this.props.onEdit && <ListingButton faClass="edit" onClick={this.editFn} />}
             {this.props.onDelete && <ListingButton faClass="trash" onClick={this.deleteFn} />}
-            {this.props.onPreview && <ListingButton faClass="search" onClick={this.previewFn} onMouseOver={this.previewFn} onMouseOut={this.previewOutFn} />}
+            {this.props.onPreview && <ListingButton faClass="search" onClick={this.previewFn} onMouseEnter={this.previewFn} onMouseLeave={this.previewOutFn} />}
         </li>;
     }
 }

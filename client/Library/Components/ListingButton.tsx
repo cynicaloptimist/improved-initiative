@@ -4,8 +4,8 @@ interface Props {
     text?: string;
     faClass?: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
-    onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
-    onMouseOut?: React.MouseEventHandler<HTMLSpanElement>;
+    onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLSpanElement>;
 }
 
 export class ListingButton extends React.Component<Props> {
@@ -15,8 +15,8 @@ export class ListingButton extends React.Component<Props> {
         return <span
             className={className}
             onClick={this.props.onClick}
-            onMouseOver={this.props.onMouseOver}
-            onMouseOut={this.props.onMouseOut}>
+            onMouseEnter={this.props.onMouseEnter}
+            onMouseLeave={this.props.onMouseLeave}>
             {text}</span>;
     } 
 }
