@@ -22,7 +22,7 @@ export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewMode
         Initiative: combatant.Initiative(),
         IsPlayerCharacter: combatant.IsPlayerCharacter,
         Tags: combatant.Tags(),
-        ImageURL: combatant.ImageURL(),
+        ImageURL: combatant.StatBlock().ImageURL,
     };
 }
 

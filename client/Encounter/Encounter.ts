@@ -270,7 +270,7 @@ export class Encounter {
                     })),
                     Hidden: c.Hidden(),
                     InterfaceVersion: process.env.VERSION,
-                    ImageURL: c.ImageURL(),
+                    ImageURL: c.StatBlock().ImageURL,
                 };
             }),
             Version: process.env.VERSION
