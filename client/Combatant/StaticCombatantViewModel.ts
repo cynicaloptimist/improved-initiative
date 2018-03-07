@@ -10,6 +10,7 @@ export interface StaticCombatantViewModel {
     Id: string;
     Tags: Tag[];
     IsPlayerCharacter: boolean;
+    ImageURL: string;
 }
 
 export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewModel {
@@ -21,6 +22,7 @@ export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewMode
         Initiative: combatant.Initiative(),
         IsPlayerCharacter: combatant.IsPlayerCharacter,
         Tags: combatant.Tags(),
+        ImageURL: combatant.ImageURL(),
     };
 }
 

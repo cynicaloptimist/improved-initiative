@@ -14,6 +14,19 @@
 </head>
 
 <body id="playerview">
+
+    <div id="imgModal" class="modal" data-bind="visible: imageModalVisible, click: CloseImageModal()">
+        <span class="close">&times;</span>
+        <img  class="modal-content" data-bind="attr:{src: imageModalURL}">
+        <div id="caption" >
+            <span data-bind="text: imageModalName"></span>
+            (<span data-bind="html: imageModalHPDisplay" ></span>)
+            <span  data-bind="foreach: imageModalTags">
+                        <span data-bind="text: Text"></span>
+                </span>
+        </div>
+    </div>
+
     <!-- ko with: combatantSuggestor -->
     <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
     <div class="damage-suggestion" data-bind="

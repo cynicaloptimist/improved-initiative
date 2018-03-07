@@ -25,6 +25,7 @@ export interface Combatant {
     StatBlock: KnockoutObservable<StatBlock>;
     GetInitiativeRoll: () => number;
     IsPlayerCharacter: boolean;
+    ImageURL: KnockoutObservable<string>;
 }
 
 export class Combatant implements Combatant {
@@ -67,7 +68,6 @@ export class Combatant implements Combatant {
             }
         });
     }
-
     public Id = probablyUniqueString();
     public Alias = ko.observable("");
     public TemporaryHP = ko.observable(0);
@@ -76,6 +76,7 @@ export class Combatant implements Combatant {
     public InitiativeGroup = ko.observable<string>(null);
     public StatBlock = ko.observable<StatBlock>();
     public Hidden = ko.observable(false);
+    public ImageURL  = ko.observable("");
 
     public IndexLabel: number;
     public MaxHP: number;
@@ -86,7 +87,6 @@ export class Combatant implements Combatant {
     public InitiativeBonus: number;
     public ConcentrationBonus: number;
     public IsPlayerCharacter = false;
-
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
@@ -100,6 +100,7 @@ export class Combatant implements Combatant {
         }
         this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         this.ConcentrationBonus = this.AbilityModifiers.Con;
+        this.ImageURL(newStatBlock.ImageURL);
     }
 
     private processSavedCombatant(savedCombatant: SavedCombatant) {
@@ -108,6 +109,7 @@ export class Combatant implements Combatant {
         this.TemporaryHP(savedCombatant.TemporaryHP);
         this.Initiative(savedCombatant.Initiative);
         this.InitiativeGroup(savedCombatant.InitiativeGroup || null);
+        this.ImageURL(savedCombatant.ImageURL);
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);

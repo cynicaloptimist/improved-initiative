@@ -126,6 +126,7 @@ export class Encounter {
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
+
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
@@ -268,7 +269,8 @@ export class Encounter {
                         DurationCombatantId: t.DurationCombatantId
                     })),
                     Hidden: c.Hidden(),
-                    InterfaceVersion: process.env.VERSION
+                    InterfaceVersion: process.env.VERSION,
+                    ImageURL: c.ImageURL(),
                 };
             }),
             Version: process.env.VERSION

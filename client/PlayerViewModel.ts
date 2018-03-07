@@ -2,6 +2,7 @@ import * as Color from "color";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
+import { Tag } from "./Combatant/Tag";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
@@ -15,9 +16,17 @@ export class PlayerViewModel {
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
     private roundCounterVisible = ko.observable(false);
+    private imageCount: KnockoutObservable<number> = ko.observable(0);
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
+    private imageModalVisible = ko.observable(false);
+    private imageModalURL = ko.observable<String>();
+    private imageModalName = ko.observable<String>();
+    private imageModalHPDisplay = ko.observable<String>();
+    private imageModalTags = ko.observableArray<Tag>();
+    private imageModalTimer;
+    private imageModalIsViewing = ko.observable(false);
 
     private socket: SocketIOClient.Socket = io();
 
@@ -63,13 +72,19 @@ export class PlayerViewModel {
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
+        this.imageCount((this.combatants().filter(c => c.ImageURL).length));
         this.roundCounter(encounter.RoundCounter);
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
             this.turnTimer.Reset();
         }
         if (encounter.ActiveCombatantId) {
-            this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
+            const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
+            this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
+            if (active.ImageURL && !this.imageModalIsViewing()) {
+                this.ShowImageModal(encounter.ActiveCombatantId, false);
+                this.imageModalTimer = setTimeout(this.CloseImageModal, 5000);
+            }
         }
     }
 
@@ -85,6 +100,22 @@ export class PlayerViewModel {
             return;
         }
         this.combatantSuggestor.Show(combatant);
+    }
+
+    private ShowImageModal = (SelectedId: string, didClick: boolean) => {
+        if (didClick) this.imageModalIsViewing(true);
+        const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
+        this.imageModalName(didClick ? combatant.Name : "Start of Turn: " + combatant.Name);
+        this.imageModalHPDisplay(combatant.HPDisplay);
+        this.imageModalURL(combatant.ImageURL);
+        this.imageModalTags(combatant.Tags);
+        this.imageModalVisible(true);
+    }
+
+    private CloseImageModal = () => {
+        this.imageModalVisible(false);
+        this.imageModalIsViewing(false);
+        clearTimeout(this.imageModalTimer);
     }
 }
 
