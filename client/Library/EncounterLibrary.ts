@@ -52,7 +52,7 @@ export class EncounterLibrary {
 }
 
 function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) {
-    const listingId = encounterId || probablyUniqueString();
+    const listingId = encounterId;
     const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
     return new Listing<SavedEncounter<SavedCombatant>>(
         listingId,
