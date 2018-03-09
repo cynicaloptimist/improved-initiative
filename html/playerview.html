@@ -15,13 +15,13 @@
 
 <body id="playerview">
 
-    <div id="imgModal" class="modal" data-bind="visible: imageModalVisible, click: CloseImageModal()">
+    <div id="imgModal" class="modal" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
         <span class="close">&times;</span>
-        <img  class="modal-content" data-bind="attr:{src: imageModalURL}">
+        <img  class="modal-content" data-bind="attr:{src: imageModal().URL}">
         <div id="caption" >
-            <span data-bind="text: imageModalCaption"></span>
-            (<span data-bind="html: imageModalHPDisplay" ></span>)
-            <span  data-bind="foreach: imageModalTags">
+            <span data-bind="text: imageModal().Caption"></span>
+            (<span data-bind="html: imageModal().HPDisplay" ></span>)
+            <span  data-bind="foreach: imageModal().Tags">
                         <span data-bind="text: Text"></span>
                 </span>
         </div>

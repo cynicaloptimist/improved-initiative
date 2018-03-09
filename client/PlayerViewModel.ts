@@ -13,7 +13,7 @@ export interface ImageModalState {
     URL: string;
     Caption: string;
     HPDisplay: string;
-    Tags: string[];
+    Tags: Tag[];
     Timeout: any;
     BlockAutoModal: boolean;
 }
@@ -31,14 +31,15 @@ export class PlayerViewModel {
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
 
-    private imageModalVisible = ko.observable(false);
-    private imageModalURL = ko.observable<String>();
-    private imageModalCaption = ko.observable<String>();
-    private imageModalHPDisplay = ko.observable<String>();
-    private imageModalTags = ko.observableArray<Tag>();
-    private imageModalTimer;
-    private imageModalIsViewing = ko.observable(false);
-    private imageModal = ko.observable<ImageModalState>();
+    private imageModal = ko.observable<ImageModalState>({
+        Visible: false,
+        URL: "",
+        Caption: "",
+        HPDisplay: "",
+        Tags: [],
+        Timeout: null,
+        BlockAutoModal: false,
+    });
 
     private socket: SocketIOClient.Socket = io();
 
@@ -93,9 +94,12 @@ export class PlayerViewModel {
             const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
             this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
-            if (active.ImageURL && !this.imageModalIsViewing()) {
+            if (active.ImageURL && !this.imageModal().BlockAutoModal) {
                 this.ShowImageModal(encounter.ActiveCombatantId, false);
-                this.imageModalTimer = setTimeout(this.CloseImageModal, 5000);
+                this.imageModal({
+                    ...this.imageModal(),
+                    Timeout: setTimeout(this.CloseImageModal, 5000),
+                });
             }
         }
     }
@@ -115,19 +119,26 @@ export class PlayerViewModel {
     }
 
     private ShowImageModal = (SelectedId: string, didClick: boolean) => {
-        if (didClick) this.imageModalIsViewing(true);
+        const imageModal = this.imageModal();
         const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
-        this.imageModalCaption(didClick ? combatant.Name : "Start of Turn: " + combatant.Name);
-        this.imageModalHPDisplay(combatant.HPDisplay);
-        this.imageModalURL(combatant.ImageURL);
-        this.imageModalTags(combatant.Tags);
-        this.imageModalVisible(true);
+        if (didClick) {
+            imageModal.BlockAutoModal = true;
+        }
+        imageModal.Caption = didClick ? combatant.Name : "Start of Turn: " + combatant.Name;
+        imageModal.HPDisplay = combatant.HPDisplay;
+        imageModal.URL = combatant.ImageURL;
+        imageModal.Tags = combatant.Tags;
+        imageModal.Visible = true;
+
+        this.imageModal(imageModal);
     }
 
     private CloseImageModal = () => {
-        this.imageModalVisible(false);
-        this.imageModalIsViewing(false);
-        clearTimeout(this.imageModalTimer);
+        const imageModal = this.imageModal();
+        imageModal.Visible = false;
+        imageModal.BlockAutoModal = false;
+        clearTimeout(imageModal.Timeout);
+        this.imageModal(imageModal);
     }
 }
 
