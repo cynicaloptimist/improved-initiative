@@ -8,6 +8,16 @@ import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
 
+export interface ImageModalState {
+    Visible: boolean;
+    URL: string;
+    Caption: string;
+    HPDisplay: string;
+    Tags: string[];
+    Timeout: any;
+    BlockAutoModal: boolean;
+}
+
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
     private userStyles: HTMLStyleElement;
@@ -28,6 +38,7 @@ export class PlayerViewModel {
     private imageModalTags = ko.observableArray<Tag>();
     private imageModalTimer;
     private imageModalIsViewing = ko.observable(false);
+    private imageModal = ko.observable<ImageModalState>();
 
     private socket: SocketIOClient.Socket = io();
 
