@@ -12,8 +12,6 @@ export interface ImageModalState {
     Visible: boolean;
     URL: string;
     Caption: string;
-    HPDisplay: string;
-    Tags: Tag[];
     Timeout: any;
     BlockAutoModal: boolean;
 }
@@ -35,8 +33,6 @@ export class PlayerViewModel {
         Visible: false,
         URL: "",
         Caption: "",
-        HPDisplay: "",
-        Tags: [],
         Timeout: null,
         BlockAutoModal: false,
     });
@@ -123,11 +119,15 @@ export class PlayerViewModel {
         const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
         if (didClick) {
             imageModal.BlockAutoModal = true;
+            imageModal.Caption = "";
+        } else {
+            imageModal.Caption = "Start of Turn: ";
         }
-        imageModal.Caption = didClick ? combatant.Name : "Start of Turn: " + combatant.Name;
-        imageModal.HPDisplay = combatant.HPDisplay;
+
+        const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
+        imageModal.Caption += `${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}`;
+        
         imageModal.URL = combatant.ImageURL;
-        imageModal.Tags = combatant.Tags;
         imageModal.Visible = true;
 
         this.imageModal(imageModal);

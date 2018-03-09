@@ -18,13 +18,7 @@
     <div id="imgModal" class="modal" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
         <span class="close">&times;</span>
         <img  class="modal-content" data-bind="attr:{src: imageModal().URL}">
-        <div id="caption" >
-            <span data-bind="text: imageModal().Caption"></span>
-            (<span data-bind="html: imageModal().HPDisplay" ></span>)
-            <span  data-bind="foreach: imageModal().Tags">
-                        <span data-bind="text: Text"></span>
-                </span>
-        </div>
+        <div id="caption" data-bind="text: imageModal().Caption"></div>
     </div>
 
     <!-- ko with: combatantSuggestor -->
