@@ -63,7 +63,7 @@ export class PlayerViewModel {
             if (playerView.encounterState) {
                 this.LoadEncounter(playerView.encounterState);    
             }
-            
+
             if (playerView.settings) {
                 this.LoadSettings(playerView.settings);
             }
@@ -90,7 +90,7 @@ export class PlayerViewModel {
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
-        this.hasImages(this.combatants().some(c => !!c.ImageURL));
+        this.hasImages(this.combatants().some(c => c.ImageURL.length > 0));
         this.roundCounter(encounter.RoundCounter);
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
             this.turnTimer.Reset();
