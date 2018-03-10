@@ -15,9 +15,9 @@
 
 <body id="playerview">
 
-    <div class="modal-blur" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
-        <img class="modal-content" data-bind="attr:{src: imageModal().URL}">
-        <div id="caption" data-bind="text: imageModal().Caption"></div>
+    <div class="modal-blur combatant-portrait" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
+        <img class="combatant-portrait-image" data-bind="attr:{src: imageModal().URL}">
+        <div class="combatant-portrait-caption" data-bind="text: imageModal().Caption"></div>
     </div>
     <!-- ko with: combatantSuggestor -->
     <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
