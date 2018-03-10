@@ -56,8 +56,17 @@ export class PlayerViewModel {
 
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
-            this.LoadEncounter(playerView.encounterState);
-            this.LoadSettings(playerView.settings);
+            if (!playerView) {
+                return;
+            }
+
+            if (playerView.encounterState) {
+                this.LoadEncounter(playerView.encounterState);    
+            }
+            
+            if (playerView.settings) {
+                this.LoadSettings(playerView.settings);
+            }
         });
     }
 
