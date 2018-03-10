@@ -6,7 +6,7 @@
     <meta name="description" content="Track your heroes' fight on the Improved Initiative player view."></meta>
     <meta property="og:image" content="img/improved-initiative-transparent-darkgreen.png"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <title>Player View - Improved Initiative</title>
 
     <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
@@ -15,11 +15,10 @@
 
 <body id="playerview">
 
-    <div id="imgModal" class="modal" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
-        <img  class="modal-content" data-bind="attr:{src: imageModal().URL}">
+    <div class="modal-blur" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
+        <img class="modal-content" data-bind="attr:{src: imageModal().URL}">
         <div id="caption" data-bind="text: imageModal().Caption"></div>
     </div>
-
     <!-- ko with: combatantSuggestor -->
     <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
     <div class="damage-suggestion" data-bind="
