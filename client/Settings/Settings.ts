@@ -11,6 +11,7 @@ export interface Settings {
         RollMonsterHp: boolean;
         AllowNegativeHP: boolean;
         AutoCheckConcentration: boolean;
+        AutoGroupInitiative: string;
     };
     TrackerView: {
         DisplayRoundCounter: boolean;
@@ -20,6 +21,12 @@ export interface Settings {
     PlayerView: PlayerViewSettings;
     Version: string;
 }
+
+export const AutoGroupInitiativeOptions = [
+    "None",
+    "By Name",
+    "Side Initiative"
+];
 
 export const hpVerbosityOptions = [
     "Actual HP",
@@ -43,7 +50,8 @@ function getDefaultSettings(): Settings {
         Rules: {
             RollMonsterHp: false,
             AllowNegativeHP: false,
-            AutoCheckConcentration: true
+            AutoCheckConcentration: true,
+            AutoGroupInitiative: 'None'
         },
         TrackerView: {
             DisplayRoundCounter: false,
@@ -88,7 +96,8 @@ function getLegacySettings(): Settings {
         Rules: {
             RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
             AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
-            AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true)
+            AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true),
+            AutoGroupInitiative: getLegacySetting<string>("AutoGroupInitiative", 'None')
         },
         TrackerView: {
             DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),

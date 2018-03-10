@@ -8,7 +8,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
-import { hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
+import { AutoGroupInitiativeOptions, hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
 import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 
 const tips = [
@@ -41,6 +41,8 @@ export class SettingsViewModel {
     public DisplayTurnTimer: KnockoutObservable<boolean>;
     public DisplayRoundCounter: KnockoutObservable<boolean>;
     public AutoCheckConcentration: KnockoutObservable<boolean>;
+    public AutoGroupInitiativeOptions: string[];
+    public AutoGroupInitiative: KnockoutObservable<string>;
     public AllowNegativeHP: KnockoutObservable<boolean>;
     public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
     public HpVerbosityOptions: string[];
@@ -89,7 +91,8 @@ export class SettingsViewModel {
             Rules: {
                 AllowNegativeHP: this.AllowNegativeHP(),
                 AutoCheckConcentration: this.AutoCheckConcentration(),
-                RollMonsterHp: this.RollHp()
+                RollMonsterHp: this.RollHp(),
+                AutoGroupInitiative: this.AutoGroupInitiative(),
             },
             TrackerView: {
                 DisplayDifficulty: this.DisplayDifficulty(),
@@ -146,6 +149,8 @@ export class SettingsViewModel {
         this.RollHp = ko.observable(currentSettings.Rules.RollMonsterHp);
         this.AllowNegativeHP = ko.observable(currentSettings.Rules.AllowNegativeHP);
         this.AutoCheckConcentration = ko.observable(currentSettings.Rules.AutoCheckConcentration);
+        this.AutoGroupInitiative = ko.observable(currentSettings.Rules.AutoGroupInitiative);
+        this.AutoGroupInitiativeOptions = AutoGroupInitiativeOptions;
 
         this.DisplayRoundCounter = ko.observable(currentSettings.TrackerView.DisplayRoundCounter);
         this.DisplayTurnTimer = ko.observable(currentSettings.TrackerView.DisplayTurnTimer);
