@@ -33,11 +33,17 @@
     </div>
     <!-- /ko -->
     <div class="combatant header">
-        <div class="initiative"><span class="fa fa-forward"></span></div>
+        <div class="initiative">
+            <span class="fa fa-forward"></span>
+        </div>
         <div class="portrait" data-bind="visible: hasImages"></div>
         <div class="name">Combatant</div>
-        <div class="hp"><span class="fa fa-heart"></span></div>
-        <div class="tags"><span class="fa fa-tag"></span></div>
+        <div class="hp">
+            <span class="fa fa-heart"></span>
+        </div>
+        <div class="tags">
+            <span class="fa fa-tag"></span>
+        </div>
     </div>
     <ul class="combatants">
         <!-- ko foreach: combatants -->
@@ -54,7 +60,9 @@
     <!-- ko if: (roundCounterVisible() || turnTimerVisible()) -->
     <div class="combat-footer">
         <span class="turn-timer" data-bind="visible: turnTimerVisible, text: turnTimer.Readout"></span>
-        <span class="round-counter" data-bind="visible: roundCounterVisible">Current Round: <span data-bind="text: roundCounter"></span></span>
+        <span class="round-counter" data-bind="visible: roundCounterVisible">Current Round:
+            <span data-bind="text: roundCounter"></span>
+        </span>
     </div>
     <!-- /ko -->
 </body>
