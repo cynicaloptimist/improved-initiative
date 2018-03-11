@@ -23,7 +23,6 @@ export interface Combatant {
     InitiativeGroup: KnockoutObservable<string>;
     Hidden: KnockoutObservable<boolean>;
     StatBlock: KnockoutObservable<StatBlock>;
-    GetInitiativeRoll: () => number;
     IsPlayerCharacter: boolean;
 }
 
@@ -100,6 +99,7 @@ export class Combatant implements Combatant {
         }
         this.InitiativeBonus = this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
         this.ConcentrationBonus = this.AbilityModifiers.Con;
+        this.setAutoInitiativeGroup();
     }
 
     private processSavedCombatant(savedCombatant: SavedCombatant) {
@@ -117,7 +117,7 @@ export class Combatant implements Combatant {
         if (indexLabelCollides) {
             this.updateIndexLabel(savedCombatant.StatBlock.Name);
         }
-        
+
     }
 
     private getMaxHP(statBlock: StatBlock) {
@@ -140,7 +140,7 @@ export class Combatant implements Combatant {
     private updateIndexLabel(oldName?: string) {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
-        if (name == oldName) { 
+        if (name == oldName) {
             this.IndexLabel = counts[name];
             return;
         }
@@ -155,7 +155,7 @@ export class Combatant implements Combatant {
         } else {
             counts[name] = counts[name] + 1;
         }
-        
+
         this.IndexLabel = counts[name];
         this.Encounter.CombatantCountsByName(counts);
     }
@@ -168,7 +168,12 @@ export class Combatant implements Combatant {
         return modifiers;
     }
 
-    public GetInitiativeRoll = () => this.Encounter.Rules.AbilityCheck(this.InitiativeBonus, this.StatBlock().InitiativeAdvantage ? "advantage" : null);
+    public GetInitiativeRoll(): number {
+        const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == 'Side Initiative';
+        const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
+        const initiativeAdvantage = (!sideInitiative && this.StatBlock().InitiativeAdvantage) ? "advantage" : null;
+        return this.Encounter.Rules.AbilityCheck(initiativeBonus, initiativeAdvantage);
+    }
 
     public GetConcentrationRoll = () => this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
 
@@ -224,4 +229,40 @@ export class Combatant implements Combatant {
 
         return name;
     });
+
+    private setAutoInitiativeGroup = () => {
+        const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
+        let lowestInitiativeCombatant = null;
+        if (autoInitiativeGroup == 'None') { return; }
+        if (autoInitiativeGroup == 'By Name') {
+            if (this.IsPlayerCharacter) { return; }
+            lowestInitiativeCombatant = this.findLowestInitiativeGroupByName();
+        } else if (autoInitiativeGroup == 'Side Initiative') {
+            lowestInitiativeCombatant = this.findLowestInitiativeGroupBySide();
+        }
+
+        if (lowestInitiativeCombatant) {
+            if (!lowestInitiativeCombatant.InitiativeGroup()) {
+                const initiativeGroup = probablyUniqueString();
+                lowestInitiativeCombatant.InitiativeGroup(initiativeGroup);
+            }
+
+            this.Initiative(lowestInitiativeCombatant.Initiative());
+            this.InitiativeGroup(lowestInitiativeCombatant.InitiativeGroup());
+            }
+    }
+
+    private findLowestInitiativeGroupByName(): Combatant {
+        const combatants = this.Encounter.Combatants();
+        return combatants.filter(c => c != this)
+            .filter(c => c.StatBlock().Name === this.StatBlock().Name)
+            .sort((a, b) => a.Initiative() - b.Initiative())[0];
+    }
+
+    private findLowestInitiativeGroupBySide(): Combatant {
+        const combatants = this.Encounter.Combatants();
+        return combatants.filter(c => c != this)
+            .filter(c => c.IsPlayerCharacter === this.IsPlayerCharacter)
+            .sort((a, b) => a.Initiative() - b.Initiative())[0];
+    }
 }
