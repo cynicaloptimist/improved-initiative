@@ -23,6 +23,7 @@ export interface Combatant {
     InitiativeGroup: KnockoutObservable<string>;
     Hidden: KnockoutObservable<boolean>;
     StatBlock: KnockoutObservable<StatBlock>;
+    GetInitiativeRoll: () => number;
     IsPlayerCharacter: boolean;
 }
 
@@ -168,7 +169,7 @@ export class Combatant implements Combatant {
         return modifiers;
     }
 
-    public GetInitiativeRoll(): number {
+    public GetInitiativeRoll: () => number = () => {
         const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == 'Side Initiative';
         const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
         const initiativeAdvantage = (!sideInitiative && this.StatBlock().InitiativeAdvantage) ? "advantage" : null;
