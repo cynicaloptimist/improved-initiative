@@ -8,7 +8,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
-import { AutoGroupInitiativeOptions, hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
+import { AutoGroupInitiativeOption, AutoGroupInitiativeOptions, hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
 import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 
 const tips = [
@@ -42,7 +42,7 @@ export class SettingsViewModel {
     public DisplayRoundCounter: KnockoutObservable<boolean>;
     public AutoCheckConcentration: KnockoutObservable<boolean>;
     public AutoGroupInitiativeOptions: string[];
-    public AutoGroupInitiative: KnockoutObservable<string>;
+    public AutoGroupInitiative: KnockoutObservable<AutoGroupInitiativeOption>;
     public AllowNegativeHP: KnockoutObservable<boolean>;
     public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
     public HpVerbosityOptions: string[];

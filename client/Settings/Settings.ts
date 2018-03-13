@@ -4,6 +4,8 @@ import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 
 export const CurrentSettings = ko.observable<Settings>();
+export const AutoGroupInitiativeOptions = ["None", "By Name", "Side Initiative"];
+export type AutoGroupInitiativeOption = "None" | "By Name" | "Side Initiative";
 
 export interface Settings {
     Commands: CommandSetting[];
@@ -11,7 +13,7 @@ export interface Settings {
         RollMonsterHp: boolean;
         AllowNegativeHP: boolean;
         AutoCheckConcentration: boolean;
-        AutoGroupInitiative: string;
+        AutoGroupInitiative: AutoGroupInitiativeOption;
     };
     TrackerView: {
         DisplayRoundCounter: boolean;
@@ -22,11 +24,6 @@ export interface Settings {
     Version: string;
 }
 
-export const AutoGroupInitiativeOptions = [
-    "None",
-    "By Name",
-    "Side Initiative"
-];
 
 export const hpVerbosityOptions = [
     "Actual HP",
@@ -97,7 +94,7 @@ function getLegacySettings(): Settings {
             RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
             AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
             AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true),
-            AutoGroupInitiative: getLegacySetting<string>("AutoGroupInitiative", 'None')
+            AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>("AutoGroupInitiative", 'None')
         },
         TrackerView: {
             DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
