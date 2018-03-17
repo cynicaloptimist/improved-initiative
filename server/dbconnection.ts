@@ -2,10 +2,11 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
+import { Spell } from "../client/Spell/Spell";
+import { StatBlock } from "../client/StatBlock/StatBlock";
+import { Listable, ServerListing } from "../common/Listable";
 import * as L from "./library";
 import { User } from "./user";
-import { StatBlock } from "../client/StatBlock/StatBlock";
-import { Spell } from "../client/Spell/Spell";
 
 export const initialize = () => {
     if (!connectionString) {
@@ -83,7 +84,7 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): L.Listing [] {
+function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): ServerListing [] {
     return Object.keys(statBlocks).map(key => {
         const c = statBlocks[key];
         return {
@@ -96,7 +97,7 @@ function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): L.Listi
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): L.Listing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): ServerListing [] {
     return Object.keys(playerCharacters).map(key => {
         const c = playerCharacters[key];
         return {
@@ -109,7 +110,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
     });
 }
 
-function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
+function getSpellListings(spells: { [key: string]: Spell }): ServerListing [] {
     return Object.keys(spells).map(key => {
         const c = spells[key];
         return {
@@ -122,7 +123,7 @@ function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
     });
 }
 
-function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): L.Listing[] {
+function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): ServerListing[] {
     return Object.keys(encounters).map(key => {
         const c = encounters[key];
         return {
@@ -199,7 +200,7 @@ export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId
         });
 }
 
-export function saveEntity<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
+export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -229,7 +230,7 @@ export function saveEntity<T extends L.LibraryItem>(entityPath: EntityPath, user
         });
 }
 
-export function saveEntitySet<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
+export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;

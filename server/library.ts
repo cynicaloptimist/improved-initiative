@@ -1,5 +1,6 @@
 import fs = require("fs");
 import path = require("path");
+import { Listable, ServerListing } from "../common/Listable";
 
 const sourceAbbreviations = {
     "monster-manual": "mm",
@@ -16,36 +17,22 @@ const createId = (name: string, source: string) => {
     return `${sourcePrefix}.${lowerCaseName}`;
 };
 
-export interface LibraryItem {
-    Version: string;
-    Name: string;
-    Id: string;
-    Source: string;
-}
-
-export interface Listing {
-    Id: string;
-    Link: string;
-    Name: string;
-    SearchHint: string;
-}
-
 interface Combatant {
     Alias: string;
 }
-export interface SavedEncounter extends LibraryItem {
+export interface SavedEncounter extends Listable {
     Combatants: Combatant [];
 }
 
 export const GetEncounterKeywords = (encounter: SavedEncounter) => (encounter.Combatants || []).map(c => c.Alias).join(" "); 
 
-export class Library<TItem extends LibraryItem> {
+export class Library<TItem extends Listable> {
     private items: { [id: string]: TItem } = {};
-    private listings: Listing[] = [];
+    private listings: ServerListing[] = [];
     
     constructor(private route: string, private getKeywords: (item: TItem) => string) { }
 
-    public static FromFile<I extends LibraryItem>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
+    public static FromFile<I extends Listable>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
         const library = new Library<I>(route, getKeywords);
 
         const filePath = path.join(__dirname, "..", filename);
@@ -69,7 +56,7 @@ export class Library<TItem extends LibraryItem> {
             }
             c.Id = createId(c.Name, c.Source);
             this.items[c.Id] = c;
-            const listing: Listing = {
+            const listing: ServerListing = {
                 Name: c.Name,
                 Id: c.Id,
                 SearchHint: this.getKeywords(c),
@@ -83,7 +70,7 @@ export class Library<TItem extends LibraryItem> {
         return this.items[id];
     }
 
-    public GetListings(): Listing[] {
+    public GetListings(): ServerListing[] {
         return this.listings;
     }
 
