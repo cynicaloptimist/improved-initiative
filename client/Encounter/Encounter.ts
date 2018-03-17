@@ -3,7 +3,7 @@ import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
-import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
+import { Tag } from "../Combatant/Tag";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { env } from "../Environment";

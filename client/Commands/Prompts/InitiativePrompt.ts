@@ -13,7 +13,7 @@ export class InitiativePrompt implements Prompt {
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
         const toPrompt = (combatant: Combatant) => {
-            const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == 'Side Initiative';
+            const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
             const initiativeBonus = sideInitiative ? 0 : toModifierString(combatant.InitiativeBonus);
             const advantageIndicator = (!sideInitiative && combatant.StatBlock().InitiativeAdvantage) ? "[adv]" : "";
 

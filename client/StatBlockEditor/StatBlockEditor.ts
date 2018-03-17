@@ -1,6 +1,5 @@
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
-import { Store } from "../Utility/Store";
 
 export class StatBlockEditor {
     private saveCallback: (newStatBlock: StatBlock) => void;

@@ -8,7 +8,7 @@ import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
-import { AutoGroupInitiativeOption, AutoGroupInitiativeOptions, hpVerbosityOptions, CurrentSettings, Settings } from "./Settings";
+import { hpVerbosityOptions, AutoGroupInitiativeOption, AutoGroupInitiativeOptions, CurrentSettings, Settings } from "./Settings";
 import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
 
 const tips = [

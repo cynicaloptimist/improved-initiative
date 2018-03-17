@@ -170,7 +170,7 @@ export class Combatant implements Combatant {
     }
 
     public GetInitiativeRoll: () => number = () => {
-        const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == 'Side Initiative';
+        const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
         const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
         const initiativeAdvantage = (!sideInitiative && this.StatBlock().InitiativeAdvantage) ? "advantage" : null;
         return this.Encounter.Rules.AbilityCheck(initiativeBonus, initiativeAdvantage);
@@ -234,11 +234,11 @@ export class Combatant implements Combatant {
     private setAutoInitiativeGroup = () => {
         const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
         let lowestInitiativeCombatant = null;
-        if (autoInitiativeGroup == 'None') { return; }
-        if (autoInitiativeGroup == 'By Name') {
+        if (autoInitiativeGroup == "None") { return; }
+        if (autoInitiativeGroup == "By Name") {
             if (this.IsPlayerCharacter) { return; }
             lowestInitiativeCombatant = this.findLowestInitiativeGroupByName();
-        } else if (autoInitiativeGroup == 'Side Initiative') {
+        } else if (autoInitiativeGroup == "Side Initiative") {
             lowestInitiativeCombatant = this.findLowestInitiativeGroupBySide();
         }
 

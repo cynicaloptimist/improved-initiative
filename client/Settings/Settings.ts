@@ -48,7 +48,7 @@ function getDefaultSettings(): Settings {
             RollMonsterHp: false,
             AllowNegativeHP: false,
             AutoCheckConcentration: true,
-            AutoGroupInitiative: 'None'
+            AutoGroupInitiative: "None"
         },
         TrackerView: {
             DisplayRoundCounter: false,
@@ -94,7 +94,7 @@ function getLegacySettings(): Settings {
             RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
             AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
             AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true),
-            AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>("AutoGroupInitiative", 'None')
+            AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>("AutoGroupInitiative", "None")
         },
         TrackerView: {
             DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
