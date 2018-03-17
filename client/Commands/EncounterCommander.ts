@@ -75,16 +75,18 @@ export class EncounterCommander {
         if (store == Store.PlayerCharacters) {
             this.accountClient.SavePlayerCharacter(newStatBlock)
                 .then(r => {
-                    if (!r) return;
-                    if (listing.Origin === "account") return;
+                    if (!r || listing.Origin === "account") {
+                        return;
+                    }
                     const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
                     this.libraries.PCs.StatBlocks.push(accountListing);
                 });
         } else {
             this.accountClient.SaveStatBlock(newStatBlock)
                 .then(r => {
-                    if (!r) return;
-                    if (listing.Origin === "account") return;
+                    if (!r || listing.Origin === "account") {
+                        return;
+                    }
                     const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
                     this.libraries.NPCs.StatBlocks.push(accountListing);
                 });
