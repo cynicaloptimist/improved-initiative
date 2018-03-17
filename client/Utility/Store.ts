@@ -45,7 +45,7 @@ export class Store {
         return Store.load(fullKey);
     }
 
-    public static Delete<T>(listName: string, key: string) {
+    public static Delete(listName: string, key: string) {
         let listKey = `${Store._prefix}.${listName}`;
         let fullKey = `${Store._prefix}.${listName}.${key}`;
         let list = Store.List(listName);
