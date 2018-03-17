@@ -1,7 +1,8 @@
+import { ServerListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { Store } from "../Utility/Store";
-import { Listing, ListingOrigin, ServerListing } from "./Listing";
+import { Listing, ListingOrigin } from "./Listing";
 
 export class NPCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);

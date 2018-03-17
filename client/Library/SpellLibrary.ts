@@ -1,8 +1,9 @@
 import * as _ from "lodash";
+import { ServerListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { Spell } from "../Spell/Spell";
 import { Store } from "../Utility/Store";
-import { Listing, ListingOrigin, ServerListing } from "./Listing";
+import { Listing, ListingOrigin } from "./Listing";
 
 export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);

@@ -1,24 +1,9 @@
-import { Listable } from "../../common/Listable";
+import { Listable, ServerListing } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
-export interface ServerListing {
-    Id: string;
-    Link: string;
-    Name: string;
-    SearchHint: string;
-}
-
-export interface Listing<T extends Listable> {
-    Id: string;
-    Link: string;
-    Name: string;
-    Origin: ListingOrigin;
-    SearchHint: string;
-}
-
-export class Listing<T extends Listable> {
+export class Listing<T extends Listable> implements ServerListing {
     constructor(
         public Id: string,
         public Name: string,

@@ -3,3 +3,10 @@ export interface Listable {
     Version: string;
     Name: string;
 }
+
+export interface ServerListing {
+    Id: string;
+    Link: string;
+    Name: string;
+    SearchHint: string;
+}
