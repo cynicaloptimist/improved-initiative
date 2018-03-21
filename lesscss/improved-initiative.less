@@ -412,6 +412,18 @@ body>.login.button {
     }
 }
 
+.c-listing {
+    .c-listing-trash, .c-listing-edit {
+        display: none;
+    }
+
+    &:hover {
+        .c-listing-trash, .c-listing-edit {
+            display: flex;
+        }
+    }
+}
+
 .toolbar .scrollframe > div {
     &.commands-combatant {
         margin-top:10px;
