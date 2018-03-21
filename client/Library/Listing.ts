@@ -7,6 +7,7 @@ export class Listing<T extends Listable> implements ServerListing {
     constructor(
         public Id: string,
         public Name: string,
+        public Path: string,
         public SearchHint: string,
         public Link: string,
         public Origin: ListingOrigin,

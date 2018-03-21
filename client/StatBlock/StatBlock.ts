@@ -56,7 +56,10 @@ export class StatBlock {
     public static GetKeywords = (statBlock: StatBlock) => statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
     public static Default = (): StatBlock => ({
-        Id: probablyUniqueString(), Name: "", Source: "", Type: "",
+        Id: probablyUniqueString(),
+        Name: "",
+        Path: "",
+        Source: "", Type: "",
         HP: { Value: 1, Notes: "1d1+0" }, AC: { Value: 10, Notes: "" },
         InitiativeModifier: 0,
         InitiativeAdvantage: false,

@@ -14,14 +14,14 @@ export class NPCLibrary {
         const localStatBlocks = Store.List(Store.StatBlocks);
         const listings = localStatBlocks.map(id => {
             let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.StatBlocks, "localStorage");
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, Store.StatBlocks, "localStorage");
         });
         ko.utils.arrayPushAll(this.StatBlocks, listings);
     }
 
     public AddStatBlockListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<StatBlock>>(this.StatBlocks, listings.map(c => {
-            return new Listing<StatBlock>(c.Id, c.Name, c.SearchHint, c.Link, source);
+            return new Listing<StatBlock>(c.Id, c.Name, c.Path, c.SearchHint, c.Link, source);
         }));
     }
 

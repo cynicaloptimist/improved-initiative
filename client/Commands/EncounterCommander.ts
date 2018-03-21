@@ -47,14 +47,14 @@ export class EncounterCommander {
     }
 
     private createSaveNewStatBlockCallback = (store: string, statBlockId: string) => (newStatBlock: StatBlock) => {
-        const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, store, "localStorage", newStatBlock);
+        const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, store, "localStorage", newStatBlock);
         Store.Save<StatBlock>(store, statBlockId, newStatBlock);
         if (store == Store.PlayerCharacters) {
             this.libraries.PCs.StatBlocks.push(listing);
             this.accountClient.SavePlayerCharacter(newStatBlock)
                 .then(r => {
                     if (!r) return;
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
                     this.libraries.PCs.StatBlocks.push(accountListing);
                 });
         } else {
@@ -62,7 +62,7 @@ export class EncounterCommander {
             this.accountClient.SaveStatBlock(newStatBlock)
                 .then(r => {
                     if (!r) return;
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
                     this.libraries.NPCs.StatBlocks.push(accountListing);
                 });
         }
@@ -78,7 +78,7 @@ export class EncounterCommander {
                     if (!r || listing.Origin === "account") {
                         return;
                     }
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
                     this.libraries.PCs.StatBlocks.push(accountListing);
                 });
         } else {
@@ -87,7 +87,7 @@ export class EncounterCommander {
                     if (!r || listing.Origin === "account") {
                         return;
                     }
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
                     this.libraries.NPCs.StatBlocks.push(accountListing);
                 });
         }
@@ -211,8 +211,9 @@ export class EncounterCommander {
         const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
             response => {
                 const encounterName = response["encounterName"];
+                const path = ""; //TODO
                 if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.Save(encounterName);
+                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                 }

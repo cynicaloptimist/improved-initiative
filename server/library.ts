@@ -59,6 +59,7 @@ export class Library<TItem extends Listable> {
             const listing: ServerListing = {
                 Name: c.Name,
                 Id: c.Id,
+                Path: "",
                 SearchHint: this.getKeywords(c),
                 Link: this.route + c.Id
             };

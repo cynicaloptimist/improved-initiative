@@ -90,6 +90,7 @@ function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): ServerL
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: "",
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
@@ -103,6 +104,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: "",
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
@@ -116,6 +118,7 @@ function getSpellListings(spells: { [key: string]: Spell }): ServerListing [] {
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: "",
             SearchHint: Spell.GetKeywords(c),
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
@@ -129,6 +132,7 @@ function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): 
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: "",
             SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
@@ -153,7 +157,7 @@ export function setSettings(userId, settings) {
 
 export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
 
-export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: T) => void) {
+export function getEntity<T extends Listable>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: Listable) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
     }

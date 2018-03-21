@@ -19,7 +19,7 @@ export class EncounterLibrary {
     public AddListings(listings: ServerListing[], source: ListingOrigin) {
         ko.utils.arrayPushAll<Listing<SavedEncounter<SavedCombatant>>>(
             this.Encounters,
-            listings.map(l => new Listing(l.Id, l.Name, l.SearchHint, l.Link, source))
+            listings.map(l => new Listing(l.Id, l.Name, l.Path, l.SearchHint, l.Link, source))
         );
     }
 
@@ -57,7 +57,8 @@ function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId
     return new Listing<SavedEncounter<SavedCombatant>>(
         listingId,
         savedEncounter.Name,
+        savedEncounter.Path,
         combatantNames,
         Store.SavedEncounters,
-        "localStorage");
+        "localStorage",);
 }

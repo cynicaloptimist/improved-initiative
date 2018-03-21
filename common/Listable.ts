@@ -2,6 +2,7 @@ export interface Listable {
     Id: string;
     Version: string;
     Name: string;
+    Path: string;
 }
 
 export interface ServerListing {
@@ -9,4 +10,5 @@ export interface ServerListing {
     Link: string;
     Name: string;
     SearchHint: string;
+    Path: string;
 }

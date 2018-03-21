@@ -11,7 +11,7 @@ export class PCLibrary {
     constructor() {
         const listings = Store.List(Store.PlayerCharacters).map(id => {
             let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Type, Store.PlayerCharacters, "localStorage");
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, Store.PlayerCharacters, "localStorage");
         });
 
         ko.utils.arrayPushAll(this.StatBlocks, listings);
@@ -25,7 +25,7 @@ export class PCLibrary {
         $.getJSON(url, (json: StatBlock[]) => {
             const listings = json.map((statBlock, index) => {
                 statBlock = { ...StatBlock.Default(), ...statBlock };
-                return new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Type, null, "server", statBlock);
+                return new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Path, statBlock.Type, null, "server", statBlock);
             });
             ko.utils.arrayPushAll(this.StatBlocks, listings);
         });
@@ -33,7 +33,7 @@ export class PCLibrary {
 
     public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<StatBlock>>(this.StatBlocks, listings.map(c => {
-            return new Listing<StatBlock>(c.Id, c.Name, c.SearchHint, c.Link, source);
+            return new Listing<StatBlock>(c.Id, c.Name, c.Path, c.SearchHint, c.Link, source);
         }));
     }
 

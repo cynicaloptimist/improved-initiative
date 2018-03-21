@@ -111,7 +111,7 @@ export class Encounter {
 
     private EmitEncounter = () => {
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
-        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
+        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -231,10 +231,11 @@ export class Encounter {
         this.durationTags.push(tag);
     }
 
-    public Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
+    public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
         let activeCombatant = this.ActiveCombatant();
         return {
             Name: name,
+            Path: path,
             Id: AccountClient.SanitizeForId(name),
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
@@ -268,6 +269,7 @@ export class Encounter {
         let activeCombatant = this.ActiveCombatant();
         return {
             Name: this.EncounterId,
+            Path: "",
             Id: this.EncounterId,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
