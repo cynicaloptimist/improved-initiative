@@ -20,7 +20,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
             return res.sendStatus(403);
         }
     
-        return DB.getEntity<T>(route, req.session.userId, req.params.id, entity => {
+        return DB.getEntity(route, req.session.userId, req.params.id, entity => {
             if (entity) {
                 return res.json(entity);    
             } else {

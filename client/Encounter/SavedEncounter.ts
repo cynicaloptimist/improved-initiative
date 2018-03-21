@@ -1,5 +1,6 @@
 import { Listable } from "../../common/Listable";
-import { DurationTiming } from "../Combatant/Tag";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { DurationTiming } from "../Combatant/DurationTiming";
 import { StatBlock } from "../StatBlock/StatBlock";
 
 export interface SavedCombatant {
@@ -29,3 +30,14 @@ export interface SavedEncounter<T> extends Listable {
     Combatants: T[];
 }
 
+export function DefaultSavedEncounter(): SavedEncounter<SavedCombatant> {
+    return {
+        ActiveCombatantId: null,
+        RoundCounter: 0,
+        Combatants: [],
+        Name: "DEFAULT_SAVED_ENCOUNTER",
+        Id: probablyUniqueString(),
+        Path: "",
+        Version: process.env.VERSION,
+    };
+}

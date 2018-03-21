@@ -1,9 +1,9 @@
 import { SavedTag } from "../Encounter/SavedEncounter";
 import { Combatant } from "./Combatant";
+import { DurationTiming } from "./DurationTiming";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";
 export const EndOfTurn: DurationTiming = "EndOfTurn";
-export type DurationTiming = "StartOfTurn" | "EndOfTurn";
 
 export interface Tag {
     Text: string;

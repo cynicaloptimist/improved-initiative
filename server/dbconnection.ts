@@ -2,6 +2,7 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
+import { DefaultSavedEncounter } from "../client/Encounter/SavedEncounter";
 import { Spell } from "../client/Spell/Spell";
 import { StatBlock } from "../client/StatBlock/StatBlock";
 import { Listable, ServerListing } from "../common/Listable";
@@ -84,9 +85,9 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): ServerListing [] {
+function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing [] {
     return Object.keys(statBlocks).map(key => {
-        const c = statBlocks[key];
+        const c = { ...StatBlock.Default(), ...statBlocks[key] };
         return {
             Name: c.Name,
             Id: c.Id,
@@ -98,9 +99,9 @@ function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): ServerL
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): ServerListing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): ServerListing [] {
     return Object.keys(playerCharacters).map(key => {
-        const c = playerCharacters[key];
+        const c = { ...StatBlock.Default(), ...playerCharacters[key] };
         return {
             Name: c.Name,
             Id: c.Id,
@@ -112,9 +113,9 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
     });
 }
 
-function getSpellListings(spells: { [key: string]: Spell }): ServerListing [] {
+function getSpellListings(spells: { [key: string]: {} }): ServerListing [] {
     return Object.keys(spells).map(key => {
-        const c = spells[key];
+        const c = { ...Spell.Default(), ...spells[key] };
         return {
             Name: c.Name,
             Id: c.Id,
@@ -126,9 +127,9 @@ function getSpellListings(spells: { [key: string]: Spell }): ServerListing [] {
     });
 }
 
-function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): ServerListing[] {
+function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(encounters).map(key => {
-        const c = encounters[key];
+        const c = { ...DefaultSavedEncounter(), ...encounters[key] };
         return {
             Name: c.Name,
             Id: c.Id,
@@ -157,7 +158,7 @@ export function setSettings(userId, settings) {
 
 export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
 
-export function getEntity<T extends Listable>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: Listable) => void) {
+export function getEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: {}) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
     }
