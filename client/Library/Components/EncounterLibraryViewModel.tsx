@@ -114,8 +114,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                     listing={l} />)}
             </ul>
             <div className="buttons">
-                <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.SaveEncounter()} />
+                <ListingButton buttonClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
+                <ListingButton buttonClass="plus" onClick={() => this.props.encounterCommander.SaveEncounter()} />
             </div>
             {previewVisible &&
                 <Overlay
