@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Overlay } from "../../Components/Overlay";
@@ -19,7 +20,7 @@ type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 
 interface State {
     filter: string;
-    previewedEncounterCombatants: string [];
+    previewedEncounterCombatants: { key: string, name: string } [];
     previewIconHovered: boolean;
     previewWindowHovered: boolean;
     previewPosition: { left: number; top: number; };
@@ -61,14 +62,14 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         };
 
         this.setState({
-            previewedEncounterCombatants: [l.CurrentName()],
+            previewedEncounterCombatants: [{ key: "encounter", name: l.CurrentName() }],
             previewIconHovered: true,
             previewPosition,
         });
 
         l.GetAsync(legacyEncounter => {
             const encounter = UpdateLegacySavedEncounter(legacyEncounter);
-            const previewedEncounterCombatants = encounter.Combatants.map(c => c.StatBlock.Name);
+            const previewedEncounterCombatants = encounter.Combatants.map(c => ({ key: c.Id, name: c.StatBlock.Name }));
             this.setState({
                 previewedEncounterCombatants
             });
@@ -125,7 +126,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 maxHeightPx={300}
                 left={this.state.previewPosition.left}
                 top={this.state.previewPosition.top}>
-                <ul className="c-encounter-preview">{this.state.previewedEncounterCombatants.map(c => <li>{c}</li>)}</ul>
+                <ul className="c-encounter-preview">{this.state.previewedEncounterCombatants.map(c => <li key={c.key}>{c.name}</li>)}</ul>
                 </Overlay>
             }
         </div>);
