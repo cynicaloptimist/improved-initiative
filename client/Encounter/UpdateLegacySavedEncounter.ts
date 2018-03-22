@@ -1,4 +1,5 @@
 import { probablyUniqueString } from "../../common/Toolbox";
+import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
 
 function updateLegacySavedCreature(savedCreature: any) {
     if (!savedCreature.StatBlock) {
@@ -9,9 +10,10 @@ function updateLegacySavedCreature(savedCreature: any) {
     }
 }
 
-export function UpdateLegacySavedEncounter(savedEncounter: any) {
+export function UpdateLegacySavedEncounter(savedEncounter: any): SavedEncounter<SavedCombatant> {
     savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter["Creatures"];
     savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter["ActiveCreatureId"];
+    savedEncounter.Path = savedEncounter.Path || "";
 
     savedEncounter.Combatants.forEach(updateLegacySavedCreature);
 
