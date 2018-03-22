@@ -99,22 +99,33 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         }
     }
 
+    private buildTree = (tree: JSX.Element [], listing: EncounterListing) => {
+        const element = <ListingViewModel
+            key={listing.Id}
+            name={listing.CurrentName()}
+            onAdd={this.loadSavedEncounter}
+            onDelete={this.deleteListing}
+            onPreview={this.previewSavedEncounter}
+            onPreviewOut={this.onPreviewOut}
+            listing={listing} />;
+        
+        if (listing.Path === "") {
+            return _.concat(tree, element);    
+        }
+
+        return tree;
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
+        const listingAndFolderComponents = filteredListings.reduce(this.buildTree, []);
 
         const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel
-                    key={l.Id}
-                    name={l.CurrentName()}
-                    onAdd={this.loadSavedEncounter}
-                    onDelete={this.deleteListing}
-                    onPreview={this.previewSavedEncounter}
-                    onPreviewOut={this.onPreviewOut}
-                    listing={l} />)}
+                {listingAndFolderComponents}
             </ul>
             <div className="buttons">
                 <ListingButton buttonClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
