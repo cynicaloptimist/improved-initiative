@@ -86,18 +86,18 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         }
     }
 
+    private loadSavedEncounter = (listing: EncounterListing) => {
+        listing.GetAsync(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
+    }
+
+    private deleteListing = (listing: EncounterListing) => {
+        if (confirm(`Delete saved encounter "${listing.CurrentName()}"?`)) {
+            this.props.library.Delete(listing);
+        }
+    }
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
-
-        const loadSavedEncounter = (listing: EncounterListing) => {
-            listing.GetAsync(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
-        };
-
-        const deleteListing = (listing: EncounterListing) => {
-            if (confirm(`Delete saved encounter "${listing.CurrentName()}"?`)) {
-                this.props.library.Delete(listing);
-            }
-        };
 
         const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
@@ -107,8 +107,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 {filteredListings.map(l => <ListingViewModel
                     key={l.Id}
                     name={l.CurrentName()}
-                    onAdd={loadSavedEncounter}
-                    onDelete={deleteListing}
+                    onAdd={this.loadSavedEncounter}
+                    onDelete={this.deleteListing}
                     onPreview={this.previewSavedEncounter}
                     onPreviewOut={this.onPreviewOut}
                     listing={l} />)}
