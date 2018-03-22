@@ -99,8 +99,11 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         }
     }
 
-    private buildTree = (tree: JSX.Element [], listing: EncounterListing) => {
-        const element = <ListingViewModel
+    private buildTree = (listings: EncounterListing[]): JSX.Element[] => {
+        const components = [];
+        listings.forEach(listing => {
+            if (listing.Path == "") {
+                const component = <ListingViewModel
             key={listing.Id}
             name={listing.CurrentName()}
             onAdd={this.loadSavedEncounter}
@@ -109,16 +112,17 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             onPreviewOut={this.onPreviewOut}
             listing={listing} />;
         
-        if (listing.Path === "") {
-            return _.concat(tree, element);    
+                components.push(component);
+            } else {
         }
+        });
 
-        return tree;
+        return components;
     }
 
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
-        const listingAndFolderComponents = filteredListings.reduce(this.buildTree, []);
+        const listingAndFolderComponents = this.buildTree(filteredListings);
 
         const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
