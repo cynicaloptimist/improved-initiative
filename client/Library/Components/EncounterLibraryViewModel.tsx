@@ -2,6 +2,7 @@ import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Overlay } from "../../Components/Overlay";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
+import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
@@ -65,7 +66,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             previewPosition,
         });
 
-        l.GetAsync(encounter => {
+        l.GetAsync(legacyEncounter => {
+            const encounter = UpdateLegacySavedEncounter(legacyEncounter);
             const previewedEncounterCombatants = encounter.Combatants.map(c => c.StatBlock.Name);
             this.setState({
                 previewedEncounterCombatants
