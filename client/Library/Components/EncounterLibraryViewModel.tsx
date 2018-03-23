@@ -18,9 +18,20 @@ export type EncounterLibraryViewModelProps = {
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
 
+interface FolderProps {
+    name: string;
+    listings: EncounterListing[];
+}
+interface FolderState {}
+class Folder extends React.Component<FolderProps, FolderState> {
+    public render() {
+        return this.props.name;
+    }
+}
+
 interface State {
     filter: string;
-    previewedEncounterCombatants: { key: string, name: string } [];
+    previewedEncounterCombatants: { key: string, name: string }[];
     previewIconHovered: boolean;
     previewWindowHovered: boolean;
     previewPosition: { left: number; top: number; };
@@ -100,24 +111,33 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     }
 
     private buildTree = (listings: EncounterListing[]): JSX.Element[] => {
-        const components = [];
+        const rootListingComponents = [];
+        const folders = {};
         listings.forEach(listing => {
             if (listing.Path == "") {
                 const component = <ListingViewModel
-            key={listing.Id}
-            name={listing.CurrentName()}
-            onAdd={this.loadSavedEncounter}
-            onDelete={this.deleteListing}
-            onPreview={this.previewSavedEncounter}
-            onPreviewOut={this.onPreviewOut}
-            listing={listing} />;
-        
-                components.push(component);
+                    key={listing.Id}
+                    name={listing.CurrentName()}
+                    onAdd={this.loadSavedEncounter}
+                    onDelete={this.deleteListing}
+                    onPreview={this.previewSavedEncounter}
+                    onPreviewOut={this.onPreviewOut}
+                    listing={listing} />;
+
+                rootListingComponents.push(component);
             } else {
-        }
+                if (folders[listing.Path] == undefined) {
+                    folders[listing.Path] = [];
+                }
+                folders[listing.Path].push(listing);
+            }
         });
 
-        return components;
+        const folderComponents = _.map(folders, (listings: EncounterListing [], folderName: string) => {
+            return <Folder key={folderName} name={folderName} listings={listings} />;
+        });
+
+        return folderComponents.concat(rootListingComponents);
     }
 
     public render() {
@@ -137,11 +157,11 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             </div>
             {previewVisible &&
                 <Overlay
-                handleMouseEvents={this.handlePreviewMouseEvent}
-                maxHeightPx={300}
-                left={this.state.previewPosition.left}
-                top={this.state.previewPosition.top}>
-                <ul className="c-encounter-preview">{this.state.previewedEncounterCombatants.map(c => <li key={c.key}>{c.name}</li>)}</ul>
+                    handleMouseEvents={this.handlePreviewMouseEvent}
+                    maxHeightPx={300}
+                    left={this.state.previewPosition.left}
+                    top={this.state.previewPosition.top}>
+                    <ul className="c-encounter-preview">{this.state.previewedEncounterCombatants.map(c => <li key={c.key}>{c.name}</li>)}</ul>
                 </Overlay>
             }
         </div>);
