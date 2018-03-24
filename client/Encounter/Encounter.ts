@@ -233,7 +233,7 @@ export class Encounter {
 
     public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
         let activeCombatant = this.ActiveCombatant();
-        const id = AccountClient.SanitizeForId(path) + "-" + AccountClient.SanitizeForId(name);
+        const id = AccountClient.MakeId(name, path);
         return {
             Name: name,
             Path: path,

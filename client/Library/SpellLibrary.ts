@@ -35,7 +35,7 @@ export class SpellLibrary {
 
     public AddOrUpdateSpell = (spell: Spell) => {
         this.Spells.remove(listing => listing.Id === spell.Id);
-        spell.Id = AccountClient.SanitizeForId(spell.Id);
+        spell.Id = AccountClient.MakeId(spell.Id);
         const listing = new Listing<Spell>(spell.Id, spell.Name, spell.Path, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
         this.Spells.push(listing);
         Store.Save(Store.Spells, spell.Id, spell);
