@@ -222,11 +222,12 @@ export class EncounterCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public MoveEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+    public MoveEncounter = (legacySavedEncounter: {}) => {
         const prompt = new DefaultPrompt(`Move Encounter to Folder: <input id='folderName' class='response' type='text' />`,
             response => {
                 const folderName = response["folderName"];
                 if (folderName) {
+                    const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
                     savedEncounter.Path = folderName;
                     this.libraries.Encounters.Save(savedEncounter);
                 }
@@ -234,8 +235,8 @@ export class EncounterCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public LoadEncounter = (savedEncounter: any) => {
-        this.tracker.Encounter.LoadSavedEncounter(UpdateLegacySavedEncounter(savedEncounter));
+    public LoadEncounter = (legacySavedEncounter: {}) => {
+        this.tracker.Encounter.LoadSavedEncounter(UpdateLegacySavedEncounter(legacySavedEncounter));
     }
 
     public NextTurn = () => {
