@@ -1,5 +1,6 @@
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
+import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
@@ -216,6 +217,18 @@ export class EncounterCommander {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                }
+            });
+        this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public MoveEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+        const prompt = new DefaultPrompt(`Move Encounter to Folder: <input id='folderName' class='response' type='text' />`,
+            response => {
+                const folderName = response["folderName"];
+                if (folderName) {
+                    savedEncounter.Path = folderName;
+                    this.libraries.Encounters.Save(savedEncounter);
                 }
             });
         this.tracker.PromptQueue.Add(prompt);
