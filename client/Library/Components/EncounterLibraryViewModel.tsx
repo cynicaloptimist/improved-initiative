@@ -100,19 +100,22 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         }
     }
 
+    private buildListingComponent = (listing: EncounterListing) =>
+        <ListingViewModel
+            key={listing.Id}
+            name={listing.CurrentName()}
+            onAdd={this.loadSavedEncounter}
+            onDelete={this.deleteListing}
+            onPreview={this.previewSavedEncounter}
+            onPreviewOut={this.onPreviewOut}
+            listing={listing} />
+
     private buildTree = (listings: EncounterListing[]): JSX.Element[] => {
         const rootListingComponents = [];
         const folders = {};
         listings.forEach(listing => {
             if (listing.Path == "") {
-                const component = <ListingViewModel
-                    key={listing.Id}
-                    name={listing.CurrentName()}
-                    onAdd={this.loadSavedEncounter}
-                    onDelete={this.deleteListing}
-                    onPreview={this.previewSavedEncounter}
-                    onPreviewOut={this.onPreviewOut}
-                    listing={listing} />;
+                const component = this.buildListingComponent(listing);
 
                 rootListingComponents.push(component);
             } else {
@@ -123,8 +126,11 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             }
         });
 
-        const folderComponents = _.map(folders, (listings: EncounterListing [], folderName: string) => {
-            return <Folder key={folderName} name={folderName} listings={listings} />;
+        const folderComponents = _.map(folders, (listings: EncounterListing[], folderName: string) => {
+            const listingComponents = listings.map(this.buildListingComponent);
+            return <Folder key={folderName} name={folderName}>
+                {listingComponents}
+            </Folder>;
         });
 
         return folderComponents.concat(rootListingComponents);
