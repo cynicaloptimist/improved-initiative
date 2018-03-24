@@ -29,7 +29,7 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
             <ListingButton text={this.props.name} onClick={this.addFn} />
             {this.props.onDelete && <ListingButton buttonClass="trash" onClick={this.deleteFn} />}
             {this.props.onEdit && <ListingButton buttonClass="edit" onClick={this.editFn} />}
-            {this.props.onMove && <ListingButton buttonClass="folder-add" onClick={this.moveFn} />}
+            {this.props.onMove && <ListingButton buttonClass="folder" onClick={this.moveFn} />}
             {this.props.onPreview && <ListingButton buttonClass="search" onClick={this.previewFn} onMouseEnter={this.previewFn} onMouseLeave={this.previewOutFn} />}
         </li>;
     }
