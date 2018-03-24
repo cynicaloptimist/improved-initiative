@@ -110,6 +110,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             name={listing.CurrentName()}
             onAdd={this.loadSavedEncounter}
             onDelete={this.deleteListing}
+            onMove={this.moveListing}
             onPreview={this.previewSavedEncounter}
             onPreviewOut={this.onPreviewOut}
             listing={listing} />
