@@ -215,22 +215,22 @@ export class EncounterCommander {
                 const path = ""; //TODO
                 if (encounterName) {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
-                    this.libraries.Encounters.Save(savedEncounter);
+                    this.libraries.Encounters.SaveOrUpdate(savedEncounter, savedEncounter.Id);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                 }
             });
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public MoveEncounter = (legacySavedEncounter: {}) => {
-        const prompt = new DefaultPrompt(`Move Encounter to Folder: <input id='folderName' class='response' type='text' />`,
+    public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
+        const name = legacySavedEncounter.Name || "";
+        const prompt = new DefaultPrompt(`Move encounter ${legacySavedEncounter.Name} to Folder: <input id='folderName' class='response' type='text' />`,
             response => {
-                const folderName = response["folderName"];
-                if (folderName) {
-                    const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-                    savedEncounter.Path = folderName;
-                    this.libraries.Encounters.Save(savedEncounter);
-                }
+                const folderName = response["folderName"] || "";
+                const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
+                savedEncounter.Path = folderName;
+                savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
+                this.libraries.Encounters.SaveOrUpdate(savedEncounter, savedEncounter.Id);
             });
         this.tracker.PromptQueue.Add(prompt);
     }

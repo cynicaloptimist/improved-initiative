@@ -11,9 +11,27 @@ export class EncounterLibrary {
     constructor() {
         const listings = Store.List(Store.SavedEncounters).map(e => {
             const encounter = UpdateLegacySavedEncounter(Store.Load<SavedEncounter<SavedCombatant>>(Store.SavedEncounters, e));
-            return listingFrom(encounter, e);
+            return this.listingFrom(encounter, "localStorage");
         });
         ko.utils.arrayPushAll(this.Encounters, listings);
+    }
+
+    private listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, origin: ListingOrigin) {
+        const listingId = savedEncounter.Id;
+        const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
+
+        let link = Store.SavedEncounters;
+        if (origin == "account") {
+            link = `/my/encounters/${savedEncounter.Id}`;
+        }
+
+        return new Listing<SavedEncounter<SavedCombatant>>(
+            listingId,
+            savedEncounter.Name,
+            savedEncounter.Path,
+            combatantNames,
+            link,
+            origin);
     }
 
     public AddListings(listings: ServerListing[], source: ListingOrigin) {
@@ -23,22 +41,21 @@ export class EncounterLibrary {
         );
     }
 
-    public Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
-        const listing = listingFrom(savedEncounter, savedEncounter.Id);
+    public SaveOrUpdate = (savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) => {
+        this.Encounters.remove(l => l.Id == savedEncounter.Id);
 
-        if (this.Encounters().indexOf(listing) === -1) {
-            this.Encounters.push(listing);
-        }
-        Store.Save(Store.SavedEncounters, listing.Id, savedEncounter);
+        savedEncounter.Id = encounterId;
+        const listing = this.listingFrom(savedEncounter, "localStorage");
+        this.Encounters.push(listing);
+
+        Store.Save(Store.SavedEncounters, encounterId, savedEncounter);
 
         new AccountClient().SaveEncounter(savedEncounter)
             .then(r => {
                 if (!r) {
                     return;
                 }
-                const accountListing = listingFrom(savedEncounter, listing.Id);
-                accountListing.Origin = "account";
-                accountListing.Link = `/my/encounters/${accountListing.Id}`;
+                const accountListing = this.listingFrom(savedEncounter, "account");
                 this.Encounters.push(accountListing);
             });
 
@@ -51,14 +68,4 @@ export class EncounterLibrary {
     }
 }
 
-function listingFrom(savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) {
-    const listingId = encounterId;
-    const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(" ");
-    return new Listing<SavedEncounter<SavedCombatant>>(
-        listingId,
-        savedEncounter.Name,
-        savedEncounter.Path,
-        combatantNames,
-        Store.SavedEncounters,
-        "localStorage",);
-}
+
