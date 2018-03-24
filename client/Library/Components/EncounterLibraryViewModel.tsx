@@ -7,6 +7,7 @@ import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEnc
 import { EncounterLibrary } from "../EncounterLibrary";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
+import { Folder } from "./Folder";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
@@ -17,17 +18,6 @@ export type EncounterLibraryViewModelProps = {
 };
 
 type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
-
-interface FolderProps {
-    name: string;
-    listings: EncounterListing[];
-}
-interface FolderState {}
-class Folder extends React.Component<FolderProps, FolderState> {
-    public render() {
-        return this.props.name;
-    }
-}
 
 interface State {
     filter: string;
