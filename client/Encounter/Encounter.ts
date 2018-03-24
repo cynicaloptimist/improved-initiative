@@ -233,10 +233,11 @@ export class Encounter {
 
     public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
         let activeCombatant = this.ActiveCombatant();
+        const id = AccountClient.SanitizeForId(path) + "-" + AccountClient.SanitizeForId(name);
         return {
             Name: name,
             Path: path,
-            Id: AccountClient.SanitizeForId(name),
+            Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
             Combatants: this.Combatants().map<SavedCombatant>(c => {
