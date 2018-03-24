@@ -105,7 +105,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): Se
         return {
             Name: c.Name,
             Id: c.Id,
-            Path: "",
+            Path: c.Path,
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
@@ -119,7 +119,7 @@ function getSpellListings(spells: { [key: string]: {} }): ServerListing [] {
         return {
             Name: c.Name,
             Id: c.Id,
-            Path: "",
+            Path: c.Path,
             SearchHint: Spell.GetKeywords(c),
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
@@ -133,7 +133,7 @@ function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[
         return {
             Name: c.Name,
             Id: c.Id,
-            Path: "",
+            Path: c.Path,
             SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
