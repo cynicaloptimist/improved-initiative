@@ -100,6 +100,10 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
         }
     }
 
+    private moveListing = (listing: EncounterListing) => {
+        listing.GetAsync(savedEncounter => this.props.encounterCommander.MoveEncounter(savedEncounter));
+    }
+
     private buildListingComponent = (listing: EncounterListing) =>
         <ListingViewModel
             key={listing.Id}
