@@ -21,7 +21,10 @@ export class Folder extends React.Component<FolderProps, FolderState> {
     private toggleState = () => this.setState({ open: !this.state.open });
 
     public render() {
-        return <li className="c-listing"><ListingButton text={this.props.name} buttonClass={this.state.open ? "folder-open" : "folder"} onClick={this.toggleState} /></li>;
+        return <span className="c-folder">
+            <li className="c-listing"><ListingButton text={this.props.name} buttonClass={this.state.open ? "folder-open" : "folder"} onClick={this.toggleState} /></li>
+            { this.state.open && this.props.children }
+        </span>;
     }
 }
 
