@@ -45,6 +45,12 @@ export class Store {
         return Store.load(fullKey);
     }
 
+    public static LoadAll<T>(listName: string): T [] {
+        return Store.List(listName)
+            .map(key => Store.Load<T>(listName, key))
+            .filter(value => !!value);
+    }
+
     public static Delete(listName: string, key: string) {
         let listKey = `${Store._prefix}.${listName}`;
         let fullKey = `${Store._prefix}.${listName}.${key}`;
