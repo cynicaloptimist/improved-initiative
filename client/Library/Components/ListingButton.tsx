@@ -2,7 +2,7 @@ import * as React from "react";
 
 interface Props {
     text?: string;
-    buttonClass?: string;
+    buttonClass: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLSpanElement>;
