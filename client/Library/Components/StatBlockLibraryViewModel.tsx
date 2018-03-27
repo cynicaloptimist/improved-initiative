@@ -121,7 +121,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             </ul>
             <div className="buttons">
                 <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton buttonClass="add" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
             {previewVisible &&
                 <Overlay
