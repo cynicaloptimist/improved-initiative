@@ -9,7 +9,7 @@ export class EncounterLibrary {
     public Encounters = ko.observableArray<Listing<SavedEncounter<SavedCombatant>>>([]);
 
     constructor() {
-        const listings = Store.LoadAll(Store.SavedEncounters)
+        const listings = Store.LoadAllAndUpdateIds(Store.SavedEncounters)
             .map(e => {
                 const encounter = UpdateLegacySavedEncounter(e);
                 return this.listingFrom(encounter, "localStorage");
