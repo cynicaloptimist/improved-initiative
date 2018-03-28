@@ -215,7 +215,7 @@ export class EncounterCommander {
                 const path = ""; //TODO
                 if (encounterName) {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
-                    this.libraries.Encounters.SaveOrUpdate(savedEncounter, savedEncounter.Id);
+                    this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                 }
             });
@@ -228,9 +228,10 @@ export class EncounterCommander {
             response => {
                 const folderName = response["folderName"] || "";
                 const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
+                const oldId = savedEncounter.Id;
                 savedEncounter.Path = folderName;
                 savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
-                this.libraries.Encounters.SaveOrUpdate(savedEncounter, savedEncounter.Id);
+                this.libraries.Encounters.Move(savedEncounter, oldId);
             });
         this.tracker.PromptQueue.Add(prompt);
     }

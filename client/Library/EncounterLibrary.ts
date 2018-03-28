@@ -42,14 +42,17 @@ export class EncounterLibrary {
         );
     }
 
-    public SaveOrUpdate = (savedEncounter: SavedEncounter<SavedCombatant>, encounterId: string) => {
-        this.Encounters.remove(l => l.Id == savedEncounter.Id);
+    public Move = (savedEncounter: SavedEncounter<SavedCombatant>, oldEncounterId: string) => {
+        this.deleteById(oldEncounterId);
 
-        savedEncounter.Id = encounterId;
+        this.Save(savedEncounter);
+    }
+
+    public Save = (savedEncounter: SavedEncounter<SavedCombatant>) => {
         const listing = this.listingFrom(savedEncounter, "localStorage");
         this.Encounters.push(listing);
 
-        Store.Save(Store.SavedEncounters, encounterId, savedEncounter);
+        Store.Save(Store.SavedEncounters, savedEncounter.Id, savedEncounter);
 
         new AccountClient().SaveEncounter(savedEncounter)
             .then(r => {
@@ -63,9 +66,13 @@ export class EncounterLibrary {
     }
 
     public Delete = (listing: Listing<SavedEncounter<SavedCombatant>>) => {
-        this.Encounters.remove(l => l.Id == listing.Id);
-        new AccountClient().DeleteEncounter(listing.Id);
-        Store.Delete(Store.SavedEncounters, listing.Id);
+        this.deleteById(listing.Id);
+    }
+
+    private deleteById = (listingId: string) => {
+        this.Encounters.remove(l => l.Id == listingId);
+        new AccountClient().DeleteEncounter(listingId);
+        Store.Delete(Store.SavedEncounters, listingId);
     }
 }
 
