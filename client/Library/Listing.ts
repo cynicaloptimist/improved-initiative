@@ -39,6 +39,7 @@ export class Listing<T extends Listable> implements ServerListing {
         }
 
         return $.getJSON(this.Link).done(item => {
+            item.Id = this.Id;
             this.value(item);
             return callback(item);
         });
