@@ -68,7 +68,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
             previewPosition,
         });
 
-        l.GetAsync(legacyEncounter => {
+        l.GetAsyncWithUpdatedId(legacyEncounter => {
             const encounter = UpdateLegacySavedEncounter(legacyEncounter);
             const previewedEncounterCombatants = encounter.Combatants.map(c => ({ key: c.Id, name: c.StatBlock.Name }));
             this.setState({
@@ -91,7 +91,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     }
 
     private loadSavedEncounter = (listing: EncounterListing) => {
-        listing.GetAsync(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
+        listing.GetAsyncWithUpdatedId(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
     }
 
     private deleteListing = (listing: EncounterListing) => {
@@ -101,7 +101,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     }
 
     private moveListing = (listing: EncounterListing) => {
-        listing.GetAsync(savedEncounter => this.props.encounterCommander.MoveEncounter(savedEncounter));
+        listing.GetAsyncWithUpdatedId(savedEncounter => this.props.encounterCommander.MoveEncounter(savedEncounter));
     }
 
     private buildListingComponent = (listing: EncounterListing) =>

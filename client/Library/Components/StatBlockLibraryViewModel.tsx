@@ -83,7 +83,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             previewPosition,
         });
 
-        l.GetAsync(statBlock => {
+        l.GetAsyncWithUpdatedId(statBlock => {
             this.setState({
                 previewedStatBlock: statBlock,
             });

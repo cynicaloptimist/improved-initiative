@@ -27,7 +27,7 @@ export class EncounterCommander {
     }
 
     public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
-        listing.GetAsync(statBlock => {
+        listing.GetAsyncWithUpdatedId(statBlock => {
             this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
@@ -111,7 +111,7 @@ export class EncounterCommander {
 
     public EditStatBlock = (listing: Listing<StatBlock>, isPlayerCharacter: boolean) => {
         const store = isPlayerCharacter ? Store.PlayerCharacters : Store.StatBlocks;
-        listing.GetAsync(statBlock => {
+        listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(store, newId), () => { }, "global");
@@ -131,7 +131,7 @@ export class EncounterCommander {
     }
 
     public EditSpell = (listing: Listing<Spell>) => {
-        listing.GetAsync(spell => {
+        listing.GetAsyncWithUpdatedId(spell => {
             this.tracker.SpellEditor.EditSpell(
                 spell,
                 this.libraries.Spells.AddOrUpdateSpell,

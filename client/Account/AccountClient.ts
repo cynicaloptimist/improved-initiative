@@ -112,7 +112,7 @@ function getUnsyncedItems(items: Listing<Listable>[]) {
     const synced = items.filter(i => i.Origin === "account");
     const unsynced = local.filter(l => !synced.some(s => s.Name == l.Name));
     const unsyncedItems = [];
-    unsynced.forEach(l => l.GetAsync(i => unsyncedItems.push(i)));
+    unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));
     return unsyncedItems;
 }
 

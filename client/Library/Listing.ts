@@ -22,13 +22,14 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
-    public GetAsync(callback: (item: T) => any) {
+    public GetAsyncWithUpdatedId(callback: (item: T) => any) {
         if (this.value()) {
             return callback(this.value());
         }
 
         if (this.Origin === "localStorage") {
             const item = Store.Load<T>(this.Link, this.Id);
+            item.Id = this.Id;
 
             if (item !== null) {
                 return callback(item);
