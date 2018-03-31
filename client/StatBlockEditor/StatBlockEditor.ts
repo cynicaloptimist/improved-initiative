@@ -1,3 +1,4 @@
+import { Listable } from "../../common/Listable";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 
@@ -5,7 +6,7 @@ export class StatBlockEditor {
     private saveCallback: (newStatBlock: StatBlock) => void;
     private deleteCallback: () => void;
     private statBlock: StatBlock;
-    private statBlockId: string;
+    private preservedProperties: { Id: string, Path: string };
 
     public EditMode = ko.observable<"instance" | "global">();
     public EditorType = ko.observable<"basic" | "advanced">("basic");
@@ -21,16 +22,26 @@ export class StatBlockEditor {
         editMode: "instance" | "global"
     ) => {
 
-        this.statBlockId = statBlockId;
-        this.statBlock = { ...StatBlock.Default(), ...statBlock };
-        delete this.statBlock.Id;
+        this.preservedProperties = {
+            Path: statBlock.Path,
+            Id: statBlock.Id,
+        };
 
+        this.statBlock = { ...StatBlock.Default(), ...statBlock };
+        
+        this.JsonStatBlock(this.getAsJSON(statBlock));
         this.EditableStatBlock(this.makeEditable(this.statBlock));
-        this.JsonStatBlock(JSON.stringify(this.statBlock, null, 2));
 
         this.saveCallback = saveCallback;
         this.deleteCallback = deleteCallback;
         this.EditMode(editMode);
+    }
+
+    private getAsJSON = (statBlock: StatBlock): string => {
+        delete statBlock.Id;
+        delete statBlock.Path;
+        delete statBlock.Version;
+        return JSON.stringify(statBlock, null, 2);
     }
 
     private makeEditable = (statBlock: StatBlock) => {
@@ -133,8 +144,10 @@ export class StatBlockEditor {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
         }
 
-        editedStatBlock.Id = this.statBlockId;
-
+        editedStatBlock.Id = this.preservedProperties.Id;
+        editedStatBlock.Path = this.preservedProperties.Path;
+        editedStatBlock.Version = StatBlock.Default().Version;
+        
         this.saveCallback(editedStatBlock);
         this.EditableStatBlock(null);
     }
