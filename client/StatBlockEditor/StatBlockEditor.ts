@@ -1,3 +1,4 @@
+import { stat } from "fs";
 import { Listable } from "../../common/Listable";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
@@ -6,7 +7,7 @@ export class StatBlockEditor {
     private saveCallback: (newStatBlock: StatBlock) => void;
     private deleteCallback: () => void;
     private statBlock: StatBlock;
-    private preservedProperties: { Id: string, Path: string };
+    private preservedProperties: { Id: string, Path: string, Player: string };
 
     public EditMode = ko.observable<"instance" | "global">();
     public EditorType = ko.observable<"basic" | "advanced">("basic");
@@ -25,6 +26,7 @@ export class StatBlockEditor {
         this.preservedProperties = {
             Path: statBlock.Path,
             Id: statBlock.Id,
+            Player: statBlock.Player
         };
 
         this.statBlock = { ...StatBlock.Default(), ...statBlock };
@@ -41,6 +43,7 @@ export class StatBlockEditor {
         delete statBlock.Id;
         delete statBlock.Path;
         delete statBlock.Version;
+        delete statBlock.Player;
         return JSON.stringify(statBlock, null, 2);
     }
 
@@ -146,6 +149,7 @@ export class StatBlockEditor {
 
         editedStatBlock.Id = this.preservedProperties.Id;
         editedStatBlock.Path = this.preservedProperties.Path;
+        editedStatBlock.Player = this.preservedProperties.Player;
         editedStatBlock.Version = StatBlock.Default().Version;
         
         this.saveCallback(editedStatBlock);
