@@ -22,7 +22,7 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
-    public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
+    public GetAsyncWithUpdatedId(callback: (item: T) => any) {
         if (this.value()) {
             return callback(this.value());
         }
