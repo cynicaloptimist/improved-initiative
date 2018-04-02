@@ -13,15 +13,42 @@ export class TagPrompt implements Prompt {
     public Conditions = Object.keys(Conditions);
     public DisplayName: string;
     public IsActive: (combatant: Combatant) => boolean;
-    public Resolve = _ => { };
+    
+    public Resolve = form => {
+        const inputs = $(form).find(this.InputSelector);
+        const responsesById = {};
+        inputs.map((_, element) => {
+            responsesById[element.id] = $(element).val();
+        });
+        const text: string = responsesById["tag-text"];
+        if (text.length) {
+            let tag = new Tag(text, this.targetCombatant);
+
+            if (this.Advanced()) {
+                const duration = parseInt(responsesById["tag-duration"]);
+                const timing = responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
+                const timingId = responsesById["tag-timing-id"];
+
+                tag = new Tag(text, this.targetCombatant, duration, timing, timingId);
+                this.encounter.AddDurationTag(tag);
+            }
+
+            this.targetCombatant.Tags.push(tag);
+
+            this.logEvent(`${this.DisplayName} added note: "${text}"`);
+            this.targetCombatant.Encounter.QueueEmitEncounter();
+        }
+        this.dequeueCallback();
+    }
+
     public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     public Advanced = ko.observable(false);
     public ToggleAdvanced = () => this.Advanced(!this.Advanced());
 
-    constructor(encounter: Encounter,
-        targetCombatant: Combatant,
-        logEvent: (s: string) => void) {
+    constructor(private encounter: Encounter,
+        private targetCombatant: Combatant,
+        private logEvent: (s: string) => void) {
         const activeCombatantId = encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : "";
 
         this.Combatants = encounter.Combatants();
@@ -29,33 +56,6 @@ export class TagPrompt implements Prompt {
 
         this.IsActive = (combatant: Combatant) => {
             return combatant.Id === activeCombatantId;
-        };
-
-        this.Resolve = form => {
-            const inputs = $(form).find(this.InputSelector);
-            const responsesById = {};
-            inputs.map((_, element) => {
-                responsesById[element.id] = $(element).val();
-            });
-            const text: string = responsesById["tag-text"];
-            if (text.length) {
-                let tag = new Tag(text, targetCombatant);
-
-                if (this.Advanced()) {
-                    const duration = parseInt(responsesById["tag-duration"]);
-                    const timing = responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
-                    const timingId = responsesById["tag-timing-id"];
-
-                    tag = new Tag(text, targetCombatant, duration, timing, timingId);
-                    encounter.AddDurationTag(tag);
-                }
-
-                targetCombatant.Tags.push(tag);
-
-                logEvent(`${this.DisplayName} added note: "${text}"`);
-                targetCombatant.Encounter.QueueEmitEncounter();
-            }
-            this.dequeueCallback();
         };
     }
 }
