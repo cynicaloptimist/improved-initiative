@@ -49,8 +49,10 @@ export class MoveEncounterPromptWrapper implements Prompt {
         private library: EncounterLibrary,
     ) {
         this.encounterName = legacySavedEncounter.Name || "";
-        const allFolderNames = this.library.Encounters().map(e => e.Path);
-        this.folderNames = _.uniq(allFolderNames);
+        this.folderNames = _(this.library.Encounters())
+            .map(e => e.Path)
+            .uniq()
+            .value();
         this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={this.folderNames} />;
     }
 
