@@ -52,6 +52,7 @@ export class MoveEncounterPromptWrapper implements Prompt {
         this.folderNames = _(this.library.Encounters())
             .map(e => e.Path)
             .uniq()
+            .compact()
             .value();
         this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={this.folderNames} />;
     }
