@@ -1,3 +1,4 @@
+import Awesomplete = require("awesomplete");
 import React = require("react");
 import { AccountClient } from "../../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
@@ -13,15 +14,20 @@ const promptClassName = "p-move-encounter";
 const inputClassName = promptClassName + "-input";
 
 export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
-    private focusInput: HTMLInputElement;
+    private input: HTMLInputElement;
     public componentDidMount() {
-        this.focusInput.focus();
+        this.input.focus();
+        new Awesomplete(this.input, {
+            list: ["Awesome", "Plete"],
+            minChars: 1,
+            autoFirst: true
+        });
     }
 
     public render() {
         return <span className={promptClassName}>
             Move encounter {this.props.encounterName} to Folder:
-            <input ref={i => this.focusInput = i} className={inputClassName} name="folderName" type="text" />
+            <input ref={i => this.input = i} className={inputClassName} name="folderName" type="text" />
             <button type="submit" className="fa fa-check button"></button>
         </span>;
     }
