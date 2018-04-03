@@ -7,13 +7,12 @@ import { Prompt } from "./Prompt";
 export class TagPrompt implements Prompt {
     public InputSelector = ".response";
     public ComponentName = "tagprompt";
-    private dequeueCallback: () => void;
 
     public Combatants: Combatant[] = [];
     public Conditions = Object.keys(Conditions);
     public DisplayName: string;
     public IsActive: (combatant: Combatant) => boolean;
-    
+
     public Resolve = form => {
         const inputs = $(form).find(this.InputSelector);
         const responsesById = {};
@@ -38,10 +37,7 @@ export class TagPrompt implements Prompt {
             this.logEvent(`${this.DisplayName} added note: "${text}"`);
             this.targetCombatant.Encounter.QueueEmitEncounter();
         }
-        this.dequeueCallback();
     }
-
-    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     public Advanced = ko.observable(false);
     public ToggleAdvanced = () => this.Advanced(!this.Advanced());

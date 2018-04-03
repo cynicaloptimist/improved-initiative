@@ -6,12 +6,8 @@ export class ConcentrationPrompt implements Prompt {
     public InputSelector = ".passcheck";
     public ComponentName = "concentrationprompt";
     public Prompt: string;
-    private dequeueCallback: () => void;
 
-    public SetDequeueCallback = callback => this.dequeueCallback = callback;
-    public Resolve = (form: HTMLFormElement) => {
-        this.dequeueCallback();
-    }
+    public Resolve = (form: HTMLFormElement) => { };
     public FailCheck: () => void;
 
     constructor(combatant: Combatant, damageAmount: number) {
@@ -23,7 +19,6 @@ export class ConcentrationPrompt implements Prompt {
             combatant.Tags()
                 .filter(t => t.Text === ConcentrationPrompt.Tag)
                 .forEach(tag => combatant.Tags.remove(tag));
-            this.dequeueCallback();
         };
     }
 }

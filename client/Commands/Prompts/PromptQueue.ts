@@ -6,7 +6,6 @@ export class PromptQueue {
     public Prompts = ko.observableArray<Prompt>();
 
     public Add = (prompt: Prompt) => {
-        prompt.SetDequeueCallback(() => { });
         this.Prompts.push(prompt);
     }
 

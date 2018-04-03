@@ -26,7 +26,6 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
 }
 
 export class QuickAddPromptWrapper implements Prompt {
-    private dequeueCallback: any;
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
@@ -47,10 +46,8 @@ export class QuickAddPromptWrapper implements Prompt {
         };
 
         this.addStatBlock(statBlock);
-        this.dequeueCallback();
     }
 
-    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     private component = <QuickAddPrompt />;
 }
