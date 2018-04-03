@@ -1,12 +1,15 @@
 import Awesomplete = require("awesomplete");
+import _ = require("lodash");
 import React = require("react");
 import { AccountClient } from "../../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
+import { EncounterLibrary } from "../../Library/EncounterLibrary";
 import { Prompt } from "./Prompt";
 
 export interface MoveEncounterPromptProps {
     encounterName: string;
+    folderNames: string[];
 }
 export interface MoveEncounterPromptState { }
 
@@ -18,8 +21,8 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
     public componentDidMount() {
         this.input.focus();
         new Awesomplete(this.input, {
-            list: ["Awesome", "Plete"],
-            minChars: 1,
+            list: this.props.folderNames,
+            minChars: 0,
             autoFirst: true
         });
     }
@@ -39,11 +42,15 @@ export class MoveEncounterPromptWrapper implements Prompt {
     public ComponentName = "reactprompt";
 
     private encounterName: string;
+    private folderNames: string[] = [];
+
     constructor(
         private legacySavedEncounter: { Name?: string },
-        private moveEncounter: (savedEncounter: SavedEncounter<SavedCombatant>, oldEncounterId: string) => void,
+        private library: EncounterLibrary,
     ) {
         this.encounterName = legacySavedEncounter.Name || "";
+        const allFolderNames = this.library.Encounters().map(e => e.Path);
+        this.folderNames = _.uniq(allFolderNames);
     }
 
     public Resolve = (form: HTMLFormElement) => {
@@ -52,9 +59,9 @@ export class MoveEncounterPromptWrapper implements Prompt {
         const oldId = savedEncounter.Id;
         savedEncounter.Path = folderName;
         savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
-        this.moveEncounter(savedEncounter, oldId);
+        this.library.Move(savedEncounter, oldId);
     }
 
-    private component = <MoveEncounterPrompt encounterName={this.encounterName} />;
+    private component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={this.folderNames} />;
 }
 
