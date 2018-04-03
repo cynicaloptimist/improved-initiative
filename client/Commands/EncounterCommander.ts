@@ -224,7 +224,7 @@ export class EncounterCommander {
     }
 
     public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move);
+        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters);
         this.tracker.PromptQueue.Add(prompt);
     }
 
