@@ -20,11 +20,12 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
     private input: HTMLInputElement;
     public componentDidMount() {
         this.input.focus();
-        new Awesomplete(this.input, {
+        const awesomplete = new Awesomplete(this.input, {
             list: this.props.folderNames,
             minChars: 0,
             autoFirst: true
         });
+        awesomplete.open();
     }
 
     public render() {
