@@ -1,5 +1,6 @@
 import { toModifierString } from "../../../common/Toolbox";
 import { Combatant } from "../../Combatant/Combatant";
+import { CurrentSettings } from "../../Settings/Settings";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Prompt } from "./Prompt";
 
@@ -12,8 +13,9 @@ export class InitiativePrompt implements Prompt {
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
         const toPrompt = (combatant: Combatant) => {
-            const initiativeBonus = toModifierString(combatant.InitiativeBonus);
-            const advantageIndicator = combatant.StatBlock().InitiativeAdvantage ? "[adv]" : "";
+            const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+            const initiativeBonus = sideInitiative ? 0 : toModifierString(combatant.InitiativeBonus);
+            const advantageIndicator = (!sideInitiative && combatant.StatBlock().InitiativeAdvantage) ? "[adv]" : "";
 
             return {
                 Id: combatant.Id,

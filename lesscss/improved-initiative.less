@@ -406,6 +406,32 @@ body>.login.button {
             margin: 1px;
         }
     }
+
+    .c-encounter-preview {
+        margin: @medium-spacer;
+    }
+}
+
+.c-listing {
+    .c-listing-delete, .c-listing-edit, .c-listing-move {
+        display: none;
+    }
+
+    &:hover {
+        .c-listing-delete, .c-listing-edit, .c-listing-move {
+            display: flex;
+        }
+    }
+
+    .fa.c-listing-toggle:before {
+        padding-right: 5px;
+    }
+}
+
+.c-folder {
+    .c-listing:not(:first-child) {
+        margin-left: @medium-spacer;
+    }
 }
 
 .toolbar .scrollframe > div {
@@ -907,6 +933,10 @@ body>.login.button {
         button {
             margin: @small-spacer;
         }
+    }
+
+    input {
+        margin: 0 @medium-spacer;
     }
 }
 

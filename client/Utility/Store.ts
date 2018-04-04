@@ -1,3 +1,4 @@
+import { Listable } from "../../common/Listable";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
@@ -45,7 +46,19 @@ export class Store {
         return Store.load(fullKey);
     }
 
-    public static Delete<T>(listName: string, key: string) {
+    public static LoadAllAndUpdateIds<T extends Listable>(listName: string): T [] {
+        return Store.List(listName)
+            .map(key => {
+                const item = Store.Load<T>(listName, key);
+                if (item) {
+                    item.Id = key;
+                }
+                return item;
+            })
+            .filter(value => !!value);
+    }
+
+    public static Delete(listName: string, key: string) {
         let listKey = `${Store._prefix}.${listName}`;
         let fullKey = `${Store._prefix}.${listName}.${key}`;
         let list = Store.List(listName);

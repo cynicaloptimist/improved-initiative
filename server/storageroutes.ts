@@ -1,8 +1,9 @@
-import request = require("request");
 import express = require("express");
+import request = require("request");
 
-import { Library, LibraryItem } from "./library";
+import { Listable } from "../common/Listable";
 import * as DB from "./dbconnection";
+import { Library } from "./library";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -13,13 +14,13 @@ const verifyStorage = (req: Req) => {
     return dbAvailable && req.session && req.session.hasStorage;
 };
 
-function configureEntityRoute<T extends LibraryItem>(app: express.Application, route: DB.EntityPath) {
+function configureEntityRoute<T extends Listable>(app: express.Application, route: DB.EntityPath) {
     app.get(`/my/${route}/:id`, (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
     
-        return DB.getEntity<T>(route, req.session.userId, req.params.id, entity => {
+        return DB.getEntity(route, req.session.userId, req.params.id, entity => {
             if (entity) {
                 return res.json(entity);    
             } else {

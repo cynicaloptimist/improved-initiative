@@ -70,8 +70,16 @@ export class AccountClient {
         return deleteEntity(spellId, "spells");
     }
 
-    public static SanitizeForId(str: string) {
+    private static SanitizeForId(str: string) {
         return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, "");
+    }
+
+    public static MakeId(name: string, path?: string) {
+        if (path) {
+            return this.SanitizeForId(path) + "-" + this.SanitizeForId(name);
+        } else {
+            return this.SanitizeForId(name);
+        }
     }
 }
 
@@ -104,14 +112,14 @@ function getUnsyncedItems(items: Listing<Listable>[]) {
     const synced = items.filter(i => i.Origin === "account");
     const unsynced = local.filter(l => !synced.some(s => s.Name == l.Name));
     const unsyncedItems = [];
-    unsynced.forEach(l => l.GetAsync(i => unsyncedItems.push(i)));
+    unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));
     return unsyncedItems;
 }
 
 function sanitizeItems(items: Listable[]) {
     return items.map(i => {
         if (!i.Id) {
-            i.Id = AccountClient.SanitizeForId(i.Name);
+            i.Id = AccountClient.MakeId(i.Name);
         } else {
             i.Id = i.Id.replace(".", "_");
         }

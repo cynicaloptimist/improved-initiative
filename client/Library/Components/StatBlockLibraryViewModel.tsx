@@ -83,7 +83,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             previewPosition,
         });
 
-        l.GetAsync(statBlock => {
+        l.GetAsyncWithUpdatedId(partialStatBlock => {
+            const statBlock = {
+                ...StatBlock.Default(),
+                ...partialStatBlock,
+            };
+            
             this.setState({
                 previewedStatBlock: statBlock,
             });
@@ -120,8 +125,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                     listing={l} />)}
             </ul>
             <div className="buttons">
-                <ListingButton faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
+                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
             {previewVisible &&
                 <Overlay

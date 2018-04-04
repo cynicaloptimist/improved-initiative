@@ -2,6 +2,7 @@ import * as React from "react";
 
 interface Props {
     text?: string;
+    buttonClass: string;
     faClass?: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
@@ -11,9 +12,14 @@ interface Props {
 export class ListingButton extends React.Component<Props> {
     public render() {
         const text = this.props.text || "";
-        const className = this.props.faClass ? `fa fa-${this.props.faClass}` : "fa";
+        
+        const cssClasses = [`c-listing-${this.props.buttonClass}`];
+        if (this.props.faClass) {
+            cssClasses.push("fa", `fa-${this.props.faClass}`);
+        }
+        
         return <span
-            className={className}
+            className={cssClasses.join(" ")}
             onClick={this.props.onClick}
             onMouseEnter={this.props.onMouseEnter}
             onMouseLeave={this.props.onMouseLeave}>

@@ -3,7 +3,7 @@ import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { EncounterCommander } from "../Commands/EncounterCommander";
 import { SpellLibrary } from "../Library/SpellLibrary";
-import { Dice, IRules } from "../Rules/Rules";
+import { Dice } from "../Rules/Rules";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { ComponentLoader } from "./Components";
 import { TextAssets } from "./TextAssets";
@@ -100,7 +100,6 @@ export function RegisterBindingHandlers() {
 
         let text = markdownit().renderInline(originalText);
 
-        const rules: IRules = bindingContext.$root.Encounter.Rules;
         const encounterCommander: EncounterCommander = bindingContext.$root.EncounterCommander;
         const combatantCommander: CombatantCommander = bindingContext.$root.CombatantCommander;
         const spellLibrary: SpellLibrary = bindingContext.$root.Libraries.Spells;

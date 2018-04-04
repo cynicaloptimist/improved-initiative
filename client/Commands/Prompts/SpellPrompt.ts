@@ -25,7 +25,7 @@ export class SpellPrompt implements Prompt {
     }
 
     constructor(listing: Listing<Spell>) {
-        listing.GetAsync(spell => this.Spell(spell));
+        listing.GetAsyncWithUpdatedId(spell => this.Spell(spell));
     }
 
     public Resolve = () => this.dequeue();

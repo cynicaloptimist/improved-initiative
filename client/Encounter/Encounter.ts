@@ -3,7 +3,7 @@ import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
-import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
+import { Tag } from "../Combatant/Tag";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { env } from "../Environment";
@@ -111,7 +111,7 @@ export class Encounter {
 
     private EmitEncounter = () => {
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
-        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId));
+        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -209,18 +209,6 @@ export class Encounter {
 
         const nextCombatant = this.Combatants()[nextIndex];
 
-        this.durationTags
-            .filter(t =>
-                t.DurationRemaining() == 0 && (
-                    (t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == EndOfTurn) ||
-                    (t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == StartOfTurn)
-                )
-            )
-            .forEach(t => {
-                t.Remove();
-                this.durationTags.splice(this.durationTags.indexOf(t), 1);
-            });
-
         this.ActiveCombatant(nextCombatant);
         this.TurnTimer.Reset();
         this.QueueEmitEncounter();
@@ -243,11 +231,13 @@ export class Encounter {
         this.durationTags.push(tag);
     }
 
-    public Save: (name: string) => SavedEncounter<SavedCombatant> = (name: string) => {
+    public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
         let activeCombatant = this.ActiveCombatant();
+        const id = AccountClient.MakeId(name, path);
         return {
             Name: name,
-            Id: AccountClient.SanitizeForId(name),
+            Path: path,
+            Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
             Combatants: this.Combatants().map<SavedCombatant>(c => {
@@ -261,7 +251,7 @@ export class Encounter {
                     InitiativeGroup: c.InitiativeGroup(),
                     Alias: c.Alias(),
                     IndexLabel: c.IndexLabel,
-                    Tags: c.Tags().map(t => ({
+                    Tags: c.Tags().filter(t => t.Visible()).map(t => ({
                         Text: t.Text,
                         DurationRemaining: t.DurationRemaining(),
                         DurationTiming: t.DurationTiming,
@@ -280,6 +270,7 @@ export class Encounter {
         let activeCombatant = this.ActiveCombatant();
         return {
             Name: this.EncounterId,
+            Path: "",
             Id: this.EncounterId,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),

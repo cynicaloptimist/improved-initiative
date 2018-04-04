@@ -1,27 +1,13 @@
-import { Listable } from "../../common/Listable";
+import { Listable, ServerListing } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
-export interface ServerListing {
-    Id: string;
-    Link: string;
-    Name: string;
-    SearchHint: string;
-}
-
-export interface Listing<T extends Listable> {
-    Id: string;
-    Link: string;
-    Name: string;
-    Origin: ListingOrigin;
-    SearchHint: string;
-}
-
-export class Listing<T extends Listable> {
+export class Listing<T extends Listable> implements ServerListing {
     constructor(
         public Id: string,
         public Name: string,
+        public Path: string,
         public SearchHint: string,
         public Link: string,
         public Origin: ListingOrigin,
@@ -36,13 +22,14 @@ export class Listing<T extends Listable> {
 
     public SetValue = value => this.value(value);
 
-    public GetAsync(callback: (item: T) => any) {
+    public GetAsyncWithUpdatedId(callback: (item: T) => any) {
         if (this.value()) {
             return callback(this.value());
         }
 
         if (this.Origin === "localStorage") {
             const item = Store.Load<T>(this.Link, this.Id);
+            item.Id = this.Id;
 
             if (item !== null) {
                 return callback(item);
@@ -52,6 +39,7 @@ export class Listing<T extends Listable> {
         }
 
         return $.getJSON(this.Link).done(item => {
+            item.Id = this.Id;
             this.value(item);
             return callback(item);
         });

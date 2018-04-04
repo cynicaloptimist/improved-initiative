@@ -22,6 +22,7 @@ export class Spell {
             Id: probablyUniqueString(),
             Version: process.env.VERSION,
             Name: "",
+            Path: "",
             Source: "",
             CastingTime: "",
             Classes: [],

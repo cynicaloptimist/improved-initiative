@@ -60,7 +60,7 @@ export default function (app: express.Application) {
         const eventData = req.body || {};
         eventData.sessionId = req.session.id;
         eventData.userId = req.session.userId || null;
-        eventData.ipAddress = req.ip;
+        eventData.ipAddress = "${keen.ip}";
         eventData.keen = { addons };
         keenClient.recordEvent(eventName, eventData);
 

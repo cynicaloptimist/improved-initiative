@@ -9,6 +9,7 @@ export interface ListingProps<T extends Listable> {
     onAdd: (listing: Listing<T>, modified: boolean) => void;
     onDelete?: (listing: Listing<T>) => void;
     onEdit?: (listing: Listing<T>) => void;
+    onMove?:  (listing: Listing<T>) => void;
     onPreview?: (listing: Listing<T>, e: React.MouseEvent<HTMLDivElement>) => void;
     onPreviewOut?: (listing: Listing<T>) => void;
 }
@@ -19,15 +20,17 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
     }
     private deleteFn = () => this.props.onDelete(this.props.listing);
     private editFn = () => this.props.onEdit(this.props.listing);
+    private moveFn = () => this.props.onMove(this.props.listing);
     private previewFn = e => this.props.onPreview(this.props.listing, e);
     private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
 
     public render() {
-        return <li>
-            <ListingButton text={this.props.name} onClick={this.addFn} />
-            {this.props.onEdit && <ListingButton faClass="edit" onClick={this.editFn} />}
-            {this.props.onDelete && <ListingButton faClass="trash" onClick={this.deleteFn} />}
-            {this.props.onPreview && <ListingButton faClass="search" onClick={this.previewFn} onMouseEnter={this.previewFn} onMouseLeave={this.previewOutFn} />}
+        return <li className="c-listing">
+            <ListingButton buttonClass="add" text={this.props.name} onClick={this.addFn} />
+            {this.props.onDelete && <ListingButton buttonClass="delete" faClass="trash" onClick={this.deleteFn} />}
+            {this.props.onEdit && <ListingButton buttonClass="edit" faClass="edit" onClick={this.editFn} />}
+            {this.props.onMove && <ListingButton buttonClass="move" faClass="folder" onClick={this.moveFn} />}
+            {this.props.onPreview && <ListingButton buttonClass="preview" faClass="search" onClick={this.previewFn} onMouseEnter={this.previewFn} onMouseLeave={this.previewOutFn} />}
         </li>;
     }
 }

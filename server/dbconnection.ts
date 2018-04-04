@@ -2,10 +2,12 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
+import { DefaultSavedEncounter } from "../client/Encounter/SavedEncounter";
+import { Spell } from "../client/Spell/Spell";
+import { StatBlock } from "../client/StatBlock/StatBlock";
+import { Listable, ServerListing } from "../common/Listable";
 import * as L from "./library";
 import { User } from "./user";
-import { StatBlock } from "../client/StatBlock/StatBlock";
-import { Spell } from "../client/Spell/Spell";
 
 export const initialize = () => {
     if (!connectionString) {
@@ -83,12 +85,13 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): L.Listing [] {
+function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing [] {
     return Object.keys(statBlocks).map(key => {
-        const c = statBlocks[key];
+        const c = { ...StatBlock.Default(), ...statBlocks[key] };
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: "",
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
@@ -96,12 +99,13 @@ function getStatBlockListings(statBlocks: { [key: string]: StatBlock }): L.Listi
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock }): L.Listing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): ServerListing [] {
     return Object.keys(playerCharacters).map(key => {
-        const c = playerCharacters[key];
+        const c = { ...StatBlock.Default(), ...playerCharacters[key] };
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: c.Path,
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/playercharacters/${c.Id}`,
@@ -109,12 +113,13 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: StatBlock
     });
 }
 
-function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
+function getSpellListings(spells: { [key: string]: {} }): ServerListing [] {
     return Object.keys(spells).map(key => {
-        const c = spells[key];
+        const c = { ...Spell.Default(), ...spells[key] };
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: c.Path,
             SearchHint: Spell.GetKeywords(c),
             Version: c.Version,
             Link: `/my/spells/${c.Id}`,
@@ -122,12 +127,13 @@ function getSpellListings(spells: { [key: string]: Spell }): L.Listing [] {
     });
 }
 
-function getEncounterListings(encounters: { [key: string]: L.SavedEncounter }): L.Listing[] {
+function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(encounters).map(key => {
-        const c = encounters[key];
+        const c = { ...DefaultSavedEncounter(), ...encounters[key] };
         return {
             Name: c.Name,
             Id: c.Id,
+            Path: c.Path,
             SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
@@ -152,7 +158,7 @@ export function setSettings(userId, settings) {
 
 export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
 
-export function getEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: T) => void) {
+export function getEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: {}) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
     }
@@ -199,7 +205,7 @@ export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId
         });
 }
 
-export function saveEntity<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
+export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;
@@ -229,7 +235,7 @@ export function saveEntity<T extends L.LibraryItem>(entityPath: EntityPath, user
         });
 }
 
-export function saveEntitySet<T extends L.LibraryItem>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
+export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         //return null;

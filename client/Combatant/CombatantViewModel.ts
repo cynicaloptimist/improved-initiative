@@ -28,7 +28,6 @@ export class CombatantViewModel {
             }
         });
         this.Name = Combatant.DisplayName;
-
         setTimeout(() => this.IsNew(false), 500);
     }
 

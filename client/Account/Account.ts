@@ -1,4 +1,4 @@
-import { ServerListing } from "../Library/Listing";
+import { ServerListing } from "../../common/Listable";
 import { Settings } from "../Settings/Settings";
 
 export interface Account {

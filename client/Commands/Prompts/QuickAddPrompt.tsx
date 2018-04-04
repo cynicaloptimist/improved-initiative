@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import * as React from "react";
 import { StatBlock } from "../../StatBlock/StatBlock";
 import { Prompt } from "./Prompt";
