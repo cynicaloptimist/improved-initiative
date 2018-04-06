@@ -164,7 +164,7 @@
         <div class="prompts" data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}">
             <!-- ko foreach: Prompts -->
             <form class="prompt" data-bind="
-                submit: Resolve,
+                submit: $parent.Resolve($data),
                 component: {
                     name: ComponentName,
                     params: {

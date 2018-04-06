@@ -6,12 +6,9 @@ export class AcceptDamagePrompt implements Prompt {
     public InputSelector = ".acceptfull";
     public ComponentName = "acceptdamageprompt";
     public Prompt: string;
-    private dequeueCallback: () => void;
 
-    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     public Resolve = (form: HTMLFormElement) => {
-        this.dequeueCallback();
     }
     public AcceptFull: () => void;
     public AcceptHalf: () => void;
@@ -26,7 +23,6 @@ export class AcceptDamagePrompt implements Prompt {
             suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()));
             tracker.EventLog.LogHPChange(damageAmount, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
-            this.dequeueCallback();
         };
 
         this.AcceptHalf = () => {
@@ -34,7 +30,6 @@ export class AcceptDamagePrompt implements Prompt {
             suggestedCombatants.forEach(c => c.ApplyDamage(halfDamage.toString()));
             tracker.EventLog.LogHPChange(halfDamage, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
-            this.dequeueCallback();
         };
     }
 }

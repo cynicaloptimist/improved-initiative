@@ -9,7 +9,6 @@ export class InitiativePrompt implements Prompt {
     public ComponentName = "initiativeprompt";
     public PlayerCharacters = [];
     public NonPlayerCharacters = [];
-    private dequeue;
 
     constructor(combatants: Combatant[], startEncounter: () => void) {
         const toPrompt = (combatant: Combatant) => {
@@ -56,10 +55,8 @@ export class InitiativePrompt implements Prompt {
             combatants.forEach(applyInitiative);
             startEncounter();
             TutorialSpy("CompleteInitiativeRolls");
-            this.dequeue();
         };
     }
 
     public Resolve = _ => { };
-    public SetDequeueCallback = callback => this.dequeue = callback;
 }

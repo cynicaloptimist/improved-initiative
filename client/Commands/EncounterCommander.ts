@@ -12,6 +12,7 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Store } from "../Utility/Store";
 import { BuildEncounterCommandList, Command } from "./Command";
+import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
@@ -223,16 +224,7 @@ export class EncounterCommander {
     }
 
     public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-        const name = legacySavedEncounter.Name || "";
-        const prompt = new DefaultPrompt(`Move encounter ${legacySavedEncounter.Name} to Folder: <input id='folderName' class='response' type='text' />`,
-            response => {
-                const folderName = response["folderName"] || "";
-                const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-                const oldId = savedEncounter.Id;
-                savedEncounter.Path = folderName;
-                savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
-                this.libraries.Encounters.Move(savedEncounter, oldId);
-            });
+        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters);
         this.tracker.PromptQueue.Add(prompt);
     }
 

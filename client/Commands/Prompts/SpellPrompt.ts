@@ -5,11 +5,9 @@ import { Prompt } from "./Prompt";
 const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
 
 export class SpellPrompt implements Prompt {
-    private dequeue = () => { };
     public InputSelector = "button";
     public ComponentName = "spellprompt";
     public Spell = ko.observable(Spell.Default());
-    public SetDequeueCallback = callback => this.dequeue = callback;
 
     public GetType = (spell: Spell) => {
         const ritual = spell.Ritual ? " (ritual)" : "";
@@ -28,5 +26,5 @@ export class SpellPrompt implements Prompt {
         listing.GetAsyncWithUpdatedId(spell => this.Spell(spell));
     }
 
-    public Resolve = () => this.dequeue();
+    public Resolve = () => { };
 }

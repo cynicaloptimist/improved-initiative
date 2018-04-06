@@ -75,7 +75,7 @@ export class AccountClient {
     }
 
     public static MakeId(name: string, path?: string) {
-        if (path) {
+        if (path && path.length) {
             return this.SanitizeForId(path) + "-" + this.SanitizeForId(name);
         } else {
             return this.SanitizeForId(name);

@@ -2,16 +2,13 @@ export interface Prompt {
     InputSelector: string;
     ComponentName: string;
     Resolve: (form: HTMLFormElement) => void;
-    SetDequeueCallback: (callback: () => void) => void;
 }
 
 export type PromptResolver = (responses: { [id: string]: string }) => void;
 
 export class DefaultPrompt implements Prompt {
-    private dequeue = () => { };
     public InputSelector = ".response";
     public ComponentName = "defaultprompt";
-    public SetDequeueCallback = callback => this.dequeue = callback;
 
     constructor(public Query: string, private resolve: PromptResolver = () => { }) { }
 
@@ -25,6 +22,5 @@ export class DefaultPrompt implements Prompt {
             inputsById[element.id] = $(element).val();
         });
         this.resolve(inputsById);
-        this.dequeue();
     }
 }

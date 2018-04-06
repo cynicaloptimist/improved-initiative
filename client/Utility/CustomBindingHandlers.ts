@@ -1,3 +1,4 @@
+import Awesomplete = require("awesomplete");
 import { render as renderReact } from "react-dom";
 import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
@@ -9,7 +10,6 @@ import { ComponentLoader } from "./Components";
 import { TextAssets } from "./TextAssets";
 
 declare var markdownit: any;
-declare var Awesomplete: any;
 
 export function RegisterBindingHandlers() {
     const reactHandler = ko.bindingHandlers.react = {

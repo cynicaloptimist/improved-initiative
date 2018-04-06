@@ -26,17 +26,16 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
 }
 
 export class QuickAddPromptWrapper implements Prompt {
-    private dequeueCallback: any;
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
     constructor(private addStatBlock: (statBlock: StatBlock) => void) { }
 
     public Resolve = (form: HTMLFormElement) => {
-        const name = $(form).find("[name='name']").val().toString() || "New Combatant";
-        const maxHP = parseInt($(form).find("[name='hp']").val().toString()) || 1;
-        const ac = parseInt($(form).find("[name='ac']").val().toString()) || 10;
-        const initiative = parseInt($(form).find("[name='initiative']").val().toString()) || 0;
+        const name = form.elements["name"].value || "New Combatant";
+        const maxHP = parseInt(form.elements["hp"].value) || 1;
+        const ac = parseInt(form.elements["ac"].value) || 10;
+        const initiative = parseInt(form.elements["initiative"].value) || 0;
 
         const statBlock: StatBlock = {
             ...StatBlock.Default(),
@@ -47,10 +46,7 @@ export class QuickAddPromptWrapper implements Prompt {
         };
 
         this.addStatBlock(statBlock);
-        this.dequeueCallback();
     }
-
-    public SetDequeueCallback = callback => this.dequeueCallback = callback;
 
     private component = <QuickAddPrompt />;
 }
