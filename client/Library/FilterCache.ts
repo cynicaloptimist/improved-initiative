@@ -9,14 +9,14 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
     const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
 
     parentSubset.forEach(newListing => {
-        const currentListing = dedupedStatBlocks[newListing.Name];
+        const currentListing = dedupedStatBlocks[newListing.Id];
         if (currentListing) {
             const hasBetterSource = (sourceRankings.indexOf(newListing.Origin) < sourceRankings.indexOf(currentListing.Origin));
             if (hasBetterSource) {
-                dedupedStatBlocks[newListing.Name] = newListing;
+                dedupedStatBlocks[newListing.Id] = newListing;
             }
         } else {
-            dedupedStatBlocks[newListing.Name] = newListing;
+            dedupedStatBlocks[newListing.Id] = newListing;
         }
     });
 
