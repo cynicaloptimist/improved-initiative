@@ -1,6 +1,7 @@
 import express = require("express");
-
+import expressKeen = require("express-keenio");
 import KeenTracking = require("keen-tracking");
+
 const keenProjectId = process.env.KEEN_PROJECT_ID || "";
 const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
 
@@ -50,6 +51,9 @@ export function configureMetricsRoutes(app: express.Application) {
         projectId: keenProjectId,
         writeKey: keenWriteKey
     });
+
+    expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
+    app.use(expressKeen.handleAll());
 
     app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
         if (!keenProjectId || !keenWriteKey) {
