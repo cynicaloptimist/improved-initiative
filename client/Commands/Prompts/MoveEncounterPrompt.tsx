@@ -19,13 +19,13 @@ const inputClassName = promptClassName + "-input";
 export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
     private input: HTMLInputElement;
     public componentDidMount() {
-        //this.input.focus();
         const awesomplete = new Awesomplete(this.input, {
             list: this.props.folderNames,
             minChars: 0
         });
         awesomplete.evaluate();
         awesomplete.open();
+        this.input.focus();
     }
 
     public render() {
