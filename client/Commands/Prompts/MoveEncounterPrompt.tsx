@@ -19,11 +19,10 @@ const inputClassName = promptClassName + "-input";
 export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
     private input: HTMLInputElement;
     public componentDidMount() {
-        this.input.focus();
+        //this.input.focus();
         const awesomplete = new Awesomplete(this.input, {
             list: this.props.folderNames,
-            minChars: 0,
-            autoFirst: true
+            minChars: 0
         });
         awesomplete.open();
     }
@@ -61,6 +60,11 @@ export class MoveEncounterPromptWrapper implements Prompt {
     public Resolve = (form: HTMLFormElement) => {
         const folderName = form.elements["folderName"].value || "";
         const savedEncounter = UpdateLegacySavedEncounter(this.legacySavedEncounter);
+        
+        if (savedEncounter.Path == folderName) {
+            return;
+        }
+
         const oldId = savedEncounter.Id;
         savedEncounter.Path = folderName;
         savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
