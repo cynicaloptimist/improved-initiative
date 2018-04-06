@@ -77,6 +77,8 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
+    configureMetricsRoutes(app);
+    
     app.get("/", (req: Req, res: Res) => {
         const renderOptions = pageRenderOptions(initializeNewPlayerView(playerViews), req.session);
         if (defaultAccountLevel !== "free") {
@@ -163,6 +165,5 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     configureLoginRedirect(app);
     configureLogout(app);
     configureStorageRoutes(app);
-    configureMetricsRoutes(app);
     startNewsUpdates(app);
 }
