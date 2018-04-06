@@ -11,7 +11,7 @@ import { StatBlock } from "../client/StatBlock/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import { upsertUser } from "./dbconnection";
 import { Library } from "./library";
-import configureMetricsRoutes from "./metrics";
+import { configureMetricsRoutes } from "./metrics";
 import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
 import configureStorageRoutes from "./storageroutes";
 

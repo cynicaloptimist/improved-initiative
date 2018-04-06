@@ -45,7 +45,7 @@ const addons = [
     }
 ];
 
-export default function (app: express.Application) {
+export function configureMetricsRoutes(app: express.Application) {
     const keenClient = new KeenTracking({
         projectId: keenProjectId,
         writeKey: keenWriteKey
