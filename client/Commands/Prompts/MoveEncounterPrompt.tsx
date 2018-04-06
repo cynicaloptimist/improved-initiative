@@ -24,6 +24,7 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
             list: this.props.folderNames,
             minChars: 0
         });
+        awesomplete.evaluate();
         awesomplete.open();
     }
 
