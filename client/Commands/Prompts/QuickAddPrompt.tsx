@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StatBlock } from "../../StatBlock/StatBlock";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 const promptClassName = "p-quick-add";
@@ -46,6 +47,7 @@ export class QuickAddPromptWrapper implements Prompt {
         };
 
         this.addStatBlock(statBlock);
+        Metrics.TrackEvent("CombatantQuickAdded", { Name: name });
     }
 
     private component = <QuickAddPrompt />;

@@ -134,8 +134,6 @@ export class Encounter {
 
         this.QueueEmitEncounter();
 
-        Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
-
         return combatant;
     }
 

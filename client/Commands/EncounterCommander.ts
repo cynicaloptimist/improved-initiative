@@ -10,6 +10,7 @@ import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
+import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { BuildEncounterCommandList, Command } from "./Command";
 import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
@@ -30,6 +31,7 @@ export class EncounterCommander {
     public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
+            Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
     }
@@ -46,6 +48,8 @@ export class EncounterCommander {
         if (library == Store.StatBlocks) {
             this.libraries.NPCs.DeleteListing(statBlockId);
         }
+
+        Metrics.TrackEvent("StatBlockDeleted", statBlockId);
     }
 
     private createSaveNewStatBlockCallback = (store: string, statBlockId: string) => (newStatBlock: StatBlock) => {
@@ -146,11 +150,13 @@ export class EncounterCommander {
 
     public LaunchPlayerWindow = () => {
         window.open(`/p/${this.tracker.Encounter.EncounterId}`, "Player View");
+        Metrics.TrackEvent("PlayerViewLaunched", { Id: this.tracker.Encounter.EncounterId });
     }
 
     public ShowSettings = () => {
         TutorialSpy("ShowSettings");
         this.tracker.SettingsVisible(true);
+        Metrics.TrackEvent("SettingsOpened");
     }
 
     public ToggleToolbarWidth = () => {
@@ -181,6 +187,7 @@ export class EncounterCommander {
         this.HideLibraries();
 
         this.tracker.EventLog.AddEvent("Encounter started.");
+        Metrics.TrackEvent("EncounterStarted", { CombatantCount: this.tracker.Encounter.Combatants().length });
 
         return false;
     }
@@ -188,12 +195,14 @@ export class EncounterCommander {
     public EndEncounter = () => {
         this.tracker.Encounter.EndEncounter();
         this.tracker.EventLog.AddEvent("Encounter ended.");
+        Metrics.TrackEvent("EncounterEnded", { Combatants: this.tracker.Encounter.Combatants().length });
 
         return false;
     }
 
     public RerollInitiative = () => {
         this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+        Metrics.TrackEvent("InitiativeRerolled");
 
         return false;
     }
@@ -204,6 +213,7 @@ export class EncounterCommander {
             this.tracker.CombatantViewModels([]);
             this.tracker.CombatantCommander.SelectedCombatants([]);
             this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
+            Metrics.TrackEvent("EncounterCleared");
         }
 
         return false;
@@ -218,6 +228,7 @@ export class EncounterCommander {
                     const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                    Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
                 }
             });
         this.tracker.PromptQueue.Add(prompt);
@@ -229,13 +240,18 @@ export class EncounterCommander {
     }
 
     public LoadEncounter = (legacySavedEncounter: {}) => {
-        this.tracker.Encounter.LoadSavedEncounter(UpdateLegacySavedEncounter(legacySavedEncounter));
+        const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
+        this.tracker.Encounter.LoadSavedEncounter(savedEncounter);
+        Metrics.TrackEvent("EncounterLoaded", savedEncounter.Name);
     }
 
     public NextTurn = () => {
+        const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
+        Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });
+        
         this.tracker.Encounter.NextTurn();
-        let currentCombatant = this.tracker.Encounter.ActiveCombatant();
-        this.tracker.EventLog.AddEvent(`Start of turn for ${currentCombatant.DisplayName()}.`);
+        const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
+        this.tracker.EventLog.AddEvent(`Start of turn for ${turnStartCombatant.DisplayName()}.`);
 
         return false;
     }

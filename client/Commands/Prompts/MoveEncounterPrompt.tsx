@@ -5,6 +5,7 @@ import { AccountClient } from "../../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 export interface MoveEncounterPromptProps {
@@ -70,6 +71,7 @@ export class MoveEncounterPromptWrapper implements Prompt {
         savedEncounter.Path = folderName;
         savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
         this.library.Move(savedEncounter, oldId);
+        Metrics.TrackEvent("EncounterMoved", { Path: folderName });
     }
 
     private component: JSX.Element;
