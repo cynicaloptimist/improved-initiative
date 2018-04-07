@@ -1,5 +1,6 @@
 import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
 import { TrackerViewModel } from "../../TrackerViewModel";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 export class AcceptDamagePrompt implements Prompt {
@@ -18,6 +19,8 @@ export class AcceptDamagePrompt implements Prompt {
         const displayType = (damageAmount < 0) ? "healing" : "damage";
         const displayNumber = (damageAmount < 0) ? -damageAmount : damageAmount;
         this.Prompt = `Accept ${displayNumber} ${displayType} to ${combatantNames} from ${suggester}?`;
+
+        Metrics.TrackEvent("DamageSuggested", { Amount: damageAmount });
 
         this.AcceptFull = () => {
             suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()));

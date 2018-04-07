@@ -104,6 +104,7 @@ export class CombatantViewModel {
                     }
                     this.ApplyInitiative(initiative);
                     this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
+                    Metrics.TrackEvent("InitiativeSet", { Name: this.Name() });
                     this.Combatant.Encounter.QueueEmitEncounter();
                 }
             });
