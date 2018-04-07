@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
@@ -235,7 +236,12 @@ export class EncounterCommander {
     }
 
     public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters);
+        const folderNames = _(this.libraries.Encounters.Encounters())
+            .map(e => e.Path)
+            .uniq()
+            .compact()
+            .value();
+        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
         this.tracker.PromptQueue.Add(prompt);
     }
 
@@ -248,7 +254,7 @@ export class EncounterCommander {
     public NextTurn = () => {
         const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
         Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });
-        
+
         this.tracker.Encounter.NextTurn();
         const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
         this.tracker.EventLog.AddEvent(`Start of turn for ${turnStartCombatant.DisplayName()}.`);
