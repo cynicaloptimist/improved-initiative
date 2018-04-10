@@ -25,7 +25,7 @@ module.exports = function (grunt) {
       options: {
         keepalive: false
       },
-      prod: require('./webpack.config.prod'),
+      //prod: require('./webpack.config.prod'), Temporarily disabled for #209
       dev: require('./webpack.config')
     },
     less: {
@@ -85,7 +85,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_dev', ['webpack:dev', 'ts:server', 'less', 'concat:js_dependencies']);
-  grunt.registerTask('build_min', ['webpack:prod', 'ts:server', 'less', 'concat:js_dependencies_min']);
+  grunt.registerTask('build_min', [/*'webpack:prod', */'ts:server', 'less', 'concat:js_dependencies_min']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };
