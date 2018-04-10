@@ -19,7 +19,6 @@ import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 import { Toolbar } from "./Commands/components/Toolbar";
-import * as React from "react";
 
 interface PatreonPostAttributes {
     title: string;
