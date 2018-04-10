@@ -69,9 +69,9 @@
     <!-- ko if: DisplayLogin -->
         <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
-    <div data-bind="react: {
+    <span data-bind="react: {
         component: toolbarComponent
-    }"></div>
+    }"></span>
     <div class="left-column">
         <!-- ko if: LibrariesVisible -->
         <div class="libraries" data-bind="react: {
