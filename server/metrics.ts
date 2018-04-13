@@ -52,9 +52,6 @@ export function configureMetricsRoutes(app: express.Application) {
         writeKey: keenWriteKey
     });
 
-    expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
-    app.use(expressKeen.handleAll());
-
     app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
         if (!keenProjectId || !keenWriteKey) {
             return res.status(501).send("No metrics pipeline configured.");
@@ -70,4 +67,12 @@ export function configureMetricsRoutes(app: express.Application) {
 
         return res.sendStatus(200);
     });
+
+    if (!keenProjectId || !keenWriteKey) {
+        console.warn("Keen configuration variables not set.");
+        return;
+    }
+
+    expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
+    app.use(expressKeen.handleAll());
 }
