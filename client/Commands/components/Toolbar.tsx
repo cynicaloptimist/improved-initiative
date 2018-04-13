@@ -13,7 +13,9 @@ interface ToolbarState {
 }
 
 export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
+    private innerElement: HTMLDivElement;
     private outerElement: HTMLDivElement;
+    
     constructor(props: ToolbarProps) {
         super(props);
         this.state = {
@@ -23,7 +25,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     }
 
     public componentDidMount() {
-        const width = this.outerElement.offsetWidth - this.outerElement.clientWidth;
+        const width = this.outerElement.offsetWidth + this.innerElement.offsetWidth - this.innerElement.clientWidth;
         this.setState({widthStyle: width.toString() + "px"});
     }
 
@@ -40,7 +42,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
         //TODO: Ensure subscription to ShowOnActionBar changes
 
         return <div className={className} ref={e => this.outerElement = e}>
-            <div className="scrollframe" style={{ width: this.state.widthStyle }}>
+            <div className="scrollframe" ref={e => this.innerElement = e} style={{ width: this.state.widthStyle }}>
                 <div className="commands-encounter">
                     {encounterCommandButtons}
                 </div>
