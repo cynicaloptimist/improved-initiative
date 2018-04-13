@@ -452,12 +452,16 @@ body>.login.button {
     }
 }
 
+.scrollframe {
+    flex-shrink:1;
+    overflow-y: scroll;
+}
+
 .toolbar.s-narrow {
     .scrollframe {
         max-width: none;
         width: @button-size;
         overflow-x: hidden;
-        overflow-y: scroll;
     }
 
     width: @button-size;
