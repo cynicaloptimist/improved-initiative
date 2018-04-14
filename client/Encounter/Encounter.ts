@@ -16,6 +16,7 @@ import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
+import _ = require("lodash");
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;
@@ -23,7 +24,7 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private handleRemoveCombatantViewModels: (vm: CombatantViewModel []) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void
     ) {
         this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
@@ -71,13 +72,29 @@ export class Encounter {
     public RoundCounter: KnockoutObservable<number> = ko.observable(0);
     public EncounterId = env.EncounterId;
 
+    private getGroupBonusForCombatant(combatant: Combatant) {
+        const groupBonuses = this.Combatants()
+            .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
+            .map(c => c.InitiativeBonus);
+        return _.max(groupBonuses);
+    }
+
     public SortByInitiative = (stable = false) => {
         this.Combatants.sort((l, r) => {
+            const byCurrentInitiative = r.Initiative() - l.Initiative();
+
             if (stable) {
-                return r.Initiative() - l.Initiative();
+                return byCurrentInitiative;
             }
 
-            return (r.Initiative() - l.Initiative()) || (r.InitiativeBonus - l.InitiativeBonus);
+            const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
+            const byGroupName = r.InitiativeGroup().localeCompare(l.InitiativeGroup());
+            const byBonus = r.InitiativeBonus - l.InitiativeBonus
+
+            return byCurrentInitiative ||
+                byGroupBonus ||
+                byGroupName ||
+                byBonus;
         });
         this.QueueEmitEncounter();
     }
