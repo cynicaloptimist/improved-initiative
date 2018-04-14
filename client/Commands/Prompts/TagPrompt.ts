@@ -2,6 +2,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 export class TagPrompt implements Prompt {
@@ -34,7 +35,8 @@ export class TagPrompt implements Prompt {
 
             this.targetCombatant.Tags.push(tag);
 
-            this.logEvent(`${this.DisplayName} added note: "${text}"`);
+            this.logEvent(`${this.DisplayName} added tag: "${text}"`);
+            Metrics.TrackEvent("TagAdded", { Text: tag.Text, Duration: tag.DurationRemaining() });
             this.targetCombatant.Encounter.QueueEmitEncounter();
         }
     }

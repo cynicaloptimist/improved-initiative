@@ -1,6 +1,7 @@
 import express = require("express");
-
+import expressKeen = require("express-keenio");
 import KeenTracking = require("keen-tracking");
+
 const keenProjectId = process.env.KEEN_PROJECT_ID || "";
 const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
 
@@ -45,7 +46,7 @@ const addons = [
     }
 ];
 
-export default function (app: express.Application) {
+export function configureMetricsRoutes(app: express.Application) {
     const keenClient = new KeenTracking({
         projectId: keenProjectId,
         writeKey: keenWriteKey
@@ -66,4 +67,12 @@ export default function (app: express.Application) {
 
         return res.sendStatus(200);
     });
+
+    if (!keenProjectId || !keenWriteKey) {
+        console.warn("Keen configuration variables not set.");
+        return;
+    }
+
+    expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
+    app.use(expressKeen.handleAll());
 }

@@ -25,7 +25,7 @@ module.exports = function (grunt) {
       options: {
         keepalive: false
       },
-      prod: require('./webpack.config.prod'),
+      //prod: require('./webpack.config.prod'), Temporarily disabled for #209
       dev: require('./webpack.config')
     },
     less: {
@@ -41,7 +41,6 @@ module.exports = function (grunt) {
           'node_modules/knockout/build/output/knockout-latest.debug.js',
           'node_modules/knockout-mapping/dist/knockout.mapping.js',
           'node_modules/jquery/dist/jquery.js',
-          'node_modules/awesomplete/awesomplete.js',
           'node_modules/mousetrap/mousetrap.js',
           'node_modules/socket.io-client/dist/socket.io.js',
           'node_modules/moment/moment.js',
@@ -55,7 +54,6 @@ module.exports = function (grunt) {
           'node_modules/knockout/build/output/knockout-latest.js',
           'node_modules/knockout-mapping/dist/knockout.mapping.min.js',
           'node_modules/jquery/dist/jquery.min.js',
-          'node_modules/awesomplete/awesomplete.min.js',
           'node_modules/mousetrap/mousetrap.min.js',
           'node_modules/socket.io-client/dist/socket.io.min.js',
           'node_modules/moment/min/moment.min.js',
@@ -85,7 +83,7 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_dev', ['webpack:dev', 'ts:server', 'less', 'concat:js_dependencies']);
-  grunt.registerTask('build_min', ['webpack:prod', 'ts:server', 'less', 'concat:js_dependencies_min']);
+  grunt.registerTask('build_min', [/*'webpack:prod', */'ts:server', 'less', 'concat:js_dependencies_min']);
   grunt.registerTask('default', ['build_dev', 'watch']);
   grunt.registerTask('postinstall', ['copy', 'build_min']);
 };

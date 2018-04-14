@@ -5,6 +5,7 @@ import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
+import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { BuildCombatantCommandList, Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
@@ -120,6 +121,7 @@ export class CombatantCommander {
         }
 
         this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(", ")} removed from encounter.`);
+        Metrics.TrackEvent("CombatantsRemoved", { Names: deletedCombatantNames });
 
         this.tracker.Encounter.QueueEmitEncounter();
     }
@@ -187,6 +189,7 @@ export class CombatantCommander {
                 if (thp) {
                     selectedCombatants.forEach(c => c.ApplyTemporaryHP(thp));
                     this.tracker.EventLog.AddEvent(`${thp} temporary hit points granted to ${combatantNames}.`);
+                    Metrics.TrackEvent("TemporaryHPAdded", { Amount: thp });
                     this.tracker.Encounter.QueueEmitEncounter();
                 }
             });
@@ -222,6 +225,7 @@ export class CombatantCommander {
         this.tracker.Encounter.CleanInitiativeGroups();
 
         this.tracker.Encounter.SortByInitiative();
+        Metrics.TrackEvent("InitiativeLinked");
     }
 
     public LinkInitiative = () => {
@@ -278,6 +282,7 @@ export class CombatantCommander {
         const diceRoll = Dice.RollDiceExpression(diceExpression);
         this.latestRoll = diceRoll;
         const prompt = new DefaultPrompt(`Rolled: ${diceExpression} -> ${diceRoll.FormattedString} <input class='response' type='number' value='${diceRoll.Total}' />`);
+        Metrics.TrackEvent("DiceRolled", { Expression: diceExpression, Result: diceRoll.FormattedString });
         this.tracker.PromptQueue.Add(prompt);
     }
 }

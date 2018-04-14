@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -11,7 +12,6 @@ import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { DefaultRules, IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
-import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -23,7 +23,7 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private handleRemoveCombatantViewModels: (vm: CombatantViewModel []) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void
     ) {
         this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
@@ -71,13 +71,39 @@ export class Encounter {
     public RoundCounter: KnockoutObservable<number> = ko.observable(0);
     public EncounterId = env.EncounterId;
 
+    private getGroupBonusForCombatant(combatant: Combatant) {
+        if (combatant.InitiativeGroup() == null) {
+            return combatant.InitiativeBonus;
+        }
+
+        const groupBonuses = this.Combatants()
+            .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
+            .map(c => c.InitiativeBonus);
+        
+        return _.max(groupBonuses) || combatant.InitiativeBonus;
+    }
+
     public SortByInitiative = (stable = false) => {
         this.Combatants.sort((l, r) => {
+            const byCurrentInitiative = r.Initiative() - l.Initiative();
+            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
+            const rGroup = r.InitiativeGroup(), lGroup = l.InitiativeGroup();
+
             if (stable) {
-                return r.Initiative() - l.Initiative();
+                return byCurrentInitiative;
             }
 
-            return (r.Initiative() - l.Initiative()) || (r.InitiativeBonus - l.InitiativeBonus);
+            if (rGroup == null && lGroup == null) {
+                return byCurrentInitiative || byBonus;
+            }
+
+            const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
+            const byGroupName = (rGroup || "NULL").localeCompare(lGroup || "NULL");
+            
+            return byCurrentInitiative ||
+                byGroupBonus ||
+                byGroupName ||
+                byBonus;
         });
         this.QueueEmitEncounter();
     }
@@ -133,8 +159,6 @@ export class Encounter {
         }
 
         this.QueueEmitEncounter();
-
-        Metrics.TrackEvent("CombatantAdded", { Name: statBlockJson.Name });
 
         return combatant;
     }

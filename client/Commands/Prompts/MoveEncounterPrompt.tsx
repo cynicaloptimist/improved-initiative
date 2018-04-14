@@ -1,10 +1,9 @@
 import Awesomplete = require("awesomplete");
-import _ = require("lodash");
 import React = require("react");
 import { AccountClient } from "../../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
-import { EncounterLibrary } from "../../Library/EncounterLibrary";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 export interface MoveEncounterPromptProps {
@@ -43,19 +42,15 @@ export class MoveEncounterPromptWrapper implements Prompt {
     public ComponentName = "reactprompt";
 
     private encounterName: string;
-    private folderNames: string[] = [];
-
+    
     constructor(
         private legacySavedEncounter: { Name?: string },
-        private library: EncounterLibrary,
+        private moveListingFn: (encounter: SavedEncounter<SavedCombatant>, oldId: string) => void,
+        folderNames: string[],
     ) {
         this.encounterName = legacySavedEncounter.Name || "";
-        this.folderNames = _(this.library.Encounters())
-            .map(e => e.Path)
-            .uniq()
-            .compact()
-            .value();
-        this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={this.folderNames} />;
+        
+        this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={folderNames} />;
     }
 
     public Resolve = (form: HTMLFormElement) => {
@@ -69,7 +64,8 @@ export class MoveEncounterPromptWrapper implements Prompt {
         const oldId = savedEncounter.Id;
         savedEncounter.Path = folderName;
         savedEncounter.Id = AccountClient.MakeId(savedEncounter.Name, savedEncounter.Path);
-        this.library.Move(savedEncounter, oldId);
+        this.moveListingFn(savedEncounter, oldId);
+        Metrics.TrackEvent("EncounterMoved", { Path: folderName });
     }
 
     private component: JSX.Element;
