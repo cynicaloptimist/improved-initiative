@@ -87,17 +87,18 @@ export class Encounter {
         this.Combatants.sort((l, r) => {
             const byCurrentInitiative = r.Initiative() - l.Initiative();
             const byBonus = r.InitiativeBonus - l.InitiativeBonus;
+            const rGroup = r.InitiativeGroup(), lGroup = l.InitiativeGroup();
 
             if (stable) {
                 return byCurrentInitiative;
             }
 
-            if (l.InitiativeGroup() == null && r.InitiativeGroup() == null) {
+            if (rGroup == null && lGroup == null) {
                 return byCurrentInitiative || byBonus;
             }
 
             const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
-            const byGroupName = r.InitiativeGroup().localeCompare(l.InitiativeGroup());
+            const byGroupName = (rGroup || "NULL").localeCompare(lGroup || "NULL");
             
             return byCurrentInitiative ||
                 byGroupBonus ||
