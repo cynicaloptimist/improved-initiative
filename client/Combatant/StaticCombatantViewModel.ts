@@ -20,7 +20,7 @@ export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewMode
         HPColor: GetHPColor(combatant),
         Initiative: combatant.Initiative(),
         IsPlayerCharacter: combatant.IsPlayerCharacter,
-        Tags: combatant.Tags(),
+        Tags: combatant.Tags().filter(t => t.Visible()),
     };
 }
 
