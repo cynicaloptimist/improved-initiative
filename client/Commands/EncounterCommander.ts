@@ -49,7 +49,7 @@ export class EncounterCommander {
             this.libraries.NPCs.DeleteListing(statBlockId);
         }
 
-        Metrics.TrackEvent("StatBlockDeleted", statBlockId);
+        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
     }
 
     private createSaveNewStatBlockCallback = (store: string, statBlockId: string) => (newStatBlock: StatBlock) => {
@@ -247,7 +247,7 @@ export class EncounterCommander {
     public LoadEncounter = (legacySavedEncounter: {}) => {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
         this.tracker.Encounter.LoadSavedEncounter(savedEncounter);
-        Metrics.TrackEvent("EncounterLoaded", savedEncounter.Name);
+        Metrics.TrackEvent("EncounterLoaded", { Name: savedEncounter.Name });
     }
 
     public NextTurn = () => {
