@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -11,12 +12,10 @@ import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { DefaultRules, IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
-import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
-import _ = require("lodash");
 
 export class Encounter {
     private playerViewClient: PlayerViewClient;
@@ -89,7 +88,7 @@ export class Encounter {
 
             const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
             const byGroupName = r.InitiativeGroup().localeCompare(l.InitiativeGroup());
-            const byBonus = r.InitiativeBonus - l.InitiativeBonus
+            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
 
             return byCurrentInitiative ||
                 byGroupBonus ||

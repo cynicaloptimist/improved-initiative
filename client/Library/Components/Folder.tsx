@@ -1,5 +1,4 @@
 import React = require("react");
-import { Listing } from "../Listing";
 import { ListingButton } from "./ListingButton";
 
 export interface FolderProps {

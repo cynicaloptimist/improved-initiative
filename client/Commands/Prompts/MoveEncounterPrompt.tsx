@@ -1,5 +1,4 @@
 import Awesomplete = require("awesomplete");
-import _ = require("lodash");
 import React = require("react");
 import { AccountClient } from "../../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";

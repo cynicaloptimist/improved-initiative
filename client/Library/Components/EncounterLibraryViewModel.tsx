@@ -1,4 +1,3 @@
-import _ = require("lodash");
 import * as React from "react";
 import { EncounterCommander } from "../../Commands/EncounterCommander";
 import { Overlay } from "../../Components/Overlay";
