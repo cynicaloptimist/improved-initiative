@@ -72,24 +72,33 @@ export class Encounter {
     public EncounterId = env.EncounterId;
 
     private getGroupBonusForCombatant(combatant: Combatant) {
+        if (combatant.InitiativeGroup() == null) {
+            return combatant.InitiativeBonus;
+        }
+
         const groupBonuses = this.Combatants()
             .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
             .map(c => c.InitiativeBonus);
-        return _.max(groupBonuses);
+        
+        return _.max(groupBonuses) || combatant.InitiativeBonus;
     }
 
     public SortByInitiative = (stable = false) => {
         this.Combatants.sort((l, r) => {
             const byCurrentInitiative = r.Initiative() - l.Initiative();
+            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
 
             if (stable) {
                 return byCurrentInitiative;
             }
 
+            if (l.InitiativeGroup() == null && r.InitiativeGroup() == null) {
+                return byCurrentInitiative || byBonus;
+            }
+
             const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
             const byGroupName = r.InitiativeGroup().localeCompare(l.InitiativeGroup());
-            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
-
+            
             return byCurrentInitiative ||
                 byGroupBonus ||
                 byGroupName ||
