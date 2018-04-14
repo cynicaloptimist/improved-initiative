@@ -61,7 +61,7 @@ export function configureMetricsRoutes(app: express.Application) {
         const eventData = req.body || {};
         eventData.sessionId = req.session.id;
         eventData.userId = req.session.userId || null;
-        eventData.ipAddress = "${keen.ip}";
+        eventData.ipAddress = req.ip;
         eventData.keen = { addons };
         keenClient.recordEvent(eventName, eventData);
 
