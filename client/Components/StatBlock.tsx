@@ -35,13 +35,13 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Legendary Actions", data: statBlock.LegendaryActions },
         ];
 
-        return <div className="c-statblock">
+        const headerEntries = <React.Fragment>
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>
+        </React.Fragment>;
 
-            <hr />
-
+        const statEntries = <React.Fragment>
             <div className="AC">
                 <span className="stat-label">Armor Class</span>
                 <span>{statBlock.AC.Value}</span>
@@ -103,25 +103,33 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     <span>{statBlock.Challenge}</span>
                 </div>
             }
+        </React.Fragment>;
 
+        const actionEntries = powerTypes
+            .filter(powerType => powerType.data.length > 0)
+            .map(powerType =>
+                <div key={powerType.name} className={powerType.name}>
+                    <h4 className="stat-label">{powerType.name}</h4>
+                    {powerType.data.map((power, j) =>
+                        <div key={j + power.Name}>
+                            <span className="stat-label">{power.Name}</span>
+                            {power.Usage && <span className="stat-label">{power.Usage}</span>}
+                            <span className="power-content">{enricher.EnrichText(power.Content)}</span>
+                        </div>
+                    )}
+                </div>
+        );
+        
+        const description = statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>;
+
+        return <div className="c-statblock">
+            {headerEntries}
             <hr />
-
-            {powerTypes
-                .filter(powerType => powerType.data.length > 0)
-                .map(powerType =>
-                    <div key={powerType.name} className={powerType.name}>
-                        <h4 className="stat-label">{powerType.name}</h4>
-                        {powerType.data.map((power, j) =>
-                            <div key={j + power.Name}>
-                                <span className="stat-label">{power.Name}</span>
-                                {power.Usage && <span className="stat-label">{power.Usage}</span>}
-                                <span className="power-content">{enricher.EnrichText(power.Content)}</span>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-            {statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>}
+            {statEntries}
+            <hr />
+            {actionEntries}
+            <hr />
+            {description}
         </div>;
     }
 }
