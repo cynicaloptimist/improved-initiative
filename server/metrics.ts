@@ -73,6 +73,6 @@ export function configureMetricsRoutes(app: express.Application) {
         return;
     }
 
-    expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
-    app.use(expressKeen.handleAll());
+    /*expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
+    app.use(expressKeen.handleAll());*/
 }
