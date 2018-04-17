@@ -1,7 +1,7 @@
-import { PlayerView } from "../common/PlayerView";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
+import { PlayerViewManager } from "./playerviewmanager";
 
-export default function (io: SocketIO.Server, playerViews: { [encounterId: string]: PlayerView }) {
+export default function (io: SocketIO.Server, playerViews: PlayerViewManager) {
     io.on("connection", function (socket: SocketIO.Socket) {
 
         let encounterId = null;
@@ -9,23 +9,18 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
         function joinEncounter(id) {
             encounterId = id;
             socket.join(id);
-            if (playerViews[encounterId] === undefined) {
-                playerViews[encounterId] = {
-                    encounterState: null,
-                    settings: null
-                };
-            }
+            playerViews.EnsureInitialized(id);
         }
 
         socket.on("update encounter", function (id: string, updatedEncounter: {}) {
             joinEncounter(id);
-            playerViews[encounterId].encounterState = updatedEncounter;
+            playerViews.UpdateEncounter(id, updatedEncounter);
             socket.broadcast.to(encounterId).emit("encounter updated", updatedEncounter);
         });
 
         socket.on("update settings", (id: string, updatedSettings: PlayerViewSettings) => {
             joinEncounter(id);
-            playerViews[encounterId].settings = updatedSettings;
+            playerViews.UpdateSettings(id, updatedSettings);
             socket.broadcast.to(encounterId).emit("settings updated", updatedSettings);
         });
 
@@ -41,7 +36,7 @@ export default function (io: SocketIO.Server, playerViews: { [encounterId: strin
         socket.on("disconnect", function () {
             io.in(encounterId).clients((error, clients) => {
                 if (clients.length == 0) {
-                    delete playerViews[encounterId];
+                    playerViews.Destroy(encounterId);
                 }
             });
         });

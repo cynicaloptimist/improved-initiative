@@ -13,6 +13,7 @@ import { upsertUser } from "./dbconnection";
 import { Library } from "./library";
 import { configureMetricsRoutes } from "./metrics";
 import { configureLoginRedirect, configureLogout, startNewsUpdates } from "./patreon";
+import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
 
 const baseUrl = process.env.BASE_URL || "";
@@ -33,13 +34,7 @@ const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
     postedEncounter: null,
 });
 
-const initializeNewPlayerView = (playerViews) => {
-    const encounterId = probablyUniqueString();
-    playerViews[encounterId] = {};
-    return encounterId;
-};
-
-export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews) {
+export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews: PlayerViewManager) {
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
     let store = null;
@@ -80,7 +75,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     configureMetricsRoutes(app);
     
     app.get("/", (req: Req, res: Res) => {
-        const renderOptions = pageRenderOptions(initializeNewPlayerView(playerViews), req.session);
+        const renderOptions = pageRenderOptions(playerViews.InitializeNew(), req.session);
         if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
@@ -123,7 +118,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/playerviews/:id", (req: Req, res: Res) => {
-        res.json(playerViews[req.params.id]);
+        res.json(playerViews.Get(req.params.id));
     });
 
     app.get("/templates/:name", (req: Req, res: Res) => {
@@ -147,7 +142,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     const importEncounter = (req, res: Res) => {
-        const newViewId = initializeNewPlayerView(playerViews);
+        const newViewId = playerViews.InitializeNew();
         const session = req.session;
 
         if (typeof req.body.Combatants === "string") {
