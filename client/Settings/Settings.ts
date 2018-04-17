@@ -164,9 +164,17 @@ function updateToSemanticVersionIsRequired(settingsVersion: string, targetVersio
 
 function updateSettings(settings: any): Settings {
     const defaultSettings = getDefaultSettings();
+
+    if (!settings.PlayerView) {
+        settings.PlayerView = defaultSettings.PlayerView;
+    }
+
+    if (!settings.PlayerView.CustomStyles) {
+        settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
+    }
+
     if (updateToSemanticVersionIsRequired(settings.Version, "1.2.0")) {
         settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
-        settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
     }
 
     if (updateToSemanticVersionIsRequired(settings.Version, "1.3.0")) {
