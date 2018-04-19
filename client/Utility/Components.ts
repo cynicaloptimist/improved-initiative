@@ -39,8 +39,6 @@ export let RegisterComponents = () => {
     );
 
     registerComponent("settings", params => new SettingsViewModel(params.encounterCommander, params.combatantCommander, params.libraries, params.settingsVisible, params.repeatTutorial));
-    registerComponent("defaultstatblock", params => params.statBlock);
-    registerComponent("activestatblock", params => params.statBlock);
     registerComponent("combatant", params => params.viewModel);
     registerComponent("playerdisplaycombatant", params => params.combatant);
     registerComponent("defaultprompt", params => params.prompt);
