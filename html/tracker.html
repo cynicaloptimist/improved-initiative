@@ -101,14 +101,9 @@
         <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
-            <div class="statblock" data-bind="
-    component: { 
-        name: 'activestatblock', 
-        params: { 
-        statBlock: Encounter.ActiveCombatantStatBlock() 
-        } 
-    }">
-            </div>
+            <div style="flex-shrink: 1" data-bind="react: {
+                component: Encounter.ActiveCombatantStatBlock
+            }"></div>
         </div>
         <!-- /ko -->
     </div>

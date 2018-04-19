@@ -1,4 +1,5 @@
 import _ = require("lodash");
+import React = require("react");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -7,6 +8,7 @@ import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/Static
 import { Tag } from "../Combatant/Tag";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
+import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
@@ -32,8 +34,12 @@ export class Encounter {
         this.ActiveCombatant = ko.observable<Combatant>();
         this.ActiveCombatantStatBlock = ko.pureComputed(() => {
             return this.ActiveCombatant()
-                ? this.ActiveCombatant().StatBlock()
-                : StatBlock.Default();
+                ? React.createElement(StatBlockComponent, {
+                    statBlock: this.ActiveCombatant().StatBlock(),
+                    enricher: this.statBlockTextEnricher,
+                    displayMode: "active"
+                })
+                : null;
         });
 
         this.Difficulty = ko.pureComputed(() => {
@@ -62,7 +68,7 @@ export class Encounter {
     public Combatants = ko.observableArray<Combatant>([]);
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
     public ActiveCombatant: KnockoutObservable<Combatant>;
-    public ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
+    public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
     public Difficulty: KnockoutComputed<EncounterDifficulty>;
 
     public State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">("inactive");
