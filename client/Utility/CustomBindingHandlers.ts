@@ -1,10 +1,5 @@
 import Awesomplete = require("awesomplete");
 import { render as renderReact } from "react-dom";
-import { toModifierString } from "../../common/Toolbox";
-import { CombatantCommander } from "../Commands/CombatantCommander";
-import { EncounterCommander } from "../Commands/EncounterCommander";
-import { SpellLibrary } from "../Library/SpellLibrary";
-import { Dice } from "../Rules/Rules";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { ComponentLoader } from "./Components";
 import { TextAssets } from "./TextAssets";
