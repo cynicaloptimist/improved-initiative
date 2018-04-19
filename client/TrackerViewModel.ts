@@ -112,14 +112,16 @@ export class TrackerViewModel {
         this.removeCombatantViewModels
     );
 
+    public StatBlockTextEnricher = new StatBlockTextEnricher(
+        this.CombatantCommander.RollDice,
+        this.EncounterCommander.ReferenceSpell,
+        this.Libraries.Spells,
+        this.Encounter.Rules);
+    
     public librariesComponent = React.createElement(LibrariesComponent, {
         encounterCommander: this.EncounterCommander,
         libraries: this.Libraries,
-        statBlockTextEnricher: new StatBlockTextEnricher(
-            this.CombatantCommander.RollDice,
-            this.EncounterCommander.ReferenceSpell,
-            this.Libraries.Spells,
-            this.Encounter.Rules)
+        statBlockTextEnricher: this.StatBlockTextEnricher
     });
 
     public OrderedCombatants = ko.computed(() =>
