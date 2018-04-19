@@ -1,9 +1,10 @@
+import React = require("react");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { StatBlockComponent } from "../Components/StatBlock";
 import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
@@ -11,8 +12,6 @@ import { BuildCombatantCommandList, Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
-import React = require("react");
-import { StatBlockComponent } from "../Components/StatBlock";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;
