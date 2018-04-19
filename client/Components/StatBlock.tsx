@@ -5,6 +5,7 @@ import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 interface StatBlockProps {
     statBlock: StatBlock;
     enricher: StatBlockTextEnricher;
+    displayMode: "default" | "active";
 }
 
 interface StatBlockState { }
@@ -128,10 +129,15 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         
         const description = statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>;
 
+        let innerEntries;
+        if(this.props.displayMode == "active"){
+            innerEntries = <React.Fragment>{actionEntries}{statEntries}</React.Fragment>;
+        } else {
+            innerEntries = <React.Fragment>{statEntries}{actionEntries}</React.Fragment>;
+        }
         return <div className="c-statblock">
             {headerEntries}
-            {statEntries}
-            {actionEntries}
+            {innerEntries}
             {description}
         </div>;
     }

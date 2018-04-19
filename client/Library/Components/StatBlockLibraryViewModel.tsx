@@ -88,7 +88,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 ...StatBlock.Default(),
                 ...partialStatBlock,
             };
-            
+
             this.setState({
                 previewedStatBlock: statBlock,
             });
@@ -130,11 +130,14 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             </div>
             {previewVisible &&
                 <Overlay
-                handleMouseEvents={this.handlePreviewMouseEvent}
-                maxHeightPx={300}
-                left={this.state.previewPosition.left}
-                top={this.state.previewPosition.top}>
-                    <StatBlockComponent statBlock={this.state.previewedStatBlock} enricher={this.props.statBlockTextEnricher} />
+                    handleMouseEvents={this.handlePreviewMouseEvent}
+                    maxHeightPx={300}
+                    left={this.state.previewPosition.left}
+                    top={this.state.previewPosition.top}>
+                    <StatBlockComponent
+                        statBlock={this.state.previewedStatBlock}
+                        enricher={this.props.statBlockTextEnricher}
+                        displayMode="default" />
                 </Overlay>
             }
         </div>);
