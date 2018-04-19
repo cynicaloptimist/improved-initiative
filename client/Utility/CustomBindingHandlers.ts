@@ -19,7 +19,7 @@ export function RegisterBindingHandlers() {
     
         update: function (el, valueAccessor, allBindings) {
             const reactOptions = ko.unwrap(valueAccessor());
-            const component = reactOptions.component;
+            const component = ko.unwrap(reactOptions.component);
             
             renderReact(component, el);
         }
