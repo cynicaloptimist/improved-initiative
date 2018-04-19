@@ -205,14 +205,9 @@
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
             <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
-            <div class="statblock" data-bind="
-                component: { 
-                    name: 'defaultstatblock', 
-                    params:{ 
-                        statBlock: CombatantCommander.StatBlock(),
-                    } 
-                }">
-            </div>
+            <div style="flex-shrink: 1" data-bind="react: {
+                component: CombatantCommander.StatBlock
+            }"></div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>
