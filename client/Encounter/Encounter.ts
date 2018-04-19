@@ -9,9 +9,10 @@ import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
-import { DefaultRules, IRules } from "../Rules/Rules";
+import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -23,9 +24,10 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
+        public Rules: IRules,
+        private statBlockTextEnricher: StatBlockTextEnricher
     ) {
-        this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();
         this.ActiveCombatantStatBlock = ko.pureComputed(() => {
@@ -56,7 +58,6 @@ export class Encounter {
         this.playerViewClient = new PlayerViewClient(this.Socket);
     }
 
-    public Rules: IRules;
     public TurnTimer = new TurnTimer();
     public Combatants = ko.observableArray<Combatant>([]);
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;

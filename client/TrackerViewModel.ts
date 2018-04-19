@@ -11,6 +11,7 @@ import { env } from "./Environment";
 import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
@@ -105,19 +106,23 @@ export class TrackerViewModel {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
-    public Encounter = new Encounter(
-        this.PromptQueue,
-        this.Socket,
-        this.addCombatantViewModel,
-        this.removeCombatantViewModels
-    );
+    public Rules = new DefaultRules();
 
     public StatBlockTextEnricher = new StatBlockTextEnricher(
         this.CombatantCommander.RollDice,
         this.EncounterCommander.ReferenceSpell,
         this.Libraries.Spells,
-        this.Encounter.Rules);
+        this.Rules);
     
+    public Encounter = new Encounter(
+        this.PromptQueue,
+        this.Socket,
+        this.addCombatantViewModel,
+        this.removeCombatantViewModels,
+        this.Rules,
+        this.StatBlockTextEnricher
+    );
+
     public librariesComponent = React.createElement(LibrariesComponent, {
         encounterCommander: this.EncounterCommander,
         libraries: this.Libraries,
