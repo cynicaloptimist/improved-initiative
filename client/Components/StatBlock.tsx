@@ -71,6 +71,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                 })}
             </div>
 
+            <hr />
+
             <div className="modifiers">
                 {modifierTypes
                     .filter(modifierType => modifierType.data.length > 0)
@@ -103,6 +105,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     <span>{statBlock.Challenge}</span>
                 </div>
             }
+
+            <hr />
         </React.Fragment>;
 
         const actionEntries = powerTypes
@@ -117,6 +121,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                             <span className="power-content">{enricher.EnrichText(power.Content)}</span>
                         </div>
                     )}
+                    <hr />
                 </div>
         );
         
@@ -126,9 +131,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             {headerEntries}
             <hr />
             {statEntries}
-            <hr />
             {actionEntries}
-            <hr />
             {description}
         </div>;
     }
