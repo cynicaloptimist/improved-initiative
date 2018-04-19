@@ -39,6 +39,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>
+            <hr />
         </React.Fragment>;
 
         const statEntries = <React.Fragment>
@@ -129,7 +130,6 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
 
         return <div className="c-statblock">
             {headerEntries}
-            <hr />
             {statEntries}
             {actionEntries}
             {description}
