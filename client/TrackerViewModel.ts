@@ -216,13 +216,19 @@ export class TrackerViewModel {
         return "show-center-right-left";
     });
 
-    private toolbarComponent = ko.computed(() => React.createElement(Toolbar,
-        {
-            encounterCommands: this.EncounterCommander.Commands.filter(c => c.ShowOnActionBar()),
-            combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
-            width: this.ToolbarWide() ? "wide" : "narrow",
-            showCombatantCommands: this.CombatantCommander.HasSelected()
-        }));
+    private toolbarComponent = ko.computed(() => {
+        const commandsToHideByDescription = this.Encounter.State() == "active" ?
+            ["Start Encounter"] :
+            ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
+
+        return React.createElement(Toolbar,
+            {
+                encounterCommands: this.EncounterCommander.Commands.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
+                combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
+                width: this.ToolbarWide() ? "wide" : "narrow",
+                showCombatantCommands: this.CombatantCommander.HasSelected()
+            });
+    });
 
     private contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
