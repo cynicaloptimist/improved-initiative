@@ -15,7 +15,7 @@ interface ToolbarState {
 export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     private innerElement: HTMLDivElement;
     private outerElement: HTMLDivElement;
-    
+
     constructor(props: ToolbarProps) {
         super(props);
         this.state = {
@@ -30,14 +30,21 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
 
     public render() {
         const className = `toolbar s-${this.props.displayMode}`;
-        const commandToButton = (c: Command) => <Button key={c.Description} onClick={c.ActionBinding} additionalClassNames={c.ActionBarIcon} />;
+        const commandToButton =
+            (c: Command) =>
+                <Button
+                    key={c.Description}
+                    onClick={c.ActionBinding}
+                    additionalClassNames={c.ActionBarIcon}
+                    text={this.props.displayMode == "wide" ? c.Description : null}
+                />;
         const encounterCommandButtons = this.props.encounterCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
         const combatantCommandButtons = this.props.combatantCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
 
-        //TODO: Ensure subscription to ShowOnActionBar changes
+        const style = this.props.displayMode == "narrow" ? { width: this.state.widthStyle } : null;
 
         return <div className={className} ref={e => this.outerElement = e}>
-            <div className="scrollframe" ref={e => this.innerElement = e} style={{ width: this.state.widthStyle }}>
+            <div className="scrollframe" ref={e => this.innerElement = e} style={style}>
                 <div className="commands-encounter">
                     {encounterCommandButtons}
                 </div>
