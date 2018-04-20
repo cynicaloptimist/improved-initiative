@@ -29,7 +29,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     }
 
     public render() {
-        const className = `toolbar s-${this.props.displayMode}`;
+        const className = `c-toolbar s-${this.props.displayMode}`;
         const commandToButton =
             (c: Command) =>
                 <Button
