@@ -39,8 +39,8 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
                     additionalClassNames={c.ActionBarIcon}
                     text={this.props.width == "wide" ? c.Description : null}
                 />;
-        const encounterCommandButtons = this.props.encounterCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
-        const combatantCommandButtons = this.props.combatantCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
+        const encounterCommandButtons = this.props.encounterCommands.map(commandToButton);
+        const combatantCommandButtons = this.props.combatantCommands.map(commandToButton);
 
         const style = this.props.width == "narrow" ? { width: this.state.widthStyle } : null;
 

@@ -218,8 +218,8 @@ export class TrackerViewModel {
 
     private toolbarComponent = ko.computed(() => React.createElement(Toolbar,
         {
-            encounterCommands: this.EncounterCommander.Commands,
-            combatantCommands: this.CombatantCommander.Commands,
+            encounterCommands: this.EncounterCommander.Commands.filter(c => c.ShowOnActionBar()),
+            combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
             width: this.ToolbarWide() ? "wide" : "narrow",
             showCombatantCommands: this.CombatantCommander.HasSelected()
         }));
