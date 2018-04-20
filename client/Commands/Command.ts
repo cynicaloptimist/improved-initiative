@@ -36,8 +36,8 @@ export class Command {
 export let BuildEncounterCommandList: (c: EncounterCommander) => Command[] = c => [
     new Command("Toggle Menu", c.ToggleToolbarWidth, "alt+m", "fa-bars", true, true),
     new Command("Start Encounter", c.StartEncounter, "alt+r", "fa-play"),
-    new Command("End Encounter", c.EndEncounter, "alt+e", "fa-stop"),
     new Command("Reroll Initiative", c.RerollInitiative, "alt+shift+i", "fa-refresh", false),
+    new Command("End Encounter", c.EndEncounter, "alt+e", "fa-stop"),
     new Command("Clear Encounter", c.ClearEncounter, "alt+del", "fa-trash"),
     new Command("Open Library", c.ShowLibraries, "alt+a", "fa-user-plus"),
     new Command("Quick Add Combatant", c.QuickAddStatBlock, "alt+q", "fa-asterisk"),
