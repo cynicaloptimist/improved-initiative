@@ -6,6 +6,7 @@ public/fonts/*
 *.js.map
 *.js
 *.css
+*.tmp.txt
 .tscache
 .vscode
 .baseDir

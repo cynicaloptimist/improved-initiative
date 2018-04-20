@@ -438,7 +438,7 @@ body>.login.button {
     }
 }
 
-.toolbar .scrollframe > div {
+.c-toolbar .scrollframe > div {
     &.commands-combatant {
         margin-top:10px;
         padding-top:10px;
@@ -446,39 +446,40 @@ body>.login.button {
     }
     
     padding: @small-spacer;
-
-    .button {
-        margin: 1px 0;
-    }
 }
 
-.toolbar-narrow {
+.scrollframe {
+    flex-shrink:1;
+    overflow-y: scroll;
+}
+
+.c-toolbar .c-button {
+    margin: 1px 0;
+}
+
+.c-toolbar.s-narrow {
     .scrollframe {
         max-width: none;
         width: @button-size;
         overflow-x: hidden;
-        overflow-y: scroll;
     }
 
     width: @button-size;
     overflow: hidden;
-    
-    .command-name {
-        display: none;
-    }
 }
 
-.toolbar-wide {
-    .button {
+.c-toolbar.s-wide {
+    .scrollframe {
+        overflow-y: auto;
+    }
+
+    .c-button {
         text-align: left;
-        &:before {
+        &::before {
             width: @button-inner + @border-radius * 2;
             text-align: center;
             display: inline-block;
         }
-    }
-    .command-name {
-        display: inline-block;
     }
 }
 

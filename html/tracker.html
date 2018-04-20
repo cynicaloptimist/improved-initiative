@@ -69,29 +69,9 @@
     <!-- ko if: DisplayLogin -->
         <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
-    <div class="toolbar" data-bind="css: ToolbarClass">
-        <div class="scrollframe" data-bind="style: { width: ToolbarWidth($element) }">
-            <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
-                <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
-                    attr: { title: ToolTip },
-                    css: ActionBarIcon + '--button',
-                    click: ActionBinding">
-                    <span class="fa" data-bind="css: ActionBarIcon"></span>
-                    <span class="command-name" data-bind="text: Description"></span>
-                </div>
-            </div>
-            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
-                <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
-                    attr: { title: ToolTip },
-                    click: ActionBinding">
-                    <span class="fa" data-bind="css: ActionBarIcon"></span>
-                    <span class="command-name" data-bind="text: Description"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="toolbar-container" data-bind="react: {
+        component: toolbarComponent()
+    }"></div>
     <div class="left-column">
         <!-- ko if: LibrariesVisible -->
         <div class="libraries" data-bind="react: {

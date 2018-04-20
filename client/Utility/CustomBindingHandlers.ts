@@ -23,8 +23,12 @@ export function RegisterBindingHandlers() {
     ko.bindingHandlers.focusOnRender = {
         update: (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: TrackerViewModel, bindingContext?: KnockoutBindingContext) => {
             ComponentLoader.AfterComponentLoaded(() => {
-                $(element).find(valueAccessor()).get(0).focus();
-                $(element).find(valueAccessor()).first().select();
+                const focusTarget = $(element).find(valueAccessor());
+                if (focusTarget.length == 0) {
+                    return;
+                }
+                focusTarget.get(0).focus();
+                focusTarget.first().select();
             });
         }
     };
