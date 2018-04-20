@@ -5,10 +5,10 @@ import { Command } from "../Command";
 interface ToolbarProps {
     encounterCommands: Command[];
     combatantCommands: Command[];
+    displayMode: "narrow" | "wide";
 }
 
 interface ToolbarState {
-    displayWide: boolean;
     widthStyle: string;
 }
 
@@ -19,22 +19,17 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
     constructor(props: ToolbarProps) {
         super(props);
         this.state = {
-            displayWide: false,
             widthStyle: null
         };
     }
 
     public componentDidMount() {
         const width = this.outerElement.offsetWidth + this.innerElement.offsetWidth - this.innerElement.clientWidth;
-        this.setState({widthStyle: width.toString() + "px"});
-    }
-
-    private toggleWidth = () => {
-        this.setState({ displayWide: !this.state.displayWide });
+        this.setState({ widthStyle: width.toString() + "px" });
     }
 
     public render() {
-        const className = this.state.displayWide ? "toolbar s-wide" : "toolbar s-narrow";
+        const className = `toolbar s-${this.props.displayMode}`;
         const commandToButton = (c: Command) => <Button key={c.Description} onClick={c.ActionBinding} additionalClassNames={c.ActionBarIcon} />;
         const encounterCommandButtons = this.props.encounterCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);
         const combatantCommandButtons = this.props.combatantCommands.filter(c => c.ShowOnActionBar()).map(commandToButton);

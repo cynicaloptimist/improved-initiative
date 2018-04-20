@@ -6,6 +6,7 @@ import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
+import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
@@ -18,7 +19,6 @@ import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
-import { Toolbar } from "./Commands/components/Toolbar";
 
 interface PatreonPostAttributes {
     title: string;
@@ -93,7 +93,7 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
-    
+
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     private addCombatantViewModel = (combatant: Combatant) => {
@@ -102,7 +102,7 @@ export class TrackerViewModel {
         return vm;
     }
 
-    private removeCombatantViewModels = (viewModels: CombatantViewModel []) => {
+    private removeCombatantViewModels = (viewModels: CombatantViewModel[]) => {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
@@ -133,15 +133,6 @@ export class TrackerViewModel {
     public SettingsVisible = ko.observable(false);
     public LibrariesVisible = ko.observable(true);
     public ToolbarWide = ko.observable(false);
-    public ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
-    public ToolbarWidth = (el: HTMLElement) => {
-        if (this.ToolbarWide()) {
-            return "";
-        } else {
-            const width = el.parentElement.offsetWidth + el.offsetWidth - el.clientWidth;
-            return width.toString() + "px";
-        }
-    }
 
     public DisplayLogin = !env.IsLoggedIn;
 
@@ -218,11 +209,12 @@ export class TrackerViewModel {
         return "show-center-right-left";
     });
 
-    private toolbarComponent: React.ComponentElement<any, Toolbar> = React.createElement(Toolbar,
+    private toolbarComponent = ko.computed(() => React.createElement(Toolbar,
         {
             encounterCommands: this.EncounterCommander.Commands,
-            combatantCommands: this.CombatantCommander.Commands
-        });;
+            combatantCommands: this.CombatantCommander.Commands,
+            displayMode: this.ToolbarWide() ? "wide" : "narrow",
+        }));
 
     private contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
