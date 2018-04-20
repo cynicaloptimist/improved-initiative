@@ -214,6 +214,7 @@ export class TrackerViewModel {
             encounterCommands: this.EncounterCommander.Commands,
             combatantCommands: this.CombatantCommander.Commands,
             width: this.ToolbarWide() ? "wide" : "narrow",
+            showCombatantCommands: this.CombatantCommander.HasSelected()
         }));
 
     private contextualCommandSuggestion = () => {

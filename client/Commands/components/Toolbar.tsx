@@ -49,9 +49,11 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
                 <div className="commands-encounter">
                     {encounterCommandButtons}
                 </div>
-                <div className="commands-combatant">
-                    {combatantCommandButtons}
-                </div>
+                {this.props.showCombatantCommands &&
+                    <div className="commands-combatant">
+                        {combatantCommandButtons}
+                    </div>
+                }    
             </div>
         </div>;
     }
