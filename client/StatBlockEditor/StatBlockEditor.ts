@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 
@@ -38,11 +39,8 @@ export class StatBlockEditor {
     }
 
     private getAsJSON = (statBlock: StatBlock): string => {
-        delete statBlock.Id;
-        delete statBlock.Path;
-        delete statBlock.Version;
-        delete statBlock.Player;
-        return JSON.stringify(statBlock, null, 2);
+        const partialStatBlock = _.omit(statBlock, ["Id", "Path", "Version", "Player"]);
+        return JSON.stringify(partialStatBlock, null, 2);
     }
 
     private makeEditable = (statBlock: StatBlock) => {
