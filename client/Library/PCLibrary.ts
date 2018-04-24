@@ -25,7 +25,7 @@ export class PCLibrary {
         $.getJSON(url, (json: StatBlock[]) => {
             const listings = json.map((statBlock, index) => {
                 statBlock = { ...StatBlock.Default(), ...statBlock };
-                return new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Path, statBlock.Type, null, "server", statBlock);
+                return new Listing<StatBlock>(index.toString(), statBlock.Name, "Sample Player Characters", statBlock.Type, null, "server", statBlock);
             });
             ko.utils.arrayPushAll(this.StatBlocks, listings);
         });
