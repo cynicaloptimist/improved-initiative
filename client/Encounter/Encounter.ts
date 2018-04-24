@@ -90,28 +90,23 @@ export class Encounter {
         return _.max(groupBonuses) || combatant.InitiativeBonus;
     }
 
+    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
+        if (stable) {
+            return [c => c.Initiative()];
+        } else {
+            return [
+                c => c.Initiative(),
+                c => this.getGroupBonusForCombatant(c),
+                c => c.InitiativeBonus,
+                c => c.InitiativeGroup(),
+                c => c.DisplayName()
+            ];
+        }
+    }
+
     public SortByInitiative = (stable = false) => {
-        this.Combatants.sort((l, r) => {
-            const byCurrentInitiative = r.Initiative() - l.Initiative();
-            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
-            const rGroup = r.InitiativeGroup(), lGroup = l.InitiativeGroup();
-
-            if (stable) {
-                return byCurrentInitiative;
-            }
-
-            if (rGroup == null && lGroup == null) {
-                return byCurrentInitiative || byBonus;
-            }
-
-            const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
-            const byGroupName = (rGroup || "NULL").localeCompare(lGroup || "NULL");
-            
-            return byCurrentInitiative ||
-                byGroupBonus ||
-                byGroupName ||
-                byBonus;
-        });
+        const sortedCombatants = _.sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
+        this.Combatants(sortedCombatants);
         this.QueueEmitEncounter();
     }
 
