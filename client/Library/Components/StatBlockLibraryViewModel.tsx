@@ -8,6 +8,7 @@ import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { NPCLibrary } from "../NPCLibrary";
 import { PCLibrary } from "../PCLibrary";
+import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
@@ -108,21 +109,25 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         }
     }
 
+    private buildListingComponent = (l: Listing<StatBlock>) => <ListingViewModel
+        key={l.Id}
+        name={l.CurrentName()}
+        onAdd={this.loadSavedStatBlock}
+        onEdit={this.editStatBlock}
+        onPreview={this.previewStatblock}
+        onPreviewOut={this.onPreviewOut}
+        listing={l} />
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
+        const listingAndFolderComponents = BuildListingTree(this.buildListingComponent, filteredListings);
+
         const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel
-                    key={l.Id}
-                    name={l.CurrentName()}
-                    onAdd={this.loadSavedStatBlock}
-                    onEdit={this.editStatBlock}
-                    onPreview={this.previewStatblock}
-                    onPreviewOut={this.onPreviewOut}
-                    listing={l} />)}
+                {listingAndFolderComponents}
             </ul>
             <div className="buttons">
                 <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
