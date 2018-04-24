@@ -16,9 +16,7 @@ export class PCLibrary {
 
         ko.utils.arrayPushAll(this.StatBlocks, listings);
 
-        if (this.StatBlocks().length == 0) {
-            this.addSamplePlayersFromUrl("/sample_players.json");
-        }
+        this.addSamplePlayersFromUrl("/sample_players.json");
     }
 
     private addSamplePlayersFromUrl = (url: string) => {
