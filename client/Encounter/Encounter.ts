@@ -95,9 +95,9 @@ export class Encounter {
             return [c => c.Initiative()];
         } else {
             return [
-                c => c.Initiative(),
-                c => this.getGroupBonusForCombatant(c),
-                c => c.InitiativeBonus,
+                c => -c.Initiative(),
+                c => -this.getGroupBonusForCombatant(c),
+                c => -c.InitiativeBonus,
                 c => c.InitiativeGroup(),
                 c => c.DisplayName()
             ];
