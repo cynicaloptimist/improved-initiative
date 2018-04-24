@@ -99,7 +99,8 @@ export class Encounter {
                 c => -this.getGroupBonusForCombatant(c),
                 c => -c.InitiativeBonus,
                 c => c.InitiativeGroup(),
-                c => c.DisplayName()
+                c => c.StatBlock().Name,
+                c => c.IndexLabel
             ];
         }
     }
