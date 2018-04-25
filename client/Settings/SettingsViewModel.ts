@@ -4,7 +4,6 @@ import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
-import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
@@ -47,7 +46,6 @@ export class SettingsViewModel {
     public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
     public HpVerbosityOptions: string[];
     public HpVerbosity: KnockoutObservable<string>;
-    public EncounterCommands: Command[];
     public CombatantCommands: Command[];
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
@@ -87,7 +85,7 @@ export class SettingsViewModel {
         });
 
         return {
-            Commands: [...this.EncounterCommands, ...this.CombatantCommands].map(getCommandSetting),
+            Commands: [...this.encounterCommands, ...this.CombatantCommands].map(getCommandSetting),
             Rules: {
                 AllowNegativeHP: this.AllowNegativeHP(),
                 AutoCheckConcentration: this.AutoCheckConcentration(),
@@ -121,7 +119,7 @@ export class SettingsViewModel {
     }
 
     constructor(
-        private encounterCommander: EncounterCommander,
+        private encounterCommands: Command [],
         private combatantCommander: CombatantCommander,
         private libraries: Libraries,
         private settingsVisible: KnockoutObservable<boolean>,
@@ -139,7 +137,6 @@ export class SettingsViewModel {
             currentTipIndex(newIndex);
         }
 
-        this.EncounterCommands = encounterCommander.Commands;
         this.CombatantCommands = combatantCommander.Commands;
 
         this.RepeatTutorial = repeatTutorial;

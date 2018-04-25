@@ -37,7 +37,7 @@ interface PatreonPost {
 
 export class TrackerViewModel {
     constructor() {
-        ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
+        ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
 
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
             const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
@@ -94,6 +94,7 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
+    public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
 
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
@@ -223,7 +224,7 @@ export class TrackerViewModel {
 
         return React.createElement(Toolbar,
             {
-                encounterCommands: this.EncounterCommander.Commands.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
+                encounterCommands: this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
                 combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
                 width: this.ToolbarWide() ? "wide" : "narrow",
                 showCombatantCommands: this.CombatantCommander.HasSelected()
