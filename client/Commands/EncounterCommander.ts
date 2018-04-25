@@ -1,6 +1,7 @@
 import _ = require("lodash");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
+import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
@@ -12,21 +13,22 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
-import { BuildEncounterCommandList, Command } from "./Command";
 import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
-export class EncounterCommander {
-    public Commands: Command[];
-    private libraries: Libraries;
-    private accountClient = new AccountClient();
-
-    constructor(private tracker: TrackerViewModel) {
-        this.Commands = BuildEncounterCommandList(this);
-        this.libraries = tracker.Libraries;
+export class LibrariesCommander {
+    private accountClient: AccountClient;
+    constructor(
+        private tracker: TrackerViewModel,
+        private libraries: Libraries,
+        private encounterCommander: EncounterCommander) {
+        this.accountClient = new AccountClient();
     }
+
+    public ShowLibraries = () => this.tracker.LibrariesVisible(true);
+    public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
     public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
@@ -34,11 +36,6 @@ export class EncounterCommander {
             Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
-    }
-
-    public QuickAddStatBlock = () => {
-        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
-        this.tracker.PromptQueue.Add(prompt);
     }
 
     private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
@@ -99,7 +96,6 @@ export class EncounterCommander {
         }
     }
 
-
     public CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
         let statBlock = StatBlock.Default();
         let newId = probablyUniqueString();
@@ -145,6 +141,57 @@ export class EncounterCommander {
         });
     }
 
+    public ReferenceSpell = (spellListing: Listing<Spell>) => {
+        const prompt = new SpellPrompt(spellListing);
+        this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public LoadEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+        this.encounterCommander.LoadEncounter(savedEncounter);
+    }
+    
+    public SaveEncounter = () => {
+        const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
+            response => {
+                const encounterName = response["encounterName"];
+                const path = ""; //TODO
+                if (encounterName) {
+                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
+                    this.libraries.Encounters.Save(savedEncounter);
+                    this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
+                    Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
+                }
+            });
+        this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
+        const folderNames = _(this.libraries.Encounters.Encounters())
+            .map(e => e.Path)
+            .uniq()
+            .compact()
+            .value();
+        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
+        this.tracker.PromptQueue.Add(prompt);
+    }
+}
+
+export class EncounterCommander {
+    private accountClient = new AccountClient();
+
+    constructor(private tracker: TrackerViewModel) {}
+
+    public AddStatBlockFromListing = (statBlock: StatBlock, hideOnAdd: boolean) => {
+        this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
+        Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
+        this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
+    }
+
+    public QuickAddStatBlock = () => {
+        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
+        this.tracker.PromptQueue.Add(prompt);
+    }
+
     public ShowLibraries = () => this.tracker.LibrariesVisible(true);
     public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
@@ -161,11 +208,6 @@ export class EncounterCommander {
 
     public ToggleToolbarWidth = () => {
         this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
-    }
-
-    public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPrompt(spellListing);
-        this.tracker.PromptQueue.Add(prompt);
     }
 
     public DisplayRoundCounter = ko.computed(() => CurrentSettings().TrackerView.DisplayRoundCounter);
@@ -217,31 +259,6 @@ export class EncounterCommander {
         }
 
         return false;
-    }
-
-    public SaveEncounter = () => {
-        const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-            response => {
-                const encounterName = response["encounterName"];
-                const path = ""; //TODO
-                if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
-                    this.libraries.Encounters.Save(savedEncounter);
-                    this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
-                    Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
-                }
-            });
-        this.tracker.PromptQueue.Add(prompt);
-    }
-
-    public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-        const folderNames = _(this.libraries.Encounters.Encounters())
-            .map(e => e.Path)
-            .uniq()
-            .compact()
-            .value();
-        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
-        this.tracker.PromptQueue.Add(prompt);
     }
 
     public LoadEncounter = (legacySavedEncounter: {}) => {

@@ -4,7 +4,8 @@ import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { CombatantCommander } from "./Commands/CombatantCommander";
-import { EncounterCommander } from "./Commands/EncounterCommander";
+import { BuildEncounterCommandList } from "./Commands/Command";
+import { EncounterCommander, LibrariesCommander } from "./Commands/EncounterCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
@@ -94,6 +95,7 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
+    public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
     public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
 
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
@@ -112,7 +114,7 @@ export class TrackerViewModel {
 
     public StatBlockTextEnricher = new StatBlockTextEnricher(
         this.CombatantCommander.RollDice,
-        this.EncounterCommander.ReferenceSpell,
+        this.LibrariesCommander.ReferenceSpell,
         this.Libraries.Spells,
         this.Rules);
     
@@ -126,7 +128,7 @@ export class TrackerViewModel {
     );
 
     public librariesComponent = React.createElement(LibrariesComponent, {
-        encounterCommander: this.EncounterCommander,
+        librariesCommander: this.LibrariesCommander,
         libraries: this.Libraries,
         statBlockTextEnricher: this.StatBlockTextEnricher
     });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/EncounterCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";
@@ -14,7 +14,7 @@ import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
 
 export type StatBlockLibraryViewModelProps = {
-    encounterCommander: EncounterCommander;
+    librariesCommander: LibrariesCommander;
     library: PCLibrary | NPCLibrary;
     statBlockTextEnricher: StatBlockTextEnricher;
 };
@@ -58,12 +58,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     private librarySubscription: KnockoutSubscription;
 
     private loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
-        this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
+        this.props.librariesCommander.AddStatBlockFromListing(listing, hideOnAdd);
     }
 
     private editStatBlock = (l: Listing<StatBlock>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.encounterCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters);
+        this.props.librariesCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters);
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
@@ -130,8 +130,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 {listingAndFolderComponents}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
+                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
             </div>
             {previewVisible &&
                 <Overlay

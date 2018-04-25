@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/EncounterCommander";
 import { Spell } from "../../Spell/Spell";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
@@ -9,7 +9,7 @@ import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
 
 export type SpellLibraryViewModelProps = {
-    encounterCommander: EncounterCommander;
+    librariesCommander: LibrariesCommander;
     library: SpellLibrary;
 };
 
@@ -44,12 +44,12 @@ export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModel
     private librarySubscription: KnockoutSubscription;
 
     private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
-        this.props.encounterCommander.ReferenceSpell(listing);
+        this.props.librariesCommander.ReferenceSpell(listing);
     }
 
     private editSpell = (l: Listing<Spell>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.encounterCommander.EditSpell(l);
+        this.props.librariesCommander.EditSpell(l);
     }
 
     public render() {
@@ -66,8 +66,8 @@ export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModel
                     listing={l} />)}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditSpell()} />
+                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
             </div>
         </div>);
     }
