@@ -22,7 +22,7 @@ export const TutorialSteps: TutorialStep[] = [
     },
     {
         Message: "When you're ready to add some adventurers, select the <strong>Players</strong> tab at the top of the library.",
-        RaiseSelector: ".libraries .tabs span",
+        RaiseSelector: ".libraries .c-tabs span",
         AwaitAction: "SelectPlayersTab",
         CalculatePosition: elements => {
             const element = elements.last();
