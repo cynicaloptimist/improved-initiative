@@ -1,4 +1,3 @@
-import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
