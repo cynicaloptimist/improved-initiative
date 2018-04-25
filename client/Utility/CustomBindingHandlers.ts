@@ -4,10 +4,8 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { ComponentLoader } from "./Components";
 import { TextAssets } from "./TextAssets";
 
-declare var markdownit: any;
-
 export function RegisterBindingHandlers() {
-    const reactHandler = ko.bindingHandlers.react = {
+    ko.bindingHandlers.react = {
         init: function () {
             return { controlsDescendantBindings: true };
         },
