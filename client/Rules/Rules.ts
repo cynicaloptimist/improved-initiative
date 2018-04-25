@@ -57,7 +57,7 @@ export class Dice {
         }
 
         const isLooseModifier = typeof match[4] == "string";
-        if (match[4]) {
+        if (match[4] && isLooseModifier) {
             const modifier = parseInt(match[4].replace(/[\s]*/g, ""));
             const d20Roll = Math.ceil(Math.random() * 20);
             return new RollResult([d20Roll], modifier, 20);
