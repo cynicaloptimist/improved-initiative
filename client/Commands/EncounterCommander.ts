@@ -1,26 +1,14 @@
-import _ = require("lodash");
-import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
-import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
-import { Libraries } from "../Library/Libraries";
-import { Listing } from "../Library/Listing";
 import { CurrentSettings } from "../Settings/Settings";
-import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
-import { Store } from "../Utility/Store";
-import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
-import { DefaultPrompt } from "./Prompts/Prompt";
 import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
-import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class EncounterCommander {
-    private accountClient = new AccountClient();
-
     constructor(private tracker: TrackerViewModel) {}
 
     public AddStatBlockFromListing = (statBlock: StatBlock, hideOnAdd: boolean) => {
