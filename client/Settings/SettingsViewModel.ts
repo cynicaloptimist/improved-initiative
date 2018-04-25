@@ -74,7 +74,6 @@ export class SettingsViewModel {
         }
     }
 
-    public RepeatTutorial: () => void;
     public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
     private getUpdatedSettings(): Settings {
@@ -123,7 +122,7 @@ export class SettingsViewModel {
         private combatantCommander: CombatantCommander,
         private libraries: Libraries,
         private settingsVisible: KnockoutObservable<boolean>,
-        private repeatTutorial: () => void,
+        protected repeatTutorial: () => void,
     ) {
         const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
@@ -138,8 +137,6 @@ export class SettingsViewModel {
         }
 
         this.CombatantCommands = combatantCommander.Commands;
-
-        this.RepeatTutorial = repeatTutorial;
 
         const currentSettings = CurrentSettings();
 
