@@ -29,7 +29,7 @@ export class StatBlockEditor {
         };
 
         this.statBlock = { ...StatBlock.Default(), ...statBlock };
-        
+
         this.JsonStatBlock(this.getAsJSON(statBlock));
         this.EditableStatBlock(this.makeEditable(this.statBlock));
 
@@ -101,7 +101,7 @@ export class StatBlockEditor {
                 }
                 editableStatBlock[key].Value(acInt);
             }
-            
+
             if (key == "InitiativeModifier") {
                 let initInt = parseInt(editableStatBlock[key]());
                 if (isNaN(initInt)) {
@@ -137,17 +137,20 @@ export class StatBlockEditor {
                 alert(`Couldn't parse JSON from advanced editor.`);
                 return;
             }
+            
             $.extend(editedStatBlock, statBlockFromJSON);
+
+            editedStatBlock.Id = this.preservedProperties.Id;
+            editedStatBlock.Path = this.preservedProperties.Path;
+            editedStatBlock.Player = this.preservedProperties.Player;
+            editedStatBlock.Version = StatBlock.Default().Version;
         }
         if (this.EditorType() === "basic") {
             $.extend(editedStatBlock, this.unMakeEditable(this.EditableStatBlock()));
         }
 
-        editedStatBlock.Id = this.preservedProperties.Id;
-        editedStatBlock.Path = this.preservedProperties.Path;
-        editedStatBlock.Player = this.preservedProperties.Player;
-        editedStatBlock.Version = StatBlock.Default().Version;
-        
+
+
         this.saveCallback(editedStatBlock);
         this.EditableStatBlock(null);
     }
