@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LibrariesCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";

@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import { LibrariesCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";

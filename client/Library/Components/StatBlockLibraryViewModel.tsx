@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LibrariesCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";

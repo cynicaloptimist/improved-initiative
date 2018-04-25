@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LibrariesCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Spell } from "../../Spell/Spell";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
