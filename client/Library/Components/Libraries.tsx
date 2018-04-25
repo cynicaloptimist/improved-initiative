@@ -5,6 +5,7 @@ import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
+import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
 import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
@@ -30,7 +31,12 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
     }
 
     private hideLibraries = () => this.props.encounterCommander.HideLibraries();
-    private selectLibrary = (library: string) => this.setState({ selectedLibrary: library });
+    private selectLibrary = (library: string) => {
+        if (library == "Players") {
+            TutorialSpy("SelectPlayersTab");
+        }
+        this.setState({ selectedLibrary: library });
+    }
 
     public render() {
         const libraries = {
