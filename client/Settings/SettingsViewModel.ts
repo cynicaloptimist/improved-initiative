@@ -161,10 +161,10 @@ export class SettingsViewModel {
         this.NextTip = cycleTipIndex.bind(1);
         this.PreviousTip = cycleTipIndex.bind(-1);
 
-        this.createCustomCSSEditorComponent(currentSettings);
+        this.createEpicInitiativeSettingsComponent(currentSettings);
     }
 
-    private createCustomCSSEditorComponent(currentSettings: Settings) {
+    private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
         this.currentCSS = currentSettings.PlayerView.CustomCSS;
         this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
         const updateCSS = (css: string) => {
