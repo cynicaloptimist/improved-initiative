@@ -61,6 +61,8 @@ function getDefaultSettings(): Settings {
             HideMonstersOutsideEncounter: false,
             DisplayRoundCounter: false,
             DisplayTurnTimer: false,
+            DisplayPortraits: false,
+            SplashPortraits: false,
             CustomCSS: "",
             CustomStyles: {
                 combatantBackground: "",
