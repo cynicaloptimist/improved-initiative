@@ -28,7 +28,7 @@ export class EpicInitiativeSettings extends React.Component<EpicInitiativeSettin
     }
 
     public render() {
-        return <div className="custom-css-editor">
+        return <div className="c-epic-initiative-settings">
             <p>Epic Initiative is enabled.</p>
             <StylesChooser currentStyles={this.props.currentStyles} updateStyle={this.props.updateStyle} />
             <h4>Additional CSS <strong>(experimental)</strong></h4>
