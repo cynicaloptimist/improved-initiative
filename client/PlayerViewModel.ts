@@ -28,6 +28,8 @@ export class PlayerViewModel {
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
+    private displayPortraits = ko.observable(false);
+    private splashPortraits = false;
 
     private imageModal = ko.observable<ImageModalState>({
         Visible: false,
@@ -86,6 +88,8 @@ export class PlayerViewModel {
         this.allowSuggestions(settings.AllowPlayerSuggestions);
         this.turnTimerVisible(settings.DisplayTurnTimer);
         this.roundCounterVisible(settings.DisplayRoundCounter);
+        this.displayPortraits(settings.DisplayPortraits);
+        this.splashPortraits = settings.SplashPortraits;
     }
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
