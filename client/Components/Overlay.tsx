@@ -8,13 +8,20 @@ interface OverlayProps {
     top?: number;
 }
 
-interface OverlayState { }
+interface OverlayState { 
+    height: number;
+}
 
 export class Overlay extends React.Component<OverlayProps, OverlayState> {
-    private height?: number;
+    constructor(props: OverlayProps) {
+        super(props);
+        this.state = {
+            height: null
+        };
+    }
 
     public render() {
-        const overflowAmount = Math.max((this.props.top || 0) + (this.height || 0) - window.innerHeight + 4, 0);
+        const overflowAmount = Math.max((this.props.top || 0) + this.state.height - window.innerHeight + 4, 0);
         const style: React.CSSProperties = {
             maxHeight: this.props.maxHeightPx || "100%",
             left: this.props.left || 0,
@@ -42,9 +49,10 @@ export class Overlay extends React.Component<OverlayProps, OverlayState> {
         let domElement = ReactDOM.findDOMNode(this);
         if (domElement instanceof Element) {
             let newHeight = domElement.getBoundingClientRect().height;
-            if (newHeight != this.height) {
-                this.height = newHeight;
-                this.forceUpdate();
+            if (newHeight != this.state.height) {
+                this.setState({ 
+                    height: newHeight,
+                });
             }
         }
     }
