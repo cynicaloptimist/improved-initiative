@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
@@ -52,8 +52,7 @@ export class SettingsViewModel {
     public AccountViewModel = new AccountViewModel(this.libraries);
 
     private epicInitiativeSettings: React.ComponentElement<any, EpicInitiativeSettings>;
-    private currentCSS: string;
-    private currentCustomStyles: PlayerViewCustomStyles;
+    private playerViewSettings: PlayerViewSettings;
     
     public ExportData = () => {
         let blob = Store.ExportAll();
@@ -97,13 +96,12 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.DisplayTurnTimer()
             },
             PlayerView: {
+                ...this.playerViewSettings,
                 AllowPlayerSuggestions: this.PlayerViewAllowPlayerSuggestions(),
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.currentCSS,
-                CustomStyles: this.currentCustomStyles
             },
             Version: process.env.VERSION
         };
@@ -165,20 +163,10 @@ export class SettingsViewModel {
     }
 
     private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
-        this.currentCSS = currentSettings.PlayerView.CustomCSS;
-        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
-        const updateCSS = (css: string) => {
-            this.currentCSS = css;
-        };
-        const updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
-            this.currentCustomStyles[name] = value;
-        };
+        this.playerViewSettings = currentSettings.PlayerView;
 
         const customCSSEditorProps: EpicInitiativeSettingsProps = {
-            currentCSS: this.currentCSS,
-            currentStyles: this.currentCustomStyles,
-            updateCSS,
-            updateStyle
+            playerViewSettings: this.playerViewSettings
         };
 
         this.epicInitiativeSettings = React.createElement(EpicInitiativeSettings, customCSSEditorProps);
