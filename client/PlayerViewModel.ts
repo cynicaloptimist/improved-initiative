@@ -104,7 +104,7 @@ export class PlayerViewModel {
             this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
             if (active.ImageURL && !this.imageModal().BlockAutoModal) {
-                this.ShowImageModal(encounter.ActiveCombatantId, false);
+                this.SplashPortrait(encounter.ActiveCombatantId, false);
                 this.imageModal({
                     ...this.imageModal(),
                     Timeout: setTimeout(this.CloseImageModal, 5000),
@@ -127,7 +127,11 @@ export class PlayerViewModel {
         this.combatantSuggestor.Show(combatant);
     }
 
-    private ShowImageModal = (SelectedId: string, didClick: boolean) => {
+    private SplashPortrait = (SelectedId: string, didClick: boolean) => {
+        if (!this.splashPortraits) {
+            return;
+        }
+
         const imageModal = this.imageModal();
         const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
         if (didClick) {
