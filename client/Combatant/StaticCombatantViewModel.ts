@@ -1,3 +1,4 @@
+import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
@@ -14,6 +15,7 @@ export interface StaticCombatantViewModel {
 }
 
 export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewModel {
+    const sendImage = env.HasEpicInitiative;
     return {
         Name: combatant.DisplayName(),
         Id: combatant.Id,
@@ -22,7 +24,7 @@ export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewMode
         Initiative: combatant.Initiative(),
         IsPlayerCharacter: combatant.IsPlayerCharacter,
         Tags: combatant.Tags().filter(t => t.Visible()),
-        ImageURL: combatant.StatBlock().ImageURL,
+        ImageURL: sendImage && combatant.StatBlock().ImageURL,
     };
 }
 
