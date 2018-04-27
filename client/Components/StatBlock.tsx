@@ -37,6 +37,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         ];
 
         const headerEntries = <React.Fragment>
+            {statBlock.ImageURL && <img className="portrait" src={statBlock.ImageURL} />}
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>

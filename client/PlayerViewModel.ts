@@ -2,10 +2,19 @@ import * as Color from "color";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
+import { Tag } from "./Combatant/Tag";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
+
+export interface ImageModalState {
+    Visible: boolean;
+    URL: string;
+    Caption: string;
+    Timeout: any;
+    BlockAutoModal: boolean;
+}
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
@@ -15,9 +24,18 @@ export class PlayerViewModel {
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
     private roundCounterVisible = ko.observable(false);
+    private hasImages: KnockoutObservable<boolean> = ko.observable(false);
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
+
+    private imageModal = ko.observable<ImageModalState>({
+        Visible: false,
+        URL: "",
+        Caption: "",
+        Timeout: null,
+        BlockAutoModal: false,
+    });
 
     private socket: SocketIOClient.Socket = io();
 
@@ -38,8 +56,17 @@ export class PlayerViewModel {
 
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
-            this.LoadEncounter(playerView.encounterState);
-            this.LoadSettings(playerView.settings);
+            if (!playerView) {
+                return;
+            }
+
+            if (playerView.encounterState) {
+                this.LoadEncounter(playerView.encounterState);    
+            }
+
+            if (playerView.settings) {
+                this.LoadSettings(playerView.settings);
+            }
         });
     }
 
@@ -63,13 +90,22 @@ export class PlayerViewModel {
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
+        this.hasImages(this.combatants().some(c => c.ImageURL.length > 0));
         this.roundCounter(encounter.RoundCounter);
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
             this.turnTimer.Reset();
         }
         if (encounter.ActiveCombatantId) {
-            this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
+            const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
+            this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
+            if (active.ImageURL && !this.imageModal().BlockAutoModal) {
+                this.ShowImageModal(encounter.ActiveCombatantId, false);
+                this.imageModal({
+                    ...this.imageModal(),
+                    Timeout: setTimeout(this.CloseImageModal, 5000),
+                });
+            }
         }
     }
 
@@ -85,6 +121,33 @@ export class PlayerViewModel {
             return;
         }
         this.combatantSuggestor.Show(combatant);
+    }
+
+    private ShowImageModal = (SelectedId: string, didClick: boolean) => {
+        const imageModal = this.imageModal();
+        const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
+        if (didClick) {
+            imageModal.BlockAutoModal = true;
+            imageModal.Caption = "";
+        } else {
+            imageModal.Caption = "Start of Turn: ";
+        }
+
+        const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
+        imageModal.Caption += `${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}`;
+        
+        imageModal.URL = combatant.ImageURL;
+        imageModal.Visible = true;
+
+        this.imageModal(imageModal);
+    }
+
+    private CloseImageModal = () => {
+        const imageModal = this.imageModal();
+        imageModal.Visible = false;
+        imageModal.BlockAutoModal = false;
+        clearTimeout(imageModal.Timeout);
+        this.imageModal(imageModal);
     }
 }
 

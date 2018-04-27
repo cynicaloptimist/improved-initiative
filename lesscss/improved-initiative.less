@@ -758,6 +758,14 @@ body>.login.button {
             }
         }
     }
+    .Portrait {
+        width: 100%;
+        max-height: 300px;
+    }
+
+    .Portrait img {
+        object-fit: scale-down;
+    }
 }
 
 .combat-footer {
@@ -813,6 +821,7 @@ body>.login.button {
     padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
+    align-items: center;
 
     &.animate {
         animation: slide-from-left 0.5s;
@@ -966,6 +975,12 @@ body>.login.button {
         width: 15vw;
     }
 
+    .portrait{
+        width: 50px;
+        max-height: 50px;
+        padding-right: 1vw;
+    }
+
     .header .tags {
         text-align: center;
     }
@@ -977,6 +992,36 @@ body>.login.button {
         >span {
             padding-right: @medium-spacer;
         }
+    }
+
+    .combatant-portrait {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .combatant-portrait-image {
+        width: 80%;
+        height: 80%;
+        max-width: 700px;
+        object-fit: scale-down;
+    }
+
+    .combatant-portrait-caption {
+        max-width: 700px;
+        padding: 10px 0;
+    }
+
+    /* Add Animation */
+    .combatant-portrait-image, .combatant-portrait-caption {
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @keyframes zoom {
+        from {transform:scale(0)}
+        to {transform:scale(1)}
     }
 }
 

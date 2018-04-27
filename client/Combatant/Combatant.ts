@@ -67,7 +67,6 @@ export class Combatant implements Combatant {
             }
         });
     }
-
     public Id = probablyUniqueString();
     public Alias = ko.observable("");
     public TemporaryHP = ko.observable(0);
@@ -76,7 +75,7 @@ export class Combatant implements Combatant {
     public InitiativeGroup = ko.observable<string>(null);
     public StatBlock = ko.observable<StatBlock>();
     public Hidden = ko.observable(false);
-
+    
     public IndexLabel: number;
     public MaxHP: number;
     public CurrentHP: KnockoutObservable<number>;
@@ -86,7 +85,6 @@ export class Combatant implements Combatant {
     public InitiativeBonus: number;
     public ConcentrationBonus: number;
     public IsPlayerCharacter = false;
-
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
