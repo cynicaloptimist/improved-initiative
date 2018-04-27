@@ -102,13 +102,12 @@ function getLegacySettings(): Settings {
             DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
         },
         PlayerView: {
+            ...defaultSettings.PlayerView,
             AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
             MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
-            CustomCSS: defaultSettings.PlayerView.CustomCSS,
-            CustomStyles: defaultSettings.PlayerView.CustomStyles
         },
         Version: defaultSettings.Version
     };
