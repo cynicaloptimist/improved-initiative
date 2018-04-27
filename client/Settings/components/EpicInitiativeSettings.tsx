@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ChangeEvent } from "react";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../../../common/PlayerViewSettings";
-import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
+import { LabelWithCheckbox } from "./LabelWithCheckbox";
 import { StylesChooser } from "./StylesChooser";
 
 export interface EpicInitiativeSettingsProps {
@@ -29,11 +29,16 @@ export class EpicInitiativeSettings extends React.Component<EpicInitiativeSettin
         this.props.playerViewSettings.CustomStyles[name] = value;
     }
 
+    private toggleDisplayPortraits = (s: boolean) => this.props.playerViewSettings.DisplayPortraits = s;
+    private toggleSplashPortraits = (s: boolean) => this.props.playerViewSettings.SplashPortraits = s;
+    
     public render() {
         return <div className="c-epic-initiative-settings">
             <p>Epic Initiative is enabled.</p>
             <h4>Player View Display Settings</h4>
-            <StylesChooser currentStyles={this.props.currentStyles} updateStyle={this.props.updateStyle} />
+            <LabelWithCheckbox text="Show combatant portraits" toggle={this.toggleDisplayPortraits} checked={this.props.playerViewSettings.DisplayPortraits} />
+            <LabelWithCheckbox text="Show turn start portrait splash" toggle={this.toggleSplashPortraits} checked={this.props.playerViewSettings.SplashPortraits} />
+            <StylesChooser currentStyles={this.props.playerViewSettings.CustomStyles} updateStyle={this.updateStyle} />
             <h4>Additional CSS <strong>(experimental)</strong></h4>
             <textarea rows={10} onChange={this.updateCSS} value={this.state.manualCSS} />
         </div>;
