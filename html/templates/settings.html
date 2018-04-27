@@ -136,7 +136,7 @@
     <!-- ko with: AccountViewModel -->
         <!-- ko if: IsLoggedIn -->
             <!-- ko if: HasEpicInitiative -->
-            <div data-bind="react: { component: $parent.customCSSEditor }"></div>
+            <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
             <!-- /ko -->
             <!-- ko ifnot: HasEpicInitiative -->
             <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level.</p>

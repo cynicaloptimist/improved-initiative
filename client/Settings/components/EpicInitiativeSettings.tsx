@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
 import { StylesChooser } from "./StylesChooser";
 
-export interface CustomCSSEditorProps {
+export interface EpicInitiativeSettingsProps {
     currentCSS: string;
     currentStyles: PlayerViewCustomStyles;
     updateCSS: (css: string) => void;
@@ -14,8 +14,8 @@ interface State {
     manualCSS: string;
 }
 
-export class CustomCSSEditor extends React.Component<CustomCSSEditorProps, State> {
-    constructor(props: CustomCSSEditorProps) {
+export class EpicInitiativeSettings extends React.Component<EpicInitiativeSettingsProps, State> {
+    constructor(props: EpicInitiativeSettingsProps) {
         super(props);
         this.state = {
             manualCSS: this.props.currentCSS

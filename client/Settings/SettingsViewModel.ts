@@ -8,7 +8,7 @@ import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
 import { hpVerbosityOptions, AutoGroupInitiativeOption, AutoGroupInitiativeOptions, CurrentSettings, Settings } from "./Settings";
-import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
+import { EpicInitiativeSettings, EpicInitiativeSettingsProps } from "./components/EpicInitiativeSettings";
 
 const tips = [
     "You can view command list and set keybindings on the 'Commands' tab.",
@@ -51,7 +51,7 @@ export class SettingsViewModel {
     public RollHp: KnockoutObservable<boolean>;
     public AccountViewModel = new AccountViewModel(this.libraries);
 
-    private customCSSEditor: React.ComponentElement<any, CustomCSSEditor>;
+    private epicInitiativeSettings: React.ComponentElement<any, EpicInitiativeSettings>;
     private currentCSS: string;
     private currentCustomStyles: PlayerViewCustomStyles;
     
@@ -174,13 +174,13 @@ export class SettingsViewModel {
             this.currentCustomStyles[name] = value;
         };
 
-        const customCSSEditorProps: CustomCSSEditorProps = {
+        const customCSSEditorProps: EpicInitiativeSettingsProps = {
             currentCSS: this.currentCSS,
             currentStyles: this.currentCustomStyles,
             updateCSS,
             updateStyle
         };
 
-        this.customCSSEditor = React.createElement(CustomCSSEditor, customCSSEditorProps);
+        this.epicInitiativeSettings = React.createElement(EpicInitiativeSettings, customCSSEditorProps);
     }
 }
