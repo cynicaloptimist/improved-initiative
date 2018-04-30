@@ -22,7 +22,7 @@ interface LibrariesState {
     selectedLibrary: string;
 }
 
-export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
+export class LibrariesViewModel extends React.Component<LibrariesProps, LibrariesState> {
     constructor(props) {
         super(props);
         this.state = {

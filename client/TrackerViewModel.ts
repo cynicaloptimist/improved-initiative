@@ -11,7 +11,7 @@ import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
-import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
+import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -128,7 +128,7 @@ export class TrackerViewModel {
         this.StatBlockTextEnricher
     );
 
-    public librariesComponent = React.createElement(LibrariesComponent, {
+    public librariesComponent = React.createElement(LibrariesViewModel, {
         librariesCommander: this.LibrariesCommander,
         libraries: this.Libraries,
         statBlockTextEnricher: this.StatBlockTextEnricher
