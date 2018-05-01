@@ -4,6 +4,8 @@ import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
+import { NPCLibrary } from "../Library/NPCLibrary";
+import { PCLibrary } from "../Library/PCLibrary";
 import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -45,61 +47,29 @@ export class LibrariesCommander {
         Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
     }
 
-    private createSaveNewStatBlockCallback = (store: string, statBlockId: string) => (newStatBlock: StatBlock) => {
-        const listing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, store, "localStorage", newStatBlock);
-        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-        if (store == Store.PlayerCharacters) {
-            this.libraries.PCs.StatBlocks.push(listing);
-            this.accountClient.SavePlayerCharacter(newStatBlock)
-                .then(r => {
-                    if (!r) return;
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
-                    this.libraries.PCs.StatBlocks.push(accountListing);
-                });
-        } else {
-            this.libraries.NPCs.StatBlocks.push(listing);
-            this.accountClient.SaveStatBlock(newStatBlock)
-                .then(r => {
-                    if (!r) return;
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
-                    this.libraries.NPCs.StatBlocks.push(accountListing);
-                });
-        }
-    }
-
-    private createSaveEditedStatBlockCallback = (store: string, listing: Listing<StatBlock>) => (newStatBlock: StatBlock) => {
-        if (store == Store.PlayerCharacters) {
-            return this.libraries.PCs.SaveEditedStatBlock(listing, newStatBlock);
-        } else {
-            return this.libraries.NPCs.SaveEditedStatBlock(listing, newStatBlock);
-        }
-    }
-
-    public CreateAndEditStatBlock = (storeName: string) => {
+    public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
         let statBlock = StatBlock.Default();
         let newId = probablyUniqueString();
 
-        if (storeName == "PlayerCharacters") {
+        if (library.StoreName == Store.PlayerCharacters) {
             statBlock.Name = "New Player Character";
             statBlock.Player = "player";
         } else {
             statBlock.Name = "New Creature";
         }
 
-        this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
+        this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, library.SaveNewStatBlock, () => { }, "global");
     }
 
     public EditStatBlock = (
         listing: Listing<StatBlock>,
-        storeName: string,
-        saveCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void
-    ) => {
+        library: PCLibrary | NPCLibrary) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, library.SaveNewStatBlock, () => { }, "global");
             } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveCallback(listing, editedStatBlock), this.deleteSavedStatBlock(storeName, listing.Id), "global");
+                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, s => library.SaveEditedStatBlock(listing, s), this.deleteSavedStatBlock(library.StoreName, listing.Id), "global");
             }
         });
     }

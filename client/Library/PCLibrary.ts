@@ -55,4 +55,10 @@ export class PCLibrary {
                 this.StatBlocks.push(accountListing);
             });
     }
+
+    public SaveNewStatBlock = (newStatBlock: StatBlock) => {
+        const listing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, this.StoreName, "localStorage");
+        this.StatBlocks.push(listing);
+        this.SaveEditedStatBlock(listing, newStatBlock);
+    }
 }
