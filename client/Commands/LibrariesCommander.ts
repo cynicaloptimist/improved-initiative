@@ -89,14 +89,14 @@ export class LibrariesCommander {
         }
     }
 
-    public EditStatBlock = (listing: Listing<StatBlock>, isPlayerCharacter: boolean) => {
+    public EditStatBlock = (listing: Listing<StatBlock>, isPlayerCharacter: boolean, saveEditedStatBlockCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void) => {
         const store = isPlayerCharacter ? Store.PlayerCharacters : Store.StatBlocks;
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(store, newId), () => { }, "global");
             } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, this.createSaveEditedStatBlockCallback(store, listing), this.deleteSavedStatBlock(store, listing.Id), "global");
+                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveEditedStatBlockCallback(listing, editedStatBlock), this.deleteSavedStatBlock(store, listing.Id), "global");
             }
         });
     }
