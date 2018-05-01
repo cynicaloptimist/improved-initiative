@@ -68,27 +68,10 @@ export class LibrariesCommander {
     }
 
     private createSaveEditedStatBlockCallback = (store: string, listing: Listing<StatBlock>) => (newStatBlock: StatBlock) => {
-        const statBlockId = listing.Id;
-        Store.Save<StatBlock>(store, statBlockId, newStatBlock);
-        listing.SetValue(newStatBlock);
         if (store == Store.PlayerCharacters) {
-            this.accountClient.SavePlayerCharacter(newStatBlock)
-                .then(r => {
-                    if (!r || listing.Origin === "account") {
-                        return;
-                    }
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
-                    this.libraries.PCs.StatBlocks.push(accountListing);
-                });
+            return this.libraries.PCs.SaveEditedStatBlock(listing, newStatBlock);
         } else {
-            this.accountClient.SaveStatBlock(newStatBlock)
-                .then(r => {
-                    if (!r || listing.Origin === "account") {
-                        return;
-                    }
-                    const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
-                    this.libraries.NPCs.StatBlocks.push(accountListing);
-                });
+            return this.libraries.NPCs.SaveEditedStatBlock(listing, newStatBlock);
         }
     }
 

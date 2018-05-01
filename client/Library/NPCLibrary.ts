@@ -30,4 +30,19 @@ export class NPCLibrary {
         Store.Delete(Store.StatBlocks, id);
         new AccountClient().DeleteStatBlock(id);
     }
+
+    public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        const statBlockId = listing.Id;
+        Store.Save<StatBlock>(Store.StatBlocks, statBlockId, newStatBlock);
+        listing.SetValue(newStatBlock);
+        new AccountClient().SaveStatBlock(newStatBlock)
+            .then(r => {
+                if (!r || listing.Origin === "account") {
+                    return;
+                }
+                const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/statblocks/${statBlockId}`, "account", newStatBlock);
+                this.StatBlocks.push(accountListing);
+            });
+
+    }
 }

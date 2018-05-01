@@ -40,4 +40,19 @@ export class PCLibrary {
         Store.Delete(Store.PlayerCharacters, id);
         new AccountClient().DeletePlayerCharacter(id);
     }
+
+    public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        const statBlockId = listing.Id;
+        Store.Save<StatBlock>(Store.PlayerCharacters, statBlockId, newStatBlock);
+        listing.SetValue(newStatBlock);
+
+        new AccountClient().SavePlayerCharacter(newStatBlock)
+            .then(r => {
+                if (!r || listing.Origin === "account") {
+                    return;
+                }
+                const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                this.StatBlocks.push(accountListing);
+            });
+    }
 }
