@@ -85,17 +85,21 @@ export class LibrariesCommander {
         } else {
             statBlock.Name = "New Creature";
         }
-        
+
         this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
     }
 
-    public EditStatBlock = (listing: Listing<StatBlock>, storeName: string, saveEditedStatBlockCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void) => {
+    public EditStatBlock = (
+        listing: Listing<StatBlock>,
+        storeName: string,
+        saveCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void
+    ) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
                 this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
             } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveEditedStatBlockCallback(listing, editedStatBlock), this.deleteSavedStatBlock(storeName, listing.Id), "global");
+                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveCallback(listing, editedStatBlock), this.deleteSavedStatBlock(storeName, listing.Id), "global");
             }
         });
     }
@@ -127,7 +131,7 @@ export class LibrariesCommander {
     public LoadEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
         this.encounterCommander.LoadEncounter(savedEncounter);
     }
-    
+
     public SaveEncounter = () => {
         const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
             response => {
