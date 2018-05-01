@@ -63,7 +63,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
 
     private editStatBlock = (l: Listing<StatBlock>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.librariesCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters, this.props.library.SaveEditedStatBlock);
+        this.props.librariesCommander.EditStatBlock(l, this.props.library.StoreName, this.props.library.SaveEditedStatBlock);
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
@@ -131,7 +131,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
             </ul>
             <div className="buttons">
                 <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library.StoreName)} />
             </div>
             {previewVisible &&
                 <Overlay

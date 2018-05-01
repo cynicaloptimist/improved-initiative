@@ -6,12 +6,12 @@ import { Listing, ListingOrigin } from "./Listing";
 
 export class PCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
-    public ContainsPlayerCharacters = true;
-
+    public readonly StoreName = Store.PlayerCharacters;
+    
     constructor() {
-        const listings = Store.List(Store.PlayerCharacters).map(id => {
-            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, Store.PlayerCharacters, "localStorage");
+        const listings = Store.List(this.StoreName).map(id => {
+            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(this.StoreName, id) };
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, this.StoreName, "localStorage");
         });
 
         ko.utils.arrayPushAll(this.StatBlocks, listings);
@@ -37,13 +37,13 @@ export class PCLibrary {
 
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
-        Store.Delete(Store.PlayerCharacters, id);
+        Store.Delete(this.StoreName, id);
         new AccountClient().DeletePlayerCharacter(id);
     }
 
     public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
         const statBlockId = listing.Id;
-        Store.Save<StatBlock>(Store.PlayerCharacters, statBlockId, newStatBlock);
+        Store.Save<StatBlock>(this.StoreName, statBlockId, newStatBlock);
         listing.SetValue(newStatBlock);
 
         new AccountClient().SavePlayerCharacter(newStatBlock)

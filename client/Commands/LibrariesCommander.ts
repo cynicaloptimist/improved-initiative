@@ -75,28 +75,27 @@ export class LibrariesCommander {
         }
     }
 
-    public CreateAndEditStatBlock = (isPlayerCharacter: boolean) => {
+    public CreateAndEditStatBlock = (storeName: string) => {
         let statBlock = StatBlock.Default();
         let newId = probablyUniqueString();
 
-        if (isPlayerCharacter) {
+        if (storeName == "PlayerCharacters") {
             statBlock.Name = "New Player Character";
             statBlock.Player = "player";
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(Store.PlayerCharacters, newId), () => { }, "global");
         } else {
             statBlock.Name = "New Creature";
-            this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(Store.StatBlocks, newId), () => { }, "global");
         }
+        
+        this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
     }
 
-    public EditStatBlock = (listing: Listing<StatBlock>, isPlayerCharacter: boolean, saveEditedStatBlockCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void) => {
-        const store = isPlayerCharacter ? Store.PlayerCharacters : Store.StatBlocks;
+    public EditStatBlock = (listing: Listing<StatBlock>, storeName: string, saveEditedStatBlockCallback: (listing: Listing<StatBlock>, newStatBlock: StatBlock) => void) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(store, newId), () => { }, "global");
+                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, this.createSaveNewStatBlockCallback(storeName, newId), () => { }, "global");
             } else {
-                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveEditedStatBlockCallback(listing, editedStatBlock), this.deleteSavedStatBlock(store, listing.Id), "global");
+                this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, editedStatBlock => saveEditedStatBlockCallback(listing, editedStatBlock), this.deleteSavedStatBlock(storeName, listing.Id), "global");
             }
         });
     }

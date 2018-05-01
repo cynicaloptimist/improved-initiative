@@ -6,15 +6,15 @@ import { Listing, ListingOrigin } from "./Listing";
 
 export class NPCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
-    public ContainsPlayerCharacters = false;
-
+    public readonly StoreName = Store.StatBlocks;
+    
     constructor() {
         $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
 
-        const localStatBlocks = Store.List(Store.StatBlocks);
+        const localStatBlocks = Store.List(this.StoreName);
         const listings = localStatBlocks.map(id => {
-            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.StatBlocks, id) };
-            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, Store.StatBlocks, "localStorage");
+            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(this.StoreName, id) };
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, this.StoreName, "localStorage");
         });
         ko.utils.arrayPushAll(this.StatBlocks, listings);
     }
@@ -27,13 +27,13 @@ export class NPCLibrary {
 
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
-        Store.Delete(Store.StatBlocks, id);
+        Store.Delete(this.StoreName, id);
         new AccountClient().DeleteStatBlock(id);
     }
 
     public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
         const statBlockId = listing.Id;
-        Store.Save<StatBlock>(Store.StatBlocks, statBlockId, newStatBlock);
+        Store.Save<StatBlock>(this.StoreName, statBlockId, newStatBlock);
         listing.SetValue(newStatBlock);
         new AccountClient().SaveStatBlock(newStatBlock)
             .then(r => {
