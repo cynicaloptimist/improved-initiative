@@ -13,6 +13,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
+import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
@@ -22,20 +23,6 @@ import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
-
-interface PatreonPostAttributes {
-    title: string;
-    content: string;
-    url: string;
-    created_at: string;
-    was_posted_by_campaign_owner: boolean;
-}
-
-interface PatreonPost {
-    attributes: PatreonPostAttributes;
-    id: string;
-    type: string;
-}
 
 export class TrackerViewModel {
     constructor() {
