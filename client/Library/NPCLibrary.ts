@@ -9,7 +9,7 @@ export class NPCLibrary {
     public ContainsPlayerCharacters = false;
 
     constructor() {
-        $.ajax("../statblocks/").done(s => this.AddStatBlockListings(s, "server"));
+        $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
 
         const localStatBlocks = Store.List(Store.StatBlocks);
         const listings = localStatBlocks.map(id => {
@@ -19,7 +19,7 @@ export class NPCLibrary {
         ko.utils.arrayPushAll(this.StatBlocks, listings);
     }
 
-    public AddStatBlockListings = (listings: ServerListing[], source: ListingOrigin) => {
+    public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<StatBlock>>(this.StatBlocks, listings.map(c => {
             return new Listing<StatBlock>(c.Id, c.Name, c.Path, c.SearchHint, c.Link, source);
         }));

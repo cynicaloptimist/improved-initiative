@@ -71,7 +71,7 @@ export class TrackerViewModel {
         }
 
         if (account.statblocks) {
-            this.Libraries.NPCs.AddStatBlockListings(account.statblocks, "account");
+            this.Libraries.NPCs.AddListings(account.statblocks, "account");
         }
 
         if (account.playercharacters) {
