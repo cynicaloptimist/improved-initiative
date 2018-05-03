@@ -41,7 +41,7 @@ export class PCLibrary {
         new AccountClient().DeletePlayerCharacter(id);
     }
 
-    public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+    private saveStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
         const statBlockId = listing.Id;
         Store.Save<StatBlock>(this.StoreName, statBlockId, newStatBlock);
         listing.SetValue(newStatBlock);
@@ -55,10 +55,14 @@ export class PCLibrary {
                 this.StatBlocks.push(accountListing);
             });
     }
+    
+    public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        this.saveStatBlock(listing, newStatBlock);
+    }
 
     public SaveNewStatBlock = (newStatBlock: StatBlock) => {
         const listing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, this.StoreName, "localStorage");
         this.StatBlocks.push(listing);
-        this.SaveEditedStatBlock(listing, newStatBlock);
+        this.saveStatBlock(listing, newStatBlock);
     }
 }
