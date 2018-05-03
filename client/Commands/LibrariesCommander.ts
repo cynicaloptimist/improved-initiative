@@ -94,7 +94,7 @@ export class LibrariesCommander {
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPrompt(spellListing);
+        const prompt = new SpellPrompt(spellListing, this.tracker.StatBlockTextEnricher);
         this.tracker.PromptQueue.Add(prompt);
     }
 
