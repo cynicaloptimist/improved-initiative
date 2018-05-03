@@ -42,8 +42,11 @@ export class PCLibrary {
     }
 
     private saveStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
-        const statBlockId = listing.Id;
-        Store.Save<StatBlock>(this.StoreName, statBlockId, newStatBlock);
+        listing.Id = newStatBlock.Id;
+        listing.Path = newStatBlock.Path;
+        this.StatBlocks.push(listing);
+
+        Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
         listing.SetValue(newStatBlock);
 
         new AccountClient().SavePlayerCharacter(newStatBlock)
@@ -51,18 +54,18 @@ export class PCLibrary {
                 if (!r || listing.Origin === "account") {
                     return;
                 }
-                const accountListing = new Listing<StatBlock>(statBlockId, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${statBlockId}`, "account", newStatBlock);
+                const accountListing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${newStatBlock.Id}`, "account", newStatBlock);
                 this.StatBlocks.push(accountListing);
             });
     }
     
     public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        this.StatBlocks.remove(listing);
         this.saveStatBlock(listing, newStatBlock);
     }
 
     public SaveNewStatBlock = (newStatBlock: StatBlock) => {
         const listing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, this.StoreName, "localStorage");
-        this.StatBlocks.push(listing);
         this.saveStatBlock(listing, newStatBlock);
     }
 }
