@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { StatBlock } from "../../StatBlock/StatBlock";
@@ -8,12 +8,13 @@ import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { NPCLibrary } from "../NPCLibrary";
 import { PCLibrary } from "../PCLibrary";
+import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
 
 export type StatBlockLibraryViewModelProps = {
-    encounterCommander: EncounterCommander;
+    librariesCommander: LibrariesCommander;
     library: PCLibrary | NPCLibrary;
     statBlockTextEnricher: StatBlockTextEnricher;
 };
@@ -57,12 +58,12 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     private librarySubscription: KnockoutSubscription;
 
     private loadSavedStatBlock = (listing: StatBlockListing, hideOnAdd: boolean) => {
-        this.props.encounterCommander.AddStatBlockFromListing(listing, hideOnAdd);
+        this.props.librariesCommander.AddStatBlockFromListing(listing, hideOnAdd);
     }
 
     private editStatBlock = (l: Listing<StatBlock>) => {
         l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.encounterCommander.EditStatBlock(l, this.props.library.ContainsPlayerCharacters);
+        this.props.librariesCommander.EditStatBlock(l, this.props.library);
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
@@ -88,7 +89,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 ...StatBlock.Default(),
                 ...partialStatBlock,
             };
-            
+
             this.setState({
                 previewedStatBlock: statBlock,
             });
@@ -108,33 +109,40 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         }
     }
 
+    private buildListingComponent = (l: Listing<StatBlock>) => <ListingViewModel
+        key={l.Id}
+        name={l.CurrentName()}
+        onAdd={this.loadSavedStatBlock}
+        onEdit={this.editStatBlock}
+        onPreview={this.previewStatblock}
+        onPreviewOut={this.onPreviewOut}
+        listing={l} />
+
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
+        const listingAndFolderComponents = BuildListingTree(this.buildListingComponent, filteredListings);
+
         const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel
-                    key={l.Id}
-                    name={l.CurrentName()}
-                    onAdd={this.loadSavedStatBlock}
-                    onEdit={this.editStatBlock}
-                    onPreview={this.previewStatblock}
-                    onPreviewOut={this.onPreviewOut}
-                    listing={l} />)}
+                {listingAndFolderComponents}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.encounterCommander.CreateAndEditStatBlock(this.props.library.ContainsPlayerCharacters)} />
+                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library)} />
             </div>
             {previewVisible &&
                 <Overlay
-                handleMouseEvents={this.handlePreviewMouseEvent}
-                maxHeightPx={300}
-                left={this.state.previewPosition.left}
-                top={this.state.previewPosition.top}>
-                    <StatBlockComponent statBlock={this.state.previewedStatBlock} enricher={this.props.statBlockTextEnricher} />
+                    handleMouseEvents={this.handlePreviewMouseEvent}
+                    maxHeightPx={300}
+                    left={this.state.previewPosition.left}
+                    top={this.state.previewPosition.top}>
+                    <StatBlockComponent
+                        statBlock={this.state.previewedStatBlock}
+                        enricher={this.props.statBlockTextEnricher}
+                        displayMode="default" />
                 </Overlay>
             }
         </div>);

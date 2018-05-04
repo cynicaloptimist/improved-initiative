@@ -1,9 +1,10 @@
+import React = require("react");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { StatBlockComponent } from "../Components/StatBlock";
 import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
@@ -40,12 +41,16 @@ export class CombatantCommander {
     public HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
     public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-    public StatBlock: KnockoutComputed<StatBlock> = ko.pureComputed(() => {
+    public StatBlock = ko.pureComputed(() => {
         let selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
-            return selectedCombatants[0].Combatant.StatBlock();
+            return React.createElement(StatBlockComponent, {
+                statBlock: selectedCombatants[0].Combatant.StatBlock(),
+                enricher: this.tracker.StatBlockTextEnricher,
+                displayMode: "default"
+            });
         } else {
-            return StatBlock.Default();
+            return null;
         }
     });
 
@@ -267,9 +272,9 @@ export class CombatantCommander {
 
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
-            let selectedCombatant = this.SelectedCombatants()[0];
-            this.tracker.StatBlockEditor.EditStatBlock(null, this.StatBlock(), (newStatBlock) => {
-                selectedCombatant.Combatant.StatBlock(newStatBlock);
+            let selectedCombatant = this.SelectedCombatants()[0].Combatant;
+            this.tracker.StatBlockEditor.EditStatBlock(null, selectedCombatant.StatBlock(), (newStatBlock) => {
+                selectedCombatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();
             }, () => {
                 this.Remove();

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
@@ -12,7 +12,7 @@ import { ListingViewModel } from "./Listing";
 import { ListingButton } from "./ListingButton";
 
 export type EncounterLibraryViewModelProps = {
-    encounterCommander: EncounterCommander;
+    librariesCommander: LibrariesCommander;
     library: EncounterLibrary;
 };
 
@@ -90,7 +90,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     }
 
     private loadSavedEncounter = (listing: EncounterListing) => {
-        listing.GetAsyncWithUpdatedId(savedEncounter => this.props.encounterCommander.LoadEncounter(savedEncounter));
+        listing.GetAsyncWithUpdatedId(this.props.librariesCommander.LoadEncounter);
     }
 
     private deleteListing = (listing: EncounterListing) => {
@@ -100,7 +100,7 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
     }
 
     private moveListing = (listing: EncounterListing) => {
-        listing.GetAsyncWithUpdatedId(savedEncounter => this.props.encounterCommander.MoveEncounter(savedEncounter));
+        listing.GetAsyncWithUpdatedId(savedEncounter => this.props.librariesCommander.MoveEncounter(savedEncounter));
     }
 
     private buildListingComponent = (listing: EncounterListing) =>
@@ -126,8 +126,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 {listingAndFolderComponents}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.encounterCommander.HideLibraries()} />
-                <ListingButton buttonClass="save" faClass="plus" onClick={() => this.props.encounterCommander.SaveEncounter()} />
+                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <ListingButton buttonClass="save" faClass="plus" onClick={() => this.props.librariesCommander.SaveEncounter()} />
             </div>
             {previewVisible &&
                 <Overlay

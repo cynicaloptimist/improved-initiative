@@ -8,7 +8,7 @@ import { Listing, ListingOrigin } from "./Listing";
 export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
     public SpellsByNameRegex = ko.computed(() => {
-        const allSpellNames = this.Spells().map(s => _.escapeRegExp(s.Name));
+        const allSpellNames = this.Spells().map(s => _.escapeRegExp(s.Name)).sort((a, b) => b.localeCompare(a));
         if (allSpellNames.length === 0) {
             return new RegExp("a^");
         }

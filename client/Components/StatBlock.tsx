@@ -5,6 +5,7 @@ import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 interface StatBlockProps {
     statBlock: StatBlock;
     enricher: StatBlockTextEnricher;
+    displayMode: "default" | "active";
 }
 
 interface StatBlockState { }
@@ -36,9 +37,11 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         ];
 
         const headerEntries = <React.Fragment>
+            {statBlock.ImageURL && <img className="portrait" src={statBlock.ImageURL} />}
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>
+            <hr />
         </React.Fragment>;
 
         const statEntries = <React.Fragment>
@@ -70,6 +73,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     </div>;
                 })}
             </div>
+
+            <hr />
 
             <div className="modifiers">
                 {modifierTypes
@@ -103,6 +108,8 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     <span>{statBlock.Challenge}</span>
                 </div>
             }
+
+            <hr />
         </React.Fragment>;
 
         const actionEntries = powerTypes
@@ -117,18 +124,21 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                             <span className="power-content">{enricher.EnrichText(power.Content)}</span>
                         </div>
                     )}
+                    <hr />
                 </div>
         );
         
         const description = statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>;
 
+        let innerEntries;
+        if(this.props.displayMode == "active"){
+            innerEntries = <React.Fragment>{actionEntries}{statEntries}</React.Fragment>;
+        } else {
+            innerEntries = <React.Fragment>{statEntries}{actionEntries}</React.Fragment>;
+        }
         return <div className="c-statblock">
             {headerEntries}
-            <hr />
-            {statEntries}
-            <hr />
-            {actionEntries}
-            <hr />
+            {innerEntries}
             {description}
         </div>;
     }

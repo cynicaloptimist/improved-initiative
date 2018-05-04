@@ -50,7 +50,7 @@
             params: { 
                 settingsVisible: SettingsVisible,
                 repeatTutorial: RepeatTutorial,
-                encounterCommander: EncounterCommander, 
+                encounterCommands: EncounterToolbar, 
                 combatantCommander: CombatantCommander,
                 libraries: Libraries
             } 
@@ -69,29 +69,9 @@
     <!-- ko if: DisplayLogin -->
         <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
     <!-- /ko -->
-    <div class="toolbar" data-bind="css: ToolbarClass">
-        <div class="scrollframe" data-bind="style: { width: ToolbarWidth($element) }">
-            <div class="commands-encounter" data-bind="foreach: EncounterCommander.Commands">
-                <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
-                    attr: { title: ToolTip },
-                    css: ActionBarIcon + '--button',
-                    click: ActionBinding">
-                    <span class="fa" data-bind="css: ActionBarIcon"></span>
-                    <span class="command-name" data-bind="text: Description"></span>
-                </div>
-            </div>
-            <div class="commands-combatant" data-bind="visible: CombatantCommander.HasSelected(), foreach: CombatantCommander.Commands">
-                <div class="button" data-bind="
-                    visible: ShowOnActionBar, 
-                    attr: { title: ToolTip },
-                    click: ActionBinding">
-                    <span class="fa" data-bind="css: ActionBarIcon"></span>
-                    <span class="command-name" data-bind="text: Description"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="toolbar-container" data-bind="react: {
+        component: toolbarComponent()
+    }"></div>
     <div class="left-column">
         <!-- ko if: LibrariesVisible -->
         <div class="libraries" data-bind="react: {
@@ -101,14 +81,9 @@
         <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
-            <div class="statblock" data-bind="
-    component: { 
-        name: 'activestatblock', 
-        params: { 
-        statBlock: Encounter.ActiveCombatantStatBlock() 
-        } 
-    }">
-            </div>
+            <div style="flex-shrink: 1" data-bind="react: {
+                component: Encounter.ActiveCombatantStatBlock
+            }"></div>
         </div>
         <!-- /ko -->
     </div>
@@ -205,14 +180,9 @@
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
             <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
-            <div class="statblock" data-bind="
-                component: { 
-                    name: 'defaultstatblock', 
-                    params:{ 
-                        statBlock: CombatantCommander.StatBlock(),
-                    } 
-                }">
-            </div>
+            <div style="flex-shrink: 1" data-bind="react: {
+                component: CombatantCommander.StatBlock
+            }"></div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>

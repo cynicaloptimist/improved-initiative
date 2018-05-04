@@ -1,6 +1,6 @@
 
 import * as React from "react";
-import { EncounterCommander } from "../../Commands/EncounterCommander";
+import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
@@ -13,7 +13,7 @@ import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 
 export interface LibrariesProps {
-    encounterCommander: EncounterCommander;
+    librariesCommander: LibrariesCommander;
     statBlockTextEnricher: StatBlockTextEnricher;
     libraries: LibrarySet;
 }
@@ -22,7 +22,7 @@ interface LibrariesState {
     selectedLibrary: string;
 }
 
-export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
+export class LibrariesViewModel extends React.Component<LibrariesProps, LibrariesState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -30,7 +30,7 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
         };
     }
 
-    private hideLibraries = () => this.props.encounterCommander.HideLibraries();
+    private hideLibraries = () => this.props.librariesCommander.HideLibraries();
     private selectLibrary = (library: string) => {
         if (library == "Players") {
             TutorialSpy("SelectPlayersTab");
@@ -42,19 +42,19 @@ export class Libraries extends React.Component<LibrariesProps, LibrariesState> {
         const libraries = {
             Creatures: <StatBlockLibraryViewModel
                 key="creatures"
-                encounterCommander={this.props.encounterCommander}
+                librariesCommander={this.props.librariesCommander}
                 library={this.props.libraries.NPCs}
                 statBlockTextEnricher={this.props.statBlockTextEnricher} />,
             Players: <StatBlockLibraryViewModel
                 key="players"
-                encounterCommander={this.props.encounterCommander}
+                librariesCommander={this.props.librariesCommander}
                 library={this.props.libraries.PCs}
                 statBlockTextEnricher={this.props.statBlockTextEnricher} />,
             Encounters: <EncounterLibraryViewModel
-                encounterCommander={this.props.encounterCommander}
+                librariesCommander={this.props.librariesCommander}
                 library={this.props.libraries.Encounters} />,
             Spells: <SpellLibraryViewModel
-                encounterCommander={this.props.encounterCommander}
+                librariesCommander={this.props.librariesCommander}
                 library={this.props.libraries.Spells} />,
         };
 

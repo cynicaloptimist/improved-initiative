@@ -22,7 +22,7 @@
         <span data-bind="html: Tip" class="tip"></span>
         <span data-bind="click: NextTip" title="Next Tip" class="fa-clickable fa-arrow-right"></span>
     </div>
-    <span class="button repeat-tutorial" data-bind="click: RepeatTutorial">Repeat Tutorial</span>
+    <span class="button repeat-tutorial" data-bind="click: repeatTutorial">Repeat Tutorial</span>
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'" class="tab keybindings">
     <h2>Encounter Commands</h2>
@@ -30,7 +30,7 @@
         <span class="hotkey-label">Hotkey</span>
         <span class="toolbar-label">Show on Toolbar</span>
     </div>
-    <!--ko foreach: EncounterCommands -->
+    <!--ko foreach: encounterCommands -->
     <div>
         <span class="command-description" data-bind="text: Description"></span>
         <input class="keybinding" type="text" data-bind="value: KeyBinding" />
@@ -136,14 +136,14 @@
     <!-- ko with: AccountViewModel -->
         <!-- ko if: IsLoggedIn -->
             <!-- ko if: HasEpicInitiative -->
-            <div data-bind="react: { component: $parent.customCSSEditor }"></div>
+            <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
             <!-- /ko -->
             <!-- ko ifnot: HasEpicInitiative -->
             <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level.</p>
             <!-- /ko -->
         <!-- /ko -->
         <!-- ko ifnot: IsLoggedIn -->
-            <p>Log in with Patreon to access patron benefits. Epic Initiative allows you to customize your Player View's appearance with custom colors, fonts, and other CSS features.</p>
+            <p>Log in with Patreon to access patron benefits. Epic Initiative allows you to customize your Player View's appearance with combatant portraits, custom colors, fonts, and other CSS features.</p>
             <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
         <!-- /ko -->
     <!-- /ko -->

@@ -2,10 +2,19 @@ import * as Color from "color";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
+import { Tag } from "./Combatant/Tag";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
+
+export interface ImageModalState {
+    Visible: boolean;
+    URL: string;
+    Caption: string;
+    Timeout: any;
+    BlockAutoModal: boolean;
+}
 
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
@@ -18,6 +27,23 @@ export class PlayerViewModel {
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
+    private displayPortraits = ko.observable(false);
+    private splashPortraits = false;
+
+    private imageModal = ko.observable<ImageModalState>({
+        Visible: false,
+        URL: "",
+        Caption: "",
+        Timeout: null,
+        BlockAutoModal: false,
+    });
+
+    private hasImages = ko.computed(() => {
+        const displayPortraits = this.displayPortraits();
+        const combatants = this.combatants();
+
+        return displayPortraits && combatants.some(c => c.ImageURL.length > 0);
+    });
 
     private socket: SocketIOClient.Socket = io();
 
@@ -38,8 +64,17 @@ export class PlayerViewModel {
 
     public LoadEncounterFromServer = (encounterId: string) => {
         $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
-            this.LoadEncounter(playerView.encounterState);
-            this.LoadSettings(playerView.settings);
+            if (!playerView) {
+                return;
+            }
+
+            if (playerView.encounterState) {
+                this.LoadEncounter(playerView.encounterState);    
+            }
+
+            if (playerView.settings) {
+                this.LoadSettings(playerView.settings);
+            }
         });
     }
 
@@ -59,6 +94,8 @@ export class PlayerViewModel {
         this.allowSuggestions(settings.AllowPlayerSuggestions);
         this.turnTimerVisible(settings.DisplayTurnTimer);
         this.roundCounterVisible(settings.DisplayRoundCounter);
+        this.displayPortraits(settings.DisplayPortraits);
+        this.splashPortraits = settings.SplashPortraits;
     }
 
     private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
@@ -68,8 +105,16 @@ export class PlayerViewModel {
             this.turnTimer.Reset();
         }
         if (encounter.ActiveCombatantId) {
-            this.activeCombatant(this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop());
+            const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
+            this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
+            if (this.splashPortraits && active.ImageURL && !this.imageModal().BlockAutoModal) {
+                this.SplashPortrait(encounter.ActiveCombatantId, false);
+                this.imageModal({
+                    ...this.imageModal(),
+                    Timeout: setTimeout(this.CloseImageModal, 5000),
+                });
+            }
         }
     }
 
@@ -85,6 +130,33 @@ export class PlayerViewModel {
             return;
         }
         this.combatantSuggestor.Show(combatant);
+    }
+
+    private SplashPortrait = (SelectedId: string, didClick: boolean) => {
+        const imageModal = this.imageModal();
+        const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
+        if (didClick) {
+            imageModal.BlockAutoModal = true;
+            imageModal.Caption = "";
+        } else {
+            imageModal.Caption = "Start of Turn: ";
+        }
+
+        const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
+        imageModal.Caption += `${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}`;
+        
+        imageModal.URL = combatant.ImageURL;
+        imageModal.Visible = true;
+
+        this.imageModal(imageModal);
+    }
+
+    private CloseImageModal = () => {
+        const imageModal = this.imageModal();
+        imageModal.Visible = false;
+        imageModal.BlockAutoModal = false;
+        clearTimeout(imageModal.Timeout);
+        this.imageModal(imageModal);
     }
 }
 

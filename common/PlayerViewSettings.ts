@@ -4,6 +4,8 @@ export interface PlayerViewSettings {
     HideMonstersOutsideEncounter: boolean;
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
+    DisplayPortraits: boolean;
+    SplashPortraits: boolean;
     CustomCSS: string;
     CustomStyles: PlayerViewCustomStyles;
 }

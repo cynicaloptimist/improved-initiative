@@ -1,15 +1,14 @@
 import * as React from "react";
-import { PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
+import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
-import { EncounterCommander } from "../Commands/EncounterCommander";
 import { Libraries } from "../Library/Libraries";
 import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
 import { hpVerbosityOptions, AutoGroupInitiativeOption, AutoGroupInitiativeOptions, CurrentSettings, Settings } from "./Settings";
-import { CustomCSSEditor, CustomCSSEditorProps } from "./components/CustomCSSEditor";
+import { EpicInitiativeSettings, EpicInitiativeSettingsProps } from "./components/EpicInitiativeSettings";
 
 const tips = [
     "You can view command list and set keybindings on the 'Commands' tab.",
@@ -47,15 +46,13 @@ export class SettingsViewModel {
     public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
     public HpVerbosityOptions: string[];
     public HpVerbosity: KnockoutObservable<string>;
-    public EncounterCommands: Command[];
     public CombatantCommands: Command[];
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
     public AccountViewModel = new AccountViewModel(this.libraries);
 
-    private customCSSEditor: React.ComponentElement<any, CustomCSSEditor>;
-    private currentCSS: string;
-    private currentCustomStyles: PlayerViewCustomStyles;
+    private epicInitiativeSettings: React.ComponentElement<any, EpicInitiativeSettings>;
+    private playerViewSettings: PlayerViewSettings;
     
     public ExportData = () => {
         let blob = Store.ExportAll();
@@ -76,7 +73,6 @@ export class SettingsViewModel {
         }
     }
 
-    public RepeatTutorial: () => void;
     public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
     private getUpdatedSettings(): Settings {
@@ -87,7 +83,7 @@ export class SettingsViewModel {
         });
 
         return {
-            Commands: [...this.EncounterCommands, ...this.CombatantCommands].map(getCommandSetting),
+            Commands: [...this.encounterCommands, ...this.CombatantCommands].map(getCommandSetting),
             Rules: {
                 AllowNegativeHP: this.AllowNegativeHP(),
                 AutoCheckConcentration: this.AutoCheckConcentration(),
@@ -100,13 +96,12 @@ export class SettingsViewModel {
                 DisplayTurnTimer: this.DisplayTurnTimer()
             },
             PlayerView: {
+                ...this.playerViewSettings,
                 AllowPlayerSuggestions: this.PlayerViewAllowPlayerSuggestions(),
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
                 MonsterHPVerbosity: this.HpVerbosity(),
-                CustomCSS: this.currentCSS,
-                CustomStyles: this.currentCustomStyles
             },
             Version: process.env.VERSION
         };
@@ -121,11 +116,11 @@ export class SettingsViewModel {
     }
 
     constructor(
-        private encounterCommander: EncounterCommander,
+        private encounterCommands: Command [],
         private combatantCommander: CombatantCommander,
         private libraries: Libraries,
         private settingsVisible: KnockoutObservable<boolean>,
-        private repeatTutorial: () => void,
+        protected repeatTutorial: () => void,
     ) {
         const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
@@ -139,10 +134,7 @@ export class SettingsViewModel {
             currentTipIndex(newIndex);
         }
 
-        this.EncounterCommands = encounterCommander.Commands;
         this.CombatantCommands = combatantCommander.Commands;
-
-        this.RepeatTutorial = repeatTutorial;
 
         const currentSettings = CurrentSettings();
 
@@ -167,26 +159,16 @@ export class SettingsViewModel {
         this.NextTip = cycleTipIndex.bind(1);
         this.PreviousTip = cycleTipIndex.bind(-1);
 
-        this.createCustomCSSEditorComponent(currentSettings);
+        this.createEpicInitiativeSettingsComponent(currentSettings);
     }
 
-    private createCustomCSSEditorComponent(currentSettings: Settings) {
-        this.currentCSS = currentSettings.PlayerView.CustomCSS;
-        this.currentCustomStyles = currentSettings.PlayerView.CustomStyles;
-        const updateCSS = (css: string) => {
-            this.currentCSS = css;
-        };
-        const updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
-            this.currentCustomStyles[name] = value;
+    private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
+        this.playerViewSettings = currentSettings.PlayerView;
+
+        const customCSSEditorProps: EpicInitiativeSettingsProps = {
+            playerViewSettings: this.playerViewSettings
         };
 
-        const customCSSEditorProps: CustomCSSEditorProps = {
-            currentCSS: this.currentCSS,
-            currentStyles: this.currentCustomStyles,
-            updateCSS,
-            updateStyle
-        };
-
-        this.customCSSEditor = React.createElement(CustomCSSEditor, customCSSEditorProps);
+        this.epicInitiativeSettings = React.createElement(EpicInitiativeSettings, customCSSEditorProps);
     }
 }

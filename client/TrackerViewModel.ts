@@ -4,13 +4,18 @@ import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { CombatantCommander } from "./Commands/CombatantCommander";
+import { BuildEncounterCommandList } from "./Commands/Command";
 import { EncounterCommander } from "./Commands/EncounterCommander";
+import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
+import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
-import { Libraries as LibrariesComponent } from "./Library/Components/Libraries";
+import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
+import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
@@ -19,24 +24,10 @@ import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 
-interface PatreonPostAttributes {
-    title: string;
-    content: string;
-    url: string;
-    created_at: string;
-    was_posted_by_campaign_owner: boolean;
-}
-
-interface PatreonPost {
-    attributes: PatreonPostAttributes;
-    id: string;
-    type: string;
-}
-
 export class TrackerViewModel {
     constructor() {
-        ConfigureCommands([...this.EncounterCommander.Commands, ...this.CombatantCommander.Commands]);
-        
+        ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
+
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
             const suggestedCombatants = this.CombatantViewModels().filter(c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1);
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
@@ -67,7 +58,7 @@ export class TrackerViewModel {
         }
 
         if (account.statblocks) {
-            this.Libraries.NPCs.AddStatBlockListings(account.statblocks, "account");
+            this.Libraries.NPCs.AddListings(account.statblocks, "account");
         }
 
         if (account.playercharacters) {
@@ -92,7 +83,9 @@ export class TrackerViewModel {
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
-    
+    public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
+    public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
+
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
 
     private addCombatantViewModel = (combatant: Combatant) => {
@@ -101,25 +94,31 @@ export class TrackerViewModel {
         return vm;
     }
 
-    private removeCombatantViewModels = (viewModels: CombatantViewModel []) => {
+    private removeCombatantViewModels = (viewModels: CombatantViewModel[]) => {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
+    public Rules = new DefaultRules();
+
+    public StatBlockTextEnricher = new StatBlockTextEnricher(
+        this.CombatantCommander.RollDice,
+        this.LibrariesCommander.ReferenceSpell,
+        this.Libraries.Spells,
+        this.Rules);
+    
     public Encounter = new Encounter(
         this.PromptQueue,
         this.Socket,
         this.addCombatantViewModel,
-        this.removeCombatantViewModels
+        this.removeCombatantViewModels,
+        this.Rules,
+        this.StatBlockTextEnricher
     );
 
-    public librariesComponent = React.createElement(LibrariesComponent, {
-        encounterCommander: this.EncounterCommander,
+    public librariesComponent = React.createElement(LibrariesViewModel, {
+        librariesCommander: this.LibrariesCommander,
         libraries: this.Libraries,
-        statBlockTextEnricher: new StatBlockTextEnricher(
-            this.CombatantCommander.RollDice,
-            this.EncounterCommander.ReferenceSpell,
-            this.Libraries.Spells,
-            this.Encounter.Rules)
+        statBlockTextEnricher: this.StatBlockTextEnricher
     });
 
     public OrderedCombatants = ko.computed(() =>
@@ -132,15 +131,6 @@ export class TrackerViewModel {
     public SettingsVisible = ko.observable(false);
     public LibrariesVisible = ko.observable(true);
     public ToolbarWide = ko.observable(false);
-    public ToolbarClass = ko.pureComputed(() => this.ToolbarWide() ? "toolbar-wide" : "toolbar-narrow");
-    public ToolbarWidth = (el: HTMLElement) => {
-        if (this.ToolbarWide()) {
-            return "";
-        } else {
-            const width = el.parentElement.offsetWidth + el.offsetWidth - el.clientWidth;
-            return width.toString() + "px";
-        }
-    }
 
     public DisplayLogin = !env.IsLoggedIn;
 
@@ -189,7 +179,7 @@ export class TrackerViewModel {
     }
 
     public PatreonLoginUrl = env.PatreonLoginUrl;
-    
+
     public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
             return "show-center-right-left";
@@ -215,6 +205,20 @@ export class TrackerViewModel {
         }
 
         return "show-center-right-left";
+    });
+
+    private toolbarComponent = ko.computed(() => {
+        const commandsToHideByDescription = this.Encounter.State() == "active" ?
+            ["Start Encounter"] :
+            ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
+
+        return React.createElement(Toolbar,
+            {
+                encounterCommands: this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
+                combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
+                width: this.ToolbarWide() ? "wide" : "narrow",
+                showCombatantCommands: this.CombatantCommander.HasSelected()
+            });
     });
 
     private contextualCommandSuggestion = () => {

@@ -6,26 +6,24 @@ import { Listing, ListingOrigin } from "./Listing";
 
 export class PCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
-    public ContainsPlayerCharacters = true;
-
+    public readonly StoreName = Store.PlayerCharacters;
+    
     constructor() {
-        const listings = Store.List(Store.PlayerCharacters).map(id => {
-            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, Store.PlayerCharacters, "localStorage");
+        const listings = Store.List(this.StoreName).map(id => {
+            let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(this.StoreName, id) };
+            return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, this.StoreName, "localStorage");
         });
 
         ko.utils.arrayPushAll(this.StatBlocks, listings);
 
-        if (this.StatBlocks().length == 0) {
-            this.addSamplePlayersFromUrl("/sample_players.json");
-        }
+        this.addSamplePlayersFromUrl("/sample_players.json");
     }
 
     private addSamplePlayersFromUrl = (url: string) => {
         $.getJSON(url, (json: StatBlock[]) => {
             const listings = json.map((statBlock, index) => {
                 statBlock = { ...StatBlock.Default(), ...statBlock };
-                return new Listing<StatBlock>(index.toString(), statBlock.Name, statBlock.Path, statBlock.Type, null, "server", statBlock);
+                return new Listing<StatBlock>(index.toString(), statBlock.Name, "Sample Player Characters", statBlock.Type, null, "server", statBlock);
             });
             ko.utils.arrayPushAll(this.StatBlocks, listings);
         });
@@ -39,7 +37,35 @@ export class PCLibrary {
 
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
-        Store.Delete(Store.PlayerCharacters, id);
+        Store.Delete(this.StoreName, id);
         new AccountClient().DeletePlayerCharacter(id);
+    }
+
+    private saveStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        listing.Id = newStatBlock.Id;
+        listing.Path = newStatBlock.Path;
+        this.StatBlocks.push(listing);
+
+        Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
+        listing.SetValue(newStatBlock);
+
+        new AccountClient().SavePlayerCharacter(newStatBlock)
+            .then(r => {
+                if (!r || listing.Origin === "account") {
+                    return;
+                }
+                const accountListing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, `/my/playercharacters/${newStatBlock.Id}`, "account", newStatBlock);
+                this.StatBlocks.push(accountListing);
+            });
+    }
+    
+    public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
+        this.StatBlocks.remove(listing);
+        this.saveStatBlock(listing, newStatBlock);
+    }
+
+    public SaveNewStatBlock = (newStatBlock: StatBlock) => {
+        const listing = new Listing<StatBlock>(newStatBlock.Id, newStatBlock.Name, newStatBlock.Path, newStatBlock.Type, this.StoreName, "localStorage");
+        this.saveStatBlock(listing, newStatBlock);
     }
 }

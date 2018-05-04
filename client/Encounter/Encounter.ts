@@ -1,4 +1,5 @@
 import _ = require("lodash");
+import React = require("react");
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -7,11 +8,13 @@ import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/Static
 import { Tag } from "../Combatant/Tag";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
+import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
-import { DefaultRules, IRules } from "../Rules/Rules";
+import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -23,15 +26,20 @@ export class Encounter {
         promptQueue: PromptQueue,
         private Socket: SocketIOClient.Socket,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void
+        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
+        public Rules: IRules,
+        private statBlockTextEnricher: StatBlockTextEnricher
     ) {
-        this.Rules = new DefaultRules();
         this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();
         this.ActiveCombatantStatBlock = ko.pureComputed(() => {
             return this.ActiveCombatant()
-                ? this.ActiveCombatant().StatBlock()
-                : StatBlock.Default();
+                ? React.createElement(StatBlockComponent, {
+                    statBlock: this.ActiveCombatant().StatBlock(),
+                    enricher: this.statBlockTextEnricher,
+                    displayMode: "active"
+                })
+                : null;
         });
 
         this.Difficulty = ko.pureComputed(() => {
@@ -56,12 +64,11 @@ export class Encounter {
         this.playerViewClient = new PlayerViewClient(this.Socket);
     }
 
-    public Rules: IRules;
     public TurnTimer = new TurnTimer();
     public Combatants = ko.observableArray<Combatant>([]);
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
     public ActiveCombatant: KnockoutObservable<Combatant>;
-    public ActiveCombatantStatBlock: KnockoutComputed<StatBlock>;
+    public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
     public Difficulty: KnockoutComputed<EncounterDifficulty>;
 
     public State: KnockoutObservable<"active" | "inactive"> = ko.observable<"active" | "inactive">("inactive");
@@ -83,28 +90,24 @@ export class Encounter {
         return _.max(groupBonuses) || combatant.InitiativeBonus;
     }
 
+    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
+        if (stable) {
+            return [c => c.Initiative()];
+        } else {
+            return [
+                c => -c.Initiative(),
+                c => -this.getGroupBonusForCombatant(c),
+                c => -c.InitiativeBonus,
+                c => c.InitiativeGroup(),
+                c => c.StatBlock().Name,
+                c => c.IndexLabel
+            ];
+        }
+    }
+
     public SortByInitiative = (stable = false) => {
-        this.Combatants.sort((l, r) => {
-            const byCurrentInitiative = r.Initiative() - l.Initiative();
-            const byBonus = r.InitiativeBonus - l.InitiativeBonus;
-            const rGroup = r.InitiativeGroup(), lGroup = l.InitiativeGroup();
-
-            if (stable) {
-                return byCurrentInitiative;
-            }
-
-            if (rGroup == null && lGroup == null) {
-                return byCurrentInitiative || byBonus;
-            }
-
-            const byGroupBonus = this.getGroupBonusForCombatant(r) - this.getGroupBonusForCombatant(l);
-            const byGroupName = (rGroup || "NULL").localeCompare(lGroup || "NULL");
-            
-            return byCurrentInitiative ||
-                byGroupBonus ||
-                byGroupName ||
-                byBonus;
-        });
+        const sortedCombatants = _.sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
+        this.Combatants(sortedCombatants);
         this.QueueEmitEncounter();
     }
 
@@ -152,6 +155,7 @@ export class Encounter {
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
+
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
@@ -282,7 +286,8 @@ export class Encounter {
                         DurationCombatantId: t.DurationCombatantId
                     })),
                     Hidden: c.Hidden(),
-                    InterfaceVersion: process.env.VERSION
+                    InterfaceVersion: process.env.VERSION,
+                    ImageURL: c.StatBlock().ImageURL,
                 };
             }),
             Version: process.env.VERSION
