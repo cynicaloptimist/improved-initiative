@@ -108,7 +108,7 @@ export class PlayerViewModel {
             const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
             this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
-            if (active.ImageURL && !this.imageModal().BlockAutoModal) {
+            if (this.splashPortraits && active.ImageURL && !this.imageModal().BlockAutoModal) {
                 this.SplashPortrait(encounter.ActiveCombatantId, false);
                 this.imageModal({
                     ...this.imageModal(),
@@ -133,10 +133,6 @@ export class PlayerViewModel {
     }
 
     private SplashPortrait = (SelectedId: string, didClick: boolean) => {
-        if (!this.splashPortraits) {
-            return;
-        }
-
         const imageModal = this.imageModal();
         const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
         if (didClick) {
