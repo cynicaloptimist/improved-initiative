@@ -92,6 +92,7 @@
     <p>Allow players to suggest damage/healing:
         <input type="checkbox" data-bind="checked: PlayerViewAllowPlayerSuggestions" />
     </p>
+    <p>Additional player view options available with <a href="#" data-bind="click: SelectTab('epicInitiative')">Epic Initiative</a></p>
 </div>
 <div data-bind="visible: CurrentTab() == 'account'" class="tab account">
     <h3>Local Data</h3>
@@ -139,7 +140,7 @@
             <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
             <!-- /ko -->
             <!-- ko ifnot: HasEpicInitiative -->
-            <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level.</p>
+            <p>You're logged in with Patreon, but you have not selected the <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132" target="_blank">Epic Initiative</a> reward level. Epic Initiative allows you to customize your Player View's appearance with combatant portraits, custom colors, fonts, and other CSS features.</p>
             <!-- /ko -->
         <!-- /ko -->
         <!-- ko ifnot: IsLoggedIn -->
