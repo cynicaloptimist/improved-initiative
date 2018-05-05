@@ -1,3 +1,4 @@
+import React = require("react");
 import { Listing } from "../../Library/Listing";
 import { Spell } from "../../Spell/Spell";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
@@ -5,7 +6,15 @@ import { Prompt } from "./Prompt";
 
 const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
 
-export class SpellPrompt implements Prompt {
+interface SpellPromptProps {}
+interface SpellPromptState {}
+class SpellPrompt extends React.Component<SpellPromptProps, SpellPromptState> {
+    public render() {
+        return "";
+    }
+}
+
+export class SpellPromptWrapper implements Prompt {
     public InputSelector = "button";
     public ComponentName = "spellprompt";
     public Spell = ko.observable(Spell.Default());

@@ -14,7 +14,7 @@ import { Store } from "../Utility/Store";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
-import { SpellPrompt } from "./Prompts/SpellPrompt";
+import { SpellPromptWrapper } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
     private accountClient: AccountClient;
@@ -94,7 +94,7 @@ export class LibrariesCommander {
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPrompt(spellListing, this.tracker.StatBlockTextEnricher);
+        const prompt = new SpellPromptWrapper(spellListing, this.tracker.StatBlockTextEnricher);
         this.tracker.PromptQueue.Add(prompt);
     }
 
