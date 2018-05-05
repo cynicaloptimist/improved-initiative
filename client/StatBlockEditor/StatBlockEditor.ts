@@ -23,8 +23,8 @@ export class StatBlockEditor {
     ) => {
 
         this.preservedProperties = {
+            Id: statBlockId,
             Path: statBlock.Path,
-            Id: statBlock.Id,
             Player: statBlock.Player
         };
 
