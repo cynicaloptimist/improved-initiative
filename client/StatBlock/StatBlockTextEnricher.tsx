@@ -37,7 +37,7 @@ export class StatBlockTextEnricher {
     }
 
     private referenceCondition = (condition: string) => {
-        console.log(condition);
+        //TODO: Let's migrate the whole prompt queue to react before adding a ConditionReferencePrompt component
     }
 
     public GetEnrichedModifierFromAbilityScore = (score: number) => {
