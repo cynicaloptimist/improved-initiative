@@ -5,15 +5,17 @@ import { Spell } from "../Spell/Spell";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
+export function ConcatenatedStringRegex(strings: string[]) {
+    const allStrings = strings.map(s => _.escapeRegExp(s)).sort((a, b) => b.localeCompare(a));
+    if (allStrings.length === 0) {
+        return new RegExp("a^");
+    }
+    return new RegExp(`\\b(${allStrings.join("|")})\\b`, "gim");
+}
+
 export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
-    public SpellsByNameRegex = ko.computed(() => {
-        const allSpellNames = this.Spells().map(s => _.escapeRegExp(s.Name)).sort((a, b) => b.localeCompare(a));
-        if (allSpellNames.length === 0) {
-            return new RegExp("a^");
-        }
-        return new RegExp(`\\b(${allSpellNames.join("|")})\\b`, "gim");
-    });
+    public SpellsByNameRegex = ko.computed(() => ConcatenatedStringRegex(this.Spells().map(s => s.Name)));
 
     constructor() {
         $.ajax("../spells/").done(listings => this.AddListings(listings, "server"));
