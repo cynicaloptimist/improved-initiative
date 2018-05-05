@@ -2,9 +2,10 @@ import * as _ from "lodash";
 import * as Markdown from "markdown-it";
 import * as React from "react";
 import * as ReactReplace from "react-string-replace-recursively";
-import { toModifierString } from "../../common/Toolbox";
+import { concatenatedStringRegex, toModifierString } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
+import { Conditions } from "../Rules/Conditions";
 import { Dice, IRules } from "../Rules/Rules";
 import { Spell } from "../Spell/Spell";
 
@@ -35,6 +36,10 @@ export class StatBlockTextEnricher {
         }
     }
 
+    private referenceCondition = (condition: string) => {
+        console.log(condition);
+    }
+
     public GetEnrichedModifierFromAbilityScore = (score: number) => {
         const modifier = this.rules.GetModifierFromScore(score);
         return this.EnrichModifier(modifier);
@@ -54,6 +59,10 @@ export class StatBlockTextEnricher {
             "spells": {
                 pattern: this.spellLibrary.SpellsByNameRegex(),
                 matcherFn: (rawText, processed, key) => <span className="spell-reference" key={key} onClick={() => this.referenceSpell(rawText)}>{rawText}</span>
+            },
+            "conditions": {
+                pattern: concatenatedStringRegex(_.keys(Conditions)),
+                matcherFn: (rawText, processed, key) => <span className="spell-reference" key={key} onClick={() => this.referenceCondition(rawText)}>{rawText}</span>
             }
         };
 
