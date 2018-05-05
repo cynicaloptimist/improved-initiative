@@ -66,8 +66,8 @@ export class LibrariesCommander {
         library: PCLibrary | NPCLibrary) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
-                let newId = probablyUniqueString();
-                this.tracker.StatBlockEditor.EditStatBlock(newId, statBlock, library.SaveNewStatBlock, () => { }, "global");
+                const statBlockWithNewId = { ...statBlock, Id: probablyUniqueString() };
+                this.tracker.StatBlockEditor.EditStatBlock(statBlockWithNewId.Id, statBlockWithNewId, library.SaveNewStatBlock, () => { }, "global");
             } else {
                 this.tracker.StatBlockEditor.EditStatBlock(listing.Id, statBlock, s => library.SaveEditedStatBlock(listing, s), this.deleteSavedStatBlock(library.StoreName, listing.Id), "global");
             }
