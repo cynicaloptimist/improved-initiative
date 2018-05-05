@@ -8,9 +8,24 @@ interface StatBlockProps {
     displayMode: "default" | "active";
 }
 
-interface StatBlockState { }
+interface StatBlockState {
+    portraitSize: "thumbnail" | "full";
+ }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
+    constructor(props) {
+        super(props);
+        this.state = { portraitSize: "thumbnail" };
+    }
+
+    private togglePortraitSize = () => {
+        if (this.state.portraitSize == "thumbnail") {
+            this.setState({ portraitSize: "full" });
+        } else {
+            this.setState({ portraitSize: "thumbnail" });
+        }
+    }
+
     public render() {
         const statBlock = this.props.statBlock;
         const enricher = this.props.enricher;
@@ -37,7 +52,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         ];
 
         const headerEntries = <React.Fragment>
-            {statBlock.ImageURL && <img className="portrait" src={statBlock.ImageURL} />}
+            {statBlock.ImageURL && <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={statBlock.ImageURL} />}
             <h3 className="Name">{statBlock.Name}</h3>
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>
