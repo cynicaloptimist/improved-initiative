@@ -139,11 +139,11 @@ export class PlayerViewModel {
             imageModal.BlockAutoModal = true;
             imageModal.Caption = "";
         } else {
-            imageModal.Caption = "Start of Turn: ";
+            imageModal.Caption = "<p>Start of Turn:</p>";
         }
 
         const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
-        imageModal.Caption += `${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}`;
+        imageModal.Caption += `<p>${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}</p>`;
         
         imageModal.URL = combatant.ImageURL;
         imageModal.Visible = true;
