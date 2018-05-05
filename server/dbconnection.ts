@@ -91,7 +91,7 @@ function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing 
         return {
             Name: c.Name,
             Id: c.Id,
-            Path: "",
+            Path: c.Path,
             SearchHint: StatBlock.GetKeywords(c),
             Version: c.Version,
             Link: `/my/statblocks/${c.Id}`,
