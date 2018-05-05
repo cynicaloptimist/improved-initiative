@@ -675,13 +675,6 @@ body>.login.button {
     }
 }
 
-.c-statblock {
-    max-width: @fixed-column-width;
-    width: @fixed-column-width;
-    flex-shrink: 1;
-    overflow-y: auto;
-}
-
 .damage-suggestion {
     font-size: initial;
 
@@ -694,7 +687,7 @@ body>.login.button {
     }
 }
 
-.statblock, .c-statblock {
+.c-statblock {
     display:block;
     padding:@small-spacer;
     line-height: 1.4em;
@@ -702,9 +695,15 @@ body>.login.button {
     flex-shrink: 1;
     overflow-y:auto;
 
+    max-width: @fixed-column-width;
+    width: @fixed-column-width;
+
     h3, h4 {
         margin-top: @medium-spacer;
+        display: flex;
+        align-items: center;
     }
+
     hr {
         margin: @small-spacer;
     }
@@ -722,6 +721,17 @@ body>.login.button {
     }
     .power-content {
         white-space: pre-line;
+    }
+
+    .portrait-thumbnail {
+        width: 50px;
+        max-height: 50px;
+        padding: @small-spacer;
+        cursor: zoom-in;
+    }
+
+    .portrait-full {
+        cursor: zoom-out;
     }
     
     .Abilities {
@@ -879,6 +889,13 @@ body>.login.button {
     }
 }
 
+.ko-react-prompt-wrapper {
+    flex-shrink: 1;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
 .prompt {
     .recessed();
     display: flex;
@@ -975,7 +992,7 @@ body>.login.button {
         width: 15vw;
     }
 
-    .portrait{
+    .portrait {
         width: 50px;
         max-height: 50px;
         padding-right: 1vw;
