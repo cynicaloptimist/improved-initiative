@@ -92,7 +92,7 @@ export class Encounter {
 
     private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
         if (stable) {
-            return [c => c.Initiative()];
+            return [c => -c.Initiative()];
         } else {
             return [
                 c => -c.Initiative(),
