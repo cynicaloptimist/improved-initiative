@@ -165,7 +165,7 @@ export class TrackerViewModel {
 
     public ImportEncounterIfAvailable = () => {
         const encounter = env.PostedEncounter;
-        if (encounter) {
+        if (encounter && this.Encounter.Combatants().length === 0) {
             this.TutorialVisible(false);
             this.Encounter.ImportEncounter(encounter);
         }
