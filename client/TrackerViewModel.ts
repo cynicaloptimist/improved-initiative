@@ -103,6 +103,7 @@ export class TrackerViewModel {
     public StatBlockTextEnricher = new StatBlockTextEnricher(
         this.CombatantCommander.RollDice,
         this.LibrariesCommander.ReferenceSpell,
+        this.LibrariesCommander.ReferenceCondition,
         this.Libraries.Spells,
         this.Rules);
     

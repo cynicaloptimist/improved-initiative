@@ -24,6 +24,7 @@ export class StatBlockTextEnricher {
     constructor(
         private rollDice: (diceExpression: string) => void,
         private referenceSpellListing: (listing: Listing<Spell>) => void,
+        private referenceCondition: (condition: string) => void,
         private spellLibrary: SpellLibrary,
         private rules: IRules
     ) { }
@@ -34,10 +35,6 @@ export class StatBlockTextEnricher {
         if (listing) {
             this.referenceSpellListing(listing);
         }
-    }
-
-    private referenceCondition = (condition: string) => {
-        //TODO: Let's migrate the whole prompt queue to react before adding a ConditionReferencePrompt component
     }
 
     public GetEnrichedModifierFromAbilityScore = (score: number) => {
