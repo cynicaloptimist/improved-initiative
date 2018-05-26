@@ -4,11 +4,13 @@ interface Environment {
     IsLoggedIn: boolean;
     HasStorage: boolean;
     HasEpicInitiative: boolean;
+    CanonicalURL: string;
     PatreonLoginUrl: string;
 }
 
 export const env: Environment = {
     EncounterId: null,
+    CanonicalURL: null,
     PostedEncounter: null,
     HasStorage: false,
     HasEpicInitiative: false,
@@ -20,6 +22,7 @@ export function LoadEnvironment() {
     const html = document.getElementsByTagName("html")[0];
 
     env.EncounterId = html.getAttribute("encounterId");
+    env.CanonicalURL = html.getAttribute("baseUrl");
     const encounterJSON = html.getAttribute("postedEncounter");
     if (encounterJSON) {
         env.PostedEncounter = JSON.parse(encounterJSON);
