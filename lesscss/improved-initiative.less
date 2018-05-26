@@ -905,8 +905,14 @@ body>.login.button {
     min-height: @prompt-minimum-height;
 
     div.default-query {
+        align-items: center;
         flex-direction: row;
         flex-shrink: 1;
+        ul {
+            flex-shrink: 1;
+            list-style-type: none;
+            margin: @medium-spacer;
+        }
     }
 
     .add-tag {
