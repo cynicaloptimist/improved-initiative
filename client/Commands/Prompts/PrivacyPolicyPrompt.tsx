@@ -12,7 +12,7 @@ const inputClassName = promptClassName + "-input";
 
 interface PrivacyPolicyPromptProps {
     callback: (optin: boolean) => void;
- }
+}
 interface PrivacyPolicyPromptState {
     displayFullText: boolean;
 }
@@ -25,8 +25,9 @@ class PrivacyPolicyPrompt extends React.Component<PrivacyPolicyPromptProps, Priv
     public render() {
         const privacyBrief = "Improved Initiative has a privacy policy. Your data is never sold to third parties. You can help improve the app by sharing your usage data.";
         const moreInfoButton = <a href="#" onClick={e => this.setState({ displayFullText: true })}>More Info.</a>;
-        const noThanksButton = <Button text="No Thanks" onClick={() => this.props.callback(false)} />;
-        const optInButton = <Button text="Opt In" onClick={() => this.props.callback(true)} />;
+
+        const noThanksButton = <input className="button" type="submit" value="No Thanks" onClick={() => this.props.callback(false)} />;
+        const optInButton = <input className="button" type="submit" value="Opt In" onClick={() => this.props.callback(true)} />;
 
         return <div className={promptClassName}>
             <p>{privacyBrief} {moreInfoButton}</p>
@@ -46,12 +47,12 @@ export class PrivacyPolicyPromptWrapper implements Prompt {
         if (optin) {
             Store.Save(Store.User, "AllowTracking", true);
             Metrics.TrackLoad();
+        } else {
+            Store.Save(Store.User, "AllowTracking", false);
         }
     }
 
-    public Resolve = (form: HTMLFormElement) => {
-
-    }
+    public Resolve = (form: HTMLFormElement) => {};
 
     private component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
 }
