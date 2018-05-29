@@ -7,6 +7,8 @@ import { CombatantCommander } from "./Commands/CombatantCommander";
 import { BuildEncounterCommandList } from "./Commands/Command";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
+import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
+import { DefaultPrompt } from "./Commands/Prompts/Prompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
@@ -49,7 +51,16 @@ export class TrackerViewModel {
             this.HandleAccountSync(account);
         });
 
+        this.displayPrivacyNotificationIfNeeded();
+
         Metrics.TrackLoad();
+    }
+
+    private displayPrivacyNotificationIfNeeded = () => {
+        if (Store.Load(Store.User, "AllowTracking") == null) {
+            const prompt = new PrivacyPolicyPromptWrapper();
+            this.PromptQueue.Add(prompt);
+        }
     }
 
     private HandleAccountSync(account: Account) {
