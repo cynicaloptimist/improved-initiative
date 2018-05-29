@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as io from "socket.io-client";
+
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
