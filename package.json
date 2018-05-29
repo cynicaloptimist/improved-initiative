@@ -51,7 +51,6 @@
     "grunt": "^1.0.2",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-connect": "^0.10.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "^1.1.0",
