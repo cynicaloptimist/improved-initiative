@@ -57,7 +57,6 @@
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-mocha-test": "^0.12.7",
-    "grunt-open": "^0.2.3",
     "grunt-ts": "^6.0.0-beta.19",
     "grunt-webpack": "^3.1.1",
     "html-loader": "^0.5.5",
