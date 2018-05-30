@@ -106,6 +106,7 @@
   "scripts": {
     "postinstall": "grunt --no-color postinstall && webpack -p --config ./webpack.config.prod.js",
     "start": "node server/server.js",
-    "clean": "git clean -f -x -e node_modules/"
+    "clean": "git clean -f -x -e node_modules/",
+    "test": "jest"
   }
 }
