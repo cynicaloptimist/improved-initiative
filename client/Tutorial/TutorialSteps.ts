@@ -13,7 +13,7 @@ export interface TutorialStep {
 export const TutorialSteps: TutorialStep[] = [
     {
         Message: "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
-        RaiseSelector: ".left-column",
+        RaiseSelector: ".left-column, .prompt",
         CalculatePosition: elements => {
             const left = elements.offset().left + elements.outerWidth() + 10;
             const top = elements.offset().top + 200;
