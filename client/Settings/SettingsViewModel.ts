@@ -121,6 +121,7 @@ export class SettingsViewModel {
         private libraries: Libraries,
         private settingsVisible: KnockoutObservable<boolean>,
         protected repeatTutorial: () => void,
+        protected reviewPrivacyPolicy: () => void,
     ) {
         const currentTipIndex = ko.observable(Math.floor(Math.random() * tips.length));
 
