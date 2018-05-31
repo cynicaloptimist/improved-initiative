@@ -5,9 +5,6 @@ import { TutorialSteps } from "./TutorialSteps";
 export const TutorialSpy = ko.observable<string>(null);
 
 export class TutorialViewModel {
-    //TODO: prevent next when awaiting a click
-    //TODO: auto advance on view changes
-
     private stepIndex = ko.observable<number>(null);
     private showTutorial: KnockoutObservable<boolean>;
 
