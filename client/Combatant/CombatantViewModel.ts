@@ -159,7 +159,7 @@ export class CombatantViewModel {
 
     public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
-        this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
+        this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
         this.Combatant.Encounter.QueueEmitEncounter();
     }
 }
