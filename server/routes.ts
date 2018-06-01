@@ -24,7 +24,7 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
-    rootDirectory: "../../",
+    rootDirectory: "../..",
     encounterId,
     baseUrl,
     patreonClientId,

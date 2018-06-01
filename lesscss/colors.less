@@ -42,6 +42,14 @@ input, textarea {
     box-shadow: @border;
 }
 
+.green-button() {
+    .colors(@primary-black, @button-face-green, @shadow);
+
+    &:hover{
+        background-color: @hover-green;
+    }
+}
+
 .left-column, 
 .right-column, 
 .statblock, .c-statblock,
@@ -75,11 +83,7 @@ input, textarea {
         }
     }
     .start-encounter .button {
-        color: @primary-black;
-        background-color: @button-face-green;
-        &:hover {
-            background-color: @hover-green;
-        }
+        .green-button();
     }
 }
 
@@ -101,25 +105,14 @@ input, textarea {
     }
 
     .highlight {
-        .colors(@primary-black, @button-face-green, @shadow);
-        &:hover{
-            background-color: @hover-green;
-        }
+        .green-button();
     }
 }
 
-.tutorial .next {
-    .colors(@primary-black, @button-face-green, @shadow);
-    &:hover{
-        background-color: @hover-green;
-    }
-}   
-
-.login.button {
-    .colors(@primary-black, @button-face-green, @shadow);
-    &:hover{
-        background-color: @hover-green;
-    }
+.tutorial .next, 
+.login.button, 
+.p-privacy-policy-optin.button {
+    .green-button()
 }
 
 .settings {
@@ -127,10 +120,7 @@ input, textarea {
         border-color: @primary-green;
     }
     .repeat-tutorial {
-        .colors(@primary-black, @button-face-green, @shadow);
-        &:hover{
-            background-color: @hover-green;
-        }
+        .green-button()
     }
 }
 

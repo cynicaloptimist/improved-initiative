@@ -11,7 +11,7 @@ const BATCH_SIZE = 10;
 export class AccountClient {
     public GetAccount(callBack: (user: any) => void) {
         if (!env.HasStorage) {
-            return emptyPromise();
+            return callBack(null);
         }
 
         $.getJSON("/my").done(callBack);

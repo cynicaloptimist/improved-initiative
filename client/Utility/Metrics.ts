@@ -17,6 +17,10 @@ export class Metrics {
     }
 
     public static TrackEvent(name: string, data: EventData = {}): void {
+        if (!Store.Load(Store.User, "AllowTracking")) {
+            return;
+        }
+
         console.log(`Event ${name}`);
         if (data !== {}) {
             console.table(data);

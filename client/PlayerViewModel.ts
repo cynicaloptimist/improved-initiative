@@ -1,4 +1,6 @@
 import * as Color from "color";
+import * as io from "socket.io-client";
+
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";

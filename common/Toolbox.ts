@@ -1,3 +1,5 @@
+import _ = require("lodash");
+
 export interface KeyValueSet<T> {
     [key: string]: T;
 }
@@ -20,4 +22,12 @@ export function probablyUniqueString(): string {
     }
 
     return probablyUniqueString;
+}
+
+export function concatenatedStringRegex(strings: string[]) {
+    const allStrings = strings.map(s => _.escapeRegExp(s)).sort((a, b) => b.localeCompare(a));
+    if (allStrings.length === 0) {
+        return new RegExp("a^");
+    }
+    return new RegExp(`\\b(${allStrings.join("|")})\\b`, "gim");
 }

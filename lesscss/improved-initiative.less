@@ -1,5 +1,5 @@
-@import url("//fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
-@import url("//fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
+@import url("https://fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
 
 @import "colors.less";
 @import (reference) "node_modules/font-awesome/less/variables.less";
@@ -598,8 +598,9 @@ body>.login.button {
         font-weight: bold;
     }
     
-    .repeat-tutorial {
-        align-self: flex-end;
+    .commands {
+        flex-direction: row;
+        justify-content: flex-end;
     }
 
     .command-options-labels {
@@ -905,8 +906,14 @@ body>.login.button {
     min-height: @prompt-minimum-height;
 
     div.default-query {
+        align-items: center;
         flex-direction: row;
         flex-shrink: 1;
+        ul {
+            flex-shrink: 1;
+            list-style-type: none;
+            margin: @medium-spacer;
+        }
     }
 
     .add-tag {
@@ -1078,6 +1085,26 @@ body>.login.button {
     align-items: center;
     > * {
         margin: @medium-spacer;
+    }
+}
+
+.p-privacy-policy {
+    flex-shrink: 1;
+    * {
+        flex-shrink: 1;
+    }
+
+    h2, p, button {
+        margin: @small-spacer;
+    }
+
+    h2 {
+        font-size:large;
+    }
+
+    .p-privacy-policy-buttons {
+        flex-direction: row;
+        justify-content: flex-end;
     }
 }
 

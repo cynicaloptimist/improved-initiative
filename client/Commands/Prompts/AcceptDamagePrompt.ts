@@ -26,6 +26,7 @@ export class AcceptDamagePrompt implements Prompt {
             suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()));
             tracker.EventLog.LogHPChange(damageAmount, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
+            return true;
         };
 
         this.AcceptHalf = () => {
@@ -33,6 +34,7 @@ export class AcceptDamagePrompt implements Prompt {
             suggestedCombatants.forEach(c => c.ApplyDamage(halfDamage.toString()));
             tracker.EventLog.LogHPChange(halfDamage, combatantNames);
             tracker.Encounter.QueueEmitEncounter();
+            return true;
         };
     }
 }

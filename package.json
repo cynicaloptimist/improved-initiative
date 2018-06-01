@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "1.5.6",
+  "version": "1.6.0",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -13,7 +13,6 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
-    "mocha": "^2.2.5",
     "requirejs": "^2.3.5",
     "sinon": "^1.15.4"
   },
@@ -25,6 +24,7 @@
     "@types/express-serve-static-core": "^4.11.1",
     "@types/express-session": "^1.15.8",
     "@types/file-saver": "0.0.1",
+    "@types/jest": "^22.2.3",
     "@types/jquery": "^3.3.1",
     "@types/knockout": "^3.4.53",
     "@types/lodash": "^4.14.108",
@@ -52,21 +52,22 @@
     "grunt": "^1.0.2",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-connect": "^0.10.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-less": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.1",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-mocha-test": "^0.12.7",
-    "grunt-open": "^0.2.3",
     "grunt-ts": "^6.0.0-beta.19",
     "grunt-webpack": "^3.1.1",
+    "html-loader": "^0.5.5",
+    "jest": "^23.0.1",
     "jquery": "^3.3.1",
     "keen-tracking": "^1.4.0",
     "knockout": "^3.4.0",
     "knockout-mapping": "^2.6.0",
-    "less": "^2.5.0",
+    "less": "^3.0.4",
     "lodash": "^4.17.10",
     "markdown-it": "^7.0.1",
+    "markdown-loader": "^2.0.2",
     "minimist": "^1.2.0",
     "moment": "^2.22.1",
     "mongodb": "^2.2.35",
@@ -79,17 +80,33 @@
     "react-dom": "^16.3.2",
     "react-string-replace-recursively": "^0.1.27",
     "request": "^2.85.0",
-    "socket.io": "^1.7.1",
-    "socket.io-client": "^1.7.1",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
+    "ts-jest": "^22.4.6",
     "ts-loader": "^3.3.1",
     "typescript": "^2.6.2",
     "uglify-js": "^2.7.4",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "webpack": "^3.11.0"
   },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
   "scripts": {
     "postinstall": "grunt --no-color postinstall && webpack -p --config ./webpack.config.prod.js",
     "start": "node server/server.js",
-    "clean": "git clean -f -x -e node_modules/"
+    "clean": "git clean -f -x -e node_modules/",
+    "test": "jest"
   }
 }

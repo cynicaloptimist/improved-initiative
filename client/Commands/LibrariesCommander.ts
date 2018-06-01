@@ -6,6 +6,7 @@ import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { NPCLibrary } from "../Library/NPCLibrary";
 import { PCLibrary } from "../Library/PCLibrary";
+import { Conditions } from "../Rules/Conditions";
 import { Spell } from "../Spell/Spell";
 import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -125,5 +126,13 @@ export class LibrariesCommander {
             .value();
         const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
         this.tracker.PromptQueue.Add(prompt);
+    }
+
+    public ReferenceCondition = (conditionName: string) => {
+        const casedConditionName = _.startCase(conditionName);
+        if (Conditions[casedConditionName]) {
+            const prompt = new DefaultPrompt(`<strong>${casedConditionName}</strong><br /> ${Conditions[casedConditionName]}`);
+            this.tracker.PromptQueue.Add(prompt);
+        }
     }
 }

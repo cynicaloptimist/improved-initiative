@@ -1,5 +1,6 @@
 import { env } from "./Environment";
 import { Metrics } from "./Utility/Metrics";
+import { Store } from "./Utility/Store";
 
 export class LauncherViewModel {
     constructor() {
@@ -8,6 +9,10 @@ export class LauncherViewModel {
             userAgent: navigator.userAgent
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
+        const firstVisit = Store.Load(Store.User, "SkipIntro") === null;
+        if (firstVisit && window.location.href != env.CanonicalURL + "/") {
+            window.location.href = env.CanonicalURL;
+        }
     }
 
     public GeneratedEncounterId = env.EncounterId;

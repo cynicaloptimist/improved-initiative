@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as io from "socket.io-client";
+
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -7,6 +9,8 @@ import { CombatantCommander } from "./Commands/CombatantCommander";
 import { BuildEncounterCommandList } from "./Commands/Command";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
+import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
+import { DefaultPrompt } from "./Commands/Prompts/Prompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
@@ -49,7 +53,21 @@ export class TrackerViewModel {
             this.HandleAccountSync(account);
         });
 
+        this.displayPrivacyNotificationIfNeeded();
+
         Metrics.TrackLoad();
+    }
+
+    private displayPrivacyNotificationIfNeeded = () => {
+        if (Store.Load(Store.User, "AllowTracking") == null) {
+            this.ReviewPrivacyPolicy();
+        }
+    }
+
+    public ReviewPrivacyPolicy = () => {
+        this.SettingsVisible(false);
+        const prompt = new PrivacyPolicyPromptWrapper();
+        this.PromptQueue.Add(prompt);
     }
 
     private HandleAccountSync(account: Account) {
@@ -103,6 +121,7 @@ export class TrackerViewModel {
     public StatBlockTextEnricher = new StatBlockTextEnricher(
         this.CombatantCommander.RollDice,
         this.LibrariesCommander.ReferenceSpell,
+        this.LibrariesCommander.ReferenceCondition,
         this.Libraries.Spells,
         this.Rules);
     
@@ -165,7 +184,7 @@ export class TrackerViewModel {
 
     public ImportEncounterIfAvailable = () => {
         const encounter = env.PostedEncounter;
-        if (encounter) {
+        if (encounter && this.Encounter.Combatants().length === 0) {
             this.TutorialVisible(false);
             this.Encounter.ImportEncounter(encounter);
         }
