@@ -5,7 +5,12 @@
 <span class="tags">
 <!--ko foreach: Combatant.Tags() -->
     <span class="tag" data-bind="if: Visible">
+        <!-- ko if: $parent.TagHasReference -->
+        <span class="condition-reference" data-bind="text: Text, click: $parent.ReferenceTaggedCondition"></span>
+        <!-- /ko -->
+        <!-- ko ifnot: $parent.TagHasReference -->
         <span data-bind="text: Text"></span>
+        <!-- /ko -->
         <span class="fa fa-hourglass" data-bind="visible: HasDuration"></span>
         <span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
     </span>

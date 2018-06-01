@@ -1,9 +1,11 @@
+import _ = require("lodash");
 import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
 import { DefaultPrompt, Prompt } from "../Commands/Prompts/Prompt";
 import { TagPrompt } from "../Commands/Prompts/TagPrompt";
 import { Encounter } from "../Encounter/Encounter";
+import { Conditions } from "../Rules/Conditions";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
@@ -159,7 +161,20 @@ export class CombatantViewModel {
 
     public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
-        this.LogEvent(`${this.Name()} removed note: "${tag.Text}"`);
+        this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
         this.Combatant.Encounter.QueueEmitEncounter();
+    }
+
+    public ReferenceTaggedCondition = (tag: Tag) => {
+        const casedConditionName = _.startCase(tag.Text);
+        if (Conditions[casedConditionName]) {
+            const prompt = new DefaultPrompt(`<strong>${casedConditionName}</strong><br /> ${Conditions[casedConditionName]}`);
+            this.PromptUser(prompt);
+        }
+    }
+
+    public TagHasReference = (tag: Tag) => {
+        const casedConditionName = _.startCase(tag.Text);
+        return Conditions[casedConditionName] !== undefined;        
     }
 }

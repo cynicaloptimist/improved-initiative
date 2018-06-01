@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import * as Markdown from "markdown-it";
 import * as React from "react";
 import * as ReactReplace from "react-string-replace-recursively";
+
 import { concatenatedStringRegex, toModifierString } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
@@ -59,7 +60,7 @@ export class StatBlockTextEnricher {
             },
             "conditions": {
                 pattern: concatenatedStringRegex(_.keys(Conditions)),
-                matcherFn: (rawText, processed, key) => <span className="spell-reference" key={key} onClick={() => this.referenceCondition(rawText)}>{rawText}</span>
+                matcherFn: (rawText, processed, key) => <span className="condition-reference" key={key} onClick={() => this.referenceCondition(rawText)}>{rawText}</span>
             }
         };
 

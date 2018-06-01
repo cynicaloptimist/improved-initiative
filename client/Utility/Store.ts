@@ -100,13 +100,13 @@ export class Store {
     public static ImportFromDnDAppFile(file: File) {
         const statBlocksCallback = (statBlocks: StatBlock[]) => {
             statBlocks.forEach(c => {
-                this.Save(Store.StatBlocks, c.Name, c);
+                this.Save(Store.StatBlocks, c.Id, c);
             });
         };
 
         const spellsCallback = (spells: Spell[]) => {
             spells.forEach(c => {
-                this.Save(Store.Spells, c.Name, c);
+                this.Save(Store.Spells, c.Id, c);
             });
         };
 
