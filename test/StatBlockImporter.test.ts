@@ -1,10 +1,17 @@
+import * as $ from "jquery";
+
 import { StatBlockImporter } from "../client/Importers/StatBlockImporter";
 
 describe("StatBlockImporter", () => {
     let monster: Element;
 
     beforeEach(() => {
+        window["$"] = $;
         monster = document.createElement("monster");
+    });
+
+    afterEach(() => {
+        delete window["$"];
     });
 
     test("Should assign the name to a statblock", () => {

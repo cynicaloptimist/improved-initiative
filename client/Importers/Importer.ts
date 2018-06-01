@@ -1,5 +1,3 @@
-import * as $ from "jquery";
-
 export class Importer {
     constructor(protected domElement: Element) { }
 
