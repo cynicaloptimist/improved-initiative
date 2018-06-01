@@ -1,3 +1,5 @@
+import * as $ from "jquery";
+
 export class Importer {
     constructor(protected domElement: Element) { }
 
@@ -14,10 +16,14 @@ export class Importer {
     }
 
     public getValueAndNotes(selector: string) {
-        let valueAndNotes = this.getString(selector).match(/([\d]+) ?(.*)/);
+        const matches = this.getString(selector).match(/([\d]+) ?(.*)/);
+        if (!matches) {
+            return { Value: 0, Notes: "" };
+        }
+        const [_, value, notes] = matches;
         return {
-            Value: parseInt(valueAndNotes[1]),
-            Notes: valueAndNotes[2] || ""
+            Value: parseInt(value),
+            Notes: notes || ""
         };
     }
 
