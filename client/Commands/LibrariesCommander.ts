@@ -1,4 +1,4 @@
-import _ = require("lodash");
+import * as _ from "lodash";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";

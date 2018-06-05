@@ -1,5 +1,7 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as _ from "lodash";
 import React = require("react");
+
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";

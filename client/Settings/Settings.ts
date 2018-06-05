@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";

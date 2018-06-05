@@ -1,4 +1,6 @@
 import Awesomplete = require("awesomplete");
+import * as ko from "knockout";
+
 import { render as renderReact } from "react-dom";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { ComponentLoader } from "./Components";

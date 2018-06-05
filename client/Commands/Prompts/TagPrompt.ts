@@ -1,4 +1,6 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as _ from "lodash";
+
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Encounter } from "../../Encounter/Encounter";

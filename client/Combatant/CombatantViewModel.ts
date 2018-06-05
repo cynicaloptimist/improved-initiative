@@ -1,4 +1,6 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as _ from "lodash";
+
 import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";

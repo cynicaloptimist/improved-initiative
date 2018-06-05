@@ -1,4 +1,6 @@
 import * as _ from "lodash";
+import * as ko from "knockout";
+
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 

@@ -37,23 +37,18 @@ module.exports = function (grunt) {
     concat: {
       js_dependencies: {
         src: [
-          'node_modules/knockout/build/output/knockout-latest.debug.js',
-          'node_modules/knockout-mapping/dist/knockout.mapping.js',
           'node_modules/jquery/dist/jquery.js',
           'node_modules/mousetrap/mousetrap.js',
-          'node_modules/moment/moment.js',
           'node_modules/browser-filesaver/FileSaver.js',
-          'node_modules/markdown-it/dist/markdown-it.js'        ],
+          'node_modules/markdown-it/dist/markdown-it.js'
+        ],
         dest: 'public/js/dependencies.js',
         sourceMap: true
       },
       js_dependencies_min: {
         src: [
-          'node_modules/knockout/build/output/knockout-latest.js',
-          'node_modules/knockout-mapping/dist/knockout.mapping.min.js',
           'node_modules/jquery/dist/jquery.min.js',
           'node_modules/mousetrap/mousetrap.min.js',
-          'node_modules/moment/min/moment.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
           'node_modules/markdown-it/dist/markdown-it.min.js'
         ],

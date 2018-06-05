@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Store } from "../Utility/Store";
 import { CombatantCommander } from "./CombatantCommander";
 import { EncounterCommander } from "./EncounterCommander";
