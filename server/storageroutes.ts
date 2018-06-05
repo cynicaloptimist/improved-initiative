@@ -14,13 +14,22 @@ const verifyStorage = (req: Req) => {
     return dbAvailable && req.session && req.session.hasStorage;
 };
 
+const parsePossiblyMalformedIdFromParams = (params) => {
+    let id = params.id;
+    for (let i = 0; params[i] !== undefined; i++) {
+        id += params[i];
+    }
+    return id;
+};
+
 function configureEntityRoute<T extends Listable>(app: express.Application, route: DB.EntityPath) {
-    app.get(`/my/${route}/:id`, (req: Req, res: Res) => {
+    app.get(`/my/${route}/:id*`, (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
+        const entityId = parsePossiblyMalformedIdFromParams(req.params);
     
-        return DB.getEntity(route, req.session.userId, req.params.id, entity => {
+        return DB.getEntity(route, req.session.userId, entityId, entity => {
             if (entity) {
                 return res.json(entity);    
             } else {
@@ -54,7 +63,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         }
     });
 
-    app.delete(`/my/${route}/:id`, (req: Req, res: Res) => {
+    app.delete(`/my/${route}/:id*`, (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
