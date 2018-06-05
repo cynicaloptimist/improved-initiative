@@ -98,7 +98,9 @@ export class EncounterCommander {
 
     public NextTurn = () => {
         const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
+        if (turnEndCombatant) {
         Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });
+        }
 
         this.tracker.Encounter.NextTurn();
         const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
