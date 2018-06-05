@@ -897,6 +897,10 @@ body>.login.button {
 }
 
 .prompt {
+    div, span, p {
+        flex-shrink: 1;
+    }
+    
     .recessed();
     display: flex;
     
@@ -908,7 +912,6 @@ body>.login.button {
     div.default-query {
         align-items: center;
         flex-direction: row;
-        flex-shrink: 1;
     }
 
     .add-tag {
@@ -924,7 +927,6 @@ body>.login.button {
     }
 
     .spell {
-        flex-shrink: 1;
         flex-flow: column;
         align-self: stretch;
         label {
@@ -947,17 +949,12 @@ body>.login.button {
     .roll-initiative {
         flex-direction: row;
         flex-wrap: wrap;
-        flex-shrink: 1;
         align-items: center;
         ul {
             text-align: right;
             list-style-type: none;
             padding: @medium-spacer;
         }
-    }
-
-    .check-concentration {
-        flex-shrink: 1;
     }
 
     .accept-damage-options, .check-concentration-options {
@@ -1084,11 +1081,6 @@ body>.login.button {
 }
 
 .p-privacy-policy {
-    flex-shrink: 1;
-    * {
-        flex-shrink: 1;
-    }
-
     h2, p, button {
         margin: @small-spacer;
     }
