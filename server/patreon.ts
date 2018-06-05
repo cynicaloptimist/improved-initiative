@@ -89,14 +89,21 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
                 hasStorageReward ? "pledge" :
                     "none";
 
-        req.session.hasStorage = hasEpicInitiative || hasStorageReward;
-        req.session.hasEpicInitiative = hasEpicInitiative;
-        req.session.isLoggedIn = true;
+        const session = req.session;
+        if (session === undefined) {
+            throw 'Session is undefined';
+        }
+
+        session.hasStorage = hasEpicInitiative || hasStorageReward;
+        session.hasEpicInitiative = hasEpicInitiative;
+        session.isLoggedIn = true;
 
         DB.upsertUser(apiResponse.data.id, tokens.access_token, tokens.refresh_token, standing)
             .then(user => {
-                req.session.userId = user._id;
-                res.redirect(`/e/${encounterId}`);
+                if (user != null) {
+                    session.userId = user._id;
+                    res.redirect(`/e/${encounterId}`);    
+                }
             }).catch(err => {
                 console.error(err);
             });
@@ -130,8 +137,16 @@ export function configureLoginRedirect(app: express.Application) {
 }
 
 export function configureLogout(app: express.Application) {
+    if (baseUrl == null) {
+        throw "Base URL is not configured.";
+    }
+
     const logoutPath = "/logout";
     app.get(logoutPath, (req: Req, res: Res) => {
+        if (req.session == null) {
+            throw "Session is not available";
+        }
+
         req.session.destroy(err => {
             if (err) {
                 console.error(err);
@@ -141,7 +156,11 @@ export function configureLogout(app: express.Application) {
     });
 }
 
-function updateLatestPost(latestPost: { post: Post }) {
+function updateLatestPost(latestPost: { post: Post | null }) {
+    if (patreonUrl == null) {
+        throw "Patreon URL is not configured.";
+    }
+
     return request.get(patreonUrl,
         (error, response, body) => {
             const json: { data: Post[] } = JSON.parse(body);
@@ -152,7 +171,7 @@ function updateLatestPost(latestPost: { post: Post }) {
 }
 
 export function startNewsUpdates(app: express.Application) {
-    const latest: { post: Post } = { post: null };
+    const latest: { post: Post | null } = { post: null };
     if (!patreonUrl) {
         return;
     }

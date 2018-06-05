@@ -4,9 +4,9 @@ import { PlayerViewManager } from "./playerviewmanager";
 export default function (io: SocketIO.Server, playerViews: PlayerViewManager) {
     io.on("connection", function (socket: SocketIO.Socket) {
 
-        let encounterId = null;
+        let encounterId;
 
-        function joinEncounter(id) {
+        function joinEncounter(id: string) {
             encounterId = id;
             socket.join(id);
             playerViews.EnsureInitialized(id);
@@ -15,6 +15,7 @@ export default function (io: SocketIO.Server, playerViews: PlayerViewManager) {
         socket.on("update encounter", function (id: string, updatedEncounter: {}) {
             joinEncounter(id);
             playerViews.UpdateEncounter(id, updatedEncounter);
+
             socket.broadcast.to(encounterId).emit("encounter updated", updatedEncounter);
         });
 

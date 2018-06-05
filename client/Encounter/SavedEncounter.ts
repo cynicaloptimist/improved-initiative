@@ -26,7 +26,7 @@ export interface SavedTag {
 }
 
 export interface SavedEncounter<T> extends Listable {
-    ActiveCombatantId: string;
+    ActiveCombatantId: string | null;
     RoundCounter?: number;
     Combatants: T[];
 }
@@ -39,6 +39,6 @@ export function DefaultSavedEncounter(): SavedEncounter<SavedCombatant> {
         Name: "DEFAULT_SAVED_ENCOUNTER",
         Id: probablyUniqueString(),
         Path: "",
-        Version: process.env.VERSION,
+        Version: process.env.VERSION || "0.0.0",
     };
 }

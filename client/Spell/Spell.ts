@@ -20,7 +20,7 @@ export class Spell {
     public static Default: () => Spell = () => {
         return {
             Id: probablyUniqueString(),
-            Version: process.env.VERSION,
+            Version: process.env.VERSION || "0.0.0",
             Name: "",
             Path: "",
             Source: "",
