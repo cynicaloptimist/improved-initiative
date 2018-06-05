@@ -137,10 +137,6 @@ export function configureLoginRedirect(app: express.Application) {
 }
 
 export function configureLogout(app: express.Application) {
-    if (baseUrl == null) {
-        throw "Base URL is not configured.";
-    }
-
     const logoutPath = "/logout";
     app.get(logoutPath, (req: Req, res: Res) => {
         if (req.session == null) {
@@ -151,6 +147,11 @@ export function configureLogout(app: express.Application) {
             if (err) {
                 console.error(err);
             }
+
+            if (baseUrl == null) {
+                throw "Base URL is not configured.";
+            }
+            
             return res.redirect(baseUrl);
         });
     });
