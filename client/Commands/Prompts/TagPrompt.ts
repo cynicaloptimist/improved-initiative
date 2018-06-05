@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Encounter } from "../../Encounter/Encounter";
@@ -29,7 +30,13 @@ export class TagPrompt implements Prompt {
                 const timing = responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
                 const timingId = responsesById["tag-timing-id"];
 
-                tag = new Tag(text, this.targetCombatant, duration, timing, timingId);
+                // If tag is set to expire at the end of the current combatant's turn in one round, 
+                // we need to add a grace round so it doesn't end immediately at the end of this turn.
+                const timingKeyedCombatant = _.find(this.Combatants, c => timingId == c.Id);
+                const timingKeyedCombatantIsActive = this.IsActive(timingKeyedCombatant);
+                const durationGraceRound = (timingKeyedCombatantIsActive && timing == EndOfTurn) ? 1 : 0;
+
+                tag = new Tag(text, this.targetCombatant, duration + durationGraceRound, timing, timingId);
                 this.encounter.AddDurationTag(tag);
             }
 
