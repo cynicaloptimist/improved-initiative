@@ -1,4 +1,6 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as _ from "lodash";
+
 import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
@@ -168,7 +170,7 @@ export class CombatantViewModel {
     public ReferenceTaggedCondition = (tag: Tag) => {
         const casedConditionName = _.startCase(tag.Text);
         if (Conditions[casedConditionName]) {
-            const prompt = new DefaultPrompt(`<strong>${casedConditionName}</strong><br /> ${Conditions[casedConditionName]}`);
+            const prompt = new DefaultPrompt(`<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`);
             this.PromptUser(prompt);
         }
     }

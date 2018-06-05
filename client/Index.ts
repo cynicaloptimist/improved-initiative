@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
 import { PlayerViewModel } from "./PlayerViewModel";

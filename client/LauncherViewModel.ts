@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { env } from "./Environment";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";

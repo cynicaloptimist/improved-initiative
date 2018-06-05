@@ -1,4 +1,4 @@
-import _ = require("lodash");
+import * as _ from "lodash";
 
 export interface KeyValueSet<T> {
     [key: string]: T;

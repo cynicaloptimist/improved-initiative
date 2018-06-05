@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 export class EventLog {
     public Events = ko.observableArray<string>();
 

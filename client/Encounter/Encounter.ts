@@ -1,5 +1,7 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as _ from "lodash";
 import React = require("react");
+
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -228,28 +230,46 @@ export class Encounter {
     public NextTurn = () => {
         const activeCombatant = this.ActiveCombatant();
 
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "EndOfTurn")
+            .forEach(t => t.Decrement());
+        
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
         if (nextIndex >= this.Combatants().length) {
             nextIndex = 0;
             this.RoundCounter(this.RoundCounter() + 1);
-            this.durationTags.forEach(t => t.Decrement());
         }
 
         const nextCombatant = this.Combatants()[nextIndex];
 
         this.ActiveCombatant(nextCombatant);
+
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
+            .forEach(t => t.Decrement());
+
         this.TurnTimer.Reset();
         this.QueueEmitEncounter();
     }
 
     public PreviousTurn = () => {
-        let previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
+        const activeCombatant = this.ActiveCombatant();
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "StartOfTurn")
+            .forEach(t => t.Increment());
+
+        let previousIndex = this.Combatants().indexOf(activeCombatant) - 1;
         if (previousIndex < 0) {
             previousIndex = this.Combatants().length - 1;
             this.RoundCounter(this.RoundCounter() - 1);
-            this.durationTags.forEach(t => t.Increment());
         }
-        this.ActiveCombatant(this.Combatants()[previousIndex]);
+
+        const previousCombatant = this.Combatants()[previousIndex];
+        this.ActiveCombatant(previousCombatant);
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
+            .forEach(t => t.Increment());
+
         this.QueueEmitEncounter();
     }
 

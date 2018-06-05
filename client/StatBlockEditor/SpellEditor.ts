@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Spell } from "../Spell/Spell";
 
 export class SpellEditor {

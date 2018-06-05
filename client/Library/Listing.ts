@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Listable, ServerListing } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
