@@ -251,13 +251,23 @@ export class Encounter {
     }
 
     public PreviousTurn = () => {
-        let previousIndex = this.Combatants().indexOf(this.ActiveCombatant()) - 1;
+        const activeCombatant = this.ActiveCombatant();
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "StartOfTurn")
+            .forEach(t => t.Increment());
+
+        let previousIndex = this.Combatants().indexOf(activeCombatant) - 1;
         if (previousIndex < 0) {
             previousIndex = this.Combatants().length - 1;
             this.RoundCounter(this.RoundCounter() - 1);
-            this.durationTags.forEach(t => t.Increment());
         }
-        this.ActiveCombatant(this.Combatants()[previousIndex]);
+
+        const previousCombatant = this.Combatants()[previousIndex];
+        this.ActiveCombatant(previousCombatant);
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
+            .forEach(t => t.Increment());
+
         this.QueueEmitEncounter();
     }
 
