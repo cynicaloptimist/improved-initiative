@@ -228,16 +228,24 @@ export class Encounter {
     public NextTurn = () => {
         const activeCombatant = this.ActiveCombatant();
 
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "EndOfTurn")
+            .forEach(t => t.Decrement());
+        
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
         if (nextIndex >= this.Combatants().length) {
             nextIndex = 0;
             this.RoundCounter(this.RoundCounter() + 1);
-            this.durationTags.forEach(t => t.Decrement());
         }
 
         const nextCombatant = this.Combatants()[nextIndex];
 
         this.ActiveCombatant(nextCombatant);
+
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
+            .forEach(t => t.Decrement());
+
         this.TurnTimer.Reset();
         this.QueueEmitEncounter();
     }

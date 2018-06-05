@@ -29,7 +29,7 @@ export class Tag implements Tag {
     public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
     public Visible = ko.pureComputed(() => {
-        return !this.HasDuration || this.DurationRemaining() > 0;
+        return !this.HasDuration || this.DurationRemaining() >= 0;
     });
 
     public static getLegacyTags = (tags: (any)[], combatant: Combatant): Tag[] => {
