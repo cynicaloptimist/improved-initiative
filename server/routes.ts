@@ -24,14 +24,14 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 interface IPageRenderOptions {
-    rootDirectory: string,
-    encounterId: string,
-    baseUrl: string,
-    patreonClientId: string,
-    isLoggedIn: boolean,
-    hasStorage: boolean,
-    hasEpicInitiative: boolean,
-    postedEncounter: string | null
+    rootDirectory: string;
+    encounterId: string;
+    baseUrl: string;
+    patreonClientId: string;
+    isLoggedIn: boolean;
+    hasStorage: boolean;
+    hasEpicInitiative: boolean;
+    postedEncounter: string | null;
 }
 
 const pageRenderOptions = (encounterId: string, session: Express.Session) : IPageRenderOptions => ({
