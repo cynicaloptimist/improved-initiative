@@ -2,9 +2,11 @@ import express = require("express");
 import * as _ from "lodash";
 import patreon = require("patreon");
 import request = require("request");
-import * as DB from "./dbconnection";
 
+import * as DB from "./dbconnection";
 import { User } from "./user";
+
+import thanks from "../thanks";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -15,8 +17,7 @@ const epicRewardIds = ["1937132"];
 const baseUrl = process.env.BASE_URL,
     patreonClientId = process.env.PATREON_CLIENT_ID,
     patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
-    patreonUrl = process.env.PATREON_URL,
-    epicPatreonIds = (process.env.PATREON_ADDITIONAL_EPIC_USERIDS || "").split(",").map(s => s.trim());
+    patreonUrl = process.env.PATREON_URL;
 
 interface Post {
     attributes: {
@@ -79,10 +80,10 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
 
         const hasStorageReward = _.intersection(userRewards, storageRewardIds).length > 0;
 
-        const hasEpicInitiativePromo = _.includes(epicPatreonIds, apiResponse.data.id);
+        const hasEpicInitiativeThanks = _.includes(thanks.map(t => t.PatreonId), apiResponse.data.id);
         const hasEpicInitiativeReward = _.intersection(userRewards, epicRewardIds).length > 0;
 
-        const hasEpicInitiative = hasEpicInitiativePromo || hasEpicInitiativeReward;
+        const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
 
         const standing =
             hasEpicInitiative ? "epic" :
@@ -91,7 +92,7 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
 
         const session = req.session;
         if (session === undefined) {
-            throw 'Session is undefined';
+            throw "Session is undefined";
         }
 
         session.hasStorage = hasEpicInitiative || hasStorageReward;

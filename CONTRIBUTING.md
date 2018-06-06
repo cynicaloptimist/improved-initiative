@@ -37,4 +37,7 @@ For example, (x) => x + x is wrong but the following are correct:
     * Encapsulate html in templates
 
 ## Epic Initiative
-While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to my [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. Be aware that code that you contribute may wind up "locked behind the paywall" if it covers functionality that I'm planning to build for Epic Initiative. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.
+While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.
+
+### thanks.ts
+Epic Initiative is also granted to the app's GitHub contributors. If you contribute a substantial pull request, please add your name/alias, Github URL, and Patreon ID to `thanks.ts`. Patreon doesn't surface your Patreon Id anywhere in their UI as far as I can tell, but you can find it by inspecting any Patreon link to your profile.
