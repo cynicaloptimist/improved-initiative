@@ -11,6 +11,7 @@ module.exports = function (grunt) {
     ts: {
       options: {
         removeComments: false,
+        additionalFlags: '--strictNullChecks'
       },
       server: {
         src: ['server/*.ts'],

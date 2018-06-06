@@ -23,8 +23,19 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const pageRenderOptions = (encounterId: string, session: Express.Session) => ({
-    rootDirectory: "../..",
+interface IPageRenderOptions {
+    rootDirectory: string,
+    encounterId: string,
+    baseUrl: string,
+    patreonClientId: string,
+    isLoggedIn: boolean,
+    hasStorage: boolean,
+    hasEpicInitiative: boolean,
+    postedEncounter: string | null
+}
+
+const pageRenderOptions = (encounterId: string, session: Express.Session) : IPageRenderOptions => ({
+    rootDirectory: "../..", 
     encounterId,
     baseUrl,
     patreonClientId,
@@ -62,7 +73,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     };
 
     app.use(session({
-        store: store || null,
+        store: store || undefined,
         secret: process.env.SESSION_SECRET || probablyUniqueString(),
         resave: false,
         saveUninitialized: false,
@@ -75,28 +86,33 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     configureMetricsRoutes(app);
     
     app.get("/", (req: Req, res: Res) => {
-        const renderOptions = pageRenderOptions(playerViews.InitializeNew(), req.session);
+        const session = req.session;
+        if (session === undefined) {
+            throw "Session is not available";
+        }
+
+        const renderOptions = pageRenderOptions(playerViews.InitializeNew(), session);
         if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
-                req.session.hasStorage = true;
+                session.hasStorage = true;
             }
 
             if (defaultAccountLevel === "epicinitiative") {
-                req.session.hasStorage = true;
-                req.session.hasEpicInitiative = true;
+                session.hasStorage = true;
+                session.hasEpicInitiative = true;
             }
 
-            req.session.isLoggedIn = true;
+            session.isLoggedIn = true;
 
             if (process.env.DB_CONNECTION_STRING) {
                 upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
                 .then(result => {
-                    req.session.userId = result._id;
+                    session.userId = result._id;
                     res.render("landing", renderOptions);
                 });
             } else {
-                req.session.userId = probablyUniqueString();
+                session.userId = probablyUniqueString();
                 res.render("landing", renderOptions);
             }
         } else {
@@ -105,8 +121,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/e/:id", (req: Req, res: Res) => {
-        const session: any = req.session;
-        const options = pageRenderOptions(req.params.id, req.session);
+        const session = req.session;
+        if (session === undefined) {
+            throw "Session is not available";
+        }
+
+        const options = pageRenderOptions(req.params.id, session);
         if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
@@ -114,7 +134,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/p/:id", (req: Req, res: Res) => {
-        res.render("playerview", pageRenderOptions(req.params.id, req.session));
+        const session = req.session;
+        if (session == null) {
+            throw "Session is not available";
+        }
+
+        res.render("playerview", pageRenderOptions(req.params.id, session));
     });
 
     app.get("/playerviews/:id", (req: Req, res: Res) => {
@@ -122,7 +147,12 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     });
 
     app.get("/templates/:name", (req: Req, res: Res) => {
-        res.render(`templates/${req.params.name}`, pageRenderOptions("", req.session));
+        const session = req.session;
+        if (session == null) {
+            throw "Session is not available";
+        }
+
+        res.render(`templates/${req.params.name}`, pageRenderOptions("", session));
     });
 
     app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
