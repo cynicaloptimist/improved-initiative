@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import koMapping = require("knockout-mapping");
+import * as koMapping from "knockout-mapping";
 import * as _ from "lodash";
 
 import { StatBlock } from "../StatBlock/StatBlock";
