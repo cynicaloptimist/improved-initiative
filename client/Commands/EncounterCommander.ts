@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { CurrentSettings } from "../Settings/Settings";
 import { StatBlock } from "../StatBlock/StatBlock";
@@ -98,7 +100,9 @@ export class EncounterCommander {
 
     public NextTurn = () => {
         const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
-        Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });
+        if (turnEndCombatant) {
+            Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });    
+        }
 
         this.tracker.Encounter.NextTurn();
         const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();

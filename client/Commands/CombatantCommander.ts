@@ -1,4 +1,6 @@
+import * as ko from "knockout";
 import React = require("react");
+
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";

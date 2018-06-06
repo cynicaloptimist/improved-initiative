@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { TutorialSteps } from "./TutorialSteps";

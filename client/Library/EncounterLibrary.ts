@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { ServerListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";

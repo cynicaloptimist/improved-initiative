@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Prompt } from "./Prompt";
 
 export class PromptQueue {

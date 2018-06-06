@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Listable } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { env } from "../Environment";

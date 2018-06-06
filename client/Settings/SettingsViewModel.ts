@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as ko from "knockout";
+
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";

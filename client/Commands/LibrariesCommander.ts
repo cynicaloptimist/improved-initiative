@@ -1,4 +1,4 @@
-import _ = require("lodash");
+import * as _ from "lodash";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
@@ -131,7 +131,7 @@ export class LibrariesCommander {
     public ReferenceCondition = (conditionName: string) => {
         const casedConditionName = _.startCase(conditionName);
         if (Conditions[casedConditionName]) {
-            const prompt = new DefaultPrompt(`<strong>${casedConditionName}</strong><br /> ${Conditions[casedConditionName]}`);
+            const prompt = new DefaultPrompt(`<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`);
             this.tracker.PromptQueue.Add(prompt);
         }
     }

@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { SavedTag } from "../Encounter/SavedEncounter";
 import { Combatant } from "./Combatant";
 import { DurationTiming } from "./DurationTiming";

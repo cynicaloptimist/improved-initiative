@@ -1,4 +1,7 @@
-import _ = require("lodash");
+import * as ko from "knockout";
+import * as koMapping from "knockout-mapping";
+import * as _ from "lodash";
+
 import { StatBlock } from "../StatBlock/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 
@@ -48,7 +51,7 @@ export class StatBlockEditor {
         let modifierLists = ["Saves", "Skills"];
         let traitLists = ["Traits", "Actions", "Reactions", "LegendaryActions"];
 
-        let observableStatBlock = ko["mapping"].fromJS(this.statBlock);
+        let observableStatBlock = koMapping.fromJS(this.statBlock);
 
         let makeRemovableArrays = (arrayNames: string[], makeEmptyValue: () => any) => {
             for (let arrayName of arrayNames) {

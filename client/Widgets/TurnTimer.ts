@@ -1,4 +1,5 @@
-declare var moment;
+import * as ko from "knockout";
+import * as moment from "moment";
 
 export class TurnTimer {
     private elapsedSeconds = ko.observable(0);

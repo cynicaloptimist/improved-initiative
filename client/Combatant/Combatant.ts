@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { SavedCombatant } from "../Encounter/SavedEncounter";
