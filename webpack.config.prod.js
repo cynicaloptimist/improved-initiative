@@ -2,8 +2,9 @@ const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const baseConfig = require("./base.config");
+const merge = require("webpack-merge");
 
-module.exports = Object.assign(baseConfig,
+module.exports = merge(baseConfig,
   {
     plugins: [
       new UglifyJSPlugin(),
