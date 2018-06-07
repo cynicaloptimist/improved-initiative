@@ -11,16 +11,17 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 * Open pull requests against the `development` branch.
 * Link your pull request to at least one open issue (ideally exactly one).
 * If there is no open issue for your PR, open one first for discussion before submitting any code.
+* Include at least one test for your code.
 * When appropriate, encapsulate your code in its own class, in its own file.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
 * Ensure your PR is deploy-ready, as `development` auto-deploys to the [public dev server](http://improved-initiative-dev.azurewebsites.net/)
 
 ### Names
+* Use whole words, not abbreviations, in names.
 * Use PascalCase for type names and public methods.
 * Do not use "I" as a prefix for interface names.
 * Use camelCase for local variables and private properties.
 * Do not use "_" as a prefix for private properties.
-* Use whole words in names when possible.
 
 ### Style
 * Use arrow functions over anonymous function expressions.
