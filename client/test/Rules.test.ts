@@ -1,4 +1,4 @@
-import { DefaultRules, IRules } from "../client/Rules/Rules";
+import { DefaultRules, IRules } from "../Rules/Rules";
 
 describe("DefaultRules", () => {
     let rules: IRules;

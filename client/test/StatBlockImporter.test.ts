@@ -1,6 +1,6 @@
 import * as $ from "jquery";
 
-import { StatBlockImporter } from "../client/Importers/StatBlockImporter";
+import { StatBlockImporter } from "../Importers/StatBlockImporter";
 
 describe("StatBlockImporter", () => {
     let monster: Element;
