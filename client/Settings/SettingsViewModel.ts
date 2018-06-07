@@ -163,11 +163,6 @@ export class SettingsViewModel {
         this.PreviousTip = cycleTipIndex.bind(-1);
 
         this.createEpicInitiativeSettingsComponent(currentSettings);
-
-        if (currentSettings.Commands.length === 0) {
-            // Loads initial set of commands for new users
-            this.SaveAndClose();
-        }
     }
 
     private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
