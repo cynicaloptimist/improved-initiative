@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import * as _ from "lodash";
 
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { Command } from "../Commands/Command";
@@ -77,7 +78,7 @@ function getDefaultSettings(): Settings {
                 backgroundUrl: "",
             }
         },
-        Version: process.env.VERSION
+        Version: process.env.VERSION || "0.0.0"
     };
 }
 
@@ -129,15 +130,13 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
         }
     });
 
-    newSettings.Commands.forEach(b => {
-        const matchedCommands = commands.filter(c => c.Description == b.Name);
-        if (matchedCommands.length !== 1) {
-            console.warn(`Couldn't bind command: ${b.Name}`);
-            return;
+    commands.forEach(command => {
+        const commandSetting = _.find(newSettings.Commands, c => c.Name == command.Description);
+        if (commandSetting) {
+            command.KeyBinding = commandSetting.KeyBinding;
+            command.ShowOnActionBar(commandSetting.ShowOnActionBar);
         }
-        Mousetrap.bind(b.KeyBinding, matchedCommands[0].ActionBinding);
-        matchedCommands[0].KeyBinding = b.KeyBinding;
-        matchedCommands[0].ShowOnActionBar(b.ShowOnActionBar);
+        Mousetrap.bind(command.KeyBinding, command.ActionBinding);
     });
 }
 
