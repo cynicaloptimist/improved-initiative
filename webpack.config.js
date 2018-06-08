@@ -1,8 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const baseConfig = require("./base.config");
+const merge = require("webpack-merge");
 
-module.exports = Object.assign(baseConfig,
+module.exports = merge(baseConfig,
   {
     devtool: 'inline-source-map',
     watch: true,

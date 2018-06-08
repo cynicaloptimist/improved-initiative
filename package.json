@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -51,7 +51,8 @@
     "typescript": "^2.6.2",
     "uglify-js": "^2.7.4",
     "uglifyjs-webpack-plugin": "^1.2.4",
-    "webpack": "^3.11.0"
+    "webpack": "^3.11.0",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "awesomplete": "^1.1.2",
@@ -90,6 +91,11 @@
     "socket.io-client": "^2.1.1"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "client/tsconfig.json"
+      }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
@@ -104,7 +110,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "grunt --no-color postinstall && webpack -p --config ./webpack.config.prod.js",
+    "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest"

@@ -25,7 +25,7 @@ export const initialize = () => {
 export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string) {
     if (!connectionString) {
         console.error("No connection string found.");
-        return;
+        throw "No connection string found.";
     }
 
     return client.connect(connectionString)
@@ -58,13 +58,13 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         patreonId
                     });
                 });
-        });
+        }) as Promise<User>;
 }
 
 export function getAccount(userId: string, callBack: (userWithListings: any) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
-        //return null;
+        throw "No connection string found.";
     }
 
     return client.connect(connectionString)
@@ -144,6 +144,7 @@ function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[
 export function setSettings(userId, settings) {
     if (!connectionString) {
         console.error("No connection string found.");
+        throw "No connection string found.";
     }
 
     return client.connect(connectionString)
@@ -161,6 +162,7 @@ export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encount
 export function getEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: {}) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
+        throw "No connection string found.";
     }
 
     return client.connect(connectionString)
@@ -186,6 +188,7 @@ export function getEntity(entityPath: EntityPath, userId: string, entityId: stri
 export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
+        throw "No connection string found.";
     }
 
     return client.connect(connectionString)
@@ -208,7 +211,7 @@ export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId
 export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
-        //return null;
+        throw "No connection string found.";
     }
 
     if (!entity.Id || !entity.Version) {
@@ -238,7 +241,7 @@ export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: s
 export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
-        //return null;
+        throw "No connection string found.";
     }
 
     for (const entity of entities) {
@@ -247,12 +250,15 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
         }
     }
     
-
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection<User>("users");
             return users.findOne({ _id: userId })
                 .then(u => {
+                    if (u == null) {
+                        throw 'User ID not found: ' + userId;
+                    }
+
                     const updatedEntities = u[entityPath];
                     for (const entity of entities) {
                         updatedEntities[entity.Id] = entity;

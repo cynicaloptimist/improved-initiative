@@ -75,7 +75,7 @@ export class StatBlock {
         LegendaryActions: [],
         Description: "",
         Player: "",
-        Version: process.env.VERSION,
+        Version: process.env.VERSION || "0.0.0",
         ImageURL: "",
     })
 

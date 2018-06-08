@@ -10,7 +10,7 @@ type Res = Express.Response & express.Response;
 
 const dbAvailable = !!process.env.DB_CONNECTION_STRING;
 
-const verifyStorage = (req: Req) => {
+const verifyStorage = (req: Express.Request): req is { session: Express.Session } => {
     return dbAvailable && req.session && req.session.hasStorage;
 };
 
@@ -27,9 +27,16 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }
+        
+        const session = req.session;
+        if (session === undefined) {
+            throw 'Session is undefined.';
+        }
+    
         const entityId = parsePossiblyMalformedIdFromParams(req.params);
     
-        return DB.getEntity(route, req.session.userId, entityId, entity => {
+        return DB.getEntity(route, session.userId, entityId, entity => {
+
             if (entity) {
                 return res.json(entity);    
             } else {
@@ -41,7 +48,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         });
     });
     
-    app.post(`/my/${route}/`, (req, res: Res) => {
+    app.post(`/my/${route}/`, (req: Req, res: Res) => {
         if (!verifyStorage(req)) {
             return res.sendStatus(403);
         }

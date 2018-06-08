@@ -57,10 +57,15 @@ export function configureMetricsRoutes(app: express.Application) {
             return res.status(501).send("No metrics pipeline configured.");
         }
 
+        let session = req.session;
+        if (session === undefined) {
+            throw 'Session is undefined.';
+        }
+
         const eventName = req.params.eventName;
         const eventData = req.body || {};
-        eventData.sessionId = req.session.id;
-        eventData.userId = req.session.userId || null;
+        eventData.sessionId = session.id;
+        eventData.userId = session.userId || null;
         eventData.ipAddress = req.ip;
         eventData.keen = { addons };
         keenClient.recordEvent(eventName, eventData);
