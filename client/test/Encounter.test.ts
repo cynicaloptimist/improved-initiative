@@ -7,13 +7,14 @@ import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 
 function buildEncounter() {
-    const enricher = new StatBlockTextEnricher(jest.fn(), jest.fn(), jest.fn(), null, new DefaultRules());
+    const rules = new DefaultRules();
+    const enricher = new StatBlockTextEnricher(jest.fn(), jest.fn(), jest.fn(), null, rules);
     const encounter = new Encounter(
         new PromptQueue(),
         null,
         jest.fn().mockReturnValue(null),
         jest.fn(),
-        new DefaultRules(),
+        rules,
         enricher
     );
 
@@ -35,4 +36,5 @@ describe("Encounter", () => {
         encounter.AddCombatantFromStatBlock(StatBlock.Default());
         expect(encounter.Combatants().length).toBe(1);
     });
+
 });
