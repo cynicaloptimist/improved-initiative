@@ -1,6 +1,6 @@
+import { DurationTiming } from "../../common/DurationTiming";
 import { Listable } from "../../common/Listable";
 import { probablyUniqueString } from "../../common/Toolbox";
-import { DurationTiming } from "../Combatant/DurationTiming";
 import { StatBlock } from "../StatBlock/StatBlock";
 
 export interface SavedCombatant {
