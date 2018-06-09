@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import * as koMapping from "knockout-mapping";
 import * as _ from "lodash";
 
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 
 export class StatBlockEditor {

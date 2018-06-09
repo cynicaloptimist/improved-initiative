@@ -5,7 +5,7 @@ import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { Settings } from "../Settings/Settings";
 import { Spell } from "../Spell/Spell";
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 
 const BATCH_SIZE = 10;
 export class AccountClient {

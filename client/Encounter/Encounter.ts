@@ -15,7 +15,7 @@ import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";

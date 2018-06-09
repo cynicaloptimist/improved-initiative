@@ -7,7 +7,7 @@ import mustacheExpress = require("mustache-express");
 import request = require("request");
 
 import { Spell } from "../client/Spell/Spell";
-import { StatBlock } from "../client/StatBlock/StatBlock";
+import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import { upsertUser } from "./dbconnection";
 import { Library } from "./library";

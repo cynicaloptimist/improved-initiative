@@ -1,4 +1,5 @@
 import * as _ from "lodash";
+import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
@@ -8,7 +9,6 @@ import { NPCLibrary } from "../Library/NPCLibrary";
 import { PCLibrary } from "../Library/PCLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Spell } from "../Spell/Spell";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";

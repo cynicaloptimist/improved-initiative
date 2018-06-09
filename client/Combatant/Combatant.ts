@@ -5,7 +5,7 @@ import { Encounter } from "../Encounter/Encounter";
 import { SavedCombatant } from "../Encounter/SavedEncounter";
 import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { AbilityScores, StatBlock } from "../StatBlock/StatBlock";
+import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { Metrics } from "../Utility/Metrics";
 import { Tag } from "./Tag";
 

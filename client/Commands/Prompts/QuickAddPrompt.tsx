@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StatBlock } from "../../StatBlock/StatBlock";
+import { StatBlock } from "../../../common/StatBlock";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 

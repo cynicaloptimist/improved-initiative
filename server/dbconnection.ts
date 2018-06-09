@@ -4,8 +4,8 @@ const connectionString = process.env.DB_CONNECTION_STRING;
 
 import { DefaultSavedEncounter } from "../client/Encounter/SavedEncounter";
 import { Spell } from "../client/Spell/Spell";
-import { StatBlock } from "../client/StatBlock/StatBlock";
 import { Listable, ServerListing } from "../common/Listable";
+import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";
 import { User } from "./user";
 
@@ -256,7 +256,7 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
             return users.findOne({ _id: userId })
                 .then(u => {
                     if (u == null) {
-                        throw 'User ID not found: ' + userId;
+                        throw "User ID not found: " + userId;
                     }
 
                     const updatedEntities = u[entityPath];

@@ -1,8 +1,8 @@
+import { StatBlock } from "../../common/StatBlock";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { Encounter } from "../Encounter/Encounter";
 import { DefaultRules } from "../Rules/Rules";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 

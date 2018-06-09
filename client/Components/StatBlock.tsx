@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 
 interface StatBlockProps {

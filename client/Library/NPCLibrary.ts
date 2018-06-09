@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 import { ServerListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 

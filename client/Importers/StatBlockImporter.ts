@@ -1,5 +1,5 @@
 import { AccountClient } from "../Account/AccountClient";
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
