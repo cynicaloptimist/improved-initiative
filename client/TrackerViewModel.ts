@@ -11,7 +11,6 @@ import { BuildEncounterCommandList } from "./Commands/Command";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
-import { DefaultPrompt } from "./Commands/Prompts/Prompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";

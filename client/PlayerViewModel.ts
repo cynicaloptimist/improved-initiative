@@ -1,11 +1,10 @@
-import * as ko from "knockout";
 import * as Color from "color";
+import * as ko from "knockout";
 import * as io from "socket.io-client";
 
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
-import { Tag } from "./Combatant/Tag";
 import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";

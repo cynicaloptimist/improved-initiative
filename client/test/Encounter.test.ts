@@ -2,9 +2,8 @@ import { StatBlock } from "../../common/StatBlock";
 import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { Encounter } from "../Encounter/Encounter";
 import { DefaultRules } from "../Rules/Rules";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { InitializeSettings } from "../Settings/Settings";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
-import { Store } from "../Utility/Store";
 
 function buildEncounter() {
     const rules = new DefaultRules();

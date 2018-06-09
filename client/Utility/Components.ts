@@ -1,5 +1,5 @@
-import * as _ from "lodash";
 import * as ko from "knockout";
+import * as _ from "lodash";
 
 import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";

@@ -1,6 +1,4 @@
 import * as React from "react";
-import { StatBlock } from "../../../common/StatBlock";
-import { Button } from "../../Components/Button";
 import { Metrics } from "../../Utility/Metrics";
 import { Store } from "../../Utility/Store";
 import { Prompt } from "./Prompt";

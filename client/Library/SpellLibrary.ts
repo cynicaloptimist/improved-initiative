@@ -1,5 +1,4 @@
-import * as ko from "knockout";;
-import * as _ from "lodash";
+import * as ko from "knockout";
 
 import { ServerListing } from "../../common/Listable";
 import { concatenatedStringRegex } from "../../common/Toolbox";

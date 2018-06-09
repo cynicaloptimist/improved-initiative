@@ -1,7 +1,7 @@
 import { Listable } from "../../common/Listable";
+import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 import { Spell } from "../Spell/Spell";
-import { StatBlock } from "../../common/StatBlock";
 
 export class Store {
     private static _prefix = "ImprovedInitiative";
