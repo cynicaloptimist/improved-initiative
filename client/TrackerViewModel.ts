@@ -45,7 +45,7 @@ export class TrackerViewModel {
             this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
-        new AccountClient().GetAccount(account => {
+        this.accountClient.GetAccount(account => {
             if (!account) {
                 return;
             }
@@ -57,6 +57,8 @@ export class TrackerViewModel {
 
         Metrics.TrackLoad();
     }
+
+    private accountClient = new AccountClient();
 
     private displayPrivacyNotificationIfNeeded = () => {
         if (Store.Load(Store.User, "AllowTracking") == null) {
