@@ -1,5 +1,5 @@
+import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
-import { Spell } from "../Spell/Spell";
 import { Importer } from "./Importer";
 
 export class SpellImporter extends Importer {

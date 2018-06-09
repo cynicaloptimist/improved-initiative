@@ -8,7 +8,7 @@ import { Listing } from "../Library/Listing";
 import { NPCLibrary } from "../Library/NPCLibrary";
 import { PCLibrary } from "../Library/PCLibrary";
 import { Conditions } from "../Rules/Conditions";
-import { Spell } from "../Spell/Spell";
+import { Spell } from "../../common/Spell";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import React = require("react");
 
 import { Listing } from "../../Library/Listing";
-import { Spell } from "../../Spell/Spell";
+import { Spell } from "../../../common/Spell";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { Prompt } from "./Prompt";
 

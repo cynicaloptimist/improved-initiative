@@ -1,5 +1,5 @@
-import { Listable } from "../../common/Listable";
-import { probablyUniqueString } from "../../common/Toolbox";
+import { Listable } from "./Listable";
+import { probablyUniqueString } from "./Toolbox";
 
 export interface Spell extends Listable {
     Source: string;

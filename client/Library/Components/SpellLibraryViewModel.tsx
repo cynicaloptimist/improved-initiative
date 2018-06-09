@@ -1,6 +1,6 @@
 import * as React from "react";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { Spell } from "../../Spell/Spell";
+import { Spell } from "../../../common/Spell";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";

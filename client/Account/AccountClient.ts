@@ -5,7 +5,7 @@ import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { Settings } from "../Settings/Settings";
-import { Spell } from "../Spell/Spell";
+import { Spell } from "../../common/Spell";
 
 const BATCH_SIZE = 10;
 export class AccountClient {

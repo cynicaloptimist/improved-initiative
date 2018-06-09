@@ -5,7 +5,7 @@ import session = require("express-session");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
-import { Spell } from "../client/Spell/Spell";
+import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import { upsertUser } from "./dbconnection";

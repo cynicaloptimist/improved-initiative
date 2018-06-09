@@ -2,7 +2,7 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
-import { Spell } from "../client/Spell/Spell";
+import { Spell } from "../common/Spell";
 import { Listable, ServerListing } from "../common/Listable";
 import { DefaultSavedEncounter } from "../common/SavedEncounter";
 import { StatBlock } from "../common/StatBlock";

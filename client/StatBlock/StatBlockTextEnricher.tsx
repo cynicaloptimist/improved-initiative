@@ -8,7 +8,7 @@ import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice, IRules } from "../Rules/Rules";
-import { Spell } from "../Spell/Spell";
+import { Spell } from "../../common/Spell";
 
 interface ReplaceConfig {
     [name: string]: {
