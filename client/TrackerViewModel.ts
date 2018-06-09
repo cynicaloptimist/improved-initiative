@@ -1,6 +1,6 @@
+import * as ko from "knockout";
 import * as React from "react";
 import * as io from "socket.io-client";
-import * as ko from "knockout";
 
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
