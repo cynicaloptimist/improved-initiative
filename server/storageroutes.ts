@@ -1,9 +1,7 @@
 import express = require("express");
-import request = require("request");
 
 import { Listable } from "../common/Listable";
 import * as DB from "./dbconnection";
-import { Library } from "./library";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -30,7 +28,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         
         const session = req.session;
         if (session === undefined) {
-            throw 'Session is undefined.';
+            throw "Session is undefined.";
         }
     
         const entityId = parsePossiblyMalformedIdFromParams(req.params);

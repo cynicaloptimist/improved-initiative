@@ -4,7 +4,6 @@ import express = require("express");
 import session = require("express-session");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
-import request = require("request");
 
 import { Spell } from "../client/Spell/Spell";
 import { StatBlock } from "../common/StatBlock";
