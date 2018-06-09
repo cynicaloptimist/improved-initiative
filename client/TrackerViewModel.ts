@@ -129,7 +129,7 @@ export class TrackerViewModel {
     
     public Encounter = new Encounter(
         this.PromptQueue,
-        this.Socket,
+        this.playerViewClient,
         this.addCombatantViewModel,
         this.removeCombatantViewModels,
         this.Rules,

@@ -23,10 +23,9 @@ import { TurnTimer } from "../Widgets/TurnTimer";
 import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
 
 export class Encounter {
-    private playerViewClient: PlayerViewClient;
     constructor(
         promptQueue: PromptQueue,
-        private Socket: SocketIOClient.Socket,
+        private playerViewClient: PlayerViewClient,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
         public Rules: IRules,
@@ -62,8 +61,6 @@ export class Encounter {
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
-
-        this.playerViewClient = new PlayerViewClient(this.Socket);
     }
 
     public TurnTimer = new TurnTimer();
