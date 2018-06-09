@@ -1,7 +1,7 @@
-import { DurationTiming } from "../../common/DurationTiming";
-import { Listable } from "../../common/Listable";
-import { StatBlock } from "../../common/StatBlock";
-import { probablyUniqueString } from "../../common/Toolbox";
+import { DurationTiming } from "./DurationTiming";
+import { Listable } from "./Listable";
+import { StatBlock } from "./StatBlock";
+import { probablyUniqueString } from "./Toolbox";
 
 export interface SavedCombatant {
     Id: string;

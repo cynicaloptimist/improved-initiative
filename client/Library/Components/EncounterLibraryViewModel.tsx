@@ -1,7 +1,7 @@
 import * as React from "react";
+import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
-import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { FilterCache } from "../FilterCache";

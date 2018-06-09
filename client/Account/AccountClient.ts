@@ -1,6 +1,6 @@
 import { Listable } from "../../common/Listable";
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
-import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
 import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";

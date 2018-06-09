@@ -1,7 +1,7 @@
 import Awesomplete = require("awesomplete");
 import React = require("react");
 import { AccountClient } from "../../Account/AccountClient";
-import { SavedCombatant, SavedEncounter } from "../../Encounter/SavedEncounter";
+import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";

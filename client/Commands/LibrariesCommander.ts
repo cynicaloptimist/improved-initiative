@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
-import { SavedCombatant, SavedEncounter } from "../Encounter/SavedEncounter";
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { NPCLibrary } from "../Library/NPCLibrary";

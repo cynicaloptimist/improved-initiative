@@ -4,8 +4,8 @@ import * as io from "socket.io-client";
 
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
+import { SavedEncounter } from "./../common/SavedEncounter";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
-import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";

@@ -20,7 +20,7 @@ import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
-import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 
 export class Encounter {
     constructor(

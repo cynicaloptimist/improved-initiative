@@ -1,5 +1,5 @@
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { probablyUniqueString } from "../../common/Toolbox";
-import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
 
 function updateLegacySavedCreature(savedCreature: any) {
     if (!savedCreature.StatBlock) {
