@@ -38,12 +38,11 @@ export class TrackerViewModel {
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
         });
 
-        const playerViewClient = new PlayerViewClient(this.Socket);
-        playerViewClient.JoinEncounter(this.Encounter.EncounterId);
-        playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
-        playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
+        this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
+        this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
         CurrentSettings.subscribe(v => {
-            playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
+            this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
         new AccountClient().GetAccount(account => {
@@ -117,6 +116,8 @@ export class TrackerViewModel {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
+    private playerViewClient = new PlayerViewClient(this.Socket);
+    
     public Rules = new DefaultRules();
 
     public StatBlockTextEnricher = new StatBlockTextEnricher(
