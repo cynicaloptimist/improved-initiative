@@ -37,4 +37,7 @@ describe("Encounter", () => {
         expect(encounter.Combatants().length).toBe(1);
     });
 
+    test("Combat should not be active", () => {
+        expect(encounter.State()).toBe("inactive");
+    });
 });
