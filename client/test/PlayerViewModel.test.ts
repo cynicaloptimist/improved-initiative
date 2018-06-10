@@ -69,4 +69,24 @@ describe("PlayerViewModel", () => {
 
         expect(playerViewModel.imageModal().Visible).toBe(false);
     });
+
+    test("Applying damage does not splash combatant portraits", () => {
+        const combatant1 = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        
+        env.HasEpicInitiative = true;
+        const settings = CurrentSettings();
+        settings.PlayerView.DisplayPortraits = true;
+        settings.PlayerView.SplashPortraits = true;
+        playerViewModel.LoadSettings(settings.PlayerView);
+        
+        expect(playerViewModel.imageModal().Visible).toBe(false);
+
+        combatant1.ApplyDamage(5);
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+
+        expect(playerViewModel.imageModal().Visible).toBe(false);
+    });
 });
