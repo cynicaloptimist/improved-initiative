@@ -31,7 +31,7 @@ export class PlayerViewModel {
     private displayPortraits = ko.observable(false);
     private splashPortraits = false;
 
-    private imageModal = ko.observable<ImageModalState>({
+    public imageModal = ko.observable<ImageModalState>({
         Visible: false,
         URL: "",
         Caption: "",
