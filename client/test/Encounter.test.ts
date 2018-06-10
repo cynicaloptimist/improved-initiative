@@ -1,24 +1,8 @@
+import { buildEncounter } from "./buildEncounter";
+
 import { StatBlock } from "../../common/StatBlock";
-import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { Encounter } from "../Encounter/Encounter";
-import { DefaultRules } from "../Rules/Rules";
 import { InitializeSettings } from "../Settings/Settings";
-import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
-
-function buildEncounter() {
-    const rules = new DefaultRules();
-    const enricher = new StatBlockTextEnricher(jest.fn(), jest.fn(), jest.fn(), null, rules);
-    const encounter = new Encounter(
-        new PromptQueue(),
-        null,
-        jest.fn().mockReturnValue(null),
-        jest.fn(),
-        rules,
-        enricher
-    );
-
-    return encounter;
-}
 
 describe("Encounter", () => {
     let encounter: Encounter;
