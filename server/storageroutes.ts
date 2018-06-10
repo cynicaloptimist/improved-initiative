@@ -74,7 +74,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         }
         const entityId = parsePossiblyMalformedIdFromParams(req.params);
         
-        return DB.deleteEntity<T>(route, req.session.userId, entityId, result => {
+        return DB.deleteEntity(route, req.session.userId, entityId, result => {
             if (!result) {
                 return res.sendStatus(404);    
             }
