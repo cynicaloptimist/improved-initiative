@@ -1,35 +1,35 @@
-import { PlayerView } from "../../common/PlayerView";
 import { StatBlock } from "../../common/StatBlock";
+import { Encounter } from "../Encounter/Encounter";
 import { PlayerViewModel } from "../PlayerViewModel";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "./buildEncounter";
 
+const mockIo: any = {
+    on: jest.fn(),
+    emit: jest.fn()
+};
+
 describe("PlayerViewModel", () => {
     let playerViewModel: PlayerViewModel;
+    let encounter: Encounter;
     beforeEach(() => {
         InitializeSettings();
-        playerViewModel = new PlayerViewModel();
-        const jquery = jest.genMockFromModule("jquery");
-        window["$"] = jquery;
+        playerViewModel = new PlayerViewModel(mockIo);
+        encounter = buildEncounter();
+        
     });
 
-    test("Setting the encounter populates combatants", () => {
-        const encounter = buildEncounter();
-        encounter.AddCombatantFromStatBlock(StatBlock.Default());
-        const encounterState = encounter.SavePlayerDisplay();
-        
-        const playerView: PlayerView = {
-            encounterState,
-            settings: CurrentSettings().PlayerView
-        };
+    afterEach(() => {
 
-        window["$"].ajax = jest.fn().mockReturnValue({
-            done: c => c(playerView)
-        });
+    });
+
+    test("Loading the encounter populates combatants", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
 
         expect(playerViewModel.combatants().length).toBe(0);
 
-        playerViewModel.LoadEncounterFromServer("snarf");
+        playerViewModel.LoadSettings(CurrentSettings().PlayerView);
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
         
         expect(playerViewModel.combatants().length).toBe(1);
     });
