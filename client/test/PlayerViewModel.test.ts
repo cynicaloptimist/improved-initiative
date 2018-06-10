@@ -33,18 +33,21 @@ describe("PlayerViewModel", () => {
     });
 
     test("Advancing the turn splashes combatant portraits when available", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        
         env.HasEpicInitiative = true;
         const settings = CurrentSettings();
         settings.PlayerView.DisplayPortraits = true;
         settings.PlayerView.SplashPortraits = true;
         playerViewModel.LoadSettings(settings.PlayerView);
-
-        const combatant1 = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
-        const combatant2 = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
-        encounter.StartEncounter();
-
+        
         expect(playerViewModel.imageModal().Visible).toBe(false);
+
+        encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+
         expect(playerViewModel.imageModal().Visible).toBe(true);
     });
 });
