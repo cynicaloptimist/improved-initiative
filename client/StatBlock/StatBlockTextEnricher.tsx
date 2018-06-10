@@ -3,12 +3,12 @@ import * as Markdown from "markdown-it";
 import * as React from "react";
 import * as ReactReplace from "react-string-replace-recursively";
 
+import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex, toModifierString } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice, IRules } from "../Rules/Rules";
-import { Spell } from "../../common/Spell";
 
 interface ReplaceConfig {
     [name: string]: {

@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import React = require("react");
 
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -20,7 +21,6 @@ import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 
 export class Encounter {
     constructor(

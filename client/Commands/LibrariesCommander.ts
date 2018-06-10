@@ -1,14 +1,13 @@
 import * as _ from "lodash";
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
-import { AccountClient } from "../Account/AccountClient";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { NPCLibrary } from "../Library/NPCLibrary";
 import { PCLibrary } from "../Library/PCLibrary";
 import { Conditions } from "../Rules/Conditions";
-import { Spell } from "../../common/Spell";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
@@ -18,12 +17,10 @@ import { DefaultPrompt } from "./Prompts/Prompt";
 import { SpellPromptWrapper } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
-    private accountClient: AccountClient;
     constructor(
         private tracker: TrackerViewModel,
         private libraries: Libraries,
         private encounterCommander: EncounterCommander) {
-        this.accountClient = new AccountClient();
     }
 
     public ShowLibraries = () => this.tracker.LibrariesVisible(true);

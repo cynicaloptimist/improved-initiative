@@ -168,16 +168,6 @@ export class StatBlockEditor {
     public RevertStatBlock = () => {
         this.EditableStatBlock(null);
     }
-
-    private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {
-        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
-            return Number(value);
-        }
-        if (defaultValue !== null) {
-            return defaultValue;
-        }
-        return NaN;
-    }
 }
 
 ko.components.register("statblockeditor", {

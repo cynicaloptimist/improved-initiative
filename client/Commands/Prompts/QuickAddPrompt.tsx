@@ -50,5 +50,5 @@ export class QuickAddPromptWrapper implements Prompt {
         Metrics.TrackEvent("CombatantQuickAdded", { Name: name });
     }
 
-    private component = <QuickAddPrompt />;
+    public component = <QuickAddPrompt />;
 }

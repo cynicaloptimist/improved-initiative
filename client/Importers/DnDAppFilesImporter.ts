@@ -1,5 +1,5 @@
-import { StatBlock } from "../../common/StatBlock";
 import { Spell } from "../../common/Spell";
+import { StatBlock } from "../../common/StatBlock";
 import { SpellImporter } from "./SpellImporter";
 import { StatBlockImporter } from "./StatBlockImporter";
 

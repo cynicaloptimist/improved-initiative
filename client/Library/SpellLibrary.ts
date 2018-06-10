@@ -1,9 +1,9 @@
 import * as ko from "knockout";
 
 import { ServerListing } from "../../common/Listable";
+import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
-import { Spell } from "../../common/Spell";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 

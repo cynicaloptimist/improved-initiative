@@ -18,7 +18,7 @@ export class Importer {
         if (!matches) {
             return { Value: 0, Notes: "" };
         }
-        const [_, value, notes] = matches;
+        const [, value, notes] = matches;
         return {
             Value: parseInt(value),
             Notes: notes || ""

@@ -226,7 +226,7 @@ export class TrackerViewModel {
         return "show-center-right-left";
     });
 
-    private toolbarComponent = ko.computed(() => {
+    public toolbarComponent = ko.computed(() => {
         const commandsToHideByDescription = this.Encounter.State() == "active" ?
             ["Start Encounter"] :
             ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
@@ -240,7 +240,7 @@ export class TrackerViewModel {
             });
     });
 
-    private contextualCommandSuggestion = () => {
+    public contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
         const librariesVisible = this.LibrariesVisible();
         const encounterActive = this.Encounter.State() === "active";

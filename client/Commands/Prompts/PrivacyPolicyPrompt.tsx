@@ -52,5 +52,5 @@ export class PrivacyPolicyPromptWrapper implements Prompt {
 
     public Resolve = (form: HTMLFormElement) => { };
 
-    private component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
+    public component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
 }
