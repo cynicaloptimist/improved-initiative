@@ -21,7 +21,7 @@ export interface ImageModalState {
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
     private userStyles: HTMLStyleElement;
-    private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+    public combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
@@ -40,7 +40,7 @@ export class PlayerViewModel {
         BlockAutoModal: false,
     });
 
-    private hasImages = ko.computed(() => {
+    protected hasImages = ko.computed(() => {
         const displayPortraits = this.displayPortraits();
         const combatants = this.combatants();
 
@@ -127,7 +127,7 @@ export class PlayerViewModel {
         }
     }
 
-    private ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+    protected ShowSuggestion = (combatant: StaticCombatantViewModel) => {
         if (!this.allowSuggestions()) {
             return;
         }
