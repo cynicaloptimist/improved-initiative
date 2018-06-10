@@ -100,10 +100,12 @@ export class PlayerViewModel {
     public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
-        if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
-            this.turnTimer.Reset();
+        if (!encounter.ActiveCombatantId) {
+            return;
         }
-        if (encounter.ActiveCombatantId) {
+        const newCombatantTurn = !this.activeCombatant() || encounter.ActiveCombatantId != this.activeCombatant().Id;
+        if (newCombatantTurn) {
+            this.turnTimer.Reset();
             const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
             this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
