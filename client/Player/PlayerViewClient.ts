@@ -1,6 +1,6 @@
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 import { SavedEncounter } from "../../common/SavedEncounter";
+import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 
 export class PlayerViewClient {
     constructor(private socket: SocketIOClient.Socket) { }

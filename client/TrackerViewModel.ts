@@ -1,6 +1,5 @@
 import * as ko from "knockout";
 import * as React from "react";
-import * as io from "socket.io-client";
 
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -29,7 +28,7 @@ import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 
 export class TrackerViewModel {
-    constructor() {
+    constructor(private Socket: SocketIOClient.Socket) {
         ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
 
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
@@ -92,8 +91,6 @@ export class TrackerViewModel {
             this.Libraries.Encounters.AddListings(account.encounters, "account");
         }
     }
-
-    public Socket = io();
 
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();

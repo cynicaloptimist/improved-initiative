@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import * as io from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
@@ -14,14 +15,14 @@ $(() => {
     RegisterComponents();
     InitializeSettings();
     if ($("#tracker").length) {
-        let viewModel = new TrackerViewModel();
+        let viewModel = new TrackerViewModel(io());
         ko.applyBindings(viewModel, document.body);
         viewModel.ImportEncounterIfAvailable();
         viewModel.GetWhatsNewIfAvailable();
     }
     if ($("#playerview").length) {
         let encounterId = env.EncounterId;
-        let playerViewModel = new PlayerViewModel();
+        let playerViewModel = new PlayerViewModel(io());
         playerViewModel.LoadEncounterFromServer(encounterId);
         ko.applyBindings(playerViewModel, document.body);
     }

@@ -1,6 +1,5 @@
 import * as Color from "color";
 import * as ko from "knockout";
-import * as io from "socket.io-client";
 
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
@@ -47,11 +46,9 @@ export class PlayerViewModel {
         return displayPortraits && combatants.some(c => c.ImageURL.length > 0);
     });
 
-    private socket: SocketIOClient.Socket = io();
-
     private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
-    constructor() {
+    constructor(private socket: SocketIOClient.Socket) {
         this.socket.on("encounter updated", (encounter: SavedEncounter<StaticCombatantViewModel>) => {
             this.LoadEncounter(encounter);
         });
@@ -90,7 +87,7 @@ export class PlayerViewModel {
         this.additionalUserCSS = headElement.appendChild(additionalCSSElement);
     }
 
-    private LoadSettings(settings: PlayerViewSettings) {
+    public LoadSettings(settings: PlayerViewSettings) {
         this.userStyles.innerHTML = CSSFrom(settings.CustomStyles);
         this.additionalUserCSS.innerHTML = settings.CustomCSS;
         this.allowSuggestions(settings.AllowPlayerSuggestions);
@@ -100,7 +97,7 @@ export class PlayerViewModel {
         this.splashPortraits = settings.SplashPortraits;
     }
 
-    private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+    public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
         if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
