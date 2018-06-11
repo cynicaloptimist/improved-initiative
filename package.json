@@ -46,6 +46,7 @@
     "jest": "^23.0.1",
     "jest-localstorage-mock": "^2.2.0",
     "less": "^3.0.4",
+    "pre-commit": "^1.2.2",
     "requirejs": "^2.3.5",
     "ts-jest": "^22.4.6",
     "ts-loader": "^3.3.1",
@@ -117,6 +118,8 @@
     "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
-    "test": "jest"
-  }
+    "test": "jest",
+    "lint": "tslint -p client --fix && tslint -p server --fix"
+  },
+  "pre-commit": "lint"
 }
