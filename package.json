@@ -119,7 +119,7 @@
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
-    "lint": "tslint -p client --fix && tslint -p server --fix"
+    "lint": "tslint --fix --force -p client && tslint --fix --force -p server"
   },
   "pre-commit": "lint"
 }
