@@ -94,7 +94,7 @@ export class TrackerViewModel {
 
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();
-    public Libraries = new Libraries();
+    public Libraries = new Libraries(this.accountClient);
     public StatBlockEditor = new StatBlockEditor();
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
