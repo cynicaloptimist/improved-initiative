@@ -1,7 +1,7 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
-import { buildEncounter } from "./buildEncounter";
+import { buildEncounter } from "../Test/buildEncounter";
 
 describe("Combatant", () => {
     let encounter: Encounter;
