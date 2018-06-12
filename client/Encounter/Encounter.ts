@@ -2,6 +2,8 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import React = require("react");
 
+import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
@@ -15,18 +17,15 @@ import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { StatBlock } from "../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
-import { SavedCombatant, SavedEncounter } from "./SavedEncounter";
 
 export class Encounter {
-    private playerViewClient: PlayerViewClient;
     constructor(
         promptQueue: PromptQueue,
-        private Socket: SocketIOClient.Socket,
+        private playerViewClient: PlayerViewClient,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
         public Rules: IRules,
@@ -62,8 +61,6 @@ export class Encounter {
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
-
-        this.playerViewClient = new PlayerViewClient(this.Socket);
     }
 
     public TurnTimer = new TurnTimer();
@@ -292,7 +289,7 @@ export class Encounter {
                 return {
                     Id: c.Id,
                     StatBlock: c.StatBlock(),
-                    MaxHP: c.MaxHP,
+                    MaxHP: c.MaxHP(),
                     CurrentHP: c.CurrentHP(),
                     TemporaryHP: c.TemporaryHP(),
                     Initiative: c.Initiative(),

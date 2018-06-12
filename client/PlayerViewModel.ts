@@ -1,12 +1,10 @@
-import * as ko from "knockout";
 import * as Color from "color";
-import * as io from "socket.io-client";
+import * as ko from "knockout";
 
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
+import { SavedEncounter } from "./../common/SavedEncounter";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
-import { Tag } from "./Combatant/Tag";
-import { SavedEncounter } from "./Encounter/SavedEncounter";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
@@ -22,7 +20,7 @@ export interface ImageModalState {
 export class PlayerViewModel {
     private additionalUserCSS: HTMLStyleElement;
     private userStyles: HTMLStyleElement;
-    private combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
+    public combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
     private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
@@ -33,7 +31,7 @@ export class PlayerViewModel {
     private displayPortraits = ko.observable(false);
     private splashPortraits = false;
 
-    private imageModal = ko.observable<ImageModalState>({
+    public imageModal = ko.observable<ImageModalState>({
         Visible: false,
         URL: "",
         Caption: "",
@@ -41,18 +39,16 @@ export class PlayerViewModel {
         BlockAutoModal: false,
     });
 
-    private hasImages = ko.computed(() => {
+    protected hasImages = ko.computed(() => {
         const displayPortraits = this.displayPortraits();
         const combatants = this.combatants();
 
         return displayPortraits && combatants.some(c => c.ImageURL.length > 0);
     });
 
-    private socket: SocketIOClient.Socket = io();
-
     private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
-    constructor() {
+    constructor(private socket: SocketIOClient.Socket) {
         this.socket.on("encounter updated", (encounter: SavedEncounter<StaticCombatantViewModel>) => {
             this.LoadEncounter(encounter);
         });
@@ -91,7 +87,7 @@ export class PlayerViewModel {
         this.additionalUserCSS = headElement.appendChild(additionalCSSElement);
     }
 
-    private LoadSettings(settings: PlayerViewSettings) {
+    public LoadSettings(settings: PlayerViewSettings) {
         this.userStyles.innerHTML = CSSFrom(settings.CustomStyles);
         this.additionalUserCSS.innerHTML = settings.CustomCSS;
         this.allowSuggestions(settings.AllowPlayerSuggestions);
@@ -101,13 +97,15 @@ export class PlayerViewModel {
         this.splashPortraits = settings.SplashPortraits;
     }
 
-    private LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+    public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
-        if (encounter.ActiveCombatantId != (this.activeCombatant() || { Id: -1 }).Id) {
-            this.turnTimer.Reset();
+        if (!encounter.ActiveCombatantId) {
+            return;
         }
-        if (encounter.ActiveCombatantId) {
+        const newCombatantTurn = !this.activeCombatant() || encounter.ActiveCombatantId != this.activeCombatant().Id;
+        if (newCombatantTurn) {
+            this.turnTimer.Reset();
             const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
             this.activeCombatant(active);
             setTimeout(this.ScrollToActiveCombatant, 1);
@@ -128,7 +126,7 @@ export class PlayerViewModel {
         }
     }
 
-    private ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+    protected ShowSuggestion = (combatant: StaticCombatantViewModel) => {
         if (!this.allowSuggestions()) {
             return;
         }

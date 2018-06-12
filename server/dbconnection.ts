@@ -2,10 +2,10 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
-import { DefaultSavedEncounter } from "../client/Encounter/SavedEncounter";
-import { Spell } from "../client/Spell/Spell";
-import { StatBlock } from "../client/StatBlock/StatBlock";
 import { Listable, ServerListing } from "../common/Listable";
+import { DefaultSavedEncounter } from "../common/SavedEncounter";
+import { Spell } from "../common/Spell";
+import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";
 import { User } from "./user";
 
@@ -185,7 +185,7 @@ export function getEntity(entityPath: EntityPath, userId: string, entityId: stri
         });
 }
 
-export function deleteEntity<T>(entityPath: EntityPath, userId: string, entityId: string, callBack: (result: number) => void) {
+export function deleteEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -256,7 +256,7 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
             return users.findOne({ _id: userId })
                 .then(u => {
                     if (u == null) {
-                        throw 'User ID not found: ' + userId;
+                        throw "User ID not found: " + userId;
                     }
 
                     const updatedEntities = u[entityPath];

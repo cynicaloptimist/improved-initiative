@@ -1,7 +1,7 @@
-import * as React from "react";
 import * as ko from "knockout";
+import * as React from "react";
 
-import { PlayerViewCustomStyles, PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
@@ -53,7 +53,7 @@ export class SettingsViewModel {
     public RollHp: KnockoutObservable<boolean>;
     public AccountViewModel = new AccountViewModel(this.libraries);
 
-    private epicInitiativeSettings: React.ComponentElement<any, EpicInitiativeSettings>;
+    public epicInitiativeSettings: React.ComponentElement<any, EpicInitiativeSettings>;
     private playerViewSettings: PlayerViewSettings;
     
     public ExportData = () => {
@@ -119,7 +119,7 @@ export class SettingsViewModel {
 
     constructor(
         private encounterCommands: Command [],
-        private combatantCommander: CombatantCommander,
+        combatantCommander: CombatantCommander,
         private libraries: Libraries,
         private settingsVisible: KnockoutObservable<boolean>,
         protected repeatTutorial: () => void,

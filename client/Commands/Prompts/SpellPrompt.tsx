@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 import React = require("react");
 
+import { Spell } from "../../../common/Spell";
 import { Listing } from "../../Library/Listing";
-import { Spell } from "../../Spell/Spell";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { Prompt } from "./Prompt";
 

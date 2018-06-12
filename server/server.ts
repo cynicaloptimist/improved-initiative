@@ -1,7 +1,7 @@
 import express = require("express");
 import socketIO = require("socket.io");
-import { Spell } from "../client/Spell/Spell";
-import { StatBlock } from "../client/StatBlock/StatBlock";
+import { Spell } from "../common/Spell";
+import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import LaunchServer from "./launchserver";
 import * as L from "./library";

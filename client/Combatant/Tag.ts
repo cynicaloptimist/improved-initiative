@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 
-import { SavedTag } from "../Encounter/SavedEncounter";
+import { DurationTiming } from "../../common/DurationTiming";
+import { SavedTag } from "../../common/SavedEncounter";
 import { Combatant } from "./Combatant";
-import { DurationTiming } from "./DurationTiming";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";
 export const EndOfTurn: DurationTiming = "EndOfTurn";

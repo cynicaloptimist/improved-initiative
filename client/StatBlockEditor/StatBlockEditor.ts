@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import * as koMapping from "knockout-mapping";
 import * as _ from "lodash";
 
-import { StatBlock } from "../StatBlock/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { RemovableArrayValue } from "../Utility/RemovableArrayValue";
 
 export class StatBlockEditor {
@@ -167,16 +167,6 @@ export class StatBlockEditor {
 
     public RevertStatBlock = () => {
         this.EditableStatBlock(null);
-    }
-
-    private parseInt: (value, defaultValue?: number) => number = (value, defaultValue: number = null) => {
-        if (/^(\-|\+)?([0-9]+|Infinity)$/.test(value)) {
-            return Number(value);
-        }
-        if (defaultValue !== null) {
-            return defaultValue;
-        }
-        return NaN;
     }
 }
 

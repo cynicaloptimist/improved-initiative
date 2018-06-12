@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as koMapping from "knockout-mapping";
 
-import { Spell } from "../Spell/Spell";
+import { Spell } from "../../common/Spell";
 
 export class SpellEditor {
     private saveCallback: (newSpell: Spell) => void;

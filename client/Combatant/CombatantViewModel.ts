@@ -26,9 +26,9 @@ export class CombatantViewModel {
     ) {
         this.HP = ko.pureComputed(() => {
             if (this.Combatant.TemporaryHP()) {
-                return `${this.Combatant.CurrentHP()}+${this.Combatant.TemporaryHP()}/${this.Combatant.MaxHP}`;
+                return `${this.Combatant.CurrentHP()}+${this.Combatant.TemporaryHP()}/${this.Combatant.MaxHP()}`;
             } else {
-                return `${this.Combatant.CurrentHP()}/${this.Combatant.MaxHP}`;
+                return `${this.Combatant.CurrentHP()}/${this.Combatant.MaxHP()}`;
             }
         });
         this.Name = Combatant.DisplayName;
@@ -79,8 +79,9 @@ export class CombatantViewModel {
     });
 
     public GetHPColor() {
-        let green = Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP) * 170);
-        let red = Math.floor((this.Combatant.MaxHP - this.Combatant.CurrentHP()) / this.Combatant.MaxHP * 170);
+        const maxHP = this.Combatant.MaxHP(), currentHP = this.Combatant.CurrentHP();
+        let green = Math.floor((currentHP / maxHP) * 170);
+        let red = Math.floor((maxHP - currentHP) / maxHP * 170);
         return "rgb(" + red + "," + green + ",0)";
     }
 

@@ -1,5 +1,4 @@
 import express = require("express");
-import expressKeen = require("express-keenio");
 import KeenTracking = require("keen-tracking");
 
 const keenProjectId = process.env.KEEN_PROJECT_ID || "";
@@ -59,7 +58,7 @@ export function configureMetricsRoutes(app: express.Application) {
 
         let session = req.session;
         if (session === undefined) {
-            throw 'Session is undefined.';
+            throw "Session is undefined.";
         }
 
         const eventName = req.params.eventName;

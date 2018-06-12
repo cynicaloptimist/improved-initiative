@@ -1,6 +1,4 @@
 import * as React from "react";
-import { Button } from "../../Components/Button";
-import { StatBlock } from "../../StatBlock/StatBlock";
 import { Metrics } from "../../Utility/Metrics";
 import { Store } from "../../Utility/Store";
 import { Prompt } from "./Prompt";
@@ -54,5 +52,5 @@ export class PrivacyPolicyPromptWrapper implements Prompt {
 
     public Resolve = (form: HTMLFormElement) => { };
 
-    private component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
+    public component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
 }

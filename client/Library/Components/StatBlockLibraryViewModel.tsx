@@ -1,8 +1,8 @@
 import * as React from "react";
+import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
-import { StatBlock } from "../../StatBlock/StatBlock";
 import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";

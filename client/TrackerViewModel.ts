@@ -1,6 +1,5 @@
-import * as React from "react";
-import * as io from "socket.io-client";
 import * as ko from "knockout";
+import * as React from "react";
 
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -11,7 +10,6 @@ import { BuildEncounterCommandList } from "./Commands/Command";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
-import { DefaultPrompt } from "./Commands/Prompts/Prompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
@@ -30,7 +28,7 @@ import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 
 export class TrackerViewModel {
-    constructor() {
+    constructor(private Socket: SocketIOClient.Socket) {
         ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
 
         this.Socket.on("suggest damage", (suggestedCombatantIds: string[], suggestedDamage: number, suggester: string) => {
@@ -38,15 +36,14 @@ export class TrackerViewModel {
             this.CombatantCommander.SuggestEditHP(suggestedCombatants, suggestedDamage, suggester);
         });
 
-        const playerViewClient = new PlayerViewClient(this.Socket);
-        playerViewClient.JoinEncounter(this.Encounter.EncounterId);
-        playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
-        playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
+        this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
+        this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
         CurrentSettings.subscribe(v => {
-            playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
+            this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
         });
 
-        new AccountClient().GetAccount(account => {
+        this.accountClient.GetAccount(account => {
             if (!account) {
                 return;
             }
@@ -58,6 +55,8 @@ export class TrackerViewModel {
 
         Metrics.TrackLoad();
     }
+
+    private accountClient = new AccountClient();
 
     private displayPrivacyNotificationIfNeeded = () => {
         if (Store.Load(Store.User, "AllowTracking") == null) {
@@ -93,8 +92,6 @@ export class TrackerViewModel {
         }
     }
 
-    public Socket = io();
-
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();
     public Libraries = new Libraries();
@@ -117,6 +114,8 @@ export class TrackerViewModel {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
+    private playerViewClient = new PlayerViewClient(this.Socket);
+    
     public Rules = new DefaultRules();
 
     public StatBlockTextEnricher = new StatBlockTextEnricher(
@@ -128,7 +127,7 @@ export class TrackerViewModel {
     
     public Encounter = new Encounter(
         this.PromptQueue,
-        this.Socket,
+        this.playerViewClient,
         this.addCombatantViewModel,
         this.removeCombatantViewModels,
         this.Rules,
@@ -227,7 +226,7 @@ export class TrackerViewModel {
         return "show-center-right-left";
     });
 
-    private toolbarComponent = ko.computed(() => {
+    public toolbarComponent = ko.computed(() => {
         const commandsToHideByDescription = this.Encounter.State() == "active" ?
             ["Start Encounter"] :
             ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
@@ -241,7 +240,7 @@ export class TrackerViewModel {
             });
     });
 
-    private contextualCommandSuggestion = () => {
+    public contextualCommandSuggestion = () => {
         const encounterEmpty = this.Encounter.Combatants().length === 0;
         const librariesVisible = this.LibrariesVisible();
         const encounterActive = this.Encounter.State() === "active";
