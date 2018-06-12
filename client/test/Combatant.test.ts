@@ -14,14 +14,14 @@ describe("Combatant", () => {
     test("Should have its Max HP set from the statblock", () => {
         const combatant = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
     
-        expect(combatant.MaxHP).toBe(10);
+        expect(combatant.MaxHP()).toBe(10);
     });
 
     test("Should update its Max HP when its statblock is updated", () => {
         const combatant = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), Player: "player" });
     
         combatant.StatBlock({ ...StatBlock.Default(), HP: { Value: 15, Notes: "" } });
-        expect(combatant.MaxHP).toBe(15);
+        expect(combatant.MaxHP()).toBe(15);
     });
 
     test("Should notify the encounter when its statblock is updated", () => {

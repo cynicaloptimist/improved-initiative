@@ -14,7 +14,7 @@ export interface Combatant {
     Encounter: Encounter;
     Alias: KnockoutObservable<string>;
     IndexLabel: number;
-    MaxHP: number;
+    MaxHP: KnockoutComputed<number>;
     CurrentHP: KnockoutObservable<number>;
     TemporaryHP: KnockoutObservable<number>;
     AC: number;
@@ -43,6 +43,8 @@ export class Combatant implements Combatant {
 
         this.StatBlock(statBlock);
 
+        this.MaxHP = ko.computed(() => this.StatBlock().HP.Value);
+
         this.processStatBlock(statBlock);
 
         this.StatBlock.subscribe((newStatBlock) => {
@@ -50,7 +52,7 @@ export class Combatant implements Combatant {
             statBlock = newStatBlock;
         });
 
-        this.CurrentHP = ko.observable(this.MaxHP);
+        this.CurrentHP = ko.observable(this.MaxHP());
 
         if (savedCombatant) {
             this.processSavedCombatant(savedCombatant);
@@ -79,7 +81,7 @@ export class Combatant implements Combatant {
     public Hidden = ko.observable(false);
     
     public IndexLabel: number;
-    public MaxHP: number;
+    public MaxHP: KnockoutComputed<number>;
     public CurrentHP: KnockoutObservable<number>;
     public PlayerDisplayHP: KnockoutComputed<string>;
     public AC: number;
@@ -93,7 +95,6 @@ export class Combatant implements Combatant {
         this.updateIndexLabel(oldStatBlock && oldStatBlock.Name);
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
-        this.MaxHP = newStatBlock.HP.Value;
         this.AbilityModifiers = this.calculateModifiers();
         if (!newStatBlock.InitiativeModifier) {
             newStatBlock.InitiativeModifier = 0;
@@ -205,8 +206,8 @@ export class Combatant implements Combatant {
         let currHP = this.CurrentHP();
 
         currHP += healing;
-        if (currHP > this.MaxHP) {
-            currHP = this.MaxHP;
+        if (currHP > this.MaxHP()) {
+            currHP = this.MaxHP();
         }
 
         this.CurrentHP(currHP);

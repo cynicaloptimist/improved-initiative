@@ -289,7 +289,7 @@ export class Encounter {
                 return {
                     Id: c.Id,
                     StatBlock: c.StatBlock(),
-                    MaxHP: c.MaxHP,
+                    MaxHP: c.MaxHP(),
                     CurrentHP: c.CurrentHP(),
                     TemporaryHP: c.TemporaryHP(),
                     Initiative: c.Initiative(),
