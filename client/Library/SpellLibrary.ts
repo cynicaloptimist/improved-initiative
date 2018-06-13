@@ -11,17 +11,7 @@ export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
     public SpellsByNameRegex = ko.computed(() => concatenatedStringRegex(this.Spells().map(s => s.Name)));
 
-    constructor(private accountClient: AccountClient) {
-        $.ajax("../spells/").done(listings => this.AddListings(listings, "server"));
-
-        const customSpells = Store.List(Store.Spells);
-        const newListings = customSpells.map(id => {
-            let spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-            return new Listing<Spell>(id, spell.Name, spell.Path, Spell.GetKeywords(spell), Store.Spells, "localStorage");
-        });
-
-        ko.utils.arrayPushAll(this.Spells, newListings);
-    }
+    constructor(private accountClient: AccountClient) { }
 
     public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
