@@ -30,6 +30,7 @@
     "@types/react": "^16.3.12",
     "@types/react-color": "^2.13.4",
     "@types/react-dom": "^16.0.5",
+    "@types/react-test-renderer": "^16.0.1",
     "@types/request": "^2.47.0",
     "@types/serve-static": "^1.13.1",
     "@types/socket.io": "^1.4.33",
