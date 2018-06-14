@@ -5,7 +5,7 @@ import { DefaultRules, IRules } from "../Rules/Rules";
 import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
 
 export function buildStatBlockTextEnricher(rules: IRules) {
-    return new StatBlockTextEnricher(jest.fn(), jest.fn(), jest.fn(), new SpellLibrary(), rules);
+    return new StatBlockTextEnricher(jest.fn(), jest.fn(), jest.fn(), new SpellLibrary(null), rules);
 }
 
 export function buildEncounter() {
