@@ -20,9 +20,9 @@ import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
-import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
@@ -118,7 +118,7 @@ export class TrackerViewModel {
     
     public Rules = new DefaultRules();
 
-    public StatBlockTextEnricher = new StatBlockTextEnricher(
+    public StatBlockTextEnricher = new TextEnricher(
         this.CombatantCommander.RollDice,
         this.LibrariesCommander.ReferenceSpell,
         this.LibrariesCommander.ReferenceCondition,

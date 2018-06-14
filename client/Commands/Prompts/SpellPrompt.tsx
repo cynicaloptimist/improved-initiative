@@ -3,14 +3,14 @@ import React = require("react");
 
 import { Spell } from "../../../common/Spell";
 import { Listing } from "../../Library/Listing";
-import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
+import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Prompt } from "./Prompt";
 
 const numberSuffixes = ["0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"];
 
 interface SpellPromptProps {
     Spell: Spell;
-    TextEnricher: StatBlockTextEnricher;
+    TextEnricher: TextEnricher;
 }
  
 class SpellPrompt extends React.Component<SpellPromptProps, null> {
@@ -51,7 +51,7 @@ export class SpellPromptWrapper implements Prompt {
 
     protected component = ko.observable();
 
-    constructor(listing: Listing<Spell>, private textEnricher: StatBlockTextEnricher) {
+    constructor(listing: Listing<Spell>, private textEnricher: TextEnricher) {
         listing.GetAsyncWithUpdatedId(spell => {
             this.component(<SpellPrompt Spell={spell} TextEnricher={this.textEnricher} />);
         });

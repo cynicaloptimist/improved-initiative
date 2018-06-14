@@ -20,7 +20,7 @@ interface ReplaceConfig {
 type ReactReplacer = (input: string) => JSX.Element[];
 type ReactReplace = (config: ReplaceConfig) => ReactReplacer;
 
-export class StatBlockTextEnricher {
+export class TextEnricher {
     constructor(
         private rollDice: (diceExpression: string) => void,
         private referenceSpellListing: (listing: Listing<Spell>) => void,
