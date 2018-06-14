@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
