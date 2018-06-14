@@ -74,7 +74,6 @@
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",
     "lodash": "^4.17.10",
-    "markdown-it": "^7.0.1",
     "markdown-loader": "^2.0.2",
     "minimist": "^1.2.0",
     "moment": "^2.22.1",
