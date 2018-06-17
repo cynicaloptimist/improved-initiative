@@ -3,7 +3,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { PlayerViewModel } from "./PlayerViewModel";
 import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
-import { buildEncounter } from "./Test/buildEncounter";
+import { buildEncounter } from "./test/buildEncounter";
 
 describe("PlayerViewModel", () => {
     let playerViewModel: PlayerViewModel;

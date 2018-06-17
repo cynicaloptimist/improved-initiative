@@ -1,4 +1,4 @@
-import { buildEncounter } from "../Test/buildEncounter";
+import { buildEncounter } from "../test/buildEncounter";
 
 import { StatBlock } from "../../common/StatBlock";
 import { InitializeSettings } from "../Settings/Settings";
