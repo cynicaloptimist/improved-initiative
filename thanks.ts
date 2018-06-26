@@ -10,6 +10,11 @@ export default [
         "PatreonId": "11511940"
     },
     {
+        "Name": "Kevin Groke",
+        "Github": "https://github.com/groke",
+        "PatreonId": "9115589"
+    },
+    {
         "Name": "Mark Old",
         "Github": "https://github.com/dlom",
         "PatreonId": "11639636"
