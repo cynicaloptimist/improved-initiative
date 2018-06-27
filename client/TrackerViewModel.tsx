@@ -115,7 +115,7 @@ export class TrackerViewModel {
     }
 
     private playerViewClient = new PlayerViewClient(this.Socket);
-    
+
     public Rules = new DefaultRules();
 
     public StatBlockTextEnricher = new TextEnricher(
@@ -124,7 +124,7 @@ export class TrackerViewModel {
         this.LibrariesCommander.ReferenceCondition,
         this.Libraries.Spells,
         this.Rules);
-    
+
     public Encounter = new Encounter(
         this.PromptQueue,
         this.playerViewClient,
@@ -134,11 +134,11 @@ export class TrackerViewModel {
         this.StatBlockTextEnricher
     );
 
-    public librariesComponent = React.createElement(LibrariesViewModel, {
-        librariesCommander: this.LibrariesCommander,
-        libraries: this.Libraries,
-        statBlockTextEnricher: this.StatBlockTextEnricher
-    });
+    public librariesComponent = <LibrariesViewModel
+        librariesCommander={this.LibrariesCommander}
+        libraries={this.Libraries}
+        statBlockTextEnricher={this.StatBlockTextEnricher}
+    />;
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
@@ -231,13 +231,15 @@ export class TrackerViewModel {
             ["Start Encounter"] :
             ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
 
-        return React.createElement(Toolbar,
-            {
-                encounterCommands: this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
-                combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
-                width: this.ToolbarWide() ? "wide" : "narrow",
-                showCombatantCommands: this.CombatantCommander.HasSelected()
-            });
+        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d));
+        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar());
+
+        return <Toolbar
+            encounterCommands={encounterCommands}
+            combatantCommands={combatantCommands}
+            width={this.ToolbarWide() ? "wide" : "narrow"}
+            showCombatantCommands={this.CombatantCommander.HasSelected()}
+        />;
     });
 
     public contextualCommandSuggestion = () => {
