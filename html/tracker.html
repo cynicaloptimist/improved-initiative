@@ -90,14 +90,10 @@
     </div>
     <div class="center-column">
         <!-- ko if: CenterColumn() === "statblockeditor" -->
-        <div class="statblock-editor" data-bind="
-    component: {
-        name: 'statblockeditor',
-        params: {
-            editor: StatBlockEditor
-        }
-    }">
-        </div>
+        <div class="statblock-editor" 
+            data-bind="react: {
+                component: StatBlockEditor
+        }"></div>
         <!-- /ko -->
         <!-- ko if: CenterColumn() === "spelleditor" -->
         <div class="spell-editor" data-bind="
