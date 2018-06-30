@@ -17,14 +17,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         const defaultValues = {
             name: statBlock.Name
         };
-        
+
         return <Form onSubmit={this.saveAndClose}
             defaultValues = {defaultValues}
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
                 <Text field="name" />
-                <button type="submit" className="button fa fa-save" />
+                <div className="c-statblock-editor-buttons"><button type="submit" className="button fa fa-save" /></div>
             </form>
         )} />;
     }
