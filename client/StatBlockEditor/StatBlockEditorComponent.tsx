@@ -6,7 +6,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     public saveAndClose = (submittedValues?) => {
         const editedStatBlock = {
             ...this.props.statBlock,
-            Name: submittedValues.name
+            Name: submittedValues.name,
+            Path: submittedValues.folder,
         };
         
         this.props.onSave(editedStatBlock);
@@ -21,7 +22,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     public render() {
         const statBlock = this.props.statBlock;
         const defaultValues = {
-            name: statBlock.Name
+            name: statBlock.Name,
+            folder: statBlock.Path,
         };
 
         return <Form onSubmit={this.saveAndClose}
@@ -30,6 +32,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
                 {this.labelledTextField("Name", "name")}
+                {this.labelledTextField("Folder", "folder")}
                 <div className="c-statblock-editor-buttons"><button type="submit" className="button fa fa-save" /></div>
             </form>
         )} />;
