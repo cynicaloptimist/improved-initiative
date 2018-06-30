@@ -17,6 +17,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         const defaultValues = {
             name: statBlock.Name
         };
+        
         return <Form onSubmit={this.saveAndClose}
             defaultValues = {defaultValues}
             render={api => (
