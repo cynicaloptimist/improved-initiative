@@ -21,7 +21,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         return <Form onSubmit={this.saveAndClose}
             defaultValues = {defaultValues}
             render={api => (
-            <form onSubmit={api.submitForm}>
+                <form className="c-statblock-editor"
+                    onSubmit={api.submitForm}>
                 <Text field="name" />
                 <button type="submit" className="button fa fa-save" />
             </form>
