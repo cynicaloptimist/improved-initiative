@@ -13,6 +13,8 @@ describe("StatBlockEditor", () => {
             expect(editedStatBlock).toEqual(statBlock);
         }} />).getInstance() as (renderer.ReactTestInstance & StatBlockEditor);
 
-        editor.saveAndClose();
+        editor.saveAndClose({
+            name: "New StatBlock"
+        });
     });
 });

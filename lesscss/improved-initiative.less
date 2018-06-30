@@ -563,11 +563,27 @@ body>.login.button {
 .c-statblock-editor {
     display: flex;
     flex-direction: column;
+    input {
+        font-size:large;
+        padding: @small-spacer;
+        margin: @small-spacer;
+        border: none;
+        border-radius: @border-radius;
+    }
 }
 
 .c-statblock-editor-buttons {
     flex-direction: row;
     justify-content: flex-end;
+}
+
+.c-statblock-editor-text {
+    display: flex;
+    flex-direction: column;
+    div {
+        padding: @small-spacer;
+        font-size: smaller;
+    }
 }
 
 .settings {

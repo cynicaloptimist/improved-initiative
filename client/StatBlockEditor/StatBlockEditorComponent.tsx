@@ -12,6 +12,12 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onSave(editedStatBlock);
     }
 
+    private labelledTextField = (label: string, fieldName: string) =>
+        <label className="c-statblock-editor-text">
+            <div>{label}</div>
+            <Text field={fieldName} id={fieldName} />
+        </label>
+
     public render() {
         const statBlock = this.props.statBlock;
         const defaultValues = {
@@ -23,7 +29,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
-                <Text field="name" />
+                {this.labelledTextField("Name", "name")}
                 <div className="c-statblock-editor-buttons"><button type="submit" className="button fa fa-save" /></div>
             </form>
         )} />;
