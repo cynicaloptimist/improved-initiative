@@ -18,13 +18,15 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div>{label}</div>
             <Text field={fieldName} id={fieldName} />
         </label>
+    
+    public getDefaultFormValuesFromStatBlock = (statBlock: StatBlock) => ({
+        name: statBlock.Name,
+        folder: statBlock.Path,
+    })
 
     public render() {
         const statBlock = this.props.statBlock;
-        const defaultValues = {
-            name: statBlock.Name,
-            folder: statBlock.Path,
-        };
+        const defaultValues = this.getDefaultFormValuesFromStatBlock(statBlock);
 
         return <Form onSubmit={this.saveAndClose}
             defaultValues = {defaultValues}

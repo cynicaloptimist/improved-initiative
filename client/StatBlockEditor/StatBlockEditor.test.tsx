@@ -7,14 +7,13 @@ import { StatBlock } from "../../common/StatBlock";
 
 describe("StatBlockEditor", () => {
     test("Calls saveCallback with the provided statblock", () => {
+        expect.assertions(1);
         const statBlock = StatBlock.Default();
 
         const editor = renderer.create(<StatBlockEditor statBlock={statBlock} onSave={editedStatBlock => {
             expect(editedStatBlock).toEqual(statBlock);
         }} />).getInstance() as (renderer.ReactTestInstance & StatBlockEditor);
 
-        editor.saveAndClose({
-            name: "New StatBlock"
-        });
+        editor.saveAndClose(editor.getDefaultFormValuesFromStatBlock(statBlock));
     });
 });
