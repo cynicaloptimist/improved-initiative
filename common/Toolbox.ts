@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import { escapeRegExp } from "lodash";
 
 export interface KeyValueSet<T> {
     [key: string]: T;
@@ -25,7 +25,7 @@ export function probablyUniqueString(): string {
 }
 
 export function concatenatedStringRegex(strings: string[]) {
-    const allStrings = strings.map(s => _.escapeRegExp(s)).sort((a, b) => b.localeCompare(a));
+    const allStrings = strings.map(s => escapeRegExp(s)).sort((a, b) => b.localeCompare(a));
     if (allStrings.length === 0) {
         return new RegExp("a^");
     }
