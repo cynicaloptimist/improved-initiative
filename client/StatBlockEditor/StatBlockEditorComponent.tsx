@@ -18,7 +18,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             render={api => (
             <form onSubmit={api.submitForm}>
                     <Text field="name" value={statBlock.Name} />
-                    <button type="submit" className="button fa fa-save"></button>
+                    <button type="submit" className="button fa fa-save" />
             </form>
         )} />;
     }
