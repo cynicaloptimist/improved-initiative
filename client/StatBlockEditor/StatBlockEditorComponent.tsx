@@ -116,6 +116,12 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(powerType, "")} />
         </div>
 
+    private descriptionField = () =>
+        <label className="c-statblock-editor-text">
+            <div className="label">Description</div>
+            <TextArea field="Description" />
+        </label>
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -166,6 +172,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                                     {this.powerFields(api, powerType)}
                                 </div>
                         )}
+                        <div className="bordered c-statblock-editor-description">
+                            {this.descriptionField()}
+                        </div>
+                        {}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
