@@ -65,8 +65,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     private nameAndModifierField = (api: FormApi, modifierType: string, index: number) =>
         <div key={index}>
-            <Text field={`${modifierType}[${index}].Name`} />
-            <Text type="number" field={`${modifierType}[${index}].Modifier`} />
+            <Text className="name" field={`${modifierType}[${index}].Name`} />
+            <Text className="modifier" type="number" field={`${modifierType}[${index}].Modifier`} />
             <span className="fa-clickable fa-trash"
                 onClick={() => api.removeValue(modifierType, index)}
             />
@@ -112,6 +112,9 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     </div>
                     <div className="bordered c-statblock-editor-saves">
                         {this.nameAndModifierFields(api, "Saves")}
+                    </div>
+                    <div className="bordered c-statblock-editor-skills">
+                        {this.nameAndModifierFields(api, "Skills")}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />

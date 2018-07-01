@@ -597,9 +597,12 @@ body>.login.button {
     }
 
     .inline-names-and-modifiers {
-        flex-direction: row;
-        input {
-            width: 40px;
+        flex-flow: row wrap;
+        input.name {
+            width: 100px;
+        }
+        input.modifier {
+            width: 30px;
         }
         .c-button {
             padding: 5px;
