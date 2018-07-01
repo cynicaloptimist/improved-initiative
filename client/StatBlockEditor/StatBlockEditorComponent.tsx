@@ -44,6 +44,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             </div>
         </div>
 
+    private abilityScoreField = (abilityName: string) =>
+        <div key={abilityName} className="c-statblock-editor-ability">
+            <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
+            <Text id={`ability-${abilityName}`} field={`Abilities.${abilityName}`} />
+        </div>
 
     public render() {
         const header =
@@ -68,6 +73,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         {this.valueAndNotesField("Hit Points", "HP")}
                         {this.valueAndNotesField("Armor Class", "AC")}
                         {this.initiativeField()}
+                    </div>
+                    <div className="bordered c-statblock-editor-abilityscores">
+                        {["Str", "Dex", "Con", "Int", "Wis", "Cha"]
+                            .map(this.abilityScoreField)}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
