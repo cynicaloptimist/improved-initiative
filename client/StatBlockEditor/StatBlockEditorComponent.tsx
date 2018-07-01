@@ -1,5 +1,5 @@
-import React = require("react");
-import { Checkbox, Form, FormApi, NestedForm, Text, TextArea, } from "react-form";
+import * as React from "react";
+import { Checkbox, Form, FormApi, Text, TextArea, } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
 
