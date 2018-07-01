@@ -132,10 +132,6 @@ input[type="file"] {
     .button();
 }
 
-.c-add-button {
-    .colors(@primary-white, unset, @primary-white);
-}
-
 .rollable, .spell-reference, .condition-reference {
     cursor: pointer;
     border-bottom: 1px dashed;
@@ -604,6 +600,8 @@ body>.login.button {
     margin: @small-spacer;
     border-style: dashed;
     border-width: 2px;
+    border-radius: @border-radius;
+    cursor: pointer;
 }
 
 .c-statblock-editor-buttons {

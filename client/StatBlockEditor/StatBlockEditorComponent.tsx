@@ -63,7 +63,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
             <Text id={`ability-${abilityName}`} type="number" field={`Abilities.${abilityName}`} />
         </div>
-
+    
     private nameAndModifierField = (api: FormApi, modifierType: string, index: number) =>
         <div key={index}>
             <Text className="name" field={`${modifierType}[${index}].Name`} />
@@ -79,7 +79,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div className="inline-names-and-modifiers">
                 {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
             </div>
-            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
+            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
         </div>
 
     private keywordField = (api: FormApi, modifierType: string, index: number) =>
@@ -94,7 +94,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         <div>
             <div className="label">{keywordType}</div>
             {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
-            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(keywordType, "")} />
+            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(keywordType, "")} />
         </div>
 
     private powerField = (api: FormApi, modifierType: string, index: number) =>
@@ -114,7 +114,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div className="inline-powers">
                 {api.values[powerType].map((v: string, i: number) => this.powerField(api, powerType, i))}
             </div>
-            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(powerType, "")} />
+            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(powerType, "")} />
         </div>
 
     private descriptionField = () =>
