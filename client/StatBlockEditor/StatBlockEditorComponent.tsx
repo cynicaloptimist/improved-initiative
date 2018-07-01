@@ -18,6 +18,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     public saveAndClose = (submittedValues) => {
         this.parseIntWhereNeeded(submittedValues);
         const editedStatBlock = {
+            ...StatBlock.Default(),
             ...this.props.statBlock,
             ...submittedValues,
         };
