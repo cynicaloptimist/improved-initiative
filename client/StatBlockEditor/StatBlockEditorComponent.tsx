@@ -14,7 +14,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         submittedValues.Skills.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
         submittedValues.Saves.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
     }
-    
+
     public saveAndClose = (submittedValues) => {
         this.parseIntWhereNeeded(submittedValues);
         const editedStatBlock = {
@@ -40,7 +40,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
             <div className="inline-inputs">
-                <Text className="value" type="number" 
+                <Text className="value" type="number"
                     field={`${fieldName}.Value`} />
                 <Text className="notes" field={`${fieldName}.Notes`} />
             </div>
@@ -63,19 +63,20 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <Text id={`ability-${abilityName}`} type="number" field={`Abilities.${abilityName}`} />
         </div>
 
+    private nameAndModifierField = (api: FormApi, modifierType: string, index: number) =>
+        <div key={index}>
+            <Text field={`${modifierType}[${index}].Name`} />
+            <Text type="number" field={`${modifierType}[${index}].Modifier`} />
+            <span className="fa-clickable fa-trash"
+                onClick={() => api.removeValue(modifierType, index)}
+            />
+        </div>
+    
     private nameAndModifierFields = (api: FormApi, modifierType: string) =>
         <div className={`c-statblock-editor-${modifierType}`}>
             <div className="label">{modifierType}</div>
             <div className="inline-names-and-modifiers">
-                {api.values[modifierType].map((v: NameAndModifier, i: number) => {
-                    return <div key={i}>
-                        <Text field={`${modifierType}[${i}].Name`} />
-                        <Text type="number" field={`${modifierType}[${i}].Modifier`} />
-                        <span className="fa-clickable fa-trash"
-                            onClick={() => api.removeValue(modifierType, i)}
-                        />
-                    </div>;
-                })}
+                {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
                 <Button faClass="plus"
                     onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
             </div>
