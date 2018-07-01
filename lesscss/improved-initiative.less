@@ -483,7 +483,7 @@ body>.login.button {
     }
 }
 
-.statblock-editor, .spell-editor {
+.spell-editor {
     flex-grow: 1;
     flex-shrink: 1;
 
@@ -516,46 +516,6 @@ body>.login.button {
         justify-content: flex-end;
         .button {
             margin: 1px;
-        }
-    }
-}
-
-.statblock-editor {
-    .stats {
-        display: block;
-        overflow-y: auto;
-        flex-shrink: 1;
-    }
-
-    .stats > div {
-        flex-flow: row wrap;
-        margin: @small-spacer;
-    }
-
-    div.actions {
-        flex-direction: column;
-        p {
-            font-weight: bold;
-        }
-        div {
-            flex-direction: row;
-            align-items: flex-start;
-        }
-        input[type="text"] {
-            max-width: 200px;
-            height: 50px;
-        }
-    }
-
-    input {
-        &[type="text"] {
-            max-width: 100px;
-        }
-        &[type="number"] {
-            max-width: 40px;
-        }
-        &.name, &.type, &.source {
-            max-width:200px;
         }
     }
 }
