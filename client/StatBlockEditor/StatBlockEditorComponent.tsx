@@ -58,11 +58,13 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     return <div key={i}>
                         <Text field={`${modifierType}[${i}].Name`} />
                         <Text type="number" field={`${modifierType}[${i}].Modifier`} />
-                        <span className="fa-clickable fa-remove"
+                        <span className="fa-clickable fa-trash"
                             onClick={() => api.removeValue(modifierType, i)}
                         />
                     </div>;
                 })}
+                <Button faClass="plus"
+                    onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
             </div>
         </div>
 
