@@ -3,8 +3,20 @@ import { Checkbox, Form, FormApi, NestedForm, Text, } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
 
+const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
+
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
+    private parseIntWhereNeeded = (submittedValues: StatBlock) => {
+        AbilityNames.forEach(a => submittedValues.Abilities[a] = parseInt(submittedValues.Abilities[a].toString(), 10));
+        submittedValues.HP.Value = parseInt(submittedValues.HP.Value.toString(), 10);
+        submittedValues.AC.Value = parseInt(submittedValues.AC.Value.toString(), 10);
+        submittedValues.InitiativeModifier = parseInt(submittedValues.InitiativeModifier.toString(), 10);
+        submittedValues.Skills.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
+        submittedValues.Saves.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
+    }
+    
     public saveAndClose = (submittedValues) => {
+        this.parseIntWhereNeeded(submittedValues);
         const editedStatBlock = {
             ...this.props.statBlock,
             ...submittedValues,
@@ -28,7 +40,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
             <div className="inline-inputs">
-                <Text className="value" field={`${fieldName}.Value`} />
+                <Text className="value" type="number" 
+                    field={`${fieldName}.Value`} />
                 <Text className="notes" field={`${fieldName}.Notes`} />
             </div>
         </label>
@@ -47,7 +60,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private abilityScoreField = (abilityName: string) =>
         <div key={abilityName} className="c-statblock-editor-ability">
             <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
-            <Text id={`ability-${abilityName}`} field={`Abilities.${abilityName}`} />
+            <Text id={`ability-${abilityName}`} type="number" field={`Abilities.${abilityName}`} />
         </div>
 
     private nameAndModifierFields = (api: FormApi, modifierType: string) =>
@@ -93,7 +106,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         {this.initiativeField()}
                     </div>
                     <div className="bordered c-statblock-editor-abilityscores">
-                        {["Str", "Dex", "Con", "Int", "Wis", "Cha"]
+                        {AbilityNames
                             .map(this.abilityScoreField)}
                     </div>
                     <div className="bordered c-statblock-editor-saves">
