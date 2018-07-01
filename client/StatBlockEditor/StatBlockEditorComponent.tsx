@@ -110,7 +110,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
                     <h2>{header}</h2>
-                    <div className="l-scrollable">
+                    <div className="scrollframe">
                         <div className="bordered c-statblock-editor-headers">
                             {this.textField("Name", "Name")}
                             {this.textField("Folder", "Path")}
