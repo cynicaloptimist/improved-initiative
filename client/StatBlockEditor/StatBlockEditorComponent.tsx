@@ -21,8 +21,18 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private labelledTextField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <div>{label}</div>
-            <Text field={fieldName} id={fieldName} />
+            <Text field={fieldName} />
         </label>
+
+    private labelledValueAndNotes = (label: string, fieldName: string) =>
+        <label className="c-statblock-editor-text">
+            <div>{label}</div>
+            <div className="inline-inputs">
+                <Text field={`${fieldName}.Value`} />
+                <Text className="notes" field={`${fieldName}.Notes`} />
+            </div>
+        </label>
+
 
     public render() {
         const header =
@@ -42,6 +52,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         {this.labelledTextField("Portrait URL", "ImageURL")}
                         {this.labelledTextField("Source", "Source")}
                         {this.labelledTextField("Type", "Type")}
+                    </div>
+                    <div className="bordered c-statblock-editor-stats">
+                        {this.labelledValueAndNotes("Hit Points", "HP")}
+                        {this.labelledValueAndNotes("Armor Class", "AC")}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
