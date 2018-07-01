@@ -104,6 +104,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 this.props.editMode == "library" ? "Edit Library Statblock" :
                     "Edit StatBlock";
 
+        const challengeLabel = this.props.statBlock.Player == "player" ? "Level" : "Challenge";
+
         return <Form onSubmit={this.saveAndClose}
             defaultValues={this.props.statBlock}
             render={api => (
@@ -119,6 +121,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             {this.textField("Type", "Type")}
                         </div>
                         <div className="bordered c-statblock-editor-stats">
+                            {this.textField(challengeLabel, "Challenge")}
                             {this.valueAndNotesField("Hit Points", "HP")}
                             {this.valueAndNotesField("Armor Class", "AC")}
                             {this.initiativeField()}
