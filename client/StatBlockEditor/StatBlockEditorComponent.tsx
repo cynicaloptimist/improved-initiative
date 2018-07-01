@@ -1,5 +1,5 @@
 import React = require("react");
-import { Checkbox, Form, FormApi, NestedForm, Text, } from "react-form";
+import { Checkbox, Form, FormApi, NestedForm, Text, TextArea, } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
 
@@ -39,7 +39,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private valueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
-            <div className="inline-inputs">
+            <div className="inline">
                 <Text className="value" type="number"
                     field={`${fieldName}.Value`} />
                 <Text className="notes" field={`${fieldName}.Notes`} />
@@ -49,7 +49,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private initiativeField = () =>
         <div className="c-statblock-editor-text">
             <label className="label" htmlFor="InitiativeModifier">Initiative Modifier</label>
-            <div className="inline-inputs">
+            <div className="inline">
                 <Text className="value" id="InitiativeModifier" field="InitiativeModifier" />
                 <label> Roll with Advantage
                 <Checkbox field="InitiativeAdvantage" />
@@ -78,11 +78,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div className="inline-names-and-modifiers">
                 {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
             </div>
-            <Button faClass="plus" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
+            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
         </div>
 
     private keywordField = (api: FormApi, modifierType: string, index: number) =>
-        <div key={index}>
+        <div className="inline" key={index}>
             <Text className="name" field={`${modifierType}[${index}]`} />
             <span className="fa-clickable fa-trash"
                 onClick={() => api.removeValue(modifierType, index)}
@@ -92,10 +92,28 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private keywordFields = (api: FormApi, keywordType: string) =>
         <div>
             <div className="label">{keywordType}</div>
-            <div className="inline-names-and-modifiers">
-                {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
+            {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
+            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(keywordType, "")} />
+        </div>
+
+    private powerField = (api: FormApi, modifierType: string, index: number) =>
+        <div key={index}>
+            <div className="inline">
+                <Text className="name" field={`${modifierType}[${index}].Name`} />
+                <span className="fa-clickable fa-trash"
+                    onClick={() => api.removeValue(modifierType, index)}
+                />
             </div>
-            <Button faClass="plus" onClick={() => api.addValue(keywordType, "")} />
+            <TextArea field={`${modifierType}[${index}].Content`} />
+        </div>
+
+    private powerFields = (api: FormApi, powerType: string) =>
+        <div>
+            <div className="label">{powerType}</div>
+            <div className="inline-powers">
+                {api.values[powerType].map((v: string, i: number) => this.powerField(api, powerType, i))}
+            </div>
+            <Button faClass="plus" additionalClassNames="c-add-button" onClick={() => api.addValue(powerType, "")} />
         </div>
 
     public render() {
@@ -140,6 +158,12 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             keywordType =>
                                 <div key={keywordType} className="bordered c-statblock-editor-keywords">
                                     {this.keywordFields(api, keywordType)}
+                                </div>
+                        )}
+                        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+                            powerType =>
+                                <div key={powerType} className="bordered c-statblock-editor-powers">
+                                    {this.powerFields(api, powerType)}
                                 </div>
                         )}
                     </div>

@@ -132,6 +132,10 @@ input[type="file"] {
     .button();
 }
 
+.c-add-button {
+    .colors(@primary-white, unset, @primary-white);
+}
+
 .rollable, .spell-reference, .condition-reference {
     cursor: pointer;
     border-bottom: 1px dashed;
@@ -524,12 +528,16 @@ body>.login.button {
     display: flex;
     flex-direction: column;
     flex-shrink: 1;
-    input {
+    input, textarea {
         font-size: large;
         padding: @small-spacer;
         margin: @small-spacer;
         border: none;
         border-radius: @border-radius;
+    }
+
+    textarea {
+        height: 100px;
     }
 
     .bordered {
@@ -545,30 +553,28 @@ body>.login.button {
         font-size: smaller;
     }
 
-    .inline-inputs {
-        input.value {
-            width: 40px;
-        }
-        input.notes {
-            flex-grow:1;
-        }
+    .inline {
         display: flex;
         flex-direction: row;
         align-items: baseline;
     }
 
+    input.name {
+        flex-grow: 1;
+    }
+    input.modifier {
+        width: 30px;
+    }
+    input.value {
+        width: 40px;
+    }
+    input.notes {
+        flex-grow:1;
+    }
+
     .inline-names-and-modifiers {
         flex-flow: column;
-        input.name {
-            flex-grow: 1;
-        }
-        input.modifier {
-            width: 30px;
-        }
-        .c-button {
-            padding: 5px;
-            width: @button-inner;
-        }
+        
         > div {
             flex-direction: row;
             align-items: baseline;
@@ -590,14 +596,12 @@ body>.login.button {
     }
 }
 
-.c-statblock-editor-skills, 
-.c-statblock-editor-saves,
-.c-statblock-editor-keywords {
-    .c-button {
-        padding-top: @small-spacer;
-        padding-bottom: @small-spacer;
-        margin: @small-spacer;
-    }    
+.c-add-button {
+    padding-top: @small-spacer;
+    padding-bottom: @small-spacer;
+    margin: @small-spacer;
+    border-style: dashed;
+    border-width: 2px;
 }
 
 .c-statblock-editor-buttons {
