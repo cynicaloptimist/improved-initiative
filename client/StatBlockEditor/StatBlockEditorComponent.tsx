@@ -1,6 +1,6 @@
 import React = require("react");
-import { Checkbox, Form, Text, } from "react-form";
-import { StatBlock } from "../../common/StatBlock";
+import { Checkbox, Form, FormApi, NestedForm, Text, } from "react-form";
+import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
@@ -50,6 +50,22 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <Text id={`ability-${abilityName}`} field={`Abilities.${abilityName}`} />
         </div>
 
+    private nameAndModifierFields = (api: FormApi, modifierType: string) =>
+        <div className={`c-statblock-editor-${modifierType}`}>
+            <div className="label">{modifierType}</div>
+            <div className="inline-names-and-modifiers">
+                {api.values[modifierType].map((v: NameAndModifier, i: number) => {
+                    return <div key={i}>
+                        <Text field={`${modifierType}[${i}].Name`} />
+                        <Text type="number" field={`${modifierType}[${i}].Modifier`} />
+                        <span className="fa-clickable fa-remove"
+                            onClick={() => api.removeValue(modifierType, i)}
+                        />
+                    </div>;
+                })}
+            </div>
+        </div>
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -77,6 +93,9 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="bordered c-statblock-editor-abilityscores">
                         {["Str", "Dex", "Con", "Int", "Wis", "Cha"]
                             .map(this.abilityScoreField)}
+                    </div>
+                    <div className="bordered c-statblock-editor-saves">
+                        {this.nameAndModifierFields(api, "Saves")}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
