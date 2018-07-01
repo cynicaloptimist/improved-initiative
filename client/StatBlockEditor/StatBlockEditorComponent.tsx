@@ -39,6 +39,9 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="bordered c-statblock-editor-headers">
                         {this.labelledTextField("Name", "Name")}
                         {this.labelledTextField("Folder", "Path")}
+                        {this.labelledTextField("Portrait URL", "ImageURL")}
+                        {this.labelledTextField("Source", "Source")}
+                        {this.labelledTextField("Type", "Type")}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
