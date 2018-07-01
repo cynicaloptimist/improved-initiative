@@ -1,6 +1,7 @@
 @primary-green: #00643C;
 @hover-green: lighten(@primary-green, 10);
 @active-green: lighten(@primary-green, 15);
+@accent-green: darken(@primary-green, 5);
 
 @primary-white: #EAE0D5;
 @input-white: @primary-white;
@@ -189,6 +190,6 @@ input, textarea {
     }
 
     .bordered {
-        border-color:  #00492c;
+        border-color: @accent-green;
     }
 }
