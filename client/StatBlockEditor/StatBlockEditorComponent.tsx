@@ -18,13 +18,13 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onClose();
     }
 
-    private labelledTextField = (label: string, fieldName: string) =>
+    private textField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
             <Text field={fieldName} />
         </label>
 
-    private labelledValueAndNotesField = (label: string, fieldName: string) =>
+    private valueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
             <div className="inline-inputs">
@@ -58,15 +58,15 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     onSubmit={api.submitForm}>
                     <h2>{header}</h2>
                     <div className="bordered c-statblock-editor-headers">
-                        {this.labelledTextField("Name", "Name")}
-                        {this.labelledTextField("Folder", "Path")}
-                        {this.labelledTextField("Portrait URL", "ImageURL")}
-                        {this.labelledTextField("Source", "Source")}
-                        {this.labelledTextField("Type", "Type")}
+                        {this.textField("Name", "Name")}
+                        {this.textField("Folder", "Path")}
+                        {this.textField("Portrait URL", "ImageURL")}
+                        {this.textField("Source", "Source")}
+                        {this.textField("Type", "Type")}
                     </div>
                     <div className="bordered c-statblock-editor-stats">
-                        {this.labelledValueAndNotesField("Hit Points", "HP")}
-                        {this.labelledValueAndNotesField("Armor Class", "AC")}
+                        {this.valueAndNotesField("Hit Points", "HP")}
+                        {this.valueAndNotesField("Armor Class", "AC")}
                         {this.initiativeField()}
                     </div>
                     <div className="c-statblock-editor-buttons">
