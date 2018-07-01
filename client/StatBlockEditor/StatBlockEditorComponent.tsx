@@ -32,8 +32,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
-                    {this.labelledTextField("Name", "Name")}
-                    {this.labelledTextField("Folder", "Path")}
+                    <div className="bordered c-statblock-editor-headers">
+                        {this.labelledTextField("Name", "Name")}
+                        {this.labelledTextField("Folder", "Path")}
+                    </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
                         <button type="submit" className="button fa fa-save" />
