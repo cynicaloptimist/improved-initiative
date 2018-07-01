@@ -1,6 +1,7 @@
 import React = require("react");
-import { Form, Text,  } from "react-form";
+import { Form, Text, } from "react-form";
 import { StatBlock } from "../../common/StatBlock";
+import { Button } from "../Components/Button";
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
     public saveAndClose = (submittedValues) => {
@@ -8,8 +9,13 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             ...this.props.statBlock,
             ...submittedValues,
         };
-        
+
         this.props.onSave(editedStatBlock);
+        this.props.onClose();
+    }
+
+    private close = () => {
+        this.props.onClose();
     }
 
     private labelledTextField = (label: string, fieldName: string) =>
@@ -17,26 +23,30 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div>{label}</div>
             <Text field={fieldName} id={fieldName} />
         </label>
-    
+
     public render() {
         const statBlock = this.props.statBlock;
-        
+
         return <Form onSubmit={this.saveAndClose}
-            defaultValues = {statBlock}
+            defaultValues={statBlock}
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
-                {this.labelledTextField("Name", "Name")}
-                {this.labelledTextField("Folder", "Path")}
-                <div className="c-statblock-editor-buttons"><button type="submit" className="button fa fa-save" /></div>
-            </form>
-        )} />;
+                    {this.labelledTextField("Name", "Name")}
+                    {this.labelledTextField("Folder", "Path")}
+                    <div className="c-statblock-editor-buttons">
+                        <Button onClick={this.close} faClass="times" />
+                        <button type="submit" className="button fa fa-save" />
+                    </div>
+                </form>
+            )} />;
     }
 }
 
 interface StatBlockEditorProps {
     statBlock: StatBlock;
     onSave: (statBlock: StatBlock) => void;
+    onClose: () => void;
 }
 
 interface StatBlockEditorState { }
