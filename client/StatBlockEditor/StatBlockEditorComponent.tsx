@@ -81,6 +81,23 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <Button faClass="plus" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
         </div>
 
+    private keywordField = (api: FormApi, modifierType: string, index: number) =>
+        <div key={index}>
+            <Text className="name" field={`${modifierType}[${index}]`} />
+            <span className="fa-clickable fa-trash"
+                onClick={() => api.removeValue(modifierType, index)}
+            />
+        </div>
+
+    private keywordFields = (api: FormApi, keywordType: string) =>
+        <div>
+            <div className="label">{keywordType}</div>
+            <div className="inline-names-and-modifiers">
+                {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
+            </div>
+            <Button faClass="plus" onClick={() => api.addValue(keywordType, { Name: "", Modifier: "" })} />
+        </div>
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -93,27 +110,35 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
                     <h2>{header}</h2>
-                    <div className="bordered c-statblock-editor-headers">
-                        {this.textField("Name", "Name")}
-                        {this.textField("Folder", "Path")}
-                        {this.textField("Portrait URL", "ImageURL")}
-                        {this.textField("Source", "Source")}
-                        {this.textField("Type", "Type")}
-                    </div>
-                    <div className="bordered c-statblock-editor-stats">
-                        {this.valueAndNotesField("Hit Points", "HP")}
-                        {this.valueAndNotesField("Armor Class", "AC")}
-                        {this.initiativeField()}
-                    </div>
-                    <div className="bordered c-statblock-editor-abilityscores">
-                        {AbilityNames
-                            .map(this.abilityScoreField)}
-                    </div>
-                    <div className="bordered c-statblock-editor-saves">
-                        {this.nameAndModifierFields(api, "Saves")}
-                    </div>
-                    <div className="bordered c-statblock-editor-skills">
-                        {this.nameAndModifierFields(api, "Skills")}
+                    <div className="l-scrollable">
+                        <div className="bordered c-statblock-editor-headers">
+                            {this.textField("Name", "Name")}
+                            {this.textField("Folder", "Path")}
+                            {this.textField("Portrait URL", "ImageURL")}
+                            {this.textField("Source", "Source")}
+                            {this.textField("Type", "Type")}
+                        </div>
+                        <div className="bordered c-statblock-editor-stats">
+                            {this.valueAndNotesField("Hit Points", "HP")}
+                            {this.valueAndNotesField("Armor Class", "AC")}
+                            {this.initiativeField()}
+                        </div>
+                        <div className="bordered c-statblock-editor-abilityscores">
+                            {AbilityNames
+                                .map(this.abilityScoreField)}
+                        </div>
+                        <div className="bordered c-statblock-editor-saves">
+                            {this.nameAndModifierFields(api, "Saves")}
+                        </div>
+                        <div className="bordered c-statblock-editor-skills">
+                            {this.nameAndModifierFields(api, "Skills")}
+                        </div>
+                        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"].map(
+                            keywordType =>
+                                <div key={keywordType} className="bordered c-statblock-editor-keywords">
+                                    {this.keywordFields(api, keywordType)}
+                                </div>
+                        )}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
