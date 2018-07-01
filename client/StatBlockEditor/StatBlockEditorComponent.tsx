@@ -71,15 +71,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 onClick={() => api.removeValue(modifierType, index)}
             />
         </div>
-    
+
     private nameAndModifierFields = (api: FormApi, modifierType: string) =>
-        <div className={`c-statblock-editor-${modifierType}`}>
+        <div>
             <div className="label">{modifierType}</div>
             <div className="inline-names-and-modifiers">
                 {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
-                <Button faClass="plus"
-                    onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
             </div>
+            <Button faClass="plus" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
         </div>
 
     public render() {
