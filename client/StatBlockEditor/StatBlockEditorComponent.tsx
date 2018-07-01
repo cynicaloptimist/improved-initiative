@@ -3,11 +3,10 @@ import { Form, Text,  } from "react-form";
 import { StatBlock } from "../../common/StatBlock";
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
-    public saveAndClose = (submittedValues?) => {
+    public saveAndClose = (submittedValues) => {
         const editedStatBlock = {
             ...this.props.statBlock,
-            Name: submittedValues.name,
-            Path: submittedValues.folder,
+            ...submittedValues,
         };
         
         this.props.onSave(editedStatBlock);
@@ -19,22 +18,16 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <Text field={fieldName} id={fieldName} />
         </label>
     
-    public getDefaultFormValuesFromStatBlock = (statBlock: StatBlock) => ({
-        name: statBlock.Name,
-        folder: statBlock.Path,
-    })
-
     public render() {
         const statBlock = this.props.statBlock;
-        const defaultValues = this.getDefaultFormValuesFromStatBlock(statBlock);
-
+        
         return <Form onSubmit={this.saveAndClose}
-            defaultValues = {defaultValues}
+            defaultValues = {statBlock}
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
-                {this.labelledTextField("Name", "name")}
-                {this.labelledTextField("Folder", "folder")}
+                {this.labelledTextField("Name", "Name")}
+                {this.labelledTextField("Folder", "Path")}
                 <div className="c-statblock-editor-buttons"><button type="submit" className="button fa fa-save" /></div>
             </form>
         )} />;

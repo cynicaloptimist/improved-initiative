@@ -14,6 +14,6 @@ describe("StatBlockEditor", () => {
             expect(editedStatBlock).toEqual(statBlock);
         }} />).getInstance() as (renderer.ReactTestInstance & StatBlockEditor);
 
-        editor.saveAndClose(editor.getDefaultFormValuesFromStatBlock(statBlock));
+        editor.saveAndClose(statBlock);
     });
 });
