@@ -95,7 +95,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <div className="inline-names-and-modifiers">
                 {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
             </div>
-            <Button faClass="plus" onClick={() => api.addValue(keywordType, { Name: "", Modifier: "" })} />
+            <Button faClass="plus" onClick={() => api.addValue(keywordType, "")} />
         </div>
 
     public render() {
