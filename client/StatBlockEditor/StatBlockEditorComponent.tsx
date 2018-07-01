@@ -25,13 +25,17 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         </label>
 
     public render() {
-        const statBlock = this.props.statBlock;
+        const header =
+            this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
+                this.props.editMode == "library" ? "Edit Library Statblock" :
+                    "Edit StatBlock";
 
         return <Form onSubmit={this.saveAndClose}
-            defaultValues={statBlock}
+            defaultValues={this.props.statBlock}
             render={api => (
                 <form className="c-statblock-editor"
                     onSubmit={api.submitForm}>
+                    <h2>{header}</h2>
                     <div className="bordered c-statblock-editor-headers">
                         {this.labelledTextField("Name", "Name")}
                         {this.labelledTextField("Folder", "Path")}
@@ -49,6 +53,7 @@ interface StatBlockEditorProps {
     statBlock: StatBlock;
     onSave: (statBlock: StatBlock) => void;
     onClose: () => void;
+    editMode: "library" | "combatant";
 }
 
 interface StatBlockEditorState { }

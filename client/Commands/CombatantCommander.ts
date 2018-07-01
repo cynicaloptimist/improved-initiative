@@ -281,7 +281,7 @@ export class CombatantCommander {
             }, () => { }, () => {
                 this.Remove();
             },
-                "instance");
+                "combatant");
         }
     }
 

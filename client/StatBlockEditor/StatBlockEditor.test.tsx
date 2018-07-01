@@ -10,7 +10,7 @@ describe("StatBlockEditor", () => {
         expect.assertions(1);
         const statBlock = StatBlock.Default();
 
-        const editor = renderer.create(<StatBlockEditor statBlock={statBlock} onSave={editedStatBlock => {
+        const editor = renderer.create(<StatBlockEditor statBlock={statBlock} editMode="library" onClose={jest.fn()} onSave={editedStatBlock => {
             expect(editedStatBlock).toEqual(statBlock);
         }} />).getInstance() as (renderer.ReactTestInstance & StatBlockEditor);
 
