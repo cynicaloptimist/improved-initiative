@@ -574,12 +574,13 @@ body>.login.button {
     .bordered {
         margin: @small-spacer;
         padding: @small-spacer;
-        border: 2px solid #00492c;
+        border-width: 2px;
+        border-style: solid;
         border-radius: @border-radius;
     }
 
     .inline-inputs {
-        input {
+        input.value {
             width: 40px;
         }
         input.notes {
@@ -587,6 +588,20 @@ body>.login.button {
         }
         display: flex;
         flex-direction: row;
+        align-items: baseline;
+    }
+
+    input[type=checkbox] {
+        .fa-clickable();
+        font-size: large;
+        visibility: hidden;
+        &:before { 
+            visibility: visible;
+            content: "\f096"; 
+        }
+        &:checked:before {
+            content: "\f046"
+        }
     }
 }
 
@@ -607,7 +622,7 @@ body>.login.button {
 .c-statblock-editor-text {
     display: flex;
     flex-direction: column;
-    div {
+    .label {
         padding: @small-spacer;
         font-size: smaller;
     }

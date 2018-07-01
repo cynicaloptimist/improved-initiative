@@ -1,5 +1,5 @@
 import React = require("react");
-import { Form, Text, } from "react-form";
+import { Checkbox, Form, Text, } from "react-form";
 import { StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
 
@@ -20,18 +20,29 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     private labelledTextField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
-            <div>{label}</div>
+            <div className="label">{label}</div>
             <Text field={fieldName} />
         </label>
 
-    private labelledValueAndNotes = (label: string, fieldName: string) =>
+    private labelledValueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
-            <div>{label}</div>
+            <div className="label">{label}</div>
             <div className="inline-inputs">
-                <Text field={`${fieldName}.Value`} />
+                <Text className="value" field={`${fieldName}.Value`} />
                 <Text className="notes" field={`${fieldName}.Notes`} />
             </div>
         </label>
+
+    private initiativeField = () =>
+        <div className="c-statblock-editor-text">
+            <label className="label" htmlFor="InitiativeModifier">Initiative Modifier</label>
+            <div className="inline-inputs">
+                <Text className="value" id="InitiativeModifier" field="InitiativeModifier" />
+                <label> Roll with Advantage
+                <Checkbox field="InitiativeAdvantage" />
+                </label>
+            </div>
+        </div>
 
 
     public render() {
@@ -54,8 +65,9 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         {this.labelledTextField("Type", "Type")}
                     </div>
                     <div className="bordered c-statblock-editor-stats">
-                        {this.labelledValueAndNotes("Hit Points", "HP")}
-                        {this.labelledValueAndNotes("Armor Class", "AC")}
+                        {this.labelledValueAndNotesField("Hit Points", "HP")}
+                        {this.labelledValueAndNotesField("Armor Class", "AC")}
+                        {this.initiativeField()}
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
