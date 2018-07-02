@@ -175,13 +175,18 @@ export class TrackerViewModel {
         //this.TutorialVisible(false);
     }
 
-    public EditStatBlock(statBlock: StatBlock,
+    public EditStatBlock(
+        editMode: "combatant" | "library",
+        statBlock: StatBlock,
         saveCallback: (newStatBlock: StatBlock) => void,
-        saveNewCallback: (newStatBlock: StatBlock) => void,
-        deleteCallback: () => void,
-        editMode: "combatant" | "library"
+        deleteCallback?: () => void,
+        saveNewCallback?: (newStatBlock: StatBlock) => void,
     ) {
-        this.StatBlockEditor(<StatBlockEditor statBlock={statBlock} editMode={editMode} onSave={saveCallback} onClose={() => this.StatBlockEditor(null)} />);
+        this.StatBlockEditor(<StatBlockEditor
+            statBlock={statBlock}
+            editMode={editMode}
+            onSave={saveCallback}
+            onClose={() => this.StatBlockEditor(null)} />);
     }
 
     protected StatBlockEditor = ko.observable<JSX.Element>(null);

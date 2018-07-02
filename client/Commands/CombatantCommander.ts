@@ -275,13 +275,14 @@ export class CombatantCommander {
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;
-            this.tracker.EditStatBlock(selectedCombatant.StatBlock(), (newStatBlock) => {
+            this.tracker.EditStatBlock(
+                "combatant",
+                selectedCombatant.StatBlock(), (newStatBlock) => {
                 selectedCombatant.StatBlock(newStatBlock);
                 this.tracker.Encounter.QueueEmitEncounter();
-            }, () => { }, () => {
+            }, () => {
                 this.Remove();
-            },
-                "combatant");
+            });
         }
     }
 
