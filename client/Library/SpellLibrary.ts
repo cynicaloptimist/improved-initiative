@@ -11,17 +11,7 @@ export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
     public SpellsByNameRegex = ko.computed(() => concatenatedStringRegex(this.Spells().map(s => s.Name)));
 
-    constructor() {
-        $.ajax("../spells/").done(listings => this.AddListings(listings, "server"));
-
-        const customSpells = Store.List(Store.Spells);
-        const newListings = customSpells.map(id => {
-            let spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-            return new Listing<Spell>(id, spell.Name, spell.Path, Spell.GetKeywords(spell), Store.Spells, "localStorage");
-        });
-
-        ko.utils.arrayPushAll(this.Spells, newListings);
-    }
+    constructor(private accountClient: AccountClient) { }
 
     public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         ko.utils.arrayPushAll<Listing<Spell>>(this.Spells, listings.map(c => {
@@ -35,7 +25,7 @@ export class SpellLibrary {
         const listing = new Listing<Spell>(spell.Id, spell.Name, spell.Path, Spell.GetKeywords(spell), Store.Spells, "localStorage", spell);
         this.Spells.push(listing);
         Store.Save(Store.Spells, spell.Id, spell);
-        new AccountClient().SaveSpell(spell)
+        this.accountClient.SaveSpell(spell)
             .then(r => {
                 if (!r) return;
                 if (listing.Origin === "account") return;
@@ -47,6 +37,6 @@ export class SpellLibrary {
     public DeleteSpellById = (id: string) => {
         this.Spells.remove(listing => listing.Id === id);
         Store.Delete(Store.Spells, id);
-        new AccountClient().DeleteSpell(id);
+        this.accountClient.DeleteSpell(id);
     }
 }

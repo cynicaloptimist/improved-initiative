@@ -20,9 +20,9 @@ import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
-import { StatBlockTextEnricher } from "./StatBlock/StatBlockTextEnricher";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
@@ -94,7 +94,7 @@ export class TrackerViewModel {
 
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();
-    public Libraries = new Libraries();
+    public Libraries = new Libraries(this.accountClient);
     public StatBlockEditor = new StatBlockEditor();
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
@@ -115,16 +115,16 @@ export class TrackerViewModel {
     }
 
     private playerViewClient = new PlayerViewClient(this.Socket);
-    
+
     public Rules = new DefaultRules();
 
-    public StatBlockTextEnricher = new StatBlockTextEnricher(
+    public StatBlockTextEnricher = new TextEnricher(
         this.CombatantCommander.RollDice,
         this.LibrariesCommander.ReferenceSpell,
         this.LibrariesCommander.ReferenceCondition,
         this.Libraries.Spells,
         this.Rules);
-    
+
     public Encounter = new Encounter(
         this.PromptQueue,
         this.playerViewClient,
@@ -134,11 +134,11 @@ export class TrackerViewModel {
         this.StatBlockTextEnricher
     );
 
-    public librariesComponent = React.createElement(LibrariesViewModel, {
-        librariesCommander: this.LibrariesCommander,
-        libraries: this.Libraries,
-        statBlockTextEnricher: this.StatBlockTextEnricher
-    });
+    public librariesComponent = <LibrariesViewModel
+        librariesCommander={this.LibrariesCommander}
+        libraries={this.Libraries}
+        statBlockTextEnricher={this.StatBlockTextEnricher}
+    />;
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
@@ -231,13 +231,15 @@ export class TrackerViewModel {
             ["Start Encounter"] :
             ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
 
-        return React.createElement(Toolbar,
-            {
-                encounterCommands: this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d)),
-                combatantCommands: this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar()),
-                width: this.ToolbarWide() ? "wide" : "narrow",
-                showCombatantCommands: this.CombatantCommander.HasSelected()
-            });
+        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d));
+        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar());
+
+        return <Toolbar
+            encounterCommands={encounterCommands}
+            combatantCommands={combatantCommands}
+            width={this.ToolbarWide() ? "wide" : "narrow"}
+            showCombatantCommands={this.CombatantCommander.HasSelected()}
+        />;
     });
 
     public contextualCommandSuggestion = () => {

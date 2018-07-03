@@ -10,7 +10,7 @@ export class PCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
     public readonly StoreName = Store.PlayerCharacters;
     
-    constructor() {
+    constructor(private accountClient: AccountClient) {
         const listings = Store.List(this.StoreName).map(id => {
             let statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(this.StoreName, id) };
             return new Listing<StatBlock>(id, statBlock.Name, statBlock.Path, statBlock.Type, this.StoreName, "localStorage");
@@ -40,7 +40,7 @@ export class PCLibrary {
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
         Store.Delete(this.StoreName, id);
-        new AccountClient().DeletePlayerCharacter(id);
+        this.accountClient.DeletePlayerCharacter(id);
     }
 
     private saveStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
@@ -51,7 +51,7 @@ export class PCLibrary {
         Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
         listing.SetValue(newStatBlock);
 
-        new AccountClient().SavePlayerCharacter(newStatBlock)
+        this.accountClient.SavePlayerCharacter(newStatBlock)
             .then(r => {
                 if (!r || listing.Origin === "account") {
                     return;

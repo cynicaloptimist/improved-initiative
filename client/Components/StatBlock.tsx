@@ -1,10 +1,10 @@
 import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
-import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
+import { TextEnricher } from "../TextEnricher/TextEnricher";
 
 interface StatBlockProps {
     statBlock: StatBlock;
-    enricher: StatBlockTextEnricher;
+    enricher: TextEnricher;
     displayMode: "default" | "active";
 }
 

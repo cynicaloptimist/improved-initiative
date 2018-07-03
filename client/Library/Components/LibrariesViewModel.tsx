@@ -4,7 +4,7 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
-import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
+import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
@@ -14,7 +14,7 @@ import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
 export interface LibrariesProps {
     librariesCommander: LibrariesCommander;
-    statBlockTextEnricher: StatBlockTextEnricher;
+    statBlockTextEnricher: TextEnricher;
     libraries: LibrarySet;
 }
 

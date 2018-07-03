@@ -17,7 +17,7 @@ import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { StatBlockTextEnricher } from "../StatBlock/StatBlockTextEnricher";
+import { TextEnricher } from "../TextEnricher/TextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -29,7 +29,7 @@ export class Encounter {
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
         public Rules: IRules,
-        private statBlockTextEnricher: StatBlockTextEnricher
+        private statBlockTextEnricher: TextEnricher
     ) {
         this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();

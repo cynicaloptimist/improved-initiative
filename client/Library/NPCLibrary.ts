@@ -10,7 +10,7 @@ export class NPCLibrary {
     public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
     public readonly StoreName = Store.StatBlocks;
     
-    constructor() {
+    constructor(private accountClient: AccountClient) {
         $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
 
         const localStatBlocks = Store.List(this.StoreName);
@@ -30,7 +30,7 @@ export class NPCLibrary {
     public DeleteListing = (id: string) => {
         this.StatBlocks.remove(s => s.Id == id);
         Store.Delete(this.StoreName, id);
-        new AccountClient().DeleteStatBlock(id);
+        this.accountClient.DeleteStatBlock(id);
     }
 
     private saveStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
@@ -41,7 +41,7 @@ export class NPCLibrary {
         Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
         listing.SetValue(newStatBlock);
 
-        new AccountClient().SaveStatBlock(newStatBlock)
+        this.accountClient.SaveStatBlock(newStatBlock)
             .then(r => {
                 if (!r || listing.Origin === "account") {
                     return;

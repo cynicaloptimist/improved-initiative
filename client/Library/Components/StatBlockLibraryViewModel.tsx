@@ -3,7 +3,7 @@ import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
-import { StatBlockTextEnricher } from "../../StatBlock/StatBlockTextEnricher";
+import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { NPCLibrary } from "../NPCLibrary";
@@ -16,7 +16,7 @@ import { ListingButton } from "./ListingButton";
 export type StatBlockLibraryViewModelProps = {
     librariesCommander: LibrariesCommander;
     library: PCLibrary | NPCLibrary;
-    statBlockTextEnricher: StatBlockTextEnricher;
+    statBlockTextEnricher: TextEnricher;
 };
 
 type StatBlockListing = Listing<StatBlock>;
