@@ -180,13 +180,14 @@ export class TrackerViewModel {
         statBlock: StatBlock,
         saveCallback: (newStatBlock: StatBlock) => void,
         deleteCallback?: () => void,
-        saveNewCallback?: (newStatBlock: StatBlock) => void,
+        saveAsCallback?: (newStatBlock: StatBlock) => void,
     ) {
         this.StatBlockEditor(<StatBlockEditor
             statBlock={statBlock}
             editMode={editMode}
             onSave={saveCallback}
             onDelete={deleteCallback}
+            onSaveAs={saveAsCallback}
             onClose={() => this.StatBlockEditor(null)} />);
     }
 

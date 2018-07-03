@@ -69,7 +69,7 @@ export class LibrariesCommander {
                 const statBlockWithNewId = { ...statBlock, Id: probablyUniqueString() };
                 this.tracker.EditStatBlock("library", statBlockWithNewId, library.SaveNewStatBlock);
             } else {
-                this.tracker.EditStatBlock("library", statBlock, s => library.SaveEditedStatBlock(listing, s), this.deleteSavedStatBlock(library.StoreName, listing.Id));
+                this.tracker.EditStatBlock("library", statBlock, s => library.SaveEditedStatBlock(listing, s), this.deleteSavedStatBlock(library.StoreName, listing.Id), library.SaveNewStatBlock);
             }
         });
     }

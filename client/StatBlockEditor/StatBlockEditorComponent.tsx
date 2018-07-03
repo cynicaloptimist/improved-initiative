@@ -37,6 +37,18 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onClose();
     }
 
+    public saveAs = (submittedValues) => {
+        this.parseIntWhereNeeded(submittedValues);
+        const editedStatBlock = {
+            ...StatBlock.Default(),
+            ...this.props.statBlock,
+            ...submittedValues,
+        };
+
+        this.props.onSaveAs(editedStatBlock);
+        this.props.onClose();
+    }
+
     private valueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <span className="label">{label}</span>
@@ -213,6 +225,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
                         {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
+                        {this.props.onSaveAs && <Button onClick={() => this.saveAs(api.values)} faClass="plus" tooltip="Save as New" />}
                         <button type="submit" className="button fa fa-save" />
                     </div>
                 </form>
@@ -224,6 +237,7 @@ interface StatBlockEditorProps {
     statBlock: StatBlock;
     onSave: (statBlock: StatBlock) => void;
     onDelete?: () => void;
+    onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
     editMode: "library" | "combatant";
 }

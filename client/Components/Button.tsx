@@ -3,6 +3,7 @@ import * as React from "react";
 export interface ButtonProps {
     text?: string;
     faClass?: string;
+    tooltip?: string;
     additionalClassNames?: string;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
@@ -18,6 +19,11 @@ export class Button extends React.Component<ButtonProps> {
         if (this.props.additionalClassNames) {
             classNames.push(this.props.additionalClassNames);
         }
-        return <span className={classNames.join(" ")} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>{text}</span>;
+        return <span
+            className={classNames.join(" ")}
+            onClick={this.props.onClick}
+            onMouseOver={this.props.onMouseOver}
+            title={this.props.tooltip}
+        >{text}</span>;
     }
 }
