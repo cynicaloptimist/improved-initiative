@@ -34,10 +34,9 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     private valueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
-            <div className="label">{label}</div>
+            <span className="label">{label}</span>
             <div className="inline">
-                <Text className="value" type="number"
-                    field={`${fieldName}.Value`} />
+                <Text className="value" type="number" field={`${fieldName}.Value`} />
                 <Text className="notes" field={`${fieldName}.Notes`} />
             </div>
         </label>
@@ -68,14 +67,25 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             />
         </div>
 
-    private nameAndModifierFields = (api: FormApi, modifierType: string) =>
-        <div>
-            <div className="label">{modifierType}</div>
-            <div className="inline-names-and-modifiers">
-                {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
-            </div>
-            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />
-        </div>
+    private nameAndModifierFields = (api: FormApi, modifierType: string) => {
+        const addButton = <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(modifierType, { Name: "", Modifier: "" })} />;
+        if (api.values[modifierType].length == 0) {
+            return <div>
+                <span className="label">
+                    {modifierType}
+                    {addButton}
+                </span>
+            </div>;
+        } else {
+            return <div>
+                <span className="label">{modifierType}</span>
+                <div className="inline-names-and-modifiers">
+                    {api.values[modifierType].map((v: NameAndModifier, i: number) => this.nameAndModifierField(api, modifierType, i))}
+                </div>
+                {addButton}
+            </div>;
+        }
+    }
 
     private keywordField = (api: FormApi, modifierType: string, index: number) =>
         <div className="inline" key={index}>
@@ -85,12 +95,23 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             />
         </div>
 
-    private keywordFields = (api: FormApi, keywordType: string) =>
-        <div>
-            <div className="label">{keywordType}</div>
-            {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
-            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(keywordType, "")} />
-        </div>
+    private keywordFields = (api: FormApi, keywordType: string) => {
+        const addButton = <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(keywordType, "")} />;
+        if (api.values[keywordType].length == 0) {
+            return <div>
+                <span className="label">
+                    {keywordType}
+                    {addButton}
+                </span>
+            </div>;
+        } else {
+            return <div>
+                <span className="label">{keywordType}</span>
+                {api.values[keywordType].map((v: string, i: number) => this.keywordField(api, keywordType, i))}
+                {addButton}
+            </div>;
+        }
+    }
 
     private powerField = (api: FormApi, modifierType: string, index: number) =>
         <div key={index}>
@@ -103,14 +124,25 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <TextArea placeholder="Details" field={`${modifierType}[${index}].Content`} />
         </div>
 
-    private powerFields = (api: FormApi, powerType: string) =>
-        <div>
-            <div className="label">{powerType}</div>
-            <div className="inline-powers">
-                {api.values[powerType].map((v: string, i: number) => this.powerField(api, powerType, i))}
-            </div>
-            <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(powerType, "")} />
-        </div>
+    private powerFields = (api: FormApi, powerType: string) => {
+        const addButton = <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(powerType, "")} />;
+        if (api.values[powerType].length == 0) {
+            return <div>
+                <span className="label">
+                    {powerType}
+                    {addButton}
+                </span>
+            </div>;
+        } else {
+            return <div>
+                <div className="label">{powerType}</div>
+                <div className="inline-powers">
+                    {api.values[powerType].map((v: string, i: number) => this.powerField(api, powerType, i))}
+                </div>
+                {addButton}
+            </div>;
+        }
+    }
 
     private descriptionField = () =>
         <label className="c-statblock-editor-text">

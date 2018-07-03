@@ -3,6 +3,6 @@ import { Text } from "react-form";
 
 export const TextField = (props: { label: string, fieldName: string }) =>
     <label className="c-statblock-editor-text">
-        <div className="label">{props.label}</div>
+        <span className="label">{props.label}</span>
         <Text field={props.fieldName} />
     </label>;
