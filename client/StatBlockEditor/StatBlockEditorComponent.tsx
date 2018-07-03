@@ -95,12 +95,12 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     private powerField = (api: FormApi, modifierType: string, index: number) =>
         <div key={index}>
             <div className="inline">
-                <Text className="name" field={`${modifierType}[${index}].Name`} />
+                <Text className="name" placeholder="Name" field={`${modifierType}[${index}].Name`} />
                 <span className="fa-clickable fa-trash"
                     onClick={() => api.removeValue(modifierType, index)}
                 />
             </div>
-            <TextArea field={`${modifierType}[${index}].Content`} />
+            <TextArea placeholder="Details" field={`${modifierType}[${index}].Content`} />
         </div>
 
     private powerFields = (api: FormApi, powerType: string) =>
