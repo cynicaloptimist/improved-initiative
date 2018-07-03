@@ -19,6 +19,7 @@
 
 @button-face: @active-white;
 @button-face-green: lighten(@primary-green, 15);
+@button-face-disabled: darken(@primary-white, 15);
 @button-text: @primary-black;
 @shadow: #999;
 
@@ -196,4 +197,9 @@ input, textarea {
 
 .c-add-button {
     .colors(@primary-white, unset, @primary-white);
+}
+
+.c-button.s-disabled, .c-button.s-disabled:hover {
+    color: @disabled-black;
+    background-color: @button-face-disabled;
 }
