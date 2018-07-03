@@ -20,7 +20,7 @@ const initiativeField = () =>
     <div className="c-statblock-editor-text">
         <label className="label" htmlFor="InitiativeModifier">Initiative Modifier</label>
         <div className="inline">
-            <Text className="value" id="InitiativeModifier" field="InitiativeModifier" />
+            <Text className="value" type="number" id="InitiativeModifier" field="InitiativeModifier" />
             <label> Roll with Advantage
                 <Checkbox field="InitiativeAdvantage" />
             </label>
