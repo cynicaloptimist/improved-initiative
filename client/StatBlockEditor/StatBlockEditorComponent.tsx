@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox, Form, FormApi, Text, TextArea, } from "react-form";
+import { Checkbox, Form, FormApi, Text, TextArea } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
