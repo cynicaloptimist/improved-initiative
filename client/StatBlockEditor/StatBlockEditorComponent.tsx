@@ -2,6 +2,7 @@ import * as React from "react";
 import { Checkbox, Form, FormApi, Text, TextArea, } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { Button } from "../Components/Button";
+import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
@@ -31,12 +32,6 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onClose();
     }
 
-    private textField = (label: string, fieldName: string) =>
-        <label className="c-statblock-editor-text">
-            <div className="label">{label}</div>
-            <Text field={fieldName} />
-        </label>
-
     private valueAndNotesField = (label: string, fieldName: string) =>
         <label className="c-statblock-editor-text">
             <div className="label">{label}</div>
@@ -63,7 +58,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
             <Text id={`ability-${abilityName}`} type="number" field={`Abilities.${abilityName}`} />
         </div>
-    
+
     private nameAndModifierField = (api: FormApi, modifierType: string, index: number) =>
         <div key={index}>
             <Text className="name" field={`${modifierType}[${index}].Name`} />
@@ -139,14 +134,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <h2>{header}</h2>
                     <div className="scrollframe">
                         <div className="bordered c-statblock-editor-headers">
-                            {this.textField("Name", "Name")}
-                            {this.textField("Folder", "Path")}
-                            {this.textField("Portrait URL", "ImageURL")}
-                            {this.textField("Source", "Source")}
-                            {this.textField("Type", "Type")}
+                            <TextField label="Name" fieldName="Name" />
+                            <TextField label="Folder" fieldName="Path" />
+                            <TextField label="Portrait URL" fieldName="ImageURL" />
+                            <TextField label="Source" fieldName="Source" />
+                            <TextField label="Type" fieldName="Type" />
                         </div>
                         <div className="bordered c-statblock-editor-stats">
-                            {this.textField(challengeLabel, "Challenge")}
+                            <TextField label={challengeLabel} fieldName="Challenge" />
                             {this.valueAndNotesField("Hit Points", "HP")}
                             {this.valueAndNotesField("Armor Class", "AC")}
                             {this.initiativeField()}
