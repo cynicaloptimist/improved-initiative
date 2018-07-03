@@ -104,7 +104,7 @@ export class CombatantCommander {
         }
 
         this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
-        
+
         const remainingCombatants = this.tracker.CombatantViewModels();
 
         let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
@@ -277,12 +277,13 @@ export class CombatantCommander {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;
             this.tracker.EditStatBlock(
                 "combatant",
-                selectedCombatant.StatBlock(), (newStatBlock) => {
-                selectedCombatant.StatBlock(newStatBlock);
-                this.tracker.Encounter.QueueEmitEncounter();
-            }, () => {
-                this.Remove();
-            });
+                selectedCombatant.StatBlock(),
+                (newStatBlock) => {
+                    selectedCombatant.StatBlock(newStatBlock);
+                    this.tracker.Encounter.QueueEmitEncounter();
+                },
+                () => this.Remove()
+            );
         }
     }
 

@@ -15,7 +15,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         submittedValues.Skills.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
         submittedValues.Saves.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
     }
-
+    
     public saveAndClose = (submittedValues) => {
         this.parseIntWhereNeeded(submittedValues);
         const editedStatBlock = {
@@ -29,6 +29,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     }
 
     private close = () => {
+        this.props.onClose();
+    }
+
+    private delete = () => {
+        this.props.onDelete();
         this.props.onClose();
     }
 
@@ -207,6 +212,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     </div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
+                        {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
                         <button type="submit" className="button fa fa-save" />
                     </div>
                 </form>
@@ -217,6 +223,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 interface StatBlockEditorProps {
     statBlock: StatBlock;
     onSave: (statBlock: StatBlock) => void;
+    onDelete?: () => void;
     onClose: () => void;
     editMode: "library" | "combatant";
 }

@@ -186,6 +186,7 @@ export class TrackerViewModel {
             statBlock={statBlock}
             editMode={editMode}
             onSave={saveCallback}
+            onDelete={deleteCallback}
             onClose={() => this.StatBlockEditor(null)} />);
     }
 
