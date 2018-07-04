@@ -137,14 +137,24 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     }
 
     public saveAndClose = (submittedValues) => {
+        const saveAs = submittedValues.SaveAs;
+        if (saveAs) {
+            submittedValues.Id = probablyUniqueString();
+            delete submittedValues.SaveAs;
+        }
+        
         this.parseIntWhereNeeded(submittedValues);
         const editedStatBlock = {
             ...StatBlock.Default(),
             ...this.props.statBlock,
             ...submittedValues,
         };
-
-        this.props.onSave(editedStatBlock);
+        
+        if (saveAs && this.props.onSaveAs) {
+            this.props.onSaveAs(editedStatBlock);
+        } else {
+            this.props.onSave(editedStatBlock);
+        }
         this.props.onClose();
     }
 
@@ -157,19 +167,6 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onClose();
     }
 
-    public saveAs = (submittedValues) => {
-        this.parseIntWhereNeeded(submittedValues);
-        const editedStatBlock = {
-            ...StatBlock.Default(),
-            ...this.props.statBlock,
-            ...submittedValues,
-            Id: probablyUniqueString()
-        };
-
-        this.props.onSaveAs(editedStatBlock);
-        this.props.onClose();
-    }
-
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -178,7 +175,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
         const challengeLabel = this.props.statBlock.Player == "player" ? "Level" : "Challenge";
 
-        return <Form onSubmit={this.saveAndClose}
+        return <Form
+            onSubmit={this.saveAndClose}
             defaultValues={this.props.statBlock}
             render={api => (
                 <form className="c-statblock-editor"
