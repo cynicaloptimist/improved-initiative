@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import { max, sortBy } from "lodash";
-import React = require("react");
+import * as React from "react";
 
 import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";

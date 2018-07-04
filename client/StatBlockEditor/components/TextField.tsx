@@ -1,4 +1,4 @@
-import React = require("react");
+import * as React from "react";
 import { Text } from "react-form";
 
 export const TextField = (props: { label: string, fieldName: string }) =>
