@@ -25,10 +25,7 @@ describe("StatBlockEditor", () => {
         expect.assertions(1);
         const statBlock = StatBlock.Default();
 
-        Enzyme.mount(<StatBlockEditor
-            getApi={api => {
-                api.submitForm(null);
-            }}
+        const editor = Enzyme.mount(<StatBlockEditor
             statBlock={statBlock}
             editMode="library"
             onClose={jest.fn()}
@@ -36,5 +33,7 @@ describe("StatBlockEditor", () => {
                 expect(editedStatBlock).toEqual(statBlock);
                 done();
             }} />);
+        
+        editor.simulate("submit");
     });
 });
