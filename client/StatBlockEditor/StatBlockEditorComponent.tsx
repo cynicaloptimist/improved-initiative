@@ -7,15 +7,19 @@ import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
-const identityFields = (allowFolder: boolean, allowSaveAs: boolean) => {
-    return <React.Fragment>
-        <span>
-            {allowFolder && <Text field="Path" />}
-            <Text field="Name" />
-        </span>
-        {allowSaveAs && <label> Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
-    </React.Fragment>;
-};
+interface IdentityFieldsProps { allowFolder: boolean; allowSaveAs: boolean; }
+interface IdentityFieldsState { folderExpanded: boolean; }
+class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
+    public render() {
+        return <React.Fragment>
+            <span>
+                {this.props.allowFolder && <Text field="Path" />}
+                <Text field="Name" />
+            </span>
+            {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
+        </React.Fragment>;
+    }
+}
 
 const valueAndNotesField = (label: string, fieldName: string) =>
     <label className="c-statblock-editor-text">
@@ -195,7 +199,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <h2>{header}</h2>
                     <div className="scrollframe">
                         <div className="bordered c-statblock-editor-identity">
-                            {identityFields(this.props.editMode == "library", this.props.onSaveAs !== undefined)}
+                            <IdentityFields
+                                allowFolder={this.props.editMode == "library"}
+                                allowSaveAs={this.props.onSaveAs !== undefined}
+                            />
                         </div>
                         <div className="bordered c-statblock-editor-headers">
                             <TextField label="Portrait URL" fieldName="ImageURL" />
