@@ -177,6 +177,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
         return <Form
             onSubmit={this.saveAndClose}
+            getApi={this.props.getApi}
             defaultValues={this.props.statBlock}
             render={api => (
                 <form className="c-statblock-editor"
@@ -245,6 +246,7 @@ interface StatBlockEditorProps {
     onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
     editMode: "library" | "combatant";
+    getApi?: (api: FormApi) => void;
 }
 
 interface StatBlockEditorState { }
