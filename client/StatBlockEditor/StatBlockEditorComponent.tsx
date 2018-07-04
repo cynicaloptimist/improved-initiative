@@ -3,41 +3,10 @@ import { Checkbox, Form, FormApi, Text, TextArea } from "react-form";
 import { NameAndModifier, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
+import { IdentityFields } from "./components/IdentityFields";
 import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
-
-interface IdentityFieldsProps { hasFolder: boolean; allowFolder: boolean; allowSaveAs: boolean; }
-interface IdentityFieldsState { folderExpanded: boolean; }
-class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            folderExpanded: this.props.hasFolder
-        };
-    }
-
-    private folderElement = () => {
-        if (!this.props.allowFolder) {
-            return null;
-        }
-        if (this.state.folderExpanded) {
-            return <Text field="Path" />;
-        } else {
-            return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
-        }
-    }
-
-    public render() {
-        return <React.Fragment>
-            <span>
-                {this.folderElement()}
-                <Text field="Name" />
-            </span>
-            {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
-        </React.Fragment>;
-    }
-}
 
 const valueAndNotesField = (label: string, fieldName: string) =>
     <label className="c-statblock-editor-text">
