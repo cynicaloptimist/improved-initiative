@@ -31,7 +31,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
                 {this.folderElement()}
                 <Text field="Name" id="name" />
             </span>
-            {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
+            {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="SaveAs" /></label>}
         </React.Fragment>;
     }
 }
