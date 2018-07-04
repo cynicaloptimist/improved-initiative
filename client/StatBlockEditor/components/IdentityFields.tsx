@@ -26,9 +26,10 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
 
     public render() {
         return <React.Fragment>
+            <label className="label" htmlFor="name">Folder and Name</label>
             <span>
                 {this.folderElement()}
-                <Text field="Name" />
+                <Text field="Name" id="name" />
             </span>
             {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
         </React.Fragment>;
