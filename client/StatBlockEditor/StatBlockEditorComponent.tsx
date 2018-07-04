@@ -7,13 +7,31 @@ import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
-interface IdentityFieldsProps { allowFolder: boolean; allowSaveAs: boolean; }
+interface IdentityFieldsProps { api: FormApi; allowFolder: boolean; allowSaveAs: boolean; }
 interface IdentityFieldsState { folderExpanded: boolean; }
 class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            folderExpanded: this.props.api.values["Path"] && this.props.api.values["Path"].length > 0
+        };
+    }
+
+    private folderElement = () => {
+        if (!this.props.allowFolder) {
+            return null;
+        }
+        if (this.state.folderExpanded) {
+            return <Text field="Path" />;
+        } else {
+            return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
+        }
+    }
+
     public render() {
         return <React.Fragment>
             <span>
-                {this.props.allowFolder && <Text field="Path" />}
+                {this.folderElement()}
                 <Text field="Name" />
             </span>
             {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
@@ -200,7 +218,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="scrollframe">
                         <div className="bordered c-statblock-editor-identity">
                             <IdentityFields
-                                allowFolder={this.props.editMode == "library"}
+                                api={api}
+                                allowFolder={this.props.editMode === "library"}
                                 allowSaveAs={this.props.onSaveAs !== undefined}
                             />
                         </div>
