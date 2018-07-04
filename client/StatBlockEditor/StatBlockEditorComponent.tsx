@@ -7,13 +7,13 @@ import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
-interface IdentityFieldsProps { api: FormApi; allowFolder: boolean; allowSaveAs: boolean; }
+interface IdentityFieldsProps { hasFolder: boolean; allowFolder: boolean; allowSaveAs: boolean; }
 interface IdentityFieldsState { folderExpanded: boolean; }
 class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
     constructor(props) {
         super(props);
         this.state = {
-            folderExpanded: this.props.api.values["Path"] && this.props.api.values["Path"].length > 0
+            folderExpanded: this.props.hasFolder
         };
     }
 
@@ -218,7 +218,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="scrollframe">
                         <div className="bordered c-statblock-editor-identity">
                             <IdentityFields
-                                api={api}
+                                hasFolder={api.values["Path"] && api.values["Path"].length > 0}
                                 allowFolder={this.props.editMode === "library"}
                                 allowSaveAs={this.props.onSaveAs !== undefined}
                             />
