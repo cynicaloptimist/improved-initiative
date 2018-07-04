@@ -79,7 +79,6 @@
     "knockout-mapping": "^2.6.0",
     "lodash": "^4.17.10",
     "markdown-loader": "^2.0.2",
-    "minimist": "^1.2.0",
     "moment": "^2.22.1",
     "mongodb": "^2.2.35",
     "mousetrap": "^1.5.3",
