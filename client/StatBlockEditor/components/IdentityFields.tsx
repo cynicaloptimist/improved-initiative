@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text } from "react-form";
+import { Checkbox, Text } from "react-form";
 
 interface IdentityFieldsProps { hasFolder: boolean; allowFolder: boolean; allowSaveAs: boolean; }
 
