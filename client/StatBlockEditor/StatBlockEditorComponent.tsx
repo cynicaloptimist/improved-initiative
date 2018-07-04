@@ -7,6 +7,16 @@ import { TextField } from "./components/TextField";
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
+const identityFields = (allowFolder: boolean, allowSaveAs: boolean) => {
+    return <React.Fragment>
+        <span>
+            {allowFolder && <Text field="Path" />}
+            <Text field="Name" />
+        </span>
+        {allowSaveAs && <label> Save as a copy <Checkbox field="InitiativeAdvantage" /></label>}
+    </React.Fragment>;
+};
+
 const valueAndNotesField = (label: string, fieldName: string) =>
     <label className="c-statblock-editor-text">
         <span className="label">{label}</span>
@@ -184,9 +194,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     onSubmit={api.submitForm}>
                     <h2>{header}</h2>
                     <div className="scrollframe">
+                        <div className="bordered c-statblock-editor-identity">
+                            {identityFields(this.props.editMode == "library", this.props.onSaveAs !== undefined)}
+                        </div>
                         <div className="bordered c-statblock-editor-headers">
-                            <TextField label="Name" fieldName="Name" />
-                            <TextField label="Folder" fieldName="Path" />
                             <TextField label="Portrait URL" fieldName="ImageURL" />
                             <TextField label="Source" fieldName="Source" />
                             <TextField label="Type" fieldName="Type" />
@@ -227,7 +238,6 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
                         {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
-                        {this.props.onSaveAs && <Button onClick={() => this.saveAs(api.values)} faClass="plus" tooltip="Save as New" />}
                         <button type="submit" className="button fa fa-save" />
                     </div>
                 </form>
