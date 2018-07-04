@@ -1,5 +1,5 @@
+import { Field } from "formik";
 import * as React from "react";
-import { Checkbox, Text } from "react-form";
 
 interface IdentityFieldsProps { hasFolder: boolean; allowFolder: boolean; allowSaveAs: boolean; }
 
@@ -18,7 +18,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             return null;
         }
         if (this.state.folderExpanded) {
-            return <Text field="Path" />;
+            return <Field type="text" name="Path" />;
         } else {
             return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
         }
@@ -29,9 +29,9 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             <label className="label" htmlFor="name">Folder and Name</label>
             <span>
                 {this.folderElement()}
-                <Text field="Name" id="name" />
+                <Field type="text" name="Name" id="name" />
             </span>
-            {this.props.allowSaveAs && <label>Save as a copy <Checkbox field="SaveAs" /></label>}
+            {this.props.allowSaveAs && <label>Save as a copy <Field type="checkbox" name="SaveAs" /></label>}
         </React.Fragment>;
     }
 }
