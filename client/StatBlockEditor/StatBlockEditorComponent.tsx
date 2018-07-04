@@ -187,7 +187,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             <IdentityFields
                                 hasFolder={api.values["Path"] && api.values["Path"].length > 0}
                                 allowFolder={this.props.editMode === "library"}
-                                allowSaveAs={this.props.onSaveAs !== undefined}
+                                allowSaveAs={this.props.onSaveAs !== undefined && (api.touched["Name"] == true || api.touched["Path"] == true)}
                             />
                         </div>
                         <div className="bordered c-statblock-editor-headers">
