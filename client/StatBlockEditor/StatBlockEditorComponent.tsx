@@ -1,6 +1,6 @@
 import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
 import * as React from "react";
-import { NameAndModifier, StatBlock } from "../../common/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
 import { IdentityFields } from "./components/IdentityFields";
@@ -52,7 +52,7 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
             type="button"
             className="fa fa-plus c-add-button"
             onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
-        
+
         if (api.values[modifierType].length == 0) {
             return <div>
                 <span className="label">
@@ -72,22 +72,22 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     }} />;
 };
 
-const keywordField = (remove: (index: number) => void, modifierType: string, index: number) =>
+const keywordField = (remove: (index: number) => void, keywordType: string, index: number) =>
     <div className="inline" key={index}>
-        <Field type="text" className="name" name={`${modifierType}[${index}]`} />
+        <Field type="text" className="name" name={`${keywordType}[${index}]`} />
         <span className="fa-clickable fa-trash"
             onClick={() => remove(index)}
         />
     </div>;
- 
- 
+
+
 const keywordFields = (api: FormApi, keywordType: string) => {
     return <FieldArray name={keywordType} render={arrayHelpers => {
         const addButton = <button
             type="button"
             className="fa fa-plus c-add-button"
             onClick={() => arrayHelpers.push("")} />;
-        
+
         if (api.values[keywordType].length == 0) {
             return <div>
                 <span className="label">
@@ -104,43 +104,48 @@ const keywordFields = (api: FormApi, keywordType: string) => {
         }
     }} />;
 };
- 
-/*
-const powerField = (api: FormApi, modifierType: string, index: number) =>
+
+const powerField = (remove: (index: number) => void, powerType: string, index: number) =>
     <div key={index}>
         <div className="inline">
-            <Field type="text" className="name" placeholder="Name" name={`${modifierType}[${index}].Name`} />
+            <Field type="text" className="name" placeholder="Name" name={`${powerType}[${index}].Name`} />
             <span className="fa-clickable fa-trash"
-                onClick={() => api.removeValue(modifierType, index)}
+                onClick={() => remove(index)}
             />
         </div>
-        <Field type="textarea" placeholder="Details" name={`${modifierType}[${index}].Content`} />
+        <Field component="textarea" placeholder="Details" name={`${powerType}[${index}].Content`} />
     </div>;
- 
+
 const powerFields = (api: FormApi, powerType: string) => {
-    const addButton = <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(powerType, "")} />;
-    if (api.values[powerType].length == 0) {
-        return <div>
-            <span className="label">
-                {powerType}
+    return <FieldArray name={powerType} render={arrayHelpers => {
+
+        const addButton = <button type="button"
+            className="fa fa-plus c-add-button"
+            onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
+
+        if (api.values[powerType].length == 0) {
+            return <div>
+                <span className="label">
+                    {powerType}
+                    {addButton}
+                </span>
+            </div>;
+        } else {
+            return <div>
+                <div className="label">{powerType}</div>
+                <div className="inline-powers">
+                    {api.values[powerType].map((_, i: number) => powerField(arrayHelpers.remove, powerType, i))}
+                </div>
                 {addButton}
-            </span>
-        </div>;
-    } else {
-        return <div>
-            <div className="label">{powerType}</div>
-            <div className="inline-powers">
-                {api.values[powerType].map((v: string, i: number) => powerField(api, powerType, i))}
-            </div>
-            {addButton}
-        </div>;
-    }
+            </div>;
+        }
+    }} />;
 };
-*/
+
 const descriptionField = () =>
     <label className="c-statblock-editor-text">
         <div className="label">Description</div>
-        <Field type="textarea" name="Description" />
+        <Field component="textarea" name="Description" />
     </label>;
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
@@ -227,18 +232,19 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         <div className="bordered c-statblock-editor-skills">
                             {nameAndModifierFields(api, "Skills")}
                         </div>
-                        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"].map(
-                            keywordType =>
-                                <div key={keywordType} className="bordered c-statblock-editor-keywords">
-                                    {keywordFields(api, keywordType)}
-                                </div>
-                        )}
-                        {/*["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+                        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
+                            .map(
+                                keywordType =>
+                                    <div key={keywordType} className="bordered c-statblock-editor-keywords">
+                                        {keywordFields(api, keywordType)}
+                                    </div>
+                            )}
+                        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
                             powerType =>
                                 <div key={powerType} className="bordered c-statblock-editor-powers">
                                     {powerFields(api, powerType)}
                                 </div>
-                        )*/}                    
+                        )}
                         <div className="bordered c-statblock-editor-description">
                             {descriptionField()}
                         </div>
