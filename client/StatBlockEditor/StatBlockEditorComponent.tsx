@@ -72,34 +72,40 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     }} />;
 };
 
-/*
-const keywordField = (api: FormApi, modifierType: string, index: number) =>
+const keywordField = (remove: (index: number) => void, modifierType: string, index: number) =>
     <div className="inline" key={index}>
         <Field type="text" className="name" name={`${modifierType}[${index}]`} />
         <span className="fa-clickable fa-trash"
-            onClick={() => api.removeValue(modifierType, index)}
+            onClick={() => remove(index)}
         />
     </div>;
  
  
 const keywordFields = (api: FormApi, keywordType: string) => {
-    const addButton = <button type="button" className="fa fa-plus c-add-button" onClick={() => api.addValue(keywordType, "")} />;
-    if (api.values[keywordType].length == 0) {
-        return <div>
-            <span className="label">
-                {keywordType}
+    return <FieldArray name={keywordType} render={arrayHelpers => {
+        const addButton = <button
+            type="button"
+            className="fa fa-plus c-add-button"
+            onClick={() => arrayHelpers.push("")} />;
+        
+        if (api.values[keywordType].length == 0) {
+            return <div>
+                <span className="label">
+                    {keywordType}
+                    {addButton}
+                </span>
+            </div>;
+        } else {
+            return <div>
+                <span className="label">{keywordType}</span>
+                {api.values[keywordType].map((_, i: number) => keywordField(arrayHelpers.remove, keywordType, i))}
                 {addButton}
-            </span>
-        </div>;
-    } else {
-        return <div>
-            <span className="label">{keywordType}</span>
-            {api.values[keywordType].map((v: string, i: number) => keywordField(api, keywordType, i))}
-            {addButton}
-        </div>;
-    }
+            </div>;
+        }
+    }} />;
 };
  
+/*
 const powerField = (api: FormApi, modifierType: string, index: number) =>
     <div key={index}>
         <div className="inline">
@@ -221,19 +227,18 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                         <div className="bordered c-statblock-editor-skills">
                             {nameAndModifierFields(api, "Skills")}
                         </div>
-                        {/*{["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"].map(
+                        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"].map(
                             keywordType =>
                                 <div key={keywordType} className="bordered c-statblock-editor-keywords">
                                     {keywordFields(api, keywordType)}
                                 </div>
                         )}
-                        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+                        {/*["Traits", "Actions", "Reactions", "LegendaryActions"].map(
                             powerType =>
                                 <div key={powerType} className="bordered c-statblock-editor-powers">
                                     {powerFields(api, powerType)}
                                 </div>
-                        )}
-                    */}
+                        )*/}                    
                         <div className="bordered c-statblock-editor-description">
                             {descriptionField()}
                         </div>
