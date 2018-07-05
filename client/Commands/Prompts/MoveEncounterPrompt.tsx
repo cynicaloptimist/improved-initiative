@@ -1,5 +1,5 @@
 import Awesomplete = require("awesomplete");
-import React = require("react");
+import * as React from "react";
 import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
 import { AccountClient } from "../../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";

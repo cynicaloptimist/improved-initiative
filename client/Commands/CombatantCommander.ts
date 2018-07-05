@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import React = require("react");
+import * as React from "react";
 
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
@@ -104,7 +104,7 @@ export class CombatantCommander {
         }
 
         this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
-        
+
         const remainingCombatants = this.tracker.CombatantViewModels();
 
         let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
@@ -275,13 +275,15 @@ export class CombatantCommander {
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;
-            this.tracker.StatBlockEditor.EditStatBlock(null, selectedCombatant.StatBlock(), (newStatBlock) => {
-                selectedCombatant.StatBlock(newStatBlock);
-                this.tracker.Encounter.QueueEmitEncounter();
-            }, () => {
-                this.Remove();
-            },
-                "instance");
+            this.tracker.EditStatBlock(
+                "combatant",
+                selectedCombatant.StatBlock(),
+                (newStatBlock) => {
+                    selectedCombatant.StatBlock(newStatBlock);
+                    this.tracker.Encounter.QueueEmitEncounter();
+                },
+                () => this.Remove()
+            );
         }
     }
 

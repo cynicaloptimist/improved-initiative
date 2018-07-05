@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import React = require("react");
+import * as React from "react";
 
 import { Spell } from "../../../common/Spell";
 import { Listing } from "../../Library/Listing";

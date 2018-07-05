@@ -1,6 +1,7 @@
 @primary-green: #00643C;
 @hover-green: lighten(@primary-green, 10);
 @active-green: lighten(@primary-green, 15);
+@accent-green: darken(@primary-green, 5);
 
 @primary-white: #EAE0D5;
 @input-white: @primary-white;
@@ -18,6 +19,7 @@
 
 @button-face: @active-white;
 @button-face-green: lighten(@primary-green, 15);
+@button-face-disabled: darken(@primary-white, 15);
 @button-text: @primary-black;
 @shadow: #999;
 
@@ -181,4 +183,23 @@ input, textarea {
 
 .combatant-portrait-caption {
     color: @primary-white;
+}
+
+.c-statblock-editor {
+    input[type=checkbox] {
+        color: @primary-white;
+    }
+
+    .bordered {
+        border-color: @accent-green;
+    }
+}
+
+.c-add-button {
+    .colors(@primary-white, unset, @primary-white);
+}
+
+.c-button.s-disabled, .c-button.s-disabled:hover {
+    color: @disabled-black;
+    background-color: @button-face-disabled;
 }
