@@ -33,7 +33,7 @@ describe("StatBlockEditor", () => {
             expect(editedStatBlock).toEqual(statBlock);
             done();
         });
-        
+
         editor.simulate("submit");
     });
 
@@ -46,6 +46,23 @@ describe("StatBlockEditor", () => {
         });
 
         editor.find(`input[name="Name"]`).simulate("change", { target: { name: "Name", value: "Snarf" } });
+
+        editor.simulate("submit");
+    });
+
+    test("calls saveAs when Save as a copy is checked", done => {
+        expect.assertions(2);
+
+        saveAsCallback.mockImplementation((editedStatBlock: StatBlock) => {
+            expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
+            expect(editedStatBlock).not.toHaveProperty("SaveAs");
+            done();
+        });
+
+        editor.find(`input[name="Name"]`).simulate("blur", { target: { name: "Name" } });
+        editor.instance().forceUpdate();
+
+        editor.find(`input[name="SaveAs"]`).simulate("change", { target: { name: "SaveAs", value: true } });
 
         editor.simulate("submit");
     });
