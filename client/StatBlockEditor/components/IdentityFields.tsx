@@ -18,7 +18,10 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             return null;
         }
         if (this.state.folderExpanded) {
-            return <Field type="text" name="Path" />;
+            return <div>
+                <label className="label" htmlFor="Path">Folder</label>
+                <Field type="text" name="Path" />
+            </div>;
         } else {
             return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
         }
@@ -26,11 +29,13 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
 
     public render() {
         return <React.Fragment>
-            <label className="label" htmlFor="name">Folder and Name</label>
-            <span>
+            <div className="inline">
                 {this.folderElement()}
-                <Field type="text" name="Name" id="name" />
-            </span>
+                <div>
+                    <label className="label" htmlFor="Name">Name</label>
+                    <Field type="text" name="Name" id="name" />
+                </div>
+            </div>
             {this.props.allowSaveAs && <label>Save as a copy <Field type="checkbox" name="SaveAs" /></label>}
         </React.Fragment>;
     }

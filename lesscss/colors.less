@@ -73,6 +73,10 @@ input, textarea {
     }
 }
 
+.fa-clickable:hover {
+    color: @hover-white;
+}
+
 .modal-blur {
     background-color: rgba(0,0,0,0.7);
 }
@@ -197,6 +201,9 @@ input, textarea {
 
 .c-add-button {
     .colors(@primary-white, unset, @primary-white);
+    &:hover {
+        .colors(@hover-white, unset, @hover-white);
+    }
 }
 
 .c-button.s-disabled, .c-button.s-disabled:hover {
