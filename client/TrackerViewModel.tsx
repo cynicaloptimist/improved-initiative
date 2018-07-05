@@ -219,6 +219,9 @@ export class TrackerViewModel {
 
     public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
+            if (this.LibrariesVisible()) {
+                return "show-center-left-right";
+            }
             return "show-center-right-left";
         }
 
