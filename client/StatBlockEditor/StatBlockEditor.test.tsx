@@ -9,18 +9,26 @@ import { StatBlock } from "../../common/StatBlock";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("StatBlockEditor", () => {
-    test.only("Calls saveCallback with the provided statblock", done => {
-        expect.assertions(1);
-        const statBlock = StatBlock.Default();
+    let editor: Enzyme.ReactWrapper<any, any>;
+    let saveCallback: jest.Mock<(s: StatBlock) => void>;
+    let statBlock: StatBlock;
 
-        const editor = Enzyme.mount(<StatBlockEditor
+    beforeEach(() => {
+        statBlock = StatBlock.Default();
+        saveCallback = jest.fn();
+        editor = Enzyme.mount(<StatBlockEditor
             statBlock={statBlock}
             editMode="library"
             onClose={jest.fn()}
-            onSave={editedStatBlock => {
-                expect(editedStatBlock).toEqual(statBlock);
-                done();
-            }} />);
+            onSave={saveCallback} />);
+    });
+
+    test("Calls saveCallback with the provided statblock", done => {
+        expect.assertions(1);
+        saveCallback.mockImplementation(editedStatBlock => {
+            expect(editedStatBlock).toEqual(statBlock);
+            done();
+        });
         
         editor.simulate("submit");
     });
