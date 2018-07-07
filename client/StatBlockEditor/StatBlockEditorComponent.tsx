@@ -40,16 +40,30 @@ interface NameAndModifierFieldProps {
     remove: (index: number) => void;
     modifierType: string; index: number;
 }
-interface NameAndModifierFieldState {}
+interface NameAndModifierFieldState { }
 class NameAndModifierField extends React.Component<NameAndModifierFieldProps, NameAndModifierFieldState> {
+    private nameInput: HTMLInputElement;
+
+    public componentDidMount() {
+        if (this.nameInput.value == "") {
+            this.nameInput.focus();
+        }
+    }
+
     public render() {
-        return <div key={this.props.index}>
-        <Field type="text" className="name" name={`${this.props.modifierType}[${this.props.index}].Name`} />
-        <Field type="number" className="modifier" name={`${this.props.modifierType}[${this.props.index}].Modifier`} />
-        <span className="fa-clickable fa-trash"
-            onClick={() => this.props.remove(this.props.index)}
-        />
-    </div>;
+        return <div>
+            <Field type="text" className="name"
+                name={`${this.props.modifierType}[${this.props.index}].Name`}
+                innerRef={f => this.nameInput = f}
+            />
+            <Field type="number" className="modifier"
+                name={`${this.props.modifierType}[${this.props.index}].Modifier`}
+            />
+            <span
+                className="fa-clickable fa-trash"
+                onClick={() => this.props.remove(this.props.index)}
+            />
+        </div>;
     }
 }
 
@@ -73,7 +87,7 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
                 <span className="label">{modifierType}</span>
                 <div className="inline-names-and-modifiers">
                     {api.values[modifierType].map((_, i: number) =>
-                        <NameAndModifierField remove={arrayHelpers.remove} modifierType={modifierType} index={i} />
+                        <NameAndModifierField key={i} remove={arrayHelpers.remove} modifierType={modifierType} index={i} />
                     )}
                 </div>
                 {addButton}
