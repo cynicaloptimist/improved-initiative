@@ -4,6 +4,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
 import { IdentityFields } from "./components/IdentityFields";
+import { KeywordField } from "./components/KeywordField";
 import { NameAndModifierField } from "./components/NameAndModifierField";
 import { TextField } from "./components/TextField";
 
@@ -67,12 +68,7 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 };
 
 const keywordField = (remove: (index: number) => void, keywordType: string, index: number) =>
-    <div className="inline" key={index}>
-        <Field type="text" className="name" name={`${keywordType}[${index}]`} />
-        <span className="fa-clickable fa-trash"
-            onClick={() => remove(index)}
-        />
-    </div>;
+    <KeywordField key={index} remove={remove} keywordType={keywordType} index={index} />;
 
 
 const keywordFields = (api: FormApi, keywordType: string) => {
