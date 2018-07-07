@@ -50,13 +50,15 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             return;
         }
         
-        new Awesomplete(this.folderInput, {
+        const awesomeplete = new Awesomplete(this.folderInput, {
             list: this.autoCompletePaths,
             minChars: 1
         });
 
-        this.folderInput.addEventListener("awesomplete-selectcomplete", (event: any) => {
+        this.folderInput.addEventListener("awesomplete-select", (event: any) => {
             this.props.setFolder(event.text.value);
+            event.preventDefault();
+            awesomeplete.close();
         });
 
         this.initializedAutocomplete = true;
