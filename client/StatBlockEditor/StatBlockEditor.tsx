@@ -188,7 +188,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                                 hasFolder={api.values["Path"] && api.values["Path"].length > 0}
                                 allowFolder={this.props.editMode === "library"}
                                 setFolder={folderName => api.setFieldValue("Path", folderName)}
-                                allowSaveAs={this.props.onSaveAs !== undefined && (api.touched["Name"] == true || api.touched["Path"] == true)}
+                                allowSaveAs={this.props.onSaveAs !== undefined}
                                 currentListings={this.props.currentListings}
                             />
                         </div>
