@@ -93,9 +93,6 @@ const keywordFields = (api: FormApi, keywordType: string) => {
     }} />;
 };
 
-const powerField = (remove: (index: number) => void, powerType: string, index: number) =>
-    <PowerField key={index} remove={remove} powerType={powerType} index={index} />;
-
 const powerFields = (api: FormApi, powerType: string) => {
     return <FieldArray name={powerType} render={arrayHelpers => {
 
@@ -114,7 +111,8 @@ const powerFields = (api: FormApi, powerType: string) => {
             return <div>
                 <div className="label">{powerType}</div>
                 <div className="inline-powers">
-                    {api.values[powerType].map((_, i: number) => powerField(arrayHelpers.remove, powerType, i))}
+                    {api.values[powerType].map((_, i: number) =>
+                        <PowerField key={i} remove={arrayHelpers.remove} powerType={powerType} index={i} />)}
                 </div>
                 {addButton}
             </div>;
