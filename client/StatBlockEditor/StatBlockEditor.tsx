@@ -3,6 +3,7 @@ import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
+import { Listing } from "../Library/Listing";
 import { IdentityFields } from "./components/IdentityFields";
 import { KeywordField } from "./components/KeywordField";
 import { NameAndModifierField } from "./components/NameAndModifierField";
@@ -187,6 +188,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                                 hasFolder={api.values["Path"] && api.values["Path"].length > 0}
                                 allowFolder={this.props.editMode === "library"}
                                 allowSaveAs={this.props.onSaveAs !== undefined && (api.touched["Name"] == true || api.touched["Path"] == true)}
+                                currentListings={this.props.currentListings}
                             />
                         </div>
                         <div className="bordered c-statblock-editor-headers">
@@ -245,6 +247,7 @@ interface StatBlockEditorProps {
     onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
     editMode: "library" | "combatant";
+    currentListings?: Listing<StatBlock> [];
 }
 
 interface StatBlockEditorState { }

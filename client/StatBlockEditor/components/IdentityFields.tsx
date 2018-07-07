@@ -1,9 +1,19 @@
 import { Field } from "formik";
+import _ = require("lodash");
 import * as React from "react";
+import { StatBlock } from "../../../common/StatBlock";
+import { Listing } from "../../Library/Listing";
 
-interface IdentityFieldsProps { hasFolder: boolean; allowFolder: boolean; allowSaveAs: boolean; }
+interface IdentityFieldsProps {
+    hasFolder: boolean;
+    allowFolder: boolean;
+    allowSaveAs: boolean;
+    currentListings?: Listing<StatBlock>[];
+}
 
-interface IdentityFieldsState { folderExpanded: boolean; }
+interface IdentityFieldsState {
+    folderExpanded: boolean;
+}
 
 export class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
     constructor(props) {
@@ -18,6 +28,8 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             return null;
         }
         if (this.state.folderExpanded) {
+            const autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
+
             return <div>
                 <label className="label" htmlFor="Path">Folder</label>
                 <Field type="text" name="Path" />

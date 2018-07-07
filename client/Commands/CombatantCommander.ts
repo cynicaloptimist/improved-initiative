@@ -282,6 +282,7 @@ export class CombatantCommander {
                     selectedCombatant.StatBlock(newStatBlock);
                     this.tracker.Encounter.QueueEmitEncounter();
                 },
+                undefined,
                 () => this.Remove()
             );
         }

@@ -58,7 +58,7 @@ export class LibrariesCommander {
 
         statBlock.Id = newId;
 
-        this.tracker.EditStatBlock("library", statBlock, library.SaveNewStatBlock);
+        this.tracker.EditStatBlock("library", statBlock, library.SaveNewStatBlock, library.StatBlocks());
     }
 
     public EditStatBlock = (
@@ -67,9 +67,21 @@ export class LibrariesCommander {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 const statBlockWithNewId = { ...statBlock, Id: probablyUniqueString() };
-                this.tracker.EditStatBlock("library", statBlockWithNewId, library.SaveNewStatBlock);
+                this.tracker.EditStatBlock(
+                    "library",
+                    statBlockWithNewId,
+                    library.SaveNewStatBlock,
+                    library.StatBlocks()
+                );
             } else {
-                this.tracker.EditStatBlock("library", statBlock, s => library.SaveEditedStatBlock(listing, s), this.deleteSavedStatBlock(library.StoreName, listing.Id), library.SaveNewStatBlock);
+                this.tracker.EditStatBlock(
+                    "library",
+                    statBlock,
+                    s => library.SaveEditedStatBlock(listing, s),
+                    library.StatBlocks(),
+                    this.deleteSavedStatBlock(library.StoreName, listing.Id),
+                    library.SaveNewStatBlock
+                );
             }
         });
     }

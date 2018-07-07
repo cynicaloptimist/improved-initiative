@@ -17,6 +17,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
+import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -179,6 +180,7 @@ export class TrackerViewModel {
         editMode: "combatant" | "library",
         statBlock: StatBlock,
         saveCallback: (newStatBlock: StatBlock) => void,
+        currentListings?: Listing<StatBlock> [],
         deleteCallback?: () => void,
         saveAsCallback?: (newStatBlock: StatBlock) => void,
     ) {
@@ -188,7 +190,9 @@ export class TrackerViewModel {
             onSave={saveCallback}
             onDelete={deleteCallback}
             onSaveAs={saveAsCallback}
-            onClose={() => this.StatBlockEditor(null)} />);
+            onClose={() => this.StatBlockEditor(null)}
+            currentListings = {currentListings}
+        />);
     }
 
     protected StatBlockEditor = ko.observable<JSX.Element>(null);
