@@ -8,6 +8,7 @@ import { Listing } from "../../Library/Listing";
 interface IdentityFieldsProps {
     hasFolder: boolean;
     allowFolder: boolean;
+    setFolder: (folderName: string) => void;
     allowSaveAs: boolean;
     currentListings?: Listing<StatBlock>[];
 }
@@ -50,6 +51,10 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         new Awesomplete(this.folderInput, {
             list: autoCompletePaths,
             minChars: 1
+        });
+
+        this.folderInput.addEventListener("awesomplete-selectcomplete", (event: any) => {
+            this.props.setFolder(event.text.value);
         });
 
         this.initializedAutocomplete = true;
