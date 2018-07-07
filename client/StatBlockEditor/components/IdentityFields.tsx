@@ -19,10 +19,13 @@ interface IdentityFieldsState {
 
 export class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
     private folderInput: HTMLInputElement;
+    private autoCompletePaths: string [];
     private initializedAutocomplete = false;
 
     constructor(props) {
         super(props);
+        this.autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
+        
         this.state = {
             folderExpanded: this.props.hasFolder
         };
@@ -46,10 +49,9 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         if (!this.folderInput || this.initializedAutocomplete) {
             return;
         }
-        const autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
-
+        
         new Awesomplete(this.folderInput, {
-            list: autoCompletePaths,
+            list: this.autoCompletePaths,
             minChars: 1
         });
 
