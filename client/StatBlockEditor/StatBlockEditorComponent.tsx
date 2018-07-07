@@ -36,14 +36,26 @@ const abilityScoreField = (abilityName: string) =>
         <Field type="number" id={`ability-${abilityName}`} name={`Abilities.${abilityName}`} />
     </div>;
 
-const nameAndModifierField = (remove: (index: number) => void, modifierType: string, index: number) =>
-    <div key={index}>
-        <Field type="text" className="name" name={`${modifierType}[${index}].Name`} />
-        <Field type="number" className="modifier" name={`${modifierType}[${index}].Modifier`} />
+interface NameAndModifierFieldProps {
+    remove: (index: number) => void;
+    modifierType: string; index: number;
+}
+interface NameAndModifierFieldState {}
+class NameAndModifierField extends React.Component<NameAndModifierFieldProps, NameAndModifierFieldState> {
+    public render() {
+        return <div key={this.props.index}>
+        <Field type="text" className="name" name={`${this.props.modifierType}[${this.props.index}].Name`} />
+        <Field type="number" className="modifier" name={`${this.props.modifierType}[${this.props.index}].Modifier`} />
         <span className="fa-clickable fa-trash"
-            onClick={() => remove(index)}
+            onClick={() => this.props.remove(this.props.index)}
         />
     </div>;
+    }
+}
+
+const nameAndModifierField = (remove: (index: number) => void, modifierType: string, index: number) =>
+    <NameAndModifierField remove={remove} modifierType={modifierType} index={index} />;
+    
 
 const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     return <FieldArray name={modifierType} render={arrayHelpers => {
