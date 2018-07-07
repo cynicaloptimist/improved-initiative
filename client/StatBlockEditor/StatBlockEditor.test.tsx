@@ -2,7 +2,7 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
-import { StatBlockEditor } from "./StatBlockEditorComponent";
+import { StatBlockEditor } from "./StatBlockEditor";
 
 import { StatBlock } from "../../common/StatBlock";
 

@@ -22,7 +22,7 @@ import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditorComponent";
+import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
