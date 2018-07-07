@@ -182,7 +182,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
                     <h2>{header}</h2>
-                    <div className="scrollframe">
+                    <div className="flexframe"><div className="scrollframe">
                         <div className="bordered c-statblock-editor-identity">
                             <IdentityFields
                                 hasFolder={api.values["Path"] && api.values["Path"].length > 0}
@@ -230,7 +230,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             {descriptionField()}
                         </div>
 
-                    </div>
+                    </div></div>
                     <div className="c-statblock-editor-buttons">
                         <Button onClick={this.close} faClass="times" />
                         {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
@@ -248,7 +248,7 @@ interface StatBlockEditorProps {
     onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
     editMode: "library" | "combatant";
-    currentListings?: Listing<StatBlock> [];
+    currentListings?: Listing<StatBlock>[];
 }
 
 interface StatBlockEditorState { }

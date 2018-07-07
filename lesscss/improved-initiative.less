@@ -524,9 +524,14 @@ body>.login.button {
     }
 }
 
+.statblock-editor {
+    flex-grow: 1;
+}
+
 .c-statblock-editor {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     flex-shrink: 1;
 
     input, textarea {
@@ -599,6 +604,17 @@ body>.login.button {
         &:checked:before {
             content: "\f046"
         }
+    }
+
+    .flexframe {
+        display: flex;
+        flex-direction: row;
+        flex-shrink: 1;
+    }
+
+    .scrollframe {
+        flex-grow: 1;
+        flex-shrink: 1;
     }
 }
 
@@ -979,7 +995,7 @@ body>.login.button {
     flex-shrink: 1;
     align-items: flex-end;
     overflow-y: auto;
-        min-height: @prompt-minimum-height + (@medium-spacer * 4);
+    min-height: @prompt-minimum-height + (@medium-spacer * 4);
     &.empty {
         display: none;
     }
