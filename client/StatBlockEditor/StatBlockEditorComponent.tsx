@@ -67,10 +67,6 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     }} />;
 };
 
-const keywordField = (remove: (index: number) => void, keywordType: string, index: number) =>
-    <KeywordField key={index} remove={remove} keywordType={keywordType} index={index} />;
-
-
 const keywordFields = (api: FormApi, keywordType: string) => {
     return <FieldArray name={keywordType} render={arrayHelpers => {
         const addButton = <button
@@ -88,7 +84,8 @@ const keywordFields = (api: FormApi, keywordType: string) => {
         } else {
             return <div>
                 <span className="label">{keywordType}</span>
-                {api.values[keywordType].map((_, i: number) => keywordField(arrayHelpers.remove, keywordType, i))}
+                {api.values[keywordType].map((_, i: number) =>
+                    <KeywordField key={i} remove={arrayHelpers.remove} keywordType={keywordType} index={i} />)}
                 {addButton}
             </div>;
         }
