@@ -180,7 +180,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             onSubmit={this.saveAndClose}
             initialValues={this.props.statBlock}
             render={api => (
-                <Form className="c-statblock-editor">
+                <Form className="c-statblock-editor" autoComplete="false">
                     <h2>{header}</h2>
                     <div className="scrollframe">
                         <div className="bordered c-statblock-editor-identity">
