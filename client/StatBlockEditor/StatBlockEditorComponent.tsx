@@ -53,10 +53,6 @@ class NameAndModifierField extends React.Component<NameAndModifierFieldProps, Na
     }
 }
 
-const nameAndModifierField = (remove: (index: number) => void, modifierType: string, index: number) =>
-    <NameAndModifierField remove={remove} modifierType={modifierType} index={index} />;
-    
-
 const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     return <FieldArray name={modifierType} render={arrayHelpers => {
 
@@ -76,7 +72,9 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
             return <div>
                 <span className="label">{modifierType}</span>
                 <div className="inline-names-and-modifiers">
-                    {api.values[modifierType].map((_, i: number) => nameAndModifierField(arrayHelpers.remove, modifierType, i))}
+                    {api.values[modifierType].map((_, i: number) =>
+                        <NameAndModifierField remove={arrayHelpers.remove} modifierType={modifierType} index={i} />
+                    )}
                 </div>
                 {addButton}
             </div>;
