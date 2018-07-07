@@ -1,3 +1,4 @@
+import Awesomplete = require("awesomplete");
 import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
@@ -16,6 +17,9 @@ interface IdentityFieldsState {
 }
 
 export class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
+    private folderInput: HTMLInputElement;
+    private initializedAutocomplete = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -28,15 +32,27 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             return null;
         }
         if (this.state.folderExpanded) {
-            const autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
-
             return <div>
                 <label className="label" htmlFor="Path">Folder</label>
-                <Field type="text" name="Path" />
+                <Field type="text" name="Path"  innerRef={i => this.folderInput = i} />
             </div>;
         } else {
             return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
         }
+    }
+
+    public componentDidUpdate() {
+        if (!this.folderInput || this.initializedAutocomplete) {
+            return;
+        }
+        const autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
+
+        new Awesomplete(this.folderInput, {
+            list: autoCompletePaths,
+            minChars: 1
+        });
+
+        this.initializedAutocomplete = true;
     }
 
     public render() {
