@@ -4,6 +4,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
 import { IdentityFields } from "./components/IdentityFields";
+import { NameAndModifierField } from "./components/NameAndModifierField";
 import { TextField } from "./components/TextField";
 
 type FormApi = FormikProps<any>;
@@ -35,37 +36,6 @@ const abilityScoreField = (abilityName: string) =>
         <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
         <Field type="number" id={`ability-${abilityName}`} name={`Abilities.${abilityName}`} />
     </div>;
-
-interface NameAndModifierFieldProps {
-    remove: (index: number) => void;
-    modifierType: string; index: number;
-}
-interface NameAndModifierFieldState { }
-class NameAndModifierField extends React.Component<NameAndModifierFieldProps, NameAndModifierFieldState> {
-    private nameInput: HTMLInputElement;
-
-    public componentDidMount() {
-        if (this.nameInput.value == "") {
-            this.nameInput.focus();
-        }
-    }
-
-    public render() {
-        return <div>
-            <Field type="text" className="name"
-                name={`${this.props.modifierType}[${this.props.index}].Name`}
-                innerRef={f => this.nameInput = f}
-            />
-            <Field type="number" className="modifier"
-                name={`${this.props.modifierType}[${this.props.index}].Modifier`}
-            />
-            <span
-                className="fa-clickable fa-trash"
-                onClick={() => this.props.remove(this.props.index)}
-            />
-        </div>;
-    }
-}
 
 const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     return <FieldArray name={modifierType} render={arrayHelpers => {
