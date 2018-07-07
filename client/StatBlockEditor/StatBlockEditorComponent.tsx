@@ -6,6 +6,7 @@ import { Button } from "../Components/Button";
 import { IdentityFields } from "./components/IdentityFields";
 import { KeywordField } from "./components/KeywordField";
 import { NameAndModifierField } from "./components/NameAndModifierField";
+import { PowerField } from "./components/PowerField";
 import { TextField } from "./components/TextField";
 
 type FormApi = FormikProps<any>;
@@ -93,15 +94,7 @@ const keywordFields = (api: FormApi, keywordType: string) => {
 };
 
 const powerField = (remove: (index: number) => void, powerType: string, index: number) =>
-    <div key={index}>
-        <div className="inline">
-            <Field type="text" className="name" placeholder="Name" name={`${powerType}[${index}].Name`} />
-            <span className="fa-clickable fa-trash"
-                onClick={() => remove(index)}
-            />
-        </div>
-        <Field component="textarea" placeholder="Details" name={`${powerType}[${index}].Content`} />
-    </div>;
+    <PowerField key={index} remove={remove} powerType={powerType} index={index} />;
 
 const powerFields = (api: FormApi, powerType: string) => {
     return <FieldArray name={powerType} render={arrayHelpers => {
