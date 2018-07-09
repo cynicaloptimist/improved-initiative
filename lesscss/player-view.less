@@ -1,0 +1,74 @@
+#playerview {
+    margin: 0;
+
+    font-size: 150%;
+
+    background-image: url('../img/improved-initiative-transparent-darkgreen.png');
+    background-position: center bottom 20px;
+    background-repeat: no-repeat;
+
+    .header {
+        flex-direction: row;
+    }
+
+    .initiative {
+        width: 5.5vw;
+    }
+
+    .hp {
+        width: 15vw;
+    }
+
+    .portrait {
+        width: 50px;
+        align-items: center;
+        padding-right: 1vw;
+    }
+
+    .portrait img {
+        max-height: 50px;
+    }
+
+    .header .tags {
+        text-align: center;
+    }
+
+    .combat-footer {
+        flex-direction: row;
+        justify-content: flex-end;
+        margin: @medium-spacer;
+        >span {
+            padding-right: @medium-spacer;
+        }
+    }
+
+    .combatant-portrait {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    .combatant-portrait-image {
+        width: 80%;
+        height: 80%;
+        max-width: 700px;
+        object-fit: scale-down;
+    }
+
+    .combatant-portrait-caption {
+        max-width: 700px;
+        padding: 10px 0;
+    }
+
+    /* Add Animation */
+    .combatant-portrait-image, .combatant-portrait-caption {
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @keyframes zoom {
+        from {transform:scale(0)}
+        to {transform:scale(1)}
+    }
+}

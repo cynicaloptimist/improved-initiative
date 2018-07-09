@@ -1,0 +1,101 @@
+.settings {
+    .overlay-dialog();
+    .absolute-center();
+    max-width: 500px;
+    max-height: 700px;
+
+    .button {
+        margin: @small-spacer;
+    }
+
+    .tab {
+        border-width: 1px;
+        border-style: solid;
+        padding: @medium-spacer;
+        overflow-y: auto;
+        flex-shrink: 1;
+        p {
+            margin-bottom: @medium-spacer;
+        }
+        img {
+            vertical-align: bottom;
+            margin-right: @medium-spacer;
+        }
+    }
+
+    .about >div {
+        margin: @medium-spacer;
+    }
+
+    .tips {
+        flex-direction: row;
+        align-items: center;
+        span {
+            padding: @medium-spacer;
+        }
+        .tip {
+            flex-shrink: 1;
+        }
+    }
+    .whatsnew a {
+        font-weight: bold;
+    }
+    
+    .commands {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .command-options-labels {
+        position: absolute;
+        align-self: flex-end;
+        font-style: italic;
+    }
+
+    .toolbar-label, .toolbar-setting {
+        text-align: center;
+        width: 75px;
+        i {
+            width: 30px;
+        }
+    }
+
+    .hotkey-label, .keybinding {
+        text-align: center;
+        width: 100px; 
+    }
+
+    .keybindings >div {
+        flex-direction: row;
+        align-items: center;
+        
+        >span, >label {
+            padding:@small-spacer;
+        }
+    }
+
+    .command-description {
+        flex-grow:1;
+    }
+
+    .options p {
+        margin: @medium-spacer;
+    }
+
+    .save-and-close {
+        margin-top: @medium-spacer;
+        align-self: flex-end;
+    }
+
+    .support {
+        flex-direction: row;
+        align-items: center;
+        > * {
+            margin: @small-spacer;
+        }
+    }
+
+    .pledge img {
+        height: 30px;
+    }
+}

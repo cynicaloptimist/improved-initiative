@@ -1,0 +1,66 @@
+.combatants {
+    overflow-y: auto;
+    flex-shrink: 1;
+}
+
+@keyframes slide-from-left {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+.combatant {
+    display: flex;
+    padding: @small-spacer;
+    border-left-width: @medium-spacer;
+    border-left-style: solid;
+    align-items: center;
+
+    &.animate {
+        animation: slide-from-left 0.5s;
+    }
+
+    &.active .name {
+        font-weight:bold;
+    }
+    
+    &.header {
+        padding: @medium-spacer 0;
+    }
+
+    .initiative {
+        width: 30px;
+        text-align: center;
+        &.fa-link:before{
+            font-size: 60%;
+            vertical-align: top;
+        }
+    }
+
+    .name {
+        width: 50%;
+    }
+
+    .hp {
+        width: 70px;
+        text-align: center;
+    }
+
+    .ac {
+        width: 30px;
+        text-align: center;
+    }
+
+    .tags {
+        flex-grow:1;
+        flex-shrink: 1;
+    }
+
+    .buttons {
+        width: 35px;
+        text-align: right;
+    }
+}

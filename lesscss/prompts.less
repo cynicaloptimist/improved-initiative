@@ -1,0 +1,125 @@
+.prompts {
+    flex-grow: 1;
+    flex-shrink: 1;
+    align-items: flex-end;
+    overflow-y: auto;
+    min-height: @prompt-minimum-height + (@medium-spacer * 4);
+    &.empty {
+        display: none;
+    }
+}
+
+.ko-react-prompt-wrapper {
+    flex-shrink: 1;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+}
+
+.prompt {
+    div, span, p {
+        flex-shrink: 1;
+    }
+    
+    .recessed();
+    display: flex;
+    
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: @prompt-minimum-height;
+
+    div.default-query {
+        align-items: center;
+        flex-direction: row;
+    }
+
+    .add-tag {
+        flex-flow: column;
+        align-items: flex-start;
+        div {
+            flex-flow: row;
+            align-items: baseline;
+            > * {
+                margin: @small-spacer;
+            }
+        }
+    }
+
+    .spell {
+        flex-flow: column;
+        align-self: stretch;
+        label {
+            font-weight: bold;
+            padding-right: @medium-spacer;
+        }
+        .spell-type {
+            font-style: italic;
+        }
+        .spell-source {
+            font-style: italic;
+            font-size: small;
+        }
+        p {
+            padding: @small-spacer;
+            white-space: pre-wrap;
+        }
+    }
+
+    .roll-initiative {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        ul {
+            text-align: right;
+            list-style-type: none;
+            padding: @medium-spacer;
+        }
+    }
+
+    .accept-damage-options, .check-concentration-options {
+        flex-direction: row;
+        button {
+            margin: @small-spacer;
+        }
+    }
+
+    input {
+        margin: 0 @medium-spacer;
+    }
+}
+
+.p-quick-add {
+    flex-flow: row;
+    align-items: center;
+    > * {
+        margin: @medium-spacer;
+    }
+}
+
+.p-privacy-policy {
+    h2, p, button {
+        margin: @small-spacer;
+    }
+
+    h2 {
+        font-size:large;
+    }
+
+    .p-privacy-policy-buttons {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
+.p-condition-reference {
+    p, li {
+        margin: @medium-spacer;
+        list-style: none;
+    }
+}
+
+.s-roll-max {
+    font-weight: bold;
+}
+

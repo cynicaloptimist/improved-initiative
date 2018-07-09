@@ -1,0 +1,21 @@
+#tracker {
+    flex-direction: row;
+    overflow:hidden;
+    align-items: stretch;
+    
+    .center-column {
+        flex-grow:1;
+        flex-shrink:1;
+        margin: @small-spacer;
+        background-image: url('../img/improved-initiative-transparent-darkgreen.png');
+        background-position: center bottom 20px;
+        background-repeat: no-repeat;
+    }
+    
+    .left-column, .right-column, .preview.statblock {
+        .recessed();
+
+        max-width: @fixed-column-width;
+        width: @fixed-column-width;
+    }
+}

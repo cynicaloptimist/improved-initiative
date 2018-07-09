@@ -1,0 +1,21 @@
+.c-listing {
+    .c-listing-delete, .c-listing-edit, .c-listing-move {
+        display: none;
+    }
+
+    &:hover {
+        .c-listing-delete, .c-listing-edit, .c-listing-move {
+            display: flex;
+        }
+    }
+
+    .fa.c-listing-toggle:before {
+        padding-right: 5px;
+    }
+}
+
+.c-folder {
+    .c-listing:not(:first-child) {
+        margin-left: @medium-spacer;
+    }
+}

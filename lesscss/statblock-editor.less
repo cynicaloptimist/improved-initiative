@@ -1,0 +1,148 @@
+.statblock-editor {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.c-statblock-editor {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    input, textarea {
+        font-size: large;
+        padding: @small-spacer;
+        margin: @small-spacer;
+        border: none;
+        border-radius: @border-radius;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    .bordered {
+        margin: @small-spacer;
+        padding: @small-spacer;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: @border-radius;
+        max-width: 450px;
+    }
+
+    .label {
+        padding: @small-spacer;
+        font-size: smaller;
+        .c-add-button {
+            width: 50px;
+            margin-left: @medium-spacer;
+        }
+    }
+
+    .inline {
+        display: flex;
+        flex-direction: row;
+        align-items: baseline;
+    }
+
+    input.name {
+        flex-grow: 1;
+    }
+    input.modifier {
+        width: 40px;
+    }
+    input.value {
+        width: 50px;
+    }
+    input.notes {
+        flex-grow:1;
+    }
+
+    .inline-names-and-modifiers {
+        flex-flow: column;
+        
+        > div {
+            flex-direction: row;
+            align-items: baseline;
+            margin-right: @medium-spacer;
+        }
+    }
+
+    input[type=checkbox] {
+        .fa-clickable();
+        font-size: large;
+        width:0;
+        &:before { 
+            visibility: visible;
+            content: "\f096"; 
+        }
+        &:checked:before {
+            content: "\f046"
+        }
+    }
+
+    .flexframe {
+        display: flex;
+        flex-direction: row;
+        flex-shrink: 1;
+    }
+
+    .scrollframe {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
+
+.c-add-button {
+    padding-top: @small-spacer;
+    padding-bottom: @small-spacer;
+    margin: @small-spacer;
+    border-style: dashed;
+    border-width: 1px;
+    border-radius: @border-radius;
+    cursor: pointer;
+    &:hover {
+        border-style: solid;
+    }
+}
+
+.c-statblock-editor-buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+    .button, .c-button {
+        margin: @small-spacer;
+    }
+    .c-button {
+        min-width: @button-size - 20;
+    }
+    .button {
+        min-width: @button-size;
+    }
+}
+
+.c-statblock-editor-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.c-statblock-editor-identity {
+    .fa-clickable {
+        align-self: flex-end;
+        margin: @medium-spacer;
+    }
+}
+
+.c-statblock-editor-abilityscores {
+    flex-direction: row;
+    justify-content: space-evenly;
+    input {
+        width: 40px;
+        text-align: center;
+    }
+}
+
+.c-statblock-editor-ability {
+    align-items: center;
+}
+
+@import "sketch-picker.less";

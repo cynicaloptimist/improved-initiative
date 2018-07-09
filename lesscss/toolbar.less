@@ -1,0 +1,39 @@
+.c-toolbar .scrollframe > div {
+    &.commands-combatant {
+        margin-top:10px;
+        padding-top:10px;
+        border-top: 1px solid;
+    }
+    
+    padding: @small-spacer;
+}
+
+.c-toolbar .c-button {
+    margin: 1px 0;
+}
+
+.c-toolbar.s-narrow {
+    .scrollframe {
+        max-width: none;
+        width: @button-size;
+        overflow-x: hidden;
+    }
+
+    width: @button-size;
+    overflow: hidden;
+}
+
+.c-toolbar.s-wide {
+    .scrollframe {
+        overflow-y: auto;
+    }
+
+    .c-button {
+        text-align: left;
+        &::before {
+            width: @button-inner + @border-radius * 2;
+            text-align: center;
+            display: inline-block;
+        }
+    }
+}

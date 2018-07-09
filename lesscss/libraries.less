@@ -1,0 +1,52 @@
+.libraries {
+    input {
+        min-height: 20px;
+        cursor: text;
+    }
+
+    .library-button {
+        border-radius: @border-radius;
+        padding: @small-spacer;
+        margin: 1px;
+        overflow-x: hidden;
+    }
+
+    .library {
+        flex-grow: 1;
+        flex-shrink: 1;        
+        ul {
+            overflow-y: auto;
+            flex-grow: 1;
+            flex-shrink: 1;
+        }
+    }
+
+    li {
+        list-style-type: none;
+        display:flex;
+        overflow-x: hidden;
+
+        span {
+            .library-button();
+            &:first-child {
+                flex-grow: 1;
+                flex-shrink: 1;
+            }
+        }
+    }
+
+    .buttons {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        
+        span {
+            .button();
+            margin: 1px;
+        }
+    }
+
+    .c-encounter-preview {
+        margin: @medium-spacer;
+    }
+}

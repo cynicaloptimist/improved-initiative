@@ -1,0 +1,79 @@
+#landing {
+    align-items: center;
+
+    h1 {
+        padding:25px;
+    }
+        
+    input[type="text"] {
+        padding: @medium-spacer;
+        line-height: 2em;
+    }
+
+    .content {
+        flex-direction:row;
+        align-items: center;
+        max-width:800px;
+    }
+    
+    .logo {
+        flex-grow:1;
+        margin: 0 30px;
+    }
+
+    .start {
+        .recessed();
+
+        p, li, div {
+            font-size: 16pt;
+            margin: @small-spacer;
+        }
+
+        flex-grow: 1;
+        flex-shrink: 1;
+        align-items: center;
+        
+        padding:@large-spacer;
+        margin: 0 30px;
+    }
+    
+    .launch-controls {
+        div {
+            flex-direction: row;
+        }
+        .button, input {
+            flex-grow: 1;
+            flex-shrink: 1;
+            margin: @medium-spacer;
+        }
+    }
+    .disabled {
+        cursor: default;
+    }
+    .footer-spacer {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+    .footer {
+        .recessed();
+        
+        border-radius: 0;
+        text-align: center;
+        align-self: stretch;
+
+        margin: @medium-spacer 0 0 0;
+    }
+    
+    @logo-size: 40px;
+    .pledge-logo {
+        img {
+            width: @logo-size;
+        }
+        
+        position: absolute;
+        bottom: -1/4 * @logo-size;
+        right: -1/4 * @logo-size;
+        
+        .hop();
+    }
+}

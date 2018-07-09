@@ -1,0 +1,36 @@
+.sketch-picker {
+    .flexbox-fix {
+        flex-direction: row;
+    }
+    .flexbox-fix > div {
+        display: initial;
+    }
+}
+
+.c-color-block {
+    cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px black solid;//todo: move
+    border-radius: 3px;
+    vertical-align: middle;
+    margin: @small-spacer @medium-spacer @medium-spacer @small-spacer;
+
+    &.s-selected {
+        border-color: white;
+    }
+    
+    &:hover {
+        border-color: gray;//todo: move
+    }
+}
+
+.c-styles-chooser {
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.c-styles-chooser-inputs {
+    max-width: 250px;
+}
