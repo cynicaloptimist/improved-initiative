@@ -12,7 +12,6 @@ import { PCLibrary } from "../PCLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
-import { ListingButton } from "./ListingButton";
 
 export type StatBlockLibraryViewModelProps = {
     librariesCommander: LibrariesCommander;

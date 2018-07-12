@@ -1,6 +1,7 @@
 import * as React from "react";
 import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { EncounterLibrary } from "../EncounterLibrary";
@@ -9,7 +10,6 @@ import { Listing } from "../Listing";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
-import { ListingButton } from "./ListingButton";
 
 export type EncounterLibraryViewModelProps = {
     librariesCommander: LibrariesCommander;
@@ -126,8 +126,8 @@ export class EncounterLibraryViewModel extends React.Component<EncounterLibraryV
                 {listingAndFolderComponents}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <ListingButton buttonClass="save" faClass="plus" onClick={() => this.props.librariesCommander.SaveEncounter()} />
+                <Button additionalClassNames="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <Button additionalClassNames="save" faClass="plus" onClick={() => this.props.librariesCommander.SaveEncounter()} />
             </div>
             {previewVisible &&
                 <Overlay
