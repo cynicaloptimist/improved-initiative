@@ -13,7 +13,7 @@ export class ListingButton extends React.Component<Props> {
     public render() {
         const text = this.props.text || "";
         
-        const cssClasses = [`c-listing-${this.props.buttonClass}`];
+        const cssClasses = [`c-listing-button`, `c-listing-${this.props.buttonClass}`];
         if (this.props.faClass) {
             cssClasses.push("fa", `fa-${this.props.faClass}`);
         }
