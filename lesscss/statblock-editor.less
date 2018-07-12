@@ -21,29 +21,6 @@
         height: 100px;
     }
 
-    .bordered {
-        margin: @small-spacer;
-        padding: @small-spacer;
-        border-width: 2px;
-        border-style: solid;
-        border-radius: @border-radius;
-    }
-
-    .label {
-        padding: @small-spacer;
-        font-size: smaller;
-        .c-add-button {
-            width: 50px;
-            margin-left: @medium-spacer;
-        }
-    }
-
-    .inline {
-        display: flex;
-        flex-direction: row;
-        align-items: baseline;
-    }
-
     input.name {
         flex-grow: 1;
     }
@@ -87,10 +64,26 @@
     }
 
     .scrollframe {
-        flex-basis: 450px;
+        flex-grow: 1;
+        /*flex-basis: 450px;
         flex-shrink: 1;
         margin-left: auto;
-        margin-right: auto;
+        margin-right: auto;*/
+    }
+}
+
+.inline {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.c-statblock-editor__label {
+    padding: @small-spacer;
+    font-size: smaller;
+    .c-add-button {
+        width: 50px;
+        margin-left: @medium-spacer;
     }
 }
 
@@ -107,7 +100,27 @@
     }
 }
 
-.c-statblock-editor-buttons {
+.bordered {
+    margin: @small-spacer;
+    padding: @small-spacer;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: @border-radius;
+}
+
+.c-statblock-editor__identity,
+.c-statblock-editor__headers,
+.c-statblock-editor__stats,
+.c-statblock-editor__abilityscores,
+.c-statblock-editor__saves,
+.c-statblock-editor__skills,
+.c-statblock-editor__keywords,
+.c-statblock-editor__powers,
+.c-statblock-editor__description {
+    .bordered();
+}
+
+.c-statblock-editor__buttons {
     flex-direction: row;
     justify-content: flex-end;
     .button, .c-button {
@@ -121,19 +134,19 @@
     }
 }
 
-.c-statblock-editor-text {
+.c-statblock-editor__text {
     display: flex;
     flex-direction: column;
 }
 
-.c-statblock-editor-identity {
+.c-statblock-editor__identity {
     .fa-clickable {
         align-self: flex-end;
         margin: @medium-spacer;
     }
 }
 
-.c-statblock-editor-abilityscores {
+.c-statblock-editor__abilityscores {
     flex-direction: row;
     justify-content: space-evenly;
     input {
@@ -142,6 +155,6 @@
     }
 }
 
-.c-statblock-editor-ability {
+.c-statblock-editor__ability {
     align-items: center;
 }

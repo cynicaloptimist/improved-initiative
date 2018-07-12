@@ -15,8 +15,8 @@ type FormApi = FormikProps<any>;
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
 const valueAndNotesField = (label: string, fieldName: string) =>
-    <label className="c-statblock-editor-text">
-        <span className="label">{label}</span>
+    <label className="c-statblock-editor__text">
+        <span className="c-statblock-editor__label">{label}</span>
         <div className="inline">
             <Field type="number" className="value" name={`${fieldName}.Value`} />
             <Field type="text" className="notes" name={`${fieldName}.Notes`} />
@@ -24,10 +24,10 @@ const valueAndNotesField = (label: string, fieldName: string) =>
     </label>;
 
 const initiativeField = () =>
-    <div className="c-statblock-editor-text">
-        <label className="label" htmlFor="InitiativeModifier">Initiative Modifier</label>
+    <div className="c-statblock-editor__text">
+        <label className="c-statblock-editor__label" htmlFor="InitiativeModifier">Initiative Modifier</label>
         <div className="inline">
-            <Field type="number" className="value" id="InitiativeModifier" name="InitiativeModifier" />
+            <Field type="number" className="c-field__value" id="InitiativeModifier" name="InitiativeModifier" />
             <label> Roll with Advantage
                 <Field type="checkbox" name="InitiativeAdvantage" />
             </label>
@@ -35,7 +35,7 @@ const initiativeField = () =>
     </div>;
 
 const abilityScoreField = (abilityName: string) =>
-    <div key={abilityName} className="c-statblock-editor-ability">
+    <div key={abilityName} className="c-statblock-editor__ability">
         <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
         <Field type="number" id={`ability-${abilityName}`} name={`Abilities.${abilityName}`} />
     </div>;
@@ -49,14 +49,14 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
             onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
 
         if (api.values[modifierType].length == 0) {
-            return <span className="label">
+            return <span className="c-statblock-editor__label">
                     {modifierType}
                     {addButton}
                 </span>
             ;
         } else {
             return <React.Fragment>
-                <span className="label">{modifierType}</span>
+                <span className="c-statblock-editor__label">{modifierType}</span>
                 <div className="inline-names-and-modifiers">
                     {api.values[modifierType].map((_, i: number) =>
                         <NameAndModifierField key={i} remove={arrayHelpers.remove} modifierType={modifierType} index={i} />
@@ -76,13 +76,13 @@ const keywordFields = (api: FormApi, keywordType: string) => {
             onClick={() => arrayHelpers.push("")} />;
 
         if (api.values[keywordType].length == 0) {
-            return <span className="label">
+            return <span className="c-statblock-editor__label">
                     {keywordType}
                     {addButton}
                 </span>;
         } else {
             return <React.Fragment>
-                <span className="label">{keywordType}</span>
+                <span className="c-statblock-editor__label">{keywordType}</span>
                 {api.values[keywordType].map((_, i: number) =>
                     <KeywordField key={i} remove={arrayHelpers.remove} keywordType={keywordType} index={i} />)}
                 {addButton}
@@ -99,13 +99,13 @@ const powerFields = (api: FormApi, powerType: string) => {
             onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
 
         if (api.values[powerType].length == 0) {
-            return <span className="label">
+            return <span className="c-statblock-editor__label">
                     {powerType}
                     {addButton}
                 </span>;
         } else {
             return <React.Fragment>
-                <div className="label">{powerType}</div>
+                <div className="c-statblock-editor__label">{powerType}</div>
                 <div className="inline-powers">
                     {api.values[powerType].map((_, i: number) =>
                         <PowerField key={i} remove={arrayHelpers.remove} powerType={powerType} index={i} />)}
@@ -117,8 +117,8 @@ const powerFields = (api: FormApi, powerType: string) => {
 };
 
 const descriptionField = () =>
-    <label className="c-statblock-editor-text">
-        <div className="label">Description</div>
+    <label className="c-statblock-editor__text">
+        <div className="c-statblock-editor__label">Description</div>
         <Field component="textarea" name="Description" />
     </label>;
 
@@ -178,7 +178,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 <Form className="c-statblock-editor" autoComplete="false">
                     <h2>{header}</h2>
                     <div className="flexframe"><div className="scrollframe">
-                        <div className="bordered c-statblock-editor-identity">
+                        <div className="c-statblock-editor__identity">
                             <IdentityFields
                                 hasFolder={api.values["Path"] && api.values["Path"].length > 0}
                                 allowFolder={this.props.editMode === "library"}
@@ -187,46 +187,46 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                                 currentListings={this.props.currentListings}
                             />
                         </div>
-                        <div className="bordered c-statblock-editor-headers">
+                        <div className="c-statblock-editor__headers">
                             <TextField label="Portrait URL" fieldName="ImageURL" />
                             <TextField label="Source" fieldName="Source" />
                             <TextField label="Type" fieldName="Type" />
                         </div>
-                        <div className="bordered c-statblock-editor-stats">
+                        <div className="c-statblock-editor__stats">
                             <TextField label={challengeLabel} fieldName="Challenge" />
                             {valueAndNotesField("Hit Points", "HP")}
                             {valueAndNotesField("Armor Class", "AC")}
                             {initiativeField()}
                         </div>
-                        <div className="bordered c-statblock-editor-abilityscores">
+                        <div className="c-statblock-editor__abilityscores">
                             {AbilityNames
                                 .map(abilityScoreField)}
                         </div>
-                        <div className="bordered c-statblock-editor-saves">
+                        <div className="c-statblock-editor__saves">
                             {nameAndModifierFields(api, "Saves")}
                         </div>
-                        <div className="bordered c-statblock-editor-skills">
+                        <div className="c-statblock-editor__skills">
                             {nameAndModifierFields(api, "Skills")}
                         </div>
                         {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
                             .map(
                                 keywordType =>
-                                    <div key={keywordType} className="bordered c-statblock-editor-keywords">
+                                    <div key={keywordType} className="c-statblock-editor__keywords">
                                         {keywordFields(api, keywordType)}
                                     </div>
                             )}
                         {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
                             powerType =>
-                                <div key={powerType} className="bordered c-statblock-editor-powers">
+                                <div key={powerType} className="c-statblock-editor__powers">
                                     {powerFields(api, powerType)}
                                 </div>
                         )}
-                        <div className="bordered c-statblock-editor-description">
+                        <div className="c-statblock-editor__description">
                             {descriptionField()}
                         </div>
 
                     </div></div>
-                    <div className="c-statblock-editor-buttons">
+                    <div className="c-statblock-editor__buttons">
                         <Button onClick={this.close} faClass="times" />
                         {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
                         <button type="submit" className="button fa fa-save" />
