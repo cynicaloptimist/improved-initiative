@@ -49,14 +49,13 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
             onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
 
         if (api.values[modifierType].length == 0) {
-            return <div>
-                <span className="label">
+            return <span className="label">
                     {modifierType}
                     {addButton}
                 </span>
-            </div>;
+            ;
         } else {
-            return <div>
+            return <React.Fragment>
                 <span className="label">{modifierType}</span>
                 <div className="inline-names-and-modifiers">
                     {api.values[modifierType].map((_, i: number) =>
@@ -64,7 +63,7 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
                     )}
                 </div>
                 {addButton}
-            </div>;
+            </React.Fragment>;
         }
     }} />;
 };
@@ -77,19 +76,17 @@ const keywordFields = (api: FormApi, keywordType: string) => {
             onClick={() => arrayHelpers.push("")} />;
 
         if (api.values[keywordType].length == 0) {
-            return <div>
-                <span className="label">
+            return <span className="label">
                     {keywordType}
                     {addButton}
-                </span>
-            </div>;
+                </span>;
         } else {
-            return <div>
+            return <React.Fragment>
                 <span className="label">{keywordType}</span>
                 {api.values[keywordType].map((_, i: number) =>
                     <KeywordField key={i} remove={arrayHelpers.remove} keywordType={keywordType} index={i} />)}
                 {addButton}
-            </div>;
+            </React.Fragment>;
         }
     }} />;
 };
@@ -102,21 +99,19 @@ const powerFields = (api: FormApi, powerType: string) => {
             onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
 
         if (api.values[powerType].length == 0) {
-            return <div>
-                <span className="label">
+            return <span className="label">
                     {powerType}
                     {addButton}
-                </span>
-            </div>;
+                </span>;
         } else {
-            return <div>
+            return <React.Fragment>
                 <div className="label">{powerType}</div>
                 <div className="inline-powers">
                     {api.values[powerType].map((_, i: number) =>
                         <PowerField key={i} remove={arrayHelpers.remove} powerType={powerType} index={i} />)}
                 </div>
                 {addButton}
-            </div>;
+            </React.Fragment>;
         }
     }} />;
 };
