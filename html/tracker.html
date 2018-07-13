@@ -175,7 +175,7 @@
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
-            <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
+            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fa fa-close"></span></div>
             <div style="flex-shrink: 1" data-bind="react: {
                 component: CombatantCommander.StatBlock
             }"></div>
