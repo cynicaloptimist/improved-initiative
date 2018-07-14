@@ -15,8 +15,12 @@ export class Button extends React.Component<ButtonProps> {
         const text = this.props.text || "";
         
         const disabled = this.props.disabled || false;
+    
+        const classNames = ["c-button"];
 
-        const classNames = [disabled ? "c-button--disabled" : "c-button"];
+        if (disabled) {
+            classNames.push("c-button--disabled");
+        }
         if (this.props.additionalClassNames) {
             classNames.push(this.props.additionalClassNames);
         }
