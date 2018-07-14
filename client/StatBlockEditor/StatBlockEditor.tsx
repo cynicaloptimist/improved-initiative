@@ -227,8 +227,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
                     </div></div>
                     <div className="c-statblock-editor__buttons">
-                        <Button onClick={this.close} faClass="times" />
-                        {this.props.onDelete && <Button onClick={this.delete} faClass="trash" />}
+                        <Button onClick={this.close} fontAwesomeIcon="times" />
+                        {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
                         <button type="submit" className="button fa fa-save" />
                     </div>
                 </Form>

@@ -2,7 +2,7 @@ import * as React from "react";
 
 export interface ButtonProps {
     text?: string;
-    faClass?: string;
+    fontAwesomeIcon?: string;
     tooltip?: string;
     additionalClassNames?: string;
     disabled?: boolean;
@@ -25,7 +25,7 @@ export class Button extends React.Component<ButtonProps> {
             classNames.push(this.props.additionalClassNames);
         }
 
-        const faElement = this.props.faClass && <span className={`fa fa-${this.props.faClass}`} />;
+        const faElement = this.props.fontAwesomeIcon && <span className={`fa fa-${this.props.fontAwesomeIcon}`} />;
 
         return <span
             className={classNames.join(" ")}

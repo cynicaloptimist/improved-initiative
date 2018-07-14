@@ -66,8 +66,8 @@ export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModel
                     listing={l} />)}
             </ul>
             <div className="buttons">
-                <Button additionalClassNames="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <Button additionalClassNames="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
+                <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
             </div>
         </div>);
     }

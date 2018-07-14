@@ -36,7 +36,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
                 <Button
                     key={c.Description}
                     onClick={c.ActionBinding}
-                    faClass={c.ActionBarIcon}
+                    fontAwesomeIcon={c.ActionBarIcon}
                     text={this.props.width == "wide" ? c.Description : null}
                 />;
         const encounterCommandButtons = this.props.encounterCommands.map(commandToButton);
