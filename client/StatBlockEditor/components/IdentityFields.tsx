@@ -71,7 +71,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
                 {this.folderElement()}
                 <div>
                     <label className="label" htmlFor="Name">Name</label>
-                    <Field type="text" name="Name" id="name" val />
+                    <Field type="text" name="Name" id="name" />
                 </div>
             </div>
             {this.props.allowSaveAs && <label>

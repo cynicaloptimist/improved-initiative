@@ -5,6 +5,7 @@ import * as React from "react";
 import { StatBlockEditor } from "./StatBlockEditor";
 
 import { StatBlock } from "../../common/StatBlock";
+import { Listing } from "../Library/Listing";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -16,6 +17,7 @@ describe("StatBlockEditor", () => {
 
     beforeEach(() => {
         statBlock = StatBlock.Default();
+        const listing = new Listing(statBlock.Id, statBlock.Name, statBlock.Path, statBlock.Type, "/", "localStorage", statBlock);
         saveCallback = jest.fn();
         saveAsCallback = jest.fn();
         editor = Enzyme.mount(<StatBlockEditor
@@ -24,6 +26,7 @@ describe("StatBlockEditor", () => {
             onClose={jest.fn()}
             onSave={saveCallback}
             onSaveAs={saveAsCallback}
+            currentListings={[listing]}
         />);
     });
 
@@ -51,14 +54,16 @@ describe("StatBlockEditor", () => {
     });
 
     test("calls saveAs when Save as a copy is checked", done => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         saveAsCallback.mockImplementation((editedStatBlock: StatBlock) => {
             expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
+            expect(editedStatBlock.Name).toEqual("Snarf");
             expect(editedStatBlock).not.toHaveProperty("SaveAs");
             done();
         });
 
+        editor.find(`input[name="Name"]`).simulate("change", { target: { name: "Name", value: "Snarf" } });
         editor.find(`input[name="Name"]`).simulate("blur", { target: { name: "Name" } });
         editor.instance().forceUpdate();
 
