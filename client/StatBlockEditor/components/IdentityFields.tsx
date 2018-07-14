@@ -1,14 +1,13 @@
 import Awesomplete = require("awesomplete");
-import { Field } from "formik";
+import { Field, Formik, FormikProps, FormikValues } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { Listing } from "../../Library/Listing";
 
 interface IdentityFieldsProps {
-    hasFolder: boolean;
+    formApi: FormikProps<any>;
     allowFolder: boolean;
-    setFolder: (folderName: string) => void;
     allowSaveAs: boolean;
     currentListings?: Listing<StatBlock>[];
 }
@@ -19,15 +18,17 @@ interface IdentityFieldsState {
 
 export class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
     private folderInput: HTMLInputElement;
-    private autoCompletePaths: string [];
+    private autoCompletePaths: string[];
     private initializedAutocomplete = false;
 
     constructor(props) {
         super(props);
         this.autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
+
+        const folderExpanded = this.props.formApi.values["Path"] && this.props.formApi.values["Path"].length > 0;
         
         this.state = {
-            folderExpanded: this.props.hasFolder
+            folderExpanded
         };
     }
 
@@ -56,7 +57,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         });
 
         this.folderInput.addEventListener("awesomplete-select", (event: any) => {
-            this.props.setFolder(event.text.value);
+            this.props.formApi.setFieldValue("Path", event.text.value);
             event.preventDefault();
             awesomeplete.close();
         });
@@ -70,7 +71,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
                 {this.folderElement()}
                 <div>
                     <label className="label" htmlFor="Name">Name</label>
-                    <Field type="text" name="Name" id="name" />
+                    <Field type="text" name="Name" id="name" val />
                 </div>
             </div>
             {this.props.allowSaveAs && <label>Save as a copy <Field type="checkbox" name="SaveAs" /></label>}
