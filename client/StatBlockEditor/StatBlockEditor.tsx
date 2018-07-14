@@ -1,4 +1,5 @@
-import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
+import { Field, FieldArray, Form, Formik, FormikProps, FormikValues } from "formik";
+import * as _ from "lodash";
 import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -163,6 +164,27 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.props.onClose();
     }
 
+    private willOverwriteStatBlock = _.memoize(
+        (path: string, name: string) => this.props.currentListings.some(l => l.Path == path && l.Name == name),
+        (path: string, name: string) => JSON.stringify({ path, name })
+    );
+
+    private validate = (values) => {
+        const errors: any = {};
+        if (!values.SaveAs) {
+            return errors;
+        }
+
+        const path = values.Path || "";
+        const name = values.Name || "";
+
+        if (this.willOverwriteStatBlock(path, name)) {
+            errors.PathAndName = "Warning: This will overwrite an existing custom statblock.";
+        }
+
+        return errors;
+    }
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -174,6 +196,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         return <Formik
             onSubmit={this.saveAndClose}
             initialValues={this.props.statBlock}
+            validate={this.validate}
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
                     <h2>{header}</h2>

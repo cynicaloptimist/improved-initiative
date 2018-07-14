@@ -1,6 +1,6 @@
 import Awesomplete = require("awesomplete");
-import { Field, Formik, FormikProps, FormikValues } from "formik";
-import _ = require("lodash");
+import { Field, FormikProps } from "formik";
+import * as _ from "lodash";
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { Listing } from "../../Library/Listing";
@@ -26,7 +26,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         this.autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
 
         const folderExpanded = this.props.formApi.values["Path"] && this.props.formApi.values["Path"].length > 0;
-        
+
         this.state = {
             folderExpanded
         };
@@ -39,7 +39,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         if (this.state.folderExpanded) {
             return <div>
                 <label className="label" htmlFor="Path">Folder</label>
-                <Field type="text" name="Path"  innerRef={i => this.folderInput = i} />
+                <Field type="text" name="Path" innerRef={i => this.folderInput = i} />
             </div>;
         } else {
             return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
@@ -50,7 +50,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
         if (!this.folderInput || this.initializedAutocomplete) {
             return;
         }
-        
+
         const awesomeplete = new Awesomplete(this.folderInput, {
             list: this.autoCompletePaths,
             minChars: 1
@@ -74,7 +74,11 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
                     <Field type="text" name="Name" id="name" val />
                 </div>
             </div>
-            {this.props.allowSaveAs && <label>Save as a copy <Field type="checkbox" name="SaveAs" /></label>}
+            {this.props.allowSaveAs && <label>
+                Save as a copy
+                <Field type="checkbox" name="SaveAs" />
+                {this.props.formApi.errors.PathAndName}
+            </label>}
         </React.Fragment>;
     }
 }
