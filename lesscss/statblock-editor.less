@@ -10,6 +10,7 @@
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 1;
+    overflow-y: scroll;
 
     input, textarea {
         font-size: large;
@@ -57,20 +58,6 @@
         &:checked:before {
             content: "\f046"
         }
-    }
-
-    .flexframe {
-        display: flex;
-        flex-direction: row;
-        flex-shrink: 1;
-    }
-
-    .scrollframe {
-        flex-grow: 1;
-        /*flex-basis: 450px;
-        flex-shrink: 1;
-        margin-left: auto;
-        margin-right: auto;*/
     }
 }
 

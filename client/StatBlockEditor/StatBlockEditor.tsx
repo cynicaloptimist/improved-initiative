@@ -50,10 +50,10 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 
         if (api.values[modifierType].length == 0) {
             return <span className="c-statblock-editor__label">
-                    {modifierType}
-                    {addButton}
-                </span>
-            ;
+                {modifierType}
+                {addButton}
+            </span>
+                ;
         } else {
             return <React.Fragment>
                 <span className="c-statblock-editor__label">{modifierType}</span>
@@ -77,9 +77,9 @@ const keywordFields = (api: FormApi, keywordType: string) => {
 
         if (api.values[keywordType].length == 0) {
             return <span className="c-statblock-editor__label">
-                    {keywordType}
-                    {addButton}
-                </span>;
+                {keywordType}
+                {addButton}
+            </span>;
         } else {
             return <React.Fragment>
                 <span className="c-statblock-editor__label">{keywordType}</span>
@@ -100,9 +100,9 @@ const powerFields = (api: FormApi, powerType: string) => {
 
         if (api.values[powerType].length == 0) {
             return <span className="c-statblock-editor__label">
-                    {powerType}
-                    {addButton}
-                </span>;
+                {powerType}
+                {addButton}
+            </span>;
         } else {
             return <React.Fragment>
                 <div className="c-statblock-editor__label">{powerType}</div>
@@ -177,55 +177,53 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
                     <h2>{header}</h2>
-                    <div className="flexframe"><div className="scrollframe">
-                        <div className="c-statblock-editor__identity">
-                            <IdentityFields
-                                hasFolder={api.values["Path"] && api.values["Path"].length > 0}
-                                allowFolder={this.props.editMode === "library"}
-                                setFolder={folderName => api.setFieldValue("Path", folderName)}
-                                allowSaveAs={this.props.onSaveAs !== undefined}
-                                currentListings={this.props.currentListings}
-                            />
-                        </div>
-                        <div className="c-statblock-editor__headers">
-                            <TextField label="Portrait URL" fieldName="ImageURL" />
-                            <TextField label="Source" fieldName="Source" />
-                            <TextField label="Type" fieldName="Type" />
-                        </div>
-                        <div className="c-statblock-editor__stats">
-                            <TextField label={challengeLabel} fieldName="Challenge" />
-                            {valueAndNotesField("Hit Points", "HP")}
-                            {valueAndNotesField("Armor Class", "AC")}
-                            {initiativeField()}
-                        </div>
-                        <div className="c-statblock-editor__abilityscores">
-                            {AbilityNames
-                                .map(abilityScoreField)}
-                        </div>
-                        <div className="c-statblock-editor__saves">
-                            {nameAndModifierFields(api, "Saves")}
-                        </div>
-                        <div className="c-statblock-editor__skills">
-                            {nameAndModifierFields(api, "Skills")}
-                        </div>
-                        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
-                            .map(
-                                keywordType =>
-                                    <div key={keywordType} className="c-statblock-editor__keywords">
-                                        {keywordFields(api, keywordType)}
-                                    </div>
-                            )}
-                        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
-                            powerType =>
-                                <div key={powerType} className="c-statblock-editor__powers">
-                                    {powerFields(api, powerType)}
+                    <div className="c-statblock-editor__identity">
+                        <IdentityFields
+                            hasFolder={api.values["Path"] && api.values["Path"].length > 0}
+                            allowFolder={this.props.editMode === "library"}
+                            setFolder={folderName => api.setFieldValue("Path", folderName)}
+                            allowSaveAs={this.props.onSaveAs !== undefined}
+                            currentListings={this.props.currentListings}
+                        />
+                    </div>
+                    <div className="c-statblock-editor__headers">
+                        <TextField label="Portrait URL" fieldName="ImageURL" />
+                        <TextField label="Source" fieldName="Source" />
+                        <TextField label="Type" fieldName="Type" />
+                    </div>
+                    <div className="c-statblock-editor__stats">
+                        <TextField label={challengeLabel} fieldName="Challenge" />
+                        {valueAndNotesField("Hit Points", "HP")}
+                        {valueAndNotesField("Armor Class", "AC")}
+                        {initiativeField()}
+                    </div>
+                    <div className="c-statblock-editor__abilityscores">
+                        {AbilityNames
+                            .map(abilityScoreField)}
+                    </div>
+                    <div className="c-statblock-editor__saves">
+                        {nameAndModifierFields(api, "Saves")}
+                    </div>
+                    <div className="c-statblock-editor__skills">
+                        {nameAndModifierFields(api, "Skills")}
+                    </div>
+                    {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
+                        .map(
+                            keywordType =>
+                                <div key={keywordType} className="c-statblock-editor__keywords">
+                                    {keywordFields(api, keywordType)}
                                 </div>
                         )}
-                        <div className="c-statblock-editor__description">
-                            {descriptionField()}
-                        </div>
+                    {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+                        powerType =>
+                            <div key={powerType} className="c-statblock-editor__powers">
+                                {powerFields(api, powerType)}
+                            </div>
+                    )}
+                    <div className="c-statblock-editor__description">
+                        {descriptionField()}
+                    </div>
 
-                    </div></div>
                     <div className="c-statblock-editor__buttons">
                         <Button onClick={this.close} fontAwesomeIcon="times" />
                         {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
