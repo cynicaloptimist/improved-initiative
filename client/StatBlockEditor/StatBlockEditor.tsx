@@ -190,13 +190,53 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         return errors;
     }
 
+    private innerEditor = (api: FormApi) => <React.Fragment>
+        <div className="c-statblock-editor__headers">
+            <TextField label="Portrait URL" fieldName="ImageURL" />
+            <TextField label="Source" fieldName="Source" />
+            <TextField label="Type" fieldName="Type" />
+        </div>
+        <div className="c-statblock-editor__stats">
+            <TextField
+                label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"} 
+                fieldName="Challenge" />
+            {valueAndNotesField("Hit Points", "HP")}
+            {valueAndNotesField("Armor Class", "AC")}
+            {initiativeField()}
+        </div>
+        <div className="c-statblock-editor__abilityscores">
+            {AbilityNames
+                .map(abilityScoreField)}
+        </div>
+        <div className="c-statblock-editor__saves">
+            {nameAndModifierFields(api, "Saves")}
+        </div>
+        <div className="c-statblock-editor__skills">
+            {nameAndModifierFields(api, "Skills")}
+        </div>
+        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
+            .map(
+                keywordType =>
+                    <div key={keywordType} className="c-statblock-editor__keywords">
+                        {keywordFields(api, keywordType)}
+                    </div>
+            )}
+        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+            powerType =>
+                <div key={powerType} className="c-statblock-editor__powers">
+                    {powerFields(api, powerType)}
+                </div>
+        )}
+        <div className="c-statblock-editor__description">
+            {descriptionField()}
+        </div>
+    </React.Fragment>
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
                 this.props.editMode == "library" ? "Edit Library Statblock" :
                     "Edit StatBlock";
-
-        const challengeLabel = this.props.statBlock.Player == "player" ? "Level" : "Challenge";
 
         const buttons = <React.Fragment>
             <Button onClick={this.close} fontAwesomeIcon="times" />
@@ -222,43 +262,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             currentListings={this.props.currentListings}
                         />
                     </div>
-                    <div className="c-statblock-editor__headers">
-                        <TextField label="Portrait URL" fieldName="ImageURL" />
-                        <TextField label="Source" fieldName="Source" />
-                        <TextField label="Type" fieldName="Type" />
-                    </div>
-                    <div className="c-statblock-editor__stats">
-                        <TextField label={challengeLabel} fieldName="Challenge" />
-                        {valueAndNotesField("Hit Points", "HP")}
-                        {valueAndNotesField("Armor Class", "AC")}
-                        {initiativeField()}
-                    </div>
-                    <div className="c-statblock-editor__abilityscores">
-                        {AbilityNames
-                            .map(abilityScoreField)}
-                    </div>
-                    <div className="c-statblock-editor__saves">
-                        {nameAndModifierFields(api, "Saves")}
-                    </div>
-                    <div className="c-statblock-editor__skills">
-                        {nameAndModifierFields(api, "Skills")}
-                    </div>
-                    {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
-                        .map(
-                            keywordType =>
-                                <div key={keywordType} className="c-statblock-editor__keywords">
-                                    {keywordFields(api, keywordType)}
-                                </div>
-                        )}
-                    {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
-                        powerType =>
-                            <div key={powerType} className="c-statblock-editor__powers">
-                                {powerFields(api, powerType)}
-                            </div>
-                    )}
-                    <div className="c-statblock-editor__description">
-                        {descriptionField()}
-                    </div>
+                    {this.innerEditor(api)}
                     <div className="c-statblock-editor__buttons">
                         {buttons}
                     </div>
