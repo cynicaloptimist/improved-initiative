@@ -198,13 +198,22 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
         const challengeLabel = this.props.statBlock.Player == "player" ? "Level" : "Challenge";
 
+        const buttons = <React.Fragment>
+            <Button onClick={this.close} fontAwesomeIcon="times" />
+            {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
+            <button type="submit" className="button fa fa-save" />
+        </React.Fragment>;
+
         return <Formik
             onSubmit={this.saveAndClose}
             initialValues={this.props.statBlock}
             validate={this.validate}
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
-                    <h2>{header}</h2>
+                    <div className="c-statblock-editor__title-row">
+                        <h2 className="c-statblock-editor__title">{header}</h2>
+                        {buttons}
+                    </div>
                     <div className="c-statblock-editor__identity">
                         <IdentityFields
                             formApi={api}
@@ -250,11 +259,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor__description">
                         {descriptionField()}
                     </div>
-
                     <div className="c-statblock-editor__buttons">
-                        <Button onClick={this.close} fontAwesomeIcon="times" />
-                        {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
-                        <button type="submit" className="button fa fa-save" />
+                        {buttons}
                     </div>
                 </Form>
             )} />;
