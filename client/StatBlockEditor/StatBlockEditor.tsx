@@ -123,6 +123,11 @@ const descriptionField = () =>
         <Field component="textarea" name="Description" />
     </label>;
 
+const getAnonymizedStatBlockJSON = (statBlock: StatBlock) => {
+    const { Name, Path, Id, ...anonymizedStatBlock } = statBlock;
+    return JSON.stringify(anonymizedStatBlock);
+};
+
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
         AbilityNames.forEach(a => submittedValues.Abilities[a] = parseInt(submittedValues.Abilities[a].toString(), 10));
@@ -134,24 +139,26 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     }
 
     public saveAndClose = (submittedValues) => {
-        const saveAs = submittedValues.SaveAs;
-        if (saveAs) {
-            submittedValues.Id = probablyUniqueString();
-            delete submittedValues.SaveAs;
-        }
-
-        this.parseIntWhereNeeded(submittedValues);
-        const editedStatBlock = {
+        const submittedStatBlock = {
             ...StatBlock.Default(),
-            ...this.props.statBlock,
-            ...submittedValues,
+            ...submittedValues
         };
 
-        if (saveAs && this.props.onSaveAs) {
+        const {
+            SaveAs,
+            StatBlockJSON,
+            ...editedStatBlock
+        } = submittedStatBlock;
+
+        this.parseIntWhereNeeded(editedStatBlock);
+
+        if (SaveAs && this.props.onSaveAs) {
+            editedStatBlock.Id = probablyUniqueString();
             this.props.onSaveAs(editedStatBlock);
         } else {
             this.props.onSave(editedStatBlock);
         }
+
         this.props.onClose();
     }
 
@@ -244,9 +251,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <button type="submit" className="button fa fa-save" />
         </React.Fragment>;
 
+        const initialValues = {
+            ...this.props.statBlock,
+            StatBlockJSON: getAnonymizedStatBlockJSON(this.props.statBlock)
+        };
+
         return <Formik
             onSubmit={this.saveAndClose}
-            initialValues={this.props.statBlock}
+            initialValues={initialValues}
             validate={this.validate}
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
