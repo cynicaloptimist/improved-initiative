@@ -35,8 +35,15 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
 }
 
 export class FilterCache<T extends Listing<Listable>> {
-    constructor(private allItems: T[]) {
-        
+    private allItems: T[];
+    constructor(items: T[]) {
+        this.allItems = items.filter(i => {
+            if (!(i.Name && i.Name.length)) {
+                console.warn("Removing unnamed statblock: " + JSON.stringify(i));
+                return false;
+            }
+            return true;
+        });
     }
 
     private filterCache: KeyValueSet<T[]> = {};
