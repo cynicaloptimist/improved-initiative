@@ -16,7 +16,7 @@ describe("StatBlockEditor", () => {
     let statBlock: StatBlock;
 
     beforeEach(() => {
-        statBlock = StatBlock.Default();
+        statBlock = { ...StatBlock.Default(), Name: "Creature" };
         const listing = new Listing(statBlock.Id, statBlock.Name, statBlock.Path, statBlock.Type, "/", "localStorage", statBlock);
         saveCallback = jest.fn();
         saveAsCallback = jest.fn();
