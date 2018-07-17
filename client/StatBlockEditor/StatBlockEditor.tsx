@@ -171,6 +171,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     private validate = (values) => {
         const errors: any = {};
+
+        if (_.isEmpty(values.Name)) {
+            errors.NameMissing = "Error: Name is required.";
+        }
+
         if (!values.SaveAs) {
             return errors;
         }
