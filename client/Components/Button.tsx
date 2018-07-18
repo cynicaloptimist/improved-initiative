@@ -2,8 +2,10 @@ import * as React from "react";
 
 export interface ButtonProps {
     text?: string;
-    faClass?: string;
+    fontAwesomeIcon?: string;
+    tooltip?: string;
     additionalClassNames?: string;
+    disabled?: boolean;
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
 }
@@ -11,13 +13,25 @@ export interface ButtonProps {
 export class Button extends React.Component<ButtonProps> {
     public render() {
         const text = this.props.text || "";
-        const classNames = ["c-button", "fa"];
-        if (this.props.faClass) {
-            classNames.push(`fa-${this.props.faClass}`);
+        
+        const disabled = this.props.disabled || false;
+    
+        const classNames = ["c-button"];
+
+        if (disabled) {
+            classNames.push("c-button--disabled");
         }
         if (this.props.additionalClassNames) {
             classNames.push(this.props.additionalClassNames);
         }
-        return <span className={classNames.join(" ")} onClick={this.props.onClick} onMouseOver={this.props.onMouseOver}>{text}</span>;
+
+        const faElement = this.props.fontAwesomeIcon && <span className={`fa fa-${this.props.fontAwesomeIcon}`} />;
+
+        return <span
+            className={classNames.join(" ")}
+            onClick={!disabled && this.props.onClick}
+            onMouseOver={!disabled && this.props.onMouseOver}
+            title={this.props.tooltip}
+        >{faElement}{text}</span>;
     }
 }

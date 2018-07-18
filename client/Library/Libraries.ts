@@ -27,7 +27,7 @@ export class Libraries {
         ko.utils.arrayPushAll(this.Spells.Spells, newListings);
     }
 
-    constructor(private accountClient: AccountClient) {
+    constructor(accountClient: AccountClient) {
         this.PCs = new PCLibrary(accountClient);
         this.NPCs = new NPCLibrary(accountClient);
         this.Encounters = new EncounterLibrary(accountClient);

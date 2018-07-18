@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
@@ -11,7 +12,6 @@ import { PCLibrary } from "../PCLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
-import { ListingButton } from "./ListingButton";
 
 export type StatBlockLibraryViewModelProps = {
     librariesCommander: LibrariesCommander;
@@ -67,10 +67,9 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
         const previewPosition = {
-            left: rect.left + rect.width,
-            top: rect.top
+            left: e.pageX,
+            top: e.pageY
         };
 
         const statBlockOutline: StatBlock = {
@@ -130,8 +129,8 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
                 {listingAndFolderComponents}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library)} />
+                <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditStatBlock(this.props.library)} />
             </div>
             {previewVisible &&
                 <Overlay

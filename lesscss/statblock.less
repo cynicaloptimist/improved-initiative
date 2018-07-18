@@ -1,0 +1,89 @@
+.c-statblock {
+    display:block;
+    padding:@small-spacer;
+    line-height: 1.4em;
+    
+    flex-shrink: 1;
+    overflow-y:auto;
+
+    max-width: @fixed-column-width;
+    width: @fixed-column-width;
+
+    h3, h4 {
+        margin-top: @medium-spacer;
+        display: flex;
+        align-items: center;
+    }
+
+    hr {
+        margin: @small-spacer;
+    }
+    >div {
+        flex-direction:row;
+        flex-wrap: wrap;
+        max-height: none;
+        span {
+            padding-right: @small-spacer;
+        }
+    }
+    .stat-label {
+        font-weight:bold;
+        margin-right: @medium-spacer;
+    }
+    .power-content {
+        white-space: pre-line;
+    }
+
+    .portrait-thumbnail {
+        max-height: 50px;
+        padding: @small-spacer;
+        cursor: zoom-in;
+    }
+
+    .portrait-full {
+        cursor: zoom-out;
+    }
+    
+    .Abilities {
+        justify-content: space-around;
+        div {
+            flex-direction: column;
+            align-items:center;
+        }
+        margin-bottom: @small-spacer;
+    }
+    
+    .modifiers, .keyword-sets {
+        flex-direction: column;
+        div {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+    .Traits, .Actions, .Reactions, .LegendaryActions {
+        flex-direction: column;
+        div {
+            flex-direction: column;
+            div {
+                display:block;
+            }
+        }
+    }
+    .Description {
+        flex-direction: column;
+        div {
+            flex-direction: column;
+            div {
+                display:block;
+            }
+        }
+    }
+    .Portrait {
+        width: 100%;
+        max-height: 300px;
+    }
+
+    .Portrait img {
+        object-fit: scale-down;
+    }
+}

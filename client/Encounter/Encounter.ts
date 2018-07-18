@@ -1,6 +1,6 @@
 import * as ko from "knockout";
-import * as _ from "lodash";
-import React = require("react");
+import { max, sortBy } from "lodash";
+import * as React from "react";
 
 import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
@@ -86,7 +86,7 @@ export class Encounter {
             .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
             .map(c => c.InitiativeBonus);
         
-        return _.max(groupBonuses) || combatant.InitiativeBonus;
+        return max(groupBonuses) || combatant.InitiativeBonus;
     }
 
     private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
@@ -105,7 +105,7 @@ export class Encounter {
     }
 
     public SortByInitiative = (stable = false) => {
-        const sortedCombatants = _.sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
+        const sortedCombatants = sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
         this.Combatants(sortedCombatants);
         this.QueueEmitEncounter();
     }

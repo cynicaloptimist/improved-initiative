@@ -90,14 +90,9 @@
     </div>
     <div class="center-column">
         <!-- ko if: CenterColumn() === "statblockeditor" -->
-        <div class="statblock-editor" data-bind="
-    component: {
-        name: 'statblockeditor',
-        params: {
-            editor: StatBlockEditor
-        }
-    }">
-        </div>
+        <div class="statblock-editor" data-bind="react: {
+                component: StatBlockEditor
+        }"></div>
         <!-- /ko -->
         <!-- ko if: CenterColumn() === "spelleditor" -->
         <div class="spell-editor" data-bind="
@@ -180,7 +175,7 @@
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
-            <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
+            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fa fa-close"></span></div>
             <div style="flex-shrink: 1" data-bind="react: {
                 component: CombatantCommander.StatBlock
             }"></div>

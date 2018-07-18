@@ -1,0 +1,47 @@
+.c-listing-button {
+    border-radius: @border-radius;
+    padding: @small-spacer;
+    margin: 1px;
+    overflow-x: hidden;
+
+    &:first-child {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}
+
+.library {
+    flex-grow: 1;
+    flex-shrink: 1;        
+
+    input {
+        min-height: 20px;
+        cursor: text;
+    }
+
+    ul {
+        overflow-y: auto;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    li {
+        list-style-type: none;
+        display:flex;
+        overflow-x: hidden;
+    }
+
+    .buttons {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        
+        span {
+            margin: @small-spacer;
+        }
+    }
+}
+
+.c-encounter-preview {
+    margin: @medium-spacer;
+}

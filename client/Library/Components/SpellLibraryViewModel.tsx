@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { Button } from "../../Components/Button";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
-import { ListingButton } from "./ListingButton";
 
 export type SpellLibraryViewModelProps = {
     librariesCommander: LibrariesCommander;
@@ -66,8 +66,8 @@ export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModel
                     listing={l} />)}
             </ul>
             <div className="buttons">
-                <ListingButton buttonClass="hide" faClass="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <ListingButton buttonClass="new" faClass="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
+                <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
+                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
             </div>
         </div>);
     }

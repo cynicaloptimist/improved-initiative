@@ -1,0 +1,56 @@
+@button-inner: 18px;
+@button-padding: 10px;
+
+.fa {
+    .fa();
+    font-family: 'Josefin Sans', sans-serif;
+    &:before {
+        font-family: FontAwesome;
+    }
+}
+
+.fa-text {
+    .fa();
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: bold;
+    &:before {
+        font-family: FontAwesome;
+        margin-right: @medium-spacer;
+    }
+}
+
+.fa-clickable {
+	cursor: pointer;
+	.fa();
+}
+
+.button() {
+    cursor: pointer;
+    display: inline-block;
+    margin: @small-spacer;
+    padding: @button-padding;
+    text-align: center;
+    text-decoration: none;
+	border-radius: @border-radius;
+    border: 0;
+}
+
+.button, .c-button {
+    .button();
+}
+
+.button--close {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.c-button--disabled {
+    cursor: unset;
+}
+
+.rollable, .spell-reference, .condition-reference {
+    cursor: pointer;
+    border-bottom: 1px dashed;
+    margin-bottom: -1px;
+}

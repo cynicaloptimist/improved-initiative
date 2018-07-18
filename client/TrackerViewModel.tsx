@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -16,6 +17,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
+import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -95,7 +97,6 @@ export class TrackerViewModel {
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();
     public Libraries = new Libraries(this.accountClient);
-    public StatBlockEditor = new StatBlockEditor();
     public SpellEditor = new SpellEditor();
     public EncounterCommander = new EncounterCommander(this);
     public CombatantCommander = new CombatantCommander(this);
@@ -154,7 +155,7 @@ export class TrackerViewModel {
     public DisplayLogin = !env.IsLoggedIn;
 
     public CenterColumn = ko.pureComputed(() => {
-        const editStatBlock = this.StatBlockEditor.HasStatBlock();
+        const editStatBlock = this.StatBlockEditor() !== null;
         const editSpell = this.SpellEditor.HasSpell();
         if (editStatBlock) {
             return "statblockeditor";
@@ -174,6 +175,27 @@ export class TrackerViewModel {
         this.SettingsVisible(false);
         //this.TutorialVisible(false);
     }
+
+    public EditStatBlock(
+        editMode: "combatant" | "library",
+        statBlock: StatBlock,
+        saveCallback: (newStatBlock: StatBlock) => void,
+        currentListings?: Listing<StatBlock> [],
+        deleteCallback?: () => void,
+        saveAsCallback?: (newStatBlock: StatBlock) => void,
+    ) {
+        this.StatBlockEditor(<StatBlockEditor
+            statBlock={statBlock}
+            editMode={editMode}
+            onSave={saveCallback}
+            onDelete={deleteCallback}
+            onSaveAs={saveAsCallback}
+            onClose={() => this.StatBlockEditor(null)}
+            currentListings = {currentListings}
+        />);
+    }
+
+    protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
     public RepeatTutorial = () => {
         this.Encounter.EndEncounter();
@@ -201,6 +223,9 @@ export class TrackerViewModel {
 
     public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
+            if (this.LibrariesVisible()) {
+                return "show-center-left-right";
+            }
             return "show-center-right-left";
         }
 

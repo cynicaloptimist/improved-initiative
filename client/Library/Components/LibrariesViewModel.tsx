@@ -64,7 +64,7 @@ export class LibrariesViewModel extends React.Component<LibrariesProps, Librarie
 
         return <React.Fragment>
             <h2>{hasAccountSync && <span className="fa fa-cloud" title="Account Sync is enabled" />} Library</h2>
-            <Button faClass="close" onClick={this.hideLibraries} />
+            <Button additionalClassNames="button--close" fontAwesomeIcon="close" onClick={this.hideLibraries} />
             <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} selected={this.state.selectedLibrary} />
             {selectedLibrary}
         </React.Fragment>;
