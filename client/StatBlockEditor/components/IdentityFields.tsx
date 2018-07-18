@@ -70,7 +70,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             <div className="inline">
                 {this.folderElement()}
                 <div>
-                    <label className="label" htmlFor="Name">Name</label>
+                    <label className="label" htmlFor="name">Name</label>
                     <Field type="text" name="Name" id="name" />
                 </div>
             </div>
