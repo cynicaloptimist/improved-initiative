@@ -3,12 +3,14 @@ import { Field, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
+import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 
 interface IdentityFieldsProps {
     formApi: FormikProps<any>;
     allowFolder: boolean;
     allowSaveAs: boolean;
+    setEditorMode: (editorMode: "standard" | "json") => void;
     currentListings?: Listing<StatBlock>[];
 }
 
@@ -79,6 +81,11 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
                 <Field type="checkbox" name="SaveAs" />
                 {this.props.formApi.errors.PathAndName}
             </label>}
+            <div className="inline">
+                Editor Mode:
+                <Button onClick={() => this.props.setEditorMode("standard")} text="Standard" />
+                <Button onClick={() => this.props.setEditorMode("json")} text="JSON" />
+            </div>
         </React.Fragment>;
     }
 }

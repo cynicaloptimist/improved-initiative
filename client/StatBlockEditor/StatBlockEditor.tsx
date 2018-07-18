@@ -285,6 +285,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             allowFolder={this.props.editMode === "library"}
                             allowSaveAs={this.props.onSaveAs !== undefined}
                             currentListings={this.props.currentListings}
+                            setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
                         />
                     </div>
                     {
