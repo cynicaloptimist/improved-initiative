@@ -29,7 +29,7 @@ export class PowerField extends React.Component<PowerFieldProps, PowerFieldState
                     onClick={() => this.props.remove(this.props.index)}
                 />
             </div>
-            <Field component="textarea" placeholder="Details" name={`${this.props.powerType}[${this.props.index}].Content`} />
+            <Field className="c-statblock-editor__textarea" component="textarea" placeholder="Details" name={`${this.props.powerType}[${this.props.index}].Content`} />
         </div>;
     }
 }

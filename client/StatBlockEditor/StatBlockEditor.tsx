@@ -120,7 +120,7 @@ const powerFields = (api: FormApi, powerType: string) => {
 const descriptionField = () =>
     <label className="c-statblock-editor__text">
         <div className="c-statblock-editor__label">Description</div>
-        <Field component="textarea" name="Description" />
+        <Field className="c-statblock-editor__textarea" component="textarea" name="Description" />
     </label>;
 
 const getAnonymizedStatBlockJSON = (statBlock: StatBlock) => {
