@@ -72,7 +72,7 @@ describe("StatBlockEditor", () => {
         editor.simulate("submit");
     });
 
-    test.only("parses JSON if JSON editor is used", done => {
+    test("parses JSON if JSON editor is used", done => {
         const editedJSON = JSON.stringify({
             Type: "Edited in JSON"
         });
