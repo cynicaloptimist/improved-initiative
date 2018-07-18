@@ -138,7 +138,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         submittedValues.Saves.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
     }
 
-    public saveAndClose = (submittedValues) => {
+    private saveAndClose = (submittedValues) => {
         const submittedStatBlock = {
             ...StatBlock.Default(),
             ...submittedValues
