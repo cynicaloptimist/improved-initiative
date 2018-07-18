@@ -188,6 +188,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             errors.NameMissing = "Error: Name is required.";
         }
 
+        if (this.state.editorMode === "json") {
+            try {
+                JSON.parse(values.StatBlockJSON);
+            } catch (e) {
+                errors.JSONParseError = e.message;
+            }
+        }
+
         if (!values.SaveAs) {
             return errors;
         }
@@ -244,10 +252,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         </div>
     </React.Fragment>
 
-    private jsonEditor = () => <div className="c-statblock-editor__json-section">
+    private jsonEditor = (api) => <div className="c-statblock-editor__json-section">
         <label className="c-statblock-editor__text">
             <div className="c-statblock-editor__label">JSON</div>
             <Field className="c-statblock-editor__json-textarea" component="textarea" name="StatBlockJSON" />
+            {api.errors.JSONParseError}
         </label>
     </div>
 
@@ -273,6 +282,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             onSubmit={this.saveAndClose}
             initialValues={initialValues}
             validate={this.validate}
+            validateOnBlur
             render={api => (
                 <Form className="c-statblock-editor" autoComplete="false">
                     <div className="c-statblock-editor__title-row">
@@ -291,7 +301,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     {
                         this.state.editorMode == "standard" ?
                             this.innerEditor(api) :
-                            this.jsonEditor()
+                            this.jsonEditor(api)
                     }
                     <div className="c-statblock-editor__buttons">
                         {buttons}
