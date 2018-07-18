@@ -1,3 +1,6 @@
+@button-inner: 18px;
+@button-padding: 10px;
+
 .fa {
     .fa();
     font-family: 'Josefin Sans', sans-serif;
@@ -28,13 +31,16 @@
     padding: @button-padding;
     text-align: center;
     text-decoration: none;
-    
 	border-radius: @border-radius;
     border: 0;
 }
 
 .button, .c-button {
     .button();
+}
+
+.c-button {
+    width: @button-inner;
 }
 
 .button--close {
