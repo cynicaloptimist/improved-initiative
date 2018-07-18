@@ -125,10 +125,15 @@ const descriptionField = () =>
 
 const getAnonymizedStatBlockJSON = (statBlock: StatBlock) => {
     const { Name, Path, Id, ...anonymizedStatBlock } = statBlock;
-    return JSON.stringify(anonymizedStatBlock);
+    return JSON.stringify(anonymizedStatBlock, null, 2);
 };
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
+    constructor(props) {
+        super(props);
+        this.state = { editorMode: "standard" };
+    }
+
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
         AbilityNames.forEach(a => submittedValues.Abilities[a] = parseInt(submittedValues.Abilities[a].toString(), 10));
         submittedValues.HP.Value = parseInt(submittedValues.HP.Value.toString(), 10);
@@ -205,7 +210,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         </div>
         <div className="c-statblock-editor__stats">
             <TextField
-                label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"} 
+                label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"}
                 fieldName="Challenge" />
             {valueAndNotesField("Hit Points", "HP")}
             {valueAndNotesField("Armor Class", "AC")}
@@ -238,6 +243,14 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             {descriptionField()}
         </div>
     </React.Fragment>
+
+    private jsonEditor = () => <div className="c-statblock-editor__json-section">
+        <label className="c-statblock-editor__text">
+            <div className="c-statblock-editor__label">JSON</div>
+            <Field className="c-statblock-editor__json-textarea" component="textarea" name="StatBlockJSON" />
+        </label>
+    </div>
+
 
     public render() {
         const header =
@@ -274,7 +287,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                             currentListings={this.props.currentListings}
                         />
                     </div>
-                    {this.innerEditor(api)}
+                    {
+                        this.state.editorMode == "standard" ?
+                            this.innerEditor(api) :
+                            this.jsonEditor()
+                    }
                     <div className="c-statblock-editor__buttons">
                         {buttons}
                     </div>
@@ -293,4 +310,6 @@ interface StatBlockEditorProps {
     currentListings?: Listing<StatBlock>[];
 }
 
-interface StatBlockEditorState { }
+interface StatBlockEditorState {
+    editorMode: "standard" | "json";
+}

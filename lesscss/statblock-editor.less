@@ -87,8 +87,14 @@
 .c-statblock-editor__skills,
 .c-statblock-editor__keywords,
 .c-statblock-editor__powers,
-.c-statblock-editor__description {
+.c-statblock-editor__description,
+.c-statblock-editor__json-section {
     .bordered();
+}
+
+.c-statblock-editor__json-section,
+.c-statblock-editor__json-textarea {
+    flex-grow:1;
 }
 
 .c-statblock-editor__title-row {
@@ -109,6 +115,7 @@
 .c-statblock-editor__text {
     display: flex;
     flex-direction: column;
+    flex-grow:1;
 }
 
 .c-statblock-editor__identity {
@@ -130,6 +137,7 @@
 .c-statblock-editor__ability {
     align-items: center;
 }
+
 .c-statblock-editor__textarea {
     height: 100px;
 }
