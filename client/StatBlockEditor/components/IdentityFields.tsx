@@ -84,7 +84,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps, Identit
             <div className="inline">
                 Editor Mode:
                 <Button onClick={() => this.props.setEditorMode("standard")} text="Standard" />
-                <Button onClick={() => this.props.setEditorMode("json")} text="JSON" />
+                <Button additionalClassNames="c-statblock-editor__json-button" onClick={() => this.props.setEditorMode("json")} text="JSON" />
             </div>
         </React.Fragment>;
     }

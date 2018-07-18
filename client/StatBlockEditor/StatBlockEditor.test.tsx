@@ -71,4 +71,22 @@ describe("StatBlockEditor", () => {
 
         editor.simulate("submit");
     });
+
+    test.only("parses JSON if JSON editor is used", done => {
+        const editedJSON = JSON.stringify({
+            Type: "Edited in JSON"
+        });
+
+        expect.assertions(2);
+        saveCallback.mockImplementation(editedStatBlock => {
+            expect(editedStatBlock.Name).toEqual("Creature");
+            expect(editedStatBlock.Type).toEqual("Edited in JSON");
+            done();
+        });
+
+        editor.find(`.c-statblock-editor__json-button`).simulate("click");
+        editor.find(`textarea[name="StatBlockJSON"]`).simulate("change", { target: { name: "StatBlockJSON", value: editedJSON } });
+
+        editor.simulate("submit");
+    });
 });
