@@ -39,10 +39,11 @@ export class TrackerViewModel {
         });
 
         this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
-        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
         this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
+        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
         CurrentSettings.subscribe(v => {
             this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
+            this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
         });
 
         this.accountClient.GetAccount(account => {
