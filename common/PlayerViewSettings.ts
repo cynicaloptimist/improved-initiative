@@ -16,6 +16,7 @@ export const HpVerbosityOptions: HpVerbosityOption [] = [
 export interface PlayerViewSettings {
     AllowPlayerSuggestions: boolean;
     MonsterHPVerbosity: HpVerbosityOption;
+    PlayerHPVerbosity: HpVerbosityOption;
     HideMonstersOutsideEncounter: boolean;
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;

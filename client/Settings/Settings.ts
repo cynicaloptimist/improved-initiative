@@ -52,6 +52,7 @@ function getDefaultSettings(): Settings {
         PlayerView: {
             AllowPlayerSuggestions: false,
             MonsterHPVerbosity: "Colored Label",
+            PlayerHPVerbosity: "Actual HP",
             HideMonstersOutsideEncounter: false,
             DisplayRoundCounter: false,
             DisplayTurnTimer: false,
@@ -87,12 +88,14 @@ function getLegacySettings(): Settings {
     return {
         Commands: commands,
         Rules: {
+            ...defaultSettings.Rules,
             RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
             AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
             AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true),
             AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>("AutoGroupInitiative", "None")
         },
         TrackerView: {
+            ...defaultSettings.TrackerView,
             DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
             DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
