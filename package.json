@@ -117,7 +117,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "git apply patches/enzyme-adapter-react-16+1.1.1.patch || grunt --no-color postinstall",
+    "postinstall": "(git apply patches/enzyme-adapter-react-16+1.1.1.patch || true) && grunt --no-color postinstall",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
