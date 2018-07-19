@@ -29,12 +29,15 @@ export function ToStaticViewModel(combatant: Combatant): StaticCombatantViewMode
 }
 
 function GetHPDisplay(combatant: Combatant): string {
-    let monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
+    const hpVerbosity = combatant.IsPlayerCharacter ?
+        CurrentSettings().PlayerView.PlayerHPVerbosity :
+        CurrentSettings().PlayerView.MonsterHPVerbosity;
+    
     const maxHP = combatant.MaxHP(),
         currentHP = combatant.CurrentHP(),
         temporaryHP = combatant.TemporaryHP();
 
-    if (combatant.IsPlayerCharacter || monsterHpVerbosity == "Actual HP") {
+    if (hpVerbosity == "Actual HP") {
         if (temporaryHP) {
             return `${currentHP}+${temporaryHP}/${maxHP}`;
         } else {
@@ -42,11 +45,11 @@ function GetHPDisplay(combatant: Combatant): string {
         }
     }
 
-    if (monsterHpVerbosity == "Hide All") {
+    if (hpVerbosity == "Hide All") {
         return "";
     }
 
-    if (monsterHpVerbosity == "Damage Taken") {
+    if (hpVerbosity == "Damage Taken") {
         return (currentHP - maxHP).toString();
     }
 

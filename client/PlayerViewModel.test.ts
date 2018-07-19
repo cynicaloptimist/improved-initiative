@@ -114,4 +114,15 @@ describe("PlayerViewModel", () => {
         playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
     });
+
+    test("Player HP setting obfuscated HP", () => {
+        const settings = CurrentSettings();
+        settings.PlayerView.PlayerHPVerbosity = "Colored Label";
+        playerViewModel.LoadSettings(settings.PlayerView);
+        
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
+    });
 });
