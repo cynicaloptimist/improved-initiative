@@ -89,4 +89,11 @@ describe("PlayerViewModel", () => {
 
         expect(playerViewModel.imageModal().Visible).toBe(false);
     });
+
+    test("Player HP is displayed", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
+    });
 });
