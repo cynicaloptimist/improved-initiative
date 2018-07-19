@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { HpVerbosityOption, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
@@ -26,15 +26,6 @@ export interface Settings {
     PlayerView: PlayerViewSettings;
     Version: string;
 }
-
-
-export const hpVerbosityOptions = [
-    "Actual HP",
-    "Colored Label",
-    "Monochrome Label",
-    "Damage Taken",
-    "Hide All"
-];
 
 function getLegacySetting<T>(settingName: string, def: T): T {
     const setting = Store.Load<T>(Store.User, settingName);
@@ -109,7 +100,7 @@ function getLegacySettings(): Settings {
         PlayerView: {
             ...defaultSettings.PlayerView,
             AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
-            MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
+            MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
