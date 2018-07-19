@@ -47,7 +47,8 @@ export class SettingsViewModel {
     public AllowNegativeHP: KnockoutObservable<boolean>;
     public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
     public HpVerbosityOptions: HpVerbosityOption[];
-    public HpVerbosity: KnockoutObservable<HpVerbosityOption>;
+    public MonsterHpVerbosity: KnockoutObservable<HpVerbosityOption>;
+    public PlayerHpVerbosity: KnockoutObservable<HpVerbosityOption>;
     public CombatantCommands: Command[];
     public CurrentTab = ko.observable<string>("about");
     public RollHp: KnockoutObservable<boolean>;
@@ -103,7 +104,8 @@ export class SettingsViewModel {
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
-                MonsterHPVerbosity: this.HpVerbosity(),
+                MonsterHPVerbosity: this.MonsterHpVerbosity(),
+                PlayerHPVerbosity: this.PlayerHpVerbosity(),
             },
             Version: process.env.VERSION
         };
@@ -151,7 +153,8 @@ export class SettingsViewModel {
         this.DisplayTurnTimer = ko.observable(currentSettings.TrackerView.DisplayTurnTimer);
         this.DisplayDifficulty = ko.observable(currentSettings.TrackerView.DisplayDifficulty);
 
-        this.HpVerbosity = ko.observable(currentSettings.PlayerView.MonsterHPVerbosity);
+        this.MonsterHpVerbosity = ko.observable(currentSettings.PlayerView.MonsterHPVerbosity);
+        this.PlayerHpVerbosity = ko.observable(currentSettings.PlayerView.PlayerHPVerbosity);
         this.HpVerbosityOptions = HpVerbosityOptions;
         this.HideMonstersOutsideEncounter = ko.observable(currentSettings.PlayerView.HideMonstersOutsideEncounter);
         this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);
