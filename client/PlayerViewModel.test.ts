@@ -103,4 +103,15 @@ describe("PlayerViewModel", () => {
         playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
     });
+
+    test("Creature HP setting actual HP", () => {
+        const settings = CurrentSettings();
+        settings.PlayerView.MonsterHPVerbosity = "Actual HP";
+        playerViewModel.LoadSettings(settings.PlayerView);
+        
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
+    });
 });
