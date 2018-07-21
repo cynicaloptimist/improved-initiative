@@ -89,4 +89,40 @@ describe("PlayerViewModel", () => {
 
         expect(playerViewModel.imageModal().Visible).toBe(false);
     });
+
+    test("Player HP is displayed", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
+    });
+    
+    test("Creature HP is obfuscated", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
+    });
+
+    test("Creature HP setting actual HP", () => {
+        const settings = CurrentSettings();
+        settings.PlayerView.MonsterHPVerbosity = "Actual HP";
+        playerViewModel.LoadSettings(settings.PlayerView);
+        
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
+    });
+
+    test("Player HP setting obfuscated HP", () => {
+        const settings = CurrentSettings();
+        settings.PlayerView.PlayerHPVerbosity = "Colored Label";
+        playerViewModel.LoadSettings(settings.PlayerView);
+        
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
+    });
 });

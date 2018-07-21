@@ -92,7 +92,10 @@
         <input type="checkbox" data-bind="checked: PlayerViewDisplayTurnTimer" />
     </p>
     <p>Monster HP Verbosity:
-        <select data-bind="options: HpVerbosityOptions, value: HpVerbosity"></select>
+        <select data-bind="options: HpVerbosityOptions, value: MonsterHpVerbosity"></select>
+    </p>
+    <p>Player HP Verbosity:
+        <select data-bind="options: HpVerbosityOptions, value: PlayerHpVerbosity"></select>
     </p>
     <p>Hide monsters when encounter is not active:
         <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />

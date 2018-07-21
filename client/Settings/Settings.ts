@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { HpVerbosityOption, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
@@ -26,15 +26,6 @@ export interface Settings {
     PlayerView: PlayerViewSettings;
     Version: string;
 }
-
-
-export const hpVerbosityOptions = [
-    "Actual HP",
-    "Colored Label",
-    "Monochrome Label",
-    "Damage Taken",
-    "Hide All"
-];
 
 function getLegacySetting<T>(settingName: string, def: T): T {
     const setting = Store.Load<T>(Store.User, settingName);
@@ -61,6 +52,7 @@ function getDefaultSettings(): Settings {
         PlayerView: {
             AllowPlayerSuggestions: false,
             MonsterHPVerbosity: "Colored Label",
+            PlayerHPVerbosity: "Actual HP",
             HideMonstersOutsideEncounter: false,
             DisplayRoundCounter: false,
             DisplayTurnTimer: false,
@@ -96,12 +88,14 @@ function getLegacySettings(): Settings {
     return {
         Commands: commands,
         Rules: {
+            ...defaultSettings.Rules,
             RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
             AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
             AutoCheckConcentration: getLegacySetting<boolean>("AutoCheckConcentration", true),
             AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>("AutoGroupInitiative", "None")
         },
         TrackerView: {
+            ...defaultSettings.TrackerView,
             DisplayRoundCounter: getLegacySetting<boolean>("DisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
             DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
@@ -109,7 +103,7 @@ function getLegacySettings(): Settings {
         PlayerView: {
             ...defaultSettings.PlayerView,
             AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
-            MonsterHPVerbosity: getLegacySetting<string>("MonsterHPVerbosity", "Colored Label"),
+            MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
             DisplayTurnTimer: getLegacySetting<boolean>("PlayerViewDisplayTurnTimer", false),
