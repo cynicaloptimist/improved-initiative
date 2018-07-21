@@ -1,8 +1,8 @@
-<span data-bind="text: Combatant.Initiative, css: InitiativeClass" title="Initiative Roll" class="initiative"></span>
-<span class="name" data-bind="text: Name, attr: {title: Name }"></span>
-<span class="hp" data-bind="click: EditHP, text: HP, style: { color: GetHPColor() }"></span>
-<span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
-<span class="tags">
+<span class="combatant__initiative" data-bind="text: Combatant.Initiative, css: InitiativeClass" title="Initiative Roll"></span>
+<span class="combatant__name" data-bind="text: Name, attr: {title: Name }"></span>
+<span class="combatant__hp" data-bind="click: EditHP, text: HP, style: { color: GetHPColor() }"></span>
+<span class="combatant__ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
+<span class="combatant__tags">
 <!--ko foreach: Combatant.Tags() -->
     <span class="tag" data-bind="if: Visible">
         <!-- ko if: $parent.TagHasReference -->
