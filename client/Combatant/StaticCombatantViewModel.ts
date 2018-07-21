@@ -65,11 +65,12 @@ function GetHPDisplay(combatant: Combatant): string {
 
 function GetHPColor(combatant: Combatant) {
     const maxHP = combatant.MaxHP(), currentHP = combatant.CurrentHP();
-    let monsterHpVerbosity = CurrentSettings().PlayerView.MonsterHPVerbosity;
-    if (!combatant.IsPlayerCharacter &&
-        (monsterHpVerbosity == "Monochrome Label" ||
-            monsterHpVerbosity == "Hide All" ||
-            monsterHpVerbosity == "Damage Taken")) {
+    const hpVerbosity = combatant.IsPlayerCharacter ?
+        CurrentSettings().PlayerView.PlayerHPVerbosity :
+        CurrentSettings().PlayerView.MonsterHPVerbosity;
+    if (hpVerbosity == "Monochrome Label" ||
+        hpVerbosity == "Hide All" ||
+        hpVerbosity == "Damage Taken") {
         return "auto";
     }
     let green = Math.floor((currentHP / maxHP) * 170);
