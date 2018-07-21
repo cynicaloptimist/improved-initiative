@@ -35,7 +35,7 @@ function getLegacySetting<T>(settingName: string, def: T): T {
     return setting;
 }
 
-function getDefaultSettings(): Settings {
+export function getDefaultSettings(): Settings {
     return {
         Commands: [],
         Rules: {
