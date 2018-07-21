@@ -21,10 +21,18 @@
 
 .fa-clickable {
     cursor: pointer;
+	.fa();
+}
+
+.fa-clickable:hover {
+    color: @hover-white;
+}
+
+.small-button {
+    .fa-clickable();
     padding: @medium-spacer;
     border-radius: @border-radius;
-    border: 1px solid;
-	.fa();
+    border: 1px solid @primary-white;
 }
 
 .button() {
