@@ -29,7 +29,7 @@ export interface Settings {
 
 function getLegacySetting<T>(settingName: string, def: T): T {
     const setting = Store.Load<T>(Store.User, settingName);
-    if (setting === undefined) {
+    if (setting === null) {
         return def;
     }
     return setting;
