@@ -17,7 +17,7 @@
     padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
-    align-items: center;
+    align-items: baseline;
 
     &.animate {
         animation: slide-from-left 0.5s;
@@ -29,6 +29,9 @@
 }
 
 .combatant--header {
+    .colors(@primary-white, @primary-black, @primary-black);
+    display: flex;
+    flex-flow: row;
     padding: @medium-spacer 0;
 }
 
