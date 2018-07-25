@@ -15,12 +15,12 @@ type FormApi = FormikProps<any>;
 
 const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
 
-const valueAndNotesField = (label: string, fieldName: string) =>
+const ValueAndNotesField = (props: { label: string, fieldName: string }) =>
     <label className="c-statblock-editor__text">
-        <span className="c-statblock-editor__label">{label}</span>
+        <span className="c-statblock-editor__label">{props.label}</span>
         <div className="inline">
-            <Field type="number" className="value" name={`${fieldName}.Value`} />
-            <Field type="text" className="notes" name={`${fieldName}.Notes`} />
+            <Field type="number" className="value" name={`${props.fieldName}.Value`} />
+            <Field type="text" className="notes" name={`${props.fieldName}.Notes`} />
         </div>
     </label>;
 
@@ -193,8 +193,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <TextField
                 label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"}
                 fieldName="Challenge" />
-            {valueAndNotesField("Hit Points", "HP")}
-            {valueAndNotesField("Armor Class", "AC")}
+            <ValueAndNotesField label="Hit Points" fieldName="HP" />
+            <ValueAndNotesField label="Armor Class" fieldName="AC" />
             {initiativeField()}
         </div>
         <div className="c-statblock-editor__abilityscores">
