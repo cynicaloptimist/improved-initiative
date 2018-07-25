@@ -24,7 +24,7 @@ const ValueAndNotesField = (props: { label: string, fieldName: string }) =>
         </div>
     </label>;
 
-const initiativeField = () =>
+const InitiativeField = () =>
     <div className="c-statblock-editor__text">
         <label className="c-statblock-editor__label" htmlFor="InitiativeModifier">Initiative Modifier</label>
         <div className="inline">
@@ -195,7 +195,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                 fieldName="Challenge" />
             <ValueAndNotesField label="Hit Points" fieldName="HP" />
             <ValueAndNotesField label="Armor Class" fieldName="AC" />
-            {initiativeField()}
+            <InitiativeField />
         </div>
         <div className="c-statblock-editor__abilityscores">
             {AbilityNames
