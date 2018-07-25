@@ -134,6 +134,105 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.state = { editorMode: "standard" };
     }
 
+    public render() {
+        const header =
+            this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
+                this.props.editMode == "library" ? "Edit Library Statblock" :
+                    "Edit StatBlock";
+
+        const buttons = <React.Fragment>
+            <Button onClick={this.close} fontAwesomeIcon="times" />
+            {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
+            <button type="submit" className="button fa fa-save" />
+        </React.Fragment>;
+
+        const initialValues = {
+            ...this.props.statBlock,
+            StatBlockJSON: getAnonymizedStatBlockJSON(this.props.statBlock)
+        };
+
+        return <Formik
+            onSubmit={this.saveAndClose}
+            initialValues={initialValues}
+            validate={this.validate}
+            validateOnBlur
+            render={api => (
+                <Form className="c-statblock-editor" autoComplete="false">
+                    <div className="c-statblock-editor__title-row">
+                        <h2 className="c-statblock-editor__title">{header}</h2>
+                        {buttons}
+                    </div>
+                    <div className="c-statblock-editor__identity">
+                        <IdentityFields
+                            formApi={api}
+                            allowFolder={this.props.editMode === "library"}
+                            allowSaveAs={this.props.onSaveAs !== undefined}
+                            currentListings={this.props.currentListings}
+                            setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
+                        />
+                    </div>
+                    {
+                        this.state.editorMode == "standard" ?
+                            this.innerEditor(api) :
+                            this.jsonEditor(api)
+                    }
+                    <div className="c-statblock-editor__buttons">
+                        {buttons}
+                    </div>
+                </Form>
+            )} />;
+    }
+
+    private innerEditor = (api: FormApi) => <React.Fragment>
+        <div className="c-statblock-editor__headers">
+            <TextField label="Portrait URL" fieldName="ImageURL" />
+            <TextField label="Source" fieldName="Source" />
+            <TextField label="Type" fieldName="Type" />
+        </div>
+        <div className="c-statblock-editor__stats">
+            <TextField
+                label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"}
+                fieldName="Challenge" />
+            {valueAndNotesField("Hit Points", "HP")}
+            {valueAndNotesField("Armor Class", "AC")}
+            {initiativeField()}
+        </div>
+        <div className="c-statblock-editor__abilityscores">
+            {AbilityNames
+                .map(abilityScoreField)}
+        </div>
+        <div className="c-statblock-editor__saves">
+            {nameAndModifierFields(api, "Saves")}
+        </div>
+        <div className="c-statblock-editor__skills">
+            {nameAndModifierFields(api, "Skills")}
+        </div>
+        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
+            .map(
+                keywordType =>
+                    <div key={keywordType} className="c-statblock-editor__keywords">
+                        {keywordFields(api, keywordType)}
+                    </div>
+            )}
+        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
+            powerType =>
+                <div key={powerType} className="c-statblock-editor__powers">
+                    {powerFields(api, powerType)}
+                </div>
+        )}
+        <div className="c-statblock-editor__description">
+            {descriptionField()}
+        </div>
+    </React.Fragment>
+
+    private jsonEditor = (api) => <div className="c-statblock-editor__json-section">
+        <label className="c-statblock-editor__text">
+            <div className="c-statblock-editor__label">JSON</div>
+            <Field className="c-statblock-editor__json-textarea" component="textarea" name="StatBlockJSON" />
+            {api.errors.JSONParseError}
+        </label>
+    </div>
+
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
         AbilityNames.forEach(a => submittedValues.Abilities[a] = parseInt(submittedValues.Abilities[a].toString(), 10));
         submittedValues.HP.Value = parseInt(submittedValues.HP.Value.toString(), 10);
@@ -154,7 +253,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             this.state.editorMode == "standard" ?
                 submittedStatBlock :
                 JSON.parse(StatBlockJSON);
-        
+
         const editedStatBlock = {
             ...StatBlock.Default(),
             ...statBlockFromEditorMode,
@@ -216,106 +315,6 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         }
 
         return errors;
-    }
-
-    private innerEditor = (api: FormApi) => <React.Fragment>
-        <div className="c-statblock-editor__headers">
-            <TextField label="Portrait URL" fieldName="ImageURL" />
-            <TextField label="Source" fieldName="Source" />
-            <TextField label="Type" fieldName="Type" />
-        </div>
-        <div className="c-statblock-editor__stats">
-            <TextField
-                label={this.props.statBlock.Player == "player" ? "Level" : "Challenge"}
-                fieldName="Challenge" />
-            {valueAndNotesField("Hit Points", "HP")}
-            {valueAndNotesField("Armor Class", "AC")}
-            {initiativeField()}
-        </div>
-        <div className="c-statblock-editor__abilityscores">
-            {AbilityNames
-                .map(abilityScoreField)}
-        </div>
-        <div className="c-statblock-editor__saves">
-            {nameAndModifierFields(api, "Saves")}
-        </div>
-        <div className="c-statblock-editor__skills">
-            {nameAndModifierFields(api, "Skills")}
-        </div>
-        {["Speed", "Senses", "DamageVulnerabilities", "DamageResistances", "DamageImmunities", "ConditionImmunities", "Languages"]
-            .map(
-                keywordType =>
-                    <div key={keywordType} className="c-statblock-editor__keywords">
-                        {keywordFields(api, keywordType)}
-                    </div>
-            )}
-        {["Traits", "Actions", "Reactions", "LegendaryActions"].map(
-            powerType =>
-                <div key={powerType} className="c-statblock-editor__powers">
-                    {powerFields(api, powerType)}
-                </div>
-        )}
-        <div className="c-statblock-editor__description">
-            {descriptionField()}
-        </div>
-    </React.Fragment>
-
-    private jsonEditor = (api) => <div className="c-statblock-editor__json-section">
-        <label className="c-statblock-editor__text">
-            <div className="c-statblock-editor__label">JSON</div>
-            <Field className="c-statblock-editor__json-textarea" component="textarea" name="StatBlockJSON" />
-            {api.errors.JSONParseError}
-        </label>
-    </div>
-
-
-    public render() {
-        const header =
-            this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
-                this.props.editMode == "library" ? "Edit Library Statblock" :
-                    "Edit StatBlock";
-
-        const buttons = <React.Fragment>
-            <Button onClick={this.close} fontAwesomeIcon="times" />
-            {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
-            <button type="submit" className="button fa fa-save" />
-        </React.Fragment>;
-
-        const initialValues = {
-            ...this.props.statBlock,
-            StatBlockJSON: getAnonymizedStatBlockJSON(this.props.statBlock)
-        };
-
-        return <Formik
-            onSubmit={this.saveAndClose}
-            initialValues={initialValues}
-            validate={this.validate}
-            validateOnBlur
-            render={api => (
-                <Form className="c-statblock-editor" autoComplete="false">
-                    <div className="c-statblock-editor__title-row">
-                        <h2 className="c-statblock-editor__title">{header}</h2>
-                        {buttons}
-                    </div>
-                    <div className="c-statblock-editor__identity">
-                        <IdentityFields
-                            formApi={api}
-                            allowFolder={this.props.editMode === "library"}
-                            allowSaveAs={this.props.onSaveAs !== undefined}
-                            currentListings={this.props.currentListings}
-                            setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
-                        />
-                    </div>
-                    {
-                        this.state.editorMode == "standard" ?
-                            this.innerEditor(api) :
-                            this.jsonEditor(api)
-                    }
-                    <div className="c-statblock-editor__buttons">
-                        {buttons}
-                    </div>
-                </Form>
-            )} />;
     }
 }
 
