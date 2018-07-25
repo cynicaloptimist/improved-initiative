@@ -30,6 +30,8 @@
     margin: 0;
     padding: 0;
     flex-shrink: 0;
+    border-color: @shadow;
+    box-shadow: @shadow;
 }
 
 html, body {
@@ -39,6 +41,8 @@ html, body {
     display:flex;
     flex-direction:column;
     cursor: default;
+    background-color: @primary-green;
+    color: @primary-white;
 }
 
 div {
@@ -89,6 +93,10 @@ input[type="number"] {
 
 input[type="file"] {
     width: 200px;
+}
+
+input, textarea {
+    .colors(@primary-black, @input-white);
 }
 
 //Common
