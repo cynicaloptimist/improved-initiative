@@ -36,6 +36,10 @@
 }
 
 .button() {
+    .colors(@button-text, @button-face, @shadow);
+    &:hover {
+        background-color: @hover-white;
+    }
     cursor: pointer;
     display: inline-block;
     margin: @small-spacer;

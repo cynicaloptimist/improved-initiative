@@ -23,6 +23,10 @@
 @button-text: @primary-black;
 @shadow: #999;
 
+@modal-background-color: rgba(0,0,0,0.7);
+
+//TODO: move all rules to associated .less module.
+
 * {
     border-color: @shadow;
     box-shadow: @shadow;
@@ -60,16 +64,6 @@ input, textarea {
     .colors(@primary-black, @primary-white);
 }
 
-.button {
-    .colors(@button-text, @button-face, @shadow);
-    &:hover {
-        background-color: @hover-white;
-    }
-}
-
-.modal-blur {
-    background-color: rgba(0,0,0,0.7);
-}
 
 #landing {
     .disabled {
