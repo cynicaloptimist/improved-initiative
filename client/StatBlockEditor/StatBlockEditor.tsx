@@ -279,8 +279,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     }
 
     private delete = () => {
-        this.props.onDelete();
-        this.props.onClose();
+        if (confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)) {
+            this.props.onDelete();
+            this.props.onClose();
+        }
     }
 
     private willOverwriteStatBlock = _.memoize(
