@@ -7,6 +7,9 @@ import { StatBlockEditor } from "./StatBlockEditor";
 import { StatBlock } from "../../common/StatBlock";
 import { Listing } from "../Library/Listing";
 
+const CURRENT_APP_VERSION = require("../../package.json").version;
+process.env.VERSION = CURRENT_APP_VERSION;
+
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("StatBlockEditor", () => {
@@ -49,6 +52,17 @@ describe("StatBlockEditor", () => {
         });
 
         editor.find(`input[name="Name"]`).simulate("change", { target: { name: "Name", value: "Snarf" } });
+
+        editor.simulate("submit");
+    });
+
+    test("Saves current version", done => {
+        expect.assertions(1);
+
+        saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
+            expect(editedStatBlock.Version).toEqual(CURRENT_APP_VERSION);
+            done();
+        });
 
         editor.simulate("submit");
     });

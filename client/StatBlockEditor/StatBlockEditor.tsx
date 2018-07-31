@@ -260,6 +260,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             Id: submittedStatBlock.Id,
             Name: submittedStatBlock.Name,
             Path: submittedStatBlock.Path,
+            Version: process.env.VERSION,
         };
 
         this.parseIntWhereNeeded(editedStatBlock);
