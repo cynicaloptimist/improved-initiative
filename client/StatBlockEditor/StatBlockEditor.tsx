@@ -234,13 +234,24 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     </div>
 
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
-        AbilityNames.forEach(a => submittedValues.Abilities[a] = parseInt(submittedValues.Abilities[a].toString(), 10));
-        submittedValues.HP.Value = parseInt(submittedValues.HP.Value.toString(), 10);
-        submittedValues.AC.Value = parseInt(submittedValues.AC.Value.toString(), 10);
-        submittedValues.InitiativeModifier = parseInt(submittedValues.InitiativeModifier.toString(), 10);
-        submittedValues.Skills.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
-        submittedValues.Saves.forEach(s => s.Modifier = parseInt(s.Modifier.toString(), 10));
+        AbilityNames.forEach(a => submittedValues.Abilities[a] = this.castToNumberOrZero(submittedValues.Abilities[a]));
+        submittedValues.HP.Value = this.castToNumberOrZero(submittedValues.HP.Value);
+        submittedValues.AC.Value = this.castToNumberOrZero(submittedValues.AC.Value);
+        submittedValues.InitiativeModifier = this.castToNumberOrZero(submittedValues.InitiativeModifier);
+        submittedValues.Skills.forEach(s => s.Modifier = this.castToNumberOrZero(s.Modifier));
+        submittedValues.Saves.forEach(s => s.Modifier = this.castToNumberOrZero(s.Modifier));
     }
+
+    private castToNumberOrZero = (value?: any) => {
+        if (!value) {
+            return 0;
+        }
+        const parsedValue = parseInt(value.toString(), 10);
+        if (parsedValue == NaN) {
+            return 0;
+        }
+        return parsedValue;
+    }    
 
     private saveAndClose = (submittedValues) => {
         const {
