@@ -67,6 +67,19 @@ describe("StatBlockEditor", () => {
         editor.simulate("submit");
     });
 
+    test.only("Parses numeric fields", done => {
+        expect.assertions(1);
+
+        saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
+            expect(editedStatBlock.HP.Value).toEqual(10);
+            done();
+        });
+
+        editor.find(`input[name="HP.Value"]`).simulate("change", { target: { name: "HP.Value", value: "10" } });
+
+        editor.simulate("submit");
+    });
+
     test("calls saveAs when Save as a copy is checked", done => {
         expect.assertions(3);
 
