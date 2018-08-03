@@ -23,19 +23,9 @@
 @button-text: @primary-black;
 @shadow: #999;
 
-* {
-    border-color: @shadow;
-    box-shadow: @shadow;
-}
+@modal-background-color: rgba(0,0,0,0.7);
 
-html, body {
-    background-color: @primary-green;
-    color: @primary-white;
-}
-
-input, textarea {
-    .colors(@primary-black, @input-white);
-}
+//TODO: move all rules to associated .less module.
 
 .colors(@text, @background, @border: @shadow) {
     color: @text;
@@ -52,34 +42,14 @@ input, textarea {
     }
 }
 
-.left-column, 
-.right-column, 
-.statblock, .c-statblock,
-.c-overlay,
 .toolbar-container, 
-.prompt,
 .settings,
 .tutorial, 
 .damage-suggestion,
-.start, 
-.footer {
+{
     .colors(@primary-black, @primary-white);
 }
 
-.button {
-    .colors(@button-text, @button-face, @shadow);
-    &:hover {
-        background-color: @hover-white;
-    }
-}
-
-.fa-clickable:hover {
-    color: @hover-white;
-}
-
-.modal-blur {
-    background-color: rgba(0,0,0,0.7);
-}
 
 #landing {
     .disabled {
@@ -102,16 +72,6 @@ input, textarea {
     }
     .listings span:hover {
         background-color: @hover-white;
-    }
-}
-
-.toolbar {
-    .commands-combatant {
-        border-color: @shadow;
-    }
-
-    .highlight {
-        .green-button();
     }
 }
 
@@ -178,10 +138,6 @@ input, textarea {
     &.active {
         border-color: @active-green;
         background-color: @active-white;
-    }
-
-    &.header {
-        .colors(@primary-white, @primary-black, @primary-black);
     }
 }
 

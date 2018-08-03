@@ -20,11 +20,26 @@
 }
 
 .fa-clickable {
-	cursor: pointer;
+    cursor: pointer;
 	.fa();
 }
 
+.fa-clickable:hover {
+    color: @hover-white;
+}
+
+.small-button {
+    .fa-clickable();
+    padding: @medium-spacer;
+    border-radius: @border-radius;
+    border: 1px solid @primary-white;
+}
+
 .button() {
+    .colors(@button-text, @button-face, @shadow);
+    &:hover {
+        background-color: @hover-white;
+    }
     cursor: pointer;
     display: inline-block;
     margin: @small-spacer;

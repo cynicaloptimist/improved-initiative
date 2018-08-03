@@ -17,7 +17,7 @@
     padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
-    align-items: center;
+    align-items: baseline;
 
     &.animate {
         animation: slide-from-left 0.5s;
@@ -26,41 +26,41 @@
     &.active .name {
         font-weight:bold;
     }
-    
-    &.header {
-        padding: @medium-spacer 0;
-    }
+}
 
-    .initiative {
-        width: 30px;
-        text-align: center;
-        &.fa-link:before{
-            font-size: 60%;
-            vertical-align: top;
-        }
-    }
+.combatant--header {
+    .colors(@primary-white, @primary-black, @primary-black);
+    display: flex;
+    flex-flow: row;
+    padding: @medium-spacer 0;
+    align-items: baseline;
+}
 
-    .name {
-        width: 50%;
-    }
-
-    .hp {
-        width: 70px;
-        text-align: center;
-    }
-
-    .ac {
-        width: 30px;
-        text-align: center;
-    }
-
-    .tags {
-        flex-grow:1;
-        flex-shrink: 1;
-    }
-
-    .buttons {
-        width: 35px;
-        text-align: right;
+.combatant__initiative {
+    width: 30px;
+    text-align: center;
+    &.fa-link:before{
+        font-size: 60%;
+        vertical-align: top;
     }
 }
+
+.combatant__name {
+    width: 50%;
+}
+
+.combatant__hp {
+    width: 70px;
+    text-align: center;
+}
+
+.combatant__ac {
+    width: 30px;
+    text-align: center;
+}
+
+.combatant__tags {
+    flex-grow:1;
+    flex-shrink: 1;
+}
+

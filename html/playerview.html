@@ -16,8 +16,8 @@
 <body id="playerview">
 
     <div class="modal-blur combatant-portrait" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
-        <img class="combatant-portrait-image" data-bind="attr:{src: imageModal().URL}">
-        <div class="combatant-portrait-caption" data-bind="html: imageModal().Caption"></div>
+        <img class="combatant-portrait__image" data-bind="attr:{src: imageModal().URL}">
+        <div class="combatant-portrait__caption" data-bind="html: imageModal().Caption"></div>
     </div>
     <!-- ko with: combatantSuggestor -->
     <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
@@ -31,16 +31,16 @@
         }">
     </div>
     <!-- /ko -->
-    <div class="combatant header">
-        <div class="initiative">
+    <div class="combatant--header">
+        <div class="combatant__initiative">
             <span class="fa fa-forward"></span>
         </div>
-        <div class="portrait" data-bind="visible: hasImages"></div>
-        <div class="name">Combatant</div>
-        <div class="hp">
+        <div class="combatant__portrait" data-bind="visible: hasImages"></div>
+        <div class="combatant__name">Combatant</div>
+        <div class="combatant__hp">
             <span class="fa fa-heart"></span>
         </div>
-        <div class="tags">
+        <div class="combatant__tags">
             <span class="fa fa-tag"></span>
         </div>
     </div>

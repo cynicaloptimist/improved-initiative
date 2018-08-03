@@ -1,13 +1,10 @@
 @toolbar-width: 42px;
 
-.c-toolbar .scrollframe > div {
-    &.commands-combatant {
-        margin-top:10px;
-        padding-top:10px;
-        border-top: 1px solid;
-    }
-    
-    padding: @small-spacer;
+.commands-combatant {
+    border-color: @shadow;
+    margin-top:10px;
+    padding-top:10px;
+    border-top: 1px solid;
 }
 
 .c-toolbar .c-button {
@@ -30,12 +27,13 @@
         overflow-y: auto;
     }
 
+    .fa {
+        margin-left: @small-spacer;
+        margin-right: @medium-spacer;
+    }
+
     .c-button {
-        text-align: left;
-        &::before {
-            width: @button-inner + @border-radius * 2;
-            text-align: center;
-            display: inline-block;
-        }
+        display: flex;
+        justify-content: flex-start;
     }
 }

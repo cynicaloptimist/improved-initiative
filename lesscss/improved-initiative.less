@@ -30,6 +30,8 @@
     margin: 0;
     padding: 0;
     flex-shrink: 0;
+    border-color: @shadow;
+    box-shadow: @shadow;
 }
 
 html, body {
@@ -39,6 +41,8 @@ html, body {
     display:flex;
     flex-direction:column;
     cursor: default;
+    background-color: @primary-green;
+    color: @primary-white;
 }
 
 div {
@@ -89,6 +93,10 @@ input[type="number"] {
 
 input[type="file"] {
     width: 200px;
+}
+
+input, textarea {
+    .colors(@primary-black, @input-white);
 }
 
 //Common
@@ -163,15 +171,28 @@ body>.login.button {
     top: 0;
     width: 100%;
     height: 100%;
+    background-color: @modal-background-color;
 }
 
+
 .recessed {
+    .colors(@primary-black, @primary-white);
 
     margin: @medium-spacer;
     padding: @medium-spacer;
         
     border-radius: @border-radius;
     box-shadow: 2px 2px 1px inset;
+}
+
+.card {
+    .colors(@primary-black, @primary-white);
+    margin: @medium-spacer;
+    padding: @medium-spacer;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: @border-radius;
+    box-shadow: 2px 2px 1px;
 }
 
 //Layout
