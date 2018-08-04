@@ -52,7 +52,8 @@ export class SpellPromptWrapper implements Prompt {
     protected component = ko.observable();
 
     constructor(listing: Listing<Spell>, private textEnricher: TextEnricher) {
-        listing.GetAsyncWithUpdatedId(spell => {
+        listing.GetAsyncWithUpdatedId(unsafeSpell => {
+            const spell = { ...Spell.Default(), ...unsafeSpell };
             this.component(<SpellPrompt Spell={spell} TextEnricher={this.textEnricher} />);
         });
     }

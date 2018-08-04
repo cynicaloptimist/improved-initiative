@@ -27,7 +27,8 @@ export class LibrariesCommander {
     public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
     public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
-        listing.GetAsyncWithUpdatedId(statBlock => {
+        listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
+            const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
             this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
             Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
@@ -66,7 +67,11 @@ export class LibrariesCommander {
         library: PCLibrary | NPCLibrary) => {
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
-                const statBlockWithNewId = { ...statBlock, Id: probablyUniqueString() };
+                const statBlockWithNewId = {
+                    ...StatBlock.Default(),
+                    ...statBlock,
+                    Id: probablyUniqueString()
+                };
                 this.tracker.EditStatBlock(
                     "library",
                     statBlockWithNewId,
@@ -76,7 +81,7 @@ export class LibrariesCommander {
             } else {
                 this.tracker.EditStatBlock(
                     "library",
-                    statBlock,
+                    { ...StatBlock.Default(), ...statBlock },
                     s => library.SaveEditedStatBlock(listing, s),
                     library.StatBlocks(),
                     this.deleteSavedStatBlock(library.StoreName, listing.Id),
@@ -98,7 +103,7 @@ export class LibrariesCommander {
     public EditSpell = (listing: Listing<Spell>) => {
         listing.GetAsyncWithUpdatedId(spell => {
             this.tracker.SpellEditor.EditSpell(
-                spell,
+                { ...Spell.Default(), ...spell },
                 this.libraries.Spells.AddOrUpdateSpell,
                 this.libraries.Spells.DeleteSpellById
             );
