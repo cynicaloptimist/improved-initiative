@@ -1,5 +1,5 @@
 import { StatBlock } from "../../common/StatBlock";
-import { InitializeCharacter } from "./Character";
+import { InitializeCharacter } from "./PersistentCharacter";
 
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {

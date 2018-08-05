@@ -1,6 +1,6 @@
 import { StatBlock } from "../../common/StatBlock";
 
-export function InitializeCharacter(statBlock: StatBlock): Character {
+export function InitializeCharacter(statBlock: StatBlock): PersistentCharacter {
     return {
         CurrentHP: statBlock.HP.Value,
         StatBlock: statBlock,
@@ -8,7 +8,7 @@ export function InitializeCharacter(statBlock: StatBlock): Character {
     };
 }
 
-export interface Character {
+export interface PersistentCharacter {
     CurrentHP: number;
     StatBlock: StatBlock;
     Notes: string;
