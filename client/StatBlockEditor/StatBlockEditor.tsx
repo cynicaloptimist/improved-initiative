@@ -13,8 +13,6 @@ import { TextField } from "./components/TextField";
 
 type FormApi = FormikProps<any>;
 
-const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
-
 const ValueAndNotesField = (props: { label: string, fieldName: string }) =>
     <label className="c-statblock-editor__text">
         <span className="c-statblock-editor__label">{props.label}</span>
@@ -198,7 +196,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <InitiativeField />
         </div>
         <div className="c-statblock-editor__abilityscores">
-            {AbilityNames
+            {StatBlock.AbilityNames
                 .map(abilityScoreField)}
         </div>
         <div className="c-statblock-editor__saves">
@@ -234,7 +232,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     </div>
 
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
-        AbilityNames.forEach(a => submittedValues.Abilities[a] = this.castToNumberOrZero(submittedValues.Abilities[a]));
+        StatBlock.AbilityNames.forEach(a => submittedValues.Abilities[a] = this.castToNumberOrZero(submittedValues.Abilities[a]));
         submittedValues.HP.Value = this.castToNumberOrZero(submittedValues.HP.Value);
         submittedValues.AC.Value = this.castToNumberOrZero(submittedValues.AC.Value);
         submittedValues.InitiativeModifier = this.castToNumberOrZero(submittedValues.InitiativeModifier);
