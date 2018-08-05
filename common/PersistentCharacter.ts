@@ -1,4 +1,4 @@
-import { StatBlock } from "../../common/StatBlock";
+import { StatBlock } from "./StatBlock";
 
 export function InitializeCharacter(statBlock: StatBlock): PersistentCharacter {
     return {
