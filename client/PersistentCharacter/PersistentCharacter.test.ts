@@ -10,7 +10,9 @@ describe("InitializeCharacter", () => {
     });
 });
 
-it("Should update existing PlayerCharacter statblocks to Character");
+    it("Should create new PersistentCharacters for existing PlayerCharacter statblocks");
+
+    it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters");
 
 it("SavedCombatants should load their CurrentHP from the Character");
 
