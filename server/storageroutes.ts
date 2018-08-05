@@ -115,6 +115,7 @@ export default function(app: express.Application) {
         }
     });
     
+    configureEntityRoute(app, "persistentcharacters");
     configureEntityRoute(app, "statblocks");
     configureEntityRoute(app, "playercharacters");
     configureEntityRoute(app, "spells");

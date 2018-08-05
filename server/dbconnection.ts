@@ -157,7 +157,7 @@ export function setSettings(userId, settings) {
         });
 }
 
-export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
+export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters" | "persistentcharacters";
 
 export function getEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: {}) => void) {
     if (!connectionString) {
