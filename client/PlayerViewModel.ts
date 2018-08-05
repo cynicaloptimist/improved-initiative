@@ -3,7 +3,7 @@ import * as ko from "knockout";
 
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
-import { SavedEncounter } from "./../common/SavedEncounter";
+import { SavedEncounter } from "../common/SavedEncounter";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
