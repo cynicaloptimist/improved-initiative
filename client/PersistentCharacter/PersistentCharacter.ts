@@ -8,6 +8,8 @@ export function InitializeCharacter(statBlock: StatBlock): PersistentCharacter {
     };
 }
 
+export const DefaultPersistentCharacter = () => InitializeCharacter(StatBlock.Default());
+
 export interface PersistentCharacter {
     CurrentHP: number;
     StatBlock: StatBlock;
