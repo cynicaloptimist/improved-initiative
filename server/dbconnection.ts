@@ -180,7 +180,12 @@ export function getEntity(entityPath: EntityPath, userId: string, entityId: stri
                     if (!user) {
                         throw "User not found";
                     }
-                    callBack(user[entityPath][entityId]);
+                    const entities = user[entityPath];
+                    if (entities === undefined) {
+                        throw `User has no ${entityPath} entities.`;
+                    } else {
+                        callBack(entities[entityId]);
+                    }
                 });
         });
 }
@@ -259,7 +264,7 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
                         throw "User ID not found: " + userId;
                     }
 
-                    const updatedEntities = u[entityPath];
+                    const updatedEntities = u[entityPath] || {};
                     for (const entity of entities) {
                         updatedEntities[entity.Id] = entity;
                     }
