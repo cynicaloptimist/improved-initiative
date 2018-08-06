@@ -3,6 +3,7 @@ const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
 import { Listable, ServerListing } from "../common/Listable";
+import { DefaultPersistentCharacter } from "../common/PersistentCharacter";
 import { DefaultSavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -77,7 +78,8 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                         statblocks: getStatBlockListings(user.statblocks),
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
                         spells: getSpellListings(user.spells),
-                        encounters: getEncounterListings(user.encounters)
+                        encounters: getEncounterListings(user.encounters),
+                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters)
                     };
 
                     callBack(userWithListings);
@@ -137,6 +139,21 @@ function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[
             SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
+        };
+    });
+}
+
+function getPersistentCharacterListings(persistentCharactersUnsafe?: { [key: string]: {} }): ServerListing[] {
+    const persistentCharacters = persistentCharactersUnsafe || [];
+    return Object.keys(persistentCharacters).map(key => {
+        const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            Path: c.Path,
+            SearchHint: StatBlock.GetKeywords(c.StatBlock),
+            Version: c.Version,
+            Link: `/my/persistentcharacters/${c.StatBlock.Id}`,
         };
     });
 }
