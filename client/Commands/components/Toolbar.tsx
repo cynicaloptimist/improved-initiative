@@ -31,10 +31,16 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
 
     public render() {
         const className = `c-toolbar s-${this.props.width}`;
+        const commandButtonTooltip =
+            (c: Command) => {
+                const keyBinding = c.KeyBinding ? `[${c.KeyBinding}] ` : "";
+                return `${keyBinding}${c.Description}`;
+            };
         const commandToButton =
             (c: Command) =>
                 <Button
                     key={c.Description}
+                    tooltip={commandButtonTooltip(c)}
                     onClick={c.ActionBinding}
                     fontAwesomeIcon={c.ActionBarIcon}
                     text={this.props.width == "wide" ? c.Description : null}
