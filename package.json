@@ -54,6 +54,7 @@
     "requirejs": "^2.3.5",
     "ts-jest": "^23.1.2",
     "ts-loader": "^3.3.1",
+    "tslint": "^5.11.0",
     "typescript": "^3.0.1",
     "uglify-js": "^2.7.4",
     "uglifyjs-webpack-plugin": "^1.2.4",
