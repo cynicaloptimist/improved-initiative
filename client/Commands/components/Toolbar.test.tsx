@@ -19,7 +19,7 @@ const renderToolbarWithSingleCommand = (description, keyBinding) => {
             width="narrow"
             showCombatantCommands={true}
         />);
-}
+};
 
 describe("Toolbar component", () => {
     test("Button shows the command's description and key binding", () => {
@@ -28,7 +28,7 @@ describe("Toolbar component", () => {
         const component = renderToolbarWithSingleCommand(description, keyBinding);
 
         const tooltip = component.find(".c-button").first().prop("title");
-        expect(tooltip).toEqual(`[${keyBinding}] ${description}`);
+        expect(tooltip).toEqual(`${description} [${keyBinding}]`);
     });
 
     test("Button shows the command's description if key binding is blank", () => {
