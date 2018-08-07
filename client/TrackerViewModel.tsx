@@ -61,18 +61,6 @@ export class TrackerViewModel {
 
     private accountClient = new AccountClient();
 
-    private displayPrivacyNotificationIfNeeded = () => {
-        if (Store.Load(Store.User, "AllowTracking") == null) {
-            this.ReviewPrivacyPolicy();
-        }
-    }
-
-    public ReviewPrivacyPolicy = () => {
-        this.SettingsVisible(false);
-        const prompt = new PrivacyPolicyPromptWrapper();
-        this.PromptQueue.Add(prompt);
-    }
-
     private HandleAccountSync(account: Account) {
         if (account.settings && account.settings.Version) {
             CurrentSettings(account.settings);
@@ -93,6 +81,18 @@ export class TrackerViewModel {
         if (account.encounters) {
             this.Libraries.Encounters.AddListings(account.encounters, "account");
         }
+    }
+
+    private displayPrivacyNotificationIfNeeded = () => {
+        if (Store.Load(Store.User, "AllowTracking") == null) {
+            this.ReviewPrivacyPolicy();
+        }
+    }
+
+    public ReviewPrivacyPolicy = () => {
+        this.SettingsVisible(false);
+        const prompt = new PrivacyPolicyPromptWrapper();
+        this.PromptQueue.Add(prompt);
     }
 
     public PromptQueue = new PromptQueue();
