@@ -1,4 +1,4 @@
-import { Field, FieldArray, Form, Formik, FormikProps, FormikValues } from "formik";
+import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";

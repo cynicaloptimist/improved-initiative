@@ -75,6 +75,7 @@ export function RegisterBindingHandlers() {
 
     ko.bindingHandlers.awesomplete = {
         init: (element, valueAccessor) => {
+            // tslint:disable-next-line:no-unused-expression
             new Awesomplete(element, {
                 list: valueAccessor(),
                 minChars: 1,
