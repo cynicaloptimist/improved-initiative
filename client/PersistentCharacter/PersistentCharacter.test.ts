@@ -1,5 +1,7 @@
-import { InitializeCharacter } from "../../common/PersistentCharacter";
+import { DefaultPersistentCharacter, InitializeCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
+import { Store } from "../Utility/Store";
 
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
@@ -11,7 +13,12 @@ describe("InitializeCharacter", () => {
 });
 
 describe("PersistentCharacterLibrary", () => {
-    it("Should create new PersistentCharacters for existing PlayerCharacter statblocks");
+    it("Should load stored PersistentCharacters", () => {
+        const persistentCharacter = DefaultPersistentCharacter();
+        Store.Save(Store.PersistentCharacters, "some-id", persistentCharacter);
+        const library = new PersistentCharacterLibrary();
+        expect(library.GetListings()).toHaveLength(1);
+    });
 
     it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {});
 
