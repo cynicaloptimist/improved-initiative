@@ -78,7 +78,7 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                         settings: user.settings,
                         statblocks: getStatBlockListings(user.statblocks),
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
-                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters),
+                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters || {}),
                         spells: getSpellListings(user.spells),
                         encounters: getEncounterListings(user.encounters),
                     };
@@ -144,8 +144,7 @@ function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[
     });
 }
 
-function getPersistentCharacterListings(persistentCharactersUnsafe?: { [key: string]: {} }): ServerListing[] {
-    const persistentCharacters = persistentCharactersUnsafe || [];
+function getPersistentCharacterListings(persistentCharacters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(persistentCharacters).map(key => {
         const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
         return {
