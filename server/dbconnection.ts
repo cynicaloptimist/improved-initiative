@@ -2,8 +2,9 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 const connectionString = process.env.DB_CONNECTION_STRING;
 
+import * as _ from "lodash";
 import { Listable, ServerListing } from "../common/Listable";
-import { DefaultPersistentCharacter } from "../common/PersistentCharacter";
+import { DefaultPersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
 import { DefaultSavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -74,11 +75,13 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
             const users = db.collection<User>("users");
             return users.findOne({ _id: userId })
                 .then((user: User) => {
+                    const persistentCharacters = user.persistentcharacters || generatePersistentCharactersAndUpdateUser(user.playercharacters, users, userId);
+
                     const userWithListings = {
                         settings: user.settings,
                         statblocks: getStatBlockListings(user.statblocks),
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
-                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters || {}),
+                        persistentcharacters: getPersistentCharacterListings(persistentCharacters),
                         spells: getSpellListings(user.spells),
                         encounters: getEncounterListings(user.encounters),
                     };
@@ -86,6 +89,20 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                     callBack(userWithListings);
                 });
         });
+}
+
+function generatePersistentCharactersAndUpdateUser(playerCharacters: { [key: string]: {} }, users: mongo.Collection<User>, userId: string) {
+    const persistentcharacters = _.mapValues(playerCharacters, statBlockUnsafe => {
+        const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
+        return InitializeCharacter(statBlock);
+    });
+
+    users.updateOne(
+        { _id: userId },
+        { $set: { persistentcharacters } }
+    );
+
+    return persistentcharacters;
 }
 
 function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing [] {
