@@ -9,16 +9,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     ts: {
-      options: {
-        removeComments: false,
-        additionalFlags: '--strictNullChecks'
-      },
       server: {
-        src: ['server/*.ts'],
-        options: {
-          module: 'commonjs',
-          target: 'es5'
-        }
+        tsconfig: "./server/tsconfig.json"
       },
     },
     webpack: {
