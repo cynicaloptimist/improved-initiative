@@ -5,6 +5,6 @@
         "sourceMap": true,
         "strictNullChecks": true,
         "lib": ["es2015"],
-        "types": ["jest"],
+        "types": ["jest"]
     }
 }
