@@ -46,6 +46,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                     $setOnInsert: {
                         statblocks: {},
                         playercharacters: {},
+                        persistentcharacters: {},
                         spells: {},
                         encounters: {},
                         settings: {},
@@ -77,9 +78,9 @@ export function getAccount(userId: string, callBack: (userWithListings: any) => 
                         settings: user.settings,
                         statblocks: getStatBlockListings(user.statblocks),
                         playercharacters: getPlayerCharacterListings(user.playercharacters),
+                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters),
                         spells: getSpellListings(user.spells),
                         encounters: getEncounterListings(user.encounters),
-                        persistentcharacters: getPersistentCharacterListings(user.persistentcharacters)
                     };
 
                     callBack(userWithListings);
