@@ -1,7 +1,10 @@
 {
     "compilerOptions": {
+        "module": "commonjs",
         "target": "ES5",
         "sourceMap": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "lib": ["es2015"],
+        "types": ["jest"],
     }
 }
