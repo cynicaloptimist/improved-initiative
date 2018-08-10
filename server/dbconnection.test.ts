@@ -1,11 +1,19 @@
 import MongodbMemoryServer from "mongodb-memory-server";
 
-describe("", () => {
-    test("", async (done) => {
-        const mongod = new MongodbMemoryServer();
+describe("User Accounts", () => {
+    let mongod: MongodbMemoryServer;
+
+    beforeAll(async () => {
+        mongod = new MongodbMemoryServer();
+        const uri = await mongod.getUri();
+    });
+
+    afterAll(async () => {
+        await mongod.stop();
+    });
+
+    test("", async () => {
         const name = await mongod.getDbName();
         console.log(name);
-        await mongod.stop();
-        done();
     });
 });
