@@ -138,6 +138,9 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
+        if (!this.playerViewClient) {
+            return;
+        }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
