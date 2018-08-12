@@ -1,6 +1,5 @@
 import mongo = require("mongodb");
 const client = mongo.MongoClient;
-const connectionString = process.env.DB_CONNECTION_STRING;
 
 import * as _ from "lodash";
 import { Listable, ServerListing } from "../common/Listable";
@@ -11,11 +10,15 @@ import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";
 import { User } from "./user";
 
-export const initialize = () => {
-    if (!connectionString) {
-        console.error("No connection string found.");
+let connectionString;
+
+export const initialize = (initialConnectionString) => {
+    if (!initialConnectionString) {
+        console.warn("No connection string found.");
         return;
     }
+
+    connectionString = initialConnectionString;
 
     client.connect(connectionString, function (err, db) {
         if (err) {
