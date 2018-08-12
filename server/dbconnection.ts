@@ -27,7 +27,7 @@ export const initialize = (initialConnectionString) => {
     });
 };
 
-export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string) {
+export async function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -64,7 +64,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         patreonId
                     });
                 });
-        }) as Promise<User>;
+        });
 }
 
 export function getAccount(userId: string, callBack: (userWithListings: any) => void) {
