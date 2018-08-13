@@ -96,7 +96,7 @@ export default function(app: express.Application) {
             return res.sendStatus(403);
         }
     
-        return DB.getAccount(req.session.userId, account => {
+        return DB.getAccount(req.session.userId).then(account => {
             return res.json(account);
         }).catch(err => {
             return res.sendStatus(500);
