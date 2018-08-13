@@ -12,7 +12,7 @@ describe("User Accounts", () => {
         mongod = new MongodbMemoryServer();
         uri = await mongod.getUri();
         DB.initialize(uri);
-    });
+    }, 60000);
 
     afterAll(async () => {
         await mongod.stop();
