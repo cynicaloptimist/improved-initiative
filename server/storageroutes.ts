@@ -56,7 +56,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         }
 
         if (req.body.Version) {
-            return DB.saveEntity<T>(route, req.session.userId, req.body, result => {
+            return DB.saveEntity<T>(route, req.session.userId, req.body).then(result => {
                 return res.sendStatus(201);    
             }).catch(err => {
                 return res.status(500).send(err);

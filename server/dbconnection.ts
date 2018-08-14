@@ -250,7 +250,7 @@ export function deleteEntity(entityPath: EntityPath, userId: mongo.ObjectId, ent
         });
 }
 
-export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: mongo.ObjectId, entity: T, callBack: (result: number) => void) {
+export async function saveEntity<T extends Listable>(entityPath: EntityPath, userId: mongo.ObjectId, entity: T) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -264,20 +264,16 @@ export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: m
         throw "Entity Id cannot contain .";
     }
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
-            return users.updateOne(
+    const db = await client.connect(connectionString);
+    const result = await db.collection("users").updateOne(
                 { _id: userId },
                 {
                     $set: {
                         [`${entityPath}.${entity.Id}`]: entity
                     }
                 }
-            ).then(result => {
-                callBack(result.modifiedCount);
-            });
-        });
+    );
+    return result.modifiedCount;
 }
 
 export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: mongo.ObjectId, entities: T[], callBack: (result: number) => void) {
