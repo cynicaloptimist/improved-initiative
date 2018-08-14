@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectID } from "mongodb";
 import MongodbMemoryServer from "mongodb-memory-server";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
@@ -9,6 +9,7 @@ import { User } from "./user";
 describe("User Accounts", () => {
     let mongod: MongodbMemoryServer;
     let uri;
+    let userId: ObjectID;
 
     beforeAll(async () => {
         mongod = new MongodbMemoryServer();
@@ -16,27 +17,22 @@ describe("User Accounts", () => {
         DB.initialize(uri);
     }, 60000);
 
+    beforeEach(async () => {
+        const user = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
+        userId = user._id;
+    });
+
     afterAll(async () => {
         await mongod.stop();
     });
 
     test("Should initialize user with empty entity sets", async (done) => {
-        const user = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
-        expect(user.encounters).toEqual({});
-        expect(user.playercharacters).toEqual({});
-        expect(user.statblocks).toEqual({});
-        expect(user.spells).toEqual({});
-        expect(user.persistentcharacters).toEqual({});
-        done();
-    });
-
-    test("baseline", async (done) => {
-        expect.assertions(1);
-        const db = await MongoClient.connect(uri);
-        const test = await db.collection("test").insertOne({ "foo": "bar" });
-        const id = test.insertedId;
-        const lookup = await db.collection("test").findOne({ _id: id });
-        expect(lookup.foo).toEqual("bar");
+        const user = await DB.getAccount(userId);
+        expect(user.encounters).toHaveLength(0);
+        expect(user.playercharacters).toHaveLength(0);
+        expect(user.statblocks).toHaveLength(0);
+        expect(user.spells).toHaveLength(0);
+        expect(user.persistentcharacters).toHaveLength(0);
         done();
     });
 
@@ -46,8 +42,6 @@ describe("User Accounts", () => {
             Name: "Test Player Character",
             Id: "playerCharacterId",
         };
-        const insertedUser = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
-        const userId = insertedUser._id;
         await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
         const user = await DB.getAccount(userId);
         expect(user.playercharacters).toHaveLength(1);
@@ -65,8 +59,7 @@ describe("User Accounts", () => {
             Id: "playerCharacterId",
             Type: "Test Type"
         };
-        const insertedUser = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
-        const userId = insertedUser._id;
+
         await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
 
         const user = await DB.getAccount(userId);
