@@ -47,7 +47,6 @@ describe("User Accounts", () => {
         };
         const insertedUser = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
         const userId = insertedUser._id;
-        console.log(userId);
         await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
         const user = await DB.getAccount(userId);
         expect(user.playercharacters).toHaveLength(1);
