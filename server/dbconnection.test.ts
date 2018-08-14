@@ -3,6 +3,7 @@ import MongodbMemoryServer from "mongodb-memory-server";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
+import { User } from "./user";
 
 describe("User Accounts", () => {
     let mongod: MongodbMemoryServer;
@@ -19,7 +20,7 @@ describe("User Accounts", () => {
     });
 
     test("Should initialize user with empty entity sets", async (done) => {
-        const user = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge");
+        const user = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
         expect(user.encounters).toEqual({});
         expect(user.playercharacters).toEqual({});
         expect(user.statblocks).toEqual({});
@@ -35,6 +36,24 @@ describe("User Accounts", () => {
         const id = test.insertedId;
         const lookup = await db.collection("test").findOne({ _id: id });
         expect(lookup.foo).toEqual("bar");
+        done();
+    });
+
+    test("Should copy playercharacters as persistentcharacters", async (done) => {
+        const playerCharacterStatBlock = {
+            ...StatBlock.Default(),
+            Name: "Test Player Character",
+            Id: "playerCharacterId"
+        };
+        const insertedUser = await DB.upsertUser(probablyUniqueString(), "accessKey", "refreshKey", "pledge") as User;
+        const userId = insertedUser._id;
+        console.log(userId);
+        await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
+        const user = await DB.getAccount(userId);
+        expect(user.playercharacters).toHaveLength(1);
+        expect(user.persistentcharacters).toHaveLength(1);
+        const persistentCharacterName = user.persistentcharacters[0].Name;
+        expect(persistentCharacterName).toBe(playerCharacterStatBlock.Name);
         done();
     });
 });
