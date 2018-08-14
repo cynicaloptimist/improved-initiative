@@ -1,4 +1,4 @@
-import { MongoClient, ObjectID } from "mongodb";
+import { ObjectID } from "mongodb";
 import MongodbMemoryServer from "mongodb-memory-server";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
@@ -34,6 +34,17 @@ describe("User Accounts", () => {
         expect(user.spells).toHaveLength(0);
         expect(user.persistentcharacters).toHaveLength(0);
         done();
+    });
+
+    test("Should save statblocks", async () => {
+        const statBlock: StatBlock = {
+            ...StatBlock.Default(),
+            Name: "Test StatBlock",
+            Id: "playerCharacterId",
+        };
+        await DB.saveEntity("statblocks", userId, statBlock);
+        const savedStatBlock = await DB.getEntity("statblocks", userId, statBlock.Id);
+        expect(savedStatBlock).toEqual(statBlock);
     });
 
     test("Should copy playercharacters as persistentcharacters", async (done) => {
