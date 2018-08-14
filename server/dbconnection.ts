@@ -69,39 +69,42 @@ export async function upsertUser(patreonId: string, accessKey: string, refreshKe
 
 export async function getAccount(userId: mongo.ObjectId) {
     if (!connectionString) {
-        console.error("No connection string found.");
         throw "No connection string found.";
     }
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
-            return users.findOne({ _id: userId })
-                .then((user: User) => {
-                    const persistentCharacters = user.persistentcharacters || generatePersistentCharactersAndUpdateUser(user.playercharacters, users, userId);
+    const db = await client.connect(connectionString);
+    const users = db.collection<User>("users");
+    const user = await users.findOne({ _id: userId });
+    if (user === null) {
+        throw `User ${userId} not found.`;
+    }
 
-                    const userWithListings = {
-                        settings: user.settings,
-                        statblocks: getStatBlockListings(user.statblocks),
-                        playercharacters: getPlayerCharacterListings(user.playercharacters),
-                        persistentcharacters: getPersistentCharacterListings(persistentCharacters),
-                        spells: getSpellListings(user.spells),
-                        encounters: getEncounterListings(user.encounters),
-                    };
+    const persistentCharacters = await updatePersistentCharactersIfNeeded(user, users);
+    
+    const userWithListings = {
+        settings: user.settings,
+        statblocks: getStatBlockListings(user.statblocks),
+        playercharacters: getPlayerCharacterListings(user.playercharacters),
+        persistentcharacters: getPersistentCharacterListings(persistentCharacters),
+        spells: getSpellListings(user.spells),
+        encounters: getEncounterListings(user.encounters),
+    };
 
-                    return userWithListings;
-                });
-        });
+    return userWithListings;
 }
 
-function generatePersistentCharactersAndUpdateUser(playerCharacters: { [key: string]: {} }, users: mongo.Collection<User>, userId: mongo.ObjectId) {
-    const persistentcharacters = _.mapValues(playerCharacters, statBlockUnsafe => {
+async function updatePersistentCharactersIfNeeded(user: User, users: mongo.Collection<User>) {
+    if (user.persistentcharacters != undefined && !_.isEmpty(user.persistentcharacters)) {
+        return user.persistentcharacters;
+    }
+    
+    const persistentcharacters = _.mapValues(user.playercharacters, statBlockUnsafe => {
         const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
         return InitializeCharacter(statBlock);
     });
 
-    users.updateOne(
-        { _id: userId },
+    await users.updateOne(
+        { _id: user._id },
         { $set: { persistentcharacters } }
     );
 
@@ -266,12 +269,12 @@ export async function saveEntity<T extends Listable>(entityPath: EntityPath, use
 
     const db = await client.connect(connectionString);
     const result = await db.collection("users").updateOne(
-                { _id: userId },
-                {
-                    $set: {
-                        [`${entityPath}.${entity.Id}`]: entity
-                    }
-                }
+        { _id: userId },
+        {
+            $set: {
+                [`${entityPath}.${entity.Id}`]: entity
+            }
+        }
     );
     return result.modifiedCount;
 }
