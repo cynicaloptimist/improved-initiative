@@ -11,11 +11,11 @@ To run, install node.js and run the following in the cloned directory:
 
 Once the Improved Initiative app is running, the ui can be accessed at <http://localhost>
 
-You can start the dev build process by running `grunt`. This will automatically rebuild the project when you change any typescript files.
+You can start the dev build process by running `grunt`. This will automatically rebuild the project when you change any TypeScript or LessCSS files.
 
 Development of Improved Initiative is supported through [Patreon](https://www.patreon.com/improvedinitiative).
 
-Refer to CONTRIBUTING.md if you'd like to contribute code.
+Refer to **CONTRIBUTING.md** if you'd like to contribute code.
 
 ## App Settings
 You can configure your instance of Improved Initiative with these settings. All are optional, basic functionality should work if you don't specify any.
