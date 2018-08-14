@@ -37,7 +37,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
     
         const entityId = parsePossiblyMalformedIdFromParams(req.params);
     
-        return DB.getEntity(route, session.userId, entityId, entity => {
+        return DB.getEntity(route, session.userId, entityId).then(entity => {
 
             if (entity) {
                 return res.json(entity);    

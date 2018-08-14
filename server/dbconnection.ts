@@ -22,7 +22,7 @@ export const initialize = (initialConnectionString) => {
 
     client.connect(connectionString, function (err, db) {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
 };
@@ -80,7 +80,7 @@ export async function getAccount(userId: mongo.ObjectId) {
     }
 
     const persistentCharacters = await updatePersistentCharactersIfNeeded(user, users);
-    
+
     const userWithListings = {
         settings: user.settings,
         statblocks: getStatBlockListings(user.statblocks),
@@ -97,7 +97,7 @@ async function updatePersistentCharactersIfNeeded(user: User, users: mongo.Colle
     if (user.persistentcharacters != undefined && !_.isEmpty(user.persistentcharacters)) {
         return user.persistentcharacters;
     }
-    
+
     const persistentcharacters = _.mapValues(user.playercharacters, statBlockUnsafe => {
         const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
         return InitializeCharacter(statBlock);
@@ -199,35 +199,29 @@ export function setSettings(userId, settings) {
 
 export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters" | "persistentcharacters";
 
-export function getEntity(entityPath: EntityPath, userId: mongo.ObjectId, entityId: string, callBack: (entity: {}) => void) {
+export async function getEntity(entityPath: EntityPath, userId: mongo.ObjectId, entityId: string) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
     }
+    const db = await client.connect(connectionString);
+    const user = await db.collection<User>("users")
+        .findOne({ _id: userId },
+            {
+                fields: {
+                    [`${entityPath}.${entityId}`]: true
+                }
+            });
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
+    if (!user) {
+        throw "User not found";
+    }
+    const entities = user[entityPath];
+    if (entities === undefined) {
+        throw `User has no ${entityPath} entities.`;
+    }
 
-            return users
-                .findOne({ _id: userId },
-                    {
-                        fields: {
-                            [`${entityPath}.${entityId}`]: true
-                        }
-                    })
-                .then((user: User) => {
-                    if (!user) {
-                        throw "User not found";
-                    }
-                    const entities = user[entityPath];
-                    if (entities === undefined) {
-                        throw `User has no ${entityPath} entities.`;
-                    } else {
-                        callBack(entities[entityId]);
-                    }
-                });
-        });
+    return entities[entityId];
 }
 
 export function deleteEntity(entityPath: EntityPath, userId: mongo.ObjectId, entityId: string, callBack: (result: number) => void) {
