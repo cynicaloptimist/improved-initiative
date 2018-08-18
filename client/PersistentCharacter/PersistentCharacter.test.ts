@@ -11,7 +11,14 @@ function savePersistentCharacterWithName(name: string) {
     const persistentCharacter = DefaultPersistentCharacter();
     persistentCharacter.Name = name;
     Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
-    return persistentCharacter.Id;        
+    return persistentCharacter.Id;
+}
+
+function savePlayerCharacterWithName(name: string) {
+    const playerCharacter = StatBlock.Default();
+    playerCharacter.Name = name;
+    Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
+    return playerCharacter.Id;
 }
 
 describe("InitializeCharacter", () => {
@@ -26,34 +33,43 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
     it("Should load stored PersistentCharacters", () => {
         savePersistentCharacterWithName("Persistent Character");
+
         const library = new PersistentCharacterLibrary();
         const listings = library.GetListings();
         expect(listings).toHaveLength(1);
+        expect(listings[0].Name).toEqual("Persistent Character");
     });
 
     it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
-        const playerCharacter = StatBlock.Default();
-        playerCharacter.Name = "Player Character";
-        Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
+        savePlayerCharacterWithName("Player Character");
+
         const library = new PersistentCharacterLibrary();
         const listings = library.GetListings();
         expect(listings).toHaveLength(1);
         expect(listings[0].Name).toEqual("Player Character");
     });
 
-    it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {});
+    it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {
+        savePersistentCharacterWithName("Persistent Character");
+        savePlayerCharacterWithName("Player Character");
+        
+        const library = new PersistentCharacterLibrary();
+        const listings = library.GetListings();
+        expect(listings).toHaveLength(1);
+        expect(listings[0].Name).toEqual("Persistent Character");
+    });
 });
 
 describe("PersistentCharacter", () => {
-    it("SavedCombatants should load their CurrentHP from the Character", () => {});
+    it("SavedCombatants should load their CurrentHP from the Character", () => { });
 
-    it("Should allow the user to save notes", () => {});
-    
-    it("Should update the Character when a linked Combatant's hp changes", () => {});
-    
-    it("Should update the statblock when it is edited from the library", () => {});
-    
-    it("Should update the statblock when it is edited from the combatant", () => {});
-    
-    it("Should render combatant notes with markdown", () => {});
+    it("Should allow the user to save notes", () => { });
+
+    it("Should update the Character when a linked Combatant's hp changes", () => { });
+
+    it("Should update the statblock when it is edited from the library", () => { });
+
+    it("Should update the statblock when it is edited from the combatant", () => { });
+
+    it("Should render combatant notes with markdown", () => { });
 });
