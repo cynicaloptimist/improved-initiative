@@ -19,9 +19,10 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
     it("Should load stored PersistentCharacters", () => {
         const persistentCharacter = DefaultPersistentCharacter();
-        Store.Save(Store.PersistentCharacters, "some-id", persistentCharacter);
+        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
         const library = new PersistentCharacterLibrary();
-        expect(library.GetListings()).toHaveLength(1);
+        const listings = library.GetListings();
+        expect(listings).toHaveLength(1);
     });
 
     it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
