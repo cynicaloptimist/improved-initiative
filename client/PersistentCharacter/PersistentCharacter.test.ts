@@ -7,6 +7,13 @@ beforeEach(() => {
     localStorage.clear();
 });
 
+function savePersistentCharacterWithName(name: string) {
+    const persistentCharacter = DefaultPersistentCharacter();
+    persistentCharacter.Name = name;
+    Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+    return persistentCharacter.Id;        
+}
+
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
         const statBlock = StatBlock.Default();
@@ -18,8 +25,7 @@ describe("InitializeCharacter", () => {
 
 describe("PersistentCharacterLibrary", () => {
     it("Should load stored PersistentCharacters", () => {
-        const persistentCharacter = DefaultPersistentCharacter();
-        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+        savePersistentCharacterWithName("Persistent Character");
         const library = new PersistentCharacterLibrary();
         const listings = library.GetListings();
         expect(listings).toHaveLength(1);
