@@ -1,4 +1,5 @@
-import { DefaultPersistentCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
+import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
+import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
 import { Listing } from "./Listing";
 
@@ -6,12 +7,24 @@ export class PersistentCharacterLibrary {
     constructor() {
         const listings = Store.List(Store.PersistentCharacters).map(this.loadPersistentCharacterListing);
 
-        this.persistentCharacters.push(...listings);
+        if (listings.length > 0) {
+            this.persistentCharacters.push(...listings);
+        } else {
+            const convertedPlayerCharacterListings = Store.List(Store.PlayerCharacters).map(this.convertPlayerCharacterListing);
+            this.persistentCharacters.push(...convertedPlayerCharacterListings);
+        }
     }
 
     private loadPersistentCharacterListing = id => {
         const persistentCharacter = { ...DefaultPersistentCharacter(), ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id) };
         return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
+    }
+
+    private convertPlayerCharacterListing = id => {
+        const statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
+        const persistentCharacter = InitializeCharacter(statBlock);
+        Store.Save<PersistentCharacter>(Store.PersistentCharacters, id, persistentCharacter);
+        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage"); 
     }
 
     public GetListings = () => this.persistentCharacters;

@@ -3,6 +3,10 @@ import { StatBlock } from "../../common/StatBlock";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { Store } from "../Utility/Store";
 
+beforeEach(() => {
+    localStorage.clear();
+});
+
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
         const statBlock = StatBlock.Default();
@@ -20,7 +24,15 @@ describe("PersistentCharacterLibrary", () => {
         expect(library.GetListings()).toHaveLength(1);
     });
 
-    it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {});
+    it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
+        const playerCharacter = StatBlock.Default();
+        playerCharacter.Name = "Player Character";
+        Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
+        const library = new PersistentCharacterLibrary();
+        const listings = library.GetListings();
+        expect(listings).toHaveLength(1);
+        expect(listings[0].Name).toEqual("Player Character");
+    });
 
     it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {});
 });
