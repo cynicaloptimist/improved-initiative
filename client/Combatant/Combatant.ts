@@ -12,21 +12,24 @@ import { Tag } from "./Tag";
 export interface Combatant {
     Id: string;
     Encounter: Encounter;
-    Alias: KnockoutObservable<string>;
     IndexLabel: number;
-    MaxHP: KnockoutComputed<number>;
-    CurrentHP: KnockoutObservable<number>;
-    TemporaryHP: KnockoutObservable<number>;
     AC: number;
     AbilityModifiers: AbilityScores;
-    Tags: KnockoutObservableArray<Tag>;
     InitiativeBonus: number;
+    IsPlayerCharacter: boolean;
+
+    StatBlock: KnockoutObservable<StatBlock>;
+    Alias: KnockoutObservable<string>;
+    CurrentHP: KnockoutObservable<number>;
+    TemporaryHP: KnockoutObservable<number>;
+    Tags: KnockoutObservableArray<Tag>;
     Initiative: KnockoutObservable<number>;
     InitiativeGroup: KnockoutObservable<string>;
     Hidden: KnockoutObservable<boolean>;
-    StatBlock: KnockoutObservable<StatBlock>;
+
+    MaxHP: KnockoutComputed<number>;
+
     GetInitiativeRoll: () => number;
-    IsPlayerCharacter: boolean;
 }
 
 export class Combatant implements Combatant {
