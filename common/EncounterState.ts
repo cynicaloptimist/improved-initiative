@@ -1,31 +1,6 @@
-import { DurationTiming } from "./DurationTiming";
+import { CombatantState } from "./CombatantState";
 import { Listable } from "./Listable";
-import { StatBlock } from "./StatBlock";
 import { probablyUniqueString } from "./Toolbox";
-
-export interface CombatantState {
-    Id: string;
-    StatBlock: StatBlock;
-    PersistentCharacterId?: string;
-    MaxHP: number;
-    CurrentHP: number;
-    TemporaryHP: number;
-    Initiative: number;
-    InitiativeGroup?: string;
-    Alias: string;
-    IndexLabel: number;
-    Tags: string[] | TagState[];
-    Hidden: boolean;
-    InterfaceVersion: string;
-    ImageURL: string;
-}
-
-export interface TagState {
-    Text: string;
-    DurationRemaining: number;
-    DurationTiming: DurationTiming;
-    DurationCombatantId: string;
-}
 
 export interface EncounterState<T> extends Listable {
     ActiveCombatantId: string | null;

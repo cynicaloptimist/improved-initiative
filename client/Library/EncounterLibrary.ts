@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 
-import { CombatantState, EncounterState } from "../../common/EncounterState";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { ServerListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";

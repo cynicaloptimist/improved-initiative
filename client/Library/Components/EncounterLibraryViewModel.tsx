@@ -1,5 +1,6 @@
 import * as React from "react";
-import { CombatantState, EncounterState } from "../../../common/EncounterState";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";

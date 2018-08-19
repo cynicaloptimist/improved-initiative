@@ -1,4 +1,5 @@
-import { CombatantState, EncounterState } from "../../common/EncounterState";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";

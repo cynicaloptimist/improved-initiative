@@ -2,7 +2,8 @@ import * as ko from "knockout";
 import { max, sortBy } from "lodash";
 import * as React from "react";
 
-import { CombatantState, EncounterState } from "../../common/EncounterState";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";

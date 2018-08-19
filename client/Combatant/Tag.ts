@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
+import { TagState } from "../../common/CombatantState";
 import { DurationTiming } from "../../common/DurationTiming";
-import { TagState } from "../../common/EncounterState";
 import { Combatant } from "./Combatant";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";

@@ -1,6 +1,7 @@
 import Awesomplete = require("awesomplete");
 import * as React from "react";
-import { CombatantState, EncounterState } from "../../../common/EncounterState";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { AccountClient } from "../../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
