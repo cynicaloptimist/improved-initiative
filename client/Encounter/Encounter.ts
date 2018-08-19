@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { max, sortBy } from "lodash";
 import * as React from "react";
 
-import { EncounterState, SavedCombatant } from "../../common/SavedEncounter";
+import { CombatantState, EncounterState } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -57,7 +57,7 @@ export class Encounter {
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         });
 
-        let autosavedEncounter = Store.Load<EncounterState<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
+        let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
@@ -142,7 +142,7 @@ export class Encounter {
             return;
         }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
-        Store.Save<EncounterState<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
+        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -150,7 +150,7 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) => {
+    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: CombatantState) => {
         const combatant = new Combatant(statBlockJson, this, savedCombatant);
 
         if (hideOnAdd) {
@@ -279,7 +279,7 @@ export class Encounter {
         this.durationTags.push(tag);
     }
 
-    public Save = (name: string, path: string): EncounterState<SavedCombatant> => {
+    public Save = (name: string, path: string): EncounterState<CombatantState> => {
         let activeCombatant = this.ActiveCombatant();
         const id = AccountClient.MakeId(name, path);
         return {
@@ -288,7 +288,7 @@ export class Encounter {
             Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants().map<SavedCombatant>(c => {
+            Combatants: this.Combatants().map<CombatantState>(c => {
                 return {
                     Id: c.Id,
                     StatBlock: c.StatBlock(),
@@ -338,7 +338,7 @@ export class Encounter {
         };
     }
 
-    public LoadSavedEncounter = (savedEncounter: EncounterState<SavedCombatant>, autosavedEncounter = false) => {
+    public LoadSavedEncounter = (savedEncounter: EncounterState<CombatantState>, autosavedEncounter = false) => {
         const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 

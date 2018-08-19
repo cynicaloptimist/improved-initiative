@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { SavedCombatant } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/SavedEncounter";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
@@ -33,7 +33,7 @@ export interface Combatant {
 }
 
 export class Combatant implements Combatant {
-    constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
+    constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: CombatantState) {
         let statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
         if (savedCombatant) {
@@ -110,7 +110,7 @@ export class Combatant implements Combatant {
         }
     }
 
-    private processSavedCombatant(savedCombatant: SavedCombatant) {
+    private processSavedCombatant(savedCombatant: CombatantState) {
         this.IndexLabel = savedCombatant.IndexLabel;
         this.CurrentHP(savedCombatant.CurrentHP);
         this.TemporaryHP(savedCombatant.TemporaryHP);

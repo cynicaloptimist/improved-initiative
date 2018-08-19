@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { EncounterState, SavedCombatant } from "../../common/SavedEncounter";
+import { CombatantState, EncounterState } from "../../common/SavedEncounter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -115,7 +115,7 @@ export class LibrariesCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public LoadEncounter = (savedEncounter: EncounterState<SavedCombatant>) => {
+    public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
         this.encounterCommander.LoadEncounter(savedEncounter);
     }
 

@@ -3,7 +3,7 @@ import { Listable } from "./Listable";
 import { StatBlock } from "./StatBlock";
 import { probablyUniqueString } from "./Toolbox";
 
-export interface SavedCombatant {
+export interface CombatantState {
     Id: string;
     StatBlock: StatBlock;
     PersistentCharacterId?: string;
@@ -33,7 +33,7 @@ export interface EncounterState<T> extends Listable {
     Combatants: T[];
 }
 
-export function DefaultEncounterState(): EncounterState<SavedCombatant> {
+export function DefaultEncounterState(): EncounterState<CombatantState> {
     return {
         ActiveCombatantId: null,
         RoundCounter: 0,
