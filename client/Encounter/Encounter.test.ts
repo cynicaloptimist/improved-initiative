@@ -36,7 +36,15 @@ describe("Encounter", () => {
             expect(encounter.Combatants()[0]).toBe(fast);
             expect(encounter.Combatants()[1]).toBe(slow);
         });
-        
+
+        test("By modifier", () => {
+            const slow = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 0 });
+            const fast = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 2 });
+            encounter.StartEncounter();
+            expect(encounter.Combatants()[0]).toBe(fast);
+            expect(encounter.Combatants()[1]).toBe(slow);
+        });
+
         test("By group modifier", () => {
             const slow = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 0 });
             const fast = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 2 });
