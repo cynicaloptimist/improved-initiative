@@ -14,13 +14,13 @@ export interface SavedCombatant {
     InitiativeGroup?: string;
     Alias: string;
     IndexLabel: number;
-    Tags: string[] | SavedTag[];
+    Tags: string[] | TagState[];
     Hidden: boolean;
     InterfaceVersion: string;
     ImageURL: string;
 }
 
-export interface SavedTag {
+export interface TagState {
     Text: string;
     DurationRemaining: number;
     DurationTiming: DurationTiming;
