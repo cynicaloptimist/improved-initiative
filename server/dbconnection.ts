@@ -4,7 +4,7 @@ const client = mongo.MongoClient;
 import * as _ from "lodash";
 import { Listable, ServerListing } from "../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
-import { DefaultSavedEncounter } from "../common/SavedEncounter";
+import { DefaultEncounterState } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";
@@ -155,7 +155,7 @@ function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
 
 function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(encounters).map(key => {
-        const c = { ...DefaultSavedEncounter(), ...encounters[key] };
+        const c = { ...DefaultEncounterState(), ...encounters[key] };
         return {
             Name: c.Name,
             Id: c.Id,

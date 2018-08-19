@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { max, sortBy } from "lodash";
 import * as React from "react";
 
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { EncounterState, SavedCombatant } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -57,7 +57,7 @@ export class Encounter {
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         });
 
-        let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
+        let autosavedEncounter = Store.Load<EncounterState<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
@@ -142,7 +142,7 @@ export class Encounter {
             return;
         }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
-        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
+        Store.Save<EncounterState<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -279,7 +279,7 @@ export class Encounter {
         this.durationTags.push(tag);
     }
 
-    public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
+    public Save = (name: string, path: string): EncounterState<SavedCombatant> => {
         let activeCombatant = this.ActiveCombatant();
         const id = AccountClient.MakeId(name, path);
         return {
@@ -314,7 +314,7 @@ export class Encounter {
         };
     }
 
-    public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
+    public SavePlayerDisplay = (): EncounterState<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
         let activeCombatant = this.ActiveCombatant();
         return {
@@ -338,7 +338,7 @@ export class Encounter {
         };
     }
 
-    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
+    public LoadSavedEncounter = (savedEncounter: EncounterState<SavedCombatant>, autosavedEncounter = false) => {
         const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 

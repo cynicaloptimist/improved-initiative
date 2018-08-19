@@ -1,5 +1,5 @@
 import { Listable } from "../../common/Listable";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { EncounterState, SavedCombatant } from "../../common/SavedEncounter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
@@ -54,8 +54,8 @@ export class AccountClient {
         return deleteEntity(statBlockId, "playercharacters");
     }
 
-    public SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
-        return saveEntity<SavedEncounter<SavedCombatant>>(encounter, "encounters");
+    public SaveEncounter(encounter: EncounterState<SavedCombatant>) {
+        return saveEntity<EncounterState<SavedCombatant>>(encounter, "encounters");
     }
 
     public DeleteEncounter(encounterId: string) {

@@ -1,5 +1,5 @@
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import { SavedEncounter } from "../../common/SavedEncounter";
+import { EncounterState } from "../../common/SavedEncounter";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 
 export class PlayerViewClient {
@@ -9,7 +9,7 @@ export class PlayerViewClient {
         this.socket.emit("join encounter", encounterId);
     }
 
-    public UpdateEncounter(encounterId: string, updatedEncounter: SavedEncounter<StaticCombatantViewModel>) {
+    public UpdateEncounter(encounterId: string, updatedEncounter: EncounterState<StaticCombatantViewModel>) {
         this.socket.emit("update encounter", encounterId, updatedEncounter);
     }
 

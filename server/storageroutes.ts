@@ -2,7 +2,7 @@ import express = require("express");
 
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
-import { SavedCombatant, SavedEncounter } from "../common/SavedEncounter";
+import { SavedCombatant, EncounterState } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
@@ -123,5 +123,5 @@ export default function(app: express.Application) {
     configureEntityRoute<StatBlock>(app, "statblocks");
     configureEntityRoute<StatBlock>(app, "playercharacters");
     configureEntityRoute<Spell>(app, "spells");
-    configureEntityRoute<SavedEncounter<SavedCombatant>>(app, "encounters");
+    configureEntityRoute<EncounterState<SavedCombatant>>(app, "encounters");
 }

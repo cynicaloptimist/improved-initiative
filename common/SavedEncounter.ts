@@ -27,13 +27,13 @@ export interface SavedTag {
     DurationCombatantId: string;
 }
 
-export interface SavedEncounter<T> extends Listable {
+export interface EncounterState<T> extends Listable {
     ActiveCombatantId: string | null;
     RoundCounter?: number;
     Combatants: T[];
 }
 
-export function DefaultSavedEncounter(): SavedEncounter<SavedCombatant> {
+export function DefaultEncounterState(): EncounterState<SavedCombatant> {
     return {
         ActiveCombatantId: null,
         RoundCounter: 0,
