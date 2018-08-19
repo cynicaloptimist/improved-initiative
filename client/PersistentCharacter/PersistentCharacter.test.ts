@@ -3,24 +3,6 @@ import { StatBlock } from "../../common/StatBlock";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { Store } from "../Utility/Store";
 
-beforeEach(() => {
-    localStorage.clear();
-});
-
-function savePersistentCharacterWithName(name: string) {
-    const persistentCharacter = DefaultPersistentCharacter();
-    persistentCharacter.Name = name;
-    Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
-    return persistentCharacter.Id;
-}
-
-function savePlayerCharacterWithName(name: string) {
-    const playerCharacter = StatBlock.Default();
-    playerCharacter.Name = name;
-    Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
-    return playerCharacter.Id;
-}
-
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
         const statBlock = StatBlock.Default();
@@ -31,6 +13,24 @@ describe("InitializeCharacter", () => {
 });
 
 describe("PersistentCharacterLibrary", () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
+    function savePersistentCharacterWithName(name: string) {
+        const persistentCharacter = DefaultPersistentCharacter();
+        persistentCharacter.Name = name;
+        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+        return persistentCharacter.Id;
+    }
+
+    function savePlayerCharacterWithName(name: string) {
+        const playerCharacter = StatBlock.Default();
+        playerCharacter.Name = name;
+        Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
+        return playerCharacter.Id;
+    }
+
     it("Should load stored PersistentCharacters", () => {
         savePersistentCharacterWithName("Persistent Character");
 
@@ -52,7 +52,7 @@ describe("PersistentCharacterLibrary", () => {
     it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {
         savePersistentCharacterWithName("Persistent Character");
         savePlayerCharacterWithName("Player Character");
-        
+
         const library = new PersistentCharacterLibrary();
         const listings = library.GetListings();
         expect(listings).toHaveLength(1);
