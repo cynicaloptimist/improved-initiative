@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { CombatantState, EncounterState } from "../../common/SavedEncounter";
+import { CombatantState, EncounterState } from "../../common/EncounterState";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";

@@ -1,4 +1,4 @@
-import { CombatantState, EncounterState } from "../../common/SavedEncounter";
+import { CombatantState, EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
 
 function updateLegacySavedCreature(savedCreature: any) {

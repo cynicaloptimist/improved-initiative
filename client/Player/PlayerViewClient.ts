@@ -1,5 +1,5 @@
+import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import { EncounterState } from "../../common/SavedEncounter";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 
 export class PlayerViewClient {

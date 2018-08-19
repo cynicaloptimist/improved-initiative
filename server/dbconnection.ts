@@ -2,9 +2,9 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 
 import * as _ from "lodash";
+import { DefaultEncounterState } from "../common/EncounterState";
 import { Listable, ServerListing } from "../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
-import { DefaultEncounterState } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";

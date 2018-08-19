@@ -1,9 +1,9 @@
 import * as Color from "color";
 import * as ko from "knockout";
 
+import { EncounterState } from "../common/EncounterState";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
-import { EncounterState } from "../common/SavedEncounter";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";

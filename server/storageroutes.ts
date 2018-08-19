@@ -1,8 +1,8 @@
 import express = require("express");
 
+import { CombatantState, EncounterState } from "../common/EncounterState";
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
-import { CombatantState, EncounterState } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
