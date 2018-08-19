@@ -22,5 +22,4 @@ export interface CombatantState {
     Tags: string[] | TagState[];
     Hidden: boolean;
     InterfaceVersion: string;
-    ImageURL: string;
 }
