@@ -16,7 +16,7 @@ import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
-import { IRules } from "../Rules/Rules";
+import { Dice, IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { TextEnricher } from "../TextEnricher/TextEnricher";
 import { Store } from "../Utility/Store";
@@ -152,13 +152,61 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: CombatantState) => {
-        const combatant = new Combatant(statBlockJson, this, savedCombatant);
+    private getMaxHP(statBlock: StatBlock) {
+        const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
+        if (rollMonsterHp && statBlock.Player !== "player") {
+            try {
+                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+                if (rolledHP > 0) {
+                    return rolledHP;
+                }
+                return 1;
+            } catch (e) {
+                console.error(e);
+                return statBlock.HP.Value;
+            }
+        }
+        return statBlock.HP.Value;
+    }
+
+    public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
+        const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
+
+        statBlock.HP.Value = this.getMaxHP(statBlock);
+
+        const initialState: CombatantState = {
+            Id: probablyUniqueString(),
+            StatBlock: statBlock,
+            Alias: "",
+            IndexLabel: 1,
+            CurrentHP: statBlock.HP.Value,
+            TemporaryHP: 0,
+            Hidden: hideOnAdd,
+            Initiative: 0,
+            Tags: [],
+            InterfaceVersion: process.env.VERSION,
+        };
+
+        const combatant = new Combatant(initialState, this);
 
         if (hideOnAdd) {
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
+
+        const viewModel = this.buildCombatantViewModel(combatant);
+
+        if (this.State() === "active") {
+            viewModel.EditInitiative();
+        }
+
+        this.QueueEmitEncounter();
+
+        return combatant;
+    }
+
+    public AddCombatantFromState = (combatantState: CombatantState) => {
+        const combatant = new Combatant(combatantState, this);
 
         const viewModel = this.buildCombatantViewModel(combatant);
 
@@ -349,7 +397,7 @@ export class Encounter {
                 savedCombatant.Id = probablyUniqueString();
             }
 
-            const combatant = this.AddCombatantFromStatBlock(savedCombatant.StatBlock, null, savedCombatant);
+            const combatant = this.AddCombatantFromState(savedCombatant);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }

@@ -33,17 +33,10 @@ export interface Combatant {
 }
 
 export class Combatant implements Combatant {
-    constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: CombatantState) {
-        let statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
-
-        if (savedCombatant) {
-            statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
-            this.Id = "" + savedCombatant.Id; //legacy Id may be a number
-        } else {
-            statBlock.HP.Value = this.getMaxHP(statBlock);
-            this.Id = statBlock.Id + "." + probablyUniqueString();
-        }
-
+    constructor(combatantState: CombatantState, public Encounter: Encounter) {
+        let statBlock = combatantState.StatBlock;
+        this.Id = "" + combatantState.Id; //legacy Id may be a number
+        
         this.StatBlock(statBlock);
 
         this.MaxHP = ko.computed(() => this.StatBlock().HP.Value);
@@ -55,12 +48,10 @@ export class Combatant implements Combatant {
             statBlock = newStatBlock;
         });
 
-        this.CurrentHP = ko.observable(this.MaxHP());
+        this.CurrentHP = ko.observable(combatantState.CurrentHP);
 
-        if (savedCombatant) {
-            this.processSavedCombatant(savedCombatant);
-        }
-
+        this.processSavedCombatant(combatantState);
+        
         this.Initiative.subscribe(newInitiative => {
             const groupId = this.InitiativeGroup();
             if (!this.updatingGroup && groupId) {
@@ -126,23 +117,6 @@ export class Combatant implements Combatant {
             this.updateIndexLabel(savedCombatant.StatBlock.Name);
         }
 
-    }
-
-    private getMaxHP(statBlock: StatBlock) {
-        const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
-        if (rollMonsterHp && statBlock.Player !== "player") {
-            try {
-                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
-                if (rolledHP > 0) {
-                    return rolledHP;
-                }
-                return 1;
-            } catch (e) {
-                console.error(e);
-                return statBlock.HP.Value;
-            }
-        }
-        return statBlock.HP.Value;
     }
 
     private updateIndexLabel(oldName?: string) {
