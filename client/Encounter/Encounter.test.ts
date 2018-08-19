@@ -62,19 +62,8 @@ describe("Encounter", () => {
             const creature = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default() });
             const playerCharacter = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), Player: "player" });
             encounter.StartEncounter();
-            expect(encounter.Combatants()[0]).toBe(playerCharacter);
-            expect(encounter.Combatants()[1]).toBe(creature);
-        });
-
-        test("Keep groups together", () => {
-            const slowA = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 0 });
-            const fastA = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 2 });
-            const slowB = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 1 });
-            const fastB = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 3 });
-            
-            encounter.StartEncounter();
-
-            
+            expect(encounter.Combatants())
+                .toEqual([playerCharacter, creature]);
         });
     });
 });
