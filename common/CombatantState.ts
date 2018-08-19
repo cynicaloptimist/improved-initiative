@@ -12,7 +12,6 @@ export interface CombatantState {
     Id: string;
     StatBlock: StatBlock;
     PersistentCharacterId?: string;
-    MaxHP: number;
     CurrentHP: number;
     TemporaryHP: number;
     Initiative: number;
