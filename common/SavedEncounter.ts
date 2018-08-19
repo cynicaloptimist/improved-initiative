@@ -6,6 +6,7 @@ import { probablyUniqueString } from "./Toolbox";
 export interface SavedCombatant {
     Id: string;
     StatBlock: StatBlock;
+    PersistentCharacterId?: string;
     MaxHP: number;
     CurrentHP: number;
     TemporaryHP: number;
@@ -18,6 +19,7 @@ export interface SavedCombatant {
     InterfaceVersion: string;
     ImageURL: string;
 }
+
 export interface SavedTag {
     Text: string;
     DurationRemaining: number;
