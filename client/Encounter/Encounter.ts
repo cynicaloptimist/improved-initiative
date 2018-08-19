@@ -97,6 +97,7 @@ export class Encounter {
                 c => -c.Initiative(),
                 c => -this.getGroupBonusForCombatant(c),
                 c => -c.InitiativeBonus,
+                c => c.IsPlayerCharacter ? 0 : 1,
                 c => c.InitiativeGroup(),
                 c => c.StatBlock().Name,
                 c => c.IndexLabel

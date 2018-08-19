@@ -56,5 +56,13 @@ describe("Encounter", () => {
             expect(encounter.Combatants()[1]).toBe(slow);
             expect(encounter.Combatants()[2]).toBe(loner);
         });
+
+        test("Favor player characters", () => {
+            const creature = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default() });
+            const playerCharacter = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), Player: "player" });
+            encounter.StartEncounter();
+            expect(encounter.Combatants()[0]).toBe(playerCharacter);
+            expect(encounter.Combatants()[1]).toBe(creature);
+        });
     });
 });
