@@ -67,7 +67,7 @@ describe("StatBlockEditor", () => {
         editor.simulate("submit");
     });
 
-    test.only("Parses numeric fields", done => {
+    test("Parses numeric fields", done => {
         expect.assertions(1);
 
         saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
