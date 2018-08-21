@@ -71,7 +71,7 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
             </select>
             <select id="tag-timing-id" className="response">
                 {this.renderCombatantOptions()}
-            </select>'s turn in <input type="number" id="tag-duration" className="response" value="1" /> round
+            </select>'s turn in <input type="number" id="tag-duration" className="response" defaultValue="1" /> round
         </div>
     )
 
