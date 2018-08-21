@@ -113,7 +113,7 @@ export class TagPromptWrapper implements Prompt {
 
             this.logEvent(`${this.component.props.targetDisplayName} added tag: "${text}"`);
             Metrics.TrackEvent("TagAdded", { Text: tag.Text, Duration: tag.DurationRemaining() });
-            this.targetCombatant.Encounter.QueueEmitEncounter();
+            this.encounter.QueueEmitEncounter();
         }
     }
 
@@ -127,8 +127,6 @@ export class TagPromptWrapper implements Prompt {
             targetDisplayName={targetCombatant.DisplayName()}
         />;
     }
-
-    private Combatants: Combatant[];
 
     public component: JSX.Element;
 }
