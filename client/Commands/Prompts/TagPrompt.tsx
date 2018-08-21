@@ -8,7 +8,7 @@ import { Conditions } from "../../Rules/Conditions";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
-export class TagPrompt implements Prompt {
+export class TagPromptWrapper implements Prompt {
     public InputSelector = ".response";
     public ComponentName = "tagprompt";
 
