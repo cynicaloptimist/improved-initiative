@@ -14,7 +14,6 @@
 
 .combatant {
     display: flex;
-    padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
     align-items: baseline;
@@ -34,7 +33,7 @@
     &.active .combatant__name {
         font-weight:bold;
     }
-    
+
     .colors(@primary-black, @primary-white, transparent);
 
     &:nth-child(2n) {
@@ -57,6 +56,7 @@
 }
 
 .combatant__initiative {
+    padding: @small-spacer;
     width: 30px;
     text-align: center;
     &.fa-link:before{
@@ -66,10 +66,12 @@
 }
 
 .combatant__name {
+    padding: @small-spacer;
     width: 50%;
 }
 
 .combatant__hp {
+    padding: @small-spacer;
     width: 70px;
     text-align: center;
     &:hover {
@@ -78,11 +80,13 @@
 }
 
 .combatant__ac {
+    padding: @small-spacer;
     width: 30px;
     text-align: center;
 }
 
 .combatant__tags {
+    padding: @small-spacer;
     flex-grow:1;
     flex-shrink: 1;
 }
