@@ -157,11 +157,6 @@ export class CombatantViewModel {
         this.Combatant.Encounter.QueueEmitEncounter();
     }
 
-    public AddTag(encounter: Encounter) {
-        const prompt = new TagPromptWrapper(encounter, this.Combatant, this.LogEvent);
-        this.PromptUser(prompt);
-    }
-
     public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
         this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);

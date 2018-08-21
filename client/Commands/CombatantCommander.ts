@@ -14,6 +14,7 @@ import { BuildCombatantCommandList, Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { TagPromptWrapper } from "./Prompts/TagPrompt";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;
@@ -209,7 +210,9 @@ export class CombatantCommander {
         if (combatantVM instanceof CombatantViewModel) {
             this.Select(combatantVM);
         }
-        this.SelectedCombatants().forEach(c => c.AddTag(this.tracker.Encounter));
+        const selectedCombatants = this.SelectedCombatants().map(c => c.Combatant);
+        const prompt = new TagPromptWrapper(this.tracker.Encounter, selectedCombatants, this.tracker.EventLog.AddEvent);
+        this.tracker.PromptQueue.Add(prompt);
         return false;
     }
 

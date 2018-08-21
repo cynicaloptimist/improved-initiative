@@ -10,7 +10,7 @@ import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 interface TagPromptProps {
-    targetDisplayName: string;
+    targetDisplayNames: string;
     combatants: Combatant[];
     activeCombatantId: string;
 }
@@ -47,7 +47,7 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     public render() {
         return <div className="add-tag">
             <div>
-                Add a note to {this.props.targetDisplayName}:
+                Add a note to {this.props.targetDisplayNames}:
                 <input ref={i => this.textInput = i} id="tag-text" className="response" />
                 <div className="button fa fa-hourglass" onClick={this.toggleAdvanced} />
                 <button type="submit" className="fa fa-check button"></button>
@@ -92,8 +92,6 @@ export class TagPromptWrapper implements Prompt {
         });
         const text: string = responsesById["tag-text"];
         if (text.length) {
-            let tag = new Tag(text, this.targetCombatant);
-
             if (responsesById["tag-duration"] && responsesById["tag-timing-id"]) {
                 const duration = parseInt(responsesById["tag-duration"]);
                 const timing = responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
@@ -105,26 +103,33 @@ export class TagPromptWrapper implements Prompt {
                 const timingKeyedCombatantIsActive = timingKeyedCombatant.Id == this.component.props.activeCombatantId;
                 const durationGraceRound = (timingKeyedCombatantIsActive && timing == EndOfTurn) ? 1 : 0;
 
-                tag = new Tag(text, this.targetCombatant, duration + durationGraceRound, timing, timingId);
-                this.encounter.AddDurationTag(tag);
+                for (const combatant of this.targetCombatants) {
+                    const tag = new Tag(text, combatant, duration + durationGraceRound, timing, timingId);
+                    this.encounter.AddDurationTag(tag);
+                    combatant.Tags.push(tag);
+                    Metrics.TrackEvent("TagAdded", { Text: tag.Text, Duration: tag.DurationRemaining() });
+                }
+            } else {
+                for (const combatant of this.targetCombatants) {
+                    const tag = new Tag(text, combatant);
+                    combatant.Tags.push(tag);
+                    Metrics.TrackEvent("TagAdded", { Text: tag.Text });
+                }
             }
 
-            this.targetCombatant.Tags.push(tag);
-
-            this.logEvent(`${this.component.props.targetDisplayName} added tag: "${text}"`);
-            Metrics.TrackEvent("TagAdded", { Text: tag.Text, Duration: tag.DurationRemaining() });
+            this.logEvent(`Added "${text}" tag to ${this.component.props.targetDisplayName}`);
             this.encounter.QueueEmitEncounter();
         }
     }
 
     constructor(private encounter: Encounter,
-        private targetCombatant: Combatant,
+        private targetCombatants: Combatant [],
         private logEvent: (s: string) => void) {
         
         this.component = <TagPrompt
             activeCombatantId={encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""}
             combatants={encounter.Combatants()}
-            targetDisplayName={targetCombatant.DisplayName()}
+            targetDisplayNames={targetCombatants.map(t => t.DisplayName()).join(", ")}
         />;
     }
 
