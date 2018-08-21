@@ -19,13 +19,33 @@
     border-left-style: solid;
     align-items: baseline;
 
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-light;
+    }
+
     &.animate {
         animation: slide-from-left 0.5s;
     }
 
-    &.active .name {
+    &.active .combatant__name {
         font-weight:bold;
     }
+    
+    .colors(@primary-black, @primary-white, transparent);
+
+    &:nth-child(2n) {
+        background-color: @zebra-white;
+    }
+
+    &.active {
+        border-color: @active-green;
+        background-color: @active-white;
+    }
+
 }
 
 .combatant--header {
@@ -52,6 +72,9 @@
 .combatant__hp {
     width: 70px;
     text-align: center;
+    &:hover {
+        background-color: @hover-red;
+    }
 }
 
 .combatant__ac {
