@@ -18,12 +18,10 @@
     border-left-style: solid;
     align-items: baseline;
 
-    &:hover {
-        background-color: @hover-white;
-    }
+    .colors(@primary-black, @primary-white, transparent);
 
-    &.selected {
-        background-color: @selected-light;
+    &:nth-child(2n) {
+        background-color: @zebra-white;
     }
 
     &.animate {
@@ -34,17 +32,18 @@
         font-weight:bold;
     }
 
-    .colors(@primary-black, @primary-white, transparent);
-
-    &:nth-child(2n) {
-        background-color: @zebra-white;
-    }
-
     &.active {
         border-color: @active-green;
         background-color: @active-white;
     }
+    
+    &:hover {
+        background-color: @hover-white;
+    }
 
+    &.selected {
+        background-color: @selected-light;
+    }
 }
 
 .combatant--header {
