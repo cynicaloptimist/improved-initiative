@@ -7,9 +7,10 @@ import { EncounterCommander } from "./EncounterCommander";
 export class Command {
     public ShowOnActionBar: KnockoutObservable<boolean>;
     public ToolTip: KnockoutComputed<string>;
+    public KeyBinding: string;
     constructor(public Description: string,
         public ActionBinding: () => any,
-        public KeyBinding = "",
+        defaultKeyBinding: string,
         public ActionBarIcon = "",
         showOnActionBar = true,
         public LockOnActionBar = false) {
@@ -22,9 +23,11 @@ export class Command {
 
         this.ToolTip = ko.pureComputed(() => `${this.Description} [${this.KeyBinding}]`);
 
-        let keyBinding = Store.Load<string>(Store.KeyBindings, this.Description);
-        if (keyBinding) {
-            this.KeyBinding = keyBinding;
+        const savedKeybinding = Store.Load<string>(Store.KeyBindings, this.Description);
+        if (savedKeybinding) {
+            this.KeyBinding = savedKeybinding;
+        } else {
+            this.KeyBinding = defaultKeyBinding;
         }
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
