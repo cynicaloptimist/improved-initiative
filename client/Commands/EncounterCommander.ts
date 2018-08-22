@@ -99,6 +99,8 @@ export class EncounterCommander {
             this.tracker.Encounter.EndEncounter();
             this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
         }
+
+        return false;
     }
 
     public LoadEncounter = (legacySavedEncounter: {}) => {
