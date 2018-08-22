@@ -92,6 +92,15 @@ export class EncounterCommander {
         return false;
     }
 
+    public CleanEncounter = () => {
+        if (confirm("Remove NPCs and end encounter?")) {
+            const npcViewModels = this.tracker.CombatantViewModels().filter(c => !c.Combatant.IsPlayerCharacter);
+            this.tracker.CombatantCommander.SelectedCombatants([]);
+            this.tracker.Encounter.EndEncounter();
+            this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
+        }
+    }
+
     public LoadEncounter = (legacySavedEncounter: {}) => {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
         this.tracker.Encounter.LoadSavedEncounter(savedEncounter);
