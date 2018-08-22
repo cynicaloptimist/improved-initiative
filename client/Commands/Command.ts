@@ -56,16 +56,16 @@ export let BuildEncounterCommandList = (c: EncounterCommander, saveEncounterFn: 
 ];
 
 export let BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c => [
-    new Command("combatant-apply-damage", "Damage/Heal", c.EditHP, "t", "plus-circle"),
-    new Command("combatant-apply-temporary-hp", "Apply Temporary HP", c.AddTemporaryHP, "alt+t", "medkit"),
-    new Command("combatant-add-tag", "Add Note", c.AddTag, "g", "tag", false),
-    new Command("combatant-remove", "Remove from Encounter", c.Remove, "del", "remove"),
-    new Command("combatant-set-alias", "Rename", c.SetAlias, "f2", "i-cursor"),
-    new Command("combatant-edit-statblock", "Edit Statblock", c.EditStatBlock, "alt+e", "edit", false),
-    new Command("combatant-set-initiative", "Edit Initiative", c.EditInitiative, "alt+i", "play-circle-o", false),
-    new Command("combatant-link-initiative", "Link Initiative", c.LinkInitiative, "alt+l", "link", false),
-    new Command("combatant-move-down", "Move Down", c.MoveDown, "alt+j", "angle-double-down"),
-    new Command("combatant-move-up", "Move Up", c.MoveUp, "alt+k", "angle-double-up"),
+    new Command("apply-damage", "Damage/Heal", c.EditHP, "t", "plus-circle"),
+    new Command("apply-temporary-hp", "Apply Temporary HP", c.AddTemporaryHP, "alt+t", "medkit"),
+    new Command("add-tag", "Add Note", c.AddTag, "g", "tag", false),
+    new Command("remove", "Remove from Encounter", c.Remove, "del", "remove"),
+    new Command("set-alias", "Rename", c.SetAlias, "f2", "i-cursor"),
+    new Command("edit-statblock", "Edit Statblock", c.EditStatBlock, "alt+e", "edit", false),
+    new Command("set-initiative", "Edit Initiative", c.EditInitiative, "alt+i", "play-circle-o", false),
+    new Command("link-initiative", "Link Initiative", c.LinkInitiative, "alt+l", "link", false),
+    new Command("move-down", "Move Down", c.MoveDown, "alt+j", "angle-double-down"),
+    new Command("move-up", "Move Up", c.MoveUp, "alt+k", "angle-double-up"),
     new Command("select-next", "Select Next", c.SelectNext, "j", "arrow-down", false),
     new Command("select-previous", "Select Previous", c.SelectPrevious, "k", "arrow-up", false)
 ];
