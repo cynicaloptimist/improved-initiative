@@ -81,7 +81,7 @@ export class EncounterCommander {
     }
 
     public ClearEncounter = () => {
-        if (confirm("Remove all creatures and end encounter?")) {
+        if (confirm("Remove all combatants and end encounter?")) {
             this.tracker.Encounter.ClearEncounter();
             this.tracker.CombatantViewModels([]);
             this.tracker.CombatantCommander.SelectedCombatants([]);
