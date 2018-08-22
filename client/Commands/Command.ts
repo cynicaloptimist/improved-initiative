@@ -11,7 +11,7 @@ export class Command {
     constructor(public Description: string,
         public ActionBinding: () => any,
         defaultKeyBinding: string,
-        public ActionBarIcon = "",
+        public FontAwesomeIcon = "",
         showOnActionBar = true,
         public LockOnActionBar = false) {
         this.ShowOnActionBar = ko.observable(showOnActionBar);
