@@ -270,8 +270,8 @@ export class CombatantCommander {
         }
     }
 
-    public EditName = () => {
-        this.SelectedCombatants().forEach(c => c.EditName());
+    public SetAlias = () => {
+        this.SelectedCombatants().forEach(c => c.SetAlias());
         return false;
     }
 

@@ -116,7 +116,7 @@ export class CombatantViewModel {
         this.PromptUser(prompt);
     }
 
-    public EditName() {
+    public SetAlias() {
         let currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
