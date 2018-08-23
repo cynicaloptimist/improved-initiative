@@ -42,6 +42,7 @@ export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
         const commandToButton =
             (c: Command) =>
                 <Button
+                    additionalClassNames={"c-button--" + c.Id}
                     key={c.Description}
                     tooltip={commandButtonTooltip(c)}
                     onClick={c.ActionBinding}
