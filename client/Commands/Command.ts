@@ -48,7 +48,7 @@ export let BuildEncounterCommandList = (c: EncounterCommander, saveEncounterFn: 
     new Command("clear-encounter", "Clear Encounter", c.ClearEncounter, "alt+shift+del", "trash"),
     new Command("clean-encounter", "Clean Encounter", c.CleanEncounter, "alt+del", "broom"),
     new Command("open-library", "Open Library", c.ShowLibraries, "alt+a", "book"),
-    new Command("quick-add", "Quick Add Combatant", c.QuickAddStatBlock, "alt+q", "asterisk"),
+    new Command("quick-add", "Quick Add Combatant", c.QuickAddStatBlock, "alt+q", "bolt"),
     new Command("player-window", "Show Player Window", c.LaunchPlayerWindow, "alt+w", "users"),
     new Command("next-turn", "Next Turn", c.NextTurn, "n", "step-forward"),
     new Command("previous-turn", "Previous Turn", c.PreviousTurn, "alt+n", "step-backward"),
