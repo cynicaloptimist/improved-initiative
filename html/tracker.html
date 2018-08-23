@@ -110,8 +110,8 @@
             <li class="combatant--header">
                 <span class="combatant__initiative fa" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span>
                 <span class="combatant__name">Combatant</span>
-                <span class="combatant__hp fa fa-heart"></span>
-                <span class="combatant__ac fa fa-shield"></span>
+                <span class="combatant__hp fas fa-heart"></span>
+                <span class="combatant__ac fas fa-shield"></span>
                 <span title="Add notes to a creature to keep track of conditions or other effects." class="combatant__tags">Notes</span>
             </li>
             <!-- ko foreach: OrderedCombatants -->
@@ -175,14 +175,14 @@
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
-            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fa fa-close"></span></div>
+            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-close"></span></div>
             <div style="flex-shrink: 1" data-bind="react: {
                 component: CombatantCommander.StatBlock
             }"></div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>
-            <div class="close button fa fa-close" data-bind="click: CombatantCommander.Deselect"></div>
+            <div class="close button fas fa-close" data-bind="click: CombatantCommander.Deselect"></div>
             <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"></div>
             <!-- /ko -->
         </div>

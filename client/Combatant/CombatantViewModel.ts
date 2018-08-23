@@ -74,7 +74,7 @@ export class CombatantViewModel {
 
     public InitiativeClass = ko.computed(() => {
         if (this.Combatant.InitiativeGroup()) {
-            return "fa fa-link";
+            return "fas fa-link";
         }
     });
 
