@@ -18,6 +18,10 @@
     border-left-style: solid;
     align-items: baseline;
 
+    .fa-clickable:hover {
+        color: @hover-green;
+    }
+
     .colors(@primary-black, @primary-white, transparent);
 
     &:nth-child(2n) {
@@ -95,7 +99,4 @@
 
 .combatant__buttons {
     padding: @small-spacer;
-    .fa-clickable:hover {
-        color: @hover-green;
-    }    
 }
