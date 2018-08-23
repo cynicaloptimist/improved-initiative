@@ -175,14 +175,14 @@
         <div class="selected-combatant">
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
-            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-close"></span></div>
+            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-times"></span></div>
             <div style="flex-shrink: 1" data-bind="react: {
                 component: CombatantCommander.StatBlock
             }"></div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->
             <h2>Selected Combatants</h2>
-            <div class="close button fas fa-close" data-bind="click: CombatantCommander.Deselect"></div>
+            <div class="close button fas fa-times" data-bind="click: CombatantCommander.Deselect"></div>
             <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"></div>
             <!-- /ko -->
         </div>
