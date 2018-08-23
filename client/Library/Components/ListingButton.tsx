@@ -15,7 +15,7 @@ export class ListingButton extends React.Component<Props> {
         
         const cssClasses = [`c-listing-button`, `c-listing-${this.props.buttonClass}`];
         if (this.props.faClass) {
-            cssClasses.push("fa", `fa-${this.props.faClass}`);
+            cssClasses.push("fas", `fa-${this.props.faClass}`);
         }
         
         return <span
