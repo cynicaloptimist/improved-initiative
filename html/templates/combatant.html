@@ -3,7 +3,7 @@
 <span class="combatant__hp" data-bind="click: EditHP, text: HP, style: { color: GetHPColor() }"></span>
 <span class="combatant__ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
 <span class="combatant__tags">
-<!--ko foreach: Combatant.Tags() -->
+    <!--ko foreach: Combatant.Tags() -->
     <span class="tag" data-bind="if: Visible">
         <!-- ko if: $parent.TagHasReference -->
         <span class="condition-reference" data-bind="text: Text, click: $parent.ReferenceTaggedCondition"></span>
@@ -14,9 +14,9 @@
         <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
         <span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
     </span>
-<!-- /ko -->
+    <!-- /ko -->
 </span>
-    <span class="buttons">
+<span class="combatant__buttons">
     <span class="fa-clickable fa-tag" title="Add note" data-bind="click: $root.CombatantCommander.AddTag"></span>
     <span class="fa-clickable" title="Hide/Reveal in Player Window" data-bind="click: ToggleHidden, css: HiddenClass"></span>
 </span>
