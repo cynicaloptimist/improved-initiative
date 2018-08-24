@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 
 import { Store } from "../Utility/Store";
+import { LegacyCommandSettingsKeys } from "./LegacyCommandSettingsKeys";
 
 export class Command {
     public ShowOnActionBar: KnockoutObservable<boolean>;
@@ -23,12 +24,10 @@ export class Command {
 
         this.ToolTip = ko.pureComputed(() => `${this.Description} [${this.KeyBinding}]`);
 
-        const savedKeybinding = Store.Load<string>(Store.KeyBindings, this.Description);
-        if (savedKeybinding) {
-            this.KeyBinding = savedKeybinding;
-        } else {
-            this.KeyBinding = defaultKeyBinding;
-        }
+        const savedKeybinding = Store.Load<string>(Store.KeyBindings, this.Id);
+        const legacyKeybinding = LegacyCommandSettingsKeys[this.Id] && Store.Load<string>(Store.KeyBindings, LegacyCommandSettingsKeys[this.Id]);
+
+        this.KeyBinding = savedKeybinding || legacyKeybinding || defaultKeyBinding;
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
