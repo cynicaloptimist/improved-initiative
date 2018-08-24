@@ -47,7 +47,7 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     public render() {
         return <div className="add-tag">
             <div>
-                Add a note to {this.props.targetDisplayNames}:
+                Add a tag to {this.props.targetDisplayNames}:
                 <input ref={i => this.textInput = i} id="tag-text" className="response" />
                 <div className="button fas fa-hourglass" onClick={this.toggleAdvanced} />
                 <button type="submit" className="fas fa-check button"></button>
