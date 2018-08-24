@@ -13,9 +13,9 @@ export class Command {
         public ActionBinding: () => any,
         defaultKeyBinding: string,
         public FontAwesomeIcon = "",
-        showOnActionBar = true,
+        defaultShowOnActionBar = true,
         public LockOnActionBar = false) {
-        this.ShowOnActionBar = ko.observable(showOnActionBar);
+        this.ShowOnActionBar = ko.observable(defaultShowOnActionBar);
         if (LockOnActionBar) {
             this.ShowOnActionBar.subscribe(_ => {
                 this.ShowOnActionBar(true);
