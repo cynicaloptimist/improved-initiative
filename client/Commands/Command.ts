@@ -63,7 +63,7 @@ export let BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c =
     new Command("remove", "Remove from Encounter", c.Remove, "del", "times"),
     new Command("set-alias", "Rename", c.SetAlias, "f2", "i-cursor"),
     new Command("edit-statblock", "Edit Statblock", c.EditStatBlock, "alt+e", "edit", false),
-    new Command("set-initiative", "Edit Initiative", c.EditInitiative, "alt+i", "play-circle", false),
+    new Command("set-initiative", "Edit Initiative", c.EditInitiative, "alt+i", "stopwatch", false),
     new Command("link-initiative", "Link Initiative", c.LinkInitiative, "alt+l", "link", false),
     new Command("move-down", "Move Down", c.MoveDown, "alt+j", "angle-double-down"),
     new Command("move-up", "Move Up", c.MoveUp, "alt+k", "angle-double-up"),
