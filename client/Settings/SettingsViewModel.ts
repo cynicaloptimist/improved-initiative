@@ -80,7 +80,7 @@ export class SettingsViewModel {
 
     private getUpdatedSettings(): Settings {
         const getCommandSetting = (command: Command): CommandSetting => ({
-            Name: command.Description,
+            Name: command.Id,
             KeyBinding: command.KeyBinding,
             ShowOnActionBar: command.ShowOnActionBar()
         });

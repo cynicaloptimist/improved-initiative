@@ -125,7 +125,7 @@ function configureCommands(newSettings: Settings, commands: Command[]) {
     });
 
     commands.forEach(command => {
-        const commandSetting = _.find(newSettings.Commands, c => c.Name == command.Description);
+        const commandSetting = _.find(newSettings.Commands, c => c.Name == command.Id);
         if (commandSetting) {
             command.KeyBinding = commandSetting.KeyBinding;
             command.ShowOnActionBar(commandSetting.ShowOnActionBar);
