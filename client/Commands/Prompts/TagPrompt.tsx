@@ -60,14 +60,14 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
                 <option value="start">start of</option>
                 <option value="end">end of</option>
             </select>
-            <select id="tag-timing-id" className="response">
+            <select id="tag-timing-id" className="response" defaultValue={this.props.activeCombatantId}>
                 {this.renderCombatantOptions()}
             </select>'s turn in <input type="number" id="tag-duration" className="response" defaultValue="1" /> round
         </div>
     )
 
     private renderCombatantOptions = () => this.props.combatants.map(c => (
-        <option value={c.Id} selected={c.Id == this.props.activeCombatantId}>{c.DisplayName()}</option>
+        <option value={c.Id}>{c.DisplayName()}</option>
     ))
 }
 
