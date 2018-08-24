@@ -29,19 +29,11 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     
     public componentDidMount() {
         this.textInput.focus();
-    }
-
-    public componentDidUpdate() {
-        if (!this.textInput || this.initializedAutocomplete) {
-            return;
-        }
 
         this.Awesomeplete = new Awesomplete(this.textInput, {
             list: Object.keys(Conditions),
             minChars: 1
         });
-
-        this.initializedAutocomplete = true;
     }
 
     public render() {
@@ -58,7 +50,6 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
 
     private Awesomeplete: Awesomplete;
     private textInput: HTMLInputElement;
-    private initializedAutocomplete: boolean;
     
     private toggleAdvanced = () => this.setState({ advancedMode: !this.state.advancedMode });
 
