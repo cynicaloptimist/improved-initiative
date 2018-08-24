@@ -25,17 +25,6 @@ interface PendingLinkInitiative {
 export class CombatantCommander {
     constructor(private tracker: TrackerViewModel) {
         this.Commands = BuildCombatantCommandList(this);
-
-        this.Commands.forEach(c => {
-            let keyBinding = Store.Load<string>(Store.KeyBindings, c.Description);
-            if (keyBinding) {
-                c.KeyBinding = keyBinding;
-            }
-            let showOnActionBar = Store.Load<boolean>(Store.ActionBar, c.Description);
-            if (showOnActionBar != null) {
-                c.ShowOnActionBar(showOnActionBar);
-            }
-        });
     }
 
     public Commands: Command[];
