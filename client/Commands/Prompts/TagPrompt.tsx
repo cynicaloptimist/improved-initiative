@@ -67,7 +67,7 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     )
 
     private renderCombatantOptions = () => this.props.combatants.map(c => (
-        <option value={c.Id}>{c.DisplayName()}</option>
+        <option key={c.Id} value={c.Id}>{c.DisplayName()}</option>
     ))
 }
 
