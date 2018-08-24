@@ -62,7 +62,10 @@ export class PCLibrary {
     }
     
     public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
-        this.StatBlocks.remove(l => l.Id == listing.Id || l.Path + l.Name == listing.Path + listing.Name);
+        const oldStatBlocks = this.StatBlocks().filter(l => l.Id == listing.Id || l.Path + l.Name == listing.Path + listing.Name);
+        for (const statBlock of oldStatBlocks) {
+            this.DeleteListing(statBlock.Id);
+        }
         this.saveStatBlock(listing, newStatBlock);
     }
 
