@@ -173,6 +173,6 @@ export class CombatantViewModel {
 
     public TagHasReference = (tag: Tag) => {
         const casedConditionName = _.startCase(tag.Text);
-        return Conditions[casedConditionName] !== undefined;        
+        return Conditions[casedConditionName] !== undefined;
     }
 }

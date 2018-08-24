@@ -5,10 +5,10 @@
 <span class="combatant__tags">
     <!--ko foreach: Combatant.Tags() -->
     <span class="tag" data-bind="if: Visible">
-        <!-- ko if: $parent.TagHasReference -->
+        <!-- ko if: $parent.TagHasReference($data) -->
         <span class="condition-reference" data-bind="text: Text, click: $parent.ReferenceTaggedCondition"></span>
         <!-- /ko -->
-        <!-- ko ifnot: $parent.TagHasReference -->
+        <!-- ko ifnot: $parent.TagHasReference($data) -->
         <span data-bind="text: Text"></span>
         <!-- /ko -->
         <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
