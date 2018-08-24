@@ -1,6 +1,9 @@
 import * as ko from "knockout";
 
+import _ = require("lodash");
+import { Settings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
+import { CommandSetting } from "./CommandSetting";
 import { LegacyCommandSettingsKeys } from "./LegacyCommandSettingsKeys";
 
 export class Command {
@@ -24,10 +27,12 @@ export class Command {
 
         this.ToolTip = ko.pureComputed(() => `${this.Description} [${this.KeyBinding}]`);
 
-        const savedKeybinding = Store.Load<string>(Store.KeyBindings, this.Id);
+        const settings = Store.Load<Settings>(Store.User, "Settings");
+        const commandSetting = settings && _.find(settings.Commands, c => c.Name == this.Id);
+
         const legacyKeybinding = LegacyCommandSettingsKeys[this.Id] && Store.Load<string>(Store.KeyBindings, LegacyCommandSettingsKeys[this.Id]);
 
-        this.KeyBinding = savedKeybinding || legacyKeybinding || defaultKeyBinding;
+        this.KeyBinding = commandSetting.KeyBinding || legacyKeybinding || defaultKeyBinding;
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
