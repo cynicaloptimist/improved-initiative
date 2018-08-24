@@ -12,7 +12,7 @@ export class Command {
         public Description: string,
         public ActionBinding: () => any,
         defaultKeyBinding: string,
-        public FontAwesomeIcon = "",
+        public FontAwesomeIcon: string,
         defaultShowOnActionBar = true,
         public LockOnActionBar = false) {
         this.ShowOnActionBar = ko.observable(defaultShowOnActionBar);
