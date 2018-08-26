@@ -28,6 +28,7 @@ export class PlayerViewModel {
     private turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
+    private activeCombatantOnTop = ko.observable(false);
     private displayPortraits = ko.observable(false);
     private splashPortraits = false;
 
@@ -91,6 +92,7 @@ export class PlayerViewModel {
         this.userStyles.innerHTML = CSSFrom(settings.CustomStyles);
         this.additionalUserCSS.innerHTML = settings.CustomCSS;
         this.allowSuggestions(settings.AllowPlayerSuggestions);
+        this.activeCombatantOnTop(settings.ActiveCombatantOnTop);
         this.turnTimerVisible(settings.DisplayTurnTimer);
         this.roundCounterVisible(settings.DisplayRoundCounter);
         this.displayPortraits(settings.DisplayPortraits);
