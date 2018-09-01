@@ -14,7 +14,7 @@
 
 .combatant {
     display: flex;
-    padding: @small-spacer;
+    padding: @medium-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
     align-items: baseline;
@@ -29,28 +29,31 @@
 }
 
 .combatant--header {
-    .colors(@primary-white, @primary-black, @primary-black);
+    .colors(@primary-white, @primary-grey, @primary-black);
     display: flex;
     flex-flow: row;
-    padding: @medium-spacer 0;
+    padding: @medium-spacer;
     align-items: baseline;
 }
 
 .combatant__initiative {
-    width: 30px;
-    text-align: center;
+    width: 40px;
+    text-align: left;
     &.fa-link:before{
         font-size: 60%;
         vertical-align: top;
     }
+    &.fa {
+
+    }
 }
 
 .combatant__name {
-    width: 50%;
+    width: 30%;
 }
 
 .combatant__hp {
-    width: 70px;
+    width: 100px;
     text-align: center;
 }
 
@@ -60,7 +63,6 @@
 }
 
 .combatant__tags {
-    flex-grow:1;
+    flex-grow: 1;
     flex-shrink: 1;
 }
-

@@ -11,8 +11,13 @@
     margin: 1px 0;
 }
 
+.c-toolbar {
+
+}
+
 .c-toolbar.s-narrow {
     .scrollframe {
+        transition: all .3s ease-in-out;
         max-width: none;
         width: @toolbar-width;
         overflow-x: hidden;
@@ -29,7 +34,7 @@
 
     .fa {
         margin-left: @small-spacer;
-        margin-right: @medium-spacer;
+        margin-right: @large-spacer;
     }
 
     .c-button {

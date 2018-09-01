@@ -36,7 +36,7 @@ export class Command {
 }
 
 export let BuildEncounterCommandList = (c: EncounterCommander, saveEncounterFn: () => void) => [
-    new Command("Toggle Menu", c.ToggleToolbarWidth, "alt+m", "bars", true, true),
+    new Command("Close Menu", c.ToggleToolbarWidth, "alt+m", "bars", true, true),
     new Command("Start Encounter", c.StartEncounter, "alt+r", "play"),
     new Command("Reroll Initiative", c.RerollInitiative, "alt+shift+i", "refresh", false),
     new Command("End Encounter", c.EndEncounter, "alt+e", "stop"),

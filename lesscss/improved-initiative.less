@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
-@import url("https://fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Spectral+SC:400,400i,700,700i');
 
 @import "colors.less";
 @import (reference) "node_modules/font-awesome/less/variables.less";
@@ -11,21 +10,40 @@
 
 //Spacers
 
-@small-spacer: 2px;
-@medium-spacer: 5px;
-@large-spacer: 15px;
+@small-spacer: .125rem;
+@medium-spacer: .5rem;
+@large-spacer: 1rem;
+@larger-spacer: 2rem;
 
-@border-radius: 5px;
+@border-radius: 0px;
 @prompt-minimum-height: 42px;
 
-@fixed-column-width: 350px;
+@fixed-column-width: 300px;
 
 @scrollbar-width: 17px;
+
+// Typography
+
+@font-family-serif:       'Spectral SC', serif;
+@font-family-sans-serif:  'Roboto', sans-serif;
+
+@font-family-headers:     @font-family-serif;
+@font-family-body:        @font-family-sans-serif;
+
+@font-size-h1: 2.75rem;
+@font-size-h2: 1.25rem;
+@font-size-h3: 1.75rem;
+@font-size-h4: 1.25rem;
+
+@font-size-body: 1rem;
+@font-size-small: .875rem;
+@font-size-mice: .75rem;
 
 //elements
 
 * {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: @font-family-body;
+    font-size: 14px;
     position:relative;
     margin: 0;
     padding: 0;
@@ -41,7 +59,7 @@ html, body {
     display:flex;
     flex-direction:column;
     cursor: default;
-    background-color: @primary-green;
+    background: #fffce5 url('../img/paper-bg.jpg') no-repeat center/cover;
     color: @primary-white;
 }
 
@@ -50,7 +68,7 @@ div {
     flex-direction:column;
     min-height: 0;
     max-height: 100%;
-    
+
     & > * {
         min-width: 0;
         min-height: 0;
@@ -67,8 +85,13 @@ a, a * {
     cursor: pointer;
 }
 
+h1, h2, h3, h4 {
+  font-family: @font-family-headers;
+  color: @primary-red;
+}
+
 h1.improved-initiative {
-    font-family: 'Josefin Slab', serif;
+    font-family: @font-family-headers;
     &:before {
         content: url("../img/wing-transparent-antiquewhite.png");
         margin-right:@medium-spacer;
@@ -76,11 +99,20 @@ h1.improved-initiative {
 }
 
 h2 {
-    margin: @medium-spacer @medium-spacer @large-spacer;
+    margin: @small-spacer 0 @medium-spacer 0;
+    font-size: @font-size-h2;
+    font-weight: normal;
+    color: @primary-black;
 }
 
-h3, h4 {
-    margin: @small-spacer @small-spacer @medium-spacer;
+h3 {
+    margin: @medium-spacer 0 @small-spacer 0;
+    font-size: @font-size-h3;
+}
+
+h4 {
+    margin: @small-spacer @small-spacer @medium-spacer @small-spacer;
+    font-size: @font-size-h4;
 }
 
 ul.bulleted {
@@ -180,9 +212,19 @@ body>.login.button {
 
     margin: @medium-spacer;
     padding: @medium-spacer;
-        
+
     border-radius: @border-radius;
     box-shadow: 2px 2px 1px inset;
+}
+
+.card-bg (@margin, @padding) {
+  .colors(@primary-black, @primary-white);
+  
+  margin: @margin;
+  padding: @padding;
+  background-color: @primary-white;
+  border-radius: 0;
+  box-shadow: 0 0 15px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .card {
