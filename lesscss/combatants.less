@@ -14,17 +14,39 @@
 
 .combatant {
     display: flex;
-    padding: @small-spacer;
     border-left-width: @medium-spacer;
     border-left-style: solid;
     align-items: baseline;
+
+    .fa-clickable:hover {
+        color: @hover-green;
+    }
+
+    .colors(@primary-black, @primary-white, transparent);
+
+    &:nth-child(2n) {
+        background-color: @zebra-white;
+    }
 
     &.animate {
         animation: slide-from-left 0.5s;
     }
 
-    &.active .name {
+    &.active .combatant__name {
         font-weight:bold;
+    }
+
+    &.active {
+        border-color: @active-green;
+        background-color: @active-white;
+    }
+    
+    &:hover {
+        background-color: @hover-white;
+    }
+
+    &.selected {
+        background-color: @selected-light;
     }
 }
 
@@ -34,9 +56,13 @@
     flex-flow: row;
     padding: @medium-spacer 0;
     align-items: baseline;
+    .combatant__hp:hover {
+        background-color: inherit;
+    }
 }
 
 .combatant__initiative {
+    padding: @small-spacer;
     width: 30px;
     text-align: center;
     &.fa-link:before{
@@ -46,21 +72,34 @@
 }
 
 .combatant__name {
+    padding: @small-spacer;
     width: 50%;
 }
 
 .combatant__hp {
+
+    align-self: stretch;
+    padding-top: 4px;
+
     width: 70px;
     text-align: center;
+    &:hover {
+        background-color: @hover-red;
+    }
 }
 
 .combatant__ac {
+    padding: @small-spacer;
     width: 30px;
     text-align: center;
 }
 
 .combatant__tags {
+    padding: @small-spacer;
     flex-grow:1;
     flex-shrink: 1;
 }
 
+.combatant__buttons {
+    padding: @small-spacer;
+}

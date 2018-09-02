@@ -25,7 +25,7 @@ export class Button extends React.Component<ButtonProps> {
             classNames.push(this.props.additionalClassNames);
         }
 
-        const faElement = this.props.fontAwesomeIcon && <span className={`fa fa-${this.props.fontAwesomeIcon}`} />;
+        const faElement = this.props.fontAwesomeIcon && <span className={`fas fa-${this.props.fontAwesomeIcon}`} />;
 
         return <span
             className={classNames.join(" ")}

@@ -1,7 +1,7 @@
 import { buildEncounter } from "../test/buildEncounter";
 
 import { StatBlock } from "../../common/StatBlock";
-import { InitializeSettings } from "../Settings/Settings";
+import {CurrentSettings, InitializeSettings} from "../Settings/Settings";
 import { Encounter } from "./Encounter";
 
 describe("Encounter", () => {
@@ -65,5 +65,23 @@ describe("Encounter", () => {
             expect(encounter.Combatants())
                 .toEqual([playerCharacter, creature]);
         });
+    });
+
+    test("Active combatant stays at top of order", () => {
+        const settings = CurrentSettings();
+        settings.PlayerView.ActiveCombatantOnTop = true;
+
+        for (let i = 0; i < 5; i++) {
+            let thisCombatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+            thisCombatant.Initiative(i);
+        }
+
+        encounter.StartEncounter();
+        expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+
+        for (let i = 0; i < 5; i++) {
+            encounter.NextTurn();
+            expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+        }
     });
 });

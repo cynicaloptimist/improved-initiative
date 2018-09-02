@@ -23,5 +23,10 @@ export default [
         "Name": "Dan Lichty",
         "Github": "https://github.com/danlite",
         "PatreonId": "88868"
+    },
+    {
+        "Name": "Corey Kelly",
+        "Github": "https://github.com/coreyjkelly",
+        "PatreonId": "32605"
     }
 ];

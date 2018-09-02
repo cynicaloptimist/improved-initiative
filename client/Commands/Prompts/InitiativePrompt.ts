@@ -19,7 +19,7 @@ export class InitiativePrompt implements Prompt {
             return {
                 Id: combatant.Id,
                 Prompt: `${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `,
-                Css: combatant.InitiativeGroup() !== null ? "fa fa-link" : "",
+                Css: combatant.InitiativeGroup() !== null ? "fas fa-link" : "",
                 PreRoll: combatant.GetInitiativeRoll()
             };
         };

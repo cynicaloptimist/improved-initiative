@@ -14,6 +14,7 @@ export const HpVerbosityOptions: HpVerbosityOption [] = [
 ];
 
 export interface PlayerViewSettings {
+    ActiveCombatantOnTop: boolean;
     AllowPlayerSuggestions: boolean;
     MonsterHPVerbosity: HpVerbosityOption;
     PlayerHPVerbosity: HpVerbosityOption;

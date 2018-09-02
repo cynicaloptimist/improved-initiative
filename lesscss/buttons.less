@@ -1,27 +1,28 @@
 @button-inner: 18px;
 @button-padding: 10px;
 
-.fa {
-    .fa();
+.fas {
+    .fas();
     font-family: 'Josefin Sans', sans-serif;
+    font-weight: normal;
     &:before {
-        font-family: FontAwesome;
+        font-family: 'Font Awesome 5 Free';
     }
 }
 
 .fa-text {
-    .fa();
+    .fas();
     font-family: 'Josefin Sans', sans-serif;
     font-weight: bold;
     &:before {
-        font-family: FontAwesome;
+        font-family: 'Font Awesome 5 Free';
         margin-right: @medium-spacer;
     }
 }
 
 .fa-clickable {
     cursor: pointer;
-	.fa();
+	.fas();
 }
 
 .fa-clickable:hover {
@@ -52,6 +53,10 @@
 
 .button, .c-button {
     .button();
+}
+
+button.button {
+    height: 38px;
 }
 
 .button--close {
