@@ -24,10 +24,16 @@
 .fa-clickable {
   cursor: pointer;
   .fa();
+
+  &:hover {
+    color: @primary-red;
+  }
 }
 
-.fa-clickable:hover {
-  color: @hover-white;
+.statblock-editor {
+  .fa-clickable {
+    padding: @medium-spacer;
+  }
 }
 
 .small-button {
@@ -45,7 +51,7 @@
   }
   cursor: pointer;
   display: inline-block;
-  margin: @small-spacer;
+  margin: 0;
   padding: @button-padding;
   text-align: center;
   text-decoration: none;
