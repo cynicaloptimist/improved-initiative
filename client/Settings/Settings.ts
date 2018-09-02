@@ -50,6 +50,7 @@ export function getDefaultSettings(): Settings {
             DisplayDifficulty: false
         },
         PlayerView: {
+            ActiveCombatantOnTop: false,
             AllowPlayerSuggestions: false,
             MonsterHPVerbosity: "Colored Label",
             PlayerHPVerbosity: "Actual HP",
@@ -103,6 +104,7 @@ function getLegacySettings(): Settings {
         PlayerView: {
             ...defaultSettings.PlayerView,
             AllowPlayerSuggestions: getLegacySetting<boolean>("PlayerViewAllowPlayerSuggestions", false),
+            ActiveCombatantOnTop: getLegacySetting<boolean>("ActiveCombatantOnTop", false),
             MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>("MonsterHPVerbosity", "Colored Label"),
             HideMonstersOutsideEncounter: getLegacySetting<boolean>("HideMonstersOutsideEncounter", false),
             DisplayRoundCounter: getLegacySetting<boolean>("PlayerViewDisplayRoundCounter", false),
