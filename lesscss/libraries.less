@@ -1,7 +1,7 @@
 .c-listing-button {
     border-radius: @border-radius;
-    padding: @small-spacer;
-    margin: 1px;
+    padding: @medium-spacer;
+    margin: 0;
     overflow-x: hidden;
 
     &:first-child {
@@ -12,7 +12,7 @@
 
 .library {
     flex-grow: 1;
-    flex-shrink: 1;        
+    flex-shrink: 1;
 
     input {
         min-height: 20px;
@@ -31,11 +31,15 @@
         overflow-x: hidden;
     }
 
+    .listings {
+      margin-top: @medium-spacer;
+    }
+
     .buttons {
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
-        
+
         span {
             margin: @small-spacer;
         }
