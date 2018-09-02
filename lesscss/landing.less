@@ -4,7 +4,7 @@
     h1 {
         padding:25px;
     }
-        
+
     input[type="text"] {
         padding: @medium-spacer;
         line-height: 2em;
@@ -15,14 +15,14 @@
         align-items: center;
         max-width:800px;
     }
-    
+
     .logo {
         flex-grow:1;
         margin: 0 30px;
     }
 
     .start {
-        .recessed();
+        .card-bg(@larger-spacer, @larger-spacer);
 
         p, li, div {
             font-size: 16pt;
@@ -32,11 +32,11 @@
         flex-grow: 1;
         flex-shrink: 1;
         align-items: center;
-        
+
         padding:@large-spacer;
         margin: 0 30px;
     }
-    
+
     .launch-controls {
         div {
             flex-direction: row;
@@ -56,24 +56,24 @@
     }
     .footer {
         .recessed();
-        
+
         border-radius: 0;
         text-align: center;
         align-self: stretch;
 
         margin: @medium-spacer 0 0 0;
     }
-    
+
     @logo-size: 40px;
     .pledge-logo {
         img {
             width: @logo-size;
         }
-        
+
         position: absolute;
         bottom: -1/4 * @logo-size;
         right: -1/4 * @logo-size;
-        
+
         .hop();
     }
 }
