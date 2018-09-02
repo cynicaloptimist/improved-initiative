@@ -1,4 +1,8 @@
-export const LegacyCommandSettingsKeys = {
+import _ = require("lodash");
+import { Settings } from "../Settings/Settings";
+import { Store } from "../Utility/Store";
+
+const LegacyCommandSettingsKeys = {
     "toggle-menu": "Toggle Menu",
     "start-encounter": "Start Encounter",
     "reroll-initiative": "Reroll Initiative",
@@ -24,3 +28,19 @@ export const LegacyCommandSettingsKeys = {
     "select-next": "Select Next",
     "select-previous": "Select Previous"
 };
+
+export function GetLegacyKeyBinding(id: string) {
+    const settings = Store.Load<Settings>(Store.User, "Settings");
+    const legacyId = LegacyCommandSettingsKeys[id];
+    const commandSetting = settings && settings.Commands && _.find(settings.Commands, c => c.Name == legacyId);
+    if (commandSetting && commandSetting.KeyBinding) {
+        return commandSetting.KeyBinding;
+    }
+
+    const legacyKeybinding = Store.Load<string>(Store.KeyBindings, legacyId);
+    if (legacyKeybinding) {
+        return legacyKeybinding;
+    }
+
+    return null;
+}
