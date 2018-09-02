@@ -107,7 +107,22 @@ export class Encounter {
     public SortByInitiative = (stable = false) => {
         const sortedCombatants = sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
         this.Combatants(sortedCombatants);
+
+        if (this.State() === "active") {
+            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+                this.ActiveCombatantToTop();
+            }
+        }
+
         this.QueueEmitEncounter();
+    }
+
+    public ActiveCombatantToTop = () => {
+            const activeCombatant = this.ActiveCombatant();
+
+            while (this.Combatants()[0] != activeCombatant) {
+                this.Combatants().push(this.Combatants().shift());
+            }
     }
 
     public ImportEncounter = (encounter) => {
@@ -241,6 +256,10 @@ export class Encounter {
 
         this.ActiveCombatant(nextCombatant);
 
+        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+            this.ActiveCombatantToTop();
+        }
+
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
             .forEach(t => t.Decrement());
@@ -263,6 +282,11 @@ export class Encounter {
 
         const previousCombatant = this.Combatants()[previousIndex];
         this.ActiveCombatant(previousCombatant);
+
+        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+            this.ActiveCombatantToTop();
+        }
+
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
             .forEach(t => t.Increment());
