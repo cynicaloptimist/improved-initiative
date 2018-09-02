@@ -23,7 +23,21 @@ describe("Command", () => {
         expect(command.KeyBinding).toEqual("saved-keybinding");
     });
 
-    test("Should load a legacy keybinding", () => {
+    test("Should load a keybinding with a legacy id", () => {
+        const settings = getDefaultSettings();
+        settings.Commands = [
+            {
+                Name: "Add Note",
+                KeyBinding: "legacy-keybinding",
+                ShowOnActionBar: true
+            }
+        ];
+        Store.Save(Store.User, "Settings", settings);
+        const command = new Command("add-tag", "Add Tag", jest.fn(), "default-keybinding", "square");
+        expect(command.KeyBinding).toEqual("legacy-keybinding");
+    });
+
+    test("Should load a keybinding from the old Store", () => {
         Store.Save(Store.KeyBindings, "Add Note", "legacy-keybinding");
         const command = new Command("add-tag", "Add Tag", jest.fn(), "default-keybinding", "square");
         expect(command.KeyBinding).toEqual("legacy-keybinding");
