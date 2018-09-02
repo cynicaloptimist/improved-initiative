@@ -32,7 +32,7 @@ export class Command {
 
         const legacyKeybinding = LegacyCommandSettingsKeys[this.Id] && Store.Load<string>(Store.KeyBindings, LegacyCommandSettingsKeys[this.Id]);
 
-        this.KeyBinding = commandSetting.KeyBinding || legacyKeybinding || defaultKeyBinding;
+        this.KeyBinding = (commandSetting && commandSetting.KeyBinding) || legacyKeybinding || defaultKeyBinding;
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
