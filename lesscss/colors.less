@@ -8,8 +8,9 @@
 @hover-white: darken(@primary-white, 10);
 
 @primary-white: white;
-@zebra-white: darken(@primary-white, 5);
-@active-white: darken(@primary-white, 10);;
+@zebra-white: #f5f1eb;
+@accent-white: darken(@zebra-white, 20);
+@active-white: darken(@primary-white, 10);
 @selected-light: darken(@primary-white, 15);
 
 
@@ -39,7 +40,6 @@
     color: @text;
     background-color: @background;
     border-color: @border;
-    box-shadow: @border;
 }
 
 .green-button() {
@@ -113,7 +113,7 @@
         background-color: @hover-white;
     }
     &.selected, &.s-selected {
-        background-color: @primary-green;
+        background-color: @primary-red;
         color: @primary-white;
     }
 }
@@ -162,13 +162,6 @@ input[type=checkbox] {
 
 .bordered {
     border-color: @accent-green;
-}
-
-.c-add-button {
-    .colors(@primary-white, unset, @primary-white);
-    &:hover {
-        .colors(@hover-white, unset, @hover-white);
-    }
 }
 
 .c-button--disabled, .c-button--disabled:hover {
