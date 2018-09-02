@@ -3,8 +3,23 @@ import * as ko from "knockout";
 import _ = require("lodash");
 import { Settings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
-import { CommandSetting } from "./CommandSetting";
 import { LegacyCommandSettingsKeys } from "./LegacyCommandSettingsKeys";
+
+function getLegacyKeyBinding(id: string) {
+    const settings = Store.Load<Settings>(Store.User, "Settings");
+    const legacyId = LegacyCommandSettingsKeys[id];
+    const commandSetting = settings && settings.Commands && _.find(settings.Commands, c => c.Name == legacyId);
+    if (commandSetting && commandSetting.KeyBinding) {
+        return commandSetting.KeyBinding;
+    }
+
+    const legacyKeybinding = Store.Load<string>(Store.KeyBindings, legacyId);
+    if (legacyKeybinding) {
+        return legacyKeybinding;
+    }
+
+    return null;
+}
 
 export class Command {
     public ShowOnActionBar: KnockoutObservable<boolean>;
@@ -30,9 +45,7 @@ export class Command {
         const settings = Store.Load<Settings>(Store.User, "Settings");
         const commandSetting = settings && _.find(settings.Commands, c => c.Name == this.Id);
 
-        const legacyKeybinding = LegacyCommandSettingsKeys[this.Id] && Store.Load<string>(Store.KeyBindings, LegacyCommandSettingsKeys[this.Id]);
-
-        this.KeyBinding = (commandSetting && commandSetting.KeyBinding) || legacyKeybinding || defaultKeyBinding;
+        this.KeyBinding = (commandSetting && commandSetting.KeyBinding) || getLegacyKeyBinding(this.Id) || defaultKeyBinding;
 
         let showOnActionBarSetting = Store.Load<boolean>(Store.ActionBar, this.Description);
         if (showOnActionBarSetting != null) {
