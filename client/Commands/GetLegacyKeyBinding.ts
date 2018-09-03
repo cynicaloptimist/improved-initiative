@@ -7,7 +7,7 @@ const LegacyCommandSettingsKeys = {
     "start-encounter": "Start Encounter",
     "reroll-initiative": "Reroll Initiative",
     "end-encounter": "End Encounter",
-    "clear-encounter": "Clear Encounter",
+    "clean-encounter": "Clear Encounter",
     "open-library": "Open Library",
     "quick-add": "Quick Add Combatant",
     "player-window": "Show Player Window",
