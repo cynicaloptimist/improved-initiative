@@ -1,7 +1,7 @@
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";
-import titleCase = require("title-case");
+import * as _ from "lodash";
 
 export class StatBlockImporter extends Importer {
     public getType() {
@@ -12,7 +12,7 @@ export class StatBlockImporter extends Importer {
     }
 
     public getSource()  {
-        return titleCase(this.getCommaSeparatedStrings("type")[1]);
+        return _.startCase(this.getCommaSeparatedStrings("type")[1]);
     }
 
     public getAbilities() {
