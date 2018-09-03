@@ -92,7 +92,8 @@
     "react-string-replace-recursively": "^0.1.27",
     "request": "^2.85.0",
     "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "title-case": "^2.1.1"
   },
   "jest": {
     "globals": {
