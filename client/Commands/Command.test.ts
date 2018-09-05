@@ -23,7 +23,7 @@ describe("Command", () => {
         expect(command.KeyBinding).toEqual("saved-keybinding");
     });
 
-    test("Should load a keybinding with a legacy id", () => {
+    test("Should load a keybinding with a legacy Add Note id", () => {
         const settings = getDefaultSettings();
         settings.Commands = [
             {
@@ -35,6 +35,24 @@ describe("Command", () => {
         Store.Save(Store.User, "Settings", settings);
         const command = new Command("add-tag", "Add Tag", jest.fn(), "default-keybinding", "square");
         expect(command.KeyBinding).toEqual("legacy-keybinding");
+    });
+
+    test("Should switch legacy Clear Encounter keybinding to Clean Encounter", () => {
+        const settings = getDefaultSettings();
+        settings.Commands = [
+            {
+                Name: "Clear Encounter",
+                KeyBinding: "legacy-clear-encounter-keybinding",
+                ShowOnActionBar: true
+            }
+        ];
+        Store.Save(Store.User, "Settings", settings);
+        const clearEncounterCommand = new Command("clear-encounter", "Clear Encounter", jest.fn(), "default-keybinding", "square");
+        expect(clearEncounterCommand.KeyBinding).toEqual("default-keybinding");
+
+        const cleanEncounterCommand = new Command("clean-encounter", "Clean Encounter", jest.fn(), "default-keybinding", "square");
+        expect(cleanEncounterCommand.KeyBinding).toEqual("legacy-clear-encounter-keybinding");
+
     });
 
     test("Should load a keybinding from the old Store", () => {

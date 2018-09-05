@@ -34,7 +34,7 @@ export class EpicInitiativeSettings extends React.Component<EpicInitiativeSettin
     
     public render() {
         return <div className="c-epic-initiative-settings">
-            <p>Epic Initiative is enabled.</p>
+            <p><strong>Thank you for supporting Improved Initiative!</strong></p>
             <h4>Player View Display Settings</h4>
             <LabelWithCheckbox text="Show combatant portraits" toggle={this.toggleDisplayPortraits} checked={this.props.playerViewSettings.DisplayPortraits} />
             <LabelWithCheckbox text="Show turn start portrait splash" toggle={this.toggleSplashPortraits} checked={this.props.playerViewSettings.SplashPortraits} />

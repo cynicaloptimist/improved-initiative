@@ -37,4 +37,23 @@ describe("StatBlockImporter", () => {
         const result = new StatBlockImporter(monster).GetStatBlock();
         expect(result.HP).toEqual({ Value: 13, Notes: "(3d8)" });
     });
+
+    test("Size, type, and alignment fields should populate source and type", () =>  {
+        const size = document.createElement("size");
+        size.innerHTML = "L";
+        monster.appendChild(size);
+
+        const type = document.createElement("type");
+        type.innerHTML = "aberration, monster manual";
+        monster.appendChild(type);
+
+        const alignment = document.createElement("alignment");
+        alignment.innerHTML = "lawful evil";
+        monster.appendChild(alignment);
+
+        const result = new StatBlockImporter(monster).GetStatBlock();
+        expect(result.Type).toEqual("Large aberration, lawful evil");
+        expect(result.Source).toEqual("Monster Manual");
+
+    });
 });
