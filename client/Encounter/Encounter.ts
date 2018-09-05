@@ -256,16 +256,18 @@ export class Encounter {
 
         this.ActiveCombatant(nextCombatant);
 
-        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+        if (!nextCombatant.Hidden()) {
+            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+                this.ActiveCombatantToTop();
+            }
+
+            this.durationTags
+                .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
+                .forEach(t => t.Decrement());
+
+            this.TurnTimer.Reset();
+            this.QueueEmitEncounter();
         }
-
-        this.durationTags
-            .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
-            .forEach(t => t.Decrement());
-
-        this.TurnTimer.Reset();
-        this.QueueEmitEncounter();
     }
 
     public PreviousTurn = () => {

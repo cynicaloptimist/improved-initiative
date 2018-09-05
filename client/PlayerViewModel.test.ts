@@ -125,4 +125,30 @@ describe("PlayerViewModel", () => {
         playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
     });
+
+    test("Player View is only updated if next combatant is visible", () => {
+        const visibleCombatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        visibleCombatant1.Initiative(20);
+
+        const visibleCombatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        visibleCombatant2.Initiative(10);
+
+        const hiddenCombatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        hiddenCombatant.Hidden(true);
+        hiddenCombatant.Initiative(1);
+
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+
+        //expect(???).toBe(visibleCombatant1.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant2.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant2.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant1.Id);
+    });
 });
