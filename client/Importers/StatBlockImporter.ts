@@ -1,7 +1,7 @@
+import * as _ from "lodash";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";
-import * as _ from "lodash";
 
 export class StatBlockImporter extends Importer {
     public getType() {
@@ -65,5 +65,5 @@ export class StatBlockImporter extends Importer {
         "L": "Large",
         "H": "Huge",
         "G": "Gargantuan"
-    }
+    };
 }

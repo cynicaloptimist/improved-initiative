@@ -5,8 +5,6 @@ import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
 import { DefaultPrompt, Prompt } from "../Commands/Prompts/Prompt";
-import { TagPromptWrapper } from "../Commands/Prompts/TagPrompt";
-import { Encounter } from "../Encounter/Encounter";
 import { Conditions } from "../Rules/Conditions";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";

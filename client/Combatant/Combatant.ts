@@ -4,7 +4,6 @@ import { CombatantState } from "../../common/CombatantState";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
-import { Dice } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Tag } from "./Tag";
