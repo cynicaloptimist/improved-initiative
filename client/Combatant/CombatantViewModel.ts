@@ -5,7 +5,7 @@ import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
 import { DefaultPrompt, Prompt } from "../Commands/Prompts/Prompt";
-import { TagPrompt } from "../Commands/Prompts/TagPrompt";
+import { TagPromptWrapper } from "../Commands/Prompts/TagPrompt";
 import { Encounter } from "../Encounter/Encounter";
 import { Conditions } from "../Rules/Conditions";
 import { CurrentSettings } from "../Settings/Settings";
@@ -74,7 +74,7 @@ export class CombatantViewModel {
 
     public InitiativeClass = ko.computed(() => {
         if (this.Combatant.InitiativeGroup()) {
-            return "fa fa-link";
+            return "fas fa-link";
         }
     });
 
@@ -116,7 +116,7 @@ export class CombatantViewModel {
         this.PromptUser(prompt);
     }
 
-    public EditName() {
+    public SetAlias() {
         let currentName = this.Name();
         const prompt = new DefaultPrompt(`Change alias for ${currentName}: <input id='alias' class='response' />`,
             response => {
@@ -157,11 +157,6 @@ export class CombatantViewModel {
         this.Combatant.Encounter.QueueEmitEncounter();
     }
 
-    public AddTag(encounter: Encounter) {
-        const prompt = new TagPrompt(encounter, this.Combatant, this.LogEvent);
-        this.PromptUser(prompt);
-    }
-
     public RemoveTag = (tag: Tag) => {
         this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
         this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
@@ -178,6 +173,6 @@ export class CombatantViewModel {
 
     public TagHasReference = (tag: Tag) => {
         const casedConditionName = _.startCase(tag.Text);
-        return Conditions[casedConditionName] !== undefined;        
+        return Conditions[casedConditionName] !== undefined;
     }
 }

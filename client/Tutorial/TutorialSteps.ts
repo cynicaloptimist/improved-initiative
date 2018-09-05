@@ -42,7 +42,7 @@ export const TutorialSteps: TutorialStep[] = [
     },
     {
         Message: "Press 'alt-r' or <strong>click 'Start Encounter'</strong> to roll initiative.",
-        RaiseSelector: ".commands-encounter .fa-play",
+        RaiseSelector: ".c-button--start-encounter",
         AwaitAction: "ShowInitiativeDialog",
         CalculatePosition: elements => {
             const element = elements.last();
@@ -66,7 +66,7 @@ export const TutorialSteps: TutorialStep[] = [
     //{ Advance turn },
     {
         Message: "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
-        RaiseSelector: ".commands-encounter .fa-gear",
+        RaiseSelector: ".c-button--settings",
         AwaitAction: "ShowSettings",
         CalculatePosition: elements => {
             const element = elements.last();

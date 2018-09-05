@@ -1,4 +1,3 @@
-import Awesomplete = require("awesomplete");
 import * as ko from "knockout";
 
 import { render as renderReact } from "react-dom";
@@ -70,18 +69,6 @@ export function RegisterBindingHandlers() {
                 $(element).html(valueAccessor());
             }
 
-        }
-    };
-
-    ko.bindingHandlers.awesomplete = {
-        init: (element, valueAccessor) => {
-            new Awesomplete(element, {
-                list: valueAccessor(),
-                minChars: 1,
-                autoFirst: true
-            });
-
-            $(element).select();
         }
     };
 }
