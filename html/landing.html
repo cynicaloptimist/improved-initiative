@@ -16,41 +16,47 @@
 <body id="landing">
 
   <div class="container">
-    <div class="title">
-      <img src="img/logo-improved-initiative.svg" height="56" />
-      <h1>Improved Initiative</h1>
-      <h4>Combat Tracker for D&D 5e</h4>
-    </div>
+    <div class="card">
+      <div class="title">
+        <div class="logo">
+          <img src="img/logo-improved-initiative.svg" height="56" />
+        </div>
 
-    <div class="content">
-      <p>Improved Initiative enhances combat in your D&D game without getting between you and your players.</p>
-      <div class="features">
-        <div class="features-column">
-          <img src="img/icon-d20.svg" width="32" />
-          <h4>Quickly roll initiative</h4>
-        </div>
-        <div class="features-column">
-          <img src="img/icon-hp.svg" width="32" />
-          <h4>Easily adjust HP</h4>
-        </div>
-        <div class="features-column">
-          <img src="img/icon-statblock.svg" width="32" />
-          <h4>Convenient statblocks</h4>
+        <div class="headline">
+          <h1>Improved Initiative</h1>
+          <h4>Combat Tracker for D&D 5e</h4>
         </div>
       </div>
 
-      <div class="landing-start">
-        <div class="start-encounter">
-          <span class="button" data-bind="click: StartEncounter">Start an Encounter</span>
+      <div class="content">
+        <p>Improved Initiative enhances combat in your D&D game without getting between you and your players.</p>
+        <div class="features">
+          <div class="features-column">
+            <img src="img/icon-d20.svg" width="32" />
+            <h4>Quickly roll initiative</h4>
+          </div>
+          <div class="features-column">
+            <img src="img/icon-hp.svg" width="32" />
+            <h4>Easily adjust HP</h4>
+          </div>
+          <div class="features-column">
+            <img src="img/icon-statblock.svg" width="32" />
+            <h4>Convenient statblocks</h4>
+          </div>
         </div>
-        <div class="landing-seperator">or</div>
-        <div class="join-encounter">
-          <input type="text" placeholder="Encounter ID or URL" data-bind="textInput: JoinEncounterInput" />
-          <span class="button" data-bind="click: JoinEncounter, css: JoinEncounterButtonClass()">Join an Encounter</span>
+
+        <div class="landing-start">
+          <div class="start-encounter">
+            <span class="button" data-bind="click: StartEncounter">Start an Encounter</span>
+          </div>
+          <div class="landing-seperator">or</div>
+          <div class="join-encounter">
+            <input type="text" placeholder="Encounter ID or URL" data-bind="textInput: JoinEncounterInput" />
+            <span class="button" data-bind="click: JoinEncounter, css: JoinEncounterButtonClass()">Join an Encounter</span>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="footer">
