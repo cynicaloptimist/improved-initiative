@@ -13,7 +13,7 @@
 @border-radius: 0;
 @prompt-minimum-height: 42px;
 @fixed-column-width: 375px;
-@scrollbar-width: 17px;
+@scrollbar-width: 14px;
 // Typography
 @font-family-serif: 'Spectral SC', serif;
 @font-family-sans-serif: 'Roboto', sans-serif;
@@ -23,6 +23,7 @@
 @font-size-h2: 1.25rem;
 @font-size-h3: 1.75rem;
 @font-size-h4: 1.25rem;
+@font-size-large: 1.5rem;
 @font-size-body: 1rem;
 @font-size-small: 0.875rem;
 @font-size-mice: 0.75rem;
@@ -174,7 +175,7 @@ textarea {
 @import "overlay.less";
 
 .preview.statblock {
-  .overlay-dialog();
+  .card-bg-2(@large-spacer, @large-spacer);
   z-index: 4;
   max-height: 90%;
 }
@@ -196,7 +197,7 @@ body > .login.button {
 @import "settings.less";
 
 .damage-suggestion {
-  .overlay-dialog();
+  .card-bg-2(@large-spacer, @large-spacer);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -230,7 +231,7 @@ body > .login.button {
   padding: @padding;
   background-color: @primary-white;
   border-radius: 0;
-  box-shadow: 0 0 7px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25), 0 7px 14px rgba(0, 0, 0, .25);
 }
 
 .card-bg-2 (@margin, @padding) {
@@ -239,7 +240,7 @@ body > .login.button {
   padding: @padding;
   background-color: @primary-white;
   border-radius: 0;
-  box-shadow: 0 0 15px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 0 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .card {
