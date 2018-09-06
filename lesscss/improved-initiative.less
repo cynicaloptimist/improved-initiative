@@ -6,7 +6,8 @@
 @import "node_modules/font-awesome/less/path.less";
 @import (inline) "node_modules/awesomplete/awesomplete.css";
 //Spacers
-@small-spacer: 0.125rem;
+@extra-small-spacer: 0.125rem;
+@small-spacer: 0.25rem;
 @medium-spacer: 0.5rem;
 @large-spacer: 1rem;
 @larger-spacer: 2rem;
@@ -105,20 +106,20 @@ h1 {
 }
 
 h2 {
-  margin: @small-spacer 0 @medium-spacer;
+  margin: @extra-small-spacer 0 @medium-spacer;
   font-size: @font-size-h2;
   font-weight: normal;
   color: @primary-black;
 }
 
 h3 {
-  margin: @medium-spacer 0 @small-spacer;
+  margin: @medium-spacer 0 @extra-small-spacer;
   font-size: @font-size-h3;
   line-height: 1;
 }
 
 h4 {
-  margin: @small-spacer @small-spacer @medium-spacer;
+  margin: @extra-small-spacer @extra-small-spacer @medium-spacer;
   font-size: @font-size-h4;
 }
 
@@ -274,7 +275,7 @@ body > .login.button {
   span {
     flex: 1;
     padding: @medium-spacer;
-    margin-right: @small-spacer;
+    margin-right: @extra-small-spacer;
     border-radius: 0 @border-radius 0 0;
     text-align: center;
 
