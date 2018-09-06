@@ -25,7 +25,7 @@
     max-height: none;
 
     span {
-      padding-right: @small-spacer;
+      padding-right: @extra-small-spacer;
     }
   }
 
@@ -48,7 +48,7 @@
 
   .stat-label {
     font-weight: bold;
-    margin: 0 @small-spacer @medium-spacer 0;
+    margin: 0 @extra-small-spacer @medium-spacer 0;
     color: @primary-red;
   }
 
@@ -58,7 +58,7 @@
 
   .portrait-thumbnail {
     max-height: 50px;
-    padding: @small-spacer;
+    padding: @extra-small-spacer;
     cursor: zoom-in;
   }
 
@@ -102,7 +102,7 @@
     }
 
     .stat-label {
-      margin-bottom: @small-spacer;
+      margin-bottom: @extra-small-spacer;
       font-size: @font-size-small;
       text-transform: uppercase;
     }
@@ -115,6 +115,16 @@
     div {
       flex-direction: row;
       flex-wrap: wrap;
+    }
+  }
+
+  .Skills, .Saves {
+    .rollable {
+      margin: 0 @small-spacer;
+
+      &:after {
+        content: ";";
+      }
     }
   }
 
