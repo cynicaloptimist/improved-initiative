@@ -2,8 +2,27 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  border: 1rem solid @primary-red;
   align-items: center;
+
+  #top, #bottom, #left, #right {
+    background: @primary-red;
+	  position: fixed;
+	}
+	#left, #right {
+	  top: 0; bottom: 0;
+	  width: 1rem;
+	}
+
+  #left { left: 0; }
+	#right { right: 0; }
+
+	#top, #bottom {
+	  left: 0; right: 0;
+		height: 1rem;
+	}
+
+	#top { top: 0; }
+	#bottom { bottom: 0; }
 
   .container {
     flex: 1 0 auto;
@@ -154,7 +173,7 @@
 
         .join-encounter {
           flex-direction: row;
-          align-items: stretch;
+          align-items: center;
 
           input[type="text"] {
             flex: 3;
@@ -166,6 +185,7 @@
           .button {
             .colors(@primary-white, @primary-red, @primary-red);
             cursor: pointer;
+            padding: 1rem;
 
             &:hover {
               background-color: @accent-red;
@@ -178,12 +198,10 @@
   // END OF CONTAINER DIV
 
   .footer {
-    // position: absolute;
-    // bottom: 0;
     flex-shrink: 0;
     width: 100%;
     height: 60px;
-    padding: 0 @large-spacer;
+    padding: 0 0 0 @larger-spacer;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
@@ -193,7 +211,7 @@
     }
 
     p {
-      margin-bottom: @large-spacer;
+      margin-bottom: @larger-spacer;
     }
 
     a:link, a:hover, a:active, a:visited { color: @primary-red; }
@@ -214,7 +232,7 @@
   //   li,
   //   p {
   //     font-size: 16pt;
-  //     margin: @small-spacer;
+  //     margin: @extra-small-spacer;
   //   }
   //   flex-grow: 1;
   //   flex-shrink: 1;
