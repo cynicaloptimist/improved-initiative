@@ -285,15 +285,17 @@ export class Encounter {
         const previousCombatant = this.Combatants()[previousIndex];
         this.ActiveCombatant(previousCombatant);
 
-        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+        if (!previousCombatant.Hidden()) {
+            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+                this.ActiveCombatantToTop();
+            }
+
+            this.durationTags
+                .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
+                .forEach(t => t.Increment());
+
+            this.QueueEmitEncounter();
         }
-
-        this.durationTags
-            .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
-            .forEach(t => t.Increment());
-
-        this.QueueEmitEncounter();
     }
 
     private durationTags: Tag[] = [];
