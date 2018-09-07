@@ -28,12 +28,12 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     }
     
     public componentDidMount() {
-        this.textInput.focus();
-
         this.Awesomeplete = new Awesomplete(this.textInput, {
             list: Object.keys(Conditions),
-            minChars: 1
+            minChars: 1,
         });
+
+        this.textInput.focus();
     }
 
     public render() {
