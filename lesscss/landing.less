@@ -3,26 +3,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: @primary-red;
 
-  #top, #bottom, #left, #right {
-    background: @primary-red;
-	  position: fixed;
-	}
-	#left, #right {
-	  top: 0; bottom: 0;
-	  width: 1rem;
-	}
+  // #top, #bottom, #left, #right {
+  //   background: @primary-red;
+	//   position: fixed;
+	// }
+	// #left, #right {
+	//   top: 0; bottom: 0;
+	//   width: 1rem;
+	// }
+  //
+  // #left { left: 0; }
+	// #right { right: 0; }
+  //
+	// #top, #bottom {
+	//   left: 0; right: 0;
+	// 	height: 1rem;
+	// }
+  //
+	// #top { top: 0; }
+	// #bottom { bottom: 0; }
 
-  #left { left: 0; }
-	#right { right: 0; }
-
-	#top, #bottom {
-	  left: 0; right: 0;
-		height: 1rem;
-	}
-
-	#top { top: 0; }
-	#bottom { bottom: 0; }
+  .page {
+    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
+    width: calc(100% - 2rem);
+    height: calc(100% - 2rem);
+    margin: 1rem;
+  }
 
   .container {
     flex: 1 0 auto;
