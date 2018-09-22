@@ -11,7 +11,7 @@
 @zebra-white: #f5f1eb;
 @accent-white: darken(@zebra-white, 20);
 @active-white: darken(@primary-white, 10);
-@selected-light: darken(@primary-white, 15);
+@selected-light: darken(@primary-white, 20);
 
 
 @primary-red: #822000;
@@ -110,11 +110,15 @@
 .tabs span, .c-tabs span {
     background-color: @active-white;
     &:hover {
-        background-color: @hover-white;
+      background-color: @selected-light;
     }
     &.selected, &.s-selected {
         background-color: @primary-red;
         color: @primary-white;
+
+        &:hover {
+          background-color: @accent-red;
+        }
     }
 }
 
