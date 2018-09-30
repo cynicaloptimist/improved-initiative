@@ -81,12 +81,23 @@ export class EncounterCommander {
     }
 
     public ClearEncounter = () => {
-        if (confirm("Remove all creatures and end encounter?")) {
+        if (confirm("Remove all combatants and end encounter?")) {
             this.tracker.Encounter.ClearEncounter();
             this.tracker.CombatantViewModels([]);
             this.tracker.CombatantCommander.SelectedCombatants([]);
             this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
             Metrics.TrackEvent("EncounterCleared");
+        }
+
+        return false;
+    }
+
+    public CleanEncounter = () => {
+        if (confirm("Remove NPCs and end encounter?")) {
+            const npcViewModels = this.tracker.CombatantViewModels().filter(c => !c.Combatant.IsPlayerCharacter);
+            this.tracker.CombatantCommander.SelectedCombatants([]);
+            this.tracker.Encounter.EndEncounter();
+            this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
         }
 
         return false;
@@ -99,6 +110,9 @@ export class EncounterCommander {
     }
 
     public NextTurn = () => {
+        if (!this.tracker.Encounter.ActiveCombatant()) {
+            return;
+        }
         const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
         if (turnEndCombatant) {
             Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });    

@@ -46,7 +46,7 @@ const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 
         const addButton = <button
             type="button"
-            className="fa fa-plus c-add-button"
+            className="fas fa-plus c-add-button"
             onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
 
         if (api.values[modifierType].length == 0) {
@@ -73,7 +73,7 @@ const keywordFields = (api: FormApi, keywordType: string) => {
     return <FieldArray name={keywordType} render={arrayHelpers => {
         const addButton = <button
             type="button"
-            className="fa fa-plus c-add-button"
+            className="fas fa-plus c-add-button"
             onClick={() => arrayHelpers.push("")} />;
 
         if (api.values[keywordType].length == 0) {
@@ -96,7 +96,7 @@ const powerFields = (api: FormApi, powerType: string) => {
     return <FieldArray name={powerType} render={arrayHelpers => {
 
         const addButton = <button type="button"
-            className="fa fa-plus c-add-button"
+            className="fas fa-plus c-add-button"
             onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
 
         if (api.values[powerType].length == 0) {
@@ -143,7 +143,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         const buttons = <React.Fragment>
             <Button onClick={this.close} fontAwesomeIcon="times" />
             {this.props.onDelete && <Button onClick={this.delete} fontAwesomeIcon="trash" />}
-            <button type="submit" className="button fa fa-save" />
+            <button type="submit" className="button fas fa-save" />
         </React.Fragment>;
 
         const initialValues = {

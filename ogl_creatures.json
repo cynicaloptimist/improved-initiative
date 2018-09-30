@@ -21915,11 +21915,6 @@
         ],
         "Actions": [
             {
-                "Name": "Thunderous Stomp (Recharge 6)",
-                "Content": "The storm giant stomps the ground, triggering a thunderclap. All other creatures within 15 feet of the giant must succeed on a DC 17 Constitution saving throw or take 33 (6d10) thunder damage and be deafened until the start of the giant's next turn. On a successful save, a creature takes half as much damage and isn't deafened. The thunderclap can be heard out to a range of 1,200 feet.",
-                "Usage": ""
-            },
-            {
                 "Name": "Claw (Fiend Form Only)",
                 "Content": "Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.",
                 "Usage": ""

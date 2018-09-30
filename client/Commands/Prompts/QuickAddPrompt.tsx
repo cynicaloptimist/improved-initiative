@@ -21,7 +21,7 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
             <input className={inputClassName} name="hp" type="number" placeholder="HP" />
             <input className={inputClassName} name="ac" type="number" placeholder="AC" />
             <input className={inputClassName} name="initiative" type="number" placeholder="Init" />
-            <button type="submit" className="fa fa-check button"></button>
+            <button type="submit" className="fas fa-check button"></button>
         </div>;
     }
 }

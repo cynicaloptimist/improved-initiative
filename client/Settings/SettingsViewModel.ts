@@ -36,6 +36,7 @@ export class SettingsViewModel {
     public Tip: KnockoutComputed<string>;
 
     public PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
+    public ActiveCombatantOnTop: KnockoutObservable<boolean>;
     public PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
     public PlayerViewDisplayRoundCounter: KnockoutObservable<boolean>;
     public DisplayDifficulty: KnockoutObservable<boolean>;
@@ -80,7 +81,7 @@ export class SettingsViewModel {
 
     private getUpdatedSettings(): Settings {
         const getCommandSetting = (command: Command): CommandSetting => ({
-            Name: command.Description,
+            Name: command.Id,
             KeyBinding: command.KeyBinding,
             ShowOnActionBar: command.ShowOnActionBar()
         });
@@ -101,6 +102,7 @@ export class SettingsViewModel {
             PlayerView: {
                 ...this.playerViewSettings,
                 AllowPlayerSuggestions: this.PlayerViewAllowPlayerSuggestions(),
+                ActiveCombatantOnTop: this.ActiveCombatantOnTop(),
                 DisplayRoundCounter: this.PlayerViewDisplayRoundCounter(),
                 DisplayTurnTimer: this.PlayerViewDisplayTurnTimer(),
                 HideMonstersOutsideEncounter: this.HideMonstersOutsideEncounter(),
@@ -160,6 +162,7 @@ export class SettingsViewModel {
         this.PlayerViewDisplayRoundCounter = ko.observable(currentSettings.PlayerView.DisplayRoundCounter);
         this.PlayerViewDisplayTurnTimer = ko.observable(currentSettings.PlayerView.DisplayTurnTimer);
         this.PlayerViewAllowPlayerSuggestions = ko.observable(currentSettings.PlayerView.AllowPlayerSuggestions);
+        this.ActiveCombatantOnTop = ko.observable(currentSettings.PlayerView.ActiveCombatantOnTop);
 
         this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
         this.NextTip = cycleTipIndex.bind(1);

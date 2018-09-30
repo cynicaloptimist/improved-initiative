@@ -7,7 +7,7 @@ export class ConcentrationPrompt implements Prompt {
     public ComponentName = "concentrationprompt";
     public Prompt: string;
 
-    public Resolve = (form: HTMLFormElement) => { };
+    public Resolve = () => { };
     public FailCheck: () => void;
 
     constructor(combatant: Combatant, damageAmount: number) {
@@ -19,6 +19,7 @@ export class ConcentrationPrompt implements Prompt {
             combatant.Tags()
                 .filter(t => t.Text === ConcentrationPrompt.Tag)
                 .forEach(tag => combatant.Tags.remove(tag));
+            return true;
         };
     }
 }

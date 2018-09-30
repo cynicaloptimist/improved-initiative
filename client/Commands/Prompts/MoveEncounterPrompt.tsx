@@ -31,7 +31,7 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
         return <span className={promptClassName}>
             Move encounter {this.props.encounterName} to Folder:
             <input ref={i => this.input = i} className={inputClassName} name="folderName" type="text" />
-            <button type="submit" className="fa fa-check button"></button>
+            <button type="submit" className="fas fa-check button"></button>
         </span>;
     }
 

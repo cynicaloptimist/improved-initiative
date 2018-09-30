@@ -42,7 +42,7 @@ class SpellPrompt extends React.Component<SpellPromptProps, null> {
                 <p className="spell-description">{this.props.TextEnricher.EnrichText(this.props.Spell.Description)}</p>
                 <p className="spell-source">Source: {this.props.Spell.Source}</p>
             </div>
-            <button type="submit" className="fa fa-check button"></button>
+            <button type="submit" className="fas fa-check button"></button>
         </React.Fragment>;
     }
 }

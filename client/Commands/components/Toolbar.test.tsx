@@ -7,9 +7,9 @@ import { Toolbar } from "./Toolbar";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const renderToolbarWithSingleCommand = (description, keyBinding) => {
+const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
     const encounterCommands = [
-        new Command(description, () => {}, keyBinding, "gear")
+        new Command(id, description, () => {}, keyBinding, "gear")
     ];
 
     return Enzyme.render(
@@ -23,18 +23,20 @@ const renderToolbarWithSingleCommand = (description, keyBinding) => {
 
 describe("Toolbar component", () => {
     test("Button shows the command's description and key binding", () => {
+        const id = "test-command";
         const description = "Test command";
         const keyBinding = "alt+t";
-        const component = renderToolbarWithSingleCommand(description, keyBinding);
+        const component = renderToolbarWithSingleCommand(id, description, keyBinding);
 
         const tooltip = component.find(".c-button").first().prop("title");
         expect(tooltip).toEqual(`${description} [${keyBinding}]`);
     });
 
     test("Button shows the command's description if key binding is blank", () => {
+        const id = "test-command";
         const description = "Test command";
         const keyBinding = "";
-        const component = renderToolbarWithSingleCommand(description, keyBinding);
+        const component = renderToolbarWithSingleCommand(id, description, keyBinding);
 
         const tooltip = component.find(".c-button").first().prop("title");
         expect(tooltip).toEqual(description);
