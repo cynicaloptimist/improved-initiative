@@ -1,5 +1,5 @@
 @primary-green: #00643C;
-@hover-green: lighten(@primary-green, 10);
+@hover-green: lighten(@primary-green, 75);
 @active-green: lighten(@primary-green, 15);
 @accent-green: darken(@primary-green, 5);
 
@@ -123,7 +123,7 @@
 }
 
 .combat-footer {
-    background-color: @primary-black;
+    background-color: @primary-grey;
     a {
         color: @primary-white;
     }
@@ -146,8 +146,12 @@
 .combatant {
     .colors(@primary-black, @primary-white, transparent);
 
-    &:nth-child(2n) {
+    &:nth-child(2n+1) {
         background-color: @zebra-white;
+    }
+
+    &:nth-child(2n) {
+      background-color: @primary-white !important;
     }
 
     &.active {
