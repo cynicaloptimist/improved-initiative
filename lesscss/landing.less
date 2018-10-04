@@ -1,18 +1,17 @@
 #landing {
-  display: flex;
-  padding: 1rem;
-  flex-direction: column;
-  background-color: @primary-red;
+  height: auto;
 
   .page {
-    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     width: 100%;
-    height: 100%;
+    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
   }
 
   .container {
-    flex: 1 0 auto;
-    margin-top: 6rem;
+    flex: 1;
+    margin-top: @larger-spacer;
     padding: 1rem;
     align-items: center;
   }
@@ -84,7 +83,7 @@
 
       p {
         margin: @larger-spacer 0;
-        font-size: @font-size-large;
+        font-size: @font-size-body;
         line-height: 1.4;
         text-align: center;
       }
@@ -198,14 +197,15 @@
       font-size: @font-size-small;
     }
 
-    p {
-      margin: 0 0 @large-spacer @large-spacer;
+    .legal {
+      flex: 1;
+      margin: @large-spacer;
     }
 
     a:link, a:hover, a:active, a:visited { color: @primary-red; }
 
     .support {
-      z-index: 9999;
+
     }
     .patreon-button {
       .colors(@primary-white, @primary-red, @primary-red);
@@ -215,61 +215,4 @@
     }
   }
 
-
-  // .start {
-  //   .card-bg(@larger-spacer, @larger-spacer);
-  //
-  //   div,
-  //   li,
-  //   p {
-  //     font-size: 16pt;
-  //     margin: @extra-small-spacer;
-  //   }
-  //   flex-grow: 1;
-  //   flex-shrink: 1;
-  //   align-items: center;
-  //   padding: @large-spacer;
-  //   margin: 0 30px;
-  // }
-
-  // .launch-controls {
-  //   div {
-  //     flex-direction: row;
-  //   }
-  //
-  //   .button,
-  //   input {
-  //     flex-grow: 1;
-  //     flex-shrink: 1;
-  //     margin: @medium-spacer;
-  //   }
-  // }
-  //
-  // .disabled {
-  //   cursor: default;
-  // }
-
-  // .footer-spacer {
-  //   flex-grow: 1;
-  //   flex-shrink: 1;
-  // }
-  //
-  // .footer {
-  //   .recessed();
-  //   border-radius: 0;
-  //   text-align: center;
-  //   align-self: stretch;
-  //   margin: @medium-spacer 0 0;
-  // }
-  // @logo-size: 40px;
-  //
-  // .pledge-logo {
-  //   img {
-  //     width: @logo-size;
-  //   }
-  //   position: absolute;
-  //   bottom: -1/4 * @logo-size;
-  //   right: -1/4 * @logo-size;
-  //   .hop();
-  // }
 }
