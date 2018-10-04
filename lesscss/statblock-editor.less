@@ -16,7 +16,7 @@
     margin: @medium-spacer 0;
     border: 1px solid @primary-red;
     border-radius: @border-radius;
-    min-height: 40px;
+    font-size: 1rem;
   }
 
   input.name {
@@ -25,6 +25,10 @@
 
   input.notes {
     flex-grow: 1;
+  }
+
+  input[name="SaveAs"] {
+    margin: @medium-spacer @large-spacer @medium-spacer @small-spacer;
   }
 
   .inline-names-and-modifiers {
@@ -47,9 +51,6 @@
   input {
     &:first-child {
       margin-right: @medium-spacer;
-    }
-    &:last-child {
-      margin-left: @medium-spacer;
     }
   }
 }
@@ -167,6 +168,10 @@
 .c-statblock-editor__json-section,
 .c-statblock-editor__json-textarea {
   flex-grow: 1;
+
+  .c-statblock-editor__text {
+    align-items: stretch;
+  }
 }
 
 .c-statblock-editor__title-row {
