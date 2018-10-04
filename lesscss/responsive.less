@@ -3,99 +3,160 @@
 //         display: none;
 //     }
 // }
-
 //Two columns
 @media(max-width: 1200px) {
-    body>.login.button {
-        display: none;
+  body > .login.button {
+    display: none;
+  }
+
+  #tracker {
+    .toolbar-narrow {
+      width: 52px;
+    }
+  }
+
+  #tracker.show-center-left-right,
+  #tracker.show-left-center-right {
+    .right-column {
+      display: none;
+    }
+  }
+
+  #tracker.show-center-right-left,
+  #tracker.show-right-center-left {
+    .left-column {
+      display: none;
     }
 
-    #tracker {
-        .toolbar-narrow {
-            width: 52px;
-        }
+    .center-column {
+      order: 3;
     }
-
-    #tracker.show-left-center-right,
-    #tracker.show-center-left-right {
-        .right-column {
-            display: none;
-        }
-    }
-
-    #tracker.show-right-center-left,
-    #tracker.show-center-right-left {
-        .left-column {
-            display: none;
-        }
-        .center-column {
-            order: 3;
-        }
-    }
+  }
 }
-
 @media(max-width:900px) {
-    #tracker {
-        .combatant .name {
-            width: 25%;
-        }
-
-        .left-column, .right-column, .preview.statblock, .c-statblock {
-            width: 300px;
-            max-width: 300px;
-        }
+  #tracker {
+    .combatant .name {
+      width: 25%;
     }
-}
 
+    .c-statblock,
+    .left-column,
+    .preview.statblock,
+    .right-column {
+      width: 300px;
+      max-width: 300px;
+    }
+  }
+}
 //One column
 @media(max-width: 650px) {
-    .tutorial {
-        position: fixed !important;
-        top: auto !important;
-        bottom: @medium-spacer !important;
-        left: @medium-spacer !important;
-        right: 0 !important;
-        max-width: 90%;
+  .tutorial {
+    position: fixed !important;
+    top: auto !important;
+    bottom: @medium-spacer !important;
+    left: @medium-spacer !important;
+    right: 0 !important;
+    max-width: 90%;
+  }
+
+  .fa-search.preview {
+    display: none;
+  }
+
+  .combatant-portrait-image {
+    width: 100%;
+  }
+
+  #tracker.show-left-center-right {
+    .left-column {
+      width: auto;
+      max-width: initial;
+      flex-grow: 1;
+      flex-shrink: 1;
     }
 
-    .fa-search.preview {
-        display: none;
+    .center-column,
+    .right-column {
+      display: none;
+    }
+  }
+
+  #tracker.show-right-center-left {
+    .right-column {
+      width: auto;
+      max-width: initial;
+      flex-grow: 1;
+      flex-shrink: 1;
     }
 
-    .combatant-portrait-image {
-        width: 100%;
+    .center-column,
+    .left-column {
+      display: none;
+    }
+  }
+
+  #tracker.show-center-left-right,
+  #tracker.show-center-right-left {
+    .left-column,
+    .right-column {
+      display: none;
+    }
+  }
+
+  #landing {
+    .container {
+      margin-top: 0;
     }
 
-    #tracker.show-left-center-right {
-        .left-column {
-            width: auto;
-            max-width: initial;
-            flex-grow: 1;
-            flex-shrink: 1;
+    .card {
+      margin: 0;
+      
+      .title {
+        flex-direction: column;
+
+        .logo {
+          margin-right: 0;
         }
 
-        .right-column, .center-column {
-            display: none;
+        .headline {
+          text-align: center;
+          margin-top: @medium-spacer;
         }
+      }
+
+      .content {
+
+        .features {
+          flex-direction: column;
+          width: 100%;
+
+          .features-column {
+            margin: @large-spacer 0;
+
+            &:first-child {
+              margin-top: 0;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
+        }
+      }
     }
 
-    #tracker.show-right-center-left {
-        .right-column {
-            width: auto;
-            max-width: initial;
-            flex-grow: 1;
-            flex-shrink: 1;
-        }
+    .footer {
+      height: auto;
+      flex-direction: column;
+      align-items: stretch;
 
-        .left-column, .center-column {
-            display: none;
-        }
+      .legal {
+        margin: @large-spacer;
+        text-align: center;
+      }
+      .support {
+        flex: 1;
+      }
     }
-
-    #tracker.show-center-right-left,
-    #tracker.show-center-left-right {
-        .left-column, .right-column {
-            display: none;
-        }
-    }
+  }
 }
