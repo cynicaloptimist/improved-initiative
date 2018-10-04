@@ -1,22 +1,17 @@
 #playerview {
     margin: 0;
-
-    font-size: 150%;
-
-    background-image: url('../img/improved-initiative-transparent-darkgreen.png');
-    background-position: center bottom 20px;
-    background-repeat: no-repeat;
+    font-size: 20px;
 
     .combatant--header {
         flex-direction: row;
     }
 
     .combatant__initiative {
-        width: 5.5vw;
+        // width: 5.5vw;
     }
 
     .combatant__hp {
-        width: 15vw;
+        flex-basis: 10%;
     }
 
     .combatant__portrait {
@@ -29,6 +24,19 @@
         max-height: 50px;
     }
 
+    .combatant__name {
+      flex-basis: 20%;
+    }
+
+    .combatant__tags {
+      flex-basis: 50%;
+      flex-direction: row;
+
+      .tag {
+        margin-right: @large-spacer;
+      }
+    }
+
     .combatant__header .combatant__tags {
         text-align: center;
     }
@@ -37,6 +45,7 @@
         flex-direction: row;
         justify-content: flex-end;
         margin: @medium-spacer;
+        color: @primary-white;
         >span {
             padding-right: @medium-spacer;
         }

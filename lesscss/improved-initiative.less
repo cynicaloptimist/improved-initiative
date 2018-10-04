@@ -40,7 +40,7 @@
 
 * {
   font-family: @font-family-body;
-  font-size: 14px;
+  // font-size: 14px;
   position: relative;
   margin: 0;
   padding: 0;
@@ -63,6 +63,14 @@ html {
 #tracker,
 #playerview {
   background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
+}
+
+#tracker {
+  font-size: 14px;
+}
+
+#playerview {
+  font-size: 20px;
 }
 
 div {
@@ -273,6 +281,8 @@ body > .login.button {
 
 .c-tabs,
 .tabs {
+  // flex: 1;
+  justify-content: center;
   flex-flow: row;
   margin: @medium-spacer 0 0 0;
 
@@ -281,6 +291,7 @@ body > .login.button {
     padding: @medium-spacer;
     margin-right: @extra-small-spacer;
     border-radius: 0 @border-radius 0 0;
+    align-items: center;
     text-align: center;
 
     &:last-of-type {
