@@ -18,7 +18,7 @@
 
   .card {
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     .card-bg(@larger-spacer, @larger-spacer);
     border: none;
 
@@ -50,7 +50,7 @@
       align-items: center;
 
       .logo {
-        flex-basis: 4rem;
+        flex-shrink: 1;
         margin-right: @larger-spacer;
 
         img {
@@ -60,6 +60,7 @@
       }
 
       .headline {
+        flex: 1;
         flex-direction: column;
 
         h1 {
