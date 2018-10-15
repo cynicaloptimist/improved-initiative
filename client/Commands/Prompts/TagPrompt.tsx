@@ -33,7 +33,8 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
             minChars: 1,
         });
 
-        this.textInput.focus();
+        const inputElement = this.Awesomeplete.input as HTMLElement;
+        inputElement.focus();
     }
 
     public render() {
