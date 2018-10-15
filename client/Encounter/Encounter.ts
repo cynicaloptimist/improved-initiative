@@ -362,11 +362,23 @@ export class Encounter {
             Version: process.env.VERSION
         };
     }
+
+    private lastVisibleActiveCombatantId = null;
     
     private getPlayerViewActiveCombatantId() {
-        let activeCombatant = this.ActiveCombatant();
+        const activeCombatant = this.ActiveCombatant();
+        if (!activeCombatant) {
+            this.lastVisibleActiveCombatantId = null;
+            return this.lastVisibleActiveCombatantId;
+        }
 
-        return activeCombatant ? activeCombatant.Id : null;
+        if (activeCombatant.Hidden()) {
+            return this.lastVisibleActiveCombatantId;
+        }
+
+        this.lastVisibleActiveCombatantId = activeCombatant.Id;
+
+        return this.lastVisibleActiveCombatantId;
     }
 
     public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
