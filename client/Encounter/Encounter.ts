@@ -85,11 +85,11 @@ export class Encounter {
         const groupBonuses = this.Combatants()
             .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
             .map(c => c.InitiativeBonus);
-        
+
         return max(groupBonuses) || combatant.InitiativeBonus;
     }
 
-    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
+    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string)[] {
         if (stable) {
             return [c => -c.Initiative()];
         } else {
@@ -118,11 +118,11 @@ export class Encounter {
     }
 
     public ActiveCombatantToTop = () => {
-            const activeCombatant = this.ActiveCombatant();
+        const activeCombatant = this.ActiveCombatant();
 
-            while (this.Combatants()[0] != activeCombatant) {
-                this.Combatants().push(this.Combatants().shift());
-            }
+        while (this.Combatants()[0] != activeCombatant) {
+            this.Combatants().push(this.Combatants().shift());
+        }
     }
 
     public ImportEncounter = (encounter) => {
@@ -245,7 +245,7 @@ export class Encounter {
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "EndOfTurn")
             .forEach(t => t.Decrement());
-        
+
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
         if (nextIndex >= this.Combatants().length) {
             nextIndex = 0;
@@ -256,19 +256,18 @@ export class Encounter {
 
         this.ActiveCombatant(nextCombatant);
 
-        if (!nextCombatant.Hidden()) {
-            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-                this.ActiveCombatantToTop();
-            }
-
-            this.durationTags
-                .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
-                .forEach(t => t.Decrement());
-
-            this.TurnTimer.Reset();
-            this.QueueEmitEncounter();
+        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+            this.ActiveCombatantToTop();
         }
+
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
+            .forEach(t => t.Decrement());
+
+        this.TurnTimer.Reset();
+        this.QueueEmitEncounter();
     }
+
 
     public PreviousTurn = () => {
         const activeCombatant = this.ActiveCombatant();
@@ -285,18 +284,17 @@ export class Encounter {
         const previousCombatant = this.Combatants()[previousIndex];
         this.ActiveCombatant(previousCombatant);
 
-        if (!previousCombatant.Hidden()) {
-            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-                this.ActiveCombatantToTop();
-            }
-
-            this.durationTags
-                .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
-                .forEach(t => t.Increment());
-
-            this.QueueEmitEncounter();
+        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
+            this.ActiveCombatantToTop();
         }
+
+        this.durationTags
+            .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
+            .forEach(t => t.Increment());
+
+        this.QueueEmitEncounter();
     }
+
 
     private durationTags: Tag[] = [];
 
@@ -341,7 +339,7 @@ export class Encounter {
 
     public GetPlayerView = (): SavedEncounter<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-        
+
         return {
             Name: this.EncounterId,
             Path: "",
@@ -364,7 +362,7 @@ export class Encounter {
     }
 
     private lastVisibleActiveCombatantId = null;
-    
+
     private getPlayerViewActiveCombatantId() {
         const activeCombatant = this.ActiveCombatant();
         if (!activeCombatant) {
