@@ -341,12 +341,12 @@ export class Encounter {
 
     public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-        let activeCombatant = this.ActiveCombatant();
+        
         return {
             Name: this.EncounterId,
             Path: "",
             Id: this.EncounterId,
-            ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
+            ActiveCombatantId: this.getPlayerViewActiveCombatantId(),
             RoundCounter: this.RoundCounter(),
             Combatants: this.Combatants()
                 .filter(c => {
@@ -361,6 +361,12 @@ export class Encounter {
                 .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
             Version: process.env.VERSION
         };
+    }
+
+    private getPlayerViewActiveCombatantId() {
+        let activeCombatant = this.ActiveCombatant();
+
+        return activeCombatant ? activeCombatant.Id : null;
     }
 
     public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
