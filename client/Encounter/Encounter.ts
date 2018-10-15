@@ -153,7 +153,7 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
-        this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
+        this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
@@ -339,7 +339,7 @@ export class Encounter {
         };
     }
 
-    public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
+    public GetPlayerView = (): SavedEncounter<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
         
         return {
@@ -362,7 +362,7 @@ export class Encounter {
             Version: process.env.VERSION
         };
     }
-
+    
     private getPlayerViewActiveCombatantId() {
         let activeCombatant = this.ActiveCombatant();
 
