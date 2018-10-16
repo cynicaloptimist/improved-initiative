@@ -20,14 +20,14 @@ describe("PlayerViewModel", () => {
         playerViewModel = new PlayerViewModel(mockIo);
         encounter = buildEncounter();
         playerViewModel.LoadSettings(CurrentSettings().PlayerView);
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
     });
 
     test("Loading the encounter populates combatants", () => {
         expect(playerViewModel.combatants().length).toBe(0);
 
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         
         expect(playerViewModel.combatants().length).toBe(1);
     });
@@ -35,7 +35,7 @@ describe("PlayerViewModel", () => {
     test("Starting the encounter splashes combatant portraits when available", () => {
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         
         env.HasEpicInitiative = true;
         const settings = CurrentSettings();
@@ -46,7 +46,7 @@ describe("PlayerViewModel", () => {
         expect(playerViewModel.imageModal().Visible).toBe(false);
 
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
         expect(playerViewModel.imageModal().Visible).toBe(true);
     });
@@ -55,7 +55,7 @@ describe("PlayerViewModel", () => {
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         
         env.HasEpicInitiative = true;
         const settings = CurrentSettings();
@@ -65,7 +65,7 @@ describe("PlayerViewModel", () => {
         
         expect(playerViewModel.imageModal().Visible).toBe(false);
 
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
         expect(playerViewModel.imageModal().Visible).toBe(false);
     });
@@ -74,7 +74,7 @@ describe("PlayerViewModel", () => {
         const combatant1 = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant1.png" });
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, ImageURL: "http://combatant2.png" });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         
         env.HasEpicInitiative = true;
         const settings = CurrentSettings();
@@ -85,7 +85,7 @@ describe("PlayerViewModel", () => {
         expect(playerViewModel.imageModal().Visible).toBe(false);
 
         combatant1.ApplyDamage(5);
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
         expect(playerViewModel.imageModal().Visible).toBe(false);
     });
@@ -93,14 +93,14 @@ describe("PlayerViewModel", () => {
     test("Player HP is displayed", () => {
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
     });
     
     test("Creature HP is obfuscated", () => {
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
     });
 
@@ -111,7 +111,7 @@ describe("PlayerViewModel", () => {
         
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
     });
 
@@ -122,7 +122,33 @@ describe("PlayerViewModel", () => {
         
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" } });
         encounter.StartEncounter();
-        playerViewModel.LoadEncounter(encounter.SavePlayerDisplay());
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
         expect(playerViewModel.combatants()[0].HPDisplay).toBe("<span class='healthyHP'>Healthy</span>");
+    });
+
+    test("Player View is only updated if next combatant is visible", () => {
+        const visibleCombatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        visibleCombatant1.Initiative(20);
+
+        const visibleCombatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        visibleCombatant2.Initiative(10);
+
+        const hiddenCombatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+        hiddenCombatant.Hidden(true);
+        hiddenCombatant.Initiative(1);
+
+        encounter.StartEncounter();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
+
+        //expect(???).toBe(visibleCombatant1.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant2.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant2.Id);
+        encounter.NextTurn();
+
+        //expect(??).toBe(visibleCombatant1.Id);
     });
 });

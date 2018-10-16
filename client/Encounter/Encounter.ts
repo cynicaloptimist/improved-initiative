@@ -85,11 +85,11 @@ export class Encounter {
         const groupBonuses = this.Combatants()
             .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
             .map(c => c.InitiativeBonus);
-        
+
         return max(groupBonuses) || combatant.InitiativeBonus;
     }
 
-    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string )[] {
+    private getCombatantSortIteratees(stable: boolean): ((c: Combatant) => number | string)[] {
         if (stable) {
             return [c => -c.Initiative()];
         } else {
@@ -118,11 +118,11 @@ export class Encounter {
     }
 
     public ActiveCombatantToTop = () => {
-            const activeCombatant = this.ActiveCombatant();
+        const activeCombatant = this.ActiveCombatant();
 
-            while (this.Combatants()[0] != activeCombatant) {
-                this.Combatants().push(this.Combatants().shift());
-            }
+        while (this.Combatants()[0] != activeCombatant) {
+            this.Combatants().push(this.Combatants().shift());
+        }
     }
 
     public ImportEncounter = (encounter) => {
@@ -153,7 +153,7 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
-        this.playerViewClient.UpdateEncounter(this.EncounterId, this.SavePlayerDisplay());
+        this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
         Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
     }
 
@@ -245,7 +245,7 @@ export class Encounter {
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "EndOfTurn")
             .forEach(t => t.Decrement());
-        
+
         let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
         if (nextIndex >= this.Combatants().length) {
             nextIndex = 0;
@@ -267,6 +267,7 @@ export class Encounter {
         this.TurnTimer.Reset();
         this.QueueEmitEncounter();
     }
+
 
     public PreviousTurn = () => {
         const activeCombatant = this.ActiveCombatant();
@@ -293,6 +294,7 @@ export class Encounter {
 
         this.QueueEmitEncounter();
     }
+
 
     private durationTags: Tag[] = [];
 
@@ -335,14 +337,14 @@ export class Encounter {
         };
     }
 
-    public SavePlayerDisplay = (): SavedEncounter<StaticCombatantViewModel> => {
+    public GetPlayerView = (): SavedEncounter<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-        let activeCombatant = this.ActiveCombatant();
+
         return {
             Name: this.EncounterId,
             Path: "",
             Id: this.EncounterId,
-            ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
+            ActiveCombatantId: this.getPlayerViewActiveCombatantId(),
             RoundCounter: this.RoundCounter(),
             Combatants: this.Combatants()
                 .filter(c => {
@@ -357,6 +359,24 @@ export class Encounter {
                 .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
             Version: process.env.VERSION
         };
+    }
+
+    private lastVisibleActiveCombatantId = null;
+
+    private getPlayerViewActiveCombatantId() {
+        const activeCombatant = this.ActiveCombatant();
+        if (!activeCombatant) {
+            this.lastVisibleActiveCombatantId = null;
+            return this.lastVisibleActiveCombatantId;
+        }
+
+        if (activeCombatant.Hidden()) {
+            return this.lastVisibleActiveCombatantId;
+        }
+
+        this.lastVisibleActiveCombatantId = activeCombatant.Id;
+
+        return this.lastVisibleActiveCombatantId;
     }
 
     public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
