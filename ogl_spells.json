@@ -1458,7 +1458,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Instant Summon",
+    "Name": "Instant Summons",
     "CastingTime": "1 minute",
     "Classes": [
       "Wizard"
@@ -3568,7 +3568,7 @@
     "Source": "Player's Handbook"
   },
   {
-    "Name": "Pass Without Trace",
+    "Name": "Pass without Trace",
     "CastingTime": "1 action",
     "Classes": [
       "Druid",
