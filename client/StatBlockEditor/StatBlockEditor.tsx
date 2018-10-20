@@ -132,6 +132,13 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
         this.state = { editorMode: "standard" };
     }
 
+    public componentDidCatch(error, info) {
+        this.setState({
+            editorMode: "json",
+            renderError: JSON.stringify(error)
+        });
+    }
+
     public render() {
         const header =
             this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
@@ -224,10 +231,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     </React.Fragment>
 
     private jsonEditor = (api) => <div className="c-statblock-editor__json-section">
+        {this.state.renderError && <p className="c-statblock-editor__error">There was a problem with your statblock JSON, falling back to JSON editor.</p>}
+        {api.errors.JSONParseError && <p className="c-statblock-editor__error">{api.errors.JSONParseError}</p>}
         <label className="c-statblock-editor__text">
             <div className="c-statblock-editor__label">JSON</div>
             <Field className="c-statblock-editor__json-textarea" component="textarea" name="StatBlockJSON" />
-            {api.errors.JSONParseError}
         </label>
     </div>
 
@@ -342,4 +350,5 @@ interface StatBlockEditorProps {
 
 interface StatBlockEditorState {
     editorMode: "standard" | "json";
+    renderError?: string;
 }

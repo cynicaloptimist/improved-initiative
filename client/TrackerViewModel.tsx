@@ -40,10 +40,10 @@ export class TrackerViewModel {
 
         this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
         this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, CurrentSettings().PlayerView);
-        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
+        this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.GetPlayerView());
         CurrentSettings.subscribe(v => {
             this.playerViewClient.UpdateSettings(this.Encounter.EncounterId, v.PlayerView);
-            this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.SavePlayerDisplay());
+            this.playerViewClient.UpdateEncounter(this.Encounter.EncounterId, this.Encounter.GetPlayerView());
         });
 
         this.accountClient.GetAccount(account => {
