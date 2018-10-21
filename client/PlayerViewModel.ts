@@ -102,6 +102,11 @@ export class PlayerViewModel {
     public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
+        if (encounter.State() == "inactive") {
+            this.turnTimer.Stop();
+        } else {
+            this.turnTimer.Start();
+        }
         if (!encounter.ActiveCombatantId) {
             return;
         }
