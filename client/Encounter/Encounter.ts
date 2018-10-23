@@ -12,7 +12,6 @@ import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
-import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
@@ -25,7 +24,6 @@ import { TurnTimer } from "../Widgets/TurnTimer";
 
 export class Encounter {
     constructor(
-        promptQueue: PromptQueue,
         private playerViewClient: PlayerViewClient,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,

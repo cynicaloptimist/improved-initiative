@@ -128,7 +128,6 @@ export class TrackerViewModel {
         this.Rules);
 
     public Encounter = new Encounter(
-        this.PromptQueue,
         this.playerViewClient,
         this.addCombatantViewModel,
         this.removeCombatantViewModels,
