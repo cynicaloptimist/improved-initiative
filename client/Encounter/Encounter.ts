@@ -334,7 +334,6 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-
     private durationTags: Tag[] = [];
 
     public AddDurationTag = (tag: Tag) => {
