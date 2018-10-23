@@ -32,4 +32,21 @@ describe("Combatant", () => {
         combatant.StatBlock({ ...StatBlock.Default(), HP: { Value: 15, Notes: "" } });
         expect(combatantsSpy).toBeCalled();
     });
+
+    describe("Index labeling", () => {
+        test("A lone combatant is not index labelled.", () => {
+            const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+            const combatant1 = encounter.AddCombatantFromStatBlock(statBlock);
+            expect(combatant1.DisplayName()).toEqual("Goblin");
+        });
+
+        test("When multiple combatants are added with the same name, they should display index labels.", () => {
+            const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+            
+            const combatant1 = encounter.AddCombatantFromStatBlock(statBlock);
+            const combatant2 = encounter.AddCombatantFromStatBlock(statBlock);
+            expect(combatant1.DisplayName()).toEqual("Goblin 1");
+            expect(combatant2.DisplayName()).toEqual("Goblin 2");
+        });
+    });
 });
