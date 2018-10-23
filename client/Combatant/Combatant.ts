@@ -85,7 +85,10 @@ export class Combatant implements Combatant {
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-        this.updateIndexLabel(oldStatBlock && oldStatBlock.Name);
+        if (oldStatBlock) {
+            this.UpdateIndexLabel(oldStatBlock.Name);
+        }
+
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
         this.AbilityModifiers = this.calculateModifiers();
@@ -109,16 +112,9 @@ export class Combatant implements Combatant {
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
-
-        const indexLabelCollides = this.Encounter.Combatants()
-            .some(c => c.DisplayName() == this.DisplayName());
-        if (indexLabelCollides) {
-            this.updateIndexLabel(savedCombatant.StatBlock.Name);
-        }
-
     }
 
-    private updateIndexLabel(oldName?: string) {
+    public UpdateIndexLabel(oldName?: string) {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {

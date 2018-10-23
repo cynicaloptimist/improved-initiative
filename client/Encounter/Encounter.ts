@@ -188,12 +188,12 @@ export class Encounter {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
         statBlock.HP.Value = this.getMaxHP(statBlock);
-
+        
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
             StatBlock: statBlock,
             Alias: "",
-            IndexLabel: 1,
+            IndexLabel: null,
             CurrentHP: statBlock.HP.Value,
             TemporaryHP: 0,
             Hidden: hideOnAdd,
@@ -209,6 +209,8 @@ export class Encounter {
         }
         this.Combatants.push(combatant);
 
+        combatant.UpdateIndexLabel();
+
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
@@ -222,6 +224,10 @@ export class Encounter {
 
     public AddCombatantFromState = (combatantState: CombatantState) => {
         const combatant = new Combatant(combatantState, this);
+        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
+        if (displayNameIsTaken){
+            combatant.UpdateIndexLabel(); 
+        }
 
         const viewModel = this.buildCombatantViewModel(combatant);
 
