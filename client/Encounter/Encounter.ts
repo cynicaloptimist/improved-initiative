@@ -9,6 +9,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
 import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
@@ -167,27 +168,10 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    private getMaxHP(statBlock: StatBlock) {
-        const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
-        if (rollMonsterHp && statBlock.Player !== "player") {
-            try {
-                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
-                if (rolledHP > 0) {
-                    return rolledHP;
-                }
-                return 1;
-            } catch (e) {
-                console.error(e);
-                return statBlock.HP.Value;
-            }
-        }
-        return statBlock.HP.Value;
-    }
-
     public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
-        statBlock.HP.Value = this.getMaxHP(statBlock);
+        statBlock.HP.Value = GetOrRollMaximumHP(statBlock);
         
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
