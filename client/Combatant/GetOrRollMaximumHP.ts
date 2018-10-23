@@ -18,5 +18,3 @@ export function GetOrRollMaximumHP(statBlock: StatBlock) {
         }
         return statBlock.HP.Value;
     }
-
-    
