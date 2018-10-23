@@ -48,5 +48,17 @@ describe("Combatant", () => {
             expect(combatant1.DisplayName()).toEqual("Goblin 1");
             expect(combatant2.DisplayName()).toEqual("Goblin 2");
         });
+
+        test("When a combatant statblock name changes, it receives an index label if necessary", () => {
+            const statBlock1 = { ...StatBlock.Default(), Name: "Goblin" };
+            const statBlock2 = { ...StatBlock.Default(), Name: "Not Goblin" };
+            
+            const combatant1 = encounter.AddCombatantFromStatBlock(statBlock1);
+            const combatant2 = encounter.AddCombatantFromStatBlock(statBlock2);
+            combatant2.StatBlock(statBlock1);
+
+            expect(combatant1.DisplayName()).toEqual("Goblin 1");
+            expect(combatant2.DisplayName()).toEqual("Goblin 2");
+         });
     });
 });
