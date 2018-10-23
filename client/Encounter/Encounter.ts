@@ -278,10 +278,6 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-    public RollInitiative = (promptQueue: PromptQueue) => {
-        promptQueue.Add(new InitiativePrompt(this.Combatants(), this.StartEncounter));
-    }
-
     public NextTurn = () => {
         const activeCombatant = this.ActiveCombatant();
 
