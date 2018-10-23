@@ -160,7 +160,7 @@ export class Encounter {
             return;
         }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
-        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
+        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId, this.GetSavedEncounter(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -340,7 +340,7 @@ export class Encounter {
         this.durationTags.push(tag);
     }
 
-    public Save = (name: string, path: string): EncounterState<CombatantState> => {
+    public GetSavedEncounter = (name: string, path: string): EncounterState<CombatantState> => {
         let activeCombatant = this.ActiveCombatant();
         const id = AccountClient.MakeId(name, path);
         return {

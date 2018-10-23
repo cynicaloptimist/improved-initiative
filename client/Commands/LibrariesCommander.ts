@@ -126,7 +126,7 @@ export class LibrariesCommander {
                 const encounterName = response["encounterName"];
                 const path = ""; //TODO
                 if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
+                    const savedEncounter = this.tracker.Encounter.GetSavedEncounter(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
