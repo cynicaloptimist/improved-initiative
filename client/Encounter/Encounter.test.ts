@@ -53,4 +53,12 @@ describe("Encounter", () => {
             expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
         }
     });
+
+    test("Encounter turn timer stops when encounter ends", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
+        encounter.StartEncounter();
+        (<any>encounter.TurnTimer).elapsedSeconds(10);
+        encounter.EndEncounter();
+        expect((<any>encounter.TurnTimer).elapsedSeconds()).toBe(0);
+    });
 });

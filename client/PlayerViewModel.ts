@@ -69,7 +69,7 @@ export class PlayerViewModel {
             }
 
             if (playerView.encounterState) {
-                this.LoadEncounter(playerView.encounterState);    
+                this.LoadEncounter(playerView.encounterState);
             }
 
             if (playerView.settings) {
@@ -149,7 +149,7 @@ export class PlayerViewModel {
 
         const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
         imageModal.Caption += `<p>${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}</p>`;
-        
+
         imageModal.URL = combatant.ImageURL;
         imageModal.Visible = true;
 
