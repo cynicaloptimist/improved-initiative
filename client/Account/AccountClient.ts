@@ -28,6 +28,7 @@ export class AccountClient {
         $.when(
             saveEntitySet(prepareForSync(libraries.NPCs.StatBlocks()), "statblocks", messageCallback),
             saveEntitySet(prepareForSync(libraries.PCs.StatBlocks()), "playercharacters", messageCallback),
+            saveEntitySet(prepareForSync(libraries.PersistentCharacters.GetListings()), "persistentcharacters", messageCallback),
             saveEntitySet(prepareForSync(libraries.Spells.Spells()), "spells", messageCallback),
             saveEntitySet(prepareForSync(libraries.Encounters.Encounters()), "encounters", messageCallback)
         ).done(_ => {

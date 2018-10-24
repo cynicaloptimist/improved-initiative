@@ -7,10 +7,12 @@ import { EncounterLibrary } from "./EncounterLibrary";
 import { Listing } from "./Listing";
 import { NPCLibrary } from "./NPCLibrary";
 import { PCLibrary } from "./PCLibrary";
+import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
 
 export class Libraries {
     public PCs: PCLibrary;
+    public PersistentCharacters: PersistentCharacterLibrary;
     public NPCs: NPCLibrary;
     public Encounters: EncounterLibrary;
     public Spells: SpellLibrary;
@@ -29,6 +31,7 @@ export class Libraries {
 
     constructor(accountClient: AccountClient) {
         this.PCs = new PCLibrary(accountClient);
+        this.PersistentCharacters = new PersistentCharacterLibrary();
         this.NPCs = new NPCLibrary(accountClient);
         this.Encounters = new EncounterLibrary(accountClient);
         this.Spells = new SpellLibrary(accountClient);
