@@ -1,3 +1,4 @@
+import { find } from "lodash";
 import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
@@ -35,6 +36,19 @@ export class PersistentCharacterLibrary {
             return new Listing<PersistentCharacter>(c.Id, c.Name, c.Path, c.SearchHint, c.Link, source);
         });
         this.persistentCharacters.push(...newListings);
+    }
+
+    public async GetPersistentCharacter(persistentCharacterId: string) {
+        return new Promise<PersistentCharacter>(done => {
+            const persistentCharacter = find(this.persistentCharacters, (c => c.Id == persistentCharacterId));
+            if (persistentCharacter) {
+                persistentCharacter.GetAsyncWithUpdatedId(c => {
+                    const finalCharacter = { ...DefaultPersistentCharacter(), ...c };
+                    done(finalCharacter);
+                });
+            }
+            throw `Could not find persistent character with id ${persistentCharacterId}`;
+        });
     }
 
     private persistentCharacters: Listing<PersistentCharacter> [] = [];

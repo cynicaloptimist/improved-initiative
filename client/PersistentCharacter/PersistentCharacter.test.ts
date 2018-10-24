@@ -63,17 +63,19 @@ describe("PersistentCharacterLibrary", () => {
 
 describe("PersistentCharacter", () => {
     it("Should persist CurrentHP across encounters", async done => {
-        const persistentCharacter = DefaultPersistentCharacter();
-        persistentCharacter.Name = "Persistent Character";
-        persistentCharacter.StatBlock.HP.Value = 10;
-        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+        const newPersistentCharacter = DefaultPersistentCharacter();
+        newPersistentCharacter.Name = "Persistent Character";
+        newPersistentCharacter.StatBlock.HP.Value = 10;
+        Store.Save(Store.PersistentCharacters, newPersistentCharacter.Id, newPersistentCharacter);
+
+        const library = new PersistentCharacterLibrary();
 
         const encounter1 = buildEncounter();
-        const combatant1 = await encounter1.AddCombatantFromPersistentCharacter(persistentCharacter.Id);
+        const combatant1 = await encounter1.AddCombatantFromPersistentCharacter(await library.GetPersistentCharacter(newPersistentCharacter.Id));
         combatant1.ApplyDamage(5);
 
         const encounter2 = buildEncounter();
-        const combatant2 = await encounter2.AddCombatantFromPersistentCharacter(persistentCharacter.Id);
+        const combatant2 = await encounter2.AddCombatantFromPersistentCharacter(await library.GetPersistentCharacter(newPersistentCharacter.Id));
         expect(combatant2.CurrentHP()).toEqual(5);
 
         done();

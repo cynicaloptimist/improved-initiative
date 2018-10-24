@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -221,27 +222,25 @@ export class Encounter {
         return combatant;
     }
 
-    public async AddCombatantFromPersistentCharacter(persistentCharacterId: string, hideOnAdd = false): Promise<Combatant> {
-        const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacterId);
+    public AddCombatantFromPersistentCharacter(persistentCharacter: PersistentCharacter, hideOnAdd = false): Combatant {
+        const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacter.Id);
         if (alreadyAddedCombatant != undefined) {
-            console.log(`Won't add multiple persistent characters with Id ${persistentCharacterId}`);
+            console.log(`Won't add multiple persistent characters with Id ${persistentCharacter.Id}`);
             return alreadyAddedCombatant;
         }
         
-        const statBlock: StatBlock = { ...StatBlock.Default() };
-
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
-            PersistentCharacterId: persistentCharacterId,
-            StatBlock: statBlock,
+            PersistentCharacterId: persistentCharacter.Id,
+            StatBlock: persistentCharacter.StatBlock,
             Alias: "",
             IndexLabel: null,
-            CurrentHP: statBlock.HP.Value,
+            CurrentHP: persistentCharacter.CurrentHP,
             TemporaryHP: 0,
             Hidden: hideOnAdd,
             Initiative: 0,
             Tags: [],
-            InterfaceVersion: process.env.VERSION,
+            InterfaceVersion: persistentCharacter.Version,
         };
 
         const combatant = new Combatant(initialState, this);
