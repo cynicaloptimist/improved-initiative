@@ -93,3 +93,8 @@ describe("PersistentCharacter", () => {
 
     it("Should render combatant notes with markdown", () => { });
 });
+
+describe("Resolving differences between local storage and account sync", () => {
+    it("Should use the local storage persistent character if newer", () => { });
+    it("Should use the account sync persistent character if newer", () => { });
+});
