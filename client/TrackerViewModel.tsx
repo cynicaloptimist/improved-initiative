@@ -74,6 +74,10 @@ export class TrackerViewModel {
             this.Libraries.PCs.AddListings(account.playercharacters, "account");
         }
 
+        if (account.persistentcharacters) {
+            this.Libraries.PersistentCharacters.AddListings(account.persistentcharacters, "account");
+        }
+
         if (account.spells) {
             this.Libraries.Spells.AddListings(account.spells, "account");
         }

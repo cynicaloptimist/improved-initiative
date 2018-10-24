@@ -1,7 +1,8 @@
+import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
-import { Listing } from "./Listing";
+import { Listing, ListingOrigin } from "./Listing";
 
 export class PersistentCharacterLibrary {
     constructor() {
@@ -28,6 +29,13 @@ export class PersistentCharacterLibrary {
     }
 
     public GetListings = () => this.persistentCharacters;
+
+    public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+        const newListings = listings.map(c => {
+            return new Listing<PersistentCharacter>(c.Id, c.Name, c.Path, c.SearchHint, c.Link, source);
+        });
+        this.persistentCharacters.push(...newListings);
+    }
 
     private persistentCharacters: Listing<PersistentCharacter> [] = [];
 }
