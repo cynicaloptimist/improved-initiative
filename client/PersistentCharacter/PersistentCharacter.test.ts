@@ -81,7 +81,7 @@ describe("PersistentCharacter", () => {
 
     it("Should not save PersistentCharacters with Encounters", () => { });
 
-    it("Should not allow the same Persistent Character to be added twice");
+    it("Should not allow the same Persistent Character to be added twice", () => { });
 
     it("Should allow the user to save notes", () => { });
 
