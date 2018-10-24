@@ -2,6 +2,7 @@ import { DefaultPersistentCharacter, InitializeCharacter } from "../../common/Pe
 import { StatBlock } from "../../common/StatBlock";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { Store } from "../Utility/Store";
+import { buildEncounter } from "../test/buildEncounter";
 
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
@@ -61,7 +62,26 @@ describe("PersistentCharacterLibrary", () => {
 });
 
 describe("PersistentCharacter", () => {
-    it("SavedCombatants should load their CurrentHP from the Character", () => { });
+    it("Should persist CurrentHP across encounters", async done => {
+        const persistentCharacter = DefaultPersistentCharacter();
+        persistentCharacter.Name = "Persistent Character";
+        persistentCharacter.StatBlock.HP.Value = 10;
+        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+
+        const encounter1 = buildEncounter();
+        const combatant1 = await encounter1.AddCombatantFromPersistentCharacter(persistentCharacter.Id);
+        combatant1.ApplyDamage(5);
+
+        const encounter2 = buildEncounter();
+        const combatant2 = await encounter2.AddCombatantFromPersistentCharacter(persistentCharacter.Id);
+        expect(combatant2.CurrentHP()).toEqual(5);
+
+        done();
+    });
+
+    it("Should not save PersistentCharacters with Encounters", () => { });
+
+    it("Should not allow the same Persistent Character to be added twice");
 
     it("Should allow the user to save notes", () => { });
 

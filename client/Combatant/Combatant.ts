@@ -35,6 +35,7 @@ export class Combatant implements Combatant {
     constructor(combatantState: CombatantState, public Encounter: Encounter) {
         let statBlock = combatantState.StatBlock;
         this.Id = "" + combatantState.Id; //legacy Id may be a number
+        this.PersistentCharacterId = combatantState.PersistentCharacterId;
         
         this.StatBlock(statBlock);
 
@@ -65,6 +66,7 @@ export class Combatant implements Combatant {
         });
     }
     public Id = probablyUniqueString();
+    public PersistentCharacterId = null;
     public Alias = ko.observable("");
     public TemporaryHP = ko.observable(0);
     public Tags = ko.observableArray<Tag>();

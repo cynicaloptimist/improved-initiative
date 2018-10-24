@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import { max, sortBy } from "lodash";
+import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
@@ -185,7 +185,7 @@ export class Encounter {
 
         const combatant = new Combatant(initialState, this);
 
-        if (hideOnAdd) {
+        if (hideOnAdd) { //TODO: remove this?
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
@@ -209,6 +209,44 @@ export class Encounter {
         if (displayNameIsTaken){
             combatant.UpdateIndexLabel(); 
         }
+
+        const viewModel = this.buildCombatantViewModel(combatant);
+
+        if (this.State() === "active") {
+            viewModel.EditInitiative();
+        }
+
+        this.QueueEmitEncounter();
+
+        return combatant;
+    }
+
+    public async AddCombatantFromPersistentCharacter(persistentCharacterId: string, hideOnAdd = false): Promise<Combatant> {
+        const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacterId);
+        if (alreadyAddedCombatant != undefined) {
+            console.log(`Won't add multiple persistent characters with Id ${persistentCharacterId}`);
+            return alreadyAddedCombatant;
+        }
+        
+        const statBlock: StatBlock = { ...StatBlock.Default() };
+
+        const initialState: CombatantState = {
+            Id: probablyUniqueString(),
+            PersistentCharacterId: persistentCharacterId,
+            StatBlock: statBlock,
+            Alias: "",
+            IndexLabel: null,
+            CurrentHP: statBlock.HP.Value,
+            TemporaryHP: 0,
+            Hidden: hideOnAdd,
+            Initiative: 0,
+            Tags: [],
+            InterfaceVersion: process.env.VERSION,
+        };
+
+        const combatant = new Combatant(initialState, this);
+
+        this.Combatants.push(combatant);
 
         const viewModel = this.buildCombatantViewModel(combatant);
 
