@@ -25,7 +25,7 @@ export class PlayerViewModel {
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
     private roundCounterVisible = ko.observable(false);
-    private turnTimer = new TurnTimer();
+    public turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
     private activeCombatantOnTop = ko.observable(false);

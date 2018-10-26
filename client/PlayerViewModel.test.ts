@@ -156,10 +156,9 @@ describe("PlayerViewModel", () => {
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
-        (<any>encounter.TurnTimer).elapsedSeconds(10);
-        (<any>playerViewModel).turnTimer.elapsedSeconds(10);
+        jest.advanceTimersByTime(10000); // 10 seconds
         encounter.EndEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
-        expect((<any>playerViewModel).turnTimer.elapsedSeconds()).toBe(0);
+        expect(playerViewModel.turnTimer.Readout()).toBe("0:00");
     });
 });
