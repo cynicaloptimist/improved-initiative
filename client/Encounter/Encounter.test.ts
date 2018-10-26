@@ -59,6 +59,6 @@ describe("Encounter", () => {
         encounter.StartEncounter();
         jest.advanceTimersByTime(10000); // 10 seconds
         encounter.EndEncounter();
-        expect(encounter.TurnTimer.Readout()).toBe(0);
+        expect(encounter.TurnTimer.Readout()).toBe("0:00");
     });
 });
