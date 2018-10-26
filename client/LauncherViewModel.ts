@@ -12,7 +12,7 @@ export class LauncherViewModel {
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
         const firstVisit = Store.Load(Store.User, "SkipIntro") === null;
-        if (firstVisit && window.location.href != env.CanonicalURL + "/") {
+        if (firstVisit && env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/") {
             window.location.href = env.CanonicalURL;
         }
     }
