@@ -53,4 +53,12 @@ describe("Encounter", () => {
             expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
         }
     });
+
+    test("Encounter turn timer stops when encounter ends", () => {
+        encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
+        encounter.StartEncounter();
+        jest.advanceTimersByTime(10000); // 10 seconds
+        encounter.EndEncounter();
+        expect(encounter.TurnTimer.Readout()).toBe("0:00");
+    });
 });
