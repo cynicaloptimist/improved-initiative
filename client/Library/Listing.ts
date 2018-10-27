@@ -24,6 +24,19 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
+    public async GetWithTemplate(template: T) {
+        return new Promise<T>(done => {
+            this.GetAsyncWithUpdatedId(item => {
+                const templateCast = template as object;
+                const finalListable = {
+                    ...templateCast,
+                    ...item
+                } as T;
+                done(finalListable);
+            });
+        });
+    }
+
     public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
         if (this.value()) {
             return callback(this.value());
