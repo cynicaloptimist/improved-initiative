@@ -1,246 +1,310 @@
-@import url("https://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin");
-@import url("https://fonts.googleapis.com/css?family=Josefin+Slab&subset=latin");
-
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Spectral+SC:400,400i,700,700i');
 @import "colors.less";
 @import "node_modules/@fortawesome/fontawesome-free/less/fontawesome.less";
 @import "node_modules/@fortawesome/fontawesome-free/less/solid.less";
 
 @import (inline) "node_modules/awesomplete/awesomplete.css";
-
 //Spacers
-
-@small-spacer: 2px;
-@medium-spacer: 5px;
-@large-spacer: 15px;
-
-@border-radius: 5px;
+@extra-small-spacer: 0.125rem;
+@small-spacer: 0.25rem;
+@medium-spacer: 0.5rem;
+@large-spacer: 1rem;
+@larger-spacer: 2rem;
+@border-radius: 0;
 @prompt-minimum-height: 42px;
-
-@fixed-column-width: 350px;
-
-@scrollbar-width: 17px;
-
+@fixed-column-width: 375px;
+@scrollbar-width: 14px;
+// Typography
+@font-family-serif: 'Spectral SC', serif;
+@font-family-sans-serif: 'Roboto', sans-serif;
+@font-family-headers: @font-family-serif;
+@font-family-body: @font-family-sans-serif;
+@font-size-h1: 2.75rem;
+@font-size-h2: 1.25rem;
+@font-size-h3: 1.75rem;
+@font-size-h4: 1.25rem;
+@font-size-large: 1.5rem;
+@font-size-body: 1rem;
+@font-size-small: 0.875rem;
+@font-size-mice: 0.75rem;
 //elements
-
-* {
-    font-family: 'Josefin Sans', sans-serif;
-    position:relative;
-    margin: 0;
-    padding: 0;
-    flex-shrink: 0;
-    border-color: @shadow;
-    box-shadow: @shadow;
+*,
+::after,
+::before {
+  box-sizing: border-box;
 }
 
-html, body {
-    height:100%;
-    max-height: 100%;
-    max-width: 100%;
-    display:flex;
-    flex-direction:column;
-    cursor: default;
-    background-color: @primary-green;
-    color: @primary-white;
+:focus {
+  outline: @primary-red auto 5px;
+}
+
+* {
+  font-family: @font-family-body;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  border-color: @shadow;
+  box-shadow: @shadow;
+}
+
+body,
+html {
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+  color: @primary-black;
+}
+
+#tracker,
+#playerview {
+  background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
+}
+
+#tracker {
+  font-size: 14px;
+}
+
+#playerview {
+  font-size: 20px;
 }
 
 div {
-    display:flex;
-    flex-direction:column;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
+
+  & > * {
+    min-width: 0;
     min-height: 0;
     max-height: 100%;
-    
-    & > * {
-        min-width: 0;
-        min-height: 0;
-        max-height: 100%;
-        max-width: 100%;
-    }
+    max-width: 100%;
+  }
 }
 
 div.awesomplete > ul {
-    max-height: unset;
+  max-height: unset;
 }
 
-a, a * {
-    cursor: pointer;
+a,
+a * {
+  cursor: pointer;
 }
 
-h1.improved-initiative {
-    font-family: 'Josefin Slab', serif;
-    &:before {
-        content: url("../img/wing-transparent-antiquewhite.png");
-        margin-right:@medium-spacer;
-    }
+h1,
+h2,
+h3,
+h4 {
+  font-family: @font-family-headers;
+  color: @primary-red;
+}
+
+h1 {
+  font-family: @font-family-headers;
+  font-size: @font-size-h1;
 }
 
 h2 {
-    margin: @medium-spacer @medium-spacer @large-spacer;
+  margin: @extra-small-spacer 0 @medium-spacer;
+  font-size: @font-size-h2;
+  font-weight: normal;
+  color: @primary-black;
 }
 
-h3, h4 {
-    margin: @small-spacer @small-spacer @medium-spacer;
+h3 {
+  margin: @medium-spacer 0 @extra-small-spacer;
+  font-size: @font-size-h3;
+  line-height: 1;
+}
+
+h4 {
+  margin: @extra-small-spacer @extra-small-spacer @medium-spacer;
+  font-size: @font-size-h4;
 }
 
 ul.bulleted {
-    padding-left:40px;
+  padding-left: 40px;
 }
 
 input[type="number"] {
-    width: 40px;
+  width: 80px;
+  text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1;
 }
 
 input[type="file"] {
-    width: 200px;
+  width: 200px;
 }
 
-input, textarea {
-    .colors(@primary-black, @input-white);
+input,
+textarea {
+  .colors(@primary-black, @input-white);
+  padding: @medium-spacer;
+  border: 1px solid @primary-black;
 }
-
 //Common
 @import "buttons.less";
 
 .hop {
-    animation-name: hop;
-    animation-duration: 5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);
+  animation-name: hop;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);
 }
-
 @keyframes hop {
-    20%, 30% {
-        transform: translateY(0);
-    }
-    25% {
-        transform: translateY(-5px);
-    }
+  20%,
+  30% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-5px);
+  }
 }
 
 .absolute-center {
-    margin: auto;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
-
 @import "overlay.less";
 
 .preview.statblock {
-    .overlay-dialog();
-    z-index: 4;
-    max-height: 90%;
+  .card-bg-2(@large-spacer, @large-spacer);
+  z-index: 4;
+  max-height: 90%;
+  border: none;
 }
 
 .tutorial-focus {
-    z-index: 3;
+  z-index: 3;
 }
-
 @import "tutorial.less";
 
-body>.login.button {
-    display: block;
-    position: fixed;
-    bottom: 0px;
-    right: @large-spacer;
-    z-index: 1;
-
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+body > .login.button {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  right: @large-spacer;
+  z-index: 1;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
-
 @import "settings.less";
 
 .damage-suggestion {
-    .overlay-dialog();
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .card-bg-2(@large-spacer, @large-spacer);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .social-media {
-    display: none;
+  display: none;
 }
 
 .modal-blur {
-    position: fixed;
-    z-index: 2;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: @modal-background-color;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: @modal-background-color;
 }
 
-
 .recessed {
-    .colors(@primary-black, @primary-white);
+  .colors(@primary-black, @primary-white);
+  margin: @medium-spacer;
+  padding: @medium-spacer;
+  border-radius: @border-radius;
+  box-shadow: 2px 2px 1px inset;
+}
 
-    margin: @medium-spacer;
-    padding: @medium-spacer;
-        
-    border-radius: @border-radius;
-    box-shadow: 2px 2px 1px inset;
+.card-bg (@margin, @padding) {
+  .colors(@primary-black, @primary-white);
+  margin: @margin;
+  padding: @padding;
+  background-color: @primary-white;
+  border-radius: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25), 0 7px 14px rgba(0, 0, 0, .25);
+}
+
+.card-bg-2 (@margin, @padding) {
+  .colors(@primary-black, @primary-white);
+  margin: @margin;
+  padding: @padding;
+  background-color: @primary-white;
+  border-radius: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .card {
-    .colors(@primary-black, @primary-white);
-    margin: @medium-spacer;
-    padding: @medium-spacer;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: @border-radius;
-    box-shadow: 2px 2px 1px;
+  .colors(@primary-black, @primary-white);
+  margin: @medium-spacer;
+  padding: @medium-spacer;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: @border-radius;
+  box-shadow: 2px 2px 1px;
 }
-
 //Layout
-
 @import "landing.less";
 @import "tracker.less";
-
 @import "libraries.less";
 @import "listing.less";
 @import "toolbar.less";
 
 .scrollframe {
-    flex-shrink:1;
-    overflow-y: scroll;
+  flex-shrink: 1;
+  overflow-y: scroll;
 }
-
 @import "spell-editor.less";
 @import "statblock-editor.less";
 
+.c-tabs,
+.tabs {
+  justify-content: center;
+  flex-flow: row;
+  margin: @medium-spacer 0 0 0;
 
-.tabs, .c-tabs {
-    flex-flow: row wrap;
-    margin: @medium-spacer @small-spacer 0px @small-spacer;
-    span {
-        padding: 1px @medium-spacer;
-        margin-right: @small-spacer;
-        border-radius: 0px @border-radius 0px 0px;
+  span {
+    flex: 1;
+    padding: @medium-spacer @small-spacer;
+    margin-right: @extra-small-spacer;
+    border-radius: 0 @border-radius 0 0;
+    align-items: center;
+    text-align: center;
+
+    &:last-of-type {
+      margin-right: 0;
     }
+  }
 }
 
 .damage-suggestion {
-    font-size: initial;
+  font-size: initial;
 
-    .tip {
-        font-size: smaller;
-    }
+  .tip {
+    font-size: smaller;
+  }
 
-    form {
-        padding-bottom: @large-spacer;
-    }
+  form {
+    padding-bottom: @large-spacer;
+  }
 }
-
 @import "statblock.less";
-
 @import "combat-footer.less";
-
 @import "combatants.less";
-
 @import "prompts.less";
-
 @import "player-view.less";
-
 @import "responsive.less";

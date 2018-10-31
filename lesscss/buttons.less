@@ -1,58 +1,78 @@
-@button-inner: 18px;
-@button-padding: 10px;
+@button-inner: 1.25rem;
+@button-padding: 0.75rem;
 
 .fas {
-    .fas();
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: normal;
-    &:before {
-        font-family: 'Font Awesome 5 Free';
-    }
+  .fas();
+  font-family: @font-family-sans-serif;
+  font-weight: normal;
+
+  &:before {
+    font-family: 'Font Awesome 5 Free';
+  }
 }
 
 .fa-text {
-    .fas();
-    font-family: 'Josefin Sans', sans-serif;
-    font-weight: bold;
-    &:before {
-        font-family: 'Font Awesome 5 Free';
-        margin-right: @medium-spacer;
-    }
+  .fas();
+  font-family: @font-family-sans-serif;
+  font-weight: normal;
+
+  &:before {
+    font-family: 'Font Awesome 5 Free';
+    margin-right: @medium-spacer;
+  }
 }
 
 .fa-clickable {
-    cursor: pointer;
-	.fas();
+  cursor: pointer;
+  .fas();
+
+  &:hover {
+    color: @primary-red;
+  }
 }
 
-.fa-clickable:hover {
-    color: @hover-white;
+.statblock-editor {
+  .fa-clickable {
+    padding: @medium-spacer;
+  }
 }
 
 .small-button {
-    .fa-clickable();
-    padding: @medium-spacer;
-    border-radius: @border-radius;
-    border: 1px solid @primary-white;
+  .fa-clickable();
+  padding: @medium-spacer;
+  border-radius: @border-radius;
+  border: 1px solid @primary-white;
 }
 
 .button() {
-    .colors(@button-text, @button-face, @shadow);
-    &:hover {
-        background-color: @hover-white;
-    }
-    cursor: pointer;
-    display: inline-block;
-    margin: @small-spacer;
-    padding: @button-padding;
-    text-align: center;
-    text-decoration: none;
-	border-radius: @border-radius;
-    border: 0;
+  .colors(@button-text, transparent, @shadow);
+
+  &:hover {
+    background-color: @hover-black;
+  }
+  cursor: pointer;
+  display: inline-block;
+  margin: 0;
+  padding: @button-padding;
+  text-align: center;
+  text-decoration: none;
+  border-radius: @border-radius;
+  border: 0;
 }
 
-.button, .c-button {
-    .button();
+.button,
+.c-button {
+  .button();
+}
+
+.commands-encounter, .commands-combatant {
+  .c-button {
+    .colors(@primary-white, @primary-grey, 0);
+
+    &:hover {
+      background-color: @hover-grey;
+    }
+  }
 }
 
 button.button {
@@ -60,17 +80,19 @@ button.button {
 }
 
 .button--close {
-    position: absolute;
-    right: 0;
-    top: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .c-button--disabled {
-    cursor: unset;
+  cursor: unset;
 }
 
-.rollable, .spell-reference, .condition-reference {
-    cursor: pointer;
-    border-bottom: 1px dashed;
-    margin-bottom: -1px;
+.condition-reference,
+.rollable,
+.spell-reference {
+  cursor: pointer;
+  border-bottom: 1px dashed;
+  margin-bottom: -1px;
 }

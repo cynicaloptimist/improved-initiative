@@ -1,23 +1,32 @@
 @primary-green: #00643C;
-@hover-green: lighten(@primary-green, 10);
+@hover-green: lighten(@primary-green, 75);
 @active-green: lighten(@primary-green, 15);
 @accent-green: darken(@primary-green, 5);
 
-@primary-white: #EAE0D5;
+@primary-white: #fff;
 @input-white: @primary-white;
-@zebra-white: darken(@primary-white, 3);
 @hover-white: darken(@primary-white, 10);
 
-@selected-light: #C6AC8F;
+@primary-white: white;
+@zebra-white: #f5f1eb;
+@accent-white: darken(@zebra-white, 20);
+@active-white: darken(@primary-white, 10);
+@selected-light: darken(@primary-white, 20);
 
-@active-white: darken(@primary-white, 7);;
 
-@hover-red: #EF6461;
+@primary-red: #822000;
+@hover-red: fade(@primary-red, 20%);
+@active-red: lighten(@primary-red, 15);
+@accent-red: darken(@primary-red, 5);
 
 @primary-black: #0A0908;
+@hover-black: fade(@primary-black, 10%);
 @disabled-black: lighten(@primary-black, 20);
 
-@button-face: @active-white;
+@primary-grey: #212121;
+@hover-grey: lighten(@primary-grey, 15);
+
+@button-face: @primary-red;
 @button-face-green: lighten(@primary-green, 15);
 @button-face-disabled: darken(@primary-white, 15);
 @button-text: @primary-black;
@@ -31,7 +40,6 @@
     color: @text;
     background-color: @background;
     border-color: @border;
-    box-shadow: @border;
 }
 
 .green-button() {
@@ -42,12 +50,15 @@
     }
 }
 
-.toolbar-container, 
+.toolbar-container,
 .settings,
-.tutorial, 
-.damage-suggestion,
-{
+.tutorial,
+.damage-suggestion, {
     .colors(@primary-black, @primary-white);
+}
+
+.toolbar-container {
+  .colors(@primary-white, @primary-grey);
 }
 
 
@@ -75,8 +86,8 @@
     }
 }
 
-.tutorial .next, 
-.login.button, 
+.tutorial .next,
+.login.button,
 .p-privacy-policy-optin.button {
     .green-button()
 }
@@ -99,18 +110,49 @@
 .tabs span, .c-tabs span {
     background-color: @active-white;
     &:hover {
-        background-color: @hover-white;
+      background-color: @selected-light;
     }
     &.selected, &.s-selected {
-        background-color: @primary-green;
+        background-color: @primary-red;
         color: @primary-white;
+
+        &:hover {
+          background-color: @accent-red;
+        }
     }
 }
 
 .combat-footer {
-    background-color: @primary-black;
+    background-color: @primary-grey;
     a {
         color: @primary-white;
+    }
+}
+
+#tracker .combatant:not(.header) {
+    &:hover {
+        background-color: @active-white;
+    }
+
+    &.selected {
+        background-color: @hover-red;
+    }
+
+    .hp:hover {
+        background-color: @hover-red;
+    }
+}
+
+.combatant {
+    .colors(@primary-black, @primary-white, transparent);
+
+    &:nth-child(2n+1) {
+        background-color: @zebra-white;
+    }
+
+    &.active {
+        border-color: @primary-red;
+        background-color: @active-white;
     }
 }
 
@@ -124,13 +166,6 @@ input[type=checkbox] {
 
 .bordered {
     border-color: @accent-green;
-}
-
-.c-add-button {
-    .colors(@primary-white, unset, @primary-white);
-    &:hover {
-        .colors(@hover-white, unset, @hover-white);
-    }
 }
 
 .c-button--disabled, .c-button--disabled:hover {

@@ -1,121 +1,200 @@
-
 .statblock-editor {
-    flex-grow: 1;
-    flex-shrink: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .c-statblock-editor {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow-y: scroll;
+
+  input,
+  textarea {
+    padding: @medium-spacer;
+    margin: @medium-spacer 0;
+    border: 1px solid @primary-red;
+    border-radius: @border-radius;
+    font-size: 1rem;
+  }
+
+  input.name {
     flex-grow: 1;
-    flex-shrink: 1;
-    overflow-y: scroll;
+  }
 
-    input, textarea {
-        font-size: large;
-        padding: @small-spacer;
-        margin: @small-spacer;
-        border: none;
-        border-radius: @border-radius;
-    }
+  input.notes {
+    flex-grow: 1;
+  }
 
-    input.name {
-        flex-grow: 1;
-    }
-    input.modifier {
-        width: 40px;
-    }
-    input.value {
-        width: 50px;
-    }
-    input.notes {
-        flex-grow:1;
-    }
+  input[name="SaveAs"] {
+    margin: @medium-spacer @large-spacer @medium-spacer @small-spacer;
+  }
 
-    .inline-names-and-modifiers {
-        flex-flow: column;
-        
-        > div {
-            flex-direction: row;
-            align-items: baseline;
-            margin-right: @medium-spacer;
-        }
+  .inline-names-and-modifiers {
+    flex-flow: column;
+
+    > div {
+      flex-direction: row;
+      align-items: center;
+      padding: @medium-spacer 0;
     }
+  }
 }
 
 .inline {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-basis: 80%;
+
+  input {
+    &:first-child {
+      margin-right: @medium-spacer;
+    }
+  }
 }
 
-.c-statblock-editor__label, .c-text-field {
-    padding: @small-spacer;
-    font-size: smaller;
-    .c-add-button {
-        width: 50px;
-        margin-left: @medium-spacer;
+.inline-names-and-modifiers {
+  input {
+    &:first-of-type {
+      margin-right: @medium-spacer;
     }
+    &:last-of-type {
+      margin-left: @medium-spacer;
+    }
+  }
+}
+
+.c-statblock-editor__identity .inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+
+  div {
+    flex: 1;
+  }
+
+  .label {
+    flex-basis: 20%;
+  }
+
+  input {
+    flex-basis: 80%;
+  }
+}
+
+.c-text-field {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+
+  .label {
+    flex-basis: 20%;
+  }
+
+  input {
+    flex-basis: 80%;
+  }
+}
+
+.c-statblock-editor__label,
+.c-text-field > .label,
+.c-statblock-editor__identity .label {
+  flex-basis: 20%;
+  padding: @extra-small-spacer;
+  font-size: @font-size-h4;
+  font-family: @font-family-headers;
+  color: @primary-red;
+
+  .c-add-button {
+    width: 50px;
+    margin-left: @medium-spacer;
+  }
+}
+
+.c-statblock-editor__description {
+  .c-statblock-editor__label,
+  .c-text-field > .label,
+  .c-statblock-editor__identity .label {
+    flex-basis: 100%;
+  }
 }
 
 .c-add-button {
-    padding-top: @small-spacer;
-    padding-bottom: @small-spacer;
-    margin: @small-spacer;
-    border-style: dashed;
-    border-width: 1px;
-    border-radius: @border-radius;
-    cursor: pointer;
-    &:hover {
-        border-style: solid;
-    }
+  margin: @medium-spacer 0;
+  padding: @medium-spacer;
+  border: 1px dashed @primary-red;
+  color: @primary-red;
+  cursor: pointer;
+
+  &:hover {
+    border-style: solid;
+    border-color: @active-red;
+    color: @active-red
+  }
 }
 
 .bordered {
-    margin: @small-spacer;
-    padding: @small-spacer;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: @border-radius;
+  margin: @extra-small-spacer;
+  padding: @extra-small-spacer;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: @border-radius;
 }
 
-.c-statblock-editor__identity,
-.c-statblock-editor__headers,
-.c-statblock-editor__stats,
 .c-statblock-editor__abilityscores,
-.c-statblock-editor__saves,
-.c-statblock-editor__skills,
+.c-statblock-editor__description,
+.c-statblock-editor__headers,
+.c-statblock-editor__identity,
+.c-statblock-editor__json-section,
 .c-statblock-editor__keywords,
 .c-statblock-editor__powers,
-.c-statblock-editor__description,
-.c-statblock-editor__json-section {
-    .bordered();
+.c-statblock-editor__saves,
+.c-statblock-editor__skills,
+.c-statblock-editor__stats {
+  margin: @medium-spacer 0;
+  padding: 1rem;
+  background-color: @primary-white;
+  border: 1px solid @accent-white;
+}
+
+.inline-powers > div {
+  margin-bottom: @large-spacer;
 }
 
 .c-statblock-editor__json-section,
 .c-statblock-editor__json-textarea {
-    flex-grow:1;
+  flex-grow: 1;
+
+  .c-statblock-editor__text {
+    align-items: stretch;
+  }
 }
 
 .c-statblock-editor__title-row {
-    flex-direction: row;
-    justify-content: stretch;
-    align-items: flex-start;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: flex-start;
 }
 
 .c-statblock-editor__title {
-    flex-grow:1;
+  flex-grow: 1;
 }
 
 .c-statblock-editor__buttons {
-    flex-direction: row;
-    justify-content: flex-end;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .c-statblock-editor__text {
-    display: flex;
-    flex-direction: column;
-    flex-grow:1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  align-items: center;
 }
 
 .c-statblock-editor__error {
@@ -123,30 +202,32 @@
 }
 
 .c-statblock-editor__identity {
-    .fa-clickable {
-        align-self: flex-end;
-        margin: @medium-spacer;
-    }
+  .fa-clickable {
+    align-self: flex-end;
+    margin: @medium-spacer;
+  }
 }
 
 .c-statblock-editor__initiative-advantage {
-    padding-left: @medium-spacer;
-    vertical-align: baseline;
+  padding-left: @medium-spacer;
+  vertical-align: baseline;
 }
 
 .c-statblock-editor__abilityscores {
-    flex-direction: row;
-    justify-content: space-evenly;
-    input {
-        width: 40px;
-        text-align: center;
-    }
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  input {
+    text-align: center;
+  }
 }
 
 .c-statblock-editor__ability {
-    align-items: center;
+  margin: 0 @small-spacer;
+  align-items: center;
 }
 
 .c-statblock-editor__textarea {
-    height: 100px;
+  width: 100%;
+  height: 100px;
 }
