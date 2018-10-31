@@ -87,7 +87,17 @@ describe("PersistentCharacterLibrary", () => {
 describe("PersistentCharacter", () => {
     it("Should not save PersistentCharacters with Encounters", () => { });
 
-    it("Should not allow the same Persistent Character to be added twice", () => { });
+    it("Should not allow the same Persistent Character to be added twice", () => {
+        const persistentCharacter = DefaultPersistentCharacter();
+        const encounter = buildEncounter();
+        const library = new PersistentCharacterLibrary();
+        
+        encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
+        expect(encounter.Combatants().length).toBe(1);
+
+        encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
+        expect(encounter.Combatants().length).toBe(1);
+     });
 
     it("Should allow the user to save notes", () => { });
 
