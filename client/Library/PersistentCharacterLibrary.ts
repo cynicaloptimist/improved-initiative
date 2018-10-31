@@ -1,4 +1,5 @@
 import { find } from "lodash";
+import { now } from "moment";
 import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
@@ -26,7 +27,7 @@ export class PersistentCharacterLibrary {
         const statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
         const persistentCharacter = InitializeCharacter(statBlock);
         Store.Save<PersistentCharacter>(Store.PersistentCharacters, id, persistentCharacter);
-        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage"); 
+        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
     }
 
     public GetListings = () => this.persistentCharacters;
@@ -38,18 +39,24 @@ export class PersistentCharacterLibrary {
         this.persistentCharacters.push(...newListings);
     }
 
-    public async GetPersistentCharacter(persistentCharacterId: string) {
-        return new Promise<PersistentCharacter>(done => {
-            const persistentCharacter = find(this.persistentCharacters, (c => c.Id == persistentCharacterId));
-            if (persistentCharacter) {
-                persistentCharacter.GetAsyncWithUpdatedId(c => {
-                    const finalCharacter = { ...DefaultPersistentCharacter(), ...c };
-                    done(finalCharacter);
-                });
-            }
-            throw `Could not find persistent character with id ${persistentCharacterId}`;
-        });
+    public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
+        console.log("UpdatePersistentCharacter start");
+        const currentCharacterListing = find(this.persistentCharacters, p => p.Id == persistentCharacterId);
+        const currentCharacter = await currentCharacterListing.GetWithTemplate(DefaultPersistentCharacter());
+        const updatedCharacter = {
+            ...currentCharacter,
+            ...updates,
+            LastUpdateMs: now()
+        };
+
+        console.log("UpdatePersistentCharacter middle");
+        console.log(JSON.stringify(updatedCharacter));
+
+        currentCharacterListing.SetValue(updatedCharacter);
+        Store.Save<PersistentCharacter>(Store.PersistentCharacters, persistentCharacterId, updatedCharacter);
+        console.log("UpdatePersistentCharacter end");
+        return;
     }
 
-    private persistentCharacters: Listing<PersistentCharacter> [] = [];
+    private persistentCharacters: Listing<PersistentCharacter>[] = [];
 }

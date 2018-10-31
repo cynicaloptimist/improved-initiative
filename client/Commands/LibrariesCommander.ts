@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
+import { DefaultPersistentCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -34,6 +35,13 @@ export class LibrariesCommander {
             Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
+    }
+
+    public AddPersistentCharacterFromListing = async (listing: Listing<PersistentCharacter>, hideOnAdd: boolean) => {
+        const character = await listing.GetWithTemplate(DefaultPersistentCharacter());
+        this.tracker.Encounter.AddCombatantFromPersistentCharacter(character, this.libraries.PersistentCharacters, hideOnAdd);
+        Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
+        this.tracker.EventLog.AddEvent(`Character ${character.Name} added to combat.`);
     }
 
     private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {

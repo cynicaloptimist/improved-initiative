@@ -1,6 +1,7 @@
-import { DefaultPersistentCharacter, InitializeCharacter } from "../../common/PersistentCharacter";
+import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
+import { InitializeSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import { buildEncounter } from "../test/buildEncounter";
 
@@ -59,28 +60,31 @@ describe("PersistentCharacterLibrary", () => {
         expect(listings).toHaveLength(1);
         expect(listings[0].Name).toEqual("Persistent Character");
     });
+
+    it("Should provide the latest version of a Persistent Character", async done => {
+        jest.useFakeTimers();
+        InitializeSettings();
+
+        savePersistentCharacterWithName("Persistent Character");
+
+        const library = new PersistentCharacterLibrary();
+        const listing = library.GetListings()[0];
+        const encounter = buildEncounter();
+        const persistentCharacter = await listing.GetWithTemplate(DefaultPersistentCharacter());
+        const combatant = encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
+        combatant.ApplyDamage(1);
+
+        await jest.runAllTimers();
+        await jest.runAllTicks();
+        await jest.runAllImmediates();
+
+        const updatedPersistentCharacter: PersistentCharacter = await listing.GetWithTemplate(DefaultPersistentCharacter());
+        expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
+        done();
+    });
 });
 
 describe("PersistentCharacter", () => {
-    it("Should persist CurrentHP across encounters", async done => {
-        const newPersistentCharacter = DefaultPersistentCharacter();
-        newPersistentCharacter.Name = "Persistent Character";
-        newPersistentCharacter.StatBlock.HP.Value = 10;
-        Store.Save(Store.PersistentCharacters, newPersistentCharacter.Id, newPersistentCharacter);
-
-        const library = new PersistentCharacterLibrary();
-
-        const encounter1 = buildEncounter();
-        const combatant1 = await encounter1.AddCombatantFromPersistentCharacter(await library.GetPersistentCharacter(newPersistentCharacter.Id));
-        combatant1.ApplyDamage(5);
-
-        const encounter2 = buildEncounter();
-        const combatant2 = await encounter2.AddCombatantFromPersistentCharacter(await library.GetPersistentCharacter(newPersistentCharacter.Id));
-        expect(combatant2.CurrentHP()).toEqual(5);
-
-        done();
-    });
-
     it("Should not save PersistentCharacters with Encounters", () => { });
 
     it("Should not allow the same Persistent Character to be added twice", () => { });

@@ -24,29 +24,32 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
-    public async GetWithTemplate(template: T) {
+    public GetWithTemplate(template: T) {
         return new Promise<T>(done => {
-            this.GetAsyncWithUpdatedId(item => {
+            return this.GetAsyncWithUpdatedId(item => {
                 const templateCast = template as object;
                 const finalListable = {
                     ...templateCast,
                     ...item
                 } as T;
-                done(finalListable);
+                return done(finalListable);
             });
         });
     }
 
     public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
         if (this.value()) {
+            console.log("found in memory value, returning");
             return callback(this.value());
         }
 
         if (this.Origin === "localStorage") {
+            console.log("found localStorage value, returning");
             const item = Store.Load<T>(this.Link, this.Id);
             item.Id = this.Id;
 
             if (item !== null) {
+                this.value(item);
                 return callback(item);
             } else {
                 console.error(`Couldn't load item keyed '${this.Id}' from localStorage.`);

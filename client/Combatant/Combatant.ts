@@ -1,9 +1,11 @@
 import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Tag } from "./Tag";
@@ -32,11 +34,14 @@ export interface Combatant {
 }
 
 export class Combatant implements Combatant {
-    constructor(combatantState: CombatantState, public Encounter: Encounter) {
+    constructor(
+        combatantState: CombatantState,
+        public Encounter: Encounter
+    ) {
         let statBlock = combatantState.StatBlock;
         this.Id = "" + combatantState.Id; //legacy Id may be a number
         this.PersistentCharacterId = combatantState.PersistentCharacterId;
-        
+
         this.StatBlock(statBlock);
 
         this.MaxHP = ko.computed(() => this.StatBlock().HP.Value);
@@ -51,7 +56,7 @@ export class Combatant implements Combatant {
         this.CurrentHP = ko.observable(combatantState.CurrentHP);
 
         this.processSavedCombatant(combatantState);
-        
+
         this.Initiative.subscribe(newInitiative => {
             const groupId = this.InitiativeGroup();
             if (!this.updatingGroup && groupId) {
@@ -74,7 +79,7 @@ export class Combatant implements Combatant {
     public InitiativeGroup = ko.observable<string>(null);
     public StatBlock = ko.observable<StatBlock>();
     public Hidden = ko.observable(false);
-    
+
     public IndexLabel: number;
     public MaxHP: KnockoutComputed<number>;
     public CurrentHP: KnockoutObservable<number>;
@@ -101,7 +106,7 @@ export class Combatant implements Combatant {
         this.ConcentrationBonus = this.AbilityModifiers.Con;
         this.setAutoInitiativeGroup();
         if (oldStatBlock) {
-            this.Encounter.Combatants.notifySubscribers();    
+            this.Encounter.Combatants.notifySubscribers();
         }
     }
 
@@ -114,6 +119,17 @@ export class Combatant implements Combatant {
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
+    }
+
+    public AttachToPersistentCharacterLibrary(library: PersistentCharacterLibrary) {
+        if (!this.PersistentCharacterId) {
+            throw "Combatant is not a persistent character";
+        }
+
+        this.CurrentHP.subscribe(async c => {
+            console.log(`HP Updated: ${c}`);
+            return await library.UpdatePersistentCharacter(this.PersistentCharacterId, { CurrentHP: c });
+        });
     }
 
     public UpdateIndexLabel(oldName?: string) {
@@ -228,7 +244,7 @@ export class Combatant implements Combatant {
 
             this.Initiative(lowestInitiativeCombatant.Initiative());
             this.InitiativeGroup(lowestInitiativeCombatant.InitiativeGroup());
-            }
+        }
     }
 
     private findLowestInitiativeGroupByName(): Combatant {

@@ -15,6 +15,7 @@ import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/Static
 import { Tag } from "../Combatant/Tag";
 import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
@@ -222,7 +223,7 @@ export class Encounter {
         return combatant;
     }
 
-    public AddCombatantFromPersistentCharacter(persistentCharacter: PersistentCharacter, hideOnAdd = false): Combatant {
+    public AddCombatantFromPersistentCharacter(persistentCharacter: PersistentCharacter, library: PersistentCharacterLibrary, hideOnAdd = false): Combatant {
         const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacter.Id);
         if (alreadyAddedCombatant != undefined) {
             console.log(`Won't add multiple persistent characters with Id ${persistentCharacter.Id}`);
@@ -246,6 +247,8 @@ export class Encounter {
         const combatant = new Combatant(initialState, this);
 
         this.Combatants.push(combatant);
+
+        combatant.AttachToPersistentCharacterLibrary(library);
 
         const viewModel = this.buildCombatantViewModel(combatant);
 
