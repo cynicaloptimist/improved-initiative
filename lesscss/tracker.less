@@ -2,19 +2,40 @@
     flex-direction: row;
     overflow:hidden;
     align-items: stretch;
-    
+
     .center-column {
         flex-grow:1;
         flex-shrink:1;
-        margin: @small-spacer;
-        background-image: url('../img/improved-initiative-transparent-darkgreen.png');
-        background-position: center bottom 20px;
-        background-repeat: no-repeat;
+        margin: 3rem 0 calc(@larger-spacer - 6px) 0;
+        padding: 0;
     }
-    
+
     .left-column, .right-column {
-        .recessed();
+        .card-bg(@larger-spacer, @larger-spacer);
+        margin: @larger-spacer;
+        padding: @large-spacer;
         max-width: @fixed-column-width;
         width: @fixed-column-width;
+
+        &:before, &:after {
+          content: "";
+          display: block;
+          background: @primary-red center;
+          background-size: 100% 100%;
+          height: 6px;
+          position: absolute;
+        }
+
+        &:before {
+          top: 0px;
+          left: -3px;
+          right: -3px;
+        }
+
+        &:after {
+          bottom: -6px;
+          left: -3px;
+          right: -3px;
+        }
     }
 }

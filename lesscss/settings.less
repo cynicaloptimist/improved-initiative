@@ -1,11 +1,13 @@
 .settings {
     .overlay-dialog();
-    .absolute-center();
+    margin: @larger-spacer auto;
+    left: 0;
+    right: 0;
     max-width: 500px;
-    max-height: 700px;
+    max-height: 90%;
 
     .button {
-        margin: @small-spacer;
+        margin: @extra-small-spacer;
     }
 
     .tab {
@@ -40,7 +42,7 @@
     .whatsnew a {
         font-weight: bold;
     }
-    
+
     .commands {
         flex-direction: row;
         justify-content: flex-end;
@@ -62,15 +64,15 @@
 
     .hotkey-label, .keybinding {
         text-align: center;
-        width: 100px; 
+        width: 100px;
     }
 
     .keybindings >div {
         flex-direction: row;
         align-items: center;
-        
+
         >span, >label {
-            padding:@small-spacer;
+            padding:@extra-small-spacer;
         }
     }
 
@@ -91,7 +93,7 @@
         flex-direction: row;
         align-items: center;
         > * {
-            margin: @small-spacer;
+            margin: @extra-small-spacer;
         }
     }
 
