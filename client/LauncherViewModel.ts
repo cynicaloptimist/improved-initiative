@@ -11,10 +11,16 @@ export class LauncherViewModel {
             userAgent: navigator.userAgent
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
-        const firstVisit = Store.Load(Store.User, "SkipIntro") === null;
-        if (firstVisit && env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/") {
-            window.location.href = env.CanonicalURL;
+        const notAtCanonicalUrl = env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/";
+        if (notAtCanonicalUrl) {
+            const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
+            if (isFirstVisit) {
+                window.location.href = env.CanonicalURL;
+            } else {
+                this.transferLocalStorageToCanonicalUrl();
+            }
         }
+        
     }
 
     public GeneratedEncounterId = env.EncounterId;
@@ -35,5 +41,9 @@ export class LauncherViewModel {
     public JoinEncounterButtonClass = () => {
         let encounterId = this.JoinEncounterInput().split("/").pop();
         return encounterId ? "enabled" : "disabled";
+    }
+
+    private transferLocalStorageToCanonicalUrl() {
+
     }
 }
