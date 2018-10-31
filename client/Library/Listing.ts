@@ -39,12 +39,10 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
         if (this.value()) {
-            console.log("found in memory value, returning");
             return callback(this.value());
         }
 
         if (this.Origin === "localStorage") {
-            console.log("found localStorage value, returning");
             const item = Store.Load<T>(this.Link, this.Id);
             item.Id = this.Id;
 

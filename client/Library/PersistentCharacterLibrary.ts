@@ -40,7 +40,6 @@ export class PersistentCharacterLibrary {
     }
 
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
-        console.log("UpdatePersistentCharacter start");
         const currentCharacterListing = find(this.persistentCharacters, p => p.Id == persistentCharacterId);
         const currentCharacter = await currentCharacterListing.GetWithTemplate(DefaultPersistentCharacter());
         const updatedCharacter = {
@@ -49,12 +48,8 @@ export class PersistentCharacterLibrary {
             LastUpdateMs: now()
         };
 
-        console.log("UpdatePersistentCharacter middle");
-        console.log(JSON.stringify(updatedCharacter));
-
         currentCharacterListing.SetValue(updatedCharacter);
         Store.Save<PersistentCharacter>(Store.PersistentCharacters, persistentCharacterId, updatedCharacter);
-        console.log("UpdatePersistentCharacter end");
         return;
     }
 
