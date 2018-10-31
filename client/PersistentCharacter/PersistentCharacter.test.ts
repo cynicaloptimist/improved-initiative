@@ -103,9 +103,9 @@ describe("PersistentCharacter", () => {
 
     it("Should update the Character when a linked Combatant's hp changes", () => { });
 
-    it("Should update the statblock when it is edited from the library", () => { });
+    it("Should update the combatant statblock when it is edited from the library", () => { });
 
-    it("Should update the statblock when it is edited from the combatant", () => { });
+    it("Should update the library statblock when it is edited from the combatant", () => { });
 
     it("Should render combatant notes with markdown", () => { });
 });
