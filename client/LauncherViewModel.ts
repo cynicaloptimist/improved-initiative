@@ -4,6 +4,33 @@ import { env } from "./Environment";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 
+function transferLocalStorageToCanonicalUrl(canonicalUrl: string) {
+    const iframe = document.getElementById("localstorage-transfer-target") as HTMLIFrameElement;
+    iframe.onload = () => iframe.contentWindow.postMessage({ transferredLocalStorage: JSON.stringify(localStorage) }, "*");
+    window.onmessage = getTransferCompleteCallback(canonicalUrl);
+}
+
+function getTransferCompleteCallback(canonicalUrl: string) {
+    return (e: MessageEvent) => {
+        if (e.origin !== canonicalUrl) {
+            return;
+        }
+        Store.Save(Store.User, "StorageTransferred", true);
+        window.location.href = canonicalUrl;
+    };
+}
+
+export function TransferLocalStorageToCanonicalURLIfNeeded(canonicalUrl: string) {
+    const notAtCanonicalUrl = canonicalUrl.length > 0 && window.location.href != canonicalUrl + "/";
+    if (notAtCanonicalUrl) {
+        const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
+        if (isFirstVisit) {
+            window.location.href = canonicalUrl;
+        } else {
+            transferLocalStorageToCanonicalUrl(canonicalUrl);
+        }
+    }
+}
 export class LauncherViewModel {
     constructor() {
         const pageLoadData = {
@@ -12,15 +39,7 @@ export class LauncherViewModel {
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
 
-        const notAtCanonicalUrl = env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/";
-        if (notAtCanonicalUrl) {
-            const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
-            if (isFirstVisit) {
-                window.location.href = env.CanonicalURL;
-            } else {
-                this.transferLocalStorageToCanonicalUrl();
-            }
-        }
+        TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
     }
 
     public GeneratedEncounterId = env.EncounterId;
@@ -41,19 +60,5 @@ export class LauncherViewModel {
     public JoinEncounterButtonClass = () => {
         let encounterId = this.JoinEncounterInput().split("/").pop();
         return encounterId ? "enabled" : "disabled";
-    }
-
-    private transferLocalStorageToCanonicalUrl() {
-        const iframe = document.getElementById("localstorage-transfer-target") as HTMLIFrameElement;
-        iframe.onload = () => iframe.contentWindow.postMessage({ transferredLocalStorage: JSON.stringify(localStorage) }, "*");
-        window.onmessage = this.markStorageAsTransferredAndRedirect;
-    }
-
-    private markStorageAsTransferredAndRedirect(e: MessageEvent) {
-        if (e.origin !== env.CanonicalURL) {
-            return;
-        }
-        Store.Save(Store.User, "StorageTransferred", true);
-        window.location.href = env.CanonicalURL;
     }
 }
