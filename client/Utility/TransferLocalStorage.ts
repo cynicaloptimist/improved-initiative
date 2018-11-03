@@ -20,7 +20,8 @@ export function TransferLocalStorageToCanonicalURLIfNeeded(canonicalUrl: string)
     const notAtCanonicalUrl = canonicalUrl.length > 0 && window.location.href != canonicalUrl + "/";
     if (notAtCanonicalUrl) {
         const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
-        if (isFirstVisit) {
+        const storageAlreadyTransferred = Store.Load(Store.User, "StorageTransferred") == true;
+        if (isFirstVisit || storageAlreadyTransferred) {
             window.location.href = canonicalUrl;
         } else {
             transferLocalStorageToCanonicalUrl(canonicalUrl);
