@@ -25,7 +25,7 @@ export class PlayerViewModel {
     private encounterId = env.EncounterId;
     private roundCounter = ko.observable();
     private roundCounterVisible = ko.observable(false);
-    private turnTimer = new TurnTimer();
+    public turnTimer = new TurnTimer();
     private turnTimerVisible = ko.observable(false);
     private allowSuggestions = ko.observable(false);
     private activeCombatantOnTop = ko.observable(false);
@@ -69,7 +69,7 @@ export class PlayerViewModel {
             }
 
             if (playerView.encounterState) {
-                this.LoadEncounter(playerView.encounterState);    
+                this.LoadEncounter(playerView.encounterState);
             }
 
             if (playerView.settings) {
@@ -103,10 +103,12 @@ export class PlayerViewModel {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
         if (!encounter.ActiveCombatantId) {
+            this.turnTimer.Stop();
             return;
         }
         const newCombatantTurn = !this.activeCombatant() || encounter.ActiveCombatantId != this.activeCombatant().Id;
         if (newCombatantTurn) {
+            this.turnTimer.Start();
             this.turnTimer.Reset();
             const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
             this.activeCombatant(active);
@@ -147,7 +149,7 @@ export class PlayerViewModel {
 
         const tagsCaption = combatant.Tags.map(t => t.Text).join(" ");
         imageModal.Caption += `<p>${combatant.Name} (${combatant.HPDisplay}) ${tagsCaption}</p>`;
-        
+
         imageModal.URL = combatant.ImageURL;
         imageModal.Visible = true;
 

@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 import { env } from "./Environment";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
+import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLocalStorage";
 
 export class LauncherViewModel {
     constructor() {
@@ -11,10 +11,8 @@ export class LauncherViewModel {
             userAgent: navigator.userAgent
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
-        const firstVisit = Store.Load(Store.User, "SkipIntro") === null;
-        if (firstVisit && env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/") {
-            window.location.href = env.CanonicalURL;
-        }
+
+        TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
     }
 
     public GeneratedEncounterId = env.EncounterId;
