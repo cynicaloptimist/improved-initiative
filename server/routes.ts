@@ -186,6 +186,10 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.post("/launchencounter/", importEncounter);
     app.post("/importencounter/", importEncounter);
 
+    app.get("/transferlocalstorage/", (req: Req, res: Res) => {
+        res.render("transferlocalstorage", { baseUrl });
+    });
+
     configureLoginRedirect(app);
     configureLogout(app);
     configureStorageRoutes(app);

@@ -11,6 +11,7 @@ export class LauncherViewModel {
             userAgent: navigator.userAgent
         };
         Metrics.TrackEvent("LandingPageLoad", pageLoadData);
+
         const notAtCanonicalUrl = env.CanonicalURL.length > 0 && window.location.href != env.CanonicalURL + "/";
         if (notAtCanonicalUrl) {
             const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
@@ -20,7 +21,6 @@ export class LauncherViewModel {
                 this.transferLocalStorageToCanonicalUrl();
             }
         }
-        
     }
 
     public GeneratedEncounterId = env.EncounterId;
@@ -44,6 +44,16 @@ export class LauncherViewModel {
     }
 
     private transferLocalStorageToCanonicalUrl() {
+        const iframe = document.getElementById("localstorage-transfer-target") as HTMLIFrameElement;
+        iframe.onload = () => iframe.contentWindow.postMessage({ transferredLocalStorage: JSON.stringify(localStorage) }, "*");
+        window.onmessage = this.markStorageAsTransferredAndRedirect;
+    }
 
+    private markStorageAsTransferredAndRedirect(e: MessageEvent) {
+        if (e.origin !== env.CanonicalURL) {
+            return;
+        }
+        Store.Save(Store.User, "StorageTransferred", true);
+        window.location.href = env.CanonicalURL;
     }
 }
