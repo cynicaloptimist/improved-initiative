@@ -112,14 +112,14 @@ export class Encounter {
 
         if (this.State() === "active") {
             if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-                this.ActiveCombatantToTop();
+                this.bringActiveCombatantToTop();
             }
         }
 
         this.QueueEmitEncounter();
     }
 
-    public ActiveCombatantToTop = () => {
+    private bringActiveCombatantToTop = () => {
         const activeCombatant = this.ActiveCombatant();
 
         while (this.Combatants()[0] != activeCombatant) {
@@ -333,7 +333,7 @@ export class Encounter {
         this.ActiveCombatant(nextCombatant);
 
         if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+            this.bringActiveCombatantToTop();
         }
 
         this.durationTags
@@ -361,7 +361,7 @@ export class Encounter {
         this.ActiveCombatant(previousCombatant);
 
         if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+            this.bringActiveCombatantToTop();
         }
 
         this.durationTags
