@@ -69,14 +69,11 @@ describe("PersistentCharacterLibrary", () => {
 
         const library = new PersistentCharacterLibrary();
         const listing = library.GetListings()[0];
-        const encounter = buildEncounter();
         const persistentCharacter = await listing.GetWithTemplate(DefaultPersistentCharacter());
-        const combatant = encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
-        combatant.ApplyDamage(1);
 
-        await jest.runAllTimers();
-        await jest.runAllTicks();
-        await jest.runAllImmediates();
+        await library.UpdatePersistentCharacter(persistentCharacter.Id, {
+            CurrentHP: 0
+        });
 
         const updatedPersistentCharacter: PersistentCharacter = await listing.GetWithTemplate(DefaultPersistentCharacter());
         expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
@@ -88,7 +85,7 @@ describe("PersistentCharacter", () => {
     it("Should not save PersistentCharacters with Encounters", () => {
         const encounter = buildEncounter();
         const library = new PersistentCharacterLibrary();
-        
+
         encounter.AddCombatantFromPersistentCharacter(DefaultPersistentCharacter(), library);
         const savedEncounter = encounter.GetSavedEncounter("test", "");
         expect(savedEncounter.Combatants.length).toEqual(0);
@@ -98,17 +95,28 @@ describe("PersistentCharacter", () => {
         const persistentCharacter = DefaultPersistentCharacter();
         const encounter = buildEncounter();
         const library = new PersistentCharacterLibrary();
-        
+
         encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
         expect(encounter.Combatants().length).toBe(1);
 
         encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
         expect(encounter.Combatants().length).toBe(1);
-     });
+    });
 
     it("Should allow the user to save notes", () => { });
 
-    it("Should update the Character when a linked Combatant's hp changes", () => { });
+    it("Should update the Character when a linked Combatant's hp changes", () => {
+        const persistentCharacter = DefaultPersistentCharacter();
+        const encounter = buildEncounter();
+        const library = new PersistentCharacterLibrary();
+        const update = jest.fn();
+        library.UpdatePersistentCharacter = update;
+
+        const combatant = encounter.AddCombatantFromPersistentCharacter(persistentCharacter, library);
+        combatant.ApplyDamage(1);
+
+        expect(update.mock.calls).toEqual([[persistentCharacter.Id, { CurrentHP: 0 }]]);
+    });
 
     it("Should update the combatant statblock when it is edited from the library", () => { });
 
