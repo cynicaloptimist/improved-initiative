@@ -386,7 +386,9 @@ export class Encounter {
             Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants().map<CombatantState>(c => {
+            Combatants: this.Combatants()
+                .filter(c => c.PersistentCharacterId == null)
+                .map<CombatantState>(c => {
                 return {
                     Id: c.Id,
                     StatBlock: c.StatBlock(),
