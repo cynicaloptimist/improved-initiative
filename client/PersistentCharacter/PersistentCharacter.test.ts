@@ -123,6 +123,8 @@ describe("PersistentCharacter", () => {
     it("Should update the library statblock when it is edited from the combatant", () => { });
 
     it("Should render combatant notes with markdown", () => { });
+
+    it("Should remember persistent characters for autosaved encounter state", () => { });
 });
 
 describe("Resolving differences between local storage and account sync", () => {
