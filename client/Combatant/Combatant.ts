@@ -127,7 +127,6 @@ export class Combatant implements Combatant {
         }
 
         this.CurrentHP.subscribe(async c => {
-            console.log(`HP Updated: ${c}`);
             return await library.UpdatePersistentCharacter(this.PersistentCharacterId, { CurrentHP: c });
         });
     }
