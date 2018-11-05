@@ -23,7 +23,7 @@ import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { StatBlockEditor, StatBlockEditorTarget } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
@@ -181,7 +181,7 @@ export class TrackerViewModel {
     }
 
     public EditStatBlock(
-        editMode: "combatant" | "library",
+        editorTarget: StatBlockEditorTarget,
         statBlock: StatBlock,
         saveCallback: (newStatBlock: StatBlock) => void,
         currentListings?: Listing<StatBlock> [],
@@ -190,7 +190,7 @@ export class TrackerViewModel {
     ) {
         this.StatBlockEditor(<StatBlockEditor
             statBlock={statBlock}
-            editMode={editMode}
+            editorTarget={editorTarget}
             onSave={saveCallback}
             onDelete={deleteCallback}
             onSaveAs={saveAsCallback}

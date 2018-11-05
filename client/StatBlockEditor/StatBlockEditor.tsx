@@ -10,13 +10,15 @@ import { IdentityFields } from "./components/IdentityFields";
 import { abilityScoreField, descriptionField, getAnonymizedStatBlockJSON, keywordFields, nameAndModifierFields, powerFields, InitiativeField, ValueAndNotesField } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
 
+export type StatBlockEditorTarget = "library" | "combatant";
+
 interface StatBlockEditorProps {
     statBlock: StatBlock;
     onSave: (statBlock: StatBlock) => void;
     onDelete?: () => void;
     onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
-    editMode: "library" | "combatant";
+    editorTarget: StatBlockEditorTarget;
     currentListings?: Listing<Listable>[];
 }
 
@@ -40,8 +42,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     public render() {
         const header =
-            this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
-                this.props.editMode == "library" ? "Edit Library Statblock" :
+            this.props.editorTarget == "combatant" ? "Edit Combatant Statblock" :
+                this.props.editorTarget == "library" ? "Edit Library Statblock" :
                     "Edit StatBlock";
 
         const buttons = <React.Fragment>
@@ -69,7 +71,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor__identity">
                         <IdentityFields
                             formApi={api}
-                            allowFolder={this.props.editMode === "library"}
+                            allowFolder={this.props.editorTarget === "library"}
                             allowSaveAs={this.props.onSaveAs !== undefined}
                             currentListings={this.props.currentListings}
                             setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
