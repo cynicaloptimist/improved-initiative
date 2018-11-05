@@ -17,8 +17,7 @@
 .combatant {
     display: flex;
     padding: @medium-spacer;
-    border-left-width: @medium-spacer;
-    border-left-style: solid;
+    border-left: @active-combatant-indicator-width solid;
     align-items: baseline;
 
     .fa-clickable:hover {
@@ -58,6 +57,7 @@
     display: flex;
     flex-flow: row;
     padding: @medium-spacer;
+    border-left: @active-combatant-indicator-width solid @primary-black;
     align-items: baseline;
     .combatant__hp:hover {
         background-color: inherit;
