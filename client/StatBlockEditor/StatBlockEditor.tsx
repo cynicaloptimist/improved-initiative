@@ -1,6 +1,7 @@
 import { Field, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
+import { Listable } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
@@ -228,7 +229,7 @@ interface StatBlockEditorProps {
     onSaveAs?: (statBlock: StatBlock) => void;
     onClose: () => void;
     editMode: "library" | "combatant";
-    currentListings?: Listing<StatBlock>[];
+    currentListings?: Listing<Listable>[];
 }
 
 interface StatBlockEditorState {
