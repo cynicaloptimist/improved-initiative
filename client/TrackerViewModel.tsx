@@ -33,6 +33,7 @@ export class TrackerViewModel {
     private accountClient = new AccountClient();
     private playerViewClient = new PlayerViewClient(this.Socket);
 
+    public Rules = new DefaultRules();
     public PromptQueue = new PromptQueue();
     public EventLog = new EventLog();
     public Libraries = new Libraries(this.accountClient);
@@ -41,15 +42,15 @@ export class TrackerViewModel {
     public CombatantCommander = new CombatantCommander(this);
     public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
     public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
+    
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
     public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
     public SettingsVisible = ko.observable(false);
     public LibrariesVisible = ko.observable(true);
     public ToolbarWide = ko.observable(false);
+    
     public DisplayLogin = !env.IsLoggedIn;
     public PatreonLoginUrl = env.PatreonLoginUrl;
-
-
 
     constructor(private Socket: SocketIOClient.Socket) {
         ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
@@ -85,8 +86,6 @@ export class TrackerViewModel {
         const prompt = new PrivacyPolicyPromptWrapper();
         this.PromptQueue.Add(prompt);
     }
-
-    public Rules = new DefaultRules();
 
     public StatBlockTextEnricher = new TextEnricher(
         this.CombatantCommander.RollDice,
