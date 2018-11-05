@@ -221,11 +221,11 @@ export class TrackerViewModel {
     });
 
     public toolbarComponent = ko.computed(() => {
-        const commandsToHideByDescription = this.Encounter.State() == "active" ?
-            ["Start Encounter"] :
-            ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
+        const commandsToHideById = this.Encounter.State() == "active" ?
+            ["start-encounter"] :
+            ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
-        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d));
+        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d));
         const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar());
 
         return <Toolbar
