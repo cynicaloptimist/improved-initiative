@@ -5,13 +5,13 @@ import {CurrentSettings, InitializeSettings} from "../Settings/Settings";
 import { Encounter } from "../Encounter/Encounter";
 import { StatBlock } from "../../common/StatBlock";
 
-describe("Encounter", () => {
+describe("EncounterCommander", () => {
     let encounter: Encounter;
     let encounterCommander: EncounterCommander;
     beforeEach(() => {
         InitializeSettings();
         encounter = buildEncounter();
-        encounter.StartEncounter();
+        encounterCommander.StartEncounter();
     });
 
     test("Start empty encounter.", () => {
