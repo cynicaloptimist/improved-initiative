@@ -10,6 +10,21 @@ import { IdentityFields } from "./components/IdentityFields";
 import { abilityScoreField, descriptionField, getAnonymizedStatBlockJSON, keywordFields, nameAndModifierFields, powerFields, InitiativeField, ValueAndNotesField } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
 
+interface StatBlockEditorProps {
+    statBlock: StatBlock;
+    onSave: (statBlock: StatBlock) => void;
+    onDelete?: () => void;
+    onSaveAs?: (statBlock: StatBlock) => void;
+    onClose: () => void;
+    editMode: "library" | "combatant";
+    currentListings?: Listing<Listable>[];
+}
+
+interface StatBlockEditorState {
+    editorMode: "standard" | "json";
+    renderError?: string;
+}
+
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
     constructor(props) {
         super(props);
@@ -220,19 +235,4 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
         return errors;
     }
-}
-
-interface StatBlockEditorProps {
-    statBlock: StatBlock;
-    onSave: (statBlock: StatBlock) => void;
-    onDelete?: () => void;
-    onSaveAs?: (statBlock: StatBlock) => void;
-    onClose: () => void;
-    editMode: "library" | "combatant";
-    currentListings?: Listing<Listable>[];
-}
-
-interface StatBlockEditorState {
-    editorMode: "standard" | "json";
-    renderError?: string;
 }
