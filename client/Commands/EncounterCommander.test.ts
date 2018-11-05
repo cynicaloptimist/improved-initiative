@@ -4,13 +4,23 @@ import { EncounterCommander } from  "./EncounterCommander";
 import {CurrentSettings, InitializeSettings} from "../Settings/Settings";
 import { Encounter } from "../Encounter/Encounter";
 import { StatBlock } from "../../common/StatBlock";
+import { TrackerViewModel } from "../TrackerViewModel";
 
 describe("EncounterCommander", () => {
     let encounter: Encounter;
     let encounterCommander: EncounterCommander;
+    let trackerViewModel: TrackerViewModel;
     beforeEach(() => {
         InitializeSettings();
+
+        const mockIo: any = {
+            on: jest.fn(),
+            emit: jest.fn()
+        };
+
+        trackerViewModel = new TrackerViewModel(mockIo);
         encounter = buildEncounter();
+        encounterCommander = trackerViewModel.EncounterCommander;
         encounterCommander.StartEncounter();
     });
 
