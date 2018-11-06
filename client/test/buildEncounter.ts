@@ -1,5 +1,6 @@
 import { Encounter } from "../Encounter/Encounter";
 import { SpellLibrary } from "../Library/SpellLibrary";
+import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { DefaultRules, IRules } from "../Rules/Rules";
 import { TextEnricher } from "../TextEnricher/TextEnricher";
 

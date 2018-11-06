@@ -32,10 +32,10 @@ export class EventLog {
         }
     }
 
-    private element = $(".event-log");
+    private element = document.getElementsByClassName("event-log")[0];
 
     private scrollToBottomOfLog = () => {
-        let scrollHeight = this.element[0].scrollHeight;
-        this.element.scrollTop(scrollHeight);
+        let scrollHeight = this.element.scrollHeight;
+        this.element.scrollTop = scrollHeight;
     }
 }
