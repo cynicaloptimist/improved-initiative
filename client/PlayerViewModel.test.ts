@@ -153,6 +153,7 @@ describe("PlayerViewModel", () => {
     });
 
     test("Player View round timer stops when encounter stops", () => {
+        jest.useFakeTimers();
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
