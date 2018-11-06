@@ -35,7 +35,6 @@
     "@types/serve-static": "^1.13.1",
     "@types/socket.io": "^1.4.33",
     "@types/socket.io-client": "^1.4.32",
-    "chai": "^3.2.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "formik": "^1.0.0-beta.5",
@@ -106,7 +105,6 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.md?$": "markdown-loader-jest"
-
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
