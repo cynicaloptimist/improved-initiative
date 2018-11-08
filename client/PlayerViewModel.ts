@@ -18,19 +18,19 @@ export interface ImageModalState {
 }
 
 export class PlayerViewModel {
-    private additionalUserCSS: HTMLStyleElement;
-    private userStyles: HTMLStyleElement;
+    public additionalUserCSS: HTMLStyleElement;
+    public userStyles: HTMLStyleElement;
     public combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
-    private activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
-    private encounterId = env.EncounterId;
-    private roundCounter = ko.observable();
-    private roundCounterVisible = ko.observable(false);
+    public activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
+    public encounterId = env.EncounterId;
+    public roundCounter = ko.observable();
+    public roundCounterVisible = ko.observable(false);
     public turnTimer = new TurnTimer();
-    private turnTimerVisible = ko.observable(false);
-    private allowSuggestions = ko.observable(false);
-    private activeCombatantOnTop = ko.observable(false);
-    private displayPortraits = ko.observable(false);
-    private splashPortraits = false;
+    public turnTimerVisible = ko.observable(false);
+    public allowSuggestions = ko.observable(false);
+    public activeCombatantOnTop = ko.observable(false);
+    public displayPortraits = ko.observable(false);
+    public splashPortraits = false;
 
     public imageModal = ko.observable<ImageModalState>({
         Visible: false,
