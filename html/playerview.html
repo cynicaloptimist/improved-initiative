@@ -47,8 +47,8 @@
     <ul class="combatants">
         <!-- ko foreach: combatants -->
         <li class="combatant" data-bind="
-        css: { active: $parent.activeCombatant() == $data, 
-                playercharacter: $data.IsPlayerCharacter }, 
+        css: { active: $parent.activeCombatantId() == Id, 
+                playercharacter: IsPlayerCharacter }, 
         component: {
             name: 'playerdisplaycombatant',
             params: { combatant: $data }

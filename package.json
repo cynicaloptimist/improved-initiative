@@ -47,7 +47,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-ts": "^6.0.0-beta.19",
     "grunt-webpack": "^3.1.1",
-    "jest": "^23.0.1",
+    "jest": "^23.6.0",
     "jest-localstorage-mock": "^2.2.0",
     "less": "^3.0.4",
     "mongodb-memory-server": "^1.9.3",
