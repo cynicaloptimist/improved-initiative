@@ -140,16 +140,19 @@ describe("PlayerViewModel", () => {
         encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(???).toBe(visibleCombatant1.Id);
+        expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant1.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant2.Id);
+        expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant2.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant2.Id);
+        expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant2.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant1.Id);
+        expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant1.Id);
     });
 
     test("Player View round timer stops when encounter stops", () => {
