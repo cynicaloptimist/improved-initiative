@@ -21,7 +21,7 @@ export class PlayerViewModel {
     public additionalUserCSS: HTMLStyleElement;
     public userStyles: HTMLStyleElement;
     public combatants: KnockoutObservableArray<StaticCombatantViewModel> = ko.observableArray<StaticCombatantViewModel>([]);
-    public activeCombatant: KnockoutObservable<StaticCombatantViewModel> = ko.observable<StaticCombatantViewModel>();
+    public activeCombatantId = ko.observable<string>(null);
     public encounterId = env.EncounterId;
     public roundCounter = ko.observable();
     public roundCounterVisible = ko.observable(false);
@@ -106,14 +106,13 @@ export class PlayerViewModel {
             this.turnTimer.Stop();
             return;
         }
-        const newCombatantTurn = !this.activeCombatant() || encounter.ActiveCombatantId != this.activeCombatant().Id;
+        const newCombatantTurn = !this.activeCombatantId() || encounter.ActiveCombatantId != this.activeCombatantId();
         if (newCombatantTurn) {
             this.turnTimer.Start();
             this.turnTimer.Reset();
-            const active = this.combatants().filter(c => c.Id == encounter.ActiveCombatantId).pop();
-            this.activeCombatant(active);
+            this.activeCombatantId(encounter.ActiveCombatantId);
             setTimeout(this.ScrollToActiveCombatant, 1);
-            if (this.splashPortraits && active.ImageURL && !this.imageModal().BlockAutoModal) {
+            if (this.splashPortraits && !this.imageModal().BlockAutoModal) {
                 this.SplashPortrait(encounter.ActiveCombatantId, false);
                 this.imageModal({
                     ...this.imageModal(),
@@ -140,6 +139,9 @@ export class PlayerViewModel {
     private SplashPortrait = (SelectedId: string, didClick: boolean) => {
         const imageModal = this.imageModal();
         const combatant = this.combatants().filter(c => c.Id == SelectedId).pop();
+        if (!combatant || !combatant.ImageURL.length) {
+            return;
+        }
         if (didClick) {
             imageModal.BlockAutoModal = true;
             imageModal.Caption = "";
