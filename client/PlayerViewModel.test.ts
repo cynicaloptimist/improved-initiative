@@ -140,19 +140,23 @@ describe("PlayerViewModel", () => {
         encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(???).toBe(visibleCombatant1.Id);
+        expect(playerViewModel.activeCombatant().Id).toEqual(visibleCombatant1.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant2.Id);
+        expect(playerViewModel.activeCombatant().Id).toEqual(visibleCombatant2.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant2.Id);
+        expect(playerViewModel.activeCombatant().Id).toEqual(visibleCombatant2.Id);
         encounter.NextTurn();
+        playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-        //expect(??).toBe(visibleCombatant1.Id);
+        expect(playerViewModel.activeCombatant().Id).toEqual(visibleCombatant1.Id);
     });
 
     test("Player View round timer stops when encounter stops", () => {
+        jest.useFakeTimers();
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();
         playerViewModel.LoadEncounter(encounter.GetPlayerView());
