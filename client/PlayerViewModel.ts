@@ -123,7 +123,7 @@ export class PlayerViewModel {
     }
 
     private ScrollToActiveCombatant = () => {
-        let activeCombatantElement = $(".active")[0];
+        let activeCombatantElement = document.getElementsByClassName("active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }
