@@ -99,7 +99,7 @@
   "jest": {
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "client/tsconfig.json"
+        "tsConfig": "client/tsconfig.json"
       }
     },
     "setupFiles": [
