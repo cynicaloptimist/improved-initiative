@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
+import * as Mousetrap from "mousetrap";
 
 import { HpVerbosityOption, PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { Command } from "../Commands/Command";
