@@ -2,7 +2,7 @@ import Awesomplete = require("awesomplete");
 import { Field, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
-import { StatBlock } from "../../../common/StatBlock";
+import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 
@@ -11,7 +11,7 @@ interface IdentityFieldsProps {
     allowFolder: boolean;
     allowSaveAs: boolean;
     setEditorMode: (editorMode: "standard" | "json") => void;
-    currentListings?: Listing<StatBlock>[];
+    currentListings?: Listing<Listable>[];
 }
 
 interface IdentityFieldsState {

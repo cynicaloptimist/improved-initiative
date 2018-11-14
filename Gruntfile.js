@@ -9,16 +9,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     ts: {
-      options: {
-        removeComments: false,
-        additionalFlags: '--strictNullChecks'
-      },
       server: {
-        src: ['server/*.ts'],
-        options: {
-          module: 'commonjs',
-          target: 'es5'
-        }
+        tsconfig: "./server/tsconfig.json"
       },
     },
     webpack: {
@@ -39,7 +31,6 @@ module.exports = function (grunt) {
       js_dependencies: {
         src: [
           'node_modules/jquery/dist/jquery.js',
-          'node_modules/mousetrap/mousetrap.js',
           'node_modules/browser-filesaver/FileSaver.js',
           'node_modules/markdown-it/dist/markdown-it.js'
         ],
@@ -49,7 +40,6 @@ module.exports = function (grunt) {
       js_dependencies_min: {
         src: [
           'node_modules/jquery/dist/jquery.min.js',
-          'node_modules/mousetrap/mousetrap.min.js',
           'node_modules/browser-filesaver/FileSaver.min.js',
           'node_modules/markdown-it/dist/markdown-it.min.js'
         ],

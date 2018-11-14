@@ -24,6 +24,19 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
+    public GetWithTemplate(template: T) {
+        return new Promise<T>(done => {
+            return this.GetAsyncWithUpdatedId(item => {
+                const templateCast = template as object;
+                const finalListable = {
+                    ...templateCast,
+                    ...item
+                } as T;
+                return done(finalListable);
+            });
+        });
+    }
+
     public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
         if (this.value()) {
             return callback(this.value());
@@ -34,6 +47,7 @@ export class Listing<T extends Listable> implements ServerListing {
             item.Id = this.Id;
 
             if (item !== null) {
+                this.value(item);
                 return callback(item);
             } else {
                 console.error(`Couldn't load item keyed '${this.Id}' from localStorage.`);

@@ -33,8 +33,8 @@ interface IPageRenderOptions {
     postedEncounter: string | null;
 }
 
-const pageRenderOptions = (encounterId: string, session: Express.Session) : IPageRenderOptions => ({
-    rootDirectory: "../..", 
+const pageRenderOptions = (encounterId: string, session: Express.Session): IPageRenderOptions => ({
+    rootDirectory: "../..",
     encounterId,
     baseUrl,
     patreonClientId,
@@ -48,7 +48,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     const mustacheEngine = mustacheExpress();
     const MongoDBStore = dbSession(session);
     let store = null;
-    
+
     if (process.env.DB_CONNECTION_STRING) {
         store = new MongoDBStore(
             {
@@ -83,7 +83,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
     app.use(bodyParser.urlencoded({ extended: false }));
 
     configureMetricsRoutes(app);
-    
+
     app.get("/", (req: Req, res: Res) => {
         const session = req.session;
         if (session === undefined) {
@@ -106,10 +106,13 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
 
             if (process.env.DB_CONNECTION_STRING) {
                 upsertUser("defaultPatreonId", "accesskey", "refreshkey", "pledge")
-                .then(result => {
-                    session.userId = result._id;
-                    res.render("landing", renderOptions);
-                });
+                    .then(result => {
+                        if (result) {
+                            session.userId = result._id;
+                        }
+
+                        res.render("landing", renderOptions);
+                    });
             } else {
                 session.userId = probablyUniqueString();
                 res.render("landing", renderOptions);

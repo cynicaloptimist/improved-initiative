@@ -1,5 +1,7 @@
 import * as _ from "lodash";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
+import { DefaultPersistentCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -33,6 +35,13 @@ export class LibrariesCommander {
             Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
             this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
         });
+    }
+
+    public AddPersistentCharacterFromListing = async (listing: Listing<PersistentCharacter>, hideOnAdd: boolean) => {
+        const character = await listing.GetWithTemplate(DefaultPersistentCharacter());
+        this.tracker.Encounter.AddCombatantFromPersistentCharacter(character, this.libraries.PersistentCharacters, hideOnAdd);
+        Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
+        this.tracker.EventLog.AddEvent(`Character ${character.Name} added to combat.`);
     }
 
     private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
@@ -115,7 +124,7 @@ export class LibrariesCommander {
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public LoadEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+    public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
         this.encounterCommander.LoadEncounter(savedEncounter);
     }
 
@@ -125,7 +134,7 @@ export class LibrariesCommander {
                 const encounterName = response["encounterName"];
                 const path = ""; //TODO
                 if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
+                    const savedEncounter = this.tracker.Encounter.GetSavedEncounter(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     Metrics.TrackEvent("EncounterSaved", { Name: encounterName });

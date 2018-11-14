@@ -1,10 +1,11 @@
 import * as ko from "knockout";
 
-import { SavedCombatant } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/CombatantState";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
-import { Dice } from "../Rules/Rules";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Tag } from "./Tag";
@@ -12,34 +13,34 @@ import { Tag } from "./Tag";
 export interface Combatant {
     Id: string;
     Encounter: Encounter;
-    Alias: KnockoutObservable<string>;
     IndexLabel: number;
-    MaxHP: KnockoutComputed<number>;
-    CurrentHP: KnockoutObservable<number>;
-    TemporaryHP: KnockoutObservable<number>;
     AC: number;
     AbilityModifiers: AbilityScores;
-    Tags: KnockoutObservableArray<Tag>;
     InitiativeBonus: number;
+    IsPlayerCharacter: boolean;
+
+    StatBlock: KnockoutObservable<StatBlock>;
+    Alias: KnockoutObservable<string>;
+    CurrentHP: KnockoutObservable<number>;
+    TemporaryHP: KnockoutObservable<number>;
+    Tags: KnockoutObservableArray<Tag>;
     Initiative: KnockoutObservable<number>;
     InitiativeGroup: KnockoutObservable<string>;
     Hidden: KnockoutObservable<boolean>;
-    StatBlock: KnockoutObservable<StatBlock>;
+
+    MaxHP: KnockoutComputed<number>;
+
     GetInitiativeRoll: () => number;
-    IsPlayerCharacter: boolean;
 }
 
 export class Combatant implements Combatant {
-    constructor(statBlockJson, public Encounter: Encounter, savedCombatant?: SavedCombatant) {
-        let statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
-
-        if (savedCombatant) {
-            statBlock.HP.Value = savedCombatant.MaxHP || savedCombatant.StatBlock.HP.Value;
-            this.Id = "" + savedCombatant.Id; //legacy Id may be a number
-        } else {
-            statBlock.HP.Value = this.getMaxHP(statBlock);
-            this.Id = statBlock.Id + "." + probablyUniqueString();
-        }
+    constructor(
+        combatantState: CombatantState,
+        public Encounter: Encounter
+    ) {
+        let statBlock = combatantState.StatBlock;
+        this.Id = "" + combatantState.Id; //legacy Id may be a number
+        this.PersistentCharacterId = combatantState.PersistentCharacterId;
 
         this.StatBlock(statBlock);
 
@@ -52,11 +53,9 @@ export class Combatant implements Combatant {
             statBlock = newStatBlock;
         });
 
-        this.CurrentHP = ko.observable(this.MaxHP());
+        this.CurrentHP = ko.observable(combatantState.CurrentHP);
 
-        if (savedCombatant) {
-            this.processSavedCombatant(savedCombatant);
-        }
+        this.processSavedCombatant(combatantState);
 
         this.Initiative.subscribe(newInitiative => {
             const groupId = this.InitiativeGroup();
@@ -72,6 +71,7 @@ export class Combatant implements Combatant {
         });
     }
     public Id = probablyUniqueString();
+    public PersistentCharacterId = null;
     public Alias = ko.observable("");
     public TemporaryHP = ko.observable(0);
     public Tags = ko.observableArray<Tag>();
@@ -79,7 +79,7 @@ export class Combatant implements Combatant {
     public InitiativeGroup = ko.observable<string>(null);
     public StatBlock = ko.observable<StatBlock>();
     public Hidden = ko.observable(false);
-    
+
     public IndexLabel: number;
     public MaxHP: KnockoutComputed<number>;
     public CurrentHP: KnockoutObservable<number>;
@@ -92,7 +92,10 @@ export class Combatant implements Combatant {
     private updatingGroup = false;
 
     private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-        this.updateIndexLabel(oldStatBlock && oldStatBlock.Name);
+        if (oldStatBlock) {
+            this.UpdateIndexLabel(oldStatBlock.Name);
+        }
+
         this.IsPlayerCharacter = newStatBlock.Player == "player";
         this.AC = newStatBlock.AC.Value;
         this.AbilityModifiers = this.calculateModifiers();
@@ -103,11 +106,11 @@ export class Combatant implements Combatant {
         this.ConcentrationBonus = this.AbilityModifiers.Con;
         this.setAutoInitiativeGroup();
         if (oldStatBlock) {
-            this.Encounter.Combatants.notifySubscribers();    
+            this.Encounter.Combatants.notifySubscribers();
         }
     }
 
-    private processSavedCombatant(savedCombatant: SavedCombatant) {
+    private processSavedCombatant(savedCombatant: CombatantState) {
         this.IndexLabel = savedCombatant.IndexLabel;
         this.CurrentHP(savedCombatant.CurrentHP);
         this.TemporaryHP(savedCombatant.TemporaryHP);
@@ -116,33 +119,19 @@ export class Combatant implements Combatant {
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
-
-        const indexLabelCollides = this.Encounter.Combatants()
-            .some(c => c.DisplayName() == this.DisplayName());
-        if (indexLabelCollides) {
-            this.updateIndexLabel(savedCombatant.StatBlock.Name);
-        }
-
     }
 
-    private getMaxHP(statBlock: StatBlock) {
-        const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
-        if (rollMonsterHp && statBlock.Player !== "player") {
-            try {
-                const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
-                if (rolledHP > 0) {
-                    return rolledHP;
-                }
-                return 1;
-            } catch (e) {
-                console.error(e);
-                return statBlock.HP.Value;
-            }
+    public AttachToPersistentCharacterLibrary(library: PersistentCharacterLibrary) {
+        if (!this.PersistentCharacterId) {
+            throw "Combatant is not a persistent character";
         }
-        return statBlock.HP.Value;
+
+        this.CurrentHP.subscribe(async c => {
+            return await library.UpdatePersistentCharacter(this.PersistentCharacterId, { CurrentHP: c });
+        });
     }
 
-    private updateIndexLabel(oldName?: string) {
+    public UpdateIndexLabel(oldName?: string) {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
@@ -254,7 +243,7 @@ export class Combatant implements Combatant {
 
             this.Initiative(lowestInitiativeCombatant.Initiative());
             this.InitiativeGroup(lowestInitiativeCombatant.InitiativeGroup());
-            }
+        }
     }
 
     private findLowestInitiativeGroupByName(): Combatant {

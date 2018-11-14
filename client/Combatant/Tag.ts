@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
+import { TagState } from "../../common/CombatantState";
 import { DurationTiming } from "../../common/DurationTiming";
-import { SavedTag } from "../../common/SavedEncounter";
 import { Combatant } from "./Combatant";
 
 export const StartOfTurn: DurationTiming = "StartOfTurn";
@@ -37,7 +37,7 @@ export class Tag implements Tag {
     public static getLegacyTags = (tags: (any)[], combatant: Combatant): Tag[] => {
         return tags.map(tag => {
             if (tag.Text) {
-                const savedTag: SavedTag = tag;
+                const savedTag: TagState = tag;
                 return new Tag(savedTag.Text, combatant, savedTag.DurationRemaining, savedTag.DurationTiming, savedTag.DurationCombatantId);
             }
             return new Tag(tag, combatant);

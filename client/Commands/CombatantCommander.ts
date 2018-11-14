@@ -9,7 +9,6 @@ import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
-import { Store } from "../Utility/Store";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";

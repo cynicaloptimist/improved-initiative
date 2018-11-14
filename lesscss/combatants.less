@@ -1,7 +1,6 @@
 .combatants {
     overflow-y: auto;
     flex-shrink: 1;
-    padding: @large-spacer;
     background-color: @primary-white;
     border: 1px solid @accent-white;
 }
@@ -18,8 +17,7 @@
 .combatant {
     display: flex;
     padding: @medium-spacer;
-    border-left-width: @medium-spacer;
-    border-left-style: solid;
+    border-left: @active-combatant-indicator-width solid;
     align-items: baseline;
 
     .fa-clickable:hover {
@@ -55,10 +53,11 @@
 }
 
 .combatant--header {
-    .colors(@primary-white, @primary-grey, @primary-black);
+    .colors(@primary-white, @primary-grey, @primary-grey);
     display: flex;
     flex-flow: row;
     padding: @medium-spacer;
+    border-left: @active-combatant-indicator-width solid @primary-grey;
     align-items: baseline;
     .combatant__hp:hover {
         background-color: inherit;

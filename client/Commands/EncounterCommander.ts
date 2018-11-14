@@ -7,6 +7,7 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
+import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 
 export class EncounterCommander {
@@ -45,6 +46,10 @@ export class EncounterCommander {
     public DisplayTurnTimer = ko.computed(() => CurrentSettings().TrackerView.DisplayTurnTimer);
     public DisplayDifficulty = ko.computed(() => CurrentSettings().TrackerView.DisplayDifficulty);
 
+    private rollInitiative = () => {
+        this.tracker.PromptQueue.Add(new InitiativePrompt(this.tracker.Encounter.Combatants(), this.tracker.Encounter.StartEncounter));
+    }
+
     public StartEncounter = () => {
         if (this.tracker.PromptQueue.HasPrompt()) {
             this.tracker.PromptQueue.AnimatePrompt();
@@ -52,7 +57,7 @@ export class EncounterCommander {
         }
 
         if (this.tracker.Encounter.State() == "inactive") {
-            this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+            this.rollInitiative();
 
             ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
         }
@@ -74,7 +79,7 @@ export class EncounterCommander {
     }
 
     public RerollInitiative = () => {
-        this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+        this.rollInitiative();
         Metrics.TrackEvent("InitiativeRerolled");
 
         return false;

@@ -1,6 +1,7 @@
 import Awesomplete = require("awesomplete");
 import * as React from "react";
-import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { AccountClient } from "../../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
@@ -45,7 +46,7 @@ export class MoveEncounterPromptWrapper implements Prompt {
     
     constructor(
         private legacySavedEncounter: { Name?: string },
-        private moveListingFn: (encounter: SavedEncounter<SavedCombatant>, oldId: string) => void,
+        private moveListingFn: (encounter: EncounterState<CombatantState>, oldId: string) => void,
         folderNames: string[],
     ) {
         this.encounterName = legacySavedEncounter.Name || "";

@@ -1,19 +1,21 @@
 import * as ko from "knockout";
-import { max, sortBy } from "lodash";
+import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
-import { InitiativePrompt } from "../Commands/Prompts/InitiativePrompt";
-import { PromptQueue } from "../Commands/Prompts/PromptQueue";
 import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
@@ -24,7 +26,6 @@ import { TurnTimer } from "../Widgets/TurnTimer";
 
 export class Encounter {
     constructor(
-        promptQueue: PromptQueue,
         private playerViewClient: PlayerViewClient,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
@@ -57,7 +58,7 @@ export class Encounter {
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         });
 
-        let autosavedEncounter = Store.Load<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId);
+        let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId);
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
@@ -97,6 +98,7 @@ export class Encounter {
                 c => -c.Initiative(),
                 c => -this.getGroupBonusForCombatant(c),
                 c => -c.InitiativeBonus,
+                c => c.IsPlayerCharacter ? 0 : 1,
                 c => c.InitiativeGroup(),
                 c => c.StatBlock().Name,
                 c => c.IndexLabel
@@ -110,14 +112,14 @@ export class Encounter {
 
         if (this.State() === "active") {
             if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-                this.ActiveCombatantToTop();
+                this.bringActiveCombatantToTop();
             }
         }
 
         this.QueueEmitEncounter();
     }
 
-    public ActiveCombatantToTop = () => {
+    private bringActiveCombatantToTop = () => {
         const activeCombatant = this.ActiveCombatant();
 
         while (this.Combatants()[0] != activeCombatant) {
@@ -153,8 +155,11 @@ export class Encounter {
     private emitEncounterTimeoutID;
 
     private EmitEncounter = () => {
+        if (!this.playerViewClient) {
+            return;
+        }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
-        Store.Save<SavedEncounter<SavedCombatant>>(Store.AutoSavedEncounters, this.EncounterId, this.Save(this.EncounterId, ""));
+        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId, this.GetSavedEncounter(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -162,13 +167,88 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
-    public AddCombatantFromStatBlock = (statBlockJson: StatBlock, hideOnAdd = false, savedCombatant?: SavedCombatant) => {
-        const combatant = new Combatant(statBlockJson, this, savedCombatant);
+    public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
+        const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
-        if (hideOnAdd) {
+        statBlock.HP.Value = GetOrRollMaximumHP(statBlock);
+        
+        const initialState: CombatantState = {
+            Id: probablyUniqueString(),
+            StatBlock: statBlock,
+            Alias: "",
+            IndexLabel: null,
+            CurrentHP: statBlock.HP.Value,
+            TemporaryHP: 0,
+            Hidden: hideOnAdd,
+            Initiative: 0,
+            Tags: [],
+            InterfaceVersion: process.env.VERSION,
+        };
+
+        const combatant = new Combatant(initialState, this);
+
+        if (hideOnAdd) { //TODO: remove this?
             combatant.Hidden(true);
         }
         this.Combatants.push(combatant);
+
+        combatant.UpdateIndexLabel();
+
+        const viewModel = this.buildCombatantViewModel(combatant);
+
+        if (this.State() === "active") {
+            viewModel.EditInitiative();
+        }
+
+        this.QueueEmitEncounter();
+
+        return combatant;
+    }
+
+    public AddCombatantFromState = (combatantState: CombatantState) => {
+        const combatant = new Combatant(combatantState, this);
+        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
+        if (displayNameIsTaken){
+            combatant.UpdateIndexLabel(); 
+        }
+
+        const viewModel = this.buildCombatantViewModel(combatant);
+
+        if (this.State() === "active") {
+            viewModel.EditInitiative();
+        }
+
+        this.QueueEmitEncounter();
+
+        return combatant;
+    }
+
+    public AddCombatantFromPersistentCharacter(persistentCharacter: PersistentCharacter, library: PersistentCharacterLibrary, hideOnAdd = false): Combatant {
+        const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacter.Id);
+        if (alreadyAddedCombatant != undefined) {
+            console.log(`Won't add multiple persistent characters with Id ${persistentCharacter.Id}`);
+            return alreadyAddedCombatant;
+        }
+        
+        const initialState: CombatantState = {
+            Id: probablyUniqueString(),
+            PersistentCharacterId: persistentCharacter.Id,
+            StatBlock: persistentCharacter.StatBlock,
+            Alias: "",
+            IndexLabel: null,
+            CurrentHP: persistentCharacter.CurrentHP,
+            TemporaryHP: 0,
+            Hidden: hideOnAdd,
+            Initiative: 0,
+            Tags: [],
+            InterfaceVersion: persistentCharacter.Version,
+        };
+
+        const combatant = new Combatant(initialState, this);
+
+        this.Combatants.push(combatant);
+
+        combatant.AttachToPersistentCharacterLibrary(library);
 
         const viewModel = this.buildCombatantViewModel(combatant);
 
@@ -235,10 +315,6 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-    public RollInitiative = (promptQueue: PromptQueue) => {
-        promptQueue.Add(new InitiativePrompt(this.Combatants(), this.StartEncounter));
-    }
-
     public NextTurn = () => {
         const activeCombatant = this.ActiveCombatant();
 
@@ -257,7 +333,7 @@ export class Encounter {
         this.ActiveCombatant(nextCombatant);
 
         if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+            this.bringActiveCombatantToTop();
         }
 
         this.durationTags
@@ -285,7 +361,7 @@ export class Encounter {
         this.ActiveCombatant(previousCombatant);
 
         if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.ActiveCombatantToTop();
+            this.bringActiveCombatantToTop();
         }
 
         this.durationTags
@@ -295,14 +371,13 @@ export class Encounter {
         this.QueueEmitEncounter();
     }
 
-
     private durationTags: Tag[] = [];
 
     public AddDurationTag = (tag: Tag) => {
         this.durationTags.push(tag);
     }
 
-    public Save = (name: string, path: string): SavedEncounter<SavedCombatant> => {
+    public GetSavedEncounter = (name: string, path: string): EncounterState<CombatantState> => {
         let activeCombatant = this.ActiveCombatant();
         const id = AccountClient.MakeId(name, path);
         return {
@@ -311,7 +386,9 @@ export class Encounter {
             Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants().map<SavedCombatant>(c => {
+            Combatants: this.Combatants()
+                .filter(c => c.PersistentCharacterId == null)
+                .map<CombatantState>(c => {
                 return {
                     Id: c.Id,
                     StatBlock: c.StatBlock(),
@@ -337,7 +414,7 @@ export class Encounter {
         };
     }
 
-    public GetPlayerView = (): SavedEncounter<StaticCombatantViewModel> => {
+    public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
 
         return {
@@ -379,7 +456,7 @@ export class Encounter {
         return this.lastVisibleActiveCombatantId;
     }
 
-    public LoadSavedEncounter = (savedEncounter: SavedEncounter<SavedCombatant>, autosavedEncounter = false) => {
+    public LoadSavedEncounter = (savedEncounter: EncounterState<CombatantState>, autosavedEncounter = false) => {
         const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 
@@ -388,7 +465,7 @@ export class Encounter {
                 savedCombatant.Id = probablyUniqueString();
             }
 
-            const combatant = this.AddCombatantFromStatBlock(savedCombatant.StatBlock, null, savedCombatant);
+            const combatant = this.AddCombatantFromState(savedCombatant);
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }

@@ -1,132 +1,31 @@
-import { Field, FieldArray, Form, Formik, FormikProps, FormikValues } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
+import { Listable } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button } from "../Components/Button";
 import { Listing } from "../Library/Listing";
 import { IdentityFields } from "./components/IdentityFields";
-import { KeywordField } from "./components/KeywordField";
-import { NameAndModifierField } from "./components/NameAndModifierField";
-import { PowerField } from "./components/PowerField";
+import { abilityScoreField, descriptionField, getAnonymizedStatBlockJSON, keywordFields, nameAndModifierFields, powerFields, InitiativeField, ValueAndNotesField } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
 
-type FormApi = FormikProps<any>;
+export type StatBlockEditorTarget = "library" | "combatant";
 
-const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
+interface StatBlockEditorProps {
+    statBlock: StatBlock;
+    onSave: (statBlock: StatBlock) => void;
+    onDelete?: () => void;
+    onSaveAs?: (statBlock: StatBlock) => void;
+    onClose: () => void;
+    editorTarget: StatBlockEditorTarget;
+    currentListings?: Listing<Listable>[];
+}
 
-const ValueAndNotesField = (props: { label: string, fieldName: string }) =>
-    <label className="c-statblock-editor__text">
-        <span className="c-statblock-editor__label">{props.label}</span>
-        <div className="inline">
-            <Field type="number" className="value" name={`${props.fieldName}.Value`} />
-            <Field type="text" className="notes" name={`${props.fieldName}.Notes`} />
-        </div>
-    </label>;
-
-const InitiativeField = () =>
-    <div className="c-statblock-editor__text">
-        <label className="c-statblock-editor__label" htmlFor="InitiativeModifier">Initiative Modifier</label>
-        <div className="inline">
-            <Field type="number" className="c-field__value" id="InitiativeModifier" name="InitiativeModifier" />
-            <label className="c-statblock-editor__initiative-advantage">
-                Roll with Advantage <Field type="checkbox" name="InitiativeAdvantage" />
-            </label>
-        </div>
-    </div>;
-
-const abilityScoreField = (abilityName: string) =>
-    <div key={abilityName} className="c-statblock-editor__ability">
-        <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
-        <Field type="number" id={`ability-${abilityName}`} name={`Abilities.${abilityName}`} />
-    </div>;
-
-const nameAndModifierFields = (api: FormApi, modifierType: string) => {
-    return <FieldArray name={modifierType} render={arrayHelpers => {
-
-        const addButton = <button
-            type="button"
-            className="fas fa-plus c-add-button"
-            onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
-
-        if (api.values[modifierType].length == 0) {
-            return <span className="c-statblock-editor__label">
-                {modifierType}
-                {addButton}
-            </span>
-                ;
-        } else {
-            return <React.Fragment>
-                <span className="c-statblock-editor__label">{modifierType}</span>
-                <div className="inline-names-and-modifiers">
-                    {api.values[modifierType].map((_, i: number) =>
-                        <NameAndModifierField key={i} remove={arrayHelpers.remove} modifierType={modifierType} index={i} />
-                    )}
-                </div>
-                {addButton}
-            </React.Fragment>;
-        }
-    }} />;
-};
-
-const keywordFields = (api: FormApi, keywordType: string) => {
-    return <FieldArray name={keywordType} render={arrayHelpers => {
-        const addButton = <button
-            type="button"
-            className="fas fa-plus c-add-button"
-            onClick={() => arrayHelpers.push("")} />;
-
-        if (api.values[keywordType].length == 0) {
-            return <span className="c-statblock-editor__label">
-                {keywordType}
-                {addButton}
-            </span>;
-        } else {
-            return <React.Fragment>
-                <span className="c-statblock-editor__label">{keywordType}</span>
-                {api.values[keywordType].map((_, i: number) =>
-                    <KeywordField key={i} remove={arrayHelpers.remove} keywordType={keywordType} index={i} />)}
-                {addButton}
-            </React.Fragment>;
-        }
-    }} />;
-};
-
-const powerFields = (api: FormApi, powerType: string) => {
-    return <FieldArray name={powerType} render={arrayHelpers => {
-
-        const addButton = <button type="button"
-            className="fas fa-plus c-add-button"
-            onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
-
-        if (api.values[powerType].length == 0) {
-            return <span className="c-statblock-editor__label">
-                {powerType}
-                {addButton}
-            </span>;
-        } else {
-            return <React.Fragment>
-                <div className="c-statblock-editor__label">{powerType}</div>
-                <div className="inline-powers">
-                    {api.values[powerType].map((_, i: number) =>
-                        <PowerField key={i} remove={arrayHelpers.remove} powerType={powerType} index={i} />)}
-                </div>
-                {addButton}
-            </React.Fragment>;
-        }
-    }} />;
-};
-
-const descriptionField = () =>
-    <label className="c-statblock-editor__text">
-        <div className="c-statblock-editor__label">Description</div>
-        <Field className="c-statblock-editor__textarea" component="textarea" name="Description" />
-    </label>;
-
-const getAnonymizedStatBlockJSON = (statBlock: StatBlock) => {
-    const { Name, Path, Id, ...anonymizedStatBlock } = statBlock;
-    return JSON.stringify(anonymizedStatBlock, null, 2);
-};
+interface StatBlockEditorState {
+    editorMode: "standard" | "json";
+    renderError?: string;
+}
 
 export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatBlockEditorState> {
     constructor(props) {
@@ -143,8 +42,8 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
     public render() {
         const header =
-            this.props.editMode == "combatant" ? "Edit Combatant Statblock" :
-                this.props.editMode == "library" ? "Edit Library Statblock" :
+            this.props.editorTarget == "combatant" ? "Edit Combatant Statblock" :
+                this.props.editorTarget == "library" ? "Edit Library Statblock" :
                     "Edit StatBlock";
 
         const buttons = <React.Fragment>
@@ -172,7 +71,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor__identity">
                         <IdentityFields
                             formApi={api}
-                            allowFolder={this.props.editMode === "library"}
+                            allowFolder={this.props.editorTarget === "library"}
                             allowSaveAs={this.props.onSaveAs !== undefined}
                             currentListings={this.props.currentListings}
                             setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
@@ -190,7 +89,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             )} />;
     }
 
-    private innerEditor = (api: FormApi) => <React.Fragment>
+    private innerEditor = (api: FormikProps<any>) => <React.Fragment>
         <div className="c-statblock-editor__headers">
             <TextField label="Portrait URL" fieldName="ImageURL" />
             <TextField label="Source" fieldName="Source" />
@@ -205,7 +104,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             <InitiativeField />
         </div>
         <div className="c-statblock-editor__abilityscores">
-            {AbilityNames
+            {StatBlock.AbilityNames
                 .map(abilityScoreField)}
         </div>
         <div className="c-statblock-editor__saves">
@@ -242,7 +141,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     </div>
 
     private parseIntWhereNeeded = (submittedValues: StatBlock) => {
-        AbilityNames.forEach(a => submittedValues.Abilities[a] = this.castToNumberOrZero(submittedValues.Abilities[a]));
+        StatBlock.AbilityNames.forEach(a => submittedValues.Abilities[a] = this.castToNumberOrZero(submittedValues.Abilities[a]));
         submittedValues.HP.Value = this.castToNumberOrZero(submittedValues.HP.Value);
         submittedValues.AC.Value = this.castToNumberOrZero(submittedValues.AC.Value);
         submittedValues.InitiativeModifier = this.castToNumberOrZero(submittedValues.InitiativeModifier);
@@ -338,19 +237,4 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
 
         return errors;
     }
-}
-
-interface StatBlockEditorProps {
-    statBlock: StatBlock;
-    onSave: (statBlock: StatBlock) => void;
-    onDelete?: () => void;
-    onSaveAs?: (statBlock: StatBlock) => void;
-    onClose: () => void;
-    editMode: "library" | "combatant";
-    currentListings?: Listing<StatBlock>[];
-}
-
-interface StatBlockEditorState {
-    editorMode: "standard" | "json";
-    renderError?: string;
 }

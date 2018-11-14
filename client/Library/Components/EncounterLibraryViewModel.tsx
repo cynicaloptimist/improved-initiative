@@ -1,5 +1,6 @@
 import * as React from "react";
-import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
@@ -16,7 +17,7 @@ export type EncounterLibraryViewModelProps = {
     library: EncounterLibrary;
 };
 
-type EncounterListing = Listing<SavedEncounter<SavedCombatant>>;
+type EncounterListing = Listing<EncounterState<CombatantState>>;
 
 interface State {
     filter: string;

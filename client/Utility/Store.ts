@@ -6,6 +6,7 @@ import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 export class Store {
     private static _prefix = "ImprovedInitiative";
 
+    public static readonly PersistentCharacters = "PersistentCharacters";
     public static readonly PlayerCharacters = "PlayerCharacters";
     public static readonly StatBlocks = "Creatures";
     public static readonly Spells = "Spells";
