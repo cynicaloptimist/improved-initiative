@@ -4,11 +4,12 @@ import { InitializeSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { EncounterCommander } from "./EncounterCommander";
 
-describe.skip("EncounterCommander", () => {
+describe("EncounterCommander", () => {
     let encounter: Encounter;
     let encounterCommander: EncounterCommander;
     let trackerViewModel: TrackerViewModel;
     beforeEach(() => {
+        window["$"] = require("jquery");
         InitializeSettings();
 
         const mockIo: any = {
