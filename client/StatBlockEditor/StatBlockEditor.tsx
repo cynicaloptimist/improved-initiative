@@ -10,7 +10,7 @@ import { IdentityFields } from "./components/IdentityFields";
 import { abilityScoreField, descriptionField, getAnonymizedStatBlockJSON, keywordFields, nameAndModifierFields, powerFields, InitiativeField, ValueAndNotesField } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
 
-export type StatBlockEditorTarget = "library" | "combatant";
+export type StatBlockEditorTarget = "library" | "combatant" | "persistentcharacter";
 
 interface StatBlockEditorProps {
     statBlock: StatBlock;
@@ -41,10 +41,11 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
     }
 
     public render() {
-        const header =
-            this.props.editorTarget == "combatant" ? "Edit Combatant Statblock" :
-                this.props.editorTarget == "library" ? "Edit Library Statblock" :
-                    "Edit StatBlock";
+        const header = {
+            "combatant": "Edit Combatant Statblock",
+            "library": "Edit Library Statblock",
+            "persistentcharacter": "Edit Character Statblock"
+        }[this.props.editorTarget] || "Edit StatBlock";
 
         const buttons = <React.Fragment>
             <Button onClick={this.close} fontAwesomeIcon="times" />
@@ -71,7 +72,10 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
                     <div className="c-statblock-editor__identity">
                         <IdentityFields
                             formApi={api}
-                            allowFolder={this.props.editorTarget === "library"}
+                            allowFolder={
+                                this.props.editorTarget === "library"
+                                || this.props.editorTarget === "persistentcharacter"
+                            }
                             allowSaveAs={this.props.onSaveAs !== undefined}
                             currentListings={this.props.currentListings}
                             setEditorMode={(editorMode: "standard" | "json") => this.setState({ editorMode })}
@@ -158,7 +162,7 @@ export class StatBlockEditor extends React.Component<StatBlockEditorProps, StatB
             return 0;
         }
         return parsedValue;
-    }    
+    }
 
     private saveAndClose = (submittedValues) => {
         const {
