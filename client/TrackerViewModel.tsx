@@ -165,6 +165,23 @@ export class TrackerViewModel {
         />);
     }
 
+    public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(persistentCharacterId);
+        this.StatBlockEditor(<StatBlockEditor
+            statBlock={persistentCharacter.StatBlock}
+            editorTarget="persistentcharacter"
+            onSave={(statBlock: StatBlock) => {
+                this.Libraries.PersistentCharacters.UpdatePersistentCharacter(persistentCharacterId, {
+                    StatBlock: statBlock
+                });
+                this.Encounter.UpdatePersistentCharacterStatBlock(persistentCharacterId, statBlock);
+            }}
+            onDelete={() => this.Libraries.PersistentCharacters.DeletePersistentCharacter(persistentCharacterId)}
+            onClose={() => this.StatBlockEditor(null)}
+            currentListings={this.Libraries.PersistentCharacters.GetListings()}
+        />);
+    }
+
     protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
     public RepeatTutorial = () => {

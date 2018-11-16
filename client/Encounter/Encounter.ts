@@ -261,6 +261,14 @@ export class Encounter {
         return combatant;
     }
 
+    public UpdatePersistentCharacterStatBlock(persistentCharacterId: string, newStatBlock: StatBlock) {
+        const combatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacterId);
+        if (!combatant) {
+            return;
+        }
+        combatant.StatBlock(newStatBlock);
+    }
+
     public RemoveCombatantsByViewModel(combatantViewModels: CombatantViewModel[]) {
         this.Combatants.removeAll(combatantViewModels.map(vm => vm.Combatant));
         this.handleRemoveCombatantViewModels(combatantViewModels);

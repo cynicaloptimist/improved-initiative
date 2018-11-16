@@ -89,6 +89,10 @@ export class LibrariesCommander {
         });
     }
 
+    public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
+    }
+
     public CreateAndEditSpell = () => {
         const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom", Id: probablyUniqueString() };
         this.tracker.SpellEditor.EditSpell(
