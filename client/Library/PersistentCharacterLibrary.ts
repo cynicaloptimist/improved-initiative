@@ -1,4 +1,4 @@
-import { find } from "lodash";
+import { find, remove } from "lodash";
 import { now } from "moment";
 import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
@@ -7,6 +7,8 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class PersistentCharacterLibrary {
+    private persistentCharacters: Listing<PersistentCharacter>[] = [];
+
     constructor() {
         const listings = Store.List(Store.PersistentCharacters).map(this.loadPersistentCharacterListing);
 
@@ -16,18 +18,6 @@ export class PersistentCharacterLibrary {
             const convertedPlayerCharacterListings = Store.List(Store.PlayerCharacters).map(this.convertPlayerCharacterListing);
             this.persistentCharacters.push(...convertedPlayerCharacterListings);
         }
-    }
-
-    private loadPersistentCharacterListing = id => {
-        const persistentCharacter = { ...DefaultPersistentCharacter(), ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id) };
-        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
-    }
-
-    private convertPlayerCharacterListing = id => {
-        const statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
-        const persistentCharacter = InitializeCharacter(statBlock);
-        Store.Save<PersistentCharacter>(Store.PersistentCharacters, id, persistentCharacter);
-        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
     }
 
     public GetListings = () => this.persistentCharacters;
@@ -53,5 +43,20 @@ export class PersistentCharacterLibrary {
         return;
     }
 
-    private persistentCharacters: Listing<PersistentCharacter>[] = [];
+    public async DeletePersistentCharacter(persistentCharacterId: string) {
+        remove(this.persistentCharacters, p => p.Id == persistentCharacterId);
+        Store.Delete(Store.PersistentCharacters, persistentCharacterId);
+    }
+
+    private loadPersistentCharacterListing = id => {
+        const persistentCharacter = { ...DefaultPersistentCharacter(), ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id) };
+        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
+    }
+
+    private convertPlayerCharacterListing = id => {
+        const statBlock = { ...StatBlock.Default(), ...Store.Load<StatBlock>(Store.PlayerCharacters, id) };
+        const persistentCharacter = InitializeCharacter(statBlock);
+        Store.Save<PersistentCharacter>(Store.PersistentCharacters, id, persistentCharacter);
+        return new Listing<PersistentCharacter>(id, persistentCharacter.Name, persistentCharacter.Path, persistentCharacter.StatBlock.Type, Store.PersistentCharacters, "localStorage");
+    }
 }
