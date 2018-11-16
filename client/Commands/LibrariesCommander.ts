@@ -44,17 +44,6 @@ export class LibrariesCommander {
         this.tracker.EventLog.AddEvent(`Character ${character.Name} added to combat.`);
     }
 
-    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
-        if (library == Store.PlayerCharacters) {
-            this.libraries.PCs.DeleteListing(statBlockId);
-        }
-        if (library == Store.StatBlocks) {
-            this.libraries.NPCs.DeleteListing(statBlockId);
-        }
-
-        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
-    }
-
     public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
         let statBlock = StatBlock.Default();
         let newId = probablyUniqueString();
@@ -159,5 +148,16 @@ export class LibrariesCommander {
             const prompt = new DefaultPrompt(`<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`);
             this.tracker.PromptQueue.Add(prompt);
         }
+    }
+
+    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
+        if (library == Store.PlayerCharacters) {
+            this.libraries.PCs.DeleteListing(statBlockId);
+        }
+        if (library == Store.StatBlocks) {
+            this.libraries.NPCs.DeleteListing(statBlockId);
+        }
+
+        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
     }
 }
