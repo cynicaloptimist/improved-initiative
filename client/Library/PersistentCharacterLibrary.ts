@@ -29,6 +29,11 @@ export class PersistentCharacterLibrary {
         this.persistentCharacters.push(...newListings);
     }
 
+    public async GetPersistentCharacter(persistentCharacterId: string) {
+        const listing = find(this.persistentCharacters, c => c.Id == persistentCharacterId);
+        return await listing.GetWithTemplate(DefaultPersistentCharacter());
+    }
+    
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
         const currentCharacterListing = find(this.persistentCharacters, p => p.Id == persistentCharacterId);
         const currentCharacter = await currentCharacterListing.GetWithTemplate(DefaultPersistentCharacter());
