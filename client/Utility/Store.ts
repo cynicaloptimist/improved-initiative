@@ -14,6 +14,8 @@ export class Store {
     public static readonly AutoSavedEncounters = "AutoSavedEncounters";
     public static readonly User = "User";
 
+    public static readonly DefaultSavedEncounterId = "default";
+
     //Legacy
     public static readonly KeyBindings = "KeyBindings";
     public static readonly ActionBar = "ActionBar";

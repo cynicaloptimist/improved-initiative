@@ -58,7 +58,7 @@ export class Encounter {
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         });
 
-        let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId);
+        let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
         if (autosavedEncounter) {
             this.LoadSavedEncounter(autosavedEncounter, true);
         }
@@ -159,7 +159,7 @@ export class Encounter {
             return;
         }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
-        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, this.EncounterId, this.GetSavedEncounter(this.EncounterId, ""));
+        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId, this.GetSavedEncounter(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {
@@ -217,8 +217,6 @@ export class Encounter {
         if (this.State() === "active") {
             viewModel.EditInitiative();
         }
-
-        this.QueueEmitEncounter();
 
         return combatant;
     }
