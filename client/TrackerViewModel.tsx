@@ -94,7 +94,7 @@ export class TrackerViewModel {
         this.Libraries.Spells,
         this.Rules);
 
-    private addCombatantViewModel = (combatant: Combatant) => {
+    private initializeCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
         this.CombatantViewModels.push(vm);
         return vm;
@@ -106,7 +106,7 @@ export class TrackerViewModel {
 
     public Encounter = new Encounter(
         this.playerViewClient,
-        this.addCombatantViewModel,
+        this.initializeCombatantViewModel,
         this.removeCombatantViewModels,
         this.Rules,
         this.StatBlockTextEnricher
