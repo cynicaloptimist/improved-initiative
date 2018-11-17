@@ -94,22 +94,19 @@ export class TrackerViewModel {
         this.Libraries.Spells,
         this.Rules);
 
-    private initializeCombatantViewModel = (combatant: Combatant) => {
+    public InitializeCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
         this.CombatantViewModels.push(vm);
         return vm;
     }
 
-    private removeCombatantViewModels = (viewModels: CombatantViewModel[]) => {
+    public RemoveCombatantViewModels = (viewModels: CombatantViewModel[]) => {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
     public Encounter = new Encounter(
         this.playerViewClient,
-        this.initializeCombatantViewModel,
-        this.removeCombatantViewModels,
-        this.Rules,
-        this.StatBlockTextEnricher
+        this
     );
 
     public librariesComponent = <LibrariesViewModel

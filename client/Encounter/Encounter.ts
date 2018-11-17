@@ -19,7 +19,7 @@ import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrar
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { TextEnricher } from "../TextEnricher/TextEnricher";
+import { TrackerViewModel } from "../TrackerViewModel";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -27,18 +27,16 @@ import { TurnTimer } from "../Widgets/TurnTimer";
 export class Encounter {
     constructor(
         private playerViewClient: PlayerViewClient,
-        private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-        private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
-        public Rules: IRules,
-        private statBlockTextEnricher: TextEnricher
+        private tracker: TrackerViewModel
     ) {
+        this.Rules = tracker.Rules;
         this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();
         this.ActiveCombatantStatBlock = ko.pureComputed(() => {
             return this.ActiveCombatant()
                 ? React.createElement(StatBlockComponent, {
                     statBlock: this.ActiveCombatant().StatBlock(),
-                    enricher: this.statBlockTextEnricher,
+                    enricher: this.tracker.StatBlockTextEnricher,
                     displayMode: "active"
                 })
                 : null;
@@ -64,6 +62,7 @@ export class Encounter {
         }
     }
 
+    public Rules: IRules;
     public TurnTimer = new TurnTimer();
     public Combatants = ko.observableArray<Combatant>([]);
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
@@ -194,7 +193,7 @@ export class Encounter {
 
         combatant.UpdateIndexLabel();
 
-        const viewModel = this.buildCombatantViewModel(combatant);
+        const viewModel = this.tracker.InitializeCombatantViewModel(combatant);
 
         if (this.State() === "active") {
             viewModel.EditInitiative();
@@ -212,7 +211,7 @@ export class Encounter {
             combatant.UpdateIndexLabel(); 
         }
 
-        const viewModel = this.buildCombatantViewModel(combatant);
+        const viewModel = this.tracker.InitializeCombatantViewModel(combatant);
 
         if (this.State() === "active") {
             viewModel.EditInitiative();
@@ -248,7 +247,7 @@ export class Encounter {
 
         combatant.AttachToPersistentCharacterLibrary(library);
 
-        const viewModel = this.buildCombatantViewModel(combatant);
+        const viewModel = this.tracker.InitializeCombatantViewModel(combatant);
 
         if (this.State() === "active") {
             viewModel.EditInitiative();
@@ -269,7 +268,7 @@ export class Encounter {
 
     public RemoveCombatantsByViewModel(combatantViewModels: CombatantViewModel[]) {
         this.Combatants.removeAll(combatantViewModels.map(vm => vm.Combatant));
-        this.handleRemoveCombatantViewModels(combatantViewModels);
+        this.tracker.RemoveCombatantViewModels(combatantViewModels);
     }
 
     public MoveCombatant(combatant: Combatant, index: number) {
