@@ -186,6 +186,11 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
+        
+        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
+        if (displayNameIsTaken){
+            combatant.UpdateIndexLabel(); 
+        }
 
         this.QueueEmitEncounter();
 
@@ -196,11 +201,6 @@ export class Encounter {
         const combatant = new Combatant(combatantState, this);
         this.Combatants.push(combatant);
         
-        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
-        if (displayNameIsTaken){
-            combatant.UpdateIndexLabel(); 
-        }
-
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
