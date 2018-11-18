@@ -11,7 +11,7 @@ import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
 
 export class EncounterCommander {
-    constructor(private tracker: TrackerViewModel) {}
+    constructor(private tracker: TrackerViewModel) { }
 
     public AddStatBlockFromListing = (statBlock: StatBlock, hideOnAdd: boolean) => {
         this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
@@ -111,7 +111,10 @@ export class EncounterCommander {
     public LoadEncounter = (legacySavedEncounter: {}) => {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
         savedEncounter.Combatants.forEach(this.tracker.Encounter.AddCombatantFromState);
-        Metrics.TrackEvent("EncounterLoaded", { Name: savedEncounter.Name });
+        Metrics.TrackEvent("EncounterLoaded", {
+            Name: savedEncounter.Name,
+            Combatants: savedEncounter.Combatants.map(c => c.StatBlock.Name)
+        });
     }
 
     public NextTurn = () => {
