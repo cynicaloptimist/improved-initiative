@@ -205,6 +205,8 @@ export class Encounter {
     public AddCombatantFromState = (combatantState: CombatantState) => {
         const combatant = new Combatant(combatantState, this);
         const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
+
+        this.Combatants.push(combatant);
         if (displayNameIsTaken){
             combatant.UpdateIndexLabel(); 
         }
