@@ -55,7 +55,7 @@ export class Combatant implements Combatant {
 
         this.CurrentHP = ko.observable(combatantState.CurrentHP);
 
-        this.processSavedCombatant(combatantState);
+        this.processCombatantState(combatantState);
 
         this.Initiative.subscribe(newInitiative => {
             const groupId = this.InitiativeGroup();
@@ -110,7 +110,7 @@ export class Combatant implements Combatant {
         }
     }
 
-    private processSavedCombatant(savedCombatant: CombatantState) {
+    private processCombatantState(savedCombatant: CombatantState) {
         this.IndexLabel = savedCombatant.IndexLabel;
         this.CurrentHP(savedCombatant.CurrentHP);
         this.TemporaryHP(savedCombatant.TemporaryHP);
