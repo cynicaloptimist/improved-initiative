@@ -110,7 +110,7 @@ export class EncounterCommander {
 
     public LoadEncounter = (legacySavedEncounter: {}) => {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-        this.tracker.Encounter.LoadSavedEncounter(savedEncounter);
+        this.tracker.Encounter.LoadEncounterState(savedEncounter);
         Metrics.TrackEvent("EncounterLoaded", { Name: savedEncounter.Name });
     }
 

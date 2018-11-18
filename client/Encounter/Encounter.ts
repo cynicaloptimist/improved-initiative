@@ -60,7 +60,7 @@ export class Encounter {
 
         let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
         if (autosavedEncounter) {
-            this.LoadSavedEncounter(autosavedEncounter, true);
+            this.LoadEncounterState(autosavedEncounter, true);
         }
     }
 
@@ -443,11 +443,11 @@ export class Encounter {
         return this.lastVisibleActiveCombatantId;
     }
 
-    public LoadSavedEncounter = (savedEncounter: EncounterState<CombatantState>, autosavedEncounter = false) => {
-        const savedEncounterIsActive = !!savedEncounter.ActiveCombatantId;
+    public LoadEncounterState = (encounterState: EncounterState<CombatantState>, autosavedEncounter = false) => {
+        const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
         const currentEncounterIsActive = this.State() == "active";
 
-        savedEncounter.Combatants.forEach(savedCombatant => {
+        encounterState.Combatants.forEach(savedCombatant => {
             if (this.Combatants().some(c => c.Id == savedCombatant.Id)) {
                 savedCombatant.Id = probablyUniqueString();
             }
@@ -469,10 +469,10 @@ export class Encounter {
         else {
             if (savedEncounterIsActive) {
                 this.State("active");
-                this.ActiveCombatant(this.Combatants().filter(c => c.Id == savedEncounter.ActiveCombatantId).pop());
+                this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
                 this.TurnTimer.Start();
             }
-            this.RoundCounter(savedEncounter.RoundCounter || 1);
+            this.RoundCounter(encounterState.RoundCounter || 1);
         }
     }
 
