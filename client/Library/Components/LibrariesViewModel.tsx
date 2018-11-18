@@ -8,6 +8,7 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Libraries as LibrarySet } from "../Libraries";
 import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
+import { PersistentCharacterLibraryViewModel } from "./PersistentCharacterLibraryViewModel";
 import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
 import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
@@ -41,14 +42,12 @@ export class LibrariesViewModel extends React.Component<LibrariesProps, Librarie
     public render() {
         const libraries = {
             Creatures: <StatBlockLibraryViewModel
-                key="creatures"
                 librariesCommander={this.props.librariesCommander}
                 library={this.props.libraries.NPCs}
                 statBlockTextEnricher={this.props.statBlockTextEnricher} />,
-            Players: <StatBlockLibraryViewModel
-                key="players"
+            Characters: <PersistentCharacterLibraryViewModel
                 librariesCommander={this.props.librariesCommander}
-                library={this.props.libraries.PCs}
+                library={this.props.libraries.PersistentCharacters}
                 statBlockTextEnricher={this.props.statBlockTextEnricher} />,
             Encounters: <EncounterLibraryViewModel
                 librariesCommander={this.props.librariesCommander}
