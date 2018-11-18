@@ -185,17 +185,7 @@ export class Encounter {
             InterfaceVersion: process.env.VERSION,
         };
 
-        const combatant = new Combatant(initialState, this);
-
-        this.Combatants.push(combatant);
-
-        combatant.UpdateIndexLabel();
-
-        const viewModel = this.buildCombatantViewModel(combatant);
-
-        if (this.State() === "active") {
-            viewModel.EditInitiative();
-        }
+        const combatant = this.AddCombatantFromState(initialState);
 
         this.QueueEmitEncounter();
 
@@ -241,17 +231,9 @@ export class Encounter {
             InterfaceVersion: persistentCharacter.Version,
         };
 
-        const combatant = new Combatant(initialState, this);
-
-        this.Combatants.push(combatant);
-
+        const combatant = this.AddCombatantFromState(initialState);
+        
         combatant.AttachToPersistentCharacterLibrary(library);
-
-        const viewModel = this.buildCombatantViewModel(combatant);
-
-        if (this.State() === "active") {
-            viewModel.EditInitiative();
-        }
 
         this.QueueEmitEncounter();
 
