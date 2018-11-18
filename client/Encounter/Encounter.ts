@@ -187,9 +187,6 @@ export class Encounter {
 
         const combatant = new Combatant(initialState, this);
 
-        if (hideOnAdd) { //TODO: remove this?
-            combatant.Hidden(true);
-        }
         this.Combatants.push(combatant);
 
         combatant.UpdateIndexLabel();
