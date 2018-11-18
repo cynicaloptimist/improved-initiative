@@ -167,6 +167,19 @@ export class Encounter {
         this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
     }
 
+    public AddCombatantFromState = (combatantState: CombatantState) => {
+        const combatant = new Combatant(combatantState, this);
+        this.Combatants.push(combatant);
+        
+        const viewModel = this.buildCombatantViewModel(combatant);
+
+        if (this.State() === "active") {
+            viewModel.EditInitiative();
+        }
+
+        return combatant;
+    }
+
     public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
@@ -186,26 +199,13 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-        
+
         const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
         if (displayNameIsTaken){
             combatant.UpdateIndexLabel(); 
         }
 
         this.QueueEmitEncounter();
-
-        return combatant;
-    }
-
-    public AddCombatantFromState = (combatantState: CombatantState) => {
-        const combatant = new Combatant(combatantState, this);
-        this.Combatants.push(combatant);
-        
-        const viewModel = this.buildCombatantViewModel(combatant);
-
-        if (this.State() === "active") {
-            viewModel.EditInitiative();
-        }
 
         return combatant;
     }
