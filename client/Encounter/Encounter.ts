@@ -177,6 +177,12 @@ export class Encounter {
             viewModel.EditInitiative();
         }
 
+        combatant.Tags().forEach(tag => {
+            if (tag.HasDuration) {
+                this.AddDurationTag(tag);
+            }
+        });
+
         return combatant;
     }
 
@@ -456,11 +462,6 @@ export class Encounter {
             if (currentEncounterIsActive) {
                 combatant.Initiative(combatant.GetInitiativeRoll());
             }
-            combatant.Tags().forEach(tag => {
-                if (tag.HasDuration) {
-                    this.AddDurationTag(tag);
-                }
-            });
         });
 
         if (currentEncounterIsActive) {
