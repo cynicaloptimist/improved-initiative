@@ -35,6 +35,12 @@ export class PersistentCharacterLibrary {
     }
     
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
+        if (updates.StatBlock) {
+            updates.Name = updates.StatBlock.Name;
+            updates.Path = updates.StatBlock.Path;
+            updates.Version = updates.StatBlock.Version;
+            updates.Id = updates.StatBlock.Id;
+        }
         const currentCharacterListing = find(this.persistentCharacters, p => p.Id == persistentCharacterId);
         const currentCharacter = await currentCharacterListing.GetWithTemplate(DefaultPersistentCharacter());
         const updatedCharacter = {
