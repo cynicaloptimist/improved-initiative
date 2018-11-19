@@ -79,7 +79,7 @@ export class TrackerViewModel {
 
         const autosavedEncounter = UpdateLegacySavedEncounter(Store.Load(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId));
         if (autosavedEncounter) {
-            this.Encounter.LoadEncounterState(autosavedEncounter, true);
+            this.Encounter.LoadEncounterState(autosavedEncounter, this.Libraries.PersistentCharacters);
         }
 
         this.displayPrivacyNotificationIfNeeded();

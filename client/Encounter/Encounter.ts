@@ -165,7 +165,7 @@ export class Encounter {
     public AddCombatantFromState = (combatantState: CombatantState) => {
         const combatant = new Combatant(combatantState, this);
         this.Combatants.push(combatant);
-        
+
         const viewModel = this.buildCombatantViewModel(combatant);
 
         if (this.State() === "active") {
@@ -185,7 +185,7 @@ export class Encounter {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
         statBlock.HP.Value = GetOrRollMaximumHP(statBlock);
-        
+
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
             StatBlock: statBlock,
@@ -202,8 +202,8 @@ export class Encounter {
         const combatant = this.AddCombatantFromState(initialState);
 
         const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
-        if (displayNameIsTaken){
-            combatant.UpdateIndexLabel(); 
+        if (displayNameIsTaken) {
+            combatant.UpdateIndexLabel();
         }
 
         this.QueueEmitEncounter();
@@ -217,7 +217,7 @@ export class Encounter {
             console.log(`Won't add multiple persistent characters with Id ${persistentCharacter.Id}`);
             return alreadyAddedCombatant;
         }
-        
+
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
             PersistentCharacterId: persistentCharacter.Id,
@@ -233,7 +233,7 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-        
+
         combatant.AttachToPersistentCharacterLibrary(library);
 
         this.QueueEmitEncounter();
@@ -377,27 +377,27 @@ export class Encounter {
             Combatants: this.Combatants()
                 .filter(c => c.PersistentCharacterId == null)
                 .map<CombatantState>(c => {
-                return {
-                    Id: c.Id,
-                    StatBlock: c.StatBlock(),
-                    MaxHP: c.MaxHP(),
-                    CurrentHP: c.CurrentHP(),
-                    TemporaryHP: c.TemporaryHP(),
-                    Initiative: c.Initiative(),
-                    InitiativeGroup: c.InitiativeGroup(),
-                    Alias: c.Alias(),
-                    IndexLabel: c.IndexLabel,
-                    Tags: c.Tags().filter(t => t.Visible()).map(t => ({
-                        Text: t.Text,
-                        DurationRemaining: t.DurationRemaining(),
-                        DurationTiming: t.DurationTiming,
-                        DurationCombatantId: t.DurationCombatantId
-                    })),
-                    Hidden: c.Hidden(),
-                    InterfaceVersion: process.env.VERSION,
-                    ImageURL: c.StatBlock().ImageURL,
-                };
-            }),
+                    return {
+                        Id: c.Id,
+                        StatBlock: c.StatBlock(),
+                        MaxHP: c.MaxHP(),
+                        CurrentHP: c.CurrentHP(),
+                        TemporaryHP: c.TemporaryHP(),
+                        Initiative: c.Initiative(),
+                        InitiativeGroup: c.InitiativeGroup(),
+                        Alias: c.Alias(),
+                        IndexLabel: c.IndexLabel,
+                        Tags: c.Tags().filter(t => t.Visible()).map(t => ({
+                            Text: t.Text,
+                            DurationRemaining: t.DurationRemaining(),
+                            DurationTiming: t.DurationTiming,
+                            DurationCombatantId: t.DurationCombatantId
+                        })),
+                        Hidden: c.Hidden(),
+                        InterfaceVersion: process.env.VERSION,
+                        ImageURL: c.StatBlock().ImageURL,
+                    };
+                }),
             Version: process.env.VERSION
         };
     }
@@ -444,23 +444,30 @@ export class Encounter {
         return this.lastVisibleActiveCombatantId;
     }
 
-    public LoadEncounterState = (encounterState: EncounterState<CombatantState>, autosavedEncounter = false) => {
+    public LoadEncounterState = (encounterState: EncounterState<CombatantState>, persistentCharacterLibrary: PersistentCharacterLibrary) => {
         const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
-        encounterState.Combatants.forEach(savedCombatant => {
+        encounterState.Combatants.forEach(async savedCombatant => {
             if (this.Combatants().some(c => c.Id == savedCombatant.Id)) {
                 savedCombatant.Id = probablyUniqueString();
             }
 
             const combatant = this.AddCombatantFromState(savedCombatant);
+
+            if (combatant.PersistentCharacterId) {
+                const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(combatant.PersistentCharacterId);
+                combatant.StatBlock(persistentCharacter.StatBlock);
+                combatant.CurrentHP(persistentCharacter.CurrentHP);
+                combatant.AttachToPersistentCharacterLibrary(persistentCharacterLibrary);
+            }
         });
 
-            if (savedEncounterIsActive) {
-                this.State("active");
-                this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
-                this.TurnTimer.Start();
-            }
-            this.RoundCounter(encounterState.RoundCounter || 1);
+        if (savedEncounterIsActive) {
+            this.State("active");
+            this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
+            this.TurnTimer.Start();
         }
+        this.RoundCounter(encounterState.RoundCounter || 1);
+    }
 
     public ClearEncounter = () => {
         this.Combatants.removeAll();
