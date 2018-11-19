@@ -446,23 +446,14 @@ export class Encounter {
 
     public LoadEncounterState = (encounterState: EncounterState<CombatantState>, autosavedEncounter = false) => {
         const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
-        const currentEncounterIsActive = this.State() == "active";
-
         encounterState.Combatants.forEach(savedCombatant => {
             if (this.Combatants().some(c => c.Id == savedCombatant.Id)) {
                 savedCombatant.Id = probablyUniqueString();
             }
 
             const combatant = this.AddCombatantFromState(savedCombatant);
-            if (currentEncounterIsActive) {
-                combatant.Initiative(combatant.GetInitiativeRoll());
-            }
         });
 
-        if (currentEncounterIsActive) {
-            this.SortByInitiative();
-        }
-        else {
             if (savedEncounterIsActive) {
                 this.State("active");
                 this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
@@ -470,7 +461,6 @@ export class Encounter {
             }
             this.RoundCounter(encounterState.RoundCounter || 1);
         }
-    }
 
     public ClearEncounter = () => {
         this.Combatants.removeAll();
