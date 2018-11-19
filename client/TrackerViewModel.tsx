@@ -14,6 +14,7 @@ import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyProm
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
+import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
@@ -75,6 +76,11 @@ export class TrackerViewModel {
 
             this.HandleAccountSync(account);
         });
+
+        const autosavedEncounter = UpdateLegacySavedEncounter(Store.Load(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId));
+        if (autosavedEncounter) {
+            this.Encounter.LoadEncounterState(autosavedEncounter, true);
+        }
 
         this.displayPrivacyNotificationIfNeeded();
 

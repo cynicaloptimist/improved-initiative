@@ -57,11 +57,6 @@ export class Encounter {
                     .map(c => c.StatBlock().Challenge.toString());
             return DifficultyCalculator.Calculate(enemyChallengeRatings, playerLevels);
         });
-
-        let autosavedEncounter = Store.Load<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
-        if (autosavedEncounter) {
-            this.LoadEncounterState(autosavedEncounter, true);
-        }
     }
 
     public TurnTimer = new TurnTimer();
