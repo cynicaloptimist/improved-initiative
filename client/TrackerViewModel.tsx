@@ -77,9 +77,9 @@ export class TrackerViewModel {
             this.HandleAccountSync(account);
         });
 
-        const autosavedEncounter = UpdateLegacySavedEncounter(Store.Load(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId));
+        const autosavedEncounter = Store.Load(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
         if (autosavedEncounter) {
-            this.Encounter.LoadEncounterState(autosavedEncounter, this.Libraries.PersistentCharacters);
+            this.Encounter.LoadEncounterState(UpdateLegacySavedEncounter(autosavedEncounter), this.Libraries.PersistentCharacters);
         }
 
         this.displayPrivacyNotificationIfNeeded();
