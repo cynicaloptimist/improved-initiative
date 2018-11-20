@@ -90,8 +90,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             throw "Session is not available";
         }
 
-        const encounterId = playerViews.InitializeNew();
-        session.encounterId = encounterId;
+        session.encounterId = playerViews.InitializeNew();
         const renderOptions = pageRenderOptions(session);
         if (defaultAccountLevel !== "free") {
 
