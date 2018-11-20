@@ -129,6 +129,16 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             throw "Session is not available";
         }
         session.encounterId = req.params.id;
+        
+        res.redirect("/e/");
+    });
+
+    app.get("/e/", (req: Req, res: Res) => {
+        const session = req.session;
+        if (session === undefined) {
+            throw "Session is not available";
+        }
+        
         const options = pageRenderOptions(session);
         if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
