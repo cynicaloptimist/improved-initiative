@@ -33,9 +33,9 @@ interface IPageRenderOptions {
     postedEncounter: string | null;
 }
 
-const pageRenderOptions = (encounterId: string, session: Express.Session): IPageRenderOptions => ({
+const pageRenderOptions = (session: Express.Session): IPageRenderOptions => ({
     rootDirectory: "../..",
-    encounterId,
+    encounterId: session.encounterId || probablyUniqueString(),
     baseUrl,
     patreonClientId,
     isLoggedIn: session.isLoggedIn || false,
@@ -91,8 +91,8 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         }
 
         const encounterId = playerViews.InitializeNew();
-        session.EncounterId = encounterId;
-        const renderOptions = pageRenderOptions(encounterId, session);
+        session.encounterId = encounterId;
+        const renderOptions = pageRenderOptions(session);
         if (defaultAccountLevel !== "free") {
 
             if (defaultAccountLevel === "accountsync") {
@@ -129,8 +129,8 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
         if (session === undefined) {
             throw "Session is not available";
         }
-
-        const options = pageRenderOptions(req.params.id, session);
+        session.encounterId = req.params.id;
+        const options = pageRenderOptions(session);
         if (session.postedEncounter) {
             options.postedEncounter = JSON.stringify(session.postedEncounter);
         }
@@ -143,7 +143,8 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             throw "Session is not available";
         }
 
-        res.render("playerview", pageRenderOptions(req.params.id, session));
+        session.encounterId = req.params.id;
+        res.render("playerview", pageRenderOptions(session));
     });
 
     app.get("/playerviews/:id", (req: Req, res: Res) => {
@@ -156,7 +157,7 @@ export default function (app: express.Application, statBlockLibrary: Library<Sta
             throw "Session is not available";
         }
 
-        res.render(`templates/${req.params.name}`, pageRenderOptions("", session));
+        res.render(`templates/${req.params.name}`, pageRenderOptions(session));
     });
 
     app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
