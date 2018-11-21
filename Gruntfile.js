@@ -31,7 +31,6 @@ module.exports = function (grunt) {
       js_dependencies: {
         src: [
           'node_modules/jquery/dist/jquery.js',
-          'node_modules/markdown-it/dist/markdown-it.js'
         ],
         dest: 'public/js/dependencies.js',
         sourceMap: true
@@ -39,7 +38,6 @@ module.exports = function (grunt) {
       js_dependencies_min: {
         src: [
           'node_modules/jquery/dist/jquery.min.js',
-          'node_modules/markdown-it/dist/markdown-it.min.js'
         ],
         dest: 'public/js/dependencies.js'
       }
