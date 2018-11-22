@@ -381,6 +381,21 @@ export class Encounter {
         };
     }
 
+    public GetEncounterState = (name: string, path: string): EncounterState<CombatantState> => {
+        let activeCombatant = this.ActiveCombatant();
+        const id = AccountClient.MakeId(name, path);
+        return {
+            Name: name,
+            Path: path,
+            Id: id,
+            ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
+            RoundCounter: this.RoundCounter(),
+            Combatants: this.Combatants()
+                .map<CombatantState>(this.getCombatantState),
+            Version: process.env.VERSION
+        };
+    }
+
     public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
         let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
 

@@ -4,6 +4,8 @@ import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrar
 import { InitializeSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import { buildEncounter } from "../test/buildEncounter";
+import { EncounterState } from "../../common/EncounterState";
+import { CombatantState } from "../../common/CombatantState";
 
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {
@@ -124,7 +126,15 @@ describe("PersistentCharacter", () => {
 
     it("Should render combatant notes with markdown", () => { });
 
-    it("Should remember persistent characters for autosaved encounter state", () => { });
+    it("Should remember persistent characters for autosaved encounter state", () => {
+        const encounter = buildEncounter();
+        const library = new PersistentCharacterLibrary();
+
+        encounter.AddCombatantFromPersistentCharacter(DefaultPersistentCharacter(), library);
+
+        const encounterState: EncounterState<CombatantState> = encounter.GetEncounterState("", "");
+        expect(encounterState.Combatants.length).toEqual(1);
+     });
 });
 
 describe("Resolving differences between local storage and account sync", () => {
