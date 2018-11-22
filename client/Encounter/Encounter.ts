@@ -154,7 +154,7 @@ export class Encounter {
             return;
         }
         this.playerViewClient.UpdateEncounter(this.EncounterId, this.GetPlayerView());
-        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId, this.GetSavedEncounter(this.EncounterId, ""));
+        Store.Save<EncounterState<CombatantState>>(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId, this.GetEncounterState(this.EncounterId, ""));
     }
 
     public QueueEmitEncounter() {

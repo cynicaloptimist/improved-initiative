@@ -34,6 +34,20 @@ export class PersistentCharacterLibrary {
         return await listing.GetWithTemplate(DefaultPersistentCharacter());
     }
     
+    public async AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
+        const listing = new Listing<PersistentCharacter>(
+            persistentCharacter.Id,
+            persistentCharacter.Name,
+            persistentCharacter.Path,
+            persistentCharacter.Name,
+            persistentCharacter.Id,
+            "localStorage",
+            persistentCharacter
+        );
+        this.persistentCharacters.push(listing);
+        Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+    }
+
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
         if (updates.StatBlock) {
             updates.Name = updates.StatBlock.Name;

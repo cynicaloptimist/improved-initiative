@@ -29,6 +29,7 @@ import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
+import { PersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
 
 export class TrackerViewModel {
     private accountClient = new AccountClient();
@@ -43,13 +44,13 @@ export class TrackerViewModel {
     public CombatantCommander = new CombatantCommander(this);
     public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
     public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
-    
+
     public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
     public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
     public SettingsVisible = ko.observable(false);
     public LibrariesVisible = ko.observable(true);
     public ToolbarWide = ko.observable(false);
-    
+
     public DisplayLogin = !env.IsLoggedIn;
     public PatreonLoginUrl = env.PatreonLoginUrl;
 
@@ -71,6 +72,9 @@ export class TrackerViewModel {
 
         this.accountClient.GetAccount(account => {
             if (!account) {
+                if (Store.List(Store.PersistentCharacters).length == 0) {
+                    this.getAndAddSamplePersistentCharacters("/sample_players.json");
+                }
                 return;
             }
 
@@ -85,6 +89,16 @@ export class TrackerViewModel {
         this.displayPrivacyNotificationIfNeeded();
 
         Metrics.TrackLoad();
+    }
+
+    private getAndAddSamplePersistentCharacters = (url: string) => {
+        $.getJSON(url, (json: StatBlock[]) => {
+            json.forEach(statBlock => {
+                const persistentCharacter = InitializeCharacter({ ...StatBlock.Default(), ...statBlock });
+                persistentCharacter.Path = "Sample Player Characters";
+                this.Libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
+            })
+        });
     }
 
     public ReviewPrivacyPolicy = () => {
