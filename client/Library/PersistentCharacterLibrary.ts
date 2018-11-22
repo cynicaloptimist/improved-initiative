@@ -7,7 +7,7 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class PersistentCharacterLibrary {
-    private persistentCharacters: Listing<PersistentCharacter>[] = [];
+    private persistentCharacters: KnockoutObservableArray<Listing<PersistentCharacter>> = ko.observableArray([]);
 
     constructor() {
         const listings = Store.List(Store.PersistentCharacters).map(this.loadPersistentCharacterListing);
@@ -20,7 +20,7 @@ export class PersistentCharacterLibrary {
         }
     }
 
-    public GetListings = () => this.persistentCharacters;
+    public GetListings = ko.computed(() => this.persistentCharacters());
 
     public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
         const newListings = listings.map(c => {
@@ -30,7 +30,7 @@ export class PersistentCharacterLibrary {
     }
 
     public async GetPersistentCharacter(persistentCharacterId: string) {
-        const listing = find(this.persistentCharacters, c => c.Id == persistentCharacterId);
+        const listing = find(this.persistentCharacters(), c => c.Id == persistentCharacterId);
         return await listing.GetWithTemplate(DefaultPersistentCharacter());
     }
     
@@ -55,7 +55,7 @@ export class PersistentCharacterLibrary {
             updates.Version = updates.StatBlock.Version;
             updates.Id = updates.StatBlock.Id;
         }
-        const currentCharacterListing = find(this.persistentCharacters, p => p.Id == persistentCharacterId);
+        const currentCharacterListing = find(this.persistentCharacters(), p => p.Id == persistentCharacterId);
         const currentCharacter = await currentCharacterListing.GetWithTemplate(DefaultPersistentCharacter());
         const updatedCharacter = {
             ...currentCharacter,
@@ -69,7 +69,7 @@ export class PersistentCharacterLibrary {
     }
 
     public async DeletePersistentCharacter(persistentCharacterId: string) {
-        remove(this.persistentCharacters, p => p.Id == persistentCharacterId);
+        this.persistentCharacters.remove(p => p.Id == persistentCharacterId);
         Store.Delete(Store.PersistentCharacters, persistentCharacterId);
     }
 
