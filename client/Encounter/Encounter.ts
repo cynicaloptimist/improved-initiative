@@ -376,28 +376,7 @@ export class Encounter {
             RoundCounter: this.RoundCounter(),
             Combatants: this.Combatants()
                 .filter(c => c.PersistentCharacterId == null)
-                .map<CombatantState>(c => {
-                    return {
-                        Id: c.Id,
-                        StatBlock: c.StatBlock(),
-                        MaxHP: c.MaxHP(),
-                        CurrentHP: c.CurrentHP(),
-                        TemporaryHP: c.TemporaryHP(),
-                        Initiative: c.Initiative(),
-                        InitiativeGroup: c.InitiativeGroup(),
-                        Alias: c.Alias(),
-                        IndexLabel: c.IndexLabel,
-                        Tags: c.Tags().filter(t => t.Visible()).map(t => ({
-                            Text: t.Text,
-                            DurationRemaining: t.DurationRemaining(),
-                            DurationTiming: t.DurationTiming,
-                            DurationCombatantId: t.DurationCombatantId
-                        })),
-                        Hidden: c.Hidden(),
-                        InterfaceVersion: process.env.VERSION,
-                        ImageURL: c.StatBlock().ImageURL,
-                    };
-                }),
+                .map<CombatantState>(this.getCombatantState),
             Version: process.env.VERSION
         };
     }
@@ -443,6 +422,27 @@ export class Encounter {
 
         return this.lastVisibleActiveCombatantId;
     }
+
+    private getCombatantState = (c: Combatant): CombatantState => {
+        return {
+            Id: c.Id,
+            StatBlock: c.StatBlock(),
+            CurrentHP: c.CurrentHP(),
+            TemporaryHP: c.TemporaryHP(),
+            Initiative: c.Initiative(),
+            InitiativeGroup: c.InitiativeGroup(),
+            Alias: c.Alias(),
+            IndexLabel: c.IndexLabel,
+            Tags: c.Tags().filter(t => t.Visible()).map(t => ({
+                Text: t.Text,
+                DurationRemaining: t.DurationRemaining(),
+                DurationTiming: t.DurationTiming,
+                DurationCombatantId: t.DurationCombatantId
+            })),
+            Hidden: c.Hidden(),
+            InterfaceVersion: process.env.VERSION,
+        };
+    };
 
     public LoadEncounterState = (encounterState: EncounterState<CombatantState>, persistentCharacterLibrary: PersistentCharacterLibrary) => {
         const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
