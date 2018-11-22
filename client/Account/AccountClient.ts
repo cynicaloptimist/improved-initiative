@@ -7,6 +7,7 @@ import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { Settings } from "../Settings/Settings";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 
 const BATCH_SIZE = 10;
 export class AccountClient {
@@ -54,6 +55,14 @@ export class AccountClient {
 
     public DeletePlayerCharacter(statBlockId: string) {
         return deleteEntity(statBlockId, "playercharacters");
+    }
+
+    public SavePersistentCharacter(persistentCharacter: PersistentCharacter) {
+        return saveEntity<PersistentCharacter>(persistentCharacter, "persistentcharacters");
+    }
+
+    public DeletePersistentCharacter(persistentCharacterId: string) {
+        return deleteEntity(persistentCharacterId, "persistentcharacters");
     }
 
     public SaveEncounter(encounter: EncounterState<CombatantState>) {
