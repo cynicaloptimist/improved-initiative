@@ -31,11 +31,12 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
     }
 
     public componentDidMount() {
-        //TODO: Update component when adding and removing listings from library
+        this.librarySubscription = this.props.library.GetListings
+            .subscribe(() => this.forceUpdate());
     }
 
     public componentWillUnmount() {
-        //this.librarySubscription.dispose();
+        this.librarySubscription.dispose();
     }
 
     private filterCache: FilterCache<Listing<PersistentCharacter>>;
@@ -46,7 +47,7 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
     }
 
     private editStatBlock = (l: Listing<PersistentCharacter>) => {
-        l.CurrentName.subscribe(_ => this.forceUpdate());
+        const subscription = l.CurrentName.subscribe(() => this.forceUpdate(() => subscription.dispose()));
         this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Id);
     }
 
