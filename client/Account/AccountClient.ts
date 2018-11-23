@@ -1,13 +1,13 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { Listable } from "../../common/Listable";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { Settings } from "../Settings/Settings";
-import { PersistentCharacter } from "../../common/PersistentCharacter";
 
 const BATCH_SIZE = 10;
 export class AccountClient {

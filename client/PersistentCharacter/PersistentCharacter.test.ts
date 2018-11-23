@@ -1,11 +1,11 @@
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { InitializeSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import { buildEncounter } from "../test/buildEncounter";
-import { EncounterState } from "../../common/EncounterState";
-import { CombatantState } from "../../common/CombatantState";
 
 describe("InitializeCharacter", () => {
     it("Should have the current HP of the provided statblock", () => {

@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { InitializeCharacter, PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -29,7 +30,6 @@ import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
-import { PersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
 
 export class TrackerViewModel {
     private accountClient = new AccountClient();
@@ -97,7 +97,7 @@ export class TrackerViewModel {
                 const persistentCharacter = InitializeCharacter({ ...StatBlock.Default(), ...statBlock });
                 persistentCharacter.Path = "Sample Player Characters";
                 this.Libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
-            })
+            });
         });
     }
 

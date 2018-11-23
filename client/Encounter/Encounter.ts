@@ -457,7 +457,7 @@ export class Encounter {
             Hidden: c.Hidden(),
             InterfaceVersion: process.env.VERSION,
         };
-    };
+    }
 
     public LoadEncounterState = (encounterState: EncounterState<CombatantState>, persistentCharacterLibrary: PersistentCharacterLibrary) => {
         const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
