@@ -17,7 +17,7 @@ module.exports = function (grunt) {
       options: {
         keepalive: false
       },
-      dev: require('./webpack.config'),
+      dev: require('./webpack.config.dev'),
       prod: require('./webpack.config.prod')
     },
     less: {
