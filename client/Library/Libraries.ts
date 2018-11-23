@@ -31,7 +31,7 @@ export class Libraries {
 
     constructor(accountClient: AccountClient) {
         this.PCs = new PCLibrary(accountClient);
-        this.PersistentCharacters = new PersistentCharacterLibrary();
+        this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
         this.NPCs = new NPCLibrary(accountClient);
         this.Encounters = new EncounterLibrary(accountClient);
         this.Spells = new SpellLibrary(accountClient);

@@ -5,13 +5,14 @@ import { now } from "moment";
 import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
+import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class PersistentCharacterLibrary {
     private persistentCharacters: KnockoutObservableArray<Listing<PersistentCharacter>> = ko.observableArray([]);
 
-    constructor() {
+    constructor(private accountClient: AccountClient) {
         const listings = Store.List(Store.PersistentCharacters).map(this.loadPersistentCharacterListing);
 
         if (listings.length > 0) {
