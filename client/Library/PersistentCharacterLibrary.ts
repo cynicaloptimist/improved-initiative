@@ -1,6 +1,6 @@
+import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
-import * as ko from "knockout";
 
 import { ServerListing } from "../../common/Listable";
 import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
