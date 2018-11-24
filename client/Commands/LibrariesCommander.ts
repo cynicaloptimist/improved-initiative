@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import { DefaultPersistentCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
+import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -87,6 +87,19 @@ export class LibrariesCommander {
                 );
             }
         });
+    }
+
+    public CreateAndEditPersistentCharacterStatBlock = () => {
+        const statBlock = StatBlock.Default();
+        const newId = probablyUniqueString();
+
+        statBlock.Name = "New Character";
+        statBlock.Player = "player";
+        statBlock.Id = newId;
+
+        const persistentCharacter = InitializeCharacter(statBlock);
+        this.libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
+        this.EditPersistentCharacterStatBlock(persistentCharacter.Id);
     }
 
     public EditPersistentCharacterStatBlock(persistentCharacterId: string) {

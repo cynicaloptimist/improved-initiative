@@ -33,7 +33,10 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
 
     public componentDidMount() {
         this.librarySubscription = this.props.library.GetListings
-            .subscribe(() => this.forceUpdate());
+            .subscribe(newListings => {
+                this.filterCache = new FilterCache(newListings);
+                this.forceUpdate();
+            });
     }
 
     public componentWillUnmount() {
@@ -48,7 +51,10 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
     }
 
     private editStatBlock = (l: Listing<PersistentCharacter>) => {
-        const subscription = l.CurrentName.subscribe(() => this.forceUpdate(() => subscription.dispose()));
+        const subscription = l.CurrentName.subscribe(() => {
+            this.filterCache = new FilterCache(this.props.library.GetListings());
+            this.forceUpdate(() => subscription.dispose());
+        });
         this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Id);
     }
 
@@ -70,7 +76,7 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
             </ul>
             <div className="buttons">
                 <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => alert("TODO")} />
+                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditPersistentCharacterStatBlock()} />
             </div>
         </div>);
     }
