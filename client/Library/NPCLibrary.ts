@@ -52,7 +52,7 @@ export class NPCLibrary {
     }
     
     public SaveEditedStatBlock = (listing: Listing<StatBlock>, newStatBlock: StatBlock) => {
-        const oldStatBlocks = this.StatBlocks().filter(l => l.Id == listing.Id || l.Path + l.Name == listing.Path + listing.Name);
+        const oldStatBlocks = this.StatBlocks().filter(l => l.Id == listing.Id || l.Path + l.CurrentName() == listing.Path + listing.CurrentName());
         for (const statBlock of oldStatBlocks) {
             this.DeleteListing(statBlock.Id);
         }

@@ -9,7 +9,7 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
     const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
 
     parentSubset.forEach(newListing => {
-        const dedupeKey = newListing.Path + "-" + newListing.Name;
+        const dedupeKey = newListing.Path + "-" + newListing.CurrentName();
         const currentListing = dedupedStatBlocks[dedupeKey];
         if (currentListing) {
             const hasBetterSource = (sourceRankings.indexOf(newListing.Origin) < sourceRankings.indexOf(currentListing.Origin));
@@ -23,7 +23,7 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(paren
 
     Object.keys(dedupedStatBlocks).sort().forEach(i => {
         const listing = dedupedStatBlocks[i];
-        if (listing.Name.toLocaleLowerCase().indexOf(filter) > -1) {
+        if (listing.CurrentName().toLocaleLowerCase().indexOf(filter) > -1) {
             byName.push(listing);
         }
         else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
@@ -38,7 +38,7 @@ export class FilterCache<T extends Listing<Listable>> {
     private allItems: T[];
     constructor(items: T[]) {
         this.allItems = items.filter(i => {
-            if (!(i.Name && i.Name.length)) {
+            if (!(i.CurrentName() && i.CurrentName().length)) {
                 console.warn("Removing unnamed statblock: " + JSON.stringify(i));
                 return false;
             }

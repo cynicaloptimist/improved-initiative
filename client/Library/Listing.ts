@@ -1,14 +1,14 @@
 import * as ko from "knockout";
 
-import { Listable, ServerListing } from "../../common/Listable";
+import { Listable } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
-export class Listing<T extends Listable> implements ServerListing {
+export class Listing<T extends Listable> {
     constructor(
         public Id: string,
-        public Name: string,
+        private Name: string,
         public Path: string,
         public SearchHint: string,
         public Link: string,

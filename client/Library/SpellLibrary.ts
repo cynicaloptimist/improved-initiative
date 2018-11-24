@@ -9,7 +9,7 @@ import { Listing, ListingOrigin } from "./Listing";
 
 export class SpellLibrary {
     public Spells = ko.observableArray<Listing<Spell>>([]);
-    public SpellsByNameRegex = ko.computed(() => concatenatedStringRegex(this.Spells().map(s => s.Name)));
+    public SpellsByNameRegex = ko.computed(() => concatenatedStringRegex(this.Spells().map(s => s.CurrentName())));
 
     constructor(private accountClient: AccountClient) { }
 
