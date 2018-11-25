@@ -20,6 +20,7 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
     beforeEach(() => {
         localStorage.clear();
+        window["$"] = require("jquery");
     });
 
     function savePersistentCharacterWithName(name: string) {
