@@ -49,6 +49,7 @@ export class PersistentCharacterLibrary {
         );
         this.persistentCharacters.push(listing);
         Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
+        this.accountClient.SavePersistentCharacter(persistentCharacter);
     }
 
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {
@@ -68,12 +69,14 @@ export class PersistentCharacterLibrary {
 
         currentCharacterListing.SetValue(updatedCharacter);
         Store.Save<PersistentCharacter>(Store.PersistentCharacters, persistentCharacterId, updatedCharacter);
+        this.accountClient.SavePersistentCharacter(updatedCharacter);
         return;
     }
 
     public async DeletePersistentCharacter(persistentCharacterId: string) {
         this.persistentCharacters.remove(p => p.Id == persistentCharacterId);
         Store.Delete(Store.PersistentCharacters, persistentCharacterId);
+        this.accountClient.DeletePersistentCharacter(persistentCharacterId);
     }
 
     private loadPersistentCharacterListing = id => {
