@@ -59,7 +59,7 @@ export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModel
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
             <ul className="listings">
                 {filteredListings.map(l => <ListingViewModel
-                    key={l.Id}
+                    key={l.Id + l.Path + l.CurrentName()}
                     name={l.CurrentName()}
                     onAdd={this.loadSavedSpell}
                     onEdit={this.editSpell}
