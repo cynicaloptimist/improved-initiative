@@ -13,6 +13,7 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
+import { PromptQueueComponent } from "./Commands/Prompts/PromptQueueComponent";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
@@ -137,6 +138,8 @@ export class TrackerViewModel {
         libraries={this.Libraries}
         statBlockTextEnricher={this.StatBlockTextEnricher}
     />;
+
+    public PromptQueueComponent = ko.computed(() => <PromptQueueComponent prompts={this.PromptQueue.Prompts()} resolve={this.PromptQueue.Resolve} />); 
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(

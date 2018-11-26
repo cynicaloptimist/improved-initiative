@@ -5,6 +5,8 @@ import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Prompt } from "./Prompt";
 
 export class InitiativePrompt implements Prompt {
+    public component = "TODO";
+
     public InputSelector = ".response";
     public ComponentName = "initiativeprompt";
     public PlayerCharacters = [];

@@ -51,12 +51,13 @@ export class SpellPrompt implements Prompt {
     public InputSelector = "button";
     public ComponentName = "reactprompt";
 
-    protected component = ko.observable();
+    public component = "TODO";
+    protected componentObservable = ko.observable();
 
     constructor(listing: Listing<Spell>, private textEnricher: TextEnricher) {
         listing.GetAsyncWithUpdatedId(unsafeSpell => {
             const spell = { ...Spell.Default(), ...unsafeSpell };
-            this.component(<SpellPromptComponent Spell={spell} TextEnricher={this.textEnricher} />);
+            this.componentObservable(<SpellPromptComponent Spell={spell} TextEnricher={this.textEnricher} />);
         });
     }
 

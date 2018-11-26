@@ -2,11 +2,14 @@ export interface Prompt {
     InputSelector: string;
     ComponentName: string;
     Resolve: (form: HTMLFormElement) => void;
+    component: string | React.ReactElement<any>;
 }
 
 export type PromptResolver = (responses: { [id: string]: string }) => void;
 
 export class DefaultPrompt implements Prompt {
+    public component = "TODO";
+    
     public InputSelector = ".response";
     public ComponentName = "defaultprompt";
 
@@ -23,4 +26,6 @@ export class DefaultPrompt implements Prompt {
         });
         this.resolve(inputsById);
     }
+
+
 }

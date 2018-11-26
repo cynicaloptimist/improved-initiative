@@ -2,6 +2,8 @@ import { Combatant } from "../../Combatant/Combatant";
 import { Prompt } from "./Prompt";
 
 export class ConcentrationPrompt implements Prompt {
+    public component = "TODO";
+
     public static Tag = "Concentrating";
     public InputSelector = ".passcheck";
     public ComponentName = "concentrationprompt";

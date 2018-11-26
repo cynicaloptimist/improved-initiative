@@ -4,6 +4,8 @@ import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 export class AcceptDamagePrompt implements Prompt {
+    public component = "TODO";
+
     public InputSelector = ".acceptfull";
     public ComponentName = "acceptdamageprompt";
     public Prompt: string;

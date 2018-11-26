@@ -129,20 +129,9 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
-        <div class="prompts" data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}">
-            <!-- ko foreach: Prompts -->
-            <form class="prompt" data-bind="
-                submit: $parent.Resolve($data),
-                component: {
-                    name: ComponentName,
-                    params: {
-                        prompt: $data,
-                    }
-                },
-                afterRender: $parent.UpdateDom">
-            </form>
-            <!-- /ko -->
-        </div>
+        <div class="prompts" data-bind="react: {
+            component: PromptQueueComponent
+        }"></div>
 
         <div class="combat-footer">
             <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">
