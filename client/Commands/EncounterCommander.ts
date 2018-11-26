@@ -8,7 +8,7 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
-import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
+import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
 
 export class EncounterCommander {
     constructor(private tracker: TrackerViewModel) { }
@@ -20,7 +20,7 @@ export class EncounterCommander {
     }
 
     public QuickAddStatBlock = () => {
-        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
+        const prompt = new QuickAddPrompt(this.tracker.Encounter.AddCombatantFromStatBlock);
         this.tracker.PromptQueue.Add(prompt);
     }
 

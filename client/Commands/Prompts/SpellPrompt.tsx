@@ -13,7 +13,7 @@ interface SpellPromptProps {
     TextEnricher: TextEnricher;
 }
 
-class SpellPrompt extends React.Component<SpellPromptProps, null> {
+class SpellPromptComponent extends React.Component<SpellPromptProps, null> {
     private getSpellType = () => {
         const ritual = this.props.Spell.Ritual ? " (ritual)" : "";
         if (this.props.Spell.Level === 0) {
@@ -47,7 +47,7 @@ class SpellPrompt extends React.Component<SpellPromptProps, null> {
     }
 }
 
-export class SpellPromptWrapper implements Prompt {
+export class SpellPrompt implements Prompt {
     public InputSelector = "button";
     public ComponentName = "reactprompt";
 
@@ -56,7 +56,7 @@ export class SpellPromptWrapper implements Prompt {
     constructor(listing: Listing<Spell>, private textEnricher: TextEnricher) {
         listing.GetAsyncWithUpdatedId(unsafeSpell => {
             const spell = { ...Spell.Default(), ...unsafeSpell };
-            this.component(<SpellPrompt Spell={spell} TextEnricher={this.textEnricher} />);
+            this.component(<SpellPromptComponent Spell={spell} TextEnricher={this.textEnricher} />);
         });
     }
 

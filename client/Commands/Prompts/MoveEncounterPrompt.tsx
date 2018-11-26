@@ -16,7 +16,7 @@ export interface MoveEncounterPromptState { }
 const promptClassName = "p-move-encounter";
 const inputClassName = promptClassName + "-input";
 
-export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
+class MoveEncounterPromptComponent extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
     private input: HTMLInputElement;
     public componentDidMount() {
         const awesomplete = new Awesomplete(this.input, {
@@ -38,7 +38,7 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
 
 }
 
-export class MoveEncounterPromptWrapper implements Prompt {
+export class MoveEncounterPrompt implements Prompt {
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
@@ -51,7 +51,7 @@ export class MoveEncounterPromptWrapper implements Prompt {
     ) {
         this.encounterName = legacySavedEncounter.Name || "";
         
-        this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={folderNames} />;
+        this.component = <MoveEncounterPromptComponent encounterName={this.encounterName} folderNames={folderNames} />;
     }
 
     public Resolve = (form: HTMLFormElement) => {

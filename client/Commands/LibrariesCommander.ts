@@ -14,9 +14,9 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { EncounterCommander } from "./EncounterCommander";
-import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
+import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
-import { SpellPromptWrapper } from "./Prompts/SpellPrompt";
+import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
     constructor(
@@ -126,7 +126,7 @@ export class LibrariesCommander {
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPromptWrapper(spellListing, this.tracker.StatBlockTextEnricher);
+        const prompt = new SpellPrompt(spellListing, this.tracker.StatBlockTextEnricher);
         this.tracker.PromptQueue.Add(prompt);
     }
 
@@ -155,7 +155,7 @@ export class LibrariesCommander {
             .uniq()
             .compact()
             .value();
-        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
+        const prompt = new MoveEncounterPrompt(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
         this.tracker.PromptQueue.Add(prompt);
     }
 

@@ -11,7 +11,7 @@ import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList"
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
-import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
+import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
@@ -103,7 +103,7 @@ export class TrackerViewModel {
 
     public ReviewPrivacyPolicy = () => {
         this.SettingsVisible(false);
-        const prompt = new PrivacyPolicyPromptWrapper();
+        const prompt = new PrivacyPolicyPrompt();
         this.PromptQueue.Add(prompt);
     }
 
