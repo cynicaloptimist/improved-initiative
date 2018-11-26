@@ -11,7 +11,7 @@ export class PromptQueue {
         this.Prompts.push(prompt);
     }
 
-    public Resolve = (prompt: Prompt) => (form: HTMLFormElement) => {
+    public Resolve = (prompt: Prompt) => (form: EventTarget) => {
         prompt.Resolve(form);
         this.Prompts.remove(prompt);
         if (this.HasPrompt()) {
@@ -21,7 +21,7 @@ export class PromptQueue {
 
     public UpdateDom = (element: HTMLFormElement, valueAccessor, allBindings, viewModel, bindingContext) => {
         $(element).keyup(e => {
-            if (e.keyCode == 27) {
+            if (e.key == "escape") {
                 this.Dismiss();
             }
         });

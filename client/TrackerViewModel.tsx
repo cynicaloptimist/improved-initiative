@@ -139,7 +139,7 @@ export class TrackerViewModel {
         statBlockTextEnricher={this.StatBlockTextEnricher}
     />;
 
-    public PromptQueueComponent = ko.computed(() => <PromptQueueComponent prompts={this.PromptQueue.Prompts()} resolve={this.PromptQueue.Resolve} />); 
+    public PromptQueueComponent = <PromptQueueComponent promptQueue={this.PromptQueue} />; 
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(

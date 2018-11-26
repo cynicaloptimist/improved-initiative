@@ -1,7 +1,7 @@
 export interface Prompt {
     InputSelector: string;
     ComponentName: string;
-    Resolve: (form: HTMLFormElement) => void;
+    Resolve: (form: EventTarget) => void;
     component: string | React.ReactElement<any>;
 }
 
