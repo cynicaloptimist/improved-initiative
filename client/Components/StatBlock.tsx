@@ -90,7 +90,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             </div>
 
             <div className="Abilities">
-                {Object.keys(statBlock.Abilities).map(abilityName => {
+                {Object.keys(StatBlock.Default().Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
                     const abilityModifier = enricher.GetEnrichedModifierFromAbilityScore(abilityScore);
                     return <div key={abilityName}>
