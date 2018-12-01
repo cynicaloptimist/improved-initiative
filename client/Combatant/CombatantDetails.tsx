@@ -22,7 +22,10 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps, Com
 
             return tag.Text;
         });
-        const notes = "TODO";
+        
+        const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
+        const renderedNotes = notes.length > 0 ? this.props.enricher.EnrichText(notes) : null;
+
         const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
 
         return <div className="c-combatant-details">
@@ -33,7 +36,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps, Com
                 imageUrl={statBlock.ImageURL} />
             <div className="c-combatant-details__hp">Current HP: {currentHp}</div>
             {tags.length > 0 && <div className="c-combatant-details__tags">Tags: {tags.join(", ")}</div>}
-            {notes.length > 0 && <div className="c-combatant-details__notes">Notes: {notes}</div>}
+            {notes.length > 0 && <div className="c-combatant-details__notes">{renderedNotes}</div>}
             <StatBlockComponent statBlock={statBlock} displayMode={this.props.displayMode} enricher={this.props.enricher} hideName />
         </div>;
     }
