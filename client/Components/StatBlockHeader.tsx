@@ -27,7 +27,7 @@ export class StatBlockHeader extends React.Component<StatBlockHeaderProps, StatB
         if (this.props.imageUrl) {
             header = <div className={`c-statblock-header__with-portrait--${this.state.portraitSize}`}>
                 <img className={`c-statblock-header__portrait`} onClick={this.togglePortraitSize} src={this.props.imageUrl} />
-                <h3>{header}</h3>
+                {header}
             </div>;
         }
 
