@@ -13,11 +13,6 @@ interface StatBlockProps {
 interface StatBlockState {}
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    constructor(props) {
-        super(props);
-        this.state = { portraitSize: "thumbnail" };
-    }
-
     public render() {
         const statBlock = this.props.statBlock;
         const enricher = this.props.enricher;

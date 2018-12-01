@@ -10,6 +10,11 @@ interface StatBlockHeaderState {
 }
 
 export class StatBlockHeader extends React.Component<StatBlockHeaderProps, StatBlockHeaderState> {
+    constructor(props) {
+        super(props);
+        this.state = { portraitSize: "thumbnail" };
+    }
+
     public render() {
         const maybeLargePortrait = this.props.ImageUrl && this.state.portraitSize == "full" &&
             <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={this.props.ImageUrl} />;
