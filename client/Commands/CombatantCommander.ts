@@ -15,6 +15,7 @@ import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
+import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;
@@ -154,6 +155,18 @@ export class CombatantCommander {
         const latestRollTotal = this.latestRoll && this.latestRoll.Total;
         const prompt = new DefaultPrompt(`Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' value='${latestRollTotal}'/>`, callback);
         this.tracker.PromptQueue.Add(prompt);
+        return false;
+    }
+
+    public UpdateNotes = async () => {
+        const selectedCombatants = this.SelectedCombatants().filter(c => c.Combatant.PersistentCharacterId != null);
+        if (selectedCombatants.length == 0) {
+            throw "Can't edit non-persistent combatant notes";
+        }
+        const combatant = selectedCombatants[0].Combatant;
+
+        const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(combatant.PersistentCharacterId);
+        this.tracker.PromptQueue.Add(new UpdateNotesPrompt(persistentCharacter, this.tracker.Libraries.PersistentCharacters));
         return false;
     }
 
