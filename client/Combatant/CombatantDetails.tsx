@@ -26,7 +26,11 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps, Com
         const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
 
         return <div className="c-combatant-details">
-            <StatBlockHeader Name={this.props.combatantViewModel.Name()} ImageUrl={statBlock.ImageURL} />
+            <StatBlockHeader
+                name={this.props.combatantViewModel.Name()}
+                source={statBlock.Source}
+                type={statBlock.Type}
+                imageUrl={statBlock.ImageURL} />
             <div className="c-combatant-details__hp">Current HP: {currentHp}</div>
             {tags.length > 0 && <div className="c-combatant-details__tags">Tags: {tags.join(", ")}</div>}
             {notes.length > 0 && <div className="c-combatant-details__notes">Notes: {notes}</div>}

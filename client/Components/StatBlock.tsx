@@ -10,7 +10,7 @@ interface StatBlockProps {
     hideName?: boolean;
 }
 
-interface StatBlockState {}
+interface StatBlockState { }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
     public render() {
@@ -39,9 +39,13 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         ];
 
         const headerEntries = <React.Fragment>
-            {this.props.hideName || <StatBlockHeader Name={statBlock.Name} ImageUrl={statBlock.ImageURL} />}
-            <div className="Source">{statBlock.Source}</div>
-            <div className="Type">{statBlock.Type}</div>
+            {this.props.hideName || <StatBlockHeader
+                name={statBlock.Name}
+                imageUrl={statBlock.ImageURL}
+                source={statBlock.Source}
+                type={statBlock.Type}
+            />}
+
             <hr />
         </React.Fragment>;
 
