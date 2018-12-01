@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { Combatant } from "../../Combatant/Combatant";
 import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
 import { Prompt } from "./Prompt";
 
@@ -24,7 +25,7 @@ export class UpdateNotesPrompt implements Prompt {
     public ComponentName = "reactprompt";
     public component: JSX.Element;
 
-    constructor(private persistentCharacter: PersistentCharacter, private library: PersistentCharacterLibrary) {
+    constructor(private combatant: Combatant, private persistentCharacter: PersistentCharacter, private library: PersistentCharacterLibrary) {
         this.component = <UpdateNotesPromptComponent currentNotes={persistentCharacter.Notes} />;
     }
 
@@ -33,5 +34,6 @@ export class UpdateNotesPrompt implements Prompt {
         this.library.UpdatePersistentCharacter(this.persistentCharacter.Id, {
             Notes: input.value
         });
+        this.combatant.CurrentNotes(input.value);
     }
 }

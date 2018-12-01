@@ -167,7 +167,7 @@ export class CombatantCommander {
         const combatant = selectedCombatants[0].Combatant;
 
         const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(combatant.PersistentCharacterId);
-        this.tracker.PromptQueue.Add(new UpdateNotesPrompt(persistentCharacter, this.tracker.Libraries.PersistentCharacters));
+        this.tracker.PromptQueue.Add(new UpdateNotesPrompt(combatant, persistentCharacter, this.tracker.Libraries.PersistentCharacters));
         return false;
     }
 

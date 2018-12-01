@@ -233,7 +233,8 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-
+        
+        combatant.CurrentNotes(persistentCharacter.Notes);
         combatant.AttachToPersistentCharacterLibrary(library);
 
         this.QueueEmitEncounter();

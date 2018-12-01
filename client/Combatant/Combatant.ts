@@ -73,6 +73,7 @@ export class Combatant implements Combatant {
     public Id = probablyUniqueString();
     public PersistentCharacterId = null;
     public Alias = ko.observable("");
+    public CurrentNotes = ko.observable(null);
     public TemporaryHP = ko.observable(0);
     public Tags = ko.observableArray<Tag>();
     public Initiative = ko.observable(0);
