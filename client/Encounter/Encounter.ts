@@ -441,6 +441,7 @@ export class Encounter {
     private getCombatantState = (c: Combatant): CombatantState => {
         return {
             Id: c.Id,
+            PersistentCharacterId: c.PersistentCharacterId,
             StatBlock: c.StatBlock(),
             CurrentHP: c.CurrentHP(),
             TemporaryHP: c.TemporaryHP(),
