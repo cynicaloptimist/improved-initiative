@@ -474,6 +474,7 @@ export class Encounter {
                 const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(combatant.PersistentCharacterId);
                 combatant.StatBlock(persistentCharacter.StatBlock);
                 combatant.CurrentHP(persistentCharacter.CurrentHP);
+                combatant.CurrentNotes(persistentCharacter.Notes);
                 combatant.AttachToPersistentCharacterLibrary(persistentCharacterLibrary);
             }
         });
