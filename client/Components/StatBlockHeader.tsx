@@ -28,10 +28,10 @@ export class StatBlockHeader extends React.Component<StatBlockHeaderProps, StatB
             </h3>;
         }
 
-        return <React.Fragment>
+        return <div className="c-statblock-header">
             {maybeLargePortrait}
             {header}
-        </React.Fragment>;
+        </div>;
     }
 
     private togglePortraitSize = () => {
