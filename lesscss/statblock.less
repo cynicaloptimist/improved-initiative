@@ -1,15 +1,22 @@
 
-.c-statblock-header {
-  .portrait-thumbnail {
-    max-height: 50px;
+.c-statblock-header__name-and-portrait--thumbnail {
+  flex-direction: row;
+
+  .c-statblock-header__portrait{
+    max-height: 2rem;
     padding: @extra-small-spacer;
     cursor: zoom-in;
   }
+}
 
-  .portrait-full {
+.c-statblock-header__name-and-portrait--full {
+  flex-direction: column;
+
+  .c-statblock-header__portrait {
     cursor: zoom-out;
   }
 }
+
 
 .c-statblock {
   display: block;

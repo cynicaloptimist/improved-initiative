@@ -16,20 +16,16 @@ export class StatBlockHeader extends React.Component<StatBlockHeaderProps, StatB
     }
 
     public render() {
-        const maybeLargePortrait = this.props.ImageUrl && this.state.portraitSize == "full" &&
-            <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={this.props.ImageUrl} />;
-
         let header = <h3 className="Name">{this.props.Name}</h3>;
 
-        if (this.props.ImageUrl && this.state.portraitSize == "thumbnail") {
-            header = <h3 className="Name">
-                {this.props.Name}
-                <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={this.props.ImageUrl} />
-            </h3>;
+        if (this.props.ImageUrl) {
+            header = <div className={`c-statblock-header__name-and-portrait--${this.state.portraitSize}`}>
+                <img className={`c-statblock-header__portrait`} onClick={this.togglePortraitSize} src={this.props.ImageUrl} />
+                <h3>{this.props.Name}</h3>
+            </div>;
         }
 
         return <div className="c-statblock-header">
-            {maybeLargePortrait}
             {header}
         </div>;
     }
