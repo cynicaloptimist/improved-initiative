@@ -1,3 +1,4 @@
+import * as ko from "knockout";
 import * as React from "react";
 
 import { StatBlockComponent } from "../Components/StatBlock";
@@ -13,6 +14,16 @@ interface CombatantDetailsProps {
 
 interface CombatantDetailsState { }
 export class CombatantDetails extends React.Component<CombatantDetailsProps, CombatantDetailsState> {
+    public componentDidMount() {
+        this.observableSubscription = ko.computed(() => this.render()).subscribe(() => this.forceUpdate());
+    }
+
+    public componentWillUnmount() {
+        this.observableSubscription.dispose();
+    }
+
+    private observableSubscription: KnockoutSubscription;
+
     public render() {
         const currentHp = this.props.combatantViewModel.HP();
         const tags = this.props.combatantViewModel.Combatant.Tags().map(tag => {
