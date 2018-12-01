@@ -3,8 +3,8 @@ import * as React from "react";
 
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
+import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { StatBlockComponent } from "../Components/StatBlock";
 import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -34,11 +34,12 @@ export class CombatantCommander {
     public HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
     public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-    public StatBlock = ko.pureComputed(() => {
-        let selectedCombatants = this.SelectedCombatants();
+    public CombatantDetails = ko.pureComputed(() => {
+        const selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
-            return React.createElement(StatBlockComponent, {
-                statBlock: selectedCombatants[0].Combatant.StatBlock(),
+            const combatantViewModel = selectedCombatants[0];
+            return React.createElement(CombatantDetails, {
+                combatantViewModel,
                 enricher: this.tracker.StatBlockTextEnricher,
                 displayMode: "default"
             });
