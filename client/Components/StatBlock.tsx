@@ -44,6 +44,7 @@ interface StatBlockProps {
     statBlock: StatBlock;
     enricher: TextEnricher;
     displayMode: "default" | "active";
+    hideName?: boolean;
 }
 
 interface StatBlockState {}
@@ -80,7 +81,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
         ];
 
         const headerEntries = <React.Fragment>
-            <StatBlockHeader Name={statBlock.Name} ImageUrl={statBlock.ImageURL} />
+            {this.props.hideName || <StatBlockHeader Name={statBlock.Name} ImageUrl={statBlock.ImageURL} />}
             <div className="Source">{statBlock.Source}</div>
             <div className="Type">{statBlock.Type}</div>
             <hr />
