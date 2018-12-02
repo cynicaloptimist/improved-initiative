@@ -1,11 +1,13 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { find } from "lodash";
 import { InitializeCharacter, PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
+import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList";
 import { CombatantCommander } from "./Commands/CombatantCommander";
@@ -128,8 +130,7 @@ export class TrackerViewModel {
         this.playerViewClient,
         this.initializeCombatantViewModel,
         this.removeCombatantViewModels,
-        this.Rules,
-        this.StatBlockTextEnricher
+        this.Rules
     );
 
     public librariesComponent = <LibrariesViewModel
@@ -143,6 +144,12 @@ export class TrackerViewModel {
             (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
         )
     );
+
+    public ActiveCombatantDetails = ko.computed(() => {
+        const activeCombatant = this.Encounter.ActiveCombatant();
+        const combatantViewModel = find(this.CombatantViewModels(), c => c.Combatant == activeCombatant);
+        return <CombatantDetails combatantViewModel={combatantViewModel} displayMode="active" enricher={this.StatBlockTextEnricher} />;
+    });
 
     public CenterColumn = ko.pureComputed(() => {
         const editStatBlock = this.StatBlockEditor() !== null;

@@ -13,13 +13,11 @@ import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { StaticCombatantViewModel, ToStaticViewModel } from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
-import { StatBlockComponent } from "../Components/StatBlock";
 import { env } from "../Environment";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { TextEnricher } from "../TextEnricher/TextEnricher";
 import { Store } from "../Utility/Store";
 import { DifficultyCalculator, EncounterDifficulty } from "../Widgets/DifficultyCalculator";
 import { TurnTimer } from "../Widgets/TurnTimer";
@@ -29,21 +27,10 @@ export class Encounter {
         private playerViewClient: PlayerViewClient,
         private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
         private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
-        public Rules: IRules,
-        private statBlockTextEnricher: TextEnricher
+        public Rules: IRules
     ) {
         this.CombatantCountsByName = ko.observable({});
         this.ActiveCombatant = ko.observable<Combatant>();
-        this.ActiveCombatantStatBlock = ko.pureComputed(() => {
-            return this.ActiveCombatant()
-                ? React.createElement(StatBlockComponent, {
-                    statBlock: this.ActiveCombatant().StatBlock(),
-                    enricher: this.statBlockTextEnricher,
-                    displayMode: "active"
-                })
-                : null;
-        });
-
         this.Difficulty = ko.pureComputed(() => {
             const enemyChallengeRatings =
                 this.Combatants()
