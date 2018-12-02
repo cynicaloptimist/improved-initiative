@@ -33,7 +33,7 @@ export const TutorialSteps: TutorialStep[] = [
     },
     {
         Message: "It's easy to add your own player characters to Improved Initiative. For now, <strong>add a few sample characters</strong>.",
-        RaiseSelector: ".left-column",
+        RaiseSelector: ".left-column, .combatant",
         CalculatePosition: elements => {
             const left = elements.offset().left + elements.outerWidth() + 10;
             const top = elements.offset().top + 200;
