@@ -25,6 +25,10 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps, Com
     private observableSubscription: KnockoutSubscription;
 
     public render() {
+        if (!this.props.combatantViewModel) {
+            return null;
+        }
+        
         const currentHp = this.props.combatantViewModel.HP();
         const tags = this.props.combatantViewModel.Combatant.Tags().map(tag => {
             if (tag.HasDuration) {
