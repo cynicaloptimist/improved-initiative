@@ -267,9 +267,14 @@ export class TrackerViewModel {
         const commandsToHideById = this.Encounter.State() == "active" ?
             ["start-encounter"] :
             ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
+        
+        const onePersistentCharacterSelected = this.CombatantCommander.HasOneSelected() && this.CombatantCommander.SelectedCombatants()[0].Combatant.PersistentCharacterId != null;
+        if (!onePersistentCharacterSelected){
+            commandsToHideById.push("update-notes");
+        }
 
         const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d));
-        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar());
+        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d));
 
         return <Toolbar
             encounterCommands={encounterCommands}
