@@ -1,8 +1,11 @@
 import * as React from "react";
 
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
+import { Overlay } from "../../Components/Overlay";
+import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
@@ -19,6 +22,10 @@ export type PersistentCharacterLibraryViewModelProps = {
 
 interface State {
     filter: string;
+    previewedStatBlock: StatBlock;
+    previewIconHovered: boolean;
+    previewWindowHovered: boolean;
+    previewPosition: { left: number; top: number; };
 }
 
 export class PersistentCharacterLibraryViewModel extends React.Component<PersistentCharacterLibraryViewModelProps, State> {
@@ -26,6 +33,10 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
         super(props);
         this.state = {
             filter: "",
+            previewedStatBlock: StatBlock.Default(),
+            previewIconHovered: false,
+            previewWindowHovered: false,
+            previewPosition: { left: 0, top: 0 },
         };
 
         this.filterCache = new FilterCache(this.props.library.GetListings());
@@ -46,6 +57,48 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
     private filterCache: FilterCache<Listing<PersistentCharacter>>;
     private librarySubscription: KnockoutSubscription;
 
+    private previewStatblock = (l: Listing<PersistentCharacter>, e: React.MouseEvent<HTMLDivElement>) => {
+        const previewPosition = {
+            left: e.pageX,
+            top: e.pageY
+        };
+
+        const statBlockOutline: StatBlock = {
+            ...StatBlock.Default(),
+            Name: l.CurrentName(),
+        };
+
+        this.setState({
+            previewedStatBlock: statBlockOutline,
+            previewIconHovered: true,
+            previewPosition,
+        });
+
+        l.GetAsyncWithUpdatedId((persistentCharacter: PersistentCharacter) => {
+            const statBlock = {
+                ...StatBlock.Default(),
+                ...persistentCharacter.StatBlock,
+            };
+
+            this.setState({
+                previewedStatBlock: statBlock,
+            });
+        });
+    }
+
+    private onPreviewOut = (l => {
+        this.setState({ previewIconHovered: false });
+    });
+
+    private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.type === "mouseenter") {
+            this.setState({ previewWindowHovered: true });
+        }
+        if (e.type === "mouseleave") {
+            this.setState({ previewWindowHovered: false });
+        }
+    }
+
     private loadSavedStatBlock = (listing: Listing<PersistentCharacter>, hideOnAdd: boolean) => {
         this.props.librariesCommander.AddPersistentCharacterFromListing(listing, hideOnAdd);
     }
@@ -63,11 +116,15 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
         name={l.CurrentName()}
         onAdd={this.loadSavedStatBlock}
         onEdit={this.editStatBlock}
+        onPreview={this.previewStatblock}
+        onPreviewOut={this.onPreviewOut}
         listing={l} />
 
     public render() {
         const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
         const listingAndFolderComponents = BuildListingTree(this.buildListingComponent, filteredListings);
+
+        const previewVisible = this.state.previewIconHovered || this.state.previewWindowHovered;
 
         return (<div className="library">
             <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
@@ -78,6 +135,18 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
                 <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
                 <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditPersistentCharacterStatBlock()} />
             </div>
+            {previewVisible &&
+                <Overlay
+                    handleMouseEvents={this.handlePreviewMouseEvent}
+                    maxHeightPx={300}
+                    left={this.state.previewPosition.left}
+                    top={this.state.previewPosition.top}>
+                    <StatBlockComponent
+                        statBlock={this.state.previewedStatBlock}
+                        enricher={this.props.statBlockTextEnricher}
+                        displayMode="default" />
+                </Overlay>
+            }
         </div>);
     }
 }
