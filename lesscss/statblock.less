@@ -18,6 +18,10 @@
   }
 }
 
+.c-combatant-details__hp, .c-combatant-details__tags {
+  flex-direction: row;
+}
+
 .c-statblock-header {
   .Name {
     font-size: @font-size-h3;
@@ -35,6 +39,12 @@
     font-size: @font-size-small;
     line-height: 1;
   }
+}
+
+.stat-label {
+  font-weight: bold;
+  margin: 0 @extra-small-spacer @extra-small-spacer 0;
+  color: @primary-red;
 }
 
 .c-statblock {
@@ -66,12 +76,6 @@
     span {
       padding-right: @extra-small-spacer;
     }
-  }
-
-  .stat-label {
-    font-weight: bold;
-    margin: 0 @extra-small-spacer @extra-small-spacer 0;
-    color: @primary-red;
   }
 
   .power-content {

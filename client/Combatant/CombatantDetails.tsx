@@ -45,10 +45,10 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps, Com
                 source={statBlock.Source}
                 type={statBlock.Type}
                 imageUrl={statBlock.ImageURL} />
-            <div className="c-combatant-details__hp">Current HP: {currentHp}</div>
-            {tags.length > 0 && <div className="c-combatant-details__tags">Tags: {tags.join(", ")}</div>}
-            {notes && notes.length > 0 && <div className="c-combatant-details__notes">{renderedNotes}</div>}
+            <div className="c-combatant-details__hp"><span className="stat-label">Current HP</span> {currentHp}</div>
+            {tags.length > 0 && <div className="c-combatant-details__tags"><span className="stat-label">Tags</span> {tags.join("; ")}</div>}
             <StatBlockComponent statBlock={statBlock} displayMode={this.props.displayMode} enricher={this.props.enricher} hideName />
+            {notes && notes.length > 0 && <div className="c-combatant-details__notes">{renderedNotes}</div>}
         </div>;
     }
 }
