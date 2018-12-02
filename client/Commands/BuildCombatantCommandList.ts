@@ -9,7 +9,7 @@ export const BuildCombatantCommandList: (c: CombatantCommander) => Command[] = c
     new Command("remove", "Remove from Encounter", c.Remove, "del", "times"),
     new Command("set-alias", "Rename", c.SetAlias, "f2", "i-cursor"),
     new Command("toggle-hidden", "Hide/Reveal in Player View", c.ToggleHidden, "h", "eye", false),
-    new Command("edit-statblock", "Edit Statblock", c.EditStatBlock, "alt+e", "edit", false),
+    new Command("edit-statblock", "Edit Statblock", c.EditStatBlock, "e", "edit", false),
     new Command("set-initiative", "Edit Initiative", c.EditInitiative, "alt+i", "stopwatch", false),
     new Command("link-initiative", "Link Initiative", c.LinkInitiative, "alt+l", "link", false),
     new Command("move-down", "Move Down", c.MoveDown, "alt+j", "angle-double-down"),
