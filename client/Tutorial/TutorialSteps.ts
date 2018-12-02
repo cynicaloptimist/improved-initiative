@@ -13,7 +13,7 @@ export interface TutorialStep {
 export const TutorialSteps: TutorialStep[] = [
     {
         Message: "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
-        RaiseSelector: ".left-column, .prompt",
+        RaiseSelector: ".left-column, .prompt, .combatant",
         CalculatePosition: elements => {
             const left = elements.offset().left + elements.outerWidth() + 10;
             const top = elements.offset().top + 200;
@@ -21,9 +21,9 @@ export const TutorialSteps: TutorialStep[] = [
         }
     },
     {
-        Message: "When you're ready to add some adventurers, select the <strong>Players</strong> tab at the top of the library.",
+        Message: "When you're ready to add some adventurers, select the <strong>Characters</strong> tab at the top of the library.",
         RaiseSelector: ".libraries .c-tabs span",
-        AwaitAction: "SelectPlayersTab",
+        AwaitAction: "SelectCharactersTab",
         CalculatePosition: elements => {
             const element = elements.last();
             const left = element.offset().left + element.outerWidth() + 10;

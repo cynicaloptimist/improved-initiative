@@ -33,8 +33,8 @@ export class LibrariesViewModel extends React.Component<LibrariesProps, Librarie
 
     private hideLibraries = () => this.props.librariesCommander.HideLibraries();
     private selectLibrary = (library: string) => {
-        if (library == "Players") {
-            TutorialSpy("SelectPlayersTab");
+        if (library == "Characters") {
+            TutorialSpy("SelectCharactersTab");
         }
         this.setState({ selectedLibrary: library });
     }
