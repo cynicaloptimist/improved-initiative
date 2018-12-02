@@ -278,6 +278,10 @@ export class CombatantCommander {
         return false;
     }
 
+    public ToggleHidden = () => {
+        this.SelectedCombatants().forEach(c => c.ToggleHidden());
+    }
+
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;

@@ -144,7 +144,7 @@ export class CombatantViewModel {
         return this.Combatant === activeCombatant;
     });
 
-    public ToggleHidden(data, event) {
+    public ToggleHidden() {
         if (this.Combatant.Hidden()) {
             this.Combatant.Hidden(false);
             this.LogEvent(`${this.Name()} revealed in player view.`);
