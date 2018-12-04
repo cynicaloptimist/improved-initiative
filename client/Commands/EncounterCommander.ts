@@ -118,6 +118,11 @@ export class EncounterCommander {
     }
 
     public NextTurn = () => {
+        if (this.tracker.Encounter.State() != "active") {
+            this.StartEncounter();
+            return;
+        }
+
         if (!this.tracker.Encounter.ActiveCombatant()) {
             this.tracker.Encounter.ActiveCombatant(this.tracker.Encounter.Combatants()[0]);
             return;

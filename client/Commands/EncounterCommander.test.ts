@@ -39,8 +39,7 @@ describe("EncounterCommander", () => {
         expect(!encounter.ActiveCombatant());
         combatant.Initiative(combatant.GetInitiativeRoll());
         encounterCommander.NextTurn();
-        expect(encounter.RoundCounter() == 1);
-        expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+        expect(trackerViewModel.PromptQueue.Prompts()).toHaveLength(1);
 
     });
 });
