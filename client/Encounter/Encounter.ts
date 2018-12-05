@@ -385,25 +385,13 @@ export class Encounter {
     }
 
     public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
-        let hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-
         return {
             Name: this.EncounterId,
             Path: "",
             Id: this.EncounterId,
             ActiveCombatantId: this.getPlayerViewActiveCombatantId(),
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants()
-                .filter(c => {
-                    if (c.Hidden()) {
-                        return false;
-                    }
-                    if (hideMonstersOutsideEncounter && this.State() == "inactive" && !c.IsPlayerCharacter) {
-                        return false;
-                    }
-                    return true;
-                })
-                .map<StaticCombatantViewModel>(c => ToStaticViewModel(c)),
+            Combatants: this.getCombatantsForPlayerView(),
             Version: process.env.VERSION
         };
     }
@@ -424,6 +412,22 @@ export class Encounter {
         this.lastVisibleActiveCombatantId = activeCombatant.Id;
 
         return this.lastVisibleActiveCombatantId;
+    }
+
+    private getCombatantsForPlayerView() {
+        const hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
+        const combatants = this.Combatants()
+            .filter(c => {
+                if (c.Hidden()) {
+                    return false;
+                }
+                if (hideMonstersOutsideEncounter && this.State() == "inactive" && !c.IsPlayerCharacter) {
+                    return false;
+                }
+                return true;
+            });
+
+        return combatants.map<StaticCombatantViewModel>(c => ToStaticViewModel(c));
     }
 
     private getCombatantState = (c: Combatant): CombatantState => {
