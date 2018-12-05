@@ -91,22 +91,7 @@ export class Encounter {
     public SortByInitiative = (stable = false) => {
         const sortedCombatants = sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
         this.Combatants(sortedCombatants);
-
-        if (this.State() === "active") {
-            if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-                this.bringActiveCombatantToTop();
-            }
-        }
-
         this.QueueEmitEncounter();
-    }
-
-    private bringActiveCombatantToTop = () => {
-        const activeCombatant = this.ActiveCombatant();
-
-        while (this.Combatants()[0] != activeCombatant) {
-            this.Combatants().push(this.Combatants().shift());
-        }
     }
 
     public ImportEncounter = (encounter) => {
@@ -220,7 +205,7 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-        
+
         combatant.CurrentNotes(persistentCharacter.Notes);
         combatant.AttachToPersistentCharacterLibrary(library);
 
@@ -308,10 +293,6 @@ export class Encounter {
 
         this.ActiveCombatant(nextCombatant);
 
-        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.bringActiveCombatantToTop();
-        }
-
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == nextCombatant.Id && t.DurationTiming == "StartOfTurn")
             .forEach(t => t.Decrement());
@@ -335,10 +316,6 @@ export class Encounter {
 
         const previousCombatant = this.Combatants()[previousIndex];
         this.ActiveCombatant(previousCombatant);
-
-        if (CurrentSettings().PlayerView.ActiveCombatantOnTop) {
-            this.bringActiveCombatantToTop();
-        }
 
         this.durationTags
             .filter(t => t.HasDuration && t.DurationCombatantId == previousCombatant.Id && t.DurationTiming == "EndOfTurn")
@@ -426,6 +403,13 @@ export class Encounter {
                 }
                 return true;
             });
+
+        const activeCombatantOnTop = CurrentSettings().PlayerView.ActiveCombatantOnTop;
+        if (activeCombatantOnTop) {
+            while(combatants[0] != this.ActiveCombatant()){
+                combatants.push(combatants.shift());
+            }
+        }
 
         return combatants.map<StaticCombatantViewModel>(c => ToStaticViewModel(c));
     }
