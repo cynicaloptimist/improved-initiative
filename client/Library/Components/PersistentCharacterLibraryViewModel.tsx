@@ -112,7 +112,8 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
     }
 
     private createAndEditStatBlock = () => {
-        this.props.librariesCommander.CreateAndEditPersistentCharacterStatBlock();
+        const listing = this.props.librariesCommander.CreatePersistentCharacter();
+        this.editStatBlock(listing);
     }
 
     private buildListingComponent = (l: Listing<PersistentCharacter>) => <ListingViewModel
