@@ -111,6 +111,10 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
         this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Id);
     }
 
+    private createAndEditStatBlock = () => {
+        this.props.librariesCommander.CreateAndEditPersistentCharacterStatBlock();
+    }
+
     private buildListingComponent = (l: Listing<PersistentCharacter>) => <ListingViewModel
         key={l.Id + l.Path + l.CurrentName()}
         name={l.CurrentName()}
@@ -133,7 +137,7 @@ export class PersistentCharacterLibraryViewModel extends React.Component<Persist
             </ul>
             <div className="buttons">
                 <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditPersistentCharacterStatBlock()} />
+                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={this.createAndEditStatBlock} />
             </div>
             {previewVisible &&
                 <Overlay
