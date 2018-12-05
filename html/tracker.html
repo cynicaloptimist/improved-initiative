@@ -79,7 +79,7 @@
         <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
-            <div style="flex-shrink: 1" data-bind="react: {
+            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
                 component: ActiveCombatantDetails
             }"></div>
         </div>
@@ -173,7 +173,7 @@
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
             <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-times"></span></div>
-            <div style="flex-shrink: 1" data-bind="react: {
+            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
                 component: CombatantCommander.CombatantDetails
             }"></div>
             <!-- /ko -->
