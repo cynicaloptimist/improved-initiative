@@ -193,6 +193,7 @@ export class TrackerViewModel {
     }
 
     public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        this.StatBlockEditor(null);
         const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(persistentCharacterId);
         this.StatBlockEditor(<StatBlockEditor
             statBlock={persistentCharacter.StatBlock}

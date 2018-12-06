@@ -37,7 +37,7 @@ export class PersistentCharacterLibrary {
         return await listing.GetWithTemplate(DefaultPersistentCharacter());
     }
     
-    public async AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
+    public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
         const listing = new Listing<PersistentCharacter>(
             persistentCharacter.Id,
             persistentCharacter.Name,
@@ -50,6 +50,7 @@ export class PersistentCharacterLibrary {
         this.persistentCharacters.push(listing);
         Store.Save(Store.PersistentCharacters, persistentCharacter.Id, persistentCharacter);
         this.accountClient.SavePersistentCharacter(persistentCharacter);
+        return listing;
     }
 
     public async UpdatePersistentCharacter(persistentCharacterId: string, updates: Partial<PersistentCharacter>) {

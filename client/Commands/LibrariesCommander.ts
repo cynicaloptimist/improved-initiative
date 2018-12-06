@@ -89,7 +89,7 @@ export class LibrariesCommander {
         });
     }
 
-    public CreateAndEditPersistentCharacterStatBlock = () => {
+    public CreatePersistentCharacter = () => {
         const statBlock = StatBlock.Default();
         const newId = probablyUniqueString();
 
@@ -98,8 +98,7 @@ export class LibrariesCommander {
         statBlock.Id = newId;
 
         const persistentCharacter = InitializeCharacter(statBlock);
-        this.libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
-        this.EditPersistentCharacterStatBlock(persistentCharacter.Id);
+        return this.libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
     }
 
     public EditPersistentCharacterStatBlock(persistentCharacterId: string) {

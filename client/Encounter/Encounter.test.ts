@@ -77,11 +77,11 @@ describe("Encounter", () => {
         }
 
         encounter.StartEncounter();
-        expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+        expect(encounter.GetPlayerView().Combatants[0].Id).toBe(encounter.ActiveCombatant().Id);
 
         for (let i = 0; i < 5; i++) {
             encounter.NextTurn();
-            expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+            expect(encounter.GetPlayerView().Combatants[0].Id).toBe(encounter.ActiveCombatant().Id);
         }
     });
 
