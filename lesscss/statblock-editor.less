@@ -4,6 +4,9 @@
 }
 
 .c-statblock-editor {
+  * {
+    max-height:unset;
+  }
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -46,7 +49,10 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex-basis: 80%;
+
+  .c-statblock-editor__label, .label {
+    flex-basis:20%;
+  }
 
   input {
     &:first-child {
@@ -79,10 +85,6 @@
   .label {
     flex-basis: 20%;
   }
-
-  input {
-    flex-basis: 80%;
-  }
 }
 
 .c-text-field {
@@ -103,7 +105,6 @@
 .c-statblock-editor__label,
 .c-text-field > .label,
 .c-statblock-editor__identity .label {
-  flex-basis: 20%;
   padding: @extra-small-spacer;
   font-size: @font-size-h4;
   font-family: @font-family-headers;
