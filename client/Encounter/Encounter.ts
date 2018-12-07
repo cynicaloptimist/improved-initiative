@@ -271,6 +271,7 @@ export class Encounter {
 
     public EndEncounter = () => {
         this.State("inactive");
+        this.RoundCounter(0);
         this.ActiveCombatant(null);
         this.TurnTimer.Stop();
         this.QueueEmitEncounter();
