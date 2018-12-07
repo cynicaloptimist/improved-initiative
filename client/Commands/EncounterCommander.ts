@@ -51,11 +51,6 @@ export class EncounterCommander {
     }
 
     public StartEncounter = () => {
-        if (this.tracker.PromptQueue.HasPrompt()) {
-            this.tracker.PromptQueue.AnimatePrompt();
-            return;
-        }
-
         if (this.tracker.Encounter.State() == "inactive") {
             this.rollInitiative();
 
