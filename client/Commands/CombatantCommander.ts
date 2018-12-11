@@ -285,16 +285,20 @@ export class CombatantCommander {
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;
-            this.tracker.EditStatBlock(
-                "combatant",
-                selectedCombatant.StatBlock(),
-                (newStatBlock) => {
-                    selectedCombatant.StatBlock(newStatBlock);
-                    this.tracker.Encounter.QueueEmitEncounter();
-                },
-                undefined,
-                () => this.Remove()
-            );
+            if (selectedCombatant.PersistentCharacterId) {
+                this.tracker.EditPersistentCharacterStatBlock(selectedCombatant.PersistentCharacterId);
+            } else {
+                this.tracker.EditStatBlock(
+                    "combatant",
+                    selectedCombatant.StatBlock(),
+                    (newStatBlock) => {
+                        selectedCombatant.StatBlock(newStatBlock);
+                        this.tracker.Encounter.QueueEmitEncounter();
+                    },
+                    undefined,
+                    () => this.Remove()
+                );
+            }
         }
     }
 
