@@ -34,12 +34,13 @@ describe("EncounterCommander", () => {
         expect(encounter.RoundCounter() == 1);
     });
 
-    test("Kickstart encounter after placing combatants.", () => {
-        const combatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    test("Calling Next Turn should start an inactive encounter.", () => {
+        const startEncounter = encounterCommander.StartEncounter = jest.fn();
+        
+        encounter.AddCombatantFromStatBlock(StatBlock.Default());
         expect(!encounter.ActiveCombatant());
-        combatant.Initiative(combatant.GetInitiativeRoll());
         encounterCommander.NextTurn();
-        expect(trackerViewModel.PromptQueue.Prompts()).toHaveLength(1);
 
+        expect(startEncounter).toBeCalled();
     });
 });
