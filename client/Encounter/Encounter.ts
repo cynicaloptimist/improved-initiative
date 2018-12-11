@@ -406,7 +406,7 @@ export class Encounter {
             });
 
         const activeCombatantOnTop = CurrentSettings().PlayerView.ActiveCombatantOnTop;
-        if (activeCombatantOnTop) {
+        if (activeCombatantOnTop && this.ActiveCombatant()) {
             while(combatants[0] != this.ActiveCombatant()){
                 combatants.push(combatants.shift());
             }
