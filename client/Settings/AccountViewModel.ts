@@ -23,7 +23,7 @@ export class AccountViewModel {
     public PatreonLoginUrl = env.PatreonLoginUrl;
 
     public SyncedCreatures = ko.computed(() => getCounts(this.libraries.NPCs.StatBlocks()));
-    public SyncedPlayers = ko.computed(() => getCounts(this.libraries.PCs.StatBlocks()));
+    public SyncedCharacters = ko.computed(() => getCounts(this.libraries.PersistentCharacters.GetListings()));
     public SyncedSpells = ko.computed(() => getCounts(this.libraries.Spells.Spells()));
     public SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
 
