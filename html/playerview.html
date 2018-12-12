@@ -19,17 +19,18 @@
         <img class="combatant-portrait__image" data-bind="attr:{src: imageModal().URL}">
         <div class="combatant-portrait__caption" data-bind="html: imageModal().Caption"></div>
     </div>
-    <!-- ko with: combatantSuggestor -->
-    <div class="modal-blur" data-bind="visible: SuggestionVisible, click: Close"></div>
-    <div class="damage-suggestion" data-bind="
-        visible: SuggestionVisible,
-        component: {
-            name: 'playersuggestion',
-            params: {
-                suggestion: $data
-            }
-        }">
-    </div>
+    <!-- ko if: combatantSuggestor.SuggestionVisible() -->
+        <!-- ko with: combatantSuggestor -->
+        <div class="modal-blur" data-bind="click: Close"></div>
+        <div class="damage-suggestion" data-bind="
+            component: {
+                name: 'playersuggestion',
+                params: {
+                    suggestion: $data
+                }
+            }">
+        </div>
+        <!-- /ko -->
     <!-- /ko -->
     <div class="combatant--header">
         <div class="combatant__initiative">
