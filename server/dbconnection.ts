@@ -176,7 +176,7 @@ function getPersistentCharacterListings(persistentCharacters: { [key: string]: {
             Path: c.Path,
             SearchHint: StatBlock.GetKeywords(c.StatBlock),
             Version: c.Version,
-            Link: `/my/persistentcharacters/${c.StatBlock.Id}`,
+            Link: `/my/persistentcharacters/${c.Id}`,
         };
     });
 }
