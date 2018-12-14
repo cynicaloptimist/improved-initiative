@@ -7,10 +7,11 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
-import { QuickAddPromptWrapper } from "./Prompts/QuickAddPrompt";
+import { InitiativePrompt } from "./Prompts/InitiativePrompt";
+import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
 
 export class EncounterCommander {
-    constructor(private tracker: TrackerViewModel) {}
+    constructor(private tracker: TrackerViewModel) { }
 
     public AddStatBlockFromListing = (statBlock: StatBlock, hideOnAdd: boolean) => {
         this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
@@ -19,7 +20,7 @@ export class EncounterCommander {
     }
 
     public QuickAddStatBlock = () => {
-        const prompt = new QuickAddPromptWrapper(this.tracker.Encounter.AddCombatantFromStatBlock);
+        const prompt = new QuickAddPrompt(this.tracker.Encounter.AddCombatantFromStatBlock);
         this.tracker.PromptQueue.Add(prompt);
     }
 
@@ -45,14 +46,13 @@ export class EncounterCommander {
     public DisplayTurnTimer = ko.computed(() => CurrentSettings().TrackerView.DisplayTurnTimer);
     public DisplayDifficulty = ko.computed(() => CurrentSettings().TrackerView.DisplayDifficulty);
 
-    public StartEncounter = () => {
-        if (this.tracker.PromptQueue.HasPrompt()) {
-            this.tracker.PromptQueue.AnimatePrompt();
-            return;
-        }
+    private rollInitiative = () => {
+        this.tracker.PromptQueue.Add(new InitiativePrompt(this.tracker.Encounter.Combatants(), this.tracker.Encounter.StartEncounter));
+    }
 
+    public StartEncounter = () => {
         if (this.tracker.Encounter.State() == "inactive") {
-            this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+            this.rollInitiative();
 
             ComponentLoader.AfterComponentLoaded(() => TutorialSpy("ShowInitiativeDialog"));
         }
@@ -74,7 +74,7 @@ export class EncounterCommander {
     }
 
     public RerollInitiative = () => {
-        this.tracker.Encounter.RollInitiative(this.tracker.PromptQueue);
+        this.rollInitiative();
         Metrics.TrackEvent("InitiativeRerolled");
 
         return false;
@@ -105,17 +105,27 @@ export class EncounterCommander {
 
     public LoadEncounter = (legacySavedEncounter: {}) => {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-        this.tracker.Encounter.LoadSavedEncounter(savedEncounter);
-        Metrics.TrackEvent("EncounterLoaded", { Name: savedEncounter.Name });
+        const nonPlayerCombatants = savedEncounter.Combatants.filter(c => c.StatBlock.Player != "player");
+        nonPlayerCombatants.forEach(this.tracker.Encounter.AddCombatantFromState);
+        Metrics.TrackEvent("EncounterLoaded", {
+            Name: savedEncounter.Name,
+            Combatants: nonPlayerCombatants.map(c => c.StatBlock.Name)
+        });
     }
 
     public NextTurn = () => {
+        if (this.tracker.Encounter.State() != "active") {
+            this.StartEncounter();
+            return;
+        }
+
         if (!this.tracker.Encounter.ActiveCombatant()) {
+            this.tracker.Encounter.ActiveCombatant(this.tracker.Encounter.Combatants()[0]);
             return;
         }
         const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
         if (turnEndCombatant) {
-            Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });    
+            Metrics.TrackEvent("TurnCompleted", { Name: turnEndCombatant.DisplayName() });
         }
 
         this.tracker.Encounter.NextTurn();

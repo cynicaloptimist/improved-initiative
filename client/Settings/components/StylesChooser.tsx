@@ -80,7 +80,7 @@ export class StylesChooser extends React.Component<ColorChooserProps, ColorChoos
                 {this.getLabelAndColorBlock("Main Background", "mainBackground")}
                 <h4>Other Styles</h4>
                 <p><span style={{ fontFamily: this.state.styles.font }}>Font:</span> <input onBlur={this.handleFontChange} /></p>
-                <p>Background Image URL: <input onBlur={this.handleBackgroundUrlChange} /></p>
+                <p>Background Image URL: <input value={this.state.styles.backgroundUrl} onChange={this.handleBackgroundUrlChange} /></p>
             </div>
             {
                 this.state.selectedStyle !== null &&

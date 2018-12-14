@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { StatBlock } from "../../common/StatBlock";
 import { DefaultRules } from "../Rules/Rules";
-import { buildStatBlockTextEnricher } from "../test/buildEncounter";
+import { buildStatBlockTextEnricher } from "../test/buildStatBlockTextEnricher";
 import { StatBlockComponent } from "./StatBlock";
 
 Enzyme.configure({ adapter: new Adapter() });

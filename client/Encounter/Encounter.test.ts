@@ -24,16 +24,47 @@ describe("Encounter", () => {
         expect(encounter.State()).toBe("inactive");
     });
 
-    test("Initiative Ordering", () => {
-        const slow = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-        const fast = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-        expect(encounter.Combatants()[0]).toBe(slow);
+    describe("Initiative Ordering", () => {
+        test("By roll", () => {
+            const slow = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+            const fast = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+            expect(encounter.Combatants())
+                .toEqual([slow, fast]);
+    
+            fast.Initiative(20);
+            slow.Initiative(1);
+            encounter.StartEncounter();
+            expect(encounter.Combatants())
+                .toEqual([fast, slow]);
+        });
 
-        fast.Initiative(20);
-        slow.Initiative(1);
-        encounter.StartEncounter();
-        expect(encounter.Combatants()[0]).toBe(fast);
-        expect(encounter.Combatants()[1]).toBe(slow);
+        test("By modifier", () => {
+            const slow = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 0 });
+            const fast = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 2 });
+            encounter.StartEncounter();
+            expect(encounter.Combatants())
+                .toEqual([fast, slow]);
+        });
+
+        test("By group modifier", () => {
+            const slow = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 0 });
+            const fast = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 2 });
+            const loner = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), InitiativeModifier: 1 });
+            slow.InitiativeGroup("group");
+            fast.InitiativeGroup("group");
+            encounter.StartEncounter();
+
+            expect(encounter.Combatants())
+                .toEqual([fast, slow, loner]);
+        });
+
+        test("Favor player characters", () => {
+            const creature = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default() });
+            const playerCharacter = encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), Player: "player" });
+            encounter.StartEncounter();
+            expect(encounter.Combatants())
+                .toEqual([playerCharacter, creature]);
+        });
     });
 
     test("Active combatant stays at top of order", () => {
@@ -46,15 +77,15 @@ describe("Encounter", () => {
         }
 
         encounter.StartEncounter();
-        expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+        expect(encounter.GetPlayerView().Combatants[0].Id).toBe(encounter.ActiveCombatant().Id);
 
         for (let i = 0; i < 5; i++) {
             encounter.NextTurn();
-            expect(encounter.Combatants()[0]).toBe(encounter.ActiveCombatant());
+            expect(encounter.GetPlayerView().Combatants[0].Id).toBe(encounter.ActiveCombatant().Id);
         }
     });
 
-    test.skip("Encounter turn timer stops when encounter ends", () => {
+    test("Encounter turn timer stops when encounter ends", () => {
         jest.useFakeTimers();
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();

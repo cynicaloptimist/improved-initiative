@@ -1,28 +1,33 @@
 import mongo = require("mongodb");
 const client = mongo.MongoClient;
-const connectionString = process.env.DB_CONNECTION_STRING;
 
+import * as _ from "lodash";
+import { DefaultEncounterState } from "../common/EncounterState";
 import { Listable, ServerListing } from "../common/Listable";
-import { DefaultSavedEncounter } from "../common/SavedEncounter";
+import { DefaultPersistentCharacter, InitializeCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as L from "./library";
 import { User } from "./user";
 
-export const initialize = () => {
-    if (!connectionString) {
-        console.error("No connection string found.");
+let connectionString;
+
+export const initialize = (initialConnectionString) => {
+    if (!initialConnectionString) {
+        console.warn("No connection string found.");
         return;
     }
 
+    connectionString = initialConnectionString;
+
     client.connect(connectionString, function (err, db) {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
 };
 
-export function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string) {
+export async function upsertUser(patreonId: string, accessKey: string, refreshKey: string, accountStatus: string) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -45,6 +50,7 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                     $setOnInsert: {
                         statblocks: {},
                         playercharacters: {},
+                        persistentcharacters: {},
                         spells: {},
                         encounters: {},
                         settings: {},
@@ -58,34 +64,54 @@ export function upsertUser(patreonId: string, accessKey: string, refreshKey: str
                         patreonId
                     });
                 });
-        }) as Promise<User>;
-}
-
-export function getAccount(userId: string, callBack: (userWithListings: any) => void) {
-    if (!connectionString) {
-        console.error("No connection string found.");
-        throw "No connection string found.";
-    }
-
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
-            return users.findOne({ _id: userId })
-                .then((user: User) => {
-                    const userWithListings = {
-                        settings: user.settings,
-                        statblocks: getStatBlockListings(user.statblocks),
-                        playercharacters: getPlayerCharacterListings(user.playercharacters),
-                        spells: getSpellListings(user.spells),
-                        encounters: getEncounterListings(user.encounters)
-                    };
-
-                    callBack(userWithListings);
-                });
         });
 }
 
-function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing [] {
+export async function getAccount(userId: mongo.ObjectId) {
+    if (!connectionString) {
+        throw "No connection string found.";
+    }
+
+    const db = await client.connect(connectionString);
+    const users = db.collection<User>("users");
+    const user = await users.findOne({ _id: userId });
+    if (user === null) {
+        throw `User ${userId} not found.`;
+    }
+
+    const persistentCharacters = await updatePersistentCharactersIfNeeded(user, users);
+
+    const userWithListings = {
+        settings: user.settings,
+        statblocks: getStatBlockListings(user.statblocks),
+        playercharacters: getPlayerCharacterListings(user.playercharacters),
+        persistentcharacters: getPersistentCharacterListings(persistentCharacters),
+        spells: getSpellListings(user.spells),
+        encounters: getEncounterListings(user.encounters),
+    };
+
+    return userWithListings;
+}
+
+async function updatePersistentCharactersIfNeeded(user: User, users: mongo.Collection<User>) {
+    if (user.persistentcharacters != undefined && !_.isEmpty(user.persistentcharacters)) {
+        return user.persistentcharacters;
+    }
+
+    const persistentcharacters = _.mapValues(user.playercharacters, statBlockUnsafe => {
+        const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
+        return InitializeCharacter(statBlock);
+    });
+
+    await users.updateOne(
+        { _id: user._id },
+        { $set: { persistentcharacters } }
+    );
+
+    return persistentcharacters;
+}
+
+function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing[] {
     return Object.keys(statBlocks).map(key => {
         const c = { ...StatBlock.Default(), ...statBlocks[key] };
         return {
@@ -99,7 +125,7 @@ function getStatBlockListings(statBlocks: { [key: string]: {} }): ServerListing 
     });
 }
 
-function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): ServerListing [] {
+function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(playerCharacters).map(key => {
         const c = { ...StatBlock.Default(), ...playerCharacters[key] };
         return {
@@ -113,7 +139,7 @@ function getPlayerCharacterListings(playerCharacters: { [key: string]: {} }): Se
     });
 }
 
-function getSpellListings(spells: { [key: string]: {} }): ServerListing [] {
+function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
     return Object.keys(spells).map(key => {
         const c = { ...Spell.Default(), ...spells[key] };
         return {
@@ -129,7 +155,7 @@ function getSpellListings(spells: { [key: string]: {} }): ServerListing [] {
 
 function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[] {
     return Object.keys(encounters).map(key => {
-        const c = { ...DefaultSavedEncounter(), ...encounters[key] };
+        const c = { ...DefaultEncounterState(), ...encounters[key] };
         return {
             Name: c.Name,
             Id: c.Id,
@@ -137,6 +163,20 @@ function getEncounterListings(encounters: { [key: string]: {} }): ServerListing[
             SearchHint: L.GetEncounterKeywords(c),
             Version: c.Version,
             Link: `/my/encounters/${c.Id}`,
+        };
+    });
+}
+
+function getPersistentCharacterListings(persistentCharacters: { [key: string]: {} }): ServerListing[] {
+    return Object.keys(persistentCharacters).map(key => {
+        const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
+        return {
+            Name: c.Name,
+            Id: c.Id,
+            Path: c.Path,
+            SearchHint: StatBlock.GetKeywords(c.StatBlock),
+            Version: c.Version,
+            Link: `/my/persistentcharacters/${c.Id}`,
         };
     });
 }
@@ -157,35 +197,34 @@ export function setSettings(userId, settings) {
         });
 }
 
-export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters";
+export type EntityPath = "statblocks" | "playercharacters" | "spells" | "encounters" | "persistentcharacters";
 
-export function getEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (entity: {}) => void) {
+export async function getEntity(entityPath: EntityPath, userId: mongo.ObjectId, entityId: string) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
     }
+    const db = await client.connect(connectionString);
+    const user = await db.collection<User>("users")
+        .findOne({ _id: userId },
+            {
+                fields: {
+                    [`${entityPath}.${entityId}`]: true
+                }
+            });
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
+    if (!user) {
+        throw "User not found";
+    }
+    const entities = user[entityPath];
+    if (entities === undefined) {
+        throw `User has no ${entityPath} entities.`;
+    }
 
-            return users
-                .findOne({ _id: userId },
-                {
-                    fields: {
-                        [`${entityPath}.${entityId}`]: true
-                    }
-                })
-                .then((user: User) => {
-                    if (!user) {
-                        throw "User not found";
-                    }
-                    callBack(user[entityPath][entityId]);
-                });
-        });
+    return entities[entityId];
 }
 
-export function deleteEntity(entityPath: EntityPath, userId: string, entityId: string, callBack: (result: number) => void) {
+export function deleteEntity(entityPath: EntityPath, userId: mongo.ObjectId, entityId: string, callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -208,7 +247,7 @@ export function deleteEntity(entityPath: EntityPath, userId: string, entityId: s
         });
 }
 
-export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: string, entity: T, callBack: (result: number) => void) {
+export async function saveEntity<T extends Listable>(entityPath: EntityPath, userId: mongo.ObjectId, entity: T) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -222,23 +261,19 @@ export function saveEntity<T extends Listable>(entityPath: EntityPath, userId: s
         throw "Entity Id cannot contain .";
     }
 
-    return client.connect(connectionString)
-        .then((db: mongo.Db) => {
-            const users = db.collection<User>("users");
-            return users.updateOne(
-                { _id: userId },
-                {
-                    $set: {
-                        [`${entityPath}.${entity.Id}`]: entity
-                    }
-                }
-            ).then(result => {
-                callBack(result.modifiedCount);
-            });
-        });
+    const db = await client.connect(connectionString);
+    const result = await db.collection("users").updateOne(
+        { _id: userId },
+        {
+            $set: {
+                [`${entityPath}.${entity.Id}`]: entity
+            }
+        }
+    );
+    return result.modifiedCount;
 }
 
-export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: string, entities: T [], callBack: (result: number) => void) {
+export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId: mongo.ObjectId, entities: T[], callBack: (result: number) => void) {
     if (!connectionString) {
         console.error("No connection string found.");
         throw "No connection string found.";
@@ -249,7 +284,7 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
             throw "Entity missing Id or Version";
         }
     }
-    
+
     return client.connect(connectionString)
         .then((db: mongo.Db) => {
             const users = db.collection<User>("users");
@@ -259,7 +294,7 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
                         throw "User ID not found: " + userId;
                     }
 
-                    const updatedEntities = u[entityPath];
+                    const updatedEntities = u[entityPath] || {};
                     for (const entity of entities) {
                         updatedEntities[entity.Id] = entity;
                     }
@@ -270,8 +305,8 @@ export function saveEntitySet<T extends Listable>(entityPath: EntityPath, userId
                                 [`${entityPath}`]: updatedEntities
                             }
                         });
-            }).then(result => {
-                callBack(result.modifiedCount);
-            });
+                }).then(result => {
+                    callBack(result.modifiedCount);
+                });
         });
 }

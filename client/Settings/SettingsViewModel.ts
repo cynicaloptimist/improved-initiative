@@ -1,3 +1,4 @@
+import { saveAs } from "browser-filesaver";
 import * as ko from "knockout";
 import * as React from "react";
 
@@ -7,8 +8,8 @@ import { CombatantCommander } from "../Commands/CombatantCommander";
 import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Libraries } from "../Library/Libraries";
-import { AccountViewModel } from "../Settings/AccountViewModel";
 import { Store } from "../Utility/Store";
+import { AccountViewModel } from "./AccountViewModel";
 import { AutoGroupInitiativeOption, AutoGroupInitiativeOptions, CurrentSettings, Settings } from "./Settings";
 import { EpicInitiativeSettings, EpicInitiativeSettingsProps } from "./components/EpicInitiativeSettings";
 

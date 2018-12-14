@@ -19,7 +19,7 @@ interface TagPromptState {
     advancedMode: boolean;
 }
 
-class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
+class TagPromptComponent extends React.Component<TagPromptProps, TagPromptState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -72,7 +72,7 @@ class TagPrompt extends React.Component<TagPromptProps, TagPromptState> {
     ))
 }
 
-export class TagPromptWrapper implements Prompt {
+export class TagPrompt implements Prompt {
     public InputSelector = ".response";
     public ComponentName = "reactprompt";
 
@@ -118,7 +118,7 @@ export class TagPromptWrapper implements Prompt {
         private targetCombatants: Combatant [],
         private logEvent: (s: string) => void) {
         
-        this.component = <TagPrompt
+        this.component = <TagPromptComponent
             activeCombatantId={encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""}
             combatants={encounter.Combatants()}
             targetDisplayNames={targetCombatants.map(t => t.DisplayName()).join(", ")}

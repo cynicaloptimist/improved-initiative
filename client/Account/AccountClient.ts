@@ -1,5 +1,7 @@
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { Listable } from "../../common/Listable";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
@@ -27,6 +29,7 @@ export class AccountClient {
         $.when(
             saveEntitySet(prepareForSync(libraries.NPCs.StatBlocks()), "statblocks", messageCallback),
             saveEntitySet(prepareForSync(libraries.PCs.StatBlocks()), "playercharacters", messageCallback),
+            saveEntitySet(prepareForSync(libraries.PersistentCharacters.GetListings()), "persistentcharacters", messageCallback),
             saveEntitySet(prepareForSync(libraries.Spells.Spells()), "spells", messageCallback),
             saveEntitySet(prepareForSync(libraries.Encounters.Encounters()), "encounters", messageCallback)
         ).done(_ => {
@@ -54,8 +57,16 @@ export class AccountClient {
         return deleteEntity(statBlockId, "playercharacters");
     }
 
-    public SaveEncounter(encounter: SavedEncounter<SavedCombatant>) {
-        return saveEntity<SavedEncounter<SavedCombatant>>(encounter, "encounters");
+    public SavePersistentCharacter(persistentCharacter: PersistentCharacter) {
+        return saveEntity<PersistentCharacter>(persistentCharacter, "persistentcharacters");
+    }
+
+    public DeletePersistentCharacter(persistentCharacterId: string) {
+        return deleteEntity(persistentCharacterId, "persistentcharacters");
+    }
+
+    public SaveEncounter(encounter: EncounterState<CombatantState>) {
+        return saveEntity<EncounterState<CombatantState>>(encounter, "encounters");
     }
 
     public DeleteEncounter(encounterId: string) {
@@ -110,7 +121,7 @@ function prepareForSync(items: Listing<Listable>[]) {
 function getUnsyncedItems(items: Listing<Listable>[]) {
     const local = items.filter(i => i.Origin === "localStorage");
     const synced = items.filter(i => i.Origin === "account");
-    const unsynced = local.filter(l => !synced.some(s => s.Name == l.Name));
+    const unsynced = local.filter(l => !synced.some(s => s.CurrentName() == l.CurrentName()));
     const unsyncedItems = [];
     unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));
     return unsyncedItems;

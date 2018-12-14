@@ -1,6 +1,11 @@
 import express = require("express");
 
+import { CombatantState } from "../common/CombatantState";
+import { EncounterState } from "../common/EncounterState";
 import { Listable } from "../common/Listable";
+import { PersistentCharacter } from "../common/PersistentCharacter";
+import { Spell } from "../common/Spell";
+import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 
 type Req = Express.Request & express.Request;
@@ -33,7 +38,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
     
         const entityId = parsePossiblyMalformedIdFromParams(req.params);
     
-        return DB.getEntity(route, session.userId, entityId, entity => {
+        return DB.getEntity(route, session.userId, entityId).then(entity => {
 
             if (entity) {
                 return res.json(entity);    
@@ -52,7 +57,7 @@ function configureEntityRoute<T extends Listable>(app: express.Application, rout
         }
 
         if (req.body.Version) {
-            return DB.saveEntity<T>(route, req.session.userId, req.body, result => {
+            return DB.saveEntity<T>(route, req.session.userId, req.body).then(result => {
                 return res.sendStatus(201);    
             }).catch(err => {
                 return res.status(500).send(err);
@@ -92,7 +97,7 @@ export default function(app: express.Application) {
             return res.sendStatus(403);
         }
     
-        return DB.getAccount(req.session.userId, account => {
+        return DB.getAccount(req.session.userId).then(account => {
             return res.json(account);
         }).catch(err => {
             return res.sendStatus(500);
@@ -115,8 +120,9 @@ export default function(app: express.Application) {
         }
     });
     
-    configureEntityRoute(app, "statblocks");
-    configureEntityRoute(app, "playercharacters");
-    configureEntityRoute(app, "spells");
-    configureEntityRoute(app, "encounters");
+    configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
+    configureEntityRoute<StatBlock>(app, "statblocks");
+    configureEntityRoute<StatBlock>(app, "playercharacters");
+    configureEntityRoute<Spell>(app, "spells");
+    configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
 }

@@ -155,7 +155,7 @@ describe("PlayerViewModel", () => {
         expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant1.Id);
     });
 
-    test.skip("Player View round timer stops when encounter stops", () => {
+    test("Player View round timer stops when encounter stops", () => {
         jest.useFakeTimers();
         encounter.AddCombatantFromStatBlock({ ...StatBlock.Default(), HP: { Value: 10, Notes: "" }, Player: "player" });
         encounter.StartEncounter();

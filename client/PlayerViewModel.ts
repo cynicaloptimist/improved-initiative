@@ -1,9 +1,9 @@
 import * as Color from "color";
 import * as ko from "knockout";
 
+import { EncounterState } from "../common/EncounterState";
 import { PlayerView } from "../common/PlayerView";
 import { PlayerViewCustomStyles, PlayerViewSettings } from "../common/PlayerViewSettings";
-import { SavedEncounter } from "./../common/SavedEncounter";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
@@ -50,7 +50,7 @@ export class PlayerViewModel {
     private combatantSuggestor = new CombatantSuggestor(this.socket, this.encounterId);
 
     constructor(private socket: SocketIOClient.Socket) {
-        this.socket.on("encounter updated", (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+        this.socket.on("encounter updated", (encounter: EncounterState<StaticCombatantViewModel>) => {
             this.LoadEncounter(encounter);
         });
         this.socket.on("settings updated", (settings: PlayerViewSettings) => {
@@ -99,7 +99,7 @@ export class PlayerViewModel {
         this.splashPortraits = settings.SplashPortraits;
     }
 
-    public LoadEncounter = (encounter: SavedEncounter<StaticCombatantViewModel>) => {
+    public LoadEncounter = (encounter: EncounterState<StaticCombatantViewModel>) => {
         this.combatants(encounter.Combatants);
         this.roundCounter(encounter.RoundCounter);
         if (!encounter.ActiveCombatantId) {
@@ -123,7 +123,7 @@ export class PlayerViewModel {
     }
 
     private ScrollToActiveCombatant = () => {
-        let activeCombatantElement = document.getElementsByClassName("active")[0];
+        const activeCombatantElement = document.getElementsByClassName("active")[0];
         if (activeCombatantElement) {
             activeCombatantElement.scrollIntoView(false);
         }

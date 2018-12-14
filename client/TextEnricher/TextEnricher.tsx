@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import * as React from "react";
+import * as Markdown from "react-markdown";
 import * as ReactReplace from "react-string-replace-recursively";
 
 import { Spell } from "../../common/Spell";
@@ -16,9 +17,6 @@ interface ReplaceConfig {
         ignore?: string[];
     };
 }
-
-type ReactReplacer = (input: string) => JSX.Element[];
-type ReactReplace = (config: ReplaceConfig) => ReactReplacer;
 
 export class TextEnricher {
     constructor(
@@ -65,6 +63,10 @@ export class TextEnricher {
 
         const replacer = ReactReplace(replaceConfig);
 
-        return replacer(text);
+        const renderers = {
+            text: props => replacer(props.children),
+        };
+
+        return <Markdown source={text} renderers={renderers} />;
     }
 }

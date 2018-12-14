@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html encounterId="{{encounterId}}" 
-    postedEncounter="{{postedEncounter}}" 
+<html encounterId="{{encounterId}}"
+    postedEncounter="{{postedEncounter}}"
     hasStorage="{{hasStorage}}"
     hasEpicInitiative="{{hasEpicInitiative}}"
     isLoggedIn="{{isLoggedIn}}">
@@ -32,38 +32,35 @@
 
     </script>
     <div class="loading-splash" style="
-    position: fixed; 
-    width: 100%; 
-    height: 100%; 
-    background-color: #00643C; 
-    z-index: 10; 
-    background-image: url({{rootDirectory}}/img/improved-initiative-transparent-darkgreen.png);
-    background-repeat: no-repeat;
-    background-position: center bottom;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
     "></div>
     <div class="modal-blur" data-bind="visible: BlurVisible, click: CloseSettings"></div>
 
     <div class="settings" data-bind="
-        visible: SettingsVisible, 
-        component: { 
+        visible: SettingsVisible,
+        component: {
             name: 'settings',
-            params: { 
+            params: {
                 settingsVisible: SettingsVisible,
                 repeatTutorial: RepeatTutorial,
                 reviewPrivacyPolicy: ReviewPrivacyPolicy,
-                encounterCommands: EncounterToolbar, 
+                encounterCommands: EncounterToolbar,
                 combatantCommander: CombatantCommander,
                 libraries: Libraries
-            } 
+            }
         }">
     </div>
     <div class="tutorial" data-bind="
-        visible: TutorialVisible, 
-        component: { 
+        visible: TutorialVisible,
+        component: {
             name: 'tutorial',
             params: {
                 showTutorial: TutorialVisible
-            } 
+            }
         }
     ">
     </div>
@@ -82,8 +79,8 @@
         <!-- ko ifnot: LibrariesVisible -->
         <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
             <h2>Active Combatant</h2>
-            <div style="flex-shrink: 1" data-bind="react: {
-                component: Encounter.ActiveCombatantStatBlock
+            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
+                component: ActiveCombatantDetails
             }"></div>
         </div>
         <!-- /ko -->
@@ -116,15 +113,15 @@
             </li>
             <!-- ko foreach: OrderedCombatants -->
             <li class="combatant" data-bind="
-        css: { 
-            selected: IsSelected, 
+        css: {
+            selected: IsSelected,
             active: IsActive,
             animate: IsNew
         },
         click: $root.CombatantCommander.Select,
         component: {
             name: 'combatant',
-            params: { 
+            params: {
                 viewModel: $data
             }
         }">
@@ -176,8 +173,8 @@
             <!-- ko if: CombatantCommander.HasOneSelected -->
             <h2>Selected Combatant</h2>
             <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-times"></span></div>
-            <div style="flex-shrink: 1" data-bind="react: {
-                component: CombatantCommander.StatBlock
+            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
+                component: CombatantCommander.CombatantDetails
             }"></div>
             <!-- /ko -->
             <!-- ko if: CombatantCommander.HasMultipleSelected -->

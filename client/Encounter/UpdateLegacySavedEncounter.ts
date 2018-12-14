@@ -1,4 +1,5 @@
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
 
 function updateLegacySavedCreature(savedCreature: any) {
@@ -10,7 +11,7 @@ function updateLegacySavedCreature(savedCreature: any) {
     }
 }
 
-export function UpdateLegacySavedEncounter(savedEncounter: any): SavedEncounter<SavedCombatant> {
+export function UpdateLegacySavedEncounter(savedEncounter: any): EncounterState<CombatantState> {
     savedEncounter.Combatants = savedEncounter.Combatants || savedEncounter.Creatures;
     savedEncounter.ActiveCombatantId = savedEncounter.ActiveCombatantId || savedEncounter.ActiveCreatureId;
     savedEncounter.Path = savedEncounter.Path || "";

@@ -8,7 +8,7 @@ const inputClassName = promptClassName + "-input";
 
 interface QuickAddPromptProps { }
 interface QuickAddPromptState { }
-class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPromptState> {
+class QuickAddPromptComponent extends React.Component<QuickAddPromptProps, QuickAddPromptState> {
     private focusInput: HTMLInputElement;
     public componentDidMount() {
         this.focusInput.focus();
@@ -26,7 +26,7 @@ class QuickAddPrompt extends React.Component<QuickAddPromptProps, QuickAddPrompt
     }
 }
 
-export class QuickAddPromptWrapper implements Prompt {
+export class QuickAddPrompt implements Prompt {
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
@@ -50,5 +50,5 @@ export class QuickAddPromptWrapper implements Prompt {
         Metrics.TrackEvent("CombatantQuickAdded", { Name: name });
     }
 
-    public component = <QuickAddPrompt />;
+    public component = <QuickAddPromptComponent />;
 }

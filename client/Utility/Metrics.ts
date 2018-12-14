@@ -10,6 +10,7 @@ export class Metrics {
             Encounters: Store.List(Store.SavedEncounters).length,
             NpcStatBlocks: Store.List(Store.StatBlocks).length,
             PcStatBlocks: Store.List(Store.PlayerCharacters).length,
+            PersistentCharacters: Store.List(Store.PersistentCharacters).length,
             Spells: Store.List(Store.Spells).length
         };
 

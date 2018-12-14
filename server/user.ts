@@ -7,4 +7,5 @@ export interface User {
     playercharacters: { [id: string]: {} };
     spells: { [id: string]: {} };
     encounters: { [id: string]: {} };
+    persistentcharacters?: { [id: string]: {} };
 }

@@ -1,19 +1,23 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { find } from "lodash";
+import { InitializeCharacter, PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
+import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList";
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
-import { PrivacyPolicyPromptWrapper } from "./Commands/Prompts/PrivacyPolicyPrompt";
+import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
+import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
 import { Libraries } from "./Library/Libraries";
@@ -23,13 +27,35 @@ import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
+import { StatBlockEditor, StatBlockEditorTarget } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 
 export class TrackerViewModel {
+    private accountClient = new AccountClient();
+    private playerViewClient = new PlayerViewClient(this.Socket);
+
+    public Rules = new DefaultRules();
+    public PromptQueue = new PromptQueue();
+    public EventLog = new EventLog();
+    public Libraries = new Libraries(this.accountClient);
+    public SpellEditor = new SpellEditor();
+    public EncounterCommander = new EncounterCommander(this);
+    public CombatantCommander = new CombatantCommander(this);
+    public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
+    public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
+
+    public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
+    public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
+    public SettingsVisible = ko.observable(false);
+    public LibrariesVisible = ko.observable(true);
+    public ToolbarWide = ko.observable(false);
+
+    public DisplayLogin = !env.IsLoggedIn;
+    public PatreonLoginUrl = env.PatreonLoginUrl;
+
     constructor(private Socket: SocketIOClient.Socket) {
         ConfigureCommands([...this.EncounterToolbar, ...this.CombatantCommander.Commands]);
 
@@ -48,65 +74,49 @@ export class TrackerViewModel {
 
         this.accountClient.GetAccount(account => {
             if (!account) {
+                if (Store.List(Store.PersistentCharacters).length == 0) {
+                    this.getAndAddSamplePersistentCharacters("/sample_players.json");
+                }
                 return;
             }
 
             this.HandleAccountSync(account);
         });
 
+        const autosavedEncounter = Store.Load(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+        if (autosavedEncounter) {
+            this.Encounter.LoadEncounterState(UpdateLegacySavedEncounter(autosavedEncounter), this.Libraries.PersistentCharacters);
+        }
+
         this.displayPrivacyNotificationIfNeeded();
 
         Metrics.TrackLoad();
     }
 
-    private accountClient = new AccountClient();
-
-    private displayPrivacyNotificationIfNeeded = () => {
-        if (Store.Load(Store.User, "AllowTracking") == null) {
-            this.ReviewPrivacyPolicy();
-        }
+    private getAndAddSamplePersistentCharacters = (url: string) => {
+        $.getJSON(url, (json: StatBlock[]) => {
+            json.forEach(statBlock => {
+                const persistentCharacter = InitializeCharacter({ ...StatBlock.Default(), ...statBlock });
+                persistentCharacter.Path = "Sample Player Characters";
+                this.Libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
+            });
+        });
     }
 
     public ReviewPrivacyPolicy = () => {
         this.SettingsVisible(false);
-        const prompt = new PrivacyPolicyPromptWrapper();
+        const prompt = new PrivacyPolicyPrompt();
         this.PromptQueue.Add(prompt);
     }
 
-    private HandleAccountSync(account: Account) {
-        if (account.settings && account.settings.Version) {
-            CurrentSettings(account.settings);
-        }
+    public StatBlockTextEnricher = new TextEnricher(
+        this.CombatantCommander.RollDice,
+        this.LibrariesCommander.ReferenceSpell,
+        this.LibrariesCommander.ReferenceCondition,
+        this.Libraries.Spells,
+        this.Rules);
 
-        if (account.statblocks) {
-            this.Libraries.NPCs.AddListings(account.statblocks, "account");
-        }
-
-        if (account.playercharacters) {
-            this.Libraries.PCs.AddListings(account.playercharacters, "account");
-        }
-
-        if (account.spells) {
-            this.Libraries.Spells.AddListings(account.spells, "account");
-        }
-
-        if (account.encounters) {
-            this.Libraries.Encounters.AddListings(account.encounters, "account");
-        }
-    }
-
-    public PromptQueue = new PromptQueue();
-    public EventLog = new EventLog();
-    public Libraries = new Libraries(this.accountClient);
-    public SpellEditor = new SpellEditor();
-    public EncounterCommander = new EncounterCommander(this);
-    public CombatantCommander = new CombatantCommander(this);
-    public LibrariesCommander = new LibrariesCommander(this, this.Libraries, this.EncounterCommander);
-    public EncounterToolbar = BuildEncounterCommandList(this.EncounterCommander, this.LibrariesCommander.SaveEncounter);
-
-    public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
-
-    private addCombatantViewModel = (combatant: Combatant) => {
+    private initializeCombatantViewModel = (combatant: Combatant) => {
         const vm = new CombatantViewModel(combatant, this.CombatantCommander, this.PromptQueue.Add, this.EventLog.AddEvent);
         this.CombatantViewModels.push(vm);
         return vm;
@@ -116,24 +126,11 @@ export class TrackerViewModel {
         this.CombatantViewModels.removeAll(viewModels);
     }
 
-    private playerViewClient = new PlayerViewClient(this.Socket);
-
-    public Rules = new DefaultRules();
-
-    public StatBlockTextEnricher = new TextEnricher(
-        this.CombatantCommander.RollDice,
-        this.LibrariesCommander.ReferenceSpell,
-        this.LibrariesCommander.ReferenceCondition,
-        this.Libraries.Spells,
-        this.Rules);
-
     public Encounter = new Encounter(
-        this.PromptQueue,
         this.playerViewClient,
-        this.addCombatantViewModel,
+        this.initializeCombatantViewModel,
         this.removeCombatantViewModels,
-        this.Rules,
-        this.StatBlockTextEnricher
+        this.Rules
     );
 
     public librariesComponent = <LibrariesViewModel
@@ -148,12 +145,11 @@ export class TrackerViewModel {
         )
     );
 
-    public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
-    public SettingsVisible = ko.observable(false);
-    public LibrariesVisible = ko.observable(true);
-    public ToolbarWide = ko.observable(false);
-
-    public DisplayLogin = !env.IsLoggedIn;
+    public ActiveCombatantDetails = ko.computed(() => {
+        const activeCombatant = this.Encounter.ActiveCombatant();
+        const combatantViewModel = find(this.CombatantViewModels(), c => c.Combatant == activeCombatant);
+        return <CombatantDetails combatantViewModel={combatantViewModel} displayMode="active" enricher={this.StatBlockTextEnricher} />;
+    });
 
     public CenterColumn = ko.pureComputed(() => {
         const editStatBlock = this.StatBlockEditor() !== null;
@@ -178,21 +174,39 @@ export class TrackerViewModel {
     }
 
     public EditStatBlock(
-        editMode: "combatant" | "library",
+        editorTarget: StatBlockEditorTarget,
         statBlock: StatBlock,
         saveCallback: (newStatBlock: StatBlock) => void,
-        currentListings?: Listing<StatBlock> [],
+        currentListings?: Listing<StatBlock>[],
         deleteCallback?: () => void,
         saveAsCallback?: (newStatBlock: StatBlock) => void,
     ) {
         this.StatBlockEditor(<StatBlockEditor
             statBlock={statBlock}
-            editMode={editMode}
+            editorTarget={editorTarget}
             onSave={saveCallback}
             onDelete={deleteCallback}
             onSaveAs={saveAsCallback}
             onClose={() => this.StatBlockEditor(null)}
-            currentListings = {currentListings}
+            currentListings={currentListings}
+        />);
+    }
+
+    public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        this.StatBlockEditor(null);
+        const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(persistentCharacterId);
+        this.StatBlockEditor(<StatBlockEditor
+            statBlock={persistentCharacter.StatBlock}
+            editorTarget="persistentcharacter"
+            onSave={(statBlock: StatBlock) => {
+                this.Libraries.PersistentCharacters.UpdatePersistentCharacter(persistentCharacterId, {
+                    StatBlock: statBlock
+                });
+                this.Encounter.UpdatePersistentCharacterStatBlock(persistentCharacterId, statBlock);
+            }}
+            onDelete={() => this.Libraries.PersistentCharacters.DeletePersistentCharacter(persistentCharacterId)}
+            onClose={() => this.StatBlockEditor(null)}
+            currentListings={this.Libraries.PersistentCharacters.GetListings()}
         />);
     }
 
@@ -219,8 +233,6 @@ export class TrackerViewModel {
                 this.EventLog.AddEvent(`Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`);
             });
     }
-
-    public PatreonLoginUrl = env.PatreonLoginUrl;
 
     public InterfacePriority = ko.pureComputed(() => {
         if (this.CenterColumn() === "statblockeditor" || this.CenterColumn() === "spelleditor") {
@@ -253,12 +265,17 @@ export class TrackerViewModel {
     });
 
     public toolbarComponent = ko.computed(() => {
-        const commandsToHideByDescription = this.Encounter.State() == "active" ?
-            ["Start Encounter"] :
-            ["Reroll Initiative", "End Encounter", "Next Turn", "Previous Turn"];
+        const commandsToHideById = this.Encounter.State() == "active" ?
+            ["start-encounter"] :
+            ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
+        
+        const onePersistentCharacterSelected = this.CombatantCommander.HasOneSelected() && this.CombatantCommander.SelectedCombatants()[0].Combatant.PersistentCharacterId != null;
+        if (!onePersistentCharacterSelected){
+            commandsToHideById.push("update-notes");
+        }
 
-        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideByDescription.some(d => c.Description == d));
-        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar());
+        const encounterCommands = this.EncounterToolbar.filter(c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d));
+        const combatantCommands = this.CombatantCommander.Commands.filter(c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d));
 
         return <Toolbar
             encounterCommands={encounterCommands}
@@ -295,5 +312,37 @@ export class TrackerViewModel {
 
         //Creatures, library closed, encounter active: Next turn
         return "next-turn";
+    }
+
+    private HandleAccountSync(account: Account) {
+        if (account.settings && account.settings.Version) {
+            CurrentSettings(account.settings);
+        }
+
+        if (account.statblocks) {
+            this.Libraries.NPCs.AddListings(account.statblocks, "account");
+        }
+
+        if (account.playercharacters) {
+            this.Libraries.PCs.AddListings(account.playercharacters, "account");
+        }
+
+        if (account.persistentcharacters) {
+            this.Libraries.PersistentCharacters.AddListings(account.persistentcharacters, "account");
+        }
+
+        if (account.spells) {
+            this.Libraries.Spells.AddListings(account.spells, "account");
+        }
+
+        if (account.encounters) {
+            this.Libraries.Encounters.AddListings(account.encounters, "account");
+        }
+    }
+
+    private displayPrivacyNotificationIfNeeded = () => {
+        if (Store.Load(Store.User, "AllowTracking") == null) {
+            this.ReviewPrivacyPolicy();
+        }
     }
 }

@@ -5,6 +5,7 @@ export interface Account {
     settings: Settings;
     statblocks: ServerListing[];
     playercharacters: ServerListing[];
+    persistentcharacters: ServerListing[];
     spells: ServerListing[];
     encounters: ServerListing[];
 }

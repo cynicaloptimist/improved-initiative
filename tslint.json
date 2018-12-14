@@ -13,7 +13,7 @@
             "ignore-same-line"
         ],
         "no-use-before-declare": true,
-        "no-unused-variable": true,
+        "no-unused-expression": true,
         "semicolon": true,
         "ordered-imports": [
             true,

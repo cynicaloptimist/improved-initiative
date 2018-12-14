@@ -3,19 +3,19 @@ import * as React from "react";
 
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
+import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { StatBlockComponent } from "../Components/StatBlock";
 import { Dice, RollResult } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
-import { Store } from "../Utility/Store";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
-import { TagPromptWrapper } from "./Prompts/TagPrompt";
+import { TagPrompt } from "./Prompts/TagPrompt";
+import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 
 interface PendingLinkInitiative {
     combatant: CombatantViewModel;
@@ -34,11 +34,12 @@ export class CombatantCommander {
     public HasOneSelected = ko.pureComputed(() => this.SelectedCombatants().length === 1);
     public HasMultipleSelected = ko.pureComputed(() => this.SelectedCombatants().length > 1);
 
-    public StatBlock = ko.pureComputed(() => {
-        let selectedCombatants = this.SelectedCombatants();
+    public CombatantDetails = ko.pureComputed(() => {
+        const selectedCombatants = this.SelectedCombatants();
         if (selectedCombatants.length == 1) {
-            return React.createElement(StatBlockComponent, {
-                statBlock: selectedCombatants[0].Combatant.StatBlock(),
+            const combatantViewModel = selectedCombatants[0];
+            return React.createElement(CombatantDetails, {
+                combatantViewModel,
                 enricher: this.tracker.StatBlockTextEnricher,
                 displayMode: "default"
             });
@@ -158,6 +159,18 @@ export class CombatantCommander {
         return false;
     }
 
+    public UpdateNotes = async () => {
+        const selectedCombatants = this.SelectedCombatants().filter(c => c.Combatant.PersistentCharacterId != null);
+        if (selectedCombatants.length == 0) {
+            throw "Can't edit non-persistent combatant notes";
+        }
+        const combatant = selectedCombatants[0].Combatant;
+
+        const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(combatant.PersistentCharacterId);
+        this.tracker.PromptQueue.Add(new UpdateNotesPrompt(combatant, persistentCharacter, this.tracker.Libraries.PersistentCharacters));
+        return false;
+    }
+
     public SuggestEditHP = (suggestedCombatants: CombatantViewModel[], suggestedDamage: number, suggester: string) => {
         const allowPlayerSuggestions = CurrentSettings().PlayerView.AllowPlayerSuggestions;
 
@@ -201,7 +214,7 @@ export class CombatantCommander {
             this.Select(combatantVM);
         }
         const selectedCombatants = this.SelectedCombatants().map(c => c.Combatant);
-        const prompt = new TagPromptWrapper(this.tracker.Encounter, selectedCombatants, this.tracker.EventLog.AddEvent);
+        const prompt = new TagPrompt(this.tracker.Encounter, selectedCombatants, this.tracker.EventLog.AddEvent);
         this.tracker.PromptQueue.Add(prompt);
         return false;
     }
@@ -265,19 +278,27 @@ export class CombatantCommander {
         return false;
     }
 
+    public ToggleHidden = () => {
+        this.SelectedCombatants().forEach(c => c.ToggleHidden());
+    }
+
     public EditStatBlock = () => {
         if (this.SelectedCombatants().length == 1) {
             let selectedCombatant = this.SelectedCombatants()[0].Combatant;
-            this.tracker.EditStatBlock(
-                "combatant",
-                selectedCombatant.StatBlock(),
-                (newStatBlock) => {
-                    selectedCombatant.StatBlock(newStatBlock);
-                    this.tracker.Encounter.QueueEmitEncounter();
-                },
-                undefined,
-                () => this.Remove()
-            );
+            if (selectedCombatant.PersistentCharacterId) {
+                this.tracker.EditPersistentCharacterStatBlock(selectedCombatant.PersistentCharacterId);
+            } else {
+                this.tracker.EditStatBlock(
+                    "combatant",
+                    selectedCombatant.StatBlock(),
+                    (newStatBlock) => {
+                        selectedCombatant.StatBlock(newStatBlock);
+                        this.tracker.Encounter.QueueEmitEncounter();
+                    },
+                    undefined,
+                    () => this.Remove()
+                );
+            }
         }
     }
 

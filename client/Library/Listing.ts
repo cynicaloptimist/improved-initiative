@@ -1,14 +1,14 @@
 import * as ko from "knockout";
 
-import { Listable, ServerListing } from "../../common/Listable";
+import { Listable } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
-export class Listing<T extends Listable> implements ServerListing {
+export class Listing<T extends Listable> {
     constructor(
         public Id: string,
-        public Name: string,
+        private Name: string,
         public Path: string,
         public SearchHint: string,
         public Link: string,
@@ -24,6 +24,19 @@ export class Listing<T extends Listable> implements ServerListing {
 
     public SetValue = value => this.value(value);
 
+    public GetWithTemplate(template: T) {
+        return new Promise<T>(done => {
+            return this.GetAsyncWithUpdatedId(item => {
+                const templateCast = template as object;
+                const finalListable = {
+                    ...templateCast,
+                    ...item
+                } as T;
+                return done(finalListable);
+            });
+        });
+    }
+
     public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
         if (this.value()) {
             return callback(this.value());
@@ -34,6 +47,7 @@ export class Listing<T extends Listable> implements ServerListing {
             item.Id = this.Id;
 
             if (item !== null) {
+                this.value(item);
                 return callback(item);
             } else {
                 console.error(`Couldn't load item keyed '${this.Id}' from localStorage.`);

@@ -1,6 +1,8 @@
 .combatants {
     overflow-y: auto;
     flex-shrink: 1;
+    background-color: @primary-white;
+    border: 1px solid @accent-white;
 }
 
 @keyframes slide-from-left {
@@ -14,8 +16,8 @@
 
 .combatant {
     display: flex;
-    border-left-width: @medium-spacer;
-    border-left-style: solid;
+    padding: @medium-spacer;
+    border-left: @active-combatant-indicator-width solid;
     align-items: baseline;
 
     .fa-clickable:hover {
@@ -24,7 +26,7 @@
 
     .colors(@primary-black, @primary-white, transparent);
 
-    &:nth-child(2n) {
+    &:nth-child(2n-1) {
         background-color: @zebra-white;
     }
 
@@ -38,9 +40,9 @@
 
     &.active {
         border-color: @active-green;
-        background-color: @active-white;
+        background-color: @hover-green;
     }
-    
+
     &:hover {
         background-color: @hover-white;
     }
@@ -51,10 +53,11 @@
 }
 
 .combatant--header {
-    .colors(@primary-white, @primary-black, @primary-black);
+    .colors(@primary-white, @primary-grey, @primary-grey);
     display: flex;
     flex-flow: row;
-    padding: @medium-spacer 0;
+    padding: @medium-spacer;
+    border-left: @active-combatant-indicator-width solid @primary-grey;
     align-items: baseline;
     .combatant__hp:hover {
         background-color: inherit;
@@ -62,12 +65,14 @@
 }
 
 .combatant__initiative {
-    padding: @small-spacer;
-    width: 30px;
-    text-align: center;
+    width: 40px;
+    text-align: left;
     &.fa-link:before{
         font-size: 60%;
         vertical-align: top;
+    }
+    &.fa {
+
     }
 }
 

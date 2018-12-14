@@ -1,31 +1,18 @@
 import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
 import { TextEnricher } from "../TextEnricher/TextEnricher";
+import { StatBlockHeader } from "./StatBlockHeader";
 
 interface StatBlockProps {
     statBlock: StatBlock;
     enricher: TextEnricher;
     displayMode: "default" | "active";
+    hideName?: boolean;
 }
 
-interface StatBlockState {
-    portraitSize: "thumbnail" | "full";
- }
+interface StatBlockState { }
 
 export class StatBlockComponent extends React.Component<StatBlockProps, StatBlockState> {
-    constructor(props) {
-        super(props);
-        this.state = { portraitSize: "thumbnail" };
-    }
-
-    private togglePortraitSize = () => {
-        if (this.state.portraitSize == "thumbnail") {
-            this.setState({ portraitSize: "full" });
-        } else {
-            this.setState({ portraitSize: "thumbnail" });
-        }
-    }
-
     public render() {
         const statBlock = this.props.statBlock;
         const enricher = this.props.enricher;
@@ -51,23 +38,14 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             { name: "Legendary Actions", data: statBlock.LegendaryActions },
         ];
 
-        const maybeLargePortrait = statBlock.ImageURL && this.state.portraitSize == "full" &&
-            <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={statBlock.ImageURL} />;
-        
-        let titleLine = <h3 className="Name">{statBlock.Name}</h3>;
-
-        if (statBlock.ImageURL && this.state.portraitSize == "thumbnail") {
-            titleLine = <h3 className="Name">
-                {statBlock.Name}
-                <img className={`portrait-${this.state.portraitSize}`} onClick={this.togglePortraitSize} src={statBlock.ImageURL} />
-            </h3>;
-        }
-
         const headerEntries = <React.Fragment>
-            {maybeLargePortrait}
-            {titleLine}
-            <div className="Source">{statBlock.Source}</div>
-            <div className="Type">{statBlock.Type}</div>
+            {this.props.hideName || <StatBlockHeader
+                name={statBlock.Name}
+                imageUrl={statBlock.ImageURL}
+                source={statBlock.Source}
+                type={statBlock.Type}
+            />}
+
             <hr />
         </React.Fragment>;
 
@@ -90,7 +68,7 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
             </div>
 
             <div className="Abilities">
-                {Object.keys(statBlock.Abilities).map(abilityName => {
+                {Object.keys(StatBlock.Default().Abilities).map(abilityName => {
                     const abilityScore = statBlock.Abilities[abilityName];
                     const abilityModifier = enricher.GetEnrichedModifierFromAbilityScore(abilityScore);
                     return <div key={abilityName}>
@@ -153,12 +131,12 @@ export class StatBlockComponent extends React.Component<StatBlockProps, StatBloc
                     )}
                     <hr />
                 </div>
-        );
-        
+            );
+
         const description = statBlock.Description && <div className="Description">{enricher.EnrichText(statBlock.Description)}</div>;
 
         let innerEntries;
-        if(this.props.displayMode == "active"){
+        if (this.props.displayMode == "active") {
             innerEntries = <React.Fragment>{actionEntries}{statEntries}</React.Fragment>;
         } else {
             innerEntries = <React.Fragment>{statEntries}{actionEntries}</React.Fragment>;

@@ -14,7 +14,7 @@ interface PrivacyPolicyPromptProps {
 interface PrivacyPolicyPromptState {
     displayFullText: boolean;
 }
-class PrivacyPolicyPrompt extends React.Component<PrivacyPolicyPromptProps, PrivacyPolicyPromptState> {
+class PrivacyPolicyPromptComponent extends React.Component<PrivacyPolicyPromptProps, PrivacyPolicyPromptState> {
     constructor(props) {
         super(props);
         this.state = { displayFullText: false };
@@ -35,7 +35,7 @@ class PrivacyPolicyPrompt extends React.Component<PrivacyPolicyPromptProps, Priv
     }
 }
 
-export class PrivacyPolicyPromptWrapper implements Prompt {
+export class PrivacyPolicyPrompt implements Prompt {
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
@@ -52,5 +52,5 @@ export class PrivacyPolicyPromptWrapper implements Prompt {
 
     public Resolve = (form: HTMLFormElement) => { };
 
-    public component = <PrivacyPolicyPrompt callback={this.promptCallback} />;
+    public component = <PrivacyPolicyPromptComponent callback={this.promptCallback} />;
 }

@@ -1,6 +1,7 @@
 import Awesomplete = require("awesomplete");
 import * as React from "react";
-import { SavedCombatant, SavedEncounter } from "../../../common/SavedEncounter";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { AccountClient } from "../../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
@@ -15,7 +16,7 @@ export interface MoveEncounterPromptState { }
 const promptClassName = "p-move-encounter";
 const inputClassName = promptClassName + "-input";
 
-export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
+class MoveEncounterPromptComponent extends React.Component<MoveEncounterPromptProps, MoveEncounterPromptState> {
     private input: HTMLInputElement;
     public componentDidMount() {
         const awesomplete = new Awesomplete(this.input, {
@@ -37,7 +38,7 @@ export class MoveEncounterPrompt extends React.Component<MoveEncounterPromptProp
 
 }
 
-export class MoveEncounterPromptWrapper implements Prompt {
+export class MoveEncounterPrompt implements Prompt {
     public InputSelector = "." + inputClassName;
     public ComponentName = "reactprompt";
 
@@ -45,12 +46,12 @@ export class MoveEncounterPromptWrapper implements Prompt {
     
     constructor(
         private legacySavedEncounter: { Name?: string },
-        private moveListingFn: (encounter: SavedEncounter<SavedCombatant>, oldId: string) => void,
+        private moveListingFn: (encounter: EncounterState<CombatantState>, oldId: string) => void,
         folderNames: string[],
     ) {
         this.encounterName = legacySavedEncounter.Name || "";
         
-        this.component = <MoveEncounterPrompt encounterName={this.encounterName} folderNames={folderNames} />;
+        this.component = <MoveEncounterPromptComponent encounterName={this.encounterName} folderNames={folderNames} />;
     }
 
     public Resolve = (form: HTMLFormElement) => {

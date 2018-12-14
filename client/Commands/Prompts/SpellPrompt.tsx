@@ -12,8 +12,8 @@ interface SpellPromptProps {
     Spell: Spell;
     TextEnricher: TextEnricher;
 }
- 
-class SpellPrompt extends React.Component<SpellPromptProps, null> {
+
+class SpellPromptComponent extends React.Component<SpellPromptProps, null> {
     private getSpellType = () => {
         const ritual = this.props.Spell.Ritual ? " (ritual)" : "";
         if (this.props.Spell.Level === 0) {
@@ -26,18 +26,20 @@ class SpellPrompt extends React.Component<SpellPromptProps, null> {
 
         return `Level ${this.props.Spell.Level} ${this.props.Spell.School}${ritual}`;
     }
-    
+
     public render() {
         return <React.Fragment>
             <div className="spell">
                 <h3>{this.props.Spell.Name}</h3>
                 <p className="spell-type">{this.getSpellType()}</p>
-                <p><label>Casting Time:</label> {this.props.Spell.CastingTime}</p>
-                <p><label>Range:</label> {this.props.Spell.Range}</p>
-                <p><label>Components:</label> {this.props.Spell.Components}</p>
-                <p><label>Duration:</label> {this.props.Spell.Duration}</p>
-                <p><label>Classes:</label> {this.props.Spell.Classes.join(", ")}</p>
-                <p>{this.props.TextEnricher.EnrichText(this.props.Spell.Description)}</p>
+                <div className="spell-details">
+                  <p><label>Casting Time:</label> {this.props.Spell.CastingTime}</p>
+                  <p><label>Range:</label> {this.props.Spell.Range}</p>
+                  <p><label>Components:</label> {this.props.Spell.Components}</p>
+                  <p><label>Duration:</label> {this.props.Spell.Duration}</p>
+                  <p><label>Classes:</label> {this.props.Spell.Classes.join(", ")}</p>
+                </div>
+                <p className="spell-description">{this.props.TextEnricher.EnrichText(this.props.Spell.Description)}</p>
                 <p className="spell-source">Source: {this.props.Spell.Source}</p>
             </div>
             <button type="submit" className="fas fa-check button"></button>
@@ -45,7 +47,7 @@ class SpellPrompt extends React.Component<SpellPromptProps, null> {
     }
 }
 
-export class SpellPromptWrapper implements Prompt {
+export class SpellPrompt implements Prompt {
     public InputSelector = "button";
     public ComponentName = "reactprompt";
 
@@ -54,7 +56,7 @@ export class SpellPromptWrapper implements Prompt {
     constructor(listing: Listing<Spell>, private textEnricher: TextEnricher) {
         listing.GetAsyncWithUpdatedId(unsafeSpell => {
             const spell = { ...Spell.Default(), ...unsafeSpell };
-            this.component(<SpellPrompt Spell={spell} TextEnricher={this.textEnricher} />);
+            this.component(<SpellPromptComponent Spell={spell} TextEnricher={this.textEnricher} />);
         });
     }
 

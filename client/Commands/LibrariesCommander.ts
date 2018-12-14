@@ -1,5 +1,7 @@
 import * as _ from "lodash";
-import { SavedCombatant, SavedEncounter } from "../../common/SavedEncounter";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
+import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -12,9 +14,9 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Store } from "../Utility/Store";
 import { EncounterCommander } from "./EncounterCommander";
-import { MoveEncounterPromptWrapper } from "./Prompts/MoveEncounterPrompt";
+import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
-import { SpellPromptWrapper } from "./Prompts/SpellPrompt";
+import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
     constructor(
@@ -35,15 +37,11 @@ export class LibrariesCommander {
         });
     }
 
-    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
-        if (library == Store.PlayerCharacters) {
-            this.libraries.PCs.DeleteListing(statBlockId);
-        }
-        if (library == Store.StatBlocks) {
-            this.libraries.NPCs.DeleteListing(statBlockId);
-        }
-
-        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+    public AddPersistentCharacterFromListing = async (listing: Listing<PersistentCharacter>, hideOnAdd: boolean) => {
+        const character = await listing.GetWithTemplate(DefaultPersistentCharacter());
+        this.tracker.Encounter.AddCombatantFromPersistentCharacter(character, this.libraries.PersistentCharacters, hideOnAdd);
+        Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
+        this.tracker.EventLog.AddEvent(`Character ${character.Name} added to combat.`);
     }
 
     public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
@@ -91,6 +89,22 @@ export class LibrariesCommander {
         });
     }
 
+    public CreatePersistentCharacter = () => {
+        const statBlock = StatBlock.Default();
+        const newId = probablyUniqueString();
+
+        statBlock.Name = "New Character";
+        statBlock.Player = "player";
+        statBlock.Id = newId;
+
+        const persistentCharacter = InitializeCharacter(statBlock);
+        return this.libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
+    }
+
+    public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
+    }
+
     public CreateAndEditSpell = () => {
         const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom", Id: probablyUniqueString() };
         this.tracker.SpellEditor.EditSpell(
@@ -111,11 +125,11 @@ export class LibrariesCommander {
     }
 
     public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPromptWrapper(spellListing, this.tracker.StatBlockTextEnricher);
+        const prompt = new SpellPrompt(spellListing, this.tracker.StatBlockTextEnricher);
         this.tracker.PromptQueue.Add(prompt);
     }
 
-    public LoadEncounter = (savedEncounter: SavedEncounter<SavedCombatant>) => {
+    public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
         this.encounterCommander.LoadEncounter(savedEncounter);
     }
 
@@ -125,7 +139,7 @@ export class LibrariesCommander {
                 const encounterName = response["encounterName"];
                 const path = ""; //TODO
                 if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.Save(encounterName, path);
+                    const savedEncounter = this.tracker.Encounter.GetSavedEncounter(encounterName, path);
                     this.libraries.Encounters.Save(savedEncounter);
                     this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
                     Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
@@ -140,7 +154,7 @@ export class LibrariesCommander {
             .uniq()
             .compact()
             .value();
-        const prompt = new MoveEncounterPromptWrapper(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
+        const prompt = new MoveEncounterPrompt(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
         this.tracker.PromptQueue.Add(prompt);
     }
 
@@ -150,5 +164,16 @@ export class LibrariesCommander {
             const prompt = new DefaultPrompt(`<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`);
             this.tracker.PromptQueue.Add(prompt);
         }
+    }
+
+    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
+        if (library == Store.PlayerCharacters) {
+            this.libraries.PCs.DeleteListing(statBlockId);
+        }
+        if (library == Store.StatBlocks) {
+            this.libraries.NPCs.DeleteListing(statBlockId);
+        }
+
+        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
     }
 }

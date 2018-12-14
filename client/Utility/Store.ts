@@ -6,12 +6,15 @@ import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 export class Store {
     private static _prefix = "ImprovedInitiative";
 
+    public static readonly PersistentCharacters = "PersistentCharacters";
     public static readonly PlayerCharacters = "PlayerCharacters";
     public static readonly StatBlocks = "Creatures";
     public static readonly Spells = "Spells";
     public static readonly SavedEncounters = "SavedEncounters";
     public static readonly AutoSavedEncounters = "AutoSavedEncounters";
     public static readonly User = "User";
+
+    public static readonly DefaultSavedEncounterId = "default";
 
     //Legacy
     public static readonly KeyBindings = "KeyBindings";
