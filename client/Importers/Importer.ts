@@ -36,10 +36,14 @@ export class Importer {
     public getCommaSeparatedModifiers(selector: string) {
         let entries = this.getCommaSeparatedStrings(selector);
         return entries.map(e => {
-            let nameAndModifier = e.split(" ");
+            // Extract the last piece of the name/modifier, and parse an int from only that, ensuring the name can contain any manner of spacing.
+            const nameAndModifier = e.split(" ");
+            const modifierValue = parseInt(nameAndModifier.pop());
+
+            // Join the remaining string name, and trim outside spacing just in case.
             return {
-                Name: nameAndModifier[0],
-                Modifier: parseInt(nameAndModifier[1])
+                Name: nameAndModifier.join(" ").trim(),
+                Modifier: modifierValue
             };
         });
     }
