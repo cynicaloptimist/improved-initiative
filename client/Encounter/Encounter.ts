@@ -139,6 +139,7 @@ export class Encounter {
         this.Combatants.push(combatant);
 
         const viewModel = this.buildCombatantViewModel(combatant);
+        combatant.UpdateIndexLabel();
 
         if (this.State() === "active") {
             viewModel.EditInitiative();
@@ -172,11 +173,6 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-
-        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
-        if (displayNameIsTaken) {
-            combatant.UpdateIndexLabel();
-        }
 
         this.QueueEmitEncounter();
 

@@ -151,7 +151,12 @@ export class Combatant implements Combatant {
             counts[name] = counts[name] + 1;
         }
 
-        this.IndexLabel = counts[name];
+        const displayNameIsTaken = this.Encounter.Combatants().some(c => c.DisplayName() == this.DisplayName() && c != this);
+
+        if (!this.IndexLabel || displayNameIsTaken) {
+            this.IndexLabel = counts[name];
+        }
+
         this.Encounter.CombatantCountsByName(counts);
     }
 
