@@ -139,6 +139,7 @@ export class Encounter {
         this.Combatants.push(combatant);
 
         const viewModel = this.buildCombatantViewModel(combatant);
+        combatant.UpdateIndexLabel();
 
         if (this.State() === "active") {
             viewModel.EditInitiative();
@@ -172,11 +173,6 @@ export class Encounter {
         };
 
         const combatant = this.AddCombatantFromState(initialState);
-
-        const displayNameIsTaken = this.Combatants().some(c => c.DisplayName() == combatant.DisplayName());
-        if (displayNameIsTaken) {
-            combatant.UpdateIndexLabel();
-        }
 
         this.QueueEmitEncounter();
 
@@ -363,13 +359,14 @@ export class Encounter {
     }
 
     public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
+        const activeCombatantId = this.getPlayerViewActiveCombatantId();
         return {
             Name: this.EncounterId,
             Path: "",
             Id: this.EncounterId,
-            ActiveCombatantId: this.getPlayerViewActiveCombatantId(),
+            ActiveCombatantId: activeCombatantId,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.getCombatantsForPlayerView(),
+            Combatants: this.getCombatantsForPlayerView(activeCombatantId),
             Version: process.env.VERSION
         };
     }
@@ -392,7 +389,7 @@ export class Encounter {
         return this.lastVisibleActiveCombatantId;
     }
 
-    private getCombatantsForPlayerView() {
+    private getCombatantsForPlayerView(activeCombatantId: string) {
         const hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
         const combatants = this.Combatants()
             .filter(c => {
@@ -406,8 +403,8 @@ export class Encounter {
             });
 
         const activeCombatantOnTop = CurrentSettings().PlayerView.ActiveCombatantOnTop;
-        if (activeCombatantOnTop && this.ActiveCombatant()) {
-            while(combatants[0] != this.ActiveCombatant()){
+        if (activeCombatantOnTop && activeCombatantId) {
+            while(combatants[0].Id != activeCombatantId){
                 combatants.push(combatants.shift());
             }
         }

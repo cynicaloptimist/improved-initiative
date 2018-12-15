@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
-import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
@@ -151,7 +150,12 @@ export class Combatant implements Combatant {
             counts[name] = counts[name] + 1;
         }
 
-        this.IndexLabel = counts[name];
+        const displayNameIsTaken = this.Encounter.Combatants().some(c => c.DisplayName() == this.DisplayName() && c != this);
+
+        if (!this.IndexLabel || displayNameIsTaken) {
+            this.IndexLabel = counts[name];
+        }
+
         this.Encounter.CombatantCountsByName(counts);
     }
 

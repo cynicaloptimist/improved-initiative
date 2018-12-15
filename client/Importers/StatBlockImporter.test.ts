@@ -54,6 +54,41 @@ describe("StatBlockImporter", () => {
         const result = new StatBlockImporter(monster).GetStatBlock();
         expect(result.Type).toEqual("Large aberration, lawful evil");
         expect(result.Source).toEqual("Monster Manual");
+    });
+
+    test("Save and skills strings should populate as Names and Modifiers correctly", () => {
+        const size = document.createElement("save");
+        size.innerHTML = "Con +3, Cha -1";
+        monster.appendChild(size);
+
+        const type = document.createElement("skill");
+        type.innerHTML = "Perception +4, Deception -2, Slight of Hand +2, Animal Handling +6";
+        monster.appendChild(type);
+
+        const result = new StatBlockImporter(monster).GetStatBlock();
+        expect(result.Saves).toEqual([
+            {
+                Name: "Con",
+                Modifier: 3
+            },
+            {
+                Name: "Cha",
+                Modifier: -1
+            }
+        ]);
+        expect(result.Skills).toEqual([{
+            Name: "Perception",
+            Modifier: 4
+        }, {
+            Name: "Deception",
+            Modifier: -2
+        }, {
+            Name: "Slight of Hand",
+            Modifier: 2
+        }, {
+            Name: "Animal Handling",
+            Modifier: 6
+        }]);
 
     });
 });

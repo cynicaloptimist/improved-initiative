@@ -98,6 +98,7 @@ export class EncounterCommander {
             this.tracker.CombatantCommander.SelectedCombatants([]);
             this.tracker.Encounter.EndEncounter();
             this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
+            this.tracker.Encounter.CombatantCountsByName({});
         }
 
         return false;
