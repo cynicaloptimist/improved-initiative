@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
-import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
