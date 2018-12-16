@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
+const appVersion = require("./package.json").version;
 
 module.exports = {
   entry: './client/Index.ts',
@@ -29,7 +29,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   output: {
-    filename: 'ImprovedInitiative.js',
+    filename: 'ImprovedInitiative.' + appVersion + '.js',
     path: path.resolve(__dirname, 'public', 'js')
   },
 };
