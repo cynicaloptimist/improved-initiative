@@ -59,4 +59,21 @@ describe("Index labeling", () => {
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
 
     });
+
+    test("When a saved encounter is added twice, it relabels existing creatures", () => {
+        const savedEncounter = buildSavedEncounter();
+        const combatantStates = savedEncounter.Combatants;
+
+        const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
+        const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
+        
+        const combatant3 = encounter.AddCombatantFromState(combatantStates[0]);
+        const combatant4 = encounter.AddCombatantFromState(combatantStates[1]);
+
+        expect(combatant1.DisplayName()).toEqual("Goblin 1");
+        expect(combatant2.DisplayName()).toEqual("Goblin 2");
+        expect(combatant3.DisplayName()).toEqual("Goblin 3");
+        expect(combatant4.DisplayName()).toEqual("Goblin 4");
+
+    });
 });
