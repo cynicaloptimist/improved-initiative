@@ -3,6 +3,15 @@ import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 
+function buildSavedEncounter() {
+    const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+    const oldEncounter = buildEncounter();
+    oldEncounter.AddCombatantFromStatBlock(statBlock);
+    oldEncounter.AddCombatantFromStatBlock(statBlock);
+    const savedEncounter = oldEncounter.GetSavedEncounter("Test", "");
+    return savedEncounter;
+}
+
 describe("Index labeling", () => {
     let encounter: Encounter;
     beforeEach(() => {
@@ -35,5 +44,19 @@ describe("Index labeling", () => {
 
         expect(combatant1.DisplayName()).toEqual("Goblin 1");
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
-     });
+    });
+    
+    test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
+        const savedEncounter = buildSavedEncounter();
+        const combatantStates = savedEncounter.Combatants;
+
+        const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
+        expect(combatant1.DisplayName()).toEqual("Goblin");
+
+        const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
+
+        expect(combatant1.DisplayName()).toEqual("Goblin 1");
+        expect(combatant2.DisplayName()).toEqual("Goblin 2");
+
+    });
 });
