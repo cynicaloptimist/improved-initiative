@@ -45,7 +45,7 @@ describe("Index labeling", () => {
         expect(combatant1.DisplayName()).toEqual("Goblin 1");
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
     });
-    
+
     test("When all combatants the same name are removed, index labelling should reset.", () => {
         const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
         
@@ -92,7 +92,6 @@ describe("Index labeling", () => {
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
         expect(combatant3.DisplayName()).toEqual("Goblin 3");
         expect(combatant4.DisplayName()).toEqual("Goblin 4");
-
     });
 
     test("When a labelled combatant is removed, its index label is not reused.", () => {
@@ -108,5 +107,23 @@ describe("Index labeling", () => {
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
         expect(combatant3.DisplayName()).toEqual("Goblin 3");
         
+    });
+
+    test.skip("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
+        const savedEncounter = buildSavedEncounter();
+        const combatantStates = savedEncounter.Combatants;
+
+        const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
+        const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
+
+        encounter.Combatants.remove(combatant2);
+
+        const combatant3 = encounter.AddCombatantFromState(combatantStates[0]);
+        const combatant4 = encounter.AddCombatantFromState(combatantStates[1]);
+
+        expect(combatant1.DisplayName()).toEqual("Goblin 1");
+        expect(combatant2.DisplayName()).toEqual("Goblin 2");
+        expect(combatant3.DisplayName()).toEqual("Goblin 3");
+        expect(combatant4.DisplayName()).toEqual("Goblin 4");
     });
 });
