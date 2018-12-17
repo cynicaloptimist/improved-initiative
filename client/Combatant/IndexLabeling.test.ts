@@ -46,6 +46,24 @@ describe("Index labeling", () => {
         expect(combatant2.DisplayName()).toEqual("Goblin 2");
     });
     
+    test("When all combatants the same name are removed, index labelling should reset.", () => {
+        const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+        
+        const combatant1 = encounter.AddCombatantFromStatBlock(statBlock);
+        const combatant2 = encounter.AddCombatantFromStatBlock(statBlock);
+        encounter.Combatants.remove(combatant1);
+        encounter.Combatants.remove(combatant2);
+
+        const newCombatant1 = encounter.AddCombatantFromStatBlock(statBlock);
+        
+        expect(newCombatant1.DisplayName()).toEqual("Goblin");
+
+        const newCombatant2 = encounter.AddCombatantFromStatBlock(statBlock);
+
+        expect(newCombatant1.DisplayName()).toEqual("Goblin 1");
+        expect(newCombatant2.DisplayName()).toEqual("Goblin 2");
+    });
+    
     test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
         const savedEncounter = buildSavedEncounter();
         const combatantStates = savedEncounter.Combatants;
