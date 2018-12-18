@@ -109,7 +109,7 @@ describe("Index labeling", () => {
         
     });
 
-    test.skip("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
+    test("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
         const savedEncounter = buildSavedEncounter();
         const combatantStates = savedEncounter.Combatants;
 
