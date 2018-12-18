@@ -47,8 +47,8 @@ export class Encounter {
     }
 
     public TurnTimer = new TurnTimer();
-    public Combatants = ko.computed(() => this.combatants());
     private combatants = ko.observableArray<Combatant>([]);
+    public Combatants = ko.computed(() => this.combatants());
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
     public ActiveCombatant: KnockoutObservable<Combatant>;
     public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
@@ -213,6 +213,21 @@ export class Encounter {
 
     public RemoveCombatant(combatant: Combatant) {
         this.combatants.remove(combatant);
+        
+        const removedCombatantName = combatant.StatBlock().Name;
+        const remainingCombatants = this.combatants();
+
+        const allMyFriendsAreGone = remainingCombatants.every(c => c.StatBlock().Name != removedCombatantName);
+        
+        if (allMyFriendsAreGone) {
+            const combatantCountsByName = this.CombatantCountsByName();
+            delete combatantCountsByName[removedCombatantName];
+            this.CombatantCountsByName(combatantCountsByName);
+        }
+
+        if (this.combatants().length == 0) {
+            this.EndEncounter();
+        }
     }
 
     public UpdatePersistentCharacterStatBlock(persistentCharacterId: string, newStatBlock: StatBlock) {

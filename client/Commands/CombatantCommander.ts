@@ -98,27 +98,14 @@ export class CombatantCommander {
         this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
 
         const remainingCombatants = this.tracker.CombatantViewModels();
-
-        let allMyFriendsAreGone = name => remainingCombatants.every(c => c.Combatant.StatBlock().Name != name);
-
-        deletedCombatantNames.forEach(name => {
-            if (allMyFriendsAreGone(name)) {
-                const combatantCountsByName = this.tracker.Encounter.CombatantCountsByName();
-                delete combatantCountsByName[name];
-                this.tracker.Encounter.CombatantCountsByName(combatantCountsByName);
-            }
-        });
-
         if (remainingCombatants.length > 0) {
             const newSelectionIndex =
                 firstDeletedIndex > remainingCombatants.length ?
                     remainingCombatants.length - 1 :
                     firstDeletedIndex;
             this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
-        } else {
-            this.tracker.Encounter.EndEncounter();
         }
-
+        
         this.tracker.EventLog.AddEvent(`${deletedCombatantNames.join(", ")} removed from encounter.`);
         Metrics.TrackEvent("CombatantsRemoved", { Names: deletedCombatantNames });
 
