@@ -141,7 +141,7 @@ export class TrackerViewModel {
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
-            (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
+            (c1, c2) => this.Encounter.Combatants().indexOf(c1.Combatant) - this.Encounter.Combatants().indexOf(c2.Combatant)
         )
     );
 
