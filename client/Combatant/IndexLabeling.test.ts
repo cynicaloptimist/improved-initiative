@@ -51,8 +51,8 @@ describe("Index labeling", () => {
         
         const combatant1 = encounter.AddCombatantFromStatBlock(statBlock);
         const combatant2 = encounter.AddCombatantFromStatBlock(statBlock);
-        encounter.Combatants.remove(combatant1);
-        encounter.Combatants.remove(combatant2);
+        encounter.RemoveCombatant(combatant1);
+        encounter.RemoveCombatant(combatant2);
 
         const newCombatant1 = encounter.AddCombatantFromStatBlock(statBlock);
         
@@ -99,7 +99,7 @@ describe("Index labeling", () => {
         
         const combatant1 = encounter.AddCombatantFromStatBlock(statBlock);
         const combatant2 = encounter.AddCombatantFromStatBlock(statBlock);
-        encounter.Combatants.remove(combatant2);
+        encounter.RemoveCombatant(combatant2);
 
         const combatant3 = encounter.AddCombatantFromStatBlock(statBlock);
         
@@ -116,7 +116,7 @@ describe("Index labeling", () => {
         const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
         const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
 
-        encounter.Combatants.remove(combatant2);
+        encounter.RemoveCombatant(combatant2);
 
         const combatant3 = encounter.AddCombatantFromState(combatantStates[0]);
         const combatant4 = encounter.AddCombatantFromState(combatantStates[1]);
