@@ -211,7 +211,7 @@ export class Encounter {
         return combatant;
     }
 
-    public RemoveCombatant(combatant: Combatant) {
+    public RemoveCombatant = (combatant: Combatant) => {
         this.combatants.remove(combatant);
         
         const removedCombatantName = combatant.StatBlock().Name;
