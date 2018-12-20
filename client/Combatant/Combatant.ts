@@ -135,7 +135,6 @@ export class Combatant implements Combatant {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
-            this.IndexLabel = counts[name];
             return;
         }
         if (oldName) {
