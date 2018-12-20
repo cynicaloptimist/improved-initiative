@@ -158,7 +158,10 @@ export class Encounter {
     public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
-        statBlock.HP.Value = GetOrRollMaximumHP(statBlock);
+        statBlock.HP = {
+            ...statBlock.HP,
+            Value: GetOrRollMaximumHP(statBlock)
+        };
 
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
@@ -213,12 +216,12 @@ export class Encounter {
 
     public RemoveCombatant = (combatant: Combatant) => {
         this.combatants.remove(combatant);
-        
+
         const removedCombatantName = combatant.StatBlock().Name;
         const remainingCombatants = this.combatants();
 
         const allMyFriendsAreGone = remainingCombatants.every(c => c.StatBlock().Name != removedCombatantName);
-        
+
         if (allMyFriendsAreGone) {
             const combatantCountsByName = this.CombatantCountsByName();
             delete combatantCountsByName[removedCombatantName];
