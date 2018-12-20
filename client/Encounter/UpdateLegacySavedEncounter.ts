@@ -9,6 +9,9 @@ function updateLegacySavedCreature(savedCreature: any) {
     if (!savedCreature.Id) {
         savedCreature.Id = probablyUniqueString();
     }
+    if (savedCreature.MaxHP) {
+        savedCreature.StatBlock.HP.Value = savedCreature.MaxHP;
+    }
 }
 
 export function UpdateLegacySavedEncounter(savedEncounter: any): EncounterState<CombatantState> {

@@ -108,6 +108,7 @@ export class EncounterCommander {
         const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
         const nonPlayerCombatants = savedEncounter.Combatants.filter(c => c.StatBlock.Player != "player");
         nonPlayerCombatants.forEach(this.tracker.Encounter.AddCombatantFromState);
+        this.tracker.Encounter.QueueEmitEncounter();
         Metrics.TrackEvent("EncounterLoaded", {
             Name: savedEncounter.Name,
             Combatants: nonPlayerCombatants.map(c => c.StatBlock.Name)

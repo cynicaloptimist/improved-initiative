@@ -135,7 +135,6 @@ export class Combatant implements Combatant {
         const name = this.StatBlock().Name;
         const counts = this.Encounter.CombatantCountsByName();
         if (name == oldName) {
-            this.IndexLabel = counts[name];
             return;
         }
         if (oldName) {
@@ -150,9 +149,10 @@ export class Combatant implements Combatant {
             counts[name] = counts[name] + 1;
         }
 
-        const displayNameIsTaken = this.Encounter.Combatants().some(c => c.DisplayName() == this.DisplayName() && c != this);
+        const displayNameIsTaken = this.Encounter.Combatants()
+            .some(c => c.DisplayName() == this.DisplayName() && c != this);
 
-        if (!this.IndexLabel || displayNameIsTaken) {
+        if (!this.IndexLabel || this.IndexLabel < counts[name] || displayNameIsTaken) {
             this.IndexLabel = counts[name];
         }
 

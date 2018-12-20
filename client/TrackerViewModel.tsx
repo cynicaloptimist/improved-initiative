@@ -141,7 +141,7 @@ export class TrackerViewModel {
 
     public OrderedCombatants = ko.computed(() =>
         this.CombatantViewModels().sort(
-            (c1, c2) => this.Encounter.Combatants.indexOf(c1.Combatant) - this.Encounter.Combatants.indexOf(c2.Combatant)
+            (c1, c2) => this.Encounter.Combatants().indexOf(c1.Combatant) - this.Encounter.Combatants().indexOf(c2.Combatant)
         )
     );
 
@@ -195,12 +195,15 @@ export class TrackerViewModel {
     public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
         this.StatBlockEditor(null);
         const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(persistentCharacterId);
+        const hpDown = persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
+
         this.StatBlockEditor(<StatBlockEditor
             statBlock={persistentCharacter.StatBlock}
             editorTarget="persistentcharacter"
             onSave={(statBlock: StatBlock) => {
                 this.Libraries.PersistentCharacters.UpdatePersistentCharacter(persistentCharacterId, {
-                    StatBlock: statBlock
+                    StatBlock: statBlock,
+                    CurrentHP: statBlock.HP.Value - hpDown
                 });
                 this.Encounter.UpdatePersistentCharacterStatBlock(persistentCharacterId, statBlock);
             }}

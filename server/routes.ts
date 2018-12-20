@@ -31,7 +31,10 @@ interface IPageRenderOptions {
     hasStorage: boolean;
     hasEpicInitiative: boolean;
     postedEncounter: string | null;
+    appVersion: string;
 }
+
+const appVersion = require("../package.json").version;
 
 const pageRenderOptions = (session: Express.Session): IPageRenderOptions => ({
     rootDirectory: "../..",
@@ -42,6 +45,7 @@ const pageRenderOptions = (session: Express.Session): IPageRenderOptions => ({
     hasStorage: session.hasStorage || false,
     hasEpicInitiative: session.hasEpicInitiative || false,
     postedEncounter: null,
+    appVersion: appVersion
 });
 
 export default function (app: express.Application, statBlockLibrary: Library<StatBlock>, spellLibrary: Library<Spell>, playerViews: PlayerViewManager) {

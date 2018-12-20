@@ -33,12 +33,12 @@ export class Encounter {
         this.ActiveCombatant = ko.observable<Combatant>();
         this.Difficulty = ko.pureComputed(() => {
             const enemyChallengeRatings =
-                this.Combatants()
+                this.combatants()
                     .filter(c => !c.IsPlayerCharacter)
                     .filter(c => c.StatBlock().Challenge)
                     .map(c => c.StatBlock().Challenge.toString());
             const playerLevels =
-                this.Combatants()
+                this.combatants()
                     .filter(c => c.IsPlayerCharacter)
                     .filter(c => c.StatBlock().Challenge)
                     .map(c => c.StatBlock().Challenge.toString());
@@ -47,7 +47,8 @@ export class Encounter {
     }
 
     public TurnTimer = new TurnTimer();
-    public Combatants = ko.observableArray<Combatant>([]);
+    private combatants = ko.observableArray<Combatant>([]);
+    public Combatants = ko.computed(() => this.combatants());
     public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
     public ActiveCombatant: KnockoutObservable<Combatant>;
     public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
@@ -65,7 +66,7 @@ export class Encounter {
             return combatant.InitiativeBonus;
         }
 
-        const groupBonuses = this.Combatants()
+        const groupBonuses = this.combatants()
             .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
             .map(c => c.InitiativeBonus);
 
@@ -89,8 +90,8 @@ export class Encounter {
     }
 
     public SortByInitiative = (stable = false) => {
-        const sortedCombatants = sortBy(this.Combatants(), this.getCombatantSortIteratees(stable));
-        this.Combatants(sortedCombatants);
+        const sortedCombatants = sortBy(this.combatants(), this.getCombatantSortIteratees(stable));
+        this.combatants(sortedCombatants);
         this.QueueEmitEncounter();
     }
 
@@ -136,7 +137,7 @@ export class Encounter {
 
     public AddCombatantFromState = (combatantState: CombatantState) => {
         const combatant = new Combatant(combatantState, this);
-        this.Combatants.push(combatant);
+        this.combatants.push(combatant);
 
         const viewModel = this.buildCombatantViewModel(combatant);
         combatant.UpdateIndexLabel();
@@ -157,7 +158,10 @@ export class Encounter {
     public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
         const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
 
-        statBlock.HP.Value = GetOrRollMaximumHP(statBlock);
+        statBlock.HP = {
+            ...statBlock.HP,
+            Value: GetOrRollMaximumHP(statBlock)
+        };
 
         const initialState: CombatantState = {
             Id: probablyUniqueString(),
@@ -180,7 +184,7 @@ export class Encounter {
     }
 
     public AddCombatantFromPersistentCharacter(persistentCharacter: PersistentCharacter, library: PersistentCharacterLibrary, hideOnAdd = false): Combatant {
-        const alreadyAddedCombatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacter.Id);
+        const alreadyAddedCombatant = find(this.combatants(), c => c.PersistentCharacterId == persistentCharacter.Id);
         if (alreadyAddedCombatant != undefined) {
             console.log(`Won't add multiple persistent characters with Id ${persistentCharacter.Id}`);
             return alreadyAddedCombatant;
@@ -210,8 +214,27 @@ export class Encounter {
         return combatant;
     }
 
+    public RemoveCombatant = (combatant: Combatant) => {
+        this.combatants.remove(combatant);
+
+        const removedCombatantName = combatant.StatBlock().Name;
+        const remainingCombatants = this.combatants();
+
+        const allMyFriendsAreGone = remainingCombatants.every(c => c.StatBlock().Name != removedCombatantName);
+
+        if (allMyFriendsAreGone) {
+            const combatantCountsByName = this.CombatantCountsByName();
+            delete combatantCountsByName[removedCombatantName];
+            this.CombatantCountsByName(combatantCountsByName);
+        }
+
+        if (this.combatants().length == 0) {
+            this.EndEncounter();
+        }
+    }
+
     public UpdatePersistentCharacterStatBlock(persistentCharacterId: string, newStatBlock: StatBlock) {
-        const combatant = find(this.Combatants(), c => c.PersistentCharacterId == persistentCharacterId);
+        const combatant = find(this.combatants(), c => c.PersistentCharacterId == persistentCharacterId);
         if (!combatant) {
             return;
         }
@@ -219,15 +242,17 @@ export class Encounter {
     }
 
     public RemoveCombatantsByViewModel(combatantViewModels: CombatantViewModel[]) {
-        this.Combatants.removeAll(combatantViewModels.map(vm => vm.Combatant));
+        combatantViewModels
+            .map(vm => vm.Combatant)
+            .forEach(this.RemoveCombatant);
         this.handleRemoveCombatantViewModels(combatantViewModels);
     }
 
     public MoveCombatant(combatant: Combatant, index: number) {
         combatant.InitiativeGroup(null);
         this.CleanInitiativeGroups();
-        const currentPosition = this.Combatants().indexOf(combatant);
-        const passedCombatant = this.Combatants()[index];
+        const currentPosition = this.combatants().indexOf(combatant);
+        const passedCombatant = this.combatants()[index];
         const initiative = combatant.Initiative();
         let newInitiative = initiative;
         if (index > currentPosition && passedCombatant && passedCombatant.Initiative() < initiative) {
@@ -237,15 +262,15 @@ export class Encounter {
             newInitiative = passedCombatant.Initiative();
         }
 
-        this.Combatants.remove(combatant);
-        this.Combatants.splice(index, 0, combatant);
+        this.combatants.remove(combatant);
+        this.combatants.splice(index, 0, combatant);
         combatant.Initiative(newInitiative);
         combatant.Encounter.QueueEmitEncounter();
         return newInitiative;
     }
 
     public CleanInitiativeGroups() {
-        const combatants = this.Combatants();
+        const combatants = this.combatants();
         combatants.forEach(combatant => {
             const group = combatant.InitiativeGroup();
             if (group && combatants.filter(c => c.InitiativeGroup() === group).length < 2) {
@@ -260,7 +285,7 @@ export class Encounter {
             this.RoundCounter(1);
         }
         this.State("active");
-        this.ActiveCombatant(this.Combatants()[0]);
+        this.ActiveCombatant(this.combatants()[0]);
         this.TurnTimer.Start();
         this.QueueEmitEncounter();
     }
@@ -280,13 +305,13 @@ export class Encounter {
             .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "EndOfTurn")
             .forEach(t => t.Decrement());
 
-        let nextIndex = this.Combatants().indexOf(activeCombatant) + 1;
-        if (nextIndex >= this.Combatants().length) {
+        let nextIndex = this.combatants().indexOf(activeCombatant) + 1;
+        if (nextIndex >= this.combatants().length) {
             nextIndex = 0;
             this.RoundCounter(this.RoundCounter() + 1);
         }
 
-        const nextCombatant = this.Combatants()[nextIndex];
+        const nextCombatant = this.combatants()[nextIndex];
 
         this.ActiveCombatant(nextCombatant);
 
@@ -305,13 +330,13 @@ export class Encounter {
             .filter(t => t.HasDuration && t.DurationCombatantId == activeCombatant.Id && t.DurationTiming == "StartOfTurn")
             .forEach(t => t.Increment());
 
-        let previousIndex = this.Combatants().indexOf(activeCombatant) - 1;
+        let previousIndex = this.combatants().indexOf(activeCombatant) - 1;
         if (previousIndex < 0) {
-            previousIndex = this.Combatants().length - 1;
+            previousIndex = this.combatants().length - 1;
             this.RoundCounter(this.RoundCounter() - 1);
         }
 
-        const previousCombatant = this.Combatants()[previousIndex];
+        const previousCombatant = this.combatants()[previousIndex];
         this.ActiveCombatant(previousCombatant);
 
         this.durationTags
@@ -336,7 +361,7 @@ export class Encounter {
             Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants()
+            Combatants: this.combatants()
                 .filter(c => c.PersistentCharacterId == null)
                 .map<CombatantState>(this.getCombatantState),
             Version: process.env.VERSION
@@ -352,7 +377,7 @@ export class Encounter {
             Id: id,
             ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
             RoundCounter: this.RoundCounter(),
-            Combatants: this.Combatants()
+            Combatants: this.combatants()
                 .map<CombatantState>(this.getCombatantState),
             Version: process.env.VERSION
         };
@@ -391,7 +416,7 @@ export class Encounter {
 
     private getCombatantsForPlayerView(activeCombatantId: string) {
         const hideMonstersOutsideEncounter = CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
-        const combatants = this.Combatants()
+        const combatants = this.combatants()
             .filter(c => {
                 if (c.Hidden()) {
                     return false;
@@ -404,7 +429,7 @@ export class Encounter {
 
         const activeCombatantOnTop = CurrentSettings().PlayerView.ActiveCombatantOnTop;
         if (activeCombatantOnTop && activeCombatantId) {
-            while(combatants[0].Id != activeCombatantId){
+            while (combatants[0].Id != activeCombatantId) {
                 combatants.push(combatants.shift());
             }
         }
@@ -437,7 +462,7 @@ export class Encounter {
     public LoadEncounterState = (encounterState: EncounterState<CombatantState>, persistentCharacterLibrary: PersistentCharacterLibrary) => {
         const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
         encounterState.Combatants.forEach(async savedCombatant => {
-            if (this.Combatants().some(c => c.Id == savedCombatant.Id)) {
+            if (this.combatants().some(c => c.Id == savedCombatant.Id)) {
                 savedCombatant.Id = probablyUniqueString();
             }
 
@@ -454,14 +479,14 @@ export class Encounter {
 
         if (savedEncounterIsActive) {
             this.State("active");
-            this.ActiveCombatant(this.Combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
+            this.ActiveCombatant(this.combatants().filter(c => c.Id == encounterState.ActiveCombatantId).pop());
             this.TurnTimer.Start();
         }
         this.RoundCounter(encounterState.RoundCounter || 1);
     }
 
     public ClearEncounter = () => {
-        this.Combatants.removeAll();
+        this.combatants.forEach(this.RemoveCombatant);
         this.CombatantCountsByName({});
         this.EndEncounter();
     }

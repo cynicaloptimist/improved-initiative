@@ -1,3 +1,5 @@
+const appVersion = require("./package.json").version;
+
 module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-webpack');
@@ -23,7 +25,7 @@ module.exports = function (grunt) {
     less: {
       default: {
         files: {
-          "public/css/improved-initiative.css": ["lesscss/improved-initiative.less"]
+          ["public/css/improved-initiative." + appVersion + ".css"]: ["lesscss/improved-initiative.less"]
         }
       }
     },
