@@ -53,6 +53,7 @@ export class EncounterLibrary {
 
     public Save = (savedEncounter: EncounterState<CombatantState>) => {
         const listing = this.listingFrom(savedEncounter, "localStorage");
+        this.Encounters.remove(l => l.Id == listing.Id);
         this.Encounters.push(listing);
 
         Store.Save(Store.SavedEncounters, savedEncounter.Id, savedEncounter);
