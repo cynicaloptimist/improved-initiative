@@ -84,8 +84,7 @@ export class CombatantViewModel {
     }
 
     public EditHP() {
-        this.CombatantCommander.Select(this);
-        this.CombatantCommander.EditHP();
+        this.CombatantCommander.EditSingleCombatantHP(this);
     }
 
     public EditInitiative() {
