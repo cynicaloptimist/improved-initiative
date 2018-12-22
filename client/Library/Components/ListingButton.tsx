@@ -24,8 +24,7 @@ export class ListingButton extends React.Component<Props> {
             onClick={this.props.onClick}
             onMouseEnter={this.props.onMouseEnter}
             onMouseLeave={this.props.onMouseLeave}>
-            {text}
-            {this.props.children}
+            {text} {this.props.children}
         </span>;
     } 
 }
