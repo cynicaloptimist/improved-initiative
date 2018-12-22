@@ -111,6 +111,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     private buildListingComponent = (l: Listing<StatBlock>) => <ListingViewModel
         key={l.Id + l.Path + l.CurrentName()}
         name={l.CurrentName()}
+        showCount
         onAdd={this.loadSavedStatBlock}
         onEdit={this.editStatBlock}
         onPreview={this.previewStatblock}
