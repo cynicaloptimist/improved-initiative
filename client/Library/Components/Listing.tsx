@@ -36,9 +36,11 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
     private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
 
     public render() {
+        const addedCount = this.props.showCount && this.state && this.state.count;
+        const countString = addedCount ? " x" + addedCount : "";
+        const nameAndCount = this.props.name + countString;
         return <li className="c-listing">
-            <ListingButton buttonClass="add" text={this.props.name} onClick={this.addFn} />
-            {this.props.showCount && this.state && this.state.count}
+            <ListingButton buttonClass="add" text={nameAndCount} onClick={this.addFn} />
             {this.props.onDelete && <ListingButton buttonClass="delete" faClass="trash" onClick={this.deleteFn} />}
             {this.props.onEdit && <ListingButton buttonClass="edit" faClass="edit" onClick={this.editFn} />}
             {this.props.onMove && <ListingButton buttonClass="move" faClass="folder" onClick={this.moveFn} />}
