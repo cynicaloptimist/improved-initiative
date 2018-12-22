@@ -37,10 +37,9 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
 
     public render() {
         const addedCount = this.props.showCount && this.state && this.state.count;
-        const countString = addedCount ? " " + "●".repeat(addedCount) : "";
-        const nameAndCount = this.props.name + countString;
+        const countElements = addedCount ? new Array(addedCount).fill(<span className="c-listing__counter">●</span>) : "";
         return <li className="c-listing">
-            <ListingButton buttonClass="add" text={nameAndCount} onClick={this.addFn} />
+            <ListingButton buttonClass="add" text={this.props.name} onClick={this.addFn} >{countElements}</ListingButton>
             {this.props.onDelete && <ListingButton buttonClass="delete" faClass="trash" onClick={this.deleteFn} />}
             {this.props.onEdit && <ListingButton buttonClass="edit" faClass="edit" onClick={this.editFn} />}
             {this.props.onMove && <ListingButton buttonClass="move" faClass="folder" onClick={this.moveFn} />}
