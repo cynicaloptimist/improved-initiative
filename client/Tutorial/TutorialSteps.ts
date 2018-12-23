@@ -83,7 +83,7 @@ export const TutorialSteps: TutorialStep[] = [
             return { left, top };
         }
     },
-    {
+    /*{
         Message: "Press 'n' or click 'Next Turn' to advance the tracker. The active combatant's statblock is displayed for convenience.",
         RaiseSelector: ".c-button--next-turn, .left-column, .combatants",
         CalculatePosition: elements => {
@@ -92,7 +92,7 @@ export const TutorialSteps: TutorialStep[] = [
             const top = element.offset().top + 5;
             return { left, top };
         }
-    },
+    },*/
     {
         Message: "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
         RaiseSelector: ".c-button--settings",
