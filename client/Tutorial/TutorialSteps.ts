@@ -75,6 +75,7 @@ export const TutorialSteps: TutorialStep[] = [
     {
         Message: "Press 't' or click 'Apply Damage' to apply damage to selected combatants.",
         RaiseSelector: ".combatants, .c-button--apply-damage, .prompts",
+        AwaitAction: "ApplyDamage",
         CalculatePosition: elements => {
             const element = elements.first();
             const left = element.offset().left + element.outerWidth() + 10;
