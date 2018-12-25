@@ -76,7 +76,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
         if (isSingleColumnLayout) {
             previewPosition = {
                 left: 0,
-                top: 0
+                top: 150,
             };
         }
 
