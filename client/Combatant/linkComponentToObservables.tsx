@@ -1,4 +1,6 @@
+import * as ko from "knockout";
 import { noop } from "lodash";
+
 export function linkComponentToObservables(component: React.Component) {
     let observableSubscription = ko.observable().subscribe(noop);
     const oldComponentDidMount = component.componentDidMount || noop;
