@@ -15,6 +15,10 @@
 }
 
 .combatant {
+    span {
+        display: flex;
+    }
+
     display: flex;
     padding: @medium-spacer;
     border-left: @active-combatant-indicator-width solid;
@@ -59,14 +63,27 @@
     padding: @medium-spacer;
     border-left: @active-combatant-indicator-width solid @primary-grey;
     align-items: baseline;
+
+    span {
+        display: flex;
+    }
+
     .combatant__hp:hover {
         background-color: inherit;
     }
 }
 
+.combatant__leftsection {
+    flex-basis: 60%;
+}
+
+.combatant__rightsection {
+    flex: 1;
+}
+
 .combatant__initiative {
     width: 40px;
-    text-align: left;
+    justify-content: center;
     &.fa-link:before{
         font-size: 60%;
         vertical-align: top;
@@ -74,34 +91,24 @@
 }
 
 .combatant__name {
-    padding: @small-spacer;
-    width: 50%;
+    flex-grow:1;
 }
 
 .combatant__hp {
-
     align-self: stretch;
-    padding-top: 4px;
 
     width: 70px;
-    text-align: center;
+    justify-content: center;
     &:hover {
         background-color: @hover-red;
     }
 }
 
 .combatant__ac {
-    padding: @small-spacer;
     width: 30px;
-    text-align: center;
+    justify-content: center;
 }
 
 .combatant__tags {
-    padding: @small-spacer;
-    flex-grow:1;
-    flex-shrink: 1;
-}
-
-.combatant__buttons {
-    padding: @small-spacer;
+    flex: 1;
 }
