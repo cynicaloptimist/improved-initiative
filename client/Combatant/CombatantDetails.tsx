@@ -1,10 +1,28 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { noop } from "lodash";
 import { StatBlockComponent } from "../Components/StatBlock";
 import { StatBlockHeader } from "../Components/StatBlockHeader";
 import { TextEnricher } from "../TextEnricher/TextEnricher";
 import { CombatantViewModel } from "./CombatantViewModel";
+
+export function linkComponentToObservables(component: React.Component) {
+    let observableSubscription = ko.observable().subscribe(noop);
+    
+    const oldComponentDidMount = component.componentDidMount || noop;
+    component.componentDidMount = () => {
+        observableSubscription = ko.computed(() => component.render()).subscribe(() => component.forceUpdate());
+        oldComponentDidMount();
+    };
+
+    const oldComponentWillUnmount = component.componentWillUnmount || noop;
+    component.componentWillUnmount = () => {
+        observableSubscription.dispose();
+        oldComponentWillUnmount();
+    };
+}
+
 
 interface CombatantDetailsProps {
     combatantViewModel: CombatantViewModel;
@@ -14,15 +32,10 @@ interface CombatantDetailsProps {
 
 interface CombatantDetailsState { }
 export class CombatantDetails extends React.Component<CombatantDetailsProps, CombatantDetailsState> {
-    public componentDidMount() {
-        this.observableSubscription = ko.computed(() => this.render()).subscribe(() => this.forceUpdate());
+    constructor(props) {
+        super(props);
+        linkComponentToObservables(this);
     }
-
-    public componentWillUnmount() {
-        this.observableSubscription.dispose();
-    }
-
-    private observableSubscription: KnockoutSubscription;
 
     public render() {
         if (!this.props.combatantViewModel) {
