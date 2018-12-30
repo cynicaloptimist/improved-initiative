@@ -63,6 +63,10 @@ export class LibrariesCommander {
     public EditStatBlock = (
         listing: Listing<StatBlock>,
         library: PCLibrary | NPCLibrary) => {
+        if (this.tracker.TutorialVisible()) {
+            return;
+        }
+
         listing.GetAsyncWithUpdatedId(statBlock => {
             if (listing.Origin === "server") {
                 const statBlockWithNewId = {
@@ -102,6 +106,9 @@ export class LibrariesCommander {
     }
 
     public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+        if (this.tracker.TutorialVisible()) {
+            return;
+        }
         this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
     }
 
