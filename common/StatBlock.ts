@@ -61,7 +61,7 @@ export class StatBlock {
         Name: "",
         Path: "",
         Source: "", Type: "",
-        HP: { Value: 1, Notes: "1d1+0" }, AC: { Value: 10, Notes: "" },
+        HP: { Value: 1, Notes: "(1d1+0)" }, AC: { Value: 10, Notes: "" },
         InitiativeModifier: 0,
         InitiativeAdvantage: false,
         Speed: [],
