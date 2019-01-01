@@ -22,7 +22,7 @@
     display: flex;
     padding: @medium-spacer;
     border-left: @active-combatant-indicator-width solid;
-    align-items: baseline;
+    align-items: flex-start;
 
     .fa-clickable {
         padding: @extra-small-spacer;
@@ -115,6 +115,7 @@
 
 .combatant__tags {
     flex: 1;
+    flex-flow: row wrap;
     justify-content: flex-end;
 }
 
