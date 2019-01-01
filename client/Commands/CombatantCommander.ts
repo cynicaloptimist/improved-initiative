@@ -205,11 +205,17 @@ export class CombatantCommander {
 
     public AddTag = (combatantVM?: CombatantViewModel) => {
         let targetCombatants: Combatant [] = [];
+        
         if (combatantVM instanceof CombatantViewModel) {
             targetCombatants = [combatantVM.Combatant];
         } else {
             targetCombatants = this.SelectedCombatants().map(c => c.Combatant);
         }
+
+        if (targetCombatants == []) {
+            return;
+        }
+
         const prompt = new TagPrompt(this.tracker.Encounter, targetCombatants, this.tracker.EventLog.AddEvent);
         this.tracker.PromptQueue.Add(prompt);
         return false;
