@@ -75,6 +75,7 @@ export const TutorialSteps: TutorialStep[] = [
     {
         Message: "Press 't' or click 'Apply Damage' to apply damage to selected combatants.",
         RaiseSelector: ".combatants, .c-button--apply-damage, .prompts",
+        AwaitAction: "ApplyDamage",
         CalculatePosition: elements => {
             const element = elements.first();
             const left = element.offset().left + element.outerWidth() + 10;
@@ -82,7 +83,7 @@ export const TutorialSteps: TutorialStep[] = [
             return { left, top };
         }
     },
-    {
+    /*{
         Message: "Press 'n' or click 'Next Turn' to advance the tracker. The active combatant's statblock is displayed for convenience.",
         RaiseSelector: ".c-button--next-turn, .left-column, .combatants",
         CalculatePosition: elements => {
@@ -91,7 +92,7 @@ export const TutorialSteps: TutorialStep[] = [
             const top = element.offset().top + 5;
             return { left, top };
         }
-    },
+    },*/
     {
         Message: "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
         RaiseSelector: ".c-button--settings",

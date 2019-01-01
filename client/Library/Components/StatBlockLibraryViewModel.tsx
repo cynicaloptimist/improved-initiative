@@ -67,10 +67,18 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     }
 
     private previewStatblock = (l: Listing<StatBlock>, e: React.MouseEvent<HTMLDivElement>) => {
-        const previewPosition = {
+        let previewPosition = {
             left: e.pageX,
-            top: e.pageY
+            top: e.pageY,
         };
+
+        const isSingleColumnLayout = window.matchMedia("(max-width: 650px)").matches;
+        if (isSingleColumnLayout) {
+            previewPosition = {
+                left: 0,
+                top: 150,
+            };
+        }
 
         const statBlockOutline: StatBlock = {
             ...StatBlock.Default(),
@@ -111,6 +119,7 @@ export class StatBlockLibraryViewModel extends React.Component<StatBlockLibraryV
     private buildListingComponent = (l: Listing<StatBlock>) => <ListingViewModel
         key={l.Id + l.Path + l.CurrentName()}
         name={l.CurrentName()}
+        showCount
         onAdd={this.loadSavedStatBlock}
         onEdit={this.editStatBlock}
         onPreview={this.previewStatblock}

@@ -1,5 +1,15 @@
+.listings li:nth-child(2n-1) > span{
+    background-color: @zebra-white;
+    &:hover {
+        background-color: @hover-white;
+    }
+}
+.listings span:hover {
+    background-color: @hover-white;
+}
+
 .c-listing {
-    .c-listing-delete, .c-listing-edit, .c-listing-move {
+    .c-listing-delete, .c-listing-edit, .c-listing-move, .c-listing__counter {
         display: none;
     }
 

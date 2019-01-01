@@ -12,11 +12,22 @@ export interface ListingProps<T extends Listable> {
     onMove?:  (listing: Listing<T>) => void;
     onPreview?: (listing: Listing<T>, e: React.MouseEvent<HTMLDivElement>) => void;
     onPreviewOut?: (listing: Listing<T>) => void;
+    showCount?: boolean;
 }
 
-export class ListingViewModel<T extends Listable> extends React.Component<ListingProps<T>> {
+interface ListingState {
+    count: number;
+}
+
+export class ListingViewModel<T extends Listable> extends React.Component<ListingProps<T>, ListingState> {
     private addFn = (event: React.MouseEvent<HTMLSpanElement>) => {
         this.props.onAdd(this.props.listing, event.altKey);
+        if (this.props.showCount) {
+            const currentCount = this.state && this.state.count || 0;
+            this.setState({
+                count: currentCount + 1
+            });
+        }
     }
     private deleteFn = () => this.props.onDelete(this.props.listing);
     private editFn = () => this.props.onEdit(this.props.listing);
@@ -25,8 +36,10 @@ export class ListingViewModel<T extends Listable> extends React.Component<Listin
     private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
 
     public render() {
+        const addedCount = this.props.showCount && this.state && this.state.count;
+        const countElements = addedCount ? new Array(addedCount).fill(<span className="c-listing__counter">●</span>) : "";
         return <li className="c-listing">
-            <ListingButton buttonClass="add" text={this.props.name} onClick={this.addFn} />
+            <ListingButton buttonClass="add" text={this.props.name} onClick={this.addFn} >{countElements}</ListingButton>
             {this.props.onDelete && <ListingButton buttonClass="delete" faClass="trash" onClick={this.deleteFn} />}
             {this.props.onEdit && <ListingButton buttonClass="edit" faClass="edit" onClick={this.editFn} />}
             {this.props.onMove && <ListingButton buttonClass="move" faClass="folder" onClick={this.moveFn} />}

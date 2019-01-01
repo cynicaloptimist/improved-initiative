@@ -7,6 +7,7 @@ interface Props {
     onClick: React.MouseEventHandler<HTMLSpanElement>;
     onMouseEnter?: React.MouseEventHandler<HTMLSpanElement>;
     onMouseLeave?: React.MouseEventHandler<HTMLSpanElement>;
+    children?: React.ReactNode;
 }
 
 export class ListingButton extends React.Component<Props> {
@@ -23,6 +24,7 @@ export class ListingButton extends React.Component<Props> {
             onClick={this.props.onClick}
             onMouseEnter={this.props.onMouseEnter}
             onMouseLeave={this.props.onMouseLeave}>
-            {text}</span>;
+            {text} {this.props.children}
+        </span>;
     } 
 }

@@ -84,8 +84,7 @@ export class CombatantViewModel {
     }
 
     public EditHP() {
-        this.CombatantCommander.Select(this);
-        this.CombatantCommander.EditHP();
+        this.CombatantCommander.EditSingleCombatantHP(this);
     }
 
     public EditInitiative() {
@@ -94,7 +93,7 @@ export class CombatantViewModel {
         let preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
         let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
         if (this.Combatant.InitiativeGroup()) {
-            message += ` Break Link: <input name='break-link' class='response' type='checkbox' value='break' />`;
+            message += ` Break Link: <input name='break-link' type='checkbox' value='break' />`;
         }
         const prompt = new DefaultPrompt(message,
             response => {

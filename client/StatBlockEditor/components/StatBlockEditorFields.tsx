@@ -1,6 +1,7 @@
 import { Field, FieldArray, Form, Formik, FormikProps } from "formik";
 import React = require("react");
 import { StatBlock } from "../../../common/StatBlock";
+import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
@@ -36,9 +37,9 @@ export const abilityScoreField = (abilityName: string) =>
 export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
     return <FieldArray name={modifierType} render={arrayHelpers => {
 
-        const addButton = <button
-            type="button"
-            className="fas fa-plus c-add-button"
+        const addButton = <Button
+            fontAwesomeIcon="plus"
+            additionalClassNames="c-add-button"
             onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })} />;
 
         if (api.values[modifierType].length == 0) {
@@ -63,9 +64,9 @@ export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 
 export const keywordFields = (api: FormApi, keywordType: string) => {
     return <FieldArray name={keywordType} render={arrayHelpers => {
-        const addButton = <button
-            type="button"
-            className="fas fa-plus c-add-button"
+        const addButton = <Button
+            fontAwesomeIcon="plus"
+            additionalClassNames="c-add-button"
             onClick={() => arrayHelpers.push("")} />;
 
         if (api.values[keywordType].length == 0) {
@@ -87,8 +88,9 @@ export const keywordFields = (api: FormApi, keywordType: string) => {
 export const powerFields = (api: FormApi, powerType: string) => {
     return <FieldArray name={powerType} render={arrayHelpers => {
 
-        const addButton = <button type="button"
-            className="fas fa-plus c-add-button"
+        const addButton = <Button
+            fontAwesomeIcon="plus"
+            additionalClassNames="c-add-button"
             onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })} />;
 
         if (api.values[powerType].length == 0) {

@@ -102,14 +102,16 @@
         </div>
         <!-- /ko -->
         <!-- ko if: CenterColumn() === "combat" -->
-        <h2>Initiative Order</h2>
+        <h2>Combatants by Initiative</h2>
         <ul class="combatants">
             <li class="combatant--header">
-                <span class="combatant__initiative fa" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span>
-                <span class="combatant__name">Combatant</span>
-                <span class="combatant__hp fas fa-heart"></span>
-                <span class="combatant__ac fas fa-shield-alt"></span>
-                <span title="Add tags to a creature to keep track of conditions or other effects." class="combatant__tags">Tags</span>
+            <span class="combatant__leftsection">
+                <span class="combatant__initiative"><span class="fas" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span></span>
+                <span class="combatant__name">Name</span>
+                <span class="combatant__hp"><span class="fas fa-heart"></span></span>
+                <span class="combatant__ac"><span class="fas fa-shield-alt"></span></span>
+            </span>
+            <span class="combatant__rightsection"></span>
             </li>
             <!-- ko foreach: OrderedCombatants -->
             <li class="combatant" data-bind="
