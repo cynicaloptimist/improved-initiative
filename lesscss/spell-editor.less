@@ -1,36 +1,39 @@
 .spell-editor {
+  flex-grow: 1;
+  flex-shrink: 1;
+
+  textarea {
     flex-grow: 1;
     flex-shrink: 1;
+    height: 50px;
+  }
 
-    textarea {
-        flex-grow: 1;
-        flex-shrink: 1;
-        height: 50px;
-    }
+  input,
+  textarea,
+  p {
+    font-size: medium;
+    line-height: 1.4em;
+  }
 
-    input, textarea, p {
-        font-size: medium;
-        line-height: 1.4em;
-    }
+  .editor-type,
+  .edit-mode {
+    display: block;
+  }
 
-    .editor-type, .edit-mode {
-        display: block;
-    }
+  .fa-clickable {
+    margin-left: @medium-spacer;
+  }
 
-    .fa-clickable {
-        margin-left: @medium-spacer;
-    }
+  .json-editor {
+    flex-grow: 1;
+    font-family: Courier New, Courier, monospace;
+  }
 
-    .json-editor {
-        flex-grow:1;
-        font-family: Courier New, Courier, monospace;
+  .buttons {
+    flex-direction: row;
+    justify-content: flex-end;
+    .button {
+      margin: 1px;
     }
-    
-    .buttons {
-        flex-direction: row;
-        justify-content: flex-end;
-        .button {
-            margin: 1px;
-        }
-    }
+  }
 }

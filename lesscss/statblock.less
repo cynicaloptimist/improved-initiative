@@ -1,9 +1,8 @@
-
 .c-statblock-header__with-portrait--thumbnail {
   flex-direction: row;
   align-items: center;
 
-  .c-statblock-header__portrait{
+  .c-statblock-header__portrait {
     max-height: 4rem;
     padding: @small-spacer;
     cursor: zoom-in;
@@ -24,11 +23,12 @@
 }
 
 .combatant-details__wrapper {
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.c-combatant-details__hp, .c-combatant-details__tags {
+.c-combatant-details__hp,
+.c-combatant-details__tags {
   flex-direction: row;
 }
 
@@ -64,7 +64,7 @@
   flex-shrink: 1;
   overflow-y: auto;
   max-width: @fixed-column-width;
-  
+
   h3,
   h4 {
     display: flex;
@@ -118,11 +118,11 @@
 
       .modifier {
         &:before {
-          content: '(';
+          content: "(";
         }
 
         &:after {
-          content: ')';
+          content: ")";
         }
       }
     }
@@ -144,7 +144,8 @@
     }
   }
 
-  .Skills, .Saves {
+  .Skills,
+  .Saves {
     .rollable {
       margin: 0 @small-spacer;
 
@@ -170,7 +171,7 @@
         color: @primary-black;
 
         &:after {
-          content: '.';
+          content: ".";
         }
       }
       div {
