@@ -7,47 +7,66 @@ import { CombatantViewModel } from "./CombatantViewModel";
 import { linkComponentToObservables } from "./linkComponentToObservables";
 
 interface CombatantDetailsProps {
-    combatantViewModel: CombatantViewModel;
-    enricher: TextEnricher;
-    displayMode: "default" | "active";
+  combatantViewModel: CombatantViewModel;
+  enricher: TextEnricher;
+  displayMode: "default" | "active";
 }
 
-interface CombatantDetailsState { }
-export class CombatantDetails extends React.Component<CombatantDetailsProps, CombatantDetailsState> {
-    constructor(props) {
-        super(props);
-        linkComponentToObservables(this);
+interface CombatantDetailsState {}
+export class CombatantDetails extends React.Component<
+  CombatantDetailsProps,
+  CombatantDetailsState
+> {
+  constructor(props) {
+    super(props);
+    linkComponentToObservables(this);
+  }
+
+  public render() {
+    if (!this.props.combatantViewModel) {
+      return null;
     }
 
-    public render() {
-        if (!this.props.combatantViewModel) {
-            return null;
-        }
-        
-        const currentHp = this.props.combatantViewModel.HP();
-        const tags = this.props.combatantViewModel.Combatant.Tags().map(tag => {
-            if (tag.HasDuration) {
-                return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;
-            }
+    const currentHp = this.props.combatantViewModel.HP();
+    const tags = this.props.combatantViewModel.Combatant.Tags().map(tag => {
+      if (tag.HasDuration) {
+        return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;
+      }
 
-            return tag.Text;
-        });
-        
-        const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
-        const renderedNotes = notes ? this.props.enricher.EnrichText(notes) : null;
+      return tag.Text;
+    });
 
-        const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
+    const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
+    const renderedNotes = notes ? this.props.enricher.EnrichText(notes) : null;
 
-        return <div className="c-combatant-details">
-            <StatBlockHeader
-                name={this.props.combatantViewModel.Name()}
-                source={statBlock.Source}
-                type={statBlock.Type}
-                imageUrl={statBlock.ImageURL} />
-            <div className="c-combatant-details__hp"><span className="stat-label">Current HP</span> {currentHp}</div>
-            {tags.length > 0 && <div className="c-combatant-details__tags"><span className="stat-label">Tags</span> {tags.join("; ")}</div>}
-            <StatBlockComponent statBlock={statBlock} displayMode={this.props.displayMode} enricher={this.props.enricher} hideName />
-            {notes && notes.length > 0 && <div className="c-combatant-details__notes">{renderedNotes}</div>}
-        </div>;
-    }
+    const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
+
+    return (
+      <div className="c-combatant-details">
+        <StatBlockHeader
+          name={this.props.combatantViewModel.Name()}
+          source={statBlock.Source}
+          type={statBlock.Type}
+          imageUrl={statBlock.ImageURL}
+        />
+        <div className="c-combatant-details__hp">
+          <span className="stat-label">Current HP</span> {currentHp}
+        </div>
+        {tags.length > 0 && (
+          <div className="c-combatant-details__tags">
+            <span className="stat-label">Tags</span> {tags.join("; ")}
+          </div>
+        )}
+        <StatBlockComponent
+          statBlock={statBlock}
+          displayMode={this.props.displayMode}
+          enricher={this.props.enricher}
+          hideName
+        />
+        {notes && notes.length > 0 && (
+          <div className="c-combatant-details__notes">{renderedNotes}</div>
+        )}
+      </div>
+    );
+  }
 }

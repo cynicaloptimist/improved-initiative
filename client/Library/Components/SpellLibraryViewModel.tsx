@@ -9,66 +9,86 @@ import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
 export type SpellLibraryViewModelProps = {
-    librariesCommander: LibrariesCommander;
-    library: SpellLibrary;
+  librariesCommander: LibrariesCommander;
+  library: SpellLibrary;
 };
 
 type SpellListing = Listing<Spell>;
 
 interface State {
-    filter: string;
+  filter: string;
 }
 
-export class SpellLibraryViewModel extends React.Component<SpellLibraryViewModelProps, State> {
-    constructor(props: SpellLibraryViewModelProps) {
-        super(props);
-        this.state = {
-            filter: "",
-        };
+export class SpellLibraryViewModel extends React.Component<
+  SpellLibraryViewModelProps,
+  State
+> {
+  constructor(props: SpellLibraryViewModelProps) {
+    super(props);
+    this.state = {
+      filter: ""
+    };
 
-        this.filterCache = new FilterCache(this.props.library.Spells());
-    }
+    this.filterCache = new FilterCache(this.props.library.Spells());
+  }
 
-    public componentDidMount() {
-        this.librarySubscription = this.props.library.Spells.subscribe(newSpells => {
-            this.filterCache = new FilterCache(newSpells);
-            this.forceUpdate();
-        });
-    }
+  public componentDidMount() {
+    this.librarySubscription = this.props.library.Spells.subscribe(
+      newSpells => {
+        this.filterCache = new FilterCache(newSpells);
+        this.forceUpdate();
+      }
+    );
+  }
 
-    public componentWillUnmount() {
-        this.librarySubscription.dispose();
-    }
+  public componentWillUnmount() {
+    this.librarySubscription.dispose();
+  }
 
-    private filterCache: FilterCache<SpellListing>;
-    private librarySubscription: KnockoutSubscription;
+  private filterCache: FilterCache<SpellListing>;
+  private librarySubscription: KnockoutSubscription;
 
-    private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
-        this.props.librariesCommander.ReferenceSpell(listing);
-    }
+  private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
+    this.props.librariesCommander.ReferenceSpell(listing);
+  };
 
-    private editSpell = (l: Listing<Spell>) => {
-        l.CurrentName.subscribe(_ => this.forceUpdate());
-        this.props.librariesCommander.EditSpell(l);
-    }
+  private editSpell = (l: Listing<Spell>) => {
+    l.CurrentName.subscribe(_ => this.forceUpdate());
+    this.props.librariesCommander.EditSpell(l);
+  };
 
-    public render() {
-        const filteredListings = this.filterCache.GetFilteredEntries(this.state.filter);
+  public render() {
+    const filteredListings = this.filterCache.GetFilteredEntries(
+      this.state.filter
+    );
 
-        return (<div className="library">
-            <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-            <ul className="listings">
-                {filteredListings.map(l => <ListingViewModel
-                    key={l.Id + l.Path + l.CurrentName()}
-                    name={l.CurrentName()}
-                    onAdd={this.loadSavedSpell}
-                    onEdit={this.editSpell}
-                    listing={l} />)}
-            </ul>
-            <div className="buttons">
-                <Button additionalClassNames="hide" fontAwesomeIcon="chevron-up" onClick={() => this.props.librariesCommander.HideLibraries()} />
-                <Button additionalClassNames="new" fontAwesomeIcon="plus" onClick={() => this.props.librariesCommander.CreateAndEditSpell()} />
-            </div>
-        </div>);
-    }
+    return (
+      <div className="library">
+        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+        <ul className="listings">
+          {filteredListings.map(l => (
+            <ListingViewModel
+              key={l.Id + l.Path + l.CurrentName()}
+              name={l.CurrentName()}
+              onAdd={this.loadSavedSpell}
+              onEdit={this.editSpell}
+              listing={l}
+            />
+          ))}
+        </ul>
+        <div className="buttons">
+          <Button
+            additionalClassNames="hide"
+            fontAwesomeIcon="chevron-up"
+            onClick={() => this.props.librariesCommander.HideLibraries()}
+          />
+          <Button
+            additionalClassNames="new"
+            fontAwesomeIcon="plus"
+            onClick={() => this.props.librariesCommander.CreateAndEditSpell()}
+          />
+        </div>
+      </div>
+    );
+  }
 }
