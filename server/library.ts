@@ -3,77 +3,89 @@ import path = require("path");
 import { Listable, ServerListing } from "../common/Listable";
 
 const sourceAbbreviations = {
-    "monster-manual": "mm",
-    "players-handbook": "phb"
+  "monster-manual": "mm",
+  "players-handbook": "phb"
 };
 
 //Lowercase, replace whitespace with dashes, remove non-word characters.
-const formatStringForId = (str: string) => str.toLocaleLowerCase().replace(/[\s]/g, "-").replace(/[^a-z0-9-]/g, "");
+const formatStringForId = (str: string) =>
+  str
+    .toLocaleLowerCase()
+    .replace(/[\s]/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
 
 const createId = (name: string, source: string) => {
-    const sourceString = formatStringForId(source);
-    const sourcePrefix = sourceAbbreviations[sourceString] || sourceString;
-    const lowerCaseName = formatStringForId(name);
-    return `${sourcePrefix}.${lowerCaseName}`;
+  const sourceString = formatStringForId(source);
+  const sourcePrefix = sourceAbbreviations[sourceString] || sourceString;
+  const lowerCaseName = formatStringForId(name);
+  return `${sourcePrefix}.${lowerCaseName}`;
 };
 
 interface Combatant {
-    Alias: string;
+  Alias: string;
 }
 export interface SavedEncounter extends Listable {
-    Combatants: Combatant [];
+  Combatants: Combatant[];
 }
 
-export const GetEncounterKeywords = (encounter: SavedEncounter) => (encounter.Combatants || []).map(c => c.Alias).join(" "); 
+export const GetEncounterKeywords = (encounter: SavedEncounter) =>
+  (encounter.Combatants || []).map(c => c.Alias).join(" ");
 
 export class Library<TItem extends Listable> {
-    private items: { [id: string]: TItem } = {};
-    private listings: ServerListing[] = [];
-    
-    constructor(private route: string, private getKeywords: (item: TItem) => string) { }
+  private items: { [id: string]: TItem } = {};
+  private listings: ServerListing[] = [];
 
-    public static FromFile<I extends Listable>(filename: string, route: string, getKeywords: (item: I) => string): Library<I> {
-        const library = new Library<I>(route, getKeywords);
+  constructor(
+    private route: string,
+    private getKeywords: (item: TItem) => string
+  ) {}
 
-        const filePath = path.join(__dirname, "..", filename);
+  public static FromFile<I extends Listable>(
+    filename: string,
+    route: string,
+    getKeywords: (item: I) => string
+  ): Library<I> {
+    const library = new Library<I>(route, getKeywords);
 
-        fs.readFile(filePath, (err, buffer) => {
-            if (err) {
-                throw `Couldn't read ${filePath} as a library: ${err}`;
-            }
+    const filePath = path.join(__dirname, "..", filename);
 
-            const newItems: any [] = JSON.parse(buffer.toString());
-            library.Add(newItems);
-        });
+    fs.readFile(filePath, (err, buffer) => {
+      if (err) {
+        throw `Couldn't read ${filePath} as a library: ${err}`;
+      }
 
-        return library;
-    }
+      const newItems: any[] = JSON.parse(buffer.toString());
+      library.Add(newItems);
+    });
 
-    private Add(items: any []) {
-        items.forEach(c => {
-            if (!(c.Name && c.Source)) {
-                throw `Missing Name or Source: Couldn't import ${JSON.stringify(c)}`;
-            }
-            c.Id = createId(c.Name, c.Source);
-            this.items[c.Id] = c;
-            const listing: ServerListing = {
-                Name: c.Name,
-                Id: c.Id,
-                Path: c.Path || "",
-                SearchHint: this.getKeywords(c),
-                Link: this.route + c.Id
-            };
-            this.listings.push(listing);
-        });
-    }
+    return library;
+  }
 
-    public GetById(id: string): TItem {
-        return this.items[id];
-    }
+  private Add(items: any[]) {
+    items.forEach(c => {
+      if (!(c.Name && c.Source)) {
+        throw `Missing Name or Source: Couldn't import ${JSON.stringify(c)}`;
+      }
+      c.Id = createId(c.Name, c.Source);
+      this.items[c.Id] = c;
+      const listing: ServerListing = {
+        Name: c.Name,
+        Id: c.Id,
+        Path: c.Path || "",
+        SearchHint: this.getKeywords(c),
+        Link: this.route + c.Id
+      };
+      this.listings.push(listing);
+    });
+  }
 
-    public GetListings(): ServerListing[] {
-        return this.listings;
-    }
+  public GetById(id: string): TItem {
+    return this.items[id];
+  }
 
-    public Route = () => this.route;
+  public GetListings(): ServerListing[] {
+    return this.listings;
+  }
+
+  public Route = () => this.route;
 }
