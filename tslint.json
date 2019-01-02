@@ -1,20 +1,11 @@
 {
     "rules": {
-        "quotemark": [
-            true,
-            "double"
-        ],
         "member-access": true,
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-var-keyword": true,
-        "curly": [
-            true,
-            "ignore-same-line"
-        ],
         "no-use-before-declare": true,
         "no-unused-expression": true,
-        "semicolon": true,
         "ordered-imports": [
             true,
             {
