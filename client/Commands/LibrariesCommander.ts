@@ -1,7 +1,11 @@
 import * as _ from "lodash";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import { DefaultPersistentCharacter, InitializeCharacter, PersistentCharacter } from "../../common/PersistentCharacter";
+import {
+  DefaultPersistentCharacter,
+  InitializeCharacter,
+  PersistentCharacter
+} from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -19,168 +23,216 @@ import { DefaultPrompt } from "./Prompts/Prompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
-    constructor(
-        private tracker: TrackerViewModel,
-        private libraries: Libraries,
-        private encounterCommander: EncounterCommander) {
+  constructor(
+    private tracker: TrackerViewModel,
+    private libraries: Libraries,
+    private encounterCommander: EncounterCommander
+  ) {}
+
+  public ShowLibraries = () => this.tracker.LibrariesVisible(true);
+  public HideLibraries = () => this.tracker.LibrariesVisible(false);
+
+  public AddStatBlockFromListing = (
+    listing: Listing<StatBlock>,
+    hideOnAdd: boolean
+  ) => {
+    listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
+      const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
+      this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
+      Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
+      this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
+    });
+  };
+
+  public AddPersistentCharacterFromListing = async (
+    listing: Listing<PersistentCharacter>,
+    hideOnAdd: boolean
+  ) => {
+    const character = await listing.GetWithTemplate(
+      DefaultPersistentCharacter()
+    );
+    this.tracker.Encounter.AddCombatantFromPersistentCharacter(
+      character,
+      this.libraries.PersistentCharacters,
+      hideOnAdd
+    );
+    Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
+    this.tracker.EventLog.AddEvent(
+      `Character ${character.Name} added to combat.`
+    );
+  };
+
+  public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
+    let statBlock = StatBlock.Default();
+    let newId = probablyUniqueString();
+
+    if (library.StoreName == Store.PlayerCharacters) {
+      statBlock.Name = "New Player Character";
+      statBlock.Player = "player";
+    } else {
+      statBlock.Name = "New Creature";
     }
 
-    public ShowLibraries = () => this.tracker.LibrariesVisible(true);
-    public HideLibraries = () => this.tracker.LibrariesVisible(false);
+    statBlock.Id = newId;
 
-    public AddStatBlockFromListing = (listing: Listing<StatBlock>, hideOnAdd: boolean) => {
-        listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
-            const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
-            this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
-            Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
-            this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
-        });
+    this.tracker.EditStatBlock(
+      "library",
+      statBlock,
+      library.SaveNewStatBlock,
+      library.StatBlocks()
+    );
+  };
+
+  public EditStatBlock = (
+    listing: Listing<StatBlock>,
+    library: PCLibrary | NPCLibrary
+  ) => {
+    if (this.tracker.TutorialVisible()) {
+      return;
     }
 
-    public AddPersistentCharacterFromListing = async (listing: Listing<PersistentCharacter>, hideOnAdd: boolean) => {
-        const character = await listing.GetWithTemplate(DefaultPersistentCharacter());
-        this.tracker.Encounter.AddCombatantFromPersistentCharacter(character, this.libraries.PersistentCharacters, hideOnAdd);
-        Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
-        this.tracker.EventLog.AddEvent(`Character ${character.Name} added to combat.`);
-    }
-
-    public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
-        let statBlock = StatBlock.Default();
-        let newId = probablyUniqueString();
-
-        if (library.StoreName == Store.PlayerCharacters) {
-            statBlock.Name = "New Player Character";
-            statBlock.Player = "player";
-        } else {
-            statBlock.Name = "New Creature";
-        }
-
-        statBlock.Id = newId;
-
-        this.tracker.EditStatBlock("library", statBlock, library.SaveNewStatBlock, library.StatBlocks());
-    }
-
-    public EditStatBlock = (
-        listing: Listing<StatBlock>,
-        library: PCLibrary | NPCLibrary) => {
-        if (this.tracker.TutorialVisible()) {
-            return;
-        }
-
-        listing.GetAsyncWithUpdatedId(statBlock => {
-            if (listing.Origin === "server") {
-                const statBlockWithNewId = {
-                    ...StatBlock.Default(),
-                    ...statBlock,
-                    Id: probablyUniqueString()
-                };
-                this.tracker.EditStatBlock(
-                    "library",
-                    statBlockWithNewId,
-                    library.SaveNewStatBlock,
-                    library.StatBlocks()
-                );
-            } else {
-                this.tracker.EditStatBlock(
-                    "library",
-                    { ...StatBlock.Default(), ...statBlock },
-                    s => library.SaveEditedStatBlock(listing, s),
-                    library.StatBlocks(),
-                    this.deleteSavedStatBlock(library.StoreName, listing.Id),
-                    library.SaveNewStatBlock
-                );
-            }
-        });
-    }
-
-    public CreatePersistentCharacter = () => {
-        const statBlock = StatBlock.Default();
-        const newId = probablyUniqueString();
-
-        statBlock.Name = "New Character";
-        statBlock.Player = "player";
-        statBlock.Id = newId;
-
-        const persistentCharacter = InitializeCharacter(statBlock);
-        return this.libraries.PersistentCharacters.AddNewPersistentCharacter(persistentCharacter);
-    }
-
-    public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
-        if (this.tracker.TutorialVisible()) {
-            return;
-        }
-        this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
-    }
-
-    public CreateAndEditSpell = () => {
-        const newSpell = { ...Spell.Default(), Name: "New Spell", Source: "Custom", Id: probablyUniqueString() };
-        this.tracker.SpellEditor.EditSpell(
-            newSpell,
-            this.libraries.Spells.AddOrUpdateSpell,
-            this.libraries.Spells.DeleteSpellById
+    listing.GetAsyncWithUpdatedId(statBlock => {
+      if (listing.Origin === "server") {
+        const statBlockWithNewId = {
+          ...StatBlock.Default(),
+          ...statBlock,
+          Id: probablyUniqueString()
+        };
+        this.tracker.EditStatBlock(
+          "library",
+          statBlockWithNewId,
+          library.SaveNewStatBlock,
+          library.StatBlocks()
         );
-    }
+      } else {
+        this.tracker.EditStatBlock(
+          "library",
+          { ...StatBlock.Default(), ...statBlock },
+          s => library.SaveEditedStatBlock(listing, s),
+          library.StatBlocks(),
+          this.deleteSavedStatBlock(library.StoreName, listing.Id),
+          library.SaveNewStatBlock
+        );
+      }
+    });
+  };
 
-    public EditSpell = (listing: Listing<Spell>) => {
-        listing.GetAsyncWithUpdatedId(spell => {
-            this.tracker.SpellEditor.EditSpell(
-                { ...Spell.Default(), ...spell },
-                this.libraries.Spells.AddOrUpdateSpell,
-                this.libraries.Spells.DeleteSpellById
-            );
-        });
-    }
+  public CreatePersistentCharacter = () => {
+    const statBlock = StatBlock.Default();
+    const newId = probablyUniqueString();
 
-    public ReferenceSpell = (spellListing: Listing<Spell>) => {
-        const prompt = new SpellPrompt(spellListing, this.tracker.StatBlockTextEnricher);
-        this.tracker.PromptQueue.Add(prompt);
-    }
+    statBlock.Name = "New Character";
+    statBlock.Player = "player";
+    statBlock.Id = newId;
 
-    public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
-        this.encounterCommander.LoadEncounter(savedEncounter);
-    }
+    const persistentCharacter = InitializeCharacter(statBlock);
+    return this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+      persistentCharacter
+    );
+  };
 
-    public SaveEncounter = () => {
-        const prompt = new DefaultPrompt(`Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-            response => {
-                const encounterName = response["encounterName"];
-                const path = ""; //TODO
-                if (encounterName) {
-                    const savedEncounter = this.tracker.Encounter.GetSavedEncounter(encounterName, path);
-                    this.libraries.Encounters.Save(savedEncounter);
-                    this.tracker.EventLog.AddEvent(`Encounter saved as ${encounterName}.`);
-                    Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
-                }
-            });
-        this.tracker.PromptQueue.Add(prompt);
+  public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+    if (this.tracker.TutorialVisible()) {
+      return;
     }
+    this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
+  }
 
-    public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-        const folderNames = _(this.libraries.Encounters.Encounters())
-            .map(e => e.Path)
-            .uniq()
-            .compact()
-            .value();
-        const prompt = new MoveEncounterPrompt(legacySavedEncounter, this.libraries.Encounters.Move, folderNames);
-        this.tracker.PromptQueue.Add(prompt);
-    }
+  public CreateAndEditSpell = () => {
+    const newSpell = {
+      ...Spell.Default(),
+      Name: "New Spell",
+      Source: "Custom",
+      Id: probablyUniqueString()
+    };
+    this.tracker.SpellEditor.EditSpell(
+      newSpell,
+      this.libraries.Spells.AddOrUpdateSpell,
+      this.libraries.Spells.DeleteSpellById
+    );
+  };
 
-    public ReferenceCondition = (conditionName: string) => {
-        const casedConditionName = _.startCase(conditionName);
-        if (Conditions[casedConditionName]) {
-            const prompt = new DefaultPrompt(`<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`);
-            this.tracker.PromptQueue.Add(prompt);
+  public EditSpell = (listing: Listing<Spell>) => {
+    listing.GetAsyncWithUpdatedId(spell => {
+      this.tracker.SpellEditor.EditSpell(
+        { ...Spell.Default(), ...spell },
+        this.libraries.Spells.AddOrUpdateSpell,
+        this.libraries.Spells.DeleteSpellById
+      );
+    });
+  };
+
+  public ReferenceSpell = (spellListing: Listing<Spell>) => {
+    const prompt = new SpellPrompt(
+      spellListing,
+      this.tracker.StatBlockTextEnricher
+    );
+    this.tracker.PromptQueue.Add(prompt);
+  };
+
+  public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
+    this.encounterCommander.LoadEncounter(savedEncounter);
+  };
+
+  public SaveEncounter = () => {
+    const prompt = new DefaultPrompt(
+      `Save Encounter As: <input id='encounterName' class='response' type='text' />`,
+      response => {
+        const encounterName = response["encounterName"];
+        const path = ""; //TODO
+        if (encounterName) {
+          const savedEncounter = this.tracker.Encounter.GetSavedEncounter(
+            encounterName,
+            path
+          );
+          this.libraries.Encounters.Save(savedEncounter);
+          this.tracker.EventLog.AddEvent(
+            `Encounter saved as ${encounterName}.`
+          );
+          Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
         }
+      }
+    );
+    this.tracker.PromptQueue.Add(prompt);
+  };
+
+  public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
+    const folderNames = _(this.libraries.Encounters.Encounters())
+      .map(e => e.Path)
+      .uniq()
+      .compact()
+      .value();
+    const prompt = new MoveEncounterPrompt(
+      legacySavedEncounter,
+      this.libraries.Encounters.Move,
+      folderNames
+    );
+    this.tracker.PromptQueue.Add(prompt);
+  };
+
+  public ReferenceCondition = (conditionName: string) => {
+    const casedConditionName = _.startCase(conditionName);
+    if (Conditions[casedConditionName]) {
+      const prompt = new DefaultPrompt(
+        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${
+          Conditions[casedConditionName]
+        }</div>`
+      );
+      this.tracker.PromptQueue.Add(prompt);
+    }
+  };
+
+  private deleteSavedStatBlock = (
+    library: string,
+    statBlockId: string
+  ) => () => {
+    if (library == Store.PlayerCharacters) {
+      this.libraries.PCs.DeleteListing(statBlockId);
+    }
+    if (library == Store.StatBlocks) {
+      this.libraries.NPCs.DeleteListing(statBlockId);
     }
 
-    private deleteSavedStatBlock = (library: string, statBlockId: string) => () => {
-        if (library == Store.PlayerCharacters) {
-            this.libraries.PCs.DeleteListing(statBlockId);
-        }
-        if (library == Store.StatBlocks) {
-            this.libraries.NPCs.DeleteListing(statBlockId);
-        }
-
-        Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
-    }
+    Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+  };
 }

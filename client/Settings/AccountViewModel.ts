@@ -9,32 +9,40 @@ import { Listing } from "../Library/Listing";
 import { Store } from "../Utility/Store";
 
 function getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localCount = items.filter(c => c.Origin === "localStorage").length;
-    const accountCount = items.filter(c => c.Origin === "account").length;
-    return `${localCount} local, ${accountCount} synced`;
+  const localCount = items.filter(c => c.Origin === "localStorage").length;
+  const accountCount = items.filter(c => c.Origin === "account").length;
+  return `${localCount} local, ${accountCount} synced`;
 }
 
 export class AccountViewModel {
-    constructor(private libraries: Libraries) { }
+  constructor(private libraries: Libraries) {}
 
-    public IsLoggedIn = env.IsLoggedIn;
-    public HasStorage = env.HasStorage;
-    public HasEpicInitiative = env.HasEpicInitiative;
-    public PatreonLoginUrl = env.PatreonLoginUrl;
+  public IsLoggedIn = env.IsLoggedIn;
+  public HasStorage = env.HasStorage;
+  public HasEpicInitiative = env.HasEpicInitiative;
+  public PatreonLoginUrl = env.PatreonLoginUrl;
 
-    public SyncedCreatures = ko.computed(() => getCounts(this.libraries.NPCs.StatBlocks()));
-    public SyncedCharacters = ko.computed(() => getCounts(this.libraries.PersistentCharacters.GetListings()));
-    public SyncedSpells = ko.computed(() => getCounts(this.libraries.Spells.Spells()));
-    public SyncedEncounters = ko.computed(() => getCounts(this.libraries.Encounters.Encounters()));
+  public SyncedCreatures = ko.computed(() =>
+    getCounts(this.libraries.NPCs.StatBlocks())
+  );
+  public SyncedCharacters = ko.computed(() =>
+    getCounts(this.libraries.PersistentCharacters.GetListings())
+  );
+  public SyncedSpells = ko.computed(() =>
+    getCounts(this.libraries.Spells.Spells())
+  );
+  public SyncedEncounters = ko.computed(() =>
+    getCounts(this.libraries.Encounters.Encounters())
+  );
 
-    public SyncAll() {
-        this.SyncMessage("");
-        let blob = Store.ExportAll();
-        saveAs(blob, "improved-initiative.json");
-        new AccountClient().SaveAll(this.libraries, err => {
-            this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
-        });
-    }
+  public SyncAll() {
+    this.SyncMessage("");
+    let blob = Store.ExportAll();
+    saveAs(blob, "improved-initiative.json");
+    new AccountClient().SaveAll(this.libraries, err => {
+      this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
+    });
+  }
 
-    public SyncMessage = ko.observable("");
+  public SyncMessage = ko.observable("");
 }
