@@ -1,46 +1,73 @@
 <!DOCTYPE html>
-<html encounterId="{{encounterId}}"
-    postedEncounter="{{postedEncounter}}"
-    hasStorage="{{hasStorage}}"
-    hasEpicInitiative="{{hasEpicInitiative}}"
-    isLoggedIn="{{isLoggedIn}}">
-<head>
-    <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.{{appVersion}}.css">
-    <meta name="description" content="Improved Initiative is a combat tracker for D&amp;D 5E that won't get between you and your players."></meta>
-    <meta property="og:image" content="img/improved-initiative-transparent-darkgreen.png"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html
+  encounterId="{{encounterId}}"
+  postedEncounter="{{postedEncounter}}"
+  hasStorage="{{hasStorage}}"
+  hasEpicInitiative="{{hasEpicInitiative}}"
+  isLoggedIn="{{isLoggedIn}}"
+>
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{rootDirectory}}/css/improved-initiative.{{appVersion}}.css"
+    />
+    <meta
+      name="description"
+      content="Improved Initiative is a combat tracker for D&amp;D 5E that won't get between you and your players."
+    />
+    <meta
+      property="og:image"
+      content="img/improved-initiative-transparent-darkgreen.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Combat Tracker - Improved Initiative</title>
 
     <script type="text/javascript">
-        window.patreonUrl = 'http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{{baseUrl}}}/r/patreon&state={{encounterId}}';
+      window.patreonUrl =
+        "http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{{baseUrl}}}/r/patreon&state={{encounterId}}";
     </script>
-    <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
-    <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.{{appVersion}}.js"></script>
-</head>
+    <script
+      type="text/javascript"
+      src="{{rootDirectory}}/js/dependencies.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{rootDirectory}}/js/ImprovedInitiative.{{appVersion}}.js"
+    ></script>
+  </head>
 
-<body id="tracker" data-bind="css: InterfacePriority">
+  <body id="tracker" data-bind="css: InterfacePriority">
     <div id="fb-root"></div>
     <script>
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.10";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
     </script>
-    <div class="loading-splash" style="
+    <div
+      class="loading-splash"
+      style="
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 10;
-    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
-    "></div>
-    <div class="modal-blur" data-bind="visible: BlurVisible, click: CloseSettings"></div>
+    background: #f4efe7 url('../img/paper-bg.jpg') no-repeat top/cover;"
+    ></div>
+    <div
+      class="modal-blur"
+      data-bind="visible: BlurVisible, click: CloseSettings"
+    ></div>
 
-    <div class="settings" data-bind="
+    <div
+      class="settings"
+      data-bind="
         visible: SettingsVisible,
         component: {
             name: 'settings',
@@ -52,9 +79,11 @@
                 combatantCommander: CombatantCommander,
                 libraries: Libraries
             }
-        }">
-    </div>
-    <div class="tutorial" data-bind="
+        }"
+    ></div>
+    <div
+      class="tutorial"
+      data-bind="
         visible: TutorialVisible,
         component: {
             name: 'tutorial',
@@ -62,59 +91,90 @@
                 showTutorial: TutorialVisible
             }
         }
-    ">
-    </div>
+    "
+    ></div>
     <!-- ko if: DisplayLogin -->
-        <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
+    <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
+      >Log In with Patreon</a
+    >
     <!-- /ko -->
-    <div class="toolbar-container" data-bind="react: {
+    <div
+      class="toolbar-container"
+      data-bind="react: {
         component: toolbarComponent()
-    }"></div>
+    }"
+    ></div>
     <div class="left-column">
-        <!-- ko if: LibrariesVisible -->
-        <div class="libraries" data-bind="react: {
+      <!-- ko if: LibrariesVisible -->
+      <div
+        class="libraries"
+        data-bind="react: {
             component: librariesComponent
-        }"></div>
-        <!-- /ko -->
-        <!-- ko ifnot: LibrariesVisible -->
-        <div class="active-combatant" data-bind="visible: Encounter.ActiveCombatant">
-            <h2>Active Combatant</h2>
-            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
+        }"
+      ></div>
+      <!-- /ko -->
+      <!-- ko ifnot: LibrariesVisible -->
+      <div
+        class="active-combatant"
+        data-bind="visible: Encounter.ActiveCombatant"
+      >
+        <h2>Active Combatant</h2>
+        <div
+          class="combatant-details__wrapper"
+          style="flex-shrink: 1"
+          data-bind="react: {
                 component: ActiveCombatantDetails
-            }"></div>
-        </div>
-        <!-- /ko -->
+            }"
+        ></div>
+      </div>
+      <!-- /ko -->
     </div>
     <div class="center-column">
-        <!-- ko if: CenterColumn() === "statblockeditor" -->
-        <div class="statblock-editor" data-bind="react: {
+      <!-- ko if: CenterColumn() === "statblockeditor" -->
+      <div
+        class="statblock-editor"
+        data-bind="react: {
                 component: StatBlockEditor
-        }"></div>
-        <!-- /ko -->
-        <!-- ko if: CenterColumn() === "spelleditor" -->
-        <div class="spell-editor" data-bind="
+        }"
+      ></div>
+      <!-- /ko -->
+      <!-- ko if: CenterColumn() === "spelleditor" -->
+      <div
+        class="spell-editor"
+        data-bind="
     component: {
         name: 'spelleditor',
         params: {
             editor: SpellEditor
         }
-    }">
-        </div>
-        <!-- /ko -->
-        <!-- ko if: CenterColumn() === "combat" -->
-        <h2>Combatants by Initiative</h2>
-        <ul class="combatants">
-            <li class="combatant--header">
-            <span class="combatant__leftsection">
-                <span class="combatant__initiative"><span class="fas" data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"></span></span>
-                <span class="combatant__name">Name</span>
-                <span class="combatant__hp"><span class="fas fa-heart"></span></span>
-                <span class="combatant__ac"><span class="fas fa-shield-alt"></span></span>
-            </span>
-            <span class="combatant__rightsection"></span>
-            </li>
-            <!-- ko foreach: OrderedCombatants -->
-            <li class="combatant" data-bind="
+    }"
+      ></div>
+      <!-- /ko -->
+      <!-- ko if: CenterColumn() === "combat" -->
+      <h2>Combatants by Initiative</h2>
+      <ul class="combatants">
+        <li class="combatant--header">
+          <span class="combatant__leftsection">
+            <span class="combatant__initiative"
+              ><span
+                class="fas"
+                data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"
+              ></span
+            ></span>
+            <span class="combatant__name">Name</span>
+            <span class="combatant__hp"
+              ><span class="fas fa-heart"></span
+            ></span>
+            <span class="combatant__ac"
+              ><span class="fas fa-shield-alt"></span
+            ></span>
+          </span>
+          <span class="combatant__rightsection"></span>
+        </li>
+        <!-- ko foreach: OrderedCombatants -->
+        <li
+          class="combatant"
+          data-bind="
         css: {
             selected: IsSelected,
             active: IsActive,
@@ -126,14 +186,19 @@
             params: {
                 viewModel: $data
             }
-        }">
-            </li>
-            <!-- /ko -->
-        </ul>
+        }"
+        ></li>
         <!-- /ko -->
-        <div class="prompts" data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}">
-            <!-- ko foreach: Prompts -->
-            <form class="prompt" data-bind="
+      </ul>
+      <!-- /ko -->
+      <div
+        class="prompts"
+        data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}"
+      >
+        <!-- ko foreach: Prompts -->
+        <form
+          class="prompt"
+          data-bind="
                 submit: $parent.Resolve($data),
                 component: {
                     name: ComponentName,
@@ -141,51 +206,83 @@
                         prompt: $data,
                     }
                 },
-                afterRender: $parent.UpdateDom">
-            </form>
-            <!-- /ko -->
-        </div>
+                afterRender: $parent.UpdateDom"
+        ></form>
+        <!-- /ko -->
+      </div>
 
-        <div class="combat-footer">
-            <ul class="event-log" data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail">
-                <li data-bind="html: $data"></li>
-            </ul>
-            <div class="footer-bar">
-                <i class="fa-clickable" data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"></i>
-                <span class="latest-event" data-bind="html: EventLog.LatestEvent"></span>
-                <!-- ko if: EncounterCommander.DisplayTurnTimer -->
-                <span class="turn-timer" data-bind="text: Encounter.TurnTimer.Readout"></span>
-                <!-- /ko -->
-                <!-- ko if: EncounterCommander.DisplayRoundCounter -->
-                <span class="round-counter">Current Round: <span data-bind="text: Encounter.RoundCounter"></span></span>
-                <!-- /ko -->
-                <!-- ko if: EncounterCommander.DisplayDifficulty -->
-                <span class="encounter-challenge" data-bind="with: Encounter.Difficulty()">
-                        <!-- ko if: Difficulty -->
-                            <span class="difficulty" data-bind="text: Difficulty"></span>
-                <!-- /ko -->
-                <span data-bind="text: EarnedExperience"></span> XP
-                </span>
-                <!-- /ko -->
-            </div>
+      <div class="combat-footer">
+        <ul
+          class="event-log"
+          data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail"
+        >
+          <li data-bind="html: $data"></li>
+        </ul>
+        <div class="footer-bar">
+          <i
+            class="fa-clickable"
+            data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"
+          ></i>
+          <span
+            class="latest-event"
+            data-bind="html: EventLog.LatestEvent"
+          ></span>
+          <!-- ko if: EncounterCommander.DisplayTurnTimer -->
+          <span
+            class="turn-timer"
+            data-bind="text: Encounter.TurnTimer.Readout"
+          ></span>
+          <!-- /ko -->
+          <!-- ko if: EncounterCommander.DisplayRoundCounter -->
+          <span class="round-counter"
+            >Current Round:
+            <span data-bind="text: Encounter.RoundCounter"></span
+          ></span>
+          <!-- /ko -->
+          <!-- ko if: EncounterCommander.DisplayDifficulty -->
+          <span
+            class="encounter-challenge"
+            data-bind="with: Encounter.Difficulty()"
+          >
+            <!-- ko if: Difficulty -->
+            <span class="difficulty" data-bind="text: Difficulty"></span>
+            <!-- /ko -->
+            <span data-bind="text: EarnedExperience"></span> XP
+          </span>
+          <!-- /ko -->
         </div>
+      </div>
     </div>
     <div class="right-column">
-        <div class="selected-combatant">
-            <!-- ko if: CombatantCommander.HasOneSelected -->
-            <h2>Selected Combatant</h2>
-            <div class="button button--close" data-bind="click: CombatantCommander.Deselect"><span class="fas fa-times"></span></div>
-            <div class="combatant-details__wrapper" style="flex-shrink: 1" data-bind="react: {
-                component: CombatantCommander.CombatantDetails
-            }"></div>
-            <!-- /ko -->
-            <!-- ko if: CombatantCommander.HasMultipleSelected -->
-            <h2>Selected Combatants</h2>
-            <div class="close button fas fa-times" data-bind="click: CombatantCommander.Deselect"></div>
-            <div class="selected-combatant-names" data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"></div>
-            <!-- /ko -->
+      <div class="selected-combatant">
+        <!-- ko if: CombatantCommander.HasOneSelected -->
+        <h2>Selected Combatant</h2>
+        <div
+          class="button button--close"
+          data-bind="click: CombatantCommander.Deselect"
+        >
+          <span class="fas fa-times"></span>
         </div>
+        <div
+          class="combatant-details__wrapper"
+          style="flex-shrink: 1"
+          data-bind="react: {
+                component: CombatantCommander.CombatantDetails
+            }"
+        ></div>
+        <!-- /ko -->
+        <!-- ko if: CombatantCommander.HasMultipleSelected -->
+        <h2>Selected Combatants</h2>
+        <div
+          class="close button fas fa-times"
+          data-bind="click: CombatantCommander.Deselect"
+        ></div>
+        <div
+          class="selected-combatant-names"
+          data-bind="visible: CombatantCommander.HasMultipleSelected, text: CombatantCommander.Names"
+        ></div>
+        <!-- /ko -->
+      </div>
     </div>
-</body>
-
+  </body>
 </html>

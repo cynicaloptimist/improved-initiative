@@ -1,70 +1,95 @@
 <!DOCTYPE html>
 <html encounterId="{{encounterId}}">
-
-<head>
-    <link rel="stylesheet" type="text/css" href="{{rootDirectory}}/css/improved-initiative.{{appVersion}}.css">
-    <meta name="description" content="Track your heroes' fight on the Improved Initiative player view."></meta>
-    <meta property="og:image" content="img/improved-initiative-transparent-darkgreen.png"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{rootDirectory}}/css/improved-initiative.{{appVersion}}.css"
+    />
+    <meta
+      name="description"
+      content="Track your heroes' fight on the Improved Initiative player view."
+    />
+    <meta
+      property="og:image"
+      content="img/improved-initiative-transparent-darkgreen.png"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Player View - Improved Initiative</title>
 
-    <script type="text/javascript" src="{{rootDirectory}}/js/dependencies.js"></script>
-    <script type="text/javascript" src="{{rootDirectory}}/js/ImprovedInitiative.{{appVersion}}.js"></script>
-</head>
+    <script
+      type="text/javascript"
+      src="{{rootDirectory}}/js/dependencies.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="{{rootDirectory}}/js/ImprovedInitiative.{{appVersion}}.js"
+    ></script>
+  </head>
 
-<body id="playerview">
-
-    <div class="modal-blur combatant-portrait" data-bind="visible: imageModal().Visible, click: CloseImageModal()">
-        <img class="combatant-portrait__image" data-bind="attr:{src: imageModal().URL}">
-        <div class="combatant-portrait__caption" data-bind="html: imageModal().Caption"></div>
+  <body id="playerview">
+    <div
+      class="modal-blur combatant-portrait"
+      data-bind="visible: imageModal().Visible, click: CloseImageModal()"
+    >
+      <img
+        class="combatant-portrait__image"
+        data-bind="attr:{src: imageModal().URL}"
+      />
+      <div
+        class="combatant-portrait__caption"
+        data-bind="html: imageModal().Caption"
+      ></div>
     </div>
     <!-- ko if: combatantSuggestor.SuggestionVisible() -->
-        <!-- ko with: combatantSuggestor -->
-        <div class="modal-blur" data-bind="click: Close"></div>
-        <div class="damage-suggestion" data-bind="
+    <!-- ko with: combatantSuggestor -->
+    <div class="modal-blur" data-bind="click: Close"></div>
+    <div
+      class="damage-suggestion"
+      data-bind="
             component: {
                 name: 'playersuggestion',
                 params: {
                     suggestion: $data
                 }
-            }">
-        </div>
-        <!-- /ko -->
+            }"
+    ></div>
+    <!-- /ko -->
     <!-- /ko -->
     <div class="combatant--header">
-        <div class="combatant__initiative">
-            <span class="fas fa-forward"></span>
-        </div>
-        <div class="combatant__portrait" data-bind="visible: hasImages"></div>
-        <div class="combatant__name">Combatant</div>
-        <div class="combatant__hp">
-            <span class="fas fa-heart"></span>
-        </div>
-        <div class="combatant__tags">
-            <span class="fas fa-tag"></span>
-        </div>
+      <div class="combatant__initiative">
+        <span class="fas fa-forward"></span>
+      </div>
+      <div class="combatant__portrait" data-bind="visible: hasImages"></div>
+      <div class="combatant__name">Combatant</div>
+      <div class="combatant__hp"><span class="fas fa-heart"></span></div>
+      <div class="combatant__tags"><span class="fas fa-tag"></span></div>
     </div>
     <ul class="combatants">
-        <!-- ko foreach: combatants -->
-        <li class="combatant" data-bind="
+      <!-- ko foreach: combatants -->
+      <li
+        class="combatant"
+        data-bind="
         css: { active: $parent.activeCombatantId() == Id, 
                 playercharacter: IsPlayerCharacter }, 
         component: {
             name: 'playerdisplaycombatant',
             params: { combatant: $data }
-        }">
-        </li>
-        <!-- /ko -->
+        }"
+      ></li>
+      <!-- /ko -->
     </ul>
     <!-- ko if: (roundCounterVisible() || turnTimerVisible()) -->
     <div class="combat-footer">
-        <span class="turn-timer" data-bind="visible: turnTimerVisible, text: turnTimer.Readout"></span>
-        <span class="round-counter" data-bind="visible: roundCounterVisible">Current Round:
-            <span data-bind="text: roundCounter"></span>
-        </span>
+      <span
+        class="turn-timer"
+        data-bind="visible: turnTimerVisible, text: turnTimer.Readout"
+      ></span>
+      <span class="round-counter" data-bind="visible: roundCounterVisible"
+        >Current Round: <span data-bind="text: roundCounter"></span>
+      </span>
     </div>
     <!-- /ko -->
-</body>
-
+  </body>
 </html>
