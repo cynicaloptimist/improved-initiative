@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
+import { SubmitButton } from "../../Components/Button";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
@@ -46,7 +47,7 @@ class QuickAddPromptComponent extends React.Component<
           type="number"
           placeholder="Init"
         />
-        <button type="submit" className="fas fa-check button" />
+        <SubmitButton />
       </div>
     );
   }

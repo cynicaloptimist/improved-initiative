@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { Combatant } from "../../Combatant/Combatant";
+import { SubmitButton } from "../../Components/Button";
 import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
 import { Prompt } from "./Prompt";
 
@@ -23,7 +24,7 @@ class UpdateNotesPromptComponent extends React.Component<
           defaultValue={this.props.currentNotes}
           placeholder="Track long term resources and conditions. *Markdown* is supported."
         />
-        <button type="submit" className="fas fa-check button" />
+        <SubmitButton />
       </div>
     );
   }
