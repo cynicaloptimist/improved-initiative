@@ -14,6 +14,16 @@
     }
 }
 
+#tracker {
+    .combatant:hover {
+        background-color: @hover-white;
+    }
+
+    .combatant__hp:hover {
+        background-color: @hover-red;
+    }
+}
+
 .combatant {
     span {
         display: flex;
@@ -47,12 +57,8 @@
     }
 
     &.active {
-        border-color: @active-green;
-        background-color: @hover-green;
-    }
-
-    &:hover {
-        background-color: @hover-white;
+        border-color: @primary-red;
+        background-color: @active-white;
     }
 
     &.selected {
@@ -103,9 +109,6 @@
 
     width: 70px;
     justify-content: center;
-    &:hover {
-        background-color: @hover-red;
-    }
 }
 
 .combatant__ac {
