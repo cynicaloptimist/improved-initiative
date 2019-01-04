@@ -116,7 +116,7 @@ export class Combatant implements Combatant {
         this.CurrentHP(savedCombatant.CurrentHP);
         this.TemporaryHP(savedCombatant.TemporaryHP);
         this.Initiative(savedCombatant.Initiative);
-        this.InitiativeGroup(savedCombatant.InitiativeGroup || null);
+        this.InitiativeGroup(savedCombatant.InitiativeGroup || this.InitiativeGroup());
         this.Alias(savedCombatant.Alias);
         this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
         this.Hidden(savedCombatant.Hidden);
@@ -256,7 +256,7 @@ export class Combatant implements Combatant {
     private findLowestInitiativeGroupByName(): Combatant {
         const combatants = this.Encounter.Combatants();
         return combatants.filter(c => c != this)
-            .filter(c => c.StatBlock().Name === this.StatBlock().Name)
+            .filter(c => c.StatBlock().Name == this.StatBlock().Name)
             .sort((a, b) => a.Initiative() - b.Initiative())[0];
     }
 
