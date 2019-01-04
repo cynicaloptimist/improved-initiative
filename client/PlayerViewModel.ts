@@ -185,7 +185,7 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
             activeColor = baseColor.darken(0.2).string();
         }
         declarations.push(`li.combatant { background-color: ${customStyles.combatantBackground}; }`);
-        declarations.push(`li.combatant:nth-child(2n) { background-color: ${zebraColor}; }`);
+        declarations.push(`li.combatant:nth-child(2n-1) { background-color: ${zebraColor}; }`);
         declarations.push(`li.combatant.active { background-color: ${activeColor}; }`);
     }
 
