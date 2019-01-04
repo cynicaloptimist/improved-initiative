@@ -12,17 +12,17 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 1px black solid;
+  border: 1px @primary-grey solid;
   border-radius: 3px;
   vertical-align: middle;
   margin: @extra-small-spacer @medium-spacer @medium-spacer @extra-small-spacer;
 
   &.s-selected {
-    border-color: white;
+    border: 2px @primary-red solid;
   }
 
   &:hover {
-    border-color: gray;
+    border-color: @hover-grey;
   }
 }
 
