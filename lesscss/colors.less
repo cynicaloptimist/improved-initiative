@@ -1,4 +1,4 @@
-@primary-green: #00643C;
+@primary-green: #00643c;
 @hover-green: lighten(@primary-green, 75);
 @active-green: lighten(@primary-green, 15);
 @accent-green: darken(@primary-green, 5);
@@ -13,13 +13,12 @@
 @active-white: darken(@primary-white, 10);
 @selected-light: darken(@primary-white, 20);
 
-
 @primary-red: #822000;
 @hover-red: fade(@primary-red, 20%);
 @active-red: lighten(@primary-red, 15);
 @accent-red: darken(@primary-red, 5);
 
-@primary-black: #0A0908;
+@primary-black: #0a0908;
 @hover-black: fade(@primary-black, 10%);
 @disabled-black: lighten(@primary-black, 20);
 
@@ -32,122 +31,124 @@
 @button-text: @primary-black;
 @shadow: #999;
 
-@modal-background-color: rgba(0,0,0,0.7);
+@modal-background-color: rgba(0, 0, 0, 0.7);
 
 //TODO: move all rules to associated .less module.
 
 .colors(@text, @background, @border: @shadow) {
-    color: @text;
-    background-color: @background;
-    border-color: @border;
+  color: @text;
+  background-color: @background;
+  border-color: @border;
 }
 
 .green-button() {
-    .colors(@primary-black, @button-face-green, @shadow);
+  .colors(@primary-black, @button-face-green, @shadow);
 
-    &:hover{
-        background-color: @hover-green;
-    }
+  &:hover {
+    background-color: @hover-green;
+  }
 }
 
 .toolbar-container,
 .settings,
 .tutorial,
-.damage-suggestion, {
-    .colors(@primary-black, @primary-white);
+.damage-suggestion {
+  .colors(@primary-black, @primary-white);
 }
 
 .toolbar-container {
   .colors(@primary-white, @primary-grey);
 }
 
-
 #landing {
-    .disabled {
-        color: @disabled-black;
-        &:hover {
-            background-color: @button-face;
-        }
+  .disabled {
+    color: @disabled-black;
+    &:hover {
+      background-color: @button-face;
     }
-    .start-encounter .button {
-        .green-button();
-    }
+  }
+  .start-encounter .button {
+    .green-button();
+  }
 }
 
 .tutorial .next,
 .login.button,
 .p-privacy-policy-optin.button {
-    .green-button()
+  .green-button();
 }
 
 .settings {
-    .tab {
-        border-color: @primary-green;
-    }
-    .repeat-tutorial {
-        .green-button()
-    }
+  .tab {
+    border-color: @primary-green;
+  }
+  .repeat-tutorial {
+    .green-button();
+  }
 }
 
 .damage-suggestion {
-    .tip {
-        color: lighten(@primary-black, 50);
-    }
+  .tip {
+    color: lighten(@primary-black, 50);
+  }
 }
 
-.tabs span, .c-tabs span {
-    background-color: @active-white;
-    &:hover {
-      background-color: @selected-light;
-    }
-    &.selected, &.s-selected {
-        background-color: @primary-red;
-        color: @primary-white;
+.tabs span,
+.c-tabs span {
+  background-color: @active-white;
+  &:hover {
+    background-color: @selected-light;
+  }
+  &.selected,
+  &.s-selected {
+    background-color: @primary-red;
+    color: @primary-white;
 
-        &:hover {
-          background-color: @accent-red;
-        }
+    &:hover {
+      background-color: @accent-red;
     }
+  }
 }
 
 .combat-footer {
-    background-color: @primary-grey;
-    a {
-        color: @primary-white;
-    }
+  background-color: @primary-grey;
+  a {
+    color: @primary-white;
+  }
 }
 
 #tracker .combatant:not(.header) {
-    &:hover {
-        background-color: @active-white;
-    }
+  &:hover {
+    background-color: @active-white;
+  }
 
-    &.selected {
-        background-color: @hover-red;
-    }
+  &.selected {
+    background-color: @hover-red;
+  }
 
-    .hp:hover {
-        background-color: @hover-red;
-    }
+  .hp:hover {
+    background-color: @hover-red;
+  }
 }
 
 .combatant-portrait-caption {
-    color: @primary-white;
+  color: @primary-white;
 }
 
-input[type=checkbox] {
-    color: @primary-white;
+input[type="checkbox"] {
+  color: @primary-white;
 }
 
 .bordered {
-    border-color: @accent-green;
+  border-color: @accent-green;
 }
 
-.c-button--disabled, .c-button--disabled:hover {
-    color: @disabled-black;
-    background-color: @button-face-disabled;
+.c-button--disabled,
+.c-button--disabled:hover {
+  color: @disabled-black;
+  background-color: @button-face-disabled;
 }
 
 div.awesomplete li {
-    color: @primary-black;
+  color: @primary-black;
 }

@@ -11,31 +11,43 @@ import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
 
 export class Libraries {
-    public PCs: PCLibrary;
-    public PersistentCharacters: PersistentCharacterLibrary;
-    public NPCs: NPCLibrary;
-    public Encounters: EncounterLibrary;
-    public Spells: SpellLibrary;
+  public PCs: PCLibrary;
+  public PersistentCharacters: PersistentCharacterLibrary;
+  public NPCs: NPCLibrary;
+  public Encounters: EncounterLibrary;
+  public Spells: SpellLibrary;
 
-    private initializeSpells = () => {
-        $.ajax("../spells/").done(listings => this.Spells.AddListings(listings, "server"));
+  private initializeSpells = () => {
+    $.ajax("../spells/").done(listings =>
+      this.Spells.AddListings(listings, "server")
+    );
 
-        const customSpells = Store.List(Store.Spells);
-        const newListings = customSpells.map(id => {
-            let spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-            return new Listing<Spell>(id, spell.Name, spell.Path, Spell.GetKeywords(spell), Store.Spells, "localStorage");
-        });
+    const customSpells = Store.List(Store.Spells);
+    const newListings = customSpells.map(id => {
+      let spell = {
+        ...Spell.Default(),
+        ...Store.Load<Spell>(Store.Spells, id)
+      };
+      return new Listing<Spell>(
+        id,
+        spell.Name,
+        spell.Path,
+        Spell.GetKeywords(spell),
+        Store.Spells,
+        "localStorage"
+      );
+    });
 
-        ko.utils.arrayPushAll(this.Spells.Spells, newListings);
-    }
+    ko.utils.arrayPushAll(this.Spells.Spells, newListings);
+  };
 
-    constructor(accountClient: AccountClient) {
-        this.PCs = new PCLibrary(accountClient);
-        this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
-        this.NPCs = new NPCLibrary(accountClient);
-        this.Encounters = new EncounterLibrary(accountClient);
-        this.Spells = new SpellLibrary(accountClient);
-        
-        this.initializeSpells();
-    }
+  constructor(accountClient: AccountClient) {
+    this.PCs = new PCLibrary(accountClient);
+    this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
+    this.NPCs = new NPCLibrary(accountClient);
+    this.Encounters = new EncounterLibrary(accountClient);
+    this.Spells = new SpellLibrary(accountClient);
+
+    this.initializeSpells();
+  }
 }

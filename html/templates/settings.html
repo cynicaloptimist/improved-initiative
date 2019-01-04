@@ -1,183 +1,287 @@
 <div class="tabs">
-    <span data-bind="click: SelectTab('about'), css: { selected: CurrentTab() == 'about' }">About</span>
-    <span data-bind="click: SelectTab('keybindings'), css: { selected: CurrentTab() == 'keybindings' }">Commands</span>
-    <span data-bind="click: SelectTab('options'), css: { selected: CurrentTab() == 'options' }">Options</span>
-    <span data-bind="click: SelectTab('account'), css: { selected: CurrentTab() == 'account' }">Account</span>
-    <span data-bind="click: SelectTab('epicInitiative'), css: { selected: CurrentTab() == 'epicInitiative' }">Epic Initiative</span>
+  <span
+    data-bind="click: SelectTab('about'), css: { selected: CurrentTab() == 'about' }"
+    >About</span
+  >
+  <span
+    data-bind="click: SelectTab('keybindings'), css: { selected: CurrentTab() == 'keybindings' }"
+    >Commands</span
+  >
+  <span
+    data-bind="click: SelectTab('options'), css: { selected: CurrentTab() == 'options' }"
+    >Options</span
+  >
+  <span
+    data-bind="click: SelectTab('account'), css: { selected: CurrentTab() == 'account' }"
+    >Account</span
+  >
+  <span
+    data-bind="click: SelectTab('epicInitiative'), css: { selected: CurrentTab() == 'epicInitiative' }"
+    >Epic Initiative</span
+  >
 </div>
 <div data-bind="visible: CurrentTab() == 'about'" class="tab about">
-    <div>
-        <p>
-            <strong>Improved Initiative</strong> was created by
-            <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>. All Wizards of the Coast content provided under terms of the
-            <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf"
-                target="_blank">Open Gaming License Version 1.0a</a>.</p>
-    </div>
-    <div class="support">
-        Love Improved Initiative?
-        <div class="fb-like" data-href="https://www.facebook.com/improvedinitiativeapp/" data-layout="button" data-action="recommend"
-            data-size="large" data-show-faces="false" data-share="false"></div>
-        <a class="pledge" href="https://www.patreon.com/improvedinitiative" target="_blank">
-            <img src="/img/become_a_patron_button.png" />
-        </a>
-
-    </div>
-    <div class="tips">
-        <span data-bind="click: PreviousTip" title="Previous Tip" class="fa-clickable fa-arrow-left"></span>
-        <span data-bind="html: Tip" class="tip"></span>
-        <span data-bind="click: NextTip" title="Next Tip" class="fa-clickable fa-arrow-right"></span>
-    </div>
-    <div class="commands">
-        <span class="button review-privacy" data-bind="click: reviewPrivacyPolicy">Review Privacy Policy</span>
-        <span class="button repeat-tutorial" data-bind="click: repeatTutorial">Repeat Tutorial</span>
-    </div>
+  <div>
+    <p>
+      <strong>Improved Initiative</strong> was created by
+      <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>. All
+      Wizards of the Coast content provided under terms of the
+      <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank"
+        >Open Gaming License Version 1.0a</a
+      >.
+    </p>
+  </div>
+  <div class="support">
+    Love Improved Initiative?
+    <div
+      class="fb-like"
+      data-href="https://www.facebook.com/improvedinitiativeapp/"
+      data-layout="button"
+      data-action="recommend"
+      data-size="large"
+      data-show-faces="false"
+      data-share="false"
+    ></div>
+    <a
+      class="pledge"
+      href="https://www.patreon.com/improvedinitiative"
+      target="_blank"
+    >
+      <img src="/img/become_a_patron_button.png" />
+    </a>
+  </div>
+  <div class="tips">
+    <span
+      data-bind="click: PreviousTip"
+      title="Previous Tip"
+      class="fa-clickable fa-arrow-left"
+    ></span>
+    <span data-bind="html: Tip" class="tip"></span>
+    <span
+      data-bind="click: NextTip"
+      title="Next Tip"
+      class="fa-clickable fa-arrow-right"
+    ></span>
+  </div>
+  <div class="commands">
+    <span class="button review-privacy" data-bind="click: reviewPrivacyPolicy"
+      >Review Privacy Policy</span
+    >
+    <span class="button repeat-tutorial" data-bind="click: repeatTutorial"
+      >Repeat Tutorial</span
+    >
+  </div>
 </div>
 <div data-bind="visible: CurrentTab() == 'keybindings'" class="tab keybindings">
-    <h2>Encounter Commands</h2>
-    <div class="command-options-labels">
-        <span class="hotkey-label">Hotkey</span>
-        <span class="toolbar-label">Show on Toolbar</span>
-    </div>
-    <!--ko foreach: encounterCommands -->
-    <div>
-        <span class="command-description" data-bind="text: Description"></span>
-        <input class="keybinding" type="text" data-bind="value: KeyBinding" />
-        <label class="toolbar-setting">
-            <i class="fas" data-bind="css:  'fa-' + FontAwesomeIcon"></i>
-            <input type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar" />
-        </label>
-    </div>
-    <!--/ko -->
-    <h2>Combatant Commands</h2>
-    <!--ko foreach: CombatantCommands -->
-    <div>
-        <span class="command-description" data-bind="text: Description"></span>
-        <input class="keybinding" type="text" data-bind="value: KeyBinding" />
-        <label class="toolbar-setting">
-            <i class="fas" data-bind="css: 'fa-' + FontAwesomeIcon"></i>
-            <input type="checkbox" data-bind="checked: ShowOnActionBar, disable: LockOnActionBar" />
-        </label>
-    </div>
-    <!--/ko -->
+  <h2>Encounter Commands</h2>
+  <div class="command-options-labels">
+    <span class="hotkey-label">Hotkey</span>
+    <span class="toolbar-label">Show on Toolbar</span>
+  </div>
+  <!--ko foreach: encounterCommands -->
+  <div>
+    <span class="command-description" data-bind="text: Description"></span>
+    <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+    <label class="toolbar-setting">
+      <i class="fas" data-bind="css:  'fa-' + FontAwesomeIcon"></i>
+      <input
+        type="checkbox"
+        data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
+      />
+    </label>
+  </div>
+  <!--/ko -->
+  <h2>Combatant Commands</h2>
+  <!--ko foreach: CombatantCommands -->
+  <div>
+    <span class="command-description" data-bind="text: Description"></span>
+    <input class="keybinding" type="text" data-bind="value: KeyBinding" />
+    <label class="toolbar-setting">
+      <i class="fas" data-bind="css: 'fa-' + FontAwesomeIcon"></i>
+      <input
+        type="checkbox"
+        data-bind="checked: ShowOnActionBar, disable: LockOnActionBar"
+      />
+    </label>
+  </div>
+  <!--/ko -->
 </div>
 <div data-bind="visible: CurrentTab() == 'options'" class="tab options">
-    <h3>Rules</h3>
-    <p>Roll monster HP when adding to combat:
-        <input type="checkbox" data-bind="checked: RollHp" />
-    </p>
-    <p>Allow combatants to have negative hit points:
-        <input type="checkbox" data-bind="checked: AllowNegativeHP" />
-    </p>
-    <p>Automatically prompt for concentration checks:
-        <input type="checkbox" data-bind="checked: AutoCheckConcentration" />
-    </p>
-    <p>Automatically add creatures to initiative group:
-        <select data-bind="options: AutoGroupInitiativeOptions, value: AutoGroupInitiative"></select>
-    </p>
-    <h3>Encounter View</h3>
-    <p>Display Round Counter:
-        <input type="checkbox" data-bind="checked: DisplayRoundCounter" />
-    </p>
-    <p>Display Turn Timer:
-        <input type="checkbox" data-bind="checked: DisplayTurnTimer" />
-    </p>
-    <p>Display Encounter Difficulty:
-        <input type="checkbox" data-bind="checked: DisplayDifficulty" />
-    </p>
-    <h3>Player View</h3>
-    <p>Display Round Counter:
-        <input type="checkbox" data-bind="checked: PlayerViewDisplayRoundCounter" />
-    </p>
-    <p>Display Turn Timer:
-        <input type="checkbox" data-bind="checked: PlayerViewDisplayTurnTimer" />
-    </p>
-    <p>Monster HP Verbosity:
-        <select data-bind="options: HpVerbosityOptions, value: MonsterHpVerbosity"></select>
-    </p>
-    <p>Player HP Verbosity:
-        <select data-bind="options: HpVerbosityOptions, value: PlayerHpVerbosity"></select>
-    </p>
-    <p>Hide monsters when encounter is not active:
-        <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
-    </p>
-    <p>Allow players to suggest damage/healing:
-        <input type="checkbox" data-bind="checked: PlayerViewAllowPlayerSuggestions" />
-    </p>
-    <p>Active combatant at top of initiative list:
-        <input type="checkbox" data-bind="checked: ActiveCombatantOnTop" />
-    </p>
-    <p>Additional player view options available with
-        <a href="#" data-bind="click: SelectTab('epicInitiative')">Epic Initiative</a>
-    </p>
+  <h3>Rules</h3>
+  <p>
+    Roll monster HP when adding to combat:
+    <input type="checkbox" data-bind="checked: RollHp" />
+  </p>
+  <p>
+    Allow combatants to have negative hit points:
+    <input type="checkbox" data-bind="checked: AllowNegativeHP" />
+  </p>
+  <p>
+    Automatically prompt for concentration checks:
+    <input type="checkbox" data-bind="checked: AutoCheckConcentration" />
+  </p>
+  <p>
+    Automatically add creatures to initiative group:
+    <select
+      data-bind="options: AutoGroupInitiativeOptions, value: AutoGroupInitiative"
+    ></select>
+  </p>
+  <h3>Encounter View</h3>
+  <p>
+    Display Round Counter:
+    <input type="checkbox" data-bind="checked: DisplayRoundCounter" />
+  </p>
+  <p>
+    Display Turn Timer:
+    <input type="checkbox" data-bind="checked: DisplayTurnTimer" />
+  </p>
+  <p>
+    Display Encounter Difficulty:
+    <input type="checkbox" data-bind="checked: DisplayDifficulty" />
+  </p>
+  <h3>Player View</h3>
+  <p>
+    Display Round Counter:
+    <input type="checkbox" data-bind="checked: PlayerViewDisplayRoundCounter" />
+  </p>
+  <p>
+    Display Turn Timer:
+    <input type="checkbox" data-bind="checked: PlayerViewDisplayTurnTimer" />
+  </p>
+  <p>
+    Monster HP Verbosity:
+    <select
+      data-bind="options: HpVerbosityOptions, value: MonsterHpVerbosity"
+    ></select>
+  </p>
+  <p>
+    Player HP Verbosity:
+    <select
+      data-bind="options: HpVerbosityOptions, value: PlayerHpVerbosity"
+    ></select>
+  </p>
+  <p>
+    Hide monsters when encounter is not active:
+    <input type="checkbox" data-bind="checked: HideMonstersOutsideEncounter" />
+  </p>
+  <p>
+    Allow players to suggest damage/healing:
+    <input
+      type="checkbox"
+      data-bind="checked: PlayerViewAllowPlayerSuggestions"
+    />
+  </p>
+  <p>
+    Active combatant at top of initiative list:
+    <input type="checkbox" data-bind="checked: ActiveCombatantOnTop" />
+  </p>
+  <p>
+    Additional player view options available with
+    <a href="#" data-bind="click: SelectTab('epicInitiative')"
+      >Epic Initiative</a
+    >
+  </p>
 </div>
 <div data-bind="visible: CurrentTab() == 'account'" class="tab account">
-    <h3>Local Data</h3>
-    <p>Export your user data as JSON:
-        <span class="button" data-bind="click: ExportData">Download File</span>
-    </p>
-    <p>Import an exported user data file:
-        <input type="file" accept=".json" data-bind="event: { change: ImportData }" />
-    </p>
-    <p>Import statblocks and spells from DnDAppFile:
-        <input type="file" accept=".xml" data-bind="event: { change: ImportDndAppFile }" />
-    </p>
-    <!-- ko with: AccountViewModel -->
-    <h3>Account Sync</h3>
-    <!-- ko if: IsLoggedIn -->
-    <!-- ko if: HasStorage -->
-    <p>Account Sync is enabled.</p>
-    <ul>
-        <li>Creatures:
-            <span data-bind="text: SyncedCreatures"></span>
-        </li>
-        <li>Characters:
-            <span data-bind="text: SyncedCharacters"></span>
-        </li>
-        <li>Spells:
-            <span data-bind="text: SyncedSpells"></span>
-        </li>
-        <li>Encounters:
-            <span data-bind="text: SyncedEncounters"></span>
-        </li>
-    </ul>
-    <span class="button" data-bind="click: SyncAll">Backup and Sync local data</span>
-    <!-- ko if: SyncMessage -->
-    <pre data-bind="text: SyncMessage"></pre>
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- ko ifnot: HasStorage -->
-    <p>You're logged in with Patreon, but you have not selected the
-        <a href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
-            target="_blank">Account Sync</a> reward level.</p>
-    <!-- /ko -->
-    <a class="button logout" href="/logout">Log Out</a>
-    <!-- /ko -->
-    <!-- ko ifnot: IsLoggedIn -->
-    <p>Log in with Patreon to access patron benefits. Account Sync allows you to access your custom statblocks and encounters
-        from anywhere!</p>
-    <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
-    <!-- /ko -->
-    <!-- /ko -->
+  <h3>Local Data</h3>
+  <p>
+    Export your user data as JSON:
+    <span class="button" data-bind="click: ExportData">Download File</span>
+  </p>
+  <p>
+    Import an exported user data file:
+    <input
+      type="file"
+      accept=".json"
+      data-bind="event: { change: ImportData }"
+    />
+  </p>
+  <p>
+    Import statblocks and spells from DnDAppFile:
+    <input
+      type="file"
+      accept=".xml"
+      data-bind="event: { change: ImportDndAppFile }"
+    />
+  </p>
+  <!-- ko with: AccountViewModel -->
+  <h3>Account Sync</h3>
+  <!-- ko if: IsLoggedIn -->
+  <!-- ko if: HasStorage -->
+  <p>Account Sync is enabled.</p>
+  <ul>
+    <li>Creatures: <span data-bind="text: SyncedCreatures"></span></li>
+    <li>Characters: <span data-bind="text: SyncedCharacters"></span></li>
+    <li>Spells: <span data-bind="text: SyncedSpells"></span></li>
+    <li>Encounters: <span data-bind="text: SyncedEncounters"></span></li>
+  </ul>
+  <span class="button" data-bind="click: SyncAll"
+    >Backup and Sync local data</span
+  >
+  <!-- ko if: SyncMessage -->
+  <pre data-bind="text: SyncMessage"></pre>
+  <!-- /ko -->
+  <!-- /ko -->
+  <!-- ko ifnot: HasStorage -->
+  <p>
+    You're logged in with Patreon, but you have not selected the
+    <a
+      href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
+      target="_blank"
+      >Account Sync</a
+    >
+    reward level.
+  </p>
+  <!-- /ko -->
+  <a class="button logout" href="/logout">Log Out</a>
+  <!-- /ko -->
+  <!-- ko ifnot: IsLoggedIn -->
+  <p>
+    Log in with Patreon to access patron benefits. Account Sync allows you to
+    access your custom statblocks and encounters from anywhere!
+  </p>
+  <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
+    >Log In with Patreon</a
+  >
+  <!-- /ko -->
+  <!-- /ko -->
 </div>
-<div data-bind="visible: CurrentTab() == 'epicInitiative'" class="tab epicInitiative">
-    <h3>Epic Initiative</h3>
-    <!-- ko with: AccountViewModel -->
-    <!-- ko if: IsLoggedIn -->
-    <!-- ko if: HasEpicInitiative -->
-    <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
-    <!-- /ko -->
-    <!-- ko ifnot: HasEpicInitiative -->
-    <p>You're logged in with Patreon, but you have not selected the
-        <a href="https://www.patreon.com/bePatron?c=716070&rid=1937132"
-            target="_blank">Epic Initiative</a> reward level. Epic Initiative allows you to customize your Player View's appearance with combatant
-        portraits, custom colors, fonts, and other CSS features.</p>
-    <!-- /ko -->
-    <!-- /ko -->
-    <!-- ko ifnot: IsLoggedIn -->
-    <p>Log in with Patreon to access patron benefits. Epic Initiative allows you to customize your Player View's appearance
-        with combatant portraits, custom colors, fonts, and other CSS features.</p>
-    <a class="login button" data-bind="attr: { href: PatreonLoginUrl }">Log In with Patreon</a>
-    <!-- /ko -->
-    <!-- /ko -->
+<div
+  data-bind="visible: CurrentTab() == 'epicInitiative'"
+  class="tab epicInitiative"
+>
+  <h3>Epic Initiative</h3>
+  <!-- ko with: AccountViewModel -->
+  <!-- ko if: IsLoggedIn -->
+  <!-- ko if: HasEpicInitiative -->
+  <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
+  <!-- /ko -->
+  <!-- ko ifnot: HasEpicInitiative -->
+  <p>
+    You're logged in with Patreon, but you have not selected the
+    <a
+      href="https://www.patreon.com/bePatron?c=716070&rid=1937132"
+      target="_blank"
+      >Epic Initiative</a
+    >
+    reward level. Epic Initiative allows you to customize your Player View's
+    appearance with combatant portraits, custom colors, fonts, and other CSS
+    features.
+  </p>
+  <!-- /ko -->
+  <!-- /ko -->
+  <!-- ko ifnot: IsLoggedIn -->
+  <p>
+    Log in with Patreon to access patron benefits. Epic Initiative allows you to
+    customize your Player View's appearance with combatant portraits, custom
+    colors, fonts, and other CSS features.
+  </p>
+  <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
+    >Log In with Patreon</a
+  >
+  <!-- /ko -->
+  <!-- /ko -->
 </div>
-<div class="button save-and-close" data-bind="click: SaveAndClose">Save and Close</div>
+<div class="button save-and-close" data-bind="click: SaveAndClose">
+  Save and Close
+</div>

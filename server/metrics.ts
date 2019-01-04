@@ -8,75 +8,75 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 const addons = [
-    {
-        "name": "keen:ip_to_geo",
-        "input": {
-            "ip": "ipAddress"
-        },
-        "output": "geo"
+  {
+    name: "keen:ip_to_geo",
+    input: {
+      ip: "ipAddress"
     },
-    {
-        "name": "keen:url_parser",
-        "input": {
-            "url": "page.url"
-        },
-        "output": "url.info"
+    output: "geo"
+  },
+  {
+    name: "keen:url_parser",
+    input: {
+      url: "page.url"
     },
-    {
-        "name": "keen:url_parser",
-        "input": {
-            "url": "referrer.url"
-        },
-        "output": "referrer.info"
+    output: "url.info"
+  },
+  {
+    name: "keen:url_parser",
+    input: {
+      url: "referrer.url"
     },
-    {
-        "name": "keen:date_time_parser",
-        "input": {
-            "date_time": "keen.timestamp"
-        },
-        "output": "time.utc"
+    output: "referrer.info"
+  },
+  {
+    name: "keen:date_time_parser",
+    input: {
+      date_time: "keen.timestamp"
     },
-    {
-        "name": "keen:date_time_parser",
-        "input": {
-            "date_time": "localTime"
-        },
-        "output": "time.local"
-    }
+    output: "time.utc"
+  },
+  {
+    name: "keen:date_time_parser",
+    input: {
+      date_time: "localTime"
+    },
+    output: "time.local"
+  }
 ];
 
 export function configureMetricsRoutes(app: express.Application) {
-    const keenClient = new KeenTracking({
-        projectId: keenProjectId,
-        writeKey: keenWriteKey
-    });
+  const keenClient = new KeenTracking({
+    projectId: keenProjectId,
+    writeKey: keenWriteKey
+  });
 
-    app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
-        if (!keenProjectId || !keenWriteKey) {
-            return res.status(501).send("No metrics pipeline configured.");
-        }
-
-        let session = req.session;
-        if (session === undefined) {
-            throw "Session is undefined.";
-        }
-
-        const eventName = req.params.eventName;
-        const eventData = req.body || {};
-        eventData.sessionId = session.id;
-        eventData.userId = session.userId || null;
-        eventData.ipAddress = req.ip;
-        eventData.keen = { addons };
-        keenClient.recordEvent(eventName, eventData);
-
-        return res.sendStatus(200);
-    });
-
+  app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
     if (!keenProjectId || !keenWriteKey) {
-        console.warn("Keen configuration variables not set.");
-        return;
+      return res.status(501).send("No metrics pipeline configured.");
     }
 
-    /*expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
+    let session = req.session;
+    if (session === undefined) {
+      throw "Session is undefined.";
+    }
+
+    const eventName = req.params.eventName;
+    const eventData = req.body || {};
+    eventData.sessionId = session.id;
+    eventData.userId = session.userId || null;
+    eventData.ipAddress = req.ip;
+    eventData.keen = { addons };
+    keenClient.recordEvent(eventName, eventData);
+
+    return res.sendStatus(200);
+  });
+
+  if (!keenProjectId || !keenWriteKey) {
+    console.warn("Keen configuration variables not set.");
+    return;
+  }
+
+  /*expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
     app.use(expressKeen.handleAll());*/
 }

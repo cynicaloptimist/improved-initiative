@@ -1,15 +1,21 @@
 <div data-bind="text: Initiative" class="combatant__initiative"></div>
 <div class="combatant__portrait" data-bind="visible: $root.hasImages">
-    <img data-bind="visible: ImageURL != '', attr:{ src: ImageURL }, click: function(){ $root.SplashPortrait(Id, true)}">
+  <img
+    data-bind="visible: ImageURL != '', attr:{ src: ImageURL }, click: function(){ $root.SplashPortrait(Id, true)}"
+  />
 </div>
 <div class="combatant__name">
-    <span data-bind="text: Name, attr: {title: Name }"></span>
+  <span data-bind="text: Name, attr: {title: Name }"></span>
 </div>
-<div class="combatant__hp" data-bind="css: { 'disable-hover': !$root.allowSuggestions() }">
-    <span data-bind="click: $root.ShowSuggestion, html: HPDisplay, style: { color: HPColor }" class="current-hp"></span>
+<div
+  class="combatant__hp"
+  data-bind="css: { 'disable-hover': !$root.allowSuggestions() }"
+>
+  <span
+    data-bind="click: $root.ShowSuggestion, html: HPDisplay, style: { color: HPColor }"
+    class="current-hp"
+  ></span>
 </div>
 <div class="combatant__tags" data-bind="foreach: Tags">
-    <div class="tag">
-        <span data-bind="text: Text"></span>
-    </div>
+  <div class="tag"><span data-bind="text: Text"></span></div>
 </div>

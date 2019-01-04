@@ -7,85 +7,118 @@ import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 
 interface IdentityFieldsProps {
-    formApi: FormikProps<any>;
-    allowFolder: boolean;
-    allowSaveAs: boolean;
-    setEditorMode: (editorMode: "standard" | "json") => void;
-    currentListings?: Listing<Listable>[];
+  formApi: FormikProps<any>;
+  allowFolder: boolean;
+  allowSaveAs: boolean;
+  setEditorMode: (editorMode: "standard" | "json") => void;
+  currentListings?: Listing<Listable>[];
 }
 
 interface IdentityFieldsState {
-    folderExpanded: boolean;
+  folderExpanded: boolean;
 }
 
-export class IdentityFields extends React.Component<IdentityFieldsProps, IdentityFieldsState> {
-    private folderInput: HTMLInputElement;
-    private autoCompletePaths: string[];
-    private initializedAutocomplete = false;
+export class IdentityFields extends React.Component<
+  IdentityFieldsProps,
+  IdentityFieldsState
+> {
+  private folderInput: HTMLInputElement;
+  private autoCompletePaths: string[];
+  private initializedAutocomplete = false;
 
-    constructor(props) {
-        super(props);
-        this.autoCompletePaths = _.uniq(this.props.currentListings && this.props.currentListings.map(l => l.Path));
+  constructor(props) {
+    super(props);
+    this.autoCompletePaths = _.uniq(
+      this.props.currentListings && this.props.currentListings.map(l => l.Path)
+    );
 
-        const folderExpanded = this.props.formApi.values["Path"] && this.props.formApi.values["Path"].length > 0;
+    const folderExpanded =
+      this.props.formApi.values["Path"] &&
+      this.props.formApi.values["Path"].length > 0;
 
-        this.state = {
-            folderExpanded
-        };
+    this.state = {
+      folderExpanded
+    };
+  }
+
+  private folderElement = () => {
+    if (!this.props.allowFolder) {
+      return null;
+    }
+    if (this.state.folderExpanded) {
+      return (
+        <div>
+          <label className="label" htmlFor="Path">
+            Folder
+          </label>
+          <Field
+            type="text"
+            name="Path"
+            innerRef={i => (this.folderInput = i)}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <span
+          className="fa-clickable fa-folder"
+          onClick={() => this.setState({ folderExpanded: true })}
+        />
+      );
+    }
+  };
+
+  public componentDidUpdate() {
+    if (!this.folderInput || this.initializedAutocomplete) {
+      return;
     }
 
-    private folderElement = () => {
-        if (!this.props.allowFolder) {
-            return null;
-        }
-        if (this.state.folderExpanded) {
-            return <div>
-                <label className="label" htmlFor="Path">Folder</label>
-                <Field type="text" name="Path" innerRef={i => this.folderInput = i} />
-            </div>;
-        } else {
-            return <span className="fa-clickable fa-folder" onClick={() => this.setState({ folderExpanded: true })} />;
-        }
-    }
+    const awesomeplete = new Awesomplete(this.folderInput, {
+      list: this.autoCompletePaths,
+      minChars: 1
+    });
 
-    public componentDidUpdate() {
-        if (!this.folderInput || this.initializedAutocomplete) {
-            return;
-        }
+    this.folderInput.addEventListener("awesomplete-select", (event: any) => {
+      this.props.formApi.setFieldValue("Path", event.text.value);
+      event.preventDefault();
+      awesomeplete.close();
+    });
 
-        const awesomeplete = new Awesomplete(this.folderInput, {
-            list: this.autoCompletePaths,
-            minChars: 1
-        });
+    this.initializedAutocomplete = true;
+  }
 
-        this.folderInput.addEventListener("awesomplete-select", (event: any) => {
-            this.props.formApi.setFieldValue("Path", event.text.value);
-            event.preventDefault();
-            awesomeplete.close();
-        });
-
-        this.initializedAutocomplete = true;
-    }
-
-    public render() {
-        return <React.Fragment>
-            <div className="inline">
-                {this.folderElement()}
-                <div>
-                    <label className="label" htmlFor="name">Name</label>
-                    <Field type="text" name="Name" id="name" />
-                </div>
-            </div>
-            {this.props.allowSaveAs && <label>
-                Save as a copy
-                <Field type="checkbox" name="SaveAs" />
-                {this.props.formApi.errors.PathAndName}
-            </label>}
-            <div className="inline">
-                Editor Mode:
-                <Button onClick={() => this.props.setEditorMode("standard")} text="Standard" />
-                <Button additionalClassNames="c-statblock-editor__json-button" onClick={() => this.props.setEditorMode("json")} text="JSON" />
-            </div>
-        </React.Fragment>;
-    }
+  public render() {
+    return (
+      <React.Fragment>
+        <div className="inline">
+          {this.folderElement()}
+          <div>
+            <label className="label" htmlFor="name">
+              Name
+            </label>
+            <Field type="text" name="Name" id="name" />
+          </div>
+        </div>
+        {this.props.allowSaveAs && (
+          <label>
+            Save as a copy
+            <Field type="checkbox" name="SaveAs" />
+            {this.props.formApi.errors.PathAndName}
+          </label>
+        )}
+        <div className="inline">
+          Editor Mode:
+          <Button
+            onClick={() => this.props.setEditorMode("standard")}
+            text="Standard"
+          />
+          <Button
+            additionalClassNames="c-statblock-editor__json-button"
+            onClick={() => this.props.setEditorMode("json")}
+            text="JSON"
+          />
+        </div>
+      </React.Fragment>
+    );
+  }
 }

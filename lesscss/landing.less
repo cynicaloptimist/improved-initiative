@@ -27,7 +27,8 @@
     .card-bg(@larger-spacer, @larger-spacer);
     border: none;
 
-    &:before, &:after {
+    &:before,
+    &:after {
       content: "";
       display: block;
       background: @primary-red center;
@@ -86,7 +87,6 @@
       justify-content: flex-start;
       align-items: center;
 
-
       p {
         margin: @larger-spacer 0;
         font-size: @font-size-body;
@@ -108,8 +108,12 @@
           align-items: center;
           margin: 0 @medium-spacer;
 
-          &:first-child { margin-left: 0; }
-          &:last-child { margin-right: 0; }
+          &:first-child {
+            margin-left: 0;
+          }
+          &:last-child {
+            margin-right: 0;
+          }
 
           img {
             margin-bottom: @medium-spacer;
@@ -150,18 +154,24 @@
           text-align: center;
           text-transform: uppercase;
 
-          &:before, &:after {
+          &:before,
+          &:after {
             width: 50%;
             top: 51%;
             overflow: hidden;
             height: 1px;
             background-color: @hover-grey;
-            content: '\a0';
+            content: "\a0";
             position: absolute;
           }
 
-          &:before { margin-left: -52%; text-align: right; }
-          &:after { margin-left: 2%; }
+          &:before {
+            margin-left: -52%;
+            text-align: right;
+          }
+          &:after {
+            margin-left: 2%;
+          }
         }
 
         .join-encounter {
@@ -199,7 +209,8 @@
     justify-content: space-between;
     align-items: flex-end;
 
-    p, a {
+    p,
+    a {
       font-size: @font-size-small;
     }
 
@@ -208,17 +219,22 @@
       margin: @large-spacer;
     }
 
-    a:link, a:hover, a:active, a:visited { color: @primary-red; }
+    a:link,
+    a:hover,
+    a:active,
+    a:visited {
+      color: @primary-red;
+    }
 
     .support {
-
     }
     .patreon-button {
       .colors(@primary-white, @primary-red, @primary-red);
       padding: @large-spacer;
 
-      &:hover { background-color: @accent-red; }
+      &:hover {
+        background-color: @accent-red;
+      }
     }
   }
-
 }

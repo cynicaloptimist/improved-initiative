@@ -5,58 +5,68 @@ import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
 import { Prompt } from "./Prompt";
 
 export class InitiativePrompt implements Prompt {
-    public InputSelector = ".response";
-    public ComponentName = "initiativeprompt";
-    public PlayerCharacters = [];
-    public NonPlayerCharacters = [];
+  public InputSelector = ".response";
+  public ComponentName = "initiativeprompt";
+  public PlayerCharacters = [];
+  public NonPlayerCharacters = [];
 
-    constructor(combatants: Combatant[], startEncounter: () => void) {
-        const toPrompt = (combatant: Combatant) => {
-            const sideInitiative = CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
-            const initiativeBonus = sideInitiative ? 0 : toModifierString(combatant.InitiativeBonus);
-            const advantageIndicator = (!sideInitiative && combatant.StatBlock().InitiativeAdvantage) ? "[adv]" : "";
+  constructor(combatants: Combatant[], startEncounter: () => void) {
+    const toPrompt = (combatant: Combatant) => {
+      const sideInitiative =
+        CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+      const initiativeBonus = sideInitiative
+        ? 0
+        : toModifierString(combatant.InitiativeBonus);
+      const advantageIndicator =
+        !sideInitiative && combatant.StatBlock().InitiativeAdvantage
+          ? "[adv]"
+          : "";
 
-            return {
-                Id: combatant.Id,
-                Prompt: `${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `,
-                Css: combatant.InitiativeGroup() !== null ? "fas fa-link" : "",
-                PreRoll: combatant.GetInitiativeRoll()
-            };
-        };
+      return {
+        Id: combatant.Id,
+        Prompt: `${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `,
+        Css: combatant.InitiativeGroup() !== null ? "fas fa-link" : "",
+        PreRoll: combatant.GetInitiativeRoll()
+      };
+    };
 
-        const groups = [];
+    const groups = [];
 
-        const byGroup = combatants.filter(combatant => {
-            const group = combatant.InitiativeGroup();
-            if (group) {
-                if (groups.indexOf(group) > -1) {
-                    return false;
-                }
-                groups.push(group);
-            }
-            return true;
-        });
+    const byGroup = combatants.filter(combatant => {
+      const group = combatant.InitiativeGroup();
+      if (group) {
+        if (groups.indexOf(group) > -1) {
+          return false;
+        }
+        groups.push(group);
+      }
+      return true;
+    });
 
-        this.PlayerCharacters = byGroup.filter(c => c.IsPlayerCharacter).map(toPrompt);
-        this.NonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter).map(toPrompt);
+    this.PlayerCharacters = byGroup
+      .filter(c => c.IsPlayerCharacter)
+      .map(toPrompt);
+    this.NonPlayerCharacters = byGroup
+      .filter(c => !c.IsPlayerCharacter)
+      .map(toPrompt);
 
-        this.Resolve = (form: HTMLFormElement) => {
-            const inputs = $(form).find(this.InputSelector);
-            const responsesById = {};
-            inputs.map((_, element) => {
-                responsesById[element.id] = $(element).val();
-            });
-            const applyInitiative = (combatant: Combatant) => {
-                const response = responsesById[`initiative-${combatant.Id}`];
-                if (response) {
-                    combatant.Initiative(parseInt(response));
-                }
-            };
-            combatants.forEach(applyInitiative);
-            startEncounter();
-            TutorialSpy("CompleteInitiativeRolls");
-        };
-    }
+    this.Resolve = (form: HTMLFormElement) => {
+      const inputs = $(form).find(this.InputSelector);
+      const responsesById = {};
+      inputs.map((_, element) => {
+        responsesById[element.id] = $(element).val();
+      });
+      const applyInitiative = (combatant: Combatant) => {
+        const response = responsesById[`initiative-${combatant.Id}`];
+        if (response) {
+          combatant.Initiative(parseInt(response));
+        }
+      };
+      combatants.forEach(applyInitiative);
+      startEncounter();
+      TutorialSpy("CompleteInitiativeRolls");
+    };
+  }
 
-    public Resolve = _ => { };
+  public Resolve = _ => {};
 }

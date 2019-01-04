@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
@@ -12,60 +11,89 @@ import { PersistentCharacterLibraryViewModel } from "./PersistentCharacterLibrar
 import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
 import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
 
-
 export interface LibrariesProps {
-    librariesCommander: LibrariesCommander;
-    statBlockTextEnricher: TextEnricher;
-    libraries: LibrarySet;
+  librariesCommander: LibrariesCommander;
+  statBlockTextEnricher: TextEnricher;
+  libraries: LibrarySet;
 }
 
 interface LibrariesState {
-    selectedLibrary: string;
+  selectedLibrary: string;
 }
 
-export class LibrariesViewModel extends React.Component<LibrariesProps, LibrariesState> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedLibrary: "Creatures"
-        };
+export class LibrariesViewModel extends React.Component<
+  LibrariesProps,
+  LibrariesState
+> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedLibrary: "Creatures"
+    };
+  }
+
+  private hideLibraries = () => this.props.librariesCommander.HideLibraries();
+  private selectLibrary = (library: string) => {
+    if (library == "Characters") {
+      TutorialSpy("SelectCharactersTab");
     }
+    this.setState({ selectedLibrary: library });
+  };
 
-    private hideLibraries = () => this.props.librariesCommander.HideLibraries();
-    private selectLibrary = (library: string) => {
-        if (library == "Characters") {
-            TutorialSpy("SelectCharactersTab");
-        }
-        this.setState({ selectedLibrary: library });
-    }
+  public render() {
+    const libraries = {
+      Creatures: (
+        <StatBlockLibraryViewModel
+          librariesCommander={this.props.librariesCommander}
+          library={this.props.libraries.NPCs}
+          statBlockTextEnricher={this.props.statBlockTextEnricher}
+        />
+      ),
+      Characters: (
+        <PersistentCharacterLibraryViewModel
+          librariesCommander={this.props.librariesCommander}
+          library={this.props.libraries.PersistentCharacters}
+          statBlockTextEnricher={this.props.statBlockTextEnricher}
+        />
+      ),
+      Encounters: (
+        <EncounterLibraryViewModel
+          librariesCommander={this.props.librariesCommander}
+          library={this.props.libraries.Encounters}
+        />
+      ),
+      Spells: (
+        <SpellLibraryViewModel
+          librariesCommander={this.props.librariesCommander}
+          library={this.props.libraries.Spells}
+        />
+      )
+    };
 
-    public render() {
-        const libraries = {
-            Creatures: <StatBlockLibraryViewModel
-                librariesCommander={this.props.librariesCommander}
-                library={this.props.libraries.NPCs}
-                statBlockTextEnricher={this.props.statBlockTextEnricher} />,
-            Characters: <PersistentCharacterLibraryViewModel
-                librariesCommander={this.props.librariesCommander}
-                library={this.props.libraries.PersistentCharacters}
-                statBlockTextEnricher={this.props.statBlockTextEnricher} />,
-            Encounters: <EncounterLibraryViewModel
-                librariesCommander={this.props.librariesCommander}
-                library={this.props.libraries.Encounters} />,
-            Spells: <SpellLibraryViewModel
-                librariesCommander={this.props.librariesCommander}
-                library={this.props.libraries.Spells} />,
-        };
+    const selectedLibrary = libraries[this.state.selectedLibrary];
 
-        const selectedLibrary = libraries[this.state.selectedLibrary];
+    const hasAccountSync = env.HasStorage;
 
-        const hasAccountSync = env.HasStorage;
-
-        return <React.Fragment>
-            <h2>{hasAccountSync && <span className="fas fa-cloud" title="Account Sync is enabled" />} Library</h2>
-            <Button additionalClassNames="button--close" fontAwesomeIcon="times" onClick={this.hideLibraries} />
-            <Tabs options={Object.keys(libraries)} onChoose={this.selectLibrary} selected={this.state.selectedLibrary} />
-            {selectedLibrary}
-        </React.Fragment>;
-    }
+    return (
+      <React.Fragment>
+        <h2>
+          {hasAccountSync && (
+            <span className="fas fa-cloud" title="Account Sync is enabled" />
+          )}{" "}
+          Library
+        </h2>
+        <Button
+          additionalClassNames="button--close"
+          fontAwesomeIcon="times"
+          onClick={this.hideLibraries}
+        />
+        <Tabs
+          options={Object.keys(libraries)}
+          onChoose={this.selectLibrary}
+          selected={this.state.selectedLibrary}
+        />
+        {selectedLibrary}
+      </React.Fragment>
+    );
+  }
 }
