@@ -10,10 +10,9 @@ interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];
   nonPlayerCharacters: Combatant[];
 }
-interface InitiativePromptComponentState {}
+
 class InitiativePromptComponent extends React.Component<
-  InitiativePromptComponentProps,
-  InitiativePromptComponentState
+  InitiativePromptComponentProps
 > {
   public render() {
     return (
