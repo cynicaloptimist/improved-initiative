@@ -16,7 +16,7 @@ class InitiativePromptComponent extends React.Component<
 > {
   public render() {
     return (
-      <div className="roll-initiative">
+      <div className="roll-initiative" ref={e => (this.element = e)}>
         <h4>
           Roll Initiative <SubmitButton />
         </h4>
@@ -29,6 +29,17 @@ class InitiativePromptComponent extends React.Component<
       </div>
     );
   }
+
+  public componentDidMount() {
+    const firstResponseElement = this.element.getElementsByClassName(
+      "response"
+    )[0];
+    if (firstResponseElement instanceof HTMLInputElement) {
+      firstResponseElement.focus();
+    }
+  }
+
+  private element: HTMLDivElement;
 }
 
 const combatantInitiativeField = (combatant: Combatant) => {
