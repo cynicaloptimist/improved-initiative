@@ -163,6 +163,10 @@ export class Encounter {
   }
 
   public AddCombatantFromState = (combatantState: CombatantState) => {
+    if (this.combatants().some(c => c.Id == combatantState.Id)) {
+      combatantState.Id = probablyUniqueString();
+    }
+
     const combatant = new Combatant(combatantState, this);
     this.combatants.push(combatant);
 
