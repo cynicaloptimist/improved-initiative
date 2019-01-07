@@ -17,9 +17,10 @@ class InitiativePromptComponent extends React.Component<
   public render() {
     return (
       <div className="roll-initiative" ref={e => (this.element = e)}>
-        <h4>
-          Roll Initiative <SubmitButton />
-        </h4>
+        <div className="roll-initiative__header">
+          <h4>Roll Initiative</h4>
+          <SubmitButton />
+        </div>
         <ul className="playercharacters">
           {this.props.playerCharacters.map(combatantInitiativeField)}
         </ul>
