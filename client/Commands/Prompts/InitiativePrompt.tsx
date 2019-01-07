@@ -53,7 +53,7 @@ const combatantInitiativeField = (combatant: Combatant) => {
 
   const className = combatant.InitiativeGroup() !== null ? "fas fa-link" : "";
   return (
-    <li>
+    <li key={combatant.Id}>
       <span
         className={className}
       >{`${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `}</span>
