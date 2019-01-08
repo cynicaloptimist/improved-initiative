@@ -3,6 +3,7 @@ import * as React from "react";
 import { CombatantState } from "../../../common/CombatantState";
 import { EncounterState } from "../../../common/EncounterState";
 import { AccountClient } from "../../Account/AccountClient";
+import { SubmitButton } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
@@ -41,7 +42,7 @@ class MoveEncounterPromptComponent extends React.Component<
           name="folderName"
           type="text"
         />
-        <button type="submit" className="fas fa-check button" />
+        <SubmitButton />
       </span>
     );
   }

@@ -1,4 +1,4 @@
-@button-inner: 1.25rem;
+@button-inner: 2.6rem;
 @button-padding: 0.75rem;
 
 .fas {
@@ -45,19 +45,22 @@
 }
 
 .button() {
-  .colors(@button-text, transparent, @shadow);
+  .colors(@button-text, transparent, @hover-black);
 
   &:hover {
     background-color: @hover-black;
   }
   cursor: pointer;
   display: inline-block;
+  border-width: 1px;
+  border-style: solid;
   margin: 0;
+  min-width: @button-inner;
+  min-height: @button-inner;
   padding: @button-padding;
   text-align: center;
   text-decoration: none;
   border-radius: @border-radius;
-  border: 0;
 }
 
 .button,
@@ -68,7 +71,7 @@
 .commands-encounter,
 .commands-combatant {
   .c-button {
-    .colors(@primary-white, @primary-grey, 0);
+    .colors(@primary-white, @primary-grey, transparent);
 
     &:hover {
       background-color: @hover-grey;

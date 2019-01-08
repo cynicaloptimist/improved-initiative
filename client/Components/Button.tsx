@@ -42,3 +42,16 @@ export class Button extends React.Component<ButtonProps> {
     );
   }
 }
+
+interface SubmitButtonProps {
+  faClass?: string;
+}
+
+export class SubmitButton extends React.Component<SubmitButtonProps> {
+  public render() {
+    const faClass = this.props.faClass || "check";
+    return (
+      <button type="submit" className={`c-button fas fa-${faClass} button`} />
+    );
+  }
+}

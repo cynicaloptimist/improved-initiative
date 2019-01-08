@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import { Spell } from "../../../common/Spell";
+import { SubmitButton } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Prompt } from "./Prompt";
@@ -68,7 +69,7 @@ class SpellPromptComponent extends React.Component<SpellPromptProps, null> {
           </p>
           <p className="spell-source">Source: {this.props.Spell.Source}</p>
         </div>
-        <button type="submit" className="fas fa-check button" />
+        <SubmitButton />
       </React.Fragment>
     );
   }

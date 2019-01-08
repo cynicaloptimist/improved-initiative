@@ -4,7 +4,7 @@ import * as React from "react";
 import { Listable } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
-import { Button } from "../Components/Button";
+import { Button, SubmitButton } from "../Components/Button";
 import { Listing } from "../Library/Listing";
 import { IdentityFields } from "./components/IdentityFields";
 import {
@@ -69,7 +69,7 @@ export class StatBlockEditor extends React.Component<
         {this.props.onDelete && (
           <Button onClick={this.delete} fontAwesomeIcon="trash" />
         )}
-        <button type="submit" className="button fas fa-save" />
+        <SubmitButton faClass="save" />
       </React.Fragment>
     );
 

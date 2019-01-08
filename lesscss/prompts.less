@@ -44,7 +44,7 @@
     align-items: flex-start;
 
     div {
-      flex-flow: row;
+      flex-flow: row wrap;
       align-items: center;
 
       > * {
@@ -112,10 +112,6 @@
     align-items: flex-start;
     flex: 1;
 
-    h4 {
-      flex-basis: 100%;
-    }
-
     ul {
       flex: 1;
       text-align: left;
@@ -152,6 +148,13 @@
     }
   }
 
+  .roll-initiative__header {
+    margin: @medium-spacer;
+    flex-flow: row;
+    justify-content: space-between;
+    flex-basis: 100%;
+  }
+
   .accept-damage-options,
   .check-concentration-options {
     flex-direction: row;
@@ -169,7 +172,7 @@
 }
 
 .p-quick-add {
-  flex-flow: row;
+  flex-flow: row wrap;
   align-items: center;
 
   > * {

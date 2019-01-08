@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
+import { SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
 import { Metrics } from "../../Utility/Metrics";
@@ -54,7 +55,7 @@ class TagPromptComponent extends React.Component<
             className="button fas fa-hourglass"
             onClick={this.toggleAdvanced}
           />
-          <button type="submit" className="fas fa-check button" />
+          <SubmitButton />
         </div>
         {this.state.advancedMode && this.renderAdvancedFields()}
       </div>
