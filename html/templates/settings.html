@@ -20,7 +20,8 @@
     >Epic Initiative</span
   >
 </div>
-<div data-bind="visible: CurrentTab() == 'about'" class="tab about">
+<!-- ko if: CurrentTab() == "about" -->
+<div class="tab about">
   <div>
     <p>
       <strong>Improved Initiative</strong> was created by
@@ -72,7 +73,9 @@
     >
   </div>
 </div>
-<div data-bind="visible: CurrentTab() == 'keybindings'" class="tab keybindings">
+<!-- /ko -->
+<!-- ko if: CurrentTab() == "keybindings" -->
+<div class="tab keybindings">
   <h2>Encounter Commands</h2>
   <div class="command-options-labels">
     <span class="hotkey-label">Hotkey</span>
@@ -106,7 +109,9 @@
   </div>
   <!--/ko -->
 </div>
-<div data-bind="visible: CurrentTab() == 'options'" class="tab options">
+<!-- /ko -->
+<!-- ko if: CurrentTab() == "options" -->
+<div class="tab options">
   <h3>Rules</h3>
   <p>
     Roll monster HP when adding to combat:
@@ -182,7 +187,9 @@
     >
   </p>
 </div>
-<div data-bind="visible: CurrentTab() == 'account'" class="tab account">
+<!-- /ko -->
+<!-- ko if: CurrentTab() == "account" -->
+<div class="tab account">
   <h3>Local Data</h3>
   <p>
     Export your user data as JSON:
@@ -246,10 +253,9 @@
   <!-- /ko -->
   <!-- /ko -->
 </div>
-<div
-  data-bind="visible: CurrentTab() == 'epicInitiative'"
-  class="tab epicInitiative"
->
+<!-- /ko -->
+<!-- ko if: CurrentTab() == "epicInitiative" -->
+<div class="tab epicInitiative">
   <h3>Epic Initiative</h3>
   <!-- ko with: AccountViewModel -->
   <!-- ko if: IsLoggedIn -->
@@ -282,6 +288,7 @@
   <!-- /ko -->
   <!-- /ko -->
 </div>
+<!-- /ko -->
 <div class="button save-and-close" data-bind="click: SaveAndClose">
   Save and Close
 </div>
