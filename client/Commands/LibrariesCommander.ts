@@ -100,7 +100,7 @@ export class LibrariesCommander {
           { ...StatBlock.Default(), ...statBlock },
           s => library.SaveEditedStatBlock(listing, s),
           library.StatBlocks(),
-          this.deleteSavedStatBlock(library.StoreName, listing.Id),
+          this.deleteSavedStatBlock(listing.Id),
           library.SaveNewStatBlock
         );
       }
@@ -212,10 +212,7 @@ export class LibrariesCommander {
     }
   };
 
-  private deleteSavedStatBlock = (
-    library: string,
-    statBlockId: string
-  ) => () => {
+  private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.NPCs.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
   };

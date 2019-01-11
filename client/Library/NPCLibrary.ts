@@ -8,7 +8,7 @@ import { Listing, ListingOrigin } from "./Listing";
 
 export class NPCLibrary {
   public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
-  public readonly StoreName = Store.StatBlocks;
+  private readonly StoreName = Store.StatBlocks;
 
   constructor(private accountClient: AccountClient) {
     $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
