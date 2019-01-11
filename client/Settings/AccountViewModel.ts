@@ -1,12 +1,9 @@
-import { saveAs } from "browser-filesaver";
 import * as ko from "knockout";
 
 import { Listable } from "../../common/Listable";
-import { AccountClient } from "../Account/AccountClient";
 import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { Store } from "../Utility/Store";
 
 function getCounts<T extends Listable>(items: Listing<T>[]) {
   const localCount = items.filter(c => c.Origin === "localStorage").length;
@@ -15,7 +12,7 @@ function getCounts<T extends Listable>(items: Listing<T>[]) {
 }
 
 export class AccountViewModel {
-  constructor(private libraries: Libraries) {}
+  constructor(public Libraries: Libraries) {}
 
   public IsLoggedIn = env.IsLoggedIn;
   public HasStorage = env.HasStorage;
@@ -23,26 +20,15 @@ export class AccountViewModel {
   public PatreonLoginUrl = env.PatreonLoginUrl;
 
   public SyncedCreatures = ko.computed(() =>
-    getCounts(this.libraries.NPCs.StatBlocks())
+    getCounts(this.Libraries.NPCs.StatBlocks())
   );
   public SyncedCharacters = ko.computed(() =>
-    getCounts(this.libraries.PersistentCharacters.GetListings())
+    getCounts(this.Libraries.PersistentCharacters.GetListings())
   );
   public SyncedSpells = ko.computed(() =>
-    getCounts(this.libraries.Spells.Spells())
+    getCounts(this.Libraries.Spells.Spells())
   );
   public SyncedEncounters = ko.computed(() =>
-    getCounts(this.libraries.Encounters.Encounters())
+    getCounts(this.Libraries.Encounters.Encounters())
   );
-
-  public SyncAll() {
-    this.SyncMessage("");
-    let blob = Store.ExportAll();
-    saveAs(blob, "improved-initiative.json");
-    new AccountClient().SaveAll(this.libraries, err => {
-      this.SyncMessage(this.SyncMessage() + "\n" + JSON.stringify(err));
-    });
-  }
-
-  public SyncMessage = ko.observable("");
 }

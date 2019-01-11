@@ -20,6 +20,7 @@ import {
   CurrentSettings,
   Settings
 } from "./Settings";
+import { AccountSettings } from "./components/AccountSettings";
 import {
   EpicInitiativeSettings,
   EpicInitiativeSettingsProps
@@ -73,25 +74,6 @@ export class SettingsViewModel {
     EpicInitiativeSettings
   >;
   private playerViewSettings: PlayerViewSettings;
-
-  public ExportData = () => {
-    let blob = Store.ExportAll();
-    saveAs(blob, "improved-initiative.json");
-  };
-
-  public ImportData = (_, event) => {
-    let file = event.target.files[0];
-    if (file) {
-      Store.ImportAll(file);
-    }
-  };
-
-  public ImportDndAppFile = (_, event) => {
-    let file = event.target.files[0];
-    if (file) {
-      Store.ImportFromDnDAppFile(file);
-    }
-  };
 
   public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
 
@@ -227,4 +209,9 @@ export class SettingsViewModel {
       customCSSEditorProps
     );
   }
+
+  public accountSettings = React.createElement(AccountSettings, {
+    accountClient: new AccountClient(),
+    accountViewModel: this.AccountViewModel
+  });
 }
