@@ -8,14 +8,13 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { NPCLibrary } from "../NPCLibrary";
-import { PCLibrary } from "../PCLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
 export type StatBlockLibraryViewModelProps = {
   librariesCommander: LibrariesCommander;
-  library: PCLibrary | NPCLibrary;
+  library: NPCLibrary;
   statBlockTextEnricher: TextEnricher;
 };
 

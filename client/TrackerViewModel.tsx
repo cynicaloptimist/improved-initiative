@@ -429,10 +429,6 @@ export class TrackerViewModel {
       this.Libraries.NPCs.AddListings(account.statblocks, "account");
     }
 
-    if (account.playercharacters) {
-      this.Libraries.PCs.AddListings(account.playercharacters, "account");
-    }
-
     if (account.persistentcharacters) {
       this.Libraries.PersistentCharacters.AddListings(
         account.persistentcharacters,

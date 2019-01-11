@@ -12,7 +12,6 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { NPCLibrary } from "../Library/NPCLibrary";
-import { PCLibrary } from "../Library/PCLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -62,17 +61,11 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: PCLibrary | NPCLibrary) => {
+  public CreateAndEditStatBlock = (library: NPCLibrary) => {
     let statBlock = StatBlock.Default();
     let newId = probablyUniqueString();
 
-    if (library.StoreName == Store.PlayerCharacters) {
-      statBlock.Name = "New Player Character";
-      statBlock.Player = "player";
-    } else {
-      statBlock.Name = "New Creature";
-    }
-
+    statBlock.Name = "New Creature";
     statBlock.Id = newId;
 
     this.tracker.EditStatBlock(
@@ -83,10 +76,7 @@ export class LibrariesCommander {
     );
   };
 
-  public EditStatBlock = (
-    listing: Listing<StatBlock>,
-    library: PCLibrary | NPCLibrary
-  ) => {
+  public EditStatBlock = (listing: Listing<StatBlock>, library: NPCLibrary) => {
     if (this.tracker.TutorialVisible()) {
       return;
     }
@@ -226,13 +216,7 @@ export class LibrariesCommander {
     library: string,
     statBlockId: string
   ) => () => {
-    if (library == Store.PlayerCharacters) {
-      this.libraries.PCs.DeleteListing(statBlockId);
-    }
-    if (library == Store.StatBlocks) {
-      this.libraries.NPCs.DeleteListing(statBlockId);
-    }
-
+    this.libraries.NPCs.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
   };
 }
