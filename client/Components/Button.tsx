@@ -30,7 +30,7 @@ export class Button extends React.Component<ButtonProps> {
     );
 
     return (
-      <span
+      <button
         className={classNames.join(" ")}
         onClick={!disabled && this.props.onClick}
         onMouseOver={!disabled && this.props.onMouseOver}
@@ -38,7 +38,7 @@ export class Button extends React.Component<ButtonProps> {
       >
         {faElement}
         {text}
-      </span>
+      </button>
     );
   }
 }
