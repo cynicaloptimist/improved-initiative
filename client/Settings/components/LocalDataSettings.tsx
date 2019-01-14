@@ -8,11 +8,15 @@ const FileInput = (props: {
   acceptFileType: string;
 }) => {
   return (
-    <input
-      type="file"
-      accept={props.acceptFileType}
-      onChange={props.onChange}
-    />
+    <label>
+      <input
+        className="hidden-file-input"
+        type="file"
+        accept={props.acceptFileType}
+        onChange={props.onChange}
+      />
+      <span className="c-button fas fa-file-upload" />
+    </label>
   );
 };
 
