@@ -3,6 +3,19 @@ import * as React from "react";
 import { Button } from "../../Components/Button";
 import { Store } from "../../Utility/Store";
 
+const FileInput = (props: {
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  acceptFileType: string;
+}) => {
+  return (
+    <input
+      type="file"
+      accept={props.acceptFileType}
+      onChange={props.onChange}
+    />
+  );
+};
+
 export class LocalDataSettings extends React.Component<{}> {
   public render() {
     return (
@@ -14,25 +27,28 @@ export class LocalDataSettings extends React.Component<{}> {
         </p>
         <p>
           Import an exported user data file:
-          <input type="file" accept=".json" onChange={this.importData} />
+          <FileInput acceptFileType=".json" onChange={this.importData} />
         </p>
         <p>
           Import statblocks and spells from DnDAppFile:
-          <input type="file" accept=".xml" onChange={this.importDndAppFile} />
+          <FileInput acceptFileType=".xml" onChange={this.importDndAppFile} />
         </p>
       </React.Fragment>
     );
   }
+
   private exportData = () => {
     let blob = Store.ExportAll();
     saveAs(blob, "improved-initiative.json");
   };
+
   private importData = (event: React.ChangeEvent<HTMLInputElement>) => {
     let file = event.target.files[0];
     if (file) {
       Store.ImportAll(file);
     }
   };
+
   private importDndAppFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     let file = event.target.files[0];
     if (file) {
