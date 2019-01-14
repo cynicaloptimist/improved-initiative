@@ -22,7 +22,7 @@ const FileUploadButton = (props: {
         accept={props.acceptFileType}
         onChange={onChange}
       />
-      <span className="c-button fas fa-file-upload" />
+      <span className="c-button fas fa-upload" />
     </label>
   );
 };
@@ -33,22 +33,22 @@ export class LocalDataSettings extends React.Component<{}> {
       <React.Fragment>
         <h3>Local Data</h3>
         <p>
-          Export your user data as JSON:
-          <Button text="Download File" onClick={this.exportData} />
+          <Button fontAwesomeIcon="file-archive" onClick={this.exportData} />
+          Export your user data as JSON file
         </p>
         <p>
-          Import an exported user data file:
           <FileUploadButton
             acceptFileType=".json"
             handleFile={this.importData}
           />
+          Import an exported user data JSON file
         </p>
         <p>
-          Import statblocks and spells from DnDAppFile:
           <FileUploadButton
             acceptFileType=".xml"
             handleFile={this.importDndAppFile}
           />
+          Import statblocks and spells from DnDAppFile
         </p>
       </React.Fragment>
     );
