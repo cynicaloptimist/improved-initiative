@@ -69,15 +69,17 @@ export default function(
     });
   }
 
+  let cacheMaxAge = moment.duration(1, "days").asMilliseconds();
   if (process.env.NODE_ENV === "development") {
     mustacheEngine.cache._max = 0;
+    cacheMaxAge = 0;
   }
 
   app.engine("html", mustacheEngine);
   app.set("view engine", "html");
   app.set("views", __dirname + "/../html");
 
-  app.use(express.static(__dirname + "/../public"));
+  app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
 
   const cookie = {
     maxAge: moment.duration(1, "weeks").asMilliseconds()
