@@ -590,7 +590,8 @@ export class Encounter {
   };
 
   public ClearEncounter = () => {
-    this.combatants().forEach(this.RemoveCombatant);
+    const combatants = this.combatants();
+    combatants.forEach(this.RemoveCombatant);
     this.CombatantCountsByName({});
     this.EndEncounter();
   };

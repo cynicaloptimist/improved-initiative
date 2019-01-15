@@ -33,11 +33,6 @@ export class AccountClient {
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.PCs.StatBlocks()),
-        "playercharacters",
-        messageCallback
-      ),
-      saveEntitySet(
         prepareForSync(libraries.PersistentCharacters.GetListings()),
         "persistentcharacters",
         messageCallback
