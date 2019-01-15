@@ -27,6 +27,13 @@ export class LocalDataSettings extends React.Component<{}> {
           />
           Import statblocks and spells from DnDAppFile
         </p>
+        <p>
+          <Button
+            fontAwesomeIcon="trash"
+            onClick={this.confirmClearLocalData}
+          />
+          Clear all local data
+        </p>
       </React.Fragment>
     );
   }
@@ -42,5 +49,13 @@ export class LocalDataSettings extends React.Component<{}> {
 
   private importDndAppFile = (file: File) => {
     Store.ImportFromDnDAppFile(file);
+  };
+
+  private confirmClearLocalData = () => {
+    const promptText =
+      "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
+    if (prompt(promptText) == "DELETE") {
+      Store.DeleteAll();
+    }
   };
 }

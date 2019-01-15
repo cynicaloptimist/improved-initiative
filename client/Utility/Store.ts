@@ -73,6 +73,11 @@ export class Store {
     localStorage.removeItem(fullKey);
   }
 
+  public static DeleteAll() {
+    localStorage.clear();
+    location.reload();
+  }
+
   public static ExportAll() {
     return new Blob([JSON.stringify(localStorage, null, 2)], {
       type: "application/json"
