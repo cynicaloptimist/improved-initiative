@@ -191,6 +191,7 @@ export class EncounterCommander {
     if (!this.tracker.Encounter.ActiveCombatant()) {
       return;
     }
+
     this.tracker.Encounter.PreviousTurn();
     let currentCombatant = this.tracker.Encounter.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
