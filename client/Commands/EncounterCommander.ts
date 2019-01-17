@@ -69,6 +69,11 @@ export class EncounterCommander {
   };
 
   public StartEncounter = () => {
+    if (this.tracker.Encounter.Combatants().length == 0) {
+      this.tracker.EventLog.AddEvent("Cannot start empty encounter.");
+      return;
+    }
+
     if (this.tracker.Encounter.State() == "inactive") {
       this.rollInitiative();
 

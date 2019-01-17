@@ -23,7 +23,8 @@ describe("EncounterCommander", () => {
     encounterCommander.StartEncounter();
   });
 
-  test("Start empty encounter.", () => {
+  test("Cannot start an empty encounter.", () => {
+    expect(encounter.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
     expect(!encounter.ActiveCombatant());
   });
