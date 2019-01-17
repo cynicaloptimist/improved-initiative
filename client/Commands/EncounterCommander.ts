@@ -95,6 +95,10 @@ export class EncounterCommander {
   };
 
   public EndEncounter = () => {
+    if (this.tracker.Encounter.State() == "inactive") {
+      return;
+    }
+
     this.tracker.Encounter.EndEncounter();
     this.tracker.EventLog.AddEvent("Encounter ended.");
     Metrics.TrackEvent("EncounterEnded", {
