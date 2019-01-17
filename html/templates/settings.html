@@ -21,7 +21,7 @@
   >
 </div>
 <!-- ko if: CurrentTab() == "about" -->
-<div class="tab about">
+<div class="c-tab__content about">
   <div>
     <p>
       <strong>Improved Initiative</strong> was created by
@@ -75,7 +75,7 @@
 </div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "keybindings" -->
-<div class="tab keybindings">
+<div class="tab-content keybindings">
   <h2>Encounter Commands</h2>
   <div class="command-options-labels">
     <span class="hotkey-label">Hotkey</span>
@@ -111,7 +111,7 @@
 </div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "options" -->
-<div class="tab options">
+<div class="tab-content options">
   <h3>Rules</h3>
   <p>
     Roll monster HP when adding to combat:
@@ -190,12 +190,12 @@
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "account" -->
 <div
-  class="tab account"
+  class="tab-content account"
   data-bind="react: { component: accountSettings }"
 ></div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "epicInitiative" -->
-<div class="tab epicInitiative">
+<div class="tab-content epicInitiative">
   <h3>Epic Initiative</h3>
   <!-- ko with: AccountViewModel -->
   <!-- ko if: IsLoggedIn -->
