@@ -11,13 +11,14 @@ interface TabsState {}
 export class Tabs extends React.Component<TabsProps, TabsState> {
   public render() {
     const spanElements = this.props.options.map((option, i) => (
-      <span
+      <button
+        type="button"
         key={i}
-        className={this.props.selected == option ? "s-selected" : ""}
+        className={this.props.selected == option ? "c-tab s-selected" : "c-tab"}
         onClick={() => this.props.onChoose(option)}
       >
         {option}
-      </span>
+      </button>
     ));
 
     return <div className="c-tabs">{spanElements}</div>;
