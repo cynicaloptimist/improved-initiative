@@ -30,9 +30,11 @@ describe("EncounterCommander", () => {
   });
 
   test("Click Next Turn with no combatants.", () => {
+    encounter.NextTurn = jest.fn(encounter.NextTurn);
     expect(!encounter.ActiveCombatant());
     encounterCommander.NextTurn();
     expect(encounter.RoundCounter() == 1);
+    expect(encounter.NextTurn).not.toBeCalled();
   });
 
   test("Calling Next Turn should start an inactive encounter.", () => {

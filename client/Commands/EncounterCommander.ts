@@ -160,12 +160,17 @@ export class EncounterCommander {
       return;
     }
 
+    if (this.tracker.Encounter.Combatants().length == 0) {
+      return;
+    }
+
     if (!this.tracker.Encounter.ActiveCombatant()) {
       this.tracker.Encounter.ActiveCombatant(
         this.tracker.Encounter.Combatants()[0]
       );
       return;
     }
+
     const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
     if (turnEndCombatant) {
       Metrics.TrackEvent("TurnCompleted", {
