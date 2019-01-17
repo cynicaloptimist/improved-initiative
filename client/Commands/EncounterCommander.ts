@@ -74,15 +74,17 @@ export class EncounterCommander {
       return;
     }
 
-    if (this.tracker.Encounter.State() == "inactive") {
-      this.rollInitiative();
+    this.HideLibraries();
 
-      ComponentLoader.AfterComponentLoaded(() =>
-        TutorialSpy("ShowInitiativeDialog")
-      );
+    if (this.tracker.Encounter.State() == "active") {
+      return;
     }
 
-    this.HideLibraries();
+    this.rollInitiative();
+
+    ComponentLoader.AfterComponentLoaded(() =>
+      TutorialSpy("ShowInitiativeDialog")
+    );
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {
