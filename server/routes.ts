@@ -69,7 +69,7 @@ export default function(
     });
   }
 
-  let cacheMaxAge = moment.duration(1, "days").asMilliseconds();
+  let cacheMaxAge = moment.duration(7, "days").asMilliseconds();
   if (process.env.NODE_ENV === "development") {
     mustacheEngine.cache._max = 0;
     cacheMaxAge = 0;

@@ -2,30 +2,7 @@ import { saveAs } from "browser-filesaver";
 import * as React from "react";
 import { Button } from "../../Components/Button";
 import { Store } from "../../Utility/Store";
-
-const FileUploadButton = (props: {
-  handleFile: (file: File) => void;
-  acceptFileType: string;
-}) => {
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files[0];
-    if (file) {
-      props.handleFile(file);
-    }
-  };
-
-  return (
-    <label>
-      <input
-        className="hidden-file-input"
-        type="file"
-        accept={props.acceptFileType}
-        onChange={onChange}
-      />
-      <span className="c-button fas fa-upload" />
-    </label>
-  );
-};
+import { FileUploadButton } from "./FileUploadButton";
 
 export class LocalDataSettings extends React.Component<{}> {
   public render() {
@@ -50,6 +27,13 @@ export class LocalDataSettings extends React.Component<{}> {
           />
           Import statblocks and spells from DnDAppFile
         </p>
+        <p>
+          <Button
+            fontAwesomeIcon="trash"
+            onClick={this.confirmClearLocalData}
+          />
+          Clear all local data
+        </p>
       </React.Fragment>
     );
   }
@@ -65,5 +49,13 @@ export class LocalDataSettings extends React.Component<{}> {
 
   private importDndAppFile = (file: File) => {
     Store.ImportFromDnDAppFile(file);
+  };
+
+  private confirmClearLocalData = () => {
+    const promptText =
+      "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
+    if (prompt(promptText) == "DELETE") {
+      Store.DeleteAll();
+    }
   };
 }
