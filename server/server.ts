@@ -9,24 +9,29 @@ import { PlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import ConfigureSockets from "./sockets";
 
-const app = express();
-const http = require("http").Server(app);
-DB.initialize(process.env.DB_CONNECTION_STRING);
+async function improvedInitiativeServer() {
+  const app = express();
+  const http = require("http").Server(app);
 
-const statBlockLibrary = L.Library.FromFile<StatBlock>(
-  "ogl_creatures.json",
-  "/statblocks/",
-  StatBlock.GetKeywords
-);
-const spellLibrary = L.Library.FromFile<Spell>(
-  "ogl_spells.json",
-  "/spells/",
-  Spell.GetKeywords
-);
-const playerViews = new PlayerViewManager();
-ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+  DB.initialize(process.env.DB_CONNECTION_STRING);
 
-const io = socketIO(http);
-ConfigureSockets(io, playerViews);
+  const statBlockLibrary = L.Library.FromFile<StatBlock>(
+    "ogl_creatures.json",
+    "/statblocks/",
+    StatBlock.GetKeywords
+  );
+  const spellLibrary = L.Library.FromFile<Spell>(
+    "ogl_spells.json",
+    "/spells/",
+    Spell.GetKeywords
+  );
+  const playerViews = new PlayerViewManager();
+  ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-LaunchServer(http);
+  const io = socketIO(http);
+  ConfigureSockets(io, playerViews);
+
+  LaunchServer(http);
+}
+
+improvedInitiativeServer();
