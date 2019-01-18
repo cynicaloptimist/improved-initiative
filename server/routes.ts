@@ -1,7 +1,5 @@
 import bodyParser = require("body-parser");
-import dbSession = require("connect-mongodb-session");
 import express = require("express");
-import session = require("express-session");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
@@ -59,15 +57,6 @@ export default function(
   playerViews: PlayerViewManager
 ) {
   const mustacheEngine = mustacheExpress();
-  const MongoDBStore = dbSession(session);
-  let store = null;
-
-  if (process.env.DB_CONNECTION_STRING) {
-    store = new MongoDBStore({
-      uri: process.env.DB_CONNECTION_STRING,
-      collection: "sessions"
-    });
-  }
 
   let cacheMaxAge = moment.duration(7, "days").asMilliseconds();
   if (process.env.NODE_ENV === "development") {
@@ -80,20 +69,6 @@ export default function(
   app.set("views", __dirname + "/../html");
 
   app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
-
-  const cookie = {
-    maxAge: moment.duration(1, "weeks").asMilliseconds()
-  };
-
-  app.use(
-    session({
-      store: store || undefined,
-      secret: process.env.SESSION_SECRET || probablyUniqueString(),
-      resave: false,
-      saveUninitialized: false,
-      cookie
-    })
-  );
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));

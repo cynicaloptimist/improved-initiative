@@ -7,6 +7,7 @@ import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { PlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
+import ConfigureSessions from "./session";
 import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
@@ -26,6 +27,8 @@ async function improvedInitiativeServer() {
     Spell.GetKeywords
   );
   const playerViews = new PlayerViewManager();
+
+  ConfigureSessions(app);
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const io = socketIO(http);
