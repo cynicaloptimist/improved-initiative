@@ -28,7 +28,7 @@ async function improvedInitiativeServer() {
   );
   const playerViews = new PlayerViewManager();
 
-  ConfigureSessions(app);
+  await ConfigureSessions(app, process.env.DB_CONNECTION_STRING);
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const io = socketIO(http);

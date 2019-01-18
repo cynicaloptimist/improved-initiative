@@ -5,13 +5,16 @@ import moment = require("moment");
 
 import { probablyUniqueString } from "../common/Toolbox";
 
-export default async function(app: express.Application) {
+export default async function(
+  app: express.Application,
+  dbConnectionString?: string
+) {
   const MongoDBStore = dbSession(session);
   let store = null;
 
-  if (process.env.DB_CONNECTION_STRING) {
+  if (dbConnectionString) {
     store = new MongoDBStore({
-      uri: process.env.DB_CONNECTION_STRING,
+      uri: dbConnectionString,
       collection: "sessions"
     });
   }
