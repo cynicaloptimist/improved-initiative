@@ -14,7 +14,7 @@ async function improvedInitiativeServer() {
   const app = express();
   const http = require("http").Server(app);
 
-  DB.initialize(process.env.DB_CONNECTION_STRING);
+  await DB.initialize(process.env.DB_CONNECTION_STRING);
 
   const statBlockLibrary = L.Library.FromFile<StatBlock>(
     "ogl_creatures.json",

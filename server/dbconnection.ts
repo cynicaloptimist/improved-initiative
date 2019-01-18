@@ -15,7 +15,7 @@ import { User } from "./user";
 
 let connectionString;
 
-export const initialize = initialConnectionString => {
+export const initialize = async initialConnectionString => {
   if (!initialConnectionString) {
     console.warn("No connection string found.");
     return;
@@ -23,14 +23,7 @@ export const initialize = initialConnectionString => {
 
   connectionString = initialConnectionString;
 
-  client.connect(
-    connectionString,
-    function(err, db) {
-      if (err) {
-        console.error(err);
-      }
-    }
-  );
+  return await client.connect(connectionString);
 };
 
 export async function upsertUser(
