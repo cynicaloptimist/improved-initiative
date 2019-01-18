@@ -11,7 +11,7 @@ export class LauncherViewModel {
       referrer: document.referrer,
       userAgent: navigator.userAgent
     };
-    Metrics.TrackEvent("LandingPageLoad", pageLoadData);
+    Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
 
     TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
   }
