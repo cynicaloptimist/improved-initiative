@@ -1,8 +1,10 @@
 import express = require("express");
 import socketIO = require("socket.io");
+
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
+import { getDbConnectionString } from "./getDbConnectionString";
 import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { PlayerViewManager } from "./playerviewmanager";
@@ -14,7 +16,8 @@ async function improvedInitiativeServer() {
   const app = express();
   const http = require("http").Server(app);
 
-  await DB.initialize(process.env.DB_CONNECTION_STRING);
+  const dbConnectionString = await getDbConnectionString();
+  await DB.initialize(dbConnectionString);
 
   const statBlockLibrary = L.Library.FromFile<StatBlock>(
     "ogl_creatures.json",
@@ -28,7 +31,7 @@ async function improvedInitiativeServer() {
   );
   const playerViews = new PlayerViewManager();
 
-  await ConfigureSessions(app, process.env.DB_CONNECTION_STRING);
+  await ConfigureSessions(app, dbConnectionString);
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const io = socketIO(http);
