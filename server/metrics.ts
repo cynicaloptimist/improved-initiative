@@ -71,12 +71,4 @@ export function configureMetricsRoutes(app: express.Application) {
 
     return res.sendStatus(200);
   });
-
-  if (!keenProjectId || !keenWriteKey) {
-    console.warn("Keen configuration variables not set.");
-    return;
-  }
-
-  /*expressKeen.configure({ client: { projectId: keenProjectId, writeKey: keenWriteKey } });
-    app.use(expressKeen.handleAll());*/
 }
