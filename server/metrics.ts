@@ -7,14 +7,7 @@ const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const addons = [
-  {
-    name: "keen:ip_to_geo",
-    input: {
-      ip: "ipAddress"
-    },
-    output: "geo"
-  },
+const addons: any[] = [
   {
     name: "keen:url_parser",
     input: {
@@ -45,6 +38,16 @@ const addons = [
   }
 ];
 
+const onymousAddons = [
+  {
+    name: "keen:ip_to_geo",
+    input: {
+      ip: "ipAddress"
+    },
+    output: "geo"
+  }
+];
+
 export function configureMetricsRoutes(app: express.Application) {
   const keenClient = new KeenTracking({
     projectId: keenProjectId,
@@ -66,7 +69,7 @@ export function configureMetricsRoutes(app: express.Application) {
     eventData.sessionId = session.id;
     eventData.userId = session.userId || null;
     eventData.ipAddress = req.ip;
-    eventData.keen = { addons };
+    eventData.keen = { addons: addons.concat(onymousAddons) };
     keenClient.recordEvent(eventName, eventData);
 
     return res.sendStatus(200);
