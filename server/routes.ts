@@ -191,21 +191,16 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
 
   session.isLoggedIn = true;
 
-  if (process.env.DB_CONNECTION_STRING) {
-    const user = await upsertUser(
-      "defaultPatreonId",
-      "accesskey",
-      "refreshkey",
-      "pledge"
-    );
+  const user = await upsertUser(
+    "defaultPatreonId",
+    "accesskey",
+    "refreshkey",
+    "pledge"
+  );
 
-    if (user) {
-      session.userId = user._id;
-    }
-
-    return res.render("landing", pageRenderOptions(session));
-  } else {
-    session.userId = probablyUniqueString();
-    return res.render("landing", pageRenderOptions(session));
+  if (user) {
+    session.userId = user._id;
   }
+
+  return res.render("landing", pageRenderOptions(session));
 }

@@ -11,12 +11,10 @@ import * as DB from "./dbconnection";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const dbAvailable = !!process.env.DB_CONNECTION_STRING;
-
 const verifyStorage = (
   req: Express.Request
 ): req is { session: Express.Session } => {
-  return dbAvailable && req.session && req.session.hasStorage;
+  return req.session && req.session.hasStorage;
 };
 
 const parsePossiblyMalformedIdFromParams = params => {
