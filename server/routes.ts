@@ -75,45 +75,19 @@ export default function(
 
   configureMetricsRoutes(app);
 
-  app.get("/", (req: Req, res: Res) => {
+  app.get("/", async (req: Req, res: Res) => {
     const session = req.session;
     if (session === undefined) {
       throw "Session is not available";
     }
 
     session.encounterId = playerViews.InitializeNew();
-    const renderOptions = pageRenderOptions(session);
+
     if (defaultAccountLevel !== "free") {
-      if (defaultAccountLevel === "accountsync") {
-        session.hasStorage = true;
-      }
-
-      if (defaultAccountLevel === "epicinitiative") {
-        session.hasStorage = true;
-        session.hasEpicInitiative = true;
-      }
-
-      session.isLoggedIn = true;
-
-      if (process.env.DB_CONNECTION_STRING) {
-        upsertUser(
-          "defaultPatreonId",
-          "accesskey",
-          "refreshkey",
-          "pledge"
-        ).then(result => {
-          if (result) {
-            session.userId = result._id;
-          }
-
-          res.render("landing", renderOptions);
-        });
-      } else {
-        session.userId = probablyUniqueString();
-        res.render("landing", renderOptions);
-      }
+      return await setupLocalDefaultUser(session, res);
     } else {
-      res.render("landing", renderOptions);
+      const renderOptions = pageRenderOptions(session);
+      return res.render("landing", renderOptions);
     }
   });
 
@@ -203,4 +177,35 @@ export default function(
   configureLogout(app);
   configureStorageRoutes(app);
   startNewsUpdates(app);
+}
+
+async function setupLocalDefaultUser(session: Express.Session, res: Res) {
+  if (defaultAccountLevel === "accountsync") {
+    session.hasStorage = true;
+  }
+
+  if (defaultAccountLevel === "epicinitiative") {
+    session.hasStorage = true;
+    session.hasEpicInitiative = true;
+  }
+
+  session.isLoggedIn = true;
+
+  if (process.env.DB_CONNECTION_STRING) {
+    const user = await upsertUser(
+      "defaultPatreonId",
+      "accesskey",
+      "refreshkey",
+      "pledge"
+    );
+
+    if (user) {
+      session.userId = user._id;
+    }
+
+    return res.render("landing", pageRenderOptions(session));
+  } else {
+    session.userId = probablyUniqueString();
+    return res.render("landing", pageRenderOptions(session));
+  }
 }
