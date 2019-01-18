@@ -29,7 +29,7 @@ export class Metrics {
 
     data.referrer = { url: document.referrer };
     data.page = { url: document.URL };
-    data.localTime = new Date().toString();
+    data.localTime = new Date().getUTCMilliseconds();
 
     $.ajax({
       type: "POST",
@@ -47,7 +47,7 @@ export class Metrics {
 
     data.referrer = { url: document.referrer };
     data.page = { url: document.URL };
-    data.localTime = new Date().toString();
+    data.localTime = new Date().getUTCMilliseconds();
 
     $.ajax({
       type: "POST",
