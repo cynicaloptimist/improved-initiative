@@ -76,9 +76,9 @@ export function configureMetricsRoutes(app: express.Application) {
   });
 
   app.post("/recordAnonymousEvent/:eventName", (req: Req, res: Res) => {
-    /*if (!keenProjectId || !keenWriteKey) {
+    if (!keenProjectId || !keenWriteKey) {
       return res.status(501).send("No metrics pipeline configured.");
-    }*/
+    }
 
     const eventName = req.params.eventName;
     const eventData = req.body || {};
