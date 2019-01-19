@@ -45,6 +45,10 @@ export class AccountSyncSettings extends React.Component<
           <li>Encounters: {this.props.accountViewModel.SyncedEncounters()}</li>
         </ul>
         <Button text="Backup and Sync local data" onClick={this.syncAll} />
+        <p>
+          <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
+          Delete all synced account data
+        </p>
         {this.state.syncError && <pre>{this.state.syncError}</pre>}
         <a className="button logout" href="/logout">
           Log Out
@@ -100,5 +104,14 @@ export class AccountSyncSettings extends React.Component<
         });
       }
     );
+  };
+
+  private deleteAccount = async () => {
+    const promptText =
+      "To delete all of the user data synced to your account, enter DELETE.";
+    if (prompt(promptText) == "DELETE") {
+      await this.props.accountClient.DeleteAccount();
+      location.href = env.CanonicalURL;
+    }
   };
 }
