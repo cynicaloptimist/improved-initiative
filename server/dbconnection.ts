@@ -53,7 +53,6 @@ export async function upsertUser(
           },
           $setOnInsert: {
             statblocks: {},
-            playercharacters: {},
             persistentcharacters: {},
             spells: {},
             encounters: {},
@@ -78,7 +77,6 @@ export async function getAccount(userId: mongo.ObjectId) {
   const userWithListings = {
     settings: user.settings,
     statblocks: getStatBlockListings(user.statblocks),
-    playercharacters: getPlayerCharacterListings(user.playercharacters),
     persistentcharacters: getPersistentCharacterListings(
       user.persistentcharacters
     ),
@@ -109,7 +107,6 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const userAccount = {
     settings: user.settings,
     statblocks: user.statblocks,
-    playercharacters: user.playercharacters,
     persistentcharacters: user.persistentcharacters || persistentCharacters,
     spells: user.spells,
     encounters: user.encounters
@@ -140,6 +137,10 @@ async function updatePersistentCharactersIfNeeded(
     return user.persistentcharacters;
   }
 
+  if (!user.playercharacters) {
+    return {};
+  }
+
   const persistentcharacters = _.mapValues(
     user.playercharacters,
     statBlockUnsafe => {
@@ -165,22 +166,6 @@ function getStatBlockListings(statBlocks: {
       SearchHint: StatBlock.GetKeywords(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`
-    };
-  });
-}
-
-function getPlayerCharacterListings(playerCharacters: {
-  [key: string]: {};
-}): ServerListing[] {
-  return Object.keys(playerCharacters).map(key => {
-    const c = { ...StatBlock.Default(), ...playerCharacters[key] };
-    return {
-      Name: c.Name,
-      Id: c.Id,
-      Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c),
-      Version: c.Version,
-      Link: `/my/playercharacters/${c.Id}`
     };
   });
 }
@@ -245,7 +230,6 @@ export function setSettings(userId, settings) {
 
 export type EntityPath =
   | "statblocks"
-  | "playercharacters"
   | "spells"
   | "encounters"
   | "persistentcharacters";

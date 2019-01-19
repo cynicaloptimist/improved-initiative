@@ -87,7 +87,6 @@ export default function(app: express.Application) {
 
   configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
   configureEntityRoute<StatBlock>(app, "statblocks");
-  configureEntityRoute<StatBlock>(app, "playercharacters");
   configureEntityRoute<Spell>(app, "spells");
   configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
 }
