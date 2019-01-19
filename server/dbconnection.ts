@@ -101,6 +101,17 @@ export async function getAccount(userId: mongo.ObjectId) {
   return userWithListings;
 }
 
+export async function deleteAccount(userId: mongo.ObjectId) {
+  if (!connectionString) {
+    throw "No connection string found.";
+  }
+
+  const db = await client.connect(connectionString);
+  const users = db.collection<User>("users");
+  const result = await users.deleteOne({ _id: userId });
+  return result.deletedCount;
+}
+
 async function updatePersistentCharactersIfNeeded(
   user: User,
   users: mongo.Collection<User>
