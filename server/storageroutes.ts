@@ -58,6 +58,19 @@ export default function(app: express.Application) {
     }
   });
 
+  app.delete("/my", async (req, res) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    const result = await DB.deleteAccount(req.session.userId);
+    if (result) {
+      return res.status(200);
+    } else {
+      return res.status(404);
+    }
+  });
+
   configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
   configureEntityRoute<StatBlock>(app, "statblocks");
   configureEntityRoute<StatBlock>(app, "playercharacters");
