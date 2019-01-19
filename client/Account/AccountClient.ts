@@ -32,6 +32,14 @@ export class AccountClient {
     });
   }
 
+  public async GetFullAccount() {
+    if (!env.HasStorage) {
+      return emptyPromise();
+    }
+
+    return await $.getJSON("/my/fullaccount");
+  }
+
   public SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
     if (!env.HasStorage) {
       return emptyPromise();
