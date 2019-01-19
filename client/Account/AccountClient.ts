@@ -21,6 +21,17 @@ export class AccountClient {
     return true;
   }
 
+  public async DeleteAccount() {
+    if (!env.HasStorage) {
+      return emptyPromise();
+    }
+
+    return $.ajax({
+      type: "DELETE",
+      url: `/my`
+    });
+  }
+
   public SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
     if (!env.HasStorage) {
       return emptyPromise();
