@@ -40,6 +40,20 @@ export default function(app: express.Application) {
       });
   });
 
+  app.get("/my/fullaccount", (req: Req, res: Res) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    return DB.getFullAccount(req.session.userId)
+      .then(account => {
+        return res.json(account);
+      })
+      .catch(err => {
+        return res.sendStatus(500);
+      });
+  });
+
   app.post("/my/settings", (req, res: express.Response) => {
     if (!verifyStorage(req)) {
       return res.sendStatus(403);
