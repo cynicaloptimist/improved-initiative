@@ -73,6 +73,23 @@ export async function upsertUser(
 }
 
 export async function getAccount(userId: mongo.ObjectId) {
+  const user = await getFullAccount(userId);
+
+  const userWithListings = {
+    settings: user.settings,
+    statblocks: getStatBlockListings(user.statblocks),
+    playercharacters: getPlayerCharacterListings(user.playercharacters),
+    persistentcharacters: getPersistentCharacterListings(
+      user.persistentcharacters || {}
+    ),
+    spells: getSpellListings(user.spells),
+    encounters: getEncounterListings(user.encounters)
+  };
+
+  return userWithListings;
+}
+
+export async function getFullAccount(userId: mongo.ObjectId) {
   if (!connectionString) {
     throw "No connection string found.";
   }
@@ -89,16 +106,9 @@ export async function getAccount(userId: mongo.ObjectId) {
     users
   );
 
-  const userWithListings = {
-    settings: user.settings,
-    statblocks: getStatBlockListings(user.statblocks),
-    playercharacters: getPlayerCharacterListings(user.playercharacters),
-    persistentcharacters: getPersistentCharacterListings(persistentCharacters),
-    spells: getSpellListings(user.spells),
-    encounters: getEncounterListings(user.encounters)
-  };
+  user.persistentcharacters = persistentCharacters;
 
-  return userWithListings;
+  return user;
 }
 
 export async function deleteAccount(userId: mongo.ObjectId) {
