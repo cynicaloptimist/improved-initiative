@@ -44,7 +44,10 @@ export class AccountSyncSettings extends React.Component<
           <li>Spells: {this.props.accountViewModel.SyncedSpells()}</li>
           <li>Encounters: {this.props.accountViewModel.SyncedEncounters()}</li>
         </ul>
-        <Button text="Backup and Sync local data" onClick={this.syncAll} />
+        <p>
+          <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
+          Backup and sync local data
+        </p>
         <p>
           <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
           Delete all synced account data
