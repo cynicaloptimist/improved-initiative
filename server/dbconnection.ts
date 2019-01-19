@@ -80,7 +80,7 @@ export async function getAccount(userId: mongo.ObjectId) {
     statblocks: getStatBlockListings(user.statblocks),
     playercharacters: getPlayerCharacterListings(user.playercharacters),
     persistentcharacters: getPersistentCharacterListings(
-      user.persistentcharacters || {}
+      user.persistentcharacters
     ),
     spells: getSpellListings(user.spells),
     encounters: getEncounterListings(user.encounters)
@@ -106,9 +106,16 @@ export async function getFullAccount(userId: mongo.ObjectId) {
     users
   );
 
-  user.persistentcharacters = persistentCharacters;
+  const userAccount = {
+    settings: user.settings,
+    statblocks: user.statblocks,
+    playercharacters: user.playercharacters,
+    persistentcharacters: user.persistentcharacters || persistentCharacters,
+    spells: user.spells,
+    encounters: user.encounters
+  };
 
-  return user;
+  return userAccount;
 }
 
 export async function deleteAccount(userId: mongo.ObjectId) {
