@@ -15,6 +15,15 @@ export class Libraries {
   public Encounters: EncounterLibrary;
   public Spells: SpellLibrary;
 
+  constructor(accountClient: AccountClient) {
+    this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
+    this.NPCs = new NPCLibrary(accountClient);
+    this.Encounters = new EncounterLibrary(accountClient);
+    this.Spells = new SpellLibrary(accountClient);
+
+    this.initializeSpells();
+  }
+
   private initializeSpells = () => {
     $.ajax("../spells/").done(listings =>
       this.Spells.AddListings(listings, "server")
@@ -38,13 +47,4 @@ export class Libraries {
 
     ko.utils.arrayPushAll(this.Spells.Spells, newListings);
   };
-
-  constructor(accountClient: AccountClient) {
-    this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
-    this.NPCs = new NPCLibrary(accountClient);
-    this.Encounters = new EncounterLibrary(accountClient);
-    this.Spells = new SpellLibrary(accountClient);
-
-    this.initializeSpells();
-  }
 }
