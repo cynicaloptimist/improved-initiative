@@ -1,5 +1,12 @@
 import { saveAs } from "browser-filesaver";
+import { forIn } from "lodash";
 import * as React from "react";
+
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
+import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { Spell } from "../../../common/Spell";
+import { StatBlock } from "../../../common/StatBlock";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
@@ -47,6 +54,13 @@ export class AccountSyncSettings extends React.Component<
         <p>
           <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
           Backup and sync local data
+        </p>
+        <p>
+          <Button
+            fontAwesomeIcon="cloud-download-alt"
+            onClick={this.downloadAndSaveAllSyncedItems}
+          />
+          Download all synced data to local data
         </p>
         <p>
           <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
@@ -107,6 +121,27 @@ export class AccountSyncSettings extends React.Component<
         });
       }
     );
+  };
+
+  private downloadAndSaveAllSyncedItems = async () => {
+    const libraries = this.props.accountViewModel.Libraries;
+    const account = await this.props.accountClient.GetFullAccount();
+
+    forIn(account.statblocks, statBlock =>
+      libraries.NPCs.SaveNewStatBlock(statBlock)
+    );
+
+    forIn(account.persistentcharacters, persistentCharacter => {
+      libraries.PersistentCharacters.AddNewPersistentCharacter(
+        persistentCharacter
+      );
+    });
+
+    forIn(account.spells, spell => libraries.Spells.AddOrUpdateSpell(spell));
+
+    forIn(account.encounters, encounter => {
+      libraries.Encounters.Save(encounter);
+    });
   };
 
   private deleteAccount = async () => {
