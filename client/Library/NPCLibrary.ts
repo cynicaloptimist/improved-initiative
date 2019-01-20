@@ -42,7 +42,7 @@ export class NPCLibrary {
   ) => {
     listing.Id = newStatBlock.Id;
     listing.Path = newStatBlock.Path;
-    this.GetStatBlocks.push(listing);
+    this.statBlocks.push(listing);
 
     Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
     listing.SetValue(newStatBlock);
@@ -60,7 +60,7 @@ export class NPCLibrary {
         "account",
         newStatBlock
       );
-      this.GetStatBlocks.push(accountListing);
+      this.statBlocks.push(accountListing);
     });
   };
 

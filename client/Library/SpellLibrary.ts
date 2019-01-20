@@ -44,7 +44,7 @@ export class SpellLibrary {
       "localStorage",
       spell
     );
-    this.GetSpells.push(listing);
+    this.spells.push(listing);
     Store.Save(Store.Spells, spell.Id, spell);
     this.accountClient.SaveSpell(spell).then(r => {
       if (!r) return;
@@ -58,12 +58,12 @@ export class SpellLibrary {
         "account",
         spell
       );
-      this.GetSpells.push(accountListing);
+      this.spells.push(accountListing);
     });
   };
 
   public DeleteSpellById = (id: string) => {
-    this.GetSpells.remove(listing => listing.Id === id);
+    this.spells.remove(listing => listing.Id === id);
     Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };
