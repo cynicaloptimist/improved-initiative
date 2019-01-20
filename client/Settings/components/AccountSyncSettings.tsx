@@ -158,6 +158,8 @@ export class AccountSyncSettings extends React.Component<
     forIn(account.encounters, encounter => {
       libraries.Encounters.Save(encounter);
     });
+
+    location.reload();
   };
 
   private deleteAccount = async () => {
