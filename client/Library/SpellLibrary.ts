@@ -8,16 +8,17 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class SpellLibrary {
-  public Spells = ko.observableArray<Listing<Spell>>([]);
+  private spells = ko.observableArray<Listing<Spell>>([]);
+  public GetSpells = ko.computed(() => this.spells());
   public SpellsByNameRegex = ko.computed(() =>
-    concatenatedStringRegex(this.Spells().map(s => s.CurrentName()))
+    concatenatedStringRegex(this.GetSpells().map(s => s.CurrentName()))
   );
 
   constructor(private accountClient: AccountClient) {}
 
   public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<Spell>>(
-      this.Spells,
+      this.spells,
       listings.map(c => {
         return new Listing<Spell>(
           c.Id,
@@ -32,7 +33,7 @@ export class SpellLibrary {
   };
 
   public AddOrUpdateSpell = (spell: Spell) => {
-    this.Spells.remove(listing => listing.Id === spell.Id);
+    this.GetSpells.remove(listing => listing.Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
       spell.Id,
@@ -43,7 +44,7 @@ export class SpellLibrary {
       "localStorage",
       spell
     );
-    this.Spells.push(listing);
+    this.GetSpells.push(listing);
     Store.Save(Store.Spells, spell.Id, spell);
     this.accountClient.SaveSpell(spell).then(r => {
       if (!r) return;
@@ -57,12 +58,12 @@ export class SpellLibrary {
         "account",
         spell
       );
-      this.Spells.push(accountListing);
+      this.GetSpells.push(accountListing);
     });
   };
 
   public DeleteSpellById = (id: string) => {
-    this.Spells.remove(listing => listing.Id === id);
+    this.GetSpells.remove(listing => listing.Id === id);
     Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };

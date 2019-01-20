@@ -32,7 +32,7 @@ export class Libraries {
 
     const localStatBlocks = Store.List(Store.StatBlocks);
     const listings = localStatBlocks.map(id => {
-      let statBlock = {
+      const statBlock = {
         ...StatBlock.Default(),
         ...Store.Load<StatBlock>(Store.StatBlocks, id)
       };
@@ -55,22 +55,23 @@ export class Libraries {
       this.Spells.AddListings(listings, "server")
     );
 
-    const customSpells = Store.List(Store.Spells);
-    const newListings = customSpells.map(id => {
-      let spell = {
+    const localSpells = Store.List(Store.Spells);
+    const newListings = localSpells.map(id => {
+      const spell = {
         ...Spell.Default(),
         ...Store.Load<Spell>(Store.Spells, id)
       };
-      return new Listing<Spell>(
-        id,
-        spell.Name,
-        spell.Path,
-        Spell.GetKeywords(spell),
-        Store.Spells,
-        "localStorage"
-      );
+      const listing = {
+        Id: id,
+        Name: spell.Name,
+        Path: spell.Path,
+        SearchHint: Spell.GetKeywords(spell),
+        Link: Store.Spells
+      };
+
+      return listing;
     });
 
-    ko.utils.arrayPushAll(this.Spells.Spells, newListings);
+    this.Spells.AddListings(newListings, "localStorage");
   };
 }

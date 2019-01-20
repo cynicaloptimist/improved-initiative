@@ -57,7 +57,7 @@ export class AccountClient {
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.Spells.Spells()),
+        prepareForSync(libraries.Spells.GetSpells()),
         "spells",
         messageCallback
       ),

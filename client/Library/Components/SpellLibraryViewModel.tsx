@@ -29,11 +29,11 @@ export class SpellLibraryViewModel extends React.Component<
       filter: ""
     };
 
-    this.filterCache = new FilterCache(this.props.library.Spells());
+    this.filterCache = new FilterCache(this.props.library.GetSpells());
   }
 
   public componentDidMount() {
-    this.librarySubscription = this.props.library.Spells.subscribe(
+    this.librarySubscription = this.props.library.GetSpells.subscribe(
       newSpells => {
         this.filterCache = new FilterCache(newSpells);
         this.forceUpdate();

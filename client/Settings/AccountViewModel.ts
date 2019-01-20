@@ -26,7 +26,7 @@ export class AccountViewModel {
     getCounts(this.Libraries.PersistentCharacters.GetListings())
   );
   public SyncedSpells = ko.computed(() =>
-    getCounts(this.Libraries.Spells.Spells())
+    getCounts(this.Libraries.Spells.GetSpells())
   );
   public SyncedEncounters = ko.computed(() =>
     getCounts(this.Libraries.Encounters.Encounters())
