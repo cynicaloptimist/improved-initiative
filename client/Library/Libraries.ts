@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import { ServerListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -35,16 +36,18 @@ export class Libraries {
         ...StatBlock.Default(),
         ...Store.Load<StatBlock>(Store.StatBlocks, id)
       };
-      return new Listing<StatBlock>(
-        id,
-        statBlock.Name,
-        statBlock.Path,
-        statBlock.Type,
-        Store.StatBlocks,
-        "localStorage"
-      );
+
+      const listing: ServerListing = {
+        Id: id,
+        Name: statBlock.Name,
+        Path: statBlock.Path,
+        SearchHint: StatBlock.GetKeywords(statBlock),
+        Link: Store.StatBlocks
+      };
+
+      return listing;
     });
-    ko.utils.arrayPushAll(this.NPCs.StatBlocks, listings);
+    this.NPCs.AddListings(listings, "localStorage");
   };
 
   private initializeSpells = () => {

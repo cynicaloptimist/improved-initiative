@@ -47,7 +47,7 @@ export class AccountClient {
 
     $.when(
       saveEntitySet(
-        prepareForSync(libraries.NPCs.StatBlocks()),
+        prepareForSync(libraries.NPCs.GetStatBlocks()),
         "statblocks",
         messageCallback
       ),

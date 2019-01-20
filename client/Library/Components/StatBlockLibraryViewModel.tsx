@@ -42,11 +42,11 @@ export class StatBlockLibraryViewModel extends React.Component<
       previewPosition: { left: 0, top: 0 }
     };
 
-    this.filterCache = new FilterCache(this.props.library.StatBlocks());
+    this.filterCache = new FilterCache(this.props.library.GetStatBlocks());
   }
 
   public componentDidMount() {
-    this.librarySubscription = this.props.library.StatBlocks.subscribe(
+    this.librarySubscription = this.props.library.GetStatBlocks.subscribe(
       newStatBlocks => {
         this.filterCache = new FilterCache(newStatBlocks);
         this.forceUpdate();
