@@ -45,12 +45,21 @@ export class AccountSyncSettings extends React.Component<
       <React.Fragment>
         <h3>Account Sync</h3>
         <p>Account Sync is enabled.</p>
-        <ul>
-          <li>Creatures: {this.props.accountViewModel.SyncedCreatures()}</li>
-          <li>Characters: {this.props.accountViewModel.SyncedCharacters()}</li>
-          <li>Spells: {this.props.accountViewModel.SyncedSpells()}</li>
-          <li>Encounters: {this.props.accountViewModel.SyncedEncounters()}</li>
-        </ul>
+        <div className="sync-counts">
+          {this.syncCount(
+            "Statblocks",
+            this.props.accountViewModel.SyncedCreatures()
+          )}
+          {this.syncCount(
+            "Characters",
+            this.props.accountViewModel.SyncedCharacters()
+          )}
+          {this.syncCount("Spells", this.props.accountViewModel.SyncedSpells())}
+          {this.syncCount(
+            "Encounters",
+            this.props.accountViewModel.SyncedEncounters()
+          )}
+        </div>
         <p>
           <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
           Backup and sync local data
@@ -107,6 +116,13 @@ export class AccountSyncSettings extends React.Component<
       </React.Fragment>
     );
   }
+
+  private syncCount = (libraryName: string, syncCount: string) => (
+    <span className="sync-counts__row">
+      <span className="sync-counts__library-name">{libraryName}</span>
+      <span className="sync-counts__count">{syncCount}</span>
+    </span>
+  );
 
   private syncAll = () => {
     this.setState({ syncError: "" });
