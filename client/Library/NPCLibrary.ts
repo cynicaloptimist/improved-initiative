@@ -10,26 +10,7 @@ export class NPCLibrary {
   public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
   private readonly StoreName = Store.StatBlocks;
 
-  constructor(private accountClient: AccountClient) {
-    $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
-
-    const localStatBlocks = Store.List(this.StoreName);
-    const listings = localStatBlocks.map(id => {
-      let statBlock = {
-        ...StatBlock.Default(),
-        ...Store.Load<StatBlock>(this.StoreName, id)
-      };
-      return new Listing<StatBlock>(
-        id,
-        statBlock.Name,
-        statBlock.Path,
-        statBlock.Type,
-        this.StoreName,
-        "localStorage"
-      );
-    });
-    ko.utils.arrayPushAll(this.StatBlocks, listings);
-  }
+  constructor(private accountClient: AccountClient) {}
 
   public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<StatBlock>>(

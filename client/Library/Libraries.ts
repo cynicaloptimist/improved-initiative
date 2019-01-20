@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 
 import { Spell } from "../../common/Spell";
+import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
@@ -21,8 +22,30 @@ export class Libraries {
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 
+    this.initializeStatBlocks();
     this.initializeSpells();
   }
+
+  private initializeStatBlocks = () => {
+    $.ajax("../statblocks/").done(s => this.NPCs.AddListings(s, "server"));
+
+    const localStatBlocks = Store.List(Store.StatBlocks);
+    const listings = localStatBlocks.map(id => {
+      let statBlock = {
+        ...StatBlock.Default(),
+        ...Store.Load<StatBlock>(Store.StatBlocks, id)
+      };
+      return new Listing<StatBlock>(
+        id,
+        statBlock.Name,
+        statBlock.Path,
+        statBlock.Type,
+        Store.StatBlocks,
+        "localStorage"
+      );
+    });
+    ko.utils.arrayPushAll(this.NPCs.StatBlocks, listings);
+  };
 
   private initializeSpells = () => {
     $.ajax("../spells/").done(listings =>
