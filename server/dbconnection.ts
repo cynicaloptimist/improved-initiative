@@ -77,7 +77,6 @@ export async function getAccount(userId: mongo.ObjectId) {
   const userWithListings = {
     settings: user.settings,
     statblocks: getStatBlockListings(user.statblocks),
-    playercharacters: getStatBlockListings(user.playercharacters),
     persistentcharacters: getPersistentCharacterListings(
       user.persistentcharacters
     ),
@@ -105,7 +104,6 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const userAccount = {
     settings: user.settings,
     statblocks: user.statblocks,
-    playercharacters: user.playercharacters || {},
     persistentcharacters: user.persistentcharacters || {},
     spells: user.spells,
     encounters: user.encounters
