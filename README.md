@@ -25,7 +25,7 @@ You can configure your instance of Improved Initiative with these settings. All 
 * `BASE_URL` - Used in absolute URLs on client side. Falls back to relative urls if unavailable. This is the canonical URL for Patreon callback and browser localStorage.
 * `SESSION_SECRET` - Used to keep session continuity through app restarts or something. Handed to express-session.
 * `DEFAULT_ACCOUNT_LEVEL` - Set to "accountsync" or "epicinitiative" to grant rewards to all users. Useful if you have no DB.  
-* `DB_CONNECTION_STRING` - Provide a DB connection string for session and user account storage. In memory Mongo DB will be used otherwise.
+* `DB_CONNECTION_STRING` - Provide a DB connection string for session and user account storage. In memory Mongo DB will be used otherwise, which is cleared on app restart.
 * `KEEN_API_URL`, `KEEN_PROJECT_ID`, `KEEN_READ_KEY`, `KEEN_WRITE_KEY` - Configuration for metrics pipeline
 * `PATREON_URL`, `PATREON_CLIENT_ID`, `PATREON_CLIENT_SECRET` - Configuration for Patreon integration
 
