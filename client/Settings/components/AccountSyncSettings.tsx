@@ -2,19 +2,16 @@ import { saveAs } from "browser-filesaver";
 import { forIn } from "lodash";
 import * as React from "react";
 
-import { CombatantState } from "../../../common/CombatantState";
-import { EncounterState } from "../../../common/EncounterState";
-import { PersistentCharacter } from "../../../common/PersistentCharacter";
-import { Spell } from "../../../common/Spell";
-import { StatBlock } from "../../../common/StatBlock";
+import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
+import { Libraries } from "../../Library/Libraries";
+import { Listing } from "../../Library/Listing";
 import { Store } from "../../Utility/Store";
-import { AccountViewModel } from "../AccountViewModel";
 
 interface AccountSyncSettingsProps {
-  accountViewModel: AccountViewModel;
+  libraries: Libraries;
   accountClient: AccountClient;
 }
 
@@ -48,16 +45,21 @@ export class AccountSyncSettings extends React.Component<
         <div className="sync-counts">
           {this.syncCount(
             "Statblocks",
-            this.props.accountViewModel.SyncedCreatures()
+            this.getCounts(this.props.libraries.NPCs.GetStatBlocks())
           )}
           {this.syncCount(
             "Characters",
-            this.props.accountViewModel.SyncedCharacters()
+            this.getCounts(
+              this.props.libraries.PersistentCharacters.GetListings()
+            )
           )}
-          {this.syncCount("Spells", this.props.accountViewModel.SyncedSpells())}
+          {this.syncCount(
+            "Spells",
+            this.getCounts(this.props.libraries.Spells.GetSpells())
+          )}
           {this.syncCount(
             "Encounters",
-            this.props.accountViewModel.SyncedEncounters()
+            this.getCounts(this.props.libraries.Encounters.Encounters())
           )}
         </div>
         <p>
@@ -128,19 +130,15 @@ export class AccountSyncSettings extends React.Component<
     this.setState({ syncError: "" });
     let blob = Store.ExportAll();
     saveAs(blob, "improved-initiative.json");
-    this.props.accountClient.SaveAll(
-      this.props.accountViewModel.Libraries,
-      progressMessage => {
-        this.setState({
-          syncError:
-            this.state.syncError + "\n" + JSON.stringify(progressMessage)
-        });
-      }
-    );
+    this.props.accountClient.SaveAll(this.props.libraries, progressMessage => {
+      this.setState({
+        syncError: this.state.syncError + "\n" + JSON.stringify(progressMessage)
+      });
+    });
   };
 
   private downloadAndSaveAllSyncedItems = async () => {
-    const libraries = this.props.accountViewModel.Libraries;
+    const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
     forIn(account.statblocks, statBlock =>
@@ -170,4 +168,10 @@ export class AccountSyncSettings extends React.Component<
       location.href = env.CanonicalURL;
     }
   };
+
+  private getCounts<T extends Listable>(items: Listing<T>[]) {
+    const localCount = items.filter(c => c.Origin === "localStorage").length;
+    const accountCount = items.filter(c => c.Origin === "account").length;
+    return `${localCount} local, ${accountCount} synced`;
+  }
 }

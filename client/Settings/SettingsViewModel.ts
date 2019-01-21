@@ -1,4 +1,3 @@
-import { saveAs } from "browser-filesaver";
 import * as ko from "knockout";
 import * as React from "react";
 
@@ -13,7 +12,6 @@ import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Libraries } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
-import { AccountViewModel } from "./AccountViewModel";
 import {
   AutoGroupInitiativeOption,
   AutoGroupInitiativeOptions,
@@ -67,7 +65,6 @@ export class SettingsViewModel {
   public CombatantCommands: Command[];
   public CurrentTab = ko.observable<string>("about");
   public RollHp: KnockoutObservable<boolean>;
-  public AccountViewModel = new AccountViewModel(this.libraries);
 
   public epicInitiativeSettings: React.ComponentElement<
     any,
@@ -212,6 +209,6 @@ export class SettingsViewModel {
 
   public accountSettings = React.createElement(AccountSettings, {
     accountClient: new AccountClient(),
-    accountViewModel: this.AccountViewModel
+    libraries: this.libraries
   });
 }

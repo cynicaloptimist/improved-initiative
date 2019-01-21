@@ -1,12 +1,12 @@
 import * as React from "react";
 
 import { AccountClient } from "../../Account/AccountClient";
-import { AccountViewModel } from "../AccountViewModel";
+import { Libraries } from "../../Library/Libraries";
 import { AccountSyncSettings } from "./AccountSyncSettings";
 import { LocalDataSettings } from "./LocalDataSettings";
 
 interface AccountSettingsProps {
-  accountViewModel: AccountViewModel;
+  libraries: Libraries;
   accountClient: AccountClient;
 }
 
@@ -17,7 +17,7 @@ export class AccountSettings extends React.Component<AccountSettingsProps> {
         <LocalDataSettings />
         <AccountSyncSettings
           accountClient={this.props.accountClient}
-          accountViewModel={this.props.accountViewModel}
+          libraries={this.props.libraries}
         />
       </React.Fragment>
     );
