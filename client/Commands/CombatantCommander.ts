@@ -138,7 +138,12 @@ export class CombatantCommander {
   };
 
   public SelectPrevious = () => {
+    if (this.tracker.CombatantViewModels().length == 0) {
+      return;
+    }
+
     if (!this.HasSelected()) {
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
@@ -146,7 +151,12 @@ export class CombatantCommander {
   };
 
   public SelectNext = () => {
+    if (this.tracker.CombatantViewModels().length == 0) {
+      return;
+    }
+
     if (!this.HasSelected()) {
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
