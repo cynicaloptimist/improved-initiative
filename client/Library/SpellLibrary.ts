@@ -33,7 +33,7 @@ export class SpellLibrary {
   };
 
   public AddOrUpdateSpell = (spell: Spell) => {
-    this.GetSpells.remove(listing => listing.Id === spell.Id);
+    this.spells.remove(listing => listing.Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
       spell.Id,

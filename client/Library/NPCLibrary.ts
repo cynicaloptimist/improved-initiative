@@ -31,7 +31,7 @@ export class NPCLibrary {
   };
 
   public DeleteListing = (id: string) => {
-    this.GetStatBlocks.remove(s => s.Id == id);
+    this.statBlocks.remove(s => s.Id == id);
     Store.Delete(this.StoreName, id);
     this.accountClient.DeleteStatBlock(id);
   };
