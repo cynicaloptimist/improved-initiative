@@ -17,7 +17,7 @@ let connectionString;
 
 export const initialize = async initialConnectionString => {
   if (!initialConnectionString) {
-    console.warn("No connection string found.");
+    console.log("No connection string found.");
     return;
   }
 
@@ -77,6 +77,7 @@ export async function getAccount(userId: mongo.ObjectId) {
   const userWithListings = {
     settings: user.settings,
     statblocks: getStatBlockListings(user.statblocks),
+    playercharacters: getStatBlockListings(user.playercharacters),
     persistentcharacters: getPersistentCharacterListings(
       user.persistentcharacters
     ),
@@ -99,15 +100,13 @@ export async function getFullAccount(userId: mongo.ObjectId) {
     throw `User ${userId} not found.`;
   }
 
-  const persistentCharacters = await updatePersistentCharactersIfNeeded(
-    user,
-    users
-  );
+  await updatePersistentCharactersIfNeeded(user, users);
 
   const userAccount = {
     settings: user.settings,
     statblocks: user.statblocks,
-    persistentcharacters: user.persistentcharacters || persistentCharacters,
+    playercharacters: user.playercharacters || {},
+    persistentcharacters: user.persistentcharacters || {},
     spells: user.spells,
     encounters: user.encounters
   };
@@ -134,11 +133,11 @@ async function updatePersistentCharactersIfNeeded(
     user.persistentcharacters != undefined &&
     !_.isEmpty(user.persistentcharacters)
   ) {
-    return user.persistentcharacters;
+    return false;
   }
 
   if (!user.playercharacters) {
-    return {};
+    return false;
   }
 
   const persistentcharacters = _.mapValues(
@@ -150,8 +149,9 @@ async function updatePersistentCharactersIfNeeded(
   );
 
   await users.updateOne({ _id: user._id }, { $set: { persistentcharacters } });
+  user.persistentcharacters = persistentcharacters;
 
-  return persistentcharacters;
+  return true;
 }
 
 function getStatBlockListings(statBlocks: {
@@ -232,7 +232,8 @@ export type EntityPath =
   | "statblocks"
   | "spells"
   | "encounters"
-  | "persistentcharacters";
+  | "persistentcharacters"
+  | "playercharacters";
 
 export async function getEntity(
   entityPath: EntityPath,
