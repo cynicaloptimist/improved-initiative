@@ -66,6 +66,7 @@ export class AccountSyncSettings extends React.Component<
           <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
           Backup and sync local data
         </p>
+        {this.state.syncError && <pre>{this.state.syncError}</pre>}
         <p>
           <Button
             fontAwesomeIcon="cloud-download-alt"
@@ -77,7 +78,6 @@ export class AccountSyncSettings extends React.Component<
           <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
           Delete all synced account data
         </p>
-        {this.state.syncError && <pre>{this.state.syncError}</pre>}
         <a className="button logout" href="/logout">
           Log Out
         </a>
