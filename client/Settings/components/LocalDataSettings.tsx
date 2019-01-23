@@ -16,6 +16,7 @@ export class LocalDataSettings extends React.Component<{}> {
         <p>
           <FileUploadButton
             acceptFileType=".json"
+            fontAwesomeIcon="recycle"
             handleFile={this.importDataAndReplace}
           />
           Replace your user data by uploading a JSON file
@@ -23,6 +24,7 @@ export class LocalDataSettings extends React.Component<{}> {
         <p>
           <FileUploadButton
             acceptFileType=".json"
+            fontAwesomeIcon="upload"
             handleFile={this.importDataAndAdd}
           />
           Import characters, statblocks, encounters and spells from a JSON file
@@ -30,6 +32,7 @@ export class LocalDataSettings extends React.Component<{}> {
         <p>
           <FileUploadButton
             acceptFileType=".xml"
+            fontAwesomeIcon="code"
             handleFile={this.importDndAppFile}
           />
           Import statblocks and spells from DnDAppFile
