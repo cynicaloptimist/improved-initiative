@@ -2,10 +2,7 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import { find } from "lodash";
-import {
-  InitializeCharacter,
-  PersistentCharacter
-} from "../common/PersistentCharacter";
+import { InitializeCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -135,7 +132,11 @@ export class TrackerViewModel {
       );
     }
 
-    this.displayPrivacyNotificationIfNeeded();
+    this.TutorialVisible.subscribe(v => {
+      if (v == false) {
+        this.displayPrivacyNotificationIfNeeded();
+      }
+    });
 
     Metrics.TrackLoad();
   }
