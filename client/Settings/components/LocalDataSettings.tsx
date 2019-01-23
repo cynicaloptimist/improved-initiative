@@ -44,7 +44,7 @@ export class LocalDataSettings extends React.Component<{}> {
   };
 
   private importData = (file: File) => {
-    Store.ImportAll(file);
+    Store.ImportAllAndReplace(file);
   };
 
   private importDndAppFile = (file: File) => {

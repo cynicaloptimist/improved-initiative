@@ -84,7 +84,7 @@ export class Store {
     });
   }
 
-  public static ImportAll(file: File) {
+  public static ImportAllAndReplace(file: File) {
     let reader = new FileReader();
     reader.onload = (event: any) => {
       let json = event.target.result;
