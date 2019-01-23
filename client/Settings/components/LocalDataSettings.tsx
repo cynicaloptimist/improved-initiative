@@ -22,6 +22,13 @@ export class LocalDataSettings extends React.Component<{}> {
         </p>
         <p>
           <FileUploadButton
+            acceptFileType=".json"
+            handleFile={this.importDataAndAdd}
+          />
+          Import characters, statblocks, encounters and spells from a JSON file
+        </p>
+        <p>
+          <FileUploadButton
             acceptFileType=".xml"
             handleFile={this.importDndAppFile}
           />
@@ -45,6 +52,10 @@ export class LocalDataSettings extends React.Component<{}> {
 
   private importDataAndReplace = (file: File) => {
     Store.ImportAllAndReplace(file);
+  };
+
+  private importDataAndAdd = (file: File) => {
+    Store.ImportAll(file);
   };
 
   private importDndAppFile = (file: File) => {
