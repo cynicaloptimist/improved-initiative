@@ -16,9 +16,9 @@ export class LocalDataSettings extends React.Component<{}> {
         <p>
           <FileUploadButton
             acceptFileType=".json"
-            handleFile={this.importData}
+            handleFile={this.importDataAndReplace}
           />
-          Import an exported user data JSON file
+          Replace your user data by uploading a JSON file
         </p>
         <p>
           <FileUploadButton
@@ -43,7 +43,7 @@ export class LocalDataSettings extends React.Component<{}> {
     saveAs(blob, "improved-initiative.json");
   };
 
-  private importData = (file: File) => {
+  private importDataAndReplace = (file: File) => {
     Store.ImportAllAndReplace(file);
   };
 
