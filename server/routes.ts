@@ -1,7 +1,5 @@
 import bodyParser = require("body-parser");
-import dbSession = require("connect-mongodb-session");
 import express = require("express");
-import session = require("express-session");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
@@ -59,15 +57,6 @@ export default function(
   playerViews: PlayerViewManager
 ) {
   const mustacheEngine = mustacheExpress();
-  const MongoDBStore = dbSession(session);
-  let store = null;
-
-  if (process.env.DB_CONNECTION_STRING) {
-    store = new MongoDBStore({
-      uri: process.env.DB_CONNECTION_STRING,
-      collection: "sessions"
-    });
-  }
 
   let cacheMaxAge = moment.duration(7, "days").asMilliseconds();
   if (process.env.NODE_ENV === "development") {
@@ -81,64 +70,24 @@ export default function(
 
   app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
 
-  const cookie = {
-    maxAge: moment.duration(1, "weeks").asMilliseconds()
-  };
-
-  app.use(
-    session({
-      store: store || undefined,
-      secret: process.env.SESSION_SECRET || probablyUniqueString(),
-      resave: false,
-      saveUninitialized: false,
-      cookie
-    })
-  );
-
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
   configureMetricsRoutes(app);
 
-  app.get("/", (req: Req, res: Res) => {
+  app.get("/", async (req: Req, res: Res) => {
     const session = req.session;
     if (session === undefined) {
       throw "Session is not available";
     }
 
     session.encounterId = playerViews.InitializeNew();
-    const renderOptions = pageRenderOptions(session);
+
     if (defaultAccountLevel !== "free") {
-      if (defaultAccountLevel === "accountsync") {
-        session.hasStorage = true;
-      }
-
-      if (defaultAccountLevel === "epicinitiative") {
-        session.hasStorage = true;
-        session.hasEpicInitiative = true;
-      }
-
-      session.isLoggedIn = true;
-
-      if (process.env.DB_CONNECTION_STRING) {
-        upsertUser(
-          "defaultPatreonId",
-          "accesskey",
-          "refreshkey",
-          "pledge"
-        ).then(result => {
-          if (result) {
-            session.userId = result._id;
-          }
-
-          res.render("landing", renderOptions);
-        });
-      } else {
-        session.userId = probablyUniqueString();
-        res.render("landing", renderOptions);
-      }
+      return await setupLocalDefaultUser(session, res);
     } else {
-      res.render("landing", renderOptions);
+      const renderOptions = pageRenderOptions(session);
+      return res.render("landing", renderOptions);
     }
   });
 
@@ -228,4 +177,30 @@ export default function(
   configureLogout(app);
   configureStorageRoutes(app);
   startNewsUpdates(app);
+}
+
+async function setupLocalDefaultUser(session: Express.Session, res: Res) {
+  if (defaultAccountLevel === "accountsync") {
+    session.hasStorage = true;
+  }
+
+  if (defaultAccountLevel === "epicinitiative") {
+    session.hasStorage = true;
+    session.hasEpicInitiative = true;
+  }
+
+  session.isLoggedIn = true;
+
+  const user = await upsertUser(
+    "defaultPatreonId",
+    "accesskey",
+    "refreshkey",
+    "pledge"
+  );
+
+  if (user) {
+    session.userId = user._id;
+  }
+
+  return res.render("landing", pageRenderOptions(session));
 }

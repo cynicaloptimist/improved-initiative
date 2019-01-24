@@ -23,15 +23,18 @@ describe("EncounterCommander", () => {
     encounterCommander.StartEncounter();
   });
 
-  test("Start empty encounter.", () => {
+  test("Cannot start an empty encounter.", () => {
+    expect(encounter.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
     expect(!encounter.ActiveCombatant());
   });
 
   test("Click Next Turn with no combatants.", () => {
+    encounter.NextTurn = jest.fn(encounter.NextTurn);
     expect(!encounter.ActiveCombatant());
     encounterCommander.NextTurn();
     expect(encounter.RoundCounter() == 1);
+    expect(encounter.NextTurn).not.toBeCalled();
   });
 
   test("Calling Next Turn should start an inactive encounter.", () => {

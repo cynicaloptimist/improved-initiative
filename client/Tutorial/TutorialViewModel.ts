@@ -73,7 +73,9 @@ export class TutorialViewModel {
   });
 
   public Next = () => {
-    Metrics.TrackEvent("StepCompleted", { step: this.stepIndex().toString() });
+    Metrics.TrackAnonymousEvent("StepCompleted", {
+      step: this.stepIndex().toString()
+    });
     const nextStepIndex = this.stepIndex() + 1;
 
     if (nextStepIndex < TutorialSteps.length) {

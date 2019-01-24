@@ -1,5 +1,5 @@
 import { StatBlock } from "../../common/StatBlock";
-import { Dice } from "../Rules/Rules";
+import { Dice } from "../Rules/Dice";
 import { CurrentSettings } from "../Settings/Settings";
 
 export function GetOrRollMaximumHP(statBlock: StatBlock) {

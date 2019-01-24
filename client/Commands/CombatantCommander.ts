@@ -5,7 +5,8 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
-import { Dice, RollResult } from "../Rules/Rules";
+import { Dice } from "../Rules/Dice";
+import { RollResult } from "../Rules/RollResult";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -93,6 +94,10 @@ export class CombatantCommander {
   };
 
   public Remove = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const combatantsToRemove = this.SelectedCombatants.removeAll(),
       firstDeletedIndex = this.tracker
         .CombatantViewModels()
@@ -133,10 +138,28 @@ export class CombatantCommander {
   };
 
   public SelectPrevious = () => {
+    if (this.tracker.CombatantViewModels().length == 0) {
+      return;
+    }
+
+    if (!this.HasSelected()) {
+      this.Select(this.tracker.CombatantViewModels()[0]);
+      return;
+    }
+
     this.selectByOffset(-1);
   };
 
   public SelectNext = () => {
+    if (this.tracker.CombatantViewModels().length == 0) {
+      return;
+    }
+
+    if (!this.HasSelected()) {
+      this.Select(this.tracker.CombatantViewModels()[0]);
+      return;
+    }
+
     this.selectByOffset(1);
   };
 
@@ -170,6 +193,10 @@ export class CombatantCommander {
   }
 
   public EditHP = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const selectedCombatants = this.SelectedCombatants();
     this.editHPForCombatants(selectedCombatants);
   };
@@ -179,6 +206,10 @@ export class CombatantCommander {
   };
 
   public UpdateNotes = async () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const selectedCombatants = this.SelectedCombatants().filter(
       c => c.Combatant.PersistentCharacterId != null
     );
@@ -231,6 +262,10 @@ export class CombatantCommander {
   };
 
   public AddTemporaryHP = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const selectedCombatants = this.SelectedCombatants();
     const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
     const prompt = new DefaultPrompt(
@@ -299,6 +334,10 @@ export class CombatantCommander {
   };
 
   public LinkInitiative = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const selected = this.SelectedCombatants();
 
     if (selected.length <= 1) {
@@ -315,6 +354,10 @@ export class CombatantCommander {
   };
 
   public MoveUp = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const combatant = this.SelectedCombatants()[0];
     const index = this.tracker.CombatantViewModels().indexOf(combatant);
     if (combatant && index > 0) {
@@ -329,6 +372,10 @@ export class CombatantCommander {
   };
 
   public MoveDown = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     const combatant = this.SelectedCombatants()[0];
     const index = this.tracker.CombatantViewModels().indexOf(combatant);
     if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
@@ -343,15 +390,27 @@ export class CombatantCommander {
   };
 
   public SetAlias = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     this.SelectedCombatants().forEach(c => c.SetAlias());
     return false;
   };
 
   public ToggleHidden = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     this.SelectedCombatants().forEach(c => c.ToggleHidden());
   };
 
   public EditStatBlock = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
     if (this.SelectedCombatants().length == 1) {
       let selectedCombatant = this.SelectedCombatants()[0].Combatant;
       if (selectedCombatant.PersistentCharacterId) {

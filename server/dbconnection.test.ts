@@ -34,7 +34,7 @@ describe("User Accounts", () => {
   test("Should initialize user with empty entity sets", async done => {
     const user = await DB.getAccount(userId);
     expect(user.encounters).toHaveLength(0);
-    expect(user.playercharacters).toHaveLength(0);
+    expect(user).not.toHaveProperty("playercharacters");
     expect(user.statblocks).toHaveLength(0);
     expect(user.spells).toHaveLength(0);
     expect(user.persistentcharacters).toHaveLength(0);
@@ -64,7 +64,7 @@ describe("User Accounts", () => {
     };
     await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
     const user = await DB.getAccount(userId);
-    expect(user.playercharacters).toHaveLength(1);
+    expect(user).not.toHaveProperty("playercharacters");
     expect(user.persistentcharacters).toHaveLength(1);
     const persistentCharacterListing = user.persistentcharacters[0];
     expect(persistentCharacterListing.Name).toBe(playerCharacterStatBlock.Name);

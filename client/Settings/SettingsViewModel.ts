@@ -1,4 +1,3 @@
-import { saveAs } from "browser-filesaver";
 import * as ko from "knockout";
 import * as React from "react";
 
@@ -13,7 +12,6 @@ import { Command } from "../Commands/Command";
 import { CommandSetting } from "../Commands/CommandSetting";
 import { Libraries } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
-import { AccountViewModel } from "./AccountViewModel";
 import {
   AutoGroupInitiativeOption,
   AutoGroupInitiativeOptions,
@@ -27,20 +25,20 @@ import {
 } from "./components/EpicInitiativeSettings";
 
 const tips = [
-  "You can view command list and set keybindings on the 'Commands' tab.",
+  "You can set keybindings and explore advanced commands on the 'Commands' tab.",
   "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
   "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
-  "You can use the player view URL to track your combat on any device.",
-  "Editing a creature after it has been added to combat will only change that individual combatant.",
-  "You can restore a creature's hit points by applying negative damage to it.",
+  "You can follow your encounter on any device with the player view URL.",
+  "Editing a creature in the initiative order will only change that individual combatant.",
+  "You can restore hit points by applying negative damage to a combatant.",
   "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
-  "Clicking a creature while holding 'alt' will hide it from the player view when adding it to combat.",
-  "Hold the control key while clicking to select multiple combatants. You can apply damage to multiple creatures at the same time this way.",
+  "Hidden creatures can be added to the encounter by holding 'alt' when clicking their library entry.",
+  "You can select multiple combatants by holding a modifier key. You can apply damage or tags to multiple creatures at the same time this way.",
   "Moving a creature in the initiative order will automatically adjust their initiative count.",
   "The active creature will have its traits and actions displayed first for ease of reference.",
   "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
   "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
-  "A creature tagged as 'Concentrating' will prompt for a Constitution saving throw when it takes damage. You can disable this feature in the settings.",
+  "You can get automatic Concentration reminders by using the tag 'Concentrating.' You can disable this feature in the settings.",
   "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>"
 ];
 
@@ -67,7 +65,6 @@ export class SettingsViewModel {
   public CombatantCommands: Command[];
   public CurrentTab = ko.observable<string>("about");
   public RollHp: KnockoutObservable<boolean>;
-  public AccountViewModel = new AccountViewModel(this.libraries);
 
   public epicInitiativeSettings: React.ComponentElement<
     any,
@@ -212,6 +209,6 @@ export class SettingsViewModel {
 
   public accountSettings = React.createElement(AccountSettings, {
     accountClient: new AccountClient(),
-    accountViewModel: this.AccountViewModel
+    libraries: this.libraries
   });
 }

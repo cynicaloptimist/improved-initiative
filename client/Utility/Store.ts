@@ -95,6 +95,48 @@ export class Store {
         alert(`There was a problem importing ${file.name}: ${error}`);
         return;
       }
+
+      this.importList(Store.StatBlocks, importedStorage);
+      this.importList(Store.PersistentCharacters, importedStorage);
+      this.importList(Store.SavedEncounters, importedStorage);
+      this.importList(Store.Spells, importedStorage);
+
+      location.reload();
+    };
+    reader.readAsText(file);
+  }
+
+  private static importList(listName: string, importSource: any) {
+    const listKey = `${Store._prefix}.${listName}`;
+    const listingsJSON = importSource[listKey];
+    if (!listingsJSON) {
+      console.warn(`Couldn't import ${listName} from JSON`);
+      return;
+    }
+    const listings: string[] = JSON.parse(listingsJSON);
+    for (const key of listings) {
+      const fullKey = `${Store._prefix}.${listName}.${key}`;
+      const listingJSON = importSource[fullKey];
+      if (!listingJSON) {
+        console.warn(`Couldn't import ${fullKey} from JSON`);
+      } else {
+        const listing = JSON.parse(listingJSON);
+        Store.Save(listName, key, listing);
+      }
+    }
+  }
+
+  public static ImportAllAndReplace(file: File) {
+    let reader = new FileReader();
+    reader.onload = (event: any) => {
+      let json = event.target.result;
+      let importedStorage = {};
+      try {
+        importedStorage = JSON.parse(json);
+      } catch (error) {
+        alert(`There was a problem importing ${file.name}: ${error}`);
+        return;
+      }
       if (
         confirm(
           `Replace your Improved Initiative data with imported ${

@@ -29,11 +29,29 @@ export class Metrics {
 
     data.referrer = { url: document.referrer };
     data.page = { url: document.URL };
-    data.localTime = new Date().toString();
+    data.localTime = new Date().getTime();
 
     $.ajax({
       type: "POST",
       url: `/recordEvent/${name}`,
+      data: JSON.stringify(data || {}),
+      contentType: "application/json"
+    });
+  }
+
+  public static TrackAnonymousEvent(name: string, data: EventData = {}): void {
+    console.log(`Anonymous Event ${name}`);
+    if (data !== {}) {
+      console.table(data);
+    }
+
+    data.referrer = { url: document.referrer };
+    data.page = { url: document.URL };
+    data.localTime = new Date().getTime();
+
+    $.ajax({
+      type: "POST",
+      url: `/recordAnonymousEvent/${name}`,
       data: JSON.stringify(data || {}),
       contentType: "application/json"
     });

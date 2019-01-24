@@ -11,7 +11,8 @@ import {
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
-import { Dice, IRules } from "../Rules/Rules";
+import { Dice } from "../Rules/Dice";
+import { IRules } from "../Rules/Rules";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -33,7 +34,7 @@ export class TextEnricher {
   private referenceSpell = (spellName: string) => {
     const name = spellName.toLocaleLowerCase();
     const listing = _.find(
-      this.spellLibrary.Spells(),
+      this.spellLibrary.GetSpells(),
       s => s.CurrentName().toLocaleLowerCase() == name
     );
     if (listing) {

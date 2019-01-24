@@ -72,7 +72,7 @@ export class LibrariesCommander {
       "library",
       statBlock,
       library.SaveNewStatBlock,
-      library.StatBlocks()
+      library.GetStatBlocks()
     );
   };
 
@@ -92,14 +92,14 @@ export class LibrariesCommander {
           "library",
           statBlockWithNewId,
           library.SaveNewStatBlock,
-          library.StatBlocks()
+          library.GetStatBlocks()
         );
       } else {
         this.tracker.EditStatBlock(
           "library",
           { ...StatBlock.Default(), ...statBlock },
           s => library.SaveEditedStatBlock(listing, s),
-          library.StatBlocks(),
+          library.GetStatBlocks(),
           this.deleteSavedStatBlock(listing.Id),
           library.SaveNewStatBlock
         );

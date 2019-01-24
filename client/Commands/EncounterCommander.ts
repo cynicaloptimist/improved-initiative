@@ -69,15 +69,22 @@ export class EncounterCommander {
   };
 
   public StartEncounter = () => {
-    if (this.tracker.Encounter.State() == "inactive") {
-      this.rollInitiative();
-
-      ComponentLoader.AfterComponentLoaded(() =>
-        TutorialSpy("ShowInitiativeDialog")
-      );
+    if (this.tracker.Encounter.Combatants().length == 0) {
+      this.tracker.EventLog.AddEvent("Cannot start empty encounter.");
+      return;
     }
 
     this.HideLibraries();
+
+    if (this.tracker.Encounter.State() == "active") {
+      return;
+    }
+
+    this.rollInitiative();
+
+    ComponentLoader.AfterComponentLoaded(() =>
+      TutorialSpy("ShowInitiativeDialog")
+    );
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {
@@ -88,6 +95,10 @@ export class EncounterCommander {
   };
 
   public EndEncounter = () => {
+    if (this.tracker.Encounter.State() == "inactive") {
+      return;
+    }
+
     this.tracker.Encounter.EndEncounter();
     this.tracker.EventLog.AddEvent("Encounter ended.");
     Metrics.TrackEvent("EncounterEnded", {
@@ -149,12 +160,17 @@ export class EncounterCommander {
       return;
     }
 
+    if (this.tracker.Encounter.Combatants().length == 0) {
+      return;
+    }
+
     if (!this.tracker.Encounter.ActiveCombatant()) {
       this.tracker.Encounter.ActiveCombatant(
         this.tracker.Encounter.Combatants()[0]
       );
       return;
     }
+
     const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
     if (turnEndCombatant) {
       Metrics.TrackEvent("TurnCompleted", {
@@ -175,6 +191,7 @@ export class EncounterCommander {
     if (!this.tracker.Encounter.ActiveCombatant()) {
       return;
     }
+
     this.tracker.Encounter.PreviousTurn();
     let currentCombatant = this.tracker.Encounter.ActiveCombatant();
     this.tracker.EventLog.AddEvent(

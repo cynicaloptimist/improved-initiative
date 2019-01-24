@@ -30,7 +30,7 @@ export function LoadEnvironment() {
   env.HasStorage = html.getAttribute("hasStorage") == "true";
   env.HasEpicInitiative = html.getAttribute("hasEpicInitiative") == "true";
   env.IsLoggedIn = html.getAttribute("isLoggedIn") == "true";
-  if (window["patreonUrl"]) {
-    env.PatreonLoginUrl = window["patreonUrl"];
+  if (window["patreonLoginUrl"]) {
+    env.PatreonLoginUrl = window["patreonLoginUrl"];
   }
 }

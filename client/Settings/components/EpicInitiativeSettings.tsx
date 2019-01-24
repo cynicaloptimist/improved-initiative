@@ -4,6 +4,8 @@ import {
   PlayerViewCustomStyles,
   PlayerViewSettings
 } from "../../../common/PlayerViewSettings";
+import { Button } from "../../Components/Button";
+import { env } from "../../Environment";
 import { LabelWithCheckbox } from "./LabelWithCheckbox";
 import { StylesChooser } from "./StylesChooser";
 
@@ -41,8 +43,17 @@ export class EpicInitiativeSettings extends React.Component<
     (this.props.playerViewSettings.SplashPortraits = s);
 
   public render() {
+    if (!env.IsLoggedIn) {
+      return this.loginMessage();
+    }
+
+    if (!env.HasEpicInitiative) {
+      return this.upgradeMessage();
+    }
+
     return (
       <div className="c-epic-initiative-settings">
+        <h3>Epic Initiative</h3>
         <p>
           <strong>Thank you for supporting Improved Initiative!</strong>
         </p>
@@ -72,4 +83,40 @@ export class EpicInitiativeSettings extends React.Component<
       </div>
     );
   }
+
+  private loginMessage = () => (
+    <React.Fragment>
+      <h3>Epic Initiative</h3>
+      <p>
+        Log in with Patreon to access patron benefits. Epic Initiative allows
+        you to customize your Player View's appearance with combatant portraits,
+        custom colors, fonts, and other CSS features.
+      </p>
+      <a className="login button" href={env.PatreonLoginUrl}>
+        Log In with Patreon
+      </a>
+    </React.Fragment>
+  );
+
+  private upgradeMessage = () => (
+    <React.Fragment>
+      <h3>Epic Initiative</h3>
+      <p>
+        You're logged in with Patreon, but you have not selected the Epic
+        Initiative reward level. Epic Initiative allows you to customize your
+        "Player View's appearance with combatant portraits, custom colors,
+        fonts, and other CSS features.
+      </p>
+      <Button
+        onClick={() =>
+          window.open(
+            "https://www.patreon.com/bePatron?c=716070&rid=1937132",
+            "_blank"
+          )
+        }
+        additionalClassNames="button--upgrade"
+        text="Pledge Now!"
+      />
+    </React.Fragment>
+  );
 }

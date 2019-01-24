@@ -1,33 +1,38 @@
-<div class="tabs">
+<div class="c-tabs">
   <span
+    class="c-tab"
     data-bind="click: SelectTab('about'), css: { selected: CurrentTab() == 'about' }"
     >About</span
   >
   <span
+    class="c-tab"
     data-bind="click: SelectTab('keybindings'), css: { selected: CurrentTab() == 'keybindings' }"
     >Commands</span
   >
   <span
+    class="c-tab"
     data-bind="click: SelectTab('options'), css: { selected: CurrentTab() == 'options' }"
     >Options</span
   >
   <span
+    class="c-tab"
     data-bind="click: SelectTab('account'), css: { selected: CurrentTab() == 'account' }"
     >Account</span
   >
   <span
+    class="c-tab"
     data-bind="click: SelectTab('epicInitiative'), css: { selected: CurrentTab() == 'epicInitiative' }"
     >Epic Initiative</span
   >
 </div>
 <!-- ko if: CurrentTab() == "about" -->
-<div class="tab about">
+<div class="tab-content about">
   <div>
     <p>
       <strong>Improved Initiative</strong> was created by
       <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>. All
       Wizards of the Coast content provided under terms of the
-      <a href="{{rootDirectory}}/SRD-OGL_V1.1.pdf" target="_blank"
+      <a href="{{ rootDirectory }}/SRD-OGL_V1.1.pdf" target="_blank"
         >Open Gaming License Version 1.0a</a
       >.
     </p>
@@ -51,6 +56,7 @@
       <img src="/img/become_a_patron_button.png" />
     </a>
   </div>
+  <h2>Did you know?</h2>
   <div class="tips">
     <span
       data-bind="click: PreviousTip"
@@ -75,7 +81,7 @@
 </div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "keybindings" -->
-<div class="tab keybindings">
+<div class="tab-content keybindings">
   <h2>Encounter Commands</h2>
   <div class="command-options-labels">
     <span class="hotkey-label">Hotkey</span>
@@ -111,7 +117,7 @@
 </div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "options" -->
-<div class="tab options">
+<div class="tab-content options">
   <h3>Rules</h3>
   <p>
     Roll monster HP when adding to combat:
@@ -190,44 +196,15 @@
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "account" -->
 <div
-  class="tab account"
+  class="tab-content account"
   data-bind="react: { component: accountSettings }"
 ></div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "epicInitiative" -->
-<div class="tab epicInitiative">
-  <h3>Epic Initiative</h3>
-  <!-- ko with: AccountViewModel -->
-  <!-- ko if: IsLoggedIn -->
-  <!-- ko if: HasEpicInitiative -->
-  <div data-bind="react: { component: $parent.epicInitiativeSettings }"></div>
-  <!-- /ko -->
-  <!-- ko ifnot: HasEpicInitiative -->
-  <p>
-    You're logged in with Patreon, but you have not selected the
-    <a
-      href="https://www.patreon.com/bePatron?c=716070&rid=1937132"
-      target="_blank"
-      >Epic Initiative</a
-    >
-    reward level. Epic Initiative allows you to customize your Player View's
-    appearance with combatant portraits, custom colors, fonts, and other CSS
-    features.
-  </p>
-  <!-- /ko -->
-  <!-- /ko -->
-  <!-- ko ifnot: IsLoggedIn -->
-  <p>
-    Log in with Patreon to access patron benefits. Epic Initiative allows you to
-    customize your Player View's appearance with combatant portraits, custom
-    colors, fonts, and other CSS features.
-  </p>
-  <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
-    >Log In with Patreon</a
-  >
-  <!-- /ko -->
-  <!-- /ko -->
-</div>
+<div
+  class="tab-content epicInitiative"
+  data-bind="react: { component: epicInitiativeSettings }"
+></div>
 <!-- /ko -->
 <div class="button save-and-close" data-bind="click: SaveAndClose">
   Save and Close

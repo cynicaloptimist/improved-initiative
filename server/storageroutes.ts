@@ -11,12 +11,10 @@ import * as DB from "./dbconnection";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const dbAvailable = !!process.env.DB_CONNECTION_STRING;
-
 const verifyStorage = (
   req: Express.Request
 ): req is { session: Express.Session } => {
-  return dbAvailable && req.session && req.session.hasStorage;
+  return req.session && req.session.hasStorage;
 };
 
 const parsePossiblyMalformedIdFromParams = params => {
@@ -26,6 +24,72 @@ const parsePossiblyMalformedIdFromParams = params => {
   }
   return id;
 };
+
+export default function(app: express.Application) {
+  app.get("/my", (req: Req, res: Res) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    return DB.getAccount(req.session.userId)
+      .then(account => {
+        return res.json(account);
+      })
+      .catch(err => {
+        return res.sendStatus(500);
+      });
+  });
+
+  app.get("/my/fullaccount", (req: Req, res: Res) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    return DB.getFullAccount(req.session.userId)
+      .then(account => {
+        return res.json(account);
+      })
+      .catch(err => {
+        return res.sendStatus(500);
+      });
+  });
+
+  app.post("/my/settings", (req, res: express.Response) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    const newSettings = req.body;
+
+    if (newSettings.Version) {
+      return DB.setSettings(req.session.userId, newSettings).then(r => {
+        return res.sendStatus(200);
+      });
+    } else {
+      return res
+        .status(400)
+        .send("Invalid settings object, requires Version number.");
+    }
+  });
+
+  app.delete("/my", async (req, res) => {
+    if (!verifyStorage(req)) {
+      return res.sendStatus(403);
+    }
+
+    const result = await DB.deleteAccount(req.session.userId);
+    if (result) {
+      return res.status(200);
+    } else {
+      return res.status(404);
+    }
+  });
+
+  configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
+  configureEntityRoute<StatBlock>(app, "statblocks");
+  configureEntityRoute<Spell>(app, "spells");
+  configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
+}
 
 function configureEntityRoute<T extends Listable>(
   app: express.Application,
@@ -101,44 +165,4 @@ function configureEntityRoute<T extends Listable>(
       return res.status(500).send(err);
     });
   });
-}
-
-export default function(app: express.Application) {
-  app.get("/my", (req: Req, res: Res) => {
-    if (!verifyStorage(req)) {
-      return res.sendStatus(403);
-    }
-
-    return DB.getAccount(req.session.userId)
-      .then(account => {
-        return res.json(account);
-      })
-      .catch(err => {
-        return res.sendStatus(500);
-      });
-  });
-
-  app.post("/my/settings", (req, res: express.Response) => {
-    if (!verifyStorage(req)) {
-      return res.sendStatus(403);
-    }
-
-    const newSettings = req.body;
-
-    if (newSettings.Version) {
-      return DB.setSettings(req.session.userId, newSettings).then(r => {
-        return res.sendStatus(200);
-      });
-    } else {
-      return res
-        .status(400)
-        .send("Invalid settings object, requires Version number.");
-    }
-  });
-
-  configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
-  configureEntityRoute<StatBlock>(app, "statblocks");
-  configureEntityRoute<StatBlock>(app, "playercharacters");
-  configureEntityRoute<Spell>(app, "spells");
-  configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
 }

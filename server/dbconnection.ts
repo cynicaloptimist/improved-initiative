@@ -15,22 +15,15 @@ import { User } from "./user";
 
 let connectionString;
 
-export const initialize = initialConnectionString => {
+export const initialize = async initialConnectionString => {
   if (!initialConnectionString) {
-    console.warn("No connection string found.");
+    console.log("No connection string found.");
     return;
   }
 
   connectionString = initialConnectionString;
 
-  client.connect(
-    connectionString,
-    function(err, db) {
-      if (err) {
-        console.error(err);
-      }
-    }
-  );
+  return await client.connect(connectionString);
 };
 
 export async function upsertUser(
@@ -60,7 +53,6 @@ export async function upsertUser(
           },
           $setOnInsert: {
             statblocks: {},
-            playercharacters: {},
             persistentcharacters: {},
             spells: {},
             encounters: {},
@@ -80,6 +72,22 @@ export async function upsertUser(
 }
 
 export async function getAccount(userId: mongo.ObjectId) {
+  const user = await getFullAccount(userId);
+
+  const userWithListings = {
+    settings: user.settings,
+    statblocks: getStatBlockListings(user.statblocks),
+    persistentcharacters: getPersistentCharacterListings(
+      user.persistentcharacters
+    ),
+    spells: getSpellListings(user.spells),
+    encounters: getEncounterListings(user.encounters)
+  };
+
+  return userWithListings;
+}
+
+export async function getFullAccount(userId: mongo.ObjectId) {
   if (!connectionString) {
     throw "No connection string found.";
   }
@@ -91,21 +99,28 @@ export async function getAccount(userId: mongo.ObjectId) {
     throw `User ${userId} not found.`;
   }
 
-  const persistentCharacters = await updatePersistentCharactersIfNeeded(
-    user,
-    users
-  );
+  await updatePersistentCharactersIfNeeded(user, users);
 
-  const userWithListings = {
+  const userAccount = {
     settings: user.settings,
-    statblocks: getStatBlockListings(user.statblocks),
-    playercharacters: getPlayerCharacterListings(user.playercharacters),
-    persistentcharacters: getPersistentCharacterListings(persistentCharacters),
-    spells: getSpellListings(user.spells),
-    encounters: getEncounterListings(user.encounters)
+    statblocks: user.statblocks,
+    persistentcharacters: user.persistentcharacters || {},
+    spells: user.spells,
+    encounters: user.encounters
   };
 
-  return userWithListings;
+  return userAccount;
+}
+
+export async function deleteAccount(userId: mongo.ObjectId) {
+  if (!connectionString) {
+    throw "No connection string found.";
+  }
+
+  const db = await client.connect(connectionString);
+  const users = db.collection<User>("users");
+  const result = await users.deleteOne({ _id: userId });
+  return result.deletedCount;
 }
 
 async function updatePersistentCharactersIfNeeded(
@@ -116,7 +131,11 @@ async function updatePersistentCharactersIfNeeded(
     user.persistentcharacters != undefined &&
     !_.isEmpty(user.persistentcharacters)
   ) {
-    return user.persistentcharacters;
+    return false;
+  }
+
+  if (!user.playercharacters) {
+    return false;
   }
 
   const persistentcharacters = _.mapValues(
@@ -128,8 +147,9 @@ async function updatePersistentCharactersIfNeeded(
   );
 
   await users.updateOne({ _id: user._id }, { $set: { persistentcharacters } });
+  user.persistentcharacters = persistentcharacters;
 
-  return persistentcharacters;
+  return true;
 }
 
 function getStatBlockListings(statBlocks: {
@@ -144,22 +164,6 @@ function getStatBlockListings(statBlocks: {
       SearchHint: StatBlock.GetKeywords(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`
-    };
-  });
-}
-
-function getPlayerCharacterListings(playerCharacters: {
-  [key: string]: {};
-}): ServerListing[] {
-  return Object.keys(playerCharacters).map(key => {
-    const c = { ...StatBlock.Default(), ...playerCharacters[key] };
-    return {
-      Name: c.Name,
-      Id: c.Id,
-      Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c),
-      Version: c.Version,
-      Link: `/my/playercharacters/${c.Id}`
     };
   });
 }
@@ -224,10 +228,10 @@ export function setSettings(userId, settings) {
 
 export type EntityPath =
   | "statblocks"
-  | "playercharacters"
   | "spells"
   | "encounters"
-  | "persistentcharacters";
+  | "persistentcharacters"
+  | "playercharacters";
 
 export async function getEntity(
   entityPath: EntityPath,

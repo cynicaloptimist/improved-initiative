@@ -265,16 +265,30 @@ body > .login.button {
 @import "spell-editor.less";
 @import "statblock-editor.less";
 
-.c-tabs,
-.tabs {
+.c-tabs {
   justify-content: center;
   flex-flow: row;
   margin: @medium-spacer 0 0 0;
 
-  span {
+  .c-tab {
+    background-color: @active-white;
+    &:hover {
+      background-color: @selected-light;
+    }
+    &.selected,
+    &.s-selected {
+      background-color: @primary-red;
+      color: @primary-white;
+
+      &:hover {
+        background-color: @accent-red;
+      }
+    }
+
     flex: 1;
     padding: @medium-spacer @small-spacer;
     margin-right: @extra-small-spacer;
+    border-style: none;
     border-radius: 0 @border-radius 0 0;
     align-items: center;
     text-align: center;

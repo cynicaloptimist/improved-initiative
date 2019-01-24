@@ -1,4 +1,12 @@
 .settings {
+  .tab {
+    border-color: @primary-green;
+  }
+
+  .repeat-tutorial {
+    .green-button();
+  }
+
   .overlay-dialog();
   margin: @larger-spacer auto;
   left: 0;
@@ -11,7 +19,7 @@
     margin: @extra-small-spacer;
   }
 
-  .tab {
+  .tab-content {
     border-width: 1px;
     border-style: solid;
     padding: @medium-spacer;
@@ -33,9 +41,11 @@
   .tips {
     flex-direction: row;
     align-items: center;
+
     span {
-      padding: @medium-spacer;
+      margin: 0 @medium-spacer;
     }
+
     .tip {
       flex-shrink: 1;
     }
@@ -103,6 +113,18 @@
 
   .pledge img {
     height: 30px;
+  }
+
+  .sync-counts__row {
+    display: flex;
+  }
+
+  .sync-counts__library-name {
+    flex-basis: 5rem;
+  }
+
+  .button--upgrade {
+    .green-button();
   }
 }
 

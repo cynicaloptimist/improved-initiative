@@ -7,33 +7,16 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class NPCLibrary {
-  public StatBlocks = ko.observableArray<Listing<StatBlock>>([]);
+  private statBlocks = ko.observableArray<Listing<StatBlock>>([]);
   private readonly StoreName = Store.StatBlocks;
 
-  constructor(private accountClient: AccountClient) {
-    $.ajax("../statblocks/").done(s => this.AddListings(s, "server"));
+  public GetStatBlocks = ko.computed(() => this.statBlocks());
 
-    const localStatBlocks = Store.List(this.StoreName);
-    const listings = localStatBlocks.map(id => {
-      let statBlock = {
-        ...StatBlock.Default(),
-        ...Store.Load<StatBlock>(this.StoreName, id)
-      };
-      return new Listing<StatBlock>(
-        id,
-        statBlock.Name,
-        statBlock.Path,
-        statBlock.Type,
-        this.StoreName,
-        "localStorage"
-      );
-    });
-    ko.utils.arrayPushAll(this.StatBlocks, listings);
-  }
+  constructor(private accountClient: AccountClient) {}
 
   public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<StatBlock>>(
-      this.StatBlocks,
+      this.statBlocks,
       listings.map(c => {
         return new Listing<StatBlock>(
           c.Id,
@@ -48,7 +31,7 @@ export class NPCLibrary {
   };
 
   public DeleteListing = (id: string) => {
-    this.StatBlocks.remove(s => s.Id == id);
+    this.statBlocks.remove(s => s.Id == id);
     Store.Delete(this.StoreName, id);
     this.accountClient.DeleteStatBlock(id);
   };
@@ -59,7 +42,7 @@ export class NPCLibrary {
   ) => {
     listing.Id = newStatBlock.Id;
     listing.Path = newStatBlock.Path;
-    this.StatBlocks.push(listing);
+    this.statBlocks.push(listing);
 
     Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
     listing.SetValue(newStatBlock);
@@ -77,7 +60,7 @@ export class NPCLibrary {
         "account",
         newStatBlock
       );
-      this.StatBlocks.push(accountListing);
+      this.statBlocks.push(accountListing);
     });
   };
 
@@ -85,7 +68,7 @@ export class NPCLibrary {
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
-    const oldStatBlocks = this.StatBlocks().filter(
+    const oldStatBlocks = this.GetStatBlocks().filter(
       l =>
         l.Id == listing.Id ||
         l.Path + l.CurrentName() == listing.Path + listing.CurrentName()

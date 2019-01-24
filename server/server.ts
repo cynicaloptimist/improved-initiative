@@ -1,32 +1,43 @@
 import express = require("express");
 import socketIO = require("socket.io");
+
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
+import { getDbConnectionString } from "./getDbConnectionString";
 import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { PlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
+import ConfigureSessions from "./session";
 import ConfigureSockets from "./sockets";
 
-const app = express();
-const http = require("http").Server(app);
-DB.initialize(process.env.DB_CONNECTION_STRING);
+async function improvedInitiativeServer() {
+  const app = express();
+  const http = require("http").Server(app);
 
-const statBlockLibrary = L.Library.FromFile<StatBlock>(
-  "ogl_creatures.json",
-  "/statblocks/",
-  StatBlock.GetKeywords
-);
-const spellLibrary = L.Library.FromFile<Spell>(
-  "ogl_spells.json",
-  "/spells/",
-  Spell.GetKeywords
-);
-const playerViews = new PlayerViewManager();
-ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+  const dbConnectionString = await getDbConnectionString();
+  await DB.initialize(dbConnectionString);
 
-const io = socketIO(http);
-ConfigureSockets(io, playerViews);
+  const statBlockLibrary = L.Library.FromFile<StatBlock>(
+    "ogl_creatures.json",
+    "/statblocks/",
+    StatBlock.GetKeywords
+  );
+  const spellLibrary = L.Library.FromFile<Spell>(
+    "ogl_spells.json",
+    "/spells/",
+    Spell.GetKeywords
+  );
+  const playerViews = new PlayerViewManager();
 
-LaunchServer(http);
+  await ConfigureSessions(app, dbConnectionString);
+  ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+
+  const io = socketIO(http);
+  ConfigureSockets(io, playerViews);
+
+  LaunchServer(http);
+}
+
+improvedInitiativeServer();

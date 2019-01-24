@@ -3,6 +3,7 @@ import * as React from "react";
 export const FileUploadButton = (props: {
   handleFile: (file: File) => void;
   acceptFileType: string;
+  fontAwesomeIcon: string;
 }) => {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files[0];
@@ -19,7 +20,7 @@ export const FileUploadButton = (props: {
         accept={props.acceptFileType}
         onChange={onChange}
       />
-      <span className="c-button fas fa-upload" />
+      <span className={"c-button fas fa-" + props.fontAwesomeIcon} />
     </label>
   );
 };
