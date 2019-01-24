@@ -5,6 +5,7 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button } from "../../Components/Button";
+import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../../Environment";
 import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
@@ -153,7 +154,8 @@ export class AccountSyncSettings extends React.Component<
 
     forIn(account.spells, spell => libraries.Spells.AddOrUpdateSpell(spell));
 
-    forIn(account.encounters, encounter => {
+    forIn(account.encounters, downloadedEncounter => {
+      const encounter = UpdateLegacySavedEncounter(downloadedEncounter);
       libraries.Encounters.Save(encounter);
     });
 
