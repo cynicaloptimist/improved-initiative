@@ -23,7 +23,9 @@ export const initialize = async initialConnectionString => {
 
   connectionString = initialConnectionString;
 
-  return await client.connect(connectionString);
+  const db = await client.connect(connectionString);
+  db.close();
+  return;
 };
 
 export async function upsertUser(
@@ -96,10 +98,12 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const users = db.collection<User>("users");
   const user = await users.findOne({ _id: userId });
   if (user === null) {
+    db.close();
     throw `User ${userId} not found.`;
   }
 
   await updatePersistentCharactersIfNeeded(user, users);
+  db.close();
 
   const userAccount = {
     settings: user.settings,
@@ -120,6 +124,7 @@ export async function deleteAccount(userId: mongo.ObjectId) {
   const db = await client.connect(connectionString);
   const users = db.collection<User>("users");
   const result = await users.deleteOne({ _id: userId });
+  db.close();
   return result.deletedCount;
 }
 
@@ -220,9 +225,14 @@ export function setSettings(userId, settings) {
     throw "No connection string found.";
   }
 
-  return client.connect(connectionString).then((db: mongo.Db) => {
+  return client.connect(connectionString).then(async (db: mongo.Db) => {
     const users = db.collection<User>("users");
-    return users.updateOne({ _id: userId }, { $set: { settings } });
+    const result = await users.updateOne(
+      { _id: userId },
+      { $set: { settings } }
+    );
+    db.close();
+    return result.modifiedCount;
   });
 }
 
@@ -252,6 +262,8 @@ export async function getEntity(
     }
   );
 
+  db.close();
+
   if (!user) {
     throw "User not found";
   }
@@ -274,21 +286,21 @@ export function deleteEntity(
     throw "No connection string found.";
   }
 
-  return client.connect(connectionString).then((db: mongo.Db) => {
+  return client.connect(connectionString).then(async (db: mongo.Db) => {
     const users = db.collection<User>("users");
 
-    return users
-      .updateOne(
-        { _id: userId },
-        {
-          $unset: {
-            [`${entityPath}.${entityId}`]: ""
-          }
+    const result = await users.updateOne(
+      { _id: userId },
+      {
+        $unset: {
+          [`${entityPath}.${entityId}`]: ""
         }
-      )
-      .then(result => {
-        callBack(result.modifiedCount);
-      });
+      }
+    );
+
+    callBack(result.modifiedCount);
+    db.close();
+    return;
   });
 }
 
@@ -319,6 +331,9 @@ export async function saveEntity<T extends Listable>(
       }
     }
   );
+
+  db.close();
+
   return result.modifiedCount;
 }
 
@@ -362,6 +377,7 @@ export function saveEntitySet<T extends Listable>(
         );
       })
       .then(result => {
+        db.close();
         callBack(result.modifiedCount);
       });
   });
