@@ -26,16 +26,6 @@ class PlayerView extends React.Component<PlayerViewProps, PlayerViewState> {
 export class ReactPlayerView {
   constructor(element: Element) {
     const emptyState = DefaultEncounterState<StaticCombatantViewModel>();
-    emptyState.Combatants.push({
-      Name: "Test",
-      HPColor: "",
-      HPDisplay: "",
-      Id: "",
-      ImageURL: "",
-      Initiative: 0,
-      IsPlayerCharacter: false,
-      Tags: []
-    });
     const settings = getDefaultSettings().PlayerView;
     renderReact(
       <PlayerView encounterState={emptyState} playerViewSettings={settings} />,
