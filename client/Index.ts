@@ -23,6 +23,7 @@ $(() => {
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
     const playerView = new ReactPlayerView(document.body);
+    playerView.LoadEncounterFromServer(encounterId);
   }
   if ($("#landing").length) {
     let launcherViewModel = new LauncherViewModel();

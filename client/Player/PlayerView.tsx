@@ -5,6 +5,8 @@ import {
   DefaultEncounterState,
   EncounterState
 } from "../../common/EncounterState";
+import { PlayerView as PlayerViewState } from "../../common/PlayerView";
+
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 import { getDefaultSettings } from "../Settings/Settings";
@@ -13,9 +15,8 @@ interface PlayerViewProps {
   encounterState: EncounterState<StaticCombatantViewModel>;
   playerViewSettings: PlayerViewSettings;
 }
-interface PlayerViewState {}
 
-class PlayerView extends React.Component<PlayerViewProps, PlayerViewState> {
+class PlayerView extends React.Component<PlayerViewProps> {
   public render() {
     return this.props.encounterState.Combatants.map(combatant => (
       <span key={combatant.Id}>{combatant.Name}</span>
@@ -24,12 +25,25 @@ class PlayerView extends React.Component<PlayerViewProps, PlayerViewState> {
 }
 
 export class ReactPlayerView {
-  constructor(element: Element) {
+  constructor(private element: Element) {
     const emptyState = DefaultEncounterState<StaticCombatantViewModel>();
     const settings = getDefaultSettings().PlayerView;
     renderReact(
       <PlayerView encounterState={emptyState} playerViewSettings={settings} />,
-      element
+      this.element
+    );
+  }
+
+  public async LoadEncounterFromServer(encounterId: string) {
+    const playerView: PlayerViewState = await $.ajax(
+      `../playerviews/${encounterId}`
+    );
+    renderReact(
+      <PlayerView
+        encounterState={playerView.encounterState}
+        playerViewSettings={playerView.settings}
+      />,
+      this.element
     );
   }
 }
