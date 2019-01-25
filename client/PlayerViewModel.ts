@@ -225,13 +225,15 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
 
   if (customStyles.headerText) {
     declarations.push(
-      `.combatant.header, .combat-footer { color: ${customStyles.headerText}; }`
+      `.combatant--header, .combat-footer { color: ${
+        customStyles.headerText
+      }; }`
     );
   }
 
   if (customStyles.headerBackground) {
     declarations.push(
-      `.combatant.header, .combat-footer { background-color: ${
+      `.combatant--header, .combat-footer { background-color: ${
         customStyles.headerBackground
       }; border-color: ${customStyles.headerBackground} }`
     );
