@@ -41,13 +41,19 @@ export class ReactPlayerView {
         encounterState: this.playerViewState.encounterState,
         settings: settings
       });
-  });
+    });
 
     socket.emit("join encounter", this.encounterId);
   }
 
   private renderPlayerView(newState: PlayerViewState) {
     this.playerViewState = newState;
-    renderReact(<PlayerView state={this.playerViewState} />, this.element);
+    renderReact(
+      <PlayerView
+        encounterState={this.playerViewState.encounterState}
+        settings={this.playerViewState.settings}
+      />,
+      this.element
+    );
   }
 }
