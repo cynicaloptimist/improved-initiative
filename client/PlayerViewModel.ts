@@ -205,13 +205,13 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
       activeColor = baseColor.darken(0.2).string();
     }
     declarations.push(
-      `li.combatant { background-color: ${customStyles.combatantBackground}; }`
+      `.combatant { background-color: ${customStyles.combatantBackground}; }`
     );
     declarations.push(
-      `li.combatant:nth-child(2n-1) { background-color: ${zebraColor}; }`
+      `.combatant:nth-child(2n-1) { background-color: ${zebraColor}; }`
     );
     declarations.push(
-      `li.combatant.active { background-color: ${activeColor}; }`
+      `.combatant.active { background-color: ${activeColor}; }`
     );
   }
 
@@ -225,13 +225,15 @@ function CSSFrom(customStyles: PlayerViewCustomStyles): string {
 
   if (customStyles.headerText) {
     declarations.push(
-      `.combatant.header, .combat-footer { color: ${customStyles.headerText}; }`
+      `.combatant--header, .combat-footer { color: ${
+        customStyles.headerText
+      }; }`
     );
   }
 
   if (customStyles.headerBackground) {
     declarations.push(
-      `.combatant.header, .combat-footer { background-color: ${
+      `.combatant--header, .combat-footer { background-color: ${
         customStyles.headerBackground
       }; border-color: ${customStyles.headerBackground} }`
     );
