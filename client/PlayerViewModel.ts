@@ -2,11 +2,11 @@ import * as Color from "color";
 import * as ko from "knockout";
 
 import { EncounterState } from "../common/EncounterState";
-import { PlayerView } from "../common/PlayerView";
 import {
   PlayerViewCustomStyles,
   PlayerViewSettings
 } from "../common/PlayerViewSettings";
+import { PlayerViewState } from "../common/PlayerViewState";
 import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
@@ -74,19 +74,21 @@ export class PlayerViewModel {
   }
 
   public LoadEncounterFromServer = (encounterId: string) => {
-    $.ajax(`../playerviews/${encounterId}`).done((playerView: PlayerView) => {
-      if (!playerView) {
-        return;
-      }
+    $.ajax(`../playerviews/${encounterId}`).done(
+      (playerView: PlayerViewState) => {
+        if (!playerView) {
+          return;
+        }
 
-      if (playerView.encounterState) {
-        this.LoadEncounter(playerView.encounterState);
-      }
+        if (playerView.encounterState) {
+          this.LoadEncounter(playerView.encounterState);
+        }
 
-      if (playerView.settings) {
-        this.LoadSettings(playerView.settings);
+        if (playerView.settings) {
+          this.LoadSettings(playerView.settings);
+        }
       }
-    });
+    );
   };
 
   private InitializeStylesheets() {
