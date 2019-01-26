@@ -3,7 +3,7 @@ import * as io from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
-import { ReactPlayerView } from "./Player/PlayerView";
+import { ReactPlayerView } from "./Player/ReactPlayerView";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
