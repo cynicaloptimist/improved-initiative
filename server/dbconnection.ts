@@ -2,6 +2,7 @@ import mongo = require("mongodb");
 const client = mongo.MongoClient;
 
 import * as _ from "lodash";
+import { CombatantState } from "../common/CombatantState";
 import { DefaultEncounterState } from "../common/EncounterState";
 import { Listable, ServerListing } from "../common/Listable";
 import {
@@ -191,7 +192,10 @@ function getEncounterListings(encounters: {
   [key: string]: {};
 }): ServerListing[] {
   return Object.keys(encounters).map(key => {
-    const c = { ...DefaultEncounterState(), ...encounters[key] };
+    const c = {
+      ...DefaultEncounterState<CombatantState>(),
+      ...encounters[key]
+    };
     return {
       Name: c.Name,
       Id: c.Id,

@@ -26,12 +26,14 @@ export class StylesChooser extends React.Component<
   }
 
   private handleChangeComplete = (color: ColorResult) => {
+    const { r, g, b, a } = color.rgb;
+    const colorString = `rgba(${r},${g},${b},${a})`;
     const updatedState = {
-      styles: { ...this.state.styles, [this.state.selectedStyle]: color.hex }
+      styles: { ...this.state.styles, [this.state.selectedStyle]: colorString }
     };
 
     this.setState(updatedState);
-    this.props.updateStyle(this.state.selectedStyle, color.hex);
+    this.props.updateStyle(this.state.selectedStyle, colorString);
   };
 
   private handleFontChange = (event: React.FocusEvent<HTMLInputElement>) => {
