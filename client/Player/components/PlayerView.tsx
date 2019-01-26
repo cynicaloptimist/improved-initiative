@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { PlayerViewState } from "../../common/PlayerViewState";
+import { PlayerViewState } from "../../../common/PlayerViewState";
 
 export class PlayerView extends React.Component<PlayerViewState> {
   public render() {
