@@ -1,31 +1,53 @@
 import * as React from "react";
 import { render as renderReact } from "react-dom";
 
-import { DefaultEncounterState } from "../../common/EncounterState";
-import { PlayerView as PlayerViewState } from "../../common/PlayerView";
+import {
+  DefaultEncounterState,
+  EncounterState
+} from "../../common/EncounterState";
+import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import { PlayerViewState } from "../../common/PlayerViewState";
 import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 import { getDefaultSettings } from "../Settings/Settings";
 import { PlayerView } from "./PlayerView";
 
 export class ReactPlayerView {
-  constructor(private element: Element) {
-    const emptyState = DefaultEncounterState<StaticCombatantViewModel>();
-    const settings = getDefaultSettings().PlayerView;
-    renderReact(
-      <PlayerView encounterState={emptyState} playerViewSettings={settings} />,
-      this.element
-    );
-  }
-  public async LoadEncounterFromServer(encounterId: string) {
+  private playerViewState: PlayerViewState = {
+    encounterState: DefaultEncounterState<StaticCombatantViewModel>(),
+    settings: getDefaultSettings().PlayerView
+  };
+
+  constructor(private element: Element, private encounterId: string) {}
+
+  public async LoadEncounterFromServer() {
     const playerView: PlayerViewState = await $.ajax(
-      `../playerviews/${encounterId}`
+      `../playerviews/${this.encounterId}`
     );
-    renderReact(
-      <PlayerView
-        encounterState={playerView.encounterState}
-        playerViewSettings={playerView.settings}
-      />,
-      this.element
+    this.renderPlayerView(playerView);
+  }
+
+  public ConnectToSocket(socket: SocketIOClient.Socket) {
+    socket.on(
+      "encounter updated",
+      (encounter: EncounterState<StaticCombatantViewModel>) => {
+        this.renderPlayerView({
+          encounterState: encounter,
+          settings: this.playerViewState.settings
+        });
+      }
     );
+    socket.on("settings updated", (settings: PlayerViewSettings) => {
+      this.renderPlayerView({
+        encounterState: this.playerViewState.encounterState,
+        settings: settings
+      });
+  });
+
+    socket.emit("join encounter", this.encounterId);
+  }
+
+  private renderPlayerView(newState: PlayerViewState) {
+    this.playerViewState = newState;
+    renderReact(<PlayerView state={this.playerViewState} />, this.element);
   }
 }

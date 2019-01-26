@@ -1,18 +1,14 @@
 import * as React from "react";
 
-import { EncounterState } from "../../common/EncounterState";
-
-import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
+import { PlayerViewState } from "../../common/PlayerViewState";
 
 export class PlayerView extends React.Component<PlayerViewProps> {
   public render() {
-    return this.props.encounterState.Combatants.map(combatant => (
+    return this.props.state.encounterState.Combatants.map(combatant => (
       <span key={combatant.Id}>{combatant.Name}</span>
     ));
   }
 }
 interface PlayerViewProps {
-  encounterState: EncounterState<StaticCombatantViewModel>;
-  playerViewSettings: PlayerViewSettings;
+  state: PlayerViewState;
 }
