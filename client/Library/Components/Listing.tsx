@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Listing } from "../Listing";
 import { ListingButton } from "./ListingButton";
 
@@ -40,6 +41,11 @@ export class ListingViewModel<T extends Listable> extends React.Component<
   private moveFn = () => this.props.onMove(this.props.listing);
   private previewFn = e => this.props.onPreview(this.props.listing, e);
   private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
+
+  constructor(props) {
+    super(props);
+    linkComponentToObservables(this);
+  }
 
   public render() {
     const addedCount = this.props.showCount && this.state && this.state.count;
