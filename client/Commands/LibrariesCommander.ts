@@ -188,7 +188,7 @@ export class LibrariesCommander {
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
     const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.Path)
+      .map(e => e.CurrentPath())
       .uniq()
       .compact()
       .value();

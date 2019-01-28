@@ -68,7 +68,7 @@ export class SpellLibraryViewModel extends React.Component<
         <ul className="listings">
           {filteredListings.map(l => (
             <ListingViewModel
-              key={l.Id + l.Path + l.CurrentName()}
+              key={l.Id + l.CurrentPath() + l.CurrentName()}
               name={l.CurrentName()}
               onAdd={this.loadSavedSpell}
               onEdit={this.editSpell}

@@ -265,7 +265,7 @@ export class StatBlockEditor extends React.Component<
   private willOverwriteStatBlock = _.memoize(
     (path: string, name: string) =>
       this.props.currentListings.some(
-        l => l.Path == path && l.CurrentName() == name
+        l => l.CurrentPath() == path && l.CurrentName() == name
       ),
     (path: string, name: string) => JSON.stringify({ path, name })
   );

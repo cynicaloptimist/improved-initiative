@@ -29,7 +29,8 @@ export class IdentityFields extends React.Component<
   constructor(props) {
     super(props);
     this.autoCompletePaths = _.uniq(
-      this.props.currentListings && this.props.currentListings.map(l => l.Path)
+      this.props.currentListings &&
+        this.props.currentListings.map(l => l.CurrentPath())
     );
 
     const folderExpanded =

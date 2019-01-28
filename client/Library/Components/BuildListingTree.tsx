@@ -11,15 +11,15 @@ export function BuildListingTree<T extends Listable>(
   const rootListingComponents = [];
   const folders = {};
   listings.forEach(listing => {
-    if (listing.Path == "") {
+    if (listing.CurrentPath() == "") {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
     } else {
-      if (folders[listing.Path] == undefined) {
-        folders[listing.Path] = [];
+      if (folders[listing.CurrentPath()] == undefined) {
+        folders[listing.CurrentPath()] = [];
       }
-      folders[listing.Path].push(listing);
+      folders[listing.CurrentPath()].push(listing);
     }
   });
 

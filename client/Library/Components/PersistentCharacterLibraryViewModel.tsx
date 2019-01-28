@@ -131,7 +131,7 @@ export class PersistentCharacterLibraryViewModel extends React.Component<
 
   private buildListingComponent = (l: Listing<PersistentCharacter>) => (
     <ListingViewModel
-      key={l.Id + l.Path + l.CurrentName()}
+      key={l.Id + l.CurrentPath() + l.CurrentName()}
       name={l.CurrentName()}
       showCount
       onAdd={this.loadSavedStatBlock}

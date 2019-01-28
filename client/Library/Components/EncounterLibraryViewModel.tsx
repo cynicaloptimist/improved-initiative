@@ -121,7 +121,7 @@ export class EncounterLibraryViewModel extends React.Component<
 
   private buildListingComponent = (listing: EncounterListing) => (
     <ListingViewModel
-      key={listing.Id + listing.Path + listing.CurrentName()}
+      key={listing.Id + listing.CurrentPath() + listing.CurrentName()}
       name={listing.CurrentName()}
       onAdd={this.loadSavedEncounter}
       onDelete={this.deleteListing}
