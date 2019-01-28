@@ -120,19 +120,18 @@ function configureEntityRoute<T extends Listable>(
       });
   });
 
-  app.post(`/my/${route}/`, (req: Req, res: Res) => {
+  app.post(`/my/${route}/`, async (req: Req, res: Res) => {
     if (!verifyStorage(req)) {
       return res.sendStatus(403);
     }
 
     if (req.body.Version) {
-      return DB.saveEntity<T>(route, req.session.userId, req.body)
-        .then(result => {
-          return res.sendStatus(201);
-        })
-        .catch(err => {
-          return res.status(500).send(err);
-        });
+      try {
+        await DB.saveEntity<T>(route, req.session.userId, req.body);
+        return res.sendStatus(201);
+      } catch (err) {
+        return res.status(500).send(err);
+      }
     } else if (req.body.length) {
       return DB.saveEntitySet<T>(
         route,
