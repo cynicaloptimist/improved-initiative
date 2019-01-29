@@ -49,7 +49,7 @@ export class SpellLibraryViewModel extends React.Component<
   private librarySubscription: KnockoutSubscription;
 
   private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
-    this.props.librariesCommander.ReferenceSpell(listing);
+    return this.props.librariesCommander.ReferenceSpell(listing);
   };
 
   private editSpell = (l: Listing<Spell>) => {

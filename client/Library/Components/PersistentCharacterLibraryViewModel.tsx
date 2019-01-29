@@ -110,10 +110,16 @@ export class PersistentCharacterLibraryViewModel extends React.Component<
     listing: Listing<PersistentCharacter>,
     hideOnAdd: boolean
   ) => {
+    if (!this.props.librariesCommander.CanAddPersistentCharacter(listing)) {
+      return false;
+    }
+
     this.props.librariesCommander.AddPersistentCharacterFromListing(
       listing,
       hideOnAdd
     );
+
+    return true;
   };
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {

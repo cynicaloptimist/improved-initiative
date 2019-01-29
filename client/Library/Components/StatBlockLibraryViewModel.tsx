@@ -65,7 +65,10 @@ export class StatBlockLibraryViewModel extends React.Component<
     listing: StatBlockListing,
     hideOnAdd: boolean
   ) => {
-    this.props.librariesCommander.AddStatBlockFromListing(listing, hideOnAdd);
+    return this.props.librariesCommander.AddStatBlockFromListing(
+      listing,
+      hideOnAdd
+    );
   };
 
   private editStatBlock = (l: Listing<StatBlock>) => {

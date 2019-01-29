@@ -8,7 +8,7 @@ import { ListingButton } from "./ListingButton";
 export interface ListingProps<T extends Listable> {
   name: string;
   listing: Listing<T>;
-  onAdd: (listing: Listing<T>, modified: boolean) => void;
+  onAdd: (listing: Listing<T>, modified: boolean) => boolean;
   onDelete?: (listing: Listing<T>) => void;
   onEdit?: (listing: Listing<T>) => void;
   onMove?: (listing: Listing<T>) => void;
@@ -28,9 +28,9 @@ export class ListingViewModel<T extends Listable> extends React.Component<
   ListingProps<T>,
   ListingState
 > {
-  private addFn = (event: React.MouseEvent<HTMLSpanElement>) => {
-    this.props.onAdd(this.props.listing, event.altKey);
-    if (this.props.showCount) {
+  private addFn = async (event: React.MouseEvent<HTMLSpanElement>) => {
+    const didAdd = this.props.onAdd(this.props.listing, event.altKey);
+    if (didAdd && this.props.showCount) {
       const currentCount = (this.state && this.state.count) || 0;
       this.setState({
         count: currentCount + 1

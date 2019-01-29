@@ -214,22 +214,19 @@ export class Encounter {
     return combatant;
   };
 
+  public CanAddCombatant = (persistentCharacterId: string) => {
+    return !this.combatants().some(
+      c => c.PersistentCharacterId == persistentCharacterId
+    );
+  };
+
   public AddCombatantFromPersistentCharacter(
     persistentCharacter: PersistentCharacter,
     library: PersistentCharacterLibrary,
     hideOnAdd = false
   ): Combatant {
-    const alreadyAddedCombatant = find(
-      this.combatants(),
-      c => c.PersistentCharacterId == persistentCharacter.Id
-    );
-    if (alreadyAddedCombatant != undefined) {
-      console.log(
-        `Won't add multiple persistent characters with Id ${
-          persistentCharacter.Id
-        }`
-      );
-      return alreadyAddedCombatant;
+    if (!this.CanAddCombatant(persistentCharacter.Id)) {
+      return null;
     }
 
     const initialState: CombatantState = {
