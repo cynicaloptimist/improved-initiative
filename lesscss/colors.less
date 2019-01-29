@@ -14,12 +14,12 @@
 @selected-light: darken(@primary-white, 20);
 
 @primary-red: #822000;
-@hover-red: fade(@primary-red, 20%);
+@hover-red: lighten(@primary-red, 20%);
 @active-red: lighten(@primary-red, 15);
 @accent-red: darken(@primary-red, 5);
 
 @primary-black: #0a0908;
-@hover-black: fade(@primary-black, 10%);
+@hover-black: lighten(@primary-black, 10%);
 @disabled-black: lighten(@primary-black, 20);
 
 @primary-grey: #212121;
@@ -88,20 +88,6 @@
   background-color: @primary-grey;
   a {
     color: @primary-white;
-  }
-}
-
-#tracker .combatant:not(.header) {
-  &:hover {
-    background-color: @active-white;
-  }
-
-  &.selected {
-    background-color: @hover-red;
-  }
-
-  .hp:hover {
-    background-color: @hover-red;
   }
 }
 
