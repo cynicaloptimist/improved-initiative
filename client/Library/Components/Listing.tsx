@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
@@ -50,9 +51,11 @@ export class ListingViewModel<T extends Listable> extends React.Component<
   public render() {
     const addedCount = this.props.showCount && this.state && this.state.count;
     const countElements = addedCount
-      ? new Array(addedCount).fill(
-          <span className="c-listing__counter">●</span>
-        )
+      ? _.range(addedCount).map(i => (
+          <span className="c-listing__counter" key={i}>
+            ●
+          </span>
+        ))
       : "";
     return (
       <li className="c-listing">
