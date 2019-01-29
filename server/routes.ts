@@ -110,6 +110,7 @@ export default function(
     const options = pageRenderOptions(session);
     if (session.postedEncounter) {
       options.postedEncounter = JSON.stringify(session.postedEncounter);
+      delete session.postedEncounter;
     }
     res.render("tracker", options);
   });
