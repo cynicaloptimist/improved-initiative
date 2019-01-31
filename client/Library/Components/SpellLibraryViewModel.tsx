@@ -49,7 +49,7 @@ export class SpellLibraryViewModel extends React.Component<
   private librarySubscription: KnockoutSubscription;
 
   private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
-    this.props.librariesCommander.ReferenceSpell(listing);
+    return this.props.librariesCommander.ReferenceSpell(listing);
   };
 
   private editSpell = (l: Listing<Spell>) => {
@@ -68,7 +68,7 @@ export class SpellLibraryViewModel extends React.Component<
         <ul className="listings">
           {filteredListings.map(l => (
             <ListingViewModel
-              key={l.Id + l.Path + l.CurrentName()}
+              key={l.Id + l.CurrentPath() + l.CurrentName()}
               name={l.CurrentName()}
               onAdd={this.loadSavedSpell}
               onEdit={this.editSpell}

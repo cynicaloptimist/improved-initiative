@@ -63,6 +63,7 @@
   line-height: 1.4;
   flex-shrink: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   max-width: @fixed-column-width;
 
   h3,
@@ -76,6 +77,10 @@
     height: 10px;
     background: url("../img/stat-block-hr.svg") no-repeat center/100% 100%;
     margin: @medium-spacer 0;
+  }
+
+  pre {
+    white-space: pre-wrap;
   }
 
   > div {

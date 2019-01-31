@@ -110,10 +110,16 @@ export class PersistentCharacterLibraryViewModel extends React.Component<
     listing: Listing<PersistentCharacter>,
     hideOnAdd: boolean
   ) => {
+    if (!this.props.librariesCommander.CanAddPersistentCharacter(listing)) {
+      return false;
+    }
+
     this.props.librariesCommander.AddPersistentCharacterFromListing(
       listing,
       hideOnAdd
     );
+
+    return true;
   };
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {
@@ -131,7 +137,7 @@ export class PersistentCharacterLibraryViewModel extends React.Component<
 
   private buildListingComponent = (l: Listing<PersistentCharacter>) => (
     <ListingViewModel
-      key={l.Id + l.Path + l.CurrentName()}
+      key={l.Id + l.CurrentPath() + l.CurrentName()}
       name={l.CurrentName()}
       showCount
       onAdd={this.loadSavedStatBlock}

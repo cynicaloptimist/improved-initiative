@@ -21,6 +21,7 @@ export class ConcentrationPrompt implements Prompt {
         .Tags()
         .filter(t => t.Text === ConcentrationPrompt.Tag)
         .forEach(tag => combatant.Tags.remove(tag));
+      combatant.Encounter.QueueEmitEncounter();
       return true;
     };
   }

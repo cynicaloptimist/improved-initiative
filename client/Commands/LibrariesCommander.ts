@@ -41,6 +41,13 @@ export class LibrariesCommander {
       Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
     });
+    return true;
+  };
+
+  public CanAddPersistentCharacter = (
+    listing: Listing<PersistentCharacter>
+  ) => {
+    return this.tracker.Encounter.CanAddCombatant(listing.Id);
   };
 
   public AddPersistentCharacterFromListing = async (
@@ -158,6 +165,7 @@ export class LibrariesCommander {
       this.tracker.StatBlockTextEnricher
     );
     this.tracker.PromptQueue.Add(prompt);
+    return true;
   };
 
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
@@ -188,7 +196,7 @@ export class LibrariesCommander {
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
     const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.Path)
+      .map(e => e.CurrentPath())
       .uniq()
       .compact()
       .value();

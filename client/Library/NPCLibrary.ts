@@ -41,7 +41,6 @@ export class NPCLibrary {
     newStatBlock: StatBlock
   ) => {
     listing.Id = newStatBlock.Id;
-    listing.Path = newStatBlock.Path;
     this.statBlocks.push(listing);
 
     Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
@@ -71,7 +70,8 @@ export class NPCLibrary {
     const oldStatBlocks = this.GetStatBlocks().filter(
       l =>
         l.Id == listing.Id ||
-        l.Path + l.CurrentName() == listing.Path + listing.CurrentName()
+        l.CurrentPath() + l.CurrentName() ==
+          listing.CurrentPath() + listing.CurrentName()
     );
     for (const statBlock of oldStatBlocks) {
       this.DeleteListing(statBlock.Id);

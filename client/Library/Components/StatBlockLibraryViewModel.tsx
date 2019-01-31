@@ -65,7 +65,10 @@ export class StatBlockLibraryViewModel extends React.Component<
     listing: StatBlockListing,
     hideOnAdd: boolean
   ) => {
-    this.props.librariesCommander.AddStatBlockFromListing(listing, hideOnAdd);
+    return this.props.librariesCommander.AddStatBlockFromListing(
+      listing,
+      hideOnAdd
+    );
   };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
@@ -129,7 +132,7 @@ export class StatBlockLibraryViewModel extends React.Component<
 
   private buildListingComponent = (l: Listing<StatBlock>) => (
     <ListingViewModel
-      key={l.Id + l.Path + l.CurrentName()}
+      key={l.Id + l.CurrentPath() + l.CurrentName()}
       name={l.CurrentName()}
       showCount
       onAdd={this.loadSavedStatBlock}
