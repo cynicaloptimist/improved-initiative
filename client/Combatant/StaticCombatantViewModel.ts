@@ -1,4 +1,4 @@
-import { Tag } from "./Tag";
+import { TagState } from "../../common/CombatantState";
 
 export interface StaticCombatantViewModel {
   Name: string;
@@ -6,7 +6,7 @@ export interface StaticCombatantViewModel {
   HPColor: string;
   Initiative: number;
   Id: string;
-  Tags: Tag[];
+  Tags: TagState[];
   IsPlayerCharacter: boolean;
   ImageURL: string;
 }

@@ -14,7 +14,17 @@ export function ToStaticViewModel(
     HPColor: GetHPColor(combatant),
     Initiative: combatant.Initiative(),
     IsPlayerCharacter: combatant.IsPlayerCharacter,
-    Tags: combatant.Tags().filter(t => t.Visible()),
+    Tags: combatant
+      .Tags()
+      .filter(t => t.Visible())
+      .map(t => {
+        return {
+          Text: t.Text,
+          DurationRemaining: t.DurationRemaining(),
+          DurationTiming: t.DurationTiming,
+          DurationCombatantId: t.DurationCombatantId
+        };
+      }),
     ImageURL: sendImage && combatant.StatBlock().ImageURL
   };
 }
