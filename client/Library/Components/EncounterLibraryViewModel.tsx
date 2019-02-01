@@ -105,6 +105,7 @@ export class EncounterLibraryViewModel extends React.Component<
 
   private loadSavedEncounter = (listing: EncounterListing) => {
     listing.GetAsyncWithUpdatedId(this.props.librariesCommander.LoadEncounter);
+    return true;
   };
 
   private deleteListing = (listing: EncounterListing) => {
@@ -121,7 +122,7 @@ export class EncounterLibraryViewModel extends React.Component<
 
   private buildListingComponent = (listing: EncounterListing) => (
     <ListingViewModel
-      key={listing.Id + listing.Path + listing.CurrentName()}
+      key={listing.Id + listing.CurrentPath() + listing.CurrentName()}
       name={listing.CurrentName()}
       onAdd={this.loadSavedEncounter}
       onDelete={this.deleteListing}

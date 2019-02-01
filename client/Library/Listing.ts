@@ -9,7 +9,7 @@ export class Listing<T extends Listable> {
   constructor(
     public Id: string,
     private Name: string,
-    public Path: string,
+    private Path: string,
     public SearchHint: string,
     public Link: string,
     public Origin: ListingOrigin,
@@ -69,5 +69,13 @@ export class Listing<T extends Listable> {
       return current.Name || this.Name;
     }
     return this.Name;
+  });
+
+  public CurrentPath = ko.computed(() => {
+    const current = this.value();
+    if (current !== undefined) {
+      return current.Path || this.Path;
+    }
+    return this.Path;
   });
 }

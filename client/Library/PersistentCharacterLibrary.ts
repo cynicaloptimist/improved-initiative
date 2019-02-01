@@ -100,7 +100,10 @@ export class PersistentCharacterLibrary {
       LastUpdateMs: now()
     };
 
+    this.persistentCharacters.remove(currentCharacterListing);
     currentCharacterListing.SetValue(updatedCharacter);
+    this.persistentCharacters.push(currentCharacterListing);
+
     Store.Save<PersistentCharacter>(
       Store.PersistentCharacters,
       persistentCharacterId,

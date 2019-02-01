@@ -21,15 +21,16 @@
 <span class="combatant__rightsection">
   <span class="combatant__tags">
     <!--ko foreach: Combatant.Tags() -->
-    <span class="tag" data-bind="if: Visible">
+    <!-- ko if: Visible() -->
+    <span class="tag">
       <!-- ko if: $parent.TagHasReference($data) -->
       <span
-        class="condition-reference"
+        class="tag__text condition-reference"
         data-bind="text: Text, click: $parent.ReferenceTaggedCondition, clickBubble:false"
       ></span>
       <!-- /ko -->
       <!-- ko ifnot: $parent.TagHasReference($data) -->
-      <span data-bind="text: Text"></span>
+      <span class="tag__text" data-bind="text: Text"></span>
       <!-- /ko -->
       <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
       <span
@@ -37,6 +38,7 @@
         data-bind="click: $parent.RemoveTag, clickBubble:false"
       ></span>
     </span>
+    <!-- /ko -->
     <!-- /ko -->
   </span>
   <span class="combatant__buttons">
