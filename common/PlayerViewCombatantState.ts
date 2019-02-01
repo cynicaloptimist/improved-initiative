@@ -1,6 +1,6 @@
 import { TagState } from "./CombatantState";
 
-export interface StaticCombatantViewModel {
+export interface PlayerViewCombatantState {
   Name: string;
   HPDisplay: string;
   HPColor: string;

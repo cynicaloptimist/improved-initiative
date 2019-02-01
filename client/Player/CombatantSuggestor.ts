@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 
 export class CombatantSuggestor {
   constructor(
@@ -10,7 +10,7 @@ export class CombatantSuggestor {
 
   public SuggestionVisible = ko.observable(false);
   public Combatant: KnockoutObservable<
-    StaticCombatantViewModel
+    PlayerViewCombatantState
   > = ko.observable(null);
 
   public Name = ko.pureComputed(() => {
@@ -21,7 +21,7 @@ export class CombatantSuggestor {
     }
   });
 
-  public Show = (combatant: StaticCombatantViewModel) => {
+  public Show = (combatant: PlayerViewCombatantState) => {
     this.Combatant(combatant);
     this.SuggestionVisible(true);
     $("input[name=suggestedDamage]")

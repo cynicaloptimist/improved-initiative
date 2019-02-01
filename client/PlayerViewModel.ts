@@ -2,12 +2,12 @@ import * as Color from "color";
 import * as ko from "knockout";
 
 import { EncounterState } from "../common/EncounterState";
+import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import {
   PlayerViewCustomStyles,
   PlayerViewSettings
 } from "../common/PlayerViewSettings";
 import { PlayerViewState } from "../common/PlayerViewState";
-import { StaticCombatantViewModel } from "../common/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
@@ -24,8 +24,8 @@ export class PlayerViewModel {
   public additionalUserCSS: HTMLStyleElement;
   public userStyles: HTMLStyleElement;
   public combatants: KnockoutObservableArray<
-    StaticCombatantViewModel
-  > = ko.observableArray<StaticCombatantViewModel>([]);
+    PlayerViewCombatantState
+  > = ko.observableArray<PlayerViewCombatantState>([]);
   public activeCombatantId = ko.observable<string>(null);
   public encounterId = env.EncounterId;
   public roundCounter = ko.observable();
@@ -60,7 +60,7 @@ export class PlayerViewModel {
   constructor(private socket: SocketIOClient.Socket) {
     this.socket.on(
       "encounter updated",
-      (encounter: EncounterState<StaticCombatantViewModel>) => {
+      (encounter: EncounterState<PlayerViewCombatantState>) => {
         this.LoadEncounter(encounter);
       }
     );
@@ -113,7 +113,7 @@ export class PlayerViewModel {
   }
 
   public LoadEncounter = (
-    encounter: EncounterState<StaticCombatantViewModel>
+    encounter: EncounterState<PlayerViewCombatantState>
   ) => {
     this.combatants(encounter.Combatants);
     this.roundCounter(encounter.RoundCounter);
@@ -146,7 +146,7 @@ export class PlayerViewModel {
     }
   };
 
-  protected ShowSuggestion = (combatant: StaticCombatantViewModel) => {
+  protected ShowSuggestion = (combatant: PlayerViewCombatantState) => {
     if (!this.allowSuggestions()) {
       return;
     }

@@ -5,15 +5,15 @@ import {
   DefaultEncounterState,
   EncounterState
 } from "../../common/EncounterState";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { PlayerViewState } from "../../common/PlayerViewState";
-import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
 import { getDefaultSettings } from "../Settings/Settings";
 import { PlayerView } from "./components/PlayerView";
 
 export class ReactPlayerView {
   private playerViewState: PlayerViewState = {
-    encounterState: DefaultEncounterState<StaticCombatantViewModel>(),
+    encounterState: DefaultEncounterState<PlayerViewCombatantState>(),
     settings: getDefaultSettings().PlayerView
   };
 
@@ -29,7 +29,7 @@ export class ReactPlayerView {
   public ConnectToSocket(socket: SocketIOClient.Socket) {
     socket.on(
       "encounter updated",
-      (encounter: EncounterState<StaticCombatantViewModel>) => {
+      (encounter: EncounterState<PlayerViewCombatantState>) => {
         this.renderPlayerView({
           encounterState: encounter,
           settings: this.playerViewState.settings

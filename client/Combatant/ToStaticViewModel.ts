@@ -1,11 +1,11 @@
-import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { Combatant } from "./Combatant";
 
 export function ToStaticViewModel(
   combatant: Combatant
-): StaticCombatantViewModel {
+): PlayerViewCombatantState {
   const sendImage = env.HasEpicInitiative;
   return {
     Name: combatant.DisplayName(),
