@@ -12,10 +12,9 @@ import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import {
-  StaticCombatantViewModel,
-  ToStaticViewModel
-} from "../Combatant/StaticCombatantViewModel";
+  StaticCombatantViewModel} from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
+import { ToStaticViewModel } from "../Combatant/ToStaticViewModel";
 import { env } from "../Environment";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
