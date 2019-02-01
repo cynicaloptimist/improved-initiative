@@ -1,7 +1,7 @@
+import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { Combatant } from "./Combatant";
-import { StaticCombatantViewModel } from "./StaticCombatantViewModel";
 
 export function ToStaticViewModel(
   combatant: Combatant

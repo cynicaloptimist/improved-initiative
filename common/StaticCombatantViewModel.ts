@@ -1,4 +1,4 @@
-import { TagState } from "../../common/CombatantState";
+import { TagState } from "./CombatantState";
 
 export interface StaticCombatantViewModel {
   Name: string;

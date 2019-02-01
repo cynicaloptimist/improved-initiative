@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
+import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
 
 export class CombatantSuggestor {
   constructor(

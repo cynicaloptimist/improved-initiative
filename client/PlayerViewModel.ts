@@ -7,7 +7,7 @@ import {
   PlayerViewSettings
 } from "../common/PlayerViewSettings";
 import { PlayerViewState } from "../common/PlayerViewState";
-import { StaticCombatantViewModel } from "./Combatant/StaticCombatantViewModel";
+import { StaticCombatantViewModel } from "../common/StaticCombatantViewModel";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";

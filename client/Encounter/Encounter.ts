@@ -11,8 +11,7 @@ import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import {
-  StaticCombatantViewModel} from "../Combatant/StaticCombatantViewModel";
+import { StaticCombatantViewModel } from "../../common/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
 import { ToStaticViewModel } from "../Combatant/ToStaticViewModel";
 import { env } from "../Environment";
