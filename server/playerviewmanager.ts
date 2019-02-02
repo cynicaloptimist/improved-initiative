@@ -1,8 +1,8 @@
-import { PlayerView } from "../common/PlayerView";
+import { PlayerViewState } from "../common/PlayerViewState";
 import { probablyUniqueString } from "../common/Toolbox";
 
 export class PlayerViewManager {
-  private playerViews: { [encounterId: string]: PlayerView } = {};
+  private playerViews: { [encounterId: string]: PlayerViewState } = {};
 
   constructor() {}
 
