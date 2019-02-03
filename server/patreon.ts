@@ -103,7 +103,7 @@ async function handleCurrentUser(
       }
     });
 
-  console.log(`api response: ${JSON.stringify(apiResponse.data)}`);
+  console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
   const hasStorageReward =
     _.intersection(userRewards, storageRewardIds).length > 0;
