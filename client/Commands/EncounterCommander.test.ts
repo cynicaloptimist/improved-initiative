@@ -20,10 +20,10 @@ describe("EncounterCommander", () => {
     trackerViewModel = new TrackerViewModel(mockIo);
     encounter = trackerViewModel.Encounter;
     encounterCommander = trackerViewModel.EncounterCommander;
-    encounterCommander.StartEncounter();
   });
 
   test("Cannot start an empty encounter.", () => {
+    encounterCommander.StartEncounter();
     expect(encounter.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
     expect(!encounter.ActiveCombatant());
