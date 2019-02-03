@@ -587,8 +587,7 @@ export class Encounter {
   };
 
   public ClearEncounter = () => {
-    const combatants = this.combatants();
-    combatants.forEach(this.RemoveCombatant);
+    this.combatants([]);
     this.CombatantCountsByName({});
     this.EndEncounter();
   };
