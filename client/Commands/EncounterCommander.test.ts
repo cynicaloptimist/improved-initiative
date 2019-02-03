@@ -1,3 +1,4 @@
+import { InitializeCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
@@ -10,6 +11,7 @@ describe("EncounterCommander", () => {
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
     window["$"] = require("jquery");
+    window.confirm = () => true;
     InitializeSettings();
 
     const mockIo: any = {
@@ -45,5 +47,20 @@ describe("EncounterCommander", () => {
     encounterCommander.NextTurn();
 
     expect(startEncounter).toBeCalled();
+  });
+
+  test("ClearEncounter", async () => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
+      UpdatePersistentCharacter: async () => {}
+    });
+
+    expect(encounter.Combatants().length).toBe(2);
+    encounterCommander.CleanEncounter();
+    expect(encounter.Combatants().length).toBe(1);
   });
 });
