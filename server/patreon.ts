@@ -138,10 +138,11 @@ async function handleCurrentUser(
     tokens.refresh_token,
     standing
   );
-  if (user != null) {
-    session.userId = user._id;
-    res.redirect(`/e/${encounterId}`);
+  if (user === undefined) {
+    throw "Failed to insert user into database";
   }
+  session.userId = user._id;
+  res.redirect(`/e/${encounterId}`);
 }
 
 export function configureLogout(app: express.Application) {
