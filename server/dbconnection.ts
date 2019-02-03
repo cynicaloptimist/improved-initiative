@@ -40,38 +40,34 @@ export async function upsertUser(
     throw "No connection string found.";
   }
 
-  return client.connect(connectionString).then((db: mongo.Db) => {
-    const users = db.collection<User>("users");
-    return users
-      .findOneAndUpdate(
-        {
-          patreonId
-        },
-        {
-          $set: {
-            patreonId,
-            accessKey,
-            refreshKey,
-            accountStatus
-          },
-          $setOnInsert: {
-            statblocks: {},
-            persistentcharacters: {},
-            spells: {},
-            encounters: {},
-            settings: {}
-          }
-        },
-        {
-          upsert: true
-        }
-      )
-      .then(res => {
-        return users.findOne({
-          patreonId
-        });
-      });
-  });
+  const db = await client.connect(connectionString);
+  const users = await db.collection<User>("users");
+  const result = await users.findOneAndUpdate(
+    {
+      patreonId
+    },
+    {
+      $set: {
+        patreonId,
+        accessKey,
+        refreshKey,
+        accountStatus
+      },
+      $setOnInsert: {
+        statblocks: {},
+        persistentcharacters: {},
+        spells: {},
+        encounters: {},
+        settings: {}
+      }
+    },
+    {
+      upsert: true
+    }
+  );
+  const user = result.value;
+  db.close();
+  return user;
 }
 
 export async function getAccount(userId: mongo.ObjectId) {
