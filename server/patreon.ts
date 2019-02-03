@@ -58,6 +58,36 @@ interface TokensResponse {
   token_type: string;
 }
 
+export function configureLoginRedirect(app: express.Application) {
+  const redirectPath = "/r/patreon";
+  const redirectUri = baseUrl + redirectPath;
+
+  app.get(redirectPath, (req: Req, res: Res) => {
+    try {
+      const code = req.query.code;
+
+      const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
+
+      OAuthClient.getTokens(
+        code,
+        redirectUri,
+        (tokensError, tokens: TokensResponse) => {
+          if (tokensError) {
+            console.error(tokensError);
+            res.end(tokensError);
+            return;
+          }
+
+          const APIClient = patreon.default(tokens.access_token);
+          APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
+        }
+      );
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  });
+}
+
 function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
   return (currentUserError, apiResponse: ApiResponse) => {
     if (currentUserError) {
@@ -129,36 +159,6 @@ function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
         console.error(err);
       });
   };
-}
-
-export function configureLoginRedirect(app: express.Application) {
-  const redirectPath = "/r/patreon";
-  const redirectUri = baseUrl + redirectPath;
-
-  app.get(redirectPath, (req: Req, res: Res) => {
-    try {
-      const code = req.query.code;
-
-      const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
-
-      OAuthClient.getTokens(
-        code,
-        redirectUri,
-        (tokensError, tokens: TokensResponse) => {
-          if (tokensError) {
-            console.error(tokensError);
-            res.end(tokensError);
-            return;
-          }
-
-          const APIClient = patreon.default(tokens.access_token);
-          APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
-        }
-      );
-    } catch (e) {
-      res.status(500).send(e);
-    }
-  });
 }
 
 export function configureLogout(app: express.Application) {
