@@ -63,6 +63,7 @@ export class IdentityFields extends React.Component<
       return (
         <span
           className="fa-clickable fa-folder"
+          title="Move to folder"
           onClick={() => this.setState({ folderExpanded: true })}
         />
       );

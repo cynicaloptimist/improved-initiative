@@ -45,10 +45,10 @@
 }
 
 .button() {
-  .colors(@button-text, transparent, @hover-black);
+  .colors(@button-text, @primary-white, @primary-black);
 
   &:hover {
-    background-color: @hover-black;
+    .colors(@primary-red, @hover-white, @primary-red);
   }
   cursor: pointer;
   display: inline-block;
@@ -81,7 +81,7 @@
 }
 
 button.button {
-  height: 38px;
+  height: 43px;
 }
 
 .button--close {
