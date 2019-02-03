@@ -13,5 +13,7 @@ export const tips = [
   "The player view will only display a colored, qualitative indicator for Monster HP. You can change this in the settings tab.",
   "You can create tags that disappear after a set amount of rounds in order to automatically remove conditions at the end of a combatant's turn.",
   "You can get automatic Concentration reminders by using the tag 'Concentrating.' You can disable this feature in the settings.",
-  "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>"
+  "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>",
+  "Account Sync will let you access your characters and encounters from any device. <a href='https://www.patreon.com/join/improvedinitiative/checkout?rid=1322253' target='_blank'>Pledge on Patreon</a> to unlock this benefit!",
+  "Epic Initiative lets you enhance your Player View with combatant portraits and custom colors. <a href='https://www.patreon.com/join/improvedinitiative/checkout?rid=1937132' target='_blank'>Pledge on Patreon</a> to support the app and get Epic Initiative!"
 ];
