@@ -49,7 +49,7 @@ describe("EncounterCommander", () => {
     expect(startEncounter).toBeCalled();
   });
 
-  test("ClearEncounter", async () => {
+  test("CleanEncounter", async () => {
     const persistentCharacter = InitializeCharacter({
       ...StatBlock.Default(),
       Player: "player"
@@ -62,5 +62,20 @@ describe("EncounterCommander", () => {
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.CleanEncounter();
     expect(encounter.Combatants().length).toBe(1);
+  });
+
+  test("ClearEncounter", async () => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
+      UpdatePersistentCharacter: async () => {}
+    });
+
+    expect(encounter.Combatants().length).toBe(2);
+    encounterCommander.ClearEncounter();
+    expect(encounter.Combatants().length).toBe(0);
   });
 });
