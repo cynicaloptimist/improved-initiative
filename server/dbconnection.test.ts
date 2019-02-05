@@ -18,12 +18,12 @@ describe("User Accounts", () => {
   }, 60000);
 
   beforeEach(async () => {
-    const user = (await DB.upsertUser(
+    const user = await DB.upsertUser(
       probablyUniqueString(),
       "accessKey",
       "refreshKey",
       "pledge"
-    )) as User;
+    );
     userId = user._id;
   });
 
