@@ -63,7 +63,8 @@ export async function upsertUser(
       }
     },
     {
-      upsert: true
+      upsert: true,
+      returnOriginal: false
     }
   );
   const user = result.value;
