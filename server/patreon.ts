@@ -58,107 +58,91 @@ interface TokensResponse {
   token_type: string;
 }
 
-function handleCurrentUser(req: Req, res: Res, tokens: TokensResponse) {
-  return (currentUserError, apiResponse: ApiResponse) => {
-    if (currentUserError) {
-      console.error(currentUserError);
-      res.end(currentUserError);
-      return;
-    }
-
-    const encounterId = req.query.state.replace(/['"]/g, "");
-    const relationships = apiResponse.included || [];
-
-    const userRewards = relationships
-      .filter(i => i.type === "pledge")
-      .map((r: Pledge) => {
-        if (
-          r.relationships &&
-          r.relationships.reward &&
-          r.relationships.reward.data
-        ) {
-          return r.relationships.reward.data.id;
-        } else {
-          return "none";
-        }
-      });
-
-    console.log(`api response: ${JSON.stringify(apiResponse.data)}`);
-
-    const hasStorageReward =
-      _.intersection(userRewards, storageRewardIds).length > 0;
-
-    const hasEpicInitiativeThanks = _.includes(
-      thanks.map(t => t.PatreonId),
-      apiResponse.data.id
-    );
-    const hasEpicInitiativeReward =
-      _.intersection(userRewards, epicRewardIds).length > 0;
-
-    const hasEpicInitiative =
-      hasEpicInitiativeThanks || hasEpicInitiativeReward;
-
-    const standing = hasEpicInitiative
-      ? "epic"
-      : hasStorageReward
-      ? "pledge"
-      : "none";
-
-    const session = req.session;
-    if (session === undefined) {
-      throw "Session is undefined";
-    }
-
-    session.hasStorage = hasEpicInitiative || hasStorageReward;
-    session.hasEpicInitiative = hasEpicInitiative;
-    session.isLoggedIn = true;
-
-    DB.upsertUser(
-      apiResponse.data.id,
-      tokens.access_token,
-      tokens.refresh_token,
-      standing
-    )
-      .then(user => {
-        if (user != null) {
-          session.userId = user._id;
-          res.redirect(`/e/${encounterId}`);
-        }
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  };
-}
-
 export function configureLoginRedirect(app: express.Application) {
   const redirectPath = "/r/patreon";
   const redirectUri = baseUrl + redirectPath;
 
-  app.get(redirectPath, (req: Req, res: Res) => {
+  app.get(redirectPath, async (req: Req, res: Res) => {
     try {
       const code = req.query.code;
 
       const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
 
-      OAuthClient.getTokens(
-        code,
-        redirectUri,
-        (tokensError, tokens: TokensResponse) => {
-          if (tokensError) {
-            console.error(tokensError);
-            res.end(tokensError);
-            return;
-          }
+      const tokens = await OAuthClient.getTokens(code, redirectUri);
 
-          const APIClient = patreon.default(tokens.access_token);
-          APIClient(`/current_user`, handleCurrentUser(req, res, tokens));
-        }
-      );
+      const APIClient = patreon.patreon(tokens.access_token);
+      const { rawJson } = await APIClient(`/current_user`);
+      await handleCurrentUser(req, res, tokens, rawJson);
     } catch (e) {
+      console.error("Patreon login flow failed: " + e);
       res.status(500).send(e);
     }
   });
+}
+
+async function handleCurrentUser(
+  req: Req,
+  res: Res,
+  tokens: TokensResponse,
+  apiResponse: any
+) {
+  const encounterId = req.query.state.replace(/['"]/g, "");
+  const relationships = apiResponse.included || [];
+
+  const userRewards = relationships
+    .filter(i => i.type === "pledge")
+    .map((r: Pledge) => {
+      if (
+        r.relationships &&
+        r.relationships.reward &&
+        r.relationships.reward.data
+      ) {
+        return r.relationships.reward.data.id;
+      } else {
+        return "none";
+      }
+    });
+
+  console.log(`api response: ${JSON.stringify(apiResponse)}`);
+
+  const hasStorageReward =
+    _.intersection(userRewards, storageRewardIds).length > 0;
+
+  const hasEpicInitiativeThanks = _.includes(
+    thanks.map(t => t.PatreonId),
+    apiResponse.data.id
+  );
+  const hasEpicInitiativeReward =
+    _.intersection(userRewards, epicRewardIds).length > 0;
+
+  const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
+
+  const standing = hasEpicInitiative
+    ? "epic"
+    : hasStorageReward
+    ? "pledge"
+    : "none";
+
+  const session = req.session;
+  if (session === undefined) {
+    throw "Session is undefined";
+  }
+
+  session.hasStorage = hasEpicInitiative || hasStorageReward;
+  session.hasEpicInitiative = hasEpicInitiative;
+  session.isLoggedIn = true;
+
+  const user = await DB.upsertUser(
+    apiResponse.data.id,
+    tokens.access_token,
+    tokens.refresh_token,
+    standing
+  );
+  if (user === undefined) {
+    throw "Failed to insert user into database";
+  }
+  session.userId = user._id;
+  res.redirect(`/e/${encounterId}`);
 }
 
 export function configureLogout(app: express.Application) {

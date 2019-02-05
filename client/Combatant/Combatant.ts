@@ -4,7 +4,10 @@ import { CombatantState } from "../../common/CombatantState";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
-import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
+import {
+  PersistentCharacterLibrary,
+  PersistentCharacterUpdater
+} from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -123,7 +126,7 @@ export class Combatant implements Combatant {
   }
 
   public AttachToPersistentCharacterLibrary(
-    library: PersistentCharacterLibrary
+    library: PersistentCharacterUpdater
   ) {
     if (!this.PersistentCharacterId) {
       throw "Combatant is not a persistent character";

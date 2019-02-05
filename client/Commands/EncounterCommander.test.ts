@@ -1,3 +1,4 @@
+import { InitializeCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
@@ -10,6 +11,7 @@ describe("EncounterCommander", () => {
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
     window["$"] = require("jquery");
+    window.confirm = () => true;
     InitializeSettings();
 
     const mockIo: any = {
@@ -20,10 +22,10 @@ describe("EncounterCommander", () => {
     trackerViewModel = new TrackerViewModel(mockIo);
     encounter = trackerViewModel.Encounter;
     encounterCommander = trackerViewModel.EncounterCommander;
-    encounterCommander.StartEncounter();
   });
 
   test("Cannot start an empty encounter.", () => {
+    encounterCommander.StartEncounter();
     expect(encounter.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
     expect(!encounter.ActiveCombatant());
@@ -45,5 +47,35 @@ describe("EncounterCommander", () => {
     encounterCommander.NextTurn();
 
     expect(startEncounter).toBeCalled();
+  });
+
+  test("CleanEncounter", async () => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
+      UpdatePersistentCharacter: async () => {}
+    });
+
+    expect(encounter.Combatants().length).toBe(2);
+    encounterCommander.CleanEncounter();
+    expect(encounter.Combatants().length).toBe(1);
+  });
+
+  test("ClearEncounter", async () => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
+      UpdatePersistentCharacter: async () => {}
+    });
+
+    expect(encounter.Combatants().length).toBe(2);
+    encounterCommander.ClearEncounter();
+    expect(encounter.Combatants().length).toBe(0);
   });
 });

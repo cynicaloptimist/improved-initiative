@@ -13,7 +13,14 @@ import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
-export class PersistentCharacterLibrary {
+export interface PersistentCharacterUpdater {
+  UpdatePersistentCharacter: (
+    persistentCharacterId: string,
+    updates: Partial<PersistentCharacter>
+  ) => Promise<void>;
+}
+
+export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   private persistentCharacters: KnockoutObservableArray<
     Listing<PersistentCharacter>
   > = ko.observableArray([]);

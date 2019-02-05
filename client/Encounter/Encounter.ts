@@ -15,7 +15,10 @@ import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Tag } from "../Combatant/Tag";
 import { ToStaticViewModel } from "../Combatant/ToStaticViewModel";
 import { env } from "../Environment";
-import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
+import {
+  PersistentCharacterLibrary,
+  PersistentCharacterUpdater
+} from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
@@ -220,7 +223,7 @@ export class Encounter {
 
   public AddCombatantFromPersistentCharacter(
     persistentCharacter: PersistentCharacter,
-    library: PersistentCharacterLibrary,
+    library: PersistentCharacterUpdater,
     hideOnAdd = false
   ): Combatant {
     if (!this.CanAddCombatant(persistentCharacter.Id)) {
@@ -585,8 +588,7 @@ export class Encounter {
   };
 
   public ClearEncounter = () => {
-    const combatants = this.combatants();
-    combatants.forEach(this.RemoveCombatant);
+    this.combatants([]);
     this.CombatantCountsByName({});
     this.EndEncounter();
   };
