@@ -1,13 +1,10 @@
-import * as Color from "color";
 import * as ko from "knockout";
 
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
-import {
-  PlayerViewCustomStyles,
-  PlayerViewSettings
-} from "../common/PlayerViewSettings";
+import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { PlayerViewState } from "../common/PlayerViewState";
+import { CSSFrom } from "./CSSFrom";
 import { env } from "./Environment";
 import { CombatantSuggestor } from "./Player/CombatantSuggestor";
 import { TurnTimer } from "./Widgets/TurnTimer";
@@ -186,79 +183,4 @@ export class PlayerViewModel {
     clearTimeout(imageModal.Timeout);
     this.imageModal(imageModal);
   };
-}
-
-function CSSFrom(customStyles: PlayerViewCustomStyles): string {
-  const declarations = [];
-
-  if (customStyles.combatantText) {
-    declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
-  }
-
-  if (customStyles.combatantBackground) {
-    const baseColor = Color(customStyles.combatantBackground);
-    let zebraColor = "",
-      activeColor = "";
-    if (baseColor.isDark()) {
-      zebraColor = baseColor.lighten(0.1).string();
-      activeColor = baseColor.lighten(0.2).string();
-    } else {
-      zebraColor = baseColor.darken(0.1).string();
-      activeColor = baseColor.darken(0.2).string();
-    }
-    declarations.push(
-      `.combatant { background-color: ${customStyles.combatantBackground}; }`
-    );
-    declarations.push(
-      `.combatant:nth-child(2n-1) { background-color: ${zebraColor}; }`
-    );
-    declarations.push(
-      `.combatant.active { background-color: ${activeColor}; }`
-    );
-  }
-
-  if (customStyles.activeCombatantIndicator) {
-    declarations.push(
-      `.combatant.active { border-color: ${
-        customStyles.activeCombatantIndicator
-      } }`
-    );
-  }
-
-  if (customStyles.headerText) {
-    declarations.push(
-      `.combatant--header, .combat-footer { color: ${
-        customStyles.headerText
-      }; }`
-    );
-  }
-
-  if (customStyles.headerBackground) {
-    declarations.push(
-      `.combatant--header, .combat-footer { background-color: ${
-        customStyles.headerBackground
-      }; border-color: ${customStyles.headerBackground} }`
-    );
-  }
-
-  if (customStyles.mainBackground) {
-    declarations.push(
-      `#playerview { background-color: ${customStyles.mainBackground}; }`
-    );
-    if (!customStyles.backgroundUrl) {
-      declarations.push(`#playerview { background-image: none; }`);
-    }
-  }
-
-  if (customStyles.backgroundUrl) {
-    declarations.push(
-      `#playerview { background-image: url(${customStyles.backgroundUrl}); }`
-    );
-  }
-
-  if (customStyles.font) {
-    declarations.push(`* { font-family: "${customStyles.font}", sans-serif; }`);
-  }
-
-  return declarations.join(" ");
 }
