@@ -1,20 +1,16 @@
 import * as React from "react";
 
 import { PlayerViewState } from "../../../common/PlayerViewState";
-import { CSSFrom } from "../../CSSFrom";
+import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 
 export class PlayerView extends React.Component<PlayerViewState> {
   public render() {
     return (
       <div className="c-player-view">
-        <style
-          dangerouslySetInnerHTML={{
-            __html: CSSFrom(this.props.settings.CustomStyles)
-          }}
-        />
-        <style
-          dangerouslySetInnerHTML={{ __html: this.props.settings.CustomCSS }}
+        <CustomStyles
+          CustomCSS={this.props.settings.CustomCSS}
+          CustomStyles={this.props.settings.CustomStyles}
         />
         <div className="combatant--header">
           <div className="combatant__initiative">
