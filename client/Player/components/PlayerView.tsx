@@ -3,6 +3,7 @@ import * as React from "react";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
+import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 
 export class PlayerView extends React.Component<PlayerViewState> {
   public render() {
@@ -12,19 +13,7 @@ export class PlayerView extends React.Component<PlayerViewState> {
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
-        <div className="combatant--header">
-          <div className="combatant__initiative">
-            <span className="fas fa-forward" />
-          </div>
-          {this.hasImages() && <div className="combatant__portrait" />}
-          <div className="combatant__name">Combatant</div>
-          <div className="combatant__hp">
-            <span className="fas fa-heart" />
-          </div>
-          <div className="combatant__tags">
-            <span className="fas fa-tag" />
-          </div>
-        </div>
+        <PlayerViewCombatantHeader showPortrait={this.hasImages()} />
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
