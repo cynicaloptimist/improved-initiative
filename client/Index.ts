@@ -22,7 +22,10 @@ $(() => {
   }
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
-    const playerView = new ReactPlayerView(document.body, encounterId);
+    const playerView = new ReactPlayerView(
+      document.getElementById("playerview"),
+      encounterId
+    );
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(io());
   }
