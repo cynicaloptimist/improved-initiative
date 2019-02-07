@@ -5,14 +5,52 @@ import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 
-export class PlayerView extends React.Component<PlayerViewState> {
+interface PortraitModalProps {
+  imageURL: string;
+  caption: string;
+  onClose: () => void;
+}
+class PortraitModal extends React.Component<PortraitModalProps> {
   public render() {
+    return (
+      <div
+        className="modal-blur combatant-portrait"
+        onClick={this.props.onClose}
+      >
+        <img className="combatant-portrait__image" src={this.props.imageURL} />
+        <div className="combatant-portrait__caption">{this.props.caption}</div>
+      </div>
+    );
+  }
+}
+
+interface LocalState {
+  showModal: boolean;
+}
+
+export class PlayerView extends React.Component<PlayerViewState, LocalState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: true
+    };
+  }
+
+  public render() {
+    const modalState = this.getModalState();
     return (
       <div className="c-player-view">
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
+        {modalState.showModal && (
+          <PortraitModal
+            imageURL={modalState.url}
+            caption={modalState.caption}
+            onClose={this.closeModal}
+          />
+        )}
         <PlayerViewCombatantHeader showPortrait={this.hasImages()} />
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
@@ -39,6 +77,20 @@ export class PlayerView extends React.Component<PlayerViewState> {
       console.log("next combatant");
     }
   }
+
+  private getModalState = () => {
+    return {
+      caption: "Image",
+      url: "/img/pledge-orange.png",
+      showModal: this.state.showModal
+    };
+  };
+
+  private closeModal = () => {
+    this.setState({
+      showModal: false
+    });
+  };
 
   private hasImages = () => {
     return (
