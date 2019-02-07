@@ -32,7 +32,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: true
+      showModal: false
     };
   }
 
@@ -69,12 +69,12 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
     );
   }
 
-  public componentWillReceiveProps(nextProps: PlayerViewState) {
+  public componentDidUpdate(prevProps: PlayerViewState) {
     if (
-      nextProps.encounterState.ActiveCombatantId !=
+      prevProps.encounterState.ActiveCombatantId !=
       this.props.encounterState.ActiveCombatantId
     ) {
-      console.log("next combatant");
+      this.setState({ showModal: true });
     }
   }
 
