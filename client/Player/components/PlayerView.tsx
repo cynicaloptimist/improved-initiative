@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import _ = require("lodash");
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
@@ -26,28 +27,31 @@ class PortraitModal extends React.Component<PortraitModalProps> {
 
 interface LocalState {
   showModal: boolean;
+  modalURL: string;
+  modalCaption: string;
 }
 
 export class PlayerView extends React.Component<PlayerViewState, LocalState> {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false
+      showModal: false,
+      modalURL: "",
+      modalCaption: ""
     };
   }
 
   public render() {
-    const modalState = this.getModalState();
     return (
       <div className="c-player-view">
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
-        {modalState.showModal && (
+        {this.state.showModal && (
           <PortraitModal
-            imageURL={modalState.url}
-            caption={modalState.caption}
+            imageURL={this.state.modalURL}
+            caption={this.state.modalCaption}
             onClose={this.closeModal}
           />
         )}
@@ -74,17 +78,18 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
       prevProps.encounterState.ActiveCombatantId !=
       this.props.encounterState.ActiveCombatantId
     ) {
-      this.setState({ showModal: true });
+      const activeCombatant = _.find(
+        this.props.encounterState.Combatants,
+        c => c.Id == this.props.encounterState.ActiveCombatantId
+      );
+      if (activeCombatant && activeCombatant.ImageURL.length)
+        this.setState({
+          modalURL: activeCombatant.ImageURL,
+          modalCaption: activeCombatant.Name,
+          showModal: true
+        });
     }
   }
-
-  private getModalState = () => {
-    return {
-      caption: "Image",
-      url: "/img/pledge-orange.png",
-      showModal: this.state.showModal
-    };
-  };
 
   private closeModal = () => {
     this.setState({
