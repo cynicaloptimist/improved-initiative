@@ -31,6 +31,15 @@ export class PlayerView extends React.Component<PlayerViewState> {
     );
   }
 
+  public componentWillReceiveProps(nextProps: PlayerViewState) {
+    if (
+      nextProps.encounterState.ActiveCombatantId !=
+      this.props.encounterState.ActiveCombatantId
+    ) {
+      console.log("next combatant");
+    }
+  }
+
   private hasImages = () => {
     return (
       this.props.settings.DisplayPortraits &&
