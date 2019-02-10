@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
@@ -61,6 +62,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
+              showPortrait={this.showPortrait}
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               isPortraitVisible={this.props.settings.DisplayPortraits}
@@ -105,6 +107,19 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
       this.modalTimeout = setTimeout(this.closeModal, 5000);
     }
   }
+
+  private showPortrait = (combatant: PlayerViewCombatantState) => {
+    if (!combatant.ImageURL) {
+      return;
+    }
+
+    clearTimeout(this.modalTimeout);
+    this.setState({
+      modalURL: combatant.ImageURL,
+      modalCaption: combatant.Name,
+      showModal: true
+    });
+  };
 
   private closeModal = () => {
     this.setState({

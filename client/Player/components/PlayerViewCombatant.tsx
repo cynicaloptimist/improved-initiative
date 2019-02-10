@@ -7,6 +7,7 @@ interface PlayerViewCombatantProps {
   isActive: boolean;
   isPortraitVisible: boolean;
   areSuggestionsAllowed: boolean;
+  showPortrait: (state: PlayerViewCombatantState) => void;
 }
 
 export class PlayerViewCombatant extends React.Component<
@@ -30,7 +31,7 @@ export class PlayerViewCombatant extends React.Component<
             {this.props.combatant.ImageURL && (
               <img
                 src={this.props.combatant.ImageURL}
-                onClick={() => alert("TODO: Splash Portrait")}
+                onClick={() => this.props.showPortrait(this.props.combatant)}
               />
             )}
           </div>
