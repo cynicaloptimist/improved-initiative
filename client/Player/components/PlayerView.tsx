@@ -3,33 +3,11 @@ import * as React from "react";
 import _ = require("lodash");
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
-import { Button } from "../../Components/Button";
 import { CustomStyles } from "./CustomStyles";
+import { DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitModal } from "./PortraitModal";
-
-interface DamageSuggestorProps {
-  combatant: PlayerViewCombatantState;
-  onClose: () => void;
-}
-class DamageSuggestor extends React.Component<DamageSuggestorProps> {
-  public render() {
-    return (
-      <React.Fragment>
-        <div className="modal-blur" onClick={this.props.onClose} />
-        <div className="damage-suggestion">
-          Suggest damage/healing for {this.props.combatant.Name}:
-          <input type="number" name="suggestedDamage" />
-          <Button fontAwesomeIcon="check" onClick={() => alert("BARF")} />
-          <div className="tip">
-            Use a positive value to damage and a negative value to heal
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
 
 interface LocalState {
   showPortrait: boolean;
