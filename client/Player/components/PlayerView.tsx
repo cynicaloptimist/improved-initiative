@@ -9,7 +9,7 @@ import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitModal } from "./PortraitModal";
 
 interface LocalState {
-  showModal: boolean;
+  showPortrait: boolean;
   modalURL: string;
   modalCaption: string;
 }
@@ -20,7 +20,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
+      showPortrait: false,
       modalURL: "",
       modalCaption: ""
     };
@@ -33,7 +33,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
-        {this.state.showModal && (
+        {this.state.showPortrait && (
           <PortraitModal
             imageURL={this.state.modalURL}
             caption={this.state.modalCaption}
@@ -84,7 +84,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
       this.setState({
         modalURL: newActiveCombatant.ImageURL,
         modalCaption: newActiveCombatant.Name,
-        showModal: true
+        showPortrait: true
       });
       this.modalTimeout = window.setTimeout(this.closeModal, 5000);
     }
@@ -99,13 +99,13 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
     this.setState({
       modalURL: combatant.ImageURL,
       modalCaption: combatant.Name,
-      showModal: true
+      showPortrait: true
     });
   };
 
   private closeModal = () => {
     this.setState({
-      showModal: false
+      showPortrait: false
     });
   };
 
