@@ -61,6 +61,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
 
   public componentDidUpdate(prevProps: PlayerViewState) {
     this.handleSplashPortrait(prevProps.encounterState.ActiveCombatantId);
+    this.scrollToActiveCombatant();
   }
 
   private handleSplashPortrait(newActiveCombatantId) {
@@ -87,6 +88,13 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
         showPortrait: true
       });
       this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
+    }
+  }
+
+  private scrollToActiveCombatant() {
+    const activeCombatantElement = document.getElementsByClassName("active")[0];
+    if (activeCombatantElement) {
+      activeCombatantElement.scrollIntoView(false);
     }
   }
 
