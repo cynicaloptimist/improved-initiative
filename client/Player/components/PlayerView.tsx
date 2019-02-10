@@ -10,8 +10,8 @@ import { PortraitModal } from "./PortraitModal";
 
 interface LocalState {
   showPortrait: boolean;
-  modalURL: string;
-  modalCaption: string;
+  portraitURL: string;
+  portraitCaption: string;
 }
 
 export class PlayerView extends React.Component<PlayerViewState, LocalState> {
@@ -21,8 +21,8 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
     super(props);
     this.state = {
       showPortrait: false,
-      modalURL: "",
-      modalCaption: ""
+      portraitURL: "",
+      portraitCaption: ""
     };
   }
 
@@ -35,8 +35,8 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
         />
         {this.state.showPortrait && (
           <PortraitModal
-            imageURL={this.state.modalURL}
-            caption={this.state.modalCaption}
+            imageURL={this.state.portraitURL}
+            caption={this.state.portraitCaption}
             onClose={this.closePortrait}
           />
         )}
@@ -82,8 +82,8 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
 
     if (newActiveCombatant && newActiveCombatant.ImageURL.length) {
       this.setState({
-        modalURL: newActiveCombatant.ImageURL,
-        modalCaption: newActiveCombatant.Name,
+        portraitURL: newActiveCombatant.ImageURL,
+        portraitCaption: newActiveCombatant.Name,
         showPortrait: true
       });
       this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
@@ -97,8 +97,8 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
 
     window.clearTimeout(this.modalTimeout);
     this.setState({
-      modalURL: combatant.ImageURL,
-      modalCaption: combatant.Name,
+      portraitURL: combatant.ImageURL,
+      portraitCaption: combatant.Name,
       showPortrait: true
     });
   };
