@@ -37,7 +37,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
           <PortraitModal
             imageURL={this.state.modalURL}
             caption={this.state.modalCaption}
-            onClose={this.closeModal}
+            onClose={this.closePortrait}
           />
         )}
         <PlayerViewCombatantHeader showPortrait={this.hasImages()} />
@@ -86,7 +86,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
         modalCaption: newActiveCombatant.Name,
         showPortrait: true
       });
-      this.modalTimeout = window.setTimeout(this.closeModal, 5000);
+      this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
     }
   }
 
@@ -103,7 +103,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
     });
   };
 
-  private closeModal = () => {
+  private closePortrait = () => {
     this.setState({
       showPortrait: false
     });
