@@ -32,6 +32,8 @@ interface LocalState {
 }
 
 export class PlayerView extends React.Component<PlayerViewState, LocalState> {
+  private modalTimeout: NodeJS.Timer;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -94,12 +96,14 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
       c => c.Id == this.props.encounterState.ActiveCombatantId
     );
 
-    if (newActiveCombatant && newActiveCombatant.ImageURL.length)
+    if (newActiveCombatant && newActiveCombatant.ImageURL.length) {
       this.setState({
         modalURL: newActiveCombatant.ImageURL,
         modalCaption: newActiveCombatant.Name,
         showModal: true
       });
+      this.modalTimeout = setTimeout(this.closeModal, 5000);
+    }
   }
 
   private closeModal = () => {
