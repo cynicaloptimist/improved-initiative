@@ -71,9 +71,28 @@
   }
 
   .damage-suggestion {
+    .colors(@primary-black, @primary-white);
+
+    .tip {
+      color: lighten(@primary-black, 50);
+    }
+
+    .card-bg-2(@large-spacer, @large-spacer);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: initial;
+
+    .tip {
+      font-size: smaller;
+    }
+
+    form {
+      padding-bottom: @large-spacer;
+    }
+
     z-index: 2;
     position: absolute;
-    top: 10%;
   }
 
   /* Add Animation */
