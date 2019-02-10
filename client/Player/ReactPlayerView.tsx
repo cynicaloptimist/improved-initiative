@@ -16,6 +16,7 @@ export class ReactPlayerView {
     encounterState: DefaultEncounterState<PlayerViewCombatantState>(),
     settings: getDefaultSettings().PlayerView
   };
+  private socket: SocketIOClient.Socket;
 
   constructor(private element: Element, private encounterId: string) {}
 
@@ -27,7 +28,8 @@ export class ReactPlayerView {
   }
 
   public ConnectToSocket(socket: SocketIOClient.Socket) {
-    socket.on(
+    this.socket = socket;
+    this.socket.on(
       "encounter updated",
       (encounter: EncounterState<PlayerViewCombatantState>) => {
         this.renderPlayerView({
@@ -36,14 +38,14 @@ export class ReactPlayerView {
         });
       }
     );
-    socket.on("settings updated", (settings: PlayerViewSettings) => {
+    this.socket.on("settings updated", (settings: PlayerViewSettings) => {
       this.renderPlayerView({
         encounterState: this.playerViewState.encounterState,
         settings: settings
       });
     });
 
-    socket.emit("join encounter", this.encounterId);
+    this.socket.emit("join encounter", this.encounterId);
   }
 
   private renderPlayerView(newState: PlayerViewState) {
@@ -52,8 +54,22 @@ export class ReactPlayerView {
       <PlayerView
         encounterState={this.playerViewState.encounterState}
         settings={this.playerViewState.settings}
+        onSuggestDamage={this.suggestDamage}
       />,
       this.element
     );
   }
+
+  private suggestDamage = (combatantId: string, damageAmount: number) => {
+    if (!this.socket) {
+      throw "Player View not attached to socket";
+    }
+    this.socket.emit(
+      "suggest damage",
+      this.encounterId,
+      [combatantId],
+      damageAmount,
+      "Player"
+    );
+  };
 }

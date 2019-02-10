@@ -17,7 +17,14 @@ interface LocalState {
   suggestDamageCombatant: PlayerViewCombatantState;
 }
 
-export class PlayerView extends React.Component<PlayerViewState, LocalState> {
+interface OwnProps {
+  onSuggestDamage: any;
+}
+
+export class PlayerView extends React.Component<
+  PlayerViewState & OwnProps,
+  LocalState
+> {
   private modalTimeout: number;
 
   constructor(props) {
@@ -49,6 +56,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
           <DamageSuggestor
             combatant={this.state.suggestDamageCombatant}
             onClose={this.cancelSuggestion}
+            onApply={this.props.onSuggestDamage}
           />
         )}
         <PlayerViewCombatantHeader showPortrait={this.hasImages()} />
