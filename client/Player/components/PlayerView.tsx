@@ -74,21 +74,32 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
   }
 
   public componentDidUpdate(prevProps: PlayerViewState) {
-    if (
-      prevProps.encounterState.ActiveCombatantId !=
-      this.props.encounterState.ActiveCombatantId
-    ) {
-      const activeCombatant = _.find(
-        this.props.encounterState.Combatants,
-        c => c.Id == this.props.encounterState.ActiveCombatantId
-      );
-      if (activeCombatant && activeCombatant.ImageURL.length)
-        this.setState({
-          modalURL: activeCombatant.ImageURL,
-          modalCaption: activeCombatant.Name,
-          showModal: true
-        });
+    this.handleSplashPortrait(prevProps.encounterState.ActiveCombatantId);
+  }
+
+  private handleSplashPortrait(newActiveCombatantId) {
+    if (!this.props.settings.SplashPortraits) {
+      return;
     }
+
+    const newCombatantIsActive =
+      newActiveCombatantId != this.props.encounterState.ActiveCombatantId;
+
+    if (!newCombatantIsActive) {
+      return;
+    }
+
+    const newActiveCombatant = _.find(
+      this.props.encounterState.Combatants,
+      c => c.Id == this.props.encounterState.ActiveCombatantId
+    );
+
+    if (newActiveCombatant && newActiveCombatant.ImageURL.length)
+      this.setState({
+        modalURL: newActiveCombatant.ImageURL,
+        modalCaption: newActiveCombatant.Name,
+        showModal: true
+      });
   }
 
   private closeModal = () => {
