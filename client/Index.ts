@@ -23,7 +23,7 @@ $(() => {
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
     const playerView = new ReactPlayerView(
-      document.getElementById("playerview"),
+      document.getElementById("playerview__container"),
       encounterId
     );
     playerView.LoadEncounterFromServer();
