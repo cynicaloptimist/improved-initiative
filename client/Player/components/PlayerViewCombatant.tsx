@@ -43,7 +43,7 @@ export class PlayerViewCombatant extends React.Component<
         <div
           className={
             "combatant__hp" +
-            (!this.props.areSuggestionsAllowed && " disable-hover")
+            (this.props.areSuggestionsAllowed ? "" : " disable-hover")
           }
         >
           <span
