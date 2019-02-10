@@ -145,6 +145,9 @@ export class PlayerView extends React.Component<
   };
 
   private suggestDamage = (combatant: PlayerViewCombatantState) => {
+    if (!this.props.settings.AllowPlayerSuggestions) {
+      return;
+    }
     this.setState({
       suggestDamageCombatant: combatant
     });
