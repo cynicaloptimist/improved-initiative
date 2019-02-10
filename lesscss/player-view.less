@@ -73,10 +73,6 @@
   .damage-suggestion {
     .card-bg-2(@large-spacer, @large-spacer);
 
-    .tip {
-      color: lighten(@primary-black, 50);
-    }
-
     z-index: 2;
     position: absolute;
     top: 50%;
@@ -84,7 +80,13 @@
     transform: translate(-50%, -50%);
 
     font-size: initial;
-    .tip {
+
+    .damage-suggestion__input {
+      flex-flow: row;
+      justify-content: space-between;
+    }
+    .damage-suggestion__tip {
+      color: lighten(@primary-black, 50);
       font-size: smaller;
     }
   }
