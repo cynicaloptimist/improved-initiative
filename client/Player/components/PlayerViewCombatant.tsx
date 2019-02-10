@@ -8,10 +8,7 @@ interface PlayerViewCombatantProps {
   isPortraitVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
-  suggestCommand: (
-    command: string,
-    combatant: PlayerViewCombatantState
-  ) => void;
+  suggestDamage: (combatant: PlayerViewCombatantState) => void;
 }
 
 export class PlayerViewCombatant extends React.Component<
@@ -52,9 +49,7 @@ export class PlayerViewCombatant extends React.Component<
           <span
             className="current-hp"
             style={{ color: this.props.combatant.HPColor }}
-            onClick={() =>
-              this.props.suggestCommand("damage", this.props.combatant)
-            }
+            onClick={() => this.props.suggestDamage(this.props.combatant)}
             dangerouslySetInnerHTML={{ __html: this.props.combatant.HPDisplay }}
           />
         </div>

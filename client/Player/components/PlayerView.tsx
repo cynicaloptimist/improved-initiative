@@ -3,28 +3,30 @@ import * as React from "react";
 import _ = require("lodash");
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
+import { Button } from "../../Components/Button";
 import { CustomStyles } from "./CustomStyles";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitModal } from "./PortraitModal";
 
-type SuggestableCommand = "damage";
-interface CommandSuggestorProps {
-  command: SuggestableCommand;
+interface DamageSuggestorProps {
   combatant: PlayerViewCombatantState;
   onClose: () => void;
 }
-interface CommandSuggestorState {}
-class CommandSuggestor extends React.Component<
-  CommandSuggestorProps,
-  CommandSuggestorState
-> {
+class DamageSuggestor extends React.Component<DamageSuggestorProps> {
   public render() {
     return (
-      <div
-        className="modal-blur command-suggestor"
-        onClick={this.props.onClose}
-      />
+      <React.Fragment>
+        <div className="modal-blur" onClick={this.props.onClose} />
+        <div className="damage-suggestion">
+          Suggest damage/healing for {this.props.combatant.Name}:
+          <input type="number" name="suggestedDamage" />
+          <Button fontAwesomeIcon="check" onClick={() => alert("BARF")} />
+          <div className="tip">
+            Use a positive value to damage and a negative value to heal
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }
@@ -34,8 +36,7 @@ interface LocalState {
   portraitURL: string;
   portraitCaption: string;
 
-  suggestCommand: SuggestableCommand;
-  suggestCommandCombatant: PlayerViewCombatantState;
+  suggestDamageCombatant: PlayerViewCombatantState;
 }
 
 export class PlayerView extends React.Component<PlayerViewState, LocalState> {
@@ -48,8 +49,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
       portraitURL: "",
       portraitCaption: "",
 
-      suggestCommand: null,
-      suggestCommandCombatant: null
+      suggestDamageCombatant: null
     };
   }
 
@@ -67,10 +67,9 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
             onClose={this.closePortrait}
           />
         )}
-        {this.state.suggestCommand && (
-          <CommandSuggestor
-            command={this.state.suggestCommand}
-            combatant={this.state.suggestCommandCombatant}
+        {this.state.suggestDamageCombatant && (
+          <DamageSuggestor
+            combatant={this.state.suggestDamageCombatant}
             onClose={this.cancelSuggestion}
           />
         )}
@@ -79,7 +78,7 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
-              suggestCommand={this.suggestCommand}
+              suggestDamage={this.suggestDamage}
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               isPortraitVisible={this.props.settings.DisplayPortraits}
@@ -159,20 +158,15 @@ export class PlayerView extends React.Component<PlayerViewState, LocalState> {
     );
   };
 
-  private suggestCommand = (
-    command: SuggestableCommand,
-    combatant: PlayerViewCombatantState
-  ) => {
+  private suggestDamage = (combatant: PlayerViewCombatantState) => {
     this.setState({
-      suggestCommand: command,
-      suggestCommandCombatant: combatant
+      suggestDamageCombatant: combatant
     });
   };
 
   private cancelSuggestion = () => {
     this.setState({
-      suggestCommand: null,
-      suggestCommandCombatant: null
+      suggestDamageCombatant: null
     });
   };
 }
