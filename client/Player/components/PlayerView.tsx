@@ -12,6 +12,7 @@ import { PortraitModal } from "./PortraitModal";
 
 interface LocalState {
   showPortrait: boolean;
+  portraitWasRequestedByClick: boolean;
   portraitURL: string;
   portraitCaption: string;
 
@@ -32,6 +33,7 @@ export class PlayerView extends React.Component<
     super(props);
     this.state = {
       showPortrait: false,
+      portraitWasRequestedByClick: false,
       portraitURL: "",
       portraitCaption: "",
 
@@ -111,6 +113,10 @@ export class PlayerView extends React.Component<
       return;
     }
 
+    if (this.state.portraitWasRequestedByClick) {
+      return;
+    }
+
     const newActiveCombatant = _.find(
       this.props.encounterState.Combatants,
       c => c.Id == this.props.encounterState.ActiveCombatantId
@@ -120,7 +126,8 @@ export class PlayerView extends React.Component<
       this.setState({
         portraitURL: newActiveCombatant.ImageURL,
         portraitCaption: newActiveCombatant.Name,
-        showPortrait: true
+        showPortrait: true,
+        portraitWasRequestedByClick: false
       });
       this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
     }
@@ -142,13 +149,15 @@ export class PlayerView extends React.Component<
     this.setState({
       portraitURL: combatant.ImageURL,
       portraitCaption: combatant.Name,
-      showPortrait: true
+      showPortrait: true,
+      portraitWasRequestedByClick: true
     });
   };
 
   private closePortrait = () => {
     this.setState({
-      showPortrait: false
+      showPortrait: false,
+      portraitWasRequestedByClick: false
     });
   };
 
