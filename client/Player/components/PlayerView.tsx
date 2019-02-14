@@ -87,6 +87,7 @@ export class PlayerView extends React.Component<
                 ? this.props.encounterState.RoundCounter
                 : undefined
             }
+            activeCombatantId={this.props.encounterState.ActiveCombatantId}
           />
         )}
       </div>
