@@ -98,13 +98,13 @@ export class PlayerView extends React.Component<
     this.scrollToActiveCombatant();
   }
 
-  private handleSplashPortrait(newActiveCombatantId) {
+  private handleSplashPortrait(previousActiveCombatantId) {
     if (!this.props.settings.SplashPortraits) {
       return;
     }
 
     const newCombatantIsActive =
-      newActiveCombatantId != this.props.encounterState.ActiveCombatantId;
+      previousActiveCombatantId != this.props.encounterState.ActiveCombatantId;
 
     if (!newCombatantIsActive) {
       return;
