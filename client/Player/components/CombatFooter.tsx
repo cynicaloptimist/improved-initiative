@@ -1,3 +1,5 @@
+import _ = require("lodash");
+import moment = require("moment");
 import * as React from "react";
 
 export class CombatFooter extends React.Component<
@@ -25,7 +27,9 @@ export class CombatFooter extends React.Component<
     );
   }
   private getTimerReadout() {
-    return this.state.timerElapsedSeconds;
+    const time = moment.duration(this.state.timerElapsedSeconds, "seconds");
+    const paddedSeconds = _.padStart(time.seconds().toString(), 2, "0");
+    return time.minutes() + ":" + paddedSeconds;
   }
 }
 interface CombatFooterProps {
