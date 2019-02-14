@@ -3,6 +3,7 @@ import * as React from "react";
 import _ = require("lodash");
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
+import { CombatFooter } from "./CombatFooter";
 import { CustomStyles } from "./CustomStyles";
 import { DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
@@ -39,6 +40,9 @@ export class PlayerView extends React.Component<
   }
 
   public render() {
+    const footerVisible =
+      this.props.settings.DisplayRoundCounter ||
+      this.props.settings.DisplayTurnTimer;
     return (
       <div className="c-player-view">
         <CustomStyles
@@ -75,6 +79,16 @@ export class PlayerView extends React.Component<
             />
           ))}
         </ul>
+        {footerVisible && (
+          <CombatFooter
+            timerVisible={this.props.settings.DisplayTurnTimer}
+            currentRound={
+              this.props.settings.DisplayRoundCounter
+                ? this.props.encounterState.RoundCounter
+                : undefined
+            }
+          />
+        )}
       </div>
     );
   }
