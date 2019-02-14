@@ -95,11 +95,11 @@ export class PlayerView extends React.Component<
   }
 
   public componentDidUpdate(prevProps: PlayerViewState) {
-    this.handleSplashPortrait(prevProps.encounterState.ActiveCombatantId);
+    this.splashPortraitIfNeeded(prevProps.encounterState.ActiveCombatantId);
     this.scrollToActiveCombatant();
   }
 
-  private handleSplashPortrait(previousActiveCombatantId) {
+  private splashPortraitIfNeeded(previousActiveCombatantId) {
     if (!this.props.settings.SplashPortraits) {
       return;
     }
