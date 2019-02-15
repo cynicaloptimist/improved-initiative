@@ -66,7 +66,7 @@ describe("PlayerViewModel", () => {
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
 
-    let playerView = Enzyme.shallow(
+    const playerView = Enzyme.shallow(
       <PlayerView
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
