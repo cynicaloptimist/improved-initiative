@@ -2,16 +2,16 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
-import { StatBlock } from "../common/StatBlock";
-import { Encounter } from "./Encounter/Encounter";
-import { env } from "./Environment";
-import { CombatFooter } from "./Player/components/CombatFooter";
-import { PlayerView } from "./Player/components/PlayerView";
-import { PlayerViewCombatant } from "./Player/components/PlayerViewCombatant";
-import { PortraitModal } from "./Player/components/PortraitModal";
-import { PlayerViewModel } from "./PlayerViewModel";
-import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
-import { buildEncounter } from "./test/buildEncounter";
+import { StatBlock } from "../../common/StatBlock";
+import { Encounter } from "../Encounter/Encounter";
+import { env } from "../Environment";
+import { PlayerViewModel } from "../PlayerViewModel";
+import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { buildEncounter } from "../test/buildEncounter";
+import { CombatFooter } from "./components/CombatFooter";
+import { PlayerView } from "./components/PlayerView";
+import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
+import { PortraitModal } from "./components/PortraitModal";
 
 Enzyme.configure({ adapter: new Adapter() });
 
