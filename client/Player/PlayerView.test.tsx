@@ -5,7 +5,6 @@ import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
-import { PlayerViewModel } from "../PlayerViewModel";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 import { CombatFooter } from "./components/CombatFooter";
@@ -16,23 +15,13 @@ import { PortraitModal } from "./components/PortraitModal";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("PlayerViewModel", () => {
-  let playerViewModel: PlayerViewModel;
   let encounter: Encounter;
   let playerView: Enzyme.ShallowWrapper;
 
   beforeEach(() => {
     InitializeSettings();
 
-    const mockIo: any = {
-      on: jest.fn(),
-      emit: jest.fn()
-    };
-
-    playerViewModel = new PlayerViewModel(mockIo);
     encounter = buildEncounter();
-    playerViewModel.LoadSettings(CurrentSettings().PlayerView);
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-
     playerView = Enzyme.shallow(
       <PlayerView
         settings={CurrentSettings().PlayerView}
