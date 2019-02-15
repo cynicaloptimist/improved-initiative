@@ -144,14 +144,14 @@ describe("PlayerViewModel", () => {
       />
     );
 
-    expect(playerViewModel.imageModal().Visible).toBe(false);
+    expect(playerView.find(PortraitModal).length).toBe(0);
 
     combatant1.ApplyDamage(5);
     playerView.setProps({
       encounterState: encounter.GetPlayerView()
     });
 
-    expect(playerViewModel.imageModal().Visible).toBe(false);
+    expect(playerView.find(PortraitModal).length).toBe(0);
   });
 });
 
