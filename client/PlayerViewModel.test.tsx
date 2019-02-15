@@ -1,9 +1,17 @@
+import * as Enzyme from "enzyme";
+import * as Adapter from "enzyme-adapter-react-16";
+import * as React from "react";
+
 import { StatBlock } from "../common/StatBlock";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
+import { PlayerView } from "./Player/components/PlayerView";
+import { PlayerViewCombatant } from "./Player/components/PlayerViewCombatant";
 import { PlayerViewModel } from "./PlayerViewModel";
 import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
 import { buildEncounter } from "./test/buildEncounter";
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe("PlayerViewModel", () => {
   let playerViewModel: PlayerViewModel;
@@ -24,15 +32,21 @@ describe("PlayerViewModel", () => {
   });
 
   test("Loading the encounter populates combatants", () => {
-    expect(playerViewModel.combatants().length).toBe(0);
-
+    const encounter = buildEncounter();
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
     });
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
-    expect(playerViewModel.combatants().length).toBe(1);
+    const playerView = Enzyme.shallow(
+      <PlayerView
+        settings={CurrentSettings().PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+      />
+    );
+
+    expect(playerView.find(PlayerViewCombatant).length).toBe(1);
   });
 
   test("Starting the encounter splashes combatant portraits when available", () => {
