@@ -129,18 +129,26 @@ describe("PlayerViewModel", () => {
       ImageURL: "http://combatant2.png"
     });
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
     env.HasEpicInitiative = true;
     const settings = CurrentSettings();
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
-    playerViewModel.LoadSettings(settings.PlayerView);
+
+    playerView = Enzyme.shallow(
+      <PlayerView
+        settings={settings.PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+      />
+    );
 
     expect(playerViewModel.imageModal().Visible).toBe(false);
 
     combatant1.ApplyDamage(5);
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    playerView.setProps({
+      encounterState: encounter.GetPlayerView()
+    });
 
     expect(playerViewModel.imageModal().Visible).toBe(false);
   });
@@ -152,8 +160,15 @@ describe("PlayerViewModel", () => {
       Player: "player"
     });
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
+    playerView.setProps({
+      encounterState: encounter.GetPlayerView()
+    });
+    expect(
+      playerView
+        .find(PlayerViewCombatant)
+        .first()
+        .prop("combatant").HPDisplay
+    ).toBe("10/10");
   });
 
   test("Creature HP is obfuscated", () => {
