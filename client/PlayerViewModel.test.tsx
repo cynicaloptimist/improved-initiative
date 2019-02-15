@@ -153,6 +153,30 @@ describe("PlayerViewModel", () => {
     expect(playerViewModel.imageModal().Visible).toBe(false);
   });
 
+  test("Player View round timer stops when encounter stops", () => {
+    jest.useFakeTimers();
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" },
+      Player: "player"
+    });
+    encounter.StartEncounter();
+    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    jest.advanceTimersByTime(10000); // 10 seconds
+    encounter.EndEncounter();
+    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    expect(playerViewModel.turnTimer.Readout()).toBe("0:00");
+  });
+});
+
+describe("PlayerView State", () => {
+  let encounter: Encounter;
+
+  beforeEach(() => {
+    InitializeSettings();
+    encounter = buildEncounter();
+  });
+
   test("Player View is only updated if next combatant is visible", () => {
     const visibleCombatant1 = encounter.AddCombatantFromStatBlock(
       StatBlock.Default()
@@ -171,36 +195,20 @@ describe("PlayerViewModel", () => {
     hiddenCombatant.Initiative(1);
 
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    let playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
 
-    expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant1.Id);
     encounter.NextTurn();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant2.Id);
     encounter.NextTurn();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant2.Id);
     encounter.NextTurn();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-
-    expect(playerViewModel.activeCombatantId()).toEqual(visibleCombatant1.Id);
-  });
-
-  test("Player View round timer stops when encounter stops", () => {
-    jest.useFakeTimers();
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" },
-      Player: "player"
-    });
-    encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    jest.advanceTimersByTime(10000); // 10 seconds
-    encounter.EndEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.turnTimer.Readout()).toBe("0:00");
+    playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
   });
 });
 
