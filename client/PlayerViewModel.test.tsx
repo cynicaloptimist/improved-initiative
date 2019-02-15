@@ -153,66 +153,6 @@ describe("PlayerViewModel", () => {
     expect(playerViewModel.imageModal().Visible).toBe(false);
   });
 
-  test("Player HP is displayed", () => {
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" },
-      Player: "player"
-    });
-    encounter.StartEncounter();
-    playerView.setProps({
-      encounterState: encounter.GetPlayerView()
-    });
-    expect(
-      playerView
-        .find(PlayerViewCombatant)
-        .first()
-        .prop("combatant").HPDisplay
-    ).toBe("10/10");
-  });
-
-  test("Creature HP is obfuscated", () => {
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.combatants()[0].HPDisplay).toBe(
-      "<span class='healthyHP'>Healthy</span>"
-    );
-  });
-
-  test("Creature HP setting actual HP", () => {
-    const settings = CurrentSettings();
-    settings.PlayerView.MonsterHPVerbosity = "Actual HP";
-    playerViewModel.LoadSettings(settings.PlayerView);
-
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.combatants()[0].HPDisplay).toBe("10/10");
-  });
-
-  test("Player HP setting obfuscated HP", () => {
-    const settings = CurrentSettings();
-    settings.PlayerView.PlayerHPVerbosity = "Colored Label";
-    playerViewModel.LoadSettings(settings.PlayerView);
-
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.combatants()[0].HPDisplay).toBe(
-      "<span class='healthyHP'>Healthy</span>"
-    );
-  });
-
   test("Player View is only updated if next combatant is visible", () => {
     const visibleCombatant1 = encounter.AddCombatantFromStatBlock(
       StatBlock.Default()
@@ -261,5 +201,65 @@ describe("PlayerViewModel", () => {
     encounter.EndEncounter();
     playerViewModel.LoadEncounter(encounter.GetPlayerView());
     expect(playerViewModel.turnTimer.Readout()).toBe("0:00");
+  });
+});
+
+describe("PlayerViewCombatantState HP Display", () => {
+  let encounter: Encounter;
+
+  beforeEach(() => {
+    InitializeSettings();
+    encounter = buildEncounter();
+  });
+
+  test("Player HP is displayed", () => {
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" },
+      Player: "player"
+    });
+    encounter.StartEncounter();
+    const playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
+  });
+
+  test("Creature HP is obfuscated", () => {
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" }
+    });
+    encounter.StartEncounter();
+    const playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.Combatants[0].HPDisplay).toBe(
+      "<span class='healthyHP'>Healthy</span>"
+    );
+  });
+
+  test("Creature HP setting actual HP", () => {
+    const settings = CurrentSettings();
+    settings.PlayerView.MonsterHPVerbosity = "Actual HP";
+
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" }
+    });
+    encounter.StartEncounter();
+    const playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
+  });
+
+  test("Player HP setting obfuscated HP", () => {
+    const settings = CurrentSettings();
+    settings.PlayerView.PlayerHPVerbosity = "Colored Label";
+
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" }
+    });
+    encounter.StartEncounter();
+    const playerViewState = encounter.GetPlayerView();
+    expect(playerViewState.Combatants[0].HPDisplay).toBe(
+      "<span class='healthyHP'>Healthy</span>"
+    );
   });
 });
