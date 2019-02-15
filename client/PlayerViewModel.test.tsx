@@ -5,6 +5,7 @@ import * as React from "react";
 import { StatBlock } from "../common/StatBlock";
 import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
+import { CombatFooter } from "./Player/components/CombatFooter";
 import { PlayerView } from "./Player/components/PlayerView";
 import { PlayerViewCombatant } from "./Player/components/PlayerViewCombatant";
 import { PortraitModal } from "./Player/components/PortraitModal";
@@ -152,6 +153,37 @@ describe("PlayerViewModel", () => {
 
     expect(playerViewModel.imageModal().Visible).toBe(false);
   });
+});
+
+describe("Turn Timer", () => {
+  let encounter: Encounter;
+
+  beforeEach(() => {
+    InitializeSettings();
+    encounter = buildEncounter();
+  });
+
+  test("Player View round timer keeps time", () => {
+    jest.useFakeTimers();
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10, Notes: "" },
+      Player: "player"
+    });
+    encounter.StartEncounter();
+    const playerViewState = encounter.GetPlayerView();
+
+    const combatFooter = Enzyme.shallow(
+      <CombatFooter
+        currentRound={playerViewState.RoundCounter}
+        timerVisible={true}
+        activeCombatantId={playerViewState.ActiveCombatantId}
+      />
+    );
+
+    jest.advanceTimersByTime(10000); // 10 seconds
+    expect(combatFooter.find(".turn-timer").text()).toBe("0:10");
+  });
 
   test("Player View round timer stops when encounter stops", () => {
     jest.useFakeTimers();
@@ -161,11 +193,19 @@ describe("PlayerViewModel", () => {
       Player: "player"
     });
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    jest.advanceTimersByTime(10000); // 10 seconds
     encounter.EndEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
-    expect(playerViewModel.turnTimer.Readout()).toBe("0:00");
+    const playerViewState = encounter.GetPlayerView();
+
+    const combatFooter = Enzyme.shallow(
+      <CombatFooter
+        currentRound={playerViewState.RoundCounter}
+        timerVisible={true}
+        activeCombatantId={playerViewState.ActiveCombatantId}
+      />
+    );
+
+    jest.advanceTimersByTime(10000); // 10 seconds
+    expect(combatFooter.find(".turn-timer").text()).toBe("0:00");
   });
 });
 
