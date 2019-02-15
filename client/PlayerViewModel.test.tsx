@@ -7,6 +7,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { env } from "./Environment";
 import { PlayerView } from "./Player/components/PlayerView";
 import { PlayerViewCombatant } from "./Player/components/PlayerViewCombatant";
+import { PortraitModal } from "./Player/components/PortraitModal";
 import { PlayerViewModel } from "./PlayerViewModel";
 import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
 import { buildEncounter } from "./test/buildEncounter";
@@ -32,7 +33,6 @@ describe("PlayerViewModel", () => {
   });
 
   test("Loading the encounter populates combatants", () => {
-    const encounter = buildEncounter();
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
@@ -60,20 +60,26 @@ describe("PlayerViewModel", () => {
       HP: { Value: 10, Notes: "" },
       ImageURL: "http://combatant2.png"
     });
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
     env.HasEpicInitiative = true;
     const settings = CurrentSettings();
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
-    playerViewModel.LoadSettings(settings.PlayerView);
 
-    expect(playerViewModel.imageModal().Visible).toBe(false);
+    let playerView = Enzyme.shallow(
+      <PlayerView
+        settings={settings.PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+      />
+    );
+
+    expect(playerView.find(PortraitModal).length).toBe(0);
 
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    playerView.setProps({ encounterState: encounter.GetPlayerView() });
 
-    expect(playerViewModel.imageModal().Visible).toBe(true);
+    expect(playerView.find(PortraitModal).length).toBe(1);
   });
 
   test("Making no change does not splash combatant portraits", () => {
