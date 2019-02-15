@@ -17,6 +17,7 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("PlayerViewModel", () => {
   let playerViewModel: PlayerViewModel;
   let encounter: Encounter;
+  let playerView: Enzyme.ShallowWrapper;
 
   beforeEach(() => {
     InitializeSettings();
@@ -30,6 +31,14 @@ describe("PlayerViewModel", () => {
     encounter = buildEncounter();
     playerViewModel.LoadSettings(CurrentSettings().PlayerView);
     playerViewModel.LoadEncounter(encounter.GetPlayerView());
+
+    playerView = Enzyme.shallow(
+      <PlayerView
+        settings={CurrentSettings().PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+      />
+    );
   });
 
   test("Loading the encounter populates combatants", () => {
@@ -38,13 +47,7 @@ describe("PlayerViewModel", () => {
       HP: { Value: 10, Notes: "" }
     });
 
-    const playerView = Enzyme.shallow(
-      <PlayerView
-        settings={CurrentSettings().PlayerView}
-        encounterState={encounter.GetPlayerView()}
-        onSuggestDamage={jest.fn()}
-      />
-    );
+    playerView.setProps({ encounterState: encounter.GetPlayerView() });
 
     expect(playerView.find(PlayerViewCombatant).length).toBe(1);
   });
@@ -66,13 +69,10 @@ describe("PlayerViewModel", () => {
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
 
-    const playerView = Enzyme.shallow(
-      <PlayerView
-        settings={settings.PlayerView}
-        encounterState={encounter.GetPlayerView()}
-        onSuggestDamage={jest.fn()}
-      />
-    );
+    playerView.setProps({
+      encounterState: encounter.GetPlayerView(),
+      settings: settings.PlayerView
+    });
 
     expect(playerView.find(PortraitModal).length).toBe(0);
 
