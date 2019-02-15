@@ -59,9 +59,16 @@ export class CombatFooter extends React.Component<
   }
 
   private incrementTimer = () => {
-    this.setState(state => ({
-      timerElapsedSeconds: state.timerElapsedSeconds + 1
-    }));
+    this.setState(state => {
+      if (this.props.activeCombatantId == null) {
+        return {
+          timerElapsedSeconds: 0
+        };
+      }
+      return {
+        timerElapsedSeconds: state.timerElapsedSeconds + 1
+      };
+    });
   };
 }
 interface CombatFooterProps {
