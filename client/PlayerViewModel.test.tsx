@@ -94,19 +94,27 @@ describe("PlayerViewModel", () => {
       ImageURL: "http://combatant2.png"
     });
     encounter.StartEncounter();
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
 
     env.HasEpicInitiative = true;
     const settings = CurrentSettings();
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
-    playerViewModel.LoadSettings(settings.PlayerView);
 
-    expect(playerViewModel.imageModal().Visible).toBe(false);
+    playerView = Enzyme.shallow(
+      <PlayerView
+        settings={settings.PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+      />
+    );
 
-    playerViewModel.LoadEncounter(encounter.GetPlayerView());
+    expect(playerView.find(PortraitModal).length).toBe(0);
 
-    expect(playerViewModel.imageModal().Visible).toBe(false);
+    playerView.setProps({
+      encounterState: encounter.GetPlayerView()
+    });
+
+    expect(playerView.find(PortraitModal).length).toBe(0);
   });
 
   test("Applying damage does not splash combatant portraits", () => {
