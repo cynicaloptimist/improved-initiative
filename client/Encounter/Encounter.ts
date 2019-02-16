@@ -390,6 +390,15 @@ export class Encounter {
       )
       .forEach(t => t.Decrement());
 
+    // Clean up expired tags
+    this.durationTags
+      .filter(t => t.DurationRemaining() <= 0)
+      .forEach(t => t.Remove());
+
+    this.durationTags = this.durationTags.filter(
+      t => t.DurationRemaining() > 0
+    );
+
     this.TurnTimer.Reset();
     this.QueueEmitEncounter();
   };
