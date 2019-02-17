@@ -177,8 +177,10 @@ export class SettingsViewModel {
     );
   }
 
-  public accountSettings = React.createElement(AccountSettings, {
-    accountClient: new AccountClient(),
-    libraries: this.libraries
-  });
+  public accountSettings = (
+    <AccountSettings
+      accountClient={new AccountClient()}
+      libraries={this.libraries}
+    />
+  );
 }
