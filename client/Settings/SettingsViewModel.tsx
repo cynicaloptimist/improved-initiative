@@ -49,10 +49,7 @@ export class SettingsViewModel {
   public CurrentTab = ko.observable<string>("about");
   public RollHp: KnockoutObservable<boolean>;
 
-  public epicInitiativeSettings: React.ComponentElement<
-    any,
-    EpicInitiativeSettings
-  >;
+  public epicInitiativeSettings: React.ReactElement<EpicInitiativeSettings>;
   private playerViewSettings: PlayerViewSettings;
 
   public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
@@ -174,19 +171,9 @@ export class SettingsViewModel {
     this.NextTip = cycleTipIndex.bind(1);
     this.PreviousTip = cycleTipIndex.bind(-1);
 
-    this.createEpicInitiativeSettingsComponent(currentSettings);
-  }
-
-  private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
     this.playerViewSettings = currentSettings.PlayerView;
-
-    const customCSSEditorProps: EpicInitiativeSettingsProps = {
-      playerViewSettings: this.playerViewSettings
-    };
-
-    this.epicInitiativeSettings = React.createElement(
-      EpicInitiativeSettings,
-      customCSSEditorProps
+    this.epicInitiativeSettings = (
+      <EpicInitiativeSettings playerViewSettings={this.playerViewSettings} />
     );
   }
 
