@@ -28,13 +28,15 @@ export class CombatantDetails extends React.Component<
     }
 
     const currentHp = this.props.combatantViewModel.HP();
-    const tags = this.props.combatantViewModel.Combatant.Tags().map(tag => {
-      if (tag.HasDuration) {
-        return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;
-      }
+    const tags = this.props.combatantViewModel.Combatant.Tags()
+      .filter(tag => tag.Visible())
+      .map(tag => {
+        if (tag.HasDuration) {
+          return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;
+        }
 
-      return tag.Text;
-    });
+        return tag.Text;
+      });
 
     const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
     const renderedNotes = notes ? this.props.enricher.EnrichText(notes) : null;
