@@ -6,6 +6,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Button, SubmitButton } from "../Components/Button";
 import { Listing } from "../Library/Listing";
+import { ConvertStringsToNumbersWhereNeeded } from "./ConvertStringsToNumbersWhereNeeded";
 import { IdentityFields } from "./components/IdentityFields";
 import {
   abilityScoreField,
@@ -187,41 +188,6 @@ export class StatBlockEditor extends React.Component<
     </div>
   );
 
-  private parseIntWhereNeeded = (submittedValues: StatBlock) => {
-    StatBlock.AbilityNames.forEach(
-      a =>
-        (submittedValues.Abilities[a] = this.castToNumberOrZero(
-          submittedValues.Abilities[a]
-        ))
-    );
-    submittedValues.HP.Value = this.castToNumberOrZero(
-      submittedValues.HP.Value
-    );
-    submittedValues.AC.Value = this.castToNumberOrZero(
-      submittedValues.AC.Value
-    );
-    submittedValues.InitiativeModifier = this.castToNumberOrZero(
-      submittedValues.InitiativeModifier
-    );
-    submittedValues.Skills.forEach(
-      s => (s.Modifier = this.castToNumberOrZero(s.Modifier))
-    );
-    submittedValues.Saves.forEach(
-      s => (s.Modifier = this.castToNumberOrZero(s.Modifier))
-    );
-  };
-
-  private castToNumberOrZero = (value?: any) => {
-    if (!value) {
-      return 0;
-    }
-    const parsedValue = parseInt(value.toString(), 10);
-    if (parsedValue == NaN) {
-      return 0;
-    }
-    return parsedValue;
-  };
-
   private saveAndClose = submittedValues => {
     const { SaveAs, StatBlockJSON, ...submittedStatBlock } = submittedValues;
 
@@ -239,7 +205,7 @@ export class StatBlockEditor extends React.Component<
       Version: process.env.VERSION
     };
 
-    this.parseIntWhereNeeded(editedStatBlock);
+    ConvertStringsToNumbersWhereNeeded(editedStatBlock);
 
     if (SaveAs && this.props.onSaveAs) {
       editedStatBlock.Id = probablyUniqueString();
