@@ -106,7 +106,7 @@ export class StatBlockEditor extends React.Component<
               />
             </div>
             {this.state.editorMode == "standard"
-              ? this.innerEditor(api)
+              ? this.fieldEditor(api)
               : this.jsonEditor(api)}
             <div className="c-statblock-editor__buttons">{buttons}</div>
           </Form>
@@ -115,7 +115,7 @@ export class StatBlockEditor extends React.Component<
     );
   }
 
-  private innerEditor = (api: FormikProps<any>) => (
+  private fieldEditor = (api: FormikProps<any>) => (
     <React.Fragment>
       <div className="c-statblock-editor__headers">
         <TextField label="Portrait URL" fieldName="ImageURL" />
