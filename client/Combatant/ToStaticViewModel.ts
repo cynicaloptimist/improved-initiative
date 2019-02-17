@@ -1,22 +1,11 @@
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { Combatant } from "./Combatant";
-import { Tag } from "./Tag";
-
-export interface StaticCombatantViewModel {
-  Name: string;
-  HPDisplay: string;
-  HPColor: string;
-  Initiative: number;
-  Id: string;
-  Tags: Tag[];
-  IsPlayerCharacter: boolean;
-  ImageURL: string;
-}
 
 export function ToStaticViewModel(
   combatant: Combatant
-): StaticCombatantViewModel {
+): PlayerViewCombatantState {
   const sendImage = env.HasEpicInitiative;
   return {
     Name: combatant.DisplayName(),
@@ -25,7 +14,17 @@ export function ToStaticViewModel(
     HPColor: GetHPColor(combatant),
     Initiative: combatant.Initiative(),
     IsPlayerCharacter: combatant.IsPlayerCharacter,
-    Tags: combatant.Tags().filter(t => t.Visible()),
+    Tags: combatant
+      .Tags()
+      .filter(t => t.Visible())
+      .map(t => {
+        return {
+          Text: t.Text,
+          DurationRemaining: t.DurationRemaining(),
+          DurationTiming: t.DurationTiming,
+          DurationCombatantId: t.DurationCombatantId
+        };
+      }),
     ImageURL: sendImage && combatant.StatBlock().ImageURL
   };
 }
@@ -34,11 +33,9 @@ function GetHPDisplay(combatant: Combatant): string {
   const hpVerbosity = combatant.IsPlayerCharacter
     ? CurrentSettings().PlayerView.PlayerHPVerbosity
     : CurrentSettings().PlayerView.MonsterHPVerbosity;
-
   const maxHP = combatant.MaxHP(),
     currentHP = combatant.CurrentHP(),
     temporaryHP = combatant.TemporaryHP();
-
   if (hpVerbosity == "Actual HP") {
     if (temporaryHP) {
       return `${currentHP}+${temporaryHP}/${maxHP}`;
@@ -46,15 +43,12 @@ function GetHPDisplay(combatant: Combatant): string {
       return `${currentHP}/${maxHP}`;
     }
   }
-
   if (hpVerbosity == "Hide All") {
     return "";
   }
-
   if (hpVerbosity == "Damage Taken") {
     return (currentHP - maxHP).toString();
   }
-
   if (currentHP <= 0) {
     return "<span class='defeatedHP'>Defeated</span>";
   } else if (currentHP < maxHP / 2) {

@@ -5,17 +5,15 @@ import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import {
-  StaticCombatantViewModel,
-  ToStaticViewModel
-} from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
+import { ToStaticViewModel } from "../Combatant/ToStaticViewModel";
 import { env } from "../Environment";
 import {
   PersistentCharacterLibrary,
@@ -468,7 +466,7 @@ export class Encounter {
     };
   };
 
-  public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
+  public GetPlayerView = (): EncounterState<PlayerViewCombatantState> => {
     const activeCombatantId = this.getPlayerViewActiveCombatantId();
     return {
       Name: this.EncounterId,
@@ -524,7 +522,7 @@ export class Encounter {
       }
     }
 
-    return combatants.map<StaticCombatantViewModel>(c => ToStaticViewModel(c));
+    return combatants.map<PlayerViewCombatantState>(c => ToStaticViewModel(c));
   }
 
   private getCombatantState = (c: Combatant): CombatantState => {
