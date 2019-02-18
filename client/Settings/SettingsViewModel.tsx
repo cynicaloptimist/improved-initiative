@@ -4,7 +4,6 @@ import * as React from "react";
 import _ = require("lodash");
 import {
   HpVerbosityOption,
-  HpVerbosityOptions,
   PlayerViewSettings
 } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
@@ -38,7 +37,7 @@ export class SettingsViewModel {
   public DisplayTurnTimer: KnockoutObservable<boolean>;
   public DisplayRoundCounter: KnockoutObservable<boolean>;
   public AutoCheckConcentration: KnockoutObservable<boolean>;
-  public AutoGroupInitiativeOptions: string[];
+  public AutoGroupInitiativeOptions: AutoGroupInitiativeOption[];
   public AutoGroupInitiative: KnockoutObservable<AutoGroupInitiativeOption>;
   public AllowNegativeHP: KnockoutObservable<boolean>;
   public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
@@ -132,7 +131,9 @@ export class SettingsViewModel {
     this.AutoGroupInitiative = ko.observable(
       currentSettings.Rules.AutoGroupInitiative
     );
-    this.AutoGroupInitiativeOptions = _.values(AutoGroupInitiativeOption);
+    this.AutoGroupInitiativeOptions = _.values<
+      typeof AutoGroupInitiativeOption
+    >(AutoGroupInitiativeOption);
 
     this.DisplayRoundCounter = ko.observable(
       currentSettings.TrackerView.DisplayRoundCounter
@@ -150,7 +151,9 @@ export class SettingsViewModel {
     this.PlayerHpVerbosity = ko.observable(
       currentSettings.PlayerView.PlayerHPVerbosity
     );
-    this.HpVerbosityOptions = HpVerbosityOptions;
+    this.HpVerbosityOptions = _.values<typeof HpVerbosityOption>(
+      HpVerbosityOption
+    );
     this.HideMonstersOutsideEncounter = ko.observable(
       currentSettings.PlayerView.HideMonstersOutsideEncounter
     );

@@ -2,6 +2,7 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
+import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
@@ -274,7 +275,7 @@ describe("PlayerViewCombatantState HP Display", () => {
 
   test("Creature HP setting actual HP", () => {
     const settings = CurrentSettings();
-    settings.PlayerView.MonsterHPVerbosity = "Actual HP";
+    settings.PlayerView.MonsterHPVerbosity = HpVerbosityOption.ActualHP;
 
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
@@ -287,7 +288,7 @@ describe("PlayerViewCombatantState HP Display", () => {
 
   test("Player HP setting obfuscated HP", () => {
     const settings = CurrentSettings();
-    settings.PlayerView.PlayerHPVerbosity = "Colored Label";
+    settings.PlayerView.PlayerHPVerbosity = HpVerbosityOption.ColoredLabel;
 
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),

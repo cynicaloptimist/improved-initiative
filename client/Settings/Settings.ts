@@ -59,8 +59,8 @@ export function getDefaultSettings(): Settings {
     PlayerView: {
       ActiveCombatantOnTop: false,
       AllowPlayerSuggestions: false,
-      MonsterHPVerbosity: "Colored Label",
-      PlayerHPVerbosity: "Actual HP",
+      MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
+      PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
@@ -129,7 +129,7 @@ function getLegacySettings(): Settings {
       ),
       MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>(
         "MonsterHPVerbosity",
-        "Colored Label"
+        HpVerbosityOption.ColoredLabel
       ),
       HideMonstersOutsideEncounter: getLegacySetting<boolean>(
         "HideMonstersOutsideEncounter",
