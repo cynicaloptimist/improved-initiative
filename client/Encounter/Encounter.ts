@@ -33,6 +33,8 @@ import {
 import { TurnTimer } from "../Widgets/TurnTimer";
 
 export class Encounter {
+  private lastVisibleActiveCombatantId = null;
+
   constructor(
     private playerViewClient: PlayerViewClient,
     private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
@@ -491,7 +493,48 @@ export class Encounter {
     };
   };
 
-  private lastVisibleActiveCombatantId = null;
+  public LoadEncounterState = (
+    encounterState: EncounterState<CombatantState>,
+    persistentCharacterLibrary: PersistentCharacterLibrary
+  ) => {
+    const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
+    encounterState.Combatants.forEach(async savedCombatant => {
+      if (this.combatants().some(c => c.Id == savedCombatant.Id)) {
+        savedCombatant.Id = probablyUniqueString();
+      }
+
+      const combatant = this.AddCombatantFromState(savedCombatant);
+
+      if (combatant.PersistentCharacterId) {
+        const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(
+          combatant.PersistentCharacterId
+        );
+        combatant.StatBlock(persistentCharacter.StatBlock);
+        combatant.CurrentHP(persistentCharacter.CurrentHP);
+        combatant.CurrentNotes(persistentCharacter.Notes);
+        combatant.AttachToPersistentCharacterLibrary(
+          persistentCharacterLibrary
+        );
+      }
+    });
+
+    if (savedEncounterIsActive) {
+      this.State("active");
+      this.ActiveCombatant(
+        this.combatants()
+          .filter(c => c.Id == encounterState.ActiveCombatantId)
+          .pop()
+      );
+      this.TurnTimer.Start();
+    }
+    this.RoundCounter(encounterState.RoundCounter || 1);
+  };
+
+  public ClearEncounter = () => {
+    this.combatants([]);
+    this.CombatantCountsByName({});
+    this.EndEncounter();
+  };
 
   private getPlayerViewActiveCombatantId() {
     const activeCombatant = this.ActiveCombatant();
@@ -560,49 +603,6 @@ export class Encounter {
       Hidden: c.Hidden(),
       InterfaceVersion: process.env.VERSION
     };
-  };
-
-  public LoadEncounterState = (
-    encounterState: EncounterState<CombatantState>,
-    persistentCharacterLibrary: PersistentCharacterLibrary
-  ) => {
-    const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
-    encounterState.Combatants.forEach(async savedCombatant => {
-      if (this.combatants().some(c => c.Id == savedCombatant.Id)) {
-        savedCombatant.Id = probablyUniqueString();
-      }
-
-      const combatant = this.AddCombatantFromState(savedCombatant);
-
-      if (combatant.PersistentCharacterId) {
-        const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(
-          combatant.PersistentCharacterId
-        );
-        combatant.StatBlock(persistentCharacter.StatBlock);
-        combatant.CurrentHP(persistentCharacter.CurrentHP);
-        combatant.CurrentNotes(persistentCharacter.Notes);
-        combatant.AttachToPersistentCharacterLibrary(
-          persistentCharacterLibrary
-        );
-      }
-    });
-
-    if (savedEncounterIsActive) {
-      this.State("active");
-      this.ActiveCombatant(
-        this.combatants()
-          .filter(c => c.Id == encounterState.ActiveCombatantId)
-          .pop()
-      );
-      this.TurnTimer.Start();
-    }
-    this.RoundCounter(encounterState.RoundCounter || 1);
-  };
-
-  public ClearEncounter = () => {
-    this.combatants([]);
-    this.CombatantCountsByName({});
-    this.EndEncounter();
   };
 
   private rerollInitiativeWithoutPrompt = () => {
