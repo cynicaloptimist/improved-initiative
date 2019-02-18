@@ -605,5 +605,9 @@ export class Encounter {
     this.EndEncounter();
   };
 
-  private rerollInitiativeWithoutPrompt = () => {};
+  private rerollInitiativeWithoutPrompt = () => {
+    const combatants = this.combatants();
+    combatants.forEach(c => c.Initiative(c.GetInitiativeRoll()));
+    this.SortByInitiative(false);
+  };
 }
