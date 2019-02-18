@@ -99,7 +99,7 @@ describe("Encounter", () => {
     );
 
     for (let i = 0; i < 5; i++) {
-      encounter.NextTurn();
+      encounter.NextTurn(jest.fn());
       expect(encounter.GetPlayerView().Combatants[0].Id).toBe(
         encounter.ActiveCombatant().Id
       );

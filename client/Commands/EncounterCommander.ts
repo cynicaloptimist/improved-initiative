@@ -178,7 +178,8 @@ export class EncounterCommander {
       });
     }
 
-    this.tracker.Encounter.NextTurn();
+    this.tracker.Encounter.NextTurn(this.RerollInitiative);
+
     const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Start of turn for ${turnStartCombatant.DisplayName()}.`

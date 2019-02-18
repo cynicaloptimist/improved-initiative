@@ -228,15 +228,15 @@ describe("PlayerView State", () => {
     let playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
 
-    encounter.NextTurn();
+    encounter.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    encounter.NextTurn();
+    encounter.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    encounter.NextTurn();
+    encounter.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
   });

@@ -21,7 +21,10 @@ import {
 } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
-import { CurrentSettings } from "../Settings/Settings";
+import {
+  AutoRerollInitiativeOption,
+  CurrentSettings
+} from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import {
   DifficultyCalculator,
@@ -357,7 +360,7 @@ export class Encounter {
     this.QueueEmitEncounter();
   };
 
-  public NextTurn = () => {
+  public NextTurn = (promptRerollInitiative: () => boolean) => {
     const activeCombatant = this.ActiveCombatant();
 
     this.durationTags
@@ -372,6 +375,15 @@ export class Encounter {
     let nextIndex = this.combatants().indexOf(activeCombatant) + 1;
     if (nextIndex >= this.combatants().length) {
       nextIndex = 0;
+
+      const autoRerollOption = CurrentSettings().Rules.AutoRerollInitiative;
+      if (autoRerollOption == AutoRerollInitiativeOption.Prompt) {
+        promptRerollInitiative();
+      }
+      if (autoRerollOption == AutoRerollInitiativeOption.Automatic) {
+        this.rerollInitiativeWithoutPrompt();
+      }
+
       this.RoundCounter(this.RoundCounter() + 1);
     }
 
@@ -592,4 +604,6 @@ export class Encounter {
     this.CombatantCountsByName({});
     this.EndEncounter();
   };
+
+  private rerollInitiativeWithoutPrompt = () => {};
 }

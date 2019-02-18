@@ -109,7 +109,9 @@ export class CombatantCommander {
     if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
       let activeCombatant = this.tracker.Encounter.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
-        this.tracker.Encounter.NextTurn();
+        this.tracker.Encounter.NextTurn(
+          this.tracker.EncounterCommander.RerollInitiative
+        );
         activeCombatant = this.tracker.Encounter.ActiveCombatant();
       }
     }
