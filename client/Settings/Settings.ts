@@ -11,12 +11,11 @@ import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 
 export const CurrentSettings = ko.observable<Settings>();
-export const AutoGroupInitiativeOptions = [
-  "None",
-  "By Name",
-  "Side Initiative"
-];
-export type AutoGroupInitiativeOption = "None" | "By Name" | "Side Initiative";
+export enum AutoGroupInitiativeOption {
+  None = "None",
+  ByName = "By Name",
+  SideInitiative = "Side Initiative"
+}
 
 export interface Settings {
   Commands: CommandSetting[];
@@ -50,7 +49,7 @@ export function getDefaultSettings(): Settings {
       RollMonsterHp: false,
       AllowNegativeHP: false,
       AutoCheckConcentration: true,
-      AutoGroupInitiative: "None"
+      AutoGroupInitiative: AutoGroupInitiativeOption.None
     },
     TrackerView: {
       DisplayRoundCounter: false,
@@ -106,7 +105,7 @@ function getLegacySettings(): Settings {
       ),
       AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>(
         "AutoGroupInitiative",
-        "None"
+        AutoGroupInitiativeOption.None
       )
     },
     TrackerView: {

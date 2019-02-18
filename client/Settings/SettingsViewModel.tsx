@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import _ = require("lodash");
 import {
   HpVerbosityOption,
   HpVerbosityOptions,
@@ -14,7 +15,6 @@ import { Libraries } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
 import {
   AutoGroupInitiativeOption,
-  AutoGroupInitiativeOptions,
   CurrentSettings,
   Settings
 } from "./Settings";
@@ -132,7 +132,7 @@ export class SettingsViewModel {
     this.AutoGroupInitiative = ko.observable(
       currentSettings.Rules.AutoGroupInitiative
     );
-    this.AutoGroupInitiativeOptions = AutoGroupInitiativeOptions;
+    this.AutoGroupInitiativeOptions = _.values(AutoGroupInitiativeOption);
 
     this.DisplayRoundCounter = ko.observable(
       currentSettings.TrackerView.DisplayRoundCounter
