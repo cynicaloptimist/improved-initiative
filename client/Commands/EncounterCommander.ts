@@ -141,6 +141,15 @@ export class EncounterCommander {
     return false;
   };
 
+  public RestoreAllPlayerCharacterHP = () => {
+    const playerCharacters = this.tracker.Encounter.Combatants().filter(
+      c => c.IsPlayerCharacter
+    );
+    playerCharacters.forEach(pc => pc.CurrentHP(pc.MaxHP()));
+    this.tracker.EventLog.AddEvent("All player character HP was restored.");
+    Metrics.TrackEvent("AllPlayerCharacterHPRestored");
+  };
+
   public LoadEncounter = (legacySavedEncounter: {}) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
     const nonPlayerCombatants = savedEncounter.Combatants.filter(

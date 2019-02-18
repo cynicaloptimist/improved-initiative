@@ -61,6 +61,14 @@ export const BuildEncounterCommandList = (
     false
   ),
   new Command(
+    "restore-all-player-character-hp",
+    "Restore all Player Character HP",
+    c.RestoreAllPlayerCharacterHP,
+    "alt+shift+t",
+    "clinic-medical",
+    false
+  ),
+  new Command(
     "player-window",
     "Show Player Window",
     c.LaunchPlayerWindow,
