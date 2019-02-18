@@ -14,6 +14,7 @@ import { Libraries } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
 import {
   AutoGroupInitiativeOption,
+  AutoRerollInitiativeOption,
   CurrentSettings,
   Settings
 } from "./Settings";
@@ -39,6 +40,8 @@ export class SettingsViewModel {
   public AutoCheckConcentration: KnockoutObservable<boolean>;
   public AutoGroupInitiativeOptions: AutoGroupInitiativeOption[];
   public AutoGroupInitiative: KnockoutObservable<AutoGroupInitiativeOption>;
+  public AutoRerollInitiativeOptions: AutoRerollInitiativeOption[];
+  public AutoRerollInitiative: KnockoutObservable<AutoRerollInitiativeOption>;
   public AllowNegativeHP: KnockoutObservable<boolean>;
   public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
   public HpVerbosityOptions: HpVerbosityOption[];
@@ -68,7 +71,8 @@ export class SettingsViewModel {
         AllowNegativeHP: this.AllowNegativeHP(),
         AutoCheckConcentration: this.AutoCheckConcentration(),
         RollMonsterHp: this.RollHp(),
-        AutoGroupInitiative: this.AutoGroupInitiative()
+        AutoGroupInitiative: this.AutoGroupInitiative(),
+        AutoRerollInitiative: this.AutoRerollInitiative()
       },
       TrackerView: {
         DisplayDifficulty: this.DisplayDifficulty(),
@@ -128,12 +132,20 @@ export class SettingsViewModel {
     this.AutoCheckConcentration = ko.observable(
       currentSettings.Rules.AutoCheckConcentration
     );
+
     this.AutoGroupInitiative = ko.observable(
       currentSettings.Rules.AutoGroupInitiative
     );
     this.AutoGroupInitiativeOptions = _.values<
       typeof AutoGroupInitiativeOption
     >(AutoGroupInitiativeOption);
+
+    this.AutoRerollInitiative = ko.observable(
+      currentSettings.Rules.AutoRerollInitiative
+    );
+    this.AutoRerollInitiativeOptions = _.values<
+      typeof AutoRerollInitiativeOption
+    >(AutoRerollInitiativeOption);
 
     this.DisplayRoundCounter = ko.observable(
       currentSettings.TrackerView.DisplayRoundCounter

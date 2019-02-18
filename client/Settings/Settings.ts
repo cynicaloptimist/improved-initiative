@@ -11,10 +11,17 @@ import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 
 export const CurrentSettings = ko.observable<Settings>();
+
 export enum AutoGroupInitiativeOption {
   None = "None",
   ByName = "By Name",
   SideInitiative = "Side Initiative"
+}
+
+export enum AutoRerollInitiativeOption {
+  No = "No",
+  Prompt = "Prompt",
+  Automatic = "Automatic"
 }
 
 export interface Settings {
@@ -24,6 +31,7 @@ export interface Settings {
     AllowNegativeHP: boolean;
     AutoCheckConcentration: boolean;
     AutoGroupInitiative: AutoGroupInitiativeOption;
+    AutoRerollInitiative: AutoRerollInitiativeOption;
   };
   TrackerView: {
     DisplayRoundCounter: boolean;
@@ -49,7 +57,8 @@ export function getDefaultSettings(): Settings {
       RollMonsterHp: false,
       AllowNegativeHP: false,
       AutoCheckConcentration: true,
-      AutoGroupInitiative: AutoGroupInitiativeOption.None
+      AutoGroupInitiative: AutoGroupInitiativeOption.None,
+      AutoRerollInitiative: AutoRerollInitiativeOption.No
     },
     TrackerView: {
       DisplayRoundCounter: false,
