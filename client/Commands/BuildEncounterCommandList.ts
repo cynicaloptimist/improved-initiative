@@ -70,8 +70,8 @@ export const BuildEncounterCommandList = (
   ),
   new Command(
     "player-window",
-    "Show Player Window",
-    c.LaunchPlayerWindow,
+    "Launch Player View",
+    c.LaunchPlayerView,
     "alt+w",
     "users"
   ),
