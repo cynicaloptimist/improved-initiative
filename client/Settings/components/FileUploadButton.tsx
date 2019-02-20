@@ -15,7 +15,7 @@ export const FileUploadButton = (props: {
   return (
     <label>
       <input
-        className="hidden-file-input"
+        className="hidden-input"
         type="file"
         accept={props.acceptFileType}
         onChange={onChange}
