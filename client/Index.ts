@@ -8,6 +8,7 @@ import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
+import { RequestFullscreen } from "./Utility/RequestFullscreen";
 
 $(() => {
   LoadEnvironment();
@@ -19,6 +20,7 @@ $(() => {
     ko.applyBindings(viewModel, document.body);
     viewModel.ImportEncounterIfAvailable();
     viewModel.GetWhatsNewIfAvailable();
+    RequestFullscreen();
   }
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
@@ -28,6 +30,7 @@ $(() => {
     );
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(io());
+    RequestFullscreen();
   }
   if ($("#landing").length) {
     let launcherViewModel = new LauncherViewModel();
