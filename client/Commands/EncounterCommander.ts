@@ -8,6 +8,7 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
+import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
 
 export class EncounterCommander {
@@ -33,7 +34,8 @@ export class EncounterCommander {
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
   public LaunchPlayerWindow = () => {
-    window.open(`/p/${this.tracker.Encounter.EncounterId}`, "Player View");
+    const prompt = new PlayerViewPrompt(this.tracker.Encounter.EncounterId);
+    this.tracker.PromptQueue.Add(prompt);
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });
