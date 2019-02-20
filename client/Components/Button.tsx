@@ -21,6 +21,9 @@ export class Button extends React.Component<ButtonProps> {
     if (disabled) {
       classNames.push("c-button--disabled");
     }
+    if (this.props.fontAwesomeIcon && this.props.text) {
+      classNames.push("c-button--icon-and-text");
+    }
     if (this.props.additionalClassNames) {
       classNames.push(this.props.additionalClassNames);
     }
