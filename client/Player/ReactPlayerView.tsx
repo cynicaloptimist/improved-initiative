@@ -12,19 +12,23 @@ import { getDefaultSettings } from "../Settings/Settings";
 import { PlayerView } from "./components/PlayerView";
 
 export class ReactPlayerView {
-  private playerViewState: PlayerViewState = {
-    encounterState: DefaultEncounterState<PlayerViewCombatantState>(),
-    settings: getDefaultSettings().PlayerView
-  };
+  private playerViewState: PlayerViewState;
   private socket: SocketIOClient.Socket;
 
-  constructor(private element: Element, private encounterId: string) {}
+  constructor(private element: Element, private encounterId: string) {
+    this.renderPlayerView({
+      encounterState: DefaultEncounterState<PlayerViewCombatantState>(),
+      settings: getDefaultSettings().PlayerView
+    });
+  }
 
   public async LoadEncounterFromServer() {
-    const playerView: PlayerViewState = await $.ajax(
-      `../playerviews/${this.encounterId}`
-    );
-    this.renderPlayerView(playerView);
+    try {
+      const playerView: PlayerViewState = await $.ajax(
+        `../playerviews/${this.encounterId}`
+      );
+      this.renderPlayerView(playerView);
+    } catch (e) {}
   }
 
   public ConnectToSocket(socket: SocketIOClient.Socket) {
