@@ -8,7 +8,6 @@ import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
-import { ScrollToHideAddressBar } from "./Utility/ScrollToHideAddressBar";
 
 $(() => {
   LoadEnvironment();
@@ -20,7 +19,6 @@ $(() => {
     ko.applyBindings(viewModel, document.body);
     viewModel.ImportEncounterIfAvailable();
     viewModel.GetWhatsNewIfAvailable();
-    ScrollToHideAddressBar();
   }
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
@@ -30,7 +28,6 @@ $(() => {
     );
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(io());
-    ScrollToHideAddressBar();
   }
   if ($("#landing").length) {
     let launcherViewModel = new LauncherViewModel();
