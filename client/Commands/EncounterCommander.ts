@@ -10,6 +10,7 @@ import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
+import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {
   constructor(private tracker: TrackerViewModel) {}
@@ -42,11 +43,7 @@ export class EncounterCommander {
   };
 
   public ToggleFullScreen = () => {
-    if (!document["fullscreenElement"]) {
-      document.documentElement.requestFullscreen();
-    } else if (document.exitFullscreen) {
-      document.exitFullscreen();
-    }
+    ToggleFullscreen();
     return false;
   };
 
