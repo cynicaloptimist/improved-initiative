@@ -41,6 +41,15 @@ export class EncounterCommander {
     });
   };
 
+  public ToggleFullScreen = () => {
+    if (!document["fullscreenElement"]) {
+      document.documentElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+    return false;
+  };
+
   public ShowSettings = () => {
     TutorialSpy("ShowSettings");
     this.tracker.SettingsVisible(true);

@@ -75,6 +75,14 @@ export const BuildEncounterCommandList = (
     "alt+w",
     "users"
   ),
+  new Command(
+    "toggle-full-screen",
+    "Toggle Full Screen",
+    c.ToggleFullScreen,
+    "f11",
+    "expand",
+    false
+  ),
   new Command("next-turn", "Next Turn", c.NextTurn, "n", "step-forward"),
   new Command(
     "previous-turn",
