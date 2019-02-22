@@ -84,4 +84,37 @@ describe("EncounterCommander", () => {
     expect(encounter.Combatants().length).toBe(0);
     return done();
   });
+
+  test("Restore Player Character HP", async done => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+
+    const npc = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const pc = await encounter.AddCombatantFromPersistentCharacter(
+      persistentCharacter,
+      {
+        UpdatePersistentCharacter: async () => {
+          return;
+        }
+      }
+    );
+
+    expect(npc.CurrentHP()).toBe(1);
+    expect(pc.CurrentHP()).toBe(1);
+
+    npc.ApplyDamage(1);
+    pc.ApplyDamage(1);
+
+    expect(npc.CurrentHP()).toBe(0);
+    expect(pc.CurrentHP()).toBe(0);
+
+    encounterCommander.RestoreAllPlayerCharacterHP();
+
+    expect(npc.CurrentHP()).toBe(0);
+    expect(pc.CurrentHP()).toBe(1);
+
+    return done();
+  });
 });
