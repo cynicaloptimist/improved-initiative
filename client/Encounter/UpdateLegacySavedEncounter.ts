@@ -18,14 +18,15 @@ function updateLegacySavedCreature(savedCreature: any) {
 export function UpdateLegacySavedEncounter(
   savedEncounter: any
 ): EncounterState<CombatantState> {
+  savedEncounter.Version = savedEncounter.Version || "legacy";
+  savedEncounter.Id =
+    savedEncounter.Id ||
+    AccountClient.MakeId(savedEncounter.Name || probablyUniqueString());
   savedEncounter.Combatants =
     savedEncounter.Combatants || savedEncounter.Creatures;
   savedEncounter.ActiveCombatantId =
     savedEncounter.ActiveCombatantId || savedEncounter.ActiveCreatureId;
   savedEncounter.Path = savedEncounter.Path || "";
-  savedEncounter.Id =
-    savedEncounter.Id ||
-    AccountClient.MakeId(savedEncounter.Name || probablyUniqueString());
 
   savedEncounter.Combatants.forEach(updateLegacySavedCreature);
 
