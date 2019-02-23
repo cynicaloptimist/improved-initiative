@@ -1,6 +1,7 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
+import { AccountClient } from "../Account/AccountClient";
 
 function updateLegacySavedCreature(savedCreature: any) {
   if (!savedCreature.StatBlock) {
@@ -22,6 +23,9 @@ export function UpdateLegacySavedEncounter(
   savedEncounter.ActiveCombatantId =
     savedEncounter.ActiveCombatantId || savedEncounter.ActiveCreatureId;
   savedEncounter.Path = savedEncounter.Path || "";
+  savedEncounter.Id =
+    savedEncounter.Id ||
+    AccountClient.MakeId(savedEncounter.Name || probablyUniqueString());
 
   savedEncounter.Combatants.forEach(updateLegacySavedCreature);
 
