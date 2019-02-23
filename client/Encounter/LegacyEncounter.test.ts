@@ -27,6 +27,7 @@ describe("Legacy Encounter", () => {
   test("Loads a v0.1 encounter", () => {
     const v1Encounter = {
       Name: "V0.1 Encounter",
+      ActiveCreatureIndex: 0,
       Creatures: [
         {
           Statblock: makev0_1StatBlock(),
@@ -47,7 +48,9 @@ describe("Legacy Encounter", () => {
     expect(updatedEncounter.Combatants).toHaveLength(1);
 
     const updatedCombatant = updatedEncounter.Combatants[0];
+
     expect(updatedCombatant.Id).toHaveLength(8);
+    expect(updatedEncounter.ActiveCombatantId).toEqual(updatedCombatant.Id);
     expect(updatedCombatant.CurrentHP).toBe(1);
   });
 });
