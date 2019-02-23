@@ -47,6 +47,7 @@ describe("Legacy Encounter", () => {
     expect(updatedEncounter.Combatants).toHaveLength(1);
 
     const updatedCombatant = updatedEncounter.Combatants[0];
+    expect(updatedCombatant.Id).toHaveLength(8);
     expect(updatedCombatant.CurrentHP).toBe(1);
   });
 });
