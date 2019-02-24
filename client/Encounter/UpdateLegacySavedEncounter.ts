@@ -3,15 +3,15 @@ import { EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 
-function updateLegacySavedCreature(savedCreature: any) {
-  if (!savedCreature.StatBlock) {
-    savedCreature.StatBlock = savedCreature["Statblock"];
+function updateLegacySavedCreature(savedCombatant: any) {
+  if (!savedCombatant.StatBlock) {
+    savedCombatant.StatBlock = savedCombatant["Statblock"];
   }
-  if (!savedCreature.Id) {
-    savedCreature.Id = probablyUniqueString();
+  if (!savedCombatant.Id) {
+    savedCombatant.Id = probablyUniqueString();
   }
-  if (savedCreature.MaxHP) {
-    savedCreature.StatBlock.HP.Value = savedCreature.MaxHP;
+  if (savedCombatant.MaxHP) {
+    savedCombatant.StatBlock.HP.Value = savedCombatant.MaxHP;
   }
 }
 
