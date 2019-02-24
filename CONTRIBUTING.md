@@ -23,20 +23,6 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 * Use camelCase for local variables and private properties.
 * Do not use "_" as a prefix for private properties.
 
-### Style
-* Use arrow functions over anonymous function expressions.
-* Only surround arrow function parameters when necessary. 
-For example, (x) => x + x is wrong but the following are correct:
-`x => x + x`
-`(x,y) => x + y`
-`<T>(x: T, y: T) => x === y`
-* Use const whenever possible.
-* Always surround loop and conditional bodies with curly braces.
-* Don't inline code, if you can help it. This includes:
-    * Don't use html `style` attributes
-    * Put JSON structures in their own file
-    * Encapsulate html in templates
-
 ## Epic Initiative
 While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.
 
