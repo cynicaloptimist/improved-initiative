@@ -23,6 +23,20 @@ describe("EncounterCommander", () => {
     combatantCommander = trackerViewModel.CombatantCommander;
   });
 
+  test("Toggle Hidden", () => {
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
+
+    const playerViewBeforeToggle = encounter.GetPlayerView();
+    expect(playerViewBeforeToggle.Combatants).toHaveLength(1);
+
+    combatantCommander.Select(combatantViewModel);
+    combatantCommander.ToggleHidden();
+    const playerView = encounter.GetPlayerView();
+
+    expect(playerView.Combatants).toHaveLength(0);
+  });
+
   test("Toggle Reveal AC", () => {
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
     const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
