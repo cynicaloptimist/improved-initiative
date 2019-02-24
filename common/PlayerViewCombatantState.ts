@@ -9,4 +9,5 @@ export interface PlayerViewCombatantState {
   Tags: TagState[];
   IsPlayerCharacter: boolean;
   ImageURL: string;
+  AC?: number;
 }
