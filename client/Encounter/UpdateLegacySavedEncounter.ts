@@ -3,7 +3,7 @@ import { EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 
-function updateLegacySavedCreature(savedCombatant: any) {
+function updateLegacySavedCombatant(savedCombatant: any) {
   if (!savedCombatant.StatBlock) {
     savedCombatant.StatBlock = savedCombatant["Statblock"];
   }
@@ -45,7 +45,7 @@ export function UpdateLegacySavedEncounter(
     RoundCounter: savedEncounter.RoundCounter
   };
 
-  updatedEncounter.Combatants.forEach(updateLegacySavedCreature);
+  updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
   updatedEncounter.ActiveCombatantId = getActiveCombatantId(savedEncounter);
 
   return updatedEncounter;
