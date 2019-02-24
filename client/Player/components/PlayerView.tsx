@@ -45,6 +45,11 @@ export class PlayerView extends React.Component<
     const footerVisible =
       this.props.settings.DisplayRoundCounter ||
       this.props.settings.DisplayTurnTimer;
+
+    const acColumnVisible = this.props.encounterState.Combatants.some(
+      c => c.AC != undefined
+    );
+
     return (
       <div className="c-player-view">
         <CustomStyles
@@ -74,6 +79,7 @@ export class PlayerView extends React.Component<
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.props.settings.DisplayPortraits}
+              acColumnVisible={acColumnVisible}
               isActive={
                 this.props.encounterState.ActiveCombatantId == combatant.Id
               }

@@ -6,6 +6,7 @@ interface PlayerViewCombatantProps {
   combatant: PlayerViewCombatantState;
   isActive: boolean;
   portraitColumnVisible: boolean;
+  acColumnVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
   suggestDamage: (combatant: PlayerViewCombatantState) => void;
@@ -53,6 +54,9 @@ export class PlayerViewCombatant extends React.Component<
             dangerouslySetInnerHTML={{ __html: this.props.combatant.HPDisplay }}
           />
         </div>
+        {this.props.acColumnVisible && (
+          <div className="combatant__ac">{this.props.combatant.AC || ""}</div>
+        )}
         <div className="combatant__tags">
           {this.props.combatant.Tags.map((tag, index) => (
             <div className="tag" key={tag.Text + index}>
