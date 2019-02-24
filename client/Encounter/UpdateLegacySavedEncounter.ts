@@ -15,25 +15,38 @@ function updateLegacySavedCreature(savedCreature: any) {
   }
 }
 
-export function UpdateLegacySavedEncounter(
-  savedEncounter: any
-): EncounterState<CombatantState> {
-  savedEncounter.Version = savedEncounter.Version || "legacy";
-  savedEncounter.Id =
-    savedEncounter.Id ||
-    AccountClient.MakeId(savedEncounter.Name || probablyUniqueString());
-  savedEncounter.Combatants =
-    savedEncounter.Combatants || savedEncounter.Creatures;
-  savedEncounter.ActiveCombatantId =
-    savedEncounter.ActiveCombatantId || savedEncounter.ActiveCreatureId;
-  savedEncounter.Path = savedEncounter.Path || "";
-
-  savedEncounter.Combatants.forEach(updateLegacySavedCreature);
+function getActiveCombatantId(savedEncounter: any): string {
+  if (savedEncounter.ActiveCombatantId) {
+    return savedEncounter.ActiveCombatantId;
+  }
 
   const legacyCombatantIndex = savedEncounter.ActiveCreatureIndex;
   if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
-    savedEncounter.ActiveCombatantId =
-      savedEncounter.Combatants[legacyCombatantIndex].Id;
+    return savedEncounter.Creatures[legacyCombatantIndex].Id;
   }
-  return savedEncounter;
+
+  return null;
+}
+
+export function UpdateLegacySavedEncounter(
+  savedEncounter: any
+): EncounterState<CombatantState> {
+  const someName = probablyUniqueString();
+
+  const updatedEncounter: EncounterState<CombatantState> = {
+    Version: savedEncounter.Version || "legacy",
+    Id:
+      savedEncounter.Id ||
+      AccountClient.MakeId(savedEncounter.Name || someName),
+    Combatants: savedEncounter.Combatants || savedEncounter.Creatures || [],
+    ActiveCombatantId: null,
+    Name: savedEncounter.Name || someName,
+    Path: savedEncounter.Path || "",
+    RoundCounter: savedEncounter.RoundCounter
+  };
+
+  updatedEncounter.Combatants.forEach(updateLegacySavedCreature);
+  updatedEncounter.ActiveCombatantId = getActiveCombatantId(savedEncounter);
+
+  return updatedEncounter;
 }
