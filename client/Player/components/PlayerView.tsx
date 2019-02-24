@@ -70,7 +70,7 @@ export class PlayerView extends React.Component<
             onApply={this.props.onSuggestDamage}
           />
         )}
-        <PlayerViewCombatantHeader showPortrait={this.hasImages()} />
+        <PlayerViewCombatantHeader portraitColumnVisible={this.hasImages()} />
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
