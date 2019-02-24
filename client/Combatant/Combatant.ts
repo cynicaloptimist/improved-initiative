@@ -27,6 +27,7 @@ export interface Combatant {
   Initiative: KnockoutObservable<number>;
   InitiativeGroup: KnockoutObservable<string>;
   Hidden: KnockoutObservable<boolean>;
+  RevealedAC: KnockoutObservable<boolean>;
 
   MaxHP: KnockoutComputed<number>;
 
@@ -121,6 +122,7 @@ export class Combatant implements Combatant {
     this.Alias(savedCombatant.Alias);
     this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
+    this.RevealedAC(savedCombatant.RevealedAC);
   }
 
   public AttachToPersistentCharacterLibrary(
