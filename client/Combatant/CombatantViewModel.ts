@@ -158,6 +158,17 @@ export class CombatantViewModel {
     this.Combatant.Encounter.QueueEmitEncounter();
   }
 
+  public ToggleRevealedAC() {
+    if (this.Combatant.RevealedAC()) {
+      this.Combatant.RevealedAC(false);
+      this.LogEvent(`${this.Name()} AC hidden in player view.`);
+    } else {
+      this.Combatant.RevealedAC(true);
+      this.LogEvent(`${this.Name()} AC revealed in player view.`);
+    }
+    this.Combatant.Encounter.QueueEmitEncounter();
+  }
+
   public RemoveTag = (tag: Tag) => {
     this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
     this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);

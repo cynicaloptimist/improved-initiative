@@ -33,6 +33,14 @@ export const BuildCombatantCommandList: (
     false
   ),
   new Command(
+    "toggle-reveal-ac",
+    "Reveal/Hide AC in Player View",
+    c.ToggleRevealedAC,
+    "alt-h",
+    "shield-alt",
+    false
+  ),
+  new Command(
     "edit-statblock",
     "Edit Statblock",
     c.EditStatBlock,

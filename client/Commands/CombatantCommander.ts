@@ -408,6 +408,14 @@ export class CombatantCommander {
     this.SelectedCombatants().forEach(c => c.ToggleHidden());
   };
 
+  public ToggleRevealedAC = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
+    this.SelectedCombatants().forEach(c => c.ToggleRevealedAC());
+  };
+
   public EditStatBlock = () => {
     if (!this.HasSelected()) {
       return;
