@@ -5,7 +5,7 @@ import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantSta
 interface PlayerViewCombatantProps {
   combatant: PlayerViewCombatantState;
   isActive: boolean;
-  showPortraitColumn: boolean;
+  portraitColumnVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
   suggestDamage: (combatant: PlayerViewCombatantState) => void;
@@ -27,7 +27,7 @@ export class PlayerViewCombatant extends React.Component<
         <div className="combatant__initiative">
           {this.props.combatant.Initiative}
         </div>
-        {this.props.showPortraitColumn && (
+        {this.props.portraitColumnVisible && (
           <div className="combatant__portrait">
             {this.props.combatant.ImageURL && (
               <img

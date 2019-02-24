@@ -73,7 +73,7 @@ export class PlayerView extends React.Component<
               suggestDamage={this.suggestDamage}
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
-              showPortraitColumn={this.props.settings.DisplayPortraits}
+              portraitColumnVisible={this.props.settings.DisplayPortraits}
               isActive={
                 this.props.encounterState.ActiveCombatantId == combatant.Id
               }
