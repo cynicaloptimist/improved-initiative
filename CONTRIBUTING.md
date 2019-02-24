@@ -10,11 +10,10 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 ### General
 * Open pull requests against the `development` branch.
 * Link your pull request to an open [issue](https://github.com/cynicaloptimist/improved-initiative/labels/help%20wanted) with the `help wanted` tag.
-* If there is no open issue for your PR, open one first for discussion and approval before submitting any code.
 * Include at least one test for your code.
-* When appropriate, encapsulate your code in its own class, in its own file.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
-* Ensure your PR is deploy-ready, as `development` auto-deploys to the [public dev server](http://improved-initiative-dev.azurewebsites.net/)
+
+I'm happy to provide guidance on how to approach any open issue.
 
 ### Names
 * Use whole words, not abbreviations, in names.
