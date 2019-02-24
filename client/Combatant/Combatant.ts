@@ -77,6 +77,7 @@ export class Combatant implements Combatant {
   public InitiativeGroup = ko.observable<string>(null);
   public StatBlock = ko.observable<StatBlock>();
   public Hidden = ko.observable(false);
+  public RevealedAC = ko.observable(false);
 
   public IndexLabel: number;
   public MaxHP: KnockoutComputed<number>;

@@ -10,6 +10,9 @@ function updateLegacySavedCombatant(savedCombatant: any) {
   if (!savedCombatant.Id) {
     savedCombatant.Id = probablyUniqueString();
   }
+  if (!savedCombatant.RevealedAC) {
+    savedCombatant.RevealedAC = false;
+  }
   if (savedCombatant.MaxHP) {
     savedCombatant.StatBlock.HP.Value = savedCombatant.MaxHP;
   }

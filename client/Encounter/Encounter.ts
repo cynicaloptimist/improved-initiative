@@ -208,6 +208,7 @@ export class Encounter {
       CurrentHP: statBlock.HP.Value,
       TemporaryHP: 0,
       Hidden: hideOnAdd,
+      RevealedAC: false,
       Initiative: 0,
       Tags: [],
       InterfaceVersion: process.env.VERSION
@@ -244,6 +245,7 @@ export class Encounter {
       CurrentHP: persistentCharacter.CurrentHP,
       TemporaryHP: 0,
       Hidden: hideOnAdd,
+      RevealedAC: false,
       Initiative: 0,
       Tags: [],
       InterfaceVersion: persistentCharacter.Version
@@ -601,6 +603,7 @@ export class Encounter {
           DurationCombatantId: t.DurationCombatantId
         })),
       Hidden: c.Hidden(),
+      RevealedAC: c.RevealedAC(),
       InterfaceVersion: process.env.VERSION
     };
   };
