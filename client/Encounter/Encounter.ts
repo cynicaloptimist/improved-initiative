@@ -13,7 +13,7 @@ import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Tag } from "../Combatant/Tag";
-import { ToStaticViewModel } from "../Combatant/ToStaticViewModel";
+import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
 import { env } from "../Environment";
 import {
   PersistentCharacterLibrary,
@@ -579,7 +579,9 @@ export class Encounter {
       }
     }
 
-    return combatants.map<PlayerViewCombatantState>(c => ToStaticViewModel(c));
+    return combatants.map<PlayerViewCombatantState>(c =>
+      ToPlayerViewCombatantState(c)
+    );
   }
 
   private getCombatantState = (c: Combatant): CombatantState => {

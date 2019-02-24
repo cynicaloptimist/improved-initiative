@@ -3,7 +3,7 @@ import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { Combatant } from "./Combatant";
 
-export function ToStaticViewModel(
+export function ToPlayerViewCombatantState(
   combatant: Combatant
 ): PlayerViewCombatantState {
   const sendImage = env.HasEpicInitiative;
