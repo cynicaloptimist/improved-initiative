@@ -52,5 +52,6 @@ describe("Legacy Encounter", () => {
     expect(updatedCombatant.Id).toHaveLength(8);
     expect(updatedEncounter.ActiveCombatantId).toEqual(updatedCombatant.Id);
     expect(updatedCombatant.CurrentHP).toBe(1);
+    expect(updatedCombatant.RevealedAC).toBe(false);
   });
 });
