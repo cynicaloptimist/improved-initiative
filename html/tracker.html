@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html
-  encounterId="{{encounterId}}"
-  postedEncounter="{{postedEncounter}}"
-  hasStorage="{{hasStorage}}"
-  hasEpicInitiative="{{hasEpicInitiative}}"
-  isLoggedIn="{{isLoggedIn}}"
-  baseUrl="{{baseUrl}}"
+  encounterId="{{ encounterId }}"
+  postedEncounter="{{ postedEncounter }}"
+  hasStorage="{{ hasStorage }}"
+  hasEpicInitiative="{{ hasEpicInitiative }}"
+  isLoggedIn="{{ isLoggedIn }}"
+  baseUrl="{{ baseUrl }}"
 >
   <head>
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{rootDirectory}}/css/improved-initiative.{{appVersion}}.css"
+      href="{{ rootDirectory }}/css/improved-initiative.{{ appVersion }}.css"
     />
     <meta
       name="description"
@@ -31,11 +31,11 @@
     </script>
     <script
       type="text/javascript"
-      src="{{rootDirectory}}/js/dependencies.js"
+      src="{{ rootDirectory }}/js/dependencies.js"
     ></script>
     <script
       type="text/javascript"
-      src="{{rootDirectory}}/js/ImprovedInitiative.{{appVersion}}.js"
+      src="{{ rootDirectory }}/js/ImprovedInitiative.{{ appVersion }}.js"
     ></script>
   </head>
 
@@ -115,11 +115,9 @@
       ></div>
       <!-- /ko -->
       <!-- ko ifnot: LibrariesVisible -->
-      <div
-        class="active-combatant"
-        data-bind="visible: Encounter.ActiveCombatant"
-      >
+      <div class="active-combatant">
         <h2>Active Combatant</h2>
+        <!-- ko if: Encounter.ActiveCombatant -->
         <div
           class="combatant-details__wrapper"
           style="flex-shrink: 1"
@@ -127,6 +125,13 @@
                 component: ActiveCombatantDetails
             }"
         ></div>
+        <!-- /ko -->
+        <!-- ko ifnot: Encounter.ActiveCombatant -->
+        <p class="start-encounter-hint">
+          Click [ <span class="fas fa-play"></span> Start Encounter ] to roll
+          initiative. Active creature will be displayed here.
+        </p>
+        <!-- /ko -->
       </div>
       <!-- /ko -->
     </div>
