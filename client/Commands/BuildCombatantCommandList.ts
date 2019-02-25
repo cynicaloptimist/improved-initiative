@@ -42,8 +42,8 @@ export const BuildCombatantCommandList: (
   ),
   new Command(
     "edit-statblock",
-    "Edit Statblock",
-    c.EditStatBlock,
+    "Edit Unique Statblock",
+    c.EditOwnStatBlock,
     "e",
     "edit",
     false

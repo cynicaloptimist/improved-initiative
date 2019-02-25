@@ -416,7 +416,7 @@ export class CombatantCommander {
     this.SelectedCombatants().forEach(c => c.ToggleRevealedAC());
   };
 
-  public EditStatBlock = () => {
+  public EditOwnStatBlock = () => {
     if (!this.HasSelected()) {
       return;
     }
