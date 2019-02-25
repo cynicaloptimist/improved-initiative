@@ -2,7 +2,7 @@ export const tips = [
   "You can set keybindings and explore advanced commands on the 'Commands' tab.",
   "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
   "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
-  "You can follow your encounter on any device with the player view URL.",
+  "You can follow your encounter on any device with the Player View URL.",
   "The Edit Unique Statblock Combatant command lets you make ad-hoc changes to a single creature.",
   "You can restore hit points by applying negative damage to a combatant.",
   "Temporary hit points obey the 5th edition rules- applying temporary hitpoints will ignore temporary hit points a creature already has.",
