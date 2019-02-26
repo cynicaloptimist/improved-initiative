@@ -56,10 +56,13 @@ const combatantInitiativeField = (combatant: Combatant) => {
       combatant.StatBlock().InitiativeAdvantage ||
       combatant.StatBlock().InitiativeSpecialRoll == "advantage"
     ) {
-      advantageIndicator = "[adv]";
+      advantageIndicator = " [advantage]";
     }
     if (combatant.StatBlock().InitiativeSpecialRoll == "disadvantage") {
-      advantageIndicator = "[dadv]";
+      advantageIndicator = " [disadvantage]";
+    }
+    if (combatant.StatBlock().InitiativeSpecialRoll == "take-ten") {
+      advantageIndicator = " [take 10]";
     }
   }
 
