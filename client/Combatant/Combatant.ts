@@ -186,14 +186,20 @@ export class Combatant implements Combatant {
   public GetInitiativeRoll: () => number = () => {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+
+    let initiativeSpecialRoll = undefined;
+    if (!sideInitiative) {
+      if (this.StatBlock().InitiativeAdvantage) {
+        initiativeSpecialRoll = "advantage";
+      }
+
+      initiativeSpecialRoll = this.StatBlock().InitiativeSpecialRoll;
+    }
+
     const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
-    const initiativeAdvantage =
-      !sideInitiative && this.StatBlock().InitiativeAdvantage
-        ? "advantage"
-        : null;
     return this.Encounter.Rules.AbilityCheck(
       initiativeBonus,
-      initiativeAdvantage
+      initiativeSpecialRoll
     );
   };
 
