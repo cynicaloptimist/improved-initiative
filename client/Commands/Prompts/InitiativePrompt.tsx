@@ -50,19 +50,19 @@ const combatantInitiativeField = (combatant: Combatant) => {
     ? 0
     : toModifierString(combatant.InitiativeBonus);
 
-  let advantageIndicator = "";
+  let specialRollIndicator = "";
   if (!sideInitiative) {
     if (
       combatant.StatBlock().InitiativeAdvantage ||
       combatant.StatBlock().InitiativeSpecialRoll == "advantage"
     ) {
-      advantageIndicator = " [advantage]";
+      specialRollIndicator = " [advantage]";
     }
     if (combatant.StatBlock().InitiativeSpecialRoll == "disadvantage") {
-      advantageIndicator = " [disadvantage]";
+      specialRollIndicator = " [disadvantage]";
     }
     if (combatant.StatBlock().InitiativeSpecialRoll == "take-ten") {
-      advantageIndicator = " [take 10]";
+      specialRollIndicator = " [take 10]";
     }
   }
 
@@ -71,7 +71,7 @@ const combatantInitiativeField = (combatant: Combatant) => {
     <li key={combatant.Id}>
       <span
         className={className}
-      >{`${combatant.DisplayName()} (${initiativeBonus})${advantageIndicator}: `}</span>
+      >{`${combatant.DisplayName()} (${initiativeBonus})${specialRollIndicator}: `}</span>
       <input
         className="response"
         type="number"
