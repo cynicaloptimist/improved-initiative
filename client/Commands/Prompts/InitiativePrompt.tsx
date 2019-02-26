@@ -49,8 +49,19 @@ const combatantInitiativeField = (combatant: Combatant) => {
   const initiativeBonus = sideInitiative
     ? 0
     : toModifierString(combatant.InitiativeBonus);
-  const advantageIndicator =
-    !sideInitiative && combatant.StatBlock().InitiativeAdvantage ? "[adv]" : "";
+
+  let advantageIndicator = "";
+  if (!sideInitiative) {
+    if (
+      combatant.StatBlock().InitiativeAdvantage ||
+      combatant.StatBlock().InitiativeSpecialRoll == "advantage"
+    ) {
+      advantageIndicator = "[adv]";
+    }
+    if (combatant.StatBlock().InitiativeSpecialRoll == "disadvantage") {
+      advantageIndicator = "[dadv]";
+    }
+  }
 
   const className = combatant.InitiativeGroup() !== null ? "fas fa-link" : "";
   return (
