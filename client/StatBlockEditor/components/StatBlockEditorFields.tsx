@@ -37,8 +37,13 @@ export const InitiativeField = () => (
         id="InitiativeModifier"
         name="InitiativeModifier"
       />
-      <label className="c-statblock-editor__initiative-advantage">
-        Roll with Advantage <Field type="checkbox" name="InitiativeAdvantage" />
+      <label className="c-statblock-editor__initiative-special-roll">
+        <Field component="select" name="InitiativeSpecialRoll">
+          <option value="">-</option>
+          <option value="advantage">Roll with Advantage</option>
+          <option value="disadvantage">Roll with Disadvantage</option>
+          <option value="take-ten">Take 10</option>
+        </Field>
       </label>
     </div>
   </div>
