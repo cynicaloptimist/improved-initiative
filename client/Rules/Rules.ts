@@ -4,7 +4,7 @@ export interface IRules {
   GetModifierFromScore: (attribute: number) => number;
   AbilityCheck: (
     mod?: number,
-    specialRoll?: "advantage" | "disadvantage" | "take-10"
+    specialRoll?: "advantage" | "disadvantage" | "take-ten"
   ) => number;
   EnemyHPTransparency: string;
 }
@@ -15,7 +15,7 @@ export class DefaultRules implements IRules {
   };
   public AbilityCheck = (
     mod = 0,
-    specialRoll?: "advantage" | "disadvantage" | "take-10"
+    specialRoll?: "advantage" | "disadvantage" | "take-ten"
   ) => {
     if (specialRoll == "advantage") {
       return _.max([
@@ -31,7 +31,7 @@ export class DefaultRules implements IRules {
       ]);
     }
 
-    if (specialRoll == "take-10") {
+    if (specialRoll == "take-ten") {
       return 10 + mod;
     }
 
