@@ -2,7 +2,6 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
-import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
@@ -184,65 +183,5 @@ describe("PlayerView State", () => {
     encounter.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
-  });
-});
-
-describe("PlayerViewCombatantState HP Display", () => {
-  let encounter: Encounter;
-
-  beforeEach(() => {
-    InitializeSettings();
-    encounter = buildEncounter();
-  });
-
-  test("Player HP is displayed", () => {
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" },
-      Player: "player"
-    });
-    encounter.StartEncounter();
-    const playerViewState = encounter.GetPlayerView();
-    expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
-  });
-
-  test("Creature HP is obfuscated", () => {
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    const playerViewState = encounter.GetPlayerView();
-    expect(playerViewState.Combatants[0].HPDisplay).toBe(
-      "<span class='healthyHP'>Healthy</span>"
-    );
-  });
-
-  test("Creature HP setting actual HP", () => {
-    const settings = CurrentSettings();
-    settings.PlayerView.MonsterHPVerbosity = HpVerbosityOption.ActualHP;
-
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    const playerViewState = encounter.GetPlayerView();
-    expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
-  });
-
-  test("Player HP setting obfuscated HP", () => {
-    const settings = CurrentSettings();
-    settings.PlayerView.PlayerHPVerbosity = HpVerbosityOption.ColoredLabel;
-
-    encounter.AddCombatantFromStatBlock({
-      ...StatBlock.Default(),
-      HP: { Value: 10, Notes: "" }
-    });
-    encounter.StartEncounter();
-    const playerViewState = encounter.GetPlayerView();
-    expect(playerViewState.Combatants[0].HPDisplay).toBe(
-      "<span class='healthyHP'>Healthy</span>"
-    );
   });
 });
