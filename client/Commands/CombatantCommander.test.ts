@@ -4,7 +4,7 @@ import { InitializeSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { CombatantCommander } from "./CombatantCommander";
 
-describe("EncounterCommander", () => {
+describe("CombatantCommander", () => {
   let encounter: Encounter;
   let combatantCommander: CombatantCommander;
   let trackerViewModel: TrackerViewModel;
