@@ -1,9 +1,9 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import _ = require("lodash");
 import {
   HpVerbosityOption,
-  HpVerbosityOptions,
   PlayerViewSettings
 } from "../../common/PlayerViewSettings";
 import { AccountClient } from "../Account/AccountClient";
@@ -14,7 +14,7 @@ import { Libraries } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
 import {
   AutoGroupInitiativeOption,
-  AutoGroupInitiativeOptions,
+  AutoRerollInitiativeOption,
   CurrentSettings,
   Settings
 } from "./Settings";
@@ -38,8 +38,10 @@ export class SettingsViewModel {
   public DisplayTurnTimer: KnockoutObservable<boolean>;
   public DisplayRoundCounter: KnockoutObservable<boolean>;
   public AutoCheckConcentration: KnockoutObservable<boolean>;
-  public AutoGroupInitiativeOptions: string[];
+  public AutoGroupInitiativeOptions: AutoGroupInitiativeOption[];
   public AutoGroupInitiative: KnockoutObservable<AutoGroupInitiativeOption>;
+  public AutoRerollInitiativeOptions: AutoRerollInitiativeOption[];
+  public AutoRerollInitiative: KnockoutObservable<AutoRerollInitiativeOption>;
   public AllowNegativeHP: KnockoutObservable<boolean>;
   public HideMonstersOutsideEncounter: KnockoutObservable<boolean>;
   public HpVerbosityOptions: HpVerbosityOption[];
@@ -49,10 +51,7 @@ export class SettingsViewModel {
   public CurrentTab = ko.observable<string>("about");
   public RollHp: KnockoutObservable<boolean>;
 
-  public epicInitiativeSettings: React.ComponentElement<
-    any,
-    EpicInitiativeSettings
-  >;
+  public epicInitiativeSettings: React.ReactElement<EpicInitiativeSettings>;
   private playerViewSettings: PlayerViewSettings;
 
   public SelectTab = (tabName: string) => () => this.CurrentTab(tabName);
@@ -72,7 +71,8 @@ export class SettingsViewModel {
         AllowNegativeHP: this.AllowNegativeHP(),
         AutoCheckConcentration: this.AutoCheckConcentration(),
         RollMonsterHp: this.RollHp(),
-        AutoGroupInitiative: this.AutoGroupInitiative()
+        AutoGroupInitiative: this.AutoGroupInitiative(),
+        AutoRerollInitiative: this.AutoRerollInitiative()
       },
       TrackerView: {
         DisplayDifficulty: this.DisplayDifficulty(),
@@ -132,10 +132,20 @@ export class SettingsViewModel {
     this.AutoCheckConcentration = ko.observable(
       currentSettings.Rules.AutoCheckConcentration
     );
+
     this.AutoGroupInitiative = ko.observable(
       currentSettings.Rules.AutoGroupInitiative
     );
-    this.AutoGroupInitiativeOptions = AutoGroupInitiativeOptions;
+    this.AutoGroupInitiativeOptions = _.values<
+      typeof AutoGroupInitiativeOption
+    >(AutoGroupInitiativeOption);
+
+    this.AutoRerollInitiative = ko.observable(
+      currentSettings.Rules.AutoRerollInitiative
+    );
+    this.AutoRerollInitiativeOptions = _.values<
+      typeof AutoRerollInitiativeOption
+    >(AutoRerollInitiativeOption);
 
     this.DisplayRoundCounter = ko.observable(
       currentSettings.TrackerView.DisplayRoundCounter
@@ -153,7 +163,9 @@ export class SettingsViewModel {
     this.PlayerHpVerbosity = ko.observable(
       currentSettings.PlayerView.PlayerHPVerbosity
     );
-    this.HpVerbosityOptions = HpVerbosityOptions;
+    this.HpVerbosityOptions = _.values<typeof HpVerbosityOption>(
+      HpVerbosityOption
+    );
     this.HideMonstersOutsideEncounter = ko.observable(
       currentSettings.PlayerView.HideMonstersOutsideEncounter
     );
@@ -174,24 +186,16 @@ export class SettingsViewModel {
     this.NextTip = cycleTipIndex.bind(1);
     this.PreviousTip = cycleTipIndex.bind(-1);
 
-    this.createEpicInitiativeSettingsComponent(currentSettings);
-  }
-
-  private createEpicInitiativeSettingsComponent(currentSettings: Settings) {
     this.playerViewSettings = currentSettings.PlayerView;
-
-    const customCSSEditorProps: EpicInitiativeSettingsProps = {
-      playerViewSettings: this.playerViewSettings
-    };
-
-    this.epicInitiativeSettings = React.createElement(
-      EpicInitiativeSettings,
-      customCSSEditorProps
+    this.epicInitiativeSettings = (
+      <EpicInitiativeSettings playerViewSettings={this.playerViewSettings} />
     );
   }
 
-  public accountSettings = React.createElement(AccountSettings, {
-    accountClient: new AccountClient(),
-    libraries: this.libraries
-  });
+  public accountSettings = (
+    <AccountSettings
+      accountClient={new AccountClient()}
+      libraries={this.libraries}
+    />
+  );
 }

@@ -12,11 +12,20 @@
     class="combatant__hp"
     data-bind="click: EditHP, clickBubble:false, text: HP, style: { color: GetHPColor() }"
   ></span>
+  <!-- ko ifnot: Combatant.RevealedAC -->
   <span
     class="combatant__ac"
     title="Armor Class"
     data-bind="text: Combatant.AC"
-  ></span>
+  >
+  </span>
+  <!-- /ko -->
+  <!-- ko if: Combatant.RevealedAC -->
+  <span class="combatant__ac" title="Armor Class (revealed in Player View)">
+    <span data-bind="text: Combatant.AC"></span>
+    <span class="combatant__ac--revealed-badge fas fa-eye"></span>
+  </span>
+  <!-- /ko -->
 </span>
 <span class="combatant__rightsection">
   <span class="combatant__tags">

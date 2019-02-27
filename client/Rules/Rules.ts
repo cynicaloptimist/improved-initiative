@@ -4,7 +4,7 @@ export interface IRules {
   GetModifierFromScore: (attribute: number) => number;
   AbilityCheck: (
     mod?: number,
-    advantageType?: "advantage" | "disadvantage"
+    specialRoll?: "advantage" | "disadvantage" | "take-ten"
   ) => number;
   EnemyHPTransparency: string;
 }
@@ -15,20 +15,26 @@ export class DefaultRules implements IRules {
   };
   public AbilityCheck = (
     mod = 0,
-    advantageType?: "advantage" | "disadvantage"
+    specialRoll?: "advantage" | "disadvantage" | "take-ten"
   ) => {
-    if (advantageType == "advantage") {
+    if (specialRoll == "advantage") {
       return _.max([
         Math.ceil(Math.random() * 20) + mod,
         Math.ceil(Math.random() * 20) + mod
       ]);
     }
-    if (advantageType == "disadvantage") {
+
+    if (specialRoll == "disadvantage") {
       return _.min([
         Math.ceil(Math.random() * 20) + mod,
         Math.ceil(Math.random() * 20) + mod
       ]);
     }
+
+    if (specialRoll == "take-ten") {
+      return 10 + mod;
+    }
+
     return Math.ceil(Math.random() * 20) + mod;
   };
   public EnemyHPTransparency = "whenBloodied";

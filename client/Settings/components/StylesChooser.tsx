@@ -107,7 +107,10 @@ export class StylesChooser extends React.Component<
           <h4>Other Styles</h4>
           <p>
             <span style={{ fontFamily: this.state.styles.font }}>Font:</span>{" "}
-            <input onBlur={this.handleFontChange} />
+            <input
+              defaultValue={this.state.styles.font}
+              onBlur={this.handleFontChange}
+            />
           </p>
           <p>
             Background Image URL:{" "}

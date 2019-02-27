@@ -49,33 +49,72 @@ describe("EncounterCommander", () => {
     expect(startEncounter).toBeCalled();
   });
 
-  test("CleanEncounter", async () => {
+  test("CleanEncounter", async done => {
     const persistentCharacter = InitializeCharacter({
       ...StatBlock.Default(),
       Player: "player"
     });
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
     await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
-      UpdatePersistentCharacter: async () => {}
+      UpdatePersistentCharacter: async () => {
+        return;
+      }
     });
 
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.CleanEncounter();
     expect(encounter.Combatants().length).toBe(1);
+    return done();
   });
 
-  test("ClearEncounter", async () => {
+  test("ClearEncounter", async done => {
     const persistentCharacter = InitializeCharacter({
       ...StatBlock.Default(),
       Player: "player"
     });
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
     await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
-      UpdatePersistentCharacter: async () => {}
+      UpdatePersistentCharacter: async () => {
+        return;
+      }
     });
 
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.ClearEncounter();
     expect(encounter.Combatants().length).toBe(0);
+    return done();
+  });
+
+  test("Restore Player Character HP", async done => {
+    const persistentCharacter = InitializeCharacter({
+      ...StatBlock.Default(),
+      Player: "player"
+    });
+
+    const npc = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const pc = await encounter.AddCombatantFromPersistentCharacter(
+      persistentCharacter,
+      {
+        UpdatePersistentCharacter: async () => {
+          return;
+        }
+      }
+    );
+
+    expect(npc.CurrentHP()).toBe(1);
+    expect(pc.CurrentHP()).toBe(1);
+
+    npc.ApplyDamage(1);
+    pc.ApplyDamage(1);
+
+    expect(npc.CurrentHP()).toBe(0);
+    expect(pc.CurrentHP()).toBe(0);
+
+    encounterCommander.RestoreAllPlayerCharacterHP();
+
+    expect(npc.CurrentHP()).toBe(0);
+    expect(pc.CurrentHP()).toBe(1);
+
+    return done();
   });
 });

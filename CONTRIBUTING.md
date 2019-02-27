@@ -10,11 +10,10 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 ### General
 * Open pull requests against the `development` branch.
 * Link your pull request to an open [issue](https://github.com/cynicaloptimist/improved-initiative/labels/help%20wanted) with the `help wanted` tag.
-* If there is no open issue for your PR, open one first for discussion and approval before submitting any code.
 * Include at least one test for your code.
-* When appropriate, encapsulate your code in its own class, in its own file.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
-* Ensure your PR is deploy-ready, as `development` auto-deploys to the [public dev server](http://improved-initiative-dev.azurewebsites.net/)
+
+I'm happy to provide guidance on how to approach any open issue.
 
 ### Names
 * Use whole words, not abbreviations, in names.
@@ -22,20 +21,6 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 * Do not use "I" as a prefix for interface names.
 * Use camelCase for local variables and private properties.
 * Do not use "_" as a prefix for private properties.
-
-### Style
-* Use arrow functions over anonymous function expressions.
-* Only surround arrow function parameters when necessary. 
-For example, (x) => x + x is wrong but the following are correct:
-`x => x + x`
-`(x,y) => x + y`
-`<T>(x: T, y: T) => x === y`
-* Use const whenever possible.
-* Always surround loop and conditional bodies with curly braces.
-* Don't inline code, if you can help it. This includes:
-    * Don't use html `style` attributes
-    * Put JSON structures in their own file
-    * Encapsulate html in templates
 
 ## Epic Initiative
 While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.

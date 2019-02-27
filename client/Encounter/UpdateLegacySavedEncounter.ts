@@ -1,34 +1,55 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { probablyUniqueString } from "../../common/Toolbox";
+import { AccountClient } from "../Account/AccountClient";
 
-function updateLegacySavedCreature(savedCreature: any) {
-  if (!savedCreature.StatBlock) {
-    savedCreature.StatBlock = savedCreature["Statblock"];
+function updateLegacySavedCombatant(savedCombatant: any) {
+  if (!savedCombatant.StatBlock) {
+    savedCombatant.StatBlock = savedCombatant["Statblock"];
   }
-  if (!savedCreature.Id) {
-    savedCreature.Id = probablyUniqueString();
+  if (!savedCombatant.Id) {
+    savedCombatant.Id = probablyUniqueString();
   }
-  if (savedCreature.MaxHP) {
-    savedCreature.StatBlock.HP.Value = savedCreature.MaxHP;
+  if (!savedCombatant.RevealedAC) {
+    savedCombatant.RevealedAC = false;
   }
+  if (savedCombatant.MaxHP) {
+    savedCombatant.StatBlock.HP.Value = savedCombatant.MaxHP;
+  }
+}
+
+function getActiveCombatantId(savedEncounter: any): string {
+  if (savedEncounter.ActiveCombatantId) {
+    return savedEncounter.ActiveCombatantId;
+  }
+
+  const legacyCombatantIndex = savedEncounter.ActiveCreatureIndex;
+  if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
+    return savedEncounter.Creatures[legacyCombatantIndex].Id;
+  }
+
+  return null;
 }
 
 export function UpdateLegacySavedEncounter(
   savedEncounter: any
 ): EncounterState<CombatantState> {
-  savedEncounter.Combatants =
-    savedEncounter.Combatants || savedEncounter.Creatures;
-  savedEncounter.ActiveCombatantId =
-    savedEncounter.ActiveCombatantId || savedEncounter.ActiveCreatureId;
-  savedEncounter.Path = savedEncounter.Path || "";
+  const someName = probablyUniqueString();
 
-  savedEncounter.Combatants.forEach(updateLegacySavedCreature);
+  const updatedEncounter: EncounterState<CombatantState> = {
+    Version: savedEncounter.Version || "legacy",
+    Id:
+      savedEncounter.Id ||
+      AccountClient.MakeId(savedEncounter.Name || someName),
+    Combatants: savedEncounter.Combatants || savedEncounter.Creatures || [],
+    ActiveCombatantId: null,
+    Name: savedEncounter.Name || someName,
+    Path: savedEncounter.Path || "",
+    RoundCounter: savedEncounter.RoundCounter
+  };
 
-  const legacyCombatantIndex = savedEncounter.ActiveCreatureIndex;
-  if (legacyCombatantIndex !== undefined && legacyCombatantIndex != -1) {
-    savedEncounter.ActiveCombatantId =
-      savedEncounter.Combatants[legacyCombatantIndex].Id;
-  }
-  return savedEncounter;
+  updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
+  updatedEncounter.ActiveCombatantId = getActiveCombatantId(savedEncounter);
+
+  return updatedEncounter;
 }

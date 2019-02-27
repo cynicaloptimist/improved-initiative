@@ -3,7 +3,7 @@ import * as io from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
-import { PlayerViewModel } from "./PlayerViewModel";
+import { ReactPlayerView } from "./Player/ReactPlayerView";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
@@ -22,9 +22,12 @@ $(() => {
   }
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
-    let playerViewModel = new PlayerViewModel(io());
-    playerViewModel.LoadEncounterFromServer(encounterId);
-    ko.applyBindings(playerViewModel, document.body);
+    const playerView = new ReactPlayerView(
+      document.getElementById("playerview__container"),
+      encounterId
+    );
+    playerView.LoadEncounterFromServer();
+    playerView.ConnectToSocket(io());
   }
   if ($("#landing").length) {
     let launcherViewModel = new LauncherViewModel();

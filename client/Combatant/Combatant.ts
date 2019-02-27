@@ -4,10 +4,7 @@ import { CombatantState } from "../../common/CombatantState";
 import { AbilityScores, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
-import {
-  PersistentCharacterLibrary,
-  PersistentCharacterUpdater
-} from "../Library/PersistentCharacterLibrary";
+import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -30,6 +27,7 @@ export interface Combatant {
   Initiative: KnockoutObservable<number>;
   InitiativeGroup: KnockoutObservable<string>;
   Hidden: KnockoutObservable<boolean>;
+  RevealedAC: KnockoutObservable<boolean>;
 
   MaxHP: KnockoutComputed<number>;
 
@@ -80,6 +78,7 @@ export class Combatant implements Combatant {
   public InitiativeGroup = ko.observable<string>(null);
   public StatBlock = ko.observable<StatBlock>();
   public Hidden = ko.observable(false);
+  public RevealedAC = ko.observable(false);
 
   public IndexLabel: number;
   public MaxHP: KnockoutComputed<number>;
@@ -123,6 +122,7 @@ export class Combatant implements Combatant {
     this.Alias(savedCombatant.Alias);
     this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
+    this.RevealedAC(savedCombatant.RevealedAC);
   }
 
   public AttachToPersistentCharacterLibrary(
@@ -186,14 +186,20 @@ export class Combatant implements Combatant {
   public GetInitiativeRoll: () => number = () => {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+
+    let initiativeSpecialRoll = undefined;
+    if (!sideInitiative) {
+      if (this.StatBlock().InitiativeAdvantage) {
+        initiativeSpecialRoll = "advantage";
+      }
+
+      initiativeSpecialRoll = this.StatBlock().InitiativeSpecialRoll;
+    }
+
     const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
-    const initiativeAdvantage =
-      !sideInitiative && this.StatBlock().InitiativeAdvantage
-        ? "advantage"
-        : null;
     return this.Encounter.Rules.AbilityCheck(
       initiativeBonus,
-      initiativeAdvantage
+      initiativeSpecialRoll
     );
   };
 

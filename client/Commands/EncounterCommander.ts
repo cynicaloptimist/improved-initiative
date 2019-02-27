@@ -8,7 +8,9 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
+import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
+import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {
   constructor(private tracker: TrackerViewModel) {}
@@ -32,11 +34,17 @@ export class EncounterCommander {
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
-  public LaunchPlayerWindow = () => {
-    window.open(`/p/${this.tracker.Encounter.EncounterId}`, "Player View");
+  public LaunchPlayerView = () => {
+    const prompt = new PlayerViewPrompt(this.tracker.Encounter.EncounterId);
+    this.tracker.PromptQueue.Add(prompt);
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });
+  };
+
+  public ToggleFullScreen = () => {
+    ToggleFullscreen();
+    return false;
   };
 
   public ShowSettings = () => {
@@ -141,6 +149,15 @@ export class EncounterCommander {
     return false;
   };
 
+  public RestoreAllPlayerCharacterHP = () => {
+    const playerCharacters = this.tracker.Encounter.Combatants().filter(
+      c => c.IsPlayerCharacter
+    );
+    playerCharacters.forEach(pc => pc.CurrentHP(pc.MaxHP()));
+    this.tracker.EventLog.AddEvent("All player character HP was restored.");
+    Metrics.TrackEvent("AllPlayerCharacterHPRestored");
+  };
+
   public LoadEncounter = (legacySavedEncounter: {}) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
     const nonPlayerCombatants = savedEncounter.Combatants.filter(
@@ -178,7 +195,8 @@ export class EncounterCommander {
       });
     }
 
-    this.tracker.Encounter.NextTurn();
+    this.tracker.Encounter.NextTurn(this.RerollInitiative);
+
     const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Start of turn for ${turnStartCombatant.DisplayName()}.`

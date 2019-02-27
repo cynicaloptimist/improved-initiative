@@ -61,11 +61,27 @@ export const BuildEncounterCommandList = (
     false
   ),
   new Command(
+    "restore-all-player-character-hp",
+    "Restore all Player Character HP",
+    c.RestoreAllPlayerCharacterHP,
+    "alt+shift+t",
+    "clinic-medical",
+    false
+  ),
+  new Command(
     "player-window",
-    "Show Player Window",
-    c.LaunchPlayerWindow,
+    "Launch Player View",
+    c.LaunchPlayerView,
     "alt+w",
     "users"
+  ),
+  new Command(
+    "toggle-full-screen",
+    "Toggle Full Screen",
+    c.ToggleFullScreen,
+    "f11",
+    "expand",
+    false
   ),
   new Command("next-turn", "Next Turn", c.NextTurn, "n", "step-forward"),
   new Command(

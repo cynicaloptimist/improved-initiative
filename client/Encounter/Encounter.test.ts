@@ -24,6 +24,22 @@ describe("Encounter", () => {
     expect(encounter.State()).toBe("inactive");
   });
 
+  test("NextTurn changes the active combatant and will return to the top of the initiative order", () => {
+    const combatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    combatant1.Initiative(10);
+    combatant2.Initiative(5);
+    encounter.StartEncounter();
+
+    const promptReroll = jest.fn();
+    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[0]);
+    encounter.NextTurn(promptReroll);
+    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[1]);
+    encounter.NextTurn(promptReroll);
+    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[0]);
+    expect(promptReroll).not.toBeCalled();
+  });
+
   describe("Initiative Ordering", () => {
     test("By roll", () => {
       const slow = encounter.AddCombatantFromStatBlock(StatBlock.Default());
@@ -82,7 +98,7 @@ describe("Encounter", () => {
     });
   });
 
-  test("Active combatant stays at top of order", () => {
+  test("ActiveCombatantOnTop shows player view combatants in shifted order", () => {
     const settings = CurrentSettings();
     settings.PlayerView.ActiveCombatantOnTop = true;
 
@@ -99,7 +115,7 @@ describe("Encounter", () => {
     );
 
     for (let i = 0; i < 5; i++) {
-      encounter.NextTurn();
+      encounter.NextTurn(jest.fn());
       expect(encounter.GetPlayerView().Combatants[0].Id).toBe(
         encounter.ActiveCombatant().Id
       );

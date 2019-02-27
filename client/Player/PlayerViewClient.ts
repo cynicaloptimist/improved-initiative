@@ -1,6 +1,6 @@
 import { EncounterState } from "../../common/EncounterState";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
-import { StaticCombatantViewModel } from "../Combatant/StaticCombatantViewModel";
 
 export class PlayerViewClient {
   constructor(private socket: SocketIOClient.Socket) {}
@@ -11,7 +11,7 @@ export class PlayerViewClient {
 
   public UpdateEncounter(
     encounterId: string,
-    updatedEncounter: EncounterState<StaticCombatantViewModel>
+    updatedEncounter: EncounterState<PlayerViewCombatantState>
   ) {
     this.socket.emit("update encounter", encounterId, updatedEncounter);
   }

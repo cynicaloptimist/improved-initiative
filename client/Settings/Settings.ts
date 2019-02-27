@@ -11,12 +11,18 @@ import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 
 export const CurrentSettings = ko.observable<Settings>();
-export const AutoGroupInitiativeOptions = [
-  "None",
-  "By Name",
-  "Side Initiative"
-];
-export type AutoGroupInitiativeOption = "None" | "By Name" | "Side Initiative";
+
+export enum AutoGroupInitiativeOption {
+  None = "None",
+  ByName = "By Name",
+  SideInitiative = "Side Initiative"
+}
+
+export enum AutoRerollInitiativeOption {
+  No = "No",
+  Prompt = "Prompt",
+  Automatic = "Automatic"
+}
 
 export interface Settings {
   Commands: CommandSetting[];
@@ -25,6 +31,7 @@ export interface Settings {
     AllowNegativeHP: boolean;
     AutoCheckConcentration: boolean;
     AutoGroupInitiative: AutoGroupInitiativeOption;
+    AutoRerollInitiative: AutoRerollInitiativeOption;
   };
   TrackerView: {
     DisplayRoundCounter: boolean;
@@ -50,7 +57,8 @@ export function getDefaultSettings(): Settings {
       RollMonsterHp: false,
       AllowNegativeHP: false,
       AutoCheckConcentration: true,
-      AutoGroupInitiative: "None"
+      AutoGroupInitiative: AutoGroupInitiativeOption.None,
+      AutoRerollInitiative: AutoRerollInitiativeOption.No
     },
     TrackerView: {
       DisplayRoundCounter: false,
@@ -60,8 +68,8 @@ export function getDefaultSettings(): Settings {
     PlayerView: {
       ActiveCombatantOnTop: false,
       AllowPlayerSuggestions: false,
-      MonsterHPVerbosity: "Colored Label",
-      PlayerHPVerbosity: "Actual HP",
+      MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
+      PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
@@ -106,7 +114,7 @@ function getLegacySettings(): Settings {
       ),
       AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>(
         "AutoGroupInitiative",
-        "None"
+        AutoGroupInitiativeOption.None
       )
     },
     TrackerView: {
@@ -130,7 +138,7 @@ function getLegacySettings(): Settings {
       ),
       MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>(
         "MonsterHPVerbosity",
-        "Colored Label"
+        HpVerbosityOption.ColoredLabel
       ),
       HideMonstersOutsideEncounter: getLegacySetting<boolean>(
         "HideMonstersOutsideEncounter",

@@ -4,11 +4,15 @@
 
   .combatant--header {
     flex-direction: row;
-    padding: @large-spacer @medium-spacer @large-spacer @larger-spacer;
+    padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
   }
 
   .combatant__hp {
     flex-basis: 10%;
+    align-items: center;
+    &.show-hover:hover {
+      background-color: @hover-red;
+    }
   }
 
   .combatant__portrait {
@@ -71,9 +75,24 @@
   }
 
   .damage-suggestion {
+    .card-bg-2(@large-spacer, @large-spacer);
+
     z-index: 2;
     position: absolute;
-    top: 10%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: initial;
+
+    .damage-suggestion__input {
+      flex-flow: row;
+      justify-content: space-between;
+    }
+    .damage-suggestion__tip {
+      color: lighten(@primary-black, 50);
+      font-size: smaller;
+    }
   }
 
   /* Add Animation */

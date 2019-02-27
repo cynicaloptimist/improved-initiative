@@ -5,17 +5,15 @@ import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import {
-  StaticCombatantViewModel,
-  ToStaticViewModel
-} from "../Combatant/StaticCombatantViewModel";
 import { Tag } from "../Combatant/Tag";
+import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
 import { env } from "../Environment";
 import {
   PersistentCharacterLibrary,
@@ -23,7 +21,10 @@ import {
 } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
-import { CurrentSettings } from "../Settings/Settings";
+import {
+  AutoRerollInitiativeOption,
+  CurrentSettings
+} from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import {
   DifficultyCalculator,
@@ -32,6 +33,8 @@ import {
 import { TurnTimer } from "../Widgets/TurnTimer";
 
 export class Encounter {
+  private lastVisibleActiveCombatantId = null;
+
   constructor(
     private playerViewClient: PlayerViewClient,
     private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
@@ -205,6 +208,7 @@ export class Encounter {
       CurrentHP: statBlock.HP.Value,
       TemporaryHP: 0,
       Hidden: hideOnAdd,
+      RevealedAC: false,
       Initiative: 0,
       Tags: [],
       InterfaceVersion: process.env.VERSION
@@ -241,6 +245,7 @@ export class Encounter {
       CurrentHP: persistentCharacter.CurrentHP,
       TemporaryHP: 0,
       Hidden: hideOnAdd,
+      RevealedAC: false,
       Initiative: 0,
       Tags: [],
       InterfaceVersion: persistentCharacter.Version
@@ -359,7 +364,7 @@ export class Encounter {
     this.QueueEmitEncounter();
   };
 
-  public NextTurn = () => {
+  public NextTurn = (promptRerollInitiative: () => boolean) => {
     const activeCombatant = this.ActiveCombatant();
 
     this.durationTags
@@ -374,6 +379,15 @@ export class Encounter {
     let nextIndex = this.combatants().indexOf(activeCombatant) + 1;
     if (nextIndex >= this.combatants().length) {
       nextIndex = 0;
+
+      const autoRerollOption = CurrentSettings().Rules.AutoRerollInitiative;
+      if (autoRerollOption == AutoRerollInitiativeOption.Prompt) {
+        promptRerollInitiative();
+      }
+      if (autoRerollOption == AutoRerollInitiativeOption.Automatic) {
+        this.rerollInitiativeWithoutPrompt();
+      }
+
       this.RoundCounter(this.RoundCounter() + 1);
     }
 
@@ -468,7 +482,7 @@ export class Encounter {
     };
   };
 
-  public GetPlayerView = (): EncounterState<StaticCombatantViewModel> => {
+  public GetPlayerView = (): EncounterState<PlayerViewCombatantState> => {
     const activeCombatantId = this.getPlayerViewActiveCombatantId();
     return {
       Name: this.EncounterId,
@@ -478,77 +492,6 @@ export class Encounter {
       RoundCounter: this.RoundCounter(),
       Combatants: this.getCombatantsForPlayerView(activeCombatantId),
       Version: process.env.VERSION
-    };
-  };
-
-  private lastVisibleActiveCombatantId = null;
-
-  private getPlayerViewActiveCombatantId() {
-    const activeCombatant = this.ActiveCombatant();
-    if (!activeCombatant) {
-      this.lastVisibleActiveCombatantId = null;
-      return this.lastVisibleActiveCombatantId;
-    }
-
-    if (activeCombatant.Hidden()) {
-      return this.lastVisibleActiveCombatantId;
-    }
-
-    this.lastVisibleActiveCombatantId = activeCombatant.Id;
-
-    return this.lastVisibleActiveCombatantId;
-  }
-
-  private getCombatantsForPlayerView(activeCombatantId: string) {
-    const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
-      .HideMonstersOutsideEncounter;
-    const combatants = this.combatants().filter(c => {
-      if (c.Hidden()) {
-        return false;
-      }
-      if (
-        hideMonstersOutsideEncounter &&
-        this.State() == "inactive" &&
-        !c.IsPlayerCharacter
-      ) {
-        return false;
-      }
-      return true;
-    });
-
-    const activeCombatantOnTop = CurrentSettings().PlayerView
-      .ActiveCombatantOnTop;
-    if (activeCombatantOnTop && activeCombatantId) {
-      while (combatants[0].Id != activeCombatantId) {
-        combatants.push(combatants.shift());
-      }
-    }
-
-    return combatants.map<StaticCombatantViewModel>(c => ToStaticViewModel(c));
-  }
-
-  private getCombatantState = (c: Combatant): CombatantState => {
-    return {
-      Id: c.Id,
-      PersistentCharacterId: c.PersistentCharacterId,
-      StatBlock: c.StatBlock(),
-      CurrentHP: c.CurrentHP(),
-      TemporaryHP: c.TemporaryHP(),
-      Initiative: c.Initiative(),
-      InitiativeGroup: c.InitiativeGroup(),
-      Alias: c.Alias(),
-      IndexLabel: c.IndexLabel,
-      Tags: c
-        .Tags()
-        .filter(t => t.Visible())
-        .map(t => ({
-          Text: t.Text,
-          DurationRemaining: t.DurationRemaining(),
-          DurationTiming: t.DurationTiming,
-          DurationCombatantId: t.DurationCombatantId
-        })),
-      Hidden: c.Hidden(),
-      InterfaceVersion: process.env.VERSION
     };
   };
 
@@ -593,5 +536,83 @@ export class Encounter {
     this.combatants([]);
     this.CombatantCountsByName({});
     this.EndEncounter();
+  };
+
+  private getPlayerViewActiveCombatantId() {
+    const activeCombatant = this.ActiveCombatant();
+    if (!activeCombatant) {
+      this.lastVisibleActiveCombatantId = null;
+      return this.lastVisibleActiveCombatantId;
+    }
+
+    if (activeCombatant.Hidden()) {
+      return this.lastVisibleActiveCombatantId;
+    }
+
+    this.lastVisibleActiveCombatantId = activeCombatant.Id;
+
+    return this.lastVisibleActiveCombatantId;
+  }
+
+  private getCombatantsForPlayerView(activeCombatantId: string) {
+    const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
+      .HideMonstersOutsideEncounter;
+    const combatants = this.combatants().filter(c => {
+      if (c.Hidden()) {
+        return false;
+      }
+      if (
+        hideMonstersOutsideEncounter &&
+        this.State() == "inactive" &&
+        !c.IsPlayerCharacter
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    const activeCombatantOnTop = CurrentSettings().PlayerView
+      .ActiveCombatantOnTop;
+    if (activeCombatantOnTop && activeCombatantId) {
+      while (combatants[0].Id != activeCombatantId) {
+        combatants.push(combatants.shift());
+      }
+    }
+
+    return combatants.map<PlayerViewCombatantState>(c =>
+      ToPlayerViewCombatantState(c)
+    );
+  }
+
+  private getCombatantState = (c: Combatant): CombatantState => {
+    return {
+      Id: c.Id,
+      PersistentCharacterId: c.PersistentCharacterId,
+      StatBlock: c.StatBlock(),
+      CurrentHP: c.CurrentHP(),
+      TemporaryHP: c.TemporaryHP(),
+      Initiative: c.Initiative(),
+      InitiativeGroup: c.InitiativeGroup(),
+      Alias: c.Alias(),
+      IndexLabel: c.IndexLabel,
+      Tags: c
+        .Tags()
+        .filter(t => t.Visible())
+        .map(t => ({
+          Text: t.Text,
+          DurationRemaining: t.DurationRemaining(),
+          DurationTiming: t.DurationTiming,
+          DurationCombatantId: t.DurationCombatantId
+        })),
+      Hidden: c.Hidden(),
+      RevealedAC: c.RevealedAC(),
+      InterfaceVersion: process.env.VERSION
+    };
+  };
+
+  private rerollInitiativeWithoutPrompt = () => {
+    const combatants = this.combatants();
+    combatants.forEach(c => c.Initiative(c.GetInitiativeRoll()));
+    this.SortByInitiative(false);
   };
 }
