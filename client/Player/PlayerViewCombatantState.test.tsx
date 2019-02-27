@@ -4,7 +4,7 @@ import { Encounter } from "../Encounter/Encounter";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 
-describe("PlayerViewCombatantState HP Display", () => {
+describe("PlayerViewCombatantState", () => {
   let encounter: Encounter;
 
   beforeEach(() => {
