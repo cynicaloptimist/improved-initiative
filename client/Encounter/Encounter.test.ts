@@ -82,7 +82,7 @@ describe("Encounter", () => {
     });
   });
 
-  test("Active combatant stays at top of order", () => {
+  test("ActiveCombatantOnTop shows player view combatants in shifted order", () => {
     const settings = CurrentSettings();
     settings.PlayerView.ActiveCombatantOnTop = true;
 
