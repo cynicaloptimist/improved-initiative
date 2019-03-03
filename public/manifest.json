@@ -3,13 +3,13 @@
   "name": "Improved Initiative",
   "icons": [
     {
-      "src": "/img/logo-improved-initiative.svg",
-      "type": "image/svg",
+      "src": "/img/boot-transparent-white.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/img/logo-improved-initiative.svg",
-      "type": "image/svg",
+      "src": "/img/boot-transparent-white.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],
