@@ -7,6 +7,7 @@ export class PlayerViewClient {
 
   public JoinEncounter(encounterId: string): any {
     this.socket.emit("join encounter", encounterId);
+    window.setInterval(() => this.socket.emit("heartbeat", encounterId), 10000);
   }
 
   public UpdateEncounter(

@@ -59,5 +59,9 @@ export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
         }
       });
     });
+
+    socket.on("heartbeat", function(id: string) {
+      socket.broadcast.to(id).emit("heartbeat");
+    });
   });
 }
