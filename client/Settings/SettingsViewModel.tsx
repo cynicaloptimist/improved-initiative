@@ -18,18 +18,11 @@ import {
   CurrentSettings,
   Settings
 } from "./Settings";
-import { tips } from "./Tips";
+import { About } from "./components/About";
 import { AccountSettings } from "./components/AccountSettings";
-import {
-  EpicInitiativeSettings,
-  EpicInitiativeSettingsProps
-} from "./components/EpicInitiativeSettings";
+import { EpicInitiativeSettings } from "./components/EpicInitiativeSettings";
 
 export class SettingsViewModel {
-  public PreviousTip: any;
-  public NextTip: any;
-  public Tip: KnockoutComputed<string>;
-
   public PlayerViewAllowPlayerSuggestions: KnockoutObservable<boolean>;
   public ActiveCombatantOnTop: KnockoutObservable<boolean>;
   public PlayerViewDisplayTurnTimer: KnockoutObservable<boolean>;
@@ -109,20 +102,6 @@ export class SettingsViewModel {
     protected repeatTutorial: () => void,
     protected reviewPrivacyPolicy: () => void
   ) {
-    const currentTipIndex = ko.observable(
-      Math.floor(Math.random() * tips.length)
-    );
-
-    function cycleTipIndex() {
-      let newIndex = currentTipIndex() + this;
-      if (newIndex < 0) {
-        newIndex = tips.length - 1;
-      } else if (newIndex > tips.length - 1) {
-        newIndex = 0;
-      }
-      currentTipIndex(newIndex);
-    }
-
     this.CombatantCommands = combatantCommander.Commands;
 
     const currentSettings = CurrentSettings();
@@ -182,15 +161,18 @@ export class SettingsViewModel {
       currentSettings.PlayerView.ActiveCombatantOnTop
     );
 
-    this.Tip = ko.pureComputed(() => tips[currentTipIndex() % tips.length]);
-    this.NextTip = cycleTipIndex.bind(1);
-    this.PreviousTip = cycleTipIndex.bind(-1);
-
     this.playerViewSettings = currentSettings.PlayerView;
     this.epicInitiativeSettings = (
       <EpicInitiativeSettings playerViewSettings={this.playerViewSettings} />
     );
   }
+
+  public about = (
+    <About
+      repeatTutorial={this.repeatTutorial}
+      reviewPrivacyPolicy={this.reviewPrivacyPolicy}
+    />
+  );
 
   public accountSettings = (
     <AccountSettings

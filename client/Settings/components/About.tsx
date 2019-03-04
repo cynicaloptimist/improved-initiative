@@ -1,0 +1,101 @@
+import * as React from "react";
+import { Button } from "../../Components/Button";
+import { env } from "../../Environment";
+import { tips } from "../Tips";
+
+interface AboutProps {
+  repeatTutorial: () => void;
+  reviewPrivacyPolicy: () => void;
+}
+
+interface AboutState {
+  tipIndex: number;
+}
+export class About extends React.Component<AboutProps, AboutState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tipIndex: 0
+    };
+  }
+
+  public render() {
+    const currentTip = tips[this.state.tipIndex];
+    return (
+      <React.Fragment>
+        <div>
+          <p>
+            <strong>Improved Initiative</strong>
+            {" was created by "}
+            <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>
+            {". All Wizards of the Coast content provided under terms of the "}
+            <a href={env.CanonicalURL + "/SRD-OGL_V1.1.pdf"} target="_blank">
+              Open Gaming License Version 1.0a
+            </a>
+            {"."}
+          </p>
+        </div>
+        <div className="support">
+          Love Improved Initiative?
+          <div
+            className="fb-like"
+            data-href="https://www.facebook.com/improvedinitiativeapp/"
+            data-layout="button"
+            data-action="recommend"
+            data-size="large"
+            data-show-faces="false"
+            data-share="false"
+          />
+          <a
+            className="pledge"
+            href="https://www.patreon.com/improvedinitiative"
+            target="_blank"
+          >
+            <img src="/img/become_a_patron_button.png" />
+          </a>
+        </div>
+        <h2>Did you know?</h2>
+        <div className="tips">
+          <Button
+            fontAwesomeIcon="arrow-left"
+            onClick={this.previousTip}
+            tooltip="Previous Tip"
+          />
+          <span
+            className="tip"
+            dangerouslySetInnerHTML={{
+              __html: currentTip
+            }}
+          />
+          <Button
+            fontAwesomeIcon="arrow-right"
+            onClick={this.nextTip}
+            tooltip="Next Tip"
+          />
+        </div>
+        <div className="commands">
+          <span
+            className="button review-privacy"
+            onClick={this.props.reviewPrivacyPolicy}
+          >
+            Review Privacy Policy
+          </span>
+          <span
+            className="button repeat-tutorial"
+            onClick={this.props.repeatTutorial}
+          >
+            Repeat Tutorial
+          </span>
+        </div>
+      </React.Fragment>
+    );
+  }
+
+  private nextTip = () => this.navigateTips(1);
+  private previousTip = () => this.navigateTips(-1);
+
+  private navigateTips = (offset: number) =>
+    this.setState(state => ({
+      tipIndex: (state.tipIndex + tips.length + offset) % tips.length
+    }));
+}
