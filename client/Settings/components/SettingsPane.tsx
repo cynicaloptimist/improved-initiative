@@ -14,7 +14,7 @@ const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
 
 interface SettingsPaneProps {}
 interface SettingsPaneState {
-  currentTab: SettingsTab | string;
+  currentTab: SettingsTab;
 }
 
 export class SettingsPane extends React.Component<
