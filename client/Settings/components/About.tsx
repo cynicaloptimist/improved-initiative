@@ -56,10 +56,10 @@ export class About extends React.Component<AboutProps, AboutState> {
         </div>
         <h2>Did you know?</h2>
         <div className="tips">
-          <Button
-            fontAwesomeIcon="arrow-left"
+          <span
+            className="fa-arrow-left fa-clickable"
             onClick={this.previousTip}
-            tooltip="Previous Tip"
+            title="Previous Tip"
           />
           <span
             className="tip"
@@ -67,10 +67,10 @@ export class About extends React.Component<AboutProps, AboutState> {
               __html: currentTip
             }}
           />
-          <Button
-            fontAwesomeIcon="arrow-right"
+          <span
+            className="fa-arrow-right fa-clickable"
             onClick={this.nextTip}
-            tooltip="Next Tip"
+            title="Next Tip"
           />
         </div>
         <div className="commands">
