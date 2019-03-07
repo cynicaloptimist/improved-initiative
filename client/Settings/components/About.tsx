@@ -21,7 +21,7 @@ export class About extends React.Component<AboutProps, AboutState> {
   public render() {
     const currentTip = tips[this.state.tipIndex];
     return (
-      <React.Fragment>
+      <div className="tab-content about">
         <div>
           <p>
             <strong>Improved Initiative</strong>
@@ -86,7 +86,7 @@ export class About extends React.Component<AboutProps, AboutState> {
             Repeat Tutorial
           </span>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 

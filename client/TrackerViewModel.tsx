@@ -364,12 +364,15 @@ export class TrackerViewModel {
   });
 
   public settingsComponent = ko.computed(() => {
-    const repeatTutorial = this.RepeatTutorial;
-    const reviewPrivacyPolicy = this.ReviewPrivacyPolicy;
     const encounterCommands = this.EncounterToolbar;
     const combatantCommander = this.CombatantCommander;
     const libraries = this.Libraries;
-    return <SettingsPane />;
+    return (
+      <SettingsPane
+        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
+        repeatTutorial={this.RepeatTutorial}
+      />
+    );
   });
 
   public toolbarComponent = ko.computed(() => {

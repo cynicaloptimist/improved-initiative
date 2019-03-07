@@ -2,6 +2,7 @@ import { Formik } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { Tabs } from "../../Components/Tabs";
+import { About } from "./About";
 
 enum SettingsTab {
   About = "About",
@@ -13,7 +14,10 @@ enum SettingsTab {
 
 const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
 
-interface SettingsPaneProps {}
+interface SettingsPaneProps {
+  repeatTutorial: () => void;
+  reviewPrivacyPolicy: () => void;
+}
 interface SettingsPaneState {
   currentTab: SettingsTab;
 }
@@ -41,9 +45,21 @@ export class SettingsPane extends React.Component<
               options={SettingsTabOptions}
               onChoose={tab => this.setState({ currentTab: tab })}
             />
+            {this.getActiveTabContent()}
           </form>
         )}
       />
     );
   }
+
+  private getActiveTabContent = () => {
+    if (this.state.currentTab == SettingsTab.About) {
+      return (
+        <About
+          repeatTutorial={this.props.repeatTutorial}
+          reviewPrivacyPolicy={this.props.reviewPrivacyPolicy}
+        />
+      );
+    }
+  };
 }
