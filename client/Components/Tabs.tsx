@@ -13,7 +13,7 @@ export class Tabs<T extends string> extends React.Component<
   TabsState
 > {
   public render() {
-    const spanElements = this.props.options.map((option, i) => (
+    const buttonElements = this.props.options.map((option, i) => (
       <button
         type="button"
         key={i}
@@ -24,6 +24,6 @@ export class Tabs<T extends string> extends React.Component<
       </button>
     ));
 
-    return <div className="c-tabs">{spanElements}</div>;
+    return <div className="c-tabs">{buttonElements}</div>;
   }
 }
