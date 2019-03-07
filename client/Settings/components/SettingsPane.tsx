@@ -39,7 +39,7 @@ export class SettingsPane extends React.Component<
         initialValues={{}}
         onSubmit={() => {}}
         render={props => (
-          <form onSubmit={props.handleSubmit}>
+          <form className="settings" onSubmit={props.handleSubmit}>
             <Tabs
               selected={this.state.currentTab}
               options={SettingsTabOptions}
