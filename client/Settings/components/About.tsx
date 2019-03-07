@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
 import { tips } from "../Tips";
 
