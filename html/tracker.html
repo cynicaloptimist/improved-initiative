@@ -66,23 +66,14 @@
       class="modal-blur"
       data-bind="visible: BlurVisible, click: CloseSettings"
     ></div>
-
+    <!-- ko if: SettingsVisible -->
     <div
       class="settings"
-      data-bind="
-        visible: SettingsVisible,
-        component: {
-            name: 'settings',
-            params: {
-                settingsVisible: SettingsVisible,
-                repeatTutorial: RepeatTutorial,
-                reviewPrivacyPolicy: ReviewPrivacyPolicy,
-                encounterCommands: EncounterToolbar,
-                combatantCommander: CombatantCommander,
-                libraries: Libraries
-            }
-        }"
+      data-bind="react: {
+        component: settingsComponent()
+      }"
     ></div>
+    <!-- /ko -->
     <div
       class="tutorial"
       data-bind="

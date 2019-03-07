@@ -26,6 +26,7 @@ import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
@@ -360,6 +361,15 @@ export class TrackerViewModel {
     }
 
     return "show-center-right-left";
+  });
+
+  public settingsComponent = ko.computed(() => {
+    const repeatTutorial = this.RepeatTutorial;
+    const reviewPrivacyPolicy = this.ReviewPrivacyPolicy;
+    const encounterCommands = this.EncounterToolbar;
+    const combatantCommander = this.CombatantCommander;
+    const libraries = this.Libraries;
+    return <SettingsPane />;
   });
 
   public toolbarComponent = ko.computed(() => {
