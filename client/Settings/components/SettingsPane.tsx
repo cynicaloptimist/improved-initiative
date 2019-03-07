@@ -1,3 +1,4 @@
+import { Formik } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { Tabs } from "../../Components/Tabs";
@@ -30,10 +31,18 @@ export class SettingsPane extends React.Component<
 
   public render() {
     return (
-      <Tabs
-        selected={this.state.currentTab}
-        options={SettingsTabOptions}
-        onChoose={tab => this.setState({ currentTab: tab })}
+      <Formik
+        initialValues={{}}
+        onSubmit={() => {}}
+        render={props => (
+          <form onSubmit={props.handleSubmit}>
+            <Tabs
+              selected={this.state.currentTab}
+              options={SettingsTabOptions}
+              onChoose={tab => this.setState({ currentTab: tab })}
+            />
+          </form>
+        )}
       />
     );
   }
