@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import _ = require("lodash");
 import * as React from "react";
+import { SubmitButton } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { About } from "./About";
 
@@ -17,6 +18,7 @@ const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
 interface SettingsPaneProps {
   repeatTutorial: () => void;
   reviewPrivacyPolicy: () => void;
+  saveAndClose: () => void;
 }
 interface SettingsPaneState {
   currentTab: SettingsTab;
@@ -46,6 +48,13 @@ export class SettingsPane extends React.Component<
               onChoose={tab => this.setState({ currentTab: tab })}
             />
             {this.getActiveTabContent()}
+            <button
+              type="submit"
+              className="c-button save-and-close"
+              onClick={this.props.saveAndClose}
+            >
+              Save and Close
+            </button>
           </form>
         )}
       />

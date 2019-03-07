@@ -371,6 +371,7 @@ export class TrackerViewModel {
       <SettingsPane
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
+        saveAndClose={() => this.SettingsVisible(false)}
       />
     );
   });
