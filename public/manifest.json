@@ -1,0 +1,21 @@
+{
+  "short_name": "Initiative",
+  "name": "Improved Initiative",
+  "icons": [
+    {
+      "src": "/img/improved-initiative-transparent-darkred.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/improved-initiative-transparent-darkred.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/e/",
+  "background_color": "#822000",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#822000"
+}

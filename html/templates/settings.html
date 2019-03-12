@@ -26,59 +26,7 @@
   >
 </div>
 <!-- ko if: CurrentTab() == "about" -->
-<div class="tab-content about">
-  <div>
-    <p>
-      <strong>Improved Initiative</strong> was created by
-      <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>. All
-      Wizards of the Coast content provided under terms of the
-      <a href="{{ rootDirectory }}/SRD-OGL_V1.1.pdf" target="_blank"
-        >Open Gaming License Version 1.0a</a
-      >.
-    </p>
-  </div>
-  <div class="support">
-    Love Improved Initiative?
-    <div
-      class="fb-like"
-      data-href="https://www.facebook.com/improvedinitiativeapp/"
-      data-layout="button"
-      data-action="recommend"
-      data-size="large"
-      data-show-faces="false"
-      data-share="false"
-    ></div>
-    <a
-      class="pledge"
-      href="https://www.patreon.com/improvedinitiative"
-      target="_blank"
-    >
-      <img src="/img/become_a_patron_button.png" />
-    </a>
-  </div>
-  <h2>Did you know?</h2>
-  <div class="tips">
-    <span
-      data-bind="click: PreviousTip"
-      title="Previous Tip"
-      class="fa-clickable fa-arrow-left"
-    ></span>
-    <span data-bind="html: Tip" class="tip"></span>
-    <span
-      data-bind="click: NextTip"
-      title="Next Tip"
-      class="fa-clickable fa-arrow-right"
-    ></span>
-  </div>
-  <div class="commands">
-    <span class="button review-privacy" data-bind="click: reviewPrivacyPolicy"
-      >Review Privacy Policy</span
-    >
-    <span class="button repeat-tutorial" data-bind="click: repeatTutorial"
-      >Repeat Tutorial</span
-    >
-  </div>
-</div>
+<div class="tab-content about" data-bind="react: { component: about }"></div>
 <!-- /ko -->
 <!-- ko if: CurrentTab() == "keybindings" -->
 <div class="tab-content keybindings">
