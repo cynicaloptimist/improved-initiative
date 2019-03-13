@@ -65,11 +65,10 @@ const xpAmountsByChallenge = {
   "30": 155000
 };
 
-const getTotalLevel = (levels: string) =>
-  levels
-    .match(/\d+/g)
-    .map(i => parseInt(i))
-    .reduce((p, c) => p + c, 0);
+const getTotalLevel = (levels: string) => {
+  const levelStrings = levels.match(/\d+/g) || [];
+  return levelStrings.map(i => parseInt(i)).reduce((p, c) => p + c, 0);
+};
 
 const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
 
