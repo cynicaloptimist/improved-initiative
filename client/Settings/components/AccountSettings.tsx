@@ -13,13 +13,13 @@ interface AccountSettingsProps {
 export class AccountSettings extends React.Component<AccountSettingsProps> {
   public render() {
     return (
-      <React.Fragment>
+      <div className="tab-content account">
         <LocalDataSettings />
         <AccountSyncSettings
           accountClient={this.props.accountClient}
           libraries={this.props.libraries}
         />
-      </React.Fragment>
+      </div>
     );
   }
 }

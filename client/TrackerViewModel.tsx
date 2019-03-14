@@ -366,12 +366,13 @@ export class TrackerViewModel {
   public settingsComponent = ko.computed(() => {
     const encounterCommands = this.EncounterToolbar;
     const combatantCommander = this.CombatantCommander;
-    const libraries = this.Libraries;
     return (
       <SettingsPane
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
         saveAndClose={() => this.SettingsVisible(false)}
+        libraries={this.Libraries}
+        accountClient={new AccountClient()}
       />
     );
   });

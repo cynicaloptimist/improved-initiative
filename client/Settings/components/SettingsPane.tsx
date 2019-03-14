@@ -1,9 +1,11 @@
 import { Formik } from "formik";
 import _ = require("lodash");
 import * as React from "react";
-import { SubmitButton } from "../../Components/Button";
+import { AccountClient } from "../../Account/AccountClient";
 import { Tabs } from "../../Components/Tabs";
+import { Libraries } from "../../Library/Libraries";
 import { About } from "./About";
+import { AccountSettings } from "./AccountSettings";
 
 enum SettingsTab {
   About = "About",
@@ -18,6 +20,8 @@ const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
 interface SettingsPaneProps {
   repeatTutorial: () => void;
   reviewPrivacyPolicy: () => void;
+  accountClient: AccountClient;
+  libraries: Libraries;
   saveAndClose: () => void;
 }
 interface SettingsPaneState {
@@ -67,6 +71,14 @@ export class SettingsPane extends React.Component<
         <About
           repeatTutorial={this.props.repeatTutorial}
           reviewPrivacyPolicy={this.props.reviewPrivacyPolicy}
+        />
+      );
+    }
+    if (this.state.currentTab == SettingsTab.Account) {
+      return (
+        <AccountSettings
+          accountClient={this.props.accountClient}
+          libraries={this.props.libraries}
         />
       );
     }
