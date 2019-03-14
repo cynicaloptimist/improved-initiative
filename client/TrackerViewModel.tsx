@@ -368,6 +368,7 @@ export class TrackerViewModel {
     const combatantCommander = this.CombatantCommander;
     return (
       <SettingsPane
+        settings={CurrentSettings()}
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
         saveAndClose={() => this.SettingsVisible(false)}

@@ -4,8 +4,10 @@ import * as React from "react";
 import { AccountClient } from "../../Account/AccountClient";
 import { Tabs } from "../../Components/Tabs";
 import { Libraries } from "../../Library/Libraries";
+import { Settings } from "../Settings";
 import { About } from "./About";
 import { AccountSettings } from "./AccountSettings";
+import { EpicInitiativeSettings } from "./EpicInitiativeSettings";
 
 enum SettingsTab {
   About = "About",
@@ -22,6 +24,7 @@ interface SettingsPaneProps {
   reviewPrivacyPolicy: () => void;
   accountClient: AccountClient;
   libraries: Libraries;
+  settings: Settings;
   saveAndClose: () => void;
 }
 interface SettingsPaneState {
@@ -79,6 +82,13 @@ export class SettingsPane extends React.Component<
         <AccountSettings
           accountClient={this.props.accountClient}
           libraries={this.props.libraries}
+        />
+      );
+    }
+    if (this.state.currentTab == SettingsTab.EpicInitiative) {
+      return (
+        <EpicInitiativeSettings
+          playerViewSettings={this.props.settings.PlayerView}
         />
       );
     }

@@ -52,7 +52,7 @@ export class EpicInitiativeSettings extends React.Component<
     }
 
     return (
-      <div className="c-epic-initiative-settings">
+      <div className="tab-content epicInitiative">
         <h3>Epic Initiative</h3>
         <p>
           <strong>Thank you for supporting Improved Initiative!</strong>
