@@ -6,8 +6,8 @@ import {
 } from "../../../common/PlayerViewSettings";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
-import { LabelWithCheckbox } from "./LabelWithCheckbox";
 import { StylesChooser } from "./StylesChooser";
+import { Toggle } from "./Toggle";
 
 export interface EpicInitiativeSettingsProps {
   playerViewSettings: PlayerViewSettings;
@@ -58,15 +58,13 @@ export class EpicInitiativeSettings extends React.Component<
           <strong>Thank you for supporting Improved Initiative!</strong>
         </p>
         <h4>Player View Display Settings</h4>
-        <LabelWithCheckbox
+        <Toggle
           text="Show combatant portraits"
-          toggle={this.toggleDisplayPortraits}
-          checked={this.props.playerViewSettings.DisplayPortraits}
+          fieldName="PlayerView.DisplayPortraits"
         />
-        <LabelWithCheckbox
+        <Toggle
           text="Show turn start portrait splash"
-          toggle={this.toggleSplashPortraits}
-          checked={this.props.playerViewSettings.SplashPortraits}
+          fieldName="PlayerView.SplashPortraits"
         />
         <StylesChooser
           currentStyles={this.props.playerViewSettings.CustomStyles}
