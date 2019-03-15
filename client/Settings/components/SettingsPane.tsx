@@ -25,6 +25,7 @@ interface SettingsPaneProps {
   accountClient: AccountClient;
   libraries: Libraries;
   settings: Settings;
+  handleNewSettings: (newSettings: Settings) => void;
   saveAndClose: () => void;
 }
 interface SettingsPaneState {
@@ -45,8 +46,8 @@ export class SettingsPane extends React.Component<
   public render() {
     return (
       <Formik
-        initialValues={{}}
-        onSubmit={() => {}}
+        initialValues={this.props.settings}
+        onSubmit={this.handleFormSubmit}
         render={props => (
           <form className="settings" onSubmit={props.handleSubmit}>
             <Tabs
@@ -55,11 +56,7 @@ export class SettingsPane extends React.Component<
               onChoose={tab => this.setState({ currentTab: tab })}
             />
             {this.getActiveTabContent()}
-            <button
-              type="submit"
-              className="c-button save-and-close"
-              onClick={this.props.saveAndClose}
-            >
+            <button type="submit" className="c-button save-and-close">
               Save and Close
             </button>
           </form>
@@ -92,5 +89,10 @@ export class SettingsPane extends React.Component<
         />
       );
     }
+  };
+
+  private handleFormSubmit = (newSettings: Settings) => {
+    this.props.handleNewSettings(newSettings);
+    this.props.saveAndClose();
   };
 }

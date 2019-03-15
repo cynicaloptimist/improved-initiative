@@ -25,7 +25,11 @@ import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
-import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import {
+  ConfigureCommands,
+  CurrentSettings,
+  Settings
+} from "./Settings/Settings";
 import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
@@ -369,6 +373,7 @@ export class TrackerViewModel {
     return (
       <SettingsPane
         settings={CurrentSettings()}
+        handleNewSettings={this.saveUpdatedSettings}
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
         saveAndClose={() => this.SettingsVisible(false)}
@@ -468,4 +473,10 @@ export class TrackerViewModel {
       this.ReviewPrivacyPolicy();
     }
   };
+
+  private saveUpdatedSettings(newSettings: Settings) {
+    CurrentSettings(newSettings);
+    Store.Save(Store.User, "Settings", newSettings);
+    new AccountClient().SaveSettings(newSettings);
+  }
 }
