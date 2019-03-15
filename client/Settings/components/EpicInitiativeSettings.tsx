@@ -58,14 +58,12 @@ export class EpicInitiativeSettings extends React.Component<
           <strong>Thank you for supporting Improved Initiative!</strong>
         </p>
         <h4>Player View Display Settings</h4>
-        <Toggle
-          text="Show combatant portraits"
-          fieldName="PlayerView.DisplayPortraits"
-        />
-        <Toggle
-          text="Show turn start portrait splash"
-          fieldName="PlayerView.SplashPortraits"
-        />
+        <Toggle fieldName="PlayerView.DisplayPortraits">
+          Show combatant portraits
+        </Toggle>
+        <Toggle fieldName="PlayerView.SplashPortraits">
+          Show turn start portrait splash
+        </Toggle>
         <StylesChooser
           currentStyles={this.props.playerViewSettings.CustomStyles}
           updateStyle={this.updateStyle}

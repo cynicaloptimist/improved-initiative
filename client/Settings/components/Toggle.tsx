@@ -3,7 +3,6 @@ import * as React from "react";
 import { probablyUniqueString } from "../../../common/Toolbox";
 
 interface ToggleProps {
-  text: string;
   fieldName: string;
 }
 
@@ -17,19 +16,23 @@ export class Toggle extends React.Component<ToggleProps> {
   public render() {
     return (
       <Field name={this.props.fieldName}>
-        {(fieldProps: FieldProps) => (
-          <div
-            onClick={() =>
-              fieldProps.form.setFieldValue(
-                this.props.fieldName,
-                !fieldProps.field.value
-              )
-            }
-          >
-            {this.props.text}
-            {fieldProps.field.value ? " [ON]" : " [OFF]"}
-          </div>
-        )}
+        {(fieldProps: FieldProps) => {
+          const stateString = fieldProps.field.value ? "on" : "off";
+          return (
+            <div
+              className="c-toggle"
+              onClick={() =>
+                fieldProps.form.setFieldValue(
+                  this.props.fieldName,
+                  !fieldProps.field.value
+                )
+              }
+            >
+              <span className="c-toggle__label">{this.props.children}</span>
+              <span className={"c-toggle__icon fas fa-toggle-" + stateString} />
+            </div>
+          );
+        }}
       </Field>
     );
   }
