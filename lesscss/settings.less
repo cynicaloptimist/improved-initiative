@@ -122,6 +122,16 @@
   .button--upgrade {
     .green-button();
   }
+
+  .c-button-with-label {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    > span {
+      padding: 0 @extra-small-spacer;
+      flex-shrink: 1;
+    }
+  }
 }
 
 @import "sketch-picker.less";
