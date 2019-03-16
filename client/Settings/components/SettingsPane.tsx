@@ -8,6 +8,7 @@ import { Settings } from "../Settings";
 import { About } from "./About";
 import { AccountSettings } from "./AccountSettings";
 import { EpicInitiativeSettings } from "./EpicInitiativeSettings";
+import { OptionsSettings } from "./OptionsSettings";
 
 enum SettingsTab {
   About = "About",
@@ -71,6 +72,15 @@ export class SettingsPane extends React.Component<
         <About
           repeatTutorial={this.props.repeatTutorial}
           reviewPrivacyPolicy={this.props.reviewPrivacyPolicy}
+        />
+      );
+    }
+    if (this.state.currentTab == SettingsTab.Options) {
+      return (
+        <OptionsSettings
+          goToEpicInitiativeSettings={() =>
+            this.setState({ currentTab: SettingsTab.EpicInitiative })
+          }
         />
       );
     }
