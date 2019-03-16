@@ -1,3 +1,4 @@
+import { Field } from "formik";
 import * as React from "react";
 import { ChangeEvent } from "react";
 import {
@@ -66,11 +67,7 @@ export class EpicInitiativeSettings extends React.Component<
         <h4>
           Additional CSS <strong>(experimental)</strong>
         </h4>
-        <textarea
-          rows={10}
-          onChange={this.updateCSS}
-          value={this.state.manualCSS}
-        />
+        <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
       </div>
     );
   }
