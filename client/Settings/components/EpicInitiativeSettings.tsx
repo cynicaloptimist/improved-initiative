@@ -29,15 +29,6 @@ export class EpicInitiativeSettings extends React.Component<
     };
   }
 
-  private updateCSS = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    this.setState({ manualCSS: event.target.value });
-    this.props.playerViewSettings.CustomCSS = event.target.value;
-  };
-
-  private updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
-    this.props.playerViewSettings.CustomStyles[name] = value;
-  };
-
   public render() {
     if (!env.IsLoggedIn) {
       return this.loginMessage();
