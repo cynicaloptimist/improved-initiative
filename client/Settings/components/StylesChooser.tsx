@@ -47,6 +47,7 @@ export class StylesChooser extends React.Component<
             {(fieldProps: FieldProps) => (
               <div className="c-styles-chooser-color-wheel">
                 <SketchPicker
+                  presetColors={[]}
                   color={fieldProps.field.value}
                   onChangeComplete={color =>
                     this.handleChangeComplete(color, fieldProps)
