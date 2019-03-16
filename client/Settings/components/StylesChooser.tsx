@@ -24,43 +24,29 @@ export class StylesChooser extends React.Component<
   public render() {
     return (
       <div className="c-styles-chooser">
-        <div className="c-styles-chooser-inputs">
-          <h4>Colors</h4>
-          {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
-          {this.getLabelAndColorBlock(
-            "Combatant Background",
-            "combatantBackground"
-          )}
-          {this.getLabelAndColorBlock(
-            "Active Combatant Indicator",
-            "activeCombatantIndicator"
-          )}
-          {this.getLabelAndColorBlock("Header Text", "headerText")}
-          {this.getLabelAndColorBlock("Header Background", "headerBackground")}
-          {this.getLabelAndColorBlock("Main Background", "mainBackground")}
-          <h4>Other Styles</h4>
-          <Field name="PlayerView.CustomStyles.font">
-            {(fieldProps: FieldProps) => (
-              <p>
-                <span style={{ fontFamily: fieldProps.field.value }}>
-                  Font:
-                </span>{" "}
-                <input {...fieldProps.field} />
-              </p>
+        <div className="c-styles-chooser-colors">
+          <div>
+            <h4>Colors</h4>
+            {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
+            {this.getLabelAndColorBlock(
+              "Combatant Background",
+              "combatantBackground"
             )}
-          </Field>
-
-          <p>
-            Background Image URL:{" "}
-            <Field name="PlayerView.CustomStyles.backgroundUrl" />
-          </p>
-        </div>
-        {this.state.selectedStyle !== null && (
+            {this.getLabelAndColorBlock(
+              "Active Combatant Indicator",
+              "activeCombatantIndicator"
+            )}
+            {this.getLabelAndColorBlock("Header Text", "headerText")}
+            {this.getLabelAndColorBlock(
+              "Header Background",
+              "headerBackground"
+            )}
+            {this.getLabelAndColorBlock("Main Background", "mainBackground")}
+          </div>
           <Field name={"PlayerView.CustomStyles." + this.state.selectedStyle}>
             {(fieldProps: FieldProps) => (
               <div className="c-styles-chooser-color-wheel">
                 <SketchPicker
-                  width="210px"
                   color={fieldProps.field.value}
                   onChangeComplete={color =>
                     this.handleChangeComplete(color, fieldProps)
@@ -73,7 +59,21 @@ export class StylesChooser extends React.Component<
               </div>
             )}
           </Field>
-        )}
+        </div>
+        <h4>Other Styles</h4>
+        <Field name="PlayerView.CustomStyles.font">
+          {(fieldProps: FieldProps) => (
+            <p>
+              <span style={{ fontFamily: fieldProps.field.value }}>Font:</span>{" "}
+              <input {...fieldProps.field} />
+            </p>
+          )}
+        </Field>
+
+        <p>
+          Background Image URL:{" "}
+          <Field name="PlayerView.CustomStyles.backgroundUrl" />
+        </p>
       </div>
     );
   }
