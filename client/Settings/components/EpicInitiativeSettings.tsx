@@ -1,4 +1,4 @@
-import { Field } from "formik";
+import { Field, FieldProps } from "formik";
 import * as React from "react";
 import { ChangeEvent } from "react";
 import {
@@ -61,6 +61,21 @@ export class EpicInitiativeSettings extends React.Component<
           Show turn start portrait splash
         </Toggle>
         <StylesChooser />
+        <h4>Other Styles</h4>
+        <Field name="PlayerView.CustomStyles.font">
+          {(fieldProps: FieldProps) => (
+            <p>
+              <span style={{ fontFamily: fieldProps.field.value }}>Font:</span>{" "}
+              <input {...fieldProps.field} />
+            </p>
+          )}
+        </Field>
+
+        <p>
+          Background Image URL:{" "}
+          <Field name="PlayerView.CustomStyles.backgroundUrl" />
+        </p>
+
         <h4>
           Additional CSS <strong>(experimental)</strong>
         </h4>

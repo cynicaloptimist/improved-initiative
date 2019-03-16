@@ -23,58 +23,39 @@ export class StylesChooser extends React.Component<
 
   public render() {
     return (
-      <div className="c-styles-chooser">
-        <div className="c-styles-chooser-colors">
-          <div>
-            <h4>Colors</h4>
-            {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
-            {this.getLabelAndColorBlock(
-              "Combatant Background",
-              "combatantBackground"
-            )}
-            {this.getLabelAndColorBlock(
-              "Active Combatant Indicator",
-              "activeCombatantIndicator"
-            )}
-            {this.getLabelAndColorBlock("Header Text", "headerText")}
-            {this.getLabelAndColorBlock(
-              "Header Background",
-              "headerBackground"
-            )}
-            {this.getLabelAndColorBlock("Main Background", "mainBackground")}
-          </div>
-          <Field name={"PlayerView.CustomStyles." + this.state.selectedStyle}>
-            {(fieldProps: FieldProps) => (
-              <div className="c-styles-chooser-color-wheel">
-                <SketchPicker
-                  presetColors={[]}
-                  color={fieldProps.field.value}
-                  onChangeComplete={color =>
-                    this.handleChangeComplete(color, fieldProps)
-                  }
-                />
-                <Button
-                  text="Clear"
-                  onClick={() => this.clearSelectedStyle(fieldProps)}
-                />
-              </div>
-            )}
-          </Field>
+      <div className="c-styles-chooser-colors">
+        <div>
+          <h4>Colors</h4>
+          {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
+          {this.getLabelAndColorBlock(
+            "Combatant Background",
+            "combatantBackground"
+          )}
+          {this.getLabelAndColorBlock(
+            "Active Combatant Indicator",
+            "activeCombatantIndicator"
+          )}
+          {this.getLabelAndColorBlock("Header Text", "headerText")}
+          {this.getLabelAndColorBlock("Header Background", "headerBackground")}
+          {this.getLabelAndColorBlock("Main Background", "mainBackground")}
         </div>
-        <h4>Other Styles</h4>
-        <Field name="PlayerView.CustomStyles.font">
+        <Field name={"PlayerView.CustomStyles." + this.state.selectedStyle}>
           {(fieldProps: FieldProps) => (
-            <p>
-              <span style={{ fontFamily: fieldProps.field.value }}>Font:</span>{" "}
-              <input {...fieldProps.field} />
-            </p>
+            <div className="c-styles-chooser-color-wheel">
+              <SketchPicker
+                presetColors={[]}
+                color={fieldProps.field.value}
+                onChangeComplete={color =>
+                  this.handleChangeComplete(color, fieldProps)
+                }
+              />
+              <Button
+                text="Clear"
+                onClick={() => this.clearSelectedStyle(fieldProps)}
+              />
+            </div>
           )}
         </Field>
-
-        <p>
-          Background Image URL:{" "}
-          <Field name="PlayerView.CustomStyles.backgroundUrl" />
-        </p>
       </div>
     );
   }
