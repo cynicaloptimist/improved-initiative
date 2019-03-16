@@ -37,11 +37,6 @@ export class EpicInitiativeSettings extends React.Component<
     this.props.playerViewSettings.CustomStyles[name] = value;
   };
 
-  private toggleDisplayPortraits = (s: boolean) =>
-    (this.props.playerViewSettings.DisplayPortraits = s);
-  private toggleSplashPortraits = (s: boolean) =>
-    (this.props.playerViewSettings.SplashPortraits = s);
-
   public render() {
     if (!env.IsLoggedIn) {
       return this.loginMessage();
