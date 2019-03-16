@@ -19,15 +19,7 @@ export class Toggle extends React.Component<ToggleProps> {
         {(fieldProps: FieldProps) => {
           const stateString = fieldProps.field.value ? "on" : "off";
           return (
-            <div
-              className="c-toggle"
-              onClick={() =>
-                fieldProps.form.setFieldValue(
-                  this.props.fieldName,
-                  !fieldProps.field.value
-                )
-              }
-            >
+            <div className="c-toggle" onClick={() => this.toggle(fieldProps)}>
               <span className="c-toggle__label">{this.props.children}</span>
               <span className={"c-toggle__icon fas fa-toggle-" + stateString} />
             </div>
@@ -36,4 +28,10 @@ export class Toggle extends React.Component<ToggleProps> {
       </Field>
     );
   }
+
+  private toggle = (fieldProps: FieldProps) =>
+    fieldProps.form.setFieldValue(
+      this.props.fieldName,
+      !fieldProps.field.value
+    );
 }
