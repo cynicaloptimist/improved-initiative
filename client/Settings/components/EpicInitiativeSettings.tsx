@@ -60,10 +60,7 @@ export class EpicInitiativeSettings extends React.Component<
         <Toggle fieldName="PlayerView.SplashPortraits">
           Show turn start portrait splash
         </Toggle>
-        <StylesChooser
-          currentStyles={this.props.playerViewSettings.CustomStyles}
-          updateStyle={this.updateStyle}
-        />
+        <StylesChooser />
         <h4>
           Additional CSS <strong>(experimental)</strong>
         </h4>

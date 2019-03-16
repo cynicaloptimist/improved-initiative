@@ -5,12 +5,8 @@ import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
 import { Button } from "../../Components/Button";
 import { ColorBlock } from "./ColorBlock";
 
-interface ColorChooserProps {
-  currentStyles: PlayerViewCustomStyles;
-  updateStyle: (name: keyof PlayerViewCustomStyles, value: string) => void;
-}
+interface ColorChooserProps {}
 interface ColorChooserState {
-  styles: PlayerViewCustomStyles;
   selectedStyle: keyof PlayerViewCustomStyles;
 }
 
@@ -21,33 +17,27 @@ export class StylesChooser extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      styles: this.props.currentStyles,
       selectedStyle: "combatantText"
     };
   }
 
-  private handleChangeComplete = (color: ColorResult) => {
+  private handleChangeComplete = (
+    color: ColorResult,
+    fieldProps: FieldProps
+  ) => {
     const { r, g, b, a } = color.rgb;
     const colorString = `rgba(${r},${g},${b},${a})`;
-    const updatedState = {
-      styles: { ...this.state.styles, [this.state.selectedStyle]: colorString }
-    };
-
-    this.setState(updatedState);
-    this.props.updateStyle(this.state.selectedStyle, colorString);
+    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
+    fieldProps.form.setFieldValue(fieldName, colorString);
   };
 
   private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
     return () => this.setState({ selectedStyle: style });
   }
 
-  private clearSelectedStyle = () => {
-    const updatedState = {
-      styles: { ...this.state.styles, [this.state.selectedStyle]: "" }
-    };
-
-    this.setState(updatedState);
-    this.props.updateStyle(this.state.selectedStyle, "");
+  private clearSelectedStyle = (fieldProps: FieldProps) => {
+    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
+    fieldProps.form.setFieldValue(fieldName, "");
   };
 
   private getLabelAndColorBlock(
@@ -55,14 +45,18 @@ export class StylesChooser extends React.Component<
     style: keyof PlayerViewCustomStyles
   ) {
     return (
-      <p>
-        {label}:{" "}
-        <ColorBlock
-          color={this.state.styles[style]}
-          click={this.bindClickToSelectStyle(style)}
-          selected={this.state.selectedStyle == style}
-        />
-      </p>
+      <Field name={"PlayerView.CustomStyles." + style}>
+        {(fieldProps: FieldProps) => (
+          <p>
+            {label}:{" "}
+            <ColorBlock
+              color={fieldProps.field.value}
+              click={this.bindClickToSelectStyle(style)}
+              selected={this.state.selectedStyle == style}
+            />
+          </p>
+        )}
+      </Field>
     );
   }
 
@@ -101,14 +95,23 @@ export class StylesChooser extends React.Component<
           </p>
         </div>
         {this.state.selectedStyle !== null && (
-          <div className="c-styles-chooser-color-wheel">
-            <SketchPicker
-              width="210px"
-              color={this.state.styles[this.state.selectedStyle]}
-              onChangeComplete={this.handleChangeComplete}
-            />
-            <Button text="Clear" onClick={this.clearSelectedStyle} />
-          </div>
+          <Field name={"PlayerView.CustomStyles." + this.state.selectedStyle}>
+            {(fieldProps: FieldProps) => (
+              <div className="c-styles-chooser-color-wheel">
+                <SketchPicker
+                  width="210px"
+                  color={fieldProps.field.value}
+                  onChangeComplete={color =>
+                    this.handleChangeComplete(color, fieldProps)
+                  }
+                />
+                <Button
+                  text="Clear"
+                  onClick={() => this.clearSelectedStyle(fieldProps)}
+                />
+              </div>
+            )}
+          </Field>
         )}
       </div>
     );
