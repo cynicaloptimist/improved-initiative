@@ -1,4 +1,4 @@
-import { Field } from "formik";
+import { Field, FieldProps } from "formik";
 import * as React from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
@@ -35,16 +35,6 @@ export class StylesChooser extends React.Component<
 
     this.setState(updatedState);
     this.props.updateStyle(this.state.selectedStyle, colorString);
-  };
-
-  private handleFontChange = (event: React.FocusEvent<HTMLInputElement>) => {
-    const fontName = event.currentTarget.value;
-    const updatedState = {
-      styles: { ...this.state.styles, font: fontName }
-    };
-
-    this.setState(updatedState);
-    this.props.updateStyle("font", fontName);
   };
 
   private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
@@ -94,13 +84,17 @@ export class StylesChooser extends React.Component<
           {this.getLabelAndColorBlock("Header Background", "headerBackground")}
           {this.getLabelAndColorBlock("Main Background", "mainBackground")}
           <h4>Other Styles</h4>
-          <p>
-            <span style={{ fontFamily: this.state.styles.font }}>Font:</span>{" "}
-            <input
-              defaultValue={this.state.styles.font}
-              onBlur={this.handleFontChange}
-            />
-          </p>
+          <Field name="PlayerView.CustomStyles.font">
+            {(fieldProps: FieldProps) => (
+              <p>
+                <span style={{ fontFamily: fieldProps.field.value }}>
+                  Font:
+                </span>{" "}
+                <input {...fieldProps.field} />
+              </p>
+            )}
+          </Field>
+
           <p>
             Background Image URL:{" "}
             <Field name="PlayerView.CustomStyles.backgroundUrl" />
