@@ -1,3 +1,4 @@
+import { Field } from "formik";
 import * as React from "react";
 import { ColorResult, SketchPicker } from "react-color";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
@@ -44,18 +45,6 @@ export class StylesChooser extends React.Component<
 
     this.setState(updatedState);
     this.props.updateStyle("font", fontName);
-  };
-
-  private handleBackgroundUrlChange = (
-    event: React.FocusEvent<HTMLInputElement>
-  ) => {
-    const backgroundUrl = event.currentTarget.value;
-    const updatedState = {
-      styles: { ...this.state.styles, backgroundUrl: backgroundUrl }
-    };
-
-    this.setState(updatedState);
-    this.props.updateStyle("backgroundUrl", backgroundUrl);
   };
 
   private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
@@ -114,10 +103,7 @@ export class StylesChooser extends React.Component<
           </p>
           <p>
             Background Image URL:{" "}
-            <input
-              value={this.state.styles.backgroundUrl}
-              onChange={this.handleBackgroundUrlChange}
-            />
+            <Field name="PlayerView.CustomStyles.backgroundUrl" />
           </p>
         </div>
         {this.state.selectedStyle !== null && (
