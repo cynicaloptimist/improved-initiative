@@ -21,45 +21,6 @@ export class StylesChooser extends React.Component<
     };
   }
 
-  private handleChangeComplete = (
-    color: ColorResult,
-    fieldProps: FieldProps
-  ) => {
-    const { r, g, b, a } = color.rgb;
-    const colorString = `rgba(${r},${g},${b},${a})`;
-    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
-    fieldProps.form.setFieldValue(fieldName, colorString);
-  };
-
-  private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
-    return () => this.setState({ selectedStyle: style });
-  }
-
-  private clearSelectedStyle = (fieldProps: FieldProps) => {
-    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
-    fieldProps.form.setFieldValue(fieldName, "");
-  };
-
-  private getLabelAndColorBlock(
-    label: string,
-    style: keyof PlayerViewCustomStyles
-  ) {
-    return (
-      <Field name={"PlayerView.CustomStyles." + style}>
-        {(fieldProps: FieldProps) => (
-          <p>
-            {label}:{" "}
-            <ColorBlock
-              color={fieldProps.field.value}
-              click={this.bindClickToSelectStyle(style)}
-              selected={this.state.selectedStyle == style}
-            />
-          </p>
-        )}
-      </Field>
-    );
-  }
-
   public render() {
     return (
       <div className="c-styles-chooser">
@@ -116,4 +77,43 @@ export class StylesChooser extends React.Component<
       </div>
     );
   }
+
+  private getLabelAndColorBlock(
+    label: string,
+    style: keyof PlayerViewCustomStyles
+  ) {
+    return (
+      <Field name={"PlayerView.CustomStyles." + style}>
+        {(fieldProps: FieldProps) => (
+          <p>
+            {label}:{" "}
+            <ColorBlock
+              color={fieldProps.field.value}
+              click={this.bindClickToSelectStyle(style)}
+              selected={this.state.selectedStyle == style}
+            />
+          </p>
+        )}
+      </Field>
+    );
+  }
+
+  private handleChangeComplete = (
+    color: ColorResult,
+    fieldProps: FieldProps
+  ) => {
+    const { r, g, b, a } = color.rgb;
+    const colorString = `rgba(${r},${g},${b},${a})`;
+    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
+    fieldProps.form.setFieldValue(fieldName, colorString);
+  };
+
+  private bindClickToSelectStyle(style: keyof PlayerViewCustomStyles) {
+    return () => this.setState({ selectedStyle: style });
+  }
+
+  private clearSelectedStyle = (fieldProps: FieldProps) => {
+    const fieldName = "PlayerView.CustomStyles." + this.state.selectedStyle;
+    fieldProps.form.setFieldValue(fieldName, "");
+  };
 }
