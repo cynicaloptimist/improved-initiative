@@ -10,42 +10,42 @@ export class LocalDataSettings extends React.Component<{}> {
       <React.Fragment>
         <h3>Local Data</h3>
         <div className="c-button-with-label">
-          <Button fontAwesomeIcon="file-archive" onClick={this.exportData} />
           <span>Export your user data as JSON file</span>
+          <Button fontAwesomeIcon="file-archive" onClick={this.exportData} />
         </div>
         <div className="c-button-with-label">
+          <span>Replace your user data by uploading a JSON file</span>
           <FileUploadButton
             acceptFileType=".json"
             fontAwesomeIcon="recycle"
             handleFile={this.importDataAndReplace}
           />
-          <span>Replace your user data by uploading a JSON file</span>
         </div>
         <div className="c-button-with-label">
+          <span>
+            Import characters, statblocks, encounters and spells from a JSON
+            file
+          </span>
           <FileUploadButton
             acceptFileType=".json"
             fontAwesomeIcon="upload"
             handleFile={this.importDataAndAdd}
           />
-          <span>
-            Import characters, statblocks, encounters and spells from a JSON
-            file
-          </span>
         </div>
         <div className="c-button-with-label">
+          <span>Import statblocks and spells from DnDAppFile</span>
           <FileUploadButton
             acceptFileType=".xml"
             fontAwesomeIcon="code"
             handleFile={this.importDndAppFile}
           />
-          <span>Import statblocks and spells from DnDAppFile</span>
         </div>
         <div className="c-button-with-label">
+          <span>Clear all local data</span>
           <Button
             fontAwesomeIcon="trash"
             onClick={this.confirmClearLocalData}
           />
-          <span>Clear all local data</span>
         </div>
       </React.Fragment>
     );

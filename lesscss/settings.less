@@ -123,20 +123,30 @@
     .green-button();
   }
 
-  .c-button-with-label {
+  .full-width-row {
     display: flex;
     flex-flow: row;
     align-items: center;
+    justify-content: space-between;
+  }
+
+  .c-button-with-label {
+    .full-width-row();
     > span {
       padding: 0 @extra-small-spacer;
       flex-shrink: 1;
     }
   }
 
+  .c-input-with-label {
+    .full-width-row();
+    > input {
+      margin: @small-spacer;
+    }
+  }
+
   .c-dropdown {
-    display: flex;
-    flex-flow: row;
-    align-items: center;
+    .full-width-row();
     > select {
       margin: @small-spacer;
     }

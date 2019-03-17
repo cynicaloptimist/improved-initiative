@@ -64,20 +64,20 @@ export class AccountSyncSettings extends React.Component<
           )}
         </div>
         <div className="c-button-with-label">
-          <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
           <span>Backup and sync local data</span>
+          <Button fontAwesomeIcon="cloud-upload-alt" onClick={this.syncAll} />
         </div>
         {this.state.syncError && <pre>{this.state.syncError}</pre>}
         <div className="c-button-with-label">
+          <span>Download all synced data to local data</span>
           <Button
             fontAwesomeIcon="cloud-download-alt"
             onClick={this.downloadAndSaveAllSyncedItems}
           />
-          <span>Download all synced data to local data</span>
         </div>
         <div className="c-button-with-label">
-          <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
           <span>Delete all synced account data</span>
+          <Button fontAwesomeIcon="trash" onClick={this.deleteAccount} />
         </div>
         <a className="button logout" href="/logout">
           Log Out

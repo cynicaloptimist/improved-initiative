@@ -55,17 +55,19 @@ export class EpicInitiativeSettings extends React.Component<
         <h4>Other Styles</h4>
         <Field name="PlayerView.CustomStyles.font">
           {(fieldProps: FieldProps) => (
-            <p>
-              <span style={{ fontFamily: fieldProps.field.value }}>Font:</span>{" "}
+            <div className="c-input-with-label">
+              <span style={{ fontFamily: fieldProps.field.value }}>
+                Font Family
+              </span>
               <input {...fieldProps.field} />
-            </p>
+            </div>
           )}
         </Field>
 
-        <p>
-          Background Image URL:{" "}
+        <div className="c-input-with-label">
+          Background Image URL
           <Field name="PlayerView.CustomStyles.backgroundUrl" />
-        </p>
+        </div>
 
         <h4>
           Additional CSS <strong>(experimental)</strong>
