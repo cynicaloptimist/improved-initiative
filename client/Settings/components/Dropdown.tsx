@@ -7,7 +7,7 @@ export const Dropdown = (props: {
   children: any;
 }) => (
   <div className="c-dropdown">
-    {props.children}
+    <span>{props.children}</span>
     <SelectOptions {...props} />
   </div>
 );

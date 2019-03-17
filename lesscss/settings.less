@@ -134,7 +134,7 @@
   .c-button-with-label {
     .full-width-row();
     > span {
-      padding: 0 @extra-small-spacer;
+      padding: @small-spacer;
       flex-shrink: 1;
     }
   }
@@ -148,8 +148,12 @@
 
   .c-dropdown {
     .full-width-row();
+    > span {
+      padding: @small-spacer;
+    }
     > select {
       margin: @small-spacer;
+      min-width: 150px;
     }
   }
 }
