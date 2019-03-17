@@ -1,5 +1,26 @@
+import { Field } from "formik";
 import React = require("react");
+import { HpVerbosityOption } from "../../../common/PlayerViewSettings";
+import {
+  AutoGroupInitiativeOption,
+  AutoRerollInitiativeOption
+} from "../Settings";
 import { Toggle } from "./Toggle";
+
+const SelectOptions = (props: { fieldName: string; options: {} }) => (
+  <Field component="select" name={props.fieldName}>
+    {Object.keys(props.options).map(option => (
+      <option value={option}>{props.options[option]}</option>
+    ))}
+  </Field>
+);
+
+const Dropdown = (props: { fieldName: string; options: {}; children: any }) => (
+  <div className="c-dropdown">
+    {props.children}
+    <SelectOptions {...props} />
+  </div>
+);
 
 interface OptionsSettingsProps {
   goToEpicInitiativeSettings: () => void;
@@ -18,14 +39,18 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="Rules.AutoCheckConcentration">
           Automatically prompt for concentration checks
         </Toggle>
-        <p>
-          Automatically add creatures to initiative group:
-          <select data-bind="options: AutoGroupInitiativeOptions, value: AutoGroupInitiative" />
-        </p>
-        <p>
+        <Dropdown
+          fieldName="Rules.AutoGroupInitiative"
+          options={AutoGroupInitiativeOption}
+        >
+          Automatically add creatures to initiative group
+        </Dropdown>
+        <Dropdown
+          fieldName="Rules.AutoRerollInitiative"
+          options={AutoRerollInitiativeOption}
+        >
           Automatically reroll initiative at the end of each round:
-          <select data-bind="options: AutoRerollInitiativeOptions, value: AutoRerollInitiative" />
-        </p>
+        </Dropdown>
 
         <h3>Encounter View</h3>
         <Toggle fieldName="TrackerView.DisplayRoundCounter">
@@ -45,14 +70,18 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="PlayerView.DisplayTurnTimer">
           Display Turn Timer
         </Toggle>
-        <p>
+        <Dropdown
+          fieldName="PlayerView.MonsterHpVerbosity"
+          options={HpVerbosityOption}
+        >
           Monster HP Verbosity
-          <select data-bind="options: HpVerbosityOptions, value: MonsterHpVerbosity" />
-        </p>
-        <p>
+        </Dropdown>
+        <Dropdown
+          fieldName="PlayerView.PlayerHpVerbosity"
+          options={HpVerbosityOption}
+        >
           Player HP Verbosity
-          <select data-bind="options: HpVerbosityOptions, value: PlayerHpVerbosity" />
-        </p>
+        </Dropdown>
         <Toggle fieldName="PlayerView.HideMonstersOutsideEncounter">
           Hide monsters when encounter is not active
         </Toggle>
@@ -62,12 +91,12 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="PlayerView.ActiveCombatantOnTop">
           Active combatant at top of initiative list
         </Toggle>
-        <p>
+        <div>
           {"Additional player view options available with "}
           <a href="#" onClick={this.props.goToEpicInitiativeSettings}>
             Epic Initiative
           </a>
-        </p>
+        </div>
       </div>
     );
   }
