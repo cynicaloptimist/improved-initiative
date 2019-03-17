@@ -33,6 +33,8 @@ interface SettingsPaneState {
   currentTab: SettingsTab;
 }
 
+let lastTab: SettingsTab = SettingsTab.About;
+
 export class SettingsPane extends React.Component<
   SettingsPaneProps,
   SettingsPaneState
@@ -40,9 +42,13 @@ export class SettingsPane extends React.Component<
   constructor(props) {
     super(props);
     this.state = {
-      currentTab: SettingsTab.About
+      currentTab: lastTab
     };
   }
+
+  public componentDidUpdate = () => {
+    lastTab = this.state.currentTab;
+  };
 
   public render() {
     return (
