@@ -15,7 +15,9 @@ export const Dropdown = (props: {
 const SelectOptions = (props: { fieldName: string; options: {} }) => (
   <Field component="select" name={props.fieldName}>
     {Object.keys(props.options).map(option => (
-      <option value={option}>{props.options[option]}</option>
+      <option value={option} key={option}>
+        {props.options[option]}
+      </option>
     ))}
   </Field>
 );
