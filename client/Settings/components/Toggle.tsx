@@ -19,14 +19,21 @@ export class Toggle extends React.Component<ToggleProps> {
         {(fieldProps: FieldProps) => {
           const stateString = fieldProps.field.value ? "on" : "off";
           return (
-            <button
-              type="button"
-              className="c-toggle"
-              onClick={() => this.toggle(fieldProps)}
-            >
-              <span className="c-toggle__label">{this.props.children}</span>
-              <span className={"c-toggle__icon fas fa-toggle-" + stateString} />
-            </button>
+            <div className="c-button-with-label">
+              <label className="c-toggle__label" htmlFor={this.id}>
+                {this.props.children}
+              </label>
+              <button
+                id={this.id}
+                type="button"
+                className="c-toggle"
+                onClick={() => this.toggle(fieldProps)}
+              >
+                <span
+                  className={"c-toggle__icon fas fa-toggle-" + stateString}
+                />
+              </button>
+            </div>
           );
         }}
       </Field>
