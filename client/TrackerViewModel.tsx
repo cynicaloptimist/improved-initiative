@@ -368,12 +368,12 @@ export class TrackerViewModel {
   });
 
   public settingsComponent = ko.computed(() => {
-    const encounterCommands = this.EncounterToolbar;
-    const combatantCommander = this.CombatantCommander;
     return (
       <SettingsPane
         settings={CurrentSettings()}
         handleNewSettings={this.saveUpdatedSettings}
+        encounterCommands={this.EncounterToolbar}
+        combatantCommands={this.CombatantCommander.Commands}
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
         saveAndClose={() => this.SettingsVisible(false)}

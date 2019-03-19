@@ -2,11 +2,13 @@ import { Formik } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { AccountClient } from "../../Account/AccountClient";
+import { Command } from "../../Commands/Command";
 import { Tabs } from "../../Components/Tabs";
 import { Libraries } from "../../Library/Libraries";
 import { Settings } from "../Settings";
 import { About } from "./About";
 import { AccountSettings } from "./AccountSettings";
+import { CommandsSettings } from "./CommandsSettings";
 import { EpicInitiativeSettings } from "./EpicInitiativeSettings";
 import { OptionsSettings } from "./OptionsSettings";
 
@@ -23,6 +25,8 @@ const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
 interface SettingsPaneProps {
   repeatTutorial: () => void;
   reviewPrivacyPolicy: () => void;
+  encounterCommands: Command[];
+  combatantCommands: Command[];
   accountClient: AccountClient;
   libraries: Libraries;
   settings: Settings;
@@ -78,6 +82,14 @@ export class SettingsPane extends React.Component<
         <About
           repeatTutorial={this.props.repeatTutorial}
           reviewPrivacyPolicy={this.props.reviewPrivacyPolicy}
+        />
+      );
+    }
+    if (this.state.currentTab == SettingsTab.Commands) {
+      return (
+        <CommandsSettings
+          encounterCommands={this.props.encounterCommands}
+          combatantCommands={this.props.combatantCommands}
         />
       );
     }
