@@ -5,6 +5,7 @@ import { probablyUniqueString } from "../../../common/Toolbox";
 interface ToggleButtonProps {
   fieldName: string;
   id?: string;
+  disabled?: boolean;
 }
 
 export class ToggleButton extends React.Component<ToggleButtonProps> {
@@ -16,6 +17,7 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
           return (
             <button
               id={this.props.id}
+              disabled={this.props.disabled}
               type="button"
               className="c-toggle"
               onClick={() => this.toggle(fieldProps)}
@@ -28,11 +30,16 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
     );
   }
 
-  private toggle = (fieldProps: FieldProps) =>
+  private toggle = (fieldProps: FieldProps) => {
+    if (this.props.disabled) {
+      return;
+    }
+
     fieldProps.form.setFieldValue(
       this.props.fieldName,
       !fieldProps.field.value
     );
+  };
 }
 
 interface ToggleProps {
