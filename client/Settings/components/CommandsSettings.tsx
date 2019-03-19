@@ -41,6 +41,11 @@ export class CommandsSettings extends React.Component<CommandsSettingsProps> {
     return (
       <div className="tab-content keybindings">
         <h2>Encounter Commands</h2>
+        <div className="command-options-labels">
+          <span className="hotkey-label">Hotkey</span>
+          <span className="toolbar-label">Show on Toolbar</span>
+        </div>
+
         {this.props.encounterCommands.map((c, i) => (
           <CommandSettingRow command={c} commandIndex={i} />
         ))}
