@@ -1,4 +1,4 @@
-import { Formik } from "formik";
+import { Formik, FormikProps } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { AccountClient } from "../../Account/AccountClient";
@@ -59,14 +59,14 @@ export class SettingsPane extends React.Component<
       <Formik
         initialValues={this.props.settings}
         onSubmit={this.handleFormSubmit}
-        render={props => (
+        render={(props: FormikProps<Settings>) => (
           <form className="settings" onSubmit={props.handleSubmit}>
             <Tabs
               selected={this.state.currentTab}
               options={SettingsTabOptions}
               onChoose={tab => this.setState({ currentTab: tab })}
             />
-            {this.getActiveTabContent()}
+            {this.getActiveTabContent(props)}
             <button type="submit" className="c-button save-and-close">
               Save and Close
             </button>
@@ -76,7 +76,7 @@ export class SettingsPane extends React.Component<
     );
   }
 
-  private getActiveTabContent = () => {
+  private getActiveTabContent = (formikProps: FormikProps<Settings>) => {
     if (this.state.currentTab == SettingsTab.About) {
       return (
         <About
@@ -88,6 +88,7 @@ export class SettingsPane extends React.Component<
     if (this.state.currentTab == SettingsTab.Commands) {
       return (
         <CommandsSettings
+          commandSettings={formikProps.values.Commands}
           encounterCommands={this.props.encounterCommands}
           combatantCommands={this.props.combatantCommands}
         />

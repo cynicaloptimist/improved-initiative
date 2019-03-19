@@ -1,6 +1,8 @@
 import { Field } from "formik";
+import _ = require("lodash");
 import * as React from "react";
 import { Command } from "../../Commands/Command";
+import { CommandSetting } from "../../Commands/CommandSetting";
 import { ToggleButton } from "./Toggle";
 
 interface CommandSettingRowProps {
@@ -32,6 +34,7 @@ class CommandSettingRow extends React.Component<CommandSettingRowProps> {
 }
 
 interface CommandsSettingsProps {
+  commandSettings: CommandSetting[];
   encounterCommands: Command[];
   combatantCommands: Command[];
 }
@@ -45,15 +48,19 @@ export class CommandsSettings extends React.Component<CommandsSettingsProps> {
           <span className="hotkey-label">Hotkey</span>
           <span className="toolbar-label">Show on Toolbar</span>
         </div>
-
-        {this.props.encounterCommands.map((c, i) => (
-          <CommandSettingRow command={c} commandIndex={i} />
-        ))}
+        {this.props.encounterCommands.map(this.buildCommandSettingRow)}
         <h2>Combatant Commands</h2>
-        {this.props.combatantCommands.map((c, i) => (
-          <CommandSettingRow command={c} commandIndex={i} />
-        ))}
+        {this.props.combatantCommands.map(this.buildCommandSettingRow)}
       </div>
     );
   }
+
+  private buildCommandSettingRow = (command: Command) => {
+    let index = _.findIndex(
+      this.props.commandSettings,
+      s => s.Name == command.Id
+    );
+
+    return <CommandSettingRow command={command} commandIndex={index} />;
+  };
 }
