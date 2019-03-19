@@ -15,14 +15,14 @@ export class Toggle extends React.Component<ToggleProps> {
 
   public render() {
     return (
-      <Field name={this.props.fieldName}>
-        {(fieldProps: FieldProps) => {
-          const stateString = fieldProps.field.value ? "on" : "off";
-          return (
-            <div className="c-button-with-label">
-              <label className="c-toggle__label" htmlFor={this.id}>
-                {this.props.children}
-              </label>
+      <div className="c-button-with-label">
+        <label className="c-toggle__label" htmlFor={this.id}>
+          {this.props.children}
+        </label>
+        <Field name={this.props.fieldName}>
+          {(fieldProps: FieldProps) => {
+            const stateString = fieldProps.field.value ? "on" : "off";
+            return (
               <button
                 id={this.id}
                 type="button"
@@ -33,10 +33,10 @@ export class Toggle extends React.Component<ToggleProps> {
                   className={"c-toggle__icon fas fa-toggle-" + stateString}
                 />
               </button>
-            </div>
-          );
-        }}
-      </Field>
+            );
+          }}
+        </Field>
+      </div>
     );
   }
 
