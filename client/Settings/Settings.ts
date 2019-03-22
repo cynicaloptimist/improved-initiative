@@ -252,3 +252,21 @@ export function ConfigureCommands(commands: Command[]) {
     configureCommands(newSettings, commands)
   );
 }
+
+export function AddMissingCommandsAndSave(
+  settings: Settings,
+  commands: Command[]
+) {
+  for (const command of commands) {
+    if (!settings.Commands.some(c => c.Name == command.Id)) {
+      settings.Commands.push({
+        Name: command.Id,
+        KeyBinding: command.KeyBinding,
+        ShowOnActionBar: command.ShowOnActionBar()
+      });
+    }
+  }
+
+  Store.Save(Store.User, "Settings", settings);
+  CurrentSettings(settings);
+}
