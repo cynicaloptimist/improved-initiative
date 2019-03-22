@@ -73,10 +73,11 @@ export class TrackerViewModel {
   public PatreonLoginUrl = env.PatreonLoginUrl;
 
   constructor(private Socket: SocketIOClient.Socket) {
-    ConfigureCommands([
+    const allCommands = [
       ...this.EncounterToolbar,
       ...this.CombatantCommander.Commands
-    ]);
+    ];
+    ConfigureCommands(allCommands);
 
     this.Socket.on(
       "suggest damage",
