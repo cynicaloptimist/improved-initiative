@@ -209,7 +209,7 @@ function updateToSemanticVersionIsRequired(
   return false;
 }
 
-function updateSettings(settings: any): Settings {
+export function UpdateSettings(settings: any): Settings {
   const defaultSettings = getDefaultSettings();
 
   if (!settings.PlayerView) {
@@ -236,7 +236,7 @@ export function InitializeSettings() {
   const localSettings = Store.Load<any>(Store.User, "Settings");
 
   if (localSettings) {
-    const updatedSettings = updateSettings(localSettings);
+    const updatedSettings = UpdateSettings(localSettings);
     CurrentSettings(updatedSettings);
   } else {
     const legacySettings = getLegacySettings();

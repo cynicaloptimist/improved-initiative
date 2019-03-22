@@ -28,7 +28,8 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   ConfigureCommands,
   CurrentSettings,
-  Settings
+  Settings,
+  UpdateSettings
 } from "./Settings/Settings";
 import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
@@ -445,7 +446,9 @@ export class TrackerViewModel {
 
   private HandleAccountSync(account: Account) {
     if (account.settings && account.settings.Version) {
-      CurrentSettings(account.settings);
+      const updatedSettings = UpdateSettings(account.settings);
+      CurrentSettings(updatedSettings);
+      Store.Save(Store.User, "Settings", updatedSettings);
     }
 
     if (account.statblocks) {
