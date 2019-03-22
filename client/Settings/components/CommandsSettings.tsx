@@ -13,7 +13,7 @@ interface CommandSettingRowProps {
 class CommandSettingRow extends React.Component<CommandSettingRowProps> {
   public render() {
     return (
-      <div key={this.props.commandIndex}>
+      <div>
         <span className="command-description">
           {this.props.command.Description}
         </span>
@@ -61,6 +61,8 @@ export class CommandsSettings extends React.Component<CommandsSettingsProps> {
       s => s.Name == command.Id
     );
 
-    return <CommandSettingRow command={command} commandIndex={index} />;
+    return (
+      <CommandSettingRow command={command} commandIndex={index} key={index} />
+    );
   };
 }
