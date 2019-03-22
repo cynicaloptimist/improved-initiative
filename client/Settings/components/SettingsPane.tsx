@@ -31,7 +31,7 @@ interface SettingsPaneProps {
   libraries: Libraries;
   settings: Settings;
   handleNewSettings: (newSettings: Settings) => void;
-  saveAndClose: () => void;
+  closeSettings: () => void;
 }
 interface SettingsPaneState {
   currentTab: SettingsTab;
@@ -122,6 +122,6 @@ export class SettingsPane extends React.Component<
 
   private handleFormSubmit = (newSettings: Settings) => {
     this.props.handleNewSettings(newSettings);
-    this.props.saveAndClose();
+    this.props.closeSettings();
   };
 }

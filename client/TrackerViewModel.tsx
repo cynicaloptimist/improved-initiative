@@ -380,7 +380,7 @@ export class TrackerViewModel {
         combatantCommands={this.CombatantCommander.Commands}
         reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
         repeatTutorial={this.RepeatTutorial}
-        saveAndClose={() => this.SettingsVisible(false)}
+        closeSettings={() => this.SettingsVisible(false)}
         libraries={this.Libraries}
         accountClient={new AccountClient()}
       />
