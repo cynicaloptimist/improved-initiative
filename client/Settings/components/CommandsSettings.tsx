@@ -13,7 +13,7 @@ interface CommandSettingRowProps {
 class CommandSettingRow extends React.Component<CommandSettingRowProps> {
   public render() {
     return (
-      <div>
+      <div key={this.props.commandIndex}>
         <span className="command-description">
           {this.props.command.Description}
         </span>
