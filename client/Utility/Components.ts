@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 
 const pendingComponents: JQueryXHR[] = [];
@@ -43,18 +42,6 @@ export let RegisterComponents = () => {
       template: { name }
     });
 
-  registerComponent(
-    "settings",
-    params =>
-      new SettingsViewModel(
-        params.encounterCommands,
-        params.combatantCommander,
-        params.libraries,
-        params.settingsVisible,
-        params.repeatTutorial,
-        params.reviewPrivacyPolicy
-      )
-  );
   registerComponent("combatant", params => params.viewModel);
   registerComponent("playerdisplaycombatant", params => params.combatant);
   registerComponent("defaultprompt", params => params.prompt);
