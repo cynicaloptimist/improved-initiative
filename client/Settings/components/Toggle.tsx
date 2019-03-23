@@ -13,7 +13,9 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
     return (
       <Field name={this.props.fieldName}>
         {(fieldProps: FieldProps) => {
-          const stateString = fieldProps.field.value ? "on" : "off";
+          const stateString = fieldProps.field.value
+            ? "fas fa-check-circle"
+            : "far fa-circle";
           return (
             <button
               id={this.props.id}
@@ -22,7 +24,7 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
               className="c-toggle"
               onClick={() => this.toggle(fieldProps)}
             >
-              <span className={"c-toggle__icon fas fa-toggle-" + stateString} />
+              <span className={"c-toggle__icon " + stateString} />
             </button>
           );
         }}
