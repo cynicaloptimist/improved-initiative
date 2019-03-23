@@ -157,7 +157,7 @@ function getLegacySettings(): Settings {
   };
 }
 
-function configureCommands(newSettings: Settings, commands: Command[]) {
+function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
 
   Mousetrap.bind("backspace", e => {
@@ -247,9 +247,9 @@ export function InitializeSettings() {
 }
 
 export function ConfigureCommands(commands: Command[]) {
-  configureCommands(CurrentSettings(), commands);
+  applyNewCommandSettings(CurrentSettings(), commands);
   CurrentSettings.subscribe(newSettings =>
-    configureCommands(newSettings, commands)
+    applyNewCommandSettings(newSettings, commands)
   );
 }
 
