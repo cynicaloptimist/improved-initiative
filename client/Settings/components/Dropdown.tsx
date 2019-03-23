@@ -1,4 +1,5 @@
 import { Field } from "formik";
+import * as _ from "lodash";
 import React = require("react");
 
 export const Dropdown = (props: {
@@ -14,9 +15,9 @@ export const Dropdown = (props: {
 
 const SelectOptions = (props: { fieldName: string; options: {} }) => (
   <Field component="select" name={props.fieldName}>
-    {Object.keys(props.options).map(option => (
+    {_.values<string>(props.options).map(option => (
       <option value={option} key={option}>
-        {props.options[option]}
+        {option}
       </option>
     ))}
   </Field>
