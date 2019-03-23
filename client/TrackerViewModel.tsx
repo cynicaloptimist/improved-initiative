@@ -27,9 +27,9 @@ import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
   AddMissingCommandsAndSaveSettings,
-  ConfigureCommands,
   CurrentSettings,
   Settings,
+  SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
 import { SettingsPane } from "./Settings/components/SettingsPane";
@@ -79,7 +79,7 @@ export class TrackerViewModel {
       ...this.CombatantCommander.Commands
     ];
     AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
-    ConfigureCommands(allCommands);
+    SubscribeCommandsToSettingsChanges(allCommands);
 
     this.Socket.on(
       "suggest damage",

@@ -246,7 +246,7 @@ export function InitializeSettings() {
   Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
 }
 
-export function ConfigureCommands(commands: Command[]) {
+export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
   applyNewCommandSettings(CurrentSettings(), commands);
   CurrentSettings.subscribe(newSettings =>
     applyNewCommandSettings(newSettings, commands)
