@@ -56,13 +56,13 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           Display Turn Timer
         </Toggle>
         <Dropdown
-          fieldName="PlayerView.MonsterHpVerbosity"
+          fieldName="PlayerView.MonsterHPVerbosity"
           options={HpVerbosityOption}
         >
           Monster HP Verbosity
         </Dropdown>
         <Dropdown
-          fieldName="PlayerView.PlayerHpVerbosity"
+          fieldName="PlayerView.PlayerHPVerbosity"
           options={HpVerbosityOption}
         >
           Player HP Verbosity
