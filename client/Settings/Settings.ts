@@ -253,7 +253,7 @@ export function ConfigureCommands(commands: Command[]) {
   );
 }
 
-export function AddMissingCommandsAndSave(
+export function AddMissingCommandsAndSaveSettings(
   settings: Settings,
   commands: Command[]
 ) {

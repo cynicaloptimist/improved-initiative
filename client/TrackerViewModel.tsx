@@ -26,7 +26,7 @@ import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
-  AddMissingCommandsAndSave,
+  AddMissingCommandsAndSaveSettings,
   ConfigureCommands,
   CurrentSettings,
   Settings,
@@ -78,7 +78,7 @@ export class TrackerViewModel {
       ...this.EncounterToolbar,
       ...this.CombatantCommander.Commands
     ];
-    AddMissingCommandsAndSave(CurrentSettings(), allCommands);
+    AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
     ConfigureCommands(allCommands);
 
     this.Socket.on(
@@ -454,7 +454,7 @@ export class TrackerViewModel {
         ...this.EncounterToolbar,
         ...this.CombatantCommander.Commands
       ];
-      AddMissingCommandsAndSave(updatedSettings, allCommands);
+      AddMissingCommandsAndSaveSettings(updatedSettings, allCommands);
     }
 
     if (account.statblocks) {
