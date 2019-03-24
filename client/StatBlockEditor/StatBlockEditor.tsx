@@ -191,10 +191,12 @@ export class StatBlockEditor extends React.Component<
   private saveAndClose = submittedValues => {
     const { SaveAs, StatBlockJSON, ...submittedStatBlock } = submittedValues;
 
-    const statBlockFromActiveEditor =
-      this.state.editorMode == "standard"
-        ? submittedStatBlock
-        : JSON.parse(StatBlockJSON);
+    let statBlockFromActiveEditor: StatBlock;
+    if (this.state.editorMode == "standard") {
+      statBlockFromActiveEditor = submittedStatBlock;
+    } else {
+      statBlockFromActiveEditor = JSON.parse(StatBlockJSON);
+    }
 
     const editedStatBlock = {
       ...StatBlock.Default(),
