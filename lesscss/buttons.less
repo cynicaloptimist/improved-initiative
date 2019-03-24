@@ -1,6 +1,16 @@
 @button-inner: 2.6rem;
 @button-padding: 0.75rem;
 
+.far {
+  .far();
+  font-family: @font-family-sans-serif;
+  font-weight: normal;
+
+  &:before {
+    font-family: "Font Awesome 5 Free";
+  }
+}
+
 .fas {
   .fas();
   font-family: @font-family-sans-serif;
@@ -8,6 +18,7 @@
 
   &:before {
     font-family: "Font Awesome 5 Free";
+    font-weight: 900;
   }
 }
 
@@ -18,12 +29,30 @@
 
   &:before {
     font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     margin-right: @medium-spacer;
   }
 }
 
 .c-button--icon-and-text .fas {
   margin-right: @small-spacer;
+}
+
+.c-toggle {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  background: none;
+  border: none;
+}
+
+.c-toggle__icon {
+  font-size: 150%;
+}
+
+.c-toggle__icon,
+.c-toggle__label {
+  padding: @small-spacer;
 }
 
 .fa-clickable {

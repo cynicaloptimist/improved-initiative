@@ -1,27 +1,16 @@
 import * as React from "react";
 import { env } from "../../Environment";
-import { tips } from "../Tips";
+import { TipCarousel } from "./TipCarousel";
 
 interface AboutProps {
   repeatTutorial: () => void;
   reviewPrivacyPolicy: () => void;
 }
 
-interface AboutState {
-  tipIndex: number;
-}
-export class About extends React.Component<AboutProps, AboutState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tipIndex: 0
-    };
-  }
-
+export class About extends React.Component<AboutProps> {
   public render() {
-    const currentTip = tips[this.state.tipIndex];
     return (
-      <React.Fragment>
+      <div className="tab-content about">
         <div>
           <p>
             <strong>Improved Initiative</strong>
@@ -54,24 +43,7 @@ export class About extends React.Component<AboutProps, AboutState> {
           </a>
         </div>
         <h2>Did you know?</h2>
-        <div className="tips">
-          <span
-            className="fa-arrow-left fa-clickable"
-            onClick={this.previousTip}
-            title="Previous Tip"
-          />
-          <span
-            className="tip"
-            dangerouslySetInnerHTML={{
-              __html: currentTip
-            }}
-          />
-          <span
-            className="fa-arrow-right fa-clickable"
-            onClick={this.nextTip}
-            title="Next Tip"
-          />
-        </div>
+        <TipCarousel />
         <div className="commands">
           <span
             className="button review-privacy"
@@ -86,15 +58,7 @@ export class About extends React.Component<AboutProps, AboutState> {
             Repeat Tutorial
           </span>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
-
-  private nextTip = () => this.navigateTips(1);
-  private previousTip = () => this.navigateTips(-1);
-
-  private navigateTips = (offset: number) =>
-    this.setState(state => ({
-      tipIndex: (state.tipIndex + tips.length + offset) % tips.length
-    }));
 }
