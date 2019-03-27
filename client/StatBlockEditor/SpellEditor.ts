@@ -88,8 +88,3 @@ export class SpellEditor {
     this.EditableSpell(null);
   };
 }
-
-ko.components.register("spelleditor", {
-  viewModel: params => params.editor,
-  template: { name: "spelleditor" }
-});
