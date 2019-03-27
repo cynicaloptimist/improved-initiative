@@ -42,11 +42,11 @@ export let RegisterComponents = () => {
       template: { name }
     });
 
-  registerComponent("combatant", params => params.viewModel);
-  registerComponent("playerdisplaycombatant", params => params.combatant);
-  registerComponent("defaultprompt", params => params.prompt);
-  registerComponent("concentrationprompt", params => params.prompt);
   registerComponent("acceptdamageprompt", params => params.prompt);
+  registerComponent("combatant", params => params.viewModel);
+  registerComponent("concentrationprompt", params => params.prompt);
+  registerComponent("defaultprompt", params => params.prompt);
+  registerComponent("playerdisplaycombatant", params => params.combatant);
   registerComponent("reactprompt", params => params.prompt);
   registerComponent("tutorial", params => new TutorialViewModel(params));
 };
