@@ -3,12 +3,12 @@
   "name": "Improved Initiative",
   "icons": [
     {
-      "src": "/img/improved-initiative-boot-white-on-darkred.png",
+      "src": "/img/boot-white-on-darkred-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/img/improved-initiative-boot-white-on-darkred.png",
+      "src": "/img/boot-white-on-darkred-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
