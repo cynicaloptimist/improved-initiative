@@ -24,11 +24,9 @@ export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
     );
   }
 
-  private applyDamage = () => {
+  private applyDamage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const inputAmount = parseInt(this.inputElement.value);
-    if (inputAmount == NaN || !inputAmount) {
-      return;
-    }
     this.props.onApply(this.props.combatant.Id, inputAmount);
   };
 }

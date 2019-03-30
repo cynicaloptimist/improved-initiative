@@ -196,6 +196,10 @@ export class PlayerView extends React.Component<
     combatantId,
     damageAmount
   ) => {
+    this.closeAllModals();
+    if (damageAmount == NaN || !damageAmount) {
+      return;
+    }
     this.props.onSuggestDamage(combatantId, damageAmount);
     this.closeAllModals();
   };
