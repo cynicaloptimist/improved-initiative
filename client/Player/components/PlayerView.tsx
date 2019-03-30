@@ -72,7 +72,7 @@ export class PlayerView extends React.Component<
         {this.state.suggestDamageCombatant && (
           <DamageSuggestor
             combatant={this.state.suggestDamageCombatant}
-            onApply={this.props.onSuggestDamage}
+            onApply={this.handleSuggestDamagePrompt}
           />
         )}
         <PlayerViewCombatantHeader
