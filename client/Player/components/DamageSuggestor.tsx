@@ -11,19 +11,16 @@ export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
 
   public render() {
     return (
-      <React.Fragment>
-        <div className="modal-blur" onClick={this.props.onClose} />
-        <form onSubmit={this.applyDamage} className="damage-suggestion">
-          Apply damage to {this.props.combatant.Name}
-          <div className="damage-suggestion__input">
-            <input type="number" ref={e => (this.inputElement = e)} />
-            <SubmitButton />
-          </div>
-          <div className="damage-suggestion__tip">
-            Use a positive value to damage and a negative value to heal
-          </div>
-        </form>
-      </React.Fragment>
+      <form onSubmit={this.applyDamage} className="damage-suggestion">
+        Apply damage to {this.props.combatant.Name}
+        <div className="damage-suggestion__input">
+          <input type="number" ref={e => (this.inputElement = e)} />
+          <SubmitButton />
+        </div>
+        <div className="damage-suggestion__tip">
+          Use a positive value to damage and a negative value to heal
+        </div>
+      </form>
     );
   }
 
@@ -33,7 +30,6 @@ export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
       return;
     }
     this.props.onApply(this.props.combatant.Id, inputAmount);
-    this.props.onClose();
   };
 }
 
@@ -45,5 +41,4 @@ export type ApplyDamageCallback = (
 interface DamageSuggestorProps {
   combatant: PlayerViewCombatantState;
   onApply: ApplyDamageCallback;
-  onClose: () => void;
 }

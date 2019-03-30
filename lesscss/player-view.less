@@ -56,10 +56,13 @@
   }
 
   .combatant-portrait {
+    z-index: 2;
+    position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
+    width: 100%;
   }
 
   .combatant-portrait__image {
@@ -70,8 +73,8 @@
   }
 
   .combatant-portrait__caption {
+    .card-bg-2(@large-spacer, @medium-spacer);
     max-width: 700px;
-    padding: 10px 0;
   }
 
   .damage-suggestion {

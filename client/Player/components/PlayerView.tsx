@@ -8,7 +8,7 @@ import { CustomStyles } from "./CustomStyles";
 import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
-import { PortraitModal } from "./PortraitModal";
+import { PortraitWithCaption } from "./PortraitModal";
 
 interface LocalState {
   showPortrait: boolean;
@@ -50,23 +50,28 @@ export class PlayerView extends React.Component<
       c => c.AC != undefined
     );
 
+    const modalVisible =
+      this.state.showPortrait || this.state.suggestDamageCombatant;
+
     return (
       <div className="c-player-view">
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
+        {modalVisible && (
+          <div className="modal-blur" onClick={this.closeAllModals} />
+        )}
         {this.state.showPortrait && (
-          <PortraitModal
+          <PortraitWithCaption
             imageURL={this.state.portraitURL}
             caption={this.state.portraitCaption}
-            onClose={this.closePortrait}
+            onClose={this.closeAllModals}
           />
         )}
         {this.state.suggestDamageCombatant && (
           <DamageSuggestor
             combatant={this.state.suggestDamageCombatant}
-            onClose={this.cancelSuggestion}
             onApply={this.props.onSuggestDamage}
           />
         )}
@@ -138,7 +143,7 @@ export class PlayerView extends React.Component<
         showPortrait: true,
         portraitWasRequestedByClick: false
       });
-      this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
+      this.modalTimeout = window.setTimeout(this.closeAllModals, 5000);
     }
   }
 
@@ -163,10 +168,11 @@ export class PlayerView extends React.Component<
     });
   };
 
-  private closePortrait = () => {
+  private closeAllModals = () => {
     this.setState({
       showPortrait: false,
-      portraitWasRequestedByClick: false
+      portraitWasRequestedByClick: false,
+      suggestDamageCombatant: null
     });
   };
 
@@ -186,9 +192,11 @@ export class PlayerView extends React.Component<
     });
   };
 
-  private cancelSuggestion = () => {
-    this.setState({
-      suggestDamageCombatant: null
-    });
+  private handleSuggestDamagePrompt: ApplyDamageCallback = (
+    combatantId,
+    damageAmount
+  ) => {
+    this.props.onSuggestDamage(combatantId, damageAmount);
+    this.closeAllModals();
   };
 }
