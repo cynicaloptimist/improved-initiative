@@ -33,8 +33,13 @@ export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
   };
 }
 
+export type ApplyDamageCallback = (
+  combatantId: string,
+  damageAmount: number
+) => void;
+
 interface DamageSuggestorProps {
   combatant: PlayerViewCombatantState;
-  onApply: (combatantId: string, damageAmount: number) => void;
+  onApply: ApplyDamageCallback;
   onClose: () => void;
 }

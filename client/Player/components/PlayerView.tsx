@@ -5,7 +5,7 @@ import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantSta
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
 import { CustomStyles } from "./CustomStyles";
-import { DamageSuggestor } from "./DamageSuggestor";
+import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitModal } from "./PortraitModal";
@@ -20,7 +20,7 @@ interface LocalState {
 }
 
 interface OwnProps {
-  onSuggestDamage: any;
+  onSuggestDamage: ApplyDamageCallback;
 }
 
 export class PlayerView extends React.Component<
