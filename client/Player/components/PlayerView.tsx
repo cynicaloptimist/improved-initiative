@@ -78,7 +78,7 @@ export class PlayerView extends React.Component<
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
-              suggestDamage={this.suggestDamage}
+              suggestDamage={this.openSuggestDamagePrompt}
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
@@ -177,7 +177,7 @@ export class PlayerView extends React.Component<
     );
   };
 
-  private suggestDamage = (combatant: PlayerViewCombatantState) => {
+  private openSuggestDamagePrompt = (combatant: PlayerViewCombatantState) => {
     if (!this.props.settings.AllowPlayerSuggestions) {
       return;
     }
