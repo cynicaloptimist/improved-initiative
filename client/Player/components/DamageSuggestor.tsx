@@ -26,7 +26,7 @@ export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
 
   private applyDamage = () => {
     const inputAmount = parseInt(this.inputElement.value);
-    if (inputAmount == NaN) {
+    if (inputAmount == NaN || !inputAmount) {
       return;
     }
     this.props.onApply(this.props.combatant.Id, inputAmount);
