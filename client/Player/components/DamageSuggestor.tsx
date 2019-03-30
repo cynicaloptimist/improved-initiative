@@ -5,6 +5,10 @@ import { SubmitButton } from "../../Components/Button";
 export class DamageSuggestor extends React.Component<DamageSuggestorProps> {
   private inputElement: HTMLInputElement;
 
+  public componentDidMount = () => {
+    this.inputElement.focus();
+  };
+
   public render() {
     return (
       <React.Fragment>
