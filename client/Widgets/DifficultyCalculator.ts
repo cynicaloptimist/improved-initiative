@@ -70,7 +70,7 @@ const getTotalLevel = (levels: string) => {
   return levelStrings.map(i => parseInt(i)).reduce((p, c) => p + c, 0);
 };
 
-const rankedXpMultipliers = [1, 1, 1.5, 2, 2.5, 3, 4, 4];
+const rankedXpMultipliers = [0.5, 1, 1.5, 2, 2.5, 3, 4, 4];
 
 const getXpMultiplierRank = (enemyCount: number) => {
   if (enemyCount <= 1) {
