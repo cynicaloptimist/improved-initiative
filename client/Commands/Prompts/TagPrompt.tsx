@@ -12,7 +12,7 @@ import { Prompt } from "./Prompt";
 
 interface TagPromptProps {
   targetDisplayNames: string;
-  combatants: Combatant[];
+  combatantNamesById: { [id: string]: string };
   activeCombatantId: string;
 }
 
@@ -91,9 +91,9 @@ class TagPromptComponent extends React.Component<
   );
 
   private renderCombatantOptions = () =>
-    this.props.combatants.map(c => (
-      <option key={c.Id} value={c.Id}>
-        {c.DisplayName()}
+    _.toPairs(this.props.combatantNamesById).map(([id, name]) => (
+      <option key={id} value={id}>
+        {name}
       </option>
     ));
 }
@@ -164,12 +164,17 @@ export class TagPrompt implements Prompt {
     private targetCombatants: Combatant[],
     private logEvent: (s: string) => void
   ) {
+    const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
+    const combatantNamesById = _.mapValues(combatantsById, c =>
+      c.DisplayName()
+    );
+
     this.component = (
       <TagPromptComponent
         activeCombatantId={
           encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""
         }
-        combatants={encounter.Combatants()}
+        combatantNamesById={combatantNamesById}
         targetDisplayNames={targetCombatants
           .map(t => t.DisplayName())
           .join(", ")}
