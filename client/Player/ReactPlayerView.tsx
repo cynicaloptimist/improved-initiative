@@ -59,6 +59,7 @@ export class ReactPlayerView {
         encounterState={this.playerViewState.encounterState}
         settings={this.playerViewState.settings}
         onSuggestDamage={this.suggestDamage}
+        onSuggestTag={this.suggestTag}
       />,
       this.element
     );
@@ -73,6 +74,19 @@ export class ReactPlayerView {
       this.encounterId,
       [combatantId],
       damageAmount,
+      "Player"
+    );
+  };
+
+  private suggestTag = (combatantId: string, tagText: string) => {
+    if (!this.socket) {
+      throw "Player View not attached to socket";
+    }
+    this.socket.emit(
+      "suggest tag",
+      this.encounterId,
+      [combatantId],
+      tagText,
       "Player"
     );
   };

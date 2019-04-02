@@ -26,6 +26,7 @@ describe("PlayerViewModel", () => {
         settings={CurrentSettings().PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
   });
@@ -94,6 +95,7 @@ describe("PlayerViewModel", () => {
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
 
@@ -129,6 +131,7 @@ describe("PlayerViewModel", () => {
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
 

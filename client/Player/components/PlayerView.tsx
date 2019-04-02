@@ -9,6 +9,7 @@ import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitWithCaption } from "./PortraitModal";
+import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
 
 interface LocalState {
   showPortrait: boolean;
@@ -17,10 +18,12 @@ interface LocalState {
   portraitCaption: string;
 
   suggestDamageCombatant: PlayerViewCombatantState;
+  suggestTagCombatant: PlayerViewCombatantState;
 }
 
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
+  onSuggestTag: ApplyTagCallback;
 }
 
 export class PlayerView extends React.Component<
@@ -37,7 +40,8 @@ export class PlayerView extends React.Component<
       portraitURL: "",
       portraitCaption: "",
 
-      suggestDamageCombatant: null
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     };
   }
 
@@ -51,7 +55,9 @@ export class PlayerView extends React.Component<
     );
 
     const modalVisible =
-      this.state.showPortrait || this.state.suggestDamageCombatant;
+      this.state.showPortrait ||
+      this.state.suggestDamageCombatant ||
+      this.state.suggestTagCombatant;
 
     return (
       <div className="c-player-view">
@@ -75,6 +81,12 @@ export class PlayerView extends React.Component<
             onApply={this.handleSuggestDamagePrompt}
           />
         )}
+        {this.state.suggestTagCombatant && (
+          <TagSuggestor
+            combatant={this.state.suggestTagCombatant}
+            onApply={this.handleSuggestTagPrompt}
+          />
+        )}
         <PlayerViewCombatantHeader
           portraitColumnVisible={this.hasImages()}
           acColumnVisible={acColumnVisible}
@@ -84,6 +96,7 @@ export class PlayerView extends React.Component<
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
               suggestDamage={this.openSuggestDamagePrompt}
+              suggestTag={this.openSuggestTagPrompt}
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
@@ -172,7 +185,8 @@ export class PlayerView extends React.Component<
     this.setState({
       showPortrait: false,
       portraitWasRequestedByClick: false,
-      suggestDamageCombatant: null
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     });
   };
 
@@ -192,6 +206,15 @@ export class PlayerView extends React.Component<
     });
   };
 
+  private openSuggestTagPrompt = (combatant: PlayerViewCombatantState) => {
+    if (!this.props.settings.AllowPlayerSuggestions) {
+      return;
+    }
+    this.setState({
+      suggestTagCombatant: combatant
+    });
+  };
+
   private handleSuggestDamagePrompt: ApplyDamageCallback = (
     combatantId,
     damageAmount
@@ -201,6 +224,13 @@ export class PlayerView extends React.Component<
       return;
     }
     this.props.onSuggestDamage(combatantId, damageAmount);
+  };
+
+  private handleSuggestTagPrompt: ApplyTagCallback = (combatantId, tagText) => {
     this.closeAllModals();
+    if (tagText.length == 0) {
+      return;
+    }
+    this.props.onSuggestTag(combatantId, tagText);
   };
 }

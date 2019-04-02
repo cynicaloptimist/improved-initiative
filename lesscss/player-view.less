@@ -1,3 +1,15 @@
+.suggestion-prompt {
+  .card-bg-2(@large-spacer, @large-spacer);
+
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: initial;
+}
+
 #playerview {
   margin: 0;
   font-size: 20px;
@@ -78,16 +90,7 @@
   }
 
   .damage-suggestion {
-    .card-bg-2(@large-spacer, @large-spacer);
-
-    z-index: 2;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    font-size: initial;
-
+    .suggestion-prompt();
     .damage-suggestion__input {
       flex-flow: row;
       justify-content: space-between;
@@ -96,6 +99,11 @@
       color: lighten(@primary-black, 50);
       font-size: smaller;
     }
+  }
+
+  .tag-suggestion {
+    .suggestion-prompt();
+    flex-flow: row;
   }
 
   /* Add Animation */
