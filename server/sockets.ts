@@ -52,6 +52,18 @@ export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
         );
     });
 
+    socket.on("suggest tag", function(
+      id: string,
+      suggestedCombatantIds: string[],
+      suggestedTag: string,
+      suggester: string
+    ) {
+      joinEncounter(id);
+      socket.broadcast
+        .to(encounterId)
+        .emit("suggest tag", suggestedCombatantIds, suggestedTag, suggester);
+    });
+
     socket.on("disconnect", function() {
       io.in(encounterId).clients((error, clients) => {
         if (clients.length == 0) {
