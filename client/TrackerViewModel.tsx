@@ -99,6 +99,25 @@ export class TrackerViewModel {
       }
     );
 
+    this.Socket.on(
+      "suggest tag",
+      (
+        suggestedCombatantIds: string[],
+        suggestedTag: string,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.CombatantViewModels().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+
+        this.CombatantCommander.SuggestAddTag(
+          suggestedCombatants[0].Combatant,
+          suggestedTag,
+          suggester
+        );
+      }
+    );
+
     this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
     this.playerViewClient.UpdateSettings(
       this.Encounter.EncounterId,

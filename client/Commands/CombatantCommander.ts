@@ -13,6 +13,7 @@ import { Metrics } from "../Utility/Metrics";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
+import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
@@ -250,6 +251,21 @@ export class CombatantCommander {
       suggestedDamage,
       suggester,
       this.tracker
+    );
+
+    this.tracker.PromptQueue.Add(prompt);
+    return false;
+  };
+
+  public SuggestAddTag = (
+    suggestedCombatant: Combatant,
+    suggestedTag: string,
+    suggester: string
+  ) => {
+    const prompt = new AcceptTagPrompt(
+      suggestedCombatant,
+      suggestedTag,
+      suggester
     );
 
     this.tracker.PromptQueue.Add(prompt);
