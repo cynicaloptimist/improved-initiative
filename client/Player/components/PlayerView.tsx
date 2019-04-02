@@ -96,7 +96,10 @@ export class PlayerView extends React.Component<
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
               suggestDamage={this.openSuggestDamagePrompt}
-              suggestTag={this.openSuggestTagPrompt}
+              suggestTag={
+                this.props.settings.AllowTagSuggestions &&
+                this.openSuggestTagPrompt
+              }
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
