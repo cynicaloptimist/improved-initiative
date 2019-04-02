@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import { find } from "lodash";
+import { TagState } from "../common/CombatantState";
 import { InitializeCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
@@ -103,7 +104,7 @@ export class TrackerViewModel {
       "suggest tag",
       (
         suggestedCombatantIds: string[],
-        suggestedTag: string,
+        suggestedTag: TagState,
         suggester: string
       ) => {
         const suggestedCombatants = this.CombatantViewModels().filter(

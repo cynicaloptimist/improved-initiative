@@ -20,7 +20,7 @@ interface TagPromptState {
   advancedMode: boolean;
 }
 
-class TagPromptComponent extends React.Component<
+export class TagPromptComponent extends React.Component<
   TagPromptProps,
   TagPromptState
 > {

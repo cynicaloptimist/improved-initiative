@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { TagState } from "../../common/CombatantState";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
@@ -259,11 +260,12 @@ export class CombatantCommander {
 
   public SuggestAddTag = (
     suggestedCombatant: Combatant,
-    suggestedTag: string,
+    suggestedTag: TagState,
     suggester: string
   ) => {
     const prompt = new AcceptTagPrompt(
       suggestedCombatant,
+      this.tracker.Encounter.AddDurationTag,
       suggestedTag,
       suggester
     );

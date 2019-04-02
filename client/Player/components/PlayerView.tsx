@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
@@ -23,7 +24,7 @@ interface LocalState {
 
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
-  onSuggestTag: ApplyTagCallback;
+  onSuggestTag: (combatantId: string, tagState: TagState) => void;
 }
 
 export class PlayerView extends React.Component<
@@ -59,6 +60,12 @@ export class PlayerView extends React.Component<
       this.state.suggestDamageCombatant ||
       this.state.suggestTagCombatant;
 
+    const combatantsById = _.keyBy(
+      this.props.encounterState.Combatants,
+      c => c.Id
+    );
+    const combatantNamesById = _.mapValues(combatantsById, c => c.Name);
+
     return (
       <div className="c-player-view">
         <CustomStyles
@@ -83,7 +90,9 @@ export class PlayerView extends React.Component<
         )}
         {this.state.suggestTagCombatant && (
           <TagSuggestor
-            combatant={this.state.suggestTagCombatant}
+            targetCombatant={this.state.suggestTagCombatant}
+            activeCombatantId={this.props.encounterState.ActiveCombatantId}
+            combatantNamesById={combatantNamesById}
             onApply={this.handleSuggestTagPrompt}
           />
         )}
@@ -229,11 +238,12 @@ export class PlayerView extends React.Component<
     this.props.onSuggestDamage(combatantId, damageAmount);
   };
 
-  private handleSuggestTagPrompt: ApplyTagCallback = (combatantId, tagText) => {
+  private handleSuggestTagPrompt: ApplyTagCallback = tagState => {
+    const combatantId = this.state.suggestTagCombatant.Id;
     this.closeAllModals();
-    if (tagText.length == 0) {
+    if (tagState.Text.length == 0) {
       return;
     }
-    this.props.onSuggestTag(combatantId, tagText);
+    this.props.onSuggestTag(combatantId, tagState);
   };
 }

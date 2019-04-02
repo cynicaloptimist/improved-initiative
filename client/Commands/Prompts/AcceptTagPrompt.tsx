@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TagState } from "../../../common/CombatantState";
 import { Combatant } from "../../Combatant/Combatant";
 import { Tag } from "../../Combatant/Tag";
 import { Button, SubmitButton } from "../../Components/Button";
@@ -6,7 +7,7 @@ import { Prompt } from "./Prompt";
 
 interface AcceptTagPromptComponentProps {
   combatantName: string;
-  tagText: string;
+  tagState: TagState;
   suggestor: string;
   acceptTag: () => boolean;
 }
@@ -21,7 +22,7 @@ class AcceptTagPromptComponent extends React.Component<
     return (
       <div className="p-accept-tag">
         <span className="p-accept-tag__label">
-          Add tag "{this.props.tagText}" to {this.props.combatantName}?
+          Add tag "{this.props.tagState.Text}" to {this.props.combatantName}?
         </span>
         <SubmitButton faClass="times" />
         <SubmitButton beforeSubmit={this.props.acceptTag} />
@@ -37,13 +38,14 @@ export class AcceptTagPrompt implements Prompt {
 
   constructor(
     private combatant: Combatant,
-    private tagText: string,
+    private addDurationTagToEncounter: (tag: Tag) => void,
+    private tagState: TagState,
     suggestor: string
   ) {
     this.component = (
       <AcceptTagPromptComponent
         combatantName={combatant.DisplayName()}
-        tagText={tagText}
+        tagState={tagState}
         suggestor={suggestor}
         acceptTag={this.acceptTag}
       />
@@ -53,7 +55,21 @@ export class AcceptTagPrompt implements Prompt {
   public Resolve = () => {};
 
   private acceptTag = () => {
-    this.combatant.Tags.push(new Tag(this.tagText, this.combatant));
+    if (this.tagState.DurationCombatantId.length > 0) {
+      const tag = new Tag(
+        this.tagState.Text,
+        this.combatant,
+        this.tagState.DurationRemaining,
+        this.tagState.DurationTiming,
+        this.tagState.DurationCombatantId
+      );
+
+      this.addDurationTagToEncounter(tag);
+      this.combatant.Tags.push(tag);
+    } else {
+      this.combatant.Tags.push(new Tag(this.tagState.Text, this.combatant));
+    }
+
     return true;
   };
 }

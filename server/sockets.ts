@@ -55,7 +55,7 @@ export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
     socket.on("suggest tag", function(
       id: string,
       suggestedCombatantIds: string[],
-      suggestedTag: string,
+      suggestedTag: any,
       suggester: string
     ) {
       joinEncounter(id);
