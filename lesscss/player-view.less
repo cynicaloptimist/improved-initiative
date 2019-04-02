@@ -103,7 +103,13 @@
 
   .tag-suggestion {
     .suggestion-prompt();
-    flex-flow: row;
+    .add-tag > div {
+      flex-flow: row;
+      align-items: center;
+      > * {
+        margin: @extra-small-spacer;
+      }
+    }
   }
 
   /* Add Animation */
