@@ -12,7 +12,7 @@ import { Prompt } from "./Prompt";
 
 interface TagPromptProps {
   targetDisplayNames: string;
-  combatants: Combatant[];
+  combatantNamesById: { [id: string]: string };
   activeCombatantId: string;
 }
 
@@ -20,7 +20,7 @@ interface TagPromptState {
   advancedMode: boolean;
 }
 
-class TagPromptComponent extends React.Component<
+export class TagPromptComponent extends React.Component<
   TagPromptProps,
   TagPromptState
 > {
@@ -91,9 +91,9 @@ class TagPromptComponent extends React.Component<
   );
 
   private renderCombatantOptions = () =>
-    this.props.combatants.map(c => (
-      <option key={c.Id} value={c.Id}>
-        {c.DisplayName()}
+    _.toPairs(this.props.combatantNamesById).map(([id, name]) => (
+      <option key={id} value={id}>
+        {name}
       </option>
     ));
 }
@@ -119,11 +119,11 @@ export class TagPrompt implements Prompt {
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
-          this.component.props.combatants,
+          this.encounter.Combatants(),
           c => timingId == c.Id
         );
         const timingKeyedCombatantIsActive =
-          timingKeyedCombatant.Id == this.component.props.activeCombatantId;
+          timingKeyedCombatant.Id == this.encounter.ActiveCombatant().Id;
         const durationGraceRound =
           timingKeyedCombatantIsActive && timing == EndOfTurn ? 1 : 0;
 
@@ -151,7 +151,9 @@ export class TagPrompt implements Prompt {
       }
 
       this.logEvent(
-        `Added "${text}" tag to ${this.component.props.targetDisplayName}`
+        `Added "${text}" tag to ${this.targetCombatants
+          .map(c => c.DisplayName())
+          .join(", ")}`
       );
       this.encounter.QueueEmitEncounter();
     }
@@ -162,12 +164,17 @@ export class TagPrompt implements Prompt {
     private targetCombatants: Combatant[],
     private logEvent: (s: string) => void
   ) {
+    const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
+    const combatantNamesById = _.mapValues(combatantsById, c =>
+      c.DisplayName()
+    );
+
     this.component = (
       <TagPromptComponent
         activeCombatantId={
           encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""
         }
-        combatants={encounter.Combatants()}
+        combatantNamesById={combatantNamesById}
         targetDisplayNames={targetCombatants
           .map(t => t.DisplayName())
           .join(", ")}

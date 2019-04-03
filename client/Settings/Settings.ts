@@ -68,6 +68,7 @@ export function getDefaultSettings(): Settings {
     PlayerView: {
       ActiveCombatantOnTop: false,
       AllowPlayerSuggestions: false,
+      AllowTagSuggestions: false,
       MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
       PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,
@@ -157,7 +158,7 @@ function getLegacySettings(): Settings {
   };
 }
 
-function configureCommands(newSettings: Settings, commands: Command[]) {
+function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
 
   Mousetrap.bind("backspace", e => {
@@ -209,7 +210,7 @@ function updateToSemanticVersionIsRequired(
   return false;
 }
 
-function updateSettings(settings: any): Settings {
+export function UpdateSettings(settings: any): Settings {
   const defaultSettings = getDefaultSettings();
 
   if (!settings.PlayerView) {
@@ -236,7 +237,7 @@ export function InitializeSettings() {
   const localSettings = Store.Load<any>(Store.User, "Settings");
 
   if (localSettings) {
-    const updatedSettings = updateSettings(localSettings);
+    const updatedSettings = UpdateSettings(localSettings);
     CurrentSettings(updatedSettings);
   } else {
     const legacySettings = getLegacySettings();
@@ -246,9 +247,27 @@ export function InitializeSettings() {
   Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
 }
 
-export function ConfigureCommands(commands: Command[]) {
-  configureCommands(CurrentSettings(), commands);
+export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
+  applyNewCommandSettings(CurrentSettings(), commands);
   CurrentSettings.subscribe(newSettings =>
-    configureCommands(newSettings, commands)
+    applyNewCommandSettings(newSettings, commands)
   );
+}
+
+export function AddMissingCommandsAndSaveSettings(
+  settings: Settings,
+  commands: Command[]
+) {
+  for (const command of commands) {
+    if (!settings.Commands.some(c => c.Name == command.Id)) {
+      settings.Commands.push({
+        Name: command.Id,
+        KeyBinding: command.KeyBinding,
+        ShowOnActionBar: command.ShowOnActionBar()
+      });
+    }
+  }
+
+  Store.Save(Store.User, "Settings", settings);
+  CurrentSettings(settings);
 }

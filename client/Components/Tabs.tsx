@@ -1,16 +1,19 @@
 import * as React from "react";
 
-interface TabsProps {
-  options: string[];
-  selected?: string;
-  onChoose: (option: string) => void;
+interface TabsProps<T> {
+  options: T[];
+  selected?: T;
+  onChoose: (option: T) => void;
 }
 
 interface TabsState {}
 
-export class Tabs extends React.Component<TabsProps, TabsState> {
+export class Tabs<T extends string> extends React.Component<
+  TabsProps<T>,
+  TabsState
+> {
   public render() {
-    const spanElements = this.props.options.map((option, i) => (
+    const buttonElements = this.props.options.map((option, i) => (
       <button
         type="button"
         key={i}
@@ -21,6 +24,6 @@ export class Tabs extends React.Component<TabsProps, TabsState> {
       </button>
     ));
 
-    return <div className="c-tabs">{spanElements}</div>;
+    return <div className="c-tabs">{buttonElements}</div>;
   }
 }

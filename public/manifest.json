@@ -3,14 +3,16 @@
   "name": "Improved Initiative",
   "icons": [
     {
-      "src": "/img/improved-initiative-transparent-darkred.png",
+      "src": "/img/boot-white-on-darkred-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
-      "src": "/img/improved-initiative-transparent-darkred.png",
+      "src": "/img/boot-white-on-darkred-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/e/",

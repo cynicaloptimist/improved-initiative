@@ -9,7 +9,7 @@ import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 import { PlayerView } from "./components/PlayerView";
 import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
-import { PortraitModal } from "./components/PortraitModal";
+import { PortraitWithCaption } from "./components/PortraitModal";
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -26,6 +26,7 @@ describe("PlayerViewModel", () => {
         settings={CurrentSettings().PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
   });
@@ -63,12 +64,12 @@ describe("PlayerViewModel", () => {
       settings: settings.PlayerView
     });
 
-    expect(playerView.find(PortraitModal).length).toBe(0);
+    expect(playerView.find(PortraitWithCaption).length).toBe(0);
 
     encounter.StartEncounter();
     playerView.setProps({ encounterState: encounter.GetPlayerView() });
 
-    expect(playerView.find(PortraitModal).length).toBe(1);
+    expect(playerView.find(PortraitWithCaption).length).toBe(1);
   });
 
   test("Making no change does not splash combatant portraits", () => {
@@ -94,16 +95,17 @@ describe("PlayerViewModel", () => {
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
 
-    expect(playerView.find(PortraitModal).length).toBe(0);
+    expect(playerView.find(PortraitWithCaption).length).toBe(0);
 
     playerView.setProps({
       encounterState: encounter.GetPlayerView()
     });
 
-    expect(playerView.find(PortraitModal).length).toBe(0);
+    expect(playerView.find(PortraitWithCaption).length).toBe(0);
   });
 
   test("Applying damage does not splash combatant portraits", () => {
@@ -129,16 +131,17 @@ describe("PlayerViewModel", () => {
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
       />
     );
 
-    expect(playerView.find(PortraitModal).length).toBe(0);
+    expect(playerView.find(PortraitWithCaption).length).toBe(0);
 
     combatant1.ApplyDamage(5);
     playerView.setProps({
       encounterState: encounter.GetPlayerView()
     });
 
-    expect(playerView.find(PortraitModal).length).toBe(0);
+    expect(playerView.find(PortraitWithCaption).length).toBe(0);
   });
 });

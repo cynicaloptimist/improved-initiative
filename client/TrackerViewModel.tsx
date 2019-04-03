@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import { find } from "lodash";
+import { TagState } from "../common/CombatantState";
 import { InitializeCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
@@ -25,7 +26,14 @@ import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
-import { ConfigureCommands, CurrentSettings } from "./Settings/Settings";
+import {
+  AddMissingCommandsAndSaveSettings,
+  CurrentSettings,
+  Settings,
+  SubscribeCommandsToSettingsChanges,
+  UpdateSettings
+} from "./Settings/Settings";
+import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
@@ -67,10 +75,12 @@ export class TrackerViewModel {
   public PatreonLoginUrl = env.PatreonLoginUrl;
 
   constructor(private Socket: SocketIOClient.Socket) {
-    ConfigureCommands([
+    const allCommands = [
       ...this.EncounterToolbar,
       ...this.CombatantCommander.Commands
-    ]);
+    ];
+    AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
+    SubscribeCommandsToSettingsChanges(allCommands);
 
     this.Socket.on(
       "suggest damage",
@@ -85,6 +95,25 @@ export class TrackerViewModel {
         this.CombatantCommander.SuggestEditHP(
           suggestedCombatants,
           suggestedDamage,
+          suggester
+        );
+      }
+    );
+
+    this.Socket.on(
+      "suggest tag",
+      (
+        suggestedCombatantIds: string[],
+        suggestedTag: TagState,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.CombatantViewModels().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+
+        this.CombatantCommander.SuggestAddTag(
+          suggestedCombatants[0].Combatant,
+          suggestedTag,
           suggester
         );
       }
@@ -362,6 +391,22 @@ export class TrackerViewModel {
     return "show-center-right-left";
   });
 
+  public settingsComponent = ko.computed(() => {
+    return (
+      <SettingsPane
+        settings={CurrentSettings()}
+        handleNewSettings={this.saveUpdatedSettings}
+        encounterCommands={this.EncounterToolbar}
+        combatantCommands={this.CombatantCommander.Commands}
+        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
+        repeatTutorial={this.RepeatTutorial}
+        closeSettings={() => this.SettingsVisible(false)}
+        libraries={this.Libraries}
+        accountClient={new AccountClient()}
+      />
+    );
+  });
+
   public toolbarComponent = ko.computed(() => {
     const commandsToHideById =
       this.Encounter.State() == "active"
@@ -424,7 +469,12 @@ export class TrackerViewModel {
 
   private HandleAccountSync(account: Account) {
     if (account.settings && account.settings.Version) {
-      CurrentSettings(account.settings);
+      const updatedSettings = UpdateSettings(account.settings);
+      const allCommands = [
+        ...this.EncounterToolbar,
+        ...this.CombatantCommander.Commands
+      ];
+      AddMissingCommandsAndSaveSettings(updatedSettings, allCommands);
     }
 
     if (account.statblocks) {
@@ -452,4 +502,10 @@ export class TrackerViewModel {
       this.ReviewPrivacyPolicy();
     }
   };
+
+  private saveUpdatedSettings(newSettings: Settings) {
+    CurrentSettings(newSettings);
+    Store.Save(Store.User, "Settings", newSettings);
+    new AccountClient().SaveSettings(newSettings);
+  }
 }

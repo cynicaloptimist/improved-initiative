@@ -1,7 +1,6 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { SettingsViewModel } from "../Settings/SettingsViewModel";
 import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 
 const pendingComponents: JQueryXHR[] = [];
@@ -43,26 +42,12 @@ export let RegisterComponents = () => {
       template: { name }
     });
 
-  registerComponent(
-    "settings",
-    params =>
-      new SettingsViewModel(
-        params.encounterCommands,
-        params.combatantCommander,
-        params.libraries,
-        params.settingsVisible,
-        params.repeatTutorial,
-        params.reviewPrivacyPolicy
-      )
-  );
-  registerComponent("combatant", params => params.viewModel);
-  registerComponent("playerdisplaycombatant", params => params.combatant);
-  registerComponent("defaultprompt", params => params.prompt);
-  registerComponent("concentrationprompt", params => params.prompt);
-  registerComponent("initiativeprompt", params => params.prompt);
-  registerComponent("spellprompt", params => params.prompt);
   registerComponent("acceptdamageprompt", params => params.prompt);
+  registerComponent("combatant", params => params.viewModel);
+  registerComponent("concentrationprompt", params => params.prompt);
+  registerComponent("defaultprompt", params => params.prompt);
+  registerComponent("playerdisplaycombatant", params => params.combatant);
   registerComponent("reactprompt", params => params.prompt);
+  registerComponent("spelleditor", params => params.editor);
   registerComponent("tutorial", params => new TutorialViewModel(params));
-  registerComponent("playersuggestion", params => params.suggestion);
 };

@@ -1,14 +1,16 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
 import { CustomStyles } from "./CustomStyles";
-import { DamageSuggestor } from "./DamageSuggestor";
+import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
-import { PortraitModal } from "./PortraitModal";
+import { PortraitWithCaption } from "./PortraitModal";
+import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
 
 interface LocalState {
   showPortrait: boolean;
@@ -17,10 +19,12 @@ interface LocalState {
   portraitCaption: string;
 
   suggestDamageCombatant: PlayerViewCombatantState;
+  suggestTagCombatant: PlayerViewCombatantState;
 }
 
 interface OwnProps {
-  onSuggestDamage: any;
+  onSuggestDamage: ApplyDamageCallback;
+  onSuggestTag: (combatantId: string, tagState: TagState) => void;
 }
 
 export class PlayerView extends React.Component<
@@ -37,7 +41,8 @@ export class PlayerView extends React.Component<
       portraitURL: "",
       portraitCaption: "",
 
-      suggestDamageCombatant: null
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     };
   }
 
@@ -50,24 +55,45 @@ export class PlayerView extends React.Component<
       c => c.AC != undefined
     );
 
+    const modalVisible =
+      this.state.showPortrait ||
+      this.state.suggestDamageCombatant ||
+      this.state.suggestTagCombatant;
+
+    const combatantsById = _.keyBy(
+      this.props.encounterState.Combatants,
+      c => c.Id
+    );
+    const combatantNamesById = _.mapValues(combatantsById, c => c.Name);
+
     return (
       <div className="c-player-view">
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
         />
+        {modalVisible && (
+          <div className="modal-blur" onClick={this.closeAllModals} />
+        )}
         {this.state.showPortrait && (
-          <PortraitModal
+          <PortraitWithCaption
             imageURL={this.state.portraitURL}
             caption={this.state.portraitCaption}
-            onClose={this.closePortrait}
+            onClose={this.closeAllModals}
           />
         )}
         {this.state.suggestDamageCombatant && (
           <DamageSuggestor
             combatant={this.state.suggestDamageCombatant}
-            onClose={this.cancelSuggestion}
-            onApply={this.props.onSuggestDamage}
+            onApply={this.handleSuggestDamagePrompt}
+          />
+        )}
+        {this.state.suggestTagCombatant && (
+          <TagSuggestor
+            targetCombatant={this.state.suggestTagCombatant}
+            activeCombatantId={this.props.encounterState.ActiveCombatantId}
+            combatantNamesById={combatantNamesById}
+            onApply={this.handleSuggestTagPrompt}
           />
         )}
         <PlayerViewCombatantHeader
@@ -78,7 +104,11 @@ export class PlayerView extends React.Component<
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
-              suggestDamage={this.suggestDamage}
+              suggestDamage={this.openSuggestDamagePrompt}
+              suggestTag={
+                this.props.settings.AllowTagSuggestions &&
+                this.openSuggestTagPrompt
+              }
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
@@ -138,7 +168,7 @@ export class PlayerView extends React.Component<
         showPortrait: true,
         portraitWasRequestedByClick: false
       });
-      this.modalTimeout = window.setTimeout(this.closePortrait, 5000);
+      this.modalTimeout = window.setTimeout(this.closeAllModals, 5000);
     }
   }
 
@@ -163,10 +193,12 @@ export class PlayerView extends React.Component<
     });
   };
 
-  private closePortrait = () => {
+  private closeAllModals = () => {
     this.setState({
       showPortrait: false,
-      portraitWasRequestedByClick: false
+      portraitWasRequestedByClick: false,
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     });
   };
 
@@ -177,7 +209,7 @@ export class PlayerView extends React.Component<
     );
   };
 
-  private suggestDamage = (combatant: PlayerViewCombatantState) => {
+  private openSuggestDamagePrompt = (combatant: PlayerViewCombatantState) => {
     if (!this.props.settings.AllowPlayerSuggestions) {
       return;
     }
@@ -186,9 +218,32 @@ export class PlayerView extends React.Component<
     });
   };
 
-  private cancelSuggestion = () => {
+  private openSuggestTagPrompt = (combatant: PlayerViewCombatantState) => {
+    if (!this.props.settings.AllowTagSuggestions) {
+      return;
+    }
     this.setState({
-      suggestDamageCombatant: null
+      suggestTagCombatant: combatant
     });
+  };
+
+  private handleSuggestDamagePrompt: ApplyDamageCallback = (
+    combatantId,
+    damageAmount
+  ) => {
+    this.closeAllModals();
+    if (damageAmount == NaN || !damageAmount) {
+      return;
+    }
+    this.props.onSuggestDamage(combatantId, damageAmount);
+  };
+
+  private handleSuggestTagPrompt: ApplyTagCallback = tagState => {
+    const combatantId = this.state.suggestTagCombatant.Id;
+    this.closeAllModals();
+    if (tagState.Text.length == 0) {
+      return;
+    }
+    this.props.onSuggestTag(combatantId, tagState);
   };
 }

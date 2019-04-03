@@ -1,3 +1,4 @@
+import { Field, FieldProps } from "formik";
 import * as React from "react";
 import { ChangeEvent } from "react";
 import {
@@ -6,8 +7,8 @@ import {
 } from "../../../common/PlayerViewSettings";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
-import { LabelWithCheckbox } from "./LabelWithCheckbox";
 import { StylesChooser } from "./StylesChooser";
+import { Toggle } from "./Toggle";
 
 export interface EpicInitiativeSettingsProps {
   playerViewSettings: PlayerViewSettings;
@@ -28,20 +29,6 @@ export class EpicInitiativeSettings extends React.Component<
     };
   }
 
-  private updateCSS = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    this.setState({ manualCSS: event.target.value });
-    this.props.playerViewSettings.CustomCSS = event.target.value;
-  };
-
-  private updateStyle = (name: keyof PlayerViewCustomStyles, value: string) => {
-    this.props.playerViewSettings.CustomStyles[name] = value;
-  };
-
-  private toggleDisplayPortraits = (s: boolean) =>
-    (this.props.playerViewSettings.DisplayPortraits = s);
-  private toggleSplashPortraits = (s: boolean) =>
-    (this.props.playerViewSettings.SplashPortraits = s);
-
   public render() {
     if (!env.IsLoggedIn) {
       return this.loginMessage();
@@ -52,34 +39,43 @@ export class EpicInitiativeSettings extends React.Component<
     }
 
     return (
-      <div className="c-epic-initiative-settings">
+      <div className="tab-content epicInitiative">
         <h3>Epic Initiative</h3>
         <p>
           <strong>Thank you for supporting Improved Initiative!</strong>
         </p>
-        <h4>Player View Display Settings</h4>
-        <LabelWithCheckbox
-          text="Show combatant portraits"
-          toggle={this.toggleDisplayPortraits}
-          checked={this.props.playerViewSettings.DisplayPortraits}
-        />
-        <LabelWithCheckbox
-          text="Show turn start portrait splash"
-          toggle={this.toggleSplashPortraits}
-          checked={this.props.playerViewSettings.SplashPortraits}
-        />
-        <StylesChooser
-          currentStyles={this.props.playerViewSettings.CustomStyles}
-          updateStyle={this.updateStyle}
-        />
+        <h4>Additional Player View Settings</h4>
+        <Toggle fieldName="PlayerView.DisplayPortraits">
+          Show combatant portraits
+        </Toggle>
+        <Toggle fieldName="PlayerView.SplashPortraits">
+          Show turn start portrait splash
+        </Toggle>
+        <Toggle fieldName="PlayerView.AllowTagSuggestions">
+          Allow players to suggest tags
+        </Toggle>
+        <StylesChooser />
+        <h4>Other Styles</h4>
+        <Field name="PlayerView.CustomStyles.font">
+          {(fieldProps: FieldProps) => (
+            <div className="c-input-with-label">
+              <span style={{ fontFamily: fieldProps.field.value }}>
+                Font Family
+              </span>
+              <input {...fieldProps.field} />
+            </div>
+          )}
+        </Field>
+
+        <div className="c-input-with-label">
+          Background Image URL
+          <Field name="PlayerView.CustomStyles.backgroundUrl" />
+        </div>
+
         <h4>
           Additional CSS <strong>(experimental)</strong>
         </h4>
-        <textarea
-          rows={10}
-          onChange={this.updateCSS}
-          value={this.state.manualCSS}
-        />
+        <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
       </div>
     );
   }

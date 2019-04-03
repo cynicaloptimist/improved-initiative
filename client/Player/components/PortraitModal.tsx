@@ -1,19 +1,18 @@
 import * as React from "react";
 
-export class PortraitModal extends React.Component<PortraitModalProps> {
+export class PortraitWithCaption extends React.Component<
+  PortraitWithCaptionProps
+> {
   public render() {
     return (
-      <div
-        className="modal-blur combatant-portrait"
-        onClick={this.props.onClose}
-      >
+      <div className="combatant-portrait" onClick={this.props.onClose}>
         <img className="combatant-portrait__image" src={this.props.imageURL} />
         <div className="combatant-portrait__caption">{this.props.caption}</div>
       </div>
     );
   }
 }
-interface PortraitModalProps {
+interface PortraitWithCaptionProps {
   imageURL: string;
   caption: string;
   onClose: () => void;

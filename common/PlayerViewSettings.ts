@@ -9,6 +9,7 @@ export enum HpVerbosityOption {
 export interface PlayerViewSettings {
   ActiveCombatantOnTop: boolean;
   AllowPlayerSuggestions: boolean;
+  AllowTagSuggestions: boolean;
   MonsterHPVerbosity: HpVerbosityOption;
   PlayerHPVerbosity: HpVerbosityOption;
   HideMonstersOutsideEncounter: boolean;
