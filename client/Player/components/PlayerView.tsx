@@ -219,7 +219,7 @@ export class PlayerView extends React.Component<
   };
 
   private openSuggestTagPrompt = (combatant: PlayerViewCombatantState) => {
-    if (!this.props.settings.AllowPlayerSuggestions) {
+    if (!this.props.settings.AllowTagSuggestions) {
       return;
     }
     this.setState({
