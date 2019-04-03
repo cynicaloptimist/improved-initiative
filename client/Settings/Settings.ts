@@ -68,6 +68,7 @@ export function getDefaultSettings(): Settings {
     PlayerView: {
       ActiveCombatantOnTop: false,
       AllowPlayerSuggestions: false,
+      AllowTagSuggestions: false,
       MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
       PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,

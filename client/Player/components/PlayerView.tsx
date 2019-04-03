@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
@@ -9,6 +10,7 @@ import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
 import { PlayerViewCombatantHeader } from "./PlayerViewCombatantHeader";
 import { PortraitWithCaption } from "./PortraitModal";
+import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
 
 interface LocalState {
   showPortrait: boolean;
@@ -17,10 +19,12 @@ interface LocalState {
   portraitCaption: string;
 
   suggestDamageCombatant: PlayerViewCombatantState;
+  suggestTagCombatant: PlayerViewCombatantState;
 }
 
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
+  onSuggestTag: (combatantId: string, tagState: TagState) => void;
 }
 
 export class PlayerView extends React.Component<
@@ -37,7 +41,8 @@ export class PlayerView extends React.Component<
       portraitURL: "",
       portraitCaption: "",
 
-      suggestDamageCombatant: null
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     };
   }
 
@@ -51,7 +56,15 @@ export class PlayerView extends React.Component<
     );
 
     const modalVisible =
-      this.state.showPortrait || this.state.suggestDamageCombatant;
+      this.state.showPortrait ||
+      this.state.suggestDamageCombatant ||
+      this.state.suggestTagCombatant;
+
+    const combatantsById = _.keyBy(
+      this.props.encounterState.Combatants,
+      c => c.Id
+    );
+    const combatantNamesById = _.mapValues(combatantsById, c => c.Name);
 
     return (
       <div className="c-player-view">
@@ -72,7 +85,15 @@ export class PlayerView extends React.Component<
         {this.state.suggestDamageCombatant && (
           <DamageSuggestor
             combatant={this.state.suggestDamageCombatant}
-            onApply={this.props.onSuggestDamage}
+            onApply={this.handleSuggestDamagePrompt}
+          />
+        )}
+        {this.state.suggestTagCombatant && (
+          <TagSuggestor
+            targetCombatant={this.state.suggestTagCombatant}
+            activeCombatantId={this.props.encounterState.ActiveCombatantId}
+            combatantNamesById={combatantNamesById}
+            onApply={this.handleSuggestTagPrompt}
           />
         )}
         <PlayerViewCombatantHeader
@@ -84,6 +105,10 @@ export class PlayerView extends React.Component<
             <PlayerViewCombatant
               showPortrait={this.showPortrait}
               suggestDamage={this.openSuggestDamagePrompt}
+              suggestTag={
+                this.props.settings.AllowTagSuggestions &&
+                this.openSuggestTagPrompt
+              }
               combatant={combatant}
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
@@ -172,7 +197,8 @@ export class PlayerView extends React.Component<
     this.setState({
       showPortrait: false,
       portraitWasRequestedByClick: false,
-      suggestDamageCombatant: null
+      suggestDamageCombatant: null,
+      suggestTagCombatant: null
     });
   };
 
@@ -192,11 +218,32 @@ export class PlayerView extends React.Component<
     });
   };
 
+  private openSuggestTagPrompt = (combatant: PlayerViewCombatantState) => {
+    if (!this.props.settings.AllowPlayerSuggestions) {
+      return;
+    }
+    this.setState({
+      suggestTagCombatant: combatant
+    });
+  };
+
   private handleSuggestDamagePrompt: ApplyDamageCallback = (
     combatantId,
     damageAmount
   ) => {
-    this.props.onSuggestDamage(combatantId, damageAmount);
     this.closeAllModals();
+    if (damageAmount == NaN || !damageAmount) {
+      return;
+    }
+    this.props.onSuggestDamage(combatantId, damageAmount);
+  };
+
+  private handleSuggestTagPrompt: ApplyTagCallback = tagState => {
+    const combatantId = this.state.suggestTagCombatant.Id;
+    this.closeAllModals();
+    if (tagState.Text.length == 0) {
+      return;
+    }
+    this.props.onSuggestTag(combatantId, tagState);
   };
 }

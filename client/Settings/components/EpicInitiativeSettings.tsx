@@ -44,12 +44,15 @@ export class EpicInitiativeSettings extends React.Component<
         <p>
           <strong>Thank you for supporting Improved Initiative!</strong>
         </p>
-        <h4>Player View Display Settings</h4>
+        <h4>Additional Player View Settings</h4>
         <Toggle fieldName="PlayerView.DisplayPortraits">
           Show combatant portraits
         </Toggle>
         <Toggle fieldName="PlayerView.SplashPortraits">
           Show turn start portrait splash
+        </Toggle>
+        <Toggle fieldName="PlayerView.AllowTagSuggestions">
+          Allow players to suggest tags
         </Toggle>
         <StylesChooser />
         <h4>Other Styles</h4>

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render as renderReact } from "react-dom";
 
+import { TagState } from "../../common/CombatantState";
 import {
   DefaultEncounterState,
   EncounterState
@@ -59,6 +60,7 @@ export class ReactPlayerView {
         encounterState={this.playerViewState.encounterState}
         settings={this.playerViewState.settings}
         onSuggestDamage={this.suggestDamage}
+        onSuggestTag={this.suggestTag}
       />,
       this.element
     );
@@ -73,6 +75,19 @@ export class ReactPlayerView {
       this.encounterId,
       [combatantId],
       damageAmount,
+      "Player"
+    );
+  };
+
+  private suggestTag = (combatantId: string, tagState: TagState) => {
+    if (!this.socket) {
+      throw "Player View not attached to socket";
+    }
+    this.socket.emit(
+      "suggest tag",
+      this.encounterId,
+      [combatantId],
+      tagState,
       "Player"
     );
   };

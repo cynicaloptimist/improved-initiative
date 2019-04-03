@@ -10,6 +10,7 @@ interface PlayerViewCombatantProps {
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
   suggestDamage: (combatant: PlayerViewCombatantState) => void;
+  suggestTag?: (combatant: PlayerViewCombatantState) => void;
 }
 
 export class PlayerViewCombatant extends React.Component<
@@ -64,6 +65,15 @@ export class PlayerViewCombatant extends React.Component<
             </div>
           ))}
         </div>
+        {this.props.suggestTag && (
+          <div className="combatant__add-tag-button">
+            <span
+              className="fas fa-tag fa-clickable"
+              title="Suggest a Tag"
+              onClick={() => this.props.suggestTag(this.props.combatant)}
+            />
+          </div>
+        )}
       </li>
     );
   }

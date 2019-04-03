@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import { find } from "lodash";
+import { TagState } from "../common/CombatantState";
 import { InitializeCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
@@ -94,6 +95,25 @@ export class TrackerViewModel {
         this.CombatantCommander.SuggestEditHP(
           suggestedCombatants,
           suggestedDamage,
+          suggester
+        );
+      }
+    );
+
+    this.Socket.on(
+      "suggest tag",
+      (
+        suggestedCombatantIds: string[],
+        suggestedTag: TagState,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.CombatantViewModels().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+
+        this.CombatantCommander.SuggestAddTag(
+          suggestedCombatants[0].Combatant,
+          suggestedTag,
           suggester
         );
       }

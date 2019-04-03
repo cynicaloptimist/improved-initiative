@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import { TagState } from "../../common/CombatantState";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
@@ -13,6 +14,7 @@ import { Metrics } from "../Utility/Metrics";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
+import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
@@ -250,6 +252,22 @@ export class CombatantCommander {
       suggestedDamage,
       suggester,
       this.tracker
+    );
+
+    this.tracker.PromptQueue.Add(prompt);
+    return false;
+  };
+
+  public SuggestAddTag = (
+    suggestedCombatant: Combatant,
+    suggestedTag: TagState,
+    suggester: string
+  ) => {
+    const prompt = new AcceptTagPrompt(
+      suggestedCombatant,
+      this.tracker.Encounter.AddDurationTag,
+      suggestedTag,
+      suggester
     );
 
     this.tracker.PromptQueue.Add(prompt);
