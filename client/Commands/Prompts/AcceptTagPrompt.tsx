@@ -4,6 +4,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { Tag } from "../../Combatant/Tag";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 interface AcceptTagPromptComponentProps {
@@ -67,8 +68,15 @@ export class AcceptTagPrompt implements Prompt {
 
       this.encounter.AddDurationTag(tag);
       this.combatant.Tags.push(tag);
+      Metrics.TrackEvent("TagAddedFromSuggestion", {
+        Text: tag.Text,
+        Duration: tag.DurationRemaining()
+      });
     } else {
       this.combatant.Tags.push(new Tag(this.tagState.Text, this.combatant));
+      Metrics.TrackEvent("TagAddedFromSuggestion", {
+        Text: this.tagState.Text
+      });
     }
 
     this.encounter.QueueEmitEncounter();
