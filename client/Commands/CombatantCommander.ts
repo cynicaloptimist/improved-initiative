@@ -80,6 +80,9 @@ export class CombatantCommander {
       this.SelectedCombatants.removeAll();
     }
     this.SelectedCombatants.push(data);
+    Metrics.TrackEvent("CombatantsSelected", {
+      Count: this.SelectedCombatants().length
+    });
   };
 
   private selectByOffset = (offset: number) => {
@@ -265,7 +268,7 @@ export class CombatantCommander {
   ) => {
     const prompt = new AcceptTagPrompt(
       suggestedCombatant,
-      this.tracker.Encounter.AddDurationTag,
+      this.tracker.Encounter,
       suggestedTag,
       suggester
     );
@@ -278,6 +281,7 @@ export class CombatantCommander {
     setTimeout(() => {
       const prompt = new ConcentrationPrompt(combatant, damageAmount);
       this.tracker.PromptQueue.Add(prompt);
+      Metrics.TrackEvent("ConcentrationCheckTriggered");
     }, 1);
   };
 
