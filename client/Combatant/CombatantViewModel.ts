@@ -124,6 +124,10 @@ export class CombatantViewModel {
         this.Combatant.Alias(alias);
         if (alias) {
           this.LogEvent(`${currentName} alias changed to ${alias}.`);
+          Metrics.TrackEvent("AliasSet", {
+            StatBlockName: this.Combatant.StatBlock().Name,
+            Alias: alias
+          });
         } else {
           this.LogEvent(`${currentName} alias removed.`);
         }
