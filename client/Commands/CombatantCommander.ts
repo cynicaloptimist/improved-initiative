@@ -265,7 +265,7 @@ export class CombatantCommander {
   ) => {
     const prompt = new AcceptTagPrompt(
       suggestedCombatant,
-      this.tracker.Encounter.AddDurationTag,
+      this.tracker.Encounter,
       suggestedTag,
       suggester
     );
