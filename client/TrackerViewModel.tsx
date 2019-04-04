@@ -505,6 +505,7 @@ export class TrackerViewModel {
 
   private saveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
+    Metrics.TrackEvent("SettingsSaved", newSettings);
     Store.Save(Store.User, "Settings", newSettings);
     new AccountClient().SaveSettings(newSettings);
   }
