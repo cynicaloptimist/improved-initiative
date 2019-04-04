@@ -80,6 +80,9 @@ export class CombatantCommander {
       this.SelectedCombatants.removeAll();
     }
     this.SelectedCombatants.push(data);
+    Metrics.TrackEvent("CombatantsSelected", {
+      Count: this.SelectedCombatants().length
+    });
   };
 
   private selectByOffset = (offset: number) => {
