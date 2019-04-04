@@ -145,6 +145,7 @@ export class EncounterCommander {
       this.tracker.Encounter.EndEncounter();
       this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
       this.tracker.Encounter.CombatantCountsByName({});
+      Metrics.TrackEvent("EncounterCleaned");
     }
 
     return false;
