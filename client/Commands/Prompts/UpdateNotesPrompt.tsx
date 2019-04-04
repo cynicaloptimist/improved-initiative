@@ -4,6 +4,7 @@ import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
 import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
+import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 interface UpdateNotesPromptComponentProps {
@@ -53,5 +54,9 @@ export class UpdateNotesPrompt implements Prompt {
       Notes: input.value
     });
     this.combatant.CurrentNotes(input.value);
+    Metrics.TrackEvent("NotesUpdated", {
+      Name: this.combatant.DisplayName(),
+      Notes: input.value.substr(0, 100)
+    });
   };
 }
