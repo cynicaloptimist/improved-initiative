@@ -44,6 +44,7 @@ export class EncounterCommander {
 
   public ToggleFullScreen = () => {
     ToggleFullscreen();
+    Metrics.TrackEvent("FullscreenToggled");
     return false;
   };
 
