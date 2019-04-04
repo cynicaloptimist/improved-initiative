@@ -278,6 +278,7 @@ export class CombatantCommander {
     setTimeout(() => {
       const prompt = new ConcentrationPrompt(combatant, damageAmount);
       this.tracker.PromptQueue.Add(prompt);
+      Metrics.TrackEvent("ConcentrationCheckTriggered");
     }, 1);
   };
 

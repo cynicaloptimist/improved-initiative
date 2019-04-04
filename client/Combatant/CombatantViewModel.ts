@@ -151,9 +151,15 @@ export class CombatantViewModel {
     if (this.Combatant.Hidden()) {
       this.Combatant.Hidden(false);
       this.LogEvent(`${this.Name()} revealed in player view.`);
+      Metrics.TrackEvent("CombatantRevealed", {
+        Name: this.Name()
+      });
     } else {
       this.Combatant.Hidden(true);
       this.LogEvent(`${this.Name()} hidden in player view.`);
+      Metrics.TrackEvent("CombatantHidden", {
+        Name: this.Name()
+      });
     }
     this.Combatant.Encounter.QueueEmitEncounter();
   }
@@ -162,9 +168,15 @@ export class CombatantViewModel {
     if (this.Combatant.RevealedAC()) {
       this.Combatant.RevealedAC(false);
       this.LogEvent(`${this.Name()} AC hidden in player view.`);
+      Metrics.TrackEvent("CombatantACHidden", {
+        Name: this.Name()
+      });
     } else {
       this.Combatant.RevealedAC(true);
       this.LogEvent(`${this.Name()} AC revealed in player view.`);
+      Metrics.TrackEvent("CombatantACRevealed", {
+        Name: this.Name()
+      });
     }
     this.Combatant.Encounter.QueueEmitEncounter();
   }
