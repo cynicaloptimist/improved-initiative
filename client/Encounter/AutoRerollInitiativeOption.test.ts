@@ -1,9 +1,6 @@
+import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
-import {
-  AutoRerollInitiativeOption,
-  CurrentSettings,
-  InitializeSettings
-} from "../Settings/Settings";
+import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 
 describe("AutoRerollInitiativeOption", () => {

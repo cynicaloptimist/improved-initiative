@@ -1,11 +1,11 @@
 import { Formik, FormikProps } from "formik";
 import _ = require("lodash");
 import * as React from "react";
+import { Settings } from "../../../common/Settings";
 import { AccountClient } from "../../Account/AccountClient";
 import { Command } from "../../Commands/Command";
 import { Tabs } from "../../Components/Tabs";
 import { Libraries } from "../../Library/Libraries";
-import { Settings } from "../Settings";
 import { About } from "./About";
 import { AccountSettings } from "./AccountSettings";
 import { CommandsSettings } from "./CommandsSettings";

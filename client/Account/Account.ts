@@ -1,5 +1,5 @@
 import { ServerListing } from "../../common/Listable";
-import { Settings } from "../Settings/Settings";
+import { Settings } from "../../common/Settings";
 
 export interface Account {
   settings: Settings;

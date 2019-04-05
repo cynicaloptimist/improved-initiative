@@ -9,7 +9,7 @@ import {
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { PlayerViewState } from "../../common/PlayerViewState";
-import { getDefaultSettings } from "../Settings/Settings";
+import { getDefaultSettings } from "../../common/Settings";
 import { PlayerView } from "./components/PlayerView";
 
 export class ReactPlayerView {

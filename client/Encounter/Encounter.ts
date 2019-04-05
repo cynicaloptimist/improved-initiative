@@ -6,6 +6,7 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
+import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -21,10 +22,7 @@ import {
 } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
-import {
-  AutoRerollInitiativeOption,
-  CurrentSettings
-} from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import {
   DifficultyCalculator,

@@ -4,6 +4,7 @@ import * as React from "react";
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { InitializeCharacter } from "../common/PersistentCharacter";
+import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -29,7 +30,6 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   AddMissingCommandsAndSaveSettings,
   CurrentSettings,
-  Settings,
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
