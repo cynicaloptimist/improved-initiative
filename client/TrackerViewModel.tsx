@@ -92,7 +92,7 @@ export class TrackerViewModel {
         const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
-        this.CombatantCommander.SuggestEditHP(
+        this.CombatantCommander.PromptAcceptSuggestedDamage(
           suggestedCombatants,
           suggestedDamage,
           suggester

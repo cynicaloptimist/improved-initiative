@@ -238,7 +238,7 @@ export class CombatantCommander {
     return false;
   };
 
-  public SuggestEditHP = (
+  public PromptAcceptSuggestedDamage = (
     suggestedCombatants: CombatantViewModel[],
     suggestedDamage: number,
     suggester: string
