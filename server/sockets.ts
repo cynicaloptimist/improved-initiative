@@ -1,7 +1,16 @@
+import express = require("express");
+import provideSessionToSocketIo = require("express-socket.io-session");
+
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { PlayerViewManager } from "./playerviewmanager";
 
-export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
+export default function(
+  io: SocketIO.Server,
+  session: express.RequestHandler,
+  playerViews: PlayerViewManager
+) {
+  io.use(provideSessionToSocketIo(session));
+
   io.on("connection", function(socket: SocketIO.Socket) {
     let encounterId;
 

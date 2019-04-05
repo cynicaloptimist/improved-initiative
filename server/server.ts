@@ -37,7 +37,7 @@ async function improvedInitiativeServer() {
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const io = socketIO(http);
-  ConfigureSockets(io, playerViews);
+  ConfigureSockets(io, session, playerViews);
 
   LaunchServer(http);
 }
