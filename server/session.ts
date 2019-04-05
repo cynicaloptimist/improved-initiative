@@ -1,6 +1,6 @@
 import dbSession = require("connect-mongodb-session");
 import express = require("express");
-import session = require("express-session");
+import expressSession = require("express-session");
 import moment = require("moment");
 
 import { probablyUniqueString } from "../common/Toolbox";
@@ -9,7 +9,7 @@ export default async function(
   app: express.Application,
   dbConnectionString?: string
 ) {
-  const MongoDBStore = dbSession(session);
+  const MongoDBStore = dbSession(expressSession);
   let store = null;
 
   if (dbConnectionString) {
@@ -24,7 +24,7 @@ export default async function(
   };
 
   app.use(
-    session({
+    expressSession({
       store: store || undefined,
       secret: process.env.SESSION_SECRET || probablyUniqueString(),
       resave: false,
