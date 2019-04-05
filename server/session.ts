@@ -5,10 +5,7 @@ import moment = require("moment");
 
 import { probablyUniqueString } from "../common/Toolbox";
 
-export default async function(
-  app: express.Application,
-  dbConnectionString?: string
-) {
+export default async function(dbConnectionString?: string) {
   const MongoDBStore = dbSession(expressSession);
   let store = null;
 
@@ -23,13 +20,13 @@ export default async function(
     maxAge: moment.duration(1, "weeks").asMilliseconds()
   };
 
-  app.use(
-    expressSession({
-      store: store || undefined,
-      secret: process.env.SESSION_SECRET || probablyUniqueString(),
-      resave: false,
-      saveUninitialized: false,
-      cookie
-    })
-  );
+  const session = expressSession({
+    store: store || undefined,
+    secret: process.env.SESSION_SECRET || probablyUniqueString(),
+    resave: false,
+    saveUninitialized: false,
+    cookie
+  });
+
+  return session;
 }
