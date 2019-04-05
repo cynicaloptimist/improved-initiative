@@ -12,11 +12,7 @@ interface CombatantDetailsProps {
   displayMode: "default" | "active";
 }
 
-interface CombatantDetailsState {}
-export class CombatantDetails extends React.Component<
-  CombatantDetailsProps,
-  CombatantDetailsState
-> {
+export class CombatantDetails extends React.Component<CombatantDetailsProps> {
   constructor(props) {
     super(props);
     linkComponentToObservables(this);
