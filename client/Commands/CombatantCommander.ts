@@ -261,7 +261,7 @@ export class CombatantCommander {
     return false;
   };
 
-  public SuggestAddTag = (
+  public PromptAcceptSuggestedTag = (
     suggestedCombatant: Combatant,
     suggestedTag: TagState,
     suggester: string

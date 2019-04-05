@@ -111,7 +111,7 @@ export class TrackerViewModel {
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 
-        this.CombatantCommander.SuggestAddTag(
+        this.CombatantCommander.PromptAcceptSuggestedTag(
           suggestedCombatants[0].Combatant,
           suggestedTag,
           suggester
