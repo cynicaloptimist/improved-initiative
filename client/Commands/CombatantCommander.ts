@@ -6,6 +6,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { MultipleCombatantDetails } from "../Combatant/MultipleCombatantDetails";
 import { Dice } from "../Rules/Dice";
 import { RollResult } from "../Rules/RollResult";
 import { CurrentSettings } from "../Settings/Settings";
@@ -47,6 +48,10 @@ export class CombatantCommander {
 
   public CombatantDetails = ko.pureComputed(() => {
     const selectedCombatants = this.SelectedCombatants();
+    if (selectedCombatants.length == 0) {
+      return null;
+    }
+
     if (selectedCombatants.length == 1) {
       const combatantViewModel = selectedCombatants[0];
       return React.createElement(CombatantDetails, {
@@ -54,16 +59,13 @@ export class CombatantCommander {
         enricher: this.tracker.StatBlockTextEnricher,
         displayMode: "default"
       });
-    } else {
-      return null;
     }
-  });
 
-  public Names: KnockoutComputed<string> = ko.pureComputed(() =>
-    this.SelectedCombatants()
-      .map(c => c.Name())
-      .join(", ")
-  );
+    return React.createElement(MultipleCombatantDetails, {
+      combatants: selectedCombatants,
+      enricher: this.tracker.StatBlockTextEnricher
+    });
+  });
 
   private latestRoll: RollResult;
 
