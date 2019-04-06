@@ -21,7 +21,7 @@ import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
+import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
 import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
@@ -222,7 +222,7 @@ export class TrackerViewModel {
   );
 
   public librariesComponent = (
-    <LibrariesViewModel
+    <LibraryPanes
       librariesCommander={this.LibrariesCommander}
       libraries={this.Libraries}
       statBlockTextEnricher={this.StatBlockTextEnricher}

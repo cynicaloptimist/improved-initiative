@@ -12,7 +12,7 @@ import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
-export type StatBlockLibraryViewModelProps = {
+export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: NPCLibrary;
   statBlockTextEnricher: TextEnricher;
@@ -28,11 +28,11 @@ interface State {
   previewPosition: { left: number; top: number };
 }
 
-export class StatBlockLibraryViewModel extends React.Component<
-  StatBlockLibraryViewModelProps,
+export class StatBlockLibraryPane extends React.Component<
+  StatBlockLibraryPaneProps,
   State
 > {
-  constructor(props: StatBlockLibraryViewModelProps) {
+  constructor(props: StatBlockLibraryPaneProps) {
     super(props);
     this.state = {
       filter: "",

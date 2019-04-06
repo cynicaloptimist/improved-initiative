@@ -12,7 +12,7 @@ import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
-export type EncounterLibraryViewModelProps = {
+export type EncounterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: EncounterLibrary;
 };
@@ -27,11 +27,11 @@ interface State {
   previewPosition: { left: number; top: number };
 }
 
-export class EncounterLibraryViewModel extends React.Component<
-  EncounterLibraryViewModelProps,
+export class EncounterLibraryPane extends React.Component<
+  EncounterLibraryPaneProps,
   State
 > {
-  constructor(props: EncounterLibraryViewModelProps) {
+  constructor(props: EncounterLibraryPaneProps) {
     super(props);
     this.state = {
       filter: "",

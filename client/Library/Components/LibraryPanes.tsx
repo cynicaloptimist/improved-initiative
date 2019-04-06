@@ -5,26 +5,23 @@ import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
-import { Libraries as LibrarySet } from "../Libraries";
-import { EncounterLibraryViewModel } from "./EncounterLibraryViewModel";
-import { PersistentCharacterLibraryViewModel } from "./PersistentCharacterLibraryViewModel";
-import { SpellLibraryViewModel } from "./SpellLibraryViewModel";
-import { StatBlockLibraryViewModel } from "./StatBlockLibraryViewModel";
+import { Libraries } from "../Libraries";
+import { EncounterLibraryPane } from "./EncounterLibraryPane";
+import { PersistentCharacterLibraryPane } from "./PersistentCharacterLibraryPane";
+import { SpellLibraryPane } from "./SpellLibraryPane";
+import { StatBlockLibraryPane } from "./StatBlockLibraryPane";
 
-export interface LibrariesProps {
+export interface LibraryPanesProps {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
-  libraries: LibrarySet;
+  libraries: Libraries;
 }
 
-interface LibrariesState {
+interface State {
   selectedLibrary: string;
 }
 
-export class LibrariesViewModel extends React.Component<
-  LibrariesProps,
-  LibrariesState
-> {
+export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,27 +40,27 @@ export class LibrariesViewModel extends React.Component<
   public render() {
     const libraries = {
       Creatures: (
-        <StatBlockLibraryViewModel
+        <StatBlockLibraryPane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.NPCs}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       Characters: (
-        <PersistentCharacterLibraryViewModel
+        <PersistentCharacterLibraryPane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.PersistentCharacters}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       Encounters: (
-        <EncounterLibraryViewModel
+        <EncounterLibraryPane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Encounters}
         />
       ),
       Spells: (
-        <SpellLibraryViewModel
+        <SpellLibraryPane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Spells}
         />

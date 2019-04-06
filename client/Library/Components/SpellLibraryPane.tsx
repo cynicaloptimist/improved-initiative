@@ -8,7 +8,7 @@ import { SpellLibrary } from "../SpellLibrary";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
-export type SpellLibraryViewModelProps = {
+export type SpellLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: SpellLibrary;
 };
@@ -19,11 +19,11 @@ interface State {
   filter: string;
 }
 
-export class SpellLibraryViewModel extends React.Component<
-  SpellLibraryViewModelProps,
+export class SpellLibraryPane extends React.Component<
+  SpellLibraryPaneProps,
   State
 > {
-  constructor(props: SpellLibraryViewModelProps) {
+  constructor(props: SpellLibraryPaneProps) {
     super(props);
     this.state = {
       filter: ""
