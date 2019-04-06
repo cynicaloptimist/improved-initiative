@@ -141,8 +141,9 @@
   "scripts": {
     "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
+    "build": "grunt build_dev",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
-    "lint": "tslint --fix -p client && tslint --fix -p server"
+    "lint": "tslint --fix -p client && tslint --fix -p server && prettier **/*.{less,html,ts,tsx} --write"
   }
 }
