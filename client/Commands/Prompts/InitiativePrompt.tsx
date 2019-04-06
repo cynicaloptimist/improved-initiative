@@ -43,7 +43,7 @@ class InitiativePromptComponent extends React.Component<
   private element: HTMLDivElement;
 }
 
-const combatantInitiativeField = (combatant: Combatant) => {
+function combatantInitiativeField(combatant: Combatant) {
   const sideInitiative =
     CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
   const initiativeBonus = sideInitiative
@@ -80,7 +80,7 @@ const combatantInitiativeField = (combatant: Combatant) => {
       />
     </li>
   );
-};
+}
 
 export class InitiativePrompt implements Prompt {
   public InputSelector = ".response";
