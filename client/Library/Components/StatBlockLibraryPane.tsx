@@ -32,6 +32,9 @@ export class StatBlockLibraryPane extends React.Component<
   StatBlockLibraryPaneProps,
   State
 > {
+  private filterCache: FilterCache<StatBlockListing>;
+  private librarySubscription: KnockoutSubscription;
+
   constructor(props: StatBlockLibraryPaneProps) {
     super(props);
     this.state = {
@@ -58,8 +61,55 @@ export class StatBlockLibraryPane extends React.Component<
     this.librarySubscription.dispose();
   }
 
-  private filterCache: FilterCache<StatBlockListing>;
-  private librarySubscription: KnockoutSubscription;
+  public render() {
+    const filteredListings = this.filterCache.GetFilteredEntries(
+      this.state.filter
+    );
+    const listingAndFolderComponents = BuildListingTree(
+      this.buildListingComponent,
+      filteredListings
+    );
+
+    const previewVisible =
+      this.state.previewIconHovered || this.state.previewWindowHovered;
+
+    return (
+      <div className="library">
+        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+        <ul className="listings">{listingAndFolderComponents}</ul>
+        <div className="buttons">
+          <Button
+            additionalClassNames="hide"
+            fontAwesomeIcon="chevron-up"
+            onClick={() => this.props.librariesCommander.HideLibraries()}
+          />
+          <Button
+            additionalClassNames="new"
+            fontAwesomeIcon="plus"
+            onClick={() =>
+              this.props.librariesCommander.CreateAndEditStatBlock(
+                this.props.library
+              )
+            }
+          />
+        </div>
+        {previewVisible && (
+          <Overlay
+            handleMouseEvents={this.handlePreviewMouseEvent}
+            maxHeightPx={300}
+            left={this.state.previewPosition.left}
+            top={this.state.previewPosition.top}
+          >
+            <StatBlockComponent
+              statBlock={this.state.previewedStatBlock}
+              enricher={this.props.statBlockTextEnricher}
+              displayMode="default"
+            />
+          </Overlay>
+        )}
+      </div>
+    );
+  }
 
   private loadSavedStatBlock = (
     listing: StatBlockListing,
@@ -142,54 +192,4 @@ export class StatBlockLibraryPane extends React.Component<
       listing={l}
     />
   );
-
-  public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-    const listingAndFolderComponents = BuildListingTree(
-      this.buildListingComponent,
-      filteredListings
-    );
-
-    const previewVisible =
-      this.state.previewIconHovered || this.state.previewWindowHovered;
-
-    return (
-      <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-        <ul className="listings">{listingAndFolderComponents}</ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
-          />
-          <Button
-            additionalClassNames="new"
-            fontAwesomeIcon="plus"
-            onClick={() =>
-              this.props.librariesCommander.CreateAndEditStatBlock(
-                this.props.library
-              )
-            }
-          />
-        </div>
-        {previewVisible && (
-          <Overlay
-            handleMouseEvents={this.handlePreviewMouseEvent}
-            maxHeightPx={300}
-            left={this.state.previewPosition.left}
-            top={this.state.previewPosition.top}
-          >
-            <StatBlockComponent
-              statBlock={this.state.previewedStatBlock}
-              enricher={this.props.statBlockTextEnricher}
-              displayMode="default"
-            />
-          </Overlay>
-        )}
-      </div>
-    );
-  }
 }
