@@ -111,6 +111,19 @@ export class StatBlockLibraryPane extends React.Component<
     );
   }
 
+  private buildListingComponent = (l: Listing<StatBlock>) => (
+    <ListingViewModel
+      key={l.Id + l.CurrentPath() + l.CurrentName()}
+      name={l.CurrentName()}
+      showCount
+      onAdd={this.loadSavedStatBlock}
+      onEdit={this.editStatBlock}
+      onPreview={this.previewStatblock}
+      onPreviewOut={this.onPreviewOut}
+      listing={l}
+    />
+  );
+
   private loadSavedStatBlock = (
     listing: StatBlockListing,
     hideOnAdd: boolean
@@ -179,17 +192,4 @@ export class StatBlockLibraryPane extends React.Component<
       this.setState({ previewWindowHovered: false });
     }
   };
-
-  private buildListingComponent = (l: Listing<StatBlock>) => (
-    <ListingViewModel
-      key={l.Id + l.CurrentPath() + l.CurrentName()}
-      name={l.CurrentName()}
-      showCount
-      onAdd={this.loadSavedStatBlock}
-      onEdit={this.editStatBlock}
-      onPreview={this.previewStatblock}
-      onPreviewOut={this.onPreviewOut}
-      listing={l}
-    />
-  );
 }
