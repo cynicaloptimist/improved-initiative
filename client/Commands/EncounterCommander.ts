@@ -127,7 +127,6 @@ export class EncounterCommander {
   public ClearEncounter = () => {
     if (confirm("Remove all combatants and end encounter?")) {
       this.tracker.Encounter.ClearEncounter();
-      this.tracker.CombatantViewModels([]);
       this.tracker.CombatantCommander.SelectedCombatants([]);
       this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
       Metrics.TrackEvent("EncounterCleared");
@@ -139,7 +138,7 @@ export class EncounterCommander {
   public CleanEncounter = () => {
     if (confirm("Remove NPCs and end encounter?")) {
       const npcViewModels = this.tracker
-        .CombatantViewModels()
+        .OrderedCombatants()
         .filter(c => !c.Combatant.IsPlayerCharacter);
       this.tracker.CombatantCommander.SelectedCombatants([]);
       this.tracker.Encounter.EndEncounter();

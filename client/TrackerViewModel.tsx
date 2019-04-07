@@ -65,7 +65,6 @@ export class TrackerViewModel {
     this.LibrariesCommander.SaveEncounter
   );
 
-  public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
   public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
@@ -89,7 +88,7 @@ export class TrackerViewModel {
         suggestedDamage: number,
         suggester: string
       ) => {
-        const suggestedCombatants = this.CombatantViewModels().filter(
+        const suggestedCombatants = this.OrderedCombatants().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
         this.CombatantCommander.PromptAcceptSuggestedDamage(
@@ -107,7 +106,7 @@ export class TrackerViewModel {
         suggestedTag: TagState,
         suggester: string
       ) => {
-        const suggestedCombatants = this.CombatantViewModels().filter(
+        const suggestedCombatants = this.OrderedCombatants().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 
@@ -206,18 +205,15 @@ export class TrackerViewModel {
       this.PromptQueue.Add,
       this.EventLog.AddEvent
     );
-    this.CombatantViewModels.push(vm);
     return vm;
-  };
-
-  private removeCombatantViewModels = (viewModels: CombatantViewModel[]) => {
-    this.CombatantViewModels.removeAll(viewModels);
   };
 
   public Encounter = new Encounter(
     this.playerViewClient,
-    this.initializeCombatantViewModel,
-    this.removeCombatantViewModels,
+    combatantId =>
+      this.OrderedCombatants()
+        .find((c: CombatantViewModel) => c.Combatant.Id == combatantId)
+        .EditInitiative(),
     this.Rules
   );
 
@@ -230,17 +226,19 @@ export class TrackerViewModel {
   );
 
   public OrderedCombatants = ko.computed(() =>
-    this.CombatantViewModels().sort(
-      (c1, c2) =>
-        this.Encounter.Combatants().indexOf(c1.Combatant) -
-        this.Encounter.Combatants().indexOf(c2.Combatant)
-    )
+    this.Encounter.Combatants()
+      .map(this.initializeCombatantViewModel)
+      .sort(
+        (c1, c2) =>
+          this.Encounter.Combatants().indexOf(c1.Combatant) -
+          this.Encounter.Combatants().indexOf(c2.Combatant)
+      )
   );
 
   public ActiveCombatantDetails = ko.computed(() => {
     const activeCombatant = this.Encounter.ActiveCombatant();
     const combatantViewModel = find(
-      this.CombatantViewModels(),
+      this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
     );
     return (
@@ -345,7 +343,6 @@ export class TrackerViewModel {
       this.TutorialVisible(false);
       this.Encounter.ClearEncounter();
       this.Encounter.ImportEncounter(encounter);
-      this.CombatantViewModels([]);
     }
   };
 

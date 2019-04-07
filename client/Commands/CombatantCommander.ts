@@ -89,15 +89,15 @@ export class CombatantCommander {
 
   private selectByOffset = (offset: number) => {
     let newIndex =
-      this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) +
+      this.tracker.OrderedCombatants().indexOf(this.SelectedCombatants()[0]) +
       offset;
     if (newIndex < 0) {
       newIndex = 0;
-    } else if (newIndex >= this.tracker.CombatantViewModels().length) {
-      newIndex = this.tracker.CombatantViewModels().length - 1;
+    } else if (newIndex >= this.tracker.OrderedCombatants().length) {
+      newIndex = this.tracker.OrderedCombatants().length - 1;
     }
     this.SelectedCombatants.removeAll();
-    this.SelectedCombatants.push(this.tracker.CombatantViewModels()[newIndex]);
+    this.SelectedCombatants.push(this.tracker.OrderedCombatants()[newIndex]);
   };
 
   public Remove = () => {
@@ -107,13 +107,13 @@ export class CombatantCommander {
 
     const combatantsToRemove = this.SelectedCombatants.removeAll(),
       firstDeletedIndex = this.tracker
-        .CombatantViewModels()
+        .OrderedCombatants()
         .indexOf(combatantsToRemove[0]),
       deletedCombatantNames = combatantsToRemove.map(
         c => c.Combatant.StatBlock().Name
       );
 
-    if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
+    if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
       let activeCombatant = this.tracker.Encounter.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
         this.tracker.Encounter.NextTurn(
@@ -125,13 +125,13 @@ export class CombatantCommander {
 
     this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
 
-    const remainingCombatants = this.tracker.CombatantViewModels();
+    const remainingCombatants = this.tracker.OrderedCombatants();
     if (remainingCombatants.length > 0) {
       const newSelectionIndex =
         firstDeletedIndex > remainingCombatants.length
           ? remainingCombatants.length - 1
           : firstDeletedIndex;
-      this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
+      this.Select(this.tracker.OrderedCombatants()[newSelectionIndex]);
     }
 
     this.tracker.EventLog.AddEvent(
@@ -147,12 +147,12 @@ export class CombatantCommander {
   };
 
   public SelectPrevious = () => {
-    if (this.tracker.CombatantViewModels().length == 0) {
+    if (this.tracker.OrderedCombatants().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.CombatantViewModels()[0]);
+      this.Select(this.tracker.OrderedCombatants()[0]);
       return;
     }
 
@@ -160,12 +160,12 @@ export class CombatantCommander {
   };
 
   public SelectNext = () => {
-    if (this.tracker.CombatantViewModels().length == 0) {
+    if (this.tracker.OrderedCombatants().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.CombatantViewModels()[0]);
+      this.Select(this.tracker.OrderedCombatants()[0]);
       return;
     }
 
@@ -385,7 +385,7 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.CombatantViewModels().indexOf(combatant);
+    const index = this.tracker.OrderedCombatants().indexOf(combatant);
     if (combatant && index > 0) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
@@ -403,8 +403,8 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.CombatantViewModels().indexOf(combatant);
-    if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
+    const index = this.tracker.OrderedCombatants().indexOf(combatant);
+    if (combatant && index < this.tracker.OrderedCombatants().length - 1) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
         index + 1

@@ -35,8 +35,7 @@ export class Encounter {
 
   constructor(
     private playerViewClient: PlayerViewClient,
-    private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-    private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
+    private promptEditCombatantInitiative: (combatantId: string) => void,
     public Rules: IRules
   ) {
     this.CombatantCountsByName = ko.observable({});
@@ -174,11 +173,10 @@ export class Encounter {
     const combatant = new Combatant(combatantState, this);
     this.combatants.push(combatant);
 
-    const viewModel = this.buildCombatantViewModel(combatant);
     combatant.UpdateIndexLabel();
 
     if (this.State() === "active") {
-      viewModel.EditInitiative();
+      this.promptEditCombatantInitiative(combatant.Id);
     }
 
     combatant.Tags().forEach(tag => {
@@ -298,7 +296,6 @@ export class Encounter {
     combatantViewModels: CombatantViewModel[]
   ) {
     combatantViewModels.map(vm => vm.Combatant).forEach(this.RemoveCombatant);
-    this.handleRemoveCombatantViewModels(combatantViewModels);
   }
 
   public MoveCombatant(combatant: Combatant, index: number) {
