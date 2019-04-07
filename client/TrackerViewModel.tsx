@@ -225,7 +225,7 @@ export class TrackerViewModel {
     />
   );
 
-  public OrderedCombatants = ko.computed(() =>
+  public OrderedCombatants = ko.pureComputed(() =>
     this.Encounter.Combatants()
       .map(this.initializeCombatantViewModel)
       .sort(
@@ -235,7 +235,7 @@ export class TrackerViewModel {
       )
   );
 
-  public ActiveCombatantDetails = ko.computed(() => {
+  public ActiveCombatantDetails = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.ActiveCombatant();
     const combatantViewModel = find(
       this.OrderedCombatants(),
@@ -389,7 +389,7 @@ export class TrackerViewModel {
     return "show-center-right-left";
   });
 
-  public settingsComponent = ko.computed(() => {
+  public settingsComponent = ko.pureComputed(() => {
     return (
       <SettingsPane
         settings={CurrentSettings()}
@@ -405,7 +405,7 @@ export class TrackerViewModel {
     );
   });
 
-  public toolbarComponent = ko.computed(() => {
+  public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =
       this.Encounter.State() == "active"
         ? ["start-encounter"]

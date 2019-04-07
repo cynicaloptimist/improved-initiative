@@ -16,7 +16,7 @@ const animatedCombatantIds = ko.observableArray([]);
 export class CombatantViewModel {
   public HP: KnockoutComputed<string>;
   public Name: KnockoutComputed<string>;
-  public NeedsAnimate = ko.computed(
+  public NeedsAnimate = ko.pureComputed(
     () => animatedCombatantIds().indexOf(this.Combatant.Id) == -1
   );
 
@@ -76,7 +76,7 @@ export class CombatantViewModel {
     this.Combatant.Encounter.SortByInitiative(true);
   }
 
-  public InitiativeClass = ko.computed(() => {
+  public InitiativeClass = ko.pureComputed(() => {
     if (this.Combatant.InitiativeGroup()) {
       return "fas fa-link";
     }

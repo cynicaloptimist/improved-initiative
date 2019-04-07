@@ -58,13 +58,13 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  public DisplayRoundCounter = ko.computed(
+  public DisplayRoundCounter = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayRoundCounter
   );
-  public DisplayTurnTimer = ko.computed(
+  public DisplayTurnTimer = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayTurnTimer
   );
-  public DisplayDifficulty = ko.computed(
+  public DisplayDifficulty = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayDifficulty
   );
 

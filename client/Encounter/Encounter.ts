@@ -58,7 +58,7 @@ export class Encounter {
 
   public TurnTimer = new TurnTimer();
   private combatants = ko.observableArray<Combatant>([]);
-  public Combatants = ko.computed(() => this.combatants());
+  public Combatants = ko.pureComputed(() => this.combatants());
   public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
   public ActiveCombatant: KnockoutObservable<Combatant>;
   public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
@@ -67,10 +67,10 @@ export class Encounter {
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
     "active" | "inactive"
   >("inactive");
-  public StateIcon = ko.computed(() =>
+  public StateIcon = ko.pureComputed(() =>
     this.State() === "active" ? "fa-play" : "fa-pause"
   );
-  public StateTip = ko.computed(() =>
+  public StateTip = ko.pureComputed(() =>
     this.State() === "active" ? "Encounter Active" : "Encounter Inactive"
   );
 

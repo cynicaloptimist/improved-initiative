@@ -63,7 +63,7 @@ export class Listing<T extends Listable> {
     });
   }
 
-  public CurrentName = ko.computed(() => {
+  public CurrentName = ko.pureComputed(() => {
     const current = this.value();
     if (current !== undefined) {
       return current.Name || this.Name;
@@ -71,7 +71,7 @@ export class Listing<T extends Listable> {
     return this.Name;
   });
 
-  public CurrentPath = ko.computed(() => {
+  public CurrentPath = ko.pureComputed(() => {
     const current = this.value();
     if (current !== undefined) {
       return current.Path || this.Path;

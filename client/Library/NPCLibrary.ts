@@ -10,7 +10,7 @@ export class NPCLibrary {
   private statBlocks = ko.observableArray<Listing<StatBlock>>([]);
   private readonly StoreName = Store.StatBlocks;
 
-  public GetStatBlocks = ko.computed(() => this.statBlocks());
+  public GetStatBlocks = ko.pureComputed(() => this.statBlocks());
 
   constructor(private accountClient: AccountClient) {}
 

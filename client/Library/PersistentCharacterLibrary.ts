@@ -40,7 +40,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     }
   }
 
-  public GetListings = ko.computed(() => this.persistentCharacters());
+  public GetListings = ko.pureComputed(() => this.persistentCharacters());
 
   public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
     const newListings = listings.map(c => {
