@@ -345,6 +345,7 @@ export class TrackerViewModel {
       this.TutorialVisible(false);
       this.Encounter.ClearEncounter();
       this.Encounter.ImportEncounter(encounter);
+      this.CombatantViewModels([]);
     }
   };
 
