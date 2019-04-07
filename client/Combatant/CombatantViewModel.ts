@@ -11,10 +11,14 @@ import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 
+const animatedCombatantIds = ko.observableArray([]);
+
 export class CombatantViewModel {
   public HP: KnockoutComputed<string>;
   public Name: KnockoutComputed<string>;
-  public IsNew = ko.observable(true);
+  public NeedsAnimate = ko.computed(
+    () => animatedCombatantIds().indexOf(this.Combatant.Id) == -1
+  );
 
   constructor(
     public Combatant: Combatant,
@@ -30,7 +34,7 @@ export class CombatantViewModel {
       }
     });
     this.Name = Combatant.DisplayName;
-    setTimeout(() => this.IsNew(false), 500);
+    setTimeout(() => animatedCombatantIds.push(this.Combatant.Id), 500);
   }
 
   public ApplyDamage(inputDamage: string) {
