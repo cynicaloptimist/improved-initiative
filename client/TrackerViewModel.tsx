@@ -87,16 +87,7 @@ export class TrackerViewModel {
 
     this.getAccountOrSampleCharacters();
 
-    const autosavedEncounter = Store.Load(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId
-    );
-    if (autosavedEncounter) {
-      this.Encounter.LoadEncounterState(
-        UpdateLegacySavedEncounter(autosavedEncounter),
-        this.Libraries.PersistentCharacters
-      );
-    }
+    this.loadAutoSavedEncounterIfAvailable();
 
     this.TutorialVisible.subscribe(v => {
       if (v == false) {
@@ -468,6 +459,20 @@ export class TrackerViewModel {
       });
     });
   };
+
+  private loadAutoSavedEncounterIfAvailable() {
+    const autosavedEncounter = Store.Load(
+      Store.AutoSavedEncounters,
+      Store.DefaultSavedEncounterId
+    );
+
+    if (autosavedEncounter) {
+      this.Encounter.LoadEncounterState(
+        UpdateLegacySavedEncounter(autosavedEncounter),
+        this.Libraries.PersistentCharacters
+      );
+    }
+  }
 
   private initializeCombatantViewModel = (combatant: Combatant) => {
     const vm = new CombatantViewModel(
