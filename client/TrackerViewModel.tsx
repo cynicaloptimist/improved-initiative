@@ -89,11 +89,7 @@ export class TrackerViewModel {
 
     this.loadAutoSavedEncounterIfAvailable();
 
-    this.TutorialVisible.subscribe(v => {
-      if (v == false) {
-        this.displayPrivacyNotificationIfNeeded();
-      }
-    });
+    this.showPrivacyNotificationAfterTutorial();
 
     Metrics.TrackLoad();
   }
@@ -472,6 +468,14 @@ export class TrackerViewModel {
         this.Libraries.PersistentCharacters
       );
     }
+  }
+
+  private showPrivacyNotificationAfterTutorial() {
+    this.TutorialVisible.subscribe(v => {
+      if (v == false) {
+        this.displayPrivacyNotificationIfNeeded();
+      }
+    });
   }
 
   private initializeCombatantViewModel = (combatant: Combatant) => {
