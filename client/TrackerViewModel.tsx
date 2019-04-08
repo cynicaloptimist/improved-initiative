@@ -83,15 +83,8 @@ export class TrackerViewModel {
 
     this.subscribeToSocketMessages();
 
-    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
-    this.playerViewClient.UpdateSettings(
-      this.Encounter.EncounterId,
-      CurrentSettings().PlayerView
-    );
-    this.playerViewClient.UpdateEncounter(
-      this.Encounter.EncounterId,
-      this.Encounter.GetPlayerView()
-    );
+    this.joinPlayerViewEncounter();
+
     CurrentSettings.subscribe(v => {
       this.playerViewClient.UpdateSettings(
         this.Encounter.EncounterId,
@@ -443,6 +436,18 @@ export class TrackerViewModel {
       }
     );
   };
+
+  private joinPlayerViewEncounter() {
+    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+    this.playerViewClient.UpdateSettings(
+      this.Encounter.EncounterId,
+      CurrentSettings().PlayerView
+    );
+    this.playerViewClient.UpdateEncounter(
+      this.Encounter.EncounterId,
+      this.Encounter.GetPlayerView()
+    );
+  }
 
   private getAndAddSamplePersistentCharacters = (url: string) => {
     $.getJSON(url, (json: StatBlock[]) => {
