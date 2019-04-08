@@ -85,16 +85,7 @@ export class TrackerViewModel {
 
     this.joinPlayerViewEncounter();
 
-    this.accountClient.GetAccount(account => {
-      if (!account) {
-        if (Store.List(Store.PersistentCharacters).length == 0) {
-          this.getAndAddSamplePersistentCharacters("/sample_players.json");
-        }
-        return;
-      }
-
-      this.handleAccountSync(account);
-    });
+    this.getAccountOrSampleCharacters();
 
     const autosavedEncounter = Store.Load(
       Store.AutoSavedEncounters,
@@ -448,6 +439,18 @@ export class TrackerViewModel {
         this.Encounter.EncounterId,
         this.Encounter.GetPlayerView()
       );
+    });
+  }
+
+  private getAccountOrSampleCharacters() {
+    this.accountClient.GetAccount(account => {
+      if (!account) {
+        if (Store.List(Store.PersistentCharacters).length == 0) {
+          this.getAndAddSamplePersistentCharacters("/sample_players.json");
+        }
+        return;
+      }
+      this.handleAccountSync(account);
     });
   }
 
