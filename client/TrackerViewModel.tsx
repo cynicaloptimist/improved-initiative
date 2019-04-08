@@ -146,7 +146,7 @@ export class TrackerViewModel {
         return;
       }
 
-      this.HandleAccountSync(account);
+      this.handleAccountSync(account);
     });
 
     const autosavedEncounter = Store.Load(
@@ -465,7 +465,7 @@ export class TrackerViewModel {
     return vm;
   };
 
-  private HandleAccountSync(account: Account) {
+  private handleAccountSync(account: Account) {
     if (account.settings && account.settings.Version) {
       const updatedSettings = UpdateSettings(account.settings);
       const allCommands = [
