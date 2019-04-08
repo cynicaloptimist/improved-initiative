@@ -125,7 +125,9 @@ export class TrackerViewModel {
     />
   );
 
-  public OrderedCombatants = ko.pureComputed(() =>
+  public OrderedCombatants: KnockoutComputed<
+    CombatantViewModel[]
+  > = ko.pureComputed(() =>
     this.Encounter.Combatants()
       .map(this.initializeCombatantViewModel)
       .sort(
