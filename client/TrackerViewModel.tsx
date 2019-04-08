@@ -81,42 +81,7 @@ export class TrackerViewModel {
     AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
     SubscribeCommandsToSettingsChanges(allCommands);
 
-    this.Socket.on(
-      "suggest damage",
-      (
-        suggestedCombatantIds: string[],
-        suggestedDamage: number,
-        suggester: string
-      ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
-          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
-        );
-        this.CombatantCommander.PromptAcceptSuggestedDamage(
-          suggestedCombatants,
-          suggestedDamage,
-          suggester
-        );
-      }
-    );
-
-    this.Socket.on(
-      "suggest tag",
-      (
-        suggestedCombatantIds: string[],
-        suggestedTag: TagState,
-        suggester: string
-      ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
-          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
-        );
-
-        this.CombatantCommander.PromptAcceptSuggestedTag(
-          suggestedCombatants[0].Combatant,
-          suggestedTag,
-          suggester
-        );
-      }
-    );
+    this.subscribeToSocketMessages();
 
     this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
     this.playerViewClient.UpdateSettings(
@@ -438,6 +403,45 @@ export class TrackerViewModel {
 
     //Creatures, library closed, encounter active: Next turn
     return "next-turn";
+  };
+
+  private subscribeToSocketMessages = () => {
+    this.Socket.on(
+      "suggest damage",
+      (
+        suggestedCombatantIds: string[],
+        suggestedDamage: number,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.OrderedCombatants().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+        this.CombatantCommander.PromptAcceptSuggestedDamage(
+          suggestedCombatants,
+          suggestedDamage,
+          suggester
+        );
+      }
+    );
+
+    this.Socket.on(
+      "suggest tag",
+      (
+        suggestedCombatantIds: string[],
+        suggestedTag: TagState,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.OrderedCombatants().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+
+        this.CombatantCommander.PromptAcceptSuggestedTag(
+          suggestedCombatants[0].Combatant,
+          suggestedTag,
+          suggester
+        );
+      }
+    );
   };
 
   private getAndAddSamplePersistentCharacters = (url: string) => {
