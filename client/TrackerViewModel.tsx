@@ -169,21 +169,6 @@ export class TrackerViewModel {
     Metrics.TrackLoad();
   }
 
-  private getAndAddSamplePersistentCharacters = (url: string) => {
-    $.getJSON(url, (json: StatBlock[]) => {
-      json.forEach(statBlock => {
-        const persistentCharacter = InitializeCharacter({
-          ...StatBlock.Default(),
-          ...statBlock
-        });
-        persistentCharacter.Path = "Sample Player Characters";
-        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
-          persistentCharacter
-        );
-      });
-    });
-  };
-
   public ReviewPrivacyPolicy = () => {
     this.SettingsVisible(false);
     const prompt = new PrivacyPolicyPrompt();
@@ -197,16 +182,6 @@ export class TrackerViewModel {
     this.Libraries.Spells,
     this.Rules
   );
-
-  private initializeCombatantViewModel = (combatant: Combatant) => {
-    const vm = new CombatantViewModel(
-      combatant,
-      this.CombatantCommander,
-      this.PromptQueue.Add,
-      this.EventLog.AddEvent
-    );
-    return vm;
-  };
 
   public Encounter = new Encounter(
     this.playerViewClient,
@@ -463,6 +438,31 @@ export class TrackerViewModel {
 
     //Creatures, library closed, encounter active: Next turn
     return "next-turn";
+  };
+
+  private getAndAddSamplePersistentCharacters = (url: string) => {
+    $.getJSON(url, (json: StatBlock[]) => {
+      json.forEach(statBlock => {
+        const persistentCharacter = InitializeCharacter({
+          ...StatBlock.Default(),
+          ...statBlock
+        });
+        persistentCharacter.Path = "Sample Player Characters";
+        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+          persistentCharacter
+        );
+      });
+    });
+  };
+
+  private initializeCombatantViewModel = (combatant: Combatant) => {
+    const vm = new CombatantViewModel(
+      combatant,
+      this.CombatantCommander,
+      this.PromptQueue.Add,
+      this.EventLog.AddEvent
+    );
+    return vm;
   };
 
   private HandleAccountSync(account: Account) {
