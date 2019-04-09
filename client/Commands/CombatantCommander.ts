@@ -27,15 +27,20 @@ interface PendingLinkInitiative {
 }
 
 export class CombatantCommander {
+  private selectedCombatantIds = ko.observableArray<string>([]);
+  private latestRoll: RollResult;
+
   constructor(private tracker: TrackerViewModel) {
     this.Commands = BuildCombatantCommandList(this);
   }
 
   public Commands: Command[];
-  public SelectedCombatants: KnockoutObservableArray<
-    CombatantViewModel
-  > = ko.observableArray<CombatantViewModel>([]);
-
+  public SelectedCombatants = ko.pureComputed<CombatantViewModel[]>(() => {
+    const selectedCombatantIds = this.selectedCombatantIds();
+    return this.tracker
+      .OrderedCombatants()
+      .filter(c => selectedCombatantIds.some(id => c.Combatant.Id == id));
+  });
   public HasSelected = ko.pureComputed(
     () => this.SelectedCombatants().length > 0
   );
@@ -67,8 +72,6 @@ export class CombatantCommander {
     });
   });
 
-  private latestRoll: RollResult;
-
   public Select = (data: CombatantViewModel, e?: MouseEvent) => {
     if (!data) {
       return;
@@ -79,11 +82,11 @@ export class CombatantCommander {
       pendingLink.prompt.Resolve(null);
     }
     if (!((e && e.ctrlKey) || (e && e.metaKey))) {
-      this.SelectedCombatants.removeAll();
+      this.selectedCombatantIds.removeAll();
     }
-    this.SelectedCombatants.push(data);
+    this.selectedCombatantIds.push(data.Combatant.Id);
     Metrics.TrackEvent("CombatantsSelected", {
-      Count: this.SelectedCombatants().length
+      Count: this.selectedCombatantIds().length
     });
   };
 
@@ -96,8 +99,10 @@ export class CombatantCommander {
     } else if (newIndex >= this.tracker.OrderedCombatants().length) {
       newIndex = this.tracker.OrderedCombatants().length - 1;
     }
-    this.SelectedCombatants.removeAll();
-    this.SelectedCombatants.push(this.tracker.OrderedCombatants()[newIndex]);
+    this.selectedCombatantIds.removeAll();
+    this.selectedCombatantIds.push(
+      this.tracker.OrderedCombatants()[newIndex].Combatant.Id
+    );
   };
 
   public Remove = () => {
@@ -105,13 +110,14 @@ export class CombatantCommander {
       return;
     }
 
-    const combatantsToRemove = this.SelectedCombatants.removeAll(),
-      firstDeletedIndex = this.tracker
-        .OrderedCombatants()
-        .indexOf(combatantsToRemove[0]),
-      deletedCombatantNames = combatantsToRemove.map(
-        c => c.Combatant.StatBlock().Name
-      );
+    const combatantsToRemove = this.SelectedCombatants();
+    this.selectedCombatantIds.removeAll();
+    const firstDeletedIndex = this.tracker
+      .OrderedCombatants()
+      .indexOf(combatantsToRemove[0]);
+    const deletedCombatantNames = combatantsToRemove.map(
+      c => c.Combatant.StatBlock().Name
+    );
 
     if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
       let activeCombatant = this.tracker.Encounter.ActiveCombatant();
@@ -145,7 +151,7 @@ export class CombatantCommander {
   };
 
   public Deselect = () => {
-    this.SelectedCombatants([]);
+    this.selectedCombatantIds([]);
   };
 
   public SelectPrevious = () => {
