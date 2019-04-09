@@ -123,7 +123,9 @@ export class CombatantCommander {
       }
     }
 
-    this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
+    combatantsToRemove.forEach(vm =>
+      this.tracker.Encounter.RemoveCombatant(vm.Combatant)
+    );
 
     const remainingCombatants = this.tracker.OrderedCombatants();
     if (remainingCombatants.length > 0) {

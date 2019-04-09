@@ -142,7 +142,9 @@ export class EncounterCommander {
         .filter(c => !c.Combatant.IsPlayerCharacter);
       this.tracker.CombatantCommander.Deselect();
       this.tracker.Encounter.EndEncounter();
-      this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
+      npcViewModels.forEach(vm =>
+        this.tracker.Encounter.RemoveCombatant(vm.Combatant)
+      );
       this.tracker.Encounter.CombatantCountsByName({});
       Metrics.TrackEvent("EncounterCleaned");
     }

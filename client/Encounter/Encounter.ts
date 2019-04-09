@@ -292,12 +292,6 @@ export class Encounter {
     combatant.StatBlock(newStatBlock);
   }
 
-  public RemoveCombatantsByViewModel(
-    combatantViewModels: CombatantViewModel[]
-  ) {
-    combatantViewModels.map(vm => vm.Combatant).forEach(this.RemoveCombatant);
-  }
-
   public MoveCombatant(combatant: Combatant, index: number) {
     combatant.InitiativeGroup(null);
     this.CleanInitiativeGroups();
