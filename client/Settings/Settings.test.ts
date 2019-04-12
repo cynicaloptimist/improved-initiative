@@ -1,10 +1,6 @@
+import { getDefaultSettings, Settings } from "../../common/Settings";
 import { Store } from "../Utility/Store";
-import {
-  getDefaultSettings,
-  CurrentSettings,
-  InitializeSettings,
-  Settings
-} from "./Settings";
+import { CurrentSettings, InitializeSettings } from "./Settings";
 
 describe("Settings", () => {
   test("Initializes to default settings", () => {

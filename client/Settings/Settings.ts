@@ -2,45 +2,17 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import * as Mousetrap from "mousetrap";
 
+import { CommandSetting } from "../../common/CommandSetting";
+import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import {
-  HpVerbosityOption,
-  PlayerViewSettings
-} from "../../common/PlayerViewSettings";
+  getDefaultSettings,
+  AutoGroupInitiativeOption,
+  Settings
+} from "../../common/Settings";
 import { Command } from "../Commands/Command";
-import { CommandSetting } from "../Commands/CommandSetting";
 import { Store } from "../Utility/Store";
 
 export const CurrentSettings = ko.observable<Settings>();
-
-export enum AutoGroupInitiativeOption {
-  None = "None",
-  ByName = "By Name",
-  SideInitiative = "Side Initiative"
-}
-
-export enum AutoRerollInitiativeOption {
-  No = "No",
-  Prompt = "Prompt",
-  Automatic = "Automatic"
-}
-
-export interface Settings {
-  Commands: CommandSetting[];
-  Rules: {
-    RollMonsterHp: boolean;
-    AllowNegativeHP: boolean;
-    AutoCheckConcentration: boolean;
-    AutoGroupInitiative: AutoGroupInitiativeOption;
-    AutoRerollInitiative: AutoRerollInitiativeOption;
-  };
-  TrackerView: {
-    DisplayRoundCounter: boolean;
-    DisplayTurnTimer: boolean;
-    DisplayDifficulty: boolean;
-  };
-  PlayerView: PlayerViewSettings;
-  Version: string;
-}
 
 function getLegacySetting<T>(settingName: string, def: T): T {
   const setting = Store.Load<T>(Store.User, settingName);
@@ -48,48 +20,6 @@ function getLegacySetting<T>(settingName: string, def: T): T {
     return def;
   }
   return setting;
-}
-
-export function getDefaultSettings(): Settings {
-  return {
-    Commands: [],
-    Rules: {
-      RollMonsterHp: false,
-      AllowNegativeHP: false,
-      AutoCheckConcentration: true,
-      AutoGroupInitiative: AutoGroupInitiativeOption.None,
-      AutoRerollInitiative: AutoRerollInitiativeOption.No
-    },
-    TrackerView: {
-      DisplayRoundCounter: false,
-      DisplayTurnTimer: false,
-      DisplayDifficulty: false
-    },
-    PlayerView: {
-      ActiveCombatantOnTop: false,
-      AllowPlayerSuggestions: false,
-      AllowTagSuggestions: false,
-      MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
-      PlayerHPVerbosity: HpVerbosityOption.ActualHP,
-      HideMonstersOutsideEncounter: false,
-      DisplayRoundCounter: false,
-      DisplayTurnTimer: false,
-      DisplayPortraits: false,
-      SplashPortraits: false,
-      CustomCSS: "",
-      CustomStyles: {
-        combatantBackground: "",
-        combatantText: "",
-        activeCombatantIndicator: "",
-        font: "",
-        headerBackground: "",
-        headerText: "",
-        mainBackground: "",
-        backgroundUrl: ""
-      }
-    },
-    Version: process.env.VERSION || "0.0.0"
-  };
 }
 
 function getLegacySettings(): Settings {

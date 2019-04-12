@@ -9,7 +9,7 @@ import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { PlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
-import ConfigureSessions from "./session";
+import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
@@ -31,11 +31,13 @@ async function improvedInitiativeServer() {
   );
   const playerViews = new PlayerViewManager();
 
-  await ConfigureSessions(app, dbConnectionString);
+  const session = await GetSessionMiddleware(dbConnectionString);
+  app.use(session);
+
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const io = socketIO(http);
-  ConfigureSockets(io, playerViews);
+  ConfigureSockets(io, session, playerViews);
 
   LaunchServer(http);
 }

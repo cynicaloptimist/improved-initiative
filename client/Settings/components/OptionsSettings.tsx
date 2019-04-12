@@ -3,7 +3,7 @@ import { HpVerbosityOption } from "../../../common/PlayerViewSettings";
 import {
   AutoGroupInitiativeOption,
   AutoRerollInitiativeOption
-} from "../Settings";
+} from "../../../common/Settings";
 import { Dropdown } from "./Dropdown";
 import { Toggle } from "./Toggle";
 

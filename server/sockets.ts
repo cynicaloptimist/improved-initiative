@@ -1,8 +1,26 @@
+import express = require("express");
+import provideSessionToSocketIo = require("express-socket.io-session");
+
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
+import { getDefaultSettings } from "../common/Settings";
 import { PlayerViewManager } from "./playerviewmanager";
 
-export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
-  io.on("connection", function(socket: SocketIO.Socket) {
+interface SocketWithSessionData {
+  handshake: {
+    session: Express.Session;
+  };
+}
+
+export default function(
+  io: SocketIO.Server,
+  session: express.RequestHandler,
+  playerViews: PlayerViewManager
+) {
+  io.use(provideSessionToSocketIo(session));
+
+  io.on("connection", function(
+    socket: SocketIO.Socket & SocketWithSessionData
+  ) {
     let encounterId;
 
     function joinEncounter(id: string) {
@@ -23,6 +41,10 @@ export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
     socket.on(
       "update settings",
       (id: string, updatedSettings: PlayerViewSettings) => {
+        if (!socket.handshake.session.hasEpicInitiative) {
+          resetEpicInitiativeSettings(updatedSettings);
+        }
+
         joinEncounter(id);
         playerViews.UpdateSettings(id, updatedSettings);
         socket.broadcast
@@ -76,4 +98,14 @@ export default function(io: SocketIO.Server, playerViews: PlayerViewManager) {
       socket.broadcast.to(id).emit("heartbeat");
     });
   });
+}
+
+const emptyCustomStyles = getDefaultSettings().PlayerView.CustomStyles;
+
+function resetEpicInitiativeSettings(settings: PlayerViewSettings) {
+  settings.CustomCSS = "";
+  settings.CustomStyles = emptyCustomStyles;
+  settings.DisplayPortraits = false;
+  settings.SplashPortraits = false;
+  settings.AllowTagSuggestions = false;
 }

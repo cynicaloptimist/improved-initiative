@@ -4,6 +4,7 @@ import * as React from "react";
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { InitializeCharacter } from "../common/PersistentCharacter";
+import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
@@ -20,7 +21,7 @@ import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { LibrariesViewModel } from "./Library/Components/LibrariesViewModel";
+import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
 import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
@@ -29,7 +30,6 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   AddMissingCommandsAndSaveSettings,
   CurrentSettings,
-  Settings,
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
@@ -65,7 +65,6 @@ export class TrackerViewModel {
     this.LibrariesCommander.SaveEncounter
   );
 
-  public CombatantViewModels = ko.observableArray<CombatantViewModel>([]);
   public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
@@ -82,108 +81,18 @@ export class TrackerViewModel {
     AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
     SubscribeCommandsToSettingsChanges(allCommands);
 
-    this.Socket.on(
-      "suggest damage",
-      (
-        suggestedCombatantIds: string[],
-        suggestedDamage: number,
-        suggester: string
-      ) => {
-        const suggestedCombatants = this.CombatantViewModels().filter(
-          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
-        );
-        this.CombatantCommander.SuggestEditHP(
-          suggestedCombatants,
-          suggestedDamage,
-          suggester
-        );
-      }
-    );
+    this.subscribeToSocketMessages();
 
-    this.Socket.on(
-      "suggest tag",
-      (
-        suggestedCombatantIds: string[],
-        suggestedTag: TagState,
-        suggester: string
-      ) => {
-        const suggestedCombatants = this.CombatantViewModels().filter(
-          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
-        );
+    this.joinPlayerViewEncounter();
 
-        this.CombatantCommander.SuggestAddTag(
-          suggestedCombatants[0].Combatant,
-          suggestedTag,
-          suggester
-        );
-      }
-    );
+    this.getAccountOrSampleCharacters();
 
-    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
-    this.playerViewClient.UpdateSettings(
-      this.Encounter.EncounterId,
-      CurrentSettings().PlayerView
-    );
-    this.playerViewClient.UpdateEncounter(
-      this.Encounter.EncounterId,
-      this.Encounter.GetPlayerView()
-    );
-    CurrentSettings.subscribe(v => {
-      this.playerViewClient.UpdateSettings(
-        this.Encounter.EncounterId,
-        v.PlayerView
-      );
-      this.playerViewClient.UpdateEncounter(
-        this.Encounter.EncounterId,
-        this.Encounter.GetPlayerView()
-      );
-    });
+    this.loadAutoSavedEncounterIfAvailable();
 
-    this.accountClient.GetAccount(account => {
-      if (!account) {
-        if (Store.List(Store.PersistentCharacters).length == 0) {
-          this.getAndAddSamplePersistentCharacters("/sample_players.json");
-        }
-        return;
-      }
-
-      this.HandleAccountSync(account);
-    });
-
-    const autosavedEncounter = Store.Load(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId
-    );
-    if (autosavedEncounter) {
-      this.Encounter.LoadEncounterState(
-        UpdateLegacySavedEncounter(autosavedEncounter),
-        this.Libraries.PersistentCharacters
-      );
-    }
-
-    this.TutorialVisible.subscribe(v => {
-      if (v == false) {
-        this.displayPrivacyNotificationIfNeeded();
-      }
-    });
+    this.showPrivacyNotificationAfterTutorial();
 
     Metrics.TrackLoad();
   }
-
-  private getAndAddSamplePersistentCharacters = (url: string) => {
-    $.getJSON(url, (json: StatBlock[]) => {
-      json.forEach(statBlock => {
-        const persistentCharacter = InitializeCharacter({
-          ...StatBlock.Default(),
-          ...statBlock
-        });
-        persistentCharacter.Path = "Sample Player Characters";
-        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
-          persistentCharacter
-        );
-      });
-    });
-  };
 
   public ReviewPrivacyPolicy = () => {
     this.SettingsVisible(false);
@@ -199,48 +108,33 @@ export class TrackerViewModel {
     this.Rules
   );
 
-  private initializeCombatantViewModel = (combatant: Combatant) => {
-    const vm = new CombatantViewModel(
-      combatant,
-      this.CombatantCommander,
-      this.PromptQueue.Add,
-      this.EventLog.AddEvent
-    );
-    this.CombatantViewModels.push(vm);
-    return vm;
-  };
-
-  private removeCombatantViewModels = (viewModels: CombatantViewModel[]) => {
-    this.CombatantViewModels.removeAll(viewModels);
-  };
-
   public Encounter = new Encounter(
     this.playerViewClient,
-    this.initializeCombatantViewModel,
-    this.removeCombatantViewModels,
+    combatantId =>
+      this.OrderedCombatants()
+        .find((c: CombatantViewModel) => c.Combatant.Id == combatantId)
+        .EditInitiative(),
     this.Rules
   );
 
   public librariesComponent = (
-    <LibrariesViewModel
+    <LibraryPanes
       librariesCommander={this.LibrariesCommander}
       libraries={this.Libraries}
       statBlockTextEnricher={this.StatBlockTextEnricher}
     />
   );
 
-  public OrderedCombatants = ko.computed(() =>
-    this.CombatantViewModels().sort(
-      (c1, c2) =>
-        this.Encounter.Combatants().indexOf(c1.Combatant) -
-        this.Encounter.Combatants().indexOf(c2.Combatant)
-    )
+  public OrderedCombatants: KnockoutComputed<
+    CombatantViewModel[]
+  > = ko.pureComputed(() =>
+    this.Encounter.Combatants().map(this.buildCombatantViewModel)
   );
 
-  public ActiveCombatantDetails = ko.computed(() => {
+  public ActiveCombatantDetails = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.ActiveCombatant();
     const combatantViewModel = find(
-      this.CombatantViewModels(),
+      this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
     );
     return (
@@ -391,7 +285,7 @@ export class TrackerViewModel {
     return "show-center-right-left";
   });
 
-  public settingsComponent = ko.computed(() => {
+  public settingsComponent = ko.pureComputed(() => {
     return (
       <SettingsPane
         settings={CurrentSettings()}
@@ -407,7 +301,7 @@ export class TrackerViewModel {
     );
   });
 
-  public toolbarComponent = ko.computed(() => {
+  public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =
       this.Encounter.State() == "active"
         ? ["start-encounter"]
@@ -467,7 +361,130 @@ export class TrackerViewModel {
     return "next-turn";
   };
 
-  private HandleAccountSync(account: Account) {
+  private subscribeToSocketMessages = () => {
+    this.Socket.on(
+      "suggest damage",
+      (
+        suggestedCombatantIds: string[],
+        suggestedDamage: number,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.OrderedCombatants().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+        this.CombatantCommander.PromptAcceptSuggestedDamage(
+          suggestedCombatants,
+          suggestedDamage,
+          suggester
+        );
+      }
+    );
+
+    this.Socket.on(
+      "suggest tag",
+      (
+        suggestedCombatantIds: string[],
+        suggestedTag: TagState,
+        suggester: string
+      ) => {
+        const suggestedCombatants = this.OrderedCombatants().filter(
+          c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
+        );
+
+        this.CombatantCommander.PromptAcceptSuggestedTag(
+          suggestedCombatants[0].Combatant,
+          suggestedTag,
+          suggester
+        );
+      }
+    );
+  };
+
+  private joinPlayerViewEncounter() {
+    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+
+    this.playerViewClient.UpdateSettings(
+      this.Encounter.EncounterId,
+      CurrentSettings().PlayerView
+    );
+
+    this.playerViewClient.UpdateEncounter(
+      this.Encounter.EncounterId,
+      this.Encounter.GetPlayerView()
+    );
+
+    CurrentSettings.subscribe(v => {
+      this.playerViewClient.UpdateSettings(
+        this.Encounter.EncounterId,
+        v.PlayerView
+      );
+      this.playerViewClient.UpdateEncounter(
+        this.Encounter.EncounterId,
+        this.Encounter.GetPlayerView()
+      );
+    });
+  }
+
+  private getAccountOrSampleCharacters() {
+    this.accountClient.GetAccount(account => {
+      if (!account) {
+        if (Store.List(Store.PersistentCharacters).length == 0) {
+          this.getAndAddSamplePersistentCharacters("/sample_players.json");
+        }
+        return;
+      }
+      this.handleAccountSync(account);
+    });
+  }
+
+  private getAndAddSamplePersistentCharacters = (url: string) => {
+    $.getJSON(url, (json: StatBlock[]) => {
+      json.forEach(statBlock => {
+        const persistentCharacter = InitializeCharacter({
+          ...StatBlock.Default(),
+          ...statBlock
+        });
+        persistentCharacter.Path = "Sample Player Characters";
+        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+          persistentCharacter
+        );
+      });
+    });
+  };
+
+  private loadAutoSavedEncounterIfAvailable() {
+    const autosavedEncounter = Store.Load(
+      Store.AutoSavedEncounters,
+      Store.DefaultSavedEncounterId
+    );
+
+    if (autosavedEncounter) {
+      this.Encounter.LoadEncounterState(
+        UpdateLegacySavedEncounter(autosavedEncounter),
+        this.Libraries.PersistentCharacters
+      );
+    }
+  }
+
+  private showPrivacyNotificationAfterTutorial() {
+    this.TutorialVisible.subscribe(v => {
+      if (v == false) {
+        this.displayPrivacyNotificationIfNeeded();
+      }
+    });
+  }
+
+  private buildCombatantViewModel = (combatant: Combatant) => {
+    const vm = new CombatantViewModel(
+      combatant,
+      this.CombatantCommander,
+      this.PromptQueue.Add,
+      this.EventLog.AddEvent
+    );
+    return vm;
+  };
+
+  private handleAccountSync(account: Account) {
     if (account.settings && account.settings.Version) {
       const updatedSettings = UpdateSettings(account.settings);
       const allCommands = [

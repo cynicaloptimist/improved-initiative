@@ -13,7 +13,7 @@ export const ConvertStringsToNumbersWhereNeeded = (statBlock: StatBlock) => {
   statBlock.Saves.forEach(s => (s.Modifier = castToNumberOrZero(s.Modifier)));
 };
 
-const castToNumberOrZero = (value?: any) => {
+function castToNumberOrZero(value?: any) {
   if (!value) {
     return 0;
   }
@@ -22,4 +22,4 @@ const castToNumberOrZero = (value?: any) => {
     return 0;
   }
   return parsedValue;
-};
+}

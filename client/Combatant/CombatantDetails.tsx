@@ -9,14 +9,10 @@ import { linkComponentToObservables } from "./linkComponentToObservables";
 interface CombatantDetailsProps {
   combatantViewModel: CombatantViewModel;
   enricher: TextEnricher;
-  displayMode: "default" | "active";
+  displayMode: "default" | "active" | "status-only";
 }
 
-interface CombatantDetailsState {}
-export class CombatantDetails extends React.Component<
-  CombatantDetailsProps,
-  CombatantDetailsState
-> {
+export class CombatantDetails extends React.Component<CombatantDetailsProps> {
   constructor(props) {
     super(props);
     linkComponentToObservables(this);
@@ -59,12 +55,14 @@ export class CombatantDetails extends React.Component<
             <span className="stat-label">Tags</span> {tags.join("; ")}
           </div>
         )}
-        <StatBlockComponent
-          statBlock={statBlock}
-          displayMode={this.props.displayMode}
-          enricher={this.props.enricher}
-          hideName
-        />
+        {this.props.displayMode !== "status-only" && (
+          <StatBlockComponent
+            statBlock={statBlock}
+            displayMode={this.props.displayMode}
+            enricher={this.props.enricher}
+            hideName
+          />
+        )}
         {notes && notes.length > 0 && (
           <div className="c-combatant-details__notes">{renderedNotes}</div>
         )}

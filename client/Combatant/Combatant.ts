@@ -42,7 +42,7 @@ export class Combatant implements Combatant {
 
     this.StatBlock(statBlock);
 
-    this.MaxHP = ko.computed(() => this.StatBlock().HP.Value);
+    this.MaxHP = ko.pureComputed(() => this.StatBlock().HP.Value);
 
     this.processStatBlock(statBlock);
 

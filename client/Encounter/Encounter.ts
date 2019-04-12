@@ -6,6 +6,7 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
+import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -21,10 +22,7 @@ import {
 } from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
-import {
-  AutoRerollInitiativeOption,
-  CurrentSettings
-} from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
 import {
   DifficultyCalculator,
@@ -37,8 +35,7 @@ export class Encounter {
 
   constructor(
     private playerViewClient: PlayerViewClient,
-    private buildCombatantViewModel: (c: Combatant) => CombatantViewModel,
-    private handleRemoveCombatantViewModels: (vm: CombatantViewModel[]) => void,
+    private promptEditCombatantInitiative: (combatantId: string) => void,
     public Rules: IRules
   ) {
     this.CombatantCountsByName = ko.observable({});
@@ -61,7 +58,7 @@ export class Encounter {
 
   public TurnTimer = new TurnTimer();
   private combatants = ko.observableArray<Combatant>([]);
-  public Combatants = ko.computed(() => this.combatants());
+  public Combatants = ko.pureComputed(() => this.combatants());
   public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
   public ActiveCombatant: KnockoutObservable<Combatant>;
   public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
@@ -70,10 +67,10 @@ export class Encounter {
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
     "active" | "inactive"
   >("inactive");
-  public StateIcon = ko.computed(() =>
+  public StateIcon = ko.pureComputed(() =>
     this.State() === "active" ? "fa-play" : "fa-pause"
   );
-  public StateTip = ko.computed(() =>
+  public StateTip = ko.pureComputed(() =>
     this.State() === "active" ? "Encounter Active" : "Encounter Inactive"
   );
 
@@ -176,11 +173,10 @@ export class Encounter {
     const combatant = new Combatant(combatantState, this);
     this.combatants.push(combatant);
 
-    const viewModel = this.buildCombatantViewModel(combatant);
     combatant.UpdateIndexLabel();
 
     if (this.State() === "active") {
-      viewModel.EditInitiative();
+      this.promptEditCombatantInitiative(combatant.Id);
     }
 
     combatant.Tags().forEach(tag => {
@@ -294,13 +290,6 @@ export class Encounter {
       return;
     }
     combatant.StatBlock(newStatBlock);
-  }
-
-  public RemoveCombatantsByViewModel(
-    combatantViewModels: CombatantViewModel[]
-  ) {
-    combatantViewModels.map(vm => vm.Combatant).forEach(this.RemoveCombatant);
-    this.handleRemoveCombatantViewModels(combatantViewModels);
   }
 
   public MoveCombatant(combatant: Combatant, index: number) {

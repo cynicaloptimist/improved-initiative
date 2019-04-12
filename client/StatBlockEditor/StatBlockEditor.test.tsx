@@ -132,11 +132,9 @@ describe("StatBlockEditor", () => {
     });
 
     editor.find(`.c-statblock-editor__json-button`).simulate("click");
-    editor
-      .find(`textarea[name="StatBlockJSON"]`)
-      .simulate("change", {
-        target: { name: "StatBlockJSON", value: editedJSON }
-      });
+    editor.find(`textarea[name="StatBlockJSON"]`).simulate("change", {
+      target: { name: "StatBlockJSON", value: editedJSON }
+    });
 
     editor.simulate("submit");
   });

@@ -6,6 +6,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { MultipleCombatantDetails } from "../Combatant/MultipleCombatantDetails";
 import { Dice } from "../Rules/Dice";
 import { RollResult } from "../Rules/RollResult";
 import { CurrentSettings } from "../Settings/Settings";
@@ -26,15 +27,20 @@ interface PendingLinkInitiative {
 }
 
 export class CombatantCommander {
+  private selectedCombatantIds = ko.observableArray<string>([]);
+  private latestRoll: RollResult;
+
   constructor(private tracker: TrackerViewModel) {
     this.Commands = BuildCombatantCommandList(this);
   }
 
   public Commands: Command[];
-  public SelectedCombatants: KnockoutObservableArray<
-    CombatantViewModel
-  > = ko.observableArray<CombatantViewModel>([]);
-
+  public SelectedCombatants = ko.pureComputed<CombatantViewModel[]>(() => {
+    const selectedCombatantIds = this.selectedCombatantIds();
+    return this.tracker
+      .OrderedCombatants()
+      .filter(c => selectedCombatantIds.some(id => c.Combatant.Id == id));
+  });
   public HasSelected = ko.pureComputed(
     () => this.SelectedCombatants().length > 0
   );
@@ -47,6 +53,10 @@ export class CombatantCommander {
 
   public CombatantDetails = ko.pureComputed(() => {
     const selectedCombatants = this.SelectedCombatants();
+    if (selectedCombatants.length == 0) {
+      return null;
+    }
+
     if (selectedCombatants.length == 1) {
       const combatantViewModel = selectedCombatants[0];
       return React.createElement(CombatantDetails, {
@@ -54,18 +64,13 @@ export class CombatantCommander {
         enricher: this.tracker.StatBlockTextEnricher,
         displayMode: "default"
       });
-    } else {
-      return null;
     }
+
+    return React.createElement(MultipleCombatantDetails, {
+      combatants: selectedCombatants,
+      enricher: this.tracker.StatBlockTextEnricher
+    });
   });
-
-  public Names: KnockoutComputed<string> = ko.pureComputed(() =>
-    this.SelectedCombatants()
-      .map(c => c.Name())
-      .join(", ")
-  );
-
-  private latestRoll: RollResult;
 
   public Select = (data: CombatantViewModel, e?: MouseEvent) => {
     if (!data) {
@@ -77,25 +82,27 @@ export class CombatantCommander {
       pendingLink.prompt.Resolve(null);
     }
     if (!((e && e.ctrlKey) || (e && e.metaKey))) {
-      this.SelectedCombatants.removeAll();
+      this.selectedCombatantIds.removeAll();
     }
-    this.SelectedCombatants.push(data);
+    this.selectedCombatantIds.push(data.Combatant.Id);
     Metrics.TrackEvent("CombatantsSelected", {
-      Count: this.SelectedCombatants().length
+      Count: this.selectedCombatantIds().length
     });
   };
 
   private selectByOffset = (offset: number) => {
     let newIndex =
-      this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) +
+      this.tracker.OrderedCombatants().indexOf(this.SelectedCombatants()[0]) +
       offset;
     if (newIndex < 0) {
       newIndex = 0;
-    } else if (newIndex >= this.tracker.CombatantViewModels().length) {
-      newIndex = this.tracker.CombatantViewModels().length - 1;
+    } else if (newIndex >= this.tracker.OrderedCombatants().length) {
+      newIndex = this.tracker.OrderedCombatants().length - 1;
     }
-    this.SelectedCombatants.removeAll();
-    this.SelectedCombatants.push(this.tracker.CombatantViewModels()[newIndex]);
+    this.selectedCombatantIds.removeAll();
+    this.selectedCombatantIds.push(
+      this.tracker.OrderedCombatants()[newIndex].Combatant.Id
+    );
   };
 
   public Remove = () => {
@@ -103,15 +110,16 @@ export class CombatantCommander {
       return;
     }
 
-    const combatantsToRemove = this.SelectedCombatants.removeAll(),
-      firstDeletedIndex = this.tracker
-        .CombatantViewModels()
-        .indexOf(combatantsToRemove[0]),
-      deletedCombatantNames = combatantsToRemove.map(
-        c => c.Combatant.StatBlock().Name
-      );
+    const combatantsToRemove = this.SelectedCombatants();
+    this.selectedCombatantIds.removeAll();
+    const firstDeletedIndex = this.tracker
+      .OrderedCombatants()
+      .indexOf(combatantsToRemove[0]);
+    const deletedCombatantNames = combatantsToRemove.map(
+      c => c.Combatant.StatBlock().Name
+    );
 
-    if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
+    if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
       let activeCombatant = this.tracker.Encounter.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
         this.tracker.Encounter.NextTurn(
@@ -121,15 +129,17 @@ export class CombatantCommander {
       }
     }
 
-    this.tracker.Encounter.RemoveCombatantsByViewModel(combatantsToRemove);
+    combatantsToRemove.forEach(vm =>
+      this.tracker.Encounter.RemoveCombatant(vm.Combatant)
+    );
 
-    const remainingCombatants = this.tracker.CombatantViewModels();
+    const remainingCombatants = this.tracker.OrderedCombatants();
     if (remainingCombatants.length > 0) {
       const newSelectionIndex =
         firstDeletedIndex > remainingCombatants.length
           ? remainingCombatants.length - 1
           : firstDeletedIndex;
-      this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
+      this.Select(this.tracker.OrderedCombatants()[newSelectionIndex]);
     }
 
     this.tracker.EventLog.AddEvent(
@@ -141,16 +151,16 @@ export class CombatantCommander {
   };
 
   public Deselect = () => {
-    this.SelectedCombatants([]);
+    this.selectedCombatantIds([]);
   };
 
   public SelectPrevious = () => {
-    if (this.tracker.CombatantViewModels().length == 0) {
+    if (this.tracker.OrderedCombatants().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.CombatantViewModels()[0]);
+      this.Select(this.tracker.OrderedCombatants()[0]);
       return;
     }
 
@@ -158,12 +168,12 @@ export class CombatantCommander {
   };
 
   public SelectNext = () => {
-    if (this.tracker.CombatantViewModels().length == 0) {
+    if (this.tracker.OrderedCombatants().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.CombatantViewModels()[0]);
+      this.Select(this.tracker.OrderedCombatants()[0]);
       return;
     }
 
@@ -238,7 +248,7 @@ export class CombatantCommander {
     return false;
   };
 
-  public SuggestEditHP = (
+  public PromptAcceptSuggestedDamage = (
     suggestedCombatants: CombatantViewModel[],
     suggestedDamage: number,
     suggester: string
@@ -261,7 +271,7 @@ export class CombatantCommander {
     return false;
   };
 
-  public SuggestAddTag = (
+  public PromptAcceptSuggestedTag = (
     suggestedCombatant: Combatant,
     suggestedTag: TagState,
     suggester: string
@@ -383,7 +393,7 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.CombatantViewModels().indexOf(combatant);
+    const index = this.tracker.OrderedCombatants().indexOf(combatant);
     if (combatant && index > 0) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
@@ -401,8 +411,8 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.CombatantViewModels().indexOf(combatant);
-    if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
+    const index = this.tracker.OrderedCombatants().indexOf(combatant);
+    if (combatant && index < this.tracker.OrderedCombatants().length - 1) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
         index + 1

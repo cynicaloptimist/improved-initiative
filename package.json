@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -40,7 +40,7 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "formik": "^1.0.0-beta.5",
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
@@ -56,7 +56,7 @@
     "markdown-loader-jest": "^0.1.1",
     "prettier": "^1.15.3",
     "requirejs": "^2.3.5",
-    "ts-jest": "^23.10.5",
+    "ts-jest": "^24.0.1",
     "ts-loader": "^3.3.1",
     "tslint": "^5.11.0",
     "typescript": "^3.0.1",
@@ -74,7 +74,7 @@
     "connect-mongodb-session": "^1.3.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "express-socket.io-session": "^1.3.3",
+    "express-socket.io-session": "^1.3.5",
     "html-loader": "^0.5.5",
     "jquery": "^3.3.1",
     "keen-tracking": "^4.0.17",
@@ -141,8 +141,9 @@
   "scripts": {
     "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
+    "build": "grunt build_dev",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
-    "lint": "tslint --fix -p client && tslint --fix -p server"
+    "lint": "tslint --fix -p client && tslint --fix -p server && prettier **/*.{less,html,ts,tsx} --write"
   }
 }

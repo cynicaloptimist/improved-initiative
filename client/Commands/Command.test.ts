@@ -1,4 +1,4 @@
-import { getDefaultSettings } from "../Settings/Settings";
+import { getDefaultSettings } from "../../common/Settings";
 import { Store } from "../Utility/Store";
 import { Command } from "./Command";
 

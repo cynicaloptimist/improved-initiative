@@ -14,7 +14,7 @@ import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
-export type PersistentCharacterLibraryViewModelProps = {
+export type PersistentCharacterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: PersistentCharacterLibrary;
   statBlockTextEnricher: TextEnricher;
@@ -28,11 +28,11 @@ interface State {
   previewPosition: { left: number; top: number };
 }
 
-export class PersistentCharacterLibraryViewModel extends React.Component<
-  PersistentCharacterLibraryViewModelProps,
+export class PersistentCharacterLibraryPane extends React.Component<
+  PersistentCharacterLibraryPaneProps,
   State
 > {
-  constructor(props: PersistentCharacterLibraryViewModelProps) {
+  constructor(props: PersistentCharacterLibraryPaneProps) {
     super(props);
     this.state = {
       filter: "",

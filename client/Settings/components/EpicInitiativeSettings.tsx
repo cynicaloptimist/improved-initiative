@@ -81,7 +81,7 @@ export class EpicInitiativeSettings extends React.Component<
   }
 
   private loginMessage = () => (
-    <React.Fragment>
+    <div className="tab-content epicInitiativeLogin">
       <h3>Epic Initiative</h3>
       <p>
         Log in with Patreon to access patron benefits. Epic Initiative allows
@@ -91,11 +91,11 @@ export class EpicInitiativeSettings extends React.Component<
       <a className="login button" href={env.PatreonLoginUrl}>
         Log In with Patreon
       </a>
-    </React.Fragment>
+    </div>
   );
 
   private upgradeMessage = () => (
-    <React.Fragment>
+    <div className="tab-content epicInitiativeLogin">
       <h3>Epic Initiative</h3>
       <p>
         You're logged in with Patreon, but you have not selected the Epic
@@ -113,6 +113,6 @@ export class EpicInitiativeSettings extends React.Component<
         additionalClassNames="button--upgrade"
         text="Pledge Now!"
       />
-    </React.Fragment>
+    </div>
   );
 }

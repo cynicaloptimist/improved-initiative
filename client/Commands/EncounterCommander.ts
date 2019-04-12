@@ -58,13 +58,13 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  public DisplayRoundCounter = ko.computed(
+  public DisplayRoundCounter = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayRoundCounter
   );
-  public DisplayTurnTimer = ko.computed(
+  public DisplayTurnTimer = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayTurnTimer
   );
-  public DisplayDifficulty = ko.computed(
+  public DisplayDifficulty = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayDifficulty
   );
 
@@ -127,8 +127,7 @@ export class EncounterCommander {
   public ClearEncounter = () => {
     if (confirm("Remove all combatants and end encounter?")) {
       this.tracker.Encounter.ClearEncounter();
-      this.tracker.CombatantViewModels([]);
-      this.tracker.CombatantCommander.SelectedCombatants([]);
+      this.tracker.CombatantCommander.Deselect();
       this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
       Metrics.TrackEvent("EncounterCleared");
     }
@@ -139,11 +138,13 @@ export class EncounterCommander {
   public CleanEncounter = () => {
     if (confirm("Remove NPCs and end encounter?")) {
       const npcViewModels = this.tracker
-        .CombatantViewModels()
+        .OrderedCombatants()
         .filter(c => !c.Combatant.IsPlayerCharacter);
-      this.tracker.CombatantCommander.SelectedCombatants([]);
+      this.tracker.CombatantCommander.Deselect();
       this.tracker.Encounter.EndEncounter();
-      this.tracker.Encounter.RemoveCombatantsByViewModel(npcViewModels);
+      npcViewModels.forEach(vm =>
+        this.tracker.Encounter.RemoveCombatant(vm.Combatant)
+      );
       this.tracker.Encounter.CombatantCountsByName({});
       Metrics.TrackEvent("EncounterCleaned");
     }

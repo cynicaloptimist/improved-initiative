@@ -1,5 +1,5 @@
 import _ = require("lodash");
-import { Settings } from "../Settings/Settings";
+import { Settings } from "../../common/Settings";
 import { Store } from "../Utility/Store";
 
 const LegacyCommandSettingsKeys = {

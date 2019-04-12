@@ -1,8 +1,8 @@
 import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
+import { CommandSetting } from "../../../common/CommandSetting";
 import { Command } from "../../Commands/Command";
-import { CommandSetting } from "../../Commands/CommandSetting";
 import { ToggleButton } from "./Toggle";
 
 interface CommandSettingRowProps {
