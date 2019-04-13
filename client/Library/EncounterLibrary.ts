@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Store } from "../Utility/Store";
@@ -45,7 +45,7 @@ export class EncounterLibrary {
     );
   }
 
-  public AddListings(listings: ServerListing[], source: ListingOrigin) {
+  public AddListings(listings: StoredListing[], source: ListingOrigin) {
     ko.utils.arrayPushAll<Listing<EncounterState<CombatantState>>>(
       this.Encounters,
       listings.map(

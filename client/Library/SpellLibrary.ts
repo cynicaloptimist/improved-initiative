@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -16,7 +16,7 @@ export class SpellLibrary {
 
   constructor(private accountClient: AccountClient) {}
 
-  public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<Spell>>(
       this.spells,
       listings.map(c => {

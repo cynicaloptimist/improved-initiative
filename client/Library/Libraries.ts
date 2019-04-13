@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -37,7 +37,7 @@ export class Libraries {
         ...Store.Load<StatBlock>(Store.StatBlocks, id)
       };
 
-      const listing: ServerListing = {
+      const listing: StoredListing = {
         Id: id,
         Name: statBlock.Name,
         Path: statBlock.Path,

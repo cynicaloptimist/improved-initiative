@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
@@ -14,7 +14,7 @@ export class NPCLibrary {
 
   constructor(private accountClient: AccountClient) {}
 
-  public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<StatBlock>>(
       this.statBlocks,
       listings.map(c => {

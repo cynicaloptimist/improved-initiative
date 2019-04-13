@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import {
   DefaultPersistentCharacter,
   InitializeCharacter,
@@ -42,7 +42,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   public GetListings = ko.pureComputed(() => this.persistentCharacters());
 
-  public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     const newListings = listings.map(c => {
       return new Listing<PersistentCharacter>(
         c.Id,

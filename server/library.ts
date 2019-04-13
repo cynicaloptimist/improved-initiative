@@ -1,6 +1,6 @@
 import fs = require("fs");
 import path = require("path");
-import { Listable, ServerListing } from "../common/Listable";
+import { Listable, StoredListing } from "../common/Listable";
 
 const sourceAbbreviations = {
   "monster-manual": "mm",
@@ -33,7 +33,7 @@ export const GetEncounterKeywords = (encounter: SavedEncounter) =>
 
 export class Library<TItem extends Listable> {
   private items: { [id: string]: TItem } = {};
-  private listings: ServerListing[] = [];
+  private listings: StoredListing[] = [];
 
   constructor(
     private route: string,
@@ -68,7 +68,7 @@ export class Library<TItem extends Listable> {
       }
       c.Id = createId(c.Name, c.Source);
       this.items[c.Id] = c;
-      const listing: ServerListing = {
+      const listing: StoredListing = {
         Name: c.Name,
         Id: c.Id,
         Path: c.Path || "",
@@ -83,7 +83,7 @@ export class Library<TItem extends Listable> {
     return this.items[id];
   }
 
-  public GetListings(): ServerListing[] {
+  public GetListings(): StoredListing[] {
     return this.listings;
   }
 

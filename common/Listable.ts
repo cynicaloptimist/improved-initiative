@@ -5,7 +5,7 @@ export interface Listable {
   Path: string;
 }
 
-export interface ServerListing {
+export interface StoredListing {
   Id: string;
   Link: string;
   Name: string;

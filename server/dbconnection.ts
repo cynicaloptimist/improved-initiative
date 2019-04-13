@@ -3,7 +3,7 @@ import mongo = require("mongodb");
 import * as _ from "lodash";
 import { CombatantState } from "../common/CombatantState";
 import { DefaultEncounterState } from "../common/EncounterState";
-import { Listable, ServerListing } from "../common/Listable";
+import { Listable, StoredListing } from "../common/Listable";
 import {
   DefaultPersistentCharacter,
   InitializeCharacter
@@ -160,7 +160,7 @@ async function updatePersistentCharactersIfNeeded(
 
 function getStatBlockListings(statBlocks: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(statBlocks).map(key => {
     const c = { ...StatBlock.Default(), ...statBlocks[key] };
     return {
@@ -174,7 +174,7 @@ function getStatBlockListings(statBlocks: {
   });
 }
 
-function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
+function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
   return Object.keys(spells).map(key => {
     const c = { ...Spell.Default(), ...spells[key] };
     return {
@@ -190,7 +190,7 @@ function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
 
 function getEncounterListings(encounters: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(encounters).map(key => {
     const c = {
       ...DefaultEncounterState<CombatantState>(),
@@ -209,7 +209,7 @@ function getEncounterListings(encounters: {
 
 function getPersistentCharacterListings(persistentCharacters: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(persistentCharacters).map(key => {
     const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
     return {
