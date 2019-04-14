@@ -18,6 +18,10 @@ export class Spell {
   public static GetKeywords = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
+  public static GetMetadata = (spell: Spell) => ({
+    Level: spell.Level.toString()
+  });
+
   public static Default: () => Spell = () => {
     return {
       Id: probablyUniqueString(),

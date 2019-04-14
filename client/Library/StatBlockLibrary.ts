@@ -23,6 +23,7 @@ export class StatBlockLibrary {
           c.Name,
           c.Path,
           c.SearchHint,
+          c.Metadata,
           c.Link,
           source
         );
@@ -55,6 +56,7 @@ export class StatBlockLibrary {
         newStatBlock.Name,
         newStatBlock.Path,
         newStatBlock.Type,
+        StatBlock.GetMetadata(newStatBlock),
         `/my/statblocks/${newStatBlock.Id}`,
         "account",
         newStatBlock
@@ -85,6 +87,7 @@ export class StatBlockLibrary {
       newStatBlock.Name,
       newStatBlock.Path,
       newStatBlock.Type,
+      StatBlock.GetMetadata(newStatBlock),
       this.StoreName,
       "localStorage"
     );

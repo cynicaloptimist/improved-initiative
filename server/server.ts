@@ -22,12 +22,14 @@ async function improvedInitiativeServer() {
   const statBlockLibrary = L.Library.FromFile<StatBlock>(
     "ogl_creatures.json",
     "/statblocks/",
-    StatBlock.GetKeywords
+    StatBlock.GetKeywords,
+    StatBlock.GetMetadata
   );
   const spellLibrary = L.Library.FromFile<Spell>(
     "ogl_spells.json",
     "/spells/",
-    Spell.GetKeywords
+    Spell.GetKeywords,
+    Spell.GetMetadata
   );
   const playerViews = new PlayerViewManager();
 

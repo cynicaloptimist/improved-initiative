@@ -40,6 +40,7 @@ export class EncounterLibrary {
       savedEncounter.Name,
       savedEncounter.Path,
       combatantNames,
+      {},
       link,
       origin
     );
@@ -49,7 +50,16 @@ export class EncounterLibrary {
     ko.utils.arrayPushAll<Listing<EncounterState<CombatantState>>>(
       this.Encounters,
       listings.map(
-        l => new Listing(l.Id, l.Name, l.Path, l.SearchHint, l.Link, source)
+        l =>
+          new Listing(
+            l.Id,
+            l.Name,
+            l.Path,
+            l.SearchHint,
+            l.Metadata,
+            l.Link,
+            source
+          )
       )
     );
   }

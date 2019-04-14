@@ -5,6 +5,8 @@ import { now } from "moment";
 import { StoredListing } from "../../common/Listable";
 import {
   DefaultPersistentCharacter,
+  GetPersistentCharacterKeywords,
+  GetPersistentCharacterMetadata,
   InitializeCharacter,
   PersistentCharacter
 } from "../../common/PersistentCharacter";
@@ -49,6 +51,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
         c.Name,
         c.Path,
         c.SearchHint,
+        c.Metadata,
         c.Link,
         source
       );
@@ -69,7 +72,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       persistentCharacter.Id,
       persistentCharacter.Name,
       persistentCharacter.Path,
-      persistentCharacter.Name,
+      GetPersistentCharacterKeywords(persistentCharacter),
+      GetPersistentCharacterMetadata(persistentCharacter),
       persistentCharacter.Id,
       "localStorage",
       persistentCharacter
@@ -135,7 +139,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       id,
       persistentCharacter.Name,
       persistentCharacter.Path,
-      persistentCharacter.StatBlock.Type,
+      GetPersistentCharacterKeywords(persistentCharacter),
+      GetPersistentCharacterMetadata(persistentCharacter),
       Store.PersistentCharacters,
       "localStorage"
     );
@@ -156,7 +161,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       id,
       persistentCharacter.Name,
       persistentCharacter.Path,
-      persistentCharacter.StatBlock.Type,
+      GetPersistentCharacterKeywords(persistentCharacter),
+      GetPersistentCharacterMetadata(persistentCharacter),
       Store.PersistentCharacters,
       "localStorage"
     );

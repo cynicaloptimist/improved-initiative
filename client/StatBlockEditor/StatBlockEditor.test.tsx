@@ -24,7 +24,8 @@ describe("StatBlockEditor", () => {
       statBlock.Id,
       statBlock.Name,
       statBlock.Path,
-      statBlock.Type,
+      StatBlock.GetKeywords(statBlock),
+      StatBlock.GetMetadata(statBlock),
       "/",
       "localStorage",
       statBlock

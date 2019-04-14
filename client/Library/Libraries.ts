@@ -42,6 +42,7 @@ export class Libraries {
         Name: statBlock.Name,
         Path: statBlock.Path,
         SearchHint: StatBlock.GetKeywords(statBlock),
+        Metadata: StatBlock.GetMetadata(statBlock),
         Link: Store.StatBlocks
       };
 
@@ -66,6 +67,7 @@ export class Libraries {
         Name: spell.Name,
         Path: spell.Path,
         SearchHint: Spell.GetKeywords(spell),
+        Metadata: Spell.GetMetadata(spell),
         Link: Store.Spells
       };
 

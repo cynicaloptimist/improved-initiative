@@ -6,6 +6,8 @@ import { DefaultEncounterState } from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
 import {
   DefaultPersistentCharacter,
+  GetPersistentCharacterKeywords,
+  GetPersistentCharacterMetadata,
   InitializeCharacter
 } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
@@ -168,6 +170,7 @@ function getStatBlockListings(statBlocks: {
       Id: c.Id,
       Path: c.Path,
       SearchHint: StatBlock.GetKeywords(c),
+      Metadata: StatBlock.GetMetadata(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`
     };
@@ -182,6 +185,7 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
       Id: c.Id,
       Path: c.Path,
       SearchHint: Spell.GetKeywords(c),
+      Metadata: Spell.GetMetadata(c),
       Version: c.Version,
       Link: `/my/spells/${c.Id}`
     };
@@ -201,6 +205,7 @@ function getEncounterListings(encounters: {
       Id: c.Id,
       Path: c.Path,
       SearchHint: L.GetEncounterKeywords(c),
+      Metadata: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`
     };
@@ -216,7 +221,8 @@ function getPersistentCharacterListings(persistentCharacters: {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c.StatBlock),
+      SearchHint: GetPersistentCharacterKeywords(c),
+      Metadata: GetPersistentCharacterMetadata(c),
       Version: c.Version,
       Link: `/my/persistentcharacters/${c.Id}`
     };

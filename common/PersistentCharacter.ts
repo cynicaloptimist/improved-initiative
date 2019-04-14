@@ -17,6 +17,16 @@ export function InitializeCharacter(statBlock: StatBlock): PersistentCharacter {
 export const DefaultPersistentCharacter = () =>
   InitializeCharacter(StatBlock.Default());
 
+export const GetPersistentCharacterKeywords = (
+  character: PersistentCharacter
+) => character.StatBlock.Type;
+
+export const GetPersistentCharacterMetadata = (
+  character: PersistentCharacter
+) => ({
+  Level: character.StatBlock.Challenge
+});
+
 export interface PersistentCharacter {
   Id: string;
   Version: string;

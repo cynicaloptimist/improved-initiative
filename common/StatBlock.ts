@@ -1,4 +1,4 @@
-import { Listable } from "./Listable";
+import { Listable, ListingMetadata } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
 export interface AbilityScores {
@@ -57,6 +57,12 @@ export interface StatBlock extends Listable {
 export class StatBlock {
   public static GetKeywords = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
+
+  public static GetMetadata = (statBlock: StatBlock): ListingMetadata => {
+    return {
+      Level: statBlock.Challenge
+    };
+  };
 
   public static Default = (): StatBlock => ({
     Id: probablyUniqueString(),

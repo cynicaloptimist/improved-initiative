@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { Listable } from "../../common/Listable";
+import { Listable, ListingMetadata } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
@@ -11,6 +11,7 @@ export class Listing<T extends Listable> {
     private Name: string,
     private Path: string,
     public SearchHint: string,
+    public Metadata: ListingMetadata,
     public Link: string,
     public Origin: ListingOrigin,
     value?: T

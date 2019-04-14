@@ -25,6 +25,7 @@ export class SpellLibrary {
           c.Name,
           c.Path,
           c.SearchHint,
+          c.Metadata,
           c.Link,
           source
         );
@@ -40,6 +41,7 @@ export class SpellLibrary {
       spell.Name,
       spell.Path,
       Spell.GetKeywords(spell),
+      Spell.GetMetadata(spell),
       Store.Spells,
       "localStorage",
       spell
@@ -54,6 +56,7 @@ export class SpellLibrary {
         spell.Name,
         spell.Path,
         Spell.GetKeywords(spell),
+        Spell.GetMetadata(spell),
         `/my/spells/${spell.Id}`,
         "account",
         spell
