@@ -8,7 +8,7 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
-import { BuildListingTree } from "./BuildListingTree";
+import { groupByFn, BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
@@ -19,7 +19,6 @@ export type StatBlockLibraryPaneProps = {
 };
 
 type StatBlockListing = Listing<StatBlock>;
-type groupByFn = (l: StatBlockListing) => string;
 
 interface State {
   filter: string;
