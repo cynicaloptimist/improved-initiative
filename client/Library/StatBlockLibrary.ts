@@ -6,7 +6,7 @@ import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
-export class NPCLibrary {
+export class StatBlockLibrary {
   private statBlocks = ko.observableArray<Listing<StatBlock>>([]);
   private readonly StoreName = Store.StatBlocks;
 

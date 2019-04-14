@@ -11,7 +11,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { NPCLibrary } from "../Library/NPCLibrary";
+import { StatBlockLibrary } from "../Library/StatBlockLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -68,7 +68,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: NPCLibrary) => {
+  public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
     let statBlock = StatBlock.Default();
     let newId = probablyUniqueString();
 
@@ -83,7 +83,10 @@ export class LibrariesCommander {
     );
   };
 
-  public EditStatBlock = (listing: Listing<StatBlock>, library: NPCLibrary) => {
+  public EditStatBlock = (
+    listing: Listing<StatBlock>,
+    library: StatBlockLibrary
+  ) => {
     if (this.tracker.TutorialVisible()) {
       return;
     }

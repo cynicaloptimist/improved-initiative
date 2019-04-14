@@ -7,14 +7,14 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { NPCLibrary } from "../NPCLibrary";
+import { StatBlockLibrary } from "../StatBlockLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
 export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
-  library: NPCLibrary;
+  library: StatBlockLibrary;
   statBlockTextEnricher: TextEnricher;
 };
 
