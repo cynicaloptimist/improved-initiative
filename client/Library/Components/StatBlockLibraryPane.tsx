@@ -19,9 +19,11 @@ export type StatBlockLibraryPaneProps = {
 };
 
 type StatBlockListing = Listing<StatBlock>;
+type groupByFn = (l: StatBlockListing) => string;
 
 interface State {
   filter: string;
+  groupBy: groupByFn;
   previewedStatBlock: StatBlock;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -39,6 +41,7 @@ export class StatBlockLibraryPane extends React.Component<
     super(props);
     this.state = {
       filter: "",
+      groupBy: this.groupByPath,
       previewedStatBlock: StatBlock.Default(),
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -67,7 +70,7 @@ export class StatBlockLibraryPane extends React.Component<
     );
     const listingAndFolderComponents = BuildListingTree(
       this.buildListingComponent,
-      listing => listing.CurrentPath(),
+      this.state.groupBy,
       filteredListings
     );
 
@@ -76,7 +79,14 @@ export class StatBlockLibraryPane extends React.Component<
 
     return (
       <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+        <div className="search-controls">
+          <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+          <Button
+            additionalClassNames="group-by"
+            fontAwesomeIcon="sort"
+            onClick={this.toggleGroupBy}
+          />
+        </div>
         <ul className="listings">{listingAndFolderComponents}</ul>
         <div className="buttons">
           <Button
@@ -111,6 +121,21 @@ export class StatBlockLibraryPane extends React.Component<
       </div>
     );
   }
+
+  private groupByPath: groupByFn = l => l.CurrentPath();
+  private groupByLevel: groupByFn = l => l.Metadata.Level;
+
+  private toggleGroupBy = () =>
+    this.setState(state => {
+      if (state.groupBy == this.groupByPath) {
+        return {
+          groupBy: this.groupByLevel
+        };
+      }
+      return {
+        groupBy: this.groupByPath
+      };
+    });
 
   private buildListingComponent = (l: Listing<StatBlock>) => (
     <ListingViewModel
