@@ -139,6 +139,7 @@ export class EncounterLibraryPane extends React.Component<
     );
     const listingAndFolderComponents = BuildListingTree(
       this.buildListingComponent,
+      listing => listing.CurrentPath(),
       filteredListings
     );
 

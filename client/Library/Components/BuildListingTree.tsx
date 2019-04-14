@@ -6,20 +6,22 @@ import { Folder } from "./Folder";
 
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
+  groupListingsBy: (listing: Listing<T>) => string,
   listings: Listing<T>[]
 ): JSX.Element[] {
   const rootListingComponents = [];
   const folders = {};
   listings.forEach(listing => {
-    if (listing.CurrentPath() == "") {
+    const group = groupListingsBy(listing);
+    if (group == "") {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
     } else {
-      if (folders[listing.CurrentPath()] == undefined) {
-        folders[listing.CurrentPath()] = [];
+      if (folders[group] == undefined) {
+        folders[group] = [];
       }
-      folders[listing.CurrentPath()].push(listing);
+      folders[group].push(listing);
     }
   });
 
