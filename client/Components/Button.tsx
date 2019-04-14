@@ -1,13 +1,14 @@
 import * as React from "react";
 
 export interface ButtonProps {
-  text?: string;
-  fontAwesomeIcon?: string;
-  tooltip?: string;
-  additionalClassNames?: string;
-  disabled?: boolean;
   onClick: React.MouseEventHandler<HTMLSpanElement>;
   onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
+
+  additionalClassNames?: string;
+  fontAwesomeIcon?: string;
+  text?: string;
+  tooltip?: string;
+  disabled?: boolean;
 }
 
 export class Button extends React.Component<ButtonProps> {
