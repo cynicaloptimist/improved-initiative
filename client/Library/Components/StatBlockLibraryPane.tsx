@@ -8,7 +8,7 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
-import { groupByFn, BuildListingTree } from "./BuildListingTree";
+import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingViewModel } from "./Listing";
 
@@ -22,7 +22,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
   filter: string;
-  groupBy: groupByFn;
+  groupBy: ListingGroupFn;
   previewedStatBlock: StatBlock;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -121,8 +121,8 @@ export class StatBlockLibraryPane extends React.Component<
     );
   }
 
-  private groupByPath: groupByFn = l => l.CurrentPath();
-  private groupByLevel: groupByFn = l => "Challenge " + l.Metadata.Level;
+  private groupByPath: ListingGroupFn = l => l.CurrentPath();
+  private groupByLevel: ListingGroupFn = l => "Challenge " + l.Metadata.Level;
 
   private toggleGroupBy = () =>
     this.setState(state => {

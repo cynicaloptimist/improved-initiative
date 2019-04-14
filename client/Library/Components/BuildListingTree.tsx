@@ -4,7 +4,7 @@ import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
 import { Folder } from "./Folder";
 
-export type groupByFn = (l: Listing<any>) => string;
+export type ListingGroupFn = (l: Listing<any>) => string;
 
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
