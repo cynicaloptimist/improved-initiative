@@ -123,7 +123,7 @@ export class StatBlockLibraryPane extends React.Component<
   }
 
   private groupByPath: groupByFn = l => l.CurrentPath();
-  private groupByLevel: groupByFn = l => l.Metadata.Level;
+  private groupByLevel: groupByFn = l => "Challenge " + l.Metadata.Level;
 
   private toggleGroupBy = () =>
     this.setState(state => {
