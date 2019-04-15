@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
@@ -121,8 +122,15 @@ export class StatBlockLibraryPane extends React.Component<
     );
   }
 
-  private groupByPath: ListingGroupFn = l => l.CurrentPath();
-  private groupByLevel: ListingGroupFn = l => "Challenge " + l.Metadata.Level;
+  private groupByPath: ListingGroupFn = l => ({
+    label: l.CurrentPath(),
+    key: l.CurrentPath()
+  });
+
+  private groupByLevel: ListingGroupFn = l => ({
+    label: "Challenge " + l.Metadata.Level,
+    key: GetAlphaSortableLevelString(l.Metadata.Level)
+  });
 
   private toggleGroupBy = () =>
     this.setState(state => {
@@ -217,4 +225,13 @@ export class StatBlockLibraryPane extends React.Component<
       this.setState({ previewWindowHovered: false });
     }
   };
+}
+
+function GetAlphaSortableLevelString(level: string) {
+  if (level == "0") return "0001";
+  if (level == "1/8") return "0002";
+  if (level == "1/4") return "0003";
+  if (level == "1/2") return "0004";
+  if (parseInt(level) == NaN) return "0000" + level;
+  return _.padStart(level + "0", 4, "0");
 }
