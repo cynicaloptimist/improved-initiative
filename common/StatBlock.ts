@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Listable, ListingMetadata } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
@@ -54,15 +55,36 @@ export interface StatBlock extends Listable {
   ImageURL: string;
 }
 
+const StatBlockBaseTypes = [
+  "aberration",
+  "beast",
+  "celestial",
+  "construct",
+  "dragon",
+  "elemental",
+  "fey",
+  "fiend",
+  "giant",
+  "humanoid",
+  "monstrosity",
+  "ooze",
+  "plant",
+  "undead"
+];
+
 export class StatBlock {
   public static GetKeywords = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
   public static GetMetadata = (statBlock: StatBlock): ListingMetadata => {
+    const baseType = _.find(
+      StatBlockBaseTypes,
+      t => statBlock.Type.search(t) != -1
+    );
     return {
       Level: statBlock.Challenge,
       Source: statBlock.Source,
-      Type: statBlock.Type
+      Type: _.startCase(baseType)
     };
   };
 
