@@ -60,7 +60,9 @@ export class StatBlock {
 
   public static GetMetadata = (statBlock: StatBlock): ListingMetadata => {
     return {
-      Level: statBlock.Challenge
+      Level: statBlock.Challenge,
+      Source: statBlock.Source,
+      Type: statBlock.Type
     };
   };
 

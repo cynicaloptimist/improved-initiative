@@ -132,15 +132,29 @@ export class StatBlockLibraryPane extends React.Component<
     key: GetAlphaSortableLevelString(l.Metadata.Level)
   });
 
+  private groupBySource: ListingGroupFn = l => ({
+    label: l.Metadata.Source,
+    key: l.Metadata.Source
+  });
+
+  private groupByType: ListingGroupFn = l => ({
+    label: l.Metadata.Type,
+    key: l.Metadata.Type
+  });
+
   private toggleGroupBy = () =>
     this.setState(state => {
-      if (state.groupBy == this.groupByPath) {
-        return {
-          groupBy: this.groupByLevel
-        };
-      }
+      const groupingFunctions = [
+        this.groupByPath,
+        this.groupByLevel,
+        this.groupByType,
+        this.groupBySource
+      ];
+      const nextIndex =
+        (groupingFunctions.indexOf(state.groupBy) + 1) %
+        groupingFunctions.length;
       return {
-        groupBy: this.groupByPath
+        groupBy: groupingFunctions[nextIndex]
       };
     });
 

@@ -7,6 +7,8 @@ export interface Listable {
 
 export interface ListingMetadata {
   Level?: string;
+  Source?: string;
+  Type?: string;
 }
 
 export interface StoredListing {
