@@ -1,7 +1,7 @@
 [
   {
     "Name": "Aboleth",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large aberration, lawful evil",
     "HP": {
       "Value": 135,
@@ -115,7 +115,7 @@
   },
   {
     "Name": "Acolyte",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 9,
@@ -175,7 +175,7 @@
   },
   {
     "Name": "Adult Black Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, chaotic evil",
     "HP": {
       "Value": 195,
@@ -298,7 +298,7 @@
   },
   {
     "Name": "Adult Blue Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, lawful evil",
     "HP": {
       "Value": 225,
@@ -416,7 +416,7 @@
   },
   {
     "Name": "Adult Brass Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, chaotic good",
     "HP": {
       "Value": 172,
@@ -526,7 +526,7 @@
   },
   {
     "Name": "Adult Bronze Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, lawful good",
     "HP": {
       "Value": 212,
@@ -653,7 +653,7 @@
   },
   {
     "Name": "Adult Copper Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, chaotic good",
     "HP": {
       "Value": 184,
@@ -775,7 +775,7 @@
   },
   {
     "Name": "Adult Gold Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, lawful good",
     "HP": {
       "Value": 256,
@@ -906,7 +906,7 @@
   },
   {
     "Name": "Adult Green Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, lawful evil",
     "HP": {
       "Value": 207,
@@ -1041,7 +1041,7 @@
   },
   {
     "Name": "Adult Red Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, chaotic evil",
     "HP": {
       "Value": 256,
@@ -1164,7 +1164,7 @@
   },
   {
     "Name": "Adult Silver Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, lawful good",
     "HP": {
       "Value": 243,
@@ -1290,7 +1290,7 @@
   },
   {
     "Name": "Adult White Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge dragon, chaotic evil",
     "HP": {
       "Value": 200,
@@ -1413,7 +1413,7 @@
   },
   {
     "Name": "Air Elemental",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, neutral",
     "HP": {
       "Value": 90,
@@ -1489,7 +1489,7 @@
   },
   {
     "Name": "Ancient Black Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, chaotic evil",
     "HP": {
       "Value": 367,
@@ -1617,7 +1617,7 @@
   },
   {
     "Name": "Ancient Blue Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, lawful evil",
     "HP": {
       "Value": 481,
@@ -1729,7 +1729,7 @@
   },
   {
     "Name": "Ancient Brass Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, chaotic good",
     "HP": {
       "Value": 297,
@@ -1860,7 +1860,7 @@
   },
   {
     "Name": "Ancient Bronze Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, lawful good",
     "HP": {
       "Value": 444,
@@ -1992,7 +1992,7 @@
   },
   {
     "Name": "Ancient Copper Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, chaotic good",
     "HP": {
       "Value": 350,
@@ -2119,7 +2119,7 @@
   },
   {
     "Name": "Ancient Gold Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, lawful good",
     "HP": {
       "Value": 546,
@@ -2255,7 +2255,7 @@
   },
   {
     "Name": "Ancient Green Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, lawful evil",
     "HP": {
       "Value": 385,
@@ -2390,7 +2390,7 @@
   },
   {
     "Name": "Ancient Red Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, chaotic evil",
     "HP": {
       "Value": 546,
@@ -2508,7 +2508,7 @@
   },
   {
     "Name": "Ancient Silver Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, lawful good",
     "HP": {
       "Value": 487,
@@ -2639,7 +2639,7 @@
   },
   {
     "Name": "Ancient White Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, chaotic evil",
     "HP": {
       "Value": 333,
@@ -2746,7 +2746,7 @@
   },
   {
     "Name": "Androsphinx",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, lawful neutral",
     "HP": {
       "Value": 199,
@@ -2868,7 +2868,7 @@
   },
   {
     "Name": "Animated Armor",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium construct, unaligned",
     "HP": {
       "Value": 33,
@@ -2938,7 +2938,7 @@
   },
   {
     "Name": "Ankheg",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 39,
@@ -2988,7 +2988,7 @@
   },
   {
     "Name": "Ape",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 19,
@@ -3052,7 +3052,7 @@
   },
   {
     "Name": "Archmage",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 99,
@@ -3130,7 +3130,7 @@
   },
   {
     "Name": "Assassin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-good alignment",
     "HP": {
       "Value": 78,
@@ -3227,7 +3227,7 @@
   },
   {
     "Name": "Awakened Shrub",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small plant, unaligned",
     "HP": {
       "Value": 10,
@@ -3278,7 +3278,7 @@
   },
   {
     "Name": "Awakened Tree",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge plant, unaligned",
     "HP": {
       "Value": 59,
@@ -3329,7 +3329,7 @@
   },
   {
     "Name": "Axe Beak",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -3374,7 +3374,7 @@
   },
   {
     "Name": "Azer",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium elemental, lawful neutral",
     "HP": {
       "Value": 39,
@@ -3440,7 +3440,7 @@
   },
   {
     "Name": "Baboon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 3,
@@ -3491,7 +3491,7 @@
   },
   {
     "Name": "Badger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 3,
@@ -3542,7 +3542,7 @@
   },
   {
     "Name": "Balor",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge fiend (demon), chaotic evil",
     "HP": {
       "Value": 262,
@@ -3651,7 +3651,7 @@
   },
   {
     "Name": "Bandit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-lawful alignment",
     "HP": {
       "Value": 11,
@@ -3701,7 +3701,7 @@
   },
   {
     "Name": "Bandit Captain",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-lawful alignment",
     "HP": {
       "Value": 65,
@@ -3784,7 +3784,7 @@
   },
   {
     "Name": "Barbed Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (devil), lawful evil",
     "HP": {
       "Value": 110,
@@ -3895,7 +3895,7 @@
   },
   {
     "Name": "Basilisk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, unaligned",
     "HP": {
       "Value": 52,
@@ -3946,7 +3946,7 @@
   },
   {
     "Name": "Bat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -4002,7 +4002,7 @@
   },
   {
     "Name": "Bearded Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (devil), lawful evil",
     "HP": {
       "Value": 52,
@@ -4091,7 +4091,7 @@
   },
   {
     "Name": "Behir",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge monstrosity, neutral evil",
     "HP": {
       "Value": 168,
@@ -4165,7 +4165,7 @@
   },
   {
     "Name": "Berserker",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any chaotic alignment",
     "HP": {
       "Value": 67,
@@ -4216,7 +4216,7 @@
   },
   {
     "Name": "Black Bear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 19,
@@ -4277,7 +4277,7 @@
   },
   {
     "Name": "Black Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, chaotic evil",
     "HP": {
       "Value": 33,
@@ -4359,7 +4359,7 @@
   },
   {
     "Name": "Black Pudding",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large ooze, unaligned",
     "HP": {
       "Value": 85,
@@ -4433,7 +4433,7 @@
   },
   {
     "Name": "Blink Dog",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fey, lawful good",
     "HP": {
       "Value": 22,
@@ -4498,7 +4498,7 @@
   },
   {
     "Name": "Blood Hawk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 7,
@@ -4559,7 +4559,7 @@
   },
   {
     "Name": "Blue Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, lawful evil",
     "HP": {
       "Value": 52,
@@ -4635,7 +4635,7 @@
   },
   {
     "Name": "Boar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -4691,7 +4691,7 @@
   },
   {
     "Name": "Bone Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (devil), lawful evil",
     "HP": {
       "Value": 142,
@@ -4784,7 +4784,7 @@
   },
   {
     "Name": "Brass Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, chaotic good",
     "HP": {
       "Value": 16,
@@ -4860,7 +4860,7 @@
   },
   {
     "Name": "Bronze Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, lawful good",
     "HP": {
       "Value": 32,
@@ -4942,7 +4942,7 @@
   },
   {
     "Name": "Brown Bear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 34,
@@ -5008,7 +5008,7 @@
   },
   {
     "Name": "Bugbear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (goblinoid), chaotic evil",
     "HP": {
       "Value": 27,
@@ -5078,7 +5078,7 @@
   },
   {
     "Name": "Bulette",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 94,
@@ -5139,7 +5139,7 @@
   },
   {
     "Name": "Camel",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 15,
@@ -5184,7 +5184,7 @@
   },
   {
     "Name": "Cat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 2,
@@ -5244,7 +5244,7 @@
   },
   {
     "Name": "Centaur",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, neutral good",
     "HP": {
       "Value": 45,
@@ -5323,7 +5323,7 @@
   },
   {
     "Name": "Chain Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (devil), lawful evil",
     "HP": {
       "Value": 85,
@@ -5413,7 +5413,7 @@
   },
   {
     "Name": "Chimera",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 114,
@@ -5483,7 +5483,7 @@
   },
   {
     "Name": "Chuul",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large aberration, chaotic evil",
     "HP": {
       "Value": 93,
@@ -5554,7 +5554,7 @@
   },
   {
     "Name": "Clay Golem",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large construct, unaligned",
     "HP": {
       "Value": 133,
@@ -5649,7 +5649,7 @@
   },
   {
     "Name": "Cloaker",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large aberration, chaotic neutral",
     "HP": {
       "Value": 78,
@@ -5735,7 +5735,7 @@
   },
   {
     "Name": "Cloud Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, neutral good (50%) or neutral evil (50%)",
     "HP": {
       "Value": 200,
@@ -5833,7 +5833,7 @@
   },
   {
     "Name": "Cockatrice",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small monstrosity, unaligned",
     "HP": {
       "Value": 27,
@@ -5878,7 +5878,7 @@
   },
   {
     "Name": "Commoner",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 4,
@@ -5923,7 +5923,7 @@
   },
   {
     "Name": "Constrictor Snake",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 13,
@@ -5973,7 +5973,7 @@
   },
   {
     "Name": "Copper Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, chaotic good",
     "HP": {
       "Value": 22,
@@ -6049,7 +6049,7 @@
   },
   {
     "Name": "Couatl",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium celestial, lawful good",
     "HP": {
       "Value": 97,
@@ -6138,7 +6138,7 @@
   },
   {
     "Name": "Crab",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 2,
@@ -6194,7 +6194,7 @@
   },
   {
     "Name": "Crocodile",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -6250,7 +6250,7 @@
   },
   {
     "Name": "Cult Fanatic",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-good alignment",
     "HP": {
       "Value": 22,
@@ -6324,7 +6324,7 @@
   },
   {
     "Name": "Cultist",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-good alignment",
     "HP": {
       "Value": 9,
@@ -6384,7 +6384,7 @@
   },
   {
     "Name": "Darkmantle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small monstrosity, unaligned",
     "HP": {
       "Value": 22,
@@ -6450,7 +6450,7 @@
   },
   {
     "Name": "Death Dog",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, neutral evil",
     "HP": {
       "Value": 39,
@@ -6515,7 +6515,7 @@
   },
   {
     "Name": "Deep Gnome (Svirfneblin)",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small humanoid (gnome), neutral good",
     "HP": {
       "Value": 16,
@@ -6594,7 +6594,7 @@
   },
   {
     "Name": "Deer",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 4,
@@ -6639,7 +6639,7 @@
   },
   {
     "Name": "Deva",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium celestial, lawful good",
     "HP": {
       "Value": 136,
@@ -6738,7 +6738,7 @@
   },
   {
     "Name": "Dire Wolf",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 37,
@@ -6803,7 +6803,7 @@
   },
   {
     "Name": "Djinni",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, chaotic good",
     "HP": {
       "Value": 161,
@@ -6887,7 +6887,7 @@
   },
   {
     "Name": "Doppelganger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity (shapechanger), unaligned",
     "HP": {
       "Value": 52,
@@ -6967,7 +6967,7 @@
   },
   {
     "Name": "Draft Horse",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -7012,7 +7012,7 @@
   },
   {
     "Name": "Dragon Turtle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan dragon, neutral",
     "HP": {
       "Value": 341,
@@ -7096,7 +7096,7 @@
   },
   {
     "Name": "Dretch",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small fiend (demon), chaotic evil",
     "HP": {
       "Value": 18,
@@ -7159,7 +7159,7 @@
   },
   {
     "Name": "Drider",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 123,
@@ -7254,7 +7254,7 @@
   },
   {
     "Name": "Drow",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (elf), neutral evil",
     "HP": {
       "Value": 13,
@@ -7329,7 +7329,7 @@
   },
   {
     "Name": "Druid",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 27,
@@ -7393,7 +7393,7 @@
   },
   {
     "Name": "Dryad",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fey, neutral",
     "HP": {
       "Value": 22,
@@ -7473,7 +7473,7 @@
   },
   {
     "Name": "Duergar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (dwarf), lawful evil",
     "HP": {
       "Value": 26,
@@ -7544,7 +7544,7 @@
   },
   {
     "Name": "Dust Mephit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small elemental, neutral evil",
     "HP": {
       "Value": 17,
@@ -7619,7 +7619,7 @@
   },
   {
     "Name": "Eagle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 3,
@@ -7675,7 +7675,7 @@
   },
   {
     "Name": "Earth Elemental",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, neutral",
     "HP": {
       "Value": 126,
@@ -7746,7 +7746,7 @@
   },
   {
     "Name": "Efreeti",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, lawful evil",
     "HP": {
       "Value": 200,
@@ -7830,7 +7830,7 @@
   },
   {
     "Name": "Elephant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 76,
@@ -7886,7 +7886,7 @@
   },
   {
     "Name": "Elk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 13,
@@ -7942,7 +7942,7 @@
   },
   {
     "Name": "Erinyes",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (devil), lawful evil",
     "HP": {
       "Value": 153,
@@ -8041,7 +8041,7 @@
   },
   {
     "Name": "Ettercap",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, neutral evil",
     "HP": {
       "Value": 44,
@@ -8135,7 +8135,7 @@
   },
   {
     "Name": "Ettin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large giant, chaotic evil",
     "HP": {
       "Value": 85,
@@ -8206,7 +8206,7 @@
   },
   {
     "Name": "Fire Elemental",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, neutral",
     "HP": {
       "Value": 102,
@@ -8285,7 +8285,7 @@
   },
   {
     "Name": "Fire Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, lawful evil",
     "HP": {
       "Value": 162,
@@ -8362,7 +8362,7 @@
   },
   {
     "Name": "Flesh Golem",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium construct, neutral",
     "HP": {
       "Value": 93,
@@ -8456,7 +8456,7 @@
   },
   {
     "Name": "Flying Snake",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 5,
@@ -8507,7 +8507,7 @@
   },
   {
     "Name": "Flying Sword",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small construct, unaligned",
     "HP": {
       "Value": 17,
@@ -8576,7 +8576,7 @@
   },
   {
     "Name": "Frog",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -8635,7 +8635,7 @@
   },
   {
     "Name": "Frost Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, neutral evil",
     "HP": {
       "Value": 138,
@@ -8717,7 +8717,7 @@
   },
   {
     "Name": "Gargoyle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium elemental, chaotic evil",
     "HP": {
       "Value": 52,
@@ -8782,7 +8782,7 @@
   },
   {
     "Name": "Gelatinous Cube",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large ooze, unaligned",
     "HP": {
       "Value": 84,
@@ -8850,7 +8850,7 @@
   },
   {
     "Name": "Ghast",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, chaotic evil",
     "HP": {
       "Value": 36,
@@ -8911,7 +8911,7 @@
   },
   {
     "Name": "Ghost",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, any alignment",
     "HP": {
       "Value": 45,
@@ -9000,7 +9000,7 @@
   },
   {
     "Name": "Ghoul",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, chaotic evil",
     "HP": {
       "Value": 22,
@@ -9046,7 +9046,7 @@
   },
   {
     "Name": "Giant Ape",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 157,
@@ -9110,7 +9110,7 @@
   },
   {
     "Name": "Giant Badger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 13,
@@ -9171,7 +9171,7 @@
   },
   {
     "Name": "Giant Bat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 22,
@@ -9227,7 +9227,7 @@
   },
   {
     "Name": "Giant Boar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 42,
@@ -9283,7 +9283,7 @@
   },
   {
     "Name": "Giant Centipede",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 4,
@@ -9328,7 +9328,7 @@
   },
   {
     "Name": "Giant Constrictor Snake",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 60,
@@ -9383,7 +9383,7 @@
   },
   {
     "Name": "Giant Crab",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 13,
@@ -9439,7 +9439,7 @@
   },
   {
     "Name": "Giant Crocodile",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 85,
@@ -9505,7 +9505,7 @@
   },
   {
     "Name": "Giant Eagle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, neutral good",
     "HP": {
       "Value": 26,
@@ -9574,7 +9574,7 @@
   },
   {
     "Name": "Giant Elk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 42,
@@ -9640,7 +9640,7 @@
   },
   {
     "Name": "Giant Fire Beetle",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 4,
@@ -9691,7 +9691,7 @@
   },
   {
     "Name": "Giant Frog",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 18,
@@ -9761,7 +9761,7 @@
   },
   {
     "Name": "Giant Goat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -9817,7 +9817,7 @@
   },
   {
     "Name": "Giant Hyena",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 45,
@@ -9873,7 +9873,7 @@
   },
   {
     "Name": "Giant Lizard",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -9929,7 +9929,7 @@
   },
   {
     "Name": "Giant Octopus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 52,
@@ -10004,7 +10004,7 @@
   },
   {
     "Name": "Giant Owl",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, neutral",
     "HP": {
       "Value": 19,
@@ -10074,7 +10074,7 @@
   },
   {
     "Name": "Giant Poisonous Snake",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -10124,7 +10124,7 @@
   },
   {
     "Name": "Giant Rat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 7,
@@ -10180,7 +10180,7 @@
   },
   {
     "Name": "Giant Scorpion",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 52,
@@ -10235,7 +10235,7 @@
   },
   {
     "Name": "Giant Sea Horse",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 16,
@@ -10291,7 +10291,7 @@
   },
   {
     "Name": "Giant Shark",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 126,
@@ -10352,7 +10352,7 @@
   },
   {
     "Name": "Giant Spider",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 26,
@@ -10423,7 +10423,7 @@
   },
   {
     "Name": "Giant Toad",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 39,
@@ -10484,7 +10484,7 @@
   },
   {
     "Name": "Giant Vulture",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, neutral evil",
     "HP": {
       "Value": 22,
@@ -10555,7 +10555,7 @@
   },
   {
     "Name": "Giant Wasp",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 13,
@@ -10600,7 +10600,7 @@
   },
   {
     "Name": "Giant Weasel",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 9,
@@ -10660,7 +10660,7 @@
   },
   {
     "Name": "Giant Wolf Spider",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -10730,7 +10730,7 @@
   },
   {
     "Name": "Gibbering Mouther",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium aberration, neutral",
     "HP": {
       "Value": 67,
@@ -10796,7 +10796,7 @@
   },
   {
     "Name": "Glabrezu",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (demon), chaotic evil",
     "HP": {
       "Value": 157,
@@ -10891,7 +10891,7 @@
   },
   {
     "Name": "Gladiator",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 112,
@@ -10985,7 +10985,7 @@
   },
   {
     "Name": "Gnoll",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (gnoll), chaotic evil",
     "HP": {
       "Value": 22,
@@ -11046,7 +11046,7 @@
   },
   {
     "Name": "Goat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 4,
@@ -11102,7 +11102,7 @@
   },
   {
     "Name": "Goblin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small humanoid (goblinoid), neutral evil",
     "HP": {
       "Value": 7,
@@ -11163,7 +11163,7 @@
   },
   {
     "Name": "Gold Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, lawful good",
     "HP": {
       "Value": 60,
@@ -11245,7 +11245,7 @@
   },
   {
     "Name": "Gorgon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 114,
@@ -11311,7 +11311,7 @@
   },
   {
     "Name": "Gray Ooze",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium ooze, unaligned",
     "HP": {
       "Value": 22,
@@ -11384,7 +11384,7 @@
   },
   {
     "Name": "Green Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, lawful evil",
     "HP": {
       "Value": 38,
@@ -11466,7 +11466,7 @@
   },
   {
     "Name": "Green Hag",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fey, neutral evil",
     "HP": {
       "Value": 82,
@@ -11569,7 +11569,7 @@
   },
   {
     "Name": "Grick",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, neutral",
     "HP": {
       "Value": 27,
@@ -11634,7 +11634,7 @@
   },
   {
     "Name": "Griffon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 59,
@@ -11700,7 +11700,7 @@
   },
   {
     "Name": "Grimlock",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (grimlock), neutral evil",
     "HP": {
       "Value": 11,
@@ -11776,7 +11776,7 @@
   },
   {
     "Name": "Guard",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 11,
@@ -11826,7 +11826,7 @@
   },
   {
     "Name": "Guardian Naga",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, lawful good",
     "HP": {
       "Value": 127,
@@ -11908,7 +11908,7 @@
   },
   {
     "Name": "Gynosphinx",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, lawful neutral",
     "HP": {
       "Value": 136,
@@ -12011,7 +12011,7 @@
   },
   {
     "Name": "Half-Red Dragon Veteran",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human), any alignment",
     "HP": {
       "Value": 65,
@@ -12094,7 +12094,7 @@
   },
   {
     "Name": "Harpy",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, chaotic evil",
     "HP": {
       "Value": 38,
@@ -12154,7 +12154,7 @@
   },
   {
     "Name": "Hawk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -12210,7 +12210,7 @@
   },
   {
     "Name": "Hell Hound",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend, lawful evil",
     "HP": {
       "Value": 45,
@@ -12276,7 +12276,7 @@
   },
   {
     "Name": "Hezrou",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (demon), chaotic evil",
     "HP": {
       "Value": 136,
@@ -12367,7 +12367,7 @@
   },
   {
     "Name": "Hill Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, chaotic evil",
     "HP": {
       "Value": 105,
@@ -12432,7 +12432,7 @@
   },
   {
     "Name": "Hippogriff",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 19,
@@ -12498,7 +12498,7 @@
   },
   {
     "Name": "Hobgoblin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (goblinoid), lawful evil",
     "HP": {
       "Value": 11,
@@ -12554,7 +12554,7 @@
   },
   {
     "Name": "Homunculus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny construct, neutral",
     "HP": {
       "Value": 5,
@@ -12605,7 +12605,7 @@
   },
   {
     "Name": "Horned Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (devil), lawful evil",
     "HP": {
       "Value": 178,
@@ -12698,7 +12698,7 @@
   },
   {
     "Name": "Hunter Shark",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 45,
@@ -12759,7 +12759,7 @@
   },
   {
     "Name": "Hydra",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge monstrosity, unaligned",
     "HP": {
       "Value": 172,
@@ -12835,7 +12835,7 @@
   },
   {
     "Name": "Hyena",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 5,
@@ -12891,7 +12891,7 @@
   },
   {
     "Name": "Ice Devil",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (devil), lawful evil",
     "HP": {
       "Value": 180,
@@ -12988,7 +12988,7 @@
   },
   {
     "Name": "Ice Mephit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small elemental, neutral evil",
     "HP": {
       "Value": 21,
@@ -13068,7 +13068,7 @@
   },
   {
     "Name": "Imp",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny fiend (devil), lawful evil",
     "HP": {
       "Value": 10,
@@ -13161,7 +13161,7 @@
   },
   {
     "Name": "Invisible Stalker",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium elemental, neutral",
     "HP": {
       "Value": 104,
@@ -13244,7 +13244,7 @@
   },
   {
     "Name": "Iron Golem",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large construct, unaligned",
     "HP": {
       "Value": 210,
@@ -13339,7 +13339,7 @@
   },
   {
     "Name": "Jackal",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 3,
@@ -13400,7 +13400,7 @@
   },
   {
     "Name": "Killer Whale",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 90,
@@ -13466,7 +13466,7 @@
   },
   {
     "Name": "Knight",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 52,
@@ -13547,7 +13547,7 @@
   },
   {
     "Name": "Kobold",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small humanoid (kobold), lawful evil",
     "HP": {
       "Value": 5,
@@ -13608,7 +13608,7 @@
   },
   {
     "Name": "Kraken",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan monstrosity (titan), chaotic evil",
     "HP": {
       "Value": 472,
@@ -13737,7 +13737,7 @@
   },
   {
     "Name": "Lamia",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 97,
@@ -13816,7 +13816,7 @@
   },
   {
     "Name": "Lemure",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (devil), lawful evil",
     "HP": {
       "Value": 13,
@@ -13872,7 +13872,7 @@
   },
   {
     "Name": "Lich",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, any evil alignment",
     "HP": {
       "Value": 135,
@@ -14000,7 +14000,7 @@
   },
   {
     "Name": "Lion",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 26,
@@ -14080,7 +14080,7 @@
   },
   {
     "Name": "Lizard",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 2,
@@ -14125,7 +14125,7 @@
   },
   {
     "Name": "Lizardfolk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (lizardfolk), neutral",
     "HP": {
       "Value": 22,
@@ -14209,7 +14209,7 @@
   },
   {
     "Name": "Mage",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 40,
@@ -14278,7 +14278,7 @@
   },
   {
     "Name": "Magma Mephit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small elemental, neutral evil",
     "HP": {
       "Value": 22,
@@ -14354,7 +14354,7 @@
   },
   {
     "Name": "Magmin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small elemental, chaotic neutral",
     "HP": {
       "Value": 9,
@@ -14414,7 +14414,7 @@
   },
   {
     "Name": "Mammoth",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 126,
@@ -14470,7 +14470,7 @@
   },
   {
     "Name": "Manticore",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, lawful evil",
     "HP": {
       "Value": 68,
@@ -14536,7 +14536,7 @@
   },
   {
     "Name": "Marilith",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (demon), chaotic evil",
     "HP": {
       "Value": 189,
@@ -14647,7 +14647,7 @@
   },
   {
     "Name": "Mastiff",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 5,
@@ -14703,7 +14703,7 @@
   },
   {
     "Name": "Medusa",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, lawful evil",
     "HP": {
       "Value": 127,
@@ -14786,7 +14786,7 @@
   },
   {
     "Name": "Merfolk",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (merfolk), neutral",
     "HP": {
       "Value": 11,
@@ -14842,7 +14842,7 @@
   },
   {
     "Name": "Merrow",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 45,
@@ -14908,7 +14908,7 @@
   },
   {
     "Name": "Mimic",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity (shapechanger), neutral",
     "HP": {
       "Value": 58,
@@ -14984,7 +14984,7 @@
   },
   {
     "Name": "Minotaur",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 76,
@@ -15055,7 +15055,7 @@
   },
   {
     "Name": "Minotaur Skeleton",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large undead, lawful evil",
     "HP": {
       "Value": 67,
@@ -15111,7 +15111,7 @@
   },
   {
     "Name": "Mule",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -15167,7 +15167,7 @@
   },
   {
     "Name": "Mummy",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, lawful evil",
     "HP": {
       "Value": 58,
@@ -15231,7 +15231,7 @@
   },
   {
     "Name": "Mummy Lord",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, lawful evil",
     "HP": {
       "Value": 97,
@@ -15366,7 +15366,7 @@
   },
   {
     "Name": "Nalfeshnee",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (demon), chaotic evil",
     "HP": {
       "Value": 184,
@@ -15466,7 +15466,7 @@
   },
   {
     "Name": "Night Hag",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend, neutral evil",
     "HP": {
       "Value": 112,
@@ -15580,7 +15580,7 @@
   },
   {
     "Name": "Nightmare",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend, neutral evil",
     "HP": {
       "Value": 68,
@@ -15645,7 +15645,7 @@
   },
   {
     "Name": "Noble",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 9,
@@ -15709,7 +15709,7 @@
   },
   {
     "Name": "Ochre Jelly",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large ooze, unaligned",
     "HP": {
       "Value": 45,
@@ -15778,7 +15778,7 @@
   },
   {
     "Name": "Octopus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small beast, unaligned",
     "HP": {
       "Value": 3,
@@ -15853,7 +15853,7 @@
   },
   {
     "Name": "Ogre",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large giant, chaotic evil",
     "HP": {
       "Value": 59,
@@ -15903,7 +15903,7 @@
   },
   {
     "Name": "Ogre Zombie",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large undead, neutral evil",
     "HP": {
       "Value": 85,
@@ -15959,7 +15959,7 @@
   },
   {
     "Name": "Oni",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large giant, lawful evil",
     "HP": {
       "Value": 110,
@@ -16065,7 +16065,7 @@
   },
   {
     "Name": "Orc",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (orc), chaotic evil",
     "HP": {
       "Value": 15,
@@ -16126,7 +16126,7 @@
   },
   {
     "Name": "Otyugh",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large aberration, neutral",
     "HP": {
       "Value": 114,
@@ -16197,7 +16197,7 @@
   },
   {
     "Name": "Owl",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -16262,7 +16262,7 @@
   },
   {
     "Name": "Owlbear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 59,
@@ -16328,7 +16328,7 @@
   },
   {
     "Name": "Panther",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 13,
@@ -16398,7 +16398,7 @@
   },
   {
     "Name": "Pegasus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large celestial, chaotic good",
     "HP": {
       "Value": 59,
@@ -16466,7 +16466,7 @@
   },
   {
     "Name": "Phase Spider",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, unaligned",
     "HP": {
       "Value": 32,
@@ -16532,7 +16532,7 @@
   },
   {
     "Name": "Pit Fiend",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (devil), lawful evil",
     "HP": {
       "Value": 300,
@@ -16636,7 +16636,7 @@
   },
   {
     "Name": "Planetar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large celestial, lawful good",
     "HP": {
       "Value": 200,
@@ -16735,7 +16735,7 @@
   },
   {
     "Name": "Plesiosaurus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 68,
@@ -16795,7 +16795,7 @@
   },
   {
     "Name": "Poisonous Snake",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 2,
@@ -16840,7 +16840,7 @@
   },
   {
     "Name": "Polar Bear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 42,
@@ -16906,7 +16906,7 @@
   },
   {
     "Name": "Pony",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -16951,7 +16951,7 @@
   },
   {
     "Name": "Priest",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 27,
@@ -17020,7 +17020,7 @@
   },
   {
     "Name": "Pseudodragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny dragon, neutral good",
     "HP": {
       "Value": 7,
@@ -17100,7 +17100,7 @@
   },
   {
     "Name": "Purple Worm",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan monstrosity, unaligned",
     "HP": {
       "Value": 247,
@@ -17170,7 +17170,7 @@
   },
   {
     "Name": "Quasit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny fiend (demon), chaotic evil",
     "HP": {
       "Value": 7,
@@ -17253,7 +17253,7 @@
   },
   {
     "Name": "Quipper",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -17309,7 +17309,7 @@
   },
   {
     "Name": "Rakshasa",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend, lawful evil",
     "HP": {
       "Value": 110,
@@ -17385,7 +17385,7 @@
   },
   {
     "Name": "Rat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -17436,7 +17436,7 @@
   },
   {
     "Name": "Raven",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -17492,7 +17492,7 @@
   },
   {
     "Name": "Red Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, chaotic evil",
     "HP": {
       "Value": 75,
@@ -17568,7 +17568,7 @@
   },
   {
     "Name": "Reef Shark",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 22,
@@ -17629,7 +17629,7 @@
   },
   {
     "Name": "Remorhaz",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge monstrosity, unaligned",
     "HP": {
       "Value": 195,
@@ -17685,7 +17685,7 @@
   },
   {
     "Name": "Rhinoceros",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 45,
@@ -17736,7 +17736,7 @@
   },
   {
     "Name": "Riding Horse",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 13,
@@ -17781,7 +17781,7 @@
   },
   {
     "Name": "Roc",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan monstrosity, unaligned",
     "HP": {
       "Value": 248,
@@ -17864,7 +17864,7 @@
   },
   {
     "Name": "Roper",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, neutral evil",
     "HP": {
       "Value": 93,
@@ -17949,7 +17949,7 @@
   },
   {
     "Name": "Rug of Smothering",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large construct, unaligned",
     "HP": {
       "Value": 33,
@@ -18018,7 +18018,7 @@
   },
   {
     "Name": "Rust Monster",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium monstrosity, unaligned",
     "HP": {
       "Value": 27,
@@ -18079,7 +18079,7 @@
   },
   {
     "Name": "Saber-Toothed Tiger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 52,
@@ -18149,7 +18149,7 @@
   },
   {
     "Name": "Sahuagin",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (sahuagin), lawful evil",
     "HP": {
       "Value": 22,
@@ -18230,7 +18230,7 @@
   },
   {
     "Name": "Salamander",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, neutral evil",
     "HP": {
       "Value": 90,
@@ -18300,7 +18300,7 @@
   },
   {
     "Name": "Satyr",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fey, chaotic neutral",
     "HP": {
       "Value": 31,
@@ -18379,7 +18379,7 @@
   },
   {
     "Name": "Scorpion",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -18424,7 +18424,7 @@
   },
   {
     "Name": "Scout",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 16,
@@ -18502,7 +18502,7 @@
   },
   {
     "Name": "Sea Hag",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fey, chaotic evil",
     "HP": {
       "Value": 52,
@@ -18583,7 +18583,7 @@
   },
   {
     "Name": "Sea Horse",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -18628,7 +18628,7 @@
   },
   {
     "Name": "Shadow",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, chaotic evil",
     "HP": {
       "Value": 16,
@@ -18712,7 +18712,7 @@
   },
   {
     "Name": "Shambling Mound",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large plant, unaligned",
     "HP": {
       "Value": 136,
@@ -18778,7 +18778,7 @@
   },
   {
     "Name": "Shield Guardian",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large construct, unaligned",
     "HP": {
       "Value": 142,
@@ -18856,7 +18856,7 @@
   },
   {
     "Name": "Shrieker",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium plant, unaligned",
     "HP": {
       "Value": 13,
@@ -18907,7 +18907,7 @@
   },
   {
     "Name": "Silver Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, lawful good",
     "HP": {
       "Value": 45,
@@ -18983,7 +18983,7 @@
   },
   {
     "Name": "Skeleton",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, lawful evil",
     "HP": {
       "Value": 13,
@@ -19033,7 +19033,7 @@
   },
   {
     "Name": "Solar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large celestial, lawful good",
     "HP": {
       "Value": 243,
@@ -19158,7 +19158,7 @@
   },
   {
     "Name": "Specter",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, chaotic evil",
     "HP": {
       "Value": 22,
@@ -19233,7 +19233,7 @@
   },
   {
     "Name": "Spider",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -19299,7 +19299,7 @@
   },
   {
     "Name": "Spirit Naga",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, chaotic evil",
     "HP": {
       "Value": 75,
@@ -19372,7 +19372,7 @@
   },
   {
     "Name": "Sprite",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny fey, neutral good",
     "HP": {
       "Value": 2,
@@ -19441,7 +19441,7 @@
   },
   {
     "Name": "Spy",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 27,
@@ -19536,7 +19536,7 @@
   },
   {
     "Name": "Steam Mephit",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Small elemental, neutral evil",
     "HP": {
       "Value": 21,
@@ -19602,7 +19602,7 @@
   },
   {
     "Name": "Stirge",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 2,
@@ -19647,7 +19647,7 @@
   },
   {
     "Name": "Stone Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, neutral",
     "HP": {
       "Value": 126,
@@ -19746,7 +19746,7 @@
   },
   {
     "Name": "Stone Golem",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large construct, unaligned",
     "HP": {
       "Value": 178,
@@ -19830,7 +19830,7 @@
   },
   {
     "Name": "Storm Giant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge giant, chaotic good",
     "HP": {
       "Value": 230,
@@ -19935,7 +19935,7 @@
   },
   {
     "Name": "Succubus/Incubus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium fiend (shapechanger), neutral evil",
     "HP": {
       "Value": 66,
@@ -20035,7 +20035,7 @@
   },
   {
     "Name": "Swarm of Bats",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 22,
@@ -20105,7 +20105,7 @@
   },
   {
     "Name": "Swarm of Insects",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 22,
@@ -20165,7 +20165,7 @@
   },
   {
     "Name": "Swarm of Poisonous Snakes",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 36,
@@ -20225,7 +20225,7 @@
   },
   {
     "Name": "Swarm of Quippers",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 28,
@@ -20295,7 +20295,7 @@
   },
   {
     "Name": "Swarm of Rats",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 24,
@@ -20360,7 +20360,7 @@
   },
   {
     "Name": "Swarm of Ravens",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium swarm of Tiny beasts, unaligned",
     "HP": {
       "Value": 24,
@@ -20420,7 +20420,7 @@
   },
   {
     "Name": "Tarrasque",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Gargantuan monstrosity (titan), unaligned",
     "HP": {
       "Value": 676,
@@ -20551,7 +20551,7 @@
   },
   {
     "Name": "Thug",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any non-good alignment",
     "HP": {
       "Value": 32,
@@ -20617,7 +20617,7 @@
   },
   {
     "Name": "Tiger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 37,
@@ -20687,7 +20687,7 @@
   },
   {
     "Name": "Treant",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge plant, chaotic good",
     "HP": {
       "Value": 138,
@@ -20758,7 +20758,7 @@
   },
   {
     "Name": "Tribal Warrior",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 11,
@@ -20809,7 +20809,7 @@
   },
   {
     "Name": "Triceratops",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 95,
@@ -20865,7 +20865,7 @@
   },
   {
     "Name": "Troll",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large giant, chaotic evil",
     "HP": {
       "Value": 84,
@@ -20941,7 +20941,7 @@
   },
   {
     "Name": "Tyrannosaurus Rex",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Huge beast, unaligned",
     "HP": {
       "Value": 136,
@@ -21001,7 +21001,7 @@
   },
   {
     "Name": "Unicorn",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large celestial, lawful good",
     "HP": {
       "Value": 67,
@@ -21103,7 +21103,7 @@
   },
   {
     "Name": "Vampire",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead (shapechanger), lawful evil",
     "HP": {
       "Value": 144,
@@ -21242,7 +21242,7 @@
   },
   {
     "Name": "Vampire Spawn",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, neutral evil",
     "HP": {
       "Value": 82,
@@ -21336,7 +21336,7 @@
   },
   {
     "Name": "Veteran",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (any race), any alignment",
     "HP": {
       "Value": 58,
@@ -21405,7 +21405,7 @@
   },
   {
     "Name": "Violet Fungus",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium plant, unaligned",
     "HP": {
       "Value": 18,
@@ -21461,7 +21461,7 @@
   },
   {
     "Name": "Vrock",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large fiend (demon), chaotic evil",
     "HP": {
       "Value": 104,
@@ -21557,7 +21557,7 @@
   },
   {
     "Name": "Vulture",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 5,
@@ -21618,7 +21618,7 @@
   },
   {
     "Name": "Warhorse",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large beast, unaligned",
     "HP": {
       "Value": 19,
@@ -21669,7 +21669,7 @@
   },
   {
     "Name": "Warhorse Skeleton",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large undead, lawful evil",
     "HP": {
       "Value": 22,
@@ -21714,7 +21714,7 @@
   },
   {
     "Name": "Water Elemental",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large elemental, neutral",
     "HP": {
       "Value": 114,
@@ -21794,7 +21794,7 @@
   },
   {
     "Name": "Weasel",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny beast, unaligned",
     "HP": {
       "Value": 1,
@@ -21854,7 +21854,7 @@
   },
   {
     "Name": "Werebear",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human, shapechanger), neutral good",
     "HP": {
       "Value": 135,
@@ -21934,7 +21934,7 @@
   },
   {
     "Name": "Wereboar",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human, shapechanger), neutral evil",
     "HP": {
       "Value": 78,
@@ -22014,7 +22014,7 @@
   },
   {
     "Name": "Wererat",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human, shapechanger), lawful evil",
     "HP": {
       "Value": 33,
@@ -22098,7 +22098,7 @@
   },
   {
     "Name": "Weretiger",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human, shapechanger), neutral",
     "HP": {
       "Value": 120,
@@ -22192,7 +22192,7 @@
   },
   {
     "Name": "Werewolf",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium humanoid (human, shapechanger), chaotic evil",
     "HP": {
       "Value": 58,
@@ -22272,7 +22272,7 @@
   },
   {
     "Name": "White Dragon Wyrmling",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium dragon, chaotic evil",
     "HP": {
       "Value": 32,
@@ -22348,7 +22348,7 @@
   },
   {
     "Name": "Wight",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, neutral evil",
     "HP": {
       "Value": 45,
@@ -22428,7 +22428,7 @@
   },
   {
     "Name": "Will-o'-Wisp",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Tiny undead, chaotic evil",
     "HP": {
       "Value": 22,
@@ -22516,7 +22516,7 @@
   },
   {
     "Name": "Winter Wolf",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, neutral evil",
     "HP": {
       "Value": 75,
@@ -22591,7 +22591,7 @@
   },
   {
     "Name": "Wolf",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium beast, unaligned",
     "HP": {
       "Value": 11,
@@ -22656,7 +22656,7 @@
   },
   {
     "Name": "Worg",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large monstrosity, neutral evil",
     "HP": {
       "Value": 26,
@@ -22712,7 +22712,7 @@
   },
   {
     "Name": "Wraith",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, neutral evil",
     "HP": {
       "Value": 67,
@@ -22791,7 +22791,7 @@
   },
   {
     "Name": "Wyvern",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, unaligned",
     "HP": {
       "Value": 110,
@@ -22856,7 +22856,7 @@
   },
   {
     "Name": "Xorn",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium elemental, neutral",
     "HP": {
       "Value": 73,
@@ -22938,7 +22938,7 @@
   },
   {
     "Name": "Young Black Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, chaotic evil",
     "HP": {
       "Value": 127,
@@ -23030,7 +23030,7 @@
   },
   {
     "Name": "Young Blue Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, lawful evil",
     "HP": {
       "Value": 152,
@@ -23116,7 +23116,7 @@
   },
   {
     "Name": "Young Brass Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, chaotic good",
     "HP": {
       "Value": 110,
@@ -23206,7 +23206,7 @@
   },
   {
     "Name": "Young Bronze Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, lawful good",
     "HP": {
       "Value": 142,
@@ -23302,7 +23302,7 @@
   },
   {
     "Name": "Young Copper Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, chaotic good",
     "HP": {
       "Value": 119,
@@ -23392,7 +23392,7 @@
   },
   {
     "Name": "Young Gold Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, lawful good",
     "HP": {
       "Value": 178,
@@ -23492,7 +23492,7 @@
   },
   {
     "Name": "Young Green Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, lawful evil",
     "HP": {
       "Value": 136,
@@ -23588,7 +23588,7 @@
   },
   {
     "Name": "Young Red Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, chaotic evil",
     "HP": {
       "Value": 178,
@@ -23674,7 +23674,7 @@
   },
   {
     "Name": "Young Silver Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, lawful good",
     "HP": {
       "Value": 168,
@@ -23768,7 +23768,7 @@
   },
   {
     "Name": "Young White Dragon",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Large dragon, chaotic evil",
     "HP": {
       "Value": 133,
@@ -23860,7 +23860,7 @@
   },
   {
     "Name": "Zombie",
-    "Source": "Monster Manual",
+    "Source": "Basic Rules",
     "Type": "Medium undead, neutral evil",
     "HP": {
       "Value": 22,
