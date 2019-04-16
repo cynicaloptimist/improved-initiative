@@ -51,7 +51,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].CurrentName()).toEqual("Persistent Character");
+    expect(listings[0].Get().Name).toEqual("Persistent Character");
   });
 
   it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
@@ -60,7 +60,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].CurrentName()).toEqual("Player Character");
+    expect(listings[0].Get().Name).toEqual("Player Character");
   });
 
   it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {
@@ -70,7 +70,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].CurrentName()).toEqual("Persistent Character");
+    expect(listings[0].Get().Name).toEqual("Persistent Character");
   });
 
   it("Should provide the latest version of a Persistent Character", async done => {

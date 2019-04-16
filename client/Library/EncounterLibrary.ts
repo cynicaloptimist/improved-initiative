@@ -75,7 +75,7 @@ export class EncounterLibrary {
 
   public Save = (savedEncounter: EncounterState<CombatantState>) => {
     const listing = this.listingFrom(savedEncounter, "localStorage");
-    this.Encounters.remove(l => l.Id == listing.Id);
+    this.Encounters.remove(l => l.Get().Id == listing.Get().Id);
     this.Encounters.push(listing);
 
     Store.Save(Store.SavedEncounters, savedEncounter.Id, savedEncounter);
@@ -90,11 +90,11 @@ export class EncounterLibrary {
   };
 
   public Delete = (listing: Listing<EncounterState<CombatantState>>) => {
-    this.deleteById(listing.Id);
+    this.deleteById(listing.Get().Id);
   };
 
   private deleteById = (listingId: string) => {
-    this.Encounters.remove(l => l.Id == listingId);
+    this.Encounters.remove(l => l.Get().Id == listingId);
     this.accountClient.DeleteEncounter(listingId);
     Store.Delete(Store.SavedEncounters, listingId);
   };

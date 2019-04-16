@@ -72,7 +72,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
 
     const statBlockOutline: StatBlock = {
       ...StatBlock.Default(),
-      Name: l.CurrentName()
+      Name: l.Get().Name
     };
 
     this.setState({
@@ -123,11 +123,11 @@ export class PersistentCharacterLibraryPane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {
-    const subscription = l.CurrentName.subscribe(() => {
+    const subscription = l.Get.subscribe(() => {
       this.filterCache = new FilterCache(this.props.library.GetListings());
       this.forceUpdate(() => subscription.dispose());
     });
-    this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Id);
+    this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Get().Id);
   };
 
   private createAndEditStatBlock = () => {
@@ -137,8 +137,8 @@ export class PersistentCharacterLibraryPane extends React.Component<
 
   private buildListingComponent = (l: Listing<PersistentCharacter>) => (
     <ListingViewModel
-      key={l.Id + l.CurrentPath() + l.CurrentName()}
-      name={l.CurrentName()}
+      key={l.Get().Id + l.Get().Path + l.Get().Name}
+      name={l.Get().Name}
       showCount
       onAdd={this.loadSavedStatBlock}
       onEdit={this.editStatBlock}
@@ -154,7 +154,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
     );
     const listingAndFolderComponents = BuildListingTree(
       this.buildListingComponent,
-      listing => ({ label: listing.CurrentPath(), key: listing.CurrentPath() }),
+      listing => ({ label: listing.Get().Path, key: listing.Get().Path }),
       filteredListings
     );
 

@@ -62,7 +62,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   public async GetPersistentCharacter(persistentCharacterId: string) {
     const listing = find(
       this.persistentCharacters(),
-      c => c.Id == persistentCharacterId
+      c => c.Get().Id == persistentCharacterId
     );
     return await listing.GetWithTemplate(DefaultPersistentCharacter());
   }
@@ -100,7 +100,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     }
     const currentCharacterListing = find(
       this.persistentCharacters(),
-      p => p.Id == persistentCharacterId
+      p => p.Get().Id == persistentCharacterId
     );
     const currentCharacter = await currentCharacterListing.GetWithTemplate(
       DefaultPersistentCharacter()
@@ -125,7 +125,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   }
 
   public async DeletePersistentCharacter(persistentCharacterId: string) {
-    this.persistentCharacters.remove(p => p.Id == persistentCharacterId);
+    this.persistentCharacters.remove(p => p.Get().Id == persistentCharacterId);
     Store.Delete(Store.PersistentCharacters, persistentCharacterId);
     this.accountClient.DeletePersistentCharacter(persistentCharacterId);
   }

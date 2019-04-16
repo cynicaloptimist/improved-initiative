@@ -1,18 +1,22 @@
 import * as ko from "knockout";
 
-import { Listable, ListingMetadata } from "../../common/Listable";
+import {
+  Listable,
+  ListingMetadata,
+  StoredListing
+} from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
 export class Listing<T extends Listable> {
   constructor(
-    public Id: string,
+    private Id: string,
     private Name: string,
     private Path: string,
-    public SearchHint: string,
-    public Metadata: ListingMetadata,
-    public Link: string,
+    private SearchHint: string,
+    private Metadata: ListingMetadata,
+    private Link: string,
     public Origin: ListingOrigin,
     value?: T
   ) {
@@ -64,19 +68,25 @@ export class Listing<T extends Listable> {
     });
   }
 
-  public CurrentName = ko.pureComputed(() => {
+  public Get = ko.pureComputed<StoredListing>(() => {
     const current = this.value();
     if (current !== undefined) {
-      return current.Name || this.Name;
+      return {
+        Id: current.Id,
+        Name: current.Name,
+        Path: current.Path,
+        Link: this.Link,
+        SearchHint: this.SearchHint,
+        Metadata: this.Metadata
+      };
     }
-    return this.Name;
-  });
-
-  public CurrentPath = ko.pureComputed(() => {
-    const current = this.value();
-    if (current !== undefined) {
-      return current.Path || this.Path;
-    }
-    return this.Path;
+    return {
+      Id: this.Id,
+      Name: this.Name,
+      Path: this.Path,
+      Link: this.Link,
+      SearchHint: this.SearchHint,
+      Metadata: this.Metadata
+    };
   });
 }

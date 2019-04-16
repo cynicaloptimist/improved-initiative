@@ -11,7 +11,7 @@ export class SpellLibrary {
   private spells = ko.observableArray<Listing<Spell>>([]);
   public GetSpells = ko.pureComputed(() => this.spells());
   public SpellsByNameRegex = ko.pureComputed(() =>
-    concatenatedStringRegex(this.GetSpells().map(s => s.CurrentName()))
+    concatenatedStringRegex(this.GetSpells().map(s => s.Get().Name))
   );
 
   constructor(private accountClient: AccountClient) {}
@@ -34,7 +34,7 @@ export class SpellLibrary {
   };
 
   public AddOrUpdateSpell = (spell: Spell) => {
-    this.spells.remove(listing => listing.Id === spell.Id);
+    this.spells.remove(listing => listing.Get().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
       spell.Id,
@@ -66,7 +66,7 @@ export class SpellLibrary {
   };
 
   public DeleteSpellById = (id: string) => {
-    this.spells.remove(listing => listing.Id === id);
+    this.spells.remove(listing => listing.Get().Id === id);
     Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };

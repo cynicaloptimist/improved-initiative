@@ -53,7 +53,7 @@ export class SpellLibraryPane extends React.Component<
   };
 
   private editSpell = (l: Listing<Spell>) => {
-    l.CurrentName.subscribe(_ => this.forceUpdate());
+    l.Get.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
 
@@ -68,8 +68,8 @@ export class SpellLibraryPane extends React.Component<
         <ul className="listings">
           {filteredListings.map(l => (
             <ListingViewModel
-              key={l.Id + l.CurrentPath() + l.CurrentName()}
-              name={l.CurrentName()}
+              key={l.Get().Id + l.Get().Path + l.Get().Name}
+              name={l.Get().Name}
               onAdd={this.loadSavedSpell}
               onEdit={this.editSpell}
               listing={l}
