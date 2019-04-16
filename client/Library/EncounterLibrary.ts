@@ -22,23 +22,23 @@ export class EncounterLibrary {
   }
 
   private listingFrom(
-    savedEncounter: EncounterState<CombatantState>,
+    encounterState: EncounterState<CombatantState>,
     origin: ListingOrigin
   ) {
-    const listingId = savedEncounter.Id;
-    const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(
+    const listingId = encounterState.Id;
+    const combatantNames = encounterState.Combatants.map(c => c.Alias).join(
       " "
     );
 
     let link = Store.SavedEncounters;
     if (origin == "account") {
-      link = `/my/encounters/${savedEncounter.Id}`;
+      link = `/my/encounters/${encounterState.Id}`;
     }
 
     return new Listing<EncounterState<CombatantState>>(
       listingId,
-      savedEncounter.Name,
-      savedEncounter.Path,
+      encounterState.Name,
+      encounterState.Path,
       combatantNames,
       {},
       link,
