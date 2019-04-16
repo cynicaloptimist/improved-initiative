@@ -17,7 +17,7 @@ export function InitializeCharacter(statBlock: StatBlock): PersistentCharacter {
 export const DefaultPersistentCharacter = () =>
   InitializeCharacter(StatBlock.Default());
 
-export const GetPersistentCharacterKeywords = (
+export const GetPersistentCharacterSearchHint = (
   character: PersistentCharacter
 ) => character.StatBlock.Type;
 

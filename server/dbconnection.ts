@@ -2,17 +2,19 @@ import mongo = require("mongodb");
 
 import * as _ from "lodash";
 import { CombatantState } from "../common/CombatantState";
-import { DefaultEncounterState } from "../common/EncounterState";
+import {
+  DefaultEncounterState,
+  GetEncounterSearchHint
+} from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
 import {
   DefaultPersistentCharacter,
-  GetPersistentCharacterKeywords,
   GetPersistentCharacterMetadata,
+  GetPersistentCharacterSearchHint,
   InitializeCharacter
 } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import * as L from "./library";
 import { User } from "./user";
 
 let connectionString: string;
@@ -169,7 +171,7 @@ function getStatBlockListings(statBlocks: {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c),
+      SearchHint: StatBlock.GetSearchHint(c),
       Metadata: StatBlock.GetMetadata(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`
@@ -184,7 +186,7 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: Spell.GetKeywords(c),
+      SearchHint: Spell.GetSearchHint(c),
       Metadata: Spell.GetMetadata(c),
       Version: c.Version,
       Link: `/my/spells/${c.Id}`
@@ -204,7 +206,7 @@ function getEncounterListings(encounters: {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: L.GetEncounterKeywords(c),
+      SearchHint: GetEncounterSearchHint(c),
       Metadata: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`
@@ -221,7 +223,7 @@ function getPersistentCharacterListings(persistentCharacters: {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: GetPersistentCharacterKeywords(c),
+      SearchHint: GetPersistentCharacterSearchHint(c),
       Metadata: GetPersistentCharacterMetadata(c),
       Version: c.Version,
       Link: `/my/persistentcharacters/${c.Id}`

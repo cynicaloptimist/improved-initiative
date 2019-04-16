@@ -15,7 +15,7 @@ export interface Spell extends Listable {
 }
 
 export class Spell {
-  public static GetKeywords = (spell: Spell) =>
+  public static GetSearchHint = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
   public static GetMetadata = (spell: Spell) => ({

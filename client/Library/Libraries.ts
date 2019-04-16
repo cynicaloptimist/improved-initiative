@@ -41,7 +41,7 @@ export class Libraries {
         Id: id,
         Name: statBlock.Name,
         Path: statBlock.Path,
-        SearchHint: StatBlock.GetKeywords(statBlock),
+        SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
         Link: Store.StatBlocks
       };
@@ -66,7 +66,7 @@ export class Libraries {
         Id: id,
         Name: spell.Name,
         Path: spell.Path,
-        SearchHint: Spell.GetKeywords(spell),
+        SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
         Link: Store.Spells
       };

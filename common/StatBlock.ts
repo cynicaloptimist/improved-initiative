@@ -73,7 +73,7 @@ const StatBlockBaseTypes = [
 ];
 
 export class StatBlock {
-  public static GetKeywords = (statBlock: StatBlock) =>
+  public static GetSearchHint = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
   public static GetMetadata = (statBlock: StatBlock): ListingMetadata => {

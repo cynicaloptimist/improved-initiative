@@ -28,26 +28,23 @@ export interface SavedEncounter extends Listable {
   Combatants: Combatant[];
 }
 
-export const GetEncounterKeywords = (encounter: SavedEncounter) =>
-  (encounter.Combatants || []).map(c => c.Alias).join(" ");
-
 export class Library<TItem extends Listable> {
   private items: { [id: string]: TItem } = {};
   private listings: StoredListing[] = [];
 
   constructor(
     private route: string,
-    private getKeywords: (item: TItem) => string,
+    private getSearchHint: (item: TItem) => string,
     private getMetadata: (item: TItem) => ListingMetadata
   ) {}
 
   public static FromFile<I extends Listable>(
     filename: string,
     route: string,
-    getKeywords: (item: I) => string,
+    getSearchHint: (item: I) => string,
     getMetadata: (item: I) => ListingMetadata
   ): Library<I> {
-    const library = new Library<I>(route, getKeywords, getMetadata);
+    const library = new Library<I>(route, getSearchHint, getMetadata);
 
     const filePath = path.join(__dirname, "..", filename);
 
@@ -74,7 +71,7 @@ export class Library<TItem extends Listable> {
         Name: c.Name,
         Id: c.Id,
         Path: c.Path || "",
-        SearchHint: this.getKeywords(c),
+        SearchHint: this.getSearchHint(c),
         Metadata: this.getMetadata(c),
         Link: this.route + c.Id
       };
