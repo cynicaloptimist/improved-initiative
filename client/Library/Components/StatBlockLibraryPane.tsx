@@ -23,7 +23,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
   filter: string;
-  groupBy: ListingGroupFn;
+  groupingFunctionIndex: number;
   previewedStatBlock: StatBlock;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -41,7 +41,7 @@ export class StatBlockLibraryPane extends React.Component<
     super(props);
     this.state = {
       filter: "",
-      groupBy: this.groupByPath,
+      groupingFunctionIndex: 0,
       previewedStatBlock: StatBlock.Default(),
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -70,7 +70,7 @@ export class StatBlockLibraryPane extends React.Component<
     );
     const listingAndFolderComponents = BuildListingTree(
       this.buildListingComponent,
-      this.state.groupBy,
+      this.groupingFunctions[this.state.groupingFunctionIndex],
       filteredListings
     );
 
@@ -122,39 +122,30 @@ export class StatBlockLibraryPane extends React.Component<
     );
   }
 
-  private groupByPath: ListingGroupFn = l => ({
-    label: l.Listing().Path,
-    key: l.Listing().Path
-  });
-
-  private groupByLevel: ListingGroupFn = l => ({
-    label: "Challenge " + l.Listing().Metadata.Level,
-    key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
-  });
-
-  private groupBySource: ListingGroupFn = l => ({
-    label: l.Listing().Metadata.Source,
-    key: l.Listing().Metadata.Source
-  });
-
-  private groupByType: ListingGroupFn = l => ({
-    label: l.Listing().Metadata.Type,
-    key: l.Listing().Metadata.Type
-  });
+  private groupingFunctions: ListingGroupFn[] = [
+    l => ({
+      label: l.Listing().Path,
+      key: l.Listing().Path
+    }),
+    l => ({
+      label: "Challenge " + l.Listing().Metadata.Level,
+      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+    }),
+    l => ({
+      label: l.Listing().Metadata.Source,
+      key: l.Listing().Metadata.Source
+    }),
+    l => ({
+      label: l.Listing().Metadata.Type,
+      key: l.Listing().Metadata.Type
+    })
+  ];
 
   private toggleGroupBy = () =>
     this.setState(state => {
-      const groupingFunctions = [
-        this.groupByPath,
-        this.groupByLevel,
-        this.groupByType,
-        this.groupBySource
-      ];
-      const nextIndex =
-        (groupingFunctions.indexOf(state.groupBy) + 1) %
-        groupingFunctions.length;
       return {
-        groupBy: groupingFunctions[nextIndex]
+        groupingFunctionIndex:
+          (state.groupingFunctionIndex + 1) % this.groupingFunctions.length
       };
     });
 
