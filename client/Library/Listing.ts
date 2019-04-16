@@ -68,7 +68,7 @@ export class Listing<T extends Listable> {
     });
   }
 
-  public Get = ko.pureComputed<StoredListing>(() => {
+  public Listing = ko.pureComputed<StoredListing>(() => {
     const current = this.value();
     if (current !== undefined) {
       return {

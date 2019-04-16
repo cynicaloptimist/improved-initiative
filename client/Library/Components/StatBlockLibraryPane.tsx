@@ -123,23 +123,23 @@ export class StatBlockLibraryPane extends React.Component<
   }
 
   private groupByPath: ListingGroupFn = l => ({
-    label: l.Get().Path,
-    key: l.Get().Path
+    label: l.Listing().Path,
+    key: l.Listing().Path
   });
 
   private groupByLevel: ListingGroupFn = l => ({
-    label: "Challenge " + l.Get().Metadata.Level,
-    key: GetAlphaSortableLevelString(l.Get().Metadata.Level)
+    label: "Challenge " + l.Listing().Metadata.Level,
+    key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
   });
 
   private groupBySource: ListingGroupFn = l => ({
-    label: l.Get().Metadata.Source,
-    key: l.Get().Metadata.Source
+    label: l.Listing().Metadata.Source,
+    key: l.Listing().Metadata.Source
   });
 
   private groupByType: ListingGroupFn = l => ({
-    label: l.Get().Metadata.Type,
-    key: l.Get().Metadata.Type
+    label: l.Listing().Metadata.Type,
+    key: l.Listing().Metadata.Type
   });
 
   private toggleGroupBy = () =>
@@ -160,8 +160,8 @@ export class StatBlockLibraryPane extends React.Component<
 
   private buildListingComponent = (l: Listing<StatBlock>) => (
     <ListingViewModel
-      key={l.Get().Id + l.Get().Path + l.Get().Name}
-      name={l.Get().Name}
+      key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
+      name={l.Listing().Name}
       showCount
       onAdd={this.loadSavedStatBlock}
       onEdit={this.editStatBlock}
@@ -182,7 +182,7 @@ export class StatBlockLibraryPane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
-    l.Get.subscribe(_ => this.forceUpdate());
+    l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
 
@@ -206,7 +206,7 @@ export class StatBlockLibraryPane extends React.Component<
 
     const statBlockOutline: StatBlock = {
       ...StatBlock.Default(),
-      Name: l.Get().Name
+      Name: l.Listing().Name
     };
 
     this.setState({

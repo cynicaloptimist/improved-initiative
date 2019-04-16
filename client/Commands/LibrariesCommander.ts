@@ -47,7 +47,7 @@ export class LibrariesCommander {
   public CanAddPersistentCharacter = (
     listing: Listing<PersistentCharacter>
   ) => {
-    return this.tracker.Encounter.CanAddCombatant(listing.Get().Id);
+    return this.tracker.Encounter.CanAddCombatant(listing.Listing().Id);
   };
 
   public AddPersistentCharacterFromListing = async (
@@ -110,7 +110,7 @@ export class LibrariesCommander {
           { ...StatBlock.Default(), ...statBlock },
           s => library.SaveEditedStatBlock(listing, s),
           library.GetStatBlocks(),
-          this.deleteSavedStatBlock(listing.Get().Id),
+          this.deleteSavedStatBlock(listing.Listing().Id),
           library.SaveNewStatBlock
         );
       }
@@ -199,7 +199,7 @@ export class LibrariesCommander {
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
     const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.Get().Path)
+      .map(e => e.Listing().Path)
       .uniq()
       .compact()
       .value();

@@ -71,7 +71,9 @@ export class EncounterLibraryPane extends React.Component<
     };
 
     this.setState({
-      previewedEncounterCombatants: [{ key: "encounter", name: l.Get().Name }],
+      previewedEncounterCombatants: [
+        { key: "encounter", name: l.Listing().Name }
+      ],
       previewIconHovered: true,
       previewPosition
     });
@@ -107,7 +109,7 @@ export class EncounterLibraryPane extends React.Component<
   };
 
   private deleteListing = (listing: EncounterListing) => {
-    if (confirm(`Delete saved encounter "${listing.Get().Name}"?`)) {
+    if (confirm(`Delete saved encounter "${listing.Listing().Name}"?`)) {
       this.props.library.Delete(listing);
     }
   };
@@ -120,8 +122,10 @@ export class EncounterLibraryPane extends React.Component<
 
   private buildListingComponent = (listing: EncounterListing) => (
     <ListingViewModel
-      key={listing.Get().Id + listing.Get().Path + listing.Get().Name}
-      name={listing.Get().Name}
+      key={
+        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
+      }
+      name={listing.Listing().Name}
       onAdd={this.loadSavedEncounter}
       onDelete={this.deleteListing}
       onMove={this.moveListing}
@@ -137,7 +141,10 @@ export class EncounterLibraryPane extends React.Component<
     );
     const listingAndFolderComponents = BuildListingTree(
       this.buildListingComponent,
-      listing => ({ label: listing.Get().Path, key: listing.Get().Path }),
+      listing => ({
+        label: listing.Listing().Path,
+        key: listing.Listing().Path
+      }),
       filteredListings
     );
 

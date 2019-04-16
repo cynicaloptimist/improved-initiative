@@ -30,7 +30,7 @@ export class IdentityFields extends React.Component<
     super(props);
     this.autoCompletePaths = _.uniq(
       this.props.currentListings &&
-        this.props.currentListings.map(l => l.Get().Path)
+        this.props.currentListings.map(l => l.Listing().Path)
     );
 
     const folderExpanded =

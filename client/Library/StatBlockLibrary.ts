@@ -32,7 +32,7 @@ export class StatBlockLibrary {
   };
 
   public DeleteListing = (id: string) => {
-    this.statBlocks.remove(s => s.Get().Id == id);
+    this.statBlocks.remove(s => s.Listing().Id == id);
     Store.Delete(this.StoreName, id);
     this.accountClient.DeleteStatBlock(id);
   };
@@ -41,7 +41,7 @@ export class StatBlockLibrary {
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
-    listing.Get().Id = newStatBlock.Id;
+    listing.Listing().Id = newStatBlock.Id;
     this.statBlocks.push(listing);
 
     Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
@@ -71,11 +71,12 @@ export class StatBlockLibrary {
   ) => {
     const oldStatBlocks = this.GetStatBlocks().filter(
       l =>
-        l.Get().Id == listing.Get().Id ||
-        l.Get().Path + l.Get().Name == listing.Get().Path + listing.Get().Name
+        l.Listing().Id == listing.Listing().Id ||
+        l.Listing().Path + l.Listing().Name ==
+          listing.Listing().Path + listing.Listing().Name
     );
     for (const statBlock of oldStatBlocks) {
-      this.DeleteListing(statBlock.Get().Id);
+      this.DeleteListing(statBlock.Listing().Id);
     }
     this.saveStatBlock(listing, newStatBlock);
   };
