@@ -30,9 +30,7 @@ export class SpellLibrary {
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
       {
-        Id: spell.Id,
-        Name: spell.Name,
-        Path: spell.Path,
+        ...spell,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
         Link: Store.Spells

@@ -28,8 +28,6 @@ export class EncounterLibrary {
     encounterState: EncounterState<CombatantState>,
     origin: ListingOrigin
   ) {
-    const listingId = encounterState.Id;
-
     let link = Store.SavedEncounters;
     if (origin == "account") {
       link = `/my/encounters/${encounterState.Id}`;
@@ -37,9 +35,7 @@ export class EncounterLibrary {
 
     return new Listing<EncounterState<CombatantState>>(
       {
-        Id: listingId,
-        Name: encounterState.Name,
-        Path: encounterState.Path,
+        ...encounterState,
         SearchHint: GetEncounterSearchHint(encounterState),
         Metadata: {},
         Link: link

@@ -45,9 +45,7 @@ export class StatBlockLibrary {
       }
       const accountListing = new Listing<StatBlock>(
         {
-          Id: newStatBlock.Id,
-          Name: newStatBlock.Name,
-          Path: newStatBlock.Path,
+          ...newStatBlock,
           SearchHint: StatBlock.GetSearchHint(newStatBlock),
           Metadata: StatBlock.GetMetadata(newStatBlock),
           Link: `/my/statblocks/${newStatBlock.Id}`
@@ -78,9 +76,7 @@ export class StatBlockLibrary {
   public SaveNewStatBlock = (newStatBlock: StatBlock) => {
     const listing = new Listing<StatBlock>(
       {
-        Id: newStatBlock.Id,
-        Name: newStatBlock.Name,
-        Path: newStatBlock.Path,
+        ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
         Metadata: StatBlock.GetMetadata(newStatBlock),
         Link: this.StoreName

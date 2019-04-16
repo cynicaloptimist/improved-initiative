@@ -62,9 +62,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
     const listing = new Listing<PersistentCharacter>(
       {
-        Id: persistentCharacter.Id,
-        Name: persistentCharacter.Name,
-        Path: persistentCharacter.Path,
+        ...persistentCharacter,
         SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
         Metadata: GetPersistentCharacterMetadata(persistentCharacter),
         Link: persistentCharacter.Id
@@ -133,9 +131,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     };
     return new Listing<PersistentCharacter>(
       {
-        Id: id,
-        Name: persistentCharacter.Name,
-        Path: persistentCharacter.Path,
+        ...persistentCharacter,
         SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
         Metadata: GetPersistentCharacterMetadata(persistentCharacter),
         Link: Store.PersistentCharacters
@@ -157,9 +153,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     );
     return new Listing<PersistentCharacter>(
       {
-        Id: id,
-        Name: persistentCharacter.Name,
-        Path: persistentCharacter.Path,
+        ...persistentCharacter,
         SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
         Metadata: GetPersistentCharacterMetadata(persistentCharacter),
         Link: Store.PersistentCharacters

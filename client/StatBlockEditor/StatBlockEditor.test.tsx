@@ -22,9 +22,7 @@ describe("StatBlockEditor", () => {
     statBlock = { ...StatBlock.Default(), Name: "Creature" };
     const listing = new Listing(
       {
-        Id: statBlock.Id,
-        Name: statBlock.Name,
-        Path: statBlock.Path,
+        ...statBlock,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
         Link: "/"
