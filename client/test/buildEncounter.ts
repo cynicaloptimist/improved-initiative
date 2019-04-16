@@ -1,5 +1,5 @@
 import { Encounter } from "../Encounter/Encounter";
-import { DefaultRules, IRules } from "../Rules/Rules";
+import { DefaultRules } from "../Rules/Rules";
 
 export function buildEncounter() {
   const rules = new DefaultRules();

@@ -1,10 +1,6 @@
 import * as ko from "knockout";
 
-import {
-  Listable,
-  ListingMetadata,
-  StoredListing
-} from "../../common/Listable";
+import { Listable, StoredListing } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";

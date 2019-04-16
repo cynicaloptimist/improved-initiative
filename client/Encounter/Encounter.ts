@@ -11,7 +11,6 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
-import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Tag } from "../Combatant/Tag";
 import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";

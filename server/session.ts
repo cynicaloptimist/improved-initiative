@@ -1,5 +1,4 @@
 import dbSession = require("connect-mongodb-session");
-import express = require("express");
 import expressSession = require("express-session");
 import moment = require("moment");
 

@@ -3,7 +3,6 @@ import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
 import { TagPromptComponent } from "../../Commands/Prompts/TagPrompt";
-import { SubmitButton } from "../../Components/Button";
 
 export class TagSuggestor extends React.Component<TagSuggestorProps> {
   public render() {

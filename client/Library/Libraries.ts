@@ -1,12 +1,9 @@
-import * as ko from "knockout";
-
 import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
-import { Listing } from "./Listing";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
 import { StatBlockLibrary } from "./StatBlockLibrary";
