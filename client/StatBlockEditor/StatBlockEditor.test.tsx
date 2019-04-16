@@ -21,12 +21,14 @@ describe("StatBlockEditor", () => {
   beforeEach(() => {
     statBlock = { ...StatBlock.Default(), Name: "Creature" };
     const listing = new Listing(
-      statBlock.Id,
-      statBlock.Name,
-      statBlock.Path,
-      StatBlock.GetSearchHint(statBlock),
-      StatBlock.GetMetadata(statBlock),
-      "/",
+      {
+        Id: statBlock.Id,
+        Name: statBlock.Name,
+        Path: statBlock.Path,
+        SearchHint: StatBlock.GetSearchHint(statBlock),
+        Metadata: StatBlock.GetMetadata(statBlock),
+        Link: "/"
+      },
       "localStorage",
       statBlock
     );

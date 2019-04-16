@@ -20,15 +20,7 @@ export class SpellLibrary {
     ko.utils.arrayPushAll<Listing<Spell>>(
       this.spells,
       listings.map(c => {
-        return new Listing<Spell>(
-          c.Id,
-          c.Name,
-          c.Path,
-          c.SearchHint,
-          c.Metadata,
-          c.Link,
-          source
-        );
+        return new Listing<Spell>(c, source);
       })
     );
   };
@@ -37,12 +29,14 @@ export class SpellLibrary {
     this.spells.remove(listing => listing.Listing().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
-      spell.Id,
-      spell.Name,
-      spell.Path,
-      Spell.GetSearchHint(spell),
-      Spell.GetMetadata(spell),
-      Store.Spells,
+      {
+        Id: spell.Id,
+        Name: spell.Name,
+        Path: spell.Path,
+        SearchHint: Spell.GetSearchHint(spell),
+        Metadata: Spell.GetMetadata(spell),
+        Link: Store.Spells
+      },
       "localStorage",
       spell
     );
@@ -52,12 +46,14 @@ export class SpellLibrary {
       if (!r) return;
       if (listing.Origin === "account") return;
       const accountListing = new Listing<Spell>(
-        spell.Id,
-        spell.Name,
-        spell.Path,
-        Spell.GetSearchHint(spell),
-        Spell.GetMetadata(spell),
-        `/my/spells/${spell.Id}`,
+        {
+          Id: spell.Id,
+          Name: spell.Name,
+          Path: spell.Path,
+          SearchHint: Spell.GetSearchHint(spell),
+          Metadata: Spell.GetMetadata(spell),
+          Link: `/my/spells/${spell.Id}`
+        },
         "account",
         spell
       );

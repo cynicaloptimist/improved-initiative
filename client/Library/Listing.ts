@@ -11,12 +11,7 @@ export type ListingOrigin = "server" | "account" | "localStorage";
 
 export class Listing<T extends Listable> {
   constructor(
-    private Id: string,
-    private Name: string,
-    private Path: string,
-    private SearchHint: string,
-    private Metadata: ListingMetadata,
-    private Link: string,
+    private storedListing: StoredListing,
     public Origin: ListingOrigin,
     value?: T
   ) {
@@ -48,21 +43,26 @@ export class Listing<T extends Listable> {
     }
 
     if (this.Origin === "localStorage") {
-      const item = Store.Load<T>(this.Link, this.Id);
-      item.Id = this.Id;
+      const item = Store.Load<T>(
+        this.storedListing.Link,
+        this.storedListing.Id
+      );
+      item.Id = this.storedListing.Id;
 
       if (item !== null) {
         this.value(item);
         return callback(item);
       } else {
         console.error(
-          `Couldn't load item keyed '${this.Id}' from localStorage.`
+          `Couldn't load item keyed '${
+            this.storedListing.Id
+          }' from localStorage.`
         );
       }
     }
 
-    return $.getJSON(this.Link).done(item => {
-      item.Id = this.Id;
+    return $.getJSON(this.storedListing.Link).done(item => {
+      item.Id = this.storedListing.Id;
       this.value(item);
       return callback(item);
     });
@@ -75,18 +75,11 @@ export class Listing<T extends Listable> {
         Id: current.Id,
         Name: current.Name,
         Path: current.Path,
-        Link: this.Link,
-        SearchHint: this.SearchHint,
-        Metadata: this.Metadata
+        Link: this.storedListing.Link,
+        SearchHint: this.storedListing.SearchHint,
+        Metadata: this.storedListing.Metadata
       };
     }
-    return {
-      Id: this.Id,
-      Name: this.Name,
-      Path: this.Path,
-      Link: this.Link,
-      SearchHint: this.SearchHint,
-      Metadata: this.Metadata
-    };
+    return this.storedListing;
   });
 }

@@ -46,15 +46,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     const newListings = listings.map(c => {
-      return new Listing<PersistentCharacter>(
-        c.Id,
-        c.Name,
-        c.Path,
-        c.SearchHint,
-        c.Metadata,
-        c.Link,
-        source
-      );
+      return new Listing<PersistentCharacter>(c, source);
     });
     this.persistentCharacters.push(...newListings);
   };
@@ -69,12 +61,14 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
     const listing = new Listing<PersistentCharacter>(
-      persistentCharacter.Id,
-      persistentCharacter.Name,
-      persistentCharacter.Path,
-      GetPersistentCharacterSearchHint(persistentCharacter),
-      GetPersistentCharacterMetadata(persistentCharacter),
-      persistentCharacter.Id,
+      {
+        Id: persistentCharacter.Id,
+        Name: persistentCharacter.Name,
+        Path: persistentCharacter.Path,
+        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
+        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        Link: persistentCharacter.Id
+      },
       "localStorage",
       persistentCharacter
     );
@@ -138,12 +132,14 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id)
     };
     return new Listing<PersistentCharacter>(
-      id,
-      persistentCharacter.Name,
-      persistentCharacter.Path,
-      GetPersistentCharacterSearchHint(persistentCharacter),
-      GetPersistentCharacterMetadata(persistentCharacter),
-      Store.PersistentCharacters,
+      {
+        Id: id,
+        Name: persistentCharacter.Name,
+        Path: persistentCharacter.Path,
+        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
+        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        Link: Store.PersistentCharacters
+      },
       "localStorage"
     );
   };
@@ -160,12 +156,14 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       persistentCharacter
     );
     return new Listing<PersistentCharacter>(
-      id,
-      persistentCharacter.Name,
-      persistentCharacter.Path,
-      GetPersistentCharacterSearchHint(persistentCharacter),
-      GetPersistentCharacterMetadata(persistentCharacter),
-      Store.PersistentCharacters,
+      {
+        Id: id,
+        Name: persistentCharacter.Name,
+        Path: persistentCharacter.Path,
+        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
+        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        Link: Store.PersistentCharacters
+      },
       "localStorage"
     );
   };

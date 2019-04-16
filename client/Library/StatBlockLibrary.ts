@@ -18,15 +18,7 @@ export class StatBlockLibrary {
     ko.utils.arrayPushAll<Listing<StatBlock>>(
       this.statBlocks,
       listings.map(c => {
-        return new Listing<StatBlock>(
-          c.Id,
-          c.Name,
-          c.Path,
-          c.SearchHint,
-          c.Metadata,
-          c.Link,
-          source
-        );
+        return new Listing<StatBlock>(c, source);
       })
     );
   };
@@ -52,12 +44,14 @@ export class StatBlockLibrary {
         return;
       }
       const accountListing = new Listing<StatBlock>(
-        newStatBlock.Id,
-        newStatBlock.Name,
-        newStatBlock.Path,
-        newStatBlock.Type,
-        StatBlock.GetMetadata(newStatBlock),
-        `/my/statblocks/${newStatBlock.Id}`,
+        {
+          Id: newStatBlock.Id,
+          Name: newStatBlock.Name,
+          Path: newStatBlock.Path,
+          SearchHint: StatBlock.GetSearchHint(newStatBlock),
+          Metadata: StatBlock.GetMetadata(newStatBlock),
+          Link: `/my/statblocks/${newStatBlock.Id}`
+        },
         "account",
         newStatBlock
       );
@@ -83,12 +77,14 @@ export class StatBlockLibrary {
 
   public SaveNewStatBlock = (newStatBlock: StatBlock) => {
     const listing = new Listing<StatBlock>(
-      newStatBlock.Id,
-      newStatBlock.Name,
-      newStatBlock.Path,
-      newStatBlock.Type,
-      StatBlock.GetMetadata(newStatBlock),
-      this.StoreName,
+      {
+        Id: newStatBlock.Id,
+        Name: newStatBlock.Name,
+        Path: newStatBlock.Path,
+        SearchHint: StatBlock.GetSearchHint(newStatBlock),
+        Metadata: StatBlock.GetMetadata(newStatBlock),
+        Link: this.StoreName
+      },
       "localStorage"
     );
     this.saveStatBlock(listing, newStatBlock);

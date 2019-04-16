@@ -36,12 +36,14 @@ export class EncounterLibrary {
     }
 
     return new Listing<EncounterState<CombatantState>>(
-      listingId,
-      encounterState.Name,
-      encounterState.Path,
-      GetEncounterSearchHint(encounterState),
-      {},
-      link,
+      {
+        Id: listingId,
+        Name: encounterState.Name,
+        Path: encounterState.Path,
+        SearchHint: GetEncounterSearchHint(encounterState),
+        Metadata: {},
+        Link: link
+      },
       origin
     );
   }
@@ -49,18 +51,7 @@ export class EncounterLibrary {
   public AddListings(listings: StoredListing[], source: ListingOrigin) {
     ko.utils.arrayPushAll<Listing<EncounterState<CombatantState>>>(
       this.Encounters,
-      listings.map(
-        l =>
-          new Listing(
-            l.Id,
-            l.Name,
-            l.Path,
-            l.SearchHint,
-            l.Metadata,
-            l.Link,
-            source
-          )
-      )
+      listings.map(l => new Listing(l, source))
     );
   }
 
