@@ -1,7 +1,10 @@
 import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState } from "../../common/EncounterState";
+import {
+  EncounterState,
+  GetEncounterSearchHint
+} from "../../common/EncounterState";
 import { StoredListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
@@ -26,9 +29,6 @@ export class EncounterLibrary {
     origin: ListingOrigin
   ) {
     const listingId = encounterState.Id;
-    const combatantNames = encounterState.Combatants.map(c => c.Alias).join(
-      " "
-    );
 
     let link = Store.SavedEncounters;
     if (origin == "account") {
@@ -39,7 +39,7 @@ export class EncounterLibrary {
       listingId,
       encounterState.Name,
       encounterState.Path,
-      combatantNames,
+      GetEncounterSearchHint(encounterState),
       {},
       link,
       origin

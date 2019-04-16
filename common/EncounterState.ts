@@ -19,3 +19,9 @@ export function DefaultEncounterState<T>(): EncounterState<T> {
     Version: process.env.VERSION || "0.0.0"
   };
 }
+
+export function GetEncounterSearchHint(
+  encounterState: EncounterState<CombatantState>
+) {
+  return encounterState.Combatants.map(c => c.Alias).join(" ");
+}
