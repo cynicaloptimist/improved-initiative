@@ -6,7 +6,7 @@ import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
 import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingRow } from "./ListingRow";
 
 export type SpellLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -67,7 +67,7 @@ export class SpellLibraryPane extends React.Component<
         <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
         <ul className="listings">
           {filteredListings.map(l => (
-            <ListingViewModel
+            <ListingRow
               key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
               name={l.Listing().Name}
               onAdd={this.loadSavedSpell}

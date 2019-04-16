@@ -10,7 +10,7 @@ import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingRow } from "./ListingRow";
 
 export type EncounterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -121,7 +121,7 @@ export class EncounterLibraryPane extends React.Component<
   };
 
   private buildListingComponent = (listing: EncounterListing) => (
-    <ListingViewModel
+    <ListingRow
       key={
         listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
       }

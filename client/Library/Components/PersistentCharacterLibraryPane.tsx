@@ -12,7 +12,7 @@ import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingRow } from "./ListingRow";
 
 export type PersistentCharacterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -138,7 +138,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
   };
 
   private buildListingComponent = (l: Listing<PersistentCharacter>) => (
-    <ListingViewModel
+    <ListingRow
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
       showCount

@@ -11,7 +11,7 @@ import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
 import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingRow } from "./ListingRow";
 
 export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -147,7 +147,7 @@ export class StatBlockLibraryPane extends React.Component<
     });
 
   private buildListingComponent = (l: Listing<StatBlock>) => (
-    <ListingViewModel
+    <ListingRow
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
       showCount
