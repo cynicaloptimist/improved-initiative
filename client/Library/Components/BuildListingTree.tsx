@@ -6,7 +6,7 @@ import { Folder } from "./Folder";
 
 export type ListingGroupFn = (
   l: Listing<any>
-) => { label: string; key: string };
+) => { label?: string; key: string };
 
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
@@ -23,14 +23,14 @@ export function BuildListingTree<T extends Listable>(
 
   listings.forEach(listing => {
     const group = groupListingsBy(listing);
-    if (group.label == "") {
+    if (group.key == "") {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
     } else {
       if (foldersByKey[group.key] == undefined) {
         foldersByKey[group.key] = {
-          label: group.label,
+          label: group.label || group.key,
           listings: []
         };
       }

@@ -124,7 +124,6 @@ export class StatBlockLibraryPane extends React.Component<
 
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
-      label: l.Listing().Path,
       key: l.Listing().Path
     }),
     l => ({
@@ -132,11 +131,9 @@ export class StatBlockLibraryPane extends React.Component<
       key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
     }),
     l => ({
-      label: l.Listing().Metadata.Source,
       key: l.Listing().Metadata.Source
     }),
     l => ({
-      label: l.Listing().Metadata.Type,
       key: l.Listing().Metadata.Type
     })
   ];
