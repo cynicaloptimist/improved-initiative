@@ -3,15 +3,12 @@ import * as React from "react";
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { Button } from "../../Components/Button";
-import { Overlay } from "../../Components/Overlay";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { BuildListingTree } from "./BuildListingTree";
-import { LibraryFilter } from "./LibraryFilter";
 import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 
@@ -94,7 +91,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
     });
   };
 
-  private onPreviewOut = l => {
+  private onPreviewOut = () => {
     this.setState({ previewIconHovered: false });
   };
 
