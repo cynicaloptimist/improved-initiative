@@ -78,6 +78,7 @@ export class StatBlockLibraryPane extends React.Component<
     return (
       <LibraryPane
         listingAndFolderComponents={listingAndFolderComponents}
+        applyFilter={filter => this.setState({ filter })}
         toggleGroupBy={this.toggleGroupBy}
         hideLibraries={this.props.librariesCommander.HideLibraries}
         addNewItem={() =>

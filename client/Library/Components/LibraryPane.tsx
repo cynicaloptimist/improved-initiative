@@ -5,6 +5,7 @@ import { LibraryFilter } from "./LibraryFilter";
 
 interface LibraryPaneProps {
   listingAndFolderComponents: JSX.Element[];
+  applyFilter: (filter: string) => void;
   toggleGroupBy: () => void;
   hideLibraries: () => void;
   addNewItem: () => void;
@@ -22,7 +23,7 @@ export class LibraryPane extends React.Component<LibraryPaneProps> {
     return (
       <div className="library">
         <div className="search-controls">
-          <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+          <LibraryFilter applyFilterFn={this.props.applyFilter} />
           <Button
             additionalClassNames="group-by"
             fontAwesomeIcon="sort"
