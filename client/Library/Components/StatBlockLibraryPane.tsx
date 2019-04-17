@@ -13,6 +13,58 @@ import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
 import { ListingRow } from "./ListingRow";
 
+interface LibraryPaneProps {
+  listingAndFolderComponents: JSX.Element[];
+
+  toggleGroupBy: () => void;
+  hideLibraries: () => void;
+  addNewItem: () => void;
+
+  handlePreviewMouseEvent: (e: React.MouseEvent<HTMLDivElement>) => void;
+  previewVisible: boolean;
+  previewPosition: { left: number; top: number };
+  previewComponent: JSX.Element;
+}
+class LibraryPane extends React.Component<LibraryPaneProps> {
+  public render() {
+    return (
+      <div className="library">
+        <div className="search-controls">
+          <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
+          <Button
+            additionalClassNames="group-by"
+            fontAwesomeIcon="sort"
+            onClick={this.props.toggleGroupBy}
+          />
+        </div>
+        <ul className="listings">{this.props.listingAndFolderComponents}</ul>
+        <div className="buttons">
+          <Button
+            additionalClassNames="hide"
+            fontAwesomeIcon="chevron-up"
+            onClick={this.props.hideLibraries}
+          />
+          <Button
+            additionalClassNames="new"
+            fontAwesomeIcon="plus"
+            onClick={this.props.addNewItem}
+          />
+        </div>
+        {this.props.previewVisible && (
+          <Overlay
+            handleMouseEvents={this.props.handlePreviewMouseEvent}
+            maxHeightPx={300}
+            left={this.props.previewPosition.left}
+            top={this.props.previewPosition.top}
+          >
+            {this.props.previewComponent}
+          </Overlay>
+        )}
+      </div>
+    );
+  }
+}
+
 export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: StatBlockLibrary;
@@ -78,47 +130,26 @@ export class StatBlockLibraryPane extends React.Component<
       this.state.previewIconHovered || this.state.previewWindowHovered;
 
     return (
-      <div className="library">
-        <div className="search-controls">
-          <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-          <Button
-            additionalClassNames="group-by"
-            fontAwesomeIcon="sort"
-            onClick={this.toggleGroupBy}
+      <LibraryPane
+        listingAndFolderComponents={listingAndFolderComponents}
+        toggleGroupBy={this.toggleGroupBy}
+        hideLibraries={this.props.librariesCommander.HideLibraries}
+        addNewItem={() =>
+          this.props.librariesCommander.CreateAndEditStatBlock(
+            this.props.library
+          )
+        }
+        handlePreviewMouseEvent={this.handlePreviewMouseEvent}
+        previewPosition={this.state.previewPosition}
+        previewVisible={previewVisible}
+        previewComponent={
+          <StatBlockComponent
+            statBlock={this.state.previewedStatBlock}
+            enricher={this.props.statBlockTextEnricher}
+            displayMode="default"
           />
-        </div>
-        <ul className="listings">{listingAndFolderComponents}</ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
-          />
-          <Button
-            additionalClassNames="new"
-            fontAwesomeIcon="plus"
-            onClick={() =>
-              this.props.librariesCommander.CreateAndEditStatBlock(
-                this.props.library
-              )
-            }
-          />
-        </div>
-        {previewVisible && (
-          <Overlay
-            handleMouseEvents={this.handlePreviewMouseEvent}
-            maxHeightPx={300}
-            left={this.state.previewPosition.left}
-            top={this.state.previewPosition.top}
-          >
-            <StatBlockComponent
-              statBlock={this.state.previewedStatBlock}
-              enricher={this.props.statBlockTextEnricher}
-              displayMode="default"
-            />
-          </Overlay>
-        )}
-      </div>
+        }
+      />
     );
   }
 
