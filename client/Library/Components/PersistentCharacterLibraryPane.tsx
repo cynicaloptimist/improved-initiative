@@ -12,6 +12,7 @@ import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { BuildListingTree } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
+import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 
 export type PersistentCharacterLibraryPaneProps = {
@@ -167,36 +168,23 @@ export class PersistentCharacterLibraryPane extends React.Component<
       this.state.previewIconHovered || this.state.previewWindowHovered;
 
     return (
-      <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-        <ul className="listings">{listingAndFolderComponents}</ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
+      <LibraryPane
+        listingAndFolderComponents={listingAndFolderComponents}
+        applyFilter={filter => this.setState({ filter })}
+        addNewItem={this.createAndEditStatBlock}
+        toggleGroupBy={() => alert("implement me")}
+        hideLibraries={this.props.librariesCommander.HideLibraries}
+        handlePreviewMouseEvent={this.handlePreviewMouseEvent}
+        previewVisible={previewVisible}
+        previewPosition={this.state.previewPosition}
+        previewComponent={
+          <StatBlockComponent
+            statBlock={this.state.previewedStatBlock}
+            enricher={this.props.statBlockTextEnricher}
+            displayMode="default"
           />
-          <Button
-            additionalClassNames="new"
-            fontAwesomeIcon="plus"
-            onClick={this.createAndEditStatBlock}
-          />
-        </div>
-        {previewVisible && (
-          <Overlay
-            handleMouseEvents={this.handlePreviewMouseEvent}
-            maxHeightPx={300}
-            left={this.state.previewPosition.left}
-            top={this.state.previewPosition.top}
-          >
-            <StatBlockComponent
-              statBlock={this.state.previewedStatBlock}
-              enricher={this.props.statBlockTextEnricher}
-              displayMode="default"
-            />
-          </Overlay>
-        )}
-      </div>
+        }
+      />
     );
   }
 }
