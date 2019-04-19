@@ -67,7 +67,7 @@ export class StatBlockLibraryPane extends React.Component<
       this.state.filter
     );
     const listingAndFolderComponents = BuildListingTree(
-      this.buildListingComponent,
+      this.renderListingRow,
       this.groupingFunctions[this.state.groupingFunctionIndex],
       filteredListings
     );
@@ -124,7 +124,7 @@ export class StatBlockLibraryPane extends React.Component<
       };
     });
 
-  private buildListingComponent = (l: Listing<StatBlock>) => (
+  private renderListingRow = (l: Listing<StatBlock>) => (
     <ListingRow
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
