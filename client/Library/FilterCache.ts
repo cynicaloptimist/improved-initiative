@@ -11,19 +11,18 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
   const dedupedItems: KeyValueSet<T> = {};
   const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
 
-  parentSubset.forEach(newListing => {
-    const dedupeKey =
-      newListing.Listing().Path + "-" + newListing.Listing().Name;
+  parentSubset.forEach(listing => {
+    const dedupeKey = listing.Listing().Path + "-" + listing.Listing().Name;
     const currentListing = dedupedItems[dedupeKey];
     if (currentListing) {
       const hasBetterSource =
-        sourceRankings.indexOf(newListing.Origin) <
+        sourceRankings.indexOf(listing.Origin) <
         sourceRankings.indexOf(currentListing.Origin);
       if (hasBetterSource) {
-        dedupedItems[dedupeKey] = newListing;
+        dedupedItems[dedupeKey] = listing;
       }
     } else {
-      dedupedItems[dedupeKey] = newListing;
+      dedupedItems[dedupeKey] = listing;
     }
   });
 
