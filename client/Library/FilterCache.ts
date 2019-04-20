@@ -53,14 +53,15 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
 
 export class FilterCache<T extends Listing<Listable>> {
   private allItems: T[];
-  constructor(private initialItems: T[]) {
+  private initialLength: number;
+  constructor(initialItems: T[]) {
     this.initializeItems(initialItems);
   }
 
   private filterCache: KeyValueSet<T[]> = {};
 
   public UpdateIfItemsChanged(newItems) {
-    if (newItems != this.initialItems) {
+    if (newItems.length != this.initialLength) {
       this.filterCache = {};
       this.initializeItems(newItems);
     }
@@ -82,6 +83,7 @@ export class FilterCache<T extends Listing<Listable>> {
   };
 
   private initializeItems(items: T[]) {
+    this.initialLength = items.length;
     this.allItems = items.filter(i => {
       if (!(i.Listing().Name && i.Listing().Name.length)) {
         console.warn("Removing unnamed statblock: " + JSON.stringify(i));
