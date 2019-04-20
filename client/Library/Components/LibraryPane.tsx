@@ -73,11 +73,13 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
       <div className="library">
         <div className="search-controls">
           <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-          <Button
-            additionalClassNames="group-by"
-            fontAwesomeIcon="sort"
-            onClick={this.toggleGroupBy}
-          />
+          {this.props.groupByFunctions.length > 1 && (
+            <Button
+              additionalClassNames="group-by"
+              fontAwesomeIcon="sort"
+              onClick={this.toggleGroupBy}
+            />
+          )}
         </div>
         <ul className="listings">{listingAndFolderComponents}</ul>
         <div className="buttons">
