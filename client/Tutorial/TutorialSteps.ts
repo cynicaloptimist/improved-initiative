@@ -80,7 +80,7 @@ export const TutorialSteps: TutorialStep[] = [
   },
   {
     Message:
-      "Press 't' or click 'Apply Damage' to apply damage to selected combatants.",
+      "Press 't' or click 'Apply Damage' to apply damage to selected combatants. You can enter a negative number to apply healing.",
     RaiseSelector: ".combatants, .c-button--apply-damage, .prompts",
     AwaitAction: "ApplyDamage",
     CalculatePosition: elements => {
