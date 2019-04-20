@@ -68,7 +68,7 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           Player HP Verbosity
         </Dropdown>
         <Toggle fieldName="PlayerView.HideMonstersOutsideEncounter">
-          Hide monsters when encounter is not active
+          Don't show NPCs in Player View until encounter is started
         </Toggle>
         <Toggle fieldName="PlayerView.AllowPlayerSuggestions">
           Allow players to suggest damage/healing
