@@ -1,14 +1,17 @@
 import * as React from "react";
 
-import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import {
+  InitializeCharacter,
+  PersistentCharacter
+} from "../../../common/PersistentCharacter";
 import { StatBlock } from "../../../common/StatBlock";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
-import { BuildListingTree } from "./BuildListingTree";
+import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 
@@ -40,69 +43,8 @@ export class PersistentCharacterLibraryPane extends React.Component<
       previewPosition: { left: 0, top: 0 }
     };
 
-    this.filterCache = new FilterCache(this.props.library.GetListings());
+    linkComponentToObservables(this);
   }
-
-  public componentDidMount() {
-    this.librarySubscription = this.props.library.GetListings.subscribe(
-      newListings => {
-        this.filterCache = new FilterCache(newListings);
-        this.forceUpdate();
-      }
-    );
-  }
-
-  public componentWillUnmount() {
-    this.librarySubscription.dispose();
-  }
-
-  private filterCache: FilterCache<Listing<PersistentCharacter>>;
-  private librarySubscription: KnockoutSubscription;
-
-  private previewStatblock = (
-    l: Listing<PersistentCharacter>,
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-    const previewPosition = {
-      left: e.pageX,
-      top: e.pageY
-    };
-
-    const statBlockOutline: StatBlock = {
-      ...StatBlock.Default(),
-      Name: l.Listing().Name
-    };
-
-    this.setState({
-      previewedStatBlock: statBlockOutline,
-      previewIconHovered: true,
-      previewPosition
-    });
-
-    l.GetAsyncWithUpdatedId((persistentCharacter: PersistentCharacter) => {
-      const statBlock = {
-        ...StatBlock.Default(),
-        ...persistentCharacter.StatBlock
-      };
-
-      this.setState({
-        previewedStatBlock: statBlock
-      });
-    });
-  };
-
-  private onPreviewOut = () => {
-    this.setState({ previewIconHovered: false });
-  };
-
-  private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.type === "mouseenter") {
-      this.setState({ previewWindowHovered: true });
-    }
-    if (e.type === "mouseleave") {
-      this.setState({ previewWindowHovered: false });
-    }
-  };
 
   private loadSavedStatBlock = (
     listing: Listing<PersistentCharacter>,
@@ -122,7 +64,6 @@ export class PersistentCharacterLibraryPane extends React.Component<
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {
     const subscription = l.Listing.subscribe(() => {
-      this.filterCache = new FilterCache(this.props.library.GetListings());
       this.forceUpdate(() => subscription.dispose());
     });
     this.props.librariesCommander.EditPersistentCharacterStatBlock(
@@ -135,53 +76,48 @@ export class PersistentCharacterLibraryPane extends React.Component<
     this.editStatBlock(listing);
   };
 
-  private buildListingComponent = (l: Listing<PersistentCharacter>) => (
+  private renderListingRow = (
+    l: Listing<PersistentCharacter>,
+    onPreview,
+    onPreviewOut
+  ) => (
     <ListingRow
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
       showCount
       onAdd={this.loadSavedStatBlock}
       onEdit={this.editStatBlock}
-      onPreview={this.previewStatblock}
-      onPreviewOut={this.onPreviewOut}
+      onPreview={onPreview}
+      onPreviewOut={onPreviewOut}
       listing={l}
     />
   );
 
   public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-    const listingAndFolderComponents = BuildListingTree(
-      this.buildListingComponent,
-      listing => ({
-        label: listing.Listing().Path,
-        key: listing.Listing().Path
-      }),
-      filteredListings
-    );
-
-    const previewVisible =
-      this.state.previewIconHovered || this.state.previewWindowHovered;
+    const listings = this.props.library.GetListings();
 
     return (
       <LibraryPane
-        listingAndFolderComponents={listingAndFolderComponents}
-        applyFilter={filter => this.setState({ filter })}
-        addNewItem={this.createAndEditStatBlock}
-        toggleGroupBy={() => alert("implement me")}
+        defaultItem={InitializeCharacter(StatBlock.Default())}
+        listings={listings}
+        renderListingRow={this.renderListingRow}
+        groupByFunctions={this.groupingFunctions}
         hideLibraries={this.props.librariesCommander.HideLibraries}
-        handlePreviewMouseEvent={this.handlePreviewMouseEvent}
-        previewVisible={previewVisible}
-        previewPosition={this.state.previewPosition}
-        previewComponent={
+        addNewItem={this.createAndEditStatBlock}
+        renderPreview={character => (
           <StatBlockComponent
-            statBlock={this.state.previewedStatBlock}
+            statBlock={character.StatBlock}
             enricher={this.props.statBlockTextEnricher}
             displayMode="default"
           />
-        }
+        )}
       />
     );
   }
+
+  private groupingFunctions: ListingGroupFn[] = [
+    l => ({
+      key: l.Listing().Path
+    })
+  ];
 }

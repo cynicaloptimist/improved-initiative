@@ -1,6 +1,7 @@
 import _ = require("lodash");
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
@@ -32,9 +33,6 @@ export class StatBlockLibraryPane extends React.Component<
   StatBlockLibraryPaneProps,
   State
 > {
-  private filterCache: FilterCache<StatBlockListing>;
-  private librarySubscription: KnockoutSubscription;
-
   constructor(props: StatBlockLibraryPaneProps) {
     super(props);
     this.state = {
@@ -46,56 +44,31 @@ export class StatBlockLibraryPane extends React.Component<
       previewPosition: { left: 0, top: 0 }
     };
 
-    this.filterCache = new FilterCache(this.props.library.GetStatBlocks());
-  }
-
-  public componentDidMount() {
-    this.librarySubscription = this.props.library.GetStatBlocks.subscribe(
-      newStatBlocks => {
-        this.filterCache = new FilterCache(newStatBlocks);
-        this.forceUpdate();
-      }
-    );
-  }
-
-  public componentWillUnmount() {
-    this.librarySubscription.dispose();
+    linkComponentToObservables(this);
   }
 
   public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-    const listingAndFolderComponents = BuildListingTree(
-      this.renderListingRow,
-      this.groupingFunctions[this.state.groupingFunctionIndex],
-      filteredListings
-    );
-
-    const previewVisible =
-      this.state.previewIconHovered || this.state.previewWindowHovered;
+    const listings = this.props.library.GetStatBlocks();
 
     return (
       <LibraryPane
-        listingAndFolderComponents={listingAndFolderComponents}
-        applyFilter={filter => this.setState({ filter })}
-        toggleGroupBy={this.toggleGroupBy}
+        defaultItem={StatBlock.Default()}
+        listings={listings}
+        renderListingRow={this.renderListingRow}
+        groupByFunctions={this.groupingFunctions}
         hideLibraries={this.props.librariesCommander.HideLibraries}
         addNewItem={() =>
           this.props.librariesCommander.CreateAndEditStatBlock(
             this.props.library
           )
         }
-        handlePreviewMouseEvent={this.handlePreviewMouseEvent}
-        previewPosition={this.state.previewPosition}
-        previewVisible={previewVisible}
-        previewComponent={
+        renderPreview={statBlock => (
           <StatBlockComponent
-            statBlock={this.state.previewedStatBlock}
+            statBlock={statBlock}
             enricher={this.props.statBlockTextEnricher}
             displayMode="default"
           />
-        }
+        )}
       />
     );
   }
@@ -116,23 +89,19 @@ export class StatBlockLibraryPane extends React.Component<
     })
   ];
 
-  private toggleGroupBy = () =>
-    this.setState(state => {
-      return {
-        groupingFunctionIndex:
-          (state.groupingFunctionIndex + 1) % this.groupingFunctions.length
-      };
-    });
-
-  private renderListingRow = (l: Listing<StatBlock>) => (
+  private renderListingRow = (
+    l: Listing<StatBlock>,
+    onPreview,
+    onPreviewOut
+  ) => (
     <ListingRow
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
       showCount
       onAdd={this.loadSavedStatBlock}
       onEdit={this.editStatBlock}
-      onPreview={this.previewStatblock}
-      onPreviewOut={this.onPreviewOut}
+      onPreview={onPreview}
+      onPreviewOut={onPreviewOut}
       listing={l}
     />
   );
@@ -150,60 +119,6 @@ export class StatBlockLibraryPane extends React.Component<
   private editStatBlock = (l: Listing<StatBlock>) => {
     l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
-  };
-
-  private previewStatblock = (
-    l: Listing<StatBlock>,
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-    let previewPosition = {
-      left: e.pageX,
-      top: e.pageY
-    };
-
-    const isSingleColumnLayout = window.matchMedia("(max-width: 650px)")
-      .matches;
-    if (isSingleColumnLayout) {
-      previewPosition = {
-        left: 0,
-        top: 150
-      };
-    }
-
-    const statBlockOutline: StatBlock = {
-      ...StatBlock.Default(),
-      Name: l.Listing().Name
-    };
-
-    this.setState({
-      previewedStatBlock: statBlockOutline,
-      previewIconHovered: true,
-      previewPosition
-    });
-
-    l.GetAsyncWithUpdatedId(partialStatBlock => {
-      const statBlock = {
-        ...StatBlock.Default(),
-        ...partialStatBlock
-      };
-
-      this.setState({
-        previewedStatBlock: statBlock
-      });
-    });
-  };
-
-  private onPreviewOut = l => {
-    this.setState({ previewIconHovered: false });
-  };
-
-  private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.type === "mouseenter") {
-      this.setState({ previewWindowHovered: true });
-    }
-    if (e.type === "mouseleave") {
-      this.setState({ previewWindowHovered: false });
-    }
   };
 }
 
