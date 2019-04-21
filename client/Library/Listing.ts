@@ -70,7 +70,7 @@ export class Listing<T extends Listable> {
       return {
         Id: current.Id,
         Name: current.Name,
-        Path: current.Path,
+        Path: current.Path || "",
         Link: this.storedListing.Link,
         SearchHint: this.storedListing.SearchHint,
         Metadata: this.storedListing.Metadata
