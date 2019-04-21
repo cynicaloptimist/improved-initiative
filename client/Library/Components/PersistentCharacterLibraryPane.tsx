@@ -21,28 +21,11 @@ export type PersistentCharacterLibraryPaneProps = {
   statBlockTextEnricher: TextEnricher;
 };
 
-interface State {
-  filter: string;
-  previewedStatBlock: StatBlock;
-  previewIconHovered: boolean;
-  previewWindowHovered: boolean;
-  previewPosition: { left: number; top: number };
-}
-
 export class PersistentCharacterLibraryPane extends React.Component<
-  PersistentCharacterLibraryPaneProps,
-  State
+  PersistentCharacterLibraryPaneProps
 > {
   constructor(props: PersistentCharacterLibraryPaneProps) {
     super(props);
-    this.state = {
-      filter: "",
-      previewedStatBlock: StatBlock.Default(),
-      previewIconHovered: false,
-      previewWindowHovered: false,
-      previewPosition: { left: 0, top: 0 }
-    };
-
     linkComponentToObservables(this);
   }
 
