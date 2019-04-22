@@ -2,14 +2,17 @@ import * as React from "react";
 import { Spell } from "../../../common/Spell";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
 import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
+import { SpellDetails } from "./SpellDetails";
 
 export type SpellLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: SpellLibrary;
+  textEnricher: TextEnricher;
 };
 
 type SpellListing = Listing<Spell>;
@@ -50,7 +53,11 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
     />
   );
 
-  private renderPreview = (spell: Spell) => <p>{spell.Name}</p>;
+  private renderPreview = (spell: Spell) => (
+    <div className="spell-preview">
+      <SpellDetails Spell={spell} TextEnricher={this.props.textEnricher} />
+    </div>
+  );
 
   private loadSavedSpell = (listing: SpellListing) => {
     return this.props.librariesCommander.ReferenceSpell(listing);

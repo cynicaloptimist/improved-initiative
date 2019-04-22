@@ -63,6 +63,7 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
         <SpellLibraryPane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Spells}
+          textEnricher={this.props.statBlockTextEnricher}
         />
       )
     };
