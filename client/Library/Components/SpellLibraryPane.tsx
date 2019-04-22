@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { Button } from "../../Components/Button";
-import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
-import { LibraryFilter } from "./LibraryFilter";
+import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 
 export type SpellLibraryPaneProps = {
@@ -15,40 +14,45 @@ export type SpellLibraryPaneProps = {
 
 type SpellListing = Listing<Spell>;
 
-interface State {
-  filter: string;
-}
-
-export class SpellLibraryPane extends React.Component<
-  SpellLibraryPaneProps,
-  State
-> {
+export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
   constructor(props: SpellLibraryPaneProps) {
     super(props);
-    this.state = {
-      filter: ""
-    };
-
-    this.filterCache = new FilterCache(this.props.library.GetSpells());
+    linkComponentToObservables(this);
   }
 
-  public componentDidMount() {
-    this.librarySubscription = this.props.library.GetSpells.subscribe(
-      newSpells => {
-        this.filterCache = new FilterCache(newSpells);
-        this.forceUpdate();
-      }
+  public render() {
+    return (
+      <LibraryPane
+        listings={this.props.library.GetSpells()}
+        renderListingRow={this.renderListingRow}
+        defaultItem={Spell.Default()}
+        addNewItem={this.props.librariesCommander.CreateAndEditSpell}
+        hideLibraries={this.props.librariesCommander.HideLibraries}
+        renderPreview={this.renderPreview}
+        groupByFunctions={this.groupByFunctions}
+      />
     );
   }
 
-  public componentWillUnmount() {
-    this.librarySubscription.dispose();
-  }
+  private groupByFunctions = [l => ({ key: l.Listing().Path })];
 
-  private filterCache: FilterCache<SpellListing>;
-  private librarySubscription: KnockoutSubscription;
+  private renderListingRow = (listing, onPreview, onPreviewOut) => (
+    <ListingRow
+      key={
+        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
+      }
+      name={listing.Listing().Name}
+      onAdd={this.loadSavedSpell}
+      onEdit={this.editSpell}
+      onPreview={onPreview}
+      onPreviewOut={onPreviewOut}
+      listing={listing}
+    />
+  );
 
-  private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
+  private renderPreview = (spell: Spell) => <p>{spell.Name}</p>;
+
+  private loadSavedSpell = (listing: SpellListing) => {
     return this.props.librariesCommander.ReferenceSpell(listing);
   };
 
@@ -56,39 +60,4 @@ export class SpellLibraryPane extends React.Component<
     l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
-
-  public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-
-    return (
-      <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-        <ul className="listings">
-          {filteredListings.map(l => (
-            <ListingRow
-              key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
-              name={l.Listing().Name}
-              onAdd={this.loadSavedSpell}
-              onEdit={this.editSpell}
-              listing={l}
-            />
-          ))}
-        </ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
-          />
-          <Button
-            additionalClassNames="new"
-            fontAwesomeIcon="plus"
-            onClick={() => this.props.librariesCommander.CreateAndEditSpell()}
-          />
-        </div>
-      </div>
-    );
-  }
 }
