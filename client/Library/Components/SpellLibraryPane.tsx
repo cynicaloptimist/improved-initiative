@@ -3,8 +3,10 @@ import { Spell } from "../../../common/Spell";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
+import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 import { SpellDetails } from "./SpellDetails";
@@ -37,7 +39,14 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
     );
   }
 
-  private groupByFunctions = [l => ({ key: l.Listing().Path })];
+  private groupByFunctions: ListingGroupFn[] = [
+    l => ({ key: l.Listing().Path }),
+    l => ({
+      label: LevelOrCantrip(l.Listing().Metadata.Level),
+      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+    }),
+    l => ({ key: l.Listing().Metadata.Type })
+  ];
 
   private renderListingRow = (listing, onPreview, onPreviewOut) => (
     <ListingRow
@@ -67,4 +76,11 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
     l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
+}
+
+function LevelOrCantrip(levelString: string) {
+  if (levelString == "0") {
+    return "Cantrip";
+  }
+  return "Level " + levelString;
 }

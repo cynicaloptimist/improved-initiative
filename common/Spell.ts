@@ -1,4 +1,4 @@
-import { Listable } from "./Listable";
+import { Listable, ListingMetadata } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
 export interface Spell extends Listable {
@@ -18,8 +18,9 @@ export class Spell {
   public static GetSearchHint = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
-  public static GetMetadata = (spell: Spell) => ({
-    Level: spell.Level.toString()
+  public static GetMetadata = (spell: Spell): ListingMetadata => ({
+    Level: spell.Level.toString(),
+    Type: spell.School
   });
 
   public static Default: () => Spell = () => {
