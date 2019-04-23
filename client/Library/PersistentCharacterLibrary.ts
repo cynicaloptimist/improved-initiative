@@ -3,13 +3,7 @@ import { find } from "lodash";
 import { now } from "moment";
 
 import { StoredListing } from "../../common/Listable";
-import {
-  DefaultPersistentCharacter,
-  GetPersistentCharacterMetadata,
-  GetPersistentCharacterSearchHint,
-  InitializeCharacter,
-  PersistentCharacter
-} from "../../common/PersistentCharacter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
@@ -56,15 +50,15 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       this.persistentCharacters(),
       c => c.Listing().Id == persistentCharacterId
     );
-    return await listing.GetWithTemplate(DefaultPersistentCharacter());
+    return await listing.GetWithTemplate(PersistentCharacter.Default());
   }
 
   public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
     const listing = new Listing<PersistentCharacter>(
       {
         ...persistentCharacter,
-        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
-        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
+        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
         Link: persistentCharacter.Id
       },
       "localStorage",
@@ -95,7 +89,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       p => p.Listing().Id == persistentCharacterId
     );
     const currentCharacter = await currentCharacterListing.GetWithTemplate(
-      DefaultPersistentCharacter()
+      PersistentCharacter.Default()
     );
     const updatedCharacter = {
       ...currentCharacter,
@@ -126,14 +120,14 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   private loadPersistentCharacterListing = id => {
     const persistentCharacter = {
-      ...DefaultPersistentCharacter(),
+      ...PersistentCharacter.Default(),
       ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id)
     };
     return new Listing<PersistentCharacter>(
       {
         ...persistentCharacter,
-        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
-        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
+        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
         Link: Store.PersistentCharacters
       },
       "localStorage"
@@ -145,7 +139,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       ...StatBlock.Default(),
       ...Store.Load<StatBlock>(Store.PlayerCharacters, id)
     };
-    const persistentCharacter = InitializeCharacter(statBlock);
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
     Store.Save<PersistentCharacter>(
       Store.PersistentCharacters,
       id,
@@ -154,8 +148,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     return new Listing<PersistentCharacter>(
       {
         ...persistentCharacter,
-        SearchHint: GetPersistentCharacterSearchHint(persistentCharacter),
-        Metadata: GetPersistentCharacterMetadata(persistentCharacter),
+        SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
+        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
         Link: Store.PersistentCharacters
       },
       "localStorage"

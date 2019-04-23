@@ -1,10 +1,6 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import {
-  DefaultPersistentCharacter,
-  InitializeCharacter,
-  PersistentCharacter
-} from "../../common/PersistentCharacter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
@@ -16,7 +12,7 @@ describe("InitializeCharacter", () => {
   it("Should have the current HP of the provided statblock", () => {
     const statBlock = StatBlock.Default();
     statBlock.HP.Value = 10;
-    const character = InitializeCharacter(statBlock);
+    const character = PersistentCharacter.Initialize(statBlock);
     expect(character.CurrentHP).toBe(10);
   });
 });
@@ -28,7 +24,7 @@ describe("PersistentCharacterLibrary", () => {
   });
 
   function savePersistentCharacterWithName(name: string) {
-    const persistentCharacter = DefaultPersistentCharacter();
+    const persistentCharacter = PersistentCharacter.Default();
     persistentCharacter.Name = name;
     Store.Save(
       Store.PersistentCharacters,
@@ -82,7 +78,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listing = library.GetListings()[0];
     const persistentCharacter = await listing.GetWithTemplate(
-      DefaultPersistentCharacter()
+      PersistentCharacter.Default()
     );
 
     await library.UpdatePersistentCharacter(persistentCharacter.Id, {
@@ -90,7 +86,7 @@ describe("PersistentCharacterLibrary", () => {
     });
 
     const updatedPersistentCharacter: PersistentCharacter = await listing.GetWithTemplate(
-      DefaultPersistentCharacter()
+      PersistentCharacter.Default()
     );
     expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
     done();
@@ -103,7 +99,7 @@ describe("PersistentCharacter", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
 
     encounter.AddCombatantFromPersistentCharacter(
-      DefaultPersistentCharacter(),
+      PersistentCharacter.Default(),
       library
     );
     const savedEncounter = encounter.GetSavedEncounter("test", "");
@@ -111,7 +107,7 @@ describe("PersistentCharacter", () => {
   });
 
   it("Should not allow the same Persistent Character to be added twice", () => {
-    const persistentCharacter = DefaultPersistentCharacter();
+    const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
     const library = new PersistentCharacterLibrary(new AccountClient());
 
@@ -125,7 +121,7 @@ describe("PersistentCharacter", () => {
   it("Should allow the user to save notes", () => {});
 
   it("Should update the Character when a linked Combatant's hp changes", () => {
-    const persistentCharacter = DefaultPersistentCharacter();
+    const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
     const library = new PersistentCharacterLibrary(new AccountClient());
     const update = jest.fn();
@@ -153,7 +149,7 @@ describe("PersistentCharacter", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
 
     encounter.AddCombatantFromPersistentCharacter(
-      DefaultPersistentCharacter(),
+      PersistentCharacter.Default(),
       library
     );
 

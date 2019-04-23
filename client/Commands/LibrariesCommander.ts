@@ -1,11 +1,7 @@
 import * as _ from "lodash";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import {
-  DefaultPersistentCharacter,
-  InitializeCharacter,
-  PersistentCharacter
-} from "../../common/PersistentCharacter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -54,7 +50,7 @@ export class LibrariesCommander {
     hideOnAdd: boolean
   ) => {
     const character = await listing.GetWithTemplate(
-      DefaultPersistentCharacter()
+      PersistentCharacter.Default()
     );
     this.tracker.Encounter.AddCombatantFromPersistentCharacter(
       character,
@@ -124,7 +120,7 @@ export class LibrariesCommander {
     statBlock.Player = "player";
     statBlock.Id = newId;
 
-    const persistentCharacter = InitializeCharacter(statBlock);
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
     return this.libraries.PersistentCharacters.AddNewPersistentCharacter(
       persistentCharacter
     );

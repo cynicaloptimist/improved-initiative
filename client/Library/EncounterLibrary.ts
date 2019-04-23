@@ -1,10 +1,7 @@
 import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
-import {
-  EncounterState,
-  GetEncounterSearchHint
-} from "../../common/EncounterState";
+import { EncounterState } from "../../common/EncounterState";
 import { StoredListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
@@ -36,7 +33,7 @@ export class EncounterLibrary {
     return new Listing<EncounterState<CombatantState>>(
       {
         ...encounterState,
-        SearchHint: GetEncounterSearchHint(encounterState),
+        SearchHint: EncounterState.GetSearchHint(encounterState),
         Metadata: {},
         Link: link
       },

@@ -55,32 +55,12 @@ export interface StatBlock extends Listable {
   ImageURL: string;
 }
 
-const StatBlockBaseTypes = [
-  "aberration",
-  "beast",
-  "celestial",
-  "construct",
-  "dragon",
-  "elemental",
-  "fey",
-  "fiend",
-  "giant",
-  "humanoid",
-  "monstrosity",
-  "ooze",
-  "plant",
-  "undead"
-];
-
-export class StatBlock {
-  public static GetSearchHint = (statBlock: StatBlock) =>
+export namespace StatBlock {
+  export const GetSearchHint = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
-  public static GetMetadata = (statBlock: StatBlock): ListingMetadata => {
-    const baseType = _.find(
-      StatBlockBaseTypes,
-      t => statBlock.Type.search(t) != -1
-    );
+  export const GetMetadata = (statBlock: StatBlock): ListingMetadata => {
+    const baseType = _.find(BaseTypes, t => statBlock.Type.search(t) != -1);
     return {
       Level: statBlock.Challenge,
       Source: statBlock.Source,
@@ -88,7 +68,7 @@ export class StatBlock {
     };
   };
 
-  public static Default = (): StatBlock => ({
+  export const Default = (): StatBlock => ({
     Id: probablyUniqueString(),
     Name: "",
     Path: "",
@@ -119,12 +99,22 @@ export class StatBlock {
     ImageURL: ""
   });
 
-  public static readonly AbilityNames = [
-    "Str",
-    "Dex",
-    "Con",
-    "Int",
-    "Wis",
-    "Cha"
+  export const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
+
+  const BaseTypes = [
+    "aberration",
+    "beast",
+    "celestial",
+    "construct",
+    "dragon",
+    "elemental",
+    "fey",
+    "fiend",
+    "giant",
+    "humanoid",
+    "monstrosity",
+    "ooze",
+    "plant",
+    "undead"
   ];
 }

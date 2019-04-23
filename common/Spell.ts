@@ -14,16 +14,16 @@ export interface Spell extends Listable {
   Ritual: boolean;
 }
 
-export class Spell {
-  public static GetSearchHint = (spell: Spell) =>
+export namespace Spell {
+  export const GetSearchHint = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
-  public static GetMetadata = (spell: Spell): ListingMetadata => ({
+  export const GetMetadata = (spell: Spell): ListingMetadata => ({
     Level: spell.Level.toString(),
     Type: spell.School
   });
 
-  public static Default: () => Spell = () => {
+  export const Default: () => Spell = () => {
     return {
       Id: probablyUniqueString(),
       Version: process.env.VERSION || "0.0.0",

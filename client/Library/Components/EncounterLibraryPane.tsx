@@ -1,9 +1,6 @@
 import * as React from "react";
 import { CombatantState } from "../../../common/CombatantState";
-import {
-  DefaultEncounterState,
-  EncounterState
-} from "../../../common/EncounterState";
+import { EncounterState } from "../../../common/EncounterState";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { EncounterLibrary } from "../EncounterLibrary";
@@ -32,7 +29,7 @@ export class EncounterLibraryPane extends React.Component<
     return (
       <LibraryPane
         listings={listings}
-        defaultItem={DefaultEncounterState()}
+        defaultItem={EncounterState.Default()}
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupByFunctions}
         addNewItem={this.props.librariesCommander.SaveEncounter}

@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
-import { InitializeCharacter } from "../common/PersistentCharacter";
+import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
@@ -440,7 +440,7 @@ export class TrackerViewModel {
   private getAndAddSamplePersistentCharacters = (url: string) => {
     $.getJSON(url, (json: StatBlock[]) => {
       json.forEach(statBlock => {
-        const persistentCharacter = InitializeCharacter({
+        const persistentCharacter = PersistentCharacter.Initialize({
           ...StatBlock.Default(),
           ...statBlock
         });

@@ -2,17 +2,9 @@ import mongo = require("mongodb");
 
 import * as _ from "lodash";
 import { CombatantState } from "../common/CombatantState";
-import {
-  DefaultEncounterState,
-  GetEncounterSearchHint
-} from "../common/EncounterState";
+import { EncounterState } from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
-import {
-  DefaultPersistentCharacter,
-  GetPersistentCharacterMetadata,
-  GetPersistentCharacterSearchHint,
-  InitializeCharacter
-} from "../common/PersistentCharacter";
+import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { User } from "./user";
@@ -152,7 +144,7 @@ async function updatePersistentCharactersIfNeeded(
     user.playercharacters,
     statBlockUnsafe => {
       const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
-      return InitializeCharacter(statBlock);
+      return PersistentCharacter.Initialize(statBlock);
     }
   );
 
@@ -199,14 +191,14 @@ function getEncounterListings(encounters: {
 }): StoredListing[] {
   return Object.keys(encounters).map(key => {
     const c = {
-      ...DefaultEncounterState<CombatantState>(),
+      ...EncounterState.Default<CombatantState>(),
       ...encounters[key]
     };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: GetEncounterSearchHint(c),
+      SearchHint: EncounterState.GetSearchHint(c),
       Metadata: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`
@@ -218,13 +210,16 @@ function getPersistentCharacterListings(persistentCharacters: {
   [key: string]: {};
 }): StoredListing[] {
   return Object.keys(persistentCharacters).map(key => {
-    const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
+    const c = {
+      ...PersistentCharacter.Default(),
+      ...persistentCharacters[key]
+    };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: GetPersistentCharacterSearchHint(c),
-      Metadata: GetPersistentCharacterMetadata(c),
+      SearchHint: PersistentCharacter.GetSearchHint(c),
+      Metadata: PersistentCharacter.GetMetadata(c),
       Version: c.Version,
       Link: `/my/persistentcharacters/${c.Id}`
     };
