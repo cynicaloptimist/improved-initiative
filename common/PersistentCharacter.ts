@@ -32,6 +32,23 @@ export namespace PersistentCharacter {
     character.StatBlock.Type;
 
   export const GetMetadata = (character: PersistentCharacter) => ({
-    Level: character.StatBlock.Challenge
+    Level: GetTotalLevelFromString(character.StatBlock.Challenge)
   });
+
+  const GetTotalLevelFromString = (levelString: string) => {
+    const matches = levelString.match(/\d+/g);
+    if (!matches) {
+      return "";
+    }
+
+    return matches
+      .reduce((total, digitMatch) => {
+        const level = parseInt(digitMatch);
+        if (level != NaN) {
+          return total + level;
+        }
+        return total;
+      }, 0)
+      .toString();
+  };
 }

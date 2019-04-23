@@ -160,6 +160,35 @@ describe("PersistentCharacter", () => {
   });
 });
 
+describe("Metadata", () => {
+  it("Should handle just a number", () => {
+    const persistentCharacter = PersistentCharacter.Initialize({
+      ...StatBlock.Default(),
+      Challenge: "1"
+    });
+    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
+    expect(metadata.Level).toEqual("1");
+  });
+
+  it("Should handle a class with level", () => {
+    const persistentCharacter = PersistentCharacter.Initialize({
+      ...StatBlock.Default(),
+      Challenge: "Fighter 5"
+    });
+    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
+    expect(metadata.Level).toEqual("5");
+  });
+
+  it("Should handle multiple classes with levels", () => {
+    const persistentCharacter = PersistentCharacter.Initialize({
+      ...StatBlock.Default(),
+      Challenge: "Fighter 5, Rogue 5"
+    });
+    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
+    expect(metadata.Level).toEqual("10");
+  });
+});
+
 describe("Resolving differences between local storage and account sync", () => {
   it("Should use the local storage persistent character if newer", () => {});
   it("Should use the account sync persistent character if newer", () => {});
