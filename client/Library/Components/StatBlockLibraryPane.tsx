@@ -1,14 +1,13 @@
-import _ = require("lodash");
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { FilterCache } from "../FilterCache";
+import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
-import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
+import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
 import { ListingRow } from "./ListingRow";
 
@@ -120,13 +119,4 @@ export class StatBlockLibraryPane extends React.Component<
     l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
-}
-
-function GetAlphaSortableLevelString(level: string) {
-  if (level == "0") return "0001";
-  if (level == "1/8") return "0002";
-  if (level == "1/4") return "0003";
-  if (level == "1/2") return "0004";
-  if (parseInt(level) == NaN) return "0000" + level;
-  return _.padStart(level + "0", 4, "0");
 }
