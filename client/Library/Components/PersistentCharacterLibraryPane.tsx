@@ -6,6 +6,7 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { ListingGroupFn } from "./BuildListingTree";
@@ -98,6 +99,10 @@ export class PersistentCharacterLibraryPane extends React.Component<
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
       key: l.Listing().Path
+    }),
+    l => ({
+      label: "Level " + l.Listing().Metadata.Level,
+      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
     })
   ];
 }
