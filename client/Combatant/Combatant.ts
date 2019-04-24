@@ -10,39 +10,13 @@ import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { Tag } from "./Tag";
 
-export interface Combatant {
-  Id: string;
-  Encounter: Encounter;
-  IndexLabel: number;
-  AC: number;
-  AbilityModifiers: AbilityScores;
-  InitiativeBonus: number;
-  IsPlayerCharacter: boolean;
-
-  StatBlock: KnockoutObservable<StatBlock>;
-  Alias: KnockoutObservable<string>;
-  CurrentHP: KnockoutObservable<number>;
-  TemporaryHP: KnockoutObservable<number>;
-  Tags: KnockoutObservableArray<Tag>;
-  Initiative: KnockoutObservable<number>;
-  InitiativeGroup: KnockoutObservable<string>;
-  Hidden: KnockoutObservable<boolean>;
-  RevealedAC: KnockoutObservable<boolean>;
-
-  MaxHP: KnockoutComputed<number>;
-
-  GetInitiativeRoll: () => number;
-}
-
-export class Combatant implements Combatant {
+export class Combatant {
   constructor(combatantState: CombatantState, public Encounter: Encounter) {
     let statBlock = combatantState.StatBlock;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
     this.PersistentCharacterId = combatantState.PersistentCharacterId;
 
     this.StatBlock(statBlock);
-
-    this.MaxHP = ko.pureComputed(() => this.StatBlock().HP.Value);
 
     this.processStatBlock(statBlock);
 
@@ -76,19 +50,13 @@ export class Combatant implements Combatant {
   public Tags = ko.observableArray<Tag>();
   public Initiative = ko.observable(0);
   public InitiativeGroup = ko.observable<string>(null);
-  public StatBlock = ko.observable<StatBlock>();
+  public StatBlock = ko.observable<StatBlock>(StatBlock.Default());
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
 
   public IndexLabel: number;
-  public MaxHP: KnockoutComputed<number>;
   public CurrentHP: KnockoutObservable<number>;
   public PlayerDisplayHP: KnockoutComputed<string>;
-  public AC: number;
-  public AbilityModifiers: AbilityScores;
-  public InitiativeBonus: number;
-  public ConcentrationBonus: number;
-  public IsPlayerCharacter = false;
   private updatingGroup = false;
 
   private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
@@ -96,15 +64,6 @@ export class Combatant implements Combatant {
       this.UpdateIndexLabel(oldStatBlock.Name);
     }
 
-    this.IsPlayerCharacter = newStatBlock.Player == "player";
-    this.AC = newStatBlock.AC.Value;
-    this.AbilityModifiers = this.calculateModifiers();
-    if (!newStatBlock.InitiativeModifier) {
-      newStatBlock.InitiativeModifier = 0;
-    }
-    this.InitiativeBonus =
-      this.AbilityModifiers.Dex + newStatBlock.InitiativeModifier || 0;
-    this.ConcentrationBonus = this.AbilityModifiers.Con;
     this.setAutoInitiativeGroup();
     if (oldStatBlock) {
       this.Encounter.Combatants.notifySubscribers();
@@ -173,15 +132,22 @@ export class Combatant implements Combatant {
     this.Encounter.CombatantCountsByName(counts);
   }
 
-  private calculateModifiers = () => {
-    let modifiers = StatBlock.Default().Abilities;
-    for (let attribute in this.StatBlock().Abilities) {
-      modifiers[attribute] = this.Encounter.Rules.GetModifierFromScore(
-        this.StatBlock().Abilities[attribute]
-      );
-    }
-    return modifiers;
-  };
+  public InitiativeBonus = ko.computed(() => {
+    const dexterityModifier = this.Encounter.Rules.GetModifierFromScore(
+      this.StatBlock().Abilities.Dex
+    );
+    return dexterityModifier + (this.StatBlock().InitiativeModifier || 0);
+  });
+
+  public ConcentrationBonus = ko.computed(() =>
+    this.Encounter.Rules.GetModifierFromScore(this.StatBlock().Abilities.Con)
+  );
+
+  public IsPlayerCharacter = ko.computed(() =>
+    StatBlock.IsPlayerCharacter(this.StatBlock())
+  );
+
+  public MaxHP = ko.computed(() => this.StatBlock().HP.Value);
 
   public GetInitiativeRoll: () => number = () => {
     const sideInitiative =
@@ -196,7 +162,7 @@ export class Combatant implements Combatant {
       initiativeSpecialRoll = this.StatBlock().InitiativeSpecialRoll;
     }
 
-    const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus;
+    const initiativeBonus = sideInitiative ? 0 : this.InitiativeBonus();
     return this.Encounter.Rules.AbilityCheck(
       initiativeBonus,
       initiativeSpecialRoll
@@ -204,7 +170,7 @@ export class Combatant implements Combatant {
   };
 
   public GetConcentrationRoll = () =>
-    this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus);
+    this.Encounter.Rules.AbilityCheck(this.ConcentrationBonus());
 
   public ApplyDamage(damage: number) {
     let currHP = this.CurrentHP(),
@@ -231,8 +197,8 @@ export class Combatant implements Combatant {
     let currHP = this.CurrentHP();
 
     currHP += healing;
-    if (currHP > this.MaxHP()) {
-      currHP = this.MaxHP();
+    if (currHP > this.StatBlock().HP.Value) {
+      currHP = this.StatBlock().HP.Value;
     }
 
     this.CurrentHP(currHP);
@@ -267,7 +233,7 @@ export class Combatant implements Combatant {
       return;
     }
     if (autoInitiativeGroup == "By Name") {
-      if (this.IsPlayerCharacter) {
+      if (this.IsPlayerCharacter()) {
         return;
       }
       lowestInitiativeCombatant = this.findLowestInitiativeGroupByName();
@@ -298,7 +264,7 @@ export class Combatant implements Combatant {
     const combatants = this.Encounter.Combatants();
     return combatants
       .filter(c => c != this)
-      .filter(c => c.IsPlayerCharacter === this.IsPlayerCharacter)
+      .filter(c => c.IsPlayerCharacter() === this.IsPlayerCharacter())
       .sort((a, b) => a.Initiative() - b.Initiative())[0];
   }
 }

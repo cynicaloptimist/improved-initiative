@@ -41,11 +41,11 @@ export class Encounter {
     this.ActiveCombatant = ko.observable<Combatant>();
     this.Difficulty = ko.pureComputed(() => {
       const enemyChallengeRatings = this.combatants()
-        .filter(c => !c.IsPlayerCharacter)
+        .filter(c => !c.IsPlayerCharacter())
         .filter(c => c.StatBlock().Challenge)
         .map(c => c.StatBlock().Challenge.toString());
       const playerLevels = this.combatants()
-        .filter(c => c.IsPlayerCharacter)
+        .filter(c => c.IsPlayerCharacter())
         .filter(c => c.StatBlock().Challenge)
         .map(c => c.StatBlock().Challenge.toString());
       return DifficultyCalculator.Calculate(
@@ -98,7 +98,7 @@ export class Encounter {
         c => -c.Initiative(),
         c => -this.getGroupBonusForCombatant(c),
         c => -c.InitiativeBonus,
-        c => (c.IsPlayerCharacter ? 0 : 1),
+        c => (c.IsPlayerCharacter() ? 0 : 1),
         c => c.InitiativeGroup(),
         c => c.StatBlock().Name,
         c => c.IndexLabel
@@ -552,7 +552,7 @@ export class Encounter {
       if (
         hideMonstersOutsideEncounter &&
         this.State() == "inactive" &&
-        !c.IsPlayerCharacter
+        !c.IsPlayerCharacter()
       ) {
         return false;
       }
