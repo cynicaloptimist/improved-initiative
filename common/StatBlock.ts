@@ -69,7 +69,7 @@ export namespace StatBlock {
   };
 
   export const IsPlayerCharacter = (statBlock: StatBlock) =>
-    statBlock.Player == "player";
+    statBlock.Player.length > 0;
 
   export const Default = (): StatBlock => ({
     Id: probablyUniqueString(),
