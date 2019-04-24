@@ -42,34 +42,6 @@ export class IdentityFields extends React.Component<
     };
   }
 
-  private folderElement = () => {
-    if (!this.props.allowFolder) {
-      return null;
-    }
-    if (this.state.folderExpanded) {
-      return (
-        <div>
-          <label className="label" htmlFor="Path">
-            Folder
-          </label>
-          <Field
-            type="text"
-            name="Path"
-            innerRef={i => (this.folderInput = i)}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <span
-          className="fa-clickable fa-folder"
-          title="Move to folder"
-          onClick={() => this.setState({ folderExpanded: true })}
-        />
-      );
-    }
-  };
-
   public componentDidUpdate() {
     if (!this.folderInput || this.initializedAutocomplete) {
       return;
@@ -123,4 +95,32 @@ export class IdentityFields extends React.Component<
       </React.Fragment>
     );
   }
+
+  private folderElement = () => {
+    if (!this.props.allowFolder) {
+      return null;
+    }
+    if (this.state.folderExpanded) {
+      return (
+        <div>
+          <label className="label" htmlFor="Path">
+            Folder
+          </label>
+          <Field
+            type="text"
+            name="Path"
+            innerRef={i => (this.folderInput = i)}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <span
+          className="fa-clickable fa-folder"
+          title="Move to folder"
+          onClick={() => this.setState({ folderExpanded: true })}
+        />
+      );
+    }
+  };
 }
