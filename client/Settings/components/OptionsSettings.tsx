@@ -16,7 +16,7 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
       <div className="tab-content options">
         <h3>Rules</h3>
         <Toggle fieldName="Rules.RollMonsterHp">
-          Roll monster HP when adding to combat
+          Roll HP when adding combatant from statblock
         </Toggle>
         <Toggle fieldName="Rules.AllowNegativeHP">
           Allow combatants to have negative hit points
@@ -59,13 +59,13 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           fieldName="PlayerView.MonsterHPVerbosity"
           options={HpVerbosityOption}
         >
-          Monster HP Verbosity
+          Non Player Character HP Verbosity
         </Dropdown>
         <Dropdown
           fieldName="PlayerView.PlayerHPVerbosity"
           options={HpVerbosityOption}
         >
-          Player HP Verbosity
+          Player Character HP Verbosity
         </Dropdown>
         <Toggle fieldName="PlayerView.HideMonstersOutsideEncounter">
           Don't show NPCs in Player View until encounter is started
