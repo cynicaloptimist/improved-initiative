@@ -155,13 +155,15 @@ export class StatBlockEditor extends React.Component<
         <TextField label="Portrait URL" fieldName="ImageURL" />
         <TextField label="Source" fieldName="Source" />
         <TextField label="Type" fieldName="Type" />
-        <EnumToggle
-          labelsByOption={{
-            "": "Non Player Character",
-            player: "Player Character"
-          }}
-          fieldName="Player"
-        />
+        {this.props.editorTarget == "persistentcharacter" && (
+          <EnumToggle
+            labelsByOption={{
+              "": "Non Player Character",
+              player: "Player Character"
+            }}
+            fieldName="Player"
+          />
+        )}
       </div>
       <div className="c-statblock-editor__stats">
         <TextField
