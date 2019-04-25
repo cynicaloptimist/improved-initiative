@@ -1,4 +1,4 @@
-import { Field, Form, Formik, FormikProps } from "formik";
+import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 import { Listable } from "../../common/Listable";
@@ -19,6 +19,40 @@ import {
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
+
+export interface EnumToggleProps {
+  labelsByOption: { [value: string]: string };
+  fieldName: string;
+}
+
+class EnumToggle extends React.Component<EnumToggleProps> {
+  public render() {
+    return (
+      <Field name={this.props.fieldName}>
+        {(fieldProps: FieldProps) => {
+          const buttonLabel =
+            this.props.labelsByOption[fieldProps.field.value] || "UNKNOWN";
+          return (
+            <Button
+              text={buttonLabel}
+              onClick={() => this.toggle(fieldProps)}
+            />
+          );
+        }}
+      </Field>
+    );
+  }
+
+  private toggle = (fieldProps: FieldProps) => {
+    const allOptions = Object.keys(this.props.labelsByOption);
+    const nextOptionIndex =
+      (allOptions.indexOf(fieldProps.field.value) + 1) % allOptions.length;
+    fieldProps.form.setFieldValue(
+      this.props.fieldName,
+      allOptions[nextOptionIndex]
+    );
+  };
+}
 
 export type StatBlockEditorTarget =
   | "library"
@@ -121,6 +155,13 @@ export class StatBlockEditor extends React.Component<
         <TextField label="Portrait URL" fieldName="ImageURL" />
         <TextField label="Source" fieldName="Source" />
         <TextField label="Type" fieldName="Type" />
+        <EnumToggle
+          labelsByOption={{
+            "": "Non Player Character",
+            player: "Player Character"
+          }}
+          fieldName="Player"
+        />
       </div>
       <div className="c-statblock-editor__stats">
         <TextField
