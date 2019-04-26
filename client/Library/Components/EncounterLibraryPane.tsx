@@ -59,6 +59,7 @@ export class EncounterLibraryPane extends React.Component<
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={listing}
+      showCount
     />
   );
 
