@@ -103,6 +103,12 @@ export class PersistentCharacterLibraryPane extends React.Component<
     l => ({
       label: "Level " + l.Listing().Metadata.Level,
       key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+    }),
+    l => ({
+      key: l.Listing().Metadata.Source
+    }),
+    l => ({
+      key: l.Listing().Metadata.Type
     })
   ];
 }
