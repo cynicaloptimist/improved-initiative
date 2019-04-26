@@ -102,21 +102,27 @@ export class IdentityFields extends React.Component<
     }
     if (this.state.folderExpanded) {
       return (
-        <div>
-          <label className="label" htmlFor="Path">
-            Folder
-          </label>
-          <Field
-            type="text"
-            name="Path"
-            innerRef={i => (this.folderInput = i)}
+        <div className="inline">
+          <span
+            className="statblock-editor__folder-button fa-clickable fa-times"
+            onClick={() => this.setState({ folderExpanded: false })}
           />
+          <div>
+            <label className="label" htmlFor="Path">
+              Folder
+            </label>
+            <Field
+              type="text"
+              name="Path"
+              innerRef={i => (this.folderInput = i)}
+            />
+          </div>
         </div>
       );
     } else {
       return (
         <span
-          className="fa-clickable fa-folder"
+          className="statblock-editor__folder-button fa-clickable fa-folder"
           title="Move to folder"
           onClick={() => this.setState({ folderExpanded: true })}
         />
