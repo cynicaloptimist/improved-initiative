@@ -167,23 +167,23 @@ export class TrackerViewModel {
     //this.TutorialVisible(false);
   };
 
-  public EditStatBlock(
-    editorTarget: StatBlockEditorTarget,
-    statBlock: StatBlock,
-    saveCallback: (newStatBlock: StatBlock) => void,
-    currentListings?: Listing<StatBlock>[],
-    deleteCallback?: () => void,
-    saveAsCallback?: (newStatBlock: StatBlock) => void
-  ) {
+  public EditStatBlock(props: {
+    editorTarget: StatBlockEditorTarget;
+    statBlock: StatBlock;
+    saveCallback: (newStatBlock: StatBlock) => void;
+    currentListings?: Listing<StatBlock>[];
+    deleteCallback?: () => void;
+    saveAsCallback?: (newStatBlock: StatBlock) => void;
+  }) {
     this.StatBlockEditor(
       <StatBlockEditor
-        statBlock={statBlock}
-        editorTarget={editorTarget}
-        onSave={saveCallback}
-        onDelete={deleteCallback}
-        onSaveAs={saveAsCallback}
+        statBlock={props.statBlock}
+        editorTarget={props.editorTarget}
+        onSave={props.saveCallback}
+        onDelete={props.deleteCallback}
+        onSaveAs={props.saveAsCallback}
         onClose={() => this.StatBlockEditor(null)}
-        currentListings={currentListings}
+        currentListings={props.currentListings}
       />
     );
   }

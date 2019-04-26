@@ -460,16 +460,15 @@ export class CombatantCommander {
           selectedCombatant.PersistentCharacterId
         );
       } else {
-        this.tracker.EditStatBlock(
-          "combatant",
-          selectedCombatant.StatBlock(),
-          newStatBlock => {
+        this.tracker.EditStatBlock({
+          editorTarget: "combatant",
+          statBlock: selectedCombatant.StatBlock(),
+          saveCallback: newStatBlock => {
             selectedCombatant.StatBlock(newStatBlock);
             this.tracker.Encounter.QueueEmitEncounter();
           },
-          undefined,
-          () => this.Remove()
-        );
+          deleteCallback: () => this.Remove()
+        });
       }
     }
   };

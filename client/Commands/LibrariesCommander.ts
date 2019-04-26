@@ -70,12 +70,12 @@ export class LibrariesCommander {
     statBlock.Name = "New Creature";
     statBlock.Id = newId;
 
-    this.tracker.EditStatBlock(
-      "library",
+    this.tracker.EditStatBlock({
+      editorTarget: "library",
       statBlock,
-      library.SaveNewStatBlock,
-      library.GetStatBlocks()
-    );
+      saveCallback: library.SaveNewStatBlock,
+      currentListings: library.GetStatBlocks()
+    });
   };
 
   public EditStatBlock = (
@@ -93,21 +93,21 @@ export class LibrariesCommander {
           ...statBlock,
           Id: probablyUniqueString()
         };
-        this.tracker.EditStatBlock(
-          "library",
-          statBlockWithNewId,
-          library.SaveNewStatBlock,
-          library.GetStatBlocks()
-        );
+        this.tracker.EditStatBlock({
+          editorTarget: "library",
+          statBlock: statBlockWithNewId,
+          saveCallback: library.SaveNewStatBlock,
+          currentListings: library.GetStatBlocks()
+        });
       } else {
-        this.tracker.EditStatBlock(
-          "library",
-          { ...StatBlock.Default(), ...statBlock },
-          s => library.SaveEditedStatBlock(listing, s),
-          library.GetStatBlocks(),
-          this.deleteSavedStatBlock(listing.Listing().Id),
-          library.SaveNewStatBlock
-        );
+        this.tracker.EditStatBlock({
+          editorTarget: "library",
+          statBlock: { ...StatBlock.Default(), ...statBlock },
+          saveCallback: s => library.SaveEditedStatBlock(listing, s),
+          currentListings: library.GetStatBlocks(),
+          deleteCallback: this.deleteSavedStatBlock(listing.Listing().Id),
+          saveAsCallback: library.SaveNewStatBlock
+        });
       }
     });
   };
