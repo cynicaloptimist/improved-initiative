@@ -463,11 +463,11 @@ export class CombatantCommander {
         this.tracker.EditStatBlock({
           editorTarget: "combatant",
           statBlock: selectedCombatant.StatBlock(),
-          saveCallback: newStatBlock => {
+          onSave: newStatBlock => {
             selectedCombatant.StatBlock(newStatBlock);
             this.tracker.Encounter.QueueEmitEncounter();
           },
-          deleteCallback: () => this.Remove()
+          onDelete: () => this.Remove()
         });
       }
     }

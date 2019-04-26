@@ -73,7 +73,7 @@ export class LibrariesCommander {
     this.tracker.EditStatBlock({
       editorTarget: "library",
       statBlock,
-      saveCallback: library.SaveNewStatBlock,
+      onSave: library.SaveNewStatBlock,
       currentListings: library.GetStatBlocks()
     });
   };
@@ -96,17 +96,17 @@ export class LibrariesCommander {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: statBlockWithNewId,
-          saveCallback: library.SaveNewStatBlock,
+          onSave: library.SaveNewStatBlock,
           currentListings: library.GetStatBlocks()
         });
       } else {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: { ...StatBlock.Default(), ...statBlock },
-          saveCallback: s => library.SaveEditedStatBlock(listing, s),
+          onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
-          deleteCallback: this.deleteSavedStatBlock(listing.Listing().Id),
-          saveAsCallback: library.SaveNewStatBlock
+          onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
+          onSaveAs: library.SaveNewStatBlock
         });
       }
     });
