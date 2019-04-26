@@ -5,6 +5,7 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
+import { Toggle } from "../../Settings/components/Toggle";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
@@ -64,7 +65,7 @@ export class IdentityFields extends React.Component<
   public render() {
     return (
       <React.Fragment>
-        <div className="inline">
+        <div className="c-statblock-editor__path-and-name">
           {this.folderElement()}
           <div>
             <label className="label" htmlFor="name">
@@ -74,14 +75,13 @@ export class IdentityFields extends React.Component<
           </div>
         </div>
         {this.props.allowSaveAs && (
-          <label>
-            Save as a copy
-            <Field type="checkbox" name="SaveAs" />
+          <div className="c-statblock-editor__save-as">
+            <Toggle fieldName="SaveAs">Save as a copy</Toggle>
             {this.props.formApi.errors.PathAndName}
-          </label>
+          </div>
         )}
-        <div className="inline">
-          Editor Mode:
+        <div className="c-statblock-editor__mode-toggle">
+          <label>Editor Mode:</label>
           <Button
             onClick={() => this.props.setEditorMode("standard")}
             text="Standard"
