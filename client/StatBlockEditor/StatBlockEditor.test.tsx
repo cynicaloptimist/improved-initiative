@@ -113,9 +113,8 @@ describe("StatBlockEditor", () => {
       .simulate("blur", { target: { name: "Name" } });
     editor.instance().forceUpdate();
 
-    editor
-      .find(`input[name="SaveAs"]`)
-      .simulate("change", { target: { name: "SaveAs", value: true } });
+    const saveAsButton = editor.find(`.c-toggle#toggle_SaveAs`);
+    saveAsButton.simulate("click");
 
     editor.simulate("submit");
   });
