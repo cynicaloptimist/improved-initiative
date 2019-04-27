@@ -69,6 +69,23 @@ describe("StatBlockEditor", () => {
     editor.simulate("submit");
   });
 
+  test("Saves path changes", done => {
+    expect.assertions(1);
+
+    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
+      expect(editedStatBlock.Path).toEqual("SomeFolder");
+      done();
+    });
+
+    editor.find(`.statblock-editor__folder-button`).simulate("click");
+
+    editor
+      .find(`input[name="Path"]`)
+      .simulate("change", { target: { name: "Path", value: "SomeFolder" } });
+
+    editor.simulate("submit");
+  });
+
   test("Saves current version", done => {
     expect.assertions(1);
 
