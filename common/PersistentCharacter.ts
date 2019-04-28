@@ -44,7 +44,7 @@ export namespace PersistentCharacter {
     return matches
       .reduce((total, digitMatch) => {
         const level = parseInt(digitMatch);
-        if (level != NaN) {
+        if (!isNaN(level)) {
           return total + level;
         }
         return total;
