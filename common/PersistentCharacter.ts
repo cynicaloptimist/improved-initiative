@@ -1,5 +1,6 @@
 import { now } from "moment";
 import { StatBlock } from "./StatBlock";
+import { probablyUniqueString } from "./Toolbox";
 
 export interface PersistentCharacter {
   Id: string;
@@ -15,7 +16,7 @@ export interface PersistentCharacter {
 export namespace PersistentCharacter {
   export function Initialize(statBlock: StatBlock): PersistentCharacter {
     return {
-      Id: statBlock.Id,
+      Id: statBlock.Id || probablyUniqueString(),
       Version: statBlock.Version,
       Name: statBlock.Name,
       Path: statBlock.Path,
