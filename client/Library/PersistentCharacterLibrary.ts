@@ -82,7 +82,6 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       updates.Name = updates.StatBlock.Name;
       updates.Path = updates.StatBlock.Path;
       updates.Version = updates.StatBlock.Version;
-      updates.Id = updates.StatBlock.Id;
     }
     const currentCharacterListing = find(
       this.persistentCharacters(),
