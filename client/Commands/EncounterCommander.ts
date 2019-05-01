@@ -28,7 +28,7 @@ export class EncounterCommander {
     const prompt = new QuickAddPrompt(
       this.tracker.Encounter.AddCombatantFromStatBlock
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
@@ -36,7 +36,7 @@ export class EncounterCommander {
 
   public LaunchPlayerView = () => {
     const prompt = new PlayerViewPrompt(this.tracker.Encounter.EncounterId);
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });
@@ -69,7 +69,7 @@ export class EncounterCommander {
   );
 
   private rollInitiative = () => {
-    this.tracker.PromptQueue.Add(
+    this.tracker.PromptQueue.AddLegacyPrompt(
       new InitiativePrompt(
         this.tracker.Encounter.Combatants(),
         this.tracker.Encounter.StartEncounter

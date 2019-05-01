@@ -7,7 +7,7 @@ export class PromptQueue {
 
   public Prompts = ko.observableArray<LegacyPrompt>();
 
-  public Add = (prompt: LegacyPrompt) => {
+  public AddLegacyPrompt = (prompt: LegacyPrompt) => {
     this.Prompts.push(prompt);
   };
 

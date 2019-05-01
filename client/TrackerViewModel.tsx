@@ -97,7 +97,7 @@ export class TrackerViewModel {
   public ReviewPrivacyPolicy = () => {
     this.SettingsVisible(false);
     const prompt = new PrivacyPolicyPrompt();
-    this.PromptQueue.Add(prompt);
+    this.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public StatBlockTextEnricher = new TextEnricher(
@@ -470,7 +470,7 @@ export class TrackerViewModel {
     const vm = new CombatantViewModel(
       combatant,
       this.CombatantCommander,
-      this.PromptQueue.Add,
+      this.PromptQueue.AddLegacyPrompt,
       this.EventLog.AddEvent
     );
     return vm;
