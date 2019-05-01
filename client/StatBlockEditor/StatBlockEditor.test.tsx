@@ -21,11 +21,12 @@ describe("StatBlockEditor", () => {
   beforeEach(() => {
     statBlock = { ...StatBlock.Default(), Name: "Creature" };
     const listing = new Listing(
-      statBlock.Id,
-      statBlock.Name,
-      statBlock.Path,
-      statBlock.Type,
-      "/",
+      {
+        ...statBlock,
+        SearchHint: StatBlock.GetSearchHint(statBlock),
+        Metadata: StatBlock.GetMetadata(statBlock),
+        Link: "/"
+      },
       "localStorage",
       statBlock
     );
@@ -64,6 +65,23 @@ describe("StatBlockEditor", () => {
     editor
       .find(`input[name="Name"]`)
       .simulate("change", { target: { name: "Name", value: "Snarf" } });
+
+    editor.simulate("submit");
+  });
+
+  test("Saves path changes", done => {
+    expect.assertions(1);
+
+    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
+      expect(editedStatBlock.Path).toEqual("SomeFolder");
+      done();
+    });
+
+    editor.find(`.statblock-editor__folder-button`).simulate("click");
+
+    editor
+      .find(`input[name="Path"]`)
+      .simulate("change", { target: { name: "Path", value: "SomeFolder" } });
 
     editor.simulate("submit");
   });
@@ -112,9 +130,8 @@ describe("StatBlockEditor", () => {
       .simulate("blur", { target: { name: "Name" } });
     editor.instance().forceUpdate();
 
-    editor
-      .find(`input[name="SaveAs"]`)
-      .simulate("change", { target: { name: "SaveAs", value: true } });
+    const saveAsButton = editor.find(`.c-toggle#toggle_SaveAs`);
+    saveAsButton.simulate("click");
 
     editor.simulate("submit");
   });

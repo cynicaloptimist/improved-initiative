@@ -8,36 +8,44 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
 ) {
   const byName: T[] = [];
   const bySearchHint: T[] = [];
-  const dedupedStatBlocks: KeyValueSet<T> = {};
+  const dedupedItems: KeyValueSet<T> = {};
   const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
 
-  parentSubset.forEach(newListing => {
-    const dedupeKey = newListing.CurrentPath() + "-" + newListing.CurrentName();
-    const currentListing = dedupedStatBlocks[dedupeKey];
+  parentSubset.forEach(listing => {
+    const dedupeKey =
+      listing.Listing().Path.toLocaleLowerCase() +
+      "-" +
+      listing.Listing().Name.toLocaleLowerCase();
+    const currentListing = dedupedItems[dedupeKey];
     if (currentListing) {
       const hasBetterSource =
-        sourceRankings.indexOf(newListing.Origin) <
+        sourceRankings.indexOf(listing.Origin) <
         sourceRankings.indexOf(currentListing.Origin);
       if (hasBetterSource) {
-        dedupedStatBlocks[dedupeKey] = newListing;
+        dedupedItems[dedupeKey] = listing;
       }
     } else {
-      dedupedStatBlocks[dedupeKey] = newListing;
+      dedupedItems[dedupeKey] = listing;
     }
   });
 
-  Object.keys(dedupedStatBlocks)
+  Object.keys(dedupedItems)
     .sort()
     .forEach(i => {
-      const listing = dedupedStatBlocks[i];
+      const listing = dedupedItems[i];
       if (
         listing
-          .CurrentName()
-          .toLocaleLowerCase()
+          .Listing()
+          .Name.toLocaleLowerCase()
           .indexOf(filter) > -1
       ) {
         byName.push(listing);
-      } else if (listing.SearchHint.toLocaleLowerCase().indexOf(filter) > -1) {
+      } else if (
+        listing
+          .Listing()
+          .SearchHint.toLocaleLowerCase()
+          .indexOf(filter) > -1
+      ) {
         bySearchHint.push(listing);
       }
     });
@@ -47,17 +55,19 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
 
 export class FilterCache<T extends Listing<Listable>> {
   private allItems: T[];
-  constructor(items: T[]) {
-    this.allItems = items.filter(i => {
-      if (!(i.CurrentName() && i.CurrentName().length)) {
-        console.warn("Removing unnamed statblock: " + JSON.stringify(i));
-        return false;
-      }
-      return true;
-    });
+  private initialLength: number;
+  constructor(initialItems: T[]) {
+    this.initializeItems(initialItems);
   }
 
   private filterCache: KeyValueSet<T[]> = {};
+
+  public UpdateIfItemsChanged(newItems) {
+    if (newItems.length != this.initialLength) {
+      this.filterCache = {};
+      this.initializeItems(newItems);
+    }
+  }
 
   public GetFilteredEntries = (filter: string) => {
     if (this.filterCache[filter]) {
@@ -73,4 +83,15 @@ export class FilterCache<T extends Listing<Listable>> {
 
     return finalList;
   };
+
+  private initializeItems(items: T[]) {
+    this.initialLength = items.length;
+    this.allItems = items.filter(i => {
+      if (!(i.Listing().Name && i.Listing().Name.length)) {
+        console.warn("Removing unnamed statblock: " + JSON.stringify(i));
+        return false;
+      }
+      return true;
+    });
+  }
 }

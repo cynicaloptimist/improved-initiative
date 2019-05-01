@@ -139,7 +139,7 @@ export class EncounterCommander {
     if (confirm("Remove NPCs and end encounter?")) {
       const npcViewModels = this.tracker
         .OrderedCombatants()
-        .filter(c => !c.Combatant.IsPlayerCharacter);
+        .filter(c => !c.Combatant.IsPlayerCharacter());
       this.tracker.CombatantCommander.Deselect();
       this.tracker.Encounter.EndEncounter();
       npcViewModels.forEach(vm =>
@@ -153,8 +153,8 @@ export class EncounterCommander {
   };
 
   public RestoreAllPlayerCharacterHP = () => {
-    const playerCharacters = this.tracker.Encounter.Combatants().filter(
-      c => c.IsPlayerCharacter
+    const playerCharacters = this.tracker.Encounter.Combatants().filter(c =>
+      c.IsPlayerCharacter()
     );
     playerCharacters.forEach(pc => pc.CurrentHP(pc.MaxHP()));
     this.tracker.EventLog.AddEvent("All player character HP was restored.");

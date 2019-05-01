@@ -159,7 +159,7 @@ function getUnsyncedItems(items: Listing<Listable>[]) {
   const local = items.filter(i => i.Origin === "localStorage");
   const synced = items.filter(i => i.Origin === "account");
   const unsynced = local.filter(
-    l => !synced.some(s => s.CurrentName() == l.CurrentName())
+    l => !synced.some(s => s.Listing().Name == l.Listing().Name)
   );
   const unsyncedItems = [];
   unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));

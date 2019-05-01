@@ -2,7 +2,7 @@ import * as React from "react";
 import { TagState } from "../../../common/CombatantState";
 import { Combatant } from "../../Combatant/Combatant";
 import { Tag } from "../../Combatant/Tag";
-import { Button, SubmitButton } from "../../Components/Button";
+import { SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";

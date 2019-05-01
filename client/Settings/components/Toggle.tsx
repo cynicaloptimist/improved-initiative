@@ -49,19 +49,14 @@ interface ToggleProps {
 }
 
 export class Toggle extends React.Component<ToggleProps> {
-  private id: string;
-
-  public componentWillMount() {
-    this.id = `toggle_${probablyUniqueString()}`;
-  }
-
   public render() {
+    const id = `toggle_${this.props.fieldName}`;
     return (
       <div className="c-button-with-label">
-        <label className="c-toggle__label" htmlFor={this.id}>
+        <label className="c-toggle__label" htmlFor={id}>
           {this.props.children}
         </label>
-        <ToggleButton fieldName={this.props.fieldName} id={this.id} />
+        <ToggleButton fieldName={this.props.fieldName} id={id} />
       </div>
     );
   }

@@ -5,6 +5,7 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
+import { Toggle } from "../../Settings/components/Toggle";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
@@ -30,7 +31,7 @@ export class IdentityFields extends React.Component<
     super(props);
     this.autoCompletePaths = _.uniq(
       this.props.currentListings &&
-        this.props.currentListings.map(l => l.CurrentPath())
+        this.props.currentListings.map(l => l.Listing().Path)
     );
 
     const folderExpanded =
@@ -41,34 +42,6 @@ export class IdentityFields extends React.Component<
       folderExpanded
     };
   }
-
-  private folderElement = () => {
-    if (!this.props.allowFolder) {
-      return null;
-    }
-    if (this.state.folderExpanded) {
-      return (
-        <div>
-          <label className="label" htmlFor="Path">
-            Folder
-          </label>
-          <Field
-            type="text"
-            name="Path"
-            innerRef={i => (this.folderInput = i)}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <span
-          className="fa-clickable fa-folder"
-          title="Move to folder"
-          onClick={() => this.setState({ folderExpanded: true })}
-        />
-      );
-    }
-  };
 
   public componentDidUpdate() {
     if (!this.folderInput || this.initializedAutocomplete) {
@@ -92,7 +65,7 @@ export class IdentityFields extends React.Component<
   public render() {
     return (
       <React.Fragment>
-        <div className="inline">
+        <div className="c-statblock-editor__path-and-name">
           {this.folderElement()}
           <div>
             <label className="label" htmlFor="name">
@@ -102,14 +75,13 @@ export class IdentityFields extends React.Component<
           </div>
         </div>
         {this.props.allowSaveAs && (
-          <label>
-            Save as a copy
-            <Field type="checkbox" name="SaveAs" />
+          <div className="c-statblock-editor__save-as">
+            <Toggle fieldName="SaveAs">Save as a copy</Toggle>
             {this.props.formApi.errors.PathAndName}
-          </label>
+          </div>
         )}
-        <div className="inline">
-          Editor Mode:
+        <div className="c-statblock-editor__mode-toggle">
+          <label>Editor Mode:</label>
           <Button
             onClick={() => this.props.setEditorMode("standard")}
             text="Standard"
@@ -123,4 +95,38 @@ export class IdentityFields extends React.Component<
       </React.Fragment>
     );
   }
+
+  private folderElement = () => {
+    if (!this.props.allowFolder) {
+      return null;
+    }
+    if (this.state.folderExpanded) {
+      return (
+        <div className="inline">
+          <span
+            className="statblock-editor__folder-button fa-clickable fa-times"
+            onClick={() => this.setState({ folderExpanded: false })}
+          />
+          <div>
+            <label className="label" htmlFor="Path">
+              Folder
+            </label>
+            <Field
+              type="text"
+              name="Path"
+              innerRef={i => (this.folderInput = i)}
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <span
+          className="statblock-editor__folder-button fa-clickable fa-folder"
+          title="Move to folder"
+          onClick={() => this.setState({ folderExpanded: true })}
+        />
+      );
+    }
+  };
 }

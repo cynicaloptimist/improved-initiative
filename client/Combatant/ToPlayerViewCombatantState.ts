@@ -13,7 +13,7 @@ export function ToPlayerViewCombatantState(
     HPDisplay: GetHPDisplay(combatant),
     HPColor: GetHPColor(combatant),
     Initiative: combatant.Initiative(),
-    IsPlayerCharacter: combatant.IsPlayerCharacter,
+    IsPlayerCharacter: combatant.IsPlayerCharacter(),
     Tags: combatant
       .Tags()
       .filter(t => t.Visible())
@@ -26,12 +26,12 @@ export function ToPlayerViewCombatantState(
         };
       }),
     ImageURL: sendImage && combatant.StatBlock().ImageURL,
-    AC: combatant.RevealedAC() ? combatant.AC : undefined
+    AC: combatant.RevealedAC() ? combatant.StatBlock().AC.Value : undefined
   };
 }
 
 function GetHPDisplay(combatant: Combatant): string {
-  const hpVerbosity = combatant.IsPlayerCharacter
+  const hpVerbosity = combatant.IsPlayerCharacter()
     ? CurrentSettings().PlayerView.PlayerHPVerbosity
     : CurrentSettings().PlayerView.MonsterHPVerbosity;
   const maxHP = combatant.MaxHP(),
@@ -63,7 +63,7 @@ function GetHPDisplay(combatant: Combatant): string {
 function GetHPColor(combatant: Combatant) {
   const maxHP = combatant.MaxHP(),
     currentHP = combatant.CurrentHP();
-  const hpVerbosity = combatant.IsPlayerCharacter
+  const hpVerbosity = combatant.IsPlayerCharacter()
     ? CurrentSettings().PlayerView.PlayerHPVerbosity
     : CurrentSettings().PlayerView.MonsterHPVerbosity;
   if (

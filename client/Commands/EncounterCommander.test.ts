@@ -1,4 +1,4 @@
-import { InitializeCharacter } from "../../common/PersistentCharacter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
@@ -50,7 +50,7 @@ describe("EncounterCommander", () => {
   });
 
   test("CleanEncounter", async done => {
-    const persistentCharacter = InitializeCharacter({
+    const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
     });
@@ -68,7 +68,7 @@ describe("EncounterCommander", () => {
   });
 
   test("ClearEncounter", async done => {
-    const persistentCharacter = InitializeCharacter({
+    const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
     });
@@ -86,7 +86,7 @@ describe("EncounterCommander", () => {
   });
 
   test("Restore Player Character HP", async done => {
-    const persistentCharacter = InitializeCharacter({
+    const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
     });

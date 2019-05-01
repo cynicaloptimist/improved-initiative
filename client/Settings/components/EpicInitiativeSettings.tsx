@@ -1,10 +1,6 @@
 import { Field, FieldProps } from "formik";
 import * as React from "react";
-import { ChangeEvent } from "react";
-import {
-  PlayerViewCustomStyles,
-  PlayerViewSettings
-} from "../../../common/PlayerViewSettings";
+import { PlayerViewSettings } from "../../../common/PlayerViewSettings";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
 import { StylesChooser } from "./StylesChooser";

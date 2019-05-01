@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { Metrics } from "../../Utility/Metrics";
 import { Prompt } from "./Prompt";
 
 const promptClassName = "p-launch-player-view";

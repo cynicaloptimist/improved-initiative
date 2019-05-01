@@ -1,16 +1,13 @@
 import * as React from "react";
 import { CombatantState } from "../../../common/CombatantState";
 import { EncounterState } from "../../../common/EncounterState";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { Button } from "../../Components/Button";
-import { Overlay } from "../../Components/Overlay";
-import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { EncounterLibrary } from "../EncounterLibrary";
-import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { BuildListingTree } from "./BuildListingTree";
-import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingGroupFn } from "./BuildListingTree";
+import { LibraryPane } from "./LibraryPane";
+import { ListingRow } from "./ListingRow";
 
 export type EncounterLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -19,89 +16,60 @@ export type EncounterLibraryPaneProps = {
 
 type EncounterListing = Listing<EncounterState<CombatantState>>;
 
-interface State {
-  filter: string;
-  previewedEncounterCombatants: { key: string; name: string }[];
-  previewIconHovered: boolean;
-  previewWindowHovered: boolean;
-  previewPosition: { left: number; top: number };
-}
-
 export class EncounterLibraryPane extends React.Component<
-  EncounterLibraryPaneProps,
-  State
+  EncounterLibraryPaneProps
 > {
   constructor(props: EncounterLibraryPaneProps) {
     super(props);
-    this.state = {
-      filter: "",
-      previewedEncounterCombatants: [],
-      previewIconHovered: false,
-      previewWindowHovered: false,
-      previewPosition: null
-    };
-
-    this.filterCache = new FilterCache(this.props.library.Encounters());
+    linkComponentToObservables(this);
   }
 
-  private librarySubscription: KnockoutSubscription;
-  private filterCache: FilterCache<EncounterListing>;
-
-  public componentDidMount() {
-    this.librarySubscription = this.props.library.Encounters.subscribe(
-      newEncounters => {
-        this.filterCache = new FilterCache(newEncounters);
-        this.forceUpdate();
-      }
+  public render() {
+    const listings = this.props.library.Encounters();
+    return (
+      <LibraryPane
+        listings={listings}
+        defaultItem={EncounterState.Default()}
+        renderListingRow={this.renderListingRow}
+        groupByFunctions={this.groupByFunctions}
+        addNewItem={this.props.librariesCommander.SaveEncounter}
+        hideLibraries={this.props.librariesCommander.HideLibraries}
+        renderPreview={this.renderPreview}
+      />
     );
   }
 
-  public componentWillUnmount() {
-    this.librarySubscription.dispose();
-  }
+  private groupByFunctions: ListingGroupFn[] = [
+    l => ({ key: l.Listing().Path })
+  ];
 
-  private previewSavedEncounter = (
-    l: EncounterListing,
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const previewPosition = {
-      left: rect.left + rect.width,
-      top: rect.top
-    };
+  private renderListingRow = (
+    listing: EncounterListing,
+    onPreview,
+    onPreviewOut
+  ) => (
+    <ListingRow
+      key={
+        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
+      }
+      name={listing.Listing().Name}
+      onAdd={this.loadSavedEncounter}
+      onDelete={this.deleteListing}
+      onMove={this.moveListing}
+      onPreview={onPreview}
+      onPreviewOut={onPreviewOut}
+      listing={listing}
+      showCount
+    />
+  );
 
-    this.setState({
-      previewedEncounterCombatants: [
-        { key: "encounter", name: l.CurrentName() }
-      ],
-      previewIconHovered: true,
-      previewPosition
-    });
-
-    l.GetAsyncWithUpdatedId(legacyEncounter => {
-      const encounter = UpdateLegacySavedEncounter(legacyEncounter);
-      const previewedEncounterCombatants = encounter.Combatants.map(c => ({
-        key: c.Id,
-        name: c.StatBlock.Name
-      }));
-      this.setState({
-        previewedEncounterCombatants
-      });
-    });
-  };
-
-  private onPreviewOut = l => {
-    this.setState({ previewIconHovered: false });
-  };
-
-  private handlePreviewMouseEvent = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.type === "mouseenter") {
-      this.setState({ previewWindowHovered: true });
-    }
-    if (e.type === "mouseleave") {
-      this.setState({ previewWindowHovered: false });
-    }
-  };
+  private renderPreview = (encounter: EncounterState<CombatantState>) => (
+    <ul className="c-encounter-preview">
+      {encounter.Combatants.map(c => (
+        <li key={c.Id}>{c.Alias || c.StatBlock.Name}</li>
+      ))}
+    </ul>
+  );
 
   private loadSavedEncounter = (listing: EncounterListing) => {
     listing.GetAsyncWithUpdatedId(this.props.librariesCommander.LoadEncounter);
@@ -109,7 +77,7 @@ export class EncounterLibraryPane extends React.Component<
   };
 
   private deleteListing = (listing: EncounterListing) => {
-    if (confirm(`Delete saved encounter "${listing.CurrentName()}"?`)) {
+    if (confirm(`Delete saved encounter "${listing.Listing().Name}"?`)) {
       this.props.library.Delete(listing);
     }
   };
@@ -119,63 +87,4 @@ export class EncounterLibraryPane extends React.Component<
       this.props.librariesCommander.MoveEncounter(savedEncounter)
     );
   };
-
-  private buildListingComponent = (listing: EncounterListing) => (
-    <ListingViewModel
-      key={listing.Id + listing.CurrentPath() + listing.CurrentName()}
-      name={listing.CurrentName()}
-      onAdd={this.loadSavedEncounter}
-      onDelete={this.deleteListing}
-      onMove={this.moveListing}
-      onPreview={this.previewSavedEncounter}
-      onPreviewOut={this.onPreviewOut}
-      listing={listing}
-    />
-  );
-
-  public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-    const listingAndFolderComponents = BuildListingTree(
-      this.buildListingComponent,
-      filteredListings
-    );
-
-    const previewVisible =
-      this.state.previewIconHovered || this.state.previewWindowHovered;
-
-    return (
-      <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-        <ul className="listings">{listingAndFolderComponents}</ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
-          />
-          <Button
-            additionalClassNames="save"
-            fontAwesomeIcon="plus"
-            onClick={() => this.props.librariesCommander.SaveEncounter()}
-          />
-        </div>
-        {previewVisible && (
-          <Overlay
-            handleMouseEvents={this.handlePreviewMouseEvent}
-            maxHeightPx={300}
-            left={this.state.previewPosition.left}
-            top={this.state.previewPosition.top}
-          >
-            <ul className="c-encounter-preview">
-              {this.state.previewedEncounterCombatants.map(c => (
-                <li key={c.key}>{c.name}</li>
-              ))}
-            </ul>
-          </Overlay>
-        )}
-      </div>
-    );
-  }
 }

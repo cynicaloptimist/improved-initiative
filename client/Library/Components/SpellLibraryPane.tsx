@@ -1,94 +1,86 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { Button } from "../../Components/Button";
-import { FilterCache } from "../FilterCache";
+import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { SpellLibrary } from "../SpellLibrary";
-import { LibraryFilter } from "./LibraryFilter";
-import { ListingViewModel } from "./Listing";
+import { ListingGroupFn } from "./BuildListingTree";
+import { LibraryPane } from "./LibraryPane";
+import { ListingRow } from "./ListingRow";
+import { SpellDetails } from "./SpellDetails";
 
 export type SpellLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
   library: SpellLibrary;
+  textEnricher: TextEnricher;
 };
 
 type SpellListing = Listing<Spell>;
 
-interface State {
-  filter: string;
-}
-
-export class SpellLibraryPane extends React.Component<
-  SpellLibraryPaneProps,
-  State
-> {
+export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
   constructor(props: SpellLibraryPaneProps) {
     super(props);
-    this.state = {
-      filter: ""
-    };
-
-    this.filterCache = new FilterCache(this.props.library.GetSpells());
+    linkComponentToObservables(this);
   }
 
-  public componentDidMount() {
-    this.librarySubscription = this.props.library.GetSpells.subscribe(
-      newSpells => {
-        this.filterCache = new FilterCache(newSpells);
-        this.forceUpdate();
-      }
+  public render() {
+    return (
+      <LibraryPane
+        listings={this.props.library.GetSpells()}
+        renderListingRow={this.renderListingRow}
+        defaultItem={Spell.Default()}
+        addNewItem={this.props.librariesCommander.CreateAndEditSpell}
+        hideLibraries={this.props.librariesCommander.HideLibraries}
+        renderPreview={this.renderPreview}
+        groupByFunctions={this.groupByFunctions}
+      />
     );
   }
 
-  public componentWillUnmount() {
-    this.librarySubscription.dispose();
-  }
+  private groupByFunctions: ListingGroupFn[] = [
+    l => ({ key: l.Listing().Path }),
+    l => ({
+      label: LevelOrCantrip(l.Listing().Metadata.Level),
+      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+    }),
+    l => ({ key: l.Listing().Metadata.Type })
+  ];
 
-  private filterCache: FilterCache<SpellListing>;
-  private librarySubscription: KnockoutSubscription;
+  private renderListingRow = (listing, onPreview, onPreviewOut) => (
+    <ListingRow
+      key={
+        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
+      }
+      name={listing.Listing().Name}
+      onAdd={this.loadSavedSpell}
+      onEdit={this.editSpell}
+      onPreview={onPreview}
+      onPreviewOut={onPreviewOut}
+      listing={listing}
+    />
+  );
 
-  private loadSavedSpell = (listing: SpellListing, hideOnAdd: boolean) => {
+  private renderPreview = (spell: Spell) => (
+    <div className="spell-preview">
+      <SpellDetails Spell={spell} TextEnricher={this.props.textEnricher} />
+    </div>
+  );
+
+  private loadSavedSpell = (listing: SpellListing) => {
     return this.props.librariesCommander.ReferenceSpell(listing);
   };
 
   private editSpell = (l: Listing<Spell>) => {
-    l.CurrentName.subscribe(_ => this.forceUpdate());
+    l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
+}
 
-  public render() {
-    const filteredListings = this.filterCache.GetFilteredEntries(
-      this.state.filter
-    );
-
-    return (
-      <div className="library">
-        <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-        <ul className="listings">
-          {filteredListings.map(l => (
-            <ListingViewModel
-              key={l.Id + l.CurrentPath() + l.CurrentName()}
-              name={l.CurrentName()}
-              onAdd={this.loadSavedSpell}
-              onEdit={this.editSpell}
-              listing={l}
-            />
-          ))}
-        </ul>
-        <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={() => this.props.librariesCommander.HideLibraries()}
-          />
-          <Button
-            additionalClassNames="new"
-            fontAwesomeIcon="plus"
-            onClick={() => this.props.librariesCommander.CreateAndEditSpell()}
-          />
-        </div>
-      </div>
-    );
+function LevelOrCantrip(levelString: string) {
+  if (levelString == "0") {
+    return "Cantrip";
   }
+  return "Level " + levelString;
 }

@@ -1,21 +1,16 @@
 import * as _ from "lodash";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import {
-  DefaultPersistentCharacter,
-  InitializeCharacter,
-  PersistentCharacter
-} from "../../common/PersistentCharacter";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { NPCLibrary } from "../Library/NPCLibrary";
+import { StatBlockLibrary } from "../Library/StatBlockLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
-import { Store } from "../Utility/Store";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
@@ -47,7 +42,7 @@ export class LibrariesCommander {
   public CanAddPersistentCharacter = (
     listing: Listing<PersistentCharacter>
   ) => {
-    return this.tracker.Encounter.CanAddCombatant(listing.Id);
+    return this.tracker.Encounter.CanAddCombatant(listing.Listing().Id);
   };
 
   public AddPersistentCharacterFromListing = async (
@@ -55,7 +50,7 @@ export class LibrariesCommander {
     hideOnAdd: boolean
   ) => {
     const character = await listing.GetWithTemplate(
-      DefaultPersistentCharacter()
+      PersistentCharacter.Default()
     );
     this.tracker.Encounter.AddCombatantFromPersistentCharacter(
       character,
@@ -68,22 +63,25 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: NPCLibrary) => {
+  public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
     let statBlock = StatBlock.Default();
     let newId = probablyUniqueString();
 
     statBlock.Name = "New Creature";
     statBlock.Id = newId;
 
-    this.tracker.EditStatBlock(
-      "library",
+    this.tracker.EditStatBlock({
+      editorTarget: "library",
       statBlock,
-      library.SaveNewStatBlock,
-      library.GetStatBlocks()
-    );
+      onSave: library.SaveNewStatBlock,
+      currentListings: library.GetStatBlocks()
+    });
   };
 
-  public EditStatBlock = (listing: Listing<StatBlock>, library: NPCLibrary) => {
+  public EditStatBlock = (
+    listing: Listing<StatBlock>,
+    library: StatBlockLibrary
+  ) => {
     if (this.tracker.TutorialVisible()) {
       return;
     }
@@ -95,21 +93,21 @@ export class LibrariesCommander {
           ...statBlock,
           Id: probablyUniqueString()
         };
-        this.tracker.EditStatBlock(
-          "library",
-          statBlockWithNewId,
-          library.SaveNewStatBlock,
-          library.GetStatBlocks()
-        );
+        this.tracker.EditStatBlock({
+          editorTarget: "library",
+          statBlock: statBlockWithNewId,
+          onSave: library.SaveNewStatBlock,
+          currentListings: library.GetStatBlocks()
+        });
       } else {
-        this.tracker.EditStatBlock(
-          "library",
-          { ...StatBlock.Default(), ...statBlock },
-          s => library.SaveEditedStatBlock(listing, s),
-          library.GetStatBlocks(),
-          this.deleteSavedStatBlock(listing.Id),
-          library.SaveNewStatBlock
-        );
+        this.tracker.EditStatBlock({
+          editorTarget: "library",
+          statBlock: { ...StatBlock.Default(), ...statBlock },
+          onSave: s => library.SaveEditedStatBlock(listing, s),
+          currentListings: library.GetStatBlocks(),
+          onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
+          onSaveAs: library.SaveNewStatBlock
+        });
       }
     });
   };
@@ -122,7 +120,7 @@ export class LibrariesCommander {
     statBlock.Player = "player";
     statBlock.Id = newId;
 
-    const persistentCharacter = InitializeCharacter(statBlock);
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
     return this.libraries.PersistentCharacters.AddNewPersistentCharacter(
       persistentCharacter
     );
@@ -196,7 +194,7 @@ export class LibrariesCommander {
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
     const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.CurrentPath())
+      .map(e => e.Listing().Path)
       .uniq()
       .compact()
       .value();

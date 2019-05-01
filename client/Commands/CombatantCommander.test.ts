@@ -23,6 +23,17 @@ describe("CombatantCommander", () => {
     combatantCommander = trackerViewModel.CombatantCommander;
   });
 
+  test("Apply Damage", () => {
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      HP: { Value: 10 }
+    });
+    const combatantViewModel = trackerViewModel.OrderedCombatants()[0];
+    expect(combatantViewModel.HP()).toEqual("10/10");
+    combatantViewModel.ApplyDamage("5");
+    expect(combatantViewModel.HP()).toEqual("5/10");
+  });
+
   test("Toggle Hidden", () => {
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
     const combatantViewModel = trackerViewModel.OrderedCombatants()[0];

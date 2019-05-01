@@ -5,10 +5,17 @@ export interface Listable {
   Path: string;
 }
 
-export interface ServerListing {
+export interface ListingMetadata {
+  Level?: string;
+  Source?: string;
+  Type?: string;
+}
+
+export interface StoredListing {
   Id: string;
   Link: string;
   Name: string;
   SearchHint: string;
+  Metadata: ListingMetadata;
   Path: string;
 }

@@ -2,15 +2,11 @@ import mongo = require("mongodb");
 
 import * as _ from "lodash";
 import { CombatantState } from "../common/CombatantState";
-import { DefaultEncounterState } from "../common/EncounterState";
-import { Listable, ServerListing } from "../common/Listable";
-import {
-  DefaultPersistentCharacter,
-  InitializeCharacter
-} from "../common/PersistentCharacter";
+import { EncounterState } from "../common/EncounterState";
+import { Listable, StoredListing } from "../common/Listable";
+import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import * as L from "./library";
 import { User } from "./user";
 
 let connectionString: string;
@@ -148,7 +144,7 @@ async function updatePersistentCharactersIfNeeded(
     user.playercharacters,
     statBlockUnsafe => {
       const statBlock = { ...StatBlock.Default(), ...statBlockUnsafe };
-      return InitializeCharacter(statBlock);
+      return PersistentCharacter.Initialize(statBlock);
     }
   );
 
@@ -160,28 +156,30 @@ async function updatePersistentCharactersIfNeeded(
 
 function getStatBlockListings(statBlocks: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(statBlocks).map(key => {
     const c = { ...StatBlock.Default(), ...statBlocks[key] };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c),
+      SearchHint: StatBlock.GetSearchHint(c),
+      Metadata: StatBlock.GetMetadata(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`
     };
   });
 }
 
-function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
+function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
   return Object.keys(spells).map(key => {
     const c = { ...Spell.Default(), ...spells[key] };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: Spell.GetKeywords(c),
+      SearchHint: Spell.GetSearchHint(c),
+      Metadata: Spell.GetMetadata(c),
       Version: c.Version,
       Link: `/my/spells/${c.Id}`
     };
@@ -190,17 +188,18 @@ function getSpellListings(spells: { [key: string]: {} }): ServerListing[] {
 
 function getEncounterListings(encounters: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(encounters).map(key => {
     const c = {
-      ...DefaultEncounterState<CombatantState>(),
+      ...EncounterState.Default<CombatantState>(),
       ...encounters[key]
     };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: L.GetEncounterKeywords(c),
+      SearchHint: EncounterState.GetSearchHint(c),
+      Metadata: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`
     };
@@ -209,14 +208,18 @@ function getEncounterListings(encounters: {
 
 function getPersistentCharacterListings(persistentCharacters: {
   [key: string]: {};
-}): ServerListing[] {
+}): StoredListing[] {
   return Object.keys(persistentCharacters).map(key => {
-    const c = { ...DefaultPersistentCharacter(), ...persistentCharacters[key] };
+    const c = {
+      ...PersistentCharacter.Default(),
+      ...persistentCharacters[key]
+    };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: StatBlock.GetKeywords(c.StatBlock),
+      SearchHint: PersistentCharacter.GetSearchHint(c),
+      Metadata: PersistentCharacter.GetMetadata(c),
       Version: c.Version,
       Link: `/my/persistentcharacters/${c.Id}`
     };

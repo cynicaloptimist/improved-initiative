@@ -1,12 +1,12 @@
 import * as ko from "knockout";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
-export class NPCLibrary {
+export class StatBlockLibrary {
   private statBlocks = ko.observableArray<Listing<StatBlock>>([]);
   private readonly StoreName = Store.StatBlocks;
 
@@ -14,24 +14,17 @@ export class NPCLibrary {
 
   constructor(private accountClient: AccountClient) {}
 
-  public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<StatBlock>>(
       this.statBlocks,
       listings.map(c => {
-        return new Listing<StatBlock>(
-          c.Id,
-          c.Name,
-          c.Path,
-          c.SearchHint,
-          c.Link,
-          source
-        );
+        return new Listing<StatBlock>(c, source);
       })
     );
   };
 
   public DeleteListing = (id: string) => {
-    this.statBlocks.remove(s => s.Id == id);
+    this.statBlocks.remove(s => s.Listing().Id == id);
     Store.Delete(this.StoreName, id);
     this.accountClient.DeleteStatBlock(id);
   };
@@ -40,7 +33,7 @@ export class NPCLibrary {
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
-    listing.Id = newStatBlock.Id;
+    listing.Listing().Id = newStatBlock.Id;
     this.statBlocks.push(listing);
 
     Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
@@ -51,11 +44,12 @@ export class NPCLibrary {
         return;
       }
       const accountListing = new Listing<StatBlock>(
-        newStatBlock.Id,
-        newStatBlock.Name,
-        newStatBlock.Path,
-        newStatBlock.Type,
-        `/my/statblocks/${newStatBlock.Id}`,
+        {
+          ...newStatBlock,
+          SearchHint: StatBlock.GetSearchHint(newStatBlock),
+          Metadata: StatBlock.GetMetadata(newStatBlock),
+          Link: `/my/statblocks/${newStatBlock.Id}`
+        },
         "account",
         newStatBlock
       );
@@ -69,23 +63,24 @@ export class NPCLibrary {
   ) => {
     const oldStatBlocks = this.GetStatBlocks().filter(
       l =>
-        l.Id == listing.Id ||
-        l.CurrentPath() + l.CurrentName() ==
-          listing.CurrentPath() + listing.CurrentName()
+        l.Listing().Id == listing.Listing().Id ||
+        l.Listing().Path + l.Listing().Name ==
+          listing.Listing().Path + listing.Listing().Name
     );
     for (const statBlock of oldStatBlocks) {
-      this.DeleteListing(statBlock.Id);
+      this.DeleteListing(statBlock.Listing().Id);
     }
     this.saveStatBlock(listing, newStatBlock);
   };
 
   public SaveNewStatBlock = (newStatBlock: StatBlock) => {
     const listing = new Listing<StatBlock>(
-      newStatBlock.Id,
-      newStatBlock.Name,
-      newStatBlock.Path,
-      newStatBlock.Type,
-      this.StoreName,
+      {
+        ...newStatBlock,
+        SearchHint: StatBlock.GetSearchHint(newStatBlock),
+        Metadata: StatBlock.GetMetadata(newStatBlock),
+        Link: this.StoreName
+      },
       "localStorage"
     );
     this.saveStatBlock(listing, newStatBlock);

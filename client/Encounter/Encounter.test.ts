@@ -16,8 +16,10 @@ describe("Encounter", () => {
   });
 
   test("Adding a statblock results in a combatant", () => {
-    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const statBlock = StatBlock.Default();
+    encounter.AddCombatantFromStatBlock(statBlock);
     expect(encounter.Combatants().length).toBe(1);
+    expect(encounter.Combatants()[0].StatBlock()).toEqual(statBlock);
   });
 
   test("Combat should not be active", () => {

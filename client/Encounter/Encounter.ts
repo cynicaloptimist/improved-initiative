@@ -11,7 +11,6 @@ import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Combatant } from "../Combatant/Combatant";
-import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Tag } from "../Combatant/Tag";
 import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
@@ -42,11 +41,11 @@ export class Encounter {
     this.ActiveCombatant = ko.observable<Combatant>();
     this.Difficulty = ko.pureComputed(() => {
       const enemyChallengeRatings = this.combatants()
-        .filter(c => !c.IsPlayerCharacter)
+        .filter(c => !c.IsPlayerCharacter())
         .filter(c => c.StatBlock().Challenge)
         .map(c => c.StatBlock().Challenge.toString());
       const playerLevels = this.combatants()
-        .filter(c => c.IsPlayerCharacter)
+        .filter(c => c.IsPlayerCharacter())
         .filter(c => c.StatBlock().Challenge)
         .map(c => c.StatBlock().Challenge.toString());
       return DifficultyCalculator.Calculate(
@@ -79,14 +78,14 @@ export class Encounter {
 
   private getGroupBonusForCombatant(combatant: Combatant) {
     if (combatant.InitiativeGroup() == null) {
-      return combatant.InitiativeBonus;
+      return combatant.InitiativeBonus();
     }
 
     const groupBonuses = this.combatants()
       .filter(c => c.InitiativeGroup() == combatant.InitiativeGroup())
-      .map(c => c.InitiativeBonus);
+      .map(c => c.InitiativeBonus());
 
-    return max(groupBonuses) || combatant.InitiativeBonus;
+    return max(groupBonuses) || combatant.InitiativeBonus();
   }
 
   private getCombatantSortIteratees(
@@ -98,8 +97,8 @@ export class Encounter {
       return [
         c => -c.Initiative(),
         c => -this.getGroupBonusForCombatant(c),
-        c => -c.InitiativeBonus,
-        c => (c.IsPlayerCharacter ? 0 : 1),
+        c => -c.InitiativeBonus(),
+        c => (c.IsPlayerCharacter() ? 0 : 1),
         c => c.InitiativeGroup(),
         c => c.StatBlock().Name,
         c => c.IndexLabel
@@ -553,7 +552,7 @@ export class Encounter {
       if (
         hideMonstersOutsideEncounter &&
         this.State() == "inactive" &&
-        !c.IsPlayerCharacter
+        !c.IsPlayerCharacter()
       ) {
         return false;
       }

@@ -1,4 +1,4 @@
-import { Listable } from "./Listable";
+import { Listable, ListingMetadata } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
 export interface Spell extends Listable {
@@ -14,11 +14,16 @@ export interface Spell extends Listable {
   Ritual: boolean;
 }
 
-export class Spell {
-  public static GetKeywords = (spell: Spell) =>
+export namespace Spell {
+  export const GetSearchHint = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
-  public static Default: () => Spell = () => {
+  export const GetMetadata = (spell: Spell): ListingMetadata => ({
+    Level: spell.Level.toString(),
+    Type: spell.School
+  });
+
+  export const Default: () => Spell = () => {
     return {
       Id: probablyUniqueString(),
       Version: process.env.VERSION || "0.0.0",

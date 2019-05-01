@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
-import { InitializeCharacter } from "../common/PersistentCharacter";
+import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Account } from "./Account/Account";
@@ -167,24 +167,16 @@ export class TrackerViewModel {
     //this.TutorialVisible(false);
   };
 
-  public EditStatBlock(
-    editorTarget: StatBlockEditorTarget,
-    statBlock: StatBlock,
-    saveCallback: (newStatBlock: StatBlock) => void,
-    currentListings?: Listing<StatBlock>[],
-    deleteCallback?: () => void,
-    saveAsCallback?: (newStatBlock: StatBlock) => void
-  ) {
+  public EditStatBlock(props: {
+    editorTarget: StatBlockEditorTarget;
+    statBlock: StatBlock;
+    currentListings?: Listing<StatBlock>[];
+    onSave: (newStatBlock: StatBlock) => void;
+    onDelete?: () => void;
+    onSaveAs?: (newStatBlock: StatBlock) => void;
+  }) {
     this.StatBlockEditor(
-      <StatBlockEditor
-        statBlock={statBlock}
-        editorTarget={editorTarget}
-        onSave={saveCallback}
-        onDelete={deleteCallback}
-        onSaveAs={saveAsCallback}
-        onClose={() => this.StatBlockEditor(null)}
-        currentListings={currentListings}
-      />
+      <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
     );
   }
 
@@ -440,7 +432,7 @@ export class TrackerViewModel {
   private getAndAddSamplePersistentCharacters = (url: string) => {
     $.getJSON(url, (json: StatBlock[]) => {
       json.forEach(statBlock => {
-        const persistentCharacter = InitializeCharacter({
+        const persistentCharacter = PersistentCharacter.Initialize({
           ...StatBlock.Default(),
           ...statBlock
         });

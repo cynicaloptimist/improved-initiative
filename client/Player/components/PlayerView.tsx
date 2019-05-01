@@ -232,7 +232,7 @@ export class PlayerView extends React.Component<
     damageAmount
   ) => {
     this.closeAllModals();
-    if (damageAmount == NaN || !damageAmount) {
+    if (isNaN(damageAmount) || !damageAmount) {
       return;
     }
     this.props.onSuggestDamage(combatantId, damageAmount);

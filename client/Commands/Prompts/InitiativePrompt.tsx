@@ -48,7 +48,7 @@ function combatantInitiativeField(combatant: Combatant) {
     CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
   const initiativeBonus = sideInitiative
     ? 0
-    : toModifierString(combatant.InitiativeBonus);
+    : toModifierString(combatant.InitiativeBonus());
 
   let specialRollIndicator = "";
   if (!sideInitiative) {
@@ -104,8 +104,8 @@ export class InitiativePrompt implements Prompt {
       return true;
     });
 
-    const playerCharacters = byGroup.filter(c => c.IsPlayerCharacter);
-    const nonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter);
+    const playerCharacters = byGroup.filter(c => c.IsPlayerCharacter());
+    const nonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter());
 
     this.component = (
       <InitiativePromptComponent

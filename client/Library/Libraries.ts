@@ -1,25 +1,22 @@
-import * as ko from "knockout";
-
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
-import { Listing } from "./Listing";
-import { NPCLibrary } from "./NPCLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
+import { StatBlockLibrary } from "./StatBlockLibrary";
 
 export class Libraries {
   public PersistentCharacters: PersistentCharacterLibrary;
-  public NPCs: NPCLibrary;
+  public NPCs: StatBlockLibrary;
   public Encounters: EncounterLibrary;
   public Spells: SpellLibrary;
 
   constructor(accountClient: AccountClient) {
     this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
-    this.NPCs = new NPCLibrary(accountClient);
+    this.NPCs = new StatBlockLibrary(accountClient);
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 
@@ -37,11 +34,12 @@ export class Libraries {
         ...Store.Load<StatBlock>(Store.StatBlocks, id)
       };
 
-      const listing: ServerListing = {
+      const listing: StoredListing = {
         Id: id,
         Name: statBlock.Name,
         Path: statBlock.Path,
-        SearchHint: StatBlock.GetKeywords(statBlock),
+        SearchHint: StatBlock.GetSearchHint(statBlock),
+        Metadata: StatBlock.GetMetadata(statBlock),
         Link: Store.StatBlocks
       };
 
@@ -65,7 +63,8 @@ export class Libraries {
         Id: id,
         Name: spell.Name,
         Path: spell.Path,
-        SearchHint: Spell.GetKeywords(spell),
+        SearchHint: Spell.GetSearchHint(spell),
+        Metadata: Spell.GetMetadata(spell),
         Link: Store.Spells
       };
 

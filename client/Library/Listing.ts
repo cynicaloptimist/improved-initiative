@@ -1,17 +1,13 @@
 import * as ko from "knockout";
 
-import { Listable } from "../../common/Listable";
+import { Listable, StoredListing } from "../../common/Listable";
 import { Store } from "../Utility/Store";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
 export class Listing<T extends Listable> {
   constructor(
-    public Id: string,
-    private Name: string,
-    private Path: string,
-    public SearchHint: string,
-    public Link: string,
+    private storedListing: StoredListing,
     public Origin: ListingOrigin,
     value?: T
   ) {
@@ -43,39 +39,43 @@ export class Listing<T extends Listable> {
     }
 
     if (this.Origin === "localStorage") {
-      const item = Store.Load<T>(this.Link, this.Id);
-      item.Id = this.Id;
+      const item = Store.Load<T>(
+        this.storedListing.Link,
+        this.storedListing.Id
+      );
+      item.Id = this.storedListing.Id;
 
       if (item !== null) {
         this.value(item);
         return callback(item);
       } else {
         console.error(
-          `Couldn't load item keyed '${this.Id}' from localStorage.`
+          `Couldn't load item keyed '${
+            this.storedListing.Id
+          }' from localStorage.`
         );
       }
     }
 
-    return $.getJSON(this.Link).done(item => {
-      item.Id = this.Id;
+    return $.getJSON(this.storedListing.Link).done(item => {
+      item.Id = this.storedListing.Id;
       this.value(item);
       return callback(item);
     });
   }
 
-  public CurrentName = ko.pureComputed(() => {
+  public Listing = ko.pureComputed<StoredListing>(() => {
     const current = this.value();
     if (current !== undefined) {
-      return current.Name || this.Name;
+      return {
+        Id: current.Id,
+        Name: current.Name,
+        Path: current.Path || "",
+        Link: this.storedListing.Link,
+        SearchHint: this.storedListing.SearchHint,
+        Metadata: this.storedListing.Metadata
+      };
     }
-    return this.Name;
-  });
-
-  public CurrentPath = ko.pureComputed(() => {
-    const current = this.value();
-    if (current !== undefined) {
-      return current.Path || this.Path;
-    }
-    return this.Path;
+    return this.storedListing;
   });
 }

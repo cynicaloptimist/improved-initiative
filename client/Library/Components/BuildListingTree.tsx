@@ -4,36 +4,52 @@ import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
 import { Folder } from "./Folder";
 
+export type ListingGroupFn = (
+  l: Listing<any>
+) => { label?: string; key: string };
+
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
+  groupListingsBy: ListingGroupFn,
   listings: Listing<T>[]
 ): JSX.Element[] {
-  const rootListingComponents = [];
-  const folders = {};
+  const rootListingComponents: JSX.Element[] = [];
+  const foldersByKey: {
+    [key: string]: {
+      label: string;
+      listings: Listing<T>[];
+    };
+  } = {};
+
   listings.forEach(listing => {
-    if (listing.CurrentPath() == "") {
+    const group = groupListingsBy(listing);
+    if (group.key == "") {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
     } else {
-      if (folders[listing.CurrentPath()] == undefined) {
-        folders[listing.CurrentPath()] = [];
+      if (foldersByKey[group.key] == undefined) {
+        foldersByKey[group.key] = {
+          label: group.label || group.key,
+          listings: []
+        };
       }
-      folders[listing.CurrentPath()].push(listing);
+      foldersByKey[group.key].listings.push(listing);
     }
   });
 
-  const folderComponents = _.map(
-    folders,
-    (listings: Listing<T>[], folderName: string) => {
+  const folderComponents = Object.keys(foldersByKey)
+    .sort()
+    .map(key => {
+      const folderLabel = foldersByKey[key].label;
+      const listings = foldersByKey[key].listings;
       const listingComponents = listings.map(buildListingComponent);
       return (
-        <Folder key={folderName} name={folderName}>
+        <Folder key={folderLabel} name={folderLabel}>
           {listingComponents}
         </Folder>
       );
-    }
-  );
+    });
 
   return folderComponents.concat(rootListingComponents);
 }

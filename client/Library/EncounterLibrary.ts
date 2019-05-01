@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { Store } from "../Utility/Store";
@@ -22,35 +22,29 @@ export class EncounterLibrary {
   }
 
   private listingFrom(
-    savedEncounter: EncounterState<CombatantState>,
+    encounterState: EncounterState<CombatantState>,
     origin: ListingOrigin
   ) {
-    const listingId = savedEncounter.Id;
-    const combatantNames = savedEncounter.Combatants.map(c => c.Alias).join(
-      " "
-    );
-
     let link = Store.SavedEncounters;
     if (origin == "account") {
-      link = `/my/encounters/${savedEncounter.Id}`;
+      link = `/my/encounters/${encounterState.Id}`;
     }
 
     return new Listing<EncounterState<CombatantState>>(
-      listingId,
-      savedEncounter.Name,
-      savedEncounter.Path,
-      combatantNames,
-      link,
+      {
+        ...encounterState,
+        SearchHint: EncounterState.GetSearchHint(encounterState),
+        Metadata: {},
+        Link: link
+      },
       origin
     );
   }
 
-  public AddListings(listings: ServerListing[], source: ListingOrigin) {
+  public AddListings(listings: StoredListing[], source: ListingOrigin) {
     ko.utils.arrayPushAll<Listing<EncounterState<CombatantState>>>(
       this.Encounters,
-      listings.map(
-        l => new Listing(l.Id, l.Name, l.Path, l.SearchHint, l.Link, source)
-      )
+      listings.map(l => new Listing(l, source))
     );
   }
 
@@ -65,7 +59,7 @@ export class EncounterLibrary {
 
   public Save = (savedEncounter: EncounterState<CombatantState>) => {
     const listing = this.listingFrom(savedEncounter, "localStorage");
-    this.Encounters.remove(l => l.Id == listing.Id);
+    this.Encounters.remove(l => l.Listing().Id == listing.Listing().Id);
     this.Encounters.push(listing);
 
     Store.Save(Store.SavedEncounters, savedEncounter.Id, savedEncounter);
@@ -80,11 +74,11 @@ export class EncounterLibrary {
   };
 
   public Delete = (listing: Listing<EncounterState<CombatantState>>) => {
-    this.deleteById(listing.Id);
+    this.deleteById(listing.Listing().Id);
   };
 
   private deleteById = (listingId: string) => {
-    this.Encounters.remove(l => l.Id == listingId);
+    this.Encounters.remove(l => l.Listing().Id == listingId);
     this.accountClient.DeleteEncounter(listingId);
     Store.Delete(Store.SavedEncounters, listingId);
   };

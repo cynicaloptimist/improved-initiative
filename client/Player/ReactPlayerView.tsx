@@ -2,10 +2,7 @@ import * as React from "react";
 import { render as renderReact } from "react-dom";
 
 import { TagState } from "../../common/CombatantState";
-import {
-  DefaultEncounterState,
-  EncounterState
-} from "../../common/EncounterState";
+import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { PlayerViewState } from "../../common/PlayerViewState";
@@ -18,7 +15,7 @@ export class ReactPlayerView {
 
   constructor(private element: Element, private encounterId: string) {
     this.renderPlayerView({
-      encounterState: DefaultEncounterState<PlayerViewCombatantState>(),
+      encounterState: EncounterState.Default<PlayerViewCombatantState>(),
       settings: getDefaultSettings().PlayerView
     });
   }

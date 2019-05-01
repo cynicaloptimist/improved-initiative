@@ -24,7 +24,7 @@ interface ListingState {
   count: number;
 }
 
-export class ListingViewModel<T extends Listable> extends React.Component<
+export class ListingRow<T extends Listable> extends React.Component<
   ListingProps<T>,
   ListingState
 > {

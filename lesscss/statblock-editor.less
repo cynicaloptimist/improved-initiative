@@ -51,6 +51,10 @@
   flex-direction: row;
   align-items: center;
 
+  .c-button {
+    margin: @extra-small-spacer;
+  }
+
   .c-statblock-editor__label,
   .label {
     flex-basis: 20%;
@@ -74,18 +78,32 @@
   }
 }
 
-.c-statblock-editor__identity .inline {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-
-  div {
-    flex: 1;
-  }
+.c-statblock-editor__path-and-name {
+  .inline();
 
   .label {
     flex-basis: 20%;
+  }
+}
+
+.statblock-editor__folder-button {
+  margin-bottom: @medium-spacer;
+}
+
+.c-statblock-editor__save-as {
+  margin: @medium-spacer 0;
+
+  .c-button-with-label {
+    display: flex;
+    flex-flow: row;
+  }
+}
+
+.c-statblock-editor__mode-toggle {
+  .inline();
+
+  label {
+    padding: @small-spacer;
   }
 }
 
@@ -107,7 +125,7 @@
 .c-statblock-editor__label,
 .c-text-field > .label,
 .c-statblock-editor__identity .label {
-  padding: @extra-small-spacer;
+  padding: @extra-small-spacer @small-spacer;
   font-size: @font-size-h4;
   font-family: @font-family-headers;
   color: @primary-red;
@@ -207,7 +225,6 @@
 .c-statblock-editor__identity {
   .fa-clickable {
     align-self: flex-end;
-    margin: @medium-spacer;
   }
 }
 

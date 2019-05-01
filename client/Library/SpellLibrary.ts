@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { ServerListing } from "../../common/Listable";
+import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -11,36 +11,30 @@ export class SpellLibrary {
   private spells = ko.observableArray<Listing<Spell>>([]);
   public GetSpells = ko.pureComputed(() => this.spells());
   public SpellsByNameRegex = ko.pureComputed(() =>
-    concatenatedStringRegex(this.GetSpells().map(s => s.CurrentName()))
+    concatenatedStringRegex(this.GetSpells().map(s => s.Listing().Name))
   );
 
   constructor(private accountClient: AccountClient) {}
 
-  public AddListings = (listings: ServerListing[], source: ListingOrigin) => {
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<Spell>>(
       this.spells,
       listings.map(c => {
-        return new Listing<Spell>(
-          c.Id,
-          c.Name,
-          c.Path,
-          c.SearchHint,
-          c.Link,
-          source
-        );
+        return new Listing<Spell>(c, source);
       })
     );
   };
 
   public AddOrUpdateSpell = (spell: Spell) => {
-    this.spells.remove(listing => listing.Id === spell.Id);
+    this.spells.remove(listing => listing.Listing().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
-      spell.Id,
-      spell.Name,
-      spell.Path,
-      Spell.GetKeywords(spell),
-      Store.Spells,
+      {
+        ...spell,
+        SearchHint: Spell.GetSearchHint(spell),
+        Metadata: Spell.GetMetadata(spell),
+        Link: Store.Spells
+      },
       "localStorage",
       spell
     );
@@ -50,11 +44,14 @@ export class SpellLibrary {
       if (!r) return;
       if (listing.Origin === "account") return;
       const accountListing = new Listing<Spell>(
-        spell.Id,
-        spell.Name,
-        spell.Path,
-        Spell.GetKeywords(spell),
-        `/my/spells/${spell.Id}`,
+        {
+          Id: spell.Id,
+          Name: spell.Name,
+          Path: spell.Path,
+          SearchHint: Spell.GetSearchHint(spell),
+          Metadata: Spell.GetMetadata(spell),
+          Link: `/my/spells/${spell.Id}`
+        },
         "account",
         spell
       );
@@ -63,7 +60,7 @@ export class SpellLibrary {
   };
 
   public DeleteSpellById = (id: string) => {
-    this.spells.remove(listing => listing.Id === id);
+    this.spells.remove(listing => listing.Listing().Id === id);
     Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };
