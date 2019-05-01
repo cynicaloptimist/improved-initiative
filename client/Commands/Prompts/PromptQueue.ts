@@ -1,17 +1,17 @@
 import * as ko from "knockout";
 
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 export class PromptQueue {
   constructor() {}
 
-  public Prompts = ko.observableArray<Prompt>();
+  public Prompts = ko.observableArray<LegacyPrompt>();
 
-  public Add = (prompt: Prompt) => {
+  public Add = (prompt: LegacyPrompt) => {
     this.Prompts.push(prompt);
   };
 
-  public Resolve = (prompt: Prompt) => (form: HTMLFormElement) => {
+  public Resolve = (prompt: LegacyPrompt) => (form: HTMLFormElement) => {
     prompt.Resolve(form);
     this.Prompts.remove(prompt);
     if (this.HasPrompt()) {

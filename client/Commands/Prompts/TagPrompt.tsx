@@ -8,7 +8,7 @@ import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 interface TagPromptProps {
   targetDisplayNames: string;
@@ -98,7 +98,7 @@ export class TagPromptComponent extends React.Component<
     ));
 }
 
-export class TagPrompt implements Prompt {
+export class TagPrompt implements LegacyPrompt {
   public InputSelector = ".response";
   public ComponentName = "reactprompt";
 

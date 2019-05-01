@@ -2,7 +2,7 @@ import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
 import { SubmitButton } from "../../Components/Button";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 const promptClassName = "p-quick-add";
 const inputClassName = promptClassName + "-input";
@@ -53,7 +53,7 @@ class QuickAddPromptComponent extends React.Component<
   }
 }
 
-export class QuickAddPrompt implements Prompt {
+export class QuickAddPrompt implements LegacyPrompt {
   public InputSelector = "." + inputClassName;
   public ComponentName = "reactprompt";
 

@@ -6,7 +6,7 @@ import { AccountClient } from "../../Account/AccountClient";
 import { SubmitButton } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 export interface MoveEncounterPromptProps {
   encounterName: string;
@@ -48,7 +48,7 @@ class MoveEncounterPromptComponent extends React.Component<
   }
 }
 
-export class MoveEncounterPrompt implements Prompt {
+export class MoveEncounterPrompt implements LegacyPrompt {
   public InputSelector = "." + inputClassName;
   public ComponentName = "reactprompt";
 

@@ -1,7 +1,7 @@
 import { Combatant } from "../../Combatant/Combatant";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
-export class ConcentrationPrompt implements Prompt {
+export class ConcentrationPrompt implements LegacyPrompt {
   public static Tag = "Concentrating";
   public InputSelector = ".passcheck";
   public ComponentName = "concentrationprompt";

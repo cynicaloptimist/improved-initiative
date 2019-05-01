@@ -5,7 +5,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
 import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 interface UpdateNotesPromptComponentProps {
   currentNotes: string;
@@ -31,7 +31,7 @@ class UpdateNotesPromptComponent extends React.Component<
   }
 }
 
-export class UpdateNotesPrompt implements Prompt {
+export class UpdateNotesPrompt implements LegacyPrompt {
   public InputSelector = ".p-update-notes__notes";
   public ComponentName = "reactprompt";
   public component: JSX.Element;

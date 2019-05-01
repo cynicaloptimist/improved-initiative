@@ -1,18 +1,20 @@
-export interface Prompt {
+export interface LegacyPrompt {
   InputSelector: string;
   ComponentName: string;
   Resolve: (form: HTMLFormElement) => void;
 }
 
-export type PromptResolver = (responses: { [id: string]: string }) => void;
+export type LegacyPromptResolver = (
+  responses: { [id: string]: string }
+) => void;
 
-export class DefaultPrompt implements Prompt {
+export class DefaultPrompt implements LegacyPrompt {
   public InputSelector = ".response";
   public ComponentName = "defaultprompt";
 
   constructor(
     public Query: string,
-    private resolve: PromptResolver = () => {}
+    private resolve: LegacyPromptResolver = () => {}
   ) {}
 
   public Resolve = (form: HTMLFormElement) => {

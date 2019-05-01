@@ -4,7 +4,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
 import { CurrentSettings } from "../../Settings/Settings";
 import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];
@@ -82,7 +82,7 @@ function combatantInitiativeField(combatant: Combatant) {
   );
 }
 
-export class InitiativePrompt implements Prompt {
+export class InitiativePrompt implements LegacyPrompt {
   public InputSelector = ".response";
   public ComponentName = "reactprompt";
   public component: React.ReactElement<InitiativePromptComponent>;

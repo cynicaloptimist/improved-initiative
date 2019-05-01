@@ -6,7 +6,7 @@ import { SubmitButton } from "../../Components/Button";
 import { SpellDetails } from "../../Library/Components/SpellDetails";
 import { Listing } from "../../Library/Listing";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 interface SpellPromptProps {
   Spell: Spell;
@@ -24,7 +24,7 @@ class SpellPromptComponent extends React.Component<SpellPromptProps> {
   }
 }
 
-export class SpellPrompt implements Prompt {
+export class SpellPrompt implements LegacyPrompt {
   public InputSelector = "button";
   public ComponentName = "reactprompt";
 
