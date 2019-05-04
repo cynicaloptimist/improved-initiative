@@ -5,7 +5,7 @@ import { Tag } from "../../Combatant/Tag";
 import { SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 interface AcceptTagPromptComponentProps {
   combatantName: string;
@@ -33,7 +33,7 @@ class AcceptTagPromptComponent extends React.Component<
   }
 }
 
-export class AcceptTagPrompt implements Prompt {
+export class AcceptTagPrompt implements LegacyPrompt {
   public InputSelector = ".p-accept-tag__notes";
   public ComponentName = "reactprompt";
   public component: JSX.Element;

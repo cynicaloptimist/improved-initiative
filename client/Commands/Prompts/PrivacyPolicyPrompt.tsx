@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Metrics } from "../../Utility/Metrics";
 import { Store } from "../../Utility/Store";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 const privacyPolicyText: string = require("../../../PRIVACY.md");
 
@@ -69,7 +69,7 @@ class PrivacyPolicyPromptComponent extends React.Component<
   }
 }
 
-export class PrivacyPolicyPrompt implements Prompt {
+export class PrivacyPolicyPrompt implements LegacyPrompt {
   public InputSelector = "." + inputClassName;
   public ComponentName = "reactprompt";
 

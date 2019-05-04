@@ -1,9 +1,9 @@
 import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
 import { TrackerViewModel } from "../../TrackerViewModel";
 import { Metrics } from "../../Utility/Metrics";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
-export class AcceptDamagePrompt implements Prompt {
+export class AcceptDamagePrompt implements LegacyPrompt {
   public InputSelector = ".acceptfull";
   public ComponentName = "acceptdamageprompt";
   public Prompt: string;

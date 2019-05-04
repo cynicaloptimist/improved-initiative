@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { Prompt } from "./Prompt";
+import { LegacyPrompt } from "./Prompt";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -59,7 +59,7 @@ class PlayerViewPromptComponent extends React.Component<
   };
 }
 
-export class PlayerViewPrompt implements Prompt {
+export class PlayerViewPrompt implements LegacyPrompt {
   public InputSelector = "." + inputClassName;
   public ComponentName = "reactprompt";
   protected component: React.ReactElement<PlayerViewPromptComponent>;

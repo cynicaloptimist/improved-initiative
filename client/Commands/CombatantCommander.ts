@@ -206,7 +206,7 @@ export class CombatantCommander {
       `Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' value='${latestRollTotal}'/>`,
       callback
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
   }
 
   public EditHP = () => {
@@ -238,7 +238,7 @@ export class CombatantCommander {
     const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
       combatant.PersistentCharacterId
     );
-    this.tracker.PromptQueue.Add(
+    this.tracker.PromptQueue.AddLegacyPrompt(
       new UpdateNotesPrompt(
         combatant,
         persistentCharacter,
@@ -267,7 +267,7 @@ export class CombatantCommander {
       this.tracker
     );
 
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     return false;
   };
 
@@ -283,14 +283,14 @@ export class CombatantCommander {
       suggester
     );
 
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     return false;
   };
 
   public CheckConcentration = (combatant: Combatant, damageAmount: number) => {
     setTimeout(() => {
       const prompt = new ConcentrationPrompt(combatant, damageAmount);
-      this.tracker.PromptQueue.Add(prompt);
+      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
       Metrics.TrackEvent("ConcentrationCheckTriggered");
     }, 1);
   };
@@ -316,7 +316,7 @@ export class CombatantCommander {
         }
       }
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
 
     return false;
   };
@@ -339,7 +339,7 @@ export class CombatantCommander {
       targetCombatants,
       this.tracker.EventLog.AddEvent
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     return false;
   };
 
@@ -379,7 +379,7 @@ export class CombatantCommander {
       const prompt = new DefaultPrompt(message, _ =>
         this.pendingLinkInitiative(null)
       );
-      this.tracker.PromptQueue.Add(prompt);
+      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
       this.pendingLinkInitiative({ combatant: selected[0], prompt: prompt });
       return;
     }
@@ -485,6 +485,6 @@ export class CombatantCommander {
       Expression: diceExpression,
       Result: diceRoll.FormattedString
     });
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
   };
 }

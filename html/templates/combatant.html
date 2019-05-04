@@ -16,13 +16,13 @@
   <span
     class="combatant__ac"
     title="Armor Class"
-    data-bind="text: Combatant.AC"
+    data-bind="text: Combatant.StatBlock().AC.Value"
   >
   </span>
   <!-- /ko -->
   <!-- ko if: Combatant.RevealedAC -->
   <span class="combatant__ac" title="Armor Class (revealed in Player View)">
-    <span data-bind="text: Combatant.AC"></span>
+    <span data-bind="text: Combatant.StatBlock().AC.Value"></span>
     <span class="combatant__ac--revealed-badge fas fa-eye"></span>
   </span>
   <!-- /ko -->

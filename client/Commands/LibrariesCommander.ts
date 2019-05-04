@@ -162,7 +162,7 @@ export class LibrariesCommander {
       spellListing,
       this.tracker.StatBlockTextEnricher
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     return true;
   };
 
@@ -189,7 +189,7 @@ export class LibrariesCommander {
         }
       }
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
@@ -203,7 +203,7 @@ export class LibrariesCommander {
       this.libraries.Encounters.Move,
       folderNames
     );
-    this.tracker.PromptQueue.Add(prompt);
+    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public ReferenceCondition = (conditionName: string) => {
@@ -214,7 +214,7 @@ export class LibrariesCommander {
           Conditions[casedConditionName]
         }</div>`
       );
-      this.tracker.PromptQueue.Add(prompt);
+      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     }
   };
 
