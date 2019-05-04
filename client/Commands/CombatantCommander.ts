@@ -330,7 +330,7 @@ export class CombatantCommander {
       targetCombatants = this.SelectedCombatants().map(c => c.Combatant);
     }
 
-    if (targetCombatants == []) {
+    if (targetCombatants.length == 0) {
       return;
     }
 
