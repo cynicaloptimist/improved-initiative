@@ -32,9 +32,13 @@ export const ApplyDamagePrompt = (
 
   children: (
     <div className="p-apply-damage">
-      {"Apply damage or healing to "}
-      {combatantViewModels.map(c => c.Name()).join(", ")}:
-      <Field className="autofocus" name="damageAmount" />
+      <label>
+        <span>
+          {"Apply damage or healing to "}
+          {combatantViewModels.map(c => c.Name()).join(", ")}:
+        </span>
+        <Field className="autofocus" name="damageAmount" />
+      </label>
       <SubmitButton />
     </div>
   )
