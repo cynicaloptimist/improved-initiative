@@ -58,6 +58,8 @@ export class CombatantViewModel {
     } else {
       this.Combatant.ApplyHealing(healing);
     }
+
+    this.Combatant.Encounter.QueueEmitEncounter();
   }
 
   public ApplyTemporaryHP(inputTHP: string) {
