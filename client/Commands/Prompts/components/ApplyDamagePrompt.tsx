@@ -10,13 +10,18 @@ interface ApplyDamageModel {
 
 export const ApplyDamagePrompt = (
   combatantViewModels: CombatantViewModel[],
-  suggestedDamage: string
+  suggestedDamage: string,
+  logHpChange: (damage: number, combatantNames: string) => void
 ): PromptProps<ApplyDamageModel> => ({
   onSubmit: (model: ApplyDamageModel) => {
     const damageAmount = parseInt(model.damageAmount);
     if (isNaN(damageAmount)) {
       return false;
     }
+
+    const combatantNames = combatantViewModels.map(c => c.Name());
+    logHpChange(damageAmount, combatantNames.join(", "));
+
     combatantViewModels.forEach(c => c.ApplyDamage(model.damageAmount));
     return true;
   },

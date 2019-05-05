@@ -185,7 +185,8 @@ export class CombatantCommander {
     const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
     const prompt = ApplyDamagePrompt(
       combatantViewModels,
-      latestRollTotal.toString()
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
     );
     this.tracker.PromptQueue.Add(prompt);
   }
