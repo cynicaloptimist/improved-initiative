@@ -1,14 +1,23 @@
 import * as ko from "knockout";
 
 import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./components/PendingPrompts";
 
 export class PromptQueue {
   constructor() {}
 
   protected LegacyPrompts = ko.observableArray<LegacyPrompt>();
+  private prompts = ko.observableArray<PromptProps<any>>();
+
+  public Add = (prompt: PromptProps<any>) => this.prompts.push(prompt);
+
+  public RemoveResolvedPrompt = (prompt: PromptProps<any>) =>
+    this.prompts.remove(prompt);
+
+  public GetPrompts = () => this.prompts();
 
   public AddLegacyPrompt = (prompt: LegacyPrompt) => {
-    this.Prompts.push(prompt);
+    this.LegacyPrompts.push(prompt);
   };
 
   protected ResolveLegacyPrompt = (prompt: LegacyPrompt) => (

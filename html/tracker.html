@@ -190,6 +190,12 @@
       </ul>
       <!-- /ko -->
       <div
+        class="pending-prompts"
+        data-bind="react: {
+                component: PromptsComponent
+        }"
+      ></div>
+      <div
         class="prompts"
         data-bind="with: PromptQueue, css: { empty: !PromptQueue.HasPrompt() }"
       >

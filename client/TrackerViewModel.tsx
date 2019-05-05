@@ -17,6 +17,7 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
+import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
@@ -323,6 +324,13 @@ export class TrackerViewModel {
       />
     );
   });
+
+  public PromptsComponent = ko.pureComputed(() => (
+    <PendingPrompts
+      prompts={this.PromptQueue.GetPrompts()}
+      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
+    />
+  ));
 
   public contextualCommandSuggestion = () => {
     const encounterEmpty = this.Encounter.Combatants().length === 0;
