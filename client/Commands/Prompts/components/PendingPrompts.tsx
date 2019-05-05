@@ -30,13 +30,18 @@ class Prompt<T> extends React.Component<PromptProps<T>> {
   }
 
   public componentDidMount() {
+    setImmediate(this.delaySoHotkeyDoesntFillAutoselect);
+  }
+
+  private delaySoHotkeyDoesntFillAutoselect = () => {
+    //prevent mounted element from swallowing hotkey
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector
     );
     if (element.select) {
       element.select();
     }
-  }
+  };
 }
 
 interface PendingPromptsProps {
