@@ -4,22 +4,38 @@ import * as React from "react";
 export interface PromptProps<T> {
   onSubmit: (T) => boolean;
   children: React.ReactChild;
+  autoFocusSelector: string;
   initialValues?: T;
 }
 
 class Prompt<T> extends React.Component<PromptProps<T>> {
+  private formElement: HTMLFormElement;
+
   public render() {
     return (
       <Formik
         initialValues={this.props.initialValues || {}}
         onSubmit={this.props.onSubmit}
         render={(props: FormikProps<any>) => (
-          <form className="prompt" onSubmit={props.handleSubmit}>
+          <form
+            ref={r => (this.formElement = r)}
+            className="prompt"
+            onSubmit={props.handleSubmit}
+          >
             {this.props.children}
           </form>
         )}
       />
     );
+  }
+
+  public componentDidMount() {
+    const element: HTMLInputElement = this.formElement.querySelector(
+      this.props.autoFocusSelector
+    );
+    if (element.select) {
+      element.select();
+    }
   }
 }
 

@@ -28,11 +28,13 @@ export const ApplyDamagePrompt = (
 
   initialValues: { damageAmount: suggestedDamage },
 
+  autoFocusSelector: ".autofocus",
+
   children: (
     <div className="p-apply-damage">
-      Apply damage or healing to{" "}
+      {"Apply damage or healing to "}
       {combatantViewModels.map(c => c.Name()).join(", ")}:
-      <Field name="damageAmount" />
+      <Field className="autofocus" name="damageAmount" />
       <SubmitButton />
     </div>
   )
