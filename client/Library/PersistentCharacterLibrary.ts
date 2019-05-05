@@ -122,6 +122,9 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       ...PersistentCharacter.Default(),
       ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id)
     };
+
+    RepairPersistentCharacterIdIfNeeded(persistentCharacter, id);
+
     return new Listing<PersistentCharacter>(
       {
         ...persistentCharacter,
@@ -154,4 +157,21 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       "localStorage"
     );
   };
+}
+
+function RepairPersistentCharacterIdIfNeeded(
+  persistentCharacter: PersistentCharacter,
+  id: string
+) {
+  if (
+    persistentCharacter.Id != null &&
+    persistentCharacter.StatBlock.Id == persistentCharacter.Id
+  ) {
+    return;
+  }
+
+  persistentCharacter.Id = id;
+  persistentCharacter.StatBlock.Id = id;
+
+  Store.Save(Store.PersistentCharacters, id, persistentCharacter);
 }
