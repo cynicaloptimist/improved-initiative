@@ -5,7 +5,7 @@ export interface PromptProps<T> {
   onSubmit: (T) => boolean;
   children: React.ReactChild;
   autoFocusSelector: string;
-  initialValues?: T;
+  initialValues: T;
 }
 
 class Prompt<T> extends React.Component<PromptProps<T>> {
