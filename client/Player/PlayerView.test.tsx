@@ -2,6 +2,7 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
+import { TagState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
@@ -143,5 +144,54 @@ describe("PlayerViewModel", () => {
     });
 
     expect(playerView.find(PortraitWithCaption).length).toBe(0);
+  });
+});
+
+describe("Tag Suggestor", () => {
+  let encounter: Encounter;
+  let suggestTag: jest.Mock<{}>;
+  let playerView: Enzyme.ReactWrapper<
+    any,
+    Readonly<{}>,
+    React.Component<{}, {}, any>
+  >;
+
+  beforeEach(() => {
+    InitializeSettings();
+    const playerViewSettings = CurrentSettings().PlayerView;
+    playerViewSettings.AllowTagSuggestions = true;
+
+    encounter = buildEncounter();
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    suggestTag = jest.fn(() => {
+      console.log("suggestTag");
+    });
+    playerView = Enzyme.mount(
+      <PlayerView
+        settings={playerViewSettings}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+        onSuggestTag={suggestTag}
+      />
+    );
+  });
+
+  test("Should suggest simple tags", done => {
+    expect.assertions(3);
+
+    suggestTag.mockImplementation((combatantId: string, tagState: TagState) => {
+      expect(combatantId).toEqual(encounter.Combatants()[0].Id);
+      expect(tagState.Text).toEqual("Dazed");
+      expect(tagState.DurationTiming).toBeNull();
+      done();
+    });
+
+    playerView
+      .find(".combatant__add-tag-button .fa-clickable")
+      .simulate("click");
+    playerView
+      .find(`.tag-suggestion input[name="tagText"]`)
+      .simulate("change", { target: { name: "tagText", value: "Dazed" } });
+    playerView.find("form").simulate("submit");
   });
 });
