@@ -1,59 +1,11 @@
-import Awesomplete = require("awesomplete");
-import { Field, FieldProps, FormikProps } from "formik";
+import { Field, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { Toggle } from "../../Settings/components/Toggle";
-
-class InnerAwesomeplete extends React.Component<{
-  fieldName: string;
-  options: string[];
-  fieldProps: FieldProps<any>;
-}> {
-  private inputField: HTMLInputElement;
-
-  public componentDidMount() {
-    const awesomeplete = new Awesomplete(this.inputField, {
-      list: this.props.options,
-      minChars: 1
-    });
-
-    this.inputField.addEventListener("awesomplete-select", (event: any) => {
-      this.props.fieldProps.form.setFieldValue(
-        this.props.fieldName,
-        event.text.value
-      );
-      event.preventDefault();
-      awesomeplete.close();
-    });
-  }
-
-  public render() {
-    return (
-      <input
-        {...this.props.fieldProps.field}
-        type="text"
-        ref={i => (this.inputField = i)}
-      />
-    );
-  }
-}
-
-function AutocompleteTextInput(props: {
-  fieldName: string;
-  options: string[];
-}) {
-  return (
-    <Field
-      name={props.fieldName}
-      render={fieldProps => (
-        <InnerAwesomeplete {...props} fieldProps={fieldProps} />
-      )}
-    />
-  );
-}
+import { AutocompleteTextInput } from "./AutocompleteTextInput";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
