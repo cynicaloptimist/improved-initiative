@@ -2,18 +2,21 @@ import * as Awesomplete from "awesomplete";
 import * as _ from "lodash";
 import * as React from "react";
 
+import { Field } from "formik";
+import { DurationTiming } from "../../../common/DurationTiming";
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
+import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
+import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./components/PendingPrompts";
 
 interface TagPromptProps {
   targetDisplayNames: string;
   combatantNamesById: { [id: string]: string };
-  activeCombatantId: string;
 }
 
 interface TagPromptState {
@@ -31,25 +34,15 @@ export class TagPromptComponent extends React.Component<
     };
   }
 
-  public componentDidMount() {
-    this.Awesomeplete = new Awesomplete(this.textInput, {
-      list: Object.keys(Conditions),
-      minChars: 1
-    });
-
-    const inputElement = this.Awesomeplete.input as HTMLElement;
-    inputElement.focus();
-  }
-
   public render() {
     return (
       <div className="add-tag">
         <div>
           Add a tag to {this.props.targetDisplayNames}:
-          <input
-            ref={i => (this.textInput = i)}
-            id="tag-text"
-            className="response"
+          <AutocompleteTextInput
+            fieldName="tagText"
+            options={Object.keys(Conditions)}
+            autoFocus
           />
           <Button fontAwesomeIcon="hourglass" onClick={this.toggleAdvanced} />
           <SubmitButton />
@@ -59,34 +52,23 @@ export class TagPromptComponent extends React.Component<
     );
   }
 
-  private Awesomeplete: Awesomplete;
-  private textInput: HTMLInputElement;
-
   private toggleAdvanced = () =>
     this.setState({ advancedMode: !this.state.advancedMode });
 
   private renderAdvancedFields = () => (
     <div className="tag-advanced">
       ...until
-      <select id="tag-timing" className="response">
-        <option value="start">start of</option>
-        <option value="end">end of</option>
-      </select>
-      <select
-        id="tag-timing-id"
-        className="response"
-        defaultValue={this.props.activeCombatantId}
-      >
+      <EnumToggle
+        fieldName="tagTiming"
+        labelsByOption={{
+          [StartOfTurn]: "start of",
+          [EndOfTurn]: "end of"
+        }}
+      />
+      <Field component="select" name="tagTimingId">
         {this.renderCombatantOptions()}
-      </select>
-      's turn in{" "}
-      <input
-        type="number"
-        id="tag-duration"
-        className="response"
-        defaultValue="1"
-      />{" "}
-      round
+      </Field>
+      's turn in <Field type="number" name="tagDuration" /> round
     </div>
   );
 
@@ -98,89 +80,93 @@ export class TagPromptComponent extends React.Component<
     ));
 }
 
-export class TagPrompt implements LegacyPrompt {
-  public InputSelector = ".response";
-  public ComponentName = "reactprompt";
+export interface TagModel {
+  tagText: string;
+  tagDuration?: string;
+  tagTimingId?: string;
+  tagTiming?: DurationTiming;
+}
 
-  public Resolve = form => {
-    const inputs = $(form).find(this.InputSelector);
-    const responsesById = {};
-    inputs.map((_, element) => {
-      responsesById[element.id] = $(element).val();
-    });
-    const text: string = responsesById["tag-text"];
-    if (text.length) {
-      if (responsesById["tag-duration"] && responsesById["tag-timing-id"]) {
-        const duration = parseInt(responsesById["tag-duration"]);
-        const timing =
-          responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
-        const timingId = responsesById["tag-timing-id"];
+export function TagPrompt(
+  encounter: Encounter,
+  targetCombatants: Combatant[],
+  logEvent: (message: string) => void
+): PromptProps<TagModel> {
+  const activeCombatantId = encounter.ActiveCombatant()
+    ? encounter.ActiveCombatant().Id
+    : "";
+  const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
+  const combatantNamesById = _.mapValues(combatantsById, c => c.DisplayName());
+
+  return {
+    initialValues: {
+      tagText: "",
+      tagTimingId: activeCombatantId,
+      tagTiming: StartOfTurn
+    },
+    children: (
+      <TagPromptComponent
+        combatantNamesById={combatantNamesById}
+        targetDisplayNames={targetCombatants
+          .map(t => t.DisplayName())
+          .join(", ")}
+      />
+    ),
+    onSubmit: (model: TagModel) => {
+      if (model.tagText.length == 0) {
+        return true;
+      }
+
+      if (!model.tagDuration || !model.tagTimingId) {
+        for (const combatant of targetCombatants) {
+          const tag = new Tag(model.tagText, combatant);
+          combatant.Tags.push(tag);
+          Metrics.TrackEvent("TagAdded", { Text: tag.Text });
+        }
+      } else {
+        const duration = parseInt(model.tagDuration);
+        if (isNaN(duration)) {
+          return false;
+        }
 
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
           this.encounter.Combatants(),
-          c => timingId == c.Id
+          c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
-          timingKeyedCombatant.Id == this.encounter.ActiveCombatant().Id;
+          timingKeyedCombatant.Id == encounter.ActiveCombatant().Id;
         const durationGraceRound =
-          timingKeyedCombatantIsActive && timing == EndOfTurn ? 1 : 0;
+          timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
         for (const combatant of this.targetCombatants) {
           const tag = new Tag(
-            text,
+            model.tagText,
             combatant,
             duration + durationGraceRound,
-            timing,
-            timingId
+            model.tagTiming,
+            model.tagTimingId
           );
-          this.encounter.AddDurationTag(tag);
+          encounter.AddDurationTag(tag);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", {
             Text: tag.Text,
             Duration: tag.DurationRemaining()
           });
         }
-      } else {
-        for (const combatant of this.targetCombatants) {
-          const tag = new Tag(text, combatant);
-          combatant.Tags.push(tag);
-          Metrics.TrackEvent("TagAdded", { Text: tag.Text });
-        }
       }
 
-      this.logEvent(
-        `Added "${text}" tag to ${this.targetCombatants
+      logEvent(
+        `Added "${model.tagText}" tag to ${targetCombatants
           .map(c => c.DisplayName())
           .join(", ")}`
       );
-      this.encounter.QueueEmitEncounter();
-    }
+
+      encounter.QueueEmitEncounter();
+
+      return true;
+    },
+    autoFocusSelector: "input"
   };
-
-  constructor(
-    private encounter: Encounter,
-    private targetCombatants: Combatant[],
-    private logEvent: (s: string) => void
-  ) {
-    const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
-    const combatantNamesById = _.mapValues(combatantsById, c =>
-      c.DisplayName()
-    );
-
-    this.component = (
-      <TagPromptComponent
-        activeCombatantId={
-          encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""
-        }
-        combatantNamesById={combatantNamesById}
-        targetDisplayNames={targetCombatants
-          .map(t => t.DisplayName())
-          .join(", ")}
-      />
-    );
-  }
-
-  public component: JSX.Element;
 }

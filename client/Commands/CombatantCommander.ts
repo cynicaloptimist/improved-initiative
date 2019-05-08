@@ -316,12 +316,12 @@ export class CombatantCommander {
       return;
     }
 
-    const prompt = new TagPrompt(
+    const prompt = TagPrompt(
       this.tracker.Encounter,
       targetCombatants,
       this.tracker.EventLog.AddEvent
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 
