@@ -7,6 +7,7 @@ class InnerAwesomeplete extends React.Component<{
   fieldName: string;
   options: string[];
   fieldProps: FieldProps<any>;
+  autoFocus?: boolean;
 }> {
   private inputField: HTMLInputElement;
 
@@ -24,6 +25,10 @@ class InnerAwesomeplete extends React.Component<{
       event.preventDefault();
       awesomeplete.close();
     });
+
+    if (this.props.autoFocus) {
+      this.inputField.focus();
+    }
   }
 
   public render() {
@@ -40,6 +45,7 @@ class InnerAwesomeplete extends React.Component<{
 export function AutocompleteTextInput(props: {
   fieldName: string;
   options: string[];
+  autoFocus?: boolean;
 }) {
   return (
     <Field

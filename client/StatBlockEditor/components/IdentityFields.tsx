@@ -93,6 +93,7 @@ export class IdentityFields extends React.Component<
             <AutocompleteTextInput
               fieldName="Path"
               options={this.autoCompletePaths}
+              autoFocus
             />
           </div>
         </div>
