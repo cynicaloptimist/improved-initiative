@@ -84,7 +84,10 @@ export class IdentityFields extends React.Component<
         <div className="inline">
           <span
             className="statblock-editor__folder-button fa-clickable fa-times"
-            onClick={() => this.setState({ folderExpanded: false })}
+            onClick={() => {
+              this.setState({ folderExpanded: false });
+              this.props.formApi.setFieldValue("Path", "");
+            }}
           />
           <div>
             <label className="label" htmlFor="Path">
