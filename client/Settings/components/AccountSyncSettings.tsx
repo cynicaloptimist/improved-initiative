@@ -131,11 +131,15 @@ export class AccountSyncSettings extends React.Component<
     this.setState({ syncError: "" });
     let blob = Store.ExportAll();
     saveAs(blob, "improved-initiative.json");
-    this.props.accountClient.SaveAll(this.props.libraries, progressMessage => {
-      this.setState({
-        syncError: this.state.syncError + "\n" + JSON.stringify(progressMessage)
-      });
-    });
+    this.props.accountClient.SaveAllUnsyncedItems(
+      this.props.libraries,
+      progressMessage => {
+        this.setState({
+          syncError:
+            this.state.syncError + "\n" + JSON.stringify(progressMessage)
+        });
+      }
+    );
   };
 
   private downloadAndSaveAllSyncedItems = async () => {

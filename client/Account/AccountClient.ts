@@ -40,7 +40,7 @@ export class AccountClient {
     return await $.getJSON("/my/fullaccount");
   }
 
-  public SaveAll(
+  public SaveAllUnsyncedItems(
     libraries: Libraries,
     messageCallback: (message: string) => void
   ) {
