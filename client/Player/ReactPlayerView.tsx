@@ -25,6 +25,11 @@ export class ReactPlayerView {
       const playerView: PlayerViewState = await $.ajax(
         `../playerviews/${this.encounterId}`
       );
+      playerView.encounterState =
+        playerView.encounterState ||
+        EncounterState.Default<PlayerViewCombatantState>();
+      playerView.settings =
+        playerView.settings || getDefaultSettings().PlayerView;
       this.renderPlayerView(playerView);
     } catch (e) {}
   }
