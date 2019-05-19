@@ -40,7 +40,10 @@ export class AccountClient {
     return await $.getJSON("/my/fullaccount");
   }
 
-  public SaveAll(libraries: Libraries, messageCallback: (error: any) => void) {
+  public SaveAll(
+    libraries: Libraries,
+    messageCallback: (message: string) => void
+  ) {
     if (!env.HasStorage) {
       return emptyPromise();
     }
