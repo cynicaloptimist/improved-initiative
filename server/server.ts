@@ -20,13 +20,13 @@ async function improvedInitiativeServer() {
   await DB.initialize(dbConnectionString);
 
   const statBlockLibrary = L.Library.FromFile<StatBlock>(
-    "ogl_creatures.json",
+    "all_creatures.json",
     "/statblocks/",
     StatBlock.GetSearchHint,
     StatBlock.GetMetadata
   );
   const spellLibrary = L.Library.FromFile<Spell>(
-    "ogl_spells.json",
+    "all_spells.json",
     "/spells/",
     Spell.GetSearchHint,
     Spell.GetMetadata
