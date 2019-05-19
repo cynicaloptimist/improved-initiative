@@ -512,6 +512,8 @@ export class TrackerViewModel {
     if (account.encounters) {
       this.Libraries.Encounters.AddListings(account.encounters, "account");
     }
+
+    this.accountClient.SaveAllUnsyncedItems(this.Libraries, () => {});
   }
 
   private displayPrivacyNotificationIfNeeded = () => {
