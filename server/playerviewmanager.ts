@@ -1,7 +1,21 @@
 import { PlayerViewState } from "../common/PlayerViewState";
 import { probablyUniqueString } from "../common/Toolbox";
 
-export class PlayerViewManager {
+export interface PlayerViewManager {
+  Get(id: string): PlayerViewState;
+
+  UpdateEncounter(id: string, newState: any): void;
+
+  UpdateSettings(id: string, newSettings: any): void;
+
+  InitializeNew(): void;
+
+  EnsureInitialized(id: string): void;
+
+  Destroy(id: string): void;
+}
+
+export class InMemoryPlayerViewManager implements PlayerViewManager {
   private playerViews: { [encounterId: string]: PlayerViewState } = {};
 
   constructor() {}
