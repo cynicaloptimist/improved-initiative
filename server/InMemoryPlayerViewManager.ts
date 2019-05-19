@@ -9,7 +9,7 @@ export class InMemoryPlayerViewManager implements PlayerViewManager {
 
   constructor() {}
 
-  public Get(id: string) {
+  public async Get(id: string) {
     return this.playerViews[id];
   }
 
@@ -21,7 +21,7 @@ export class InMemoryPlayerViewManager implements PlayerViewManager {
     this.playerViews[id].settings = newSettings;
   }
 
-  public InitializeNew() {
+  public async InitializeNew() {
     const encounterId = probablyUniqueString();
     this.playerViews[encounterId] = {
       encounterState: null,
@@ -30,7 +30,7 @@ export class InMemoryPlayerViewManager implements PlayerViewManager {
     return encounterId;
   }
 
-  public EnsureInitialized(id: string) {
+  public async EnsureInitialized(id: string) {
     if (this.playerViews[id] === undefined) {
       this.playerViews[id] = {
         encounterState: null,
