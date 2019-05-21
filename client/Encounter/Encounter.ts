@@ -518,6 +518,7 @@ export class Encounter {
       this.TurnTimer.Start();
     }
     this.RoundCounter(encounterState.RoundCounter || 1);
+    this.QueueEmitEncounter();
   };
 
   public ClearEncounter = () => {
