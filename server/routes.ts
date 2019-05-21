@@ -81,7 +81,7 @@ export default function(
       throw "Session is not available";
     }
 
-    session.encounterId = playerViews.InitializeNew();
+    session.encounterId = await playerViews.InitializeNew();
 
     if (defaultAccountLevel !== "free") {
       return await setupLocalDefaultUser(session, res);
