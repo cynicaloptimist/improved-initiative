@@ -9,7 +9,5 @@ export interface PlayerViewManager {
 
   InitializeNew(): Promise<string>;
 
-  EnsureInitialized(id: string): Promise<void>;
-
   Destroy(id: string): void;
 }
