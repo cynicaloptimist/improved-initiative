@@ -26,7 +26,6 @@ export default function(
     function joinEncounter(id: string) {
       encounterId = id;
       socket.join(id);
-      playerViews.EnsureInitialized(id);
     }
 
     socket.on("update encounter", function(id: string, updatedEncounter: {}) {

@@ -1,4 +1,4 @@
-import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 import { Listable } from "../../common/Listable";
@@ -7,6 +7,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Button, SubmitButton } from "../Components/Button";
 import { Listing } from "../Library/Listing";
 import { ConvertStringsToNumbersWhereNeeded } from "./ConvertStringsToNumbersWhereNeeded";
+import { EnumToggle } from "./EnumToggle";
 import { IdentityFields } from "./components/IdentityFields";
 import {
   abilityScoreField,
@@ -19,40 +20,6 @@ import {
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
-
-export interface EnumToggleProps {
-  labelsByOption: { [value: string]: string };
-  fieldName: string;
-}
-
-class EnumToggle extends React.Component<EnumToggleProps> {
-  public render() {
-    return (
-      <Field name={this.props.fieldName}>
-        {(fieldProps: FieldProps) => {
-          const buttonLabel =
-            this.props.labelsByOption[fieldProps.field.value] || "UNKNOWN";
-          return (
-            <Button
-              text={buttonLabel}
-              onClick={() => this.toggle(fieldProps)}
-            />
-          );
-        }}
-      </Field>
-    );
-  }
-
-  private toggle = (fieldProps: FieldProps) => {
-    const allOptions = Object.keys(this.props.labelsByOption);
-    const nextOptionIndex =
-      (allOptions.indexOf(fieldProps.field.value) + 1) % allOptions.length;
-    fieldProps.form.setFieldValue(
-      this.props.fieldName,
-      allOptions[nextOptionIndex]
-    );
-  };
-}
 
 export type StatBlockEditorTarget =
   | "library"

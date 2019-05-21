@@ -1,27 +1,38 @@
 import * as ko from "knockout";
 
 import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./components/PendingPrompts";
 
 export class PromptQueue {
   constructor() {}
 
-  public Prompts = ko.observableArray<LegacyPrompt>();
+  protected LegacyPrompts = ko.observableArray<LegacyPrompt>();
+  private prompts = ko.observableArray<PromptProps<any>>();
+
+  public Add = (prompt: PromptProps<any>) => this.prompts.push(prompt);
+
+  public RemoveResolvedPrompt = (prompt: PromptProps<any>) =>
+    this.prompts.remove(prompt);
+
+  public GetPrompts = () => this.prompts();
 
   public AddLegacyPrompt = (prompt: LegacyPrompt) => {
-    this.Prompts.push(prompt);
+    this.LegacyPrompts.push(prompt);
   };
 
-  public Resolve = (prompt: LegacyPrompt) => (form: HTMLFormElement) => {
+  protected ResolveLegacyPrompt = (prompt: LegacyPrompt) => (
+    form: HTMLFormElement
+  ) => {
     prompt.Resolve(form);
-    this.Prompts.remove(prompt);
+    this.LegacyPrompts.remove(prompt);
     if (this.HasPrompt()) {
-      $(this.Prompts()[0].InputSelector)
+      $(this.LegacyPrompts()[0].InputSelector)
         .first()
         .select();
     }
   };
 
-  public UpdateDom = (
+  protected UpdateLegacyDom = (
     element: HTMLFormElement,
     valueAccessor,
     allBindings,
@@ -40,12 +51,12 @@ export class PromptQueue {
   };
 
   public HasPrompt = ko.pureComputed(() => {
-    return this.Prompts().length > 0;
+    return this.LegacyPrompts().length > 0;
   });
 
   public Dismiss = () => {
     if (this.HasPrompt()) {
-      this.Prompts.remove(this.Prompts()[0]);
+      this.LegacyPrompts.remove(this.LegacyPrompts()[0]);
     }
   };
 
@@ -59,7 +70,7 @@ export class PromptQueue {
     $(".prompt")
       .animate(up, opts)
       .animate(down, opts)
-      .find(this.Prompts()[0].InputSelector)
+      .find(this.LegacyPrompts()[0].InputSelector)
       .first()
       .select();
   };

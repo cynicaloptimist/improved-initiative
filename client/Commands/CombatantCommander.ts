@@ -20,6 +20,7 @@ import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
+import { ApplyDamagePrompt } from "./Prompts/components/ApplyDamagePrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -180,33 +181,14 @@ export class CombatantCommander {
     this.selectByOffset(1);
   };
 
-  private CreateEditHPCallback = (
-    combatants: CombatantViewModel[],
-    combatantNames: string
-  ) => {
-    return response => {
-      const damage = response["damage"];
-      if (damage) {
-        combatants.forEach(c => c.ApplyDamage(damage));
-        const damageNum = parseInt(damage);
-        this.tracker.EventLog.LogHPChange(damageNum, combatantNames);
-        this.tracker.Encounter.QueueEmitEncounter();
-      }
-    };
-  };
-
   private editHPForCombatants(combatantViewModels: CombatantViewModel[]) {
-    const combatantNames = combatantViewModels.map(c => c.Name()).join(", ");
-    const callback = this.CreateEditHPCallback(
+    const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
+    const prompt = ApplyDamagePrompt(
       combatantViewModels,
-      combatantNames
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
     );
-    const latestRollTotal = this.latestRoll && this.latestRoll.Total;
-    const prompt = new DefaultPrompt(
-      `Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' value='${latestRollTotal}'/>`,
-      callback
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   }
 
   public EditHP = () => {
@@ -330,16 +312,16 @@ export class CombatantCommander {
       targetCombatants = this.SelectedCombatants().map(c => c.Combatant);
     }
 
-    if (targetCombatants == []) {
+    if (targetCombatants.length == 0) {
       return;
     }
 
-    const prompt = new TagPrompt(
+    const prompt = TagPrompt(
       this.tracker.Encounter,
       targetCombatants,
       this.tracker.EventLog.AddEvent
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 

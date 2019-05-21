@@ -191,20 +191,26 @@
       <!-- /ko -->
       <div
         class="prompts"
-        data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}"
+        data-bind="react: {
+                component: PromptsComponent
+        }"
+      ></div>
+      <div
+        class="prompts legacy-prompts"
+        data-bind="with: PromptQueue, css: { empty: !PromptQueue.HasPrompt() }"
       >
-        <!-- ko foreach: Prompts -->
+        <!-- ko foreach: LegacyPrompts -->
         <form
           class="prompt"
           data-bind="
-                submit: $parent.Resolve($data),
+                submit: $parent.ResolveLegacyPrompt($data),
                 component: {
                     name: ComponentName,
                     params: {
                         prompt: $data,
                     }
                 },
-                afterRender: $parent.UpdateDom"
+                afterRender: $parent.UpdateLegacyDom"
         ></form>
         <!-- /ko -->
       </div>

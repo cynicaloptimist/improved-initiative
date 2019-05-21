@@ -1,4 +1,3 @@
-import Awesomplete = require("awesomplete");
 import { Field, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
@@ -6,6 +5,7 @@ import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { Toggle } from "../../Settings/components/Toggle";
+import { AutocompleteTextInput } from "./AutocompleteTextInput";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
@@ -23,9 +23,7 @@ export class IdentityFields extends React.Component<
   IdentityFieldsProps,
   IdentityFieldsState
 > {
-  private folderInput: HTMLInputElement;
   private autoCompletePaths: string[];
-  private initializedAutocomplete = false;
 
   constructor(props) {
     super(props);
@@ -41,25 +39,6 @@ export class IdentityFields extends React.Component<
     this.state = {
       folderExpanded
     };
-  }
-
-  public componentDidUpdate() {
-    if (!this.folderInput || this.initializedAutocomplete) {
-      return;
-    }
-
-    const awesomeplete = new Awesomplete(this.folderInput, {
-      list: this.autoCompletePaths,
-      minChars: 1
-    });
-
-    this.folderInput.addEventListener("awesomplete-select", (event: any) => {
-      this.props.formApi.setFieldValue("Path", event.text.value);
-      event.preventDefault();
-      awesomeplete.close();
-    });
-
-    this.initializedAutocomplete = true;
   }
 
   public render() {
@@ -105,16 +84,19 @@ export class IdentityFields extends React.Component<
         <div className="inline">
           <span
             className="statblock-editor__folder-button fa-clickable fa-times"
-            onClick={() => this.setState({ folderExpanded: false })}
+            onClick={() => {
+              this.setState({ folderExpanded: false });
+              this.props.formApi.setFieldValue("Path", "");
+            }}
           />
           <div>
             <label className="label" htmlFor="Path">
               Folder
             </label>
-            <Field
-              type="text"
-              name="Path"
-              innerRef={i => (this.folderInput = i)}
+            <AutocompleteTextInput
+              fieldName="Path"
+              options={this.autoCompletePaths}
+              autoFocus
             />
           </div>
         </div>

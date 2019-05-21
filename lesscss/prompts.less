@@ -1,6 +1,5 @@
 .prompts {
   padding: @medium-spacer;
-  flex-grow: 1;
   flex-shrink: 1;
   align-items: center;
   overflow-y: auto;
@@ -9,6 +8,10 @@
   &.empty {
     display: none;
   }
+}
+
+.legacy-prompts {
+  flex-grow: 1;
 }
 
 .ko-react-prompt-wrapper {
@@ -182,4 +185,20 @@
 .p-accept-tag__label {
   flex-grow: 1;
   flex-shrink: 1;
+}
+
+.p-apply-damage {
+  flex-grow: 1;
+  flex-direction: row;
+  align-items: center;
+  label {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+  button {
+    margin: @small-spacer;
+  }
+  input {
+    width: 60px;
+  }
 }

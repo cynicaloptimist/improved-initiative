@@ -46,7 +46,6 @@ export let RegisterComponents = () => {
   registerComponent("combatant", params => params.viewModel);
   registerComponent("concentrationprompt", params => params.prompt);
   registerComponent("defaultprompt", params => params.prompt);
-  registerComponent("playerdisplaycombatant", params => params.combatant);
   registerComponent("reactprompt", params => params.prompt);
   registerComponent("spelleditor", params => params.editor);
   registerComponent("tutorial", params => new TutorialViewModel(params));

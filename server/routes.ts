@@ -81,7 +81,7 @@ export default function(
       throw "Session is not available";
     }
 
-    session.encounterId = playerViews.InitializeNew();
+    session.encounterId = await playerViews.InitializeNew();
 
     if (defaultAccountLevel !== "free") {
       return await setupLocalDefaultUser(session, res);
@@ -125,8 +125,9 @@ export default function(
     res.render("playerview", pageRenderOptions(session));
   });
 
-  app.get("/playerviews/:id", (req: Req, res: Res) => {
-    res.json(playerViews.Get(req.params.id));
+  app.get("/playerviews/:id", async (req: Req, res: Res) => {
+    const playerView = await playerViews.Get(req.params.id);
+    res.json(playerView);
   });
 
   app.get("/templates/:name", (req: Req, res: Res) => {
