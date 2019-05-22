@@ -155,8 +155,8 @@ export default function(
     res.json(spellLibrary.GetById(req.params.id));
   });
 
-  const importEncounter = (req, res: Res) => {
-    const newViewId = playerViews.InitializeNew();
+  const importEncounter = async (req, res: Res) => {
+    const newViewId = await playerViews.InitializeNew();
     const session = req.session;
 
     if (typeof req.body.Combatants === "string") {
