@@ -125,6 +125,10 @@ export class Encounter {
     };
     if (encounter.Combatants) {
       encounter.Combatants.forEach(c => {
+        if (c.Player == "npc") {
+          c.Player = "";
+        }
+
         if (c.Id) {
           $.ajax(`/statblocks/${c.Id}`)
             .done(statBlockFromLibrary => {
