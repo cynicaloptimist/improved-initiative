@@ -39,7 +39,12 @@ export const ApplyDamagePrompt = (
           {"Apply damage or healing to "}
           {combatantViewModels.map(c => c.Name()).join(", ")}:
         </label>
-        <Field id={fieldLabelId} className="autofocus" name="damageAmount" />
+        <Field
+          id={fieldLabelId}
+          type="number"
+          className="autofocus"
+          name="damageAmount"
+        />
         <SubmitButton />
       </div>
     )
