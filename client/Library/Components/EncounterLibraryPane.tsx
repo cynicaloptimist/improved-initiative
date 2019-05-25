@@ -1,6 +1,5 @@
 import * as React from "react";
-import { CombatantState } from "../../../common/CombatantState";
-import { EncounterState, SavedEncounter } from "../../../common/EncounterState";
+import { SavedEncounter } from "../../../common/SavedEncounter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { EncounterLibrary } from "../EncounterLibrary";

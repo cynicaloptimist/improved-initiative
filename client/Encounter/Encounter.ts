@@ -3,9 +3,10 @@ import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState, SavedEncounter } from "../../common/EncounterState";
+import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -439,7 +440,6 @@ export class Encounter {
   };
 
   public GetSavedEncounter = (name: string, path: string): SavedEncounter => {
-    let activeCombatant = this.ActiveCombatant();
     const id = AccountClient.MakeId(name, path);
     return {
       Name: name,

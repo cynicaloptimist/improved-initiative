@@ -1,5 +1,6 @@
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState, SavedEncounter } from "../../common/EncounterState";
+import { EncounterState } from "../../common/EncounterState";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 

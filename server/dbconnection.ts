@@ -1,10 +1,9 @@
 import mongo = require("mongodb");
 
 import * as _ from "lodash";
-import { CombatantState } from "../common/CombatantState";
-import { EncounterState, SavedEncounter } from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
+import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { User } from "./user";
