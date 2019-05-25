@@ -56,6 +56,25 @@ export interface StatBlock extends Listable {
 }
 
 export namespace StatBlock {
+  export const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
+
+  const BaseTypes = [
+    "aberration",
+    "beast",
+    "celestial",
+    "construct",
+    "dragon",
+    "elemental",
+    "fey",
+    "fiend",
+    "giant",
+    "humanoid",
+    "monstrosity",
+    "ooze",
+    "plant",
+    "undead"
+  ];
+
   export const GetSearchHint = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
@@ -101,23 +120,4 @@ export namespace StatBlock {
     Version: process.env.VERSION || "0.0.0",
     ImageURL: ""
   });
-
-  export const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
-
-  const BaseTypes = [
-    "aberration",
-    "beast",
-    "celestial",
-    "construct",
-    "dragon",
-    "elemental",
-    "fey",
-    "fiend",
-    "giant",
-    "humanoid",
-    "monstrosity",
-    "ooze",
-    "plant",
-    "undead"
-  ];
 }
