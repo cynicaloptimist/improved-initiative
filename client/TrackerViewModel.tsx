@@ -20,7 +20,10 @@ import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
-import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
+import {
+  UpdateLegacyEncounterState,
+  UpdateLegacySavedEncounter
+} from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
@@ -460,7 +463,7 @@ export class TrackerViewModel {
 
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
-        UpdateLegacySavedEncounter(autosavedEncounter),
+        UpdateLegacyEncounterState(autosavedEncounter),
         this.Libraries.PersistentCharacters
       );
     }

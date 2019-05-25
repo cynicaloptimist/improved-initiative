@@ -3,7 +3,7 @@ import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState } from "../../common/EncounterState";
+import { EncounterState, SavedEncounter } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { AutoRerollInitiativeOption } from "../../common/Settings";
@@ -159,7 +159,7 @@ export class Encounter {
     Store.Save<EncounterState<CombatantState>>(
       Store.AutoSavedEncounters,
       Store.DefaultSavedEncounterId,
-      this.GetEncounterState(this.EncounterId, "")
+      this.GetEncounterState()
     );
   };
 
@@ -438,18 +438,13 @@ export class Encounter {
     this.durationTags.push(tag);
   };
 
-  public GetSavedEncounter = (
-    name: string,
-    path: string
-  ): EncounterState<CombatantState> => {
+  public GetSavedEncounter = (name: string, path: string): SavedEncounter => {
     let activeCombatant = this.ActiveCombatant();
     const id = AccountClient.MakeId(name, path);
     return {
       Name: name,
       Path: path,
       Id: id,
-      ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-      RoundCounter: this.RoundCounter(),
       Combatants: this.combatants()
         .filter(c => c.PersistentCharacterId == null)
         .map<CombatantState>(this.getCombatantState),
@@ -457,33 +452,21 @@ export class Encounter {
     };
   };
 
-  public GetEncounterState = (
-    name: string,
-    path: string
-  ): EncounterState<CombatantState> => {
+  public GetEncounterState = (): EncounterState<CombatantState> => {
     let activeCombatant = this.ActiveCombatant();
-    const id = AccountClient.MakeId(name, path);
     return {
-      Name: name,
-      Path: path,
-      Id: id,
       ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
       RoundCounter: this.RoundCounter(),
-      Combatants: this.combatants().map<CombatantState>(this.getCombatantState),
-      Version: process.env.VERSION
+      Combatants: this.combatants().map<CombatantState>(this.getCombatantState)
     };
   };
 
   public GetPlayerView = (): EncounterState<PlayerViewCombatantState> => {
     const activeCombatantId = this.getPlayerViewActiveCombatantId();
     return {
-      Name: this.EncounterId,
-      Path: "",
-      Id: this.EncounterId,
       ActiveCombatantId: activeCombatantId,
       RoundCounter: this.RoundCounter(),
-      Combatants: this.getCombatantsForPlayerView(activeCombatantId),
-      Version: process.env.VERSION
+      Combatants: this.getCombatantsForPlayerView(activeCombatantId)
     };
   };
 

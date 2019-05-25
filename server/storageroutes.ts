@@ -7,6 +7,7 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
+import { SavedEncounter } from "./library";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -88,7 +89,7 @@ export default function(app: express.Application) {
   configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
   configureEntityRoute<StatBlock>(app, "statblocks");
   configureEntityRoute<Spell>(app, "spells");
-  configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
+  configureEntityRoute<SavedEncounter>(app, "encounters");
 }
 
 function configureEntityRoute<T extends Listable>(
