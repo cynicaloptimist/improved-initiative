@@ -51,8 +51,9 @@ interface PendingPromptsProps {
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    return this.props.prompts.map(prompt => (
+    return this.props.prompts.map((prompt, index) => (
       <Prompt
+        key={index}
         {...prompt}
         onSubmit={values => {
           const shouldResolve = prompt.onSubmit(values);
