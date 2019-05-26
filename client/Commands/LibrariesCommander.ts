@@ -14,6 +14,7 @@ import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
@@ -171,25 +172,12 @@ export class LibrariesCommander {
   };
 
   public SaveEncounter = () => {
-    const prompt = new DefaultPrompt(
-      `Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-      response => {
-        const encounterName = response["encounterName"];
-        const path = ""; //TODO
-        if (encounterName) {
-          const savedEncounter = this.tracker.Encounter.GetSavedEncounter(
-            encounterName,
-            path
-          );
-          this.libraries.Encounters.Save(savedEncounter);
-          this.tracker.EventLog.AddEvent(
-            `Encounter saved as ${encounterName}.`
-          );
-          Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
-        }
-      }
+    const prompt = SaveEncounterPrompt(
+      this.tracker.Encounter.GetSavedEncounter,
+      this.libraries.Encounters.Save,
+      this.tracker.EventLog.AddEvent
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
