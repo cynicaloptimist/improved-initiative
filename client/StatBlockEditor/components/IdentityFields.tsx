@@ -5,7 +5,7 @@ import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { Toggle } from "../../Settings/components/Toggle";
-import { AutocompleteTextInput } from "./AutocompleteTextInput";
+import { AutoHideField } from "./AutoHideField";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
@@ -15,14 +15,7 @@ interface IdentityFieldsProps {
   currentListings?: Listing<Listable>[];
 }
 
-interface IdentityFieldsState {
-  folderExpanded: boolean;
-}
-
-export class IdentityFields extends React.Component<
-  IdentityFieldsProps,
-  IdentityFieldsState
-> {
+export class IdentityFields extends React.Component<IdentityFieldsProps> {
   private autoCompletePaths: string[];
 
   constructor(props) {
@@ -31,14 +24,6 @@ export class IdentityFields extends React.Component<
       this.props.currentListings &&
         this.props.currentListings.map(l => l.Listing().Path)
     );
-
-    const folderExpanded =
-      this.props.formApi.values["Path"] &&
-      this.props.formApi.values["Path"].length > 0;
-
-    this.state = {
-      folderExpanded
-    };
   }
 
   public render() {
@@ -79,36 +64,15 @@ export class IdentityFields extends React.Component<
     if (!this.props.allowFolder) {
       return null;
     }
-    if (this.state.folderExpanded) {
-      return (
-        <div className="inline">
-          <span
-            className="statblock-editor__folder-button fa-clickable fa-times"
-            onClick={() => {
-              this.setState({ folderExpanded: false });
-              this.props.formApi.setFieldValue("Path", "");
-            }}
-          />
-          <div>
-            <label className="label" htmlFor="Path">
-              Folder
-            </label>
-            <AutocompleteTextInput
-              fieldName="Path"
-              options={this.autoCompletePaths}
-              autoFocus
-            />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <span
-          className="statblock-editor__folder-button fa-clickable fa-folder"
-          title="Move to folder"
-          onClick={() => this.setState({ folderExpanded: true })}
-        />
-      );
-    }
+    return (
+      <AutoHideField
+        faClass="folder"
+        fieldName="Path"
+        formApi={this.props.formApi}
+        label="Folder: "
+        tooltip="Add to folder"
+        autoCompleteOptions={this.autoCompletePaths}
+      />
+    );
   };
 }
