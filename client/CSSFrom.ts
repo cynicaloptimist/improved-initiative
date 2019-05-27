@@ -2,7 +2,7 @@ import * as Color from "color";
 import { PlayerViewCustomStyles } from "../common/PlayerViewSettings";
 
 export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
-  const declarations = [];
+  const declarations: string[] = [];
   if (customStyles.combatantText) {
     declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
   }
