@@ -1,14 +1,24 @@
 import React = require("react");
 
-import { FormikProps } from "formik";
+import { Field, FieldProps } from "formik";
 import { AutocompleteTextInput } from "./AutocompleteTextInput";
+
+export function AutoHideField(props: AutoHideFieldProps) {
+  return (
+    <Field
+      name={props.fieldName}
+      render={(fieldApi: FieldProps) => (
+        <InnerAutoHideField {...props} fieldApi={fieldApi} />
+      )}
+    />
+  );
+}
 
 interface AutoHideFieldProps {
   faClass: string;
   fieldName: string;
   label: string;
   tooltip?: string;
-  formApi: FormikProps<any>;
   autoCompleteOptions?: string[];
 }
 
@@ -16,15 +26,17 @@ interface AutoHideFieldState {
   isExpanded: boolean;
 }
 
-export class AutoHideField extends React.Component<
-  AutoHideFieldProps,
+export class InnerAutoHideField extends React.Component<
+  AutoHideFieldProps & {
+    fieldApi: FieldProps;
+  },
   AutoHideFieldState
 > {
   constructor(props) {
     super(props);
     const isExpanded =
-      this.props.formApi.values[this.props.fieldName] &&
-      this.props.formApi.values[this.props.fieldName].length > 0;
+      this.props.fieldApi.form.values[this.props.fieldName] &&
+      this.props.fieldApi.form.values[this.props.fieldName].length > 0;
     this.state = {
       isExpanded
     };
@@ -38,9 +50,10 @@ export class AutoHideField extends React.Component<
             className="statblock-editor__folder-button fa-clickable fa-times"
             onClick={() => {
               this.setState({ isExpanded: false });
-              this.props.formApi.setFieldValue(this.props.fieldName, "");
+              this.props.fieldApi.form.setFieldValue(this.props.fieldName, "");
             }}
           />
+
           <div>
             <label className="label" htmlFor={this.props.fieldName}>
               {this.props.label}

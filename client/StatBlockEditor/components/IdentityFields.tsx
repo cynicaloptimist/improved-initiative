@@ -68,7 +68,6 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
       <AutoHideField
         faClass="folder"
         fieldName="Path"
-        formApi={this.props.formApi}
         label="Folder: "
         tooltip="Add to folder"
         autoCompleteOptions={this.autoCompletePaths}
