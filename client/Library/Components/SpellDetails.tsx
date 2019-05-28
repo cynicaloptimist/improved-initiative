@@ -22,28 +22,28 @@ export function SpellDetails(props: {
   return (
     <div className="spell">
       <h3>{props.Spell.Name}</h3>
-      <p className="spell-type">{getSpellType(props.Spell)}</p>
+      <div className="spell-type">{getSpellType(props.Spell)}</div>
       <div className="spell-details">
-        <p>
+        <div>
           <label>Casting Time:</label> {props.Spell.CastingTime}
-        </p>
-        <p>
+        </div>
+        <div>
           <label>Range:</label> {props.Spell.Range}
-        </p>
-        <p>
+        </div>
+        <div>
           <label>Components:</label> {props.Spell.Components}
-        </p>
-        <p>
+        </div>
+        <div>
           <label>Duration:</label> {props.Spell.Duration}
-        </p>
-        <p>
+        </div>
+        <div>
           <label>Classes:</label> {props.Spell.Classes.join(", ")}
-        </p>
+        </div>
       </div>
-      <p className="spell-description">
+      <div className="spell-description">
         {props.TextEnricher.EnrichText(props.Spell.Description)}
-      </p>
-      <p className="spell-source">Source: {props.Spell.Source}</p>
+      </div>
+      <div className="spell-source">Source: {props.Spell.Source}</div>
     </div>
   );
 }
