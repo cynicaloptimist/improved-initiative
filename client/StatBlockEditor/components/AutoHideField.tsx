@@ -45,9 +45,9 @@ export class InnerAutoHideField extends React.Component<
   public render() {
     if (this.state.isExpanded) {
       return (
-        <div className="inline">
+        <div className="autohide-field inline">
           <span
-            className="statblock-editor__folder-button fa-clickable fa-times"
+            className="autohide-field__drop-button fa-clickable fa-times"
             onClick={() => {
               this.setState({ isExpanded: false });
               this.props.fieldApi.form.setFieldValue(this.props.fieldName, "");
@@ -55,7 +55,10 @@ export class InnerAutoHideField extends React.Component<
           />
 
           <div>
-            <label className="label" htmlFor={this.props.fieldName}>
+            <label
+              className="autohide-field__label label"
+              htmlFor={this.props.fieldName}
+            >
               {this.props.label}
             </label>
             <AutocompleteTextInput
@@ -69,7 +72,7 @@ export class InnerAutoHideField extends React.Component<
     } else {
       return (
         <span
-          className={`statblock-editor__folder-button fa-clickable fa-${
+          className={`autohide-field__open-button fa-clickable fa-${
             this.props.faClass
           }`}
           title={this.props.tooltip}
