@@ -207,4 +207,24 @@
   flex-grow: 1;
   flex-direction: row;
   align-items: center;
+
+  input {
+    margin: @extra-small-spacer;
+  }
+
+  .autohide-field {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .autohide-field__drop-button,
+  .autohide-field__open-button {
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+  }
+  .autohide-field__label-and-field {
+    flex-flow: row;
+    align-items: center;
+    padding-left: @medium-spacer;
+  }
 }

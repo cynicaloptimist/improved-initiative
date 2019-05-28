@@ -53,8 +53,7 @@ export class InnerAutoHideField extends React.Component<
               this.props.fieldApi.form.setFieldValue(this.props.fieldName, "");
             }}
           />
-
-          <div>
+          <div className="autohide-field__label-and-field">
             <label
               className="autohide-field__label label"
               htmlFor={this.props.fieldName}
