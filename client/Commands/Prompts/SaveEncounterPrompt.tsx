@@ -4,6 +4,7 @@ import { probablyUniqueString } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
+import { AutoHideField } from "../../StatBlockEditor/components/AutoHideField";
 import { Metrics } from "../../Utility/Metrics";
 import { EventLog } from "../../Widgets/EventLog";
 import { PromptProps } from "./components/PendingPrompts";
@@ -16,7 +17,8 @@ interface SaveEncounterModel {
 export function SaveEncounterPrompt(
   getSavedEncounter: typeof Encounter.prototype.GetSavedEncounter,
   saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
-  logEvent: typeof EventLog.prototype.AddEvent
+  logEvent: typeof EventLog.prototype.AddEvent,
+  autocompletePaths: string[]
 ): PromptProps<SaveEncounterModel> {
   const fieldLabelId = probablyUniqueString();
   return {
@@ -28,6 +30,13 @@ export function SaveEncounterPrompt(
     children: (
       <div className="p-save-encounter">
         <label htmlFor={fieldLabelId}>{"Save Encounter As: "}</label>
+        <AutoHideField
+          faClass="folder"
+          fieldName="Path"
+          label="Folder: "
+          tooltip="Save in folder"
+          autoCompleteOptions={autocompletePaths}
+        />
         <Field id={fieldLabelId} name="Name" className="response" type="text" />
         <SubmitButton />
       </div>

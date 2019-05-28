@@ -175,7 +175,8 @@ export class LibrariesCommander {
     const prompt = SaveEncounterPrompt(
       this.tracker.Encounter.GetSavedEncounter,
       this.libraries.Encounters.Save,
-      this.tracker.EventLog.AddEvent
+      this.tracker.EventLog.AddEvent,
+      this.libraries.Encounters.Encounters().map(e => e.Listing().Path)
     );
     this.tracker.PromptQueue.Add(prompt);
   };
