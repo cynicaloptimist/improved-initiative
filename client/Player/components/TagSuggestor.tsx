@@ -33,10 +33,6 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
     }
 
     if (model.tagDuration) {
-      const duration = parseInt(model.tagDuration);
-      if (isNaN(duration)) {
-        return false;
-      }
       // If tag is set to expire at the end of the current combatant's turn in one round,
       // we need to add a grace round so it doesn't end immediately at the end of this turn.
       const timingKeyedCombatantIsActive =
@@ -47,7 +43,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
       const tagState: TagState = {
         Text: model.tagText,
         DurationCombatantId: model.tagTimingId,
-        DurationRemaining: duration + durationGraceRound,
+        DurationRemaining: model.tagDuration + durationGraceRound,
         DurationTiming: model.tagTiming
       };
 
