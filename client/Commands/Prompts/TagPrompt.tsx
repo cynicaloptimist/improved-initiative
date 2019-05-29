@@ -1,8 +1,7 @@
-import * as Awesomplete from "awesomplete";
 import * as _ from "lodash";
 import * as React from "react";
 
-import { Field } from "formik";
+import { Field, FieldProps } from "formik";
 import { DurationTiming } from "../../../common/DurationTiming";
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
@@ -44,7 +43,14 @@ export class TagPromptComponent extends React.Component<
             options={Object.keys(Conditions)}
             autoFocus
           />
-          <Button fontAwesomeIcon="hourglass" onClick={this.toggleAdvanced} />
+          <Field name="useDuration">
+            {(fieldApi: FieldProps) => (
+              <Button
+                fontAwesomeIcon="hourglass"
+                onClick={() => this.toggleAdvanced(fieldApi)}
+              />
+            )}
+          </Field>
           <SubmitButton />
         </div>
         {this.state.advancedMode && this.renderAdvancedFields()}
@@ -52,8 +58,11 @@ export class TagPromptComponent extends React.Component<
     );
   }
 
-  private toggleAdvanced = () =>
-    this.setState({ advancedMode: !this.state.advancedMode });
+  private toggleAdvanced = (fieldApi: FieldProps) => {
+    const toggledMode = !this.state.advancedMode;
+    fieldApi.form.setFieldValue(fieldApi.field.name, toggledMode);
+    this.setState({ advancedMode: toggledMode });
+  };
 
   private renderAdvancedFields = () => (
     <div className="tag-advanced">
@@ -82,9 +91,10 @@ export class TagPromptComponent extends React.Component<
 
 export interface TagModel {
   tagText: string;
-  tagDuration?: string;
+  tagDuration?: number;
   tagTimingId?: string;
   tagTiming?: DurationTiming;
+  useDuration: boolean;
 }
 
 export function TagPrompt(
@@ -102,7 +112,9 @@ export function TagPrompt(
     initialValues: {
       tagText: "",
       tagTimingId: activeCombatantId,
-      tagTiming: StartOfTurn
+      tagTiming: StartOfTurn,
+      tagDuration: 1,
+      useDuration: false
     },
     children: (
       <TagPromptComponent
@@ -117,22 +129,17 @@ export function TagPrompt(
         return true;
       }
 
-      if (!model.tagDuration || !model.tagTimingId) {
+      if (!model.useDuration || !model.tagDuration || !model.tagTimingId) {
         for (const combatant of targetCombatants) {
           const tag = new Tag(model.tagText, combatant);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", { Text: tag.Text });
         }
       } else {
-        const duration = parseInt(model.tagDuration);
-        if (isNaN(duration)) {
-          return false;
-        }
-
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
-          this.encounter.Combatants(),
+          encounter.Combatants(),
           c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
@@ -140,11 +147,11 @@ export function TagPrompt(
         const durationGraceRound =
           timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
-        for (const combatant of this.targetCombatants) {
+        for (const combatant of targetCombatants) {
           const tag = new Tag(
             model.tagText,
             combatant,
-            duration + durationGraceRound,
+            model.tagDuration + durationGraceRound,
             model.tagTiming,
             model.tagTimingId
           );

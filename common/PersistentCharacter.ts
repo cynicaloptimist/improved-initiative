@@ -37,7 +37,7 @@ export namespace PersistentCharacter {
   });
 
   const GetTotalLevelFromString = (levelString: string) => {
-    const matches = levelString.match(/\d+/g);
+    const matches = levelString.toString().match(/\d+/g);
     if (!matches) {
       return "";
     }
