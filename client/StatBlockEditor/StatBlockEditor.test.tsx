@@ -77,7 +77,7 @@ describe("StatBlockEditor", () => {
       done();
     });
 
-    editor.find(`.statblock-editor__folder-button`).simulate("click");
+    editor.find(`.autohide-field__open-button`).simulate("click");
 
     editor
       .find(`input[name="Path"]`)
