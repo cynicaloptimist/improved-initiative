@@ -127,7 +127,7 @@ export function TagPrompt(
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
-          this.encounter.Combatants(),
+          encounter.Combatants(),
           c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
@@ -135,7 +135,7 @@ export function TagPrompt(
         const durationGraceRound =
           timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
-        for (const combatant of this.targetCombatants) {
+        for (const combatant of targetCombatants) {
           const tag = new Tag(
             model.tagText,
             combatant,
