@@ -82,7 +82,7 @@ export class TagPromptComponent extends React.Component<
 
 export interface TagModel {
   tagText: string;
-  tagDuration?: string;
+  tagDuration?: number;
   tagTimingId?: string;
   tagTiming?: DurationTiming;
 }
@@ -124,11 +124,6 @@ export function TagPrompt(
           Metrics.TrackEvent("TagAdded", { Text: tag.Text });
         }
       } else {
-        const duration = parseInt(model.tagDuration);
-        if (isNaN(duration)) {
-          return false;
-        }
-
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
@@ -144,7 +139,7 @@ export function TagPrompt(
           const tag = new Tag(
             model.tagText,
             combatant,
-            duration + durationGraceRound,
+            model.tagDuration + durationGraceRound,
             model.tagTiming,
             model.tagTimingId
           );
