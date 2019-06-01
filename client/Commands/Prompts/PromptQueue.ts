@@ -25,7 +25,7 @@ export class PromptQueue {
   ) => {
     prompt.Resolve(form);
     this.LegacyPrompts.remove(prompt);
-    if (this.HasPrompt()) {
+    if (this.HasLegacyPrompt()) {
       $(this.LegacyPrompts()[0].InputSelector)
         .first()
         .select();
@@ -51,17 +51,21 @@ export class PromptQueue {
   };
 
   public HasPrompt = ko.pureComputed(() => {
+    return this.prompts().length > 0 || this.LegacyPrompts().length > 0;
+  });
+
+  public HasLegacyPrompt = ko.pureComputed(() => {
     return this.LegacyPrompts().length > 0;
   });
 
   public Dismiss = () => {
-    if (this.HasPrompt()) {
+    if (this.HasLegacyPrompt()) {
       this.LegacyPrompts.remove(this.LegacyPrompts()[0]);
     }
   };
 
   public AnimatePrompt = () => {
-    if (!this.HasPrompt()) {
+    if (!this.HasLegacyPrompt()) {
       return;
     }
     const opts = { duration: 200 };
