@@ -1,7 +1,6 @@
 import React = require("react");
 
 import { Field, FieldProps } from "formik";
-import { AutocompleteTextInput } from "./AutocompleteTextInput";
 
 export function AutoHideField(props: AutoHideFieldProps) {
   return (
@@ -17,9 +16,8 @@ export function AutoHideField(props: AutoHideFieldProps) {
 interface AutoHideFieldProps {
   faClass: string;
   fieldName: string;
-  label: string;
   tooltip?: string;
-  autoCompleteOptions?: string[];
+  children: React.ReactNode;
 }
 
 interface AutoHideFieldState {
@@ -53,19 +51,7 @@ export class InnerAutoHideField extends React.Component<
               this.props.fieldApi.form.setFieldValue(this.props.fieldName, "");
             }}
           />
-          <div className="autohide-field__label-and-field">
-            <label
-              className="autohide-field__label label"
-              htmlFor={this.props.fieldName}
-            >
-              {this.props.label}
-            </label>
-            <AutocompleteTextInput
-              fieldName={this.props.fieldName}
-              options={this.props.autoCompleteOptions}
-              autoFocus
-            />
-          </div>
+          <div className="autohide-field__children">{this.props.children}</div>
         </div>
       );
     } else {

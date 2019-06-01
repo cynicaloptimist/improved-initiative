@@ -6,6 +6,7 @@ import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { Toggle } from "../../Settings/components/Toggle";
 import { AutoHideField } from "./AutoHideField";
+import { AutocompleteTextInput } from "./AutocompleteTextInput";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
@@ -65,13 +66,16 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
       return null;
     }
     return (
-      <AutoHideField
-        faClass="folder"
-        fieldName="Path"
-        label="Folder: "
-        tooltip="Add to folder"
-        autoCompleteOptions={this.autoCompletePaths}
-      />
+      <AutoHideField faClass="folder" fieldName="Path" tooltip="Add to folder">
+        <label className="autohide-field__label label" htmlFor="Path">
+          {"Folder: "}
+        </label>
+        <AutocompleteTextInput
+          fieldName="Path"
+          options={this.autoCompletePaths}
+          autoFocus
+        />
+      </AutoHideField>
     );
   };
 }

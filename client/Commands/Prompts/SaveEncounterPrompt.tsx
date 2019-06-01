@@ -5,6 +5,7 @@ import { SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
 import { AutoHideField } from "../../StatBlockEditor/components/AutoHideField";
+import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
 import { EventLog } from "../../Widgets/EventLog";
 import { PromptProps } from "./components/PendingPrompts";
@@ -33,10 +34,17 @@ export function SaveEncounterPrompt(
         <AutoHideField
           faClass="folder"
           fieldName="Path"
-          label="Folder: "
           tooltip="Save in folder"
-          autoCompleteOptions={autocompletePaths}
-        />
+        >
+          <label className="autohide-field__label label" htmlFor="Path">
+            {"Folder: "}
+          </label>
+          <AutocompleteTextInput
+            fieldName="Path"
+            options={autocompletePaths}
+            autoFocus
+          />
+        </AutoHideField>
         <Field id={fieldLabelId} name="Name" className="response" type="text" />
         <SubmitButton />
       </div>
