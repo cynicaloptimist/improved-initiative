@@ -50,6 +50,10 @@ export class PromptQueue {
       .select();
   };
 
+  public HasPrompt = ko.pureComputed(() => {
+    return this.prompts().length > 0 || this.LegacyPrompts().length > 0;
+  });
+
   public HasLegacyPrompt = ko.pureComputed(() => {
     return this.LegacyPrompts().length > 0;
   });
