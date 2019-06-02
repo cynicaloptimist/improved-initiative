@@ -51,13 +51,10 @@
     flex-flow: column;
     align-items: stretch;
 
-    div {
+    > div {
       flex-flow: row wrap;
       align-items: center;
-
-      > * {
-        margin: @extra-small-spacer;
-      }
+      justify-content: flex-end;
     }
   }
 
@@ -131,9 +128,11 @@
     }
   }
 
-  input {
-    margin: 0 0 0 @large-spacer;
+  input,
+  select {
     padding: @medium-spacer;
+    margin: @small-spacer;
+    height: 2.6rem;
     border: 1px solid @primary-black;
   }
 }
