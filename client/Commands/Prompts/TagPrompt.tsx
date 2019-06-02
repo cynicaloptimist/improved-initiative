@@ -35,28 +35,30 @@ export class TagPromptComponent extends React.Component<
 
   public render() {
     return (
-      <div className="add-tag">
-        <div>
-          <label className="add-tag__label" htmlFor="tagText">
-            Add a tag to {this.props.targetDisplayNames}
-          </label>
-          <AutocompleteTextInput
-            fieldName="tagText"
-            options={Object.keys(Conditions)}
-            autoFocus
-          />
-          <Field name="useDuration">
-            {(fieldApi: FieldProps) => (
-              <Button
-                fontAwesomeIcon="hourglass"
-                onClick={() => this.toggleAdvanced(fieldApi)}
-              />
-            )}
-          </Field>
-          <SubmitButton />
+      <React.Fragment>
+        <div className="add-tag">
+          <div>
+            <label className="add-tag__label" htmlFor="tagText">
+              Add a tag to {this.props.targetDisplayNames}
+            </label>
+            <AutocompleteTextInput
+              fieldName="tagText"
+              options={Object.keys(Conditions)}
+              autoFocus
+            />
+            <Field name="useDuration">
+              {(fieldApi: FieldProps) => (
+                <Button
+                  fontAwesomeIcon="hourglass"
+                  onClick={() => this.toggleAdvanced(fieldApi)}
+                />
+              )}
+            </Field>
+          </div>
+          {this.state.advancedMode && this.renderAdvancedFields()}
         </div>
-        {this.state.advancedMode && this.renderAdvancedFields()}
-      </div>
+        <SubmitButton />
+      </React.Fragment>
     );
   }
 
