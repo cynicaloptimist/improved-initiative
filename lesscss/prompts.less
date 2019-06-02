@@ -214,23 +214,12 @@
 
 .p-save-encounter {
   flex-grow: 1;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.p-save-encounter__basic,
+.p-save-encounter__advanced {
+  flex-flow: row;
   align-items: center;
-
-  .autohide-field {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .autohide-field__drop-button,
-  .autohide-field__open-button {
-    margin-bottom: 0;
-    margin-left: 0.5rem;
-  }
-
-  .autohide-field__children {
-    flex-flow: row;
-    align-items: center;
-    padding-left: @medium-spacer;
-  }
 }

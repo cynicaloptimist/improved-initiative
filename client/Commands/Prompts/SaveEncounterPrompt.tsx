@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import * as React from "react";
 import { probablyUniqueString } from "../../../common/Toolbox";
-import { SubmitButton } from "../../Components/Button";
+import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
@@ -12,16 +12,52 @@ import { PromptProps } from "./components/PendingPrompts";
 interface SaveEncounterPromptComponentProps {
   autocompletePaths: string[];
 }
-interface SaveEncounterPromptComponentState {}
+interface SaveEncounterPromptComponentState {
+  advancedPrompt: boolean;
+}
 class SaveEncounterPromptComponent extends React.Component<
   SaveEncounterPromptComponentProps,
   SaveEncounterPromptComponentState
 > {
+  constructor(props) {
+    super(props);
+    this.state = {
+      advancedPrompt: false
+    };
+  }
+
   public render() {
     const fieldLabelId = probablyUniqueString();
     return (
-      <div className="p-save-encounter">
-        <label htmlFor={fieldLabelId}>{"Save Encounter As: "}</label>
+      <React.Fragment>
+        <div className="p-save-encounter">
+          <div className="p-save-encounter__basic">
+            <label htmlFor={fieldLabelId}>{"Save Encounter As: "}</label>
+            <Field
+              id={fieldLabelId}
+              name="Name"
+              className="response"
+              type="text"
+            />
+            <Button
+              fontAwesomeIcon="caret-down"
+              onClick={() =>
+                this.setState(oldState => ({
+                  advancedPrompt: !oldState.advancedPrompt
+                }))
+              }
+            />
+          </div>
+          {this.state.advancedPrompt && this.renderAdvanced()}
+        </div>
+        <SubmitButton />
+      </React.Fragment>
+    );
+  }
+
+  private renderAdvanced = () => {
+    return (
+      <div className="p-save-encounter__advanced">
         <label className="autohide-field__label label" htmlFor="Path">
           {"Folder: "}
         </label>
@@ -30,11 +66,9 @@ class SaveEncounterPromptComponent extends React.Component<
           options={this.props.autocompletePaths}
           autoFocus
         />
-        <Field id={fieldLabelId} name="Name" className="response" type="text" />
-        <SubmitButton />
       </div>
     );
-  }
+  };
 }
 
 interface SaveEncounterModel {
