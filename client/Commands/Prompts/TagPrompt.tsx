@@ -37,7 +37,9 @@ export class TagPromptComponent extends React.Component<
     return (
       <div className="add-tag">
         <div>
-          Add a tag to {this.props.targetDisplayNames}:
+          <label className="add-tag__label" htmlFor="tagText">
+            Add a tag to {this.props.targetDisplayNames}
+          </label>
           <AutocompleteTextInput
             fieldName="tagText"
             options={Object.keys(Conditions)}

@@ -47,8 +47,9 @@
   }
 
   .add-tag {
+    flex-grow: 1;
     flex-flow: column;
-    align-items: flex-start;
+    align-items: stretch;
 
     div {
       flex-flow: row wrap;
@@ -58,6 +59,10 @@
         margin: @extra-small-spacer;
       }
     }
+  }
+
+  .add-tag__label {
+    flex-grow: 1;
   }
 
   .roll-initiative {
