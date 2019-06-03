@@ -26,7 +26,7 @@ export type StatBlockEditorTarget =
   | "combatant"
   | "persistentcharacter";
 
-interface StatBlockEditorProps {
+export interface StatBlockEditorProps {
   statBlock: StatBlock;
   onSave: (statBlock: StatBlock) => void;
   onDelete?: () => void;
@@ -99,7 +99,7 @@ export class StatBlockEditor extends React.Component<
                   this.props.editorTarget === "library" ||
                   this.props.editorTarget === "persistentcharacter"
                 }
-                allowSaveAs={this.props.onSaveAsCopy !== undefined}
+                allowSaveAsCopy={this.props.onSaveAsCopy !== undefined}
                 currentListings={this.props.currentListings}
                 setEditorMode={(editorMode: "standard" | "json") =>
                   this.setState({ editorMode })

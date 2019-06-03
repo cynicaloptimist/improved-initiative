@@ -11,7 +11,7 @@ import { AutocompleteTextInput } from "./AutocompleteTextInput";
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
   allowFolder: boolean;
-  allowSaveAs: boolean;
+  allowSaveAsCopy: boolean;
   setEditorMode: (editorMode: "standard" | "json") => void;
   currentListings?: Listing<Listable>[];
 }
@@ -28,6 +28,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
   }
 
   public render() {
+    const showSaveAs = this.props.allowSaveAsCopy;
     return (
       <React.Fragment>
         <div className="c-statblock-editor__path-and-name">
@@ -39,7 +40,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
             <Field type="text" name="Name" id="name" />
           </div>
         </div>
-        {this.props.allowSaveAs && (
+        {showSaveAs && (
           <div className="c-statblock-editor__save-as">
             <Toggle fieldName="SaveAs">Save as a copy</Toggle>
             {this.props.formApi.errors.PathAndName}

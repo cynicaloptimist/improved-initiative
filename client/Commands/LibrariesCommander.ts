@@ -107,7 +107,7 @@ export class LibrariesCommander {
           onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
           onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
-          onSaveAs: library.SaveNewStatBlock
+          onSaveAsCopy: library.SaveNewStatBlock
         });
       }
     });
