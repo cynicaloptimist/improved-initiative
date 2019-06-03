@@ -45,11 +45,21 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
         {showSaveAs && (
           <div className="c-statblock-editor__save-as">
             {this.props.allowSaveAsCopy && (
-              <Toggle fieldName="SaveAs">Save as a copy</Toggle>
+              <Toggle
+                fieldName="SaveAs"
+                disabled={this.props.formApi.values.SaveAsCharacter}
+              >
+                Save as a copy
+              </Toggle>
             )}
             {this.props.formApi.errors.PathAndName}
             {this.props.allowSaveAsCharacter && (
-              <Toggle fieldName="SaveAsCharacter">Save as a Character</Toggle>
+              <Toggle
+                fieldName="SaveAsCharacter"
+                disabled={this.props.formApi.values.SaveAs}
+              >
+                Save as a Character
+              </Toggle>
             )}
           </div>
         )}
