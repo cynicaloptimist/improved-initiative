@@ -58,7 +58,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
                 fieldName="SaveAsCharacter"
                 disabled={this.props.formApi.values.SaveAs}
               >
-                Save as a Character
+                Save as a <strong>Character</strong>
               </Toggle>
             )}
           </div>
