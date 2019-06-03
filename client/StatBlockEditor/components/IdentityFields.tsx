@@ -12,6 +12,7 @@ interface IdentityFieldsProps {
   formApi: FormikProps<any>;
   allowFolder: boolean;
   allowSaveAsCopy: boolean;
+  allowSaveAsCharacter: boolean;
   setEditorMode: (editorMode: "standard" | "json") => void;
   currentListings?: Listing<Listable>[];
 }
@@ -28,7 +29,8 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
   }
 
   public render() {
-    const showSaveAs = this.props.allowSaveAsCopy;
+    const showSaveAs =
+      this.props.allowSaveAsCopy || this.props.allowSaveAsCharacter;
     return (
       <React.Fragment>
         <div className="c-statblock-editor__path-and-name">
@@ -42,10 +44,15 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
         </div>
         {showSaveAs && (
           <div className="c-statblock-editor__save-as">
-            <Toggle fieldName="SaveAs">Save as a copy</Toggle>
-            {this.props.formApi.errors.PathAndName}
+            {this.props.allowSaveAsCopy && (
+              <Toggle fieldName="SaveAs">Save as a copy</Toggle>
+            )}
+            {this.props.allowSaveAsCharacter && (
+              <Toggle fieldName="SaveAsCharacter">Save as a Character</Toggle>
+            )}
           </div>
         )}
+        {this.props.formApi.errors.PathAndName}
         <div className="c-statblock-editor__mode-toggle">
           <label>Editor Mode:</label>
           <Button

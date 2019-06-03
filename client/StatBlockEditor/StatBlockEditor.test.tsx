@@ -16,6 +16,7 @@ describe("StatBlockEditor", () => {
   let editor: Enzyme.ReactWrapper<any, any>;
   let saveCallback: jest.Mock<(s: StatBlock) => void>;
   let saveAsCallback: jest.Mock<(s: StatBlock) => void>;
+  let saveAsCharacterCallback: jest.Mock<(s: StatBlock) => void>;
   let statBlock: StatBlock;
 
   beforeEach(() => {
@@ -32,6 +33,7 @@ describe("StatBlockEditor", () => {
     );
     saveCallback = jest.fn();
     saveAsCallback = jest.fn();
+    saveAsCharacterCallback = jest.fn();
     editor = Enzyme.mount(
       <StatBlockEditor
         statBlock={statBlock}
@@ -39,6 +41,7 @@ describe("StatBlockEditor", () => {
         onClose={jest.fn()}
         onSave={saveCallback}
         onSaveAsCopy={saveAsCallback}
+        onSaveAsCharacter={saveAsCharacterCallback}
         currentListings={[listing]}
       />
     );
@@ -131,6 +134,30 @@ describe("StatBlockEditor", () => {
     editor.instance().forceUpdate();
 
     const saveAsButton = editor.find(`.c-toggle#toggle_SaveAs`);
+    saveAsButton.simulate("click");
+
+    editor.simulate("submit");
+  });
+
+  test("calls saveAsCharacter when Save as a character is checked", done => {
+    expect.assertions(3);
+
+    saveAsCharacterCallback.mockImplementation((editedStatBlock: StatBlock) => {
+      expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
+      expect(editedStatBlock.Name).toEqual("Snarf");
+      expect(editedStatBlock).not.toHaveProperty("SaveAs");
+      done();
+    });
+
+    editor
+      .find(`input[name="Name"]`)
+      .simulate("change", { target: { name: "Name", value: "Snarf" } });
+    editor
+      .find(`input[name="Name"]`)
+      .simulate("blur", { target: { name: "Name" } });
+    editor.instance().forceUpdate();
+
+    const saveAsButton = editor.find(`.c-toggle#toggle_SaveAsCharacter`);
     saveAsButton.simulate("click");
 
     editor.simulate("submit");

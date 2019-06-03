@@ -98,6 +98,7 @@ export class LibrariesCommander {
           editorTarget: "library",
           statBlock: statBlockWithNewId,
           onSave: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
           currentListings: library.GetStatBlocks()
         });
       } else {
@@ -107,7 +108,8 @@ export class LibrariesCommander {
           onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
           onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
-          onSaveAsCopy: library.SaveNewStatBlock
+          onSaveAsCopy: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
       }
     });
@@ -210,5 +212,12 @@ export class LibrariesCommander {
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.NPCs.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+  };
+
+  private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
+    this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+      persistentCharacter
+    );
   };
 }
