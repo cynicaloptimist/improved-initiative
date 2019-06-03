@@ -21,14 +21,10 @@ import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
-import {
-  UpdateLegacyEncounterState,
-  UpdateLegacySavedEncounter
-} from "./Encounter/UpdateLegacySavedEncounter";
+import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
-import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
