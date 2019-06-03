@@ -1,6 +1,5 @@
 import { Field, FieldProps } from "formik";
 import * as React from "react";
-import { probablyUniqueString } from "../../../common/Toolbox";
 
 interface ToggleButtonProps {
   fieldName: string;
