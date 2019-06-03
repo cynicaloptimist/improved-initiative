@@ -6,6 +6,7 @@ import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
+import { Omit } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -41,7 +42,7 @@ import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
-  StatBlockEditorTarget
+  StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
@@ -171,14 +172,7 @@ export class TrackerViewModel {
     //this.TutorialVisible(false);
   };
 
-  public EditStatBlock(props: {
-    editorTarget: StatBlockEditorTarget;
-    statBlock: StatBlock;
-    currentListings?: Listing<StatBlock>[];
-    onSave: (newStatBlock: StatBlock) => void;
-    onDelete?: () => void;
-    onSaveAs?: (newStatBlock: StatBlock) => void;
-  }) {
+  public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
     this.StatBlockEditor(
       <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
     );
