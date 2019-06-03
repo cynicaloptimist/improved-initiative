@@ -38,7 +38,7 @@ describe("StatBlockEditor", () => {
         editorTarget="library"
         onClose={jest.fn()}
         onSave={saveCallback}
-        onSaveAs={saveAsCallback}
+        onSaveAsCopy={saveAsCallback}
         currentListings={[listing]}
       />
     );

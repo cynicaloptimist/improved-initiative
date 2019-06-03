@@ -30,7 +30,7 @@ interface StatBlockEditorProps {
   statBlock: StatBlock;
   onSave: (statBlock: StatBlock) => void;
   onDelete?: () => void;
-  onSaveAs?: (statBlock: StatBlock) => void;
+  onSaveAsCopy?: (statBlock: StatBlock) => void;
   onClose: () => void;
   editorTarget: StatBlockEditorTarget;
   currentListings?: Listing<Listable>[];
@@ -99,7 +99,7 @@ export class StatBlockEditor extends React.Component<
                   this.props.editorTarget === "library" ||
                   this.props.editorTarget === "persistentcharacter"
                 }
-                allowSaveAs={this.props.onSaveAs !== undefined}
+                allowSaveAs={this.props.onSaveAsCopy !== undefined}
                 currentListings={this.props.currentListings}
                 setEditorMode={(editorMode: "standard" | "json") =>
                   this.setState({ editorMode })
@@ -219,9 +219,9 @@ export class StatBlockEditor extends React.Component<
 
     ConvertStringsToNumbersWhereNeeded(editedStatBlock);
 
-    if (SaveAs && this.props.onSaveAs) {
+    if (SaveAs && this.props.onSaveAsCopy) {
       editedStatBlock.Id = probablyUniqueString();
-      this.props.onSaveAs(editedStatBlock);
+      this.props.onSaveAsCopy(editedStatBlock);
     } else {
       this.props.onSave(editedStatBlock);
     }
