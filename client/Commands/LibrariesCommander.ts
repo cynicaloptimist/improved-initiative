@@ -175,7 +175,7 @@ export class LibrariesCommander {
 
   public SaveEncounter = () => {
     const prompt = SaveEncounterPrompt(
-      this.tracker.Encounter.GetSavedEncounter,
+      this.tracker.Encounter.GetEncounterState,
       this.libraries.Encounters.Save,
       this.tracker.EventLog.AddEvent,
       this.libraries.Encounters.Encounters().map(e => e.Listing().Path)

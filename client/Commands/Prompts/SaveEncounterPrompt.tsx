@@ -1,6 +1,7 @@
 import { Field } from "formik";
 import * as React from "react";
 import { probablyUniqueString } from "../../../common/Toolbox";
+import { AccountClient } from "../../Account/AccountClient";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
@@ -77,7 +78,7 @@ interface SaveEncounterModel {
 }
 
 export function SaveEncounterPrompt(
-  getSavedEncounter: typeof Encounter.prototype.GetSavedEncounter,
+  getEncounterState: typeof Encounter.prototype.GetEncounterState,
   saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
   logEvent: typeof EventLog.prototype.AddEvent,
   autocompletePaths: string[]
@@ -94,7 +95,16 @@ export function SaveEncounterPrompt(
     onSubmit: (model: SaveEncounterModel) => {
       if (!model.Name) return false;
 
-      const savedEncounter = getSavedEncounter(model.Name, model.Path);
+      const encounterState = getEncounterState();
+      const id = AccountClient.MakeId(model.Name, model.Path);
+      const savedEncounter = {
+        Name: model.Name,
+        Path: model.Path,
+        Id: id,
+        Combatants: encounterState.Combatants,
+        Version: process.env.VERSION
+      };
+
       saveEncounterToLibrary(savedEncounter);
       logEvent(`Encounter saved as ${model.Name}.`);
       Metrics.TrackEvent("EncounterSaved", { Name: model.Name });

@@ -439,19 +439,6 @@ export class Encounter {
     this.durationTags.push(tag);
   };
 
-  public GetSavedEncounter = (name: string, path: string): SavedEncounter => {
-    const id = AccountClient.MakeId(name, path);
-    return {
-      Name: name,
-      Path: path,
-      Id: id,
-      Combatants: this.combatants()
-        .filter(c => c.PersistentCharacterId == null)
-        .map<CombatantState>(c => c.GetState()),
-      Version: process.env.VERSION
-    };
-  };
-
   public GetEncounterState = (): EncounterState<CombatantState> => {
     let activeCombatant = this.ActiveCombatant();
     return {
