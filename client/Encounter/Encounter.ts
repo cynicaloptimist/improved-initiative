@@ -447,7 +447,7 @@ export class Encounter {
       Id: id,
       Combatants: this.combatants()
         .filter(c => c.PersistentCharacterId == null)
-        .map<CombatantState>(this.getCombatantState),
+        .map<CombatantState>(c => c.GetState()),
       Version: process.env.VERSION
     };
   };
@@ -457,7 +457,7 @@ export class Encounter {
     return {
       ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
       RoundCounter: this.RoundCounter(),
-      Combatants: this.combatants().map<CombatantState>(this.getCombatantState)
+      Combatants: this.combatants().map<CombatantState>(c => c.GetState())
     };
   };
 
@@ -559,32 +559,6 @@ export class Encounter {
       ToPlayerViewCombatantState(c)
     );
   }
-
-  private getCombatantState = (c: Combatant): CombatantState => {
-    return {
-      Id: c.Id,
-      PersistentCharacterId: c.PersistentCharacterId,
-      StatBlock: c.StatBlock(),
-      CurrentHP: c.CurrentHP(),
-      TemporaryHP: c.TemporaryHP(),
-      Initiative: c.Initiative(),
-      InitiativeGroup: c.InitiativeGroup(),
-      Alias: c.Alias(),
-      IndexLabel: c.IndexLabel,
-      Tags: c
-        .Tags()
-        .filter(t => t.Visible())
-        .map(t => ({
-          Text: t.Text,
-          DurationRemaining: t.DurationRemaining(),
-          DurationTiming: t.DurationTiming,
-          DurationCombatantId: t.DurationCombatantId
-        })),
-      Hidden: c.Hidden(),
-      RevealedAC: c.RevealedAC(),
-      InterfaceVersion: process.env.VERSION
-    };
-  };
 
   private rerollInitiativeWithoutPrompt = () => {
     const combatants = this.combatants();
