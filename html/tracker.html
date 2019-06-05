@@ -109,7 +109,7 @@
       <!-- ko ifnot: LibrariesVisible -->
       <div class="active-combatant">
         <h2>Active Combatant</h2>
-        <!-- ko if: Encounter.ActiveCombatant -->
+        <!-- ko if: Encounter.EncounterFlow.ActiveCombatant -->
         <div
           class="combatant-details__wrapper"
           style="flex-shrink: 1"
@@ -118,7 +118,7 @@
             }"
         ></div>
         <!-- /ko -->
-        <!-- ko ifnot: Encounter.ActiveCombatant -->
+        <!-- ko ifnot: Encounter.EncounterFlow.ActiveCombatant -->
         <p class="start-encounter-hint">
           Click [ <span class="fas fa-play"></span> Start Encounter ] to roll
           initiative. Active creature will be displayed here.
@@ -156,7 +156,7 @@
             <span class="combatant__initiative"
               ><span
                 class="fas"
-                data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"
+                data-bind="css: Encounter.EncounterFlow.StateIcon, attr: { title: Encounter.EncounterFlow.StateTip }"
               ></span
             ></span>
             <span class="combatant__name">Name</span>
@@ -234,13 +234,13 @@
           <!-- ko if: EncounterCommander.DisplayTurnTimer -->
           <span
             class="turn-timer"
-            data-bind="text: Encounter.TurnTimer.Readout"
+            data-bind="text: Encounter.EncounterFlow.TurnTimer.Readout"
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayRoundCounter -->
           <span class="round-counter"
             >Current Round:
-            <span data-bind="text: Encounter.RoundCounter"></span
+            <span data-bind="text: Encounter.EncounterFlow.RoundCounter"></span
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayDifficulty -->
