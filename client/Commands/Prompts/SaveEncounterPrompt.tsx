@@ -101,7 +101,9 @@ export function SaveEncounterPrompt(
         Name: model.Name,
         Path: model.Path,
         Id: id,
-        Combatants: encounterState.Combatants,
+        Combatants: encounterState.Combatants.filter(
+          c => !c.PersistentCharacterId
+        ),
         Version: process.env.VERSION
       };
 

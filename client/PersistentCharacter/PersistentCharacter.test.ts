@@ -1,8 +1,10 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
+import { SaveEncounterPrompt } from "../Commands/Prompts/SaveEncounterPrompt";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { InitializeSettings } from "../Settings/Settings";
 import { Store } from "../Utility/Store";
@@ -103,8 +105,22 @@ describe("PersistentCharacter", () => {
       library
     );
 
-    const encounterState = encounter.GetEncounterState();
-    expect(encounterState.Combatants.length).toEqual(0);
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+
+    const prompt = SaveEncounterPrompt(
+      encounter.GetEncounterState,
+      savedEncounter => {
+        expect(savedEncounter.Combatants.length).toEqual(1);
+      },
+      () => {},
+      []
+    );
+
+    const formValues = prompt.initialValues;
+    formValues.Name = "Test";
+    prompt.onSubmit(formValues);
+
+    expect.assertions(1);
   });
 
   it("Should not allow the same Persistent Character to be added twice", () => {
