@@ -1,3 +1,5 @@
+import * as ko from "knockout";
+
 import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { Combatant } from "../Combatant/Combatant";
 import { Tag } from "../Combatant/Tag";
