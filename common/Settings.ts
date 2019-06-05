@@ -44,7 +44,7 @@ export function getDefaultSettings(): Settings {
     TrackerView: {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
-      DisplayDifficulty: false
+      DisplayDifficulty: true
     },
     PlayerView: {
       ActiveCombatantOnTop: false,
