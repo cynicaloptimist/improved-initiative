@@ -153,7 +153,7 @@ export class CombatantViewModel {
   });
 
   public IsActive = ko.pureComputed(() => {
-    const activeCombatant = this.Combatant.Encounter.ActiveCombatant();
+    const activeCombatant = this.Combatant.Encounter.EncounterFlow.ActiveCombatant();
     return this.Combatant === activeCombatant;
   });
 

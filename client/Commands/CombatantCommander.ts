@@ -121,12 +121,12 @@ export class CombatantCommander {
     );
 
     if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
-      let activeCombatant = this.tracker.Encounter.ActiveCombatant();
+      let activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
-        this.tracker.Encounter.NextTurn(
+        this.tracker.Encounter.EncounterFlow.NextTurn(
           this.tracker.EncounterCommander.RerollInitiative
         );
-        activeCombatant = this.tracker.Encounter.ActiveCombatant();
+        activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       }
     }
 

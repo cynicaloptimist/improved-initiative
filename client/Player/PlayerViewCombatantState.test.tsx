@@ -18,7 +18,7 @@ describe("PlayerViewCombatantState", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
   });
@@ -28,7 +28,7 @@ describe("PlayerViewCombatantState", () => {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe(
       "<span class='healthyHP'>Healthy</span>"
@@ -42,7 +42,7 @@ describe("PlayerViewCombatantState", () => {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
   });
@@ -54,7 +54,7 @@ describe("PlayerViewCombatantState", () => {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe(
       "<span class='healthyHP'>Healthy</span>"

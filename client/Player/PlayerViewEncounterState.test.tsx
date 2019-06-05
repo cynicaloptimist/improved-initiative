@@ -53,20 +53,20 @@ describe("PlayerView State", () => {
     );
     hiddenCombatant.Hidden(true);
     hiddenCombatant.Initiative(1);
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
 
     let playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
 
-    encounter.NextTurn(jest.fn());
+    encounter.EncounterFlow.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    encounter.NextTurn(jest.fn());
+    encounter.EncounterFlow.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant2.Id);
 
-    encounter.NextTurn(jest.fn());
+    encounter.EncounterFlow.NextTurn(jest.fn());
     playerViewState = encounter.GetPlayerView();
     expect(playerViewState.ActiveCombatantId).toEqual(visibleCombatant1.Id);
   });
