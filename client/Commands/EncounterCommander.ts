@@ -35,8 +35,8 @@ export class EncounterCommander {
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
   public LaunchPlayerView = () => {
-    const prompt = new PlayerViewPrompt(this.tracker.Encounter.EncounterId);
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    const prompt = PlayerViewPrompt(this.tracker.Encounter.EncounterId);
+    this.tracker.PromptQueue.Add(prompt);
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });

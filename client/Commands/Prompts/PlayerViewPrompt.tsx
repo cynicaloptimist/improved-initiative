@@ -2,6 +2,7 @@ import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
 import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./components/PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -59,13 +60,15 @@ class PlayerViewPromptComponent extends React.Component<
   };
 }
 
-export class PlayerViewPrompt implements LegacyPrompt {
-  public InputSelector = "." + inputClassName;
-  public ComponentName = "reactprompt";
-  protected component: React.ReactElement<PlayerViewPromptComponent>;
+interface PlayerViewPromptModel {}
 
-  constructor(encounterId: string) {
-    this.component = <PlayerViewPromptComponent encounterId={encounterId} />;
-  }
-  public Resolve = () => {};
+export function PlayerViewPrompt(
+  encounterId: string
+): PromptProps<PlayerViewPromptModel> {
+  return {
+    initialValues: {},
+    autoFocusSelector: "." + inputClassName,
+    children: <PlayerViewPromptComponent encounterId={encounterId} />,
+    onSubmit: () => true
+  };
 }
