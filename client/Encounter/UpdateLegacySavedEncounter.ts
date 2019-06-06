@@ -58,7 +58,8 @@ export function UpdateLegacyEncounterState(
   const updatedEncounter: EncounterState<CombatantState> = {
     Combatants: encounterState.Combatants || encounterState.Creatures || [],
     RoundCounter: encounterState.RoundCounter || 0,
-    ActiveCombatantId: null
+    ActiveCombatantId: null,
+    BackgroundImageUrl: encounterState.BackgroundImageUrl
   };
 
   updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
