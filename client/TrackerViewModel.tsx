@@ -133,7 +133,7 @@ export class TrackerViewModel {
   );
 
   public ActiveCombatantDetails = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.ActiveCombatant();
+    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
     const combatantViewModel = find(
       this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
@@ -213,7 +213,7 @@ export class TrackerViewModel {
   protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public RepeatTutorial = () => {
-    this.Encounter.EndEncounter();
+    this.Encounter.EncounterFlow.EndEncounter();
     this.EncounterCommander.ShowLibraries();
     this.SettingsVisible(false);
     this.TutorialVisible(true);
@@ -264,7 +264,7 @@ export class TrackerViewModel {
       return "show-right-center-left";
     }
 
-    if (this.Encounter.State() == "active") {
+    if (this.Encounter.EncounterFlow.State() == "active") {
       return "show-center-left-right";
     }
 
@@ -289,7 +289,7 @@ export class TrackerViewModel {
 
   public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =
-      this.Encounter.State() == "active"
+      this.Encounter.EncounterFlow.State() == "active"
         ? ["start-encounter"]
         : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
@@ -328,7 +328,7 @@ export class TrackerViewModel {
   public contextualCommandSuggestion = () => {
     const encounterEmpty = this.Encounter.Combatants().length === 0;
     const librariesVisible = this.LibrariesVisible();
-    const encounterActive = this.Encounter.State() === "active";
+    const encounterActive = this.Encounter.EncounterFlow.State() === "active";
 
     if (encounterEmpty) {
       if (librariesVisible) {

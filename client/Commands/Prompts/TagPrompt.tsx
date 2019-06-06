@@ -7,6 +7,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
+import { EncounterFlow } from "../../Encounter/EncounterFlow";
 import { Conditions } from "../../Rules/Conditions";
 import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
@@ -106,8 +107,8 @@ export function TagPrompt(
   targetCombatants: Combatant[],
   logEvent: (message: string) => void
 ): PromptProps<TagModel> {
-  const activeCombatantId = encounter.ActiveCombatant()
-    ? encounter.ActiveCombatant().Id
+  const activeCombatantId = encounter.EncounterFlow.ActiveCombatant()
+    ? encounter.EncounterFlow.ActiveCombatant().Id
     : "";
   const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
   const combatantNamesById = _.mapValues(combatantsById, c => c.DisplayName());
@@ -147,7 +148,8 @@ export function TagPrompt(
           c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
-          timingKeyedCombatant.Id == encounter.ActiveCombatant().Id;
+          timingKeyedCombatant.Id ==
+          encounter.EncounterFlow.ActiveCombatant().Id;
         const durationGraceRound =
           timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
@@ -159,7 +161,7 @@ export function TagPrompt(
             model.tagTiming,
             model.tagTimingId
           );
-          encounter.AddDurationTag(tag);
+          encounter.EncounterFlow.AddDurationTag(tag);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", {
             Text: tag.Text,

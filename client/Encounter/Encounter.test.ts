@@ -23,7 +23,7 @@ describe("Encounter", () => {
   });
 
   test("Combat should not be active", () => {
-    expect(encounter.State()).toBe("inactive");
+    expect(encounter.EncounterFlow.State()).toBe("inactive");
   });
 
   test("NextTurn changes the active combatant and will return to the top of the initiative order", () => {
@@ -31,14 +31,20 @@ describe("Encounter", () => {
     const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
     combatant1.Initiative(10);
     combatant2.Initiative(5);
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
 
     const promptReroll = jest.fn();
-    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[0]);
-    encounter.NextTurn(promptReroll);
-    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[1]);
-    encounter.NextTurn(promptReroll);
-    expect(encounter.ActiveCombatant()).toBe(encounter.Combatants()[0]);
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBe(
+      encounter.Combatants()[0]
+    );
+    encounter.EncounterFlow.NextTurn(promptReroll);
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBe(
+      encounter.Combatants()[1]
+    );
+    encounter.EncounterFlow.NextTurn(promptReroll);
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBe(
+      encounter.Combatants()[0]
+    );
     expect(promptReroll).not.toBeCalled();
   });
 
@@ -50,7 +56,7 @@ describe("Encounter", () => {
 
       fast.Initiative(20);
       slow.Initiative(1);
-      encounter.StartEncounter();
+      encounter.EncounterFlow.StartEncounter();
       expect(encounter.Combatants()).toEqual([fast, slow]);
     });
 
@@ -63,7 +69,7 @@ describe("Encounter", () => {
         ...StatBlock.Default(),
         InitiativeModifier: 2
       });
-      encounter.StartEncounter();
+      encounter.EncounterFlow.StartEncounter();
       expect(encounter.Combatants()).toEqual([fast, slow]);
     });
 
@@ -82,7 +88,7 @@ describe("Encounter", () => {
       });
       slow.InitiativeGroup("group");
       fast.InitiativeGroup("group");
-      encounter.StartEncounter();
+      encounter.EncounterFlow.StartEncounter();
 
       expect(encounter.Combatants()).toEqual([fast, slow, loner]);
     });
@@ -95,7 +101,7 @@ describe("Encounter", () => {
         ...StatBlock.Default(),
         Player: "player"
       });
-      encounter.StartEncounter();
+      encounter.EncounterFlow.StartEncounter();
       expect(encounter.Combatants()).toEqual([playerCharacter, creature]);
     });
   });
@@ -111,15 +117,15 @@ describe("Encounter", () => {
       thisCombatant.Initiative(i);
     }
 
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     expect(encounter.GetPlayerView().Combatants[0].Id).toBe(
-      encounter.ActiveCombatant().Id
+      encounter.EncounterFlow.ActiveCombatant().Id
     );
 
     for (let i = 0; i < 5; i++) {
-      encounter.NextTurn(jest.fn());
+      encounter.EncounterFlow.NextTurn(jest.fn());
       expect(encounter.GetPlayerView().Combatants[0].Id).toBe(
-        encounter.ActiveCombatant().Id
+        encounter.EncounterFlow.ActiveCombatant().Id
       );
     }
   });
@@ -131,9 +137,9 @@ describe("Encounter", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     jest.advanceTimersByTime(10000); // 10 seconds
-    encounter.EndEncounter();
-    expect(encounter.TurnTimer.Readout()).toBe("0:00");
+    encounter.EncounterFlow.EndEncounter();
+    expect(encounter.EncounterFlow.TurnTimer.Readout()).toBe("0:00");
   });
 });

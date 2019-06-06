@@ -26,24 +26,26 @@ describe("EncounterCommander", () => {
 
   test("Cannot start an empty encounter.", () => {
     encounterCommander.StartEncounter();
-    expect(encounter.State()).toBe("inactive");
+    expect(encounter.EncounterFlow.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
-    expect(!encounter.ActiveCombatant());
+    expect(!encounter.EncounterFlow.ActiveCombatant());
   });
 
   test("Click Next Turn with no combatants.", () => {
-    encounter.NextTurn = jest.fn(encounter.NextTurn);
-    expect(!encounter.ActiveCombatant());
+    encounter.EncounterFlow.NextTurn = jest.fn(
+      encounter.EncounterFlow.NextTurn
+    );
+    expect(!encounter.EncounterFlow.ActiveCombatant());
     encounterCommander.NextTurn();
-    expect(encounter.RoundCounter() == 1);
-    expect(encounter.NextTurn).not.toBeCalled();
+    expect(encounter.EncounterFlow.RoundCounter() == 1);
+    expect(encounter.EncounterFlow.NextTurn).not.toBeCalled();
   });
 
   test("Calling Next Turn should start an inactive encounter.", () => {
     const startEncounter = (encounterCommander.StartEncounter = jest.fn());
 
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    expect(!encounter.ActiveCombatant());
+    expect(!encounter.EncounterFlow.ActiveCombatant());
     encounterCommander.NextTurn();
 
     expect(startEncounter).toBeCalled();
