@@ -44,6 +44,7 @@ export class EncounterFlow {
     this.RoundCounter(0);
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
+    this.encounter.TemporaryBackgroundImageUrl(null);
     this.encounter.QueueEmitEncounter();
   };
 
