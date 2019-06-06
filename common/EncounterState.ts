@@ -1,6 +1,7 @@
 export interface EncounterState<T> {
   ActiveCombatantId: string | null;
   RoundCounter?: number;
+  BackgroundImageUrl?: string;
   Combatants: T[];
 }
 

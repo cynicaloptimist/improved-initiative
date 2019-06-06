@@ -71,6 +71,9 @@ export class PlayerView extends React.Component<
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
+          TemporaryBackgroundImageUrl={
+            this.props.encounterState.BackgroundImageUrl
+          }
         />
         {modalVisible && (
           <div className="modal-blur" onClick={this.closeAllModals} />

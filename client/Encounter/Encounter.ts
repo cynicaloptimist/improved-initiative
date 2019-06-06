@@ -28,6 +28,8 @@ import {
 import { EncounterFlow } from "./EncounterFlow";
 
 export class Encounter {
+  public TemporaryBackgroundImageUrl = ko.observable<string>(null);
+
   private lastVisibleActiveCombatantId = null;
 
   constructor(
@@ -179,7 +181,6 @@ export class Encounter {
 
   public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
     const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
-
     statBlock.HP = {
       ...statBlock.HP,
       Value: GetOrRollMaximumHP(statBlock)
@@ -328,7 +329,10 @@ export class Encounter {
     return {
       ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
       RoundCounter: this.EncounterFlow.RoundCounter(),
-      Combatants: this.combatants().map<CombatantState>(c => c.GetState())
+      Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
+      BackgroundImageUrl:
+        this.TemporaryBackgroundImageUrl() ||
+        CurrentSettings().PlayerView.CustomStyles.backgroundUrl
     };
   };
 
@@ -337,7 +341,10 @@ export class Encounter {
     return {
       ActiveCombatantId: activeCombatantId,
       RoundCounter: this.EncounterFlow.RoundCounter(),
-      Combatants: this.getCombatantsForPlayerView(activeCombatantId)
+      Combatants: this.getCombatantsForPlayerView(activeCombatantId),
+      BackgroundImageUrl:
+        this.TemporaryBackgroundImageUrl() ||
+        CurrentSettings().PlayerView.CustomStyles.backgroundUrl
     };
   };
 
@@ -376,6 +383,7 @@ export class Encounter {
       this.EncounterFlow.TurnTimer.Start();
     }
     this.EncounterFlow.RoundCounter(encounterState.RoundCounter || 1);
+    this.TemporaryBackgroundImageUrl(encounterState.BackgroundImageUrl || null);
     this.QueueEmitEncounter();
   };
 
