@@ -28,7 +28,6 @@ export class AcceptDamagePrompt implements LegacyPrompt {
     this.AcceptFull = () => {
       suggestedCombatants.forEach(c => c.ApplyDamage(damageAmount.toString()));
       tracker.EventLog.LogHPChange(damageAmount, combatantNames);
-      tracker.Encounter.QueueEmitEncounter();
       return true;
     };
 
@@ -36,7 +35,6 @@ export class AcceptDamagePrompt implements LegacyPrompt {
       const halfDamage = Math.floor(damageAmount / 2);
       suggestedCombatants.forEach(c => c.ApplyDamage(halfDamage.toString()));
       tracker.EventLog.LogHPChange(halfDamage, combatantNames);
-      tracker.Encounter.QueueEmitEncounter();
       return true;
     };
   }

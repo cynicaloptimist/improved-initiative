@@ -58,8 +58,6 @@ export class CombatantViewModel {
     } else {
       this.Combatant.ApplyHealing(healing);
     }
-
-    this.Combatant.Encounter.QueueEmitEncounter();
   }
 
   public ApplyTemporaryHP(inputTHP: string) {
@@ -115,7 +113,6 @@ export class CombatantViewModel {
         this.ApplyInitiative(initiative);
         this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
         Metrics.TrackEvent("InitiativeSet", { Name: this.Name() });
-        this.Combatant.Encounter.QueueEmitEncounter();
       }
     });
     this.PromptUser(prompt);
@@ -137,8 +134,6 @@ export class CombatantViewModel {
         } else {
           this.LogEvent(`${currentName} alias removed.`);
         }
-
-        this.Combatant.Encounter.QueueEmitEncounter();
       }
     );
     this.PromptUser(prompt);
@@ -171,7 +166,6 @@ export class CombatantViewModel {
         Name: this.Name()
       });
     }
-    this.Combatant.Encounter.QueueEmitEncounter();
   }
 
   public ToggleRevealedAC() {
@@ -188,13 +182,11 @@ export class CombatantViewModel {
         Name: this.Name()
       });
     }
-    this.Combatant.Encounter.QueueEmitEncounter();
   }
 
   public RemoveTag = (tag: Tag) => {
     this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
     this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
-    this.Combatant.Encounter.QueueEmitEncounter();
   };
 
   public ReferenceTaggedCondition = (tag: Tag) => {

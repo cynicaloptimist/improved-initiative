@@ -36,7 +36,6 @@ export class EncounterFlow {
     this.State("active");
     this.ActiveCombatant(this.encounter.Combatants()[0]);
     this.TurnTimer.Start();
-    this.encounter.QueueEmitEncounter();
   };
 
   public EndEncounter = () => {
@@ -45,7 +44,6 @@ export class EncounterFlow {
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
     this.encounter.TemporaryBackgroundImageUrl(null);
-    this.encounter.QueueEmitEncounter();
   };
 
   public NextTurn = (promptRerollInitiative: () => boolean) => {
@@ -86,7 +84,6 @@ export class EncounterFlow {
       .forEach(t => t.Decrement());
 
     this.TurnTimer.Reset();
-    this.encounter.QueueEmitEncounter();
   };
 
   public PreviousTurn = () => {
@@ -118,7 +115,6 @@ export class EncounterFlow {
           t.DurationTiming == "EndOfTurn"
       )
       .forEach(t => t.Increment());
-    this.encounter.QueueEmitEncounter();
   };
 
   public AddDurationTag = (tag: Tag) => {

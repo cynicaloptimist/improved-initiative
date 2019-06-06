@@ -176,8 +176,6 @@ export function TagPrompt(
           .join(", ")}`
       );
 
-      encounter.QueueEmitEncounter();
-
       return true;
     },
     autoFocusSelector: "input"

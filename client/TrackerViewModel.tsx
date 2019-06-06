@@ -457,6 +457,8 @@ export class TrackerViewModel {
         this.Libraries.PersistentCharacters
       );
     }
+
+    this.Encounter.StartEncounterAutosaves();
   }
 
   private showPrivacyNotificationAfterTutorial() {

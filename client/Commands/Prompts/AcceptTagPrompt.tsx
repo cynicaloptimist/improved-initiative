@@ -79,7 +79,6 @@ export class AcceptTagPrompt implements LegacyPrompt {
       });
     }
 
-    this.encounter.QueueEmitEncounter();
     return true;
   };
 }

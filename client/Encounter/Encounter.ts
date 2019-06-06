@@ -51,6 +51,13 @@ export class Encounter {
         playerLevels
       );
     });
+
+    this.GetPlayerView.subscribe(newPlayerView => {
+      if (!this.playerViewClient) {
+        return;
+      }
+      this.playerViewClient.UpdateEncounter(this.EncounterId, newPlayerView);
+    });
   }
 
   private combatants = ko.observableArray<Combatant>([]);
@@ -101,7 +108,6 @@ export class Encounter {
       this.getCombatantSortIteratees(stable)
     );
     this.combatants(sortedCombatants);
-    this.QueueEmitEncounter();
   };
 
   public ImportEncounter = encounter => {
@@ -134,28 +140,6 @@ export class Encounter {
       });
     }
   };
-
-  private emitEncounterTimeoutID;
-
-  private EmitEncounter = () => {
-    if (!this.playerViewClient) {
-      return;
-    }
-    this.playerViewClient.UpdateEncounter(
-      this.EncounterId,
-      this.GetPlayerView()
-    );
-    Store.Save<EncounterState<CombatantState>>(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId,
-      this.GetEncounterState()
-    );
-  };
-
-  public QueueEmitEncounter() {
-    clearTimeout(this.emitEncounterTimeoutID);
-    this.emitEncounterTimeoutID = setTimeout(this.EmitEncounter, 10);
-  }
 
   public AddCombatantFromState = (combatantState: CombatantState) => {
     if (this.combatants().some(c => c.Id == combatantState.Id)) {
@@ -203,8 +187,6 @@ export class Encounter {
 
     const combatant = this.AddCombatantFromState(initialState);
 
-    this.QueueEmitEncounter();
-
     return combatant;
   };
 
@@ -242,8 +224,6 @@ export class Encounter {
 
     combatant.CurrentNotes(persistentCharacter.Notes);
     combatant.AttachToPersistentCharacterLibrary(library);
-
-    this.QueueEmitEncounter();
 
     return combatant;
   }
@@ -308,7 +288,6 @@ export class Encounter {
     this.combatants.remove(combatant);
     this.combatants.splice(index, 0, combatant);
     combatant.Initiative(newInitiative);
-    this.QueueEmitEncounter();
     return newInitiative;
   }
 
@@ -324,6 +303,16 @@ export class Encounter {
       }
     });
   }
+
+  public StartEncounterAutosaves = () => {
+    this.GetEncounterState.subscribe(newState => {
+      Store.Save<EncounterState<CombatantState>>(
+        Store.AutoSavedEncounters,
+        Store.DefaultSavedEncounterId,
+        newState
+      );
+    });
+  };
 
   public GetEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
@@ -391,7 +380,6 @@ export class Encounter {
     }
     this.EncounterFlow.RoundCounter(encounterState.RoundCounter || 1);
     this.TemporaryBackgroundImageUrl(encounterState.BackgroundImageUrl || null);
-    this.QueueEmitEncounter();
   };
 
   public ClearEncounter = () => {
