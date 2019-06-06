@@ -108,7 +108,7 @@ describe("PersistentCharacter", () => {
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
 
     const prompt = SaveEncounterPrompt(
-      encounter.GetEncounterState,
+      encounter.GetEncounterState(),
       savedEncounter => {
         expect(savedEncounter.Combatants.length).toEqual(1);
       },

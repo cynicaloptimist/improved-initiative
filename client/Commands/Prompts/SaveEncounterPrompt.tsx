@@ -1,9 +1,10 @@
 import { Field } from "formik";
 import * as React from "react";
+import { CombatantState } from "../../../common/CombatantState";
+import { EncounterState } from "../../../common/EncounterState";
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button, SubmitButton } from "../../Components/Button";
-import { Encounter } from "../../Encounter/Encounter";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
@@ -78,7 +79,7 @@ interface SaveEncounterModel {
 }
 
 export function SaveEncounterPrompt(
-  getEncounterState: typeof Encounter.prototype.GetEncounterState,
+  encounterState: EncounterState<CombatantState>,
   saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
   logEvent: typeof EventLog.prototype.AddEvent,
   autocompletePaths: string[]
@@ -95,7 +96,6 @@ export function SaveEncounterPrompt(
     onSubmit: (model: SaveEncounterModel) => {
       if (!model.Name) return false;
 
-      const encounterState = getEncounterState();
       const id = AccountClient.MakeId(model.Name, model.Path);
       const savedEncounter = {
         Name: model.Name,
