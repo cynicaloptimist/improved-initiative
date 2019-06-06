@@ -307,7 +307,7 @@ export class Encounter {
     this.combatants.remove(combatant);
     this.combatants.splice(index, 0, combatant);
     combatant.Initiative(newInitiative);
-    combatant.Encounter.QueueEmitEncounter();
+    this.QueueEmitEncounter();
     return newInitiative;
   }
 
