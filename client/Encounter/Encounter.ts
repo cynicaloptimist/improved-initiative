@@ -324,29 +324,35 @@ export class Encounter {
     });
   }
 
-  public GetEncounterState = (): EncounterState<CombatantState> => {
-    let activeCombatant = this.EncounterFlow.ActiveCombatant();
-    return {
-      ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-      RoundCounter: this.EncounterFlow.RoundCounter(),
-      Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
-      BackgroundImageUrl:
-        this.TemporaryBackgroundImageUrl() ||
-        CurrentSettings().PlayerView.CustomStyles.backgroundUrl
-    };
-  };
+  public GetEncounterState = ko.computed(
+    (): EncounterState<CombatantState> => {
+      let activeCombatant = this.EncounterFlow.ActiveCombatant();
+      const defaultBackgroundUrl = CurrentSettings().PlayerView.CustomStyles
+        .backgroundUrl;
+      return {
+        ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
+        RoundCounter: this.EncounterFlow.RoundCounter(),
+        Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
+        BackgroundImageUrl:
+          this.TemporaryBackgroundImageUrl() || defaultBackgroundUrl
+      };
+    }
+  );
 
-  public GetPlayerView = (): EncounterState<PlayerViewCombatantState> => {
-    const activeCombatantId = this.getPlayerViewActiveCombatantId();
-    return {
-      ActiveCombatantId: activeCombatantId,
-      RoundCounter: this.EncounterFlow.RoundCounter(),
-      Combatants: this.getCombatantsForPlayerView(activeCombatantId),
-      BackgroundImageUrl:
-        this.TemporaryBackgroundImageUrl() ||
-        CurrentSettings().PlayerView.CustomStyles.backgroundUrl
-    };
-  };
+  public GetPlayerView = ko.computed(
+    (): EncounterState<PlayerViewCombatantState> => {
+      const activeCombatantId = this.getPlayerViewActiveCombatantId();
+      const defaultBackgroundUrl = CurrentSettings().PlayerView.CustomStyles
+        .backgroundUrl;
+      return {
+        ActiveCombatantId: activeCombatantId,
+        RoundCounter: this.EncounterFlow.RoundCounter(),
+        Combatants: this.getCombatantsForPlayerView(activeCombatantId),
+        BackgroundImageUrl:
+          this.TemporaryBackgroundImageUrl() || defaultBackgroundUrl
+      };
+    }
+  );
 
   public LoadEncounterState = (
     encounterState: EncounterState<CombatantState>,
