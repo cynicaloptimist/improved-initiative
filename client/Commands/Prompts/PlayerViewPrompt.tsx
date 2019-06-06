@@ -1,7 +1,7 @@
+import { Field } from "formik";
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { TextField } from "../../StatBlockEditor/components/TextField";
 import { PromptProps } from "./components/PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
@@ -43,10 +43,10 @@ class PlayerViewPromptComponent extends React.Component<
             additionalClassNames={inputClassName}
           />
           {env.HasEpicInitiative && (
-            <TextField
-              fieldName="backgroundImageUrl"
-              label="Background Image URL"
-            />
+            <label>
+              Background Image URL
+              <Field type="text" name="backgroundImageUrl" />
+            </label>
           )}
         </div>
         <SubmitButton />
