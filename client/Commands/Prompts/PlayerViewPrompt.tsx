@@ -23,6 +23,7 @@ class PlayerViewPromptComponent extends React.Component<
         <div className="launch-player-view">
           <input
             className="hidden-input"
+            readOnly
             value={playerViewUrl}
             ref={e => (this.hiddenInput = e)}
           />
