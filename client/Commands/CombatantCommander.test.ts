@@ -23,6 +23,10 @@ describe("CombatantCommander", () => {
     combatantCommander = trackerViewModel.CombatantCommander;
   });
 
+  afterEach(() => {
+    encounter.ClearEncounter();
+  });
+
   test("Apply Damage", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),

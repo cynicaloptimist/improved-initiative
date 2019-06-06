@@ -24,6 +24,10 @@ describe("EncounterCommander", () => {
     encounterCommander = trackerViewModel.EncounterCommander;
   });
 
+  afterEach(() => {
+    encounter.ClearEncounter();
+  });
+
   test("Cannot start an empty encounter.", () => {
     encounterCommander.StartEncounter();
     expect(encounter.EncounterFlow.State()).toBe("inactive");
