@@ -67,7 +67,7 @@ class PlayerViewPromptComponent extends React.Component<
 }
 
 interface PlayerViewPromptModel {
-  backgroundImageUrl?: string;
+  backgroundImageUrl: string;
 }
 
 export function PlayerViewPrompt(
@@ -75,11 +75,11 @@ export function PlayerViewPrompt(
   setBackgroundImageUrl: (url: string) => void
 ): PromptProps<PlayerViewPromptModel> {
   return {
-    initialValues: {},
+    initialValues: { backgroundImageUrl: "" },
     autoFocusSelector: "." + inputClassName,
     children: <PlayerViewPromptComponent encounterId={encounterId} />,
     onSubmit: (model: PlayerViewPromptModel) => {
-      if (model.backgroundImageUrl) {
+      if (model.backgroundImageUrl.length) {
         setBackgroundImageUrl(model.backgroundImageUrl);
       }
       return true;
