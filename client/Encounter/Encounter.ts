@@ -37,7 +37,6 @@ export class Encounter {
     private promptEditCombatantInitiative: (combatantId: string) => void,
     public Rules: IRules
   ) {
-    this.CombatantCountsByName = ko.observable({});
     this.Difficulty = ko.pureComputed(() => {
       const enemyChallengeRatings = this.combatants()
         .filter(c => !c.IsPlayerCharacter())
@@ -56,7 +55,9 @@ export class Encounter {
 
   private combatants = ko.observableArray<Combatant>([]);
   public Combatants = ko.pureComputed(() => this.combatants());
-  public CombatantCountsByName: KnockoutObservable<{ [name: string]: number }>;
+  public CombatantCountsByName: KnockoutObservable<{
+    [name: string]: number;
+  }> = ko.observable({});
   public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
   public Difficulty: KnockoutComputed<EncounterDifficulty>;
 
