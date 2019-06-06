@@ -35,8 +35,13 @@ export class EncounterCommander {
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
   public LaunchPlayerView = () => {
-    const prompt = PlayerViewPrompt(this.tracker.Encounter.EncounterId);
+    const prompt = PlayerViewPrompt(
+      this.tracker.Encounter.EncounterId,
+      backgroundImageUrl =>
+        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
+    );
     this.tracker.PromptQueue.Add(prompt);
+
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });

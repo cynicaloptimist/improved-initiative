@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { LegacyPrompt } from "./Prompt";
+import { TextField } from "../../StatBlockEditor/components/TextField";
 import { PromptProps } from "./components/PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
@@ -18,7 +18,6 @@ class PlayerViewPromptComponent extends React.Component<
 
   public render() {
     const playerViewUrl = `${env.CanonicalURL}/p/${this.props.encounterId}`;
-
     return (
       <React.Fragment>
         <div className="launch-player-view">
@@ -42,6 +41,12 @@ class PlayerViewPromptComponent extends React.Component<
             onClick={this.openPlayerViewWindow}
             additionalClassNames={inputClassName}
           />
+          {env.HasEpicInitiative && (
+            <TextField
+              fieldName="backgroundImageUrl"
+              label="Background Image URL"
+            />
+          )}
         </div>
         <SubmitButton />
       </React.Fragment>
@@ -60,15 +65,23 @@ class PlayerViewPromptComponent extends React.Component<
   };
 }
 
-interface PlayerViewPromptModel {}
+interface PlayerViewPromptModel {
+  backgroundImageUrl?: string;
+}
 
 export function PlayerViewPrompt(
-  encounterId: string
+  encounterId: string,
+  setBackgroundImageUrl: (url: string) => void
 ): PromptProps<PlayerViewPromptModel> {
   return {
     initialValues: {},
     autoFocusSelector: "." + inputClassName,
     children: <PlayerViewPromptComponent encounterId={encounterId} />,
-    onSubmit: () => true
+    onSubmit: (model: PlayerViewPromptModel) => {
+      if (model.backgroundImageUrl) {
+        setBackgroundImageUrl(model.backgroundImageUrl);
+      }
+      return true;
+    }
   };
 }
