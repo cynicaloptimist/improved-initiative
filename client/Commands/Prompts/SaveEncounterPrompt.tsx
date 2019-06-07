@@ -1,4 +1,4 @@
-import { Field } from "formik";
+import { Field, FieldArray, FieldProps } from "formik";
 import * as React from "react";
 import { CombatantState } from "../../../common/CombatantState";
 import { EncounterState } from "../../../common/EncounterState";
@@ -8,6 +8,7 @@ import { AccountClient } from "../../Account/AccountClient";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
+import { ToggleButton } from "../../Settings/components/Toggle";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
 import { EventLog } from "../../Widgets/EventLog";
@@ -72,6 +73,24 @@ class SaveEncounterPromptComponent extends React.Component<
             autoFocus
           />
         </label>
+        <Field
+          name="Combatants"
+          render={(fieldApi: FieldProps) =>
+            fieldApi.field.value.map(
+              (inclusion: CombatantInclusionModel, index) => {
+                return (
+                  <label
+                    className="p-save-encounter__include-combatant"
+                    key={inclusion.CombatantId}
+                  >
+                    {inclusion.Name}{" "}
+                    <ToggleButton fieldName={`Combatants[${index}].Include`} />
+                  </label>
+                );
+              }
+            )
+          }
+        />
         {env.HasEpicInitiative && (
           <label>
             {"Background Image URL: "}
@@ -83,10 +102,17 @@ class SaveEncounterPromptComponent extends React.Component<
   };
 }
 
+interface CombatantInclusionModel {
+  Name: string;
+  CombatantId: string;
+  Include: boolean;
+}
+
 interface SaveEncounterModel {
   Name: string;
   Path: string;
   BackgroundImageUrl: string;
+  Combatants: CombatantInclusionModel[];
 }
 
 export function SaveEncounterPrompt(
@@ -100,7 +126,14 @@ export function SaveEncounterPrompt(
     initialValues: {
       Name: "",
       Path: "",
-      BackgroundImageUrl: backgroundImageUrl
+      BackgroundImageUrl: backgroundImageUrl,
+      Combatants: encounterState.Combatants.filter(
+        c => c.PersistentCharacterId == null
+      ).map(c => ({
+        Name: (c.Alias || c.StatBlock.Name) + " " + c.IndexLabel,
+        CombatantId: c.Id,
+        Include: c.PersistentCharacterId == null
+      }))
     },
     autoFocusSelector: ".response",
     children: (
@@ -109,13 +142,18 @@ export function SaveEncounterPrompt(
     onSubmit: (model: SaveEncounterModel) => {
       if (!model.Name) return false;
 
+      const inclusionByCombatantId = {};
+      for (const combatant of model.Combatants) {
+        inclusionByCombatantId[combatant.CombatantId] = combatant.Include;
+      }
+
       const id = AccountClient.MakeId(model.Name, model.Path);
       const savedEncounter: SavedEncounter = {
         Name: model.Name,
         Path: model.Path,
         Id: id,
         Combatants: encounterState.Combatants.filter(
-          c => !c.PersistentCharacterId
+          c => inclusionByCombatantId[c.Id]
         ),
         BackgroundImageUrl: model.BackgroundImageUrl,
         Version: process.env.VERSION
