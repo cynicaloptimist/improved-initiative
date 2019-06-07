@@ -44,7 +44,7 @@ class PlayerViewPromptComponent extends React.Component<
           />
           {env.HasEpicInitiative && (
             <label>
-              Background Image URL
+              {"Background Image URL: "}
               <Field type="text" name="backgroundImageUrl" />
             </label>
           )}

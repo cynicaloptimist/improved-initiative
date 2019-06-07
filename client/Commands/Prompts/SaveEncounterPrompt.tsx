@@ -34,13 +34,15 @@ class SaveEncounterPromptComponent extends React.Component<
       <React.Fragment>
         <div className="p-save-encounter">
           <div className="p-save-encounter__basic">
-            <label htmlFor={fieldLabelId}>{"Save Encounter As: "}</label>
-            <Field
-              id={fieldLabelId}
-              name="Name"
-              className="response"
-              type="text"
-            />
+            <label>
+              {"Save Encounter As: "}
+              <Field
+                id={fieldLabelId}
+                name="Name"
+                className="response"
+                type="text"
+              />
+            </label>
             <Button
               fontAwesomeIcon="caret-down"
               onClick={() =>
@@ -60,14 +62,14 @@ class SaveEncounterPromptComponent extends React.Component<
   private renderAdvanced = () => {
     return (
       <div className="p-save-encounter__advanced">
-        <label className="autohide-field__label label" htmlFor="Path">
+        <label>
           {"Folder: "}
+          <AutocompleteTextInput
+            fieldName="Path"
+            options={this.props.autocompletePaths}
+            autoFocus
+          />
         </label>
-        <AutocompleteTextInput
-          fieldName="Path"
-          options={this.props.autocompletePaths}
-          autoFocus
-        />
       </div>
     );
   };
