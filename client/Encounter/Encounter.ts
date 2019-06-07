@@ -317,14 +317,12 @@ export class Encounter {
   public GetEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
       let activeCombatant = this.EncounterFlow.ActiveCombatant();
-      const defaultBackgroundUrl = CurrentSettings().PlayerView.CustomStyles
-        .backgroundUrl;
+
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
         RoundCounter: this.EncounterFlow.RoundCounter(),
         Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
-        BackgroundImageUrl:
-          this.TemporaryBackgroundImageUrl() || defaultBackgroundUrl
+        BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
       };
     }
   );
