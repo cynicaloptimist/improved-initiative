@@ -4,6 +4,7 @@ import { probablyUniqueString } from "./Toolbox";
 
 export interface SavedEncounter extends Listable {
   Combatants: CombatantState[];
+  BackgroundImageUrl?: string;
 }
 
 export namespace SavedEncounter {

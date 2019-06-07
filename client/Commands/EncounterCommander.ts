@@ -173,6 +173,9 @@ export class EncounterCommander {
       c => c.StatBlock.Player != "player"
     );
     nonPlayerCombatants.forEach(this.tracker.Encounter.AddCombatantFromState);
+    this.tracker.Encounter.TemporaryBackgroundImageUrl(
+      savedEncounter.BackgroundImageUrl
+    );
     Metrics.TrackEvent("EncounterLoaded", {
       Name: savedEncounter.Name,
       Combatants: nonPlayerCombatants.map(c => c.StatBlock.Name)

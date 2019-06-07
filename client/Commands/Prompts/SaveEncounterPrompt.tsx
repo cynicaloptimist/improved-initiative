@@ -2,6 +2,7 @@ import { Field } from "formik";
 import * as React from "react";
 import { CombatantState } from "../../../common/CombatantState";
 import { EncounterState } from "../../../common/EncounterState";
+import { SavedEncounter } from "../../../common/SavedEncounter";
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button, SubmitButton } from "../../Components/Button";
@@ -109,13 +110,14 @@ export function SaveEncounterPrompt(
       if (!model.Name) return false;
 
       const id = AccountClient.MakeId(model.Name, model.Path);
-      const savedEncounter = {
+      const savedEncounter: SavedEncounter = {
         Name: model.Name,
         Path: model.Path,
         Id: id,
         Combatants: encounterState.Combatants.filter(
           c => !c.PersistentCharacterId
         ),
+        BackgroundImageUrl: model.BackgroundImageUrl,
         Version: process.env.VERSION
       };
 

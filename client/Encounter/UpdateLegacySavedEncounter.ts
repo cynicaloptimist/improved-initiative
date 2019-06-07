@@ -44,7 +44,8 @@ export function UpdateLegacySavedEncounter(
       AccountClient.MakeId(savedEncounter.Name || someName),
     Combatants: savedEncounter.Combatants || savedEncounter.Creatures || [],
     Name: savedEncounter.Name || someName,
-    Path: savedEncounter.Path || ""
+    Path: savedEncounter.Path || "",
+    BackgroundImageUrl: savedEncounter.BackgroundImageUrl || undefined
   };
 
   updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
