@@ -37,6 +37,7 @@ export class EncounterCommander {
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
       this.tracker.Encounter.EncounterId,
+      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       backgroundImageUrl =>
         this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
     );

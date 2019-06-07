@@ -72,16 +72,15 @@ interface PlayerViewPromptModel {
 
 export function PlayerViewPrompt(
   encounterId: string,
+  currentBackgroundImageUrl: string,
   setBackgroundImageUrl: (url: string) => void
 ): PromptProps<PlayerViewPromptModel> {
   return {
-    initialValues: { backgroundImageUrl: "" },
+    initialValues: { backgroundImageUrl: currentBackgroundImageUrl },
     autoFocusSelector: "." + inputClassName,
     children: <PlayerViewPromptComponent encounterId={encounterId} />,
     onSubmit: (model: PlayerViewPromptModel) => {
-      if (model.backgroundImageUrl.length) {
-        setBackgroundImageUrl(model.backgroundImageUrl);
-      }
+      setBackgroundImageUrl(model.backgroundImageUrl);
       return true;
     }
   };
