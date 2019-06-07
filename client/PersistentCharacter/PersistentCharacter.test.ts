@@ -109,6 +109,7 @@ describe("PersistentCharacter", () => {
 
     const prompt = SaveEncounterPrompt(
       encounter.GetEncounterState(),
+      "",
       savedEncounter => {
         expect(savedEncounter.Combatants.length).toEqual(1);
       },

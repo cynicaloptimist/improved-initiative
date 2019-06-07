@@ -5,6 +5,7 @@ import { EncounterState } from "../../../common/EncounterState";
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { AccountClient } from "../../Account/AccountClient";
 import { Button, SubmitButton } from "../../Components/Button";
+import { env } from "../../Environment";
 import { EncounterLibrary } from "../../Library/EncounterLibrary";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
@@ -70,6 +71,12 @@ class SaveEncounterPromptComponent extends React.Component<
             autoFocus
           />
         </label>
+        {env.HasEpicInitiative && (
+          <label>
+            {"Background Image URL: "}
+            <Field type="text" name="BackgroundImageUrl" />
+          </label>
+        )}
       </div>
     );
   };
@@ -78,10 +85,12 @@ class SaveEncounterPromptComponent extends React.Component<
 interface SaveEncounterModel {
   Name: string;
   Path: string;
+  BackgroundImageUrl: string;
 }
 
 export function SaveEncounterPrompt(
   encounterState: EncounterState<CombatantState>,
+  backgroundImageUrl: string,
   saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
   logEvent: typeof EventLog.prototype.AddEvent,
   autocompletePaths: string[]
@@ -89,7 +98,8 @@ export function SaveEncounterPrompt(
   return {
     initialValues: {
       Name: "",
-      Path: ""
+      Path: "",
+      BackgroundImageUrl: backgroundImageUrl
     },
     autoFocusSelector: ".response",
     children: (
