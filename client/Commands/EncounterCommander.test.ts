@@ -3,6 +3,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
+import { buildEncounter } from "../test/buildEncounter";
 import { EncounterCommander } from "./EncounterCommander";
 
 describe("EncounterCommander", () => {
@@ -122,5 +123,19 @@ describe("EncounterCommander", () => {
     expect(pc.CurrentHP()).toBe(1);
 
     return done();
+  });
+
+  function buildSavedEncounter() {
+    const npcStatBlock = { ...StatBlock.Default(), Name: "Goblin" };
+    const oldEncounter = buildEncounter();
+    oldEncounter.AddCombatantFromStatBlock(npcStatBlock);
+    const savedEncounter = oldEncounter.GetEncounterState();
+    return savedEncounter;
+  }
+
+  test("LoadEncounter loads non-persistent combatants", () => {
+    const savedEncounter = buildSavedEncounter();
+    encounterCommander.LoadEncounter(savedEncounter);
+    expect(encounter.Combatants()[0].DisplayName()).toEqual("Goblin");
   });
 });
