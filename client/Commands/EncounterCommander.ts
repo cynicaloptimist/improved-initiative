@@ -169,16 +169,34 @@ export class EncounterCommander {
 
   public LoadEncounter = (legacySavedEncounter: {}) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-    const nonPlayerCombatants = savedEncounter.Combatants.filter(
-      c => c.StatBlock.Player != "player"
+
+    const nonCharacterCombatants = savedEncounter.Combatants.filter(
+      c => !c.PersistentCharacterId
     );
-    nonPlayerCombatants.forEach(this.tracker.Encounter.AddCombatantFromState);
+    nonCharacterCombatants.forEach(
+      this.tracker.Encounter.AddCombatantFromState
+    );
+
+    const persistentCharacters = savedEncounter.Combatants.filter(
+      c => c.PersistentCharacterId
+    );
+    persistentCharacters.forEach(async pc => {
+      const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
+        pc.PersistentCharacterId
+      );
+      this.tracker.Encounter.AddCombatantFromPersistentCharacter(
+        persistentCharacter,
+        this.tracker.Libraries.PersistentCharacters
+      );
+    });
+
     this.tracker.Encounter.TemporaryBackgroundImageUrl(
       savedEncounter.BackgroundImageUrl
     );
+
     Metrics.TrackEvent("EncounterLoaded", {
       Name: savedEncounter.Name,
-      Combatants: nonPlayerCombatants.map(c => c.StatBlock.Name)
+      Combatants: nonCharacterCombatants.map(c => c.StatBlock.Name)
     });
   };
 
