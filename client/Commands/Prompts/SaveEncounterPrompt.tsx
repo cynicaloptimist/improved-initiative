@@ -127,10 +127,10 @@ export function SaveEncounterPrompt(
       Name: "",
       Path: "",
       BackgroundImageUrl: backgroundImageUrl,
-      Combatants: encounterState.Combatants.filter(
-        c => c.PersistentCharacterId == null
-      ).map(c => ({
-        Name: (c.Alias || c.StatBlock.Name) + " " + c.IndexLabel,
+      Combatants: encounterState.Combatants.map(c => ({
+        Name:
+          (c.Alias || c.StatBlock.Name) +
+          (c.IndexLabel ? " " + c.IndexLabel : ""),
         CombatantId: c.Id,
         Include: c.PersistentCharacterId == null
       }))
