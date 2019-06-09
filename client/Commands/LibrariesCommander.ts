@@ -170,7 +170,7 @@ export class LibrariesCommander {
   };
 
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
-    this.encounterCommander.LoadEncounter(savedEncounter);
+    this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
 
   public SaveEncounter = () => {

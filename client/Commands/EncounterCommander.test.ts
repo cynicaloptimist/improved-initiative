@@ -142,7 +142,7 @@ describe("EncounterCommander", () => {
 
   test("LoadEncounter loads non-persistent combatants", () => {
     const savedEncounter = buildSavedEncounterWithPersistentCharacter();
-    encounterCommander.LoadEncounter(savedEncounter);
+    encounterCommander.LoadSavedEncounter(savedEncounter);
     expect(encounter.Combatants()[0].DisplayName()).toEqual("Goblin");
   });
 
@@ -159,7 +159,7 @@ describe("EncounterCommander", () => {
       persistentCharacter
     );
 
-    await encounterCommander.LoadEncounter(savedEncounter);
+    await encounterCommander.LoadSavedEncounter(savedEncounter);
 
     expect(encounter.Combatants()[1].DisplayName()).toEqual("Library Gregorr");
     done();
