@@ -167,7 +167,7 @@ export class EncounterCommander {
     Metrics.TrackEvent("AllPlayerCharacterHPRestored");
   };
 
-  public LoadEncounter = (legacySavedEncounter: {}) => {
+  public LoadEncounter = async (legacySavedEncounter: {}) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
 
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
@@ -180,15 +180,20 @@ export class EncounterCommander {
     const persistentCharacters = savedEncounter.Combatants.filter(
       c => c.PersistentCharacterId
     );
-    persistentCharacters.forEach(async pc => {
-      const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
-        pc.PersistentCharacterId
-      );
-      this.tracker.Encounter.AddCombatantFromPersistentCharacter(
-        persistentCharacter,
-        this.tracker.Libraries.PersistentCharacters
-      );
-    });
+
+    const persistentCharactersPromise = persistentCharacters.map(
+      pc =>
+        new Promise(async resolve => {
+          const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
+            pc.PersistentCharacterId
+          );
+          this.tracker.Encounter.AddCombatantFromPersistentCharacter(
+            persistentCharacter,
+            this.tracker.Libraries.PersistentCharacters
+          );
+          resolve();
+        })
+    );
 
     this.tracker.Encounter.TemporaryBackgroundImageUrl(
       savedEncounter.BackgroundImageUrl
@@ -198,6 +203,8 @@ export class EncounterCommander {
       Name: savedEncounter.Name,
       Combatants: nonCharacterCombatants.map(c => c.StatBlock.Name)
     });
+
+    return Promise.all(persistentCharactersPromise);
   };
 
   public NextTurn = () => {

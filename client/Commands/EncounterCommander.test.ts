@@ -125,17 +125,43 @@ describe("EncounterCommander", () => {
     return done();
   });
 
-  function buildSavedEncounter() {
+  function buildSavedEncounterWithPersistentCharacter() {
     const npcStatBlock = { ...StatBlock.Default(), Name: "Goblin" };
+    const persistentCharacter = PersistentCharacter.Initialize({
+      ...StatBlock.Default(),
+      Name: "Encounter Gregorr"
+    });
     const oldEncounter = buildEncounter();
     oldEncounter.AddCombatantFromStatBlock(npcStatBlock);
+    oldEncounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
+      UpdatePersistentCharacter: async () => {}
+    });
     const savedEncounter = oldEncounter.GetEncounterState();
     return savedEncounter;
   }
 
   test("LoadEncounter loads non-persistent combatants", () => {
-    const savedEncounter = buildSavedEncounter();
+    const savedEncounter = buildSavedEncounterWithPersistentCharacter();
     encounterCommander.LoadEncounter(savedEncounter);
     expect(encounter.Combatants()[0].DisplayName()).toEqual("Goblin");
+  });
+
+  test("LoadEncounter loads the current version of persistent combatants", async done => {
+    const savedEncounter = buildSavedEncounterWithPersistentCharacter();
+
+    const persistentCharacter = PersistentCharacter.Initialize({
+      ...StatBlock.Default(),
+      Name: "Library Gregorr"
+    });
+    persistentCharacter.Id = savedEncounter.Combatants[1].PersistentCharacterId;
+
+    trackerViewModel.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+      persistentCharacter
+    );
+
+    await encounterCommander.LoadEncounter(savedEncounter);
+
+    expect(encounter.Combatants()[1].DisplayName()).toEqual("Library Gregorr");
+    done();
   });
 });
