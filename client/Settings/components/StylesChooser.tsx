@@ -24,7 +24,7 @@ export class StylesChooser extends React.Component<
   public render() {
     return (
       <div className="c-styles-chooser-colors">
-        <div>
+        <div className="c-styles-chooser-slot-chooser">
           <h4>Colors</h4>
           {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
           {this.getLabelAndColorBlock(
@@ -67,14 +67,14 @@ export class StylesChooser extends React.Component<
     return (
       <Field name={"PlayerView.CustomStyles." + style}>
         {(fieldProps: FieldProps) => (
-          <p>
-            {label}:{" "}
+          <div className="c-label-and-color-block">
+            <span>{label}</span>
             <ColorBlock
               color={fieldProps.field.value}
               click={this.bindClickToSelectStyle(style)}
               selected={this.state.selectedStyle == style}
             />
-          </p>
+          </div>
         )}
       </Field>
     );
