@@ -201,7 +201,7 @@ export class EncounterCommander {
 
     Metrics.TrackEvent("EncounterLoaded", {
       Name: savedEncounter.Name,
-      Combatants: nonCharacterCombatants.map(c => c.StatBlock.Name)
+      Combatants: savedEncounter.Combatants.map(c => c.StatBlock.Name)
     });
 
     return Promise.all(persistentCharactersPromise);
