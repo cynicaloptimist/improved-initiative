@@ -35,6 +35,7 @@ export class TagPromptComponent extends React.Component<
   }
 
   public render() {
+    const autoCompleteOptions = Object.keys(Conditions);
     return (
       <React.Fragment>
         <div className="add-tag">
@@ -44,7 +45,7 @@ export class TagPromptComponent extends React.Component<
             </label>
             <AutocompleteTextInput
               fieldName="tagText"
-              options={Object.keys(Conditions)}
+              options={autoCompleteOptions}
               autoFocus
             />
             <Field name="useDuration">
