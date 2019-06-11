@@ -7,7 +7,6 @@ import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
-import { EncounterFlow } from "../../Encounter/EncounterFlow";
 import { Conditions } from "../../Rules/Conditions";
 import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
@@ -35,7 +34,9 @@ export class TagPromptComponent extends React.Component<
   }
 
   public render() {
-    const autoCompleteOptions = Object.keys(Conditions);
+    const autoCompleteOptions = _.keys(Conditions).concat(
+      _.values(this.props.combatantNamesById)
+    );
     return (
       <React.Fragment>
         <div className="add-tag">
