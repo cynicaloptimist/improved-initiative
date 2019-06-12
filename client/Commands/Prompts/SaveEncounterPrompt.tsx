@@ -73,24 +73,20 @@ class SaveEncounterPromptComponent extends React.Component<
             autoFocus
           />
         </label>
-        <Field
-          name="Combatants"
-          render={(fieldApi: FieldProps) =>
-            fieldApi.field.value.map(
-              (inclusion: CombatantInclusionModel, index) => {
-                return (
-                  <label
-                    className="p-save-encounter__include-combatant"
-                    key={inclusion.CombatantId}
-                  >
-                    {inclusion.Name}{" "}
-                    <ToggleButton fieldName={`Combatants[${index}].Include`} />
-                  </label>
-                );
-              }
-            )
-          }
-        />
+        <div className="p-save-encounter__include-combatants">
+          <div className="p-save-encounter__character-combatants">
+            <Field
+              name="CharacterCombatants"
+              render={this.renderCombatantInclusionRow}
+            />
+          </div>
+          <div className="p-save-encounter__non-character-combatants">
+            <Field
+              name="NonCharacterCombatants"
+              render={this.renderCombatantInclusionRow}
+            />
+          </div>
+        </div>
         {env.HasEpicInitiative && (
           <label>
             {"Background Image URL: "}
@@ -100,6 +96,21 @@ class SaveEncounterPromptComponent extends React.Component<
       </div>
     );
   };
+
+  private renderCombatantInclusionRow = (fieldApi: FieldProps) =>
+    fieldApi.field.value.map((inclusion: CombatantInclusionModel, index) => {
+      return (
+        <label
+          className="p-save-encounter__include-combatant"
+          key={inclusion.CombatantId}
+        >
+          {inclusion.Name}{" "}
+          <ToggleButton
+            fieldName={`${fieldApi.field.name}[${index}].Include`}
+          />
+        </label>
+      );
+    });
 }
 
 interface CombatantInclusionModel {
@@ -112,7 +123,8 @@ interface SaveEncounterModel {
   Name: string;
   Path: string;
   BackgroundImageUrl: string;
-  Combatants: CombatantInclusionModel[];
+  CharacterCombatants: CombatantInclusionModel[];
+  NonCharacterCombatants: CombatantInclusionModel[];
 }
 
 export function SaveEncounterPrompt(
@@ -127,12 +139,21 @@ export function SaveEncounterPrompt(
       Name: "",
       Path: "",
       BackgroundImageUrl: backgroundImageUrl,
-      Combatants: encounterState.Combatants.map(c => ({
+      NonCharacterCombatants: encounterState.Combatants.filter(
+        c => c.PersistentCharacterId == null
+      ).map(c => ({
         Name:
           (c.Alias || c.StatBlock.Name) +
           (c.IndexLabel ? " " + c.IndexLabel : ""),
         CombatantId: c.Id,
-        Include: c.PersistentCharacterId == null
+        Include: true
+      })),
+      CharacterCombatants: encounterState.Combatants.filter(
+        c => c.PersistentCharacterId != null
+      ).map(c => ({
+        Name: c.Alias || c.StatBlock.Name,
+        CombatantId: c.Id,
+        Include: false
       }))
     },
     autoFocusSelector: ".response",
@@ -143,7 +164,10 @@ export function SaveEncounterPrompt(
       if (!model.Name) return false;
 
       const inclusionByCombatantId = {};
-      for (const combatant of model.Combatants) {
+      for (const combatant of model.NonCharacterCombatants) {
+        inclusionByCombatantId[combatant.CombatantId] = combatant.Include;
+      }
+      for (const combatant of model.CharacterCombatants) {
         inclusionByCombatantId[combatant.CombatantId] = combatant.Include;
       }
 
