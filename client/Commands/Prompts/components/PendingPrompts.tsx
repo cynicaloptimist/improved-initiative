@@ -8,7 +8,11 @@ export interface PromptProps<T> {
   initialValues: T;
 }
 
-class Prompt<T> extends React.Component<PromptProps<T>> {
+class Prompt<T> extends React.Component<
+  PromptProps<T> & {
+    onCancel: () => void;
+  }
+> {
   private formElement: HTMLFormElement;
 
   public render() {
@@ -21,6 +25,11 @@ class Prompt<T> extends React.Component<PromptProps<T>> {
             ref={r => (this.formElement = r)}
             className="prompt"
             onSubmit={props.handleSubmit}
+            onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
+              if (e.key == "Escape") {
+                this.props.onCancel();
+              }
+            }}
           >
             {this.props.children}
           </form>
@@ -51,8 +60,9 @@ interface PendingPromptsProps {
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    return this.props.prompts.map(prompt => (
+    return this.props.prompts.map((prompt, index) => (
       <Prompt
+        key={index}
         {...prompt}
         onSubmit={values => {
           const shouldResolve = prompt.onSubmit(values);
@@ -60,6 +70,9 @@ export class PendingPrompts extends React.Component<PendingPromptsProps> {
             this.props.removeResolvedPrompt(prompt);
           }
           return shouldResolve;
+        }}
+        onCancel={() => {
+          this.props.removeResolvedPrompt(prompt);
         }}
       />
     ));

@@ -121,12 +121,12 @@ export class CombatantCommander {
     );
 
     if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
-      let activeCombatant = this.tracker.Encounter.ActiveCombatant();
+      let activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
-        this.tracker.Encounter.NextTurn(
+        this.tracker.Encounter.EncounterFlow.NextTurn(
           this.tracker.EncounterCommander.RerollInitiative
         );
-        activeCombatant = this.tracker.Encounter.ActiveCombatant();
+        activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       }
     }
 
@@ -147,8 +147,6 @@ export class CombatantCommander {
       `${deletedCombatantNames.join(", ")} removed from encounter.`
     );
     Metrics.TrackEvent("CombatantsRemoved", { Names: deletedCombatantNames });
-
-    this.tracker.Encounter.QueueEmitEncounter();
   };
 
   public Deselect = () => {
@@ -294,7 +292,6 @@ export class CombatantCommander {
             `${thp} temporary hit points granted to ${combatantNames}.`
           );
           Metrics.TrackEvent("TemporaryHPAdded", { Amount: thp });
-          this.tracker.Encounter.QueueEmitEncounter();
         }
       }
     );
@@ -447,7 +444,6 @@ export class CombatantCommander {
           statBlock: selectedCombatant.StatBlock(),
           onSave: newStatBlock => {
             selectedCombatant.StatBlock(newStatBlock);
-            this.tracker.Encounter.QueueEmitEncounter();
           },
           onDelete: () => this.Remove()
         });

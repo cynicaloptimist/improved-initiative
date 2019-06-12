@@ -1,7 +1,6 @@
-import { CombatantState } from "../../common/CombatantState";
-import { EncounterState } from "../../common/EncounterState";
 import { Listable } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { Settings } from "../../common/Settings";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
@@ -105,8 +104,8 @@ export class AccountClient {
     return deleteEntity(persistentCharacterId, "persistentcharacters");
   }
 
-  public SaveEncounter(encounter: EncounterState<CombatantState>) {
-    return saveEntity<EncounterState<CombatantState>>(encounter, "encounters");
+  public SaveEncounter(encounter: SavedEncounter) {
+    return saveEntity<SavedEncounter>(encounter, "encounters");
   }
 
   public DeleteEncounter(encounterId: string) {

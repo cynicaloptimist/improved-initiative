@@ -46,10 +46,24 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   };
 
   public async GetPersistentCharacter(persistentCharacterId: string) {
-    const listing = find(
+    let listing = find(
       this.persistentCharacters(),
       c => c.Listing().Id == persistentCharacterId
     );
+
+    if (!listing) {
+      listing = new Listing(
+        {
+          Id: persistentCharacterId,
+          Link: `/my/persistentcharacters/${persistentCharacterId}`,
+          Metadata: {},
+          Name: "",
+          Path: "",
+          SearchHint: ""
+        },
+        "account"
+      );
+    }
     return await listing.GetWithTemplate(PersistentCharacter.Default());
   }
 

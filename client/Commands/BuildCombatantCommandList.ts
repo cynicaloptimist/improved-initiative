@@ -36,7 +36,7 @@ export const BuildCombatantCommandList: (
     "toggle-reveal-ac",
     "Reveal/Hide AC in Player View",
     c.ToggleRevealedAC,
-    "alt-h",
+    "alt+h",
     "shield-alt",
     false
   ),

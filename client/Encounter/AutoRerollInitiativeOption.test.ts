@@ -14,9 +14,9 @@ describe("AutoRerollInitiativeOption", () => {
     const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
     combatant1.Initiative(10);
     combatant2.Initiative(5);
-    encounter.StartEncounter();
-    encounter.NextTurn(promptReroll);
-    encounter.NextTurn(promptReroll);
+    encounter.EncounterFlow.StartEncounter();
+    encounter.EncounterFlow.NextTurn(promptReroll);
+    encounter.EncounterFlow.NextTurn(promptReroll);
     return encounter;
   };
 

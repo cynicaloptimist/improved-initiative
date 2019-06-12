@@ -35,8 +35,14 @@ export class EncounterCommander {
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
   public LaunchPlayerView = () => {
-    const prompt = new PlayerViewPrompt(this.tracker.Encounter.EncounterId);
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    const prompt = PlayerViewPrompt(
+      this.tracker.Encounter.EncounterId,
+      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
+      backgroundImageUrl =>
+        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
+    );
+    this.tracker.PromptQueue.Add(prompt);
+
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: this.tracker.Encounter.EncounterId
     });
@@ -72,7 +78,7 @@ export class EncounterCommander {
     this.tracker.PromptQueue.AddLegacyPrompt(
       new InitiativePrompt(
         this.tracker.Encounter.Combatants(),
-        this.tracker.Encounter.StartEncounter
+        this.tracker.Encounter.EncounterFlow.StartEncounter
       )
     );
   };
@@ -85,7 +91,7 @@ export class EncounterCommander {
 
     this.HideLibraries();
 
-    if (this.tracker.Encounter.State() == "active") {
+    if (this.tracker.Encounter.EncounterFlow.State() == "active") {
       return;
     }
 
@@ -104,11 +110,11 @@ export class EncounterCommander {
   };
 
   public EndEncounter = () => {
-    if (this.tracker.Encounter.State() == "inactive") {
+    if (this.tracker.Encounter.EncounterFlow.State() == "inactive") {
       return;
     }
 
-    this.tracker.Encounter.EndEncounter();
+    this.tracker.Encounter.EncounterFlow.EndEncounter();
     this.tracker.EventLog.AddEvent("Encounter ended.");
     Metrics.TrackEvent("EncounterEnded", {
       Combatants: this.tracker.Encounter.Combatants().length
@@ -141,7 +147,7 @@ export class EncounterCommander {
         .OrderedCombatants()
         .filter(c => !c.Combatant.IsPlayerCharacter());
       this.tracker.CombatantCommander.Deselect();
-      this.tracker.Encounter.EndEncounter();
+      this.tracker.Encounter.EncounterFlow.EndEncounter();
       npcViewModels.forEach(vm =>
         this.tracker.Encounter.RemoveCombatant(vm.Combatant)
       );
@@ -161,21 +167,48 @@ export class EncounterCommander {
     Metrics.TrackEvent("AllPlayerCharacterHPRestored");
   };
 
-  public LoadEncounter = (legacySavedEncounter: {}) => {
+  public LoadSavedEncounter = async (legacySavedEncounter: {}) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-    const nonPlayerCombatants = savedEncounter.Combatants.filter(
-      c => c.StatBlock.Player != "player"
+
+    const nonCharacterCombatants = savedEncounter.Combatants.filter(
+      c => !c.PersistentCharacterId
     );
-    nonPlayerCombatants.forEach(this.tracker.Encounter.AddCombatantFromState);
-    this.tracker.Encounter.QueueEmitEncounter();
+    nonCharacterCombatants.forEach(
+      this.tracker.Encounter.AddCombatantFromState
+    );
+
+    const persistentCharacters = savedEncounter.Combatants.filter(
+      c => c.PersistentCharacterId
+    );
+
+    const persistentCharactersPromise = persistentCharacters.map(
+      pc =>
+        new Promise(async resolve => {
+          const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
+            pc.PersistentCharacterId
+          );
+          this.tracker.Encounter.AddCombatantFromPersistentCharacter(
+            persistentCharacter,
+            this.tracker.Libraries.PersistentCharacters
+          );
+          resolve();
+        })
+    );
+
+    this.tracker.Encounter.TemporaryBackgroundImageUrl(
+      savedEncounter.BackgroundImageUrl
+    );
+
     Metrics.TrackEvent("EncounterLoaded", {
       Name: savedEncounter.Name,
-      Combatants: nonPlayerCombatants.map(c => c.StatBlock.Name)
+      Combatants: savedEncounter.Combatants.map(c => c.StatBlock.Name)
     });
+
+    return Promise.all(persistentCharactersPromise);
   };
 
   public NextTurn = () => {
-    if (this.tracker.Encounter.State() != "active") {
+    if (this.tracker.Encounter.EncounterFlow.State() != "active") {
       this.StartEncounter();
       return;
     }
@@ -184,23 +217,23 @@ export class EncounterCommander {
       return;
     }
 
-    if (!this.tracker.Encounter.ActiveCombatant()) {
-      this.tracker.Encounter.ActiveCombatant(
+    if (!this.tracker.Encounter.EncounterFlow.ActiveCombatant()) {
+      this.tracker.Encounter.EncounterFlow.ActiveCombatant(
         this.tracker.Encounter.Combatants()[0]
       );
       return;
     }
 
-    const turnEndCombatant = this.tracker.Encounter.ActiveCombatant();
+    const turnEndCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     if (turnEndCombatant) {
       Metrics.TrackEvent("TurnCompleted", {
         Name: turnEndCombatant.DisplayName()
       });
     }
 
-    this.tracker.Encounter.NextTurn(this.RerollInitiative);
+    this.tracker.Encounter.EncounterFlow.NextTurn(this.RerollInitiative);
 
-    const turnStartCombatant = this.tracker.Encounter.ActiveCombatant();
+    const turnStartCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Start of turn for ${turnStartCombatant.DisplayName()}.`
     );
@@ -209,12 +242,12 @@ export class EncounterCommander {
   };
 
   public PreviousTurn = () => {
-    if (!this.tracker.Encounter.ActiveCombatant()) {
+    if (!this.tracker.Encounter.EncounterFlow.ActiveCombatant()) {
       return;
     }
 
-    this.tracker.Encounter.PreviousTurn();
-    let currentCombatant = this.tracker.Encounter.ActiveCombatant();
+    this.tracker.Encounter.EncounterFlow.PreviousTurn();
+    let currentCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Initiative rewound to ${currentCombatant.DisplayName()}.`
     );

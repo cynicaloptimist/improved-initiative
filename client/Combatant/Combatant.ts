@@ -226,6 +226,31 @@ export class Combatant {
     return name;
   });
 
+  public GetState = () => {
+    return {
+      Id: this.Id,
+      PersistentCharacterId: this.PersistentCharacterId,
+      StatBlock: this.StatBlock(),
+      CurrentHP: this.CurrentHP(),
+      TemporaryHP: this.TemporaryHP(),
+      Initiative: this.Initiative(),
+      InitiativeGroup: this.InitiativeGroup(),
+      Alias: this.Alias(),
+      IndexLabel: this.IndexLabel,
+      Tags: this.Tags()
+        .filter(t => t.Visible())
+        .map(t => ({
+          Text: t.Text,
+          DurationRemaining: t.DurationRemaining(),
+          DurationTiming: t.DurationTiming,
+          DurationCombatantId: t.DurationCombatantId
+        })),
+      Hidden: this.Hidden(),
+      RevealedAC: this.RevealedAC(),
+      InterfaceVersion: process.env.VERSION
+    };
+  };
+
   private setAutoInitiativeGroup = () => {
     const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
     let lowestInitiativeCombatant = null;

@@ -23,7 +23,7 @@ describe("Turn Timer", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     const combatFooter = Enzyme.shallow(
       <CombatFooter
@@ -42,8 +42,8 @@ describe("Turn Timer", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
-    encounter.EndEncounter();
+    encounter.EncounterFlow.StartEncounter();
+    encounter.EncounterFlow.EndEncounter();
     const playerViewState = encounter.GetPlayerView();
     const combatFooter = Enzyme.shallow(
       <CombatFooter

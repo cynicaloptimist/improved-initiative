@@ -3,12 +3,12 @@ import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 
-function buildSavedEncounter() {
+function buildEncounterState() {
   const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
   const oldEncounter = buildEncounter();
   oldEncounter.AddCombatantFromStatBlock(statBlock);
   oldEncounter.AddCombatantFromStatBlock(statBlock);
-  const savedEncounter = oldEncounter.GetSavedEncounter("Test", "");
+  const savedEncounter = oldEncounter.GetEncounterState();
   return savedEncounter;
 }
 
@@ -65,7 +65,7 @@ describe("Index labeling", () => {
   });
 
   test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
-    const savedEncounter = buildSavedEncounter();
+    const savedEncounter = buildEncounterState();
     const combatantStates = savedEncounter.Combatants;
 
     const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
@@ -78,7 +78,7 @@ describe("Index labeling", () => {
   });
 
   test("When a saved encounter is added twice, it relabels existing creatures", () => {
-    const savedEncounter = buildSavedEncounter();
+    const savedEncounter = buildEncounterState();
     const combatantStates = savedEncounter.Combatants;
 
     const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
@@ -108,7 +108,7 @@ describe("Index labeling", () => {
   });
 
   test("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
-    const savedEncounter = buildSavedEncounter();
+    const savedEncounter = buildEncounterState();
     const combatantStates = savedEncounter.Combatants;
 
     const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);

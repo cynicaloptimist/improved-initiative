@@ -1,6 +1,5 @@
 import { Field, FieldProps } from "formik";
 import * as React from "react";
-import { probablyUniqueString } from "../../../common/Toolbox";
 
 interface ToggleButtonProps {
   fieldName: string;
@@ -46,6 +45,7 @@ export class ToggleButton extends React.Component<ToggleButtonProps> {
 
 interface ToggleProps {
   fieldName: string;
+  disabled?: boolean;
 }
 
 export class Toggle extends React.Component<ToggleProps> {
@@ -56,7 +56,7 @@ export class Toggle extends React.Component<ToggleProps> {
         <label className="c-toggle__label" htmlFor={id}>
           {this.props.children}
         </label>
-        <ToggleButton fieldName={this.props.fieldName} id={id} />
+        <ToggleButton {...this.props} id={id} />
       </div>
     );
   }

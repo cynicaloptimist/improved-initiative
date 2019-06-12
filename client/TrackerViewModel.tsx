@@ -6,6 +6,7 @@ import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
+import { Omit } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -20,11 +21,10 @@ import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
-import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
+import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
-import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -38,7 +38,7 @@ import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
-  StatBlockEditorTarget
+  StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
@@ -133,7 +133,7 @@ export class TrackerViewModel {
   );
 
   public ActiveCombatantDetails = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.ActiveCombatant();
+    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
     const combatantViewModel = find(
       this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
@@ -168,14 +168,7 @@ export class TrackerViewModel {
     //this.TutorialVisible(false);
   };
 
-  public EditStatBlock(props: {
-    editorTarget: StatBlockEditorTarget;
-    statBlock: StatBlock;
-    currentListings?: Listing<StatBlock>[];
-    onSave: (newStatBlock: StatBlock) => void;
-    onDelete?: () => void;
-    onSaveAs?: (newStatBlock: StatBlock) => void;
-  }) {
+  public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
     this.StatBlockEditor(
       <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
     );
@@ -220,7 +213,7 @@ export class TrackerViewModel {
   protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public RepeatTutorial = () => {
-    this.Encounter.EndEncounter();
+    this.Encounter.EncounterFlow.EndEncounter();
     this.EncounterCommander.ShowLibraries();
     this.SettingsVisible(false);
     this.TutorialVisible(true);
@@ -271,7 +264,7 @@ export class TrackerViewModel {
       return "show-right-center-left";
     }
 
-    if (this.Encounter.State() == "active") {
+    if (this.Encounter.EncounterFlow.State() == "active") {
       return "show-center-left-right";
     }
 
@@ -296,7 +289,7 @@ export class TrackerViewModel {
 
   public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =
-      this.Encounter.State() == "active"
+      this.Encounter.EncounterFlow.State() == "active"
         ? ["start-encounter"]
         : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
@@ -335,7 +328,7 @@ export class TrackerViewModel {
   public contextualCommandSuggestion = () => {
     const encounterEmpty = this.Encounter.Combatants().length === 0;
     const librariesVisible = this.LibrariesVisible();
-    const encounterActive = this.Encounter.State() === "active";
+    const encounterActive = this.Encounter.EncounterFlow.State() === "active";
 
     if (encounterEmpty) {
       if (librariesVisible) {
@@ -460,10 +453,12 @@ export class TrackerViewModel {
 
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
-        UpdateLegacySavedEncounter(autosavedEncounter),
+        UpdateLegacyEncounterState(autosavedEncounter),
         this.Libraries.PersistentCharacters
       );
     }
+
+    this.Encounter.StartEncounterAutosaves();
   }
 
   private showPrivacyNotificationAfterTutorial() {

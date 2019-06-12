@@ -55,7 +55,7 @@ function getLegacySettings(): Settings {
         false
       ),
       DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
-      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
+      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true)
     },
     PlayerView: {
       ...defaultSettings.PlayerView,

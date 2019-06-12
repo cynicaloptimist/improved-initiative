@@ -1,10 +1,9 @@
 import mongo = require("mongodb");
 
 import * as _ from "lodash";
-import { CombatantState } from "../common/CombatantState";
-import { EncounterState } from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
+import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { User } from "./user";
@@ -191,14 +190,14 @@ function getEncounterListings(encounters: {
 }): StoredListing[] {
   return Object.keys(encounters).map(key => {
     const c = {
-      ...EncounterState.Default<CombatantState>(),
+      ...SavedEncounter.Default(),
       ...encounters[key]
     };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: EncounterState.GetSearchHint(c),
+      SearchHint: SavedEncounter.GetSearchHint(c),
       Metadata: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`

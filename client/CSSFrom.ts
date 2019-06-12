@@ -1,7 +1,10 @@
 import * as Color from "color";
 import { PlayerViewCustomStyles } from "../common/PlayerViewSettings";
 
-export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
+export function CSSFrom(
+  customStyles: PlayerViewCustomStyles,
+  temporaryBackgroundImageUrl?: string
+): string {
   const declarations: string[] = [];
   if (customStyles.combatantText) {
     declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
@@ -56,9 +59,10 @@ export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
       declarations.push(`#playerview { background-image: none; }`);
     }
   }
-  if (customStyles.backgroundUrl) {
+  if (temporaryBackgroundImageUrl || customStyles.backgroundUrl) {
     declarations.push(
-      `#playerview { background-image: url(${customStyles.backgroundUrl}); }`
+      `#playerview { background-image: url(${temporaryBackgroundImageUrl ||
+        customStyles.backgroundUrl}); }`
     );
   }
   if (customStyles.font) {

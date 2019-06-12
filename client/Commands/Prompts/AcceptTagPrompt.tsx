@@ -66,7 +66,7 @@ export class AcceptTagPrompt implements LegacyPrompt {
         this.tagState.DurationCombatantId
       );
 
-      this.encounter.AddDurationTag(tag);
+      this.encounter.EncounterFlow.AddDurationTag(tag);
       this.combatant.Tags.push(tag);
       Metrics.TrackEvent("TagAddedFromSuggestion", {
         Text: tag.Text,
@@ -79,7 +79,6 @@ export class AcceptTagPrompt implements LegacyPrompt {
       });
     }
 
-    this.encounter.QueueEmitEncounter();
     return true;
   };
 }

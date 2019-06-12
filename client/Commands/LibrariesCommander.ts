@@ -14,6 +14,7 @@ import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
@@ -97,6 +98,7 @@ export class LibrariesCommander {
           editorTarget: "library",
           statBlock: statBlockWithNewId,
           onSave: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
           currentListings: library.GetStatBlocks()
         });
       } else {
@@ -106,7 +108,8 @@ export class LibrariesCommander {
           onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
           onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
-          onSaveAs: library.SaveNewStatBlock
+          onSaveAsCopy: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
       }
     });
@@ -167,29 +170,18 @@ export class LibrariesCommander {
   };
 
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
-    this.encounterCommander.LoadEncounter(savedEncounter);
+    this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
 
   public SaveEncounter = () => {
-    const prompt = new DefaultPrompt(
-      `Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-      response => {
-        const encounterName = response["encounterName"];
-        const path = ""; //TODO
-        if (encounterName) {
-          const savedEncounter = this.tracker.Encounter.GetSavedEncounter(
-            encounterName,
-            path
-          );
-          this.libraries.Encounters.Save(savedEncounter);
-          this.tracker.EventLog.AddEvent(
-            `Encounter saved as ${encounterName}.`
-          );
-          Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
-        }
-      }
+    const prompt = SaveEncounterPrompt(
+      this.tracker.Encounter.GetEncounterState(),
+      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
+      this.libraries.Encounters.Save,
+      this.tracker.EventLog.AddEvent,
+      this.libraries.Encounters.Encounters().map(e => e.Listing().Path)
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
@@ -221,5 +213,12 @@ export class LibrariesCommander {
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.NPCs.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+  };
+
+  private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
+    this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+      persistentCharacter
+    );
   };
 }

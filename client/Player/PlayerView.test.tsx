@@ -67,7 +67,7 @@ describe("PlayerViewModel", () => {
 
     expect(playerView.find(PortraitWithCaption).length).toBe(0);
 
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     playerView.setProps({ encounterState: encounter.GetPlayerView() });
 
     expect(playerView.find(PortraitWithCaption).length).toBe(1);
@@ -84,7 +84,7 @@ describe("PlayerViewModel", () => {
       HP: { Value: 10, Notes: "" },
       ImageURL: "http://combatant2.png"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
 
     env.HasEpicInitiative = true;
     const settings = CurrentSettings();
@@ -120,7 +120,7 @@ describe("PlayerViewModel", () => {
       HP: { Value: 10, Notes: "" },
       ImageURL: "http://combatant2.png"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
 
     env.HasEpicInitiative = true;
     const settings = CurrentSettings();

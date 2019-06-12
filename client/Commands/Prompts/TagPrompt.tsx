@@ -34,27 +34,34 @@ export class TagPromptComponent extends React.Component<
   }
 
   public render() {
+    const autoCompleteOptions = _.keys(Conditions).concat(
+      _.values(this.props.combatantNamesById)
+    );
     return (
-      <div className="add-tag">
-        <div>
-          Add a tag to {this.props.targetDisplayNames}:
-          <AutocompleteTextInput
-            fieldName="tagText"
-            options={Object.keys(Conditions)}
-            autoFocus
-          />
-          <Field name="useDuration">
-            {(fieldApi: FieldProps) => (
-              <Button
-                fontAwesomeIcon="hourglass"
-                onClick={() => this.toggleAdvanced(fieldApi)}
-              />
-            )}
-          </Field>
-          <SubmitButton />
+      <React.Fragment>
+        <div className="add-tag">
+          <div>
+            <label className="add-tag__label" htmlFor="tagText">
+              Add a tag to {this.props.targetDisplayNames}
+            </label>
+            <AutocompleteTextInput
+              fieldName="tagText"
+              options={autoCompleteOptions}
+              autoFocus
+            />
+            <Field name="useDuration">
+              {(fieldApi: FieldProps) => (
+                <Button
+                  fontAwesomeIcon="hourglass"
+                  onClick={() => this.toggleAdvanced(fieldApi)}
+                />
+              )}
+            </Field>
+          </div>
+          {this.state.advancedMode && this.renderAdvancedFields()}
         </div>
-        {this.state.advancedMode && this.renderAdvancedFields()}
-      </div>
+        <SubmitButton />
+      </React.Fragment>
     );
   }
 
@@ -102,8 +109,8 @@ export function TagPrompt(
   targetCombatants: Combatant[],
   logEvent: (message: string) => void
 ): PromptProps<TagModel> {
-  const activeCombatantId = encounter.ActiveCombatant()
-    ? encounter.ActiveCombatant().Id
+  const activeCombatantId = encounter.EncounterFlow.ActiveCombatant()
+    ? encounter.EncounterFlow.ActiveCombatant().Id
     : "";
   const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
   const combatantNamesById = _.mapValues(combatantsById, c => c.DisplayName());
@@ -143,7 +150,8 @@ export function TagPrompt(
           c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
-          timingKeyedCombatant.Id == encounter.ActiveCombatant().Id;
+          timingKeyedCombatant.Id ==
+          encounter.EncounterFlow.ActiveCombatant().Id;
         const durationGraceRound =
           timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
@@ -155,7 +163,7 @@ export function TagPrompt(
             model.tagTiming,
             model.tagTimingId
           );
-          encounter.AddDurationTag(tag);
+          encounter.EncounterFlow.AddDurationTag(tag);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", {
             Text: tag.Text,
@@ -169,8 +177,6 @@ export function TagPrompt(
           .map(c => c.DisplayName())
           .join(", ")}`
       );
-
-      encounter.QueueEmitEncounter();
 
       return true;
     },

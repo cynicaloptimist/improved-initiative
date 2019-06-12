@@ -1,7 +1,8 @@
+import { Field } from "formik";
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./components/PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -17,12 +18,12 @@ class PlayerViewPromptComponent extends React.Component<
 
   public render() {
     const playerViewUrl = `${env.CanonicalURL}/p/${this.props.encounterId}`;
-
     return (
       <React.Fragment>
         <div className="launch-player-view">
           <input
             className="hidden-input"
+            readOnly
             value={playerViewUrl}
             ref={e => (this.hiddenInput = e)}
           />
@@ -41,6 +42,12 @@ class PlayerViewPromptComponent extends React.Component<
             onClick={this.openPlayerViewWindow}
             additionalClassNames={inputClassName}
           />
+          {env.HasEpicInitiative && (
+            <label>
+              {"Background Image URL: "}
+              <Field type="text" name="backgroundImageUrl" />
+            </label>
+          )}
         </div>
         <SubmitButton />
       </React.Fragment>
@@ -59,13 +66,22 @@ class PlayerViewPromptComponent extends React.Component<
   };
 }
 
-export class PlayerViewPrompt implements LegacyPrompt {
-  public InputSelector = "." + inputClassName;
-  public ComponentName = "reactprompt";
-  protected component: React.ReactElement<PlayerViewPromptComponent>;
+interface PlayerViewPromptModel {
+  backgroundImageUrl: string;
+}
 
-  constructor(encounterId: string) {
-    this.component = <PlayerViewPromptComponent encounterId={encounterId} />;
-  }
-  public Resolve = () => {};
+export function PlayerViewPrompt(
+  encounterId: string,
+  currentBackgroundImageUrl: string,
+  setBackgroundImageUrl: (url: string) => void
+): PromptProps<PlayerViewPromptModel> {
+  return {
+    initialValues: { backgroundImageUrl: currentBackgroundImageUrl },
+    autoFocusSelector: "." + inputClassName,
+    children: <PlayerViewPromptComponent encounterId={encounterId} />,
+    onSubmit: (model: PlayerViewPromptModel) => {
+      setBackgroundImageUrl(model.backgroundImageUrl);
+      return true;
+    }
+  };
 }

@@ -26,11 +26,12 @@ export type StatBlockEditorTarget =
   | "combatant"
   | "persistentcharacter";
 
-interface StatBlockEditorProps {
+export interface StatBlockEditorProps {
   statBlock: StatBlock;
   onSave: (statBlock: StatBlock) => void;
   onDelete?: () => void;
-  onSaveAs?: (statBlock: StatBlock) => void;
+  onSaveAsCopy?: (statBlock: StatBlock) => void;
+  onSaveAsCharacter?: (statBlock: StatBlock) => void;
   onClose: () => void;
   editorTarget: StatBlockEditorTarget;
   currentListings?: Listing<Listable>[];
@@ -99,7 +100,10 @@ export class StatBlockEditor extends React.Component<
                   this.props.editorTarget === "library" ||
                   this.props.editorTarget === "persistentcharacter"
                 }
-                allowSaveAs={this.props.onSaveAs !== undefined}
+                allowSaveAsCopy={this.props.onSaveAsCopy !== undefined}
+                allowSaveAsCharacter={
+                  this.props.onSaveAsCharacter !== undefined
+                }
                 currentListings={this.props.currentListings}
                 setEditorMode={(editorMode: "standard" | "json") =>
                   this.setState({ editorMode })
@@ -199,7 +203,12 @@ export class StatBlockEditor extends React.Component<
   );
 
   private saveAndClose = submittedValues => {
-    const { SaveAs, StatBlockJSON, ...submittedStatBlock } = submittedValues;
+    const {
+      SaveAs,
+      SaveAsCharacter,
+      StatBlockJSON,
+      ...submittedStatBlock
+    } = submittedValues;
 
     let statBlockFromActiveEditor: StatBlock;
     if (this.state.editorMode == "standard") {
@@ -219,9 +228,12 @@ export class StatBlockEditor extends React.Component<
 
     ConvertStringsToNumbersWhereNeeded(editedStatBlock);
 
-    if (SaveAs && this.props.onSaveAs) {
+    if (SaveAsCharacter && this.props.onSaveAsCharacter) {
       editedStatBlock.Id = probablyUniqueString();
-      this.props.onSaveAs(editedStatBlock);
+      this.props.onSaveAsCharacter(editedStatBlock);
+    } else if (SaveAs && this.props.onSaveAsCopy) {
+      editedStatBlock.Id = probablyUniqueString();
+      this.props.onSaveAsCopy(editedStatBlock);
     } else {
       this.props.onSave(editedStatBlock);
     }
