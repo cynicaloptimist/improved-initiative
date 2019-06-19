@@ -179,7 +179,7 @@ export class LibrariesCommander {
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       this.libraries.Encounters.Save,
       this.tracker.EventLog.AddEvent,
-      this.libraries.Encounters.Encounters().map(e => e.Listing().Path)
+      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Listing().Path))
     );
     this.tracker.PromptQueue.Add(prompt);
   };
