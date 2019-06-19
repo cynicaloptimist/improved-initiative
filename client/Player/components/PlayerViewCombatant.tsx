@@ -39,9 +39,7 @@ export class PlayerViewCombatant extends React.Component<
             )}
           </div>
         )}
-        <div className="combatant__name" title={this.props.combatant.Name}>
-          {this.props.combatant.Name}
-        </div>
+        <div className="combatant__name">{this.props.combatant.Name}</div>
         <div
           className={
             "combatant__hp" +
