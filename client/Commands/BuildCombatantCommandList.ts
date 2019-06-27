@@ -4,13 +4,13 @@ import { Command } from "./Command";
 export const BuildCombatantCommandList: (
   c: CombatantCommander
 ) => Command[] = c => [
-  new Command("apply-damage", "Apply Damage", c.EditHP, "t", "heart-broken"),
+  new Command("apply-damage", "Apply Damage", c.EditHP, "t", "fist-raised"),
   new Command(
     "apply-healing",
     "Apply Healing",
     c.ApplyHealing,
     "l",
-    "heartbeat",
+    "heart",
     false
   ),
   new Command(
