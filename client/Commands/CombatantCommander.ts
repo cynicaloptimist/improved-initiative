@@ -21,6 +21,7 @@ import { DefaultPrompt } from "./Prompts/Prompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 import { ApplyDamagePrompt } from "./Prompts/components/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "./Prompts/components/ApplyHealingPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -200,6 +201,20 @@ export class CombatantCommander {
 
   public EditSingleCombatantHP = (combatantViewModel: CombatantViewModel) => {
     this.editHPForCombatants([combatantViewModel]);
+  };
+
+  public ApplyHealing = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+    const selectedCombatants = this.SelectedCombatants();
+    const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
+    const prompt = ApplyHealingPrompt(
+      selectedCombatants,
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
+    );
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public UpdateNotes = async () => {

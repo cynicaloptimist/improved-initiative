@@ -6,6 +6,14 @@ export const BuildCombatantCommandList: (
 ) => Command[] = c => [
   new Command("apply-damage", "Apply Damage", c.EditHP, "t", "heart-broken"),
   new Command(
+    "apply-healing",
+    "Apply Healing",
+    c.ApplyHealing,
+    "l",
+    "heartbeat",
+    false
+  ),
+  new Command(
     "apply-temporary-hp",
     "Apply Temporary HP",
     c.AddTemporaryHP,
