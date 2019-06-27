@@ -4,7 +4,7 @@ import { Command } from "./Command";
 export const BuildCombatantCommandList: (
   c: CombatantCommander
 ) => Command[] = c => [
-  new Command("apply-damage", "Damage/Heal", c.EditHP, "t", "plus-circle"),
+  new Command("apply-damage", "Apply Damage", c.EditHP, "t", "heart-broken"),
   new Command(
     "apply-temporary-hp",
     "Apply Temporary HP",
