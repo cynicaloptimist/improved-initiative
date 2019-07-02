@@ -32,6 +32,7 @@
     "@types/react-color": "^2.13.4",
     "@types/react-dom": "^16.0.5",
     "@types/react-test-renderer": "^16.0.1",
+    "@types/redis": "^2.8.12",
     "@types/request": "^2.47.0",
     "@types/serve-static": "^1.13.1",
     "@types/socket.io": "^1.4.33",
@@ -67,7 +68,6 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
-    "@types/redis": "^2.8.12",
     "awesomplete": "^1.1.2",
     "body-parser": "^1.18.2",
     "browser-filesaver": "^1.1.0",
