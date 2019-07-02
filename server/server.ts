@@ -33,7 +33,7 @@ async function improvedInitiativeServer() {
   );
   const playerViews = GetPlayerViewManager();
 
-  const session = await GetSessionMiddleware(dbConnectionString);
+  const session = await GetSessionMiddleware(process.env.REDIS_URL);
   app.use(session);
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
