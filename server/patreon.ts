@@ -105,31 +105,16 @@ async function handleCurrentUser(
 
   console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
-  const hasStorageReward =
-    _.intersection(userRewards, storageRewardIds).length > 0;
-
-  const hasEpicInitiativeThanks = _.includes(
-    thanks.map(t => t.PatreonId),
-    apiResponse.data.id
-  );
-  const hasEpicInitiativeReward =
-    _.intersection(userRewards, epicRewardIds).length > 0;
-
-  const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
-
-  const standing = hasEpicInitiative
-    ? "epic"
-    : hasStorageReward
-    ? "pledge"
-    : "none";
+  const userId = apiResponse.data.id;
+  const standing = getUserAccountLevel(userId, userRewards);
 
   const session = req.session;
   if (session === undefined) {
     throw "Session is undefined";
   }
 
-  session.hasStorage = hasEpicInitiative || hasStorageReward;
-  session.hasEpicInitiative = hasEpicInitiative;
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
   session.isLoggedIn = true;
 
   const user = await DB.upsertUser(
@@ -143,6 +128,28 @@ async function handleCurrentUser(
   }
   session.userId = user._id;
   res.redirect(`/e/${encounterId}`);
+}
+
+function getUserAccountLevel(userId: string, rewardIds: string[]) {
+  const hasStorageReward =
+    _.intersection(rewardIds, storageRewardIds).length > 0;
+
+  const hasEpicInitiativeThanks = _.includes(
+    thanks.map(t => t.PatreonId),
+    userId
+  );
+  const hasEpicInitiativeReward =
+    _.intersection(rewardIds, epicRewardIds).length > 0;
+
+  const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
+
+  const standing = hasEpicInitiative
+    ? "epic"
+    : hasStorageReward
+    ? "pledge"
+    : "none";
+
+  return standing;
 }
 
 export function configureLogout(app: express.Application) {
