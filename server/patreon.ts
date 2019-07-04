@@ -202,3 +202,27 @@ export function startNewsUpdates(app: express.Application) {
     res.json(latest.post);
   });
 }
+
+export function configurePatreonWebhookReceiver(app: express.Application) {
+  app.post("/patreon_webhook/", async (req, res) => {
+    if (process.env.PATREON_WEBHOOK_SECRET) {
+      const signature = req.header("X-Patreon-Signature");
+      //TODO: verify  https://docs.patreon.com/#webhooks
+    }
+
+    console.log(JSON.stringify(req.body));
+
+    const userId = _.get(req.body, "data.relationships.patron.data.id", null);
+    const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
+
+    if (!userId || !rewardId) {
+      return res.send(400);
+    }
+
+    const userAccountLevel = getUserAccountLevel(userId, [rewardId]);
+
+    await DB.upsertUser(userId, userAccountLevel);
+
+    return res.send(201);
+  });
+}
