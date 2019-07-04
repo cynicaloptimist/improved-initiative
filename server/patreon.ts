@@ -64,6 +64,8 @@ export function configureLoginRedirect(app: express.Application) {
 
   app.get(redirectPath, async (req: Req, res: Res) => {
     try {
+      console.log("req.query >" + JSON.stringify(req.query));
+      console.log("req.body >" + JSON.stringify(req.body));
       const code = req.query.code;
 
       const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
@@ -86,6 +88,8 @@ async function handleCurrentUser(
   tokens: TokensResponse,
   apiResponse: any
 ) {
+  console.log(`api response: ${JSON.stringify(apiResponse)}`);
+
   const encounterId = req.query.state.replace(/['"]/g, "");
   const relationships = apiResponse.included || [];
 
@@ -102,8 +106,6 @@ async function handleCurrentUser(
         return "none";
       }
     });
-
-  console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, userRewards);
