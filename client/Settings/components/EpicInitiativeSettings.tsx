@@ -69,7 +69,7 @@ export class EpicInitiativeSettings extends React.Component<
         </div>
 
         <h4>
-          Additional CSS <strong>(experimental)</strong>
+          Additional Player View CSS <strong>(experimental)</strong>
         </h4>
         <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
       </div>
