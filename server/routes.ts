@@ -12,6 +12,7 @@ import { configureMetricsRoutes } from "./metrics";
 import {
   configureLoginRedirect,
   configureLogout,
+  configurePatreonWebhookReceiver,
   startNewsUpdates
 } from "./patreon";
 import { PlayerViewManager } from "./playerviewmanager";
@@ -177,6 +178,7 @@ export default function(
 
   configureLoginRedirect(app);
   configureLogout(app);
+  configurePatreonWebhookReceiver(app);
   configureStorageRoutes(app);
   startNewsUpdates(app);
 }
