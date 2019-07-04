@@ -117,12 +117,7 @@ async function handleCurrentUser(
   session.hasEpicInitiative = standing == "epic";
   session.isLoggedIn = true;
 
-  const user = await DB.upsertUser(
-    apiResponse.data.id,
-    tokens.access_token,
-    tokens.refresh_token,
-    standing
-  );
+  const user = await DB.upsertUser(apiResponse.data.id, standing);
   if (user === undefined) {
     throw "Failed to insert user into database";
   }

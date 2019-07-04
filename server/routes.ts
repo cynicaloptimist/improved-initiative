@@ -195,8 +195,6 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
 
   const user = await upsertUser(
     process.env.DEFAULT_PATREON_ID || "defaultPatreonId",
-    "accesskey",
-    "refreshkey",
     "pledge"
   );
 

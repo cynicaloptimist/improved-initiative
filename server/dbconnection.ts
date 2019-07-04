@@ -24,12 +24,7 @@ export const initialize = async initialConnectionString => {
   return;
 };
 
-export async function upsertUser(
-  patreonId: string,
-  accessKey: string,
-  refreshKey: string,
-  accountStatus: string
-) {
+export async function upsertUser(patreonId: string, accountStatus: string) {
   if (!connectionString) {
     console.error("No connection string found.");
     throw "No connection string found.";
@@ -45,8 +40,6 @@ export async function upsertUser(
     {
       $set: {
         patreonId,
-        accessKey,
-        refreshKey,
         accountStatus
       },
       $setOnInsert: {
