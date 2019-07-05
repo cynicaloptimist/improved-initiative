@@ -1,17 +1,65 @@
-<span data-bind="text: Combatant.Initiative, css: InitiativeClass" title="Initiative Roll" class="initiative"></span>
-<span class="name" data-bind="text: Name, attr: {title: Name }"></span>
-<span class="hp" data-bind="click: EditHP, text: HP, style: { color: GetHPColor() }"></span>
-<span class="ac" title="Armor Class" data-bind="text: Combatant.AC"></span>
-<span class="tags">
-<!--ko foreach: Combatant.Tags() -->
-    <span class="tag">
-        <span data-bind="text: Text"></span>
-        <span class="fa fa-hourglass" data-bind="visible: HasDuration"></span>
-        <span class="fa-clickable fa-remove" data-bind="click: $parent.RemoveTag"></span>
-    </span>
-<!-- /ko -->
+<span class="combatant__leftsection">
+  <span
+    class="combatant__initiative"
+    data-bind="text: Combatant.Initiative, css: InitiativeClass"
+    title="Initiative Roll"
+  ></span>
+  <span
+    class="combatant__name"
+    data-bind="text: Name, attr: {title: Name }"
+  ></span>
+  <span
+    class="combatant__hp"
+    data-bind="click: EditHP, clickBubble:false, text: HP, style: { color: GetHPColor() }"
+  ></span>
+  <!-- ko ifnot: Combatant.RevealedAC -->
+  <span
+    class="combatant__ac"
+    title="Armor Class"
+    data-bind="text: Combatant.StatBlock().AC.Value"
+  >
+  </span>
+  <!-- /ko -->
+  <!-- ko if: Combatant.RevealedAC -->
+  <span class="combatant__ac" title="Armor Class (revealed in Player View)">
+    <span data-bind="text: Combatant.StatBlock().AC.Value"></span>
+    <span class="combatant__ac--revealed-badge fas fa-eye"></span>
+  </span>
+  <!-- /ko -->
 </span>
-    <span class="buttons">
-    <span class="fa-clickable fa-tag" title="Add note" data-bind="click: $root.CombatantCommander.AddTag"></span>
-    <span class="fa-clickable" title="Hide/Reveal in Player Window" data-bind="click: ToggleHidden, css: HiddenClass"></span>
+<span class="combatant__rightsection">
+  <span class="combatant__tags">
+    <!--ko foreach: Combatant.Tags() -->
+    <!-- ko if: Visible() -->
+    <span class="tag">
+      <!-- ko if: $parent.TagHasReference($data) -->
+      <span
+        class="tag__text condition-reference"
+        data-bind="text: Text, click: $parent.ReferenceTaggedCondition, clickBubble:false"
+      ></span>
+      <!-- /ko -->
+      <!-- ko ifnot: $parent.TagHasReference($data) -->
+      <span class="tag__text" data-bind="text: Text"></span>
+      <!-- /ko -->
+      <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
+      <span
+        class="fa-clickable fa-times"
+        data-bind="click: $parent.RemoveTag, clickBubble:false"
+      ></span>
+    </span>
+    <!-- /ko -->
+    <!-- /ko -->
+  </span>
+  <span class="combatant__buttons">
+    <span
+      class="fa-clickable fa-tag"
+      title="Add Tag"
+      data-bind="click: $root.CombatantCommander.AddTag, clickBubble:false"
+    ></span>
+    <span
+      class="fa-clickable"
+      title="Hide/Reveal in Player Window"
+      data-bind="click: ToggleHidden, clickBubble:false, css: HiddenClass"
+    ></span>
+  </span>
 </span>

@@ -1,84 +1,90 @@
-module ImprovedInitiative {
-    export class SpellEditor {
-        private saveCallback: (newSpell: Spell) => void;
-        private deleteCallback: (id: string) => void;
-        private spell: Spell;
+import * as ko from "knockout";
+import * as koMapping from "knockout-mapping";
 
-        EditorType = ko.observable<'basic' | 'advanced'>('basic');
-        JsonSpell = ko.observable<string>();
-        EditableSpell = ko.observable(null);
+import { Spell } from "../../common/Spell";
 
-        HasSpell = ko.pureComputed(() => this.EditableSpell() !== null);
+export class SpellEditor {
+  private saveCallback: (newSpell: Spell) => void;
+  private deleteCallback: (id: string) => void;
+  private spell: Spell;
+  private spellId: string;
 
-        EditSpell = (
-            spell: Spell,
-            saveCallback: (newSpell: Spell) => void,
-            deleteCallback: (id: string) => void
-        ) => {
-            
-            this.spell = { ...Spell.Default(), ...spell }
+  public EditorType = ko.observable<"basic" | "advanced">("basic");
+  public JsonSpell = ko.observable<string>();
+  public EditableSpell = ko.observable(null);
 
-            this.EditableSpell(this.makeEditable(this.spell));
-            this.JsonSpell(JSON.stringify(this.spell, null, 2));
-            
-            this.saveCallback = saveCallback;
-            this.deleteCallback = deleteCallback;
-        }
+  public HasSpell = ko.pureComputed(() => this.EditableSpell() !== null);
 
-        
-        private makeEditable = (spell: Spell) => {
-            let observableSpell = ko['mapping'].fromJS(this.spell);
-            return observableSpell;
-        }
+  public EditSpell = (
+    spell: Spell,
+    saveCallback: (newSpell: Spell) => void,
+    deleteCallback: (id: string) => void
+  ) => {
+    this.spellId = spell.Id;
+    this.spell = { ...Spell.Default(), ...spell };
+    delete this.spell.Id;
 
-        private unMakeEditable = (editableSpell: any) => {
-            let unObservableSpell = ko.toJS(editableSpell);
-            delete unObservableSpell.__ko_mapping__;
-            const classes = unObservableSpell.Classes;
-            if (typeof classes === "string") {
-                unObservableSpell.Classes = classes.split(",").map(s => s.trim());
-            }
-            return unObservableSpell;
-        }
+    this.EditableSpell(this.makeEditable(this.spell));
+    this.JsonSpell(JSON.stringify(this.spell, null, 2));
 
-        SelectInput = () => {
-            $(".stats input.name").select();
-        }
+    this.saveCallback = saveCallback;
+    this.deleteCallback = deleteCallback;
+  };
 
-        SaveSpell = () => {
-            let editedSpell: Spell = Spell.Default();
+  private makeEditable = (spell: Spell) => {
+    let observableSpell = koMapping.fromJS(this.spell);
+    return observableSpell;
+  };
 
-            if (this.EditorType() === 'advanced') {
-                try {
-                    var spellFromJSON = JSON.parse(this.JsonSpell());
-                } catch (error) {
-                    alert(`Couldn't parse JSON from advanced editor.`);
-                    return;
-                }
-                $.extend(editedSpell, spellFromJSON)
-            }
-            if (this.EditorType() === 'basic') {
-                $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));
-            }
-            
-            this.saveCallback(editedSpell);
-            this.EditableSpell(null);
-        }
+  private unMakeEditable = (editableSpell: any) => {
+    let unObservableSpell = ko.toJS(editableSpell);
+    delete unObservableSpell.__ko_mapping__;
+    const classes = unObservableSpell.Classes;
+    if (typeof classes === "string") {
+      unObservableSpell.Classes = classes.split(",").map(s => s.trim());
+    }
+    return unObservableSpell;
+  };
 
-        DeleteSpell = () => {
-            if (confirm(`Delete your custom spell ${this.spell.Name}? This cannot be undone.`)) {
-                this.deleteCallback(this.spell.Id);
-                this.EditableSpell(null);
-            }
-        }
+  public SelectInput = () => {
+    $(".stats input.name").select();
+  };
 
-        RevertSpell = () => {
-            this.EditableSpell(null);
-        }
+  public SaveSpell = () => {
+    let editedSpell: Spell = Spell.Default();
+
+    if (this.EditorType() === "advanced") {
+      let spellFromJSON = {};
+      try {
+        spellFromJSON = JSON.parse(this.JsonSpell());
+      } catch (error) {
+        alert(`Couldn't parse JSON from advanced editor.`);
+        return;
+      }
+      $.extend(editedSpell, spellFromJSON);
+    }
+    if (this.EditorType() === "basic") {
+      $.extend(editedSpell, this.unMakeEditable(this.EditableSpell()));
     }
 
-    ko.components.register('spelleditor', {
-        viewModel: params => params.editor,
-        template: { name: 'spelleditor' }
-    });
+    editedSpell.Id = this.spellId;
+
+    this.saveCallback(editedSpell);
+    this.EditableSpell(null);
+  };
+
+  public DeleteSpell = () => {
+    if (
+      confirm(
+        `Delete your custom spell ${this.spell.Name}? This cannot be undone.`
+      )
+    ) {
+      this.deleteCallback(this.spellId);
+      this.EditableSpell(null);
+    }
+  };
+
+  public RevertSpell = () => {
+    this.EditableSpell(null);
+  };
 }

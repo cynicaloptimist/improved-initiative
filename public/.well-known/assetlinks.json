@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "xyz.appmaker.fuyetl",
+      "sha256_cert_fingerprints": ["DB:69:5E:BB:CC:93:8D:6E:6D:12:66:3B:89:76:33:00:DC:34:92:D1:9C:E6:71:F0:7F:D9:31:55:6D:F1:E8:87"]
+    }
+  }
+]

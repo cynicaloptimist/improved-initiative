@@ -1,80 +1,87 @@
-module ImprovedInitiative {
-    export const TutorialSpy = ko.observable<string>(null);
+import * as ko from "knockout";
 
-    export class TutorialViewModel {
-        //TODO: prevent next when awaiting a click
-        //TODO: auto advance on view changes
+import { Metrics } from "../Utility/Metrics";
+import { Store } from "../Utility/Store";
+import { TutorialSteps } from "./TutorialSteps";
 
-        private stepIndex = ko.observable<number>(null);
-        private showTutorial: KnockoutObservable<boolean>;
+export const TutorialSpy = ko.observable<string>(null);
 
-        CurrentStep: KnockoutComputed<string>;
-        Position: KnockoutComputed<Position>;
-        constructor(params: { showTutorial: KnockoutObservable<boolean> }) {
-            this.stepIndex.subscribe(newStepIndex => {
-                $('.tutorial-focus').removeClass('tutorial-focus');
+export class TutorialViewModel {
+  private stepIndex = ko.observable<number>(null);
+  private showTutorial: KnockoutObservable<boolean>;
 
-                const nextStep = TutorialSteps[newStepIndex];
-                const focusSelector = nextStep.RaiseSelector;
-                $(focusSelector).addClass('tutorial-focus');
-                const position = nextStep.CalculatePosition($(focusSelector));
-                if (newStepIndex == 0) {
-                    $('.tutorial').css(position);
-                }
-                else {
-                    $('.tutorial').animate(position);
-                }
-            });
+  public CurrentStep: KnockoutComputed<string>;
+  public Position: KnockoutComputed<Position>;
+  constructor(params: { showTutorial: KnockoutObservable<boolean> }) {
+    this.stepIndex.subscribe(newStepIndex => {
+      $(".tutorial-focus").removeClass("tutorial-focus");
 
-            TutorialSpy.subscribe(action => {
-                const index = this.stepIndex();
-                if (index && action == TutorialSteps[index].AwaitAction) {
-                    this.Next();
-                }
-            });
+      const nextStep = TutorialSteps[newStepIndex];
+      const focusSelector = nextStep.RaiseSelector;
+      const focusedElements = $(focusSelector);
+      if (focusedElements.length === 0) {
+        console.error("Tutorial binding broken");
+        return;
+      }
+      focusedElements.addClass("tutorial-focus");
+      const position: any = nextStep.CalculatePosition(focusedElements);
+      if (newStepIndex == 0) {
+        $(".tutorial").css(position);
+      } else {
+        $(".tutorial").animate(position);
+      }
+    });
 
-            this.showTutorial = params.showTutorial;
-            
-            if (this.showTutorial()) {
-                this.stepIndex(0);    
-            }
+    TutorialSpy.subscribe(action => {
+      const index = this.stepIndex();
+      if (index && action == TutorialSteps[index].AwaitAction) {
+        this.Next();
+      }
+    });
 
-            this.showTutorial.subscribe(v => {
-                if (v) {
-                    this.stepIndex(0)
-                }
-            });
-            
-            this.CurrentStep = ko.pureComputed(() => {
-                const index = this.stepIndex();
-                if (index !== null) {
-                    return TutorialSteps[index].Message    
-                }
-                return "";
-            });
-        }
+    this.showTutorial = params.showTutorial;
 
-        End = () => {
-            this.stepIndex(0);
-            $('.tutorial-focus').removeClass('tutorial-focus');
-            Store.Save(Store.User, 'SkipIntro', true);
-            this.showTutorial(false);
-        }
-
-        CanGoNext = ko.pureComputed(() => {
-            const stepIndex = this.stepIndex();
-            return stepIndex === null || !TutorialSteps[stepIndex].AwaitAction;
-        });
-
-        Next = () => {
-            window.appInsights.trackEvent("StepCompleted", { step: this.stepIndex().toString() });
-            const nextStepIndex = this.stepIndex() + 1;
-
-            if (nextStepIndex < TutorialSteps.length) {
-                this.stepIndex(nextStepIndex);
-            } else {
-                this.End();
-            }
-        }
+    if (this.showTutorial()) {
+      this.stepIndex(0);
     }
+
+    this.showTutorial.subscribe(v => {
+      if (v) {
+        this.stepIndex(0);
+      }
+    });
+
+    this.CurrentStep = ko.pureComputed(() => {
+      const index = this.stepIndex();
+      if (index !== null) {
+        return TutorialSteps[index].Message;
+      }
+      return "";
+    });
+  }
+
+  public End = () => {
+    this.stepIndex(0);
+    $(".tutorial-focus").removeClass("tutorial-focus");
+    Store.Save(Store.User, "SkipIntro", true);
+    this.showTutorial(false);
+  };
+
+  public CanGoNext = ko.pureComputed(() => {
+    const stepIndex = this.stepIndex();
+    return stepIndex === null || !TutorialSteps[stepIndex].AwaitAction;
+  });
+
+  public Next = () => {
+    Metrics.TrackAnonymousEvent("StepCompleted", {
+      step: this.stepIndex().toString()
+    });
+    const nextStepIndex = this.stepIndex() + 1;
+
+    if (nextStepIndex < TutorialSteps.length) {
+      this.stepIndex(nextStepIndex);
+    } else {
+      this.End();
+    }
+  };
 }

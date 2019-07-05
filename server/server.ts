@@ -1,25 +1,47 @@
-/// <reference path="../typings/index.d.ts" />
-
-import socketIO = require("socket.io");
 import express = require("express");
+import socketIO = require("socket.io");
 
-import ConfigureAppInsights from "./configureappinsights";
+import { Spell } from "../common/Spell";
+import { StatBlock } from "../common/StatBlock";
+import { InMemoryPlayerViewManager } from "./InMemoryPlayerViewManager";
+import * as DB from "./dbconnection";
+import { getDbConnectionString } from "./getDbConnectionString";
 import LaunchServer from "./launchserver";
-import ConfigureRoutes from "./routes";
-import ConfigureSockets from "./sockets";
 import * as L from "./library";
+import ConfigureRoutes from "./routes";
+import GetSessionMiddleware from "./session";
+import ConfigureSockets from "./sockets";
 
-ConfigureAppInsights();
+async function improvedInitiativeServer() {
+  const app = express();
+  const http = require("http").Server(app);
 
-const app = express();
-const http = require("http").Server(app);
+  const dbConnectionString = await getDbConnectionString();
+  await DB.initialize(dbConnectionString);
 
-const statBlockLibrary = L.Library.FromFile<L.StatBlock>("ogl_creatures.json", "/statblocks/", L.GetStatBlockKeywords);
-const spellLibrary = L.Library.FromFile<L.Spell>("ogl_spells.json", "/spells/", L.GetSpellKeywords);
-const playerViews = [];
-ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+  const statBlockLibrary = L.Library.FromFile<StatBlock>(
+    "ogl_creatures.json",
+    "/statblocks/",
+    StatBlock.GetSearchHint,
+    StatBlock.GetMetadata
+  );
+  const spellLibrary = L.Library.FromFile<Spell>(
+    "ogl_spells.json",
+    "/spells/",
+    Spell.GetSearchHint,
+    Spell.GetMetadata
+  );
+  const playerViews = new InMemoryPlayerViewManager();
 
-const io = socketIO(http);
-ConfigureSockets(io, playerViews);
+  const session = await GetSessionMiddleware(dbConnectionString);
+  app.use(session);
 
-LaunchServer(http);
+  ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+
+  const io = socketIO(http);
+  ConfigureSockets(io, session, playerViews);
+
+  LaunchServer(http);
+}
+
+improvedInitiativeServer();

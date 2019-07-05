@@ -1,0 +1,17 @@
+node_modules/*
+typings/*
+public/user/*
+public/fonts/*
+*.log
+*.js.map
+*.js
+*.css
+.tscache
+.vscode
+.baseDir
+!Gruntfile.js
+!*.config.js
+!*.config.base.js
+!*.config.dev.js
+!*.config.prod.js
+!test/test.js

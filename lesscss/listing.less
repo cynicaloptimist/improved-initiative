@@ -1,0 +1,38 @@
+.listings li:nth-child(2n-1) > span {
+  background-color: @zebra-white;
+  &:hover {
+    background-color: @hover-white;
+  }
+}
+.listings span:hover {
+  background-color: @hover-white;
+}
+
+.c-listing {
+  .c-listing-delete,
+  .c-listing-edit,
+  .c-listing-move,
+  .c-listing__counter {
+    display: none;
+  }
+
+  &:hover {
+    .c-listing-delete,
+    .c-listing-edit,
+    .c-listing-move {
+      display: flex;
+    }
+  }
+
+  .fa.c-listing-toggle:before {
+    padding-right: 5px;
+  }
+}
+
+.c-folder {
+  .c-listing {
+    &:not(:first-child) {
+      margin-left: @medium-spacer;
+    }
+  }
+}

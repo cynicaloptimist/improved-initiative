@@ -1,40 +1,54 @@
 <h2>Edit Spell</h2>
 <div class="editor-type">
-    Editor:
-    <label>
-        <input type="radio" name="editor-type" value="basic" data-bind="checked: EditorType" />Form</label>
-    <label>
-        <input type="radio" name="editor-type" value="advanced" data-bind="checked: EditorType" />JSON</label>
+  Editor:
+  <label>
+    <input
+      type="radio"
+      name="editor-type"
+      value="basic"
+      data-bind="checked: EditorType"
+    />Form</label
+  >
+  <label>
+    <input
+      type="radio"
+      name="editor-type"
+      value="advanced"
+      data-bind="checked: EditorType"
+    />JSON</label
+  >
 </div>
 <!-- ko if: EditorType() == 'basic' -->
 <div class="stats" data-bind="with: EditableSpell, afterRender: SelectInput">
-    <p>Name <input class="name" type="text" data-bind="value: Name" />
-    </p>
-    <p>Source <input type="text" data-bind="value: Source" />
-    </p>
-    <p>School <input type="text" data-bind="value: School" />
-    </p>
-    <p>Casting Time <input type="text" data-bind="value: CastingTime" />
-    </p>
-    <p>Ritual <input type="checkbox" data-bind="checked: Ritual" /></p>
-    <p>Range <input type="text" data-bind="value: Range" />
-    </p>
-    <p>Components <input type="text" data-bind="value: Components" />
-    </p>
-    <p>Duration <input type="text" data-bind="value: Duration" />
-    </p>
-    <p>Classes <input type="text" data-bind="value: Classes" />
-    <p>Description</p>
-    <textarea data-bind="value: Description"></textarea>
-    </p>
-    
+  <p>Name <input class="name" type="text" data-bind="value: Name" /></p>
+  <p>Source <input type="text" data-bind="value: Source" /></p>
+  <p>Level <input type="text" data-bind="value: Level" /></p>
+  <p>School <input type="text" data-bind="value: School" /></p>
+  <p>Casting Time <input type="text" data-bind="value: CastingTime" /></p>
+  <p>Ritual <input type="checkbox" data-bind="checked: Ritual" /></p>
+  <p>Range <input type="text" data-bind="value: Range" /></p>
+  <p>Components <input type="text" data-bind="value: Components" /></p>
+  <p>Duration <input type="text" data-bind="value: Duration" /></p>
+  <p>Classes <input type="text" data-bind="value: Classes" /></p>
+  <p>Description</p>
+  <textarea data-bind="value: Description"></textarea>
 </div>
 <!-- /ko -->
 <!-- ko if: EditorType() == 'advanced' -->
-<textarea class="json-editor" spellcheck="false" data-bind="value: JsonSpell"></textarea>
+<textarea
+  class="json-editor"
+  spellcheck="false"
+  data-bind="value: JsonSpell"
+></textarea>
 <!-- /ko -->
 <div class="buttons">
-    <div data-bind="click: SaveSpell" title="Save changes to spell"><span class="button fa-save"></span></div>
-    <div data-bind="click: RevertSpell" title="Cancel and revert spell"><span class="button fa-close"></span></div>
-    <div data-bind="click: DeleteSpell" title="Delete spell"><span class="button fa-trash"></span></div>
+  <div data-bind="click: SaveSpell" title="Save changes to spell">
+    <span class="button fas fa-save"></span>
+  </div>
+  <div data-bind="click: RevertSpell" title="Cancel and revert spell">
+    <span class="button fas fa-times"></span>
+  </div>
+  <div data-bind="click: DeleteSpell" title="Delete spell">
+    <span class="button fas fa-trash"></span>
+  </div>
 </div>

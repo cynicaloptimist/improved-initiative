@@ -1,45 +1,67 @@
-module ImprovedInitiative {
-    export class SpellLibrary {
-        Spells = ko.observableArray<SpellListing>([]);
-        SpellsByNameRegex = ko.computed(() => {
-            const allSpellNames = this.Spells().map(s => s.Name());
-            if (allSpellNames.length === 0) {
-                return new RegExp('a^');
-            }
-            return new RegExp(`\\b(${allSpellNames.join("|")})\\b`, "gim");
-        });
+import * as ko from "knockout";
 
-        constructor() {
-            $.ajax("../spells/").done(this.addSpellListings);
+import { StoredListing } from "../../common/Listable";
+import { Spell } from "../../common/Spell";
+import { concatenatedStringRegex } from "../../common/Toolbox";
+import { AccountClient } from "../Account/AccountClient";
+import { Store } from "../Utility/Store";
+import { Listing, ListingOrigin } from "./Listing";
 
-            const customSpells = Store.List(Store.Spells);
-            customSpells.forEach(id => {
-                var spell = { ...Spell.Default(), ...Store.Load<Spell>(Store.Spells, id) };
-                this.Spells.push(new SpellListing(id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell));
-            });
+export class SpellLibrary {
+  private spells = ko.observableArray<Listing<Spell>>([]);
+  public GetSpells = ko.pureComputed(() => this.spells());
+  public SpellsByNameRegex = ko.pureComputed(() =>
+    concatenatedStringRegex(this.GetSpells().map(s => s.Listing().Name))
+  );
 
-            window.appInsights.trackEvent("CustomSpells", { Count: customSpells.length.toString() });
-        }
+  constructor(private accountClient: AccountClient) {}
 
-        private addSpellListings = (listings: { Id: string, Name: string, Keywords: string, Link: string }[]) => {
-            listings.sort((c1, c2) => {
-                return c1.Name.toLocaleLowerCase() > c2.Name.toLocaleLowerCase() ? 1 : -1;
-            });
-            ko.utils.arrayPushAll<SpellListing>(this.Spells, listings.map(c => {
-                return new SpellListing(c.Id, c.Name, c.Keywords, c.Link, "server");
-            }));
-        }
+  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
+    ko.utils.arrayPushAll<Listing<Spell>>(
+      this.spells,
+      listings.map(c => {
+        return new Listing<Spell>(c, source);
+      })
+    );
+  };
 
-        public AddOrUpdateSpell = (spell: Spell) => {
-            this.Spells.remove(listing => listing.Source === "localStorage" && listing.Id === spell.Id);
-            const listing = new SpellListing(spell.Id, spell.Name, Spell.GetKeywords(spell), null, "localStorage", spell);
-            this.Spells.unshift(listing);
-            Store.Save(Store.Spells, spell.Id, spell);
-        }
+  public AddOrUpdateSpell = (spell: Spell) => {
+    this.spells.remove(listing => listing.Listing().Id === spell.Id);
+    spell.Id = AccountClient.MakeId(spell.Id);
+    const listing = new Listing<Spell>(
+      {
+        ...spell,
+        SearchHint: Spell.GetSearchHint(spell),
+        Metadata: Spell.GetMetadata(spell),
+        Link: Store.Spells
+      },
+      "localStorage",
+      spell
+    );
+    this.spells.push(listing);
+    Store.Save(Store.Spells, spell.Id, spell);
+    this.accountClient.SaveSpell(spell).then(r => {
+      if (!r) return;
+      if (listing.Origin === "account") return;
+      const accountListing = new Listing<Spell>(
+        {
+          Id: spell.Id,
+          Name: spell.Name,
+          Path: spell.Path,
+          SearchHint: Spell.GetSearchHint(spell),
+          Metadata: Spell.GetMetadata(spell),
+          Link: `/my/spells/${spell.Id}`
+        },
+        "account",
+        spell
+      );
+      this.spells.push(accountListing);
+    });
+  };
 
-        public DeleteSpellById = (id: string) => {
-            this.Spells.remove(listing => listing.Id === id);
-            Store.Delete(Store.Spells, id);
-        }
-    }
+  public DeleteSpellById = (id: string) => {
+    this.spells.remove(listing => listing.Listing().Id === id);
+    Store.Delete(Store.Spells, id);
+    this.accountClient.DeleteSpell(id);
+  };
 }

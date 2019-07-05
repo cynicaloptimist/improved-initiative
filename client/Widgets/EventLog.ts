@@ -1,43 +1,48 @@
-module ImprovedInitiative {
-    export class EventLog {
-        Events = ko.observableArray<string>();
-        
-        LatestEvent = ko.pureComputed(() => this.Events()[this.Events().length - 1] || "Welcome to Improved Initiative!");
-        EventsTail = ko.pureComputed(() => this.Events().slice(0, this.Events().length - 1));
-        
-        AddEvent = (event: string) => {
-            this.Events.push(event);
-        }
+import * as ko from "knockout";
 
-        ToggleFullLog = () => {
-            if(this.ShowFullLog()) {
-                this.ShowFullLog(false);
-                $('.combatants').css('flex-shrink', 1);
-            } else {
-                this.ShowFullLog(true);
-                $('.combatants').css('flex-shrink', 0);
-                this.scrollToBottomOfLog();
-            }
-        }
+export class EventLog {
+  public Events = ko.observableArray<string>();
 
-        ToggleCSS = () => this.ShowFullLog() ? 'fa-caret-down' : 'fa-caret-up';
+  public LatestEvent = ko.pureComputed(
+    () =>
+      this.Events()[this.Events().length - 1] ||
+      "Welcome to Improved Initiative!"
+  );
+  public EventsTail = ko.pureComputed(() =>
+    this.Events().slice(0, this.Events().length - 1)
+  );
 
-        ShowFullLog = ko.observable<boolean>(false);
+  public AddEvent = (event: string) => {
+    this.Events.push(event);
+  };
 
-        LogHPChange = (damage: number, combatantNames: string) => {
-            if (damage > 0) {
-                this.AddEvent(`${damage} damage applied to ${combatantNames}.`);
-            }
-            if (damage < 0) {
-                this.AddEvent(`${-damage} HP restored to ${combatantNames}.`);
-            }
-        }
-
-        private element = $('.event-log');
-        
-        private scrollToBottomOfLog = () => {
-            let scrollHeight = this.element[0].scrollHeight;
-            this.element.scrollTop(scrollHeight);
-        }
+  public ToggleFullLog = () => {
+    if (this.ShowFullLog()) {
+      this.ShowFullLog(false);
+    } else {
+      this.ShowFullLog(true);
+      this.scrollToBottomOfLog();
     }
+  };
+
+  public ToggleCSS = () =>
+    this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up";
+
+  public ShowFullLog = ko.observable<boolean>(false);
+
+  public LogHPChange = (damage: number, combatantNames: string) => {
+    if (damage > 0) {
+      this.AddEvent(`${damage} damage applied to ${combatantNames}.`);
+    }
+    if (damage < 0) {
+      this.AddEvent(`${-damage} HP restored to ${combatantNames}.`);
+    }
+  };
+
+  private element = document.getElementsByClassName("event-log")[0];
+
+  private scrollToBottomOfLog = () => {
+    let scrollHeight = this.element.scrollHeight;
+    this.element.scrollTop = scrollHeight;
+  };
 }

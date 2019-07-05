@@ -1,0 +1,127 @@
+.suggestion-prompt {
+  .card-bg-2(@large-spacer, @large-spacer);
+
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: initial;
+}
+
+#playerview {
+  margin: 0;
+  font-size: 20px;
+
+  .combatant--header {
+    flex-direction: row;
+    padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
+  }
+
+  .combatant__hp {
+    flex-basis: 10%;
+    align-items: center;
+    &.show-hover:hover {
+      background-color: @hover-red;
+    }
+  }
+
+  .combatant__portrait {
+    width: 50px;
+    align-items: center;
+    padding-right: 1vw;
+  }
+
+  .combatant__portrait img {
+    max-height: 50px;
+  }
+
+  .combatant__name {
+    flex-basis: 30%;
+  }
+
+  .combatant__tags {
+    flex-direction: row;
+
+    .tag {
+      .colors(@primary-white, @primary-red);
+      margin-right: @large-spacer;
+      padding: @medium-spacer;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+  }
+
+  .combatant__header .combatant__tags {
+    text-align: center;
+  }
+
+  .combat-footer {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: @medium-spacer;
+    color: @primary-white;
+    > span {
+      padding-right: @medium-spacer;
+    }
+  }
+
+  .combatant-portrait {
+    z-index: 2;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .combatant-portrait__image {
+    width: 80%;
+    max-width: 700px;
+    object-fit: scale-down;
+  }
+
+  .combatant-portrait__caption {
+    .card-bg-2(@large-spacer, @medium-spacer);
+    max-width: 700px;
+  }
+
+  .damage-suggestion {
+    .suggestion-prompt();
+    .damage-suggestion__input {
+      flex-flow: row;
+      justify-content: space-between;
+    }
+    .damage-suggestion__tip {
+      color: lighten(@primary-black, 50);
+      font-size: smaller;
+    }
+  }
+
+  .tag-suggestion {
+    .suggestion-prompt();
+    .add-tag > div {
+      flex-flow: row;
+      align-items: center;
+      > * {
+        margin: @extra-small-spacer;
+      }
+    }
+  }
+
+  /* Add Animation */
+  .combatant-portrait__image,
+  .combatant-portrait__caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+  }
+
+  @keyframes zoom {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+}

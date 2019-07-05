@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+      function getHostNameTail(url) {
+        return new URL(url).hostname
+          .split(".")
+          .slice(-2)
+          .join(".");
+      }
+
+      window.onmessage = function(event) {
+        console.log("message: " + JSON.stringify(event));
+        var baseUrl = "{{{baseUrl}}}";
+        if (!event) return;
+        if (new URL(window.location).host !== new URL(baseUrl).host) {
+          throw "transfer target is not at canonical URL";
+        }
+        if (getHostNameTail(event.origin) !== getHostNameTail(baseUrl)) {
+          throw "transfer origin is not from trusted URL";
+        }
+
+        var transferredLocalStorage =
+          event && event.data && event.data.transferredLocalStorage;
+        if (!transferredLocalStorage) {
+          throw "no localStorage transfer data was received";
+        }
+
+        try {
+          importedStorage = JSON.parse(transferredLocalStorage);
+        } catch (error) {
+          throw "There was a problem importing transferred local storage: " +
+            error;
+        }
+
+        for (key in importedStorage) {
+          localStorage.setItem(key, importedStorage[key]);
+        }
+
+        window.top.postMessage("StorageTransferred", event.origin);
+      };
+    </script>
+  </head>
+</html>

@@ -1,0 +1,42 @@
+.combat-footer {
+  padding: @medium-spacer;
+  margin: 0;
+  margin-top: auto;
+  border-radius: 0;
+  flex-shrink: 1;
+
+  .difficulty::after {
+    content: ": ";
+  }
+
+  .event-log {
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    min-height: @large-spacer;
+    color: @primary-white;
+    margin-bottom: @large-spacer;
+
+    li {
+      padding: @small-spacer 0;
+    }
+  }
+
+  .footer-bar {
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: flex-end;
+    color: @primary-white;
+
+    > span,
+    > i {
+      padding-right: @medium-spacer;
+    }
+  }
+
+  .latest-event {
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+}

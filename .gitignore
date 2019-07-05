@@ -1,13 +1,15 @@
 node_modules/*
 typings/*
 public/user/*
-public/fonts/*
+public/webfonts/*
 *.log
 *.js.map
 *.js
 *.css
+*.tmp.txt
 .tscache
 .vscode
 .baseDir
 !Gruntfile.js
+!webpack.*.js
 !test/test.js

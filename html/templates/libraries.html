@@ -1,5 +1,0 @@
-<h2>Library</h2>
-<div class="tabs" data-bind="foreach: LibraryTabs">
-    <span data-bind="click: $parent.SelectedTab, css: $parent.TabClassName($data), text: Name"></span>
-</div>
-<div class="library" data-bind="component: { name: SelectedTab().Component, params: { encounterCommander: EncounterCommander, library: SelectedTab().Library } }"></div>

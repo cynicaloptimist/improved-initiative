@@ -1,26 +1,46 @@
-module ImprovedInitiative {
-    export class LauncherViewModel {
-        constructor() {
-        }
+import * as ko from "knockout";
 
-        GeneratedEncounterId = $('html')[0].getAttribute('encounterId');
-        JoinEncounterInput = ko.observable<string>('');
+import { env } from "./Environment";
+import { Metrics } from "./Utility/Metrics";
+import { Store } from "./Utility/Store";
+import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLocalStorage";
 
-        StartEncounter = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
-        }
+export class LauncherViewModel {
+  constructor() {
+    const pageLoadData = {
+      referrer: document.referrer,
+      userAgent: navigator.userAgent
+    };
+    Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
 
-        JoinEncounter = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            if (encounterId) {
-                window.location.href = `p/${encounterId}`;
-            }
-        }
+    TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
+  }
 
-        JoinEncounterButtonClass = () => {
-            var encounterId = this.JoinEncounterInput().split('/').pop();
-            return encounterId ? 'enabled' : 'disabled';
-        }
+  public GeneratedEncounterId = env.EncounterId;
+  public JoinEncounterInput = ko.observable<string>("");
+
+  public StartEncounter = () => {
+    const encounterId = this.JoinEncounterInput()
+      .split("/")
+      .pop();
+    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+    window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
+  };
+
+  public JoinEncounter = () => {
+    const encounterId = this.JoinEncounterInput()
+      .split("/")
+      .pop();
+    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+    if (encounterId) {
+      window.location.href = `p/${encounterId}`;
     }
+  };
+
+  public JoinEncounterButtonClass = () => {
+    const encounterId = this.JoinEncounterInput()
+      .split("/")
+      .pop();
+    return encounterId ? "enabled" : "disabled";
+  };
 }

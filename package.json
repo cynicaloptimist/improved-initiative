@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "0.11.2",
+  "version": "2.5.0",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -8,53 +8,144 @@
     "url": "https://github.com/cynicaloptimist/improved-initiative.git"
   },
   "engines": {
-    "node": ">=4"
+    "npm": "6.1.0"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
-    "mocha": "^2.2.5",
-    "requirejs": "^2.1.17",
-    "sinon": "^1.15.4"
-  },
-  "dependencies": {
-    "applicationinsights": "^0.19.0",
-    "awesomplete": "^1.1.1",
-    "body-parser": "^1.14.1",
-    "browser-filesaver": "^1.1.0",
-    "express": "^4.13.3",
-    "express-session": "^1.14.2",
-    "font-awesome": "^4.5.0",
-    "grunt": "^1.0.1",
+    "@types/awesomplete": "^1.1.6",
+    "@types/body-parser": "^1.17.0",
+    "@types/color": "^3.0.0",
+    "@types/enzyme": "^3.1.11",
+    "@types/express": "^4.11.1",
+    "@types/express-serve-static-core": "^4.11.1",
+    "@types/express-session": "^1.15.8",
+    "@types/file-saver": "0.0.1",
+    "@types/jest": "^22.2.3",
+    "@types/jquery": "^3.3.5",
+    "@types/knockout": "^3.4.54",
+    "@types/lodash": "^4.14.108",
+    "@types/mime": "^2.0.0",
+    "@types/mongodb": "^3.1.19",
+    "@types/mongodb-memory-server": "^1.8.0",
+    "@types/mousetrap": "^1.6.0",
+    "@types/node": "^8.0.34",
+    "@types/react": "^16.3.12",
+    "@types/react-color": "^2.13.4",
+    "@types/react-dom": "^16.0.5",
+    "@types/react-test-renderer": "^16.0.1",
+    "@types/request": "^2.47.0",
+    "@types/serve-static": "^1.13.1",
+    "@types/socket.io": "^1.4.33",
+    "@types/socket.io-client": "^1.4.32",
+    "ajv": "^6.9.1",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
+    "formik": "^1.0.0-beta.5",
+    "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-connect": "^0.10.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-less": "^1.0.1",
-    "grunt-contrib-uglify": "^2.2.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-open": "^0.2.3",
-    "grunt-ts": "^5.5.1",
-    "jquery": "^2.1.4",
-    "knockout": "^3.4.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-ts": "^6.0.0-beta.22",
+    "grunt-webpack": "^3.1.3",
+    "husky": "^1.2.0",
+    "jest": "^24.1.0",
+    "jest-localstorage-mock": "^2.2.0",
+    "less": "^3.0.4",
+    "lint-staged": "^8.1.0",
+    "markdown-loader-jest": "^0.1.1",
+    "prettier": "^1.15.3",
+    "requirejs": "^2.3.5",
+    "ts-jest": "^24.0.1",
+    "ts-loader": "^3.3.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.4.4",
+    "uglify-js": "^2.7.4",
+    "uglifyjs-webpack-plugin": "^1.2.4",
+    "webpack": "^3.11.0",
+    "webpack-merge": "^4.1.2"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.7.2",
+    "@types/redis": "^2.8.12",
+    "awesomplete": "^1.1.2",
+    "body-parser": "^1.18.2",
+    "browser-filesaver": "^1.1.0",
+    "color": "^3.0.0",
+    "connect-mongodb-session": "^1.3.0",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-socket.io-session": "^1.3.5",
+    "html-loader": "^0.5.5",
+    "jquery": "^3.4.1",
+    "keen-tracking": "^4.0.17",
+    "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",
-    "less": "^2.5.0",
-    "markdown-it": "^7.0.1",
-    "minimist": "^1.2.0",
-    "moment": "^2.16.0",
+    "lodash": "^4.17.11",
+    "markdown-loader": "^5.0.0",
+    "moment": "^2.22.1",
+    "mongodb": "^3.1.13",
+    "mongodb-memory-server": "^3.0.0",
     "mousetrap": "^1.5.3",
     "mustache": "^2.2.0",
-    "mustache-express": "^1.2.1",
-    "request": "^2.81.0",
-    "socket.io": "^1.7.1",
-    "socket.io-client": "^1.7.1",
-    "typescript": "^2.1.4",
-    "typings": "2.1.0",
-    "uglify-js": "^2.7.4"
+    "mustache-express": "^1.2.5",
+    "node": "^10.3.0",
+    "npm": "^6.9.0",
+    "patreon": "^0.4.1",
+    "react": "^16.3.2",
+    "react-color": "^2.17.0",
+    "react-dom": "^16.3.2",
+    "react-markdown": "^4.0.3",
+    "react-string-replace-recursively": "^0.1.27",
+    "redis": "^2.8.0",
+    "request": "^2.85.0",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "client/tsconfig.json"
+      }
+    },
+    "setupFiles": [
+      "jest-localstorage-mock"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.md?$": "markdown-loader-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{less,html,ts,tsx}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --fix",
+      "git add"
+    ]
   },
   "scripts": {
-    "postinstall": "typings install && grunt --no-color postinstall",
+    "postinstall": "grunt --no-color postinstall",
     "start": "node server/server.js",
-    "clean": "git clean -f -x -e node_modules/"
+    "build-dev": "grunt build_dev",
+    "clean": "git clean -f -x -e node_modules/",
+    "test": "jest",
+    "lint": "tslint --fix -p client && tslint --fix -p server && prettier **/*.{less,html,ts,tsx} --write"
   }
 }
