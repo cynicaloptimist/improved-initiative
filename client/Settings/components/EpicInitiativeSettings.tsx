@@ -96,8 +96,8 @@ export class EpicInitiativeSettings extends React.Component<
       <p>
         You're logged in with Patreon, but you have not selected the Epic
         Initiative reward level. Epic Initiative allows you to customize your
-        "Player View's appearance with combatant portraits, custom colors,
-        fonts, and other CSS features.
+        Player View's appearance with combatant portraits, custom colors, fonts,
+        and other CSS features.
       </p>
       <Button
         onClick={() =>
