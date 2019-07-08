@@ -42,11 +42,24 @@ class PlayerViewPromptComponent extends React.Component<
             onClick={this.openPlayerViewWindow}
             additionalClassNames={inputClassName}
           />
-          {env.HasEpicInitiative && (
+          {env.HasEpicInitiative ? (
             <label>
               {"Background Image URL: "}
               <Field type="text" name="backgroundImageUrl" />
             </label>
+          ) : (
+            <p>
+              <label>
+                Epic Initiative patrons can set a background image for your
+                Player View.{" "}
+              </label>
+              <a
+                href="https://www.patreon.com/bePatron?c=716070&amp;rid=1937132"
+                target="_blank"
+              >
+                Pledge on Patreon
+              </a>
+            </p>
           )}
         </div>
         <SubmitButton />
