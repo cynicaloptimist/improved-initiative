@@ -121,7 +121,8 @@
         <!-- ko ifnot: Encounter.EncounterFlow.ActiveCombatant -->
         <p class="start-encounter-hint">
           Click [ <span class="fas fa-play"></span> Start Encounter ] to roll
-          initiative. Active creature will be displayed here.
+          initiative. The StatBlock for the Active Combatant will be displayed
+          here.
         </p>
         <!-- /ko -->
       </div>
@@ -259,6 +260,9 @@
     </div>
     <div class="right-column">
       <div class="selected-combatant">
+        <!-- ko ifnot: CombatantCommander.HasSelected -->
+        <h2>No Combatant Selected</h2>
+        <!-- /ko -->
         <!-- ko if: CombatantCommander.HasSelected -->
         <!-- ko if: CombatantCommander.HasOneSelected -->
         <h2>Selected Combatant</h2>
