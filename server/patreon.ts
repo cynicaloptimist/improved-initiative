@@ -171,8 +171,13 @@ function updateLatestPost(latestPost: { post: Post | null }) {
     throw "Patreon URL is not configured.";
   }
 
-  return request.get(patreonUrl, (error, response, body) => {
-    const json: { data: Post[] } = JSON.parse(body);
+  request.get(patreonUrl, (error, response, body) => {
+    let json: { data: Post[] };
+    try {
+      json = JSON.parse(body);
+    } catch {
+      json = { data: [] };
+    }
     if (json.data) {
       latestPost.post = json.data.filter(
         d => d.attributes.was_posted_by_campaign_owner
