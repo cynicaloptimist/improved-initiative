@@ -210,10 +210,12 @@ export function startNewsUpdates(app: express.Application) {
 
 export function configurePatreonWebhookReceiver(app: express.Application) {
   app.post("/patreon_webhook/", async (req, res) => {
-    if (process.env.PATREON_WEBHOOK_SECRET) {
-      const signature = req.header("X-Patreon-Signature");
-      //TODO: verify  https://docs.patreon.com/#webhooks
+    if (!process.env.PATREON_WEBHOOK_SECRET) {
+      return res.send(501);
     }
+
+    const signature = req.header("X-Patreon-Signature");
+    //TODO: verify  https://docs.patreon.com/#webhooks
 
     console.log(JSON.stringify(req.body));
 
