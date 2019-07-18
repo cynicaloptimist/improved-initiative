@@ -70,20 +70,24 @@
   .combatant-portrait {
     z-index: 2;
     position: absolute;
-    display: flex;
     align-items: center;
     width: 100%;
+    display: grid;
+    height: 80%;
   }
 
   .combatant-portrait__image {
     width: 80%;
-    max-width: 700px;
-    object-fit: scale-down;
+    object-fit: contain;
+    max-width: 80%;
+    max-height: 80vh;
+    margin: auto;
   }
 
   .combatant-portrait__caption {
     .card-bg-2(@large-spacer, @medium-spacer);
-    max-width: 700px;
+    margin: auto;
+    margin-top: 85vh;
   }
 
   .damage-suggestion {
