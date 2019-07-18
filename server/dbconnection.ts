@@ -84,6 +84,11 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const user = await users.findOne({ _id: userId });
   if (user === null) {
     client.close();
@@ -112,6 +117,11 @@ export async function deleteAccount(userId: mongo.ObjectId) {
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await users.deleteOne({ _id: userId });
   client.close();
   return result.deletedCount;
@@ -251,6 +261,11 @@ export async function getEntity(
   }
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const user = await db.collection<User>("users").findOne(
     { _id: userId },
     {
@@ -289,6 +304,10 @@ export async function deleteEntity(
 
   const users = db.collection<User>("users");
 
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await users.updateOne(
     { _id: userId },
     {
@@ -323,6 +342,11 @@ export async function saveEntity<T extends Listable>(
 
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await db.collection("users").updateOne(
     { _id: userId },
     {
@@ -358,6 +382,11 @@ export async function saveEntitySet<T extends Listable>(
   const db = client.db();
 
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await users.findOne({ _id: userId }).then(u => {
     if (u == null) {
       throw "User ID not found: " + userId;
