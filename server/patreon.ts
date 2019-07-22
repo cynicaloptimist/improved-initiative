@@ -192,6 +192,20 @@ function updateLatestPost(latestPost: { post: Post | null }) {
 
 export function startNewsUpdates(app: express.Application) {
   const latest: { post: Post | null } = { post: null };
+
+  app.get("/whatsnew/", (req, res) => {
+    const post: Post = latest.post || {
+      attributes: {
+        title: process.env.FALLBACK_POST_TITLE || "Pledge on Patreon",
+        url:
+          process.env.FALLBACK_POST_URL ||
+          "https://www.patreon.com/improvedinitiative",
+        was_posted_by_campaign_owner: true
+      }
+    };
+    res.json(post);
+  });
+
   if (!patreonUrl) {
     return;
   }
@@ -201,10 +215,6 @@ export function startNewsUpdates(app: express.Application) {
   app.get("/updatenews/", (req: Req, res: Res) => {
     updateLatestPost(latest);
     res.sendStatus(200);
-  });
-
-  app.get("/whatsnew/", (req, res) => {
-    res.json(latest.post);
   });
 }
 
