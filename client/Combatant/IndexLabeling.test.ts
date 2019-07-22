@@ -3,18 +3,6 @@ import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 
-function buildEncounterState() {
-  const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
-  const oldEncounter = buildEncounter();
-  for (const initiative of [8, 10]) {
-    const combatant = oldEncounter.AddCombatantFromStatBlock(statBlock);
-    combatant.Initiative(initiative);
-  }
-  oldEncounter.EncounterFlow.StartEncounter();
-  const savedEncounter = oldEncounter.GetEncounterState();
-  return savedEncounter;
-}
-
 describe("Index labeling", () => {
   let encounter: Encounter;
   beforeEach(() => {
@@ -67,35 +55,6 @@ describe("Index labeling", () => {
     expect(newCombatant2.DisplayName()).toEqual("Goblin 2");
   });
 
-  test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
-    const savedEncounter = buildEncounterState();
-    const combatantStates = savedEncounter.Combatants;
-
-    const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
-    expect(combatant1.DisplayName()).toEqual("Goblin");
-
-    const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
-
-    expect(combatant1.DisplayName()).toEqual("Goblin 1");
-    expect(combatant2.DisplayName()).toEqual("Goblin 2");
-  });
-
-  test("When a saved encounter is added twice, it relabels existing creatures", () => {
-    const savedEncounter = buildEncounterState();
-    const combatantStates = savedEncounter.Combatants;
-
-    const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
-    const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
-
-    const combatant3 = encounter.AddCombatantFromState(combatantStates[0]);
-    const combatant4 = encounter.AddCombatantFromState(combatantStates[1]);
-
-    expect(combatant1.DisplayName()).toEqual("Goblin 1");
-    expect(combatant2.DisplayName()).toEqual("Goblin 2");
-    expect(combatant3.DisplayName()).toEqual("Goblin 3");
-    expect(combatant4.DisplayName()).toEqual("Goblin 4");
-  });
-
   test("When a labelled combatant is removed, its index label is not reused.", () => {
     const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
 
@@ -110,23 +69,17 @@ describe("Index labeling", () => {
     expect(combatant3.DisplayName()).toEqual("Goblin 3");
   });
 
-  test("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
-    const savedEncounter = buildEncounterState();
-    const combatantStates = savedEncounter.Combatants;
-
-    const combatant1 = encounter.AddCombatantFromState(combatantStates[0]);
-    const combatant2 = encounter.AddCombatantFromState(combatantStates[1]);
-
-    encounter.RemoveCombatant(combatant2);
-
-    const combatant3 = encounter.AddCombatantFromState(combatantStates[0]);
-    const combatant4 = encounter.AddCombatantFromState(combatantStates[1]);
-
-    expect(combatant1.DisplayName()).toEqual("Goblin 1");
-    expect(combatant2.DisplayName()).toEqual("Goblin 2");
-    expect(combatant3.DisplayName()).toEqual("Goblin 3");
-    expect(combatant4.DisplayName()).toEqual("Goblin 4");
-  });
+  function buildEncounterState() {
+    const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+    const oldEncounter = buildEncounter();
+    for (const initiative of [8, 10]) {
+      const combatant = oldEncounter.AddCombatantFromStatBlock(statBlock);
+      combatant.Initiative(initiative);
+    }
+    oldEncounter.EncounterFlow.StartEncounter();
+    const savedEncounter = oldEncounter.GetEncounterState();
+    return savedEncounter;
+  }
 
   test("When a saved encounter state is loaded, it keeps the correct index labels", () => {
     const encounterState = buildEncounterState();
