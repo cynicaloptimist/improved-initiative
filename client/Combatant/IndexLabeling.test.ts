@@ -6,8 +6,11 @@ import { buildEncounter } from "../test/buildEncounter";
 function buildEncounterState() {
   const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
   const oldEncounter = buildEncounter();
-  oldEncounter.AddCombatantFromStatBlock(statBlock);
-  oldEncounter.AddCombatantFromStatBlock(statBlock);
+  for (const initiative of [8, 10]) {
+    const combatant = oldEncounter.AddCombatantFromStatBlock(statBlock);
+    combatant.Initiative(initiative);
+  }
+  oldEncounter.EncounterFlow.StartEncounter();
   const savedEncounter = oldEncounter.GetEncounterState();
   return savedEncounter;
 }
@@ -123,5 +126,17 @@ describe("Index labeling", () => {
     expect(combatant2.DisplayName()).toEqual("Goblin 2");
     expect(combatant3.DisplayName()).toEqual("Goblin 3");
     expect(combatant4.DisplayName()).toEqual("Goblin 4");
+  });
+
+  test("When a saved encounter state is loaded, it keeps the correct index labels", () => {
+    const encounterState = buildEncounterState();
+    const newEncounter = buildEncounter();
+    newEncounter.LoadEncounterState(encounterState, null);
+
+    const combatantDisplayNames = newEncounter
+      .Combatants()
+      .map(c => c.DisplayName());
+    expect(combatantDisplayNames).toContain("Goblin 2");
+    expect(combatantDisplayNames).toContain("Goblin 1");
   });
 });
