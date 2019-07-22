@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
+import _ = require("lodash");
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
@@ -347,7 +348,11 @@ export class Encounter {
     persistentCharacterLibrary: PersistentCharacterLibrary
   ) => {
     const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
-    encounterState.Combatants.forEach(async savedCombatant => {
+    const combatantsInLabelOrder = _.sortBy(
+      encounterState.Combatants,
+      c => c.IndexLabel
+    );
+    combatantsInLabelOrder.forEach(async savedCombatant => {
       if (this.combatants().some(c => c.Id == savedCombatant.Id)) {
         savedCombatant.Id = probablyUniqueString();
       }
