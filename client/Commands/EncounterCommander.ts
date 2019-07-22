@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import _ = require("lodash");
 import { StatBlock } from "../../common/StatBlock";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { CurrentSettings } from "../Settings/Settings";
@@ -173,7 +174,13 @@ export class EncounterCommander {
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
       c => !c.PersistentCharacterId
     );
-    nonCharacterCombatants.forEach(
+
+    const nonCharacterCombatantsInLabelOrder = _.sortBy(
+      nonCharacterCombatants,
+      c => c.IndexLabel
+    );
+
+    nonCharacterCombatantsInLabelOrder.forEach(
       this.tracker.Encounter.AddCombatantFromState
     );
 
