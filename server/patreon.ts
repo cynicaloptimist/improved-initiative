@@ -21,13 +21,13 @@ const baseUrl = process.env.BASE_URL,
 interface Post {
   attributes: {
     title: string;
-    content: string;
     url: string;
-    created_at: string;
     was_posted_by_campaign_owner: boolean;
+    //content: string;
+    //created_at: string;
   };
-  id: string;
-  type: string;
+  //id: string;
+  //type: string;
 }
 
 interface Pledge {
