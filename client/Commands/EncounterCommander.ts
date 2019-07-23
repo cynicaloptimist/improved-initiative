@@ -11,6 +11,7 @@ import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
+import { RollDicePrompt } from "./Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {
@@ -260,5 +261,11 @@ export class EncounterCommander {
     );
 
     return false;
+  };
+
+  public PromptRollDice = () => {
+    this.tracker.PromptQueue.Add(
+      RollDicePrompt(this.tracker.CombatantCommander.RollDice)
+    );
   };
 }
