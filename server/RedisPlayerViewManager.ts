@@ -19,7 +19,7 @@ export class RedisPlayerViewManager implements PlayerViewManager {
           encounterState: EncounterState.Default<PlayerViewCombatantState>(),
           settings: getDefaultSettings().PlayerView
         };
-        if (err) {
+        if (err || !fields) {
           done(defaultPlayerView);
         }
         done({
