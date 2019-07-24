@@ -5,6 +5,7 @@ import request = require("request");
 
 import * as DB from "./dbconnection";
 
+import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
 
 type Req = Express.Request & express.Request;
@@ -176,13 +177,8 @@ function updateLatestPost(latestPost: { post: Post | null }) {
   }
 
   request.get(patreonUrl, (error, response, body) => {
-    let json: { data: Post[] };
-    try {
-      json = JSON.parse(body);
-    } catch {
-      json = { data: [] };
-    }
-    if (json.data) {
+    const json = ParseJSONOrDefault(body, { data: [] });
+    if (json.data.length) {
       latestPost.post = json.data.filter(
         d => d.attributes.was_posted_by_campaign_owner
       )[0];

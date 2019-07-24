@@ -3,7 +3,7 @@ import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../common/PlayerViewState";
 import { getDefaultSettings } from "../common/Settings";
-import { probablyUniqueString } from "../common/Toolbox";
+import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export class RedisPlayerViewManager implements PlayerViewManager {
@@ -15,15 +15,22 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   public Get = (id: string) =>
     new Promise<PlayerViewState>(done =>
       this.redisClient.hgetall(`playerviews_${id}`, (err, fields) => {
+        const defaultPlayerView = {
+          encounterState: EncounterState.Default<PlayerViewCombatantState>(),
+          settings: getDefaultSettings().PlayerView
+        };
         if (err) {
-          done({
-            encounterState: EncounterState.Default<PlayerViewCombatantState>(),
-            settings: getDefaultSettings().PlayerView
-          });
+          done(defaultPlayerView);
         }
         done({
-          encounterState: JSON.parse(fields.encounterState),
-          settings: JSON.parse(fields.settings)
+          encounterState: ParseJSONOrDefault(
+            fields.encounterState,
+            defaultPlayerView.encounterState
+          ),
+          settings: ParseJSONOrDefault(
+            fields.settings,
+            defaultPlayerView.settings
+          )
         });
       })
     );
