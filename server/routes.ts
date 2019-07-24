@@ -5,7 +5,7 @@ import mustacheExpress = require("mustache-express");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { probablyUniqueString } from "../common/Toolbox";
+import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { upsertUser } from "./dbconnection";
 import { Library } from "./library";
 import { configureMetricsRoutes } from "./metrics";
@@ -161,7 +161,9 @@ export default function(
     const session = req.session;
 
     if (typeof req.body.Combatants === "string") {
-      session.postedEncounter = { Combatants: JSON.parse(req.body.Combatants) };
+      session.postedEncounter = {
+        Combatants: ParseJSONOrDefault(req.body.Combatants, [])
+      };
     } else {
       session.postedEncounter = req.body;
     }

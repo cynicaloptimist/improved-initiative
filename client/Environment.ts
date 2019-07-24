@@ -1,3 +1,5 @@
+import { ParseJSONOrDefault } from "../common/Toolbox";
+
 interface Environment {
   EncounterId: string;
   PostedEncounter: { Combatants: any[] };
@@ -25,7 +27,7 @@ export function LoadEnvironment() {
   env.CanonicalURL = html.getAttribute("baseUrl");
   const encounterJSON = html.getAttribute("postedEncounter");
   if (encounterJSON) {
-    env.PostedEncounter = JSON.parse(encounterJSON);
+    env.PostedEncounter = ParseJSONOrDefault(encounterJSON, { Combatants: [] });
   }
   env.HasStorage = html.getAttribute("hasStorage") == "true";
   env.HasEpicInitiative = html.getAttribute("hasEpicInitiative") == "true";

@@ -34,4 +34,12 @@ export function concatenatedStringRegex(strings: string[]) {
   return new RegExp(`\\b(${allStrings.join("|")})\\b`, "gim");
 }
 
+export function ParseJSONOrDefault<T>(json, defaultValue: T) {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return defaultValue;
+  }
+}
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
