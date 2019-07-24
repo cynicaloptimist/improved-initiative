@@ -40,7 +40,8 @@ export class CombatantViewModel {
   public ApplyDamage(inputDamage: string) {
     let damage = parseInt(inputDamage),
       healing = -damage,
-      autoCheckConcentration = CurrentSettings().Rules.AutoCheckConcentration;
+      shouldAutoCheckConcentration = CurrentSettings().Rules
+        .AutoCheckConcentration;
 
     if (isNaN(damage)) {
       return;
@@ -49,7 +50,7 @@ export class CombatantViewModel {
     if (damage > 0) {
       Metrics.TrackEvent("DamageApplied", { Amount: damage.toString() });
       if (
-        autoCheckConcentration &&
+        shouldAutoCheckConcentration &&
         this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)
       ) {
         this.CombatantCommander.CheckConcentration(this.Combatant, damage);

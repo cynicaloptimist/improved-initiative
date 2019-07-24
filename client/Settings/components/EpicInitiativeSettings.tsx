@@ -69,7 +69,7 @@ export class EpicInitiativeSettings extends React.Component<
         </div>
 
         <h4>
-          Additional CSS <strong>(experimental)</strong>
+          Additional Player View CSS <strong>(experimental)</strong>
         </h4>
         <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
       </div>
@@ -96,8 +96,8 @@ export class EpicInitiativeSettings extends React.Component<
       <p>
         You're logged in with Patreon, but you have not selected the Epic
         Initiative reward level. Epic Initiative allows you to customize your
-        "Player View's appearance with combatant portraits, custom colors,
-        fonts, and other CSS features.
+        Player View's appearance with combatant portraits, custom colors, fonts,
+        and other CSS features.
       </p>
       <Button
         onClick={() =>

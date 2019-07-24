@@ -67,7 +67,10 @@ export class StylesChooser extends React.Component<
     return (
       <Field name={"PlayerView.CustomStyles." + style}>
         {(fieldProps: FieldProps) => (
-          <div className="c-label-and-color-block">
+          <div
+            className="c-label-and-color-block"
+            onClick={this.bindClickToSelectStyle(style)}
+          >
             <span>{label}</span>
             <ColorBlock
               color={fieldProps.field.value}

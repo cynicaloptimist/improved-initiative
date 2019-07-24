@@ -52,6 +52,7 @@ export const BuildEncounterCommandList = (
     "broom"
   ),
   new Command("open-library", "Open Library", c.ShowLibraries, "alt+a", "book"),
+  new Command("roll-dice", "Roll Dice", c.PromptRollDice, "d", "dice", false),
   new Command(
     "quick-add",
     "Quick Add Combatant",

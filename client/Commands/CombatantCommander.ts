@@ -18,9 +18,11 @@ import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 import { ApplyDamagePrompt } from "./Prompts/components/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "./Prompts/components/ApplyHealingPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -200,6 +202,20 @@ export class CombatantCommander {
 
   public EditSingleCombatantHP = (combatantViewModel: CombatantViewModel) => {
     this.editHPForCombatants([combatantViewModel]);
+  };
+
+  public ApplyHealing = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+    const selectedCombatants = this.SelectedCombatants();
+    const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
+    const prompt = ApplyHealingPrompt(
+      selectedCombatants,
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
+    );
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public UpdateNotes = async () => {
@@ -454,15 +470,12 @@ export class CombatantCommander {
   public RollDice = (diceExpression: string) => {
     const diceRoll = Dice.RollDiceExpression(diceExpression);
     this.latestRoll = diceRoll;
-    const prompt = new DefaultPrompt(
-      `Rolled: ${diceExpression} -> ${
-        diceRoll.FormattedString
-      } <input class='response' type='number' value='${diceRoll.Total}' />`
-    );
+    const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
+
     Metrics.TrackEvent("DiceRolled", {
       Expression: diceExpression,
       Result: diceRoll.FormattedString
     });
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 }

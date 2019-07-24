@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import _ = require("lodash");
 import { StatBlock } from "../../common/StatBlock";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { CurrentSettings } from "../Settings/Settings";
@@ -10,6 +11,7 @@ import { Metrics } from "../Utility/Metrics";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
+import { RollDicePrompt } from "./Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {
@@ -173,7 +175,13 @@ export class EncounterCommander {
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
       c => !c.PersistentCharacterId
     );
-    nonCharacterCombatants.forEach(
+
+    const nonCharacterCombatantsInLabelOrder = _.sortBy(
+      nonCharacterCombatants,
+      c => c.IndexLabel
+    );
+
+    nonCharacterCombatantsInLabelOrder.forEach(
       this.tracker.Encounter.AddCombatantFromState
     );
 
@@ -253,5 +261,11 @@ export class EncounterCommander {
     );
 
     return false;
+  };
+
+  public PromptRollDice = () => {
+    this.tracker.PromptQueue.Add(
+      RollDicePrompt(this.tracker.CombatantCommander.RollDice)
+    );
   };
 }

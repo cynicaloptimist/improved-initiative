@@ -12,6 +12,7 @@ import { configureMetricsRoutes } from "./metrics";
 import {
   configureLoginRedirect,
   configureLogout,
+  configurePatreonWebhookReceiver,
   startNewsUpdates
 } from "./patreon";
 import { PlayerViewManager } from "./playerviewmanager";
@@ -177,6 +178,7 @@ export default function(
 
   configureLoginRedirect(app);
   configureLogout(app);
+  configurePatreonWebhookReceiver(app);
   configureStorageRoutes(app);
   startNewsUpdates(app);
 }
@@ -194,9 +196,7 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
   session.isLoggedIn = true;
 
   const user = await upsertUser(
-    "defaultPatreonId",
-    "accesskey",
-    "refreshkey",
+    process.env.DEFAULT_PATREON_ID || "defaultPatreonId",
     "pledge"
   );
 

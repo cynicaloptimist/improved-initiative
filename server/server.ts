@@ -3,11 +3,11 @@ import socketIO = require("socket.io");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { InMemoryPlayerViewManager } from "./InMemoryPlayerViewManager";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
 import LaunchServer from "./launchserver";
 import * as L from "./library";
+import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
@@ -31,9 +31,9 @@ async function improvedInitiativeServer() {
     Spell.GetSearchHint,
     Spell.GetMetadata
   );
-  const playerViews = new InMemoryPlayerViewManager();
+  const playerViews = GetPlayerViewManager();
 
-  const session = await GetSessionMiddleware(dbConnectionString);
+  const session = await GetSessionMiddleware(process.env.REDIS_URL);
   app.use(session);
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);

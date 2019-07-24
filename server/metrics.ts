@@ -56,7 +56,7 @@ export function configureMetricsRoutes(app: express.Application) {
 
   app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
     if (!keenProjectId || !keenWriteKey) {
-      return res.status(501).send("No metrics pipeline configured.");
+      return res.status(204).send("No metrics pipeline configured.");
     }
 
     let session = req.session;
@@ -72,7 +72,7 @@ export function configureMetricsRoutes(app: express.Application) {
     eventData.keen = { addons: addons.concat(onymousAddons) };
     keenClient.recordEvent(eventName, eventData);
 
-    return res.sendStatus(200);
+    return res.sendStatus(202);
   });
 
   app.post("/recordAnonymousEvent/:eventName", (req: Req, res: Res) => {

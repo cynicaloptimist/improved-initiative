@@ -8,7 +8,9 @@ import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 
-const BATCH_SIZE = 10;
+const DEFAULT_BATCH_SIZE = 10;
+const ENCOUNTER_BATCH_SIZE = 1;
+
 export class AccountClient {
   public GetAccount(callBack: (user: any) => void) {
     if (!env.HasStorage) {
@@ -51,21 +53,25 @@ export class AccountClient {
       saveEntitySet(
         prepareForSync(libraries.NPCs.GetStatBlocks()),
         "statblocks",
+        DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
         prepareForSync(libraries.PersistentCharacters.GetListings()),
         "persistentcharacters",
+        DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
         prepareForSync(libraries.Spells.GetSpells()),
         "spells",
+        DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
         prepareForSync(libraries.Encounters.Encounters()),
         "encounters",
+        ENCOUNTER_BATCH_SIZE,
         messageCallback
       )
     ).done(_ => {
@@ -187,6 +193,7 @@ function sanitizeItems(items: Listable[]) {
 function saveEntitySet<Listable>(
   entitySet: Listable[],
   entityType: string,
+  batchSize: number,
   messageCallback: (message: string) => void
 ) {
   if (!env.HasStorage || !entitySet.length) {
@@ -194,7 +201,7 @@ function saveEntitySet<Listable>(
   }
 
   const uploadByBatch = (remaining: Listable[]) => {
-    const batch = remaining.slice(0, BATCH_SIZE);
+    const batch = remaining.slice(0, batchSize);
     return $.ajax({
       type: "POST",
       url: `/my/${entityType}/`,
@@ -205,7 +212,7 @@ function saveEntitySet<Listable>(
       messageCallback(
         `Syncing, ${remaining.length} ${entityType} remaining...`
       );
-      const next = remaining.slice(BATCH_SIZE);
+      const next = remaining.slice(DEFAULT_BATCH_SIZE);
       if (!next.length) {
         return r;
       }

@@ -21,13 +21,13 @@ const baseUrl = process.env.BASE_URL,
 interface Post {
   attributes: {
     title: string;
-    content: string;
     url: string;
-    created_at: string;
     was_posted_by_campaign_owner: boolean;
+    //content: string;
+    //created_at: string;
   };
-  id: string;
-  type: string;
+  //id: string;
+  //type: string;
 }
 
 interface Pledge {
@@ -64,6 +64,8 @@ export function configureLoginRedirect(app: express.Application) {
 
   app.get(redirectPath, async (req: Req, res: Res) => {
     try {
+      console.log("req.query >" + JSON.stringify(req.query));
+      console.log("req.body >" + JSON.stringify(req.body));
       const code = req.query.code;
 
       const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
@@ -86,6 +88,8 @@ async function handleCurrentUser(
   tokens: TokensResponse,
   apiResponse: any
 ) {
+  console.log(`api response: ${JSON.stringify(apiResponse)}`);
+
   const encounterId = req.query.state.replace(/['"]/g, "");
   const relationships = apiResponse.included || [];
 
@@ -103,17 +107,36 @@ async function handleCurrentUser(
       }
     });
 
-  console.log(`api response: ${JSON.stringify(apiResponse)}`);
+  const userId = apiResponse.data.id;
+  const standing = getUserAccountLevel(userId, userRewards);
 
+  const session = req.session;
+  if (session === undefined) {
+    throw "Session is undefined";
+  }
+
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
+  session.isLoggedIn = true;
+
+  const user = await DB.upsertUser(apiResponse.data.id, standing);
+  if (user === undefined) {
+    throw "Failed to insert user into database";
+  }
+  session.userId = user._id;
+  res.redirect(`/e/${encounterId}`);
+}
+
+function getUserAccountLevel(userId: string, rewardIds: string[]) {
   const hasStorageReward =
-    _.intersection(userRewards, storageRewardIds).length > 0;
+    _.intersection(rewardIds, storageRewardIds).length > 0;
 
   const hasEpicInitiativeThanks = _.includes(
     thanks.map(t => t.PatreonId),
-    apiResponse.data.id
+    userId
   );
   const hasEpicInitiativeReward =
-    _.intersection(userRewards, epicRewardIds).length > 0;
+    _.intersection(rewardIds, epicRewardIds).length > 0;
 
   const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
 
@@ -123,26 +146,7 @@ async function handleCurrentUser(
     ? "pledge"
     : "none";
 
-  const session = req.session;
-  if (session === undefined) {
-    throw "Session is undefined";
-  }
-
-  session.hasStorage = hasEpicInitiative || hasStorageReward;
-  session.hasEpicInitiative = hasEpicInitiative;
-  session.isLoggedIn = true;
-
-  const user = await DB.upsertUser(
-    apiResponse.data.id,
-    tokens.access_token,
-    tokens.refresh_token,
-    standing
-  );
-  if (user === undefined) {
-    throw "Failed to insert user into database";
-  }
-  session.userId = user._id;
-  res.redirect(`/e/${encounterId}`);
+  return standing;
 }
 
 export function configureLogout(app: express.Application) {
@@ -188,6 +192,20 @@ function updateLatestPost(latestPost: { post: Post | null }) {
 
 export function startNewsUpdates(app: express.Application) {
   const latest: { post: Post | null } = { post: null };
+
+  app.get("/whatsnew/", (req, res) => {
+    const post: Post = latest.post || {
+      attributes: {
+        title: process.env.FALLBACK_POST_TITLE || "Pledge on Patreon",
+        url:
+          process.env.FALLBACK_POST_URL ||
+          "https://www.patreon.com/improvedinitiative",
+        was_posted_by_campaign_owner: true
+      }
+    };
+    res.json(post);
+  });
+
   if (!patreonUrl) {
     return;
   }
@@ -198,8 +216,30 @@ export function startNewsUpdates(app: express.Application) {
     updateLatestPost(latest);
     res.sendStatus(200);
   });
+}
 
-  app.get("/whatsnew/", (req, res) => {
-    res.json(latest.post);
+export function configurePatreonWebhookReceiver(app: express.Application) {
+  app.post("/patreon_webhook/", async (req, res) => {
+    if (!process.env.PATREON_WEBHOOK_SECRET) {
+      return res.send(501);
+    }
+
+    const signature = req.header("X-Patreon-Signature");
+    //TODO: verify  https://docs.patreon.com/#webhooks
+
+    console.log(JSON.stringify(req.body));
+
+    const userId = _.get(req.body, "data.relationships.patron.data.id", null);
+    const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
+
+    if (!userId || !rewardId) {
+      return res.send(400);
+    }
+
+    const userAccountLevel = getUserAccountLevel(userId, [rewardId]);
+
+    await DB.upsertUser(userId, userAccountLevel);
+
+    return res.send(201);
   });
 }

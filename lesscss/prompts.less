@@ -104,7 +104,7 @@
     }
 
     input {
-      height: 2em;
+      height: 2rem;
     }
   }
 
@@ -127,8 +127,11 @@
   .launch-player-view {
     flex-grow: 1;
     align-items: flex-start;
+    p {
+      margin: @small-spacer;
+    }
     .c-button {
-      margin: @extra-small-spacer;
+      margin: @small-spacer;
     }
   }
 
@@ -138,6 +141,16 @@
     margin: @small-spacer;
     height: 2.6rem;
     border: 1px solid @primary-black;
+  }
+}
+
+.prompt--with-submit-on-right {
+  flex-flow: row;
+  flex-grow: 1;
+  div:first-child {
+    flex-flow: row;
+    flex-grow: 1;
+    align-items: center;
   }
 }
 

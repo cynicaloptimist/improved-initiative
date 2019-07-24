@@ -39,14 +39,17 @@ class Prompt<T> extends React.Component<
   }
 
   public componentDidMount() {
-    setImmediate(this.delaySoHotkeyDoesntFillAutoselect);
+    setImmediate(this.delaySoAutoFocusedFieldDoesntSwallowHotkey);
   }
 
-  private delaySoHotkeyDoesntFillAutoselect = () => {
+  private delaySoAutoFocusedFieldDoesntSwallowHotkey = () => {
     //prevent mounted element from swallowing hotkey
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector
     );
+    if (element.focus) {
+      element.focus();
+    }
     if (element.select) {
       element.select();
     }

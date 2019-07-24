@@ -164,4 +164,69 @@ describe("EncounterCommander", () => {
     expect(encounter.Combatants()[1].DisplayName()).toEqual("Library Gregorr");
     done();
   });
+
+  describe("Index Labelling and Saved Encounters", () => {
+    function buildEncounterState() {
+      const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
+      const oldEncounter = buildEncounter();
+      for (const initiative of [8, 10]) {
+        const combatant = oldEncounter.AddCombatantFromStatBlock(statBlock);
+        combatant.Initiative(initiative);
+      }
+      oldEncounter.EncounterFlow.StartEncounter();
+      const savedEncounter = oldEncounter.GetEncounterState();
+      return savedEncounter;
+    }
+
+    test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
+      const savedEncounter = buildEncounterState();
+
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+
+      const combatantDisplayNames = encounter
+        .Combatants()
+        .map(c => [c.DisplayName(), c.Initiative()]);
+
+      expect(combatantDisplayNames).toEqual([
+        ["Goblin 1", 8],
+        ["Goblin 2", 10]
+      ]);
+    });
+
+    test("When a saved encounter is added twice, it relabels existing creatures", () => {
+      const savedEncounter = buildEncounterState();
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+
+      const combatantDisplayNames = encounter
+        .Combatants()
+        .map(c => c.DisplayName());
+
+      expect(combatantDisplayNames).toEqual([
+        "Goblin 1",
+        "Goblin 2",
+        "Goblin 3",
+        "Goblin 4"
+      ]);
+    });
+
+    test("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
+      const savedEncounter = buildEncounterState();
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+
+      encounter.RemoveCombatant(encounter.Combatants()[1]);
+
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+
+      const combatantDisplayNames = encounter
+        .Combatants()
+        .map(c => c.DisplayName());
+
+      expect(combatantDisplayNames).toEqual([
+        "Goblin 1",
+        "Goblin 3",
+        "Goblin 4"
+      ]);
+    });
+  });
 });
