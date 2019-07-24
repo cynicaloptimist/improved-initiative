@@ -20,9 +20,9 @@ export class RedisPlayerViewManager implements PlayerViewManager {
           settings: getDefaultSettings().PlayerView
         };
         if (err || !fields) {
-          done(defaultPlayerView);
+          return done(defaultPlayerView);
         }
-        done({
+        return done({
           encounterState: ParseJSONOrDefault(
             fields.encounterState,
             defaultPlayerView.encounterState
