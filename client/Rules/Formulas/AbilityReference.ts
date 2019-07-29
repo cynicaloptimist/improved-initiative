@@ -42,11 +42,14 @@ export class AbilityReference implements FormulaTerm {
   public FormulaString(): string {
     return `${this.Key}`;
   }
-  public static readonly Pattern = /\[(STR|DEX|CON|INT|WIS|CHA)\]/;
-  public static TestPattern = /\[(?:STR|DEX|CON|INT|WIS|CHA)\]/;
-  constructor(match: string, rules?: IRules) {
-    const result = AbilityReference.Pattern.exec(match);
-    this.OriginalLabel = match[1];
+  public static readonly Pattern = /\{(STR|DEX|CON|INT|WIS|CHA)\}/;
+  public static TestPattern = /\{(?:STR|DEX|CON|INT|WIS|CHA)\}/;
+  constructor(str: string, rules?: IRules) {
+    const result = AbilityReference.Pattern.exec(str);
+    if (!result) {
+      throw `${str} did not match any known ability modifier`;
+    }
+    this.OriginalLabel = result[1];
     this.Key = AbilityReference.KeyForPattern(result[1]);
 
     rules = rules || new DefaultRules();
