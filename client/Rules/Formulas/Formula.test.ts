@@ -13,6 +13,7 @@ describe("Formula", () => {
   let stats: StatBlock;
   let rules = new DefaultRules();
   let testCounter = 1;
+  let OriginalRandom = Math.random;
 
   beforeEach(() => {
     // console.log(`Starting test ${testCounter++}`);
@@ -22,7 +23,7 @@ describe("Formula", () => {
   });
 
   test("Die roll", () => {
-    term = new Die("2d6", rules);
+    term = new Die("2d6");
     Math.random = jest
       .fn()
       .mockReturnValueOnce(5 / 6)
@@ -63,5 +64,11 @@ describe("Formula", () => {
     term = new Formula("[DEX] + [PROF] - 5", rules);
     expect(term.HasStaticResult).toBe(true);
     expect(term.EvaluateStatic(stats).Total).toBe(3 + 2 - 5);
+  });
+
+  test("Roll check (implied d20)", () => {
+    let formula = new Formula("[DEX] + [PROF] - 5", rules);
+    Math.random = jest.fn().mockReturnValueOnce(15 / 20);
+    expect(formula.RollCheck(stats).Total).toBe(15 + 3 + 2 - 5);
   });
 });

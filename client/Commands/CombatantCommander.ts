@@ -7,8 +7,9 @@ import { Combatant } from "../Combatant/Combatant";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { MultipleCombatantDetails } from "../Combatant/MultipleCombatantDetails";
-import { Dice } from "../Rules/Dice";
-import { RollResult } from "../Rules/RollResult";
+import { Formula } from "../Rules/Formulas/Formula";
+import { FormulaResult } from "../Rules/Formulas/FormulaTerm";
+import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -31,7 +32,7 @@ interface PendingLinkInitiative {
 
 export class CombatantCommander {
   private selectedCombatantIds = ko.observableArray<string>([]);
-  private latestRoll: RollResult;
+  private latestRoll: FormulaResult;
 
   constructor(private tracker: TrackerViewModel) {
     this.Commands = BuildCombatantCommandList(this);
@@ -468,7 +469,8 @@ export class CombatantCommander {
   };
 
   public RollDice = (diceExpression: string) => {
-    const diceRoll = Dice.RollDiceExpression(diceExpression);
+    const formula = new Formula(diceExpression, null);
+    const diceRoll = formula.RollCheck();
     this.latestRoll = diceRoll;
     const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
 

@@ -18,43 +18,41 @@ export class Formula implements FormulaTerm {
   public get RequiresStats(): boolean {
     return this.Terms.some((t: FormulaTerm) => t.RequiresStats);
   }
-  public Evaluate(stats?: StatBlock): FormulaResult {
+  public Evaluate(
+    stats?: StatBlock,
+    withPrefix?: FormulaTerm[]
+  ): FormulaResult {
     const result: FormulaResult = {
       Total: 0,
       String: "",
       FormattedString: ""
     };
-    this.Terms.forEach((term: FormulaTerm, i: number) =>
-      {
-        let termResult = term.Evaluate(stats);
-        result.Total += (this.GetCoefficient(term) * termResult.Total),
-        result.String
-          += ` ${this.CoefficientPrefix(term,i === 0)}${termResult.String}`
-        result.FormattedString
-          += ` ${this.CoefficientPrefix(term,i === 0)}${termResult.FormattedString}`
-      });
-    result.String = result.String.trim();
-    result.FormattedString = result.FormattedString.trim();
+    withPrefix = withPrefix || [];
+    withPrefix.concat(this.Terms).forEach((term: FormulaTerm, i: number) => {
+      let termResult = term.Evaluate(stats);
+      (result.Total += this.GetCoefficient(term) * termResult.Total),
+        (result.String += ` ${this.CoefficientPrefix(term, i === 0)}${
+          termResult.String
+        }`);
+      result.FormattedString += ` ${this.CoefficientPrefix(term, i === 0)}${
+        termResult.FormattedString
+      }`;
+    });
+    result.String = result.String.trim() + ` = ${result.Total}`;
+    result.FormattedString =
+      result.FormattedString.trim() + ` = <em>${result.Total}</em>`;
     return result;
   }
   public RollCheck(stats?: StatBlock): FormulaResult {
-    if (this.HasStaticResult)
-    {
+    if (this.HasStaticResult) {
       // assume the expression is a modifier for a base d20
-      const result = this.Evaluate(stats);
-      const d20 = Die.Default.Evaluate();
-      result.Total += d20.Total;
-      result.String = d20.String + ' ' + result.String;
-      result.FormattedString = d20.FormattedString + ' ' + result.FormattedString;
-      return result;
+      return this.Evaluate(stats, [Die.Default]);
     }
     return this.Evaluate(stats);
   }
   public EvaluateStatic = this.Evaluate;
 
   constructor(str: string, rules: IRules) {
-    // console.warn("Building formula for string: "+str);
-    // console.warn(`against regex ${Formula.Pattern.source}`);
     const matches = Formula.Pattern.test(str);
     if (!matches) {
       throw "Top-level formula pattern does not match!";
@@ -69,7 +67,6 @@ export class Formula implements FormulaTerm {
 
     let termMatch = TermWithOperatorPattern.exec(formulaString);
     while (termMatch !== null) {
-      // console.warn(`${termMatch[0]}: ${termMatch[1]} , ${termMatch[2]}`);
       const term = Formula.BuildTerm(termMatch[2], rules);
       const coeff = termMatch[1] == "-" ? -1 : 1;
       this.Terms.push(term);
@@ -117,19 +114,18 @@ export class Formula implements FormulaTerm {
       return t.FormulaString();
     }).join("");
   }
-  private CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string
-  {
+  private CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string {
     const coeff = this.GetCoefficient(t);
-    switch (coeff)
-    {
-      case 1: return isFirst ? '' : '+ ';
-      case -1: return '- ';
+    switch (coeff) {
+      case 1:
+        return isFirst ? "" : "+ ";
+      case -1:
+        return "- ";
       default:
-        if (coeff < 0)
-        {
+        if (coeff < 0) {
           return `- ${Math.abs(coeff)}×`;
         }
-        return `${isFirst ? '' : '+ '}${coeff}×`;
+        return `${isFirst ? "" : "+ "}${coeff}×`;
     }
   }
 }

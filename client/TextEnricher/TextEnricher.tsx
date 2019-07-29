@@ -11,7 +11,8 @@ import {
 import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
-import { Dice } from "../Rules/Dice";
+import { Formula } from "../Rules/Formulas/Formula";
+// import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
 
 interface ReplaceConfig {
@@ -24,7 +25,7 @@ interface ReplaceConfig {
 
 export class TextEnricher {
   constructor(
-    private rollDice: (diceExpression: string) => void,
+    private rollDice: (diceExpression: string, rules: IRules) => void,
     private referenceSpellListing: (listing: Listing<Spell>) => void,
     private referenceCondition: (condition: string) => void,
     private spellLibrary: SpellLibrary,
@@ -50,7 +51,7 @@ export class TextEnricher {
   public EnrichModifier = (modifier: number) => {
     const modifierString = toModifierString(modifier);
     return (
-      <span className="rollable" onClick={() => this.rollDice(modifierString)}>
+      <span className="rollable" onClick={() => this.rollDice(modifierString, this.rules)}>
         {modifierString}
       </span>
     );
@@ -59,12 +60,12 @@ export class TextEnricher {
   public EnrichText = (text: string, name = "") => {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
-        pattern: Dice.GlobalDicePattern,
+        pattern: new RegExp(Formula.Pattern, "g"),
         matcherFn: (rawText, processed, key) => (
           <span
             className="rollable"
             key={key}
-            onClick={() => this.rollDice(rawText)}
+            onClick={() => this.rollDice(rawText, this.rules)}
           >
             {rawText}
           </span>

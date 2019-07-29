@@ -2,8 +2,8 @@ import { Field } from "formik";
 import React = require("react");
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
-import { Dice } from "../../Rules/Dice";
-import { RollResult } from "../../Rules/RollResult";
+import { Formula } from "../../Rules/Formulas/Formula";
+import { FormulaResult } from "../../Rules/Formulas/FormulaTerm";
 import { PromptProps } from "./components/PendingPrompts";
 
 interface RollDiceModel {
@@ -16,9 +16,7 @@ export const RollDicePrompt = (
   const fieldLabelId = probablyUniqueString();
   return {
     onSubmit: (model: RollDiceModel) => {
-      const isLegalExpression = Dice.ValidDicePattern.test(
-        model.diceExpression
-      );
+      const isLegalExpression = Formula.Pattern.test(model.diceExpression);
       if (!isLegalExpression) {
         return false;
       }
@@ -49,7 +47,7 @@ export const RollDicePrompt = (
 
 export const ShowDiceRollPrompt = (
   diceExpression: string,
-  rollResult: RollResult
+  rollResult: FormulaResult
 ) => ({
   onSubmit: () => true,
   initialValues: {},
