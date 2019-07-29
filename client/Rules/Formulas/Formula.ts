@@ -3,7 +3,7 @@ import { IRules } from "../Rules";
 import { AbilityReference } from "./AbilityReference";
 import { Constant } from "./Constant";
 import { Die } from "./Die";
-import { FormulaClass, FormulaTerm } from "./FormulaTerm";
+import { FormulaClass, FormulaResult, FormulaTerm } from "./FormulaTerm";
 import { StatReference } from "./StatReference";
 
 export class Formula implements FormulaTerm {
@@ -18,12 +18,37 @@ export class Formula implements FormulaTerm {
   public get RequiresStats(): boolean {
     return this.Terms.some((t: FormulaTerm) => t.RequiresStats);
   }
-  public Evaluate(stats?: StatBlock): number {
-    return this.Terms.reduce(
-      (sum: number, t: FormulaTerm) =>
-        sum + this.GetCoefficient(t) * t.Evaluate(stats),
-      0
-    );
+  public Evaluate(stats?: StatBlock): FormulaResult {
+    const result: FormulaResult = {
+      Total: 0,
+      String: "",
+      FormattedString: ""
+    };
+    this.Terms.forEach((term: FormulaTerm, i: number) =>
+      {
+        let termResult = term.Evaluate(stats);
+        result.Total += (this.GetCoefficient(term) * termResult.Total),
+        result.String
+          += ` ${this.CoefficientPrefix(term,i === 0)}${termResult.String}`
+        result.FormattedString
+          += ` ${this.CoefficientPrefix(term,i === 0)}${termResult.FormattedString}`
+      });
+    result.String = result.String.trim();
+    result.FormattedString = result.FormattedString.trim();
+    return result;
+  }
+  public RollCheck(stats?: StatBlock): FormulaResult {
+    if (this.HasStaticResult)
+    {
+      // assume the expression is a modifier for a base d20
+      const result = this.Evaluate(stats);
+      const d20 = Die.Default.Evaluate();
+      result.Total += d20.Total;
+      result.String = d20.String + ' ' + result.String;
+      result.FormattedString = d20.FormattedString + ' ' + result.FormattedString;
+      return result;
+    }
+    return this.Evaluate(stats);
   }
   public EvaluateStatic = this.Evaluate;
 
@@ -91,5 +116,20 @@ export class Formula implements FormulaTerm {
       }
       return t.FormulaString();
     }).join("");
+  }
+  private CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string
+  {
+    const coeff = this.GetCoefficient(t);
+    switch (coeff)
+    {
+      case 1: return isFirst ? '' : '+ ';
+      case -1: return '- ';
+      default:
+        if (coeff < 0)
+        {
+          return `- ${Math.abs(coeff)}×`;
+        }
+        return `${isFirst ? '' : '+ '}${coeff}×`;
+    }
   }
 }

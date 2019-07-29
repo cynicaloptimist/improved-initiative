@@ -5,7 +5,12 @@ export class Constant implements FormulaTerm {
   private readonly Value: number;
   public readonly HasStaticResult = true;
   public readonly RequiresStats = false;
-  public Evaluate = () => this.Value;
+  public Evaluate = () => ({
+    Total: this.Value,
+    String: `${this.Value}`,
+    FormattedString: `${this.Value}`
+    // `<strong>${this.Value}</strong>` ?
+  });
   public EvaluateStatic = this.Evaluate;
 
   public FormulaString(): string {

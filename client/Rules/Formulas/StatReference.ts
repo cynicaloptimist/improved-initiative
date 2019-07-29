@@ -3,7 +3,7 @@ import { IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
 
 export class StatReference implements FormulaTerm {
-  private readonly OriginalMatch: string;
+  private readonly OriginalLabel: string;
   private readonly Key: keyof StatBlock;
   private static KeyForPattern(pattern: string): keyof StatBlock {
     switch (pattern) {
@@ -37,13 +37,20 @@ export class StatReference implements FormulaTerm {
     if (!stats) {
       throw `Stat reference can't be calculated without StatBlock context!`;
     }
-    return StatReference.Extract(stats, this.Key);
+    return {
+      Total: StatReference.Extract(stats, this.Key),
+      String: `${this.Key} (${StatReference.Extract(stats, this.Key)})`,
+      FormattedString: `${StatReference.Extract(stats, this.Key)}<sub>${
+        this.Key
+      }</sub>`
+    };
   }
   public EvaluateStatic = this.Evaluate;
   public static readonly Pattern = /\[(PROF|SPELL|LVL)]/;
   public static TestPattern = /\[(?:PROF|SPELL|LVL)\]/;
   constructor(match: string, rules: IRules) {
     const result = StatReference.Pattern.exec(match);
+    this.OriginalLabel = result[1];
     this.Key = StatReference.KeyForPattern(result[1]);
   }
 }

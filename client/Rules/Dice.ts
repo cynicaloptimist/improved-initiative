@@ -1,3 +1,4 @@
+import { FormulaResult } from "./Formulas/FormulaTerm";
 import { RollResult } from "./RollResult";
 
 export class Dice {

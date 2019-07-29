@@ -12,8 +12,10 @@ describe("Formula", () => {
   let term: FormulaTerm;
   let stats: StatBlock;
   let rules = new DefaultRules();
+  let testCounter = 1;
 
   beforeEach(() => {
+    // console.log(`Starting test ${testCounter++}`);
     stats = StatBlock.Default();
     stats.Abilities.Dex = 16;
     stats.ProficiencyBonus = 2;
@@ -25,18 +27,18 @@ describe("Formula", () => {
       .fn()
       .mockReturnValueOnce(5 / 6)
       .mockReturnValueOnce(3 / 6);
-    expect(term.Evaluate()).toBe(8);
+    expect(term.Evaluate().Total).toBe(8);
   });
 
   test("Extract dexterity", () => {
     term = new AbilityReference("[DEX]", rules);
-    expect(term.Evaluate(stats)).toBe(3);
+    expect(term.Evaluate(stats).Total).toBe(3);
     expect(term.FormulaString()).toBe("Dex");
   });
 
   test("Extract proficiency bonus", () => {
     term = new StatReference("[PROF]", rules);
-    expect(term.Evaluate(stats)).toBe(2);
+    expect(term.Evaluate(stats).Total).toBe(2);
     expect(term.FormulaString()).toBe("ProficiencyBonus");
   });
 
@@ -48,7 +50,7 @@ describe("Formula", () => {
   test("Evaluate formula", () => {
     term = new Formula("1d6 + [DEX] + [PROF] - 5", rules);
     Math.random = jest.fn().mockReturnValueOnce(5 / 6);
-    expect(term.Evaluate(stats)).toBe(5 + 3 + 2 - 5);
+    expect(term.Evaluate(stats).Total).toBe(5 + 3 + 2 - 5);
   });
 
   test("Requiring stats", () => {
@@ -60,6 +62,6 @@ describe("Formula", () => {
   test("Static evaluation", () => {
     term = new Formula("[DEX] + [PROF] - 5", rules);
     expect(term.HasStaticResult).toBe(true);
-    expect(term.EvaluateStatic(stats)).toBe(3 + 2 - 5);
+    expect(term.EvaluateStatic(stats).Total).toBe(3 + 2 - 5);
   });
 });

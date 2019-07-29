@@ -4,6 +4,7 @@ import { FormulaTerm } from "./FormulaTerm";
 
 export class AbilityReference implements FormulaTerm {
   private GetModifier: (score: number) => number; // TODO: where does this get injected?
+  private readonly OriginalLabel: string;
   private readonly Key: keyof AbilityScores;
   private static KeyForPattern(pattern: string): keyof AbilityScores {
     switch (pattern) {
@@ -29,7 +30,13 @@ export class AbilityReference implements FormulaTerm {
     if (!stats) {
       throw `Ability reference can't be calculated without StatBlock context!`;
     }
-    return this.GetModifier(stats.Abilities[this.Key]);
+    return {
+      Total: this.GetModifier(stats.Abilities[this.Key]),
+      String: `${this.Key} (${this.GetModifier(stats.Abilities[this.Key])})`,
+      FormattedString: `${this.GetModifier(stats.Abilities[this.Key])}<sub>${
+        this.Key
+      }</sub>`
+    };
   }
   public EvaluateStatic = this.Evaluate;
   public FormulaString(): string {
@@ -39,6 +46,7 @@ export class AbilityReference implements FormulaTerm {
   public static TestPattern = /\[(?:STR|DEX|CON|INT|WIS|CHA)\]/;
   constructor(match: string, rules: IRules) {
     const result = AbilityReference.Pattern.exec(match);
+    this.OriginalLabel = match[1];
     this.Key = AbilityReference.KeyForPattern(result[1]);
     this.GetModifier = rules.GetModifierFromScore;
   }
