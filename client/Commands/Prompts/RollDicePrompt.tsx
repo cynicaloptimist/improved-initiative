@@ -11,18 +11,19 @@ interface RollDiceModel {
 }
 
 export const RollDicePrompt = (
-  rollDiceExpression: (expression: string) => void
+  rollDiceExpression: (expression: string) => boolean
 ): PromptProps<RollDiceModel> => {
   const fieldLabelId = probablyUniqueString();
   return {
     onSubmit: (model: RollDiceModel) => {
-      const isLegalExpression = Formula.Pattern.test(model.diceExpression);
+      const isLegalExpression = Formula.DefaultPattern.test(
+        model.diceExpression
+      );
       if (!isLegalExpression) {
         return false;
       }
 
-      rollDiceExpression(model.diceExpression);
-      return true;
+      return rollDiceExpression(model.diceExpression);
     },
 
     initialValues: { diceExpression: "" },
@@ -57,7 +58,7 @@ export const ShowDiceRollPrompt = (
       <div>
         {"Rolled: "}
         {diceExpression}
-        {" -> "}
+        {" → "}
         <span
           dangerouslySetInnerHTML={{ __html: rollResult.FormattedString }}
         />

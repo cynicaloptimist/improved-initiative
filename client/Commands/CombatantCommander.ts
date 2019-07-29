@@ -470,7 +470,19 @@ export class CombatantCommander {
 
   public RollDice = (diceExpression: string) => {
     const formula = new Formula(diceExpression, null);
-    const diceRoll = formula.RollCheck();
+    let diceRoll: FormulaResult;
+    if (formula.RequiresStats) {
+      if (this.HasOneSelected() === true) {
+        diceRoll = formula.RollCheck(
+          this.SelectedCombatants()[0].Combatant.StatBlock()
+        );
+      } else {
+        alert("That formula requires a combatant to be selected"); // TODO: too intrusive?
+        return false;
+      }
+    } else {
+      diceRoll = formula.RollCheck();
+    }
     this.latestRoll = diceRoll;
     const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
 
@@ -479,5 +491,6 @@ export class CombatantCommander {
       Result: diceRoll.FormattedString
     });
     this.tracker.PromptQueue.Add(prompt);
+    return true;
   };
 }
