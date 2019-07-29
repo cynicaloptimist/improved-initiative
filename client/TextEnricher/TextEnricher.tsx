@@ -62,7 +62,7 @@ export class TextEnricher {
   public EnrichText = (text: string, name = "") => {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
-        pattern: new RegExp(Formula.Pattern, "g"),
+        pattern: new RegExp(Formula.DefaultPattern, "g"),
         matcherFn: (rawText, processed, key) => (
           <span
             className="rollable"

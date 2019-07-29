@@ -14,11 +14,11 @@ export class Formula implements FormulaTerm {
   }
   protected static BuildRegexFromTermExpression(termExp: RegExp): RegExp {
     return new RegExp(
-      "\\s*(?:[+-]?(?:\\s*" +
+      "(\\s*(?:[+-]?(?:\\s*" +
         termExp.source +
         "))\\s*(?:[+-]\\s*(?:" +
         termExp.source +
-        ")\\s*)*"
+        ")\\s*)*)"
     );
   }
   protected static readonly DefaultTermClasses: FormulaClass[] = [
@@ -30,7 +30,7 @@ export class Formula implements FormulaTerm {
   public static readonly DefaultTermPattern = Formula.BuildTermPatternFromClasses(
     Formula.DefaultTermClasses
   );
-  public static readonly Pattern = Formula.BuildRegexFromTermExpression(
+  public static readonly DefaultPattern = Formula.BuildRegexFromTermExpression(
     Formula.DefaultTermPattern
   );
 
@@ -111,9 +111,8 @@ export class Formula implements FormulaTerm {
         termResult.FormattedString
       }`;
     });
-    result.String = result.String.trim() + ` = ${result.Total}`;
-    result.FormattedString =
-      result.FormattedString.trim() + ` = <em>${result.Total}</em>`;
+    result.String = result.String.trim(); // + ` = ${result.Total}`;
+    result.FormattedString = result.FormattedString.trim(); // + ` = <em>${result.Total}</em>`;
     return result;
   }
   public RollCheck(stats?: StatBlock): FormulaResult {
