@@ -2,6 +2,17 @@ import { StatBlock } from "../../../common/StatBlock";
 import { IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
 
+const Defaults = {
+  ProficiencyBonus: 0,
+  SpellcastingAbility: 0,
+  Challenge: 1
+};
+const ShortNames = {
+  SpellcastingAbility: "Spellcasting",
+  ProficiencyBonus: "Proficiency",
+  Challenge: "Level"
+};
+
 export class StatReference implements FormulaTerm {
   private readonly OriginalLabel: string;
   private readonly Key: keyof StatBlock;
@@ -23,10 +34,16 @@ export class StatReference implements FormulaTerm {
       case "SpellcastingAbility":
         return stats[key];
       case "Challenge":
-        return Number.parseInt(stats[key]);
+        return Number.parseInt(stats[key]); // TODO: this field might support multiclass detection -- need to incorporate that formula
       default:
         throw `Illegal StatBlock key ${key}`;
     }
+  }
+  private static ExtractOrDefault(
+    stats: StatBlock,
+    key: keyof StatBlock
+  ): number {
+    return StatReference.Extract(stats, key) || Defaults[key];
   }
   public readonly HasStaticResult = true;
   public readonly RequiresStats = true;
@@ -38,11 +55,15 @@ export class StatReference implements FormulaTerm {
       throw `Stat reference can't be calculated without StatBlock context!`;
     }
     return {
-      Total: StatReference.Extract(stats, this.Key),
-      String: `${this.Key} (${StatReference.Extract(stats, this.Key)})`,
-      FormattedString: `${StatReference.Extract(stats, this.Key)}<sub>${
+      Total: StatReference.ExtractOrDefault(stats, this.Key),
+      String: `${this.Key} (${StatReference.ExtractOrDefault(
+        stats,
         this.Key
-      }</sub>`
+      )})`,
+      FormattedString: `${StatReference.ExtractOrDefault(
+        stats,
+        this.Key
+      )}<sub>${ShortNames[this.Key]}</sub>`
     };
   }
   public EvaluateStatic = this.Evaluate;
