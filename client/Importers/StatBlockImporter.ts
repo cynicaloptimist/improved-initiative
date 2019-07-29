@@ -55,8 +55,8 @@ export class StatBlockImporter extends Importer {
     statBlock.Senses = this.getCommaSeparatedStrings("senses");
     statBlock.Languages = this.getCommaSeparatedStrings("languages");
 
-    statBlock.Skills = this.getCommaSeparatedModifiers("skill");
-    statBlock.Saves = this.getCommaSeparatedModifiers("save");
+    statBlock.Skills = this.getCommaSeparatedModifiersAsFormulas("skill");
+    statBlock.Saves = this.getCommaSeparatedModifiersAsFormulas("save");
 
     statBlock.Traits = this.getPowers("trait");
     statBlock.Actions = this.getPowers("action");

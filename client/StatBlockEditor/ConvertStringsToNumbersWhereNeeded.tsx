@@ -9,8 +9,8 @@ export const ConvertStringsToNumbersWhereNeeded = (statBlock: StatBlock) => {
   statBlock.InitiativeModifier = castToNumberOrZero(
     statBlock.InitiativeModifier
   );
-  statBlock.Skills.forEach(s => (s.Modifier = castToNumberOrZero(s.Modifier)));
-  statBlock.Saves.forEach(s => (s.Modifier = castToNumberOrZero(s.Modifier)));
+  // statBlock.Skills.forEach(s => (s.Modifier = castToNumberOrZero(s.Modifier)));
+  // statBlock.Saves.forEach(s => (s.Modifier = castToNumberOrZero(s.Modifier)));
 };
 
 function castToNumberOrZero(value?: any) {

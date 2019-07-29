@@ -108,7 +108,7 @@ export class StatBlockComponent extends React.Component<
                 {modifierType.data.map((modifier, i) => (
                   <span key={i + modifier.Name}>
                     {modifier.Name}
-                    {enricher.EnrichModifier(modifier.Modifier)}{" "}
+                    {enricher.EnrichModifier(modifier.ModifierFormula)}{" "}
                   </span>
                 ))}
               </div>

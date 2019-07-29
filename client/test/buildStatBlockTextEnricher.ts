@@ -7,6 +7,7 @@ export function buildStatBlockTextEnricher(rules: IRules) {
     jest.fn(),
     jest.fn(),
     jest.fn(),
+    jest.fn(),
     new SpellLibrary(null),
     rules
   );

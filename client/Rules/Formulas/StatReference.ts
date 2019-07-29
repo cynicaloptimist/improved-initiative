@@ -68,7 +68,7 @@ export class StatReference implements FormulaTerm {
   }
   public EvaluateStatic = this.Evaluate;
   public static readonly Pattern = /\{(PROF|SPELL|LVL)}/;
-  public static TestPattern = /\{(?:PROF|SPELL|LVL)\}/;
+  public static TestPattern = /\{(?:PROF|SPELL|LVL)}/;
   constructor(match: string, rules?: IRules) {
     const result = StatReference.Pattern.exec(match);
     this.OriginalLabel = result[1];

@@ -16,8 +16,9 @@ export interface NameAndModifier {
   Modifier: number;
 }
 
-export interface NameAndComputedModifier extends NameAndModifier {
-  ModifierFormula?: string;
+export interface NameAndComputedModifier {
+  Name: string;
+  ModifierFormula: string;
 }
 
 export interface ValueAndNotes {

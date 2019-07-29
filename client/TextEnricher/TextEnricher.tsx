@@ -25,6 +25,7 @@ interface ReplaceConfig {
 export class TextEnricher {
   constructor(
     private rollDice: (diceExpression: string, rules: IRules) => void,
+    private formulaText: (formulaExpression: string, rules: IRules) => string,
     private referenceSpellListing: (listing: Listing<Spell>) => void,
     private referenceCondition: (condition: string) => void,
     private spellLibrary: SpellLibrary,
@@ -47,15 +48,17 @@ export class TextEnricher {
     return this.EnrichModifier(modifier);
   };
 
-  public EnrichModifier = (modifier: number) => {
-    const modifierString = toModifierString(modifier);
+  public EnrichModifier = (modifier: number | string) => {
+    const modifierString =
+      typeof modifier === "number" ? toModifierString(modifier) : modifier;
     return (
       <span
         className="rollable"
         onClick={() => this.rollDice(modifierString, this.rules)}
-      >
-        {modifierString}
-      </span>
+        dangerouslySetInnerHTML={{
+          __html: this.formulaText(modifierString, this.rules)
+        }}
+      />
     );
   };
 

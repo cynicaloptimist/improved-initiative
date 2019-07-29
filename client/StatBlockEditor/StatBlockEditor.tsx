@@ -14,6 +14,7 @@ import {
   descriptionField,
   getAnonymizedStatBlockJSON,
   keywordFields,
+  nameAndComputedModifierFields,
   nameAndModifierFields,
   powerFields,
   InitiativeField,
@@ -147,6 +148,9 @@ export class StatBlockEditor extends React.Component<
         <ValueAndNotesField label="Armor Class" fieldName="AC" />
         <InitiativeField />
       </div>
+      <div className="c-statblock-editor__abilityscores">
+        {StatBlock.AbilityNames.map(abilityScoreField)}
+      </div>
       <div className="c-statblock-editor__otherscores">
         <TextField label="Proficiency Bonus" fieldName="ProficiencyBonus" />
         <TextField
@@ -154,14 +158,11 @@ export class StatBlockEditor extends React.Component<
           fieldName="SpellcastingAbility"
         />
       </div>
-      <div className="c-statblock-editor__abilityscores">
-        {StatBlock.AbilityNames.map(abilityScoreField)}
-      </div>
       <div className="c-statblock-editor__saves">
         {nameAndModifierFields(api, "Saves")}
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndModifierFields(api, "Skills")}
+        {nameAndComputedModifierFields(api, "Skills")}
       </div>
       {[
         "Speed",

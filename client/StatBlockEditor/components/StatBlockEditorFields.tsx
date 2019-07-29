@@ -3,6 +3,7 @@ import React = require("react");
 import { StatBlock } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
+import { NameAndComputedModifierField } from "./NameAndComputedModifierField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
 
@@ -87,6 +88,52 @@ export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
               <div className="inline-names-and-modifiers">
                 {api.values[modifierType].map((_, i: number) => (
                   <NameAndModifierField
+                    key={i}
+                    remove={arrayHelpers.remove}
+                    modifierType={modifierType}
+                    index={i}
+                  />
+                ))}
+              </div>
+              {addButton}
+            </React.Fragment>
+          );
+        }
+      }}
+    />
+  );
+};
+
+export const nameAndComputedModifierFields = (
+  api: FormApi,
+  modifierType: string
+) => {
+  return (
+    <FieldArray
+      name={modifierType}
+      render={arrayHelpers => {
+        const addButton = (
+          <Button
+            fontAwesomeIcon="plus"
+            additionalClassNames="c-add-button"
+            onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })}
+          />
+        );
+
+        if (api.values[modifierType].length == 0) {
+          return (
+            <span className="c-statblock-editor__label">
+              {modifierType}
+              {addButton}
+            </span>
+          );
+        } else {
+          return (
+            <React.Fragment>
+              <span className="c-statblock-editor__label">{modifierType}</span>
+              <div className="inline-names-and-modifiers">
+                {api.values[modifierType].map((_, i: number) => (
+                  <NameAndComputedModifierField
                     key={i}
                     remove={arrayHelpers.remove}
                     modifierType={modifierType}

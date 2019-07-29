@@ -468,8 +468,8 @@ export class CombatantCommander {
     }
   };
 
-  public RollDice = (diceExpression: string) => {
-    const formula = new Formula(diceExpression, null);
+  public RollDice = (formulaExpression: string, rules?: IRules) => {
+    const formula = new Formula(formulaExpression, rules);
     let diceRoll: FormulaResult;
     if (formula.RequiresStats) {
       if (this.HasOneSelected() === true) {
@@ -484,13 +484,42 @@ export class CombatantCommander {
       diceRoll = formula.RollCheck();
     }
     this.latestRoll = diceRoll;
-    const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
+    const prompt = ShowDiceRollPrompt(formulaExpression, diceRoll);
 
     Metrics.TrackEvent("DiceRolled", {
-      Expression: diceExpression,
+      Expression: formulaExpression,
       Result: diceRoll.FormattedString
     });
     this.tracker.PromptQueue.Add(prompt);
     return true;
+  };
+
+  public FormattedStaticFormula = (
+    formulaExpression: string,
+    rules?: IRules
+  ) => {
+    const formula = new Formula(formulaExpression, rules);
+    if (!formula.HasStaticResult) {
+      // not static! TODO: avoid this upstream (different formula subclass?)
+      console.error(
+        `The expression '${formulaExpression}' contains a die roll and can't be used here.`
+      );
+      return formulaExpression;
+    }
+    let evaluation: FormulaResult;
+    if (formula.RequiresStats) {
+      if (this.HasOneSelected() === true) {
+        evaluation = formula.EvaluateStatic(
+          this.SelectedCombatants()[0].Combatant.StatBlock()
+        );
+      } else {
+        alert("That formula requires a combatant to be selected"); // TODO: too intrusive?
+        return formulaExpression;
+      }
+    } else {
+      evaluation = formula.EvaluateStatic();
+    }
+
+    return evaluation.FormattedString;
   };
 }
