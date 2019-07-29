@@ -147,6 +147,13 @@ export class StatBlockEditor extends React.Component<
         <ValueAndNotesField label="Armor Class" fieldName="AC" />
         <InitiativeField />
       </div>
+      <div className="c-statblock-editor__otherscores">
+        <TextField label="Proficiency Bonus" fieldName="ProficiencyBonus" />
+        <TextField
+          label="Spellcasting Ability"
+          fieldName="SpellcastingAbility"
+        />
+      </div>
       <div className="c-statblock-editor__abilityscores">
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
