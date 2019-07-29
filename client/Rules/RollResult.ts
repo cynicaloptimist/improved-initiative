@@ -1,4 +1,5 @@
-export class RollResult {
+// no export while deprecating!
+class RollResult {
   constructor(
     public Rolls: number[],
     public Modifier: number,

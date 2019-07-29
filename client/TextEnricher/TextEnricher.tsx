@@ -12,7 +12,6 @@ import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Formula } from "../Rules/Formulas/Formula";
-// import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
 
 interface ReplaceConfig {
@@ -51,7 +50,10 @@ export class TextEnricher {
   public EnrichModifier = (modifier: number) => {
     const modifierString = toModifierString(modifier);
     return (
-      <span className="rollable" onClick={() => this.rollDice(modifierString, this.rules)}>
+      <span
+        className="rollable"
+        onClick={() => this.rollDice(modifierString, this.rules)}
+      >
         {modifierString}
       </span>
     );

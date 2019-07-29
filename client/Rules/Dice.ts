@@ -1,7 +1,8 @@
 import { FormulaResult } from "./Formulas/FormulaTerm";
-import { RollResult } from "./RollResult";
+// import { RollResult } from "./RollResult";
 
-export class Dice {
+// no export while deprecating!
+class Dice {
   public static readonly ValidDicePattern = /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/;
   public static readonly GlobalDicePattern = /(\d+d\d+(?:[\s]*[+-][\s]*\d+)?|[+-][\s]*\d+)/g;
   public static readonly RollDiceExpression = (expression: string) => {
