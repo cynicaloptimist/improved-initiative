@@ -6,7 +6,7 @@ const MAX_CONCURRENT_DICE = 1023;
 export class Die implements FormulaTerm {
   private readonly Multiplier: number = 1;
   private readonly Faces: number;
-  private readonly Rolls: number[] = [];
+  private Rolls: number[] = [];
   public readonly HasStaticResult = false;
   public readonly RequiresStats = false;
   public Evaluate(): FormulaResult {
@@ -22,13 +22,13 @@ export class Die implements FormulaTerm {
       throw `Due to memory requirements, cannot roll more than ${MAX_CONCURRENT_DICE} dice at once`;
     }
 
+    this.Rolls = [];
     for (let i = 0; i < this.Multiplier; i++) {
       this.Rolls.push(Die.RollOne(this.Faces));
     }
-    // this.Rolls.concat(Array.apply(() => Die.RollOne(this.Faces), Array(this.Multiplier)));
 
     return {
-      Total: this.Rolls.reduce((acc: number, roll: number) => acc + roll),
+      Total: this.Rolls.reduce((acc: number, roll: number) => acc + roll, 0),
       String: `[${this.Rolls}]`,
       FormattedString: `[${this.FormattedRolls}]`
     };
@@ -59,7 +59,7 @@ export class Die implements FormulaTerm {
 
   public static readonly Pattern = /(\d+)d(\d+)/;
   public static readonly TestPattern = /\d+d\d+/;
-  constructor(str: string) {
+  constructor(str: string, rules?: any) {
     const results = Die.Pattern.exec(str);
     this.Multiplier = Number.parseInt(results[1], 10);
     this.Faces = Number.parseInt(results[2], 10);
