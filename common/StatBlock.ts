@@ -16,6 +16,10 @@ export interface NameAndModifier {
   Modifier: number;
 }
 
+export interface NameAndComputedModifier extends NameAndModifier {
+  ModifierFormula?: string;
+}
+
 export interface ValueAndNotes {
   Value: number;
   Notes: string;
@@ -41,8 +45,10 @@ export interface StatBlock extends Listable {
   DamageResistances: string[];
   DamageImmunities: string[];
   ConditionImmunities: string[];
-  Saves: NameAndModifier[];
-  Skills: NameAndModifier[];
+  Saves: NameAndComputedModifier[];
+  Skills: NameAndComputedModifier[];
+  ProficiencyBonus?: number;
+  SpellcastingAbility?: number;
   Senses: string[];
   Languages: string[];
   Challenge: string;
