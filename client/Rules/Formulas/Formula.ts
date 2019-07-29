@@ -7,11 +7,84 @@ import { FormulaClass, FormulaResult, FormulaTerm } from "./FormulaTerm";
 import { StatReference } from "./StatReference";
 
 export class Formula implements FormulaTerm {
-  private readonly Terms: FormulaTerm[] = [];
-  private readonly Coefficients: WeakMap<FormulaTerm, number> = new WeakMap();
+  protected static BuildTermPatternFromClasses(termClasses: FormulaClass[]) {
+    return new RegExp(
+      termClasses.map((fc: FormulaClass) => fc.TestPattern.source).join("|")
+    );
+  }
+  protected static BuildRegexFromTermExpression(termExp: RegExp): RegExp {
+    return new RegExp(
+      "\\s*(?:[+-]?(?:\\s*" +
+        termExp.source +
+        "))\\s*(?:[+-]\\s*(?:" +
+        termExp.source +
+        ")\\s*)*"
+    );
+  }
+  protected static readonly DefaultTermClasses: FormulaClass[] = [
+    Die,
+    AbilityReference,
+    StatReference,
+    Constant
+  ];
+  public static readonly DefaultTermPattern = Formula.BuildTermPatternFromClasses(
+    Formula.DefaultTermClasses
+  );
+  public static readonly Pattern = Formula.BuildRegexFromTermExpression(
+    Formula.DefaultTermPattern
+  );
+
+  protected readonly TermClasses: FormulaClass[];
+  protected readonly TermPattern: RegExp;
+  protected readonly Pattern: RegExp;
+
+  protected readonly Terms: FormulaTerm[] = [];
+  protected BuildTerm(subpattern: string, rules: IRules): FormulaTerm {
+    for (let i = 0; i < this.TermClasses.length; i++) {
+      if (this.TermClasses[i].TestPattern.test(subpattern)) {
+        return new this.TermClasses[i](subpattern, rules);
+      }
+    }
+    throw `Could not identify term formula for "${subpattern}"`;
+  }
+
+  protected readonly Coefficients: WeakMap<FormulaTerm, number> = new WeakMap();
   private GetCoefficient(t: FormulaTerm): number {
     return this.Coefficients.has(t) ? this.Coefficients.get(t) : 1;
   }
+
+  constructor(
+    str: string,
+    rules?: IRules,
+    termClasses: FormulaClass[] = Formula.DefaultTermClasses
+  ) {
+    this.TermClasses = termClasses;
+    this.TermPattern = Formula.BuildTermPatternFromClasses(termClasses);
+    this.Pattern = Formula.BuildRegexFromTermExpression(this.TermPattern);
+
+    const matches = this.Pattern.test(str);
+    if (!matches) {
+      throw "Top-level formula pattern does not match!";
+    }
+    const formulaMatch: RegExpExecArray = this.Pattern.exec(str);
+    const formulaString = formulaMatch[0];
+
+    const termWithOperatorPattern = new RegExp(
+      "([+-])?\\s*(" + this.TermPattern.source + ")",
+      "g"
+    );
+
+    let termMatch = termWithOperatorPattern.exec(formulaString);
+    while (termMatch !== null) {
+      const term = this.BuildTerm(termMatch[2], rules);
+      const coeff = termMatch[1] == "-" ? -1 : 1;
+      this.Terms.push(term);
+      this.Coefficients.set(term, coeff);
+
+      termMatch = termWithOperatorPattern.exec(formulaString);
+    }
+  }
+
   public get HasStaticResult(): boolean {
     return this.Terms.every((t: FormulaTerm) => t.HasStaticResult);
   }
@@ -52,57 +125,6 @@ export class Formula implements FormulaTerm {
   }
   public EvaluateStatic = this.Evaluate;
 
-  constructor(str: string, rules: IRules) {
-    const matches = Formula.Pattern.test(str);
-    if (!matches) {
-      throw "Top-level formula pattern does not match!";
-    }
-    const formulaMatch: RegExpExecArray = Formula.Pattern.exec(str);
-    const formulaString = formulaMatch[0];
-
-    const TermWithOperatorPattern = new RegExp(
-      "([+-])?\\s*(" + Formula.TermPattern.source + ")",
-      "g"
-    );
-
-    let termMatch = TermWithOperatorPattern.exec(formulaString);
-    while (termMatch !== null) {
-      const term = Formula.BuildTerm(termMatch[2], rules);
-      const coeff = termMatch[1] == "-" ? -1 : 1;
-      this.Terms.push(term);
-      this.Coefficients.set(term, coeff);
-
-      termMatch = TermWithOperatorPattern.exec(formulaString);
-    }
-  }
-  private static TermClasses: FormulaClass[] = [
-    Die,
-    AbilityReference,
-    StatReference,
-    Constant
-  ];
-  public static TermPattern = new RegExp(
-    Formula.TermClasses.map((fc: FormulaClass) => fc.TestPattern.source).join(
-      "|"
-    )
-  );
-  public static readonly Pattern = new RegExp(
-    "\\s*(?:[+-]?(?:\\s*" +
-      Formula.TermPattern.source +
-      "))\\s*(?:[+-]\\s*(?:" +
-      Formula.TermPattern.source +
-      ")\\s*)*"
-  );
-
-  public static BuildTerm(subpattern: string, rules: IRules): FormulaTerm {
-    for (let i = 0; i < Formula.TermClasses.length; i++) {
-      if (Formula.TermClasses[i].TestPattern.test(subpattern)) {
-        return new Formula.TermClasses[i](subpattern, rules);
-      }
-    }
-    throw `Could not identify term formula for "${subpattern}"`;
-  }
-
   public FormulaString(): string {
     return this.Terms.map((t: FormulaTerm, i: number) => {
       if (this.GetCoefficient(t) < 0) {
@@ -114,7 +136,7 @@ export class Formula implements FormulaTerm {
       return t.FormulaString();
     }).join("");
   }
-  private CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string {
+  protected CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string {
     const coeff = this.GetCoefficient(t);
     switch (coeff) {
       case 1:
@@ -127,5 +149,14 @@ export class Formula implements FormulaTerm {
         }
         return `${isFirst ? "" : "+ "}${coeff}×`;
     }
+  }
+}
+
+export class ReferenceFreeFormula extends Formula {
+  protected static TermClasses: FormulaClass[] = [Die, Constant];
+  // static definitions for TermPattern and Pattern necessary?
+
+  constructor(str: string, rules?: IRules) {
+    super(str, rules, ReferenceFreeFormula.TermClasses);
   }
 }

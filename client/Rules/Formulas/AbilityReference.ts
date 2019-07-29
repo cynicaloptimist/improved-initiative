@@ -1,5 +1,5 @@
 import { AbilityScores, StatBlock } from "../../../common/StatBlock";
-import { IRules } from "../Rules";
+import { DefaultRules, IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
 
 export class AbilityReference implements FormulaTerm {
@@ -44,10 +44,12 @@ export class AbilityReference implements FormulaTerm {
   }
   public static readonly Pattern = /\[(STR|DEX|CON|INT|WIS|CHA)\]/;
   public static TestPattern = /\[(?:STR|DEX|CON|INT|WIS|CHA)\]/;
-  constructor(match: string, rules: IRules) {
+  constructor(match: string, rules?: IRules) {
     const result = AbilityReference.Pattern.exec(match);
     this.OriginalLabel = match[1];
     this.Key = AbilityReference.KeyForPattern(result[1]);
+
+    rules = rules || new DefaultRules();
     this.GetModifier = rules.GetModifierFromScore;
   }
 }

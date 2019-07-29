@@ -1,4 +1,3 @@
-import { IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
 
 export class Constant implements FormulaTerm {
@@ -16,7 +15,7 @@ export class Constant implements FormulaTerm {
   public FormulaString(): string {
     return `${this.Value}`;
   }
-  constructor(str: string, rules: IRules) {
+  constructor(str: string, rules?: any) {
     const results = Constant.Pattern.exec(str);
     if (results === null) {
       throw `Constant did not match a number in ${str}`;

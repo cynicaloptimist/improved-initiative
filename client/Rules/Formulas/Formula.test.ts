@@ -4,7 +4,7 @@ import { StatBlock } from "../../../common/StatBlock";
 import { DefaultRules } from "../Rules";
 import { AbilityReference } from "./AbilityReference";
 import { Die } from "./Die";
-import { Formula } from "./Formula";
+import { Formula, ReferenceFreeFormula } from "./Formula";
 import { FormulaTerm } from "./FormulaTerm";
 import { StatReference } from "./StatReference";
 
@@ -70,5 +70,15 @@ describe("Formula", () => {
     let formula = new Formula("[DEX] + [PROF] - 5", rules);
     Math.random = jest.fn().mockReturnValueOnce(15 / 20);
     expect(formula.RollCheck(stats).Total).toBe(15 + 3 + 2 - 5);
+  });
+
+  test("Restricted formulas", () => {
+    Math.random = jest.fn().mockReturnValueOnce(5 / 6);
+    term = new ReferenceFreeFormula("1d6 - 1");
+    expect(term.Evaluate().Total).toBe(5 - 1);
+
+    expect(() => {
+      const badFormula = new ReferenceFreeFormula("[DEX] + [PROF]");
+    }).toThrow();
   });
 });

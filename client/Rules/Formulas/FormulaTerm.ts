@@ -19,5 +19,5 @@ export interface FormulaResult {
 export interface FormulaClass {
   Pattern: RegExp;
   TestPattern: RegExp;
-  new (text: string, rules: IRules): FormulaTerm;
+  new (text: string, rules?: IRules): FormulaTerm;
 }
