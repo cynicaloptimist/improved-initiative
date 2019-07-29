@@ -1,12 +1,13 @@
 import { StatBlock } from "../../common/StatBlock";
-import { Dice } from "../Rules/Dice";
+import { Formula } from "../Rules/Formulas/Formula";
 import { CurrentSettings } from "../Settings/Settings";
 
 export function GetOrRollMaximumHP(statBlock: StatBlock) {
   const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
   if (rollMonsterHp && statBlock.Player !== "player") {
     try {
-      const rolledHP = Dice.RollDiceExpression(statBlock.HP.Notes).Total;
+      const HPformula = new Formula(statBlock.HP.Notes);
+      const rolledHP = HPformula.Evaluate(statBlock).Total;
       if (rolledHP > 0) {
         return rolledHP;
       }
