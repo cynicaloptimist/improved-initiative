@@ -1,14 +1,12 @@
 // import { DefaultRules, IRules } from "./Rules";
 import { text } from "body-parser";
-import { StatBlock } from "../../common/StatBlock";
-import {
-  AbilityReference,
-  Die,
-  Formula,
-  FormulaTerm,
-  StatReference
-} from "./Formula";
-import { DefaultRules } from "./Rules";
+import { StatBlock } from "../../../common/StatBlock";
+import { DefaultRules } from "../Rules";
+import { AbilityReference } from "./AbilityReference";
+import { Die } from "./Die";
+import { Formula } from "./Formula";
+import { FormulaTerm } from "./FormulaTerm";
+import { StatReference } from "./StatReference";
 
 describe("Formula", () => {
   let term: FormulaTerm;
