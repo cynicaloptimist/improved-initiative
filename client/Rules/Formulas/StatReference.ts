@@ -9,8 +9,8 @@ const Defaults = {
 };
 const ShortNames = {
   SpellcastingAbility: "Spellcasting",
-  ProficiencyBonus: "Proficiency",
-  Challenge: "Level"
+  ProficiencyBonus: "Prof",
+  Challenge: "Lvl"
 };
 
 export class StatReference implements FormulaTerm {
