@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
+import { probablyUniqueString } from "../../../../common/Toolbox";
 
 export interface PromptProps<T> {
   onSubmit: (T) => boolean;
@@ -15,6 +16,10 @@ class Prompt<T> extends React.Component<
 > {
   private formElement: HTMLFormElement;
 
+  private setFormElementRef = (r: HTMLFormElement) => {
+    this.formElement = r;
+  };
+
   public render() {
     return (
       <Formik
@@ -22,7 +27,7 @@ class Prompt<T> extends React.Component<
         onSubmit={this.props.onSubmit}
         render={(props: FormikProps<any>) => (
           <form
-            ref={r => (this.formElement = r)}
+            ref={this.setFormElementRef}
             className="prompt"
             onSubmit={props.handleSubmit}
             onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
@@ -43,6 +48,9 @@ class Prompt<T> extends React.Component<
   }
 
   private delaySoAutoFocusedFieldDoesntSwallowHotkey = () => {
+    if (this.formElement === null) {
+      return console.error("Prompt unmounted before autofocus could occur!");
+    }
     //prevent mounted element from swallowing hotkey
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector
