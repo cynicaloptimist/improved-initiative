@@ -468,58 +468,26 @@ export class CombatantCommander {
     }
   };
 
-  public RollDice = (formulaExpression: string, rules?: IRules) => {
-    const formula = new Formula(formulaExpression, rules);
-    let diceRoll: FormulaResult;
-    if (formula.RequiresStats) {
-      if (this.HasOneSelected() === true) {
-        diceRoll = formula.RollCheck(
-          this.SelectedCombatants()[0].Combatant.StatBlock()
-        );
-      } else {
-        alert("That formula requires a combatant to be selected"); // TODO: too intrusive?
-        return false;
-      }
-    } else {
-      diceRoll = formula.RollCheck();
-    }
-    this.latestRoll = diceRoll;
-    const prompt = ShowDiceRollPrompt(formulaExpression, diceRoll);
+  public DisplayRollResult = (
+    originalExpression: string,
+    result: FormulaResult
+  ) => {
+    this.latestRoll = result;
+
+    const prompt = ShowDiceRollPrompt(originalExpression, result);
 
     Metrics.TrackEvent("DiceRolled", {
-      Expression: formulaExpression,
-      Result: diceRoll.FormattedString
+      Expression: originalExpression,
+      Result: result.FormattedString
     });
     this.tracker.PromptQueue.Add(prompt);
     return true;
   };
 
-  public FormattedStaticFormula = (
-    formulaExpression: string,
-    rules?: IRules
-  ) => {
-    const formula = new Formula(formulaExpression, rules);
-    if (!formula.HasStaticResult) {
-      // not static! TODO: avoid this upstream (different formula subclass?)
-      console.error(
-        `The expression '${formulaExpression}' contains a die roll and can't be used here.`
-      );
-      return formulaExpression;
+  public SelectedStatBlock = () => {
+    if (this.HasOneSelected()) {
+      return this.SelectedCombatants()[0].Combatant.StatBlock();
     }
-    let evaluation: FormulaResult;
-    if (formula.RequiresStats) {
-      if (this.HasOneSelected() === true) {
-        evaluation = formula.EvaluateStatic(
-          this.SelectedCombatants()[0].Combatant.StatBlock()
-        );
-      } else {
-        alert("That formula requires a combatant to be selected"); // TODO: too intrusive?
-        return formulaExpression;
-      }
-    } else {
-      evaluation = formula.EvaluateStatic();
-    }
-
-    return evaluation.FormattedString;
+    return null;
   };
 }

@@ -106,7 +106,8 @@ export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 
 export const nameAndComputedModifierFields = (
   api: FormApi,
-  modifierType: string
+  modifierType: string,
+  fullBlock: StatBlock
 ) => {
   return (
     <FieldArray
@@ -138,6 +139,7 @@ export const nameAndComputedModifierFields = (
                     remove={arrayHelpers.remove}
                     modifierType={modifierType}
                     index={i}
+                    statBlock={fullBlock}
                   />
                 ))}
               </div>

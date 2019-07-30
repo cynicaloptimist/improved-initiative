@@ -13,6 +13,8 @@ import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Formula } from "../Rules/Formulas/Formula";
 import { IRules } from "../Rules/Rules";
+import { FormulaResult } from "../Rules/Formulas/FormulaTerm";
+import { StatBlock } from "../../common/StatBlock";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -24,8 +26,11 @@ interface ReplaceConfig {
 
 export class TextEnricher {
   constructor(
-    private rollDice: (diceExpression: string, rules: IRules) => void,
-    private formulaText: (formulaExpression: string, rules: IRules) => string,
+    private displayRoll: (
+      originalExpression: string,
+      result: FormulaResult
+    ) => void,
+    private selectedStats: () => StatBlock | null,
     private referenceSpellListing: (listing: Listing<Spell>) => void,
     private referenceCondition: (condition: string) => void,
     private spellLibrary: SpellLibrary,
@@ -45,36 +50,56 @@ export class TextEnricher {
 
   public GetEnrichedModifierFromAbilityScore = (score: number) => {
     const modifier = this.rules.GetModifierFromScore(score);
-    return this.EnrichModifier(modifier);
+    return this.EnrichModifier(toModifierString(modifier));
   };
 
-  public EnrichModifier = (modifier: number | string) => {
-    const modifierString =
-      typeof modifier === "number" ? toModifierString(modifier) : modifier;
-    return (
-      <span
-        className="rollable"
-        onClick={() => this.rollDice(modifierString, this.rules)}
-        dangerouslySetInnerHTML={{
-          __html: this.formulaText(modifierString, this.rules)
-        }}
-      />
-    );
+  public EnrichModifier = (modifier: string, key?: string) => {
+    if (Formula.WholeStringMatch.test(modifier)) {
+      const formula = new Formula(modifier);
+      const stats = this.selectedStats();
+      if (stats === null && formula.RequiresStats) {
+        return (
+          <span
+            key={key}
+            className="rollable error requires-selected"
+            title="This formula requires a selected combatant."
+            dangerouslySetInnerHTML={{
+              __html: formula.FormulaString(stats)
+            }}
+          />
+        );
+      } else {
+        return (
+          <span
+            key={key}
+            className="rollable"
+            onClick={() => this.displayRoll(modifier, formula.RollCheck(stats))}
+            dangerouslySetInnerHTML={{
+              __html: formula.FormulaString(stats)
+            }}
+          />
+        );
+      }
+    } else {
+      return (
+        <span
+          key={key}
+          className="rollable error syntax-error"
+          title="This formula has a syntax error."
+        >
+          {modifier}
+        </span>
+      );
+    }
   };
 
   public EnrichText = (text: string, name = "") => {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: new RegExp(Formula.DefaultPattern, "g"),
-        matcherFn: (rawText, processed, key) => (
-          <span
-            className="rollable"
-            key={key}
-            onClick={() => this.rollDice(rawText, this.rules)}
-          >
-            {rawText}
-          </span>
-        )
+        matcherFn: (rawText, processed, key) => {
+          return this.EnrichModifier(rawText, key);
+        }
       },
       spells: {
         pattern: this.spellLibrary.SpellsByNameRegex(),

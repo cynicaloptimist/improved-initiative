@@ -159,10 +159,10 @@ export class StatBlockEditor extends React.Component<
         />
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndModifierFields(api, "Saves")}
+        {nameAndComputedModifierFields(api, "Saves", this.props.statBlock)}
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndComputedModifierFields(api, "Skills")}
+        {nameAndComputedModifierFields(api, "Skills", this.props.statBlock)}
       </div>
       {[
         "Speed",

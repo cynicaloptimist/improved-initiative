@@ -265,7 +265,10 @@ export class EncounterCommander {
 
   public PromptRollDice = () => {
     this.tracker.PromptQueue.Add(
-      RollDicePrompt(this.tracker.CombatantCommander.RollDice)
+      RollDicePrompt(
+        this.tracker.CombatantCommander.DisplayRollResult,
+        this.tracker.CombatantCommander.SelectedStatBlock
+      )
     );
   };
 }

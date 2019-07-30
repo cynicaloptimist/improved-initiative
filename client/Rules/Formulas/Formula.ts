@@ -12,13 +12,18 @@ export class Formula implements FormulaTerm {
       termClasses.map((fc: FormulaClass) => fc.TestPattern.source).join("|")
     );
   }
-  protected static BuildRegexFromTermExpression(termExp: RegExp): RegExp {
+  protected static BuildFullPatternFromTerms(
+    termExp: RegExp,
+    asFullStringMatch = false
+  ): RegExp {
     return new RegExp(
-      "(\\s*(?:[+-]?(?:\\s*" +
+      (asFullStringMatch ? "^" : "") +
+        "(\\s*(?:[+-]?(?:\\s*" +
         termExp.source +
         "))\\s*(?:[+-]\\s*(?:" +
         termExp.source +
-        ")\\s*)*)"
+        ")\\s*)*)" +
+        (asFullStringMatch ? "$" : "")
     );
   }
   protected static readonly DefaultTermClasses: FormulaClass[] = [
@@ -30,8 +35,12 @@ export class Formula implements FormulaTerm {
   public static readonly DefaultTermPattern = Formula.BuildTermPatternFromClasses(
     Formula.DefaultTermClasses
   );
-  public static readonly DefaultPattern = Formula.BuildRegexFromTermExpression(
+  public static readonly DefaultPattern = Formula.BuildFullPatternFromTerms(
     Formula.DefaultTermPattern
+  );
+  public static readonly WholeStringMatch = Formula.BuildFullPatternFromTerms(
+    Formula.DefaultTermPattern,
+    true
   );
 
   protected readonly TermClasses: FormulaClass[];
@@ -60,11 +69,11 @@ export class Formula implements FormulaTerm {
   ) {
     this.TermClasses = termClasses;
     this.TermPattern = Formula.BuildTermPatternFromClasses(termClasses);
-    this.Pattern = Formula.BuildRegexFromTermExpression(this.TermPattern);
+    this.Pattern = Formula.BuildFullPatternFromTerms(this.TermPattern);
 
     const matches = this.Pattern.test(str);
     if (!matches) {
-      throw "Top-level formula pattern does not match!";
+      throw `Top-level formula pattern (${str}) does not match!`;
     }
     const formulaMatch: RegExpExecArray = this.Pattern.exec(str);
     const formulaString = formulaMatch[0];
@@ -124,7 +133,8 @@ export class Formula implements FormulaTerm {
   }
   public EvaluateStatic = this.Evaluate;
 
-  public FormulaString(): string {
+  public FormulaString(stats?: StatBlock): string {
+    // TODO: make this match formatted string in result!
     return this.Terms.map((t: FormulaTerm, i: number) => {
       if (this.GetCoefficient(t) < 0) {
         return `-${t.FormulaString()}`;
@@ -153,9 +163,45 @@ export class Formula implements FormulaTerm {
 
 export class ReferenceFreeFormula extends Formula {
   protected static TermClasses: FormulaClass[] = [Die, Constant];
-  // static definitions for TermPattern and Pattern necessary?
+  public static readonly Pattern = Formula.BuildFullPatternFromTerms(
+    Formula.BuildTermPatternFromClasses(ReferenceFreeFormula.DefaultTermClasses)
+  );
 
   constructor(str: string, rules?: IRules) {
     super(str, rules, ReferenceFreeFormula.TermClasses);
   }
 }
+
+export class DieFreeFormula extends Formula {
+  protected static TermClasses: FormulaClass[] = [
+    AbilityReference,
+    StatReference,
+    Constant
+  ];
+  public static readonly WholeStringMatch = Formula.BuildFullPatternFromTerms(
+    Formula.BuildTermPatternFromClasses(
+      ReferenceFreeFormula.DefaultTermClasses
+    ),
+    true
+  );
+
+  constructor(str: string, rules?: IRules) {
+    super(str, rules, DieFreeFormula.TermClasses);
+  }
+}
+
+export const QuickRoll = (
+  formulaExpression: string,
+  statGetter: () => StatBlock | null,
+  rules?: IRules
+) => {
+  const formula = new Formula(formulaExpression, rules);
+  if (formula.RequiresStats) {
+    const stats = statGetter();
+    if (stats === null) {
+      return null;
+    }
+    return formula.RollCheck(stats);
+  }
+  return formula.RollCheck();
+};

@@ -3,7 +3,7 @@ import { DefaultRules, IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
 
 export class AbilityReference implements FormulaTerm {
-  private GetModifier: (score: number) => number; // TODO: where does this get injected?
+  private GetModifier: (score: number) => number;
   private readonly OriginalLabel: string;
   private readonly Key: keyof AbilityScores;
   private static KeyForPattern(pattern: string): keyof AbilityScores {

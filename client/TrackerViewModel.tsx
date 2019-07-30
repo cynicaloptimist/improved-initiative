@@ -102,8 +102,8 @@ export class TrackerViewModel {
   };
 
   public StatBlockTextEnricher = new TextEnricher(
-    this.CombatantCommander.RollDice,
-    this.CombatantCommander.FormattedStaticFormula,
+    this.CombatantCommander.DisplayRollResult,
+    this.CombatantCommander.SelectedStatBlock,
     this.LibrariesCommander.ReferenceSpell,
     this.LibrariesCommander.ReferenceCondition,
     this.Libraries.Spells,

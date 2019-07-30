@@ -1,5 +1,6 @@
 import { Field } from "formik";
 import React = require("react");
+import { StatBlock } from "../../../common/StatBlock";
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
 import { Formula } from "../../Rules/Formulas/Formula";
@@ -11,19 +12,29 @@ interface RollDiceModel {
 }
 
 export const RollDicePrompt = (
-  rollDiceExpression: (expression: string) => boolean
+  displayRollResult: (expression: string, result: FormulaResult) => boolean,
+  selectedStatBlock: () => StatBlock
 ): PromptProps<RollDiceModel> => {
   const fieldLabelId = probablyUniqueString();
+  let errors: any = {};
   return {
     onSubmit: (model: RollDiceModel) => {
-      const isLegalExpression = Formula.DefaultPattern.test(
-        model.diceExpression
-      );
-      if (!isLegalExpression) {
+      errors = {};
+      if (!Formula.WholeStringMatch.test(model.diceExpression)) {
+        errors.Forumla = "Formula syntax error";
         return false;
       }
 
-      return rollDiceExpression(model.diceExpression);
+      const statBlock = selectedStatBlock();
+      const formula = new Formula(model.diceExpression);
+      if (statBlock === null && formula.RequiresStats) {
+        errors.Formula = "That formula requires a combatant to be selected";
+        return false;
+      }
+      return displayRollResult(
+        model.diceExpression,
+        formula.RollCheck(statBlock)
+      );
     },
 
     initialValues: { diceExpression: "" },
@@ -41,13 +52,18 @@ export const RollDicePrompt = (
           />
         </div>
         <SubmitButton />
+        {errors.Formula ? (
+          <p className="c-statblock-editor__error">{errors.Formula}</p>
+        ) : (
+          ""
+        )}
       </div>
     )
   };
 };
 
 export const ShowDiceRollPrompt = (
-  diceExpression: string,
+  originalExpression: string,
   rollResult: FormulaResult
 ) => ({
   onSubmit: () => true,
@@ -57,12 +73,18 @@ export const ShowDiceRollPrompt = (
     <div className="prompt--with-submit-on-right">
       <div>
         {"Rolled: "}
-        {diceExpression}
+        {originalExpression}
         {" → "}
         <span
           dangerouslySetInnerHTML={{ __html: rollResult.FormattedString }}
         />
-        <input className="response" type="number" value={rollResult.Total} />
+        <input
+          className="response"
+          type="text"
+          readOnly
+          disabled
+          value={rollResult.Total}
+        />
       </div>
       <SubmitButton />
     </div>
