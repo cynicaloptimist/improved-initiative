@@ -25,6 +25,11 @@ export class StatBlockComponent extends React.Component<
       { name: "Skills", data: statBlock.Skills }
     ];
 
+    const otherScores = [
+      { name: "Proficiency Bonus", data: statBlock.ProficiencyBonus },
+      { name: "Spellcasting Ability", data: statBlock.SpellcastingAbility }
+    ];
+
     const keywordSetTypes = [
       { name: "Senses", data: statBlock.Senses },
       { name: "Damage Vulnerabilities", data: statBlock.DamageVulnerabilities },
@@ -110,9 +115,17 @@ export class StatBlockComponent extends React.Component<
                     {modifier.Name}
                     {modifier.ModifierFormula
                       ? enricher.EnrichModifier(modifier.ModifierFormula)
-                      : "—"}{" "}
+                      : ""}{" "}
                   </span>
                 ))}
+              </div>
+            ))}
+          {otherScores
+            .filter(score => typeof score.data === "number")
+            .map(score => (
+              <div key={score.name} className={score.name}>
+                <span className="stat-label">{score.name}</span>
+                <span className="stat-value">{score.data}</span>
               </div>
             ))}
         </div>
