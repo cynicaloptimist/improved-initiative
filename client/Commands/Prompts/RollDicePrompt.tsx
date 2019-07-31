@@ -86,7 +86,7 @@ export const ShowDiceRollPrompt = (
           value={rollResult.Total}
         />
       </div>
-      <SubmitButton />
+      <SubmitButton faClass="times" />
     </div>
   )
 });
