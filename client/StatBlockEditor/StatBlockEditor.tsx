@@ -154,11 +154,14 @@ export class StatBlockEditor extends React.Component<
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
       <div className="c-statblock-editor__otherscores">
-        <TextField label="Proficiency Bonus" fieldName="ProficiencyBonus" />
-        <TextField
-          label="Spellcasting Ability"
-          fieldName="SpellcastingAbility"
-        />
+        <label className="c-number-field inline">
+          <div className="label">Proficiency Bonus</div>
+          <Field type="number" name="ProficiencyBonus" />
+        </label>
+        <label className="c-number-field inline">
+          <div className="label">Spellcasting Ability</div>
+          <Field type="number" name="SpellcastingAbility" />
+        </label>
       </div>
       <div className="c-statblock-editor__saves">
         {nameAndComputedModifierFields(api, "Saves")}

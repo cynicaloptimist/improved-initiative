@@ -23,6 +23,11 @@
     font-size: 1rem;
   }
 
+  select {
+    text-indent: @medium-spacer;
+    height: 37px;
+  }
+
   input.name {
     flex-grow: 1;
   }
@@ -108,23 +113,33 @@
   }
 }
 
-.c-text-field {
+.c-text-field,
+.c-number-field {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-
+}
+.c-text-field {
   .label {
     flex-basis: 20%;
   }
-
   input {
     flex-basis: 80%;
+  }
+}
+.c-number-field {
+  .label {
+    flex-basis: 40%;
+  }
+  input {
+    flex-basis: 60%;
   }
 }
 
 .c-statblock-editor__label,
 .c-text-field > .label,
+.c-number-field > .label,
 .c-statblock-editor__identity .label {
   padding: @extra-small-spacer @small-spacer;
   font-size: @font-size-h4;
@@ -140,6 +155,7 @@
 .c-statblock-editor__description {
   .c-statblock-editor__label,
   .c-text-field > .label,
+  .c-number-field > .label,
   .c-statblock-editor__identity .label {
     flex-basis: 100%;
   }
@@ -182,15 +198,6 @@
   padding: 1rem;
   background-color: @primary-white;
   border: 1px solid @accent-white;
-}
-
-.c-statblock-editor__otherscores .c-text-field {
-  .label {
-    flex-basis: 40%;
-  }
-  input {
-    flex-basis: 60%;
-  }
 }
 
 .inline-powers > div {
