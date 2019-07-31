@@ -1,12 +1,12 @@
 import { Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
-import { StatBlock, ModifierLists } from "../../../common/StatBlock";
+import { ModifierLists, StatBlock } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
+import { FormApi, StatBlockFormValues } from "../StatBlockEditor";
 import { KeywordField } from "./KeywordField";
 import { NameAndComputedModifierField } from "./NameAndComputedModifierField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
-import { StatBlockFormValues, FormApi } from "../StatBlockEditor";
 
 export const ValueAndNotesField = (props: {
   label: string;

@@ -3,11 +3,11 @@ import { text } from "body-parser";
 import { StatBlock } from "../../../common/StatBlock";
 import { DefaultRules } from "../Rules";
 import { AbilityReference } from "./AbilityReference";
+import { Constant } from "./Constant";
 import { Die } from "./Die";
 import { Formula, ReferenceFreeFormula } from "./Formula";
 import { FormulaTerm } from "./FormulaTerm";
 import { StatReference } from "./StatReference";
-import { Constant } from "./Constant";
 
 describe("Formula", () => {
   let term: FormulaTerm;

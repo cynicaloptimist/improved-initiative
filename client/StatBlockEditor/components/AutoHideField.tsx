@@ -2,17 +2,6 @@ import React = require("react");
 
 import { Field, FieldProps } from "formik";
 
-export function AutoHideField(props: AutoHideFieldProps) {
-  return (
-    <Field
-      name={props.fieldName}
-      render={(fieldApi: FieldProps) => (
-        <InnerAutoHideField {...props} fieldApi={fieldApi} />
-      )}
-    />
-  );
-}
-
 interface AutoHideFieldProps {
   faClass: string;
   fieldName: string;
@@ -66,4 +55,15 @@ export class InnerAutoHideField extends React.Component<
       );
     }
   }
+}
+
+export function AutoHideField(props: AutoHideFieldProps) {
+  return (
+    <Field
+      name={props.fieldName}
+      render={(fieldApi: FieldProps) => (
+        <InnerAutoHideField {...props} fieldApi={fieldApi} />
+      )}
+    />
+  );
 }
