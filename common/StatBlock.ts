@@ -32,7 +32,12 @@ export interface NameAndContent {
   Usage?: string;
 }
 
-export interface StatBlock extends Listable {
+export interface ModifierLists {
+  Saves: NameAndComputedModifier[];
+  Skills: NameAndComputedModifier[];
+}
+
+export interface StatBlock extends Listable, ModifierLists {
   Source: string;
   Type: string;
   HP: ValueAndNotes;
@@ -46,8 +51,6 @@ export interface StatBlock extends Listable {
   DamageResistances: string[];
   DamageImmunities: string[];
   ConditionImmunities: string[];
-  Saves: NameAndComputedModifier[];
-  Skills: NameAndComputedModifier[];
   ProficiencyBonus?: number;
   SpellcastingAbility?: number;
   Senses: string[];

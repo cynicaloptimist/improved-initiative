@@ -1,13 +1,12 @@
 import { Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
-import { StatBlock } from "../../../common/StatBlock";
+import { StatBlock, ModifierLists } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
 import { NameAndComputedModifierField } from "./NameAndComputedModifierField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
-
-type FormApi = FormikProps<any>;
+import { StatBlockFormValues, FormApi } from "../StatBlockEditor";
 
 export const ValueAndNotesField = (props: {
   label: string;
@@ -61,7 +60,11 @@ export const abilityScoreField = (abilityName: string) => (
   </div>
 );
 
-export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
+// (unused)
+export const nameAndModifierFields = (
+  api: FormApi,
+  modifierType: keyof ModifierLists
+) => {
   return (
     <FieldArray
       name={modifierType}
@@ -106,8 +109,7 @@ export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
 
 export const nameAndComputedModifierFields = (
   api: FormApi,
-  modifierType: string,
-  fullBlock: StatBlock
+  modifierType: keyof ModifierLists
 ) => {
   return (
     <FieldArray
@@ -139,7 +141,7 @@ export const nameAndComputedModifierFields = (
                     remove={arrayHelpers.remove}
                     modifierType={modifierType}
                     index={i}
-                    statBlock={fullBlock}
+                    api={api}
                   />
                 ))}
               </div>

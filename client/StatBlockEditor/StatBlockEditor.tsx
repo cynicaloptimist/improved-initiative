@@ -15,7 +15,6 @@ import {
   getAnonymizedStatBlockJSON,
   keywordFields,
   nameAndComputedModifierFields,
-  nameAndModifierFields,
   powerFields,
   InitiativeField,
   ValueAndNotesField
@@ -42,6 +41,9 @@ interface StatBlockEditorState {
   editorMode: "standard" | "json";
   renderError?: string;
 }
+
+export type StatBlockFormValues = StatBlock & { StatBlockJSON: string };
+export type FormApi = FormikProps<StatBlockFormValues>;
 
 export class StatBlockEditor extends React.Component<
   StatBlockEditorProps,
@@ -77,7 +79,7 @@ export class StatBlockEditor extends React.Component<
       </React.Fragment>
     );
 
-    const initialValues = {
+    const initialValues: StatBlockFormValues = {
       ...this.props.statBlock,
       StatBlockJSON: getAnonymizedStatBlockJSON(this.props.statBlock)
     };
@@ -159,10 +161,10 @@ export class StatBlockEditor extends React.Component<
         />
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndComputedModifierFields(api, "Saves", this.props.statBlock)}
+        {nameAndComputedModifierFields(api, "Saves")}
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndComputedModifierFields(api, "Skills", this.props.statBlock)}
+        {nameAndComputedModifierFields(api, "Skills")}
       </div>
       {[
         "Speed",
