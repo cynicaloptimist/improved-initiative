@@ -25,10 +25,11 @@ export class StatBlockComponent extends React.Component<
       { name: "Skills", data: statBlock.Skills }
     ];
 
-    const otherScores = [
-      { name: "Proficiency Bonus", data: statBlock.ProficiencyBonus },
-      { name: "Spellcasting Ability", data: statBlock.SpellcastingAbility }
-    ];
+    const otherScores = [];
+    // [
+    //   { name: "Proficiency Bonus", data: statBlock.ProficiencyBonus },
+    //   { name: "Spellcasting Ability", data: statBlock.SpellcastingAbility }
+    // ];
 
     const keywordSetTypes = [
       { name: "Senses", data: statBlock.Senses },
