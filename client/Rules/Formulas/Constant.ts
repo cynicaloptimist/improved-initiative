@@ -8,13 +8,14 @@ export class Constant implements FormulaTerm {
     Total: this.Value,
     String: `${this.Value}`,
     FormattedString: `${this.Value}`
-    // `<strong>${this.Value}</strong>` ?
   });
   public EvaluateStatic = this.Evaluate;
 
   public FormulaString(): string {
     return `${this.Value}`;
   }
+  public Annotated = this.FormulaString;
+
   constructor(str: string, rules?: any) {
     const results = Constant.Pattern.exec(str);
     if (results === null) {

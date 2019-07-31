@@ -134,7 +134,6 @@ export class Formula implements FormulaTerm {
   public EvaluateStatic = this.Evaluate;
 
   public FormulaString(stats?: StatBlock): string {
-    // TODO: make this match formatted string in result!
     return this.Terms.map((t: FormulaTerm, i: number) => {
       if (this.GetCoefficient(t) < 0) {
         return `-${t.FormulaString()}`;
@@ -144,6 +143,14 @@ export class Formula implements FormulaTerm {
       }
       return t.FormulaString();
     }).join("");
+  }
+  public Annotated(stats?: StatBlock) {
+    return this.Terms.map(
+      (term: FormulaTerm, i: number) =>
+        `${this.CoefficientPrefix(term, i === 0)}${term.Annotated(stats)}`
+    )
+      .join(" ")
+      .trim();
   }
   protected CoefficientPrefix(t: FormulaTerm, isFirst: boolean): string {
     const coeff = this.GetCoefficient(t);

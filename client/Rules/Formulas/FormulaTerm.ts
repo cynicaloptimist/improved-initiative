@@ -5,9 +5,9 @@ export interface FormulaTerm {
   HasStaticResult: boolean;
   RequiresStats: boolean;
   Evaluate: (stats?: StatBlock) => FormulaResult;
-  FormulaString: () => string;
-  // AnnotatedString: (stats: StatBlock) => string;
   EvaluateStatic: (stats?: StatBlock) => FormulaResult;
+  FormulaString: () => string;
+  Annotated: (stats?: StatBlock) => string;
 }
 
 export interface FormulaResult {

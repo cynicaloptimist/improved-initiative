@@ -4,6 +4,7 @@ import * as Markdown from "react-markdown";
 import * as ReactReplace from "react-string-replace-recursively";
 
 import { Spell } from "../../common/Spell";
+import { StatBlock } from "../../common/StatBlock";
 import {
   concatenatedStringRegex,
   toModifierString
@@ -12,9 +13,8 @@ import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Formula } from "../Rules/Formulas/Formula";
-import { IRules } from "../Rules/Rules";
 import { FormulaResult } from "../Rules/Formulas/FormulaTerm";
-import { StatBlock } from "../../common/StatBlock";
+import { IRules } from "../Rules/Rules";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -64,7 +64,7 @@ export class TextEnricher {
             className="rollable error requires-selected"
             title="This formula requires a selected combatant."
             dangerouslySetInnerHTML={{
-              __html: formula.FormulaString(stats)
+              __html: formula.Annotated()
             }}
           />
         );
@@ -75,7 +75,7 @@ export class TextEnricher {
             className="rollable"
             onClick={() => this.displayRoll(modifier, formula.RollCheck(stats))}
             dangerouslySetInnerHTML={{
-              __html: formula.FormulaString(stats)
+              __html: formula.Annotated(stats)
             }}
           />
         );

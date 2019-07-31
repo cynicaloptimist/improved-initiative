@@ -30,8 +30,14 @@ export class Die implements FormulaTerm {
     return {
       Total: this.Rolls.reduce((acc: number, roll: number) => acc + roll, 0),
       String: `[${this.Rolls}]`,
-      FormattedString: `[${this.FormattedRolls}]`
+      FormattedString: this.WrapFormatting(this.FormattedRolls)
     };
+  }
+  public WrapFormatting(inner: string) {
+    return `<span class="${this.Multiplier}d d${this.Faces}">[${inner}]</span>`;
+  }
+  public Annotated() {
+    return this.WrapFormatting(`${this.Multiplier}d${this.Faces}`);
   }
   public static RollOne(faces: number): number {
     if (!Number.isSafeInteger(faces) || faces < 1) {
@@ -50,6 +56,7 @@ export class Die implements FormulaTerm {
       return `<span class='s-roll'>${r}</span>`;
     }).join(", ");
   }
+
   public EvaluateStatic(): never {
     throw "Cannot statically evaluate a die roll";
   }

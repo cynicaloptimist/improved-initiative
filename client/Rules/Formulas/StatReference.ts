@@ -16,6 +16,9 @@ const ShortNames = {
 export class StatReference implements FormulaTerm {
   private readonly OriginalLabel: string;
   private readonly Key: keyof StatBlock;
+  private Get(stats: StatBlock) {
+    return StatReference.ExtractOrDefault(stats, this.Key);
+  }
   private static KeyForPattern(pattern: string): keyof StatBlock {
     switch (pattern) {
       case "PROF":
@@ -54,17 +57,18 @@ export class StatReference implements FormulaTerm {
     if (!stats) {
       throw `Stat reference can't be calculated without StatBlock context!`;
     }
+    const stat = this.Get(stats);
     return {
-      Total: StatReference.ExtractOrDefault(stats, this.Key),
-      String: `${this.Key} (${StatReference.ExtractOrDefault(
-        stats,
-        this.Key
-      )})`,
-      FormattedString: `${StatReference.ExtractOrDefault(
-        stats,
-        this.Key
-      )}<sub>${ShortNames[this.Key]}</sub>`
+      Total: stat,
+      String: `${this.Key} (${stat})`,
+      FormattedString: this.WrapFormatting(stat)
     };
+  }
+  public Annotated(stats?: StatBlock) {
+    return this.WrapFormatting(stats ? this.Get(stats) : "?");
+  }
+  public WrapFormatting(inner: any) {
+    return `${inner}<sup>${ShortNames[this.Key]}</sup>`;
   }
   public EvaluateStatic = this.Evaluate;
   public static readonly Pattern = /\{(PROF|SPELL|LVL)}/;
