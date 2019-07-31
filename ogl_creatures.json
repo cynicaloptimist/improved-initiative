@@ -28,25 +28,25 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Int",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [
       {
         "Name": "History",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Perception",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -143,11 +143,11 @@
     "Skills": [
       {
         "Name": "Medicine",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Religion",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -202,29 +202,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -325,29 +325,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -443,37 +443,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "History",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Perception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -553,33 +553,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Perception",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -680,33 +680,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Perception",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -802,37 +802,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Con",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Wis",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Cha",
-        "Modifier": 13
+        "ModifierFormula": "13"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Perception",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Stealth",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -933,41 +933,41 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Insight",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Perception",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1068,29 +1068,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1191,37 +1191,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "History",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Perception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1317,29 +1317,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1516,29 +1516,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Con",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Stealth",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1644,29 +1644,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 15
+        "ModifierFormula": "15"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 12
+        "ModifierFormula": "12"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1756,37 +1756,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Wis",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Cha",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Skills": [
       {
         "Name": "History",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -1887,33 +1887,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 15
+        "ModifierFormula": "15"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 12
+        "ModifierFormula": "12"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Perception",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2019,33 +2019,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Con",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Perception",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Stealth",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2146,37 +2146,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Con",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 16
+        "ModifierFormula": "16"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Perception",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Stealth",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2282,41 +2282,41 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Con",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Insight",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Perception",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Stealth",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2417,29 +2417,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 13
+        "ModifierFormula": "13"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2535,37 +2535,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 13
+        "ModifierFormula": "13"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "History",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Perception",
-        "Modifier": 16
+        "ModifierFormula": "16"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2666,29 +2666,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 60 ft.", "darkvision 120 ft."],
@@ -2778,33 +2778,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Int",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Religion",
-        "Modifier": 15
+        "ModifierFormula": "15"
       }
     ],
     "Senses": ["truesight 120 ft."],
@@ -3016,11 +3016,11 @@
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -3083,21 +3083,21 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "History",
-        "Modifier": 13
+        "ModifierFormula": "13"
       }
     ],
     "Senses": [],
@@ -3157,29 +3157,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Int",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Acrobatics",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Deception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": [],
@@ -3401,7 +3401,7 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [],
@@ -3575,19 +3575,19 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Con",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 12
+        "ModifierFormula": "12"
       }
     ],
     "Skills": [],
@@ -3728,25 +3728,25 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Deception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -3816,33 +3816,33 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Insight",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -4034,15 +4034,15 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [],
@@ -4119,11 +4119,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["darkvision 90 ft."],
@@ -4304,29 +4304,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -4461,11 +4461,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -4526,7 +4526,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -4586,29 +4586,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -4723,25 +4723,25 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Insight",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -4811,29 +4811,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -4887,29 +4887,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -4970,7 +4970,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -5036,11 +5036,11 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Survival",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -5106,7 +5106,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft.", "tremorsense 60 ft."],
@@ -5212,11 +5212,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -5272,15 +5272,15 @@
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Survival",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -5355,15 +5355,15 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [],
@@ -5441,7 +5441,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -5511,7 +5511,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -5677,7 +5677,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -5762,25 +5762,25 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": [],
@@ -6000,29 +6000,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -6081,15 +6081,15 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [],
@@ -6166,7 +6166,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 30 ft."],
@@ -6222,7 +6222,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -6278,15 +6278,15 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Religion",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -6352,11 +6352,11 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Religion",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -6412,7 +6412,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 60 ft."],
@@ -6478,11 +6478,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -6543,15 +6543,15 @@
     "Skills": [
       {
         "Name": "Investigation",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -6671,21 +6671,21 @@
     "Saves": [
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -6766,11 +6766,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -6830,15 +6830,15 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [],
@@ -6915,11 +6915,11 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Insight",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -7039,15 +7039,15 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -7187,11 +7187,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -7282,11 +7282,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -7357,15 +7357,15 @@
     "Skills": [
       {
         "Name": "Medicine",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Nature",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -7421,11 +7421,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -7572,11 +7572,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -7647,7 +7647,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -7773,15 +7773,15 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -7974,19 +7974,19 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [],
@@ -8069,15 +8069,15 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Survival",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -8163,7 +8163,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -8312,25 +8312,25 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -8542,7 +8542,7 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [],
@@ -8604,11 +8604,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 1
+        "ModifierFormula": "1"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 30 ft."],
@@ -8662,25 +8662,25 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -9074,11 +9074,11 @@
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -9356,7 +9356,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft."],
@@ -9411,7 +9411,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft."],
@@ -9467,7 +9467,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -9533,7 +9533,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -9602,7 +9602,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -9719,11 +9719,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 30 ft."],
@@ -9845,7 +9845,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -9957,11 +9957,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -10032,11 +10032,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -10102,7 +10102,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft."],
@@ -10319,7 +10319,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 60 ft."],
@@ -10380,7 +10380,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -10512,7 +10512,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -10628,11 +10628,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -10688,11 +10688,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -10830,19 +10830,19 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -10918,25 +10918,25 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Intimidation",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -11130,7 +11130,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -11190,29 +11190,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -11273,7 +11273,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -11346,7 +11346,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 60 ft. (blind beyond this radius)"],
@@ -11411,29 +11411,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -11494,19 +11494,19 @@
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Deception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -11662,7 +11662,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -11728,15 +11728,15 @@
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [
@@ -11804,7 +11804,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -11853,23 +11853,23 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Int",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [],
@@ -11940,19 +11940,19 @@
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "History",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Religion",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["truesight 120 ft."],
@@ -12038,21 +12038,21 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -12182,7 +12182,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -12238,7 +12238,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -12310,15 +12310,15 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [],
@@ -12395,7 +12395,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -12460,7 +12460,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -12637,19 +12637,19 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -12726,7 +12726,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["darkvision 30 ft."],
@@ -12787,7 +12787,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -12863,7 +12863,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -12922,19 +12922,19 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [],
@@ -13016,11 +13016,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -13101,19 +13101,19 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Insight",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -13202,11 +13202,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Stealth",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -13367,7 +13367,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -13428,7 +13428,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 120 ft."],
@@ -13493,11 +13493,11 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [],
@@ -13640,23 +13640,23 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 17
+        "ModifierFormula": "17"
       },
       {
         "Name": "Dex",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Con",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Int",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Wis",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Skills": [],
@@ -13765,15 +13765,15 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Insight",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -13910,33 +13910,33 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Int",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 18
+        "ModifierFormula": "18"
       },
       {
         "Name": "History",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Insight",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Perception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["truesight 120 ft."],
@@ -14028,11 +14028,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -14153,15 +14153,15 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Survival",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -14236,21 +14236,21 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "History",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -14306,7 +14306,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -14570,19 +14570,19 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Cha",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Skills": [],
@@ -14675,7 +14675,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -14731,19 +14731,19 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Insight",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -14814,7 +14814,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -14936,7 +14936,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -15012,7 +15012,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -15198,7 +15198,7 @@
     "Saves": [
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [],
@@ -15270,29 +15270,29 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Int",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "History",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Religion",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -15400,19 +15400,19 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Int",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -15500,19 +15500,19 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Insight",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -15673,15 +15673,15 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Insight",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -15806,11 +15806,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 30 ft."],
@@ -15930,7 +15930,7 @@
     "Saves": [
       {
         "Name": "Wis",
-        "Modifier": 0
+        "ModifierFormula": "0"
       }
     ],
     "Skills": [],
@@ -15986,33 +15986,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Deception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -16093,7 +16093,7 @@
     "Skills": [
       {
         "Name": "Intimidation",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -16153,7 +16153,7 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [],
@@ -16225,11 +16225,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -16290,7 +16290,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -16356,11 +16356,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -16425,21 +16425,21 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -16494,7 +16494,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -16564,15 +16564,15 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Con",
-        "Modifier": 13
+        "ModifierFormula": "13"
       },
       {
         "Name": "Wis",
-        "Modifier": 10
+        "ModifierFormula": "10"
       }
     ],
     "Skills": [],
@@ -16668,21 +16668,21 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Wis",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Cha",
-        "Modifier": 12
+        "ModifierFormula": "12"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 11
+        "ModifierFormula": "11"
       }
     ],
     "Senses": ["truesight 120 ft."],
@@ -16763,11 +16763,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -16868,7 +16868,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -16979,15 +16979,15 @@
     "Skills": [
       {
         "Name": "Medicine",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Religion",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -17048,11 +17048,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -17127,11 +17127,11 @@
     "Saves": [
       {
         "Name": "Con",
-        "Modifier": 11
+        "ModifierFormula": "11"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [],
@@ -17205,7 +17205,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -17343,11 +17343,11 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Insight",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -17464,7 +17464,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -17519,29 +17519,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -17596,7 +17596,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 30 ft."],
@@ -17808,25 +17808,25 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -17892,11 +17892,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -18107,11 +18107,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": [],
@@ -18177,7 +18177,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -18328,15 +18328,15 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Performance",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -18452,19 +18452,19 @@
     "Skills": [
       {
         "Name": "Nature",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Survival",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -18674,7 +18674,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -18740,7 +18740,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 60 ft. (blind beyond this radius)"],
@@ -18934,29 +18934,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -19065,21 +19065,21 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Wis",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Cha",
-        "Modifier": 17
+        "ModifierFormula": "17"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 14
+        "ModifierFormula": "14"
       }
     ],
     "Senses": ["truesight 120 ft."],
@@ -19261,7 +19261,7 @@
     "Skills": [
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 30 ft."],
@@ -19326,19 +19326,19 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Cha",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [],
@@ -19400,11 +19400,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Senses": [],
@@ -19469,31 +19469,31 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Insight",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Investigation",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Sleight of Hand",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -19674,25 +19674,25 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 12
+        "ModifierFormula": "12"
       },
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -19857,37 +19857,37 @@
     "Saves": [
       {
         "Name": "Str",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "Con",
-        "Modifier": 10
+        "ModifierFormula": "10"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Athletics",
-        "Modifier": 14
+        "ModifierFormula": "14"
       },
       {
         "Name": "History",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Perception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": [],
@@ -19971,23 +19971,23 @@
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Insight",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Stealth",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -20453,15 +20453,15 @@
     "Saves": [
       {
         "Name": "Int",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [],
@@ -20579,7 +20579,7 @@
     "Skills": [
       {
         "Name": "Intimidation",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -20645,11 +20645,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -20893,7 +20893,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -20969,7 +20969,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -21135,25 +21135,25 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Stealth",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Senses": ["darkvision 120 ft."],
@@ -21274,21 +21274,21 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -21364,11 +21364,11 @@
     "Skills": [
       {
         "Name": "Athletics",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -21495,15 +21495,15 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [],
@@ -21585,7 +21585,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -21822,11 +21822,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": [],
@@ -21886,7 +21886,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Senses": [],
@@ -21966,7 +21966,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": [],
@@ -22046,11 +22046,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft. (rat form only)"],
@@ -22130,11 +22130,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -22224,7 +22224,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -22299,29 +22299,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Con",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Wis",
-        "Modifier": 2
+        "ModifierFormula": "2"
       },
       {
         "Name": "Cha",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Stealth",
-        "Modifier": 2
+        "ModifierFormula": "2"
       }
     ],
     "Senses": ["blindsight 10 ft.", "darkvision 60 ft."],
@@ -22381,11 +22381,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -22544,11 +22544,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": [],
@@ -22619,11 +22619,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": [],
@@ -22684,7 +22684,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -22819,7 +22819,7 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["darkvision 60 ft."],
@@ -22886,11 +22886,11 @@
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["darkvision 60 ft.", "tremorsense 60 ft."],
@@ -22965,29 +22965,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23057,29 +23057,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Wis",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Cha",
-        "Modifier": 7
+        "ModifierFormula": "7"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23143,33 +23143,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23233,33 +23233,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23329,33 +23329,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23419,37 +23419,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Cha",
-        "Modifier": 9
+        "ModifierFormula": "9"
       }
     ],
     "Skills": [
       {
         "Name": "Insight",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Persuasion",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Stealth",
-        "Modifier": 6
+        "ModifierFormula": "6"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23519,33 +23519,33 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 5
+        "ModifierFormula": "5"
       }
     ],
     "Skills": [
       {
         "Name": "Deception",
-        "Modifier": 5
+        "ModifierFormula": "5"
       },
       {
         "Name": "Perception",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23615,29 +23615,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23701,37 +23701,37 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Con",
-        "Modifier": 9
+        "ModifierFormula": "9"
       },
       {
         "Name": "Wis",
-        "Modifier": 4
+        "ModifierFormula": "4"
       },
       {
         "Name": "Cha",
-        "Modifier": 8
+        "ModifierFormula": "8"
       }
     ],
     "Skills": [
       {
         "Name": "Arcana",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "History",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Perception",
-        "Modifier": 8
+        "ModifierFormula": "8"
       },
       {
         "Name": "Stealth",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23795,29 +23795,29 @@
     "Saves": [
       {
         "Name": "Dex",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Con",
-        "Modifier": 7
+        "ModifierFormula": "7"
       },
       {
         "Name": "Wis",
-        "Modifier": 3
+        "ModifierFormula": "3"
       },
       {
         "Name": "Cha",
-        "Modifier": 4
+        "ModifierFormula": "4"
       }
     ],
     "Skills": [
       {
         "Name": "Perception",
-        "Modifier": 6
+        "ModifierFormula": "6"
       },
       {
         "Name": "Stealth",
-        "Modifier": 3
+        "ModifierFormula": "3"
       }
     ],
     "Senses": ["blindsight 30 ft.", "darkvision 120 ft."],
@@ -23887,7 +23887,7 @@
     "Saves": [
       {
         "Name": "Wis",
-        "Modifier": 0
+        "ModifierFormula": "0"
       }
     ],
     "Skills": [],
