@@ -48,10 +48,18 @@ export class Formula implements FormulaTerm {
   protected readonly Pattern: RegExp;
 
   protected readonly Terms: FormulaTerm[] = [];
-  protected BuildTerm(subpattern: string, rules: IRules): FormulaTerm {
+  protected BuildTerm(
+    subpattern: string,
+    rules: IRules,
+    coeff: number
+  ): FormulaTerm {
     for (let i = 0; i < this.TermClasses.length; i++) {
-      if (this.TermClasses[i].TestPattern.test(subpattern)) {
-        return new this.TermClasses[i](subpattern, rules);
+      const termClass = this.TermClasses[i];
+      if (termClass.TestPattern.test(subpattern)) {
+        if (termClass === Constant && coeff === -1) {
+          subpattern = "-" + subpattern;
+        }
+        return new termClass(subpattern, rules);
       }
     }
     throw `Could not identify term formula for "${subpattern}"`;
@@ -85,10 +93,13 @@ export class Formula implements FormulaTerm {
 
     let termMatch = termWithOperatorPattern.exec(formulaString);
     while (termMatch !== null) {
-      const term = this.BuildTerm(termMatch[2], rules);
       const coeff = termMatch[1] == "-" ? -1 : 1;
+      const term = this.BuildTerm(termMatch[2], rules, coeff);
       this.Terms.push(term);
-      this.Coefficients.set(term, coeff);
+      this.Coefficients.set(
+        term,
+        coeff === -1 && term instanceof Constant ? 1 : coeff
+      );
 
       termMatch = termWithOperatorPattern.exec(formulaString);
     }
