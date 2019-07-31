@@ -1,3 +1,4 @@
+import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { StatBlock } from "../../../common/StatBlock";
 import { IRules } from "../Rules";
 import { FormulaTerm } from "./FormulaTerm";
@@ -37,7 +38,7 @@ export class StatReference implements FormulaTerm {
       case "SpellcastingAbility":
         return stats[key];
       case "Challenge":
-        return Number.parseInt(stats[key]); // TODO: this field might support multiclass detection -- need to incorporate that formula
+        return PersistentCharacter.GetTotalLevelFromString(stats[key]);
       default:
         throw `Illegal StatBlock key ${key}`;
     }

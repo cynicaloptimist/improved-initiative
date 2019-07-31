@@ -32,24 +32,19 @@ export namespace PersistentCharacter {
   export const GetSearchHint = (character: PersistentCharacter) =>
     character.StatBlock.Type;
 
-  const GetTotalLevelFromString = (levelString: string) => {
+  export const GetTotalLevelFromString = (levelString: string) => {
     const matches = levelString.toString().match(/\d+/g);
     if (!matches) {
-      return "";
+      return 0;
     }
-
     return matches
-      .reduce((total, digitMatch) => {
-        const level = parseInt(digitMatch);
-        if (!isNaN(level)) {
-          return total + level;
-        }
-        return total;
-      }, 0)
-      .toString();
+      .map(n => Number.parseInt(n))
+      .filter(n => !isNaN(n))
+      .reduce((a, b) => a + b, 0);
   };
 
-  export const GetMetadata = (character: PersistentCharacter) => ({
-    Level: GetTotalLevelFromString(character.StatBlock.Challenge)
-  });
+  export const GetMetadata = (character: PersistentCharacter) => {
+    const total = GetTotalLevelFromString(character.StatBlock.Challenge);
+    return { Level: total === 0 ? "" : `${total}` };
+  };
 }
