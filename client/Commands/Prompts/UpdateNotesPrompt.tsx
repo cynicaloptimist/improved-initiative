@@ -1,9 +1,7 @@
 import * as React from "react";
 
-import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
-import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
 import { Metrics } from "../../Utility/Metrics";
 import { LegacyPrompt } from "./Prompt";
 
@@ -36,13 +34,11 @@ export class UpdateNotesPrompt implements LegacyPrompt {
   public ComponentName = "reactprompt";
   public component: JSX.Element;
 
-  constructor(
-    private combatant: Combatant,
-    private persistentCharacter: PersistentCharacter,
-    private library: PersistentCharacterLibrary
-  ) {
+  constructor(private combatant: Combatant) {
     this.component = (
-      <UpdateNotesPromptComponent currentNotes={persistentCharacter.Notes} />
+      <UpdateNotesPromptComponent
+        currentNotes={this.combatant.CurrentNotes()}
+      />
     );
   }
 
@@ -50,9 +46,6 @@ export class UpdateNotesPrompt implements LegacyPrompt {
     const input = form.getElementsByClassName(
       "p-update-notes__notes"
     )[0] as HTMLTextAreaElement;
-    this.library.UpdatePersistentCharacter(this.persistentCharacter.Id, {
-      Notes: input.value
-    });
     this.combatant.CurrentNotes(input.value);
     Metrics.TrackEvent("NotesUpdated", {
       Name: this.combatant.DisplayName(),

@@ -97,6 +97,13 @@ export class Combatant {
         { CurrentHP: c }
       );
     });
+
+    this.CurrentNotes.subscribe(async n => {
+      return await library.UpdatePersistentCharacter(
+        this.PersistentCharacterId,
+        { Notes: n }
+      );
+    });
   }
 
   public UpdateIndexLabel(oldName?: string) {
