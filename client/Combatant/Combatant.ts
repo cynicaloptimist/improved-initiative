@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
-import { CombatantState } from "../../common/CombatantState";
-import { AbilityScores, StatBlock } from "../../common/StatBlock";
+import { CombatantState, TagState } from "../../common/CombatantState";
+import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
@@ -235,7 +235,7 @@ export class Combatant {
     return name;
   });
 
-  public GetState = () => {
+  public GetState: () => CombatantState = () => {
     return {
       Id: this.Id,
       PersistentCharacterId: this.PersistentCharacterId,
@@ -249,8 +249,9 @@ export class Combatant {
       IndexLabel: this.IndexLabel,
       Tags: this.Tags()
         .filter(t => t.Visible())
-        .map(t => ({
+        .map<TagState>(t => ({
           Text: t.Text,
+          Hidden: t.HiddenFromPlayerView,
           DurationRemaining: t.DurationRemaining(),
           DurationTiming: t.DurationTiming,
           DurationCombatantId: t.DurationCombatantId
