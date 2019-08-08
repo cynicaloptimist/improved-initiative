@@ -4,7 +4,7 @@ import { probablyUniqueString } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
 import { Dice } from "../../Rules/Dice";
 import { RollResult } from "../../Rules/RollResult";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 interface RollDiceModel {
   diceExpression: string;

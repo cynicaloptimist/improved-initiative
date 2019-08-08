@@ -2,7 +2,7 @@ import { Field } from "formik";
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";

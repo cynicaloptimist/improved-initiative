@@ -11,7 +11,7 @@ import { Conditions } from "../../Rules/Conditions";
 import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 interface TagPromptProps {
   targetDisplayNames: string;

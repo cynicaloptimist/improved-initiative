@@ -16,9 +16,9 @@ import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList"
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
+import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
 import { Toolbar } from "./Commands/components/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";

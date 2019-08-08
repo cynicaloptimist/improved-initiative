@@ -16,13 +16,13 @@ import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
+import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
-import { ApplyDamagePrompt } from "./Prompts/components/ApplyDamagePrompt";
-import { ApplyHealingPrompt } from "./Prompts/components/ApplyHealingPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;

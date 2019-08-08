@@ -4,7 +4,7 @@ import { Field } from "formik";
 import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
 import { Metrics } from "../../Utility/Metrics";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 interface UpdateNotesPromptComponentProps {}
 
