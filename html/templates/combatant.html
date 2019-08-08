@@ -43,6 +43,10 @@
       <!-- /ko -->
       <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
       <span
+        class="fas fa-eye-slash"
+        data-bind="visible: HiddenFromPlayerView"
+      ></span>
+      <span
         class="fa-clickable fa-times"
         data-bind="click: $parent.RemoveTag, clickBubble:false"
       ></span>
