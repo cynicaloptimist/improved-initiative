@@ -5,6 +5,7 @@ import { Field, FieldProps } from "formik";
 import { DurationTiming } from "../../../common/DurationTiming";
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
@@ -16,6 +17,7 @@ import { PromptProps } from "./PendingPrompts";
 interface TagPromptProps {
   targetDisplayNames: string;
   combatantNamesById: { [id: string]: string };
+  encounterIsActive: () => boolean;
 }
 
 interface TagPromptState {
@@ -31,9 +33,11 @@ export class TagPromptComponent extends React.Component<
     this.state = {
       advancedMode: false
     };
+    linkComponentToObservables(this);
   }
 
   public render() {
+    const encounterIsActive = this.props.encounterIsActive();
     const autoCompleteOptions = _.keys(Conditions).concat(
       _.values(this.props.combatantNamesById)
     );
@@ -58,7 +62,8 @@ export class TagPromptComponent extends React.Component<
               )}
             </Field>
           </div>
-          {this.state.advancedMode && this.renderAdvancedFields()}
+          {this.state.advancedMode &&
+            this.renderAdvancedFields(encounterIsActive)}
         </div>
         <SubmitButton />
       </React.Fragment>
@@ -71,22 +76,32 @@ export class TagPromptComponent extends React.Component<
     this.setState({ advancedMode: toggledMode });
   };
 
-  private renderAdvancedFields = () => (
-    <div className="tag-advanced">
-      ...until
-      <EnumToggle
-        fieldName="tagTiming"
-        labelsByOption={{
-          [StartOfTurn]: "start of",
-          [EndOfTurn]: "end of"
-        }}
-      />
-      <Field component="select" name="tagTimingId">
-        {this.renderCombatantOptions()}
-      </Field>
-      's turn in <Field type="number" name="tagDuration" /> round
-    </div>
-  );
+  private renderAdvancedFields = (encounterIsActive: boolean) => {
+    if (!encounterIsActive) {
+      return (
+        <div className="add-tag__advanced">
+          Start Encounter to enable tag durations.
+        </div>
+      );
+    }
+
+    return (
+      <div className="add-tag__advanced">
+        ...until
+        <EnumToggle
+          fieldName="tagTiming"
+          labelsByOption={{
+            [StartOfTurn]: "start of",
+            [EndOfTurn]: "end of"
+          }}
+        />
+        <Field component="select" name="tagTimingId">
+          {this.renderCombatantOptions()}
+        </Field>
+        's turn in <Field type="number" name="tagDuration" /> round
+      </div>
+    );
+  };
 
   private renderCombatantOptions = () =>
     _.toPairs(this.props.combatantNamesById).map(([id, name]) => (
@@ -129,6 +144,7 @@ export function TagPrompt(
         targetDisplayNames={targetCombatants
           .map(t => t.DisplayName())
           .join(", ")}
+        encounterIsActive={() => encounter.EncounterFlow.State() == "active"}
       />
     ),
     onSubmit: (model: TagModel) => {
@@ -136,7 +152,12 @@ export function TagPrompt(
         return true;
       }
 
-      if (!model.useDuration || !model.tagDuration || !model.tagTimingId) {
+      if (
+        encounter.EncounterFlow.State() == "inactive" ||
+        !model.useDuration ||
+        !model.tagDuration ||
+        !model.tagTimingId
+      ) {
         for (const combatant of targetCombatants) {
           const tag = new Tag(model.tagText, combatant);
           combatant.Tags.push(tag);
