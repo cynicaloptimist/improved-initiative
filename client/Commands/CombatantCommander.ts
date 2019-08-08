@@ -231,7 +231,7 @@ export class CombatantCommander {
     }
     const combatant = selectedCombatants[0].Combatant;
 
-    this.tracker.PromptQueue.AddLegacyPrompt(new UpdateNotesPrompt(combatant));
+    this.tracker.PromptQueue.Add(UpdateNotesPrompt(combatant));
     return false;
   };
 
