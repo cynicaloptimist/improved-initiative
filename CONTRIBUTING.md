@@ -13,6 +13,8 @@ The backend lives in `/server/`. It's also Typescript, but it has its own build 
 
 Shared data structures are located in `/common/`. Any interfaces in this folder are saved to localstorage or databases, so only make additive, backwards-compatible changes to them and consider backwards compatability when handling them.
 
+**I'm happy to provide guidance on how to approach any open issue.**
+
 ## Guidelines
 Here is a short list of coding guidelines (adapted from [TypeScript Coding Guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)). This is not an exhaustive guide, so please be willing to make requested modifications to your code.
 
@@ -21,8 +23,6 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 * Link your pull request to an open [issue](https://github.com/cynicaloptimist/improved-initiative/labels/help%20wanted) with the `help wanted` tag.
 * Include at least one test for your code.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
-
-**I'm happy to provide guidance on how to approach any open issue.**
 
 ### Names
 * Use whole words, not abbreviations, in names.
