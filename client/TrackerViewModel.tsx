@@ -293,11 +293,7 @@ export class TrackerViewModel {
         ? ["start-encounter"]
         : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
-    const onePersistentCharacterSelected =
-      this.CombatantCommander.HasOneSelected() &&
-      this.CombatantCommander.SelectedCombatants()[0].Combatant
-        .PersistentCharacterId != null;
-    if (!onePersistentCharacterSelected) {
+    if (!this.CombatantCommander.HasOneSelected()) {
       commandsToHideById.push("update-notes");
     }
 

@@ -219,18 +219,11 @@ export class CombatantCommander {
   };
 
   public UpdateNotes = async () => {
-    if (!this.HasSelected()) {
+    if (!this.HasOneSelected()) {
       return;
     }
 
-    const selectedCombatants = this.SelectedCombatants().filter(
-      c => c.Combatant.PersistentCharacterId != null
-    );
-    if (selectedCombatants.length == 0) {
-      throw "Can't edit non-persistent combatant notes";
-    }
-    const combatant = selectedCombatants[0].Combatant;
-
+    const combatant = this.SelectedCombatants()[0].Combatant;
     this.tracker.PromptQueue.Add(UpdateNotesPrompt(combatant));
     return false;
   };
