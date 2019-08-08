@@ -213,6 +213,7 @@ export class Encounter {
       Alias: "",
       IndexLabel: null,
       CurrentHP: persistentCharacter.CurrentHP,
+      CurrentNotes: persistentCharacter.Notes,
       TemporaryHP: 0,
       Hidden: hideOnAdd,
       RevealedAC: false,
@@ -223,7 +224,6 @@ export class Encounter {
 
     const combatant = this.AddCombatantFromState(initialState);
 
-    combatant.CurrentNotes(persistentCharacter.Notes);
     combatant.AttachToPersistentCharacterLibrary(library);
 
     return combatant;

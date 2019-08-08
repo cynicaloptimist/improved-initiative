@@ -26,6 +26,7 @@ export class Combatant {
     });
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
+    this.CurrentNotes = ko.observable(combatantState.CurrentNotes || "");
 
     this.processCombatantState(combatantState);
 
@@ -45,7 +46,6 @@ export class Combatant {
   public Id = probablyUniqueString();
   public PersistentCharacterId = null;
   public Alias = ko.observable("");
-  public CurrentNotes = ko.observable(null);
   public TemporaryHP = ko.observable(0);
   public Tags = ko.observableArray<Tag>();
   public Initiative = ko.observable(0);
@@ -56,6 +56,7 @@ export class Combatant {
 
   public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
+  public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
@@ -73,6 +74,7 @@ export class Combatant {
   private processCombatantState(savedCombatant: CombatantState) {
     this.IndexLabel = savedCombatant.IndexLabel;
     this.CurrentHP(savedCombatant.CurrentHP);
+    this.CurrentNotes(savedCombatant.CurrentNotes);
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
@@ -239,6 +241,7 @@ export class Combatant {
       PersistentCharacterId: this.PersistentCharacterId,
       StatBlock: this.StatBlock(),
       CurrentHP: this.CurrentHP(),
+      CurrentNotes: this.CurrentNotes(),
       TemporaryHP: this.TemporaryHP(),
       Initiative: this.Initiative(),
       InitiativeGroup: this.InitiativeGroup(),

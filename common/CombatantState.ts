@@ -13,6 +13,7 @@ export interface CombatantState {
   StatBlock: StatBlock;
   PersistentCharacterId?: string;
   CurrentHP: number;
+  CurrentNotes?: string;
   TemporaryHP: number;
   Initiative: number;
   InitiativeGroup?: string;
