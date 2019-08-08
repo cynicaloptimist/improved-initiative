@@ -6,6 +6,7 @@ export interface TagState {
   DurationRemaining: number;
   DurationTiming: DurationTiming;
   DurationCombatantId: string;
+  Hidden?: boolean;
 }
 
 export interface CombatantState {

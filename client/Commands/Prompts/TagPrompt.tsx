@@ -53,6 +53,31 @@ export class TagPromptComponent extends React.Component<
               options={autoCompleteOptions}
               autoFocus
             />
+            <Field name="tagHidden">
+              {(fieldApi: FieldProps) => {
+                if (fieldApi.field.value == true) {
+                  return (
+                    <Button
+                      fontAwesomeIcon="eye-slash"
+                      tooltip="Hide/Show tag in Player View"
+                      onClick={() =>
+                        fieldApi.form.setFieldValue(fieldApi.field.name, false)
+                      }
+                    />
+                  );
+                } else {
+                  return (
+                    <Button
+                      fontAwesomeIcon="eye"
+                      tooltip="Hide/Show tag in Player View"
+                      onClick={() =>
+                        fieldApi.form.setFieldValue(fieldApi.field.name, true)
+                      }
+                    />
+                  );
+                }
+              }}
+            </Field>
             <Field name="useDuration">
               {(fieldApi: FieldProps) => (
                 <Button
@@ -117,6 +142,7 @@ export interface TagModel {
   tagTimingId?: string;
   tagTiming?: DurationTiming;
   useDuration: boolean;
+  tagHidden: boolean;
 }
 
 export function TagPrompt(
@@ -136,7 +162,8 @@ export function TagPrompt(
       tagTimingId: activeCombatantId,
       tagTiming: StartOfTurn,
       tagDuration: 1,
-      useDuration: false
+      useDuration: false,
+      tagHidden: false
     },
     children: (
       <TagPromptComponent
@@ -159,7 +186,7 @@ export function TagPrompt(
         !model.tagTimingId
       ) {
         for (const combatant of targetCombatants) {
-          const tag = new Tag(model.tagText, combatant);
+          const tag = new Tag(model.tagText, combatant, model.tagHidden);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", { Text: tag.Text });
         }
@@ -180,6 +207,7 @@ export function TagPrompt(
           const tag = new Tag(
             model.tagText,
             combatant,
+            model.tagHidden,
             model.tagDuration + durationGraceRound,
             model.tagTiming,
             model.tagTimingId

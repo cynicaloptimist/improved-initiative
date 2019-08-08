@@ -16,7 +16,7 @@ export function ToPlayerViewCombatantState(
     IsPlayerCharacter: combatant.IsPlayerCharacter(),
     Tags: combatant
       .Tags()
-      .filter(t => t.Visible())
+      .filter(t => t.Visible() && !t.HiddenFromPlayerView)
       .map(t => {
         return {
           Text: t.Text,
