@@ -19,7 +19,7 @@ import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { Toolbar } from "./Commands/components/Toolbar";
+import { Toolbar } from "./Commands/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
