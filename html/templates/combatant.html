@@ -30,7 +30,7 @@
 <span class="combatant__rightsection">
   <span class="combatant__tags">
     <!--ko foreach: Combatant.Tags() -->
-    <!-- ko if: Visible() -->
+    <!-- ko if: NotExpired() -->
     <span class="tag">
       <!-- ko if: $parent.TagHasReference($data) -->
       <span

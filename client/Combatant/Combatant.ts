@@ -248,7 +248,7 @@ export class Combatant {
       Alias: this.Alias(),
       IndexLabel: this.IndexLabel,
       Tags: this.Tags()
-        .filter(t => t.Visible())
+        .filter(t => t.NotExpired())
         .map<TagState>(t => ({
           Text: t.Text,
           Hidden: t.HiddenFromPlayerView,
