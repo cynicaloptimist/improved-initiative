@@ -112,6 +112,7 @@ async function handleCurrentUser(
 
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, userRewards);
+  const emailAddress = _.get(apiResponse, "data.attributes.email", "");
 
   const session = req.session;
   if (session === undefined) {
@@ -122,7 +123,7 @@ async function handleCurrentUser(
   session.hasEpicInitiative = standing == "epic";
   session.isLoggedIn = true;
 
-  const user = await DB.upsertUser(apiResponse.data.id, standing);
+  const user = await DB.upsertUser(apiResponse.data.id, standing, emailAddress);
   if (user === undefined) {
     throw "Failed to insert user into database";
   }
@@ -252,12 +253,14 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
         .send("Missing data.relationships.currently_entitled_tiers.data");
     }
 
+    const userEmail = _.get(req.body, "data.attributes.email", "");
+
     const userAccountLevel = getUserAccountLevel(
       userId,
       entitledTiers.map(tier => tier.id)
     );
 
-    await DB.upsertUser(userId, userAccountLevel);
+    await DB.upsertUser(userId, userAccountLevel, userEmail);
 
     return res.send(201);
   });
