@@ -218,29 +218,34 @@ export function startNewsUpdates(app: express.Application) {
 
 export function configurePatreonWebhookReceiver(app: express.Application) {
   app.post("/patreon_webhook/", async (req, res) => {
+    console.log(JSON.stringify(req.body));
+
     if (!process.env.PATREON_WEBHOOK_SECRET) {
-      return res.send(501);
+      return res.status(501).send("Webhook not configured");
     }
 
     const signature = req.header("X-Patreon-Signature");
 
     if (!signature) {
-      return res.send(401);
+      return res.status(401).send("Signature not found.");
     }
 
     if (
       !verifySignature(signature, process.env.PATREON_WEBHOOK_SECRET, req.body)
     ) {
-      return res.send(401);
+      return res.status(401).send("Signature mismatch.");
     }
 
-    console.log(JSON.stringify(req.body));
-
     const userId = _.get(req.body, "data.relationships.patron.data.id", null);
+
+    if (!userId) {
+      return res.status(400).send("Missing data.relationships.patron.data.id");
+    }
+
     const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
 
-    if (!userId || !rewardId) {
-      return res.send(400);
+    if (!rewardId) {
+      return res.status(400).send("Missing data.relationships.reward.data.id");
     }
 
     const userAccountLevel = getUserAccountLevel(userId, [rewardId]);
