@@ -1,6 +1,7 @@
 import { buildEncounter } from "../test/buildEncounter";
 
 import { StatBlock } from "../../common/StatBlock";
+import { Tag } from "../Combatant/Tag";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { Encounter } from "./Encounter";
 
@@ -141,5 +142,36 @@ describe("Encounter", () => {
     jest.advanceTimersByTime(10000); // 10 seconds
     encounter.EncounterFlow.EndEncounter();
     expect(encounter.EncounterFlow.TurnTimer.Readout()).toBe("0:00");
+  });
+});
+
+describe("Tags", () => {
+  beforeEach(() => {
+    InitializeSettings();
+  });
+
+  test("Should appear in Player View", () => {
+    const encounter = buildEncounter();
+    const combatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    combatant.Tags.push(new Tag("Some Tag", combatant, false));
+    const playerView = encounter.GetPlayerView();
+    const playerViewCombatant = playerView.Combatants[0];
+    expect(playerViewCombatant.Tags).toEqual([
+      {
+        Text: "Some Tag",
+        DurationRemaining: -1,
+        DurationTiming: "StartOfTurn",
+        DurationCombatantId: ""
+      }
+    ]);
+  });
+
+  test("Should not appear in Player View when hidden", () => {
+    const encounter = buildEncounter();
+    const combatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    combatant.Tags.push(new Tag("Some Tag", combatant, true));
+    const playerView = encounter.GetPlayerView();
+    const playerViewCombatant = playerView.Combatants[0];
+    expect(playerViewCombatant.Tags).toEqual([]);
   });
 });
