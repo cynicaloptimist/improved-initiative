@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 import express = require("express");
 import * as _ from "lodash";
 import patreon = require("patreon");
@@ -221,7 +223,16 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
     }
 
     const signature = req.header("X-Patreon-Signature");
-    //TODO: verify  https://docs.patreon.com/#webhooks
+
+    if (!signature) {
+      return res.send(401);
+    }
+
+    if (
+      !verifySignature(signature, process.env.PATREON_WEBHOOK_SECRET, req.body)
+    ) {
+      return res.send(401);
+    }
 
     console.log(JSON.stringify(req.body));
 
@@ -238,4 +249,18 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
 
     return res.send(201);
   });
+}
+
+function verifySignature(
+  signature: string,
+  secret: string,
+  postBody: any
+): boolean {
+  const hmac = crypto.createHmac("md5", secret);
+
+  hmac.update(JSON.stringify(postBody));
+
+  const crypted = hmac.digest("hex");
+
+  return crypted === signature;
 }
