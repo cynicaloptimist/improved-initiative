@@ -236,17 +236,26 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
       return res.status(401).send("Signature mismatch.");
     }
 
-    const userId = _.get(req.body, "data.relationships.patron.data.id", null);
+    const userId = _.get(req.body, "data.relationships.user.data.id", null);
     if (!userId) {
-      return res.status(400).send("Missing data.relationships.patron.data.id");
+      return res.status(400).send("Missing data.relationships.user.data.id");
     }
 
-    const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
-    if (!rewardId) {
-      return res.status(400).send("Missing data.relationships.reward.data.id");
+    const entitledTiers: { id: string }[] | null = _.get(
+      req.body,
+      "data.relationships.currently_entitled_tiers.data",
+      null
+    );
+    if (!entitledTiers) {
+      return res
+        .status(400)
+        .send("Missing data.relationships.currently_entitled_tiers.data");
     }
 
-    const userAccountLevel = getUserAccountLevel(userId, [rewardId]);
+    const userAccountLevel = getUserAccountLevel(
+      userId,
+      entitledTiers.map(tier => tier.id)
+    );
 
     await DB.upsertUser(userId, userAccountLevel);
 
