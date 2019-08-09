@@ -71,7 +71,13 @@ export default function(
 
   app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
 
-  app.use(bodyParser.json());
+  app.use(
+    bodyParser.json({
+      verify: function(req, res, buf, encoding) {
+        req["rawBody"] = buf.toString();
+      }
+    })
+  );
   app.use(bodyParser.urlencoded({ extended: false }));
 
   configureMetricsRoutes(app);
