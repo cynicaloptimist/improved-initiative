@@ -10,7 +10,7 @@ import * as DB from "./dbconnection";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
 
-type Req = Express.Request & express.Request;
+type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
 
 const storageRewardIds = ["1322253", "1937132"];
@@ -217,39 +217,31 @@ export function startNewsUpdates(app: express.Application) {
 }
 
 export function configurePatreonWebhookReceiver(app: express.Application) {
-  app.post("/patreon_webhook/", async (req, res) => {
-    console.log(JSON.stringify(req.body));
+  app.post("/patreon_webhook/", async (req: Req, res: Res) => {
+    console.log(req.rawBody);
 
-    if (!process.env.PATREON_WEBHOOK_SECRET) {
+    const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
+    if (!webhookSecret) {
       return res.status(501).send("Webhook not configured");
     }
 
     const signature = req.header("X-Patreon-Signature");
-
     if (!signature) {
       console.log("Signature not found.");
       return res.status(401).send("Signature not found.");
     }
 
-    if (
-      !verifySignature(
-        signature,
-        process.env.PATREON_WEBHOOK_SECRET,
-        JSON.stringify(req.body)
-      )
-    ) {
+    if (!verifySignature(signature, webhookSecret, req.rawBody)) {
       console.log("Signature mismatch with provided signature: " + signature);
       return res.status(401).send("Signature mismatch.");
     }
 
     const userId = _.get(req.body, "data.relationships.patron.data.id", null);
-
     if (!userId) {
       return res.status(400).send("Missing data.relationships.patron.data.id");
     }
 
     const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
-
     if (!rewardId) {
       return res.status(400).send("Missing data.relationships.reward.data.id");
     }
