@@ -227,12 +227,14 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
     const signature = req.header("X-Patreon-Signature");
 
     if (!signature) {
+      console.log("Signature not found.");
       return res.status(401).send("Signature not found.");
     }
 
     if (
       !verifySignature(signature, process.env.PATREON_WEBHOOK_SECRET, req.body)
     ) {
+      console.log("Signature mismatch with provided signature: " + signature);
       return res.status(401).send("Signature mismatch.");
     }
 
