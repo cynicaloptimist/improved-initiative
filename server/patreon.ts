@@ -232,7 +232,11 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
     }
 
     if (
-      !verifySignature(signature, process.env.PATREON_WEBHOOK_SECRET, req.body)
+      !verifySignature(
+        signature,
+        process.env.PATREON_WEBHOOK_SECRET,
+        JSON.stringify(req.body)
+      )
     ) {
       console.log("Signature mismatch with provided signature: " + signature);
       return res.status(401).send("Signature mismatch.");
@@ -261,11 +265,11 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
 function verifySignature(
   signature: string,
   secret: string,
-  postBody: any
+  postBodyJSON: string
 ): boolean {
   const hmac = crypto.createHmac("md5", secret);
 
-  hmac.update(JSON.stringify(postBody));
+  hmac.update(postBodyJSON);
 
   const crypted = hmac.digest("hex");
 
