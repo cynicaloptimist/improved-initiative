@@ -255,10 +255,12 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
 
     const userEmail = _.get(req.body, "data.attributes.email", "");
 
-    const userAccountLevel = getUserAccountLevel(
-      userId,
-      entitledTiers.map(tier => tier.id)
-    );
+    const isDeletedPledge =
+      req.header("X-Patreon-Event") == "members:pledge:delete";
+
+    const userAccountLevel = isDeletedPledge
+      ? "none"
+      : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
 
     await DB.upsertUser(userId, userAccountLevel, userEmail);
 
