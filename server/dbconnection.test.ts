@@ -18,7 +18,7 @@ describe("User Accounts", () => {
   }, 60000);
 
   beforeEach(async () => {
-    const user = await DB.upsertUser(probablyUniqueString(), "pledge");
+    const user = await DB.upsertUser(probablyUniqueString(), "pledge", "");
     userId = user._id;
   });
 
