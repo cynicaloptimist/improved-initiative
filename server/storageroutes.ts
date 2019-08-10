@@ -1,13 +1,12 @@
 import express = require("express");
 
-import { CombatantState } from "../common/CombatantState";
-import { EncounterState } from "../common/EncounterState";
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { SavedEncounter } from "./library";
+import { updateSessionAccountFeatures } from "./patreon";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -34,9 +33,12 @@ export default function(app: express.Application) {
 
     return DB.getAccount(req.session.userId)
       .then(account => {
+        if (req.session && account.accountStatus) {
+          updateSessionAccountFeatures(req.session, account.accountStatus);
+        }
         return res.json(account);
       })
-      .catch(err => {
+      .catch(() => {
         return res.sendStatus(500);
       });
   });
@@ -50,7 +52,7 @@ export default function(app: express.Application) {
       .then(account => {
         return res.json(account);
       })
-      .catch(err => {
+      .catch(() => {
         return res.sendStatus(500);
       });
   });
@@ -63,7 +65,7 @@ export default function(app: express.Application) {
     const newSettings = req.body;
 
     if (newSettings.Version) {
-      return DB.setSettings(req.session.userId, newSettings).then(r => {
+      return DB.setSettings(req.session.userId, newSettings).then(() => {
         return res.sendStatus(200);
       });
     } else {
@@ -116,7 +118,7 @@ function configureEntityRoute<T extends Listable>(
           return res.sendStatus(404);
         }
       })
-      .catch(err => {
+      .catch(() => {
         return res.sendStatus(500);
       });
   });
@@ -134,14 +136,9 @@ function configureEntityRoute<T extends Listable>(
         return res.status(500).send(err);
       }
     } else if (req.body.length) {
-      return DB.saveEntitySet<T>(
-        route,
-        req.session.userId,
-        req.body,
-        result => {
-          return res.sendStatus(201);
-        }
-      ).catch(err => {
+      return DB.saveEntitySet<T>(route, req.session.userId, req.body, () => {
+        return res.sendStatus(201);
+      }).catch(err => {
         return res.status(500).send(err);
       });
     } else {
