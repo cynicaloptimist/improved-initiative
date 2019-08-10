@@ -115,13 +115,11 @@ async function handleCurrentUser(
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
 
   const session = req.session;
+
   if (session === undefined) {
     throw "Session is undefined";
   }
-
-  session.hasStorage = standing == "pledge" || standing == "epic";
-  session.hasEpicInitiative = standing == "epic";
-  session.isLoggedIn = true;
+  updateSessionAccountFeatures(session, standing);
 
   const user = await DB.upsertUser(apiResponse.data.id, standing, emailAddress);
   if (user === undefined) {
@@ -129,6 +127,15 @@ async function handleCurrentUser(
   }
   session.userId = user._id;
   res.redirect(`/e/${encounterId}`);
+}
+
+export function updateSessionAccountFeatures(
+  session: Express.Session,
+  standing: string
+) {
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
+  session.isLoggedIn = true;
 }
 
 function getUserAccountLevel(userId: string, rewardIds: string[]) {
