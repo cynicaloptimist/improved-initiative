@@ -57,7 +57,7 @@ export class Encounter {
       if (!this.playerViewClient) {
         return;
       }
-      this.playerViewClient.UpdateEncounter(this.EncounterId, newPlayerView);
+      this.playerViewClient.UpdateEncounter(env.EncounterId, newPlayerView);
     });
   }
 
@@ -70,8 +70,6 @@ export class Encounter {
   public Difficulty: KnockoutComputed<EncounterDifficulty>;
 
   public EncounterFlow = new EncounterFlow(this);
-
-  public EncounterId = env.EncounterId;
 
   private getGroupBonusForCombatant(combatant: Combatant) {
     if (combatant.InitiativeGroup() == null) {
