@@ -4,7 +4,7 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
-import { User } from "./user";
+import { handleCurrentUser } from "./patreon";
 
 describe("User Accounts", () => {
   let mongod: MongodbMemoryServer;
@@ -90,5 +90,14 @@ describe("User Accounts", () => {
       playerCharacterStatBlock.Type
     );
     done();
+  });
+
+  test("Handle user account response from Patreon API", async () => {
+    const apiResponse = require("./api_response_epic_account.json");
+    const req: any = { query: { state: "encounterId" }, session: {} };
+    const res: any = { redirect: jest.fn() };
+    await handleCurrentUser(req, res, apiResponse);
+    const user = await DB.getAccount(req.session.userId);
+    expect(user.accountStatus).toEqual("epic");
   });
 });
