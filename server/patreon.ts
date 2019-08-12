@@ -89,21 +89,13 @@ export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
   console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
   const encounterId = req.query.state.replace(/['"]/g, "");
-  const relationships = apiResponse.included || [];
+  const pledges = (apiResponse.included || []).filter(
+    item => item.type == "pledge" && item.attributes.declined_since == null
+  );
 
-  const userRewards = relationships
-    .filter(i => i.type === "pledge")
-    .map((r: Pledge) => {
-      if (
-        r.relationships &&
-        r.relationships.reward &&
-        r.relationships.reward.data
-      ) {
-        return r.relationships.reward.data.id;
-      } else {
-        return "none";
-      }
-    });
+  const userRewards = pledges.map((r: Pledge) =>
+    _.get(r, "relationships.reward.data.id", "none")
+  );
 
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, userRewards);

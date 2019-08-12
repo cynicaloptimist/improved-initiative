@@ -92,12 +92,23 @@ describe("User Accounts", () => {
     done();
   });
 
-  test("Handle user account response from Patreon API", async () => {
-    const apiResponse = require("./api_response_epic_account.json");
-    const req: any = { query: { state: "encounterId" }, session: {} };
-    const res: any = { redirect: jest.fn() };
-    await handleCurrentUser(req, res, apiResponse);
-    const user = await DB.getAccount(req.session.userId);
-    expect(user.accountStatus).toEqual("epic");
+  describe("Handle user account response from Patreon API", () => {
+    test("Epic Initiative", async () => {
+      const apiResponse = require("./api_response_epic_account.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("epic");
+    });
+
+    test("Declined Pledge", async () => {
+      const apiResponse = require("./api_response_declined_pledge.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("none");
+    });
   });
 });
