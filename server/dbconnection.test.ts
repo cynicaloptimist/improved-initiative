@@ -102,6 +102,15 @@ describe("User Accounts", () => {
       expect(user.accountStatus).toEqual("epic");
     });
 
+    test("No Pledge", async () => {
+      const apiResponse = require("./api_response_no_pledge.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("none");
+    });
+
     test("Declined Pledge", async () => {
       const apiResponse = require("./api_response_declined_pledge.json");
       const req: any = { query: { state: "encounterId" }, session: {} };
