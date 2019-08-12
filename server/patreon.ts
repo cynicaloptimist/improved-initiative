@@ -77,7 +77,7 @@ export function configureLoginRedirect(app: express.Application) {
 
       const APIClient = patreon.patreon(tokens.access_token);
       const { rawJson } = await APIClient(`/current_user`);
-      await handleCurrentUser(req, res, tokens, rawJson);
+      await handleCurrentUser(req, res, rawJson);
     } catch (e) {
       console.error("Patreon login flow failed: " + e);
       res.status(500).send(e);
@@ -85,12 +85,7 @@ export function configureLoginRedirect(app: express.Application) {
   });
 }
 
-async function handleCurrentUser(
-  req: Req,
-  res: Res,
-  tokens: TokensResponse,
-  apiResponse: any
-) {
+export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
   console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
   const encounterId = req.query.state.replace(/['"]/g, "");
