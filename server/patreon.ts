@@ -212,54 +212,60 @@ export function startNewsUpdates(app: express.Application) {
 }
 
 export function configurePatreonWebhookReceiver(app: express.Application) {
-  app.post("/patreon_webhook/", async (req: Req, res: Res) => {
-    console.log(req.rawBody);
+  app.post("/patreon_webhook/", verifySender, handleWebhook);
+}
 
-    const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
-    if (!webhookSecret) {
-      return res.status(501).send("Webhook not configured");
-    }
+async function handleWebhook(req: Req, res: Res) {
+  const userId = _.get(req.body, "data.relationships.user.data.id", null);
 
-    const signature = req.header("X-Patreon-Signature");
-    if (!signature) {
-      console.log("Signature not found.");
-      return res.status(401).send("Signature not found.");
-    }
+  if (!userId) {
+    return res.status(400).send("Missing data.relationships.user.data.id");
+  }
 
-    if (!verifySignature(signature, webhookSecret, req.rawBody)) {
-      console.log("Signature mismatch with provided signature: " + signature);
-      return res.status(401).send("Signature mismatch.");
-    }
+  const entitledTiers: { id: string }[] | null = _.get(
+    req.body,
+    "data.relationships.currently_entitled_tiers.data",
+    null
+  );
 
-    const userId = _.get(req.body, "data.relationships.user.data.id", null);
-    if (!userId) {
-      return res.status(400).send("Missing data.relationships.user.data.id");
-    }
+  if (!entitledTiers) {
+    return res
+      .status(400)
+      .send("Missing data.relationships.currently_entitled_tiers.data");
+  }
 
-    const entitledTiers: { id: string }[] | null = _.get(
-      req.body,
-      "data.relationships.currently_entitled_tiers.data",
-      null
-    );
-    if (!entitledTiers) {
-      return res
-        .status(400)
-        .send("Missing data.relationships.currently_entitled_tiers.data");
-    }
+  const userEmail = _.get(req.body, "data.attributes.email", "");
 
-    const userEmail = _.get(req.body, "data.attributes.email", "");
+  const isDeletedPledge =
+    req.header("X-Patreon-Event") == "members:pledge:delete";
 
-    const isDeletedPledge =
-      req.header("X-Patreon-Event") == "members:pledge:delete";
+  const userAccountLevel = isDeletedPledge
+    ? "none"
+    : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+  await DB.upsertUser(userId, userAccountLevel, userEmail);
+  return res.send(201);
+}
 
-    const userAccountLevel = isDeletedPledge
-      ? "none"
-      : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+function verifySender(req: Req, res: Res, next) {
+  console.log(req.rawBody);
 
-    await DB.upsertUser(userId, userAccountLevel, userEmail);
+  const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    return res.status(501).send("Webhook not configured");
+  }
 
-    return res.send(201);
-  });
+  const signature = req.header("X-Patreon-Signature");
+  if (!signature) {
+    console.log("Signature not found.");
+    return res.status(401).send("Signature not found.");
+  }
+
+  if (!verifySignature(signature, webhookSecret, req.rawBody)) {
+    console.log("Signature mismatch with provided signature: " + signature);
+    return res.status(401).send("Signature mismatch.");
+  }
+
+  return next();
 }
 
 function verifySignature(
