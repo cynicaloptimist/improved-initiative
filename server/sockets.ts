@@ -21,10 +21,8 @@ export default function(
   io.on("connection", function(
     socket: SocketIO.Socket & SocketWithSessionData
   ) {
-    let encounterId;
-
     function joinEncounter(id: string) {
-      encounterId = id;
+      socket.handshake.session.encounterId = id;
       socket.join(id);
     }
 
@@ -32,9 +30,7 @@ export default function(
       joinEncounter(id);
       playerViews.UpdateEncounter(id, updatedEncounter);
 
-      socket.broadcast
-        .to(encounterId)
-        .emit("encounter updated", updatedEncounter);
+      socket.broadcast.to(id).emit("encounter updated", updatedEncounter);
     });
 
     socket.on(
@@ -46,9 +42,7 @@ export default function(
 
         joinEncounter(id);
         playerViews.UpdateSettings(id, updatedSettings);
-        socket.broadcast
-          .to(encounterId)
-          .emit("settings updated", updatedSettings);
+        socket.broadcast.to(id).emit("settings updated", updatedSettings);
       }
     );
 
@@ -64,7 +58,7 @@ export default function(
     ) {
       joinEncounter(id);
       socket.broadcast
-        .to(encounterId)
+        .to(id)
         .emit(
           "suggest damage",
           suggestedCombatantIds,
@@ -81,11 +75,12 @@ export default function(
     ) {
       joinEncounter(id);
       socket.broadcast
-        .to(encounterId)
+        .to(id)
         .emit("suggest tag", suggestedCombatantIds, suggestedTag, suggester);
     });
 
     socket.on("disconnect", function() {
+      const encounterId = socket.handshake.session.encounterId;
       io.in(encounterId).clients((error, clients) => {
         if (clients.length == 0) {
           playerViews.Destroy(encounterId);
