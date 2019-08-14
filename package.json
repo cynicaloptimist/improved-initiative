@@ -37,6 +37,7 @@
     "@types/serve-static": "^1.13.1",
     "@types/socket.io": "^1.4.33",
     "@types/socket.io-client": "^1.4.32",
+    "@types/socket.io-redis": "^1.0.25",
     "ajv": "^6.9.1",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
@@ -100,7 +101,8 @@
     "redis": "^2.8.0",
     "request": "^2.85.0",
     "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "socket.io-redis": "^5.2.0"
   },
   "jest": {
     "globals": {

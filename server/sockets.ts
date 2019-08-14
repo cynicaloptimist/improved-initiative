@@ -1,5 +1,6 @@
 import express = require("express");
 import provideSessionToSocketIo = require("express-socket.io-session");
+import redis = require("socket.io-redis");
 
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { getDefaultSettings } from "../common/Settings";
@@ -16,6 +17,10 @@ export default function(
   session: express.RequestHandler,
   playerViews: PlayerViewManager
 ) {
+  if (process.env.REDIS_URL) {
+    io.adapter(redis(process.env.REDIS_URL));
+  }
+
   io.use(provideSessionToSocketIo(session));
 
   io.on("connection", function(
