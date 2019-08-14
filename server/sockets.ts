@@ -1,5 +1,6 @@
 import express = require("express");
 import provideSessionToSocketIo = require("express-socket.io-session");
+import redis = require("socket.io-redis");
 
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { getDefaultSettings } from "../common/Settings";
@@ -16,15 +17,17 @@ export default function(
   session: express.RequestHandler,
   playerViews: PlayerViewManager
 ) {
+  if (process.env.REDIS_URL) {
+    io.adapter(redis(process.env.REDIS_URL));
+  }
+
   io.use(provideSessionToSocketIo(session));
 
   io.on("connection", function(
     socket: SocketIO.Socket & SocketWithSessionData
   ) {
-    let encounterId;
-
     function joinEncounter(id: string) {
-      encounterId = id;
+      socket.handshake.session.encounterId = id;
       socket.join(id);
     }
 
@@ -33,8 +36,8 @@ export default function(
       playerViews.UpdateEncounter(id, updatedEncounter);
 
       socket.broadcast
-        .to(encounterId)
-        .emit("encounter updated", updatedEncounter);
+        .to(id)
+        .volatile.emit("encounter updated", updatedEncounter);
     });
 
     socket.on(
@@ -47,8 +50,8 @@ export default function(
         joinEncounter(id);
         playerViews.UpdateSettings(id, updatedSettings);
         socket.broadcast
-          .to(encounterId)
-          .emit("settings updated", updatedSettings);
+          .to(id)
+          .volatile.emit("settings updated", updatedSettings);
       }
     );
 
@@ -64,7 +67,7 @@ export default function(
     ) {
       joinEncounter(id);
       socket.broadcast
-        .to(encounterId)
+        .to(id)
         .emit(
           "suggest damage",
           suggestedCombatantIds,
@@ -81,20 +84,17 @@ export default function(
     ) {
       joinEncounter(id);
       socket.broadcast
-        .to(encounterId)
+        .to(id)
         .emit("suggest tag", suggestedCombatantIds, suggestedTag, suggester);
     });
 
     socket.on("disconnect", function() {
+      const encounterId = socket.handshake.session.encounterId;
       io.in(encounterId).clients((error, clients) => {
         if (clients.length == 0) {
           playerViews.Destroy(encounterId);
         }
       });
-    });
-
-    socket.on("heartbeat", function(id: string) {
-      socket.broadcast.to(id).emit("heartbeat");
     });
   });
 }
