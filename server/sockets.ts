@@ -92,10 +92,6 @@ export default function(
         }
       });
     });
-
-    socket.on("heartbeat", function(id: string) {
-      socket.broadcast.to(id).emit("heartbeat");
-    });
   });
 }
 
