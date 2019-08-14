@@ -35,7 +35,9 @@ export default function(
       joinEncounter(id);
       playerViews.UpdateEncounter(id, updatedEncounter);
 
-      socket.broadcast.to(id).emit("encounter updated", updatedEncounter);
+      socket.broadcast
+        .to(id)
+        .volatile.emit("encounter updated", updatedEncounter);
     });
 
     socket.on(
@@ -47,7 +49,9 @@ export default function(
 
         joinEncounter(id);
         playerViews.UpdateSettings(id, updatedSettings);
-        socket.broadcast.to(id).emit("settings updated", updatedSettings);
+        socket.broadcast
+          .to(id)
+          .volatile.emit("settings updated", updatedSettings);
       }
     );
 
