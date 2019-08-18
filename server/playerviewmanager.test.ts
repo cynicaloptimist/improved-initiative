@@ -19,6 +19,12 @@ function TestPlayerViewManagerImplementation(
         settings: getDefaultSettings().PlayerView
       });
     });
+
+    it("Should show uninitialized views as available", async () => {
+      const playerViewManager = makePlayerViewManager();
+      const isAvailable = await playerViewManager.IdAvailable("someId");
+      expect(isAvailable).toBe(true);
+    });
   });
 }
 

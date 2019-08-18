@@ -1,9 +1,12 @@
+import * as redis from "redis";
 import { PlayerViewState } from "../common/PlayerViewState";
 import { InMemoryPlayerViewManager } from "./InMemoryPlayerViewManager";
 import { RedisPlayerViewManager } from "./RedisPlayerViewManager";
 
 export interface PlayerViewManager {
   Get(id: string): Promise<PlayerViewState>;
+
+  IdAvailable(id: string): Promise<boolean>;
 
   UpdateEncounter(id: string, newState: any): void;
 

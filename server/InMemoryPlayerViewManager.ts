@@ -16,6 +16,10 @@ export class InMemoryPlayerViewManager implements PlayerViewManager {
     return this.createOrGet(id);
   }
 
+  public async IdAvailable(id: string) {
+    return this.playerViews[id] === undefined;
+  }
+
   public UpdateEncounter(id: string, newState: any) {
     const playerViewState = this.createOrGet(id);
     playerViewState.encounterState = newState;

@@ -32,6 +32,13 @@ export class RedisPlayerViewManager implements PlayerViewManager {
       })
     );
 
+  public IdAvailable = (id: string) =>
+    new Promise<boolean>(done =>
+      this.redisClient.hgetall(`playerviews_${id}`, (err, fields) => {
+        return done(!fields);
+      })
+    );
+
   public UpdateEncounter = (id: string, newState: any) =>
     this.redisClient.hset(
       `playerviews_${id}`,
