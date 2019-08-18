@@ -8,10 +8,11 @@ import { PlayerViewManager } from "./playerviewmanager";
 
 function TestPlayerViewManagerImplementation(
   managerName: string,
-  playerViewManager: PlayerViewManager
+  makePlayerViewManager: () => PlayerViewManager
 ) {
   describe(managerName, () => {
     it("Should return a default player view when not initialized", async () => {
+      const playerViewManager = makePlayerViewManager();
       const playerView = await playerViewManager.Get("someId");
       expect(playerView).toEqual({
         encounterState: EncounterState.Default<PlayerViewCombatantState>(),
@@ -23,9 +24,9 @@ function TestPlayerViewManagerImplementation(
 
 TestPlayerViewManagerImplementation(
   "InMemoryPlayerViewManager",
-  new InMemoryPlayerViewManager()
+  () => new InMemoryPlayerViewManager()
 );
 TestPlayerViewManagerImplementation(
   "RedisPlayerViewManager",
-  new RedisPlayerViewManager(createClient("test"))
+  () => new RedisPlayerViewManager(createClient("test"))
 );
