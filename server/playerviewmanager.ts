@@ -16,7 +16,8 @@ export interface PlayerViewManager {
 
 export function GetPlayerViewManager(): PlayerViewManager {
   if (process.env.REDIS_URL) {
-    return new RedisPlayerViewManager(process.env.REDIS_URL);
+    const client = redis.createClient(process.env.REDIS_URL);
+    return new RedisPlayerViewManager(client);
   }
   return new InMemoryPlayerViewManager();
 }

@@ -7,10 +7,7 @@ import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export class RedisPlayerViewManager implements PlayerViewManager {
-  private redisClient: redis.RedisClient;
-  constructor(redisUrl: string) {
-    this.redisClient = redis.createClient(redisUrl);
-  }
+  constructor(private redisClient: redis.RedisClient) {}
 
   public Get = (id: string) =>
     new Promise<PlayerViewState>(done =>
