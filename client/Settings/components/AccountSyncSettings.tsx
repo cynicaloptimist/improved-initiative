@@ -171,7 +171,7 @@ export class AccountSyncSettings extends React.Component<
       "To delete all of the user data synced to your account, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
       await this.props.accountClient.DeleteAccount();
-      location.href = env.CanonicalURL;
+      location.href = env.BaseUrl;
     }
   };
 

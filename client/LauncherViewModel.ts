@@ -13,7 +13,7 @@ export class LauncherViewModel {
     };
     Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
 
-    TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
+    TransferLocalStorageToCanonicalURLIfNeeded(env.BaseUrl);
   }
 
   public GeneratedEncounterId = env.EncounterId;

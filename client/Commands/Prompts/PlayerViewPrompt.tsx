@@ -17,7 +17,7 @@ class PlayerViewPromptComponent extends React.Component<
   private hiddenInput: HTMLInputElement;
 
   public render() {
-    const playerViewUrl = `${env.CanonicalURL}/p/${this.props.encounterId}`;
+    const playerViewUrl = `${env.BaseUrl}/p/${this.props.encounterId}`;
     return (
       <React.Fragment>
         <div className="launch-player-view">
