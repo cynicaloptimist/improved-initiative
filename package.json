@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.7.2",
+    "@sentry/browser": "^5.6.2",
     "awesomplete": "^1.1.2",
     "body-parser": "^1.18.2",
     "browser-filesaver": "^1.1.0",

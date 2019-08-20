@@ -34,6 +34,7 @@ interface ClientEnvironment {
   hasStorage: boolean;
   hasEpicInitiative: boolean;
   postedEncounter: string | null;
+  sentryDsn: string | null;
   appVersion: string;
 }
 
@@ -48,6 +49,7 @@ const getClientEnvironment = (session: Express.Session): ClientEnvironment => ({
   hasStorage: session.hasStorage || false,
   hasEpicInitiative: session.hasEpicInitiative || false,
   postedEncounter: null,
+  sentryDsn: process.env.SENTRY_DSN || null,
   appVersion: appVersion
 });
 

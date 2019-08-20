@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 
 interface Environment {
@@ -34,5 +35,10 @@ export function LoadEnvironment() {
   env.IsLoggedIn = html.getAttribute("isLoggedIn") == "true";
   if (window["patreonLoginUrl"]) {
     env.PatreonLoginUrl = window["patreonLoginUrl"];
+  }
+
+  const sentryDsn = html.getAttribute("sentryDsn");
+  if (sentryDsn !== null) {
+    Sentry.init({ dsn: sentryDsn });
   }
 }
