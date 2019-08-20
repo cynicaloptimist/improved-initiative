@@ -20,7 +20,6 @@ interface LibraryPaneProps<T extends Listable> {
     onPreviewOut: () => void
   ) => JSX.Element;
   groupByFunctions: ListingGroupFn[];
-  hideLibraries: () => void;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
 }
@@ -83,11 +82,6 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
         </div>
         <ul className="listings">{listingAndFolderComponents}</ul>
         <div className="buttons">
-          <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={this.props.hideLibraries}
-          />
           <Button
             text="Add New"
             additionalClassNames="new"

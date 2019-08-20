@@ -32,7 +32,6 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
         renderListingRow={this.renderListingRow}
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}
-        hideLibraries={this.props.librariesCommander.HideLibraries}
         renderPreview={this.renderPreview}
         groupByFunctions={this.groupByFunctions}
       />
