@@ -29,7 +29,7 @@ interface ClientEnvironment {
   rootDirectory: string;
   encounterId: string;
   baseUrl: string;
-  patreonClientId: string;
+  patreonLoginUrl: string;
   isLoggedIn: boolean;
   hasStorage: boolean;
   hasEpicInitiative: boolean;
@@ -40,18 +40,24 @@ interface ClientEnvironment {
 
 const appVersion = require("../package.json").version;
 
-const getClientEnvironment = (session: Express.Session): ClientEnvironment => ({
-  rootDirectory: "../..",
-  encounterId: session.encounterId || probablyUniqueString(),
-  baseUrl,
-  patreonClientId,
-  isLoggedIn: session.isLoggedIn || false,
-  hasStorage: session.hasStorage || false,
-  hasEpicInitiative: session.hasEpicInitiative || false,
-  postedEncounter: null,
-  sentryDsn: process.env.SENTRY_DSN || null,
-  appVersion: appVersion
-});
+const getClientEnvironment = (session: Express.Session): ClientEnvironment => {
+  const encounterId = session.encounterId || probablyUniqueString();
+  return {
+    rootDirectory: "../..",
+    encounterId,
+    baseUrl,
+    patreonLoginUrl:
+      "http://www.patreon.com/oauth2/authorize" +
+      `?response_type=code&client_id=${patreonClientId}` +
+      `&redirect_uri=${baseUrl}/r/patreon&state=${encounterId}`,
+    isLoggedIn: session.isLoggedIn || false,
+    hasStorage: session.hasStorage || false,
+    hasEpicInitiative: session.hasEpicInitiative || false,
+    postedEncounter: null,
+    sentryDsn: process.env.SENTRY_DSN || null,
+    appVersion: appVersion
+  };
+};
 
 export default function(
   app: express.Application,
