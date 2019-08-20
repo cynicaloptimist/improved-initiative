@@ -89,6 +89,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
             onClick={this.props.hideLibraries}
           />
           <Button
+            text="Add New"
             additionalClassNames="new"
             fontAwesomeIcon="plus"
             onClick={this.props.addNewItem}
