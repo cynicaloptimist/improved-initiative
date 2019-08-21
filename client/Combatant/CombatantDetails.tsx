@@ -25,7 +25,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
 
     const currentHp = this.props.combatantViewModel.HP();
     const tags = this.props.combatantViewModel.Combatant.Tags()
-      .filter(tag => tag.Visible())
+      .filter(tag => tag.NotExpired())
       .map(tag => {
         if (tag.HasDuration) {
           return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;

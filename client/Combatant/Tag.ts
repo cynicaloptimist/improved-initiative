@@ -13,7 +13,7 @@ export interface Tag {
   DurationRemaining: KnockoutObservable<number>;
   DurationTiming: DurationTiming;
   DurationCombatantId: string;
-  Visible: KnockoutComputed<boolean>;
+  NotExpired: KnockoutComputed<boolean>;
   Remove: () => void;
   Decrement: () => void;
   Increment: () => void;
@@ -23,6 +23,7 @@ export class Tag implements Tag {
   constructor(
     public Text: string,
     combatant: Combatant,
+    public HiddenFromPlayerView: boolean,
     duration = -1,
     public DurationTiming = StartOfTurn,
     public DurationCombatantId = ""
@@ -36,7 +37,7 @@ export class Tag implements Tag {
 
   public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
-  public Visible = ko.pureComputed(() => {
+  public NotExpired = ko.pureComputed(() => {
     return !this.HasDuration || this.DurationRemaining() > 0;
   });
 
@@ -50,12 +51,13 @@ export class Tag implements Tag {
         return new Tag(
           savedTag.Text,
           combatant,
+          savedTag.Hidden || false,
           savedTag.DurationRemaining,
           savedTag.DurationTiming,
           savedTag.DurationCombatantId
         );
       }
-      return new Tag(tag, combatant);
+      return new Tag(tag, combatant, false);
     });
   };
 }

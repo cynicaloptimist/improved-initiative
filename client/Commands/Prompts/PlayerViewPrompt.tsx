@@ -2,7 +2,7 @@ import { Field } from "formik";
 import * as React from "react";
 import { Button, SubmitButton } from "../../Components/Button";
 import { env } from "../../Environment";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -17,7 +17,7 @@ class PlayerViewPromptComponent extends React.Component<
   private hiddenInput: HTMLInputElement;
 
   public render() {
-    const playerViewUrl = `${env.CanonicalURL}/p/${this.props.encounterId}`;
+    const playerViewUrl = `${env.BaseUrl}/p/${this.props.encounterId}`;
     return (
       <React.Fragment>
         <div className="launch-player-view">

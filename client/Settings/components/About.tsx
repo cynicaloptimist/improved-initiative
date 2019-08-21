@@ -17,7 +17,7 @@ export class About extends React.Component<AboutProps> {
             {" was created by "}
             <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>
             {". All Wizards of the Coast content provided under terms of the "}
-            <a href={env.CanonicalURL + "/SRD-OGL_V1.1.pdf"} target="_blank">
+            <a href={env.BaseUrl + "/SRD-OGL_V1.1.pdf"} target="_blank">
               Open Gaming License Version 1.0a
             </a>
             {"."}

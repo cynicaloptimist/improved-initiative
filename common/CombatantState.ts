@@ -6,6 +6,7 @@ export interface TagState {
   DurationRemaining: number;
   DurationTiming: DurationTiming;
   DurationCombatantId: string;
+  Hidden?: boolean;
 }
 
 export interface CombatantState {
@@ -13,6 +14,7 @@ export interface CombatantState {
   StatBlock: StatBlock;
   PersistentCharacterId?: string;
   CurrentHP: number;
+  CurrentNotes?: string;
   TemporaryHP: number;
   Initiative: number;
   InitiativeGroup?: string;

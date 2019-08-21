@@ -12,7 +12,7 @@ import { ToggleButton } from "../../Settings/components/Toggle";
 import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
 import { EventLog } from "../../Widgets/EventLog";
-import { PromptProps } from "./components/PendingPrompts";
+import { PromptProps } from "./PendingPrompts";
 
 interface SaveEncounterPromptComponentProps {
   autocompletePaths: string[];

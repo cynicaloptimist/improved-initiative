@@ -20,6 +20,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
             <TagPromptComponent
               targetDisplayNames={this.props.targetCombatant.Name}
               combatantNamesById={this.props.combatantNamesById}
+              encounterIsActive={() => this.props.activeCombatantId != null}
             />
           </form>
         )}

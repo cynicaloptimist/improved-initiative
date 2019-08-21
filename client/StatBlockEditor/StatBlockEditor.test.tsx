@@ -14,9 +14,9 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe("StatBlockEditor", () => {
   let editor: Enzyme.ReactWrapper<any, any>;
-  let saveCallback: jest.Mock<(s: StatBlock) => void>;
-  let saveAsCallback: jest.Mock<(s: StatBlock) => void>;
-  let saveAsCharacterCallback: jest.Mock<(s: StatBlock) => void>;
+  let saveCallback: jest.Mock<void>;
+  let saveAsCallback: jest.Mock<void>;
+  let saveAsCharacterCallback: jest.Mock<void>;
   let statBlock: StatBlock;
 
   beforeEach(() => {

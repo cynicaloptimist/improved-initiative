@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
-import { CombatantState } from "../../common/CombatantState";
-import { AbilityScores, StatBlock } from "../../common/StatBlock";
+import { CombatantState, TagState } from "../../common/CombatantState";
+import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
@@ -26,6 +26,7 @@ export class Combatant {
     });
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
+    this.CurrentNotes = ko.observable(combatantState.CurrentNotes || "");
 
     this.processCombatantState(combatantState);
 
@@ -45,7 +46,6 @@ export class Combatant {
   public Id = probablyUniqueString();
   public PersistentCharacterId = null;
   public Alias = ko.observable("");
-  public CurrentNotes = ko.observable(null);
   public TemporaryHP = ko.observable(0);
   public Tags = ko.observableArray<Tag>();
   public Initiative = ko.observable(0);
@@ -56,6 +56,7 @@ export class Combatant {
 
   public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
+  public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
@@ -73,6 +74,7 @@ export class Combatant {
   private processCombatantState(savedCombatant: CombatantState) {
     this.IndexLabel = savedCombatant.IndexLabel;
     this.CurrentHP(savedCombatant.CurrentHP);
+    this.CurrentNotes(savedCombatant.CurrentNotes);
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
@@ -95,6 +97,13 @@ export class Combatant {
       return await library.UpdatePersistentCharacter(
         this.PersistentCharacterId,
         { CurrentHP: c }
+      );
+    });
+
+    this.CurrentNotes.subscribe(async n => {
+      return await library.UpdatePersistentCharacter(
+        this.PersistentCharacterId,
+        { Notes: n }
       );
     });
   }
@@ -226,21 +235,23 @@ export class Combatant {
     return name;
   });
 
-  public GetState = () => {
+  public GetState: () => CombatantState = () => {
     return {
       Id: this.Id,
       PersistentCharacterId: this.PersistentCharacterId,
       StatBlock: this.StatBlock(),
       CurrentHP: this.CurrentHP(),
+      CurrentNotes: this.CurrentNotes(),
       TemporaryHP: this.TemporaryHP(),
       Initiative: this.Initiative(),
       InitiativeGroup: this.InitiativeGroup(),
       Alias: this.Alias(),
       IndexLabel: this.IndexLabel,
       Tags: this.Tags()
-        .filter(t => t.Visible())
-        .map(t => ({
+        .filter(t => t.NotExpired())
+        .map<TagState>(t => ({
           Text: t.Text,
+          Hidden: t.HiddenFromPlayerView,
           DurationRemaining: t.DurationRemaining(),
           DurationTiming: t.DurationTiming,
           DurationCombatantId: t.DurationCombatantId

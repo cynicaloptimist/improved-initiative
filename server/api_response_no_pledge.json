@@ -1,0 +1,54 @@
+{
+    "data": {
+        "attributes": {
+            "about": null,
+            "can_see_nsfw": null,
+            "created": "2017-09-01T02:25:28.000+00:00",
+            "default_country_code": null,
+            "discord_id": null,
+            "email": "TEST@TEST.com",
+            "facebook": null,
+            "facebook_id": null,
+            "first_name": "TEST_FIRST_NAME",
+            "full_name": "TEST_FIRST_NAME TEST_LAST_NAME",
+            "gender": 0,
+            "has_password": true,
+            "image_url": "https://c8.patreon.com/2/200/TEST_PATRON_ID",
+            "is_deleted": false,
+            "is_email_verified": true,
+            "is_nuked": false,
+            "is_suspended": false,
+            "last_name": "TEST_LAST_NAME",
+            "social_connections": {
+                "deviantart": null,
+                "discord": null,
+                "facebook": null,
+                "instagram": null,
+                "reddit": null,
+                "spotify": null,
+                "twitch": null,
+                "twitter": null,
+                "youtube": null
+            },
+            "thumb_url": "https://c8.patreon.com/2/200/TEST_PATRON_ID",
+            "twitch": null,
+            "twitter": null,
+            "url": "https://www.patreon.com/user?u=TEST_PATRON_ID",
+            "vanity": null,
+            "youtube": null
+        },
+        "id": "TEST_PATRON_ID",
+        "relationships": {
+            "pledges": {
+                "data": [
+                ]
+            }
+        },
+        "type": "user"
+    },
+    "included": [
+    ],
+    "links": {
+        "self": "https://www.patreon.com/api/user/TEST_PATRON_ID"
+    }
+}

@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
+import { PromptProps } from "./PendingPrompts";
 import { LegacyPrompt } from "./Prompt";
-import { PromptProps } from "./components/PendingPrompts";
 
 export class PromptQueue {
   constructor() {}

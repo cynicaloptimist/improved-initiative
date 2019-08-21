@@ -25,31 +25,39 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-interface IPageRenderOptions {
+interface ClientEnvironment {
   rootDirectory: string;
   encounterId: string;
   baseUrl: string;
-  patreonClientId: string;
+  patreonLoginUrl: string;
   isLoggedIn: boolean;
   hasStorage: boolean;
   hasEpicInitiative: boolean;
   postedEncounter: string | null;
+  sentryDsn: string | null;
   appVersion: string;
 }
 
 const appVersion = require("../package.json").version;
 
-const pageRenderOptions = (session: Express.Session): IPageRenderOptions => ({
-  rootDirectory: "../..",
-  encounterId: session.encounterId || probablyUniqueString(),
-  baseUrl,
-  patreonClientId,
-  isLoggedIn: session.isLoggedIn || false,
-  hasStorage: session.hasStorage || false,
-  hasEpicInitiative: session.hasEpicInitiative || false,
-  postedEncounter: null,
-  appVersion: appVersion
-});
+const getClientEnvironment = (session: Express.Session): ClientEnvironment => {
+  const encounterId = session.encounterId || probablyUniqueString();
+  return {
+    rootDirectory: "../..",
+    encounterId,
+    baseUrl,
+    patreonLoginUrl:
+      "http://www.patreon.com/oauth2/authorize" +
+      `?response_type=code&client_id=${patreonClientId}` +
+      `&redirect_uri=${baseUrl}/r/patreon&state=${encounterId}`,
+    isLoggedIn: session.isLoggedIn || false,
+    hasStorage: session.hasStorage || false,
+    hasEpicInitiative: session.hasEpicInitiative || false,
+    postedEncounter: null,
+    sentryDsn: process.env.SENTRY_DSN || null,
+    appVersion: appVersion
+  };
+};
 
 export default function(
   app: express.Application,
@@ -71,7 +79,13 @@ export default function(
 
   app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
 
-  app.use(bodyParser.json());
+  app.use(
+    bodyParser.json({
+      verify: function(req, res, buf, encoding) {
+        req["rawBody"] = buf.toString();
+      }
+    })
+  );
   app.use(bodyParser.urlencoded({ extended: false }));
 
   configureMetricsRoutes(app);
@@ -87,7 +101,7 @@ export default function(
     if (defaultAccountLevel !== "free") {
       return await setupLocalDefaultUser(session, res);
     } else {
-      const renderOptions = pageRenderOptions(session);
+      const renderOptions = getClientEnvironment(session);
       return res.render("landing", renderOptions);
     }
   });
@@ -108,7 +122,7 @@ export default function(
       throw "Session is not available";
     }
 
-    const options = pageRenderOptions(session);
+    const options = getClientEnvironment(session);
     if (session.postedEncounter) {
       options.postedEncounter = JSON.stringify(session.postedEncounter);
       delete session.postedEncounter;
@@ -123,7 +137,7 @@ export default function(
     }
 
     session.encounterId = req.params.id;
-    res.render("playerview", pageRenderOptions(session));
+    res.render("playerview", getClientEnvironment(session));
   });
 
   app.get("/playerviews/:id", async (req: Req, res: Res) => {
@@ -137,7 +151,7 @@ export default function(
       throw "Session is not available";
     }
 
-    res.render(`templates/${req.params.name}`, pageRenderOptions(session));
+    res.render(`templates/${req.params.name}`, getClientEnvironment(session));
   });
 
   app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
@@ -199,12 +213,13 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
 
   const user = await upsertUser(
     process.env.DEFAULT_PATREON_ID || "defaultPatreonId",
-    "pledge"
+    "pledge",
+    ""
   );
 
   if (user) {
     session.userId = user._id;
   }
 
-  return res.render("landing", pageRenderOptions(session));
+  return res.render("landing", getClientEnvironment(session));
 }

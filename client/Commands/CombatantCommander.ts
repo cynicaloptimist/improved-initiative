@@ -16,13 +16,13 @@ import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
+import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
 import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
-import { ApplyDamagePrompt } from "./Prompts/components/ApplyDamagePrompt";
-import { ApplyHealingPrompt } from "./Prompts/components/ApplyHealingPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -219,28 +219,12 @@ export class CombatantCommander {
   };
 
   public UpdateNotes = async () => {
-    if (!this.HasSelected()) {
+    if (!this.HasOneSelected()) {
       return;
     }
 
-    const selectedCombatants = this.SelectedCombatants().filter(
-      c => c.Combatant.PersistentCharacterId != null
-    );
-    if (selectedCombatants.length == 0) {
-      throw "Can't edit non-persistent combatant notes";
-    }
-    const combatant = selectedCombatants[0].Combatant;
-
-    const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
-      combatant.PersistentCharacterId
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(
-      new UpdateNotesPrompt(
-        combatant,
-        persistentCharacter,
-        this.tracker.Libraries.PersistentCharacters
-      )
-    );
+    const combatant = this.SelectedCombatants()[0].Combatant;
+    this.tracker.PromptQueue.Add(UpdateNotesPrompt(combatant));
     return false;
   };
 

@@ -7,10 +7,7 @@ import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export class RedisPlayerViewManager implements PlayerViewManager {
-  private redisClient: redis.RedisClient;
-  constructor(redisUrl: string) {
-    this.redisClient = redis.createClient(redisUrl);
-  }
+  constructor(private redisClient: redis.RedisClient) {}
 
   public Get = (id: string) =>
     new Promise<PlayerViewState>(done =>
@@ -32,6 +29,13 @@ export class RedisPlayerViewManager implements PlayerViewManager {
             defaultPlayerView.settings
           )
         });
+      })
+    );
+
+  public IdAvailable = (id: string) =>
+    new Promise<boolean>(done =>
+      this.redisClient.hgetall(`playerviews_${id}`, (err, fields) => {
+        return done(!fields);
       })
     );
 

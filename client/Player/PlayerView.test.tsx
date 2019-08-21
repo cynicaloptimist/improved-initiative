@@ -149,7 +149,7 @@ describe("PlayerViewModel", () => {
 
 describe("Tag Suggestor", () => {
   let encounter: Encounter;
-  let suggestTag: jest.Mock<{}>;
+  let suggestTag: jest.Mock<void>;
   let playerView: Enzyme.ReactWrapper<
     any,
     Readonly<{}>,

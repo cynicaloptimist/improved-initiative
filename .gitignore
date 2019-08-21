@@ -1,6 +1,5 @@
 node_modules/*
 typings/*
-public/user/*
 public/webfonts/*
 *.log
 *.js.map
@@ -13,4 +12,3 @@ public/webfonts/*
 .baseDir
 !Gruntfile.js
 !webpack.*.js
-!test/test.js

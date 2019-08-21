@@ -6,6 +6,8 @@
   hasEpicInitiative="{{ hasEpicInitiative }}"
   isLoggedIn="{{ isLoggedIn }}"
   baseUrl="{{ baseUrl }}"
+  sentryDsn="{{ sentryDsn }}"
+  patreonLoginUrl="{{ patreonLoginUrl }}"
 >
   <head>
     <link
@@ -26,10 +28,6 @@
 
     <title>Combat Tracker - Improved Initiative</title>
 
-    <script type="text/javascript">
-      window.patreonLoginUrl =
-        "http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{{baseUrl}}}/r/patreon&state={{encounterId}}";
-    </script>
     <script
       type="text/javascript"
       src="{{ rootDirectory }}/js/dependencies.js"

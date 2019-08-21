@@ -30,7 +30,7 @@
 <span class="combatant__rightsection">
   <span class="combatant__tags">
     <!--ko foreach: Combatant.Tags() -->
-    <!-- ko if: Visible() -->
+    <!-- ko if: NotExpired() -->
     <span class="tag">
       <!-- ko if: $parent.TagHasReference($data) -->
       <span
@@ -42,6 +42,11 @@
       <span class="tag__text" data-bind="text: Text"></span>
       <!-- /ko -->
       <span class="fas fa-hourglass" data-bind="visible: HasDuration"></span>
+      <span
+        class="fas fa-eye-slash"
+        title="Tag hidden from Player View"
+        data-bind="visible: HiddenFromPlayerView"
+      ></span>
       <span
         class="fa-clickable fa-times"
         data-bind="click: $parent.RemoveTag, clickBubble:false"

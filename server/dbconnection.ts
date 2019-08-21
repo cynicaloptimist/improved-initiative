@@ -24,7 +24,11 @@ export const initialize = async initialConnectionString => {
   return;
 };
 
-export async function upsertUser(patreonId: string, accountStatus: string) {
+export async function upsertUser(
+  patreonId: string,
+  accountStatus: string,
+  emailAddress: string
+) {
   if (!connectionString) {
     console.error("No connection string found.");
     throw "No connection string found.";
@@ -40,7 +44,8 @@ export async function upsertUser(patreonId: string, accountStatus: string) {
     {
       $set: {
         patreonId,
-        accountStatus
+        accountStatus,
+        emailAddress
       },
       $setOnInsert: {
         statblocks: {},
@@ -64,6 +69,7 @@ export async function getAccount(userId: mongo.ObjectId) {
   const user = await getFullAccount(userId);
 
   const userWithListings = {
+    accountStatus: user.accountStatus,
     settings: user.settings,
     statblocks: getStatBlockListings(user.statblocks),
     persistentcharacters: getPersistentCharacterListings(
@@ -99,6 +105,7 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   client.close();
 
   const userAccount = {
+    accountStatus: user.accountStatus,
     settings: user.settings,
     statblocks: user.statblocks,
     persistentcharacters: user.persistentcharacters || {},

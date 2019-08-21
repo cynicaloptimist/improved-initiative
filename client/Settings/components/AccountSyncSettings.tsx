@@ -104,14 +104,14 @@ export class AccountSyncSettings extends React.Component<
     return (
       <React.Fragment>
         <p>
-          You're logged in with Patreon, but you have not selected the
+          {"You're logged in with Patreon, but you have not selected the "}
           <a
             href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
             target="_blank"
           >
             Account Sync
           </a>
-          reward level.
+          {" reward level."}
         </p>
         <a className="button logout" href="/logout">
           Log Out
@@ -171,7 +171,7 @@ export class AccountSyncSettings extends React.Component<
       "To delete all of the user data synced to your account, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
       await this.props.accountClient.DeleteAccount();
-      location.href = env.CanonicalURL;
+      location.href = env.BaseUrl;
     }
   };
 

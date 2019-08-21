@@ -61,6 +61,7 @@ export class AcceptTagPrompt implements LegacyPrompt {
       const tag = new Tag(
         this.tagState.Text,
         this.combatant,
+        false,
         this.tagState.DurationRemaining,
         this.tagState.DurationTiming,
         this.tagState.DurationCombatantId
@@ -73,7 +74,9 @@ export class AcceptTagPrompt implements LegacyPrompt {
         Duration: tag.DurationRemaining()
       });
     } else {
-      this.combatant.Tags.push(new Tag(this.tagState.Text, this.combatant));
+      this.combatant.Tags.push(
+        new Tag(this.tagState.Text, this.combatant, false)
+      );
       Metrics.TrackEvent("TagAddedFromSuggestion", {
         Text: this.tagState.Text
       });

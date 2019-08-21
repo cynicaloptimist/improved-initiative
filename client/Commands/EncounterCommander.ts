@@ -3,6 +3,7 @@ import * as ko from "knockout";
 import _ = require("lodash");
 import { StatBlock } from "../../common/StatBlock";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
+import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
@@ -38,7 +39,7 @@ export class EncounterCommander {
 
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
-      this.tracker.Encounter.EncounterId,
+      env.EncounterId,
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       backgroundImageUrl =>
         this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
@@ -46,7 +47,7 @@ export class EncounterCommander {
     this.tracker.PromptQueue.Add(prompt);
 
     Metrics.TrackEvent("PlayerViewLaunched", {
-      Id: this.tracker.Encounter.EncounterId
+      Id: env.EncounterId
     });
   };
 

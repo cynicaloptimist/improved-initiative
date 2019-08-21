@@ -32,7 +32,6 @@ export class EncounterLibraryPane extends React.Component<
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupByFunctions}
         addNewItem={this.props.librariesCommander.SaveEncounter}
-        hideLibraries={this.props.librariesCommander.HideLibraries}
         renderPreview={this.renderPreview}
       />
     );

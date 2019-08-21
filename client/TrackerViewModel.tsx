@@ -16,10 +16,10 @@ import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList"
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
+import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { PendingPrompts } from "./Commands/Prompts/components/PendingPrompts";
-import { Toolbar } from "./Commands/components/Toolbar";
+import { Toolbar } from "./Commands/Toolbar";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
@@ -293,11 +293,7 @@ export class TrackerViewModel {
         ? ["start-encounter"]
         : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
-    const onePersistentCharacterSelected =
-      this.CombatantCommander.HasOneSelected() &&
-      this.CombatantCommander.SelectedCombatants()[0].Combatant
-        .PersistentCharacterId != null;
-    if (!onePersistentCharacterSelected) {
+    if (!this.CombatantCommander.HasOneSelected()) {
       commandsToHideById.push("update-notes");
     }
 
@@ -394,25 +390,22 @@ export class TrackerViewModel {
   };
 
   private joinPlayerViewEncounter() {
-    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+    this.playerViewClient.JoinEncounter(env.EncounterId);
 
     this.playerViewClient.UpdateSettings(
-      this.Encounter.EncounterId,
+      env.EncounterId,
       CurrentSettings().PlayerView
     );
 
     this.playerViewClient.UpdateEncounter(
-      this.Encounter.EncounterId,
+      env.EncounterId,
       this.Encounter.GetPlayerView()
     );
 
     CurrentSettings.subscribe(v => {
-      this.playerViewClient.UpdateSettings(
-        this.Encounter.EncounterId,
-        v.PlayerView
-      );
+      this.playerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
       this.playerViewClient.UpdateEncounter(
-        this.Encounter.EncounterId,
+        env.EncounterId,
         this.Encounter.GetPlayerView()
       );
     });

@@ -55,7 +55,6 @@ export class StatBlockLibraryPane extends React.Component<
         listings={listings}
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupingFunctions}
-        hideLibraries={this.props.librariesCommander.HideLibraries}
         addNewItem={() =>
           this.props.librariesCommander.CreateAndEditStatBlock(
             this.props.library

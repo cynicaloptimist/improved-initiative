@@ -1,3 +1,5 @@
+import * as crypto from "crypto";
+
 import express = require("express");
 import * as _ from "lodash";
 import patreon = require("patreon");
@@ -8,7 +10,7 @@ import * as DB from "./dbconnection";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
 
-type Req = Express.Request & express.Request;
+type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
 
 const storageRewardIds = ["1322253", "1937132"];
@@ -75,7 +77,7 @@ export function configureLoginRedirect(app: express.Application) {
 
       const APIClient = patreon.patreon(tokens.access_token);
       const { rawJson } = await APIClient(`/current_user`);
-      await handleCurrentUser(req, res, tokens, rawJson);
+      await handleCurrentUser(req, res, rawJson);
     } catch (e) {
       console.error("Patreon login flow failed: " + e);
       res.status(500).send(e);
@@ -83,49 +85,44 @@ export function configureLoginRedirect(app: express.Application) {
   });
 }
 
-async function handleCurrentUser(
-  req: Req,
-  res: Res,
-  tokens: TokensResponse,
-  apiResponse: any
-) {
+export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
   console.log(`api response: ${JSON.stringify(apiResponse)}`);
 
   const encounterId = req.query.state.replace(/['"]/g, "");
-  const relationships = apiResponse.included || [];
+  const pledges = (apiResponse.included || []).filter(
+    item => item.type == "pledge" && item.attributes.declined_since == null
+  );
 
-  const userRewards = relationships
-    .filter(i => i.type === "pledge")
-    .map((r: Pledge) => {
-      if (
-        r.relationships &&
-        r.relationships.reward &&
-        r.relationships.reward.data
-      ) {
-        return r.relationships.reward.data.id;
-      } else {
-        return "none";
-      }
-    });
+  const userRewards = pledges.map((r: Pledge) =>
+    _.get(r, "relationships.reward.data.id", "none")
+  );
 
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, userRewards);
+  const emailAddress = _.get(apiResponse, "data.attributes.email", "");
 
   const session = req.session;
+
   if (session === undefined) {
     throw "Session is undefined";
   }
+  updateSessionAccountFeatures(session, standing);
 
-  session.hasStorage = standing == "pledge" || standing == "epic";
-  session.hasEpicInitiative = standing == "epic";
-  session.isLoggedIn = true;
-
-  const user = await DB.upsertUser(apiResponse.data.id, standing);
+  const user = await DB.upsertUser(apiResponse.data.id, standing, emailAddress);
   if (user === undefined) {
     throw "Failed to insert user into database";
   }
   session.userId = user._id;
   res.redirect(`/e/${encounterId}`);
+}
+
+export function updateSessionAccountFeatures(
+  session: Express.Session,
+  standing: string
+) {
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
+  session.isLoggedIn = true;
 }
 
 function getUserAccountLevel(userId: string, rewardIds: string[]) {
@@ -215,27 +212,72 @@ export function startNewsUpdates(app: express.Application) {
 }
 
 export function configurePatreonWebhookReceiver(app: express.Application) {
-  app.post("/patreon_webhook/", async (req, res) => {
-    if (!process.env.PATREON_WEBHOOK_SECRET) {
-      return res.send(501);
-    }
+  app.post("/patreon_webhook/", verifySender, handleWebhook);
+}
 
-    const signature = req.header("X-Patreon-Signature");
-    //TODO: verify  https://docs.patreon.com/#webhooks
+async function handleWebhook(req: Req, res: Res) {
+  const userId = _.get(req.body, "data.relationships.user.data.id", null);
 
-    console.log(JSON.stringify(req.body));
+  if (!userId) {
+    return res.status(400).send("Missing data.relationships.user.data.id");
+  }
 
-    const userId = _.get(req.body, "data.relationships.patron.data.id", null);
-    const rewardId = _.get(req.body, "data.relationships.reward.data.id", null);
+  const entitledTiers: { id: string }[] | null = _.get(
+    req.body,
+    "data.relationships.currently_entitled_tiers.data",
+    null
+  );
 
-    if (!userId || !rewardId) {
-      return res.send(400);
-    }
+  if (!entitledTiers) {
+    return res
+      .status(400)
+      .send("Missing data.relationships.currently_entitled_tiers.data");
+  }
 
-    const userAccountLevel = getUserAccountLevel(userId, [rewardId]);
+  const userEmail = _.get(req.body, "data.attributes.email", "");
 
-    await DB.upsertUser(userId, userAccountLevel);
+  const isDeletedPledge =
+    req.header("X-Patreon-Event") == "members:pledge:delete";
 
-    return res.send(201);
-  });
+  const userAccountLevel = isDeletedPledge
+    ? "none"
+    : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+  await DB.upsertUser(userId, userAccountLevel, userEmail);
+  return res.send(201);
+}
+
+function verifySender(req: Req, res: Res, next) {
+  console.log(req.rawBody);
+
+  const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    return res.status(501).send("Webhook not configured");
+  }
+
+  const signature = req.header("X-Patreon-Signature");
+  if (!signature) {
+    console.log("Signature not found.");
+    return res.status(401).send("Signature not found.");
+  }
+
+  if (!verifySignature(signature, webhookSecret, req.rawBody)) {
+    console.log("Signature mismatch with provided signature: " + signature);
+    return res.status(401).send("Signature mismatch.");
+  }
+
+  return next();
+}
+
+function verifySignature(
+  signature: string,
+  secret: string,
+  postBodyJSON: string
+): boolean {
+  const hmac = crypto.createHmac("md5", secret);
+
+  hmac.update(postBodyJSON);
+
+  const crypted = hmac.digest("hex");
+
+  return crypted === signature;
 }

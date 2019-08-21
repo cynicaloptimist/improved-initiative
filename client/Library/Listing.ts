@@ -43,9 +43,9 @@ export class Listing<T extends Listable> {
         this.storedListing.Link,
         this.storedListing.Id
       );
-      item.Id = this.storedListing.Id;
 
       if (item !== null) {
+        item.Id = this.storedListing.Id;
         this.value(item);
         return callback(item);
       } else {
