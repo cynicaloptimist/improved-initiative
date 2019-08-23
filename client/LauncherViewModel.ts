@@ -31,7 +31,7 @@ export class LauncherViewModel {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
-    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+
     if (encounterId) {
       window.location.href = `p/${encounterId}`;
     }

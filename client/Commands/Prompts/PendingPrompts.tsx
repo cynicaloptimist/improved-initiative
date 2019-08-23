@@ -57,27 +57,31 @@ class Prompt<T> extends React.Component<
 }
 
 interface PendingPromptsProps {
-  prompts: PromptProps<unknown>[];
-  removeResolvedPrompt: (prompt: PromptProps<unknown>) => void;
+  promptsAndIds: [PromptProps<unknown>, string][];
+  removeResolvedPrompt: (promptId: string) => void;
 }
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    return this.props.prompts.map((prompt, index) => (
-      <Prompt
-        key={index}
-        {...prompt}
-        onSubmit={values => {
-          const shouldResolve = prompt.onSubmit(values);
-          if (shouldResolve) {
-            this.props.removeResolvedPrompt(prompt);
-          }
-          return shouldResolve;
-        }}
-        onCancel={() => {
-          this.props.removeResolvedPrompt(prompt);
-        }}
-      />
-    ));
+    return this.props.promptsAndIds.map(promptAndId => {
+      const [prompt, promptId] = promptAndId;
+
+      return (
+        <Prompt
+          key={promptId}
+          {...prompt}
+          onSubmit={values => {
+            const shouldResolve = prompt.onSubmit(values);
+            if (shouldResolve) {
+              this.props.removeResolvedPrompt(promptId);
+            }
+            return shouldResolve;
+          }}
+          onCancel={() => {
+            this.props.removeResolvedPrompt(promptId);
+          }}
+        />
+      );
+    });
   }
 }

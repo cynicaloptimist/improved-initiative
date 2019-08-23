@@ -316,7 +316,7 @@ export class TrackerViewModel {
 
   public PromptsComponent = ko.pureComputed(() => (
     <PendingPrompts
-      prompts={this.PromptQueue.GetPrompts()}
+      promptsAndIds={this.PromptQueue.GetPrompts()}
       removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
     />
   ));
