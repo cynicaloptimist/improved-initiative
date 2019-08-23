@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import { probablyUniqueString } from "../../../common/Toolbox";
 import { PromptProps } from "./PendingPrompts";
 import { LegacyPrompt } from "./Prompt";
 
@@ -7,12 +8,13 @@ export class PromptQueue {
   constructor() {}
 
   protected LegacyPrompts = ko.observableArray<LegacyPrompt>();
-  private prompts = ko.observableArray<PromptProps<any>>();
+  private prompts = ko.observableArray<[PromptProps<any>, string]>();
 
-  public Add = (prompt: PromptProps<any>) => this.prompts.push(prompt);
+  public Add = (prompt: PromptProps<any>) =>
+    this.prompts.push([prompt, probablyUniqueString()]);
 
-  public RemoveResolvedPrompt = (prompt: PromptProps<any>) =>
-    this.prompts.remove(prompt);
+  public RemoveResolvedPrompt = (promptId: string) =>
+    this.prompts.remove(p => p[1] == promptId);
 
   public GetPrompts = () => this.prompts();
 
