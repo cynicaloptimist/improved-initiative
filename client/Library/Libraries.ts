@@ -25,7 +25,12 @@ export class Libraries {
   }
 
   private initializeStatBlocks = () => {
-    $.ajax("../statblocks/").done(s => this.NPCs.AddListings(s, "server"));
+    $.ajax("../statblocks/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      return this.NPCs.AddListings(listings, "server");
+    });
 
     const localStatBlocks = Store.List(Store.StatBlocks);
     const listings = localStatBlocks.map(id => {
@@ -49,9 +54,12 @@ export class Libraries {
   };
 
   private initializeSpells = () => {
-    $.ajax("../spells/").done(listings =>
-      this.Spells.AddListings(listings, "server")
-    );
+    $.ajax("../spells/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      return this.Spells.AddListings(listings, "server");
+    });
 
     const localSpells = Store.List(Store.Spells);
     const newListings = localSpells.map(id => {
