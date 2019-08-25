@@ -37,6 +37,9 @@ export function LoadEnvironment() {
 
   const sentryDsn = html.getAttribute("sentryDsn");
   if (sentryDsn !== null) {
-    Sentry.init({ dsn: sentryDsn });
+    Sentry.init({
+      dsn: sentryDsn,
+      release: `improved-initiative@${process.env.VERSION}`
+    });
   }
 }
