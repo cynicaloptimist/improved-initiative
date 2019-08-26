@@ -4,8 +4,7 @@ import { ParseJSONOrDefault } from "../common/Toolbox";
 
 interface Environment {
   EncounterId: string;
-  PostedEncounter: { Combatants: any[] } | null;
-  PostedStatBlock: StatBlock | null;
+  PostedEncounter: { Combatants: {}[] } | null;
   IsLoggedIn: boolean;
   HasStorage: boolean;
   HasEpicInitiative: boolean;
