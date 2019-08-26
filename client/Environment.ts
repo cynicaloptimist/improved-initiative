@@ -1,9 +1,11 @@
 import * as Sentry from "@sentry/browser";
+import { StatBlock } from "../common/StatBlock";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 
 interface Environment {
   EncounterId: string;
-  PostedEncounter: { Combatants: any[] };
+  PostedEncounter: { Combatants: any[] } | null;
+  PostedStatBlock: StatBlock | null;
   IsLoggedIn: boolean;
   HasStorage: boolean;
   HasEpicInitiative: boolean;
@@ -15,6 +17,7 @@ export const env: Environment = {
   EncounterId: null,
   BaseUrl: null,
   PostedEncounter: null,
+  PostedStatBlock: null,
   HasStorage: false,
   HasEpicInitiative: false,
   IsLoggedIn: false,
