@@ -228,6 +228,25 @@ export class TrackerViewModel {
     }
   };
 
+  public ImportStatBlockIfAvailable = () => {
+    if (!env.PostedStatBlock) {
+      return;
+    }
+
+    const statBlock = {
+      ...StatBlock.Default(),
+      ...env.PostedStatBlock
+    };
+
+    this.TutorialVisible(false);
+    this.EditStatBlock({
+      editorTarget: "library",
+      onSave: this.Libraries.NPCs.SaveNewStatBlock,
+      statBlock,
+      currentListings: this.Libraries.NPCs.GetStatBlocks()
+    });
+  };
+
   public GetWhatsNewIfAvailable = () => {
     $.getJSON("/whatsnew/").done((latestPost: PatreonPost) => {
       this.EventLog.AddEvent(
