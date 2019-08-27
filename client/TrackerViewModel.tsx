@@ -229,16 +229,22 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
-    const statBlock = env.PostedStatBlock;
-    if (statBlock) {
-      this.TutorialVisible(false);
-      this.EditStatBlock({
-        editorTarget: "library",
-        onSave: this.Libraries.NPCs.SaveNewStatBlock,
-        statBlock,
-        currentListings: this.Libraries.NPCs.GetStatBlocks()
-      });
+    if (!env.PostedStatBlock) {
+      return;
     }
+
+    const statBlock = {
+      ...StatBlock.Default(),
+      ...env.PostedStatBlock
+    };
+
+    this.TutorialVisible(false);
+    this.EditStatBlock({
+      editorTarget: "library",
+      onSave: this.Libraries.NPCs.SaveNewStatBlock,
+      statBlock,
+      currentListings: this.Libraries.NPCs.GetStatBlocks()
+    });
   };
 
   public GetWhatsNewIfAvailable = () => {
