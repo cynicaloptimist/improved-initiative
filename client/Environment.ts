@@ -1,10 +1,10 @@
 import * as Sentry from "@sentry/browser";
-import { StatBlock } from "../common/StatBlock";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 
 interface Environment {
   EncounterId: string;
   PostedEncounter: { Combatants: {}[] } | null;
+  PostedStatBlock: {} | null;
   IsLoggedIn: boolean;
   HasStorage: boolean;
   HasEpicInitiative: boolean;
@@ -28,10 +28,18 @@ export function LoadEnvironment() {
 
   env.EncounterId = html.getAttribute("encounterId");
   env.BaseUrl = html.getAttribute("baseUrl");
+
   const encounterJSON = html.getAttribute("postedEncounter");
   if (encounterJSON) {
     env.PostedEncounter = ParseJSONOrDefault(encounterJSON, null);
   }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const statBlockJSON = urlParams.get("importStatBlock");
+  if (statBlockJSON) {
+    env.PostedStatBlock = ParseJSONOrDefault(statBlockJSON, null);
+  }
+
   env.HasStorage = html.getAttribute("hasStorage") == "true";
   env.HasEpicInitiative = html.getAttribute("hasEpicInitiative") == "true";
   env.IsLoggedIn = html.getAttribute("isLoggedIn") == "true";
