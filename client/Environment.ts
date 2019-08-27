@@ -30,7 +30,7 @@ export function LoadEnvironment() {
   env.BaseUrl = html.getAttribute("baseUrl");
   const encounterJSON = html.getAttribute("postedEncounter");
   if (encounterJSON) {
-    env.PostedEncounter = ParseJSONOrDefault(encounterJSON, { Combatants: [] });
+    env.PostedEncounter = ParseJSONOrDefault(encounterJSON, null);
   }
   env.HasStorage = html.getAttribute("hasStorage") == "true";
   env.HasEpicInitiative = html.getAttribute("hasEpicInitiative") == "true";
