@@ -1,12 +1,13 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import * as compression from "json-url";
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
-import { Omit } from "../common/Toolbox";
+import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -44,6 +45,8 @@ import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { Metrics } from "./Utility/Metrics";
 import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
+
+const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
@@ -229,21 +232,24 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
-    if (!env.PostedStatBlock) {
+    if (!env.ImportedCompressedStatBlockJSON) {
       return;
     }
 
-    const statBlock = {
-      ...StatBlock.Default(),
-      ...env.PostedStatBlock
-    };
-
     this.TutorialVisible(false);
-    this.EditStatBlock({
-      editorTarget: "library",
-      onSave: this.Libraries.NPCs.SaveNewStatBlock,
-      statBlock,
-      currentListings: this.Libraries.NPCs.GetStatBlocks()
+
+    codec.decompress(env.ImportedCompressedStatBlockJSON).then(json => {
+      const parsedStatBlock = ParseJSONOrDefault(json, {});
+      const statBlock: StatBlock = {
+        ...StatBlock.Default(),
+        ...parsedStatBlock
+      };
+      this.EditStatBlock({
+        editorTarget: "library",
+        onSave: this.Libraries.NPCs.SaveNewStatBlock,
+        statBlock,
+        currentListings: this.Libraries.NPCs.GetStatBlocks()
+      });
     });
   };
 
