@@ -146,7 +146,9 @@ export class StatBlockComponent extends React.Component<
           <h4 className="stat-label">{powerType.name}</h4>
           {powerType.data.map((power, j) => (
             <div key={j + power.Name}>
-              <span className="stat-label">{power.Name}</span>
+              {power.Name.length ? (
+                <span className="stat-label">{power.Name}</span>
+              ) : null}
               {power.Usage && <span className="stat-label">{power.Usage}</span>}
               <span className="power-content">
                 {enricher.EnrichText(power.Content)}
