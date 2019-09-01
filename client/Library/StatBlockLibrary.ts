@@ -74,6 +74,15 @@ export class StatBlockLibrary {
   };
 
   public SaveNewStatBlock = (newStatBlock: StatBlock) => {
+    const oldStatBlocks = this.GetStatBlocks().filter(
+      l =>
+        l.Listing().Path + l.Listing().Name ==
+        newStatBlock.Path + newStatBlock.Name
+    );
+    for (const statBlock of oldStatBlocks) {
+      this.DeleteListing(statBlock.Listing().Id);
+    }
+
     const listing = new Listing<StatBlock>(
       {
         ...newStatBlock,
