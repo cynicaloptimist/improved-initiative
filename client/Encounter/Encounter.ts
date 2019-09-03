@@ -21,7 +21,7 @@ import {
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import {
   DifficultyCalculator,
   EncounterDifficulty
@@ -305,9 +305,9 @@ export class Encounter {
 
   public StartEncounterAutosaves = () => {
     this.GetEncounterState.subscribe(newState => {
-      Store.Save<EncounterState<CombatantState>>(
-        Store.AutoSavedEncounters,
-        Store.DefaultSavedEncounterId,
+      LegacySynchronousLocalStore.Save<EncounterState<CombatantState>>(
+        LegacySynchronousLocalStore.AutoSavedEncounters,
+        LegacySynchronousLocalStore.DefaultSavedEncounterId,
         newState
       );
     });

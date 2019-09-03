@@ -1,7 +1,7 @@
 import { saveAs } from "browser-filesaver";
 import * as React from "react";
 import { Button } from "../../Components/Button";
-import { Store } from "../../Utility/Store";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { FileUploadButton } from "./FileUploadButton";
 
 export class LocalDataSettings extends React.Component<{}> {
@@ -52,27 +52,27 @@ export class LocalDataSettings extends React.Component<{}> {
   }
 
   private exportData = () => {
-    let blob = Store.ExportAll();
+    let blob = LegacySynchronousLocalStore.ExportAll();
     saveAs(blob, "improved-initiative.json");
   };
 
   private importDataAndReplace = (file: File) => {
-    Store.ImportAllAndReplace(file);
+    LegacySynchronousLocalStore.ImportAllAndReplace(file);
   };
 
   private importDataAndAdd = (file: File) => {
-    Store.ImportAll(file);
+    LegacySynchronousLocalStore.ImportAll(file);
   };
 
   private importDndAppFile = (file: File) => {
-    Store.ImportFromDnDAppFile(file);
+    LegacySynchronousLocalStore.ImportFromDnDAppFile(file);
   };
 
   private confirmClearLocalData = () => {
     const promptText =
       "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
-      Store.DeleteAll();
+      LegacySynchronousLocalStore.DeleteAll();
     }
   };
 }

@@ -4,7 +4,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
 const _prefix = "ImprovedInitiative";
-export namespace Store {
+export namespace LegacySynchronousLocalStore {
   export const PersistentCharacters = "PersistentCharacters";
   export const PlayerCharacters = "PlayerCharacters";
   export const StatBlocks = "Creatures";
@@ -35,7 +35,7 @@ export namespace Store {
     }
     let listKey = `${_prefix}.${listName}`;
     let fullKey = `${_prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
+    let list = LegacySynchronousLocalStore.List(listName);
     if (list.indexOf(key) == -1) {
       list.push(key);
       save(listKey, list);
@@ -51,9 +51,9 @@ export namespace Store {
   export function LoadAllAndUpdateIds<T extends Listable>(
     listName: string
   ): T[] {
-    return Store.List(listName)
+    return LegacySynchronousLocalStore.List(listName)
       .map(key => {
-        const item = Store.Load<T>(listName, key);
+        const item = LegacySynchronousLocalStore.Load<T>(listName, key);
         if (item) {
           item.Id = key;
         }
@@ -65,7 +65,7 @@ export namespace Store {
   export function Delete(listName: string, key: string) {
     let listKey = `${_prefix}.${listName}`;
     let fullKey = `${_prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
+    let list = LegacySynchronousLocalStore.List(listName);
     let keyIndex = list.indexOf(key);
     if (keyIndex != -1) {
       list.splice(keyIndex, 1);
@@ -97,10 +97,13 @@ export namespace Store {
         return;
       }
 
-      this.importList(Store.StatBlocks, importedStorage);
-      this.importList(Store.PersistentCharacters, importedStorage);
+      this.importList(LegacySynchronousLocalStore.StatBlocks, importedStorage);
+      this.importList(
+        LegacySynchronousLocalStore.PersistentCharacters,
+        importedStorage
+      );
       this.importList(SavedEncounters, importedStorage);
-      this.importList(Store.Spells, importedStorage);
+      this.importList(LegacySynchronousLocalStore.Spells, importedStorage);
 
       location.reload();
     };
@@ -158,13 +161,13 @@ export namespace Store {
   export function ImportFromDnDAppFile(file: File) {
     const statBlocksCallback = (statBlocks: StatBlock[]) => {
       statBlocks.forEach(c => {
-        this.Save(Store.StatBlocks, c.Id, c);
+        this.Save(LegacySynchronousLocalStore.StatBlocks, c.Id, c);
       });
     };
 
     const spellsCallback = (spells: Spell[]) => {
       spells.forEach(c => {
-        this.Save(Store.Spells, c.Id, c);
+        this.Save(LegacySynchronousLocalStore.Spells, c.Id, c);
       });
     };
 
@@ -178,8 +181,11 @@ export namespace Store {
   }
 
   export function ExportStatBlocks() {
-    let statBlocks = this.List(Store.StatBlocks).map(id =>
-      Store.Load(Store.StatBlocks, id)
+    let statBlocks = this.List(LegacySynchronousLocalStore.StatBlocks).map(id =>
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.StatBlocks,
+        id
+      )
     );
     return new Blob([JSON.stringify(statBlocks, null, 2)], {
       type: "application/json"

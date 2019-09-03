@@ -9,7 +9,7 @@ import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEnc
 import { env } from "../../Environment";
 import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
-import { Store } from "../../Utility/Store";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 
 interface AccountSyncSettingsProps {
   libraries: Libraries;
@@ -129,7 +129,7 @@ export class AccountSyncSettings extends React.Component<
 
   private syncAll = () => {
     this.setState({ syncError: "" });
-    let blob = Store.ExportAll();
+    let blob = LegacySynchronousLocalStore.ExportAll();
     saveAs(blob, "improved-initiative.json");
     this.props.accountClient.SaveAllUnsyncedItems(
       this.props.libraries,

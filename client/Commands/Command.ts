@@ -2,7 +2,7 @@ import * as ko from "knockout";
 
 import _ = require("lodash");
 import { Settings } from "../../common/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { GetLegacyKeyBinding } from "./GetLegacyKeyBinding";
 
 export class Command {
@@ -29,7 +29,10 @@ export class Command {
       () => `${this.Description} [${this.KeyBinding}]`
     );
 
-    const settings = Store.Load<Settings>(Store.User, "Settings");
+    const settings = LegacySynchronousLocalStore.Load<Settings>(
+      LegacySynchronousLocalStore.User,
+      "Settings"
+    );
     const commandSetting =
       settings && _.find(settings.Commands, c => c.Name == this.Id);
 
@@ -38,8 +41,8 @@ export class Command {
       GetLegacyKeyBinding(this.Id) ||
       defaultKeyBinding;
 
-    let showOnActionBarSetting = Store.Load<boolean>(
-      Store.ActionBar,
+    let showOnActionBarSetting = LegacySynchronousLocalStore.Load<boolean>(
+      LegacySynchronousLocalStore.ActionBar,
       this.Description
     );
     if (showOnActionBarSetting != null) {

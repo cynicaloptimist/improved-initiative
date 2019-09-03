@@ -2,7 +2,7 @@ import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
@@ -32,11 +32,16 @@ export class Libraries {
       return this.NPCs.AddListings(listings, "server");
     });
 
-    const localStatBlocks = Store.List(Store.StatBlocks);
+    const localStatBlocks = LegacySynchronousLocalStore.List(
+      LegacySynchronousLocalStore.StatBlocks
+    );
     const listings = localStatBlocks.map(id => {
       const statBlock = {
         ...StatBlock.Default(),
-        ...Store.Load<StatBlock>(Store.StatBlocks, id)
+        ...LegacySynchronousLocalStore.Load<StatBlock>(
+          LegacySynchronousLocalStore.StatBlocks,
+          id
+        )
       };
 
       const listing: StoredListing = {
@@ -45,7 +50,7 @@ export class Libraries {
         Path: statBlock.Path,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
-        Link: Store.StatBlocks
+        Link: LegacySynchronousLocalStore.StatBlocks
       };
 
       return listing;
@@ -61,11 +66,16 @@ export class Libraries {
       return this.Spells.AddListings(listings, "server");
     });
 
-    const localSpells = Store.List(Store.Spells);
+    const localSpells = LegacySynchronousLocalStore.List(
+      LegacySynchronousLocalStore.Spells
+    );
     const newListings = localSpells.map(id => {
       const spell = {
         ...Spell.Default(),
-        ...Store.Load<Spell>(Store.Spells, id)
+        ...LegacySynchronousLocalStore.Load<Spell>(
+          LegacySynchronousLocalStore.Spells,
+          id
+        )
       };
       const listing = {
         Id: id,
@@ -73,7 +83,7 @@ export class Libraries {
         Path: spell.Path,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: Store.Spells
+        Link: LegacySynchronousLocalStore.Spells
       };
 
       return listing;

@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
 import { Listable, StoredListing } from "../../common/Listable";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export type ListingOrigin = "server" | "account" | "localStorage";
 
@@ -39,7 +39,7 @@ export class Listing<T extends Listable> {
     }
 
     if (this.Origin === "localStorage") {
-      const item = Store.Load<T>(
+      const item = LegacySynchronousLocalStore.Load<T>(
         this.storedListing.Link,
         this.storedListing.Id
       );

@@ -4,14 +4,16 @@ import { StoredListing } from "../../common/Listable";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class EncounterLibrary {
   public Encounters = ko.observableArray<Listing<SavedEncounter>>([]);
 
   constructor(private accountClient: AccountClient) {
-    const listings = Store.LoadAllAndUpdateIds(Store.SavedEncounters).map(e => {
+    const listings = LegacySynchronousLocalStore.LoadAllAndUpdateIds(
+      LegacySynchronousLocalStore.SavedEncounters
+    ).map(e => {
       const encounter = UpdateLegacySavedEncounter(e);
       return this.listingFrom(encounter, "localStorage");
     });
@@ -19,7 +21,7 @@ export class EncounterLibrary {
   }
 
   private listingFrom(encounterState: SavedEncounter, origin: ListingOrigin) {
-    let link = Store.SavedEncounters;
+    let link = LegacySynchronousLocalStore.SavedEncounters;
     if (origin == "account") {
       link = `/my/encounters/${encounterState.Id}`;
     }
@@ -53,7 +55,11 @@ export class EncounterLibrary {
     this.Encounters.remove(l => l.Listing().Id == listing.Listing().Id);
     this.Encounters.push(listing);
 
-    Store.Save(Store.SavedEncounters, savedEncounter.Id, savedEncounter);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.SavedEncounters,
+      savedEncounter.Id,
+      savedEncounter
+    );
 
     this.accountClient.SaveEncounter(savedEncounter).then(r => {
       if (!r) {
@@ -71,6 +77,9 @@ export class EncounterLibrary {
   private deleteById = (listingId: string) => {
     this.Encounters.remove(l => l.Listing().Id == listingId);
     this.accountClient.DeleteEncounter(listingId);
-    Store.Delete(Store.SavedEncounters, listingId);
+    LegacySynchronousLocalStore.Delete(
+      LegacySynchronousLocalStore.SavedEncounters,
+      listingId
+    );
   };
 }

@@ -1,4 +1,4 @@
-import { Store } from "./Store";
+import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 
 interface EventData {
   [key: string]: any;
@@ -7,18 +7,33 @@ interface EventData {
 export class Metrics {
   public static TrackLoad(): void {
     const counts = {
-      Encounters: Store.List(Store.SavedEncounters).length,
-      NpcStatBlocks: Store.List(Store.StatBlocks).length,
-      PcStatBlocks: Store.List(Store.PlayerCharacters).length,
-      PersistentCharacters: Store.List(Store.PersistentCharacters).length,
-      Spells: Store.List(Store.Spells).length
+      Encounters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.SavedEncounters
+      ).length,
+      NpcStatBlocks: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.StatBlocks
+      ).length,
+      PcStatBlocks: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PlayerCharacters
+      ).length,
+      PersistentCharacters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PersistentCharacters
+      ).length,
+      Spells: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.Spells
+      ).length
     };
 
     Metrics.TrackEvent("AppLoad", counts);
   }
 
   public static TrackEvent(name: string, data: EventData = {}): void {
-    if (!Store.Load(Store.User, "AllowTracking")) {
+    if (
+      !LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      )
+    ) {
       return;
     }
 

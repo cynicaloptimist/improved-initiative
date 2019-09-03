@@ -3,12 +3,12 @@ import * as ko from "knockout";
 import { StoredListing } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class StatBlockLibrary {
   private statBlocks = ko.observableArray<Listing<StatBlock>>([]);
-  private readonly StoreName = Store.StatBlocks;
+  private readonly StoreName = LegacySynchronousLocalStore.StatBlocks;
 
   public GetStatBlocks = ko.pureComputed(() => this.statBlocks());
 
@@ -25,7 +25,7 @@ export class StatBlockLibrary {
 
   public DeleteListing = (id: string) => {
     this.statBlocks.remove(s => s.Listing().Id == id);
-    Store.Delete(this.StoreName, id);
+    LegacySynchronousLocalStore.Delete(this.StoreName, id);
     this.accountClient.DeleteStatBlock(id);
   };
 
@@ -36,7 +36,11 @@ export class StatBlockLibrary {
     listing.Listing().Id = newStatBlock.Id;
     this.statBlocks.push(listing);
 
-    Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
+    LegacySynchronousLocalStore.Save<StatBlock>(
+      this.StoreName,
+      newStatBlock.Id,
+      newStatBlock
+    );
     listing.SetValue(newStatBlock);
 
     this.accountClient.SaveStatBlock(newStatBlock).then(r => {
