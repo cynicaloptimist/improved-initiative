@@ -36,17 +36,18 @@ export class Command {
     const commandSetting =
       settings && _.find(settings.Commands, c => c.Name == this.Id);
 
-    this.KeyBinding =
-      (commandSetting && commandSetting.KeyBinding) ||
-      GetLegacyKeyBinding(this.Id) ||
-      defaultKeyBinding;
-
-    let showOnActionBarSetting = LegacySynchronousLocalStore.Load<boolean>(
-      LegacySynchronousLocalStore.ActionBar,
-      this.Description
-    );
-    if (showOnActionBarSetting != null) {
-      this.ShowOnActionBar(showOnActionBarSetting);
+    if (commandSetting == undefined) {
+      this.KeyBinding = GetLegacyKeyBinding(this.Id) || defaultKeyBinding;
+      const showOnActionBarSetting = LegacySynchronousLocalStore.Load<boolean>(
+        LegacySynchronousLocalStore.ActionBar,
+        this.Description
+      );
+      if (showOnActionBarSetting != null) {
+        this.ShowOnActionBar(showOnActionBarSetting);
+      }
+    } else {
+      this.KeyBinding = commandSetting.KeyBinding;
+      this.ShowOnActionBar(commandSetting.ShowOnActionBar);
     }
   }
 }
