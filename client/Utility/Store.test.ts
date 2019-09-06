@@ -1,4 +1,19 @@
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
+import { Store } from "./Store";
+
+describe("Store", () => {
+  it("Saves, Lists, Loads, and Deletes", async done => {
+    await Store.Save("TestList", "TestKey", "TestValue");
+    const list = await Store.List("TestList");
+    expect(list).toEqual(["TestKey"]);
+    const item = await Store.Load("TestList", "TestKey");
+    expect(item).toEqual("TestValue");
+    await Store.Delete("TestList", "TestKey");
+    const emptyList = await Store.List("TestList");
+    expect(emptyList).toEqual([]);
+    done();
+  });
+});
 
 describe("LegacySynchronousLocalStore", () => {
   it("Saves, Lists, Loads, and Deletes", () => {
