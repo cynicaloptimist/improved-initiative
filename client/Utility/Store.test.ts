@@ -2,7 +2,7 @@ import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
 describe("Store", () => {
-  it("Saves, Lists, Loads, and Deletes", async done => {
+  it("Saves, Lists, Loads, and Deletes", async () => {
     await Store.Save("TestList", "TestKey", "TestValue");
     const list = await Store.List("TestList");
     expect(list).toEqual(["TestKey"]);
@@ -11,7 +11,6 @@ describe("Store", () => {
     await Store.Delete("TestList", "TestKey");
     const emptyList = await Store.List("TestList");
     expect(emptyList).toEqual([]);
-    done();
   });
 });
 
