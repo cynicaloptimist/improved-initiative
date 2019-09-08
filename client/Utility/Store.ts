@@ -23,7 +23,7 @@ export namespace Store {
     if (list && list.constructor === Array) {
       return list;
     }
-    save(listKey, []);
+    await save(listKey, []);
     return [];
   }
 
