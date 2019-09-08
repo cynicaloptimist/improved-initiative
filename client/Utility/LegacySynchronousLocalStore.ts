@@ -22,12 +22,7 @@ export namespace LegacySynchronousLocalStore {
 
   export async function MigrateItemsToStore() {
     const allSaveItemPromises = [];
-    for (const listName of [
-      PersistentCharacters,
-      StatBlocks,
-      Spells,
-      SavedEncounters
-    ]) {
+    for (const listName of [StatBlocks]) {
       const allItems = LoadAllAndUpdateIds(listName);
       const saveItemPromises = allItems.map(async item => {
         await Store.Save(listName, item.Id, item);
