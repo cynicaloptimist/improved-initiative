@@ -2,6 +2,7 @@ import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
+import { Store } from "./Store";
 
 const _prefix = "ImprovedInitiative";
 export namespace LegacySynchronousLocalStore {
@@ -18,6 +19,25 @@ export namespace LegacySynchronousLocalStore {
   //Legacy
   export const KeyBindings = "KeyBindings";
   export const ActionBar = "ActionBar";
+
+  export async function MigrateItemsToStore() {
+    const allSaveItemPromises = [];
+    for (const listName of [
+      PersistentCharacters,
+      StatBlocks,
+      Spells,
+      SavedEncounters
+    ]) {
+      const allItems = LoadAllAndUpdateIds(listName);
+      const saveItemPromises = allItems.map(async item => {
+        await Store.Save(listName, item.Id, item);
+        Delete(listName, item.Id);
+        return;
+      });
+      allSaveItemPromises.push(...saveItemPromises);
+    }
+    return await Promise.all(allSaveItemPromises);
+  }
 
   export function List(listName: string): string[] {
     let listKey = `${_prefix}.${listName}`;

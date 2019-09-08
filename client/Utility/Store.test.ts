@@ -1,3 +1,4 @@
+import { StatBlock } from "../../common/StatBlock";
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
@@ -44,5 +45,18 @@ describe("LegacySynchronousLocalStore", () => {
 
     const item = LegacySynchronousLocalStore.Load("TestList", "TestKey");
     expect(item).toEqual({ Label: "SomeValue", Amount: 5 });
+  });
+
+  it("Migrates items to the new store", async () => {
+    const statBlock = { ...StatBlock.Default(), Name: "Saved Statblock" };
+    LegacySynchronousLocalStore.Save(Store.StatBlocks, statBlock.Id, statBlock);
+
+    await LegacySynchronousLocalStore.MigrateItemsToStore();
+
+    const migratedStatBlock = await Store.Load(Store.StatBlocks, statBlock.Id);
+    expect(migratedStatBlock).toEqual(statBlock);
+
+    const legacyListings = LegacySynchronousLocalStore.List(Store.StatBlocks);
+    expect(legacyListings).toEqual([]);
   });
 });
