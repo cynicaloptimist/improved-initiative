@@ -3,6 +3,7 @@ import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
@@ -24,7 +25,7 @@ export class Libraries {
     this.initializeSpells();
   }
 
-  private initializeStatBlocks = () => {
+  private initializeStatBlocks = async () => {
     $.ajax("../statblocks/").done(listings => {
       if (!listings) {
         return;
@@ -32,30 +33,31 @@ export class Libraries {
       return this.NPCs.AddListings(listings, "server");
     });
 
-    const localStatBlocks = LegacySynchronousLocalStore.List(
-      LegacySynchronousLocalStore.StatBlocks
-    );
-    const listings = localStatBlocks.map(id => {
-      const statBlock = {
-        ...StatBlock.Default(),
-        ...LegacySynchronousLocalStore.Load<StatBlock>(
-          LegacySynchronousLocalStore.StatBlocks,
+    const localStatBlocks = await Store.List(Store.StatBlocks);
+    const listings = await Promise.all(
+      localStatBlocks.map(async id => {
+        const savedStatBlock = await Store.Load<StatBlock>(
+          Store.StatBlocks,
           id
-        )
-      };
+        );
+        const statBlock = {
+          ...StatBlock.Default(),
+          ...savedStatBlock
+        };
 
-      const listing: StoredListing = {
-        Id: id,
-        Name: statBlock.Name,
-        Path: statBlock.Path,
-        SearchHint: StatBlock.GetSearchHint(statBlock),
-        Metadata: StatBlock.GetMetadata(statBlock),
-        Link: LegacySynchronousLocalStore.StatBlocks
-      };
+        const listing: StoredListing = {
+          Id: id,
+          Name: statBlock.Name,
+          Path: statBlock.Path,
+          SearchHint: StatBlock.GetSearchHint(statBlock),
+          Metadata: StatBlock.GetMetadata(statBlock),
+          Link: Store.StatBlocks
+        };
 
-      return listing;
-    });
-    this.NPCs.AddListings(listings, "localStorage");
+        return listing;
+      })
+    );
+    this.NPCs.AddListings(listings, "localAsync");
   };
 
   private initializeSpells = () => {

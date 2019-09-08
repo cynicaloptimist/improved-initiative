@@ -1,18 +1,17 @@
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
+import { Store } from "./Store";
 
 interface EventData {
   [key: string]: any;
 }
 
 export class Metrics {
-  public static TrackLoad(): void {
+  public static async TrackLoad() {
     const counts = {
       Encounters: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.SavedEncounters
       ).length,
-      NpcStatBlocks: LegacySynchronousLocalStore.List(
-        LegacySynchronousLocalStore.StatBlocks
-      ).length,
+      NpcStatBlocks: (await Store.List(Store.StatBlocks)).length,
       PcStatBlocks: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.PlayerCharacters
       ).length,

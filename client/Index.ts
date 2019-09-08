@@ -8,6 +8,7 @@ import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 
 $(() => {
   LoadEnvironment();
@@ -15,11 +16,13 @@ $(() => {
   RegisterComponents();
   InitializeSettings();
   if ($("#tracker").length) {
-    let viewModel = new TrackerViewModel(io());
-    ko.applyBindings(viewModel, document.body);
-    viewModel.ImportEncounterIfAvailable();
-    viewModel.ImportStatBlockIfAvailable();
-    viewModel.GetWhatsNewIfAvailable();
+    LegacySynchronousLocalStore.MigrateItemsToStore().then(() => {
+      const viewModel = new TrackerViewModel(io());
+      ko.applyBindings(viewModel, document.body);
+      viewModel.ImportEncounterIfAvailable();
+      viewModel.ImportStatBlockIfAvailable();
+      viewModel.GetWhatsNewIfAvailable();
+    });
   }
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;

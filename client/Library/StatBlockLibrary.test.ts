@@ -1,21 +1,17 @@
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import { Store } from "../Utility/Store";
 import { StatBlockLibrary } from "./StatBlockLibrary";
 
 describe("StatBlock Library", () => {
   test("", async done => {
     localStorage.clear();
 
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.StatBlocks,
-      "creatureId",
-      {
-        ...StatBlock.Default(),
-        Name: "Saved Creature",
-        HP: { Value: 10 }
-      }
-    );
+    await Store.Save(Store.StatBlocks, "creatureId", {
+      ...StatBlock.Default(),
+      Name: "Saved Creature",
+      HP: { Value: 10 }
+    });
 
     const library = new StatBlockLibrary(new AccountClient());
     library.AddListings(
@@ -23,13 +19,13 @@ describe("StatBlock Library", () => {
         {
           Name: "Saved Creature",
           Id: "creatureId",
-          Link: LegacySynchronousLocalStore.StatBlocks,
+          Link: Store.StatBlocks,
           Path: "",
           Metadata: {},
           SearchHint: ""
         }
       ],
-      "localStorage"
+      "localAsync"
     );
 
     const listing = library.GetStatBlocks()[0];

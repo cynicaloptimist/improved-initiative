@@ -1,6 +1,5 @@
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
-import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 import { Store } from "./Store";
 
@@ -8,7 +7,6 @@ const _prefix = "ImprovedInitiative";
 export namespace LegacySynchronousLocalStore {
   export const PersistentCharacters = "PersistentCharacters";
   export const PlayerCharacters = "PlayerCharacters";
-  export const StatBlocks = "Creatures";
   export const Spells = "Spells";
   export const SavedEncounters = "SavedEncounters";
   export const AutoSavedEncounters = "AutoSavedEncounters";
@@ -22,7 +20,7 @@ export namespace LegacySynchronousLocalStore {
 
   export async function MigrateItemsToStore() {
     const allSaveItemPromises = [];
-    for (const listName of [StatBlocks]) {
+    for (const listName of [Store.StatBlocks]) {
       const allItems = LoadAllAndUpdateIds(listName);
       const saveItemPromises = allItems.map(async item => {
         await Store.Save(listName, item.Id, item);
@@ -112,7 +110,6 @@ export namespace LegacySynchronousLocalStore {
         return;
       }
 
-      importList(LegacySynchronousLocalStore.StatBlocks, importedStorage);
       importList(
         LegacySynchronousLocalStore.PersistentCharacters,
         importedStorage
@@ -174,12 +171,6 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function ImportFromDnDAppFile(file: File) {
-    const statBlocksCallback = (statBlocks: StatBlock[]) => {
-      statBlocks.forEach(c => {
-        Save(LegacySynchronousLocalStore.StatBlocks, c.Id, c);
-      });
-    };
-
     const spellsCallback = (spells: Spell[]) => {
       spells.forEach(c => {
         Save(LegacySynchronousLocalStore.Spells, c.Id, c);
@@ -191,20 +182,8 @@ export namespace LegacySynchronousLocalStore {
     ) {
       const importer = new DnDAppFilesImporter();
 
-      importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+      importer.ImportEntitiesFromXml(file, () => {}, spellsCallback);
     }
-  }
-
-  export function ExportStatBlocks() {
-    let statBlocks = List(LegacySynchronousLocalStore.StatBlocks).map(id =>
-      LegacySynchronousLocalStore.Load(
-        LegacySynchronousLocalStore.StatBlocks,
-        id
-      )
-    );
-    return new Blob([JSON.stringify(statBlocks, null, 2)], {
-      type: "application/json"
-    });
   }
 
   const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
