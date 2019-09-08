@@ -5,7 +5,6 @@ import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
-const _prefix = "ImprovedInitiative";
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
   export const PlayerCharacters = "PlayerCharacters";
@@ -18,12 +17,11 @@ export namespace Store {
   export const DefaultSavedEncounterId = "default";
 
   export async function List(listName: string): Promise<string[]> {
-    let listKey = `${_prefix}.${listName}`;
-    let list = await load<string[]>(listKey);
+    let list = await load<string[]>(listName);
     if (list && list.constructor === Array) {
       return list;
     }
-    await save(listKey, []);
+    await save(listName, []);
     return [];
   }
 
@@ -31,18 +29,17 @@ export namespace Store {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
-    let listKey = `${_prefix}.${listName}`;
-    let fullKey = `${_prefix}.${listName}.${key}`;
+    let fullKey = `${listName}.${key}`;
     let list = await Store.List(listName);
     if (list.indexOf(key) == -1) {
       list.push(key);
-      save(listKey, list);
+      save(listName, list);
     }
     save(fullKey, value);
   }
 
   export async function Load<T>(listName: string, key: string): Promise<T> {
-    let fullKey = `${_prefix}.${listName}.${key}`;
+    let fullKey = `${listName}.${key}`;
     return await load(fullKey);
   }
 
@@ -65,13 +62,12 @@ export namespace Store {
   }
 
   export async function Delete(listName: string, key: string) {
-    let listKey = `${_prefix}.${listName}`;
-    let fullKey = `${_prefix}.${listName}.${key}`;
+    let fullKey = `${listName}.${key}`;
     let list = await Store.List(listName);
     let keyIndex = list.indexOf(key);
     if (keyIndex != -1) {
       list.splice(keyIndex, 1);
-      save(listKey, list);
+      save(listName, list);
     }
     return await localforage.removeItem(fullKey);
   }
@@ -115,15 +111,14 @@ export namespace Store {
   }
 
   async function importList(listName: string, importSource: any) {
-    const listKey = `${_prefix}.${listName}`;
-    const listingsJSON = importSource[listKey];
+    const listingsJSON = importSource[listName];
     if (!listingsJSON) {
       console.warn(`Couldn't import ${listName} from JSON`);
       return;
     }
     const listings: string[] = JSON.parse(listingsJSON);
     for (const key of listings) {
-      const fullKey = `${_prefix}.${listName}.${key}`;
+      const fullKey = `${listName}.${key}`;
       const listingJSON = importSource[fullKey];
       if (!listingJSON) {
         console.warn(`Couldn't import ${fullKey} from JSON`);
