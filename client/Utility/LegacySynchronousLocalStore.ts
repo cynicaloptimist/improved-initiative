@@ -112,13 +112,13 @@ export namespace LegacySynchronousLocalStore {
         return;
       }
 
-      this.importList(LegacySynchronousLocalStore.StatBlocks, importedStorage);
-      this.importList(
+      importList(LegacySynchronousLocalStore.StatBlocks, importedStorage);
+      importList(
         LegacySynchronousLocalStore.PersistentCharacters,
         importedStorage
       );
-      this.importList(SavedEncounters, importedStorage);
-      this.importList(LegacySynchronousLocalStore.Spells, importedStorage);
+      importList(SavedEncounters, importedStorage);
+      importList(LegacySynchronousLocalStore.Spells, importedStorage);
 
       location.reload();
     };
@@ -176,13 +176,13 @@ export namespace LegacySynchronousLocalStore {
   export function ImportFromDnDAppFile(file: File) {
     const statBlocksCallback = (statBlocks: StatBlock[]) => {
       statBlocks.forEach(c => {
-        this.Save(LegacySynchronousLocalStore.StatBlocks, c.Id, c);
+        Save(LegacySynchronousLocalStore.StatBlocks, c.Id, c);
       });
     };
 
     const spellsCallback = (spells: Spell[]) => {
       spells.forEach(c => {
-        this.Save(LegacySynchronousLocalStore.Spells, c.Id, c);
+        Save(LegacySynchronousLocalStore.Spells, c.Id, c);
       });
     };
 
@@ -196,7 +196,7 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function ExportStatBlocks() {
-    let statBlocks = this.List(LegacySynchronousLocalStore.StatBlocks).map(id =>
+    let statBlocks = List(LegacySynchronousLocalStore.StatBlocks).map(id =>
       LegacySynchronousLocalStore.Load(
         LegacySynchronousLocalStore.StatBlocks,
         id
