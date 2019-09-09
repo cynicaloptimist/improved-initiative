@@ -164,7 +164,9 @@ function prepareForSync(items: Listing<Listable>[]) {
 }
 
 function getUnsyncedItems(items: Listing<Listable>[]) {
-  const local = items.filter(i => i.Origin === "localStorage");
+  const local = items.filter(
+    i => i.Origin === "localStorage" || i.Origin === "localAsync"
+  );
   const synced = items.filter(i => i.Origin === "account");
   const unsynced = local.filter(
     l => !synced.some(s => s.Listing().Name == l.Listing().Name)
