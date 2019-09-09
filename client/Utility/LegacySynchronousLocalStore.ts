@@ -92,8 +92,12 @@ export namespace LegacySynchronousLocalStore {
     location.reload();
   }
 
-  export function ExportAll() {
-    return new Blob([JSON.stringify(localStorage, null, 2)], {
+  export function ExportAll(additionalKeys: { [key: string]: any }) {
+    const allData = {
+      ...localStorage,
+      ...additionalKeys
+    };
+    return new Blob([JSON.stringify(allData, null, 2)], {
       type: "application/json"
     });
   }

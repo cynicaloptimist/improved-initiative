@@ -77,15 +77,12 @@ export namespace Store {
     location.reload();
   }
 
-  export async function ExportAll() {
+  export async function GetAllKeys() {
     let storage = {};
     await localforage.iterate((value, key) => {
       storage[key] = value;
     });
-
-    return new Blob([JSON.stringify(storage, null, 2)], {
-      type: "application/json"
-    });
+    return storage;
   }
 
   export async function ImportAll(file: File) {
