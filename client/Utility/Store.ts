@@ -100,10 +100,10 @@ export namespace Store {
         return;
       }
 
-      importList(Store.StatBlocks, importedStorage);
-      importList(Store.PersistentCharacters, importedStorage);
+      importList(StatBlocks, importedStorage);
+      importList(PersistentCharacters, importedStorage);
       importList(SavedEncounters, importedStorage);
-      importList(Store.Spells, importedStorage);
+      importList(Spells, importedStorage);
 
       location.reload();
     };
