@@ -73,12 +73,13 @@ export class LocalDataSettings extends React.Component<{}> {
     LegacySynchronousLocalStore.ImportFromDnDAppFile(file);
   };
 
-  private confirmClearLocalData = () => {
+  private confirmClearLocalData = async () => {
     const promptText =
       "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
       Store.DeleteAll();
-      LegacySynchronousLocalStore.DeleteAll();
+      await LegacySynchronousLocalStore.DeleteAll();
+      location.reload();
     }
   };
 }

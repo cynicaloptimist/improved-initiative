@@ -89,7 +89,6 @@ export namespace LegacySynchronousLocalStore {
 
   export function DeleteAll() {
     localStorage.clear();
-    location.reload();
   }
 
   export function ExportAll(additionalKeys: { [key: string]: any }) {

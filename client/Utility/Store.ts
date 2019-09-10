@@ -74,7 +74,6 @@ export namespace Store {
 
   export async function DeleteAll() {
     await localforage.clear();
-    location.reload();
   }
 
   export async function GetAllKeys() {
