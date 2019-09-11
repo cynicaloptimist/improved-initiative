@@ -42,19 +42,14 @@ export namespace Store {
   export async function LoadAllAndUpdateIds<T extends Listable>(
     listName: string
   ): Promise<T[]> {
-    const listings = await Store.List(listName);
-    const updatedItems = listings
-      .map<Promise<T>>(async key => {
-        const item = await Store.Load<T>(listName, key);
+    const store = localforage.createInstance({ name: listName });
+    let items = [];
+    await store.iterate((item: Listable, key) => {
+      item.Id = key;
+      items.push(item);
+    });
 
-        if (item) {
-          item.Id = key;
-        }
-        return item;
-      })
-      .filter(value => !!value);
-
-    return Promise.all(updatedItems);
+    return items;
   }
 
   export async function Delete(listName: string, key: string) {
@@ -177,8 +172,7 @@ export namespace Store {
   }
 
   export async function ExportStatBlocks() {
-    const listings = await List(Store.StatBlocks);
-    let statBlocks = listings.map(id => Store.Load(Store.StatBlocks, id));
+    let statBlocks = await LoadAllAndUpdateIds(StatBlocks);
     return new Blob([JSON.stringify(statBlocks, null, 2)], {
       type: "application/json"
     });

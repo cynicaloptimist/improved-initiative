@@ -33,30 +33,24 @@ export class Libraries {
       return this.NPCs.AddListings(listings, "server");
     });
 
-    const localStatBlocks = await Store.List(Store.StatBlocks);
-    const listings = await Promise.all(
-      localStatBlocks.map(async id => {
-        const savedStatBlock = await Store.Load<StatBlock>(
-          Store.StatBlocks,
-          id
-        );
-        const statBlock = {
-          ...StatBlock.Default(),
-          ...savedStatBlock
-        };
+    const localStatBlocks = await Store.LoadAllAndUpdateIds(Store.StatBlocks);
+    const listings = localStatBlocks.map(savedStatBlock => {
+      const statBlock = {
+        ...StatBlock.Default(),
+        ...savedStatBlock
+      };
 
-        const listing: StoredListing = {
-          Id: id,
-          Name: statBlock.Name,
-          Path: statBlock.Path,
-          SearchHint: StatBlock.GetSearchHint(statBlock),
-          Metadata: StatBlock.GetMetadata(statBlock),
-          Link: Store.StatBlocks
-        };
+      const listing: StoredListing = {
+        Id: statBlock.Id,
+        Name: statBlock.Name,
+        Path: statBlock.Path,
+        SearchHint: StatBlock.GetSearchHint(statBlock),
+        Metadata: StatBlock.GetMetadata(statBlock),
+        Link: Store.StatBlocks
+      };
 
-        return listing;
-      })
-    );
+      return listing;
+    });
     this.NPCs.AddListings(listings, "localAsync");
     await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
