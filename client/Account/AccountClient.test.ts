@@ -31,7 +31,7 @@ async function fakeListing(
 describe("getUnsyncedItemsFromListings", () => {
   test("Should find unsynced local items", async () => {
     const localListing = await fakeListing("item1", "Unsynced", "localStorage");
-    const remoteListing = await fakeListing("item1", "Synced", "account");
+    const remoteListing = await fakeListing("item2", "Synced", "account");
     const unsyncedItems = await getUnsyncedItemsFromListings([
       localListing,
       remoteListing
@@ -48,7 +48,7 @@ describe("getUnsyncedItemsFromListings", () => {
 
   test("Should find unsynced localAsync items", async () => {
     const localListing = await fakeListing("item1", "Unsynced", "localAsync");
-    const remoteListing = await fakeListing("item1", "Synced", "account");
+    const remoteListing = await fakeListing("item2", "Synced", "account");
     const unsyncedItems = await getUnsyncedItemsFromListings([
       localListing,
       remoteListing
