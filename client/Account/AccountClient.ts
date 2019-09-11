@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Listable } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { SavedEncounter } from "../../common/SavedEncounter";
@@ -168,13 +169,20 @@ export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
 }
 
 async function getUnsyncedItems(items: Listing<Listable>[]) {
-  const local = items.filter(
-    i => i.Origin === "localStorage" || i.Origin === "localAsync"
-  );
+  const itemsByName: _.Dictionary<Listing<Listable>> = {};
+  for (const item of items) {
+    const name = item.Listing().Name;
+    if (itemsByName[name] == undefined) {
+      itemsByName[name] = item;
+    } else {
+      if (item.Origin == "account") {
+        itemsByName[name] = item;
+      }
+    }
+  }
 
-  const synced = items.filter(i => i.Origin === "account");
-  const unsynced = local.filter(
-    l => !synced.some(s => s.Listing().Name == l.Listing().Name)
+  const unsynced = _.values(itemsByName).filter(
+    i => i.Origin == "localStorage" || i.Origin == "localAsync"
   );
 
   const unsyncedItems = await Promise.all(
