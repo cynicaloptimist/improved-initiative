@@ -62,4 +62,30 @@ describe("getUnsyncedItemsFromListings", () => {
       }
     ]);
   });
+
+  test("Should omit synced items", async () => {
+    const localListing = await fakeListing("item1", "Synced", "localAsync");
+    const remoteListing = await fakeListing("item1", "Synced", "account");
+
+    const localUnsyncedListing = await fakeListing(
+      "item2",
+      "Unsynced",
+      "localAsync"
+    );
+
+    const unsyncedItems = await getUnsyncedItemsFromListings([
+      localListing,
+      remoteListing,
+      localUnsyncedListing
+    ]);
+
+    expect(unsyncedItems).toEqual([
+      {
+        Id: "item2",
+        Name: "Unsynced",
+        Path: "",
+        Version: "legacy"
+      }
+    ]);
+  });
 });
