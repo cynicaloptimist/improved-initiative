@@ -21,11 +21,11 @@ export class Libraries {
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 
-    this.initializeStatBlocks();
+    this.initializeStatBlocks(accountClient);
     this.initializeSpells();
   }
 
-  private initializeStatBlocks = async () => {
+  private initializeStatBlocks = async (accountClient: AccountClient) => {
     $.ajax("../statblocks/").done(listings => {
       if (!listings) {
         return;
@@ -58,6 +58,7 @@ export class Libraries {
       })
     );
     this.NPCs.AddListings(listings, "localAsync");
+    await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
 
   private initializeSpells = () => {
