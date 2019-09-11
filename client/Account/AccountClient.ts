@@ -51,25 +51,27 @@ export class AccountClient {
 
     const promises = [
       saveEntitySet(
-        await prepareForSync(libraries.NPCs.GetStatBlocks()),
+        await getUnsyncedItemsFromListings(libraries.NPCs.GetStatBlocks()),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await prepareForSync(libraries.PersistentCharacters.GetListings()),
+        await getUnsyncedItemsFromListings(
+          libraries.PersistentCharacters.GetListings()
+        ),
         "persistentcharacters",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await prepareForSync(libraries.Spells.GetSpells()),
+        await getUnsyncedItemsFromListings(libraries.Spells.GetSpells()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await prepareForSync(libraries.Encounters.Encounters()),
+        await getUnsyncedItemsFromListings(libraries.Encounters.Encounters()),
         "encounters",
         ENCOUNTER_BATCH_SIZE,
         messageCallback
@@ -160,7 +162,7 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
   });
 }
 
-export async function prepareForSync(items: Listing<Listable>[]) {
+export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
   const unsynced = await getUnsyncedItems(items);
   return sanitizeItems(unsynced);
 }
