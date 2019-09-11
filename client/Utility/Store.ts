@@ -16,6 +16,7 @@ export namespace Store {
 
   export const DefaultSavedEncounterId = "default";
 
+  export const SupportedLists = [StatBlocks];
   export async function List(listName: string): Promise<string[]> {
     let list = await load<string[]>(listName);
     if (list && list.constructor === Array) {
