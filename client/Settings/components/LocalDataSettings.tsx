@@ -77,8 +77,8 @@ export class LocalDataSettings extends React.Component<{}> {
     const promptText =
       "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
-      Store.DeleteAll();
-      await LegacySynchronousLocalStore.DeleteAll();
+      await Store.DeleteAll();
+      LegacySynchronousLocalStore.DeleteAll();
       location.reload();
     }
   };
