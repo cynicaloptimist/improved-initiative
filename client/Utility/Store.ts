@@ -18,16 +18,6 @@ export namespace Store {
 
   export const SupportedLists = [StatBlocks];
 
-  export async function List(listName: string): Promise<string[]> {
-    let keys = [];
-    const store = localforage.createInstance({ name: listName });
-    await store.iterate((value, key) => {
-      keys.push(key);
-    });
-
-    return keys;
-  }
-
   export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;

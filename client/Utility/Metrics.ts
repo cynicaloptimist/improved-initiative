@@ -11,7 +11,7 @@ export class Metrics {
       Encounters: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.SavedEncounters
       ).length,
-      NpcStatBlocks: (await Store.List(Store.StatBlocks)).length,
+      NpcStatBlocks: (await Store.LoadAllAndUpdateIds(Store.StatBlocks)).length,
       PcStatBlocks: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.PlayerCharacters
       ).length,
