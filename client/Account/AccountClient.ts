@@ -41,42 +41,44 @@ export class AccountClient {
     return await $.getJSON("/my/fullaccount");
   }
 
-  public SaveAllUnsyncedItems(
+  public async SaveAllUnsyncedItems(
     libraries: Libraries,
     messageCallback: (message: string) => void
   ) {
     if (!env.HasStorage) {
-      return emptyPromise();
+      return;
     }
 
-    $.when(
+    const promises = [
       saveEntitySet(
-        prepareForSync(libraries.NPCs.GetStatBlocks()),
+        await prepareForSync(libraries.NPCs.GetStatBlocks()),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.PersistentCharacters.GetListings()),
+        await prepareForSync(libraries.PersistentCharacters.GetListings()),
         "persistentcharacters",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.Spells.GetSpells()),
+        await prepareForSync(libraries.Spells.GetSpells()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.Encounters.Encounters()),
+        await prepareForSync(libraries.Encounters.Encounters()),
         "encounters",
         ENCOUNTER_BATCH_SIZE,
         messageCallback
       )
-    ).done(_ => {
-      messageCallback("Account Sync complete.");
-    });
+    ];
+
+    await Promise.all(promises);
+
+    return messageCallback("Account Sync complete.");
   }
 
   public SaveSettings(settings: Settings) {
@@ -158,21 +160,33 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
   });
 }
 
-function prepareForSync(items: Listing<Listable>[]) {
-  const unsynced = getUnsyncedItems(items);
+export async function prepareForSync(items: Listing<Listable>[]) {
+  const unsynced = await getUnsyncedItems(items);
   return sanitizeItems(unsynced);
 }
 
-function getUnsyncedItems(items: Listing<Listable>[]) {
+async function getUnsyncedItems(items: Listing<Listable>[]) {
   const local = items.filter(
     i => i.Origin === "localStorage" || i.Origin === "localAsync"
   );
+
   const synced = items.filter(i => i.Origin === "account");
   const unsynced = local.filter(
     l => !synced.some(s => s.Listing().Name == l.Listing().Name)
   );
-  const unsyncedItems = [];
-  unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));
+
+  const unsyncedItems = await Promise.all(
+    unsynced.map(
+      async listing =>
+        await listing.GetWithTemplate({
+          Id: listing.Listing().Id,
+          Name: listing.Listing().Name,
+          Path: listing.Listing().Path,
+          Version: process.env.VERSION
+        })
+    )
+  );
+
   return unsyncedItems;
 }
 
@@ -192,14 +206,14 @@ function sanitizeItems(items: Listable[]) {
   });
 }
 
-function saveEntitySet<Listable>(
+async function saveEntitySet<Listable>(
   entitySet: Listable[],
   entityType: string,
   batchSize: number,
   messageCallback: (message: string) => void
 ) {
   if (!env.HasStorage || !entitySet.length) {
-    return emptyPromise();
+    return;
   }
 
   const uploadByBatch = (remaining: Listable[]) => {
