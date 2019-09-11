@@ -17,31 +17,26 @@ export namespace Store {
   export const DefaultSavedEncounterId = "default";
 
   export const SupportedLists = [StatBlocks];
+
   export async function List(listName: string): Promise<string[]> {
-    let list = await load<string[]>(listName);
-    if (list && list.constructor === Array) {
-      return list;
-    }
-    await save(listName, []);
-    return [];
+    let keys = [];
+    const store = localforage.createInstance({ name: listName });
+    await store.iterate((value, key) => {
+      keys.push(key);
+    });
+
+    return keys;
   }
 
   export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
-    let fullKey = `${listName}.${key}`;
-    let list = await Store.List(listName);
-    if (list.indexOf(key) == -1) {
-      list.push(key);
-      save(listName, list);
-    }
-    save(fullKey, value);
+    await save(listName, key, value);
   }
 
   export async function Load<T>(listName: string, key: string): Promise<T> {
-    let fullKey = `${listName}.${key}`;
-    return await load(fullKey);
+    return await load(listName, key);
   }
 
   export async function LoadAllAndUpdateIds<T extends Listable>(
@@ -63,25 +58,26 @@ export namespace Store {
   }
 
   export async function Delete(listName: string, key: string) {
-    let fullKey = `${listName}.${key}`;
-    let list = await Store.List(listName);
-    let keyIndex = list.indexOf(key);
-    if (keyIndex != -1) {
-      list.splice(keyIndex, 1);
-      save(listName, list);
-    }
-    return await localforage.removeItem(fullKey);
+    const store = localforage.createInstance({ name: listName });
+
+    return await store.removeItem(key);
   }
 
   export async function DeleteAll() {
-    await localforage.clear();
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.clear();
+    }
   }
 
   export async function GetAllKeys() {
     let storage = {};
-    await localforage.iterate((value, key) => {
-      storage[key] = value;
-    });
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.iterate((value, key) => {
+        storage[`${listName}.${key}`] = value;
+      });
+    }
     return storage;
   }
 
@@ -144,10 +140,12 @@ export namespace Store {
           } and reload?`
         )
       ) {
-        await localforage.clear();
+        await DeleteAll();
         let promises = [];
-        for (let key in importedStorage) {
-          promises.push(localforage.setItem(key, importedStorage[key]));
+        for (let fullKey in importedStorage) {
+          const [listName, key] = fullKey.split(".");
+          const store = localforage.createInstance({ name: listName });
+          promises.push(store.setItem(key, importedStorage[key]));
         }
         await Promise.all(promises);
         location.reload();
@@ -186,11 +184,13 @@ export namespace Store {
     });
   }
 
-  async function save(key, value) {
-    return localforage.setItem(key, value);
+  async function save(listName: string, key: string, value) {
+    const store = localforage.createInstance({ name: listName });
+    return store.setItem(key, value);
   }
 
-  async function load<T>(key: string) {
-    return await localforage.getItem<T>(key);
+  async function load<T>(listName: string, key: string) {
+    const store = localforage.createInstance({ name: listName });
+    return await store.getItem<T>(key);
   }
 }
