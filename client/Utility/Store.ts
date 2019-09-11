@@ -186,7 +186,7 @@ export namespace Store {
 
   async function save(listName: string, key: string, value) {
     const store = localforage.createInstance({ name: listName });
-    return store.setItem(key, value);
+    return await store.setItem(key, value);
   }
 
   async function load<T>(listName: string, key: string) {
