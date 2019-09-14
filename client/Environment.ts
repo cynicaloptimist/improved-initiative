@@ -38,6 +38,7 @@ export function LoadEnvironment() {
   const compressedStatBlockJSON = urlParams.get("s");
   if (compressedStatBlockJSON) {
     env.ImportedCompressedStatBlockJSON = compressedStatBlockJSON;
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   env.HasStorage = html.getAttribute("hasStorage") == "true";
