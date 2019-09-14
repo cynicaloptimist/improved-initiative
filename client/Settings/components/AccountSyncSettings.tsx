@@ -178,10 +178,10 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localAsyncCount = items.filter(c => c.Origin === "localAsync").length;
-    const localStorageCount = items.filter(c => c.Origin === "localStorage")
-      .length;
+    const localCount = items.filter(
+      c => c.Origin === "localAsync" || c.Origin === "localStorage"
+    ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
-    return `${localAsyncCount} localAsync, ${localStorageCount} localStorage, ${accountCount} synced`;
+    return `${localCount} local, ${accountCount} synced`;
   }
 }
