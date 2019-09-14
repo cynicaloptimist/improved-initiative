@@ -26,7 +26,9 @@ export class StatBlockLibrary {
   public DeleteListing = async (id: string) => {
     this.statBlocks.remove(s => s.Listing().Id == id);
     await Store.Delete(this.StoreName, id);
-    await this.accountClient.DeleteStatBlock(id);
+    try {
+      await this.accountClient.DeleteStatBlock(id);
+    } catch {}
   };
 
   private saveStatBlock = async (
