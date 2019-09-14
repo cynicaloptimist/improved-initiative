@@ -113,6 +113,7 @@ export namespace LegacySynchronousLocalStore {
         return;
       }
 
+      importList(Store.StatBlocks, importedStorage);
       importList(
         LegacySynchronousLocalStore.PersistentCharacters,
         importedStorage
