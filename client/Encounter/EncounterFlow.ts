@@ -44,6 +44,7 @@ export class EncounterFlow {
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
     this.encounter.TemporaryBackgroundImageUrl(null);
+    // display combat stats in GM view
   };
 
   public NextTurn = (promptRerollInitiative: () => boolean) => {
@@ -83,6 +84,8 @@ export class EncounterFlow {
       )
       .forEach(t => t.Decrement());
 
+    // grab value first, write it to activeCombatant.TotalCombatTime
+    // increment activeCombatant.TotalRounds
     this.TurnTimer.Reset();
   };
 

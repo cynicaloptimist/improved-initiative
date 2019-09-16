@@ -54,6 +54,9 @@ export class Combatant {
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
 
+  public CombatRounds = ko.observable(0);
+  public CombatTimeSeconds = ko.observable(0);
+
   public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
   public CurrentNotes: KnockoutObservable<string>;
@@ -213,6 +216,22 @@ export class Combatant {
     this.CurrentHP(currHP);
   }
 
+  public IncrementCombatRounds() {
+    let currRounds = this.CombatRounds();
+
+    currRounds += 1;
+
+    this.CombatRounds(currRounds);
+  }
+
+  public DecrementCombatRounds() {
+    let currRounds = this.CombatRounds();
+
+    currRounds -= 1;
+
+    this.CombatRounds(currRounds);
+  }
+
   public ApplyTemporaryHP(tempHP: number) {
     if (tempHP > this.TemporaryHP()) {
       this.TemporaryHP(tempHP);
@@ -258,6 +277,8 @@ export class Combatant {
         })),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
+      CombatRounds: this.CombatRounds(),
+      CombatTimeSeconds: this.CombatTimeSeconds(),
       InterfaceVersion: process.env.VERSION
     };
   };

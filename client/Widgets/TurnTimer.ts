@@ -24,6 +24,10 @@ export class TurnTimer {
     this.Start();
   };
 
+  public ElapsedSeconds = ko.pureComputed(() => {
+    return this.elapsedSeconds();
+  });
+
   public Readout = ko.pureComputed(() => {
     let time = moment.duration({ seconds: this.elapsedSeconds() });
     let paddedSeconds = time.seconds().toString();
