@@ -126,6 +126,17 @@ export class EncounterCommander {
       Combatants: this.tracker.Encounter.Combatants().length
     });
 
+    const displayPostCombatStats = CurrentSettings().TrackerView
+      .PostCombatStats;
+    if (displayPostCombatStats) {
+      this.tracker.Encounter.Combatants().forEach(c => {
+        if (c.IsPlayerCharacter()) {
+          this.tracker.EventLog.AddEvent(c.CombatStatsString());
+        }
+      });
+    }
+    this.tracker.Encounter.Combatants().forEach(c => c.ResetCombatStats());
+
     return false;
   };
 

@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import * as moment from "moment";
 
 import { CombatantState, TagState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
@@ -235,9 +236,14 @@ export class Combatant {
   public AddCombatTime(timeSec: number) {
     let currTimeSec = this.CombatTimeSeconds();
 
-    currTimeSec += currTimeSec;
+    currTimeSec += timeSec;
 
     this.CombatTimeSeconds(currTimeSec);
+  }
+
+  public ResetCombatStats() {
+    this.CombatRounds(0);
+    this.CombatTimeSeconds(0);
   }
 
   public ApplyTemporaryHP(tempHP: number) {
@@ -260,6 +266,22 @@ export class Combatant {
     }
 
     return name;
+  });
+
+  public CombatStatsString = ko.computed(() => {
+    const name = this.DisplayName(),
+      roundCount = this.CombatRounds(),
+      elapsedSec = this.CombatTimeSeconds();
+
+    let avgTime = moment.duration({ seconds: elapsedSec });
+    let paddedSeconds = avgTime.seconds().toString();
+    if (paddedSeconds.length < 2) {
+      paddedSeconds = "0" + paddedSeconds;
+    }
+
+    let tString = avgTime.minutes() + ":" + paddedSeconds;
+
+    return `${name} participated in ${roundCount} rounds, averaging ${tString} per round.`;
   });
 
   public GetState: () => CombatantState = () => {

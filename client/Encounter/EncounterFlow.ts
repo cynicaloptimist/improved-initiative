@@ -41,12 +41,13 @@ export class EncounterFlow {
   public EndEncounter = () => {
     this.State("inactive");
     this.RoundCounter(0);
-    // TODO: udpate final active combatant
+
+    let elapsedSeconds = this.TurnTimer.ElapsedSeconds();
+    this.ActiveCombatant().AddCombatTime(elapsedSeconds);
+
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
     this.encounter.TemporaryBackgroundImageUrl(null);
-    // TODO: display stats. Prompt? Check InitiativePrompt for inspiration.
-    this.encounter.Combatants().forEach(c => console.log(c.GetState()));
   };
 
   public NextTurn = (promptRerollInitiative: () => boolean) => {
