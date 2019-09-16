@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "2.7.0",
+  "version": "2.7.2",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -81,6 +81,7 @@
     "fakeredis": "^2.0.0",
     "html-loader": "^0.5.5",
     "jquery": "^3.4.1",
+    "json-url": "^2.4.2",
     "keen-tracking": "^4.0.17",
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",

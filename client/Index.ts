@@ -18,6 +18,7 @@ $(() => {
     let viewModel = new TrackerViewModel(io());
     ko.applyBindings(viewModel, document.body);
     viewModel.ImportEncounterIfAvailable();
+    viewModel.ImportStatBlockIfAvailable();
     viewModel.GetWhatsNewIfAvailable();
   }
   if ($("#playerview").length) {

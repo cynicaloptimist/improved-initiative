@@ -79,12 +79,12 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="PlayerView.ActiveCombatantOnTop">
           Active combatant at top of initiative list
         </Toggle>
-        <div>
+        <p>
           {"Additional player view options available with "}
           <a href="#" onClick={this.props.goToEpicInitiativeSettings}>
             Epic Initiative
           </a>
-        </div>
+        </p>
       </div>
     );
   }

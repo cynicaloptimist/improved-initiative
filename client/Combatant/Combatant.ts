@@ -78,7 +78,7 @@ export class Combatant {
   private processCombatantState(savedCombatant: CombatantState) {
     this.IndexLabel = savedCombatant.IndexLabel;
     this.CurrentHP(savedCombatant.CurrentHP);
-    this.CurrentNotes(savedCombatant.CurrentNotes);
+    this.CurrentNotes(savedCombatant.CurrentNotes || "");
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
