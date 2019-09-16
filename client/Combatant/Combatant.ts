@@ -232,6 +232,14 @@ export class Combatant {
     this.CombatRounds(currRounds);
   }
 
+  public AddCombatTime(timeSec: number) {
+    let currTimeSec = this.CombatTimeSeconds();
+
+    currTimeSec += currTimeSec;
+
+    this.CombatTimeSeconds(currTimeSec);
+  }
+
   public ApplyTemporaryHP(tempHP: number) {
     if (tempHP > this.TemporaryHP()) {
       this.TemporaryHP(tempHP);

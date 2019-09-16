@@ -55,7 +55,8 @@ function getLegacySettings(): Settings {
         false
       ),
       DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
-      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true)
+      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true),
+      PostCombatStats: getLegacySetting<boolean>("PostCombatStats", false)
     },
     PlayerView: {
       ...defaultSettings.PlayerView,

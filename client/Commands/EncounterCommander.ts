@@ -76,6 +76,9 @@ export class EncounterCommander {
   public DisplayDifficulty = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayDifficulty
   );
+  public PostCombatStats = ko.pureComputed(
+    () => CurrentSettings().TrackerView.PostCombatStats
+  );
 
   private rollInitiative = () => {
     this.tracker.PromptQueue.AddLegacyPrompt(

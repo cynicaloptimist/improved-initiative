@@ -41,14 +41,17 @@ export class EncounterFlow {
   public EndEncounter = () => {
     this.State("inactive");
     this.RoundCounter(0);
+    // TODO: udpate final active combatant
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
     this.encounter.TemporaryBackgroundImageUrl(null);
-    // display combat stats in GM view
+    // TODO: display stats. Prompt? Check InitiativePrompt for inspiration.
+    this.encounter.Combatants().forEach(c => console.log(c.GetState()));
   };
 
   public NextTurn = (promptRerollInitiative: () => boolean) => {
     const activeCombatant = this.ActiveCombatant();
+    activeCombatant.IncrementCombatRounds();
 
     this.durationTags
       .filter(
@@ -84,13 +87,15 @@ export class EncounterFlow {
       )
       .forEach(t => t.Decrement());
 
-    // grab value first, write it to activeCombatant.TotalCombatTime
-    // increment activeCombatant.TotalRounds
+    let elapsedSeconds = this.TurnTimer.ElapsedSeconds();
+    activeCombatant.AddCombatTime(elapsedSeconds);
     this.TurnTimer.Reset();
   };
 
   public PreviousTurn = () => {
     const activeCombatant = this.ActiveCombatant();
+    activeCombatant.DecrementCombatRounds();
+
     this.durationTags
       .filter(
         t =>

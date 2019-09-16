@@ -47,6 +47,9 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="TrackerView.DisplayDifficulty">
           Display Encounter Difficulty
         </Toggle>
+        <Toggle fieldName="TrackerView.PostCombatStats">
+          Display Post-Combat Stats Summary
+        </Toggle>
 
         <h3>Player View</h3>
         <Toggle fieldName="PlayerView.DisplayRoundCounter">
