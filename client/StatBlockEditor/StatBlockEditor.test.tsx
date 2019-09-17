@@ -28,7 +28,7 @@ describe("StatBlockEditor", () => {
         Metadata: StatBlock.GetMetadata(statBlock),
         Link: "/"
       },
-      "localStorage",
+      "localAsync",
       statBlock
     );
     saveCallback = jest.fn();

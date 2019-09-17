@@ -42,8 +42,8 @@ import {
   StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
 
 const codec = compression("lzma");
@@ -69,7 +69,12 @@ export class TrackerViewModel {
     this.LibrariesCommander.SaveEncounter
   );
 
-  public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
+  public TutorialVisible = ko.observable(
+    !LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.User,
+      "SkipIntro"
+    )
+  );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public ToolbarWide = ko.observable(false);
@@ -439,7 +444,11 @@ export class TrackerViewModel {
   private getAccountOrSampleCharacters() {
     this.accountClient.GetAccount(account => {
       if (!account) {
-        if (Store.List(Store.PersistentCharacters).length == 0) {
+        if (
+          LegacySynchronousLocalStore.List(
+            LegacySynchronousLocalStore.PersistentCharacters
+          ).length == 0
+        ) {
           this.getAndAddSamplePersistentCharacters("/sample_players.json");
         }
         return;
@@ -464,9 +473,9 @@ export class TrackerViewModel {
   };
 
   private loadAutoSavedEncounterIfAvailable() {
-    const autosavedEncounter = Store.Load(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId
+    const autosavedEncounter = LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
     );
 
     if (autosavedEncounter) {
@@ -530,7 +539,12 @@ export class TrackerViewModel {
   }
 
   private displayPrivacyNotificationIfNeeded = () => {
-    if (Store.Load(Store.User, "AllowTracking") == null) {
+    if (
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      ) == null
+    ) {
       this.ReviewPrivacyPolicy();
     }
   };
@@ -538,7 +552,11 @@ export class TrackerViewModel {
   private saveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
-    Store.Save(Store.User, "Settings", newSettings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      newSettings
+    );
     new AccountClient().SaveSettings(newSettings);
   }
 }

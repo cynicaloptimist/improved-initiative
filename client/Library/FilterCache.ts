@@ -9,7 +9,12 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
   const byName: T[] = [];
   const bySearchHint: T[] = [];
   const dedupedItems: KeyValueSet<T> = {};
-  const sourceRankings: ListingOrigin[] = ["account", "localStorage", "server"];
+  const sourceRankings: ListingOrigin[] = [
+    "account",
+    "localAsync",
+    "localStorage",
+    "server"
+  ];
 
   parentSubset.forEach(listing => {
     const dedupeKey =

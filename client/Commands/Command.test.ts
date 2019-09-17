@@ -1,5 +1,5 @@
 import { getDefaultSettings } from "../../common/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Command } from "./Command";
 
 describe("Command", () => {
@@ -23,7 +23,11 @@ describe("Command", () => {
         ShowOnActionBar: true
       }
     ];
-    Store.Save(Store.User, "Settings", settings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      settings
+    );
 
     const command = new Command(
       "some-command-id",
@@ -44,7 +48,11 @@ describe("Command", () => {
         ShowOnActionBar: true
       }
     ];
-    Store.Save(Store.User, "Settings", settings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      settings
+    );
     const command = new Command(
       "add-tag",
       "Add Tag",
@@ -64,7 +72,11 @@ describe("Command", () => {
         ShowOnActionBar: true
       }
     ];
-    Store.Save(Store.User, "Settings", settings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      settings
+    );
     const clearEncounterCommand = new Command(
       "clear-encounter",
       "Clear Encounter",
@@ -87,7 +99,11 @@ describe("Command", () => {
   });
 
   test("Should load a keybinding from the old Store", () => {
-    Store.Save(Store.KeyBindings, "Add Note", "legacy-keybinding");
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.KeyBindings,
+      "Add Note",
+      "legacy-keybinding"
+    );
     const command = new Command(
       "add-tag",
       "Add Tag",

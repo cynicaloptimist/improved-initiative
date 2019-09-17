@@ -7,7 +7,7 @@ describe("StatBlock Library", () => {
   test("", async done => {
     localStorage.clear();
 
-    Store.Save(Store.StatBlocks, "creatureId", {
+    await Store.Save(Store.StatBlocks, "creatureId", {
       ...StatBlock.Default(),
       Name: "Saved Creature",
       HP: { Value: 10 }
@@ -25,7 +25,7 @@ describe("StatBlock Library", () => {
           SearchHint: ""
         }
       ],
-      "localStorage"
+      "localAsync"
     );
 
     const listing = library.GetStatBlocks()[0];

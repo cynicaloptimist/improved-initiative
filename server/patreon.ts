@@ -242,6 +242,7 @@ async function handleWebhook(req: Req, res: Res) {
   const userAccountLevel = isDeletedPledge
     ? "none"
     : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+  console.log(`Updating account level for ${userEmail} to ${userAccountLevel}`);
   await DB.upsertUser(userId, userAccountLevel, userEmail);
   return res.send(201);
 }

@@ -85,6 +85,7 @@
     "keen-tracking": "^4.0.17",
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",
+    "localforage": "^1.7.3",
     "lodash": "^4.17.14",
     "markdown-loader": "^5.1.0",
     "moment": "^2.22.1",

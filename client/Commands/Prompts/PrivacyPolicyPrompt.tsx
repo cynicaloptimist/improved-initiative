@@ -1,6 +1,6 @@
 import * as React from "react";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Metrics } from "../../Utility/Metrics";
-import { Store } from "../../Utility/Store";
 import { LegacyPrompt } from "./Prompt";
 
 const privacyPolicyText: string = require("../../../PRIVACY.md");
@@ -77,10 +77,18 @@ export class PrivacyPolicyPrompt implements LegacyPrompt {
 
   private promptCallback = (optin: boolean) => {
     if (optin) {
-      Store.Save(Store.User, "AllowTracking", true);
+      LegacySynchronousLocalStore.Save(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking",
+        true
+      );
       Metrics.TrackLoad();
     } else {
-      Store.Save(Store.User, "AllowTracking", false);
+      LegacySynchronousLocalStore.Save(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking",
+        false
+      );
     }
   };
 

@@ -6,14 +6,15 @@ import mustacheExpress = require("mustache-express");
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
-import { upsertUser } from "./dbconnection";
+import { getAccount, upsertUser } from "./dbconnection";
 import { Library } from "./library";
 import { configureMetricsRoutes } from "./metrics";
 import {
   configureLoginRedirect,
   configureLogout,
   configurePatreonWebhookReceiver,
-  startNewsUpdates
+  startNewsUpdates,
+  updateSessionAccountFeatures
 } from "./patreon";
 import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
@@ -116,10 +117,15 @@ export default function(
     res.redirect("/e/");
   });
 
-  app.get("/e/", (req: Req, res: Res) => {
+  app.get("/e/", async (req: Req, res: Res) => {
     const session = req.session;
     if (session === undefined) {
       throw "Session is not available";
+    }
+
+    if (session.userId) {
+      const account = await getAccount(session.userId);
+      updateSessionAccountFeatures(session, account.accountStatus);
     }
 
     const options = getClientEnvironment(session);
