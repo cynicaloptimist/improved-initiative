@@ -1,8 +1,8 @@
 import * as ko from "knockout";
 
 import { env } from "./Environment";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
 import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLocalStorage";
 
 export class LauncherViewModel {
@@ -23,7 +23,10 @@ export class LauncherViewModel {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
-    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+    LegacySynchronousLocalStore.Delete(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
+    );
     window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
   };
 

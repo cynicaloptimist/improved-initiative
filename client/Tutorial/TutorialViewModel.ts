@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Metrics } from "../Utility/Metrics";
-import { Store } from "../Utility/Store";
 import { TutorialSteps } from "./TutorialSteps";
 
 export const TutorialSpy = ko.observable<string>(null);
@@ -63,7 +63,11 @@ export class TutorialViewModel {
   public End = () => {
     this.stepIndex(0);
     $(".tutorial-focus").removeClass("tutorial-focus");
-    Store.Save(Store.User, "SkipIntro", true);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "SkipIntro",
+      true
+    );
     this.showTutorial(false);
   };
 

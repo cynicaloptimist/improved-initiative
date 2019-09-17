@@ -4,7 +4,7 @@ import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class SpellLibrary {
@@ -33,13 +33,17 @@ export class SpellLibrary {
         ...spell,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: Store.Spells
+        Link: LegacySynchronousLocalStore.Spells
       },
       "localStorage",
       spell
     );
     this.spells.push(listing);
-    Store.Save(Store.Spells, spell.Id, spell);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.Spells,
+      spell.Id,
+      spell
+    );
     this.accountClient.SaveSpell(spell).then(r => {
       if (!r) return;
       if (listing.Origin === "account") return;
@@ -61,7 +65,7 @@ export class SpellLibrary {
 
   public DeleteSpellById = (id: string) => {
     this.spells.remove(listing => listing.Listing().Id === id);
-    Store.Delete(Store.Spells, id);
+    LegacySynchronousLocalStore.Delete(LegacySynchronousLocalStore.Spells, id);
     this.accountClient.DeleteSpell(id);
   };
 }

@@ -1,90 +1,72 @@
+import * as localforage from "localforage";
+
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
-export class Store {
-  private static _prefix = "ImprovedInitiative";
+export namespace Store {
+  export const PersistentCharacters = "PersistentCharacters";
+  export const PlayerCharacters = "PlayerCharacters";
+  export const StatBlocks = "Creatures";
+  export const Spells = "Spells";
+  export const SavedEncounters = "SavedEncounters";
+  export const AutoSavedEncounters = "AutoSavedEncounters";
+  export const User = "User";
 
-  public static readonly PersistentCharacters = "PersistentCharacters";
-  public static readonly PlayerCharacters = "PlayerCharacters";
-  public static readonly StatBlocks = "Creatures";
-  public static readonly Spells = "Spells";
-  public static readonly SavedEncounters = "SavedEncounters";
-  public static readonly AutoSavedEncounters = "AutoSavedEncounters";
-  public static readonly User = "User";
+  export const DefaultSavedEncounterId = "default";
 
-  public static readonly DefaultSavedEncounterId = "default";
+  export const SupportedLists = [StatBlocks];
 
-  //Legacy
-  public static readonly KeyBindings = "KeyBindings";
-  public static readonly ActionBar = "ActionBar";
-
-  public static List(listName: string): string[] {
-    let listKey = `${Store._prefix}.${listName}`;
-    let list = Store.load(listKey);
-    if (list && list.constructor === Array) {
-      return list;
-    }
-    Store.save(listKey, []);
-    return [];
-  }
-
-  public static Save<T>(listName: string, key: string, value: T) {
+  export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
-    let listKey = `${Store._prefix}.${listName}`;
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
-    if (list.indexOf(key) == -1) {
-      list.push(key);
-      Store.save(listKey, list);
-    }
-    Store.save(fullKey, value);
+    await save(listName, key, value);
   }
 
-  public static Load<T>(listName: string, key: string): T {
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    return Store.load(fullKey);
+  export async function Load<T>(listName: string, key: string): Promise<T> {
+    return await load(listName, key);
   }
 
-  public static LoadAllAndUpdateIds<T extends Listable>(listName: string): T[] {
-    return Store.List(listName)
-      .map(key => {
-        const item = Store.Load<T>(listName, key);
-        if (item) {
-          item.Id = key;
-        }
-        return item;
-      })
-      .filter(value => !!value);
-  }
-
-  public static Delete(listName: string, key: string) {
-    let listKey = `${Store._prefix}.${listName}`;
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
-    let keyIndex = list.indexOf(key);
-    if (keyIndex != -1) {
-      list.splice(keyIndex, 1);
-      Store.save(listKey, list);
-    }
-    localStorage.removeItem(fullKey);
-  }
-
-  public static DeleteAll() {
-    localStorage.clear();
-    location.reload();
-  }
-
-  public static ExportAll() {
-    return new Blob([JSON.stringify(localStorage, null, 2)], {
-      type: "application/json"
+  export async function LoadAllAndUpdateIds<T extends Listable>(
+    listName: string
+  ): Promise<T[]> {
+    const store = localforage.createInstance({ name: listName });
+    let items = [];
+    await store.iterate((item: Listable, key) => {
+      item.Id = key;
+      items.push(item);
     });
+
+    return items;
   }
 
-  public static ImportAll(file: File) {
+  export async function Delete(listName: string, key: string) {
+    const store = localforage.createInstance({ name: listName });
+
+    return await store.removeItem(key);
+  }
+
+  export async function DeleteAll() {
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.clear();
+    }
+  }
+
+  export async function GetAllKeys() {
+    let storage = {};
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.iterate((value, key) => {
+        storage[`${listName}.${key}`] = value;
+      });
+    }
+    return storage;
+  }
+
+  export async function ImportAll(file: File) {
     let reader = new FileReader();
     reader.onload = (event: any) => {
       let json = event.target.result;
@@ -96,39 +78,38 @@ export class Store {
         return;
       }
 
-      this.importList(Store.StatBlocks, importedStorage);
-      this.importList(Store.PersistentCharacters, importedStorage);
-      this.importList(Store.SavedEncounters, importedStorage);
-      this.importList(Store.Spells, importedStorage);
+      importList(StatBlocks, importedStorage);
+      importList(PersistentCharacters, importedStorage);
+      importList(SavedEncounters, importedStorage);
+      importList(Spells, importedStorage);
 
       location.reload();
     };
     reader.readAsText(file);
   }
 
-  private static importList(listName: string, importSource: any) {
-    const listKey = `${Store._prefix}.${listName}`;
-    const listingsJSON = importSource[listKey];
+  async function importList(listName: string, importSource: any) {
+    const listingsJSON = importSource[listName];
     if (!listingsJSON) {
       console.warn(`Couldn't import ${listName} from JSON`);
       return;
     }
     const listings: string[] = JSON.parse(listingsJSON);
     for (const key of listings) {
-      const fullKey = `${Store._prefix}.${listName}.${key}`;
+      const fullKey = `${listName}.${key}`;
       const listingJSON = importSource[fullKey];
       if (!listingJSON) {
         console.warn(`Couldn't import ${fullKey} from JSON`);
       } else {
         const listing = JSON.parse(listingJSON);
-        Store.Save(listName, key, listing);
+        Save(listName, key, listing);
       }
     }
   }
 
-  public static ImportAllAndReplace(file: File) {
+  export async function ImportAllAndReplace(file: File) {
     let reader = new FileReader();
-    reader.onload = (event: any) => {
+    reader.onload = async (event: any) => {
       let json = event.target.result;
       let importedStorage = {};
       try {
@@ -144,26 +125,30 @@ export class Store {
           } and reload?`
         )
       ) {
-        localStorage.clear();
-        for (let key in importedStorage) {
-          localStorage.setItem(key, importedStorage[key]);
+        await DeleteAll();
+        let promises = [];
+        for (let fullKey in importedStorage) {
+          const [listName, key] = fullKey.split(".");
+          const store = localforage.createInstance({ name: listName });
+          promises.push(store.setItem(key, importedStorage[key]));
         }
+        await Promise.all(promises);
         location.reload();
       }
     };
     reader.readAsText(file);
   }
 
-  public static ImportFromDnDAppFile(file: File) {
+  export async function ImportFromDnDAppFile(file: File) {
     const statBlocksCallback = (statBlocks: StatBlock[]) => {
       statBlocks.forEach(c => {
-        this.Save(Store.StatBlocks, c.Id, c);
+        Save(Store.StatBlocks, c.Id, c);
       });
     };
 
     const spellsCallback = (spells: Spell[]) => {
       spells.forEach(c => {
-        this.Save(Store.Spells, c.Id, c);
+        Save(Store.Spells, c.Id, c);
       });
     };
 
@@ -176,22 +161,20 @@ export class Store {
     }
   }
 
-  public static ExportStatBlocks() {
-    let statBlocks = this.List(Store.StatBlocks).map(id =>
-      Store.Load(Store.StatBlocks, id)
-    );
+  export async function ExportStatBlocks() {
+    let statBlocks = await LoadAllAndUpdateIds(StatBlocks);
     return new Blob([JSON.stringify(statBlocks, null, 2)], {
       type: "application/json"
     });
   }
 
-  private static save = (key, value) =>
-    localStorage.setItem(key, JSON.stringify(value));
-  private static load = key => {
-    let value = localStorage.getItem(key);
-    if (value === "undefined") {
-      return null;
-    }
-    return JSON.parse(value);
-  };
+  async function save(listName: string, key: string, value) {
+    const store = localforage.createInstance({ name: listName });
+    return await store.setItem(key, value);
+  }
+
+  async function load<T>(listName: string, key: string) {
+    const store = localforage.createInstance({ name: listName });
+    return await store.getItem<T>(key);
+  }
 }

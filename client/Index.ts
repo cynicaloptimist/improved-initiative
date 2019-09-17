@@ -8,19 +8,22 @@ import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterComponents } from "./Utility/Components";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 
-$(() => {
+$(async () => {
   LoadEnvironment();
   RegisterBindingHandlers();
   RegisterComponents();
   InitializeSettings();
   if ($("#tracker").length) {
-    let viewModel = new TrackerViewModel(io());
+    await LegacySynchronousLocalStore.MigrateItemsToStore();
+    const viewModel = new TrackerViewModel(io());
     ko.applyBindings(viewModel, document.body);
     viewModel.ImportEncounterIfAvailable();
     viewModel.ImportStatBlockIfAvailable();
     viewModel.GetWhatsNewIfAvailable();
   }
+
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
     const playerView = new ReactPlayerView(
@@ -30,9 +33,11 @@ $(() => {
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(io());
   }
+
   if ($("#landing").length) {
     let launcherViewModel = new LauncherViewModel();
     ko.applyBindings(launcherViewModel, document.body);
   }
+
   $(".loading-splash").hide();
 });
