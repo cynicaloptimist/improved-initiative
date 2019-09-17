@@ -15,7 +15,8 @@ async function fakeListing(
       Link: "Test",
       Metadata: {},
       Path: "",
-      SearchHint: ""
+      SearchHint: "",
+      LastUpdateMs: 0
     },
     listingOrigin
   );

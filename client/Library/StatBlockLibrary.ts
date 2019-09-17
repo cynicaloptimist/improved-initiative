@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -35,6 +36,7 @@ export class StatBlockLibrary {
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
+    newStatBlock.LastUpdateMs = moment.now();
     listing.Listing().Id = newStatBlock.Id;
     this.statBlocks.push(listing);
 
@@ -50,7 +52,8 @@ export class StatBlockLibrary {
         ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
         Metadata: StatBlock.GetMetadata(newStatBlock),
-        Link: `/my/statblocks/${newStatBlock.Id}`
+        Link: `/my/statblocks/${newStatBlock.Id}`,
+        LastUpdateMs: moment.now()
       },
       "account",
       newStatBlock
@@ -89,7 +92,8 @@ export class StatBlockLibrary {
         ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
         Metadata: StatBlock.GetMetadata(newStatBlock),
-        Link: this.StoreName
+        Link: this.StoreName,
+        LastUpdateMs: moment.now()
       },
       "localAsync"
     );

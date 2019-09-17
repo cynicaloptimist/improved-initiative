@@ -2,6 +2,7 @@ import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
@@ -59,7 +60,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
           Metadata: {},
           Name: "",
           Path: "",
-          SearchHint: ""
+          SearchHint: "",
+          LastUpdateMs: 0
         },
         "account"
       );

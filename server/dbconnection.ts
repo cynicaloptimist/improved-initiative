@@ -175,7 +175,8 @@ function getStatBlockListings(statBlocks: {
       SearchHint: StatBlock.GetSearchHint(c),
       Metadata: StatBlock.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/statblocks/${c.Id}`
+      Link: `/my/statblocks/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -190,7 +191,8 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
       SearchHint: Spell.GetSearchHint(c),
       Metadata: Spell.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/spells/${c.Id}`
+      Link: `/my/spells/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -210,7 +212,8 @@ function getEncounterListings(encounters: {
       SearchHint: SavedEncounter.GetSearchHint(c),
       Metadata: {},
       Version: c.Version,
-      Link: `/my/encounters/${c.Id}`
+      Link: `/my/encounters/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -230,7 +233,8 @@ function getPersistentCharacterListings(persistentCharacters: {
       SearchHint: PersistentCharacter.GetSearchHint(c),
       Metadata: PersistentCharacter.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/persistentcharacters/${c.Id}`
+      Link: `/my/persistentcharacters/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }

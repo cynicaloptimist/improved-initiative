@@ -26,7 +26,8 @@ describe("StatBlockEditor", () => {
         ...statBlock,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
-        Link: "/"
+        Link: "/",
+        LastUpdateMs: 0
       },
       "localAsync",
       statBlock

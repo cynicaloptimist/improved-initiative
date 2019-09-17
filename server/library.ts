@@ -73,7 +73,8 @@ export class Library<TItem extends Listable> {
         Path: c.Path || "",
         SearchHint: this.getSearchHint(c),
         Metadata: this.getMetadata(c),
-        Link: this.route + c.Id
+        Link: this.route + c.Id,
+        LastUpdateMs: 0
       };
       this.listings.push(listing);
     });

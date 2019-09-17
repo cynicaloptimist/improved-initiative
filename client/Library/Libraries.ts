@@ -46,7 +46,8 @@ export class Libraries {
         Path: statBlock.Path,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
-        Link: Store.StatBlocks
+        Link: Store.StatBlocks,
+        LastUpdateMs: statBlock.LastUpdateMs || 0
       };
 
       return listing;
@@ -80,7 +81,8 @@ export class Libraries {
         Path: spell.Path,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: LegacySynchronousLocalStore.Spells
+        Link: LegacySynchronousLocalStore.Spells,
+        LastUpdateMs: spell.LastUpdateMs || 0
       };
 
       return listing;

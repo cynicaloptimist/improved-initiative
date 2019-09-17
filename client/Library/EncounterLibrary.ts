@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { AccountClient } from "../Account/AccountClient";
@@ -31,7 +32,8 @@ export class EncounterLibrary {
         ...encounterState,
         SearchHint: SavedEncounter.GetSearchHint(encounterState),
         Metadata: {},
-        Link: link
+        Link: link,
+        LastUpdateMs: encounterState.LastUpdateMs || 0
       },
       origin
     );
@@ -51,6 +53,7 @@ export class EncounterLibrary {
   };
 
   public Save = (savedEncounter: SavedEncounter) => {
+    savedEncounter.LastUpdateMs = moment.now();
     const listing = this.listingFrom(savedEncounter, "localStorage");
     this.Encounters.remove(l => l.Listing().Id == listing.Listing().Id);
     this.Encounters.push(listing);

@@ -1,5 +1,6 @@
 import { Field, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
+import moment = require("moment");
 import * as React from "react";
 import { Listable } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
@@ -217,7 +218,7 @@ export class StatBlockEditor extends React.Component<
       statBlockFromActiveEditor = JSON.parse(StatBlockJSON);
     }
 
-    const editedStatBlock = {
+    const editedStatBlock: StatBlock = {
       ...StatBlock.Default(),
       ...statBlockFromActiveEditor,
       Id: submittedStatBlock.Id,

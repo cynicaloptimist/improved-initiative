@@ -28,10 +28,13 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     }
 
     const currentListing = dedupedItems[dedupeKey];
+
+    const isNewer =
+      listing.Listing().LastUpdateMs > currentListing.Listing().LastUpdateMs;
     const hasBetterSource =
       sourceRankings.indexOf(listing.Origin) <
       sourceRankings.indexOf(currentListing.Origin);
-    if (hasBetterSource) {
+    if (isNewer || hasBetterSource) {
       dedupedItems[dedupeKey] = listing;
     }
   });

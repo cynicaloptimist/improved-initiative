@@ -22,7 +22,8 @@ describe("StatBlock Library", () => {
           Link: Store.StatBlocks,
           Path: "",
           Metadata: {},
-          SearchHint: ""
+          SearchHint: "",
+          LastUpdateMs: 0
         }
       ],
       "localAsync"

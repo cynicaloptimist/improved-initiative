@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
@@ -26,6 +27,7 @@ export class SpellLibrary {
   };
 
   public AddOrUpdateSpell = (spell: Spell) => {
+    spell.LastUpdateMs = moment.now();
     this.spells.remove(listing => listing.Listing().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
@@ -33,7 +35,8 @@ export class SpellLibrary {
         ...spell,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: LegacySynchronousLocalStore.Spells
+        Link: LegacySynchronousLocalStore.Spells,
+        LastUpdateMs: spell.LastUpdateMs
       },
       "localStorage",
       spell
@@ -54,7 +57,8 @@ export class SpellLibrary {
           Path: spell.Path,
           SearchHint: Spell.GetSearchHint(spell),
           Metadata: Spell.GetMetadata(spell),
-          Link: `/my/spells/${spell.Id}`
+          Link: `/my/spells/${spell.Id}`,
+          LastUpdateMs: moment.now()
         },
         "account",
         spell

@@ -90,7 +90,8 @@ export class Listing<T extends Listable> {
         Path: current.Path || "",
         Link: this.storedListing.Link,
         SearchHint: this.storedListing.SearchHint,
-        Metadata: this.storedListing.Metadata
+        Metadata: this.storedListing.Metadata,
+        LastUpdateMs: current.LastUpdateMs || 0
       };
     }
     return this.storedListing;
