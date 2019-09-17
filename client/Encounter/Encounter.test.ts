@@ -49,6 +49,40 @@ describe("Encounter", () => {
     expect(promptReroll).not.toBeCalled();
   });
 
+  test("Display post-combat stats produces reasonable results", () => {
+    const settings = CurrentSettings();
+    settings.TrackerView.PostCombatStats = true;
+
+    jest.useFakeTimers();
+
+    for (let i = 0; i < 2; i++) {
+      let thisCombatant = encounter.AddCombatantFromStatBlock(
+        StatBlock.Default()
+      );
+      thisCombatant.Initiative(2 - i);
+      thisCombatant.Alias(`Combatant ${i}`);
+    }
+
+    encounter.EncounterFlow.StartEncounter();
+
+    for (let i = 0; i < 5; i++) {
+      jest.advanceTimersByTime(60 * 1000);
+      encounter.EncounterFlow.NextTurn(jest.fn());
+    }
+
+    expect(encounter.EncounterFlow.CombatTimeString()).toBe(
+      "Combat lasted 3 rounds, taking 5:00, averaging 1:40 per round."
+    );
+
+    expect(encounter.Combatants()[0].CombatStatsString()).toBe(
+      "Combatant 0 participated in 2 rounds, taking on average 1:30 per round."
+    );
+
+    expect(encounter.Combatants()[1].CombatStatsString()).toBe(
+      "Combatant 1 participated in 3 rounds, taking on average 0:40 per round."
+    );
+  });
+
   describe("Initiative Ordering", () => {
     test("By roll", () => {
       const slow = encounter.AddCombatantFromStatBlock(StatBlock.Default());

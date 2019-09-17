@@ -129,6 +129,10 @@ export class EncounterCommander {
     const displayPostCombatStats = CurrentSettings().TrackerView
       .PostCombatStats;
     if (displayPostCombatStats) {
+      this.tracker.EventLog.AddEvent(
+        this.tracker.Encounter.EncounterFlow.CombatTimeString()
+      );
+
       this.tracker.Encounter.Combatants().forEach(c => {
         if (c.IsPlayerCharacter()) {
           this.tracker.EventLog.AddEvent(c.CombatStatsString());
@@ -136,6 +140,8 @@ export class EncounterCommander {
       });
     }
     this.tracker.Encounter.Combatants().forEach(c => c.ResetCombatStats());
+
+    this.tracker.Encounter.EncounterFlow.RoundCounter(0);
 
     return false;
   };

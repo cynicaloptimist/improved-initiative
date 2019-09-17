@@ -273,7 +273,7 @@ export class Combatant {
       roundCount = this.CombatRounds(),
       elapsedSec = this.CombatTimeSeconds();
 
-    let avgTime = moment.duration({ seconds: elapsedSec });
+    let avgTime = moment.duration({ seconds: elapsedSec / roundCount });
     let paddedSeconds = avgTime.seconds().toString();
     if (paddedSeconds.length < 2) {
       paddedSeconds = "0" + paddedSeconds;
@@ -281,7 +281,7 @@ export class Combatant {
 
     let tString = avgTime.minutes() + ":" + paddedSeconds;
 
-    return `${name} participated in ${roundCount} rounds, averaging ${tString} per round.`;
+    return `${name} participated in ${roundCount} rounds, taking on average ${tString} per round.`;
   });
 
   public GetState: () => CombatantState = () => {
