@@ -21,15 +21,17 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
       listing.Listing().Path.toLocaleLowerCase() +
       "-" +
       listing.Listing().Name.toLocaleLowerCase();
+
+    if (dedupedItems[dedupeKey] == undefined) {
+      dedupedItems[dedupeKey] = listing;
+      return;
+    }
+
     const currentListing = dedupedItems[dedupeKey];
-    if (currentListing) {
-      const hasBetterSource =
-        sourceRankings.indexOf(listing.Origin) <
-        sourceRankings.indexOf(currentListing.Origin);
-      if (hasBetterSource) {
-        dedupedItems[dedupeKey] = listing;
-      }
-    } else {
+    const hasBetterSource =
+      sourceRankings.indexOf(listing.Origin) <
+      sourceRankings.indexOf(currentListing.Origin);
+    if (hasBetterSource) {
       dedupedItems[dedupeKey] = listing;
     }
   });
