@@ -76,9 +76,6 @@ export class EncounterCommander {
   public DisplayDifficulty = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayDifficulty
   );
-  public PostCombatStats = ko.pureComputed(
-    () => CurrentSettings().TrackerView.PostCombatStats
-  );
 
   private rollInitiative = () => {
     this.tracker.PromptQueue.AddLegacyPrompt(
@@ -130,7 +127,7 @@ export class EncounterCommander {
       .PostCombatStats;
     if (displayPostCombatStats) {
       this.tracker.EventLog.AddEvent(
-        this.tracker.Encounter.EncounterFlow.CombatTimeString()
+        this.tracker.Encounter.EncounterFlow.CombatStatsString()
       );
 
       this.tracker.Encounter.Combatants().forEach(c => {
@@ -139,7 +136,8 @@ export class EncounterCommander {
         }
       });
     }
-    this.tracker.Encounter.Combatants().forEach(c => c.ResetCombatStats());
+    this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Reset());
+    this.tracker.Encounter.EncounterFlow.CombatTimer.Reset();
 
     this.tracker.Encounter.EncounterFlow.RoundCounter(0);
 

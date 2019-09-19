@@ -1,5 +1,5 @@
 import * as ko from "knockout";
-import * as moment from "moment";
+import { GetTimerReadout } from "./GetTimerReadout";
 
 export class TurnTimer {
   private elapsedSeconds = ko.observable(0);
@@ -29,12 +29,8 @@ export class TurnTimer {
   });
 
   public Readout = ko.pureComputed(() => {
-    let time = moment.duration({ seconds: this.elapsedSeconds() });
-    let paddedSeconds = time.seconds().toString();
-    if (paddedSeconds.length < 2) {
-      paddedSeconds = "0" + paddedSeconds;
-    }
+    let elapsedSeconds = this.elapsedSeconds();
 
-    return time.minutes() + ":" + paddedSeconds;
+    return GetTimerReadout(elapsedSeconds);
   });
 }

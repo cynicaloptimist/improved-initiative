@@ -5,6 +5,7 @@ import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { Combatant } from "../Combatant/Combatant";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings } from "../Settings/Settings";
+import { CombatTimer } from "../Widgets/CombatTimer";
 import { TurnTimer } from "../Widgets/TurnTimer";
 import { Encounter } from "./Encounter";
 
@@ -15,6 +16,7 @@ export class EncounterFlow {
   public RoundCounter: KnockoutObservable<number> = ko.observable(0);
   public CombatTimeSeconds: KnockoutObservable<number> = ko.observable(0);
   public TurnTimer = new TurnTimer();
+  public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
     "active" | "inactive"
   >("inactive");
@@ -34,23 +36,24 @@ export class EncounterFlow {
     this.encounter.SortByInitiative();
     if (this.State() == "inactive") {
       this.RoundCounter(1);
+      this.CombatTimer.IncrementCombatRounds();
     }
     this.State("active");
     this.ActiveCombatant(this.encounter.Combatants()[0]);
+    this.ActiveCombatant().CombatTimer.Start();
+    this.ActiveCombatant().CombatTimer.IncrementCombatRounds();
     this.TurnTimer.Start();
-    this.CombatTimeSeconds(0);
+    this.CombatTimer.Start();
   };
 
   public EndEncounter = () => {
     this.State("inactive");
 
     if (this.ActiveCombatant() != null) {
-      this.ActiveCombatant().IncrementCombatRounds();
-      let elapsedSeconds = this.TurnTimer.ElapsedSeconds();
-      this.ActiveCombatant().AddCombatTime(elapsedSeconds);
-      this.AddCombatTime(elapsedSeconds);
+      this.ActiveCombatant().CombatTimer.Stop();
     }
 
+    this.CombatTimer.Stop();
     this.ActiveCombatant(null);
     this.TurnTimer.Stop();
     this.encounter.TemporaryBackgroundImageUrl(null);
@@ -79,11 +82,15 @@ export class EncounterFlow {
         this.rerollInitiativeWithoutPrompt();
       }
       this.RoundCounter(this.RoundCounter() + 1);
+      this.CombatTimer.IncrementCombatRounds();
     }
 
     const nextCombatant = this.encounter.Combatants()[nextIndex];
     this.ActiveCombatant(nextCombatant);
-    this.ActiveCombatant().IncrementCombatRounds();
+
+    activeCombatant.CombatTimer.Stop();
+    nextCombatant.CombatTimer.IncrementCombatRounds();
+    nextCombatant.CombatTimer.Start();
 
     this.durationTags
       .filter(
@@ -94,15 +101,11 @@ export class EncounterFlow {
       )
       .forEach(t => t.Decrement());
 
-    let elapsedSeconds = this.TurnTimer.ElapsedSeconds();
-    activeCombatant.AddCombatTime(elapsedSeconds);
-    this.AddCombatTime(elapsedSeconds);
     this.TurnTimer.Reset();
   };
 
   public PreviousTurn = () => {
     const activeCombatant = this.ActiveCombatant();
-    activeCombatant.DecrementCombatRounds();
 
     this.durationTags
       .filter(
@@ -119,10 +122,15 @@ export class EncounterFlow {
     if (previousIndex < 0) {
       previousIndex = this.encounter.Combatants().length - 1;
       this.RoundCounter(this.RoundCounter() - 1);
+      this.CombatTimer.DecrementCombatRounds();
     }
 
     const previousCombatant = this.encounter.Combatants()[previousIndex];
     this.ActiveCombatant(previousCombatant);
+
+    activeCombatant.CombatTimer.DecrementCombatRounds();
+    activeCombatant.CombatTimer.Stop();
+    previousCombatant.CombatTimer.Start();
 
     this.durationTags
       .filter(
@@ -133,37 +141,14 @@ export class EncounterFlow {
       )
       .forEach(t => t.Increment());
 
-    let elapsedSeconds = this.TurnTimer.ElapsedSeconds();
-    activeCombatant.AddCombatTime(elapsedSeconds);
-    this.AddCombatTime(elapsedSeconds);
     this.TurnTimer.Reset();
   };
 
-  public AddCombatTime(timeSec: number) {
-    let currTimeSec = this.CombatTimeSeconds();
+  public CombatStatsString = ko.computed(() => {
+    let roundCount = this.CombatTimer.ElapsedRounds();
 
-    currTimeSec += timeSec;
-
-    this.CombatTimeSeconds(currTimeSec);
-  }
-
-  public CombatTimeString = ko.computed(() => {
-    const roundCount = this.RoundCounter(),
-      elapsedSec = this.CombatTimeSeconds();
-
-    let totalTime = moment.duration({ seconds: elapsedSec });
-    let avgTime = moment.duration({ seconds: elapsedSec / roundCount });
-    let paddedSeconds = totalTime.seconds().toString();
-    let paddedSecondsAvg = avgTime.seconds().toString();
-    if (paddedSeconds.length < 2) {
-      paddedSeconds = "0" + paddedSeconds;
-    }
-    if (paddedSecondsAvg.length < 2) {
-      paddedSecondsAvg = "0" + paddedSecondsAvg;
-    }
-
-    let avgTimeString = avgTime.minutes() + ":" + paddedSecondsAvg;
-    let totalTimeString = totalTime.minutes() + ":" + paddedSeconds;
+    let avgTimeString = this.CombatTimer.ReadoutAverageTime();
+    let totalTimeString = this.CombatTimer.ReadoutTotalTime();
 
     return `Combat lasted ${roundCount} rounds, taking ${totalTimeString}, averaging ${avgTimeString} per round.`;
   });

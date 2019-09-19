@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as moment from "moment";
 
 import { CombatantState, TagState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
@@ -9,6 +8,7 @@ import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrar
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
+import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
 
 export class Combatant {
@@ -55,8 +55,7 @@ export class Combatant {
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
 
-  public CombatRounds = ko.observable(0);
-  public CombatTimeSeconds = ko.observable(0);
+  public CombatTimer = new CombatTimer();
 
   public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
@@ -217,35 +216,6 @@ export class Combatant {
     this.CurrentHP(currHP);
   }
 
-  public IncrementCombatRounds() {
-    let currRounds = this.CombatRounds();
-
-    currRounds += 1;
-
-    this.CombatRounds(currRounds);
-  }
-
-  public DecrementCombatRounds() {
-    let currRounds = this.CombatRounds();
-
-    currRounds -= 1;
-
-    this.CombatRounds(currRounds);
-  }
-
-  public AddCombatTime(timeSec: number) {
-    let currTimeSec = this.CombatTimeSeconds();
-
-    currTimeSec += timeSec;
-
-    this.CombatTimeSeconds(currTimeSec);
-  }
-
-  public ResetCombatStats() {
-    this.CombatRounds(0);
-    this.CombatTimeSeconds(0);
-  }
-
   public ApplyTemporaryHP(tempHP: number) {
     if (tempHP > this.TemporaryHP()) {
       this.TemporaryHP(tempHP);
@@ -269,19 +239,12 @@ export class Combatant {
   });
 
   public CombatStatsString = ko.computed(() => {
-    const name = this.DisplayName(),
-      roundCount = this.CombatRounds(),
-      elapsedSec = this.CombatTimeSeconds();
+    const name = this.DisplayName();
+    const roundCount = this.CombatTimer.ElapsedRounds();
 
-    let avgTime = moment.duration({ seconds: elapsedSec / roundCount });
-    let paddedSeconds = avgTime.seconds().toString();
-    if (paddedSeconds.length < 2) {
-      paddedSeconds = "0" + paddedSeconds;
-    }
+    const avgTimeString = this.CombatTimer.ReadoutAverageTime();
 
-    let tString = avgTime.minutes() + ":" + paddedSeconds;
-
-    return `${name} participated in ${roundCount} rounds, taking on average ${tString} per round.`;
+    return `${name} participated in ${roundCount} rounds, taking on average ${avgTimeString} per round.`;
   });
 
   public GetState: () => CombatantState = () => {
@@ -307,8 +270,6 @@ export class Combatant {
         })),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
-      CombatRounds: this.CombatRounds(),
-      CombatTimeSeconds: this.CombatTimeSeconds(),
       InterfaceVersion: process.env.VERSION
     };
   };

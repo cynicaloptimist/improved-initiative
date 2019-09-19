@@ -70,12 +70,12 @@ describe("Encounter", () => {
       encounter.EncounterFlow.NextTurn(jest.fn());
     }
 
-    expect(encounter.EncounterFlow.CombatTimeString()).toBe(
+    expect(encounter.EncounterFlow.CombatStatsString()).toBe(
       "Combat lasted 3 rounds, taking 5:00, averaging 1:40 per round."
     );
 
     expect(encounter.Combatants()[0].CombatStatsString()).toBe(
-      "Combatant 0 participated in 2 rounds, taking on average 1:30 per round."
+      "Combatant 0 participated in 3 rounds, taking on average 1:00 per round."
     );
 
     expect(encounter.Combatants()[1].CombatStatsString()).toBe(
