@@ -49,7 +49,7 @@ export class CombatTimer {
     return this.elapsedSeconds();
   });
 
-  public ElapsedRounds = ko.pureComputed(() => {
+  public ElapsedRounds = ko.computed(() => {
     return this.elapsedRounds();
   });
 
