@@ -69,7 +69,6 @@ export class LocalDataSettings extends React.Component<{}> {
   };
 
   private importDndAppFile = (file: File) => {
-    Store.ImportFromDnDAppFile(file);
     LegacySynchronousLocalStore.ImportFromDnDAppFile(file);
   };
 

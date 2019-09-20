@@ -1,5 +1,6 @@
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
+import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 import { Store } from "./Store";
 
@@ -175,6 +176,12 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function ImportFromDnDAppFile(file: File) {
+    const statBlocksCallback = (statBlocks: StatBlock[]) => {
+      statBlocks.forEach(c => {
+        Save(Store.StatBlocks, c.Id, c);
+      });
+    };
+
     const spellsCallback = (spells: Spell[]) => {
       spells.forEach(c => {
         Save(LegacySynchronousLocalStore.Spells, c.Id, c);
@@ -186,7 +193,7 @@ export namespace LegacySynchronousLocalStore {
     ) {
       const importer = new DnDAppFilesImporter();
 
-      importer.ImportEntitiesFromXml(file, () => {}, spellsCallback);
+      importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
     }
   }
 
