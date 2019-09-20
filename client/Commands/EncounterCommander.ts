@@ -131,13 +131,14 @@ export class EncounterCommander {
       const combatTimer = this.tracker.Encounter.EncounterFlow.CombatTimer;
       const combatStatsPrompt = CombatStatsPrompt(
         combatTimer.ElapsedRounds(),
-        combatTimer.ReadoutTotalTime(),
-        combatTimer.ReadoutAverageTime(),
-        this.tracker.Encounter.Combatants().map(c => ({
-          displayName: c.DisplayName(),
-          elapsedRounds: c.CombatTimer.ElapsedRounds(),
-          averageTimeReadout: c.CombatTimer.ReadoutAverageTime()
-        }))
+        combatTimer.ElapsedSeconds(),
+        this.tracker.Encounter.Combatants()
+          .filter(c => c.IsPlayerCharacter())
+          .map(c => ({
+            displayName: c.DisplayName(),
+            elapsedRounds: c.CombatTimer.ElapsedRounds(),
+            elapsedSeconds: c.CombatTimer.ElapsedSeconds()
+          }))
       );
 
       this.tracker.PromptQueue.Add(combatStatsPrompt);

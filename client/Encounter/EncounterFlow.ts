@@ -5,6 +5,7 @@ import { Combatant } from "../Combatant/Combatant";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings } from "../Settings/Settings";
 import { CombatTimer } from "../Widgets/CombatTimer";
+import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 export class EncounterFlow {
@@ -26,6 +27,10 @@ export class EncounterFlow {
   );
   public StateTip = ko.pureComputed(() =>
     this.State() === "active" ? "Encounter Active" : "Encounter Inactive"
+  );
+
+  public TurnTimerReadout = ko.pureComputed(() =>
+    GetTimerReadout(this.TurnTimer.ElapsedSeconds())
   );
 
   public StartEncounter = () => {
@@ -136,15 +141,6 @@ export class EncounterFlow {
 
     this.TurnTimer.Reset();
   };
-
-  public CombatStatsString = ko.computed(() => {
-    let roundCount = this.CombatTimer.ElapsedRounds();
-
-    let avgTimeString = this.CombatTimer.ReadoutAverageTime();
-    let totalTimeString = this.CombatTimer.ReadoutTotalTime();
-
-    return `Combat lasted ${roundCount} rounds, taking ${totalTimeString}, averaging ${avgTimeString} per round.`;
-  });
 
   public AddDurationTag = (tag: Tag) => {
     this.durationTags.push(tag);

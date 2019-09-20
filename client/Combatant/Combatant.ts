@@ -240,15 +240,6 @@ export class Combatant {
     return name;
   });
 
-  public CombatStatsString = ko.computed(() => {
-    const name = this.DisplayName();
-    const roundCount = this.CombatTimer.ElapsedRounds();
-
-    const avgTimeString = this.CombatTimer.ReadoutAverageTime();
-
-    return `${name} participated in ${roundCount} rounds, taking on average ${avgTimeString} per round.`;
-  });
-
   public GetState: () => CombatantState = () => {
     return {
       Id: this.Id,

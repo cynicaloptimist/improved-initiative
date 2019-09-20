@@ -3,6 +3,7 @@ import { buildEncounter } from "../test/buildEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 describe("Encounter", () => {
@@ -70,17 +71,23 @@ describe("Encounter", () => {
       encounter.EncounterFlow.NextTurn(jest.fn());
     }
 
-    expect(encounter.EncounterFlow.CombatStatsString()).toBe(
-      "Combat lasted 3 rounds, taking 5:00, averaging 1:40 per round."
-    );
+    expect(
+      GetTimerReadout(encounter.EncounterFlow.CombatTimer.ElapsedSeconds())
+    ).toBe("5:00");
 
-    expect(encounter.Combatants()[0].CombatStatsString()).toBe(
-      "Combatant 0 participated in 3 rounds, taking on average 1:00 per round."
-    );
+    let combatant0Elapsed = encounter
+        .Combatants()[0]
+        .CombatTimer.ElapsedSeconds(),
+      combatant0Rounds = encounter.Combatants()[0].CombatTimer.ElapsedRounds();
 
-    expect(encounter.Combatants()[1].CombatStatsString()).toBe(
-      "Combatant 1 participated in 3 rounds, taking on average 0:40 per round."
-    );
+    expect(GetTimerReadout(combatant0Elapsed / combatant0Rounds)).toBe("1:00");
+
+    let combatant1Elapsed = encounter
+        .Combatants()[1]
+        .CombatTimer.ElapsedSeconds(),
+      combatant1Rounds = encounter.Combatants()[1].CombatTimer.ElapsedRounds();
+
+    expect(GetTimerReadout(combatant1Elapsed / combatant1Rounds)).toBe("0:40");
   });
 
   describe("Initiative Ordering", () => {
@@ -175,7 +182,7 @@ describe("Encounter", () => {
     encounter.EncounterFlow.StartEncounter();
     jest.advanceTimersByTime(10000); // 10 seconds
     encounter.EncounterFlow.EndEncounter();
-    expect(encounter.EncounterFlow.TurnTimer.ReadoutTotalTime()).toBe("0:00");
+    expect(encounter.EncounterFlow.TurnTimerReadout()).toBe("0:00");
   });
 });
 

@@ -1,6 +1,10 @@
 import * as moment from "moment";
 
 export function GetTimerReadout(elapsedSeconds: number) {
+  if (isNaN(elapsedSeconds)) {
+    return "0:00";
+  }
+
   let time = moment.duration({ seconds: elapsedSeconds });
   let paddedSeconds = time.seconds().toString(),
     paddedMinutes = time.minutes().toString();
