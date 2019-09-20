@@ -181,6 +181,8 @@ export class Encounter {
       RevealedAC: false,
       Initiative: 0,
       Tags: [],
+      RoundCounter: 0,
+      ElapsedSeconds: 0,
       InterfaceVersion: process.env.VERSION
     };
 
@@ -217,6 +219,8 @@ export class Encounter {
       RevealedAC: false,
       Initiative: 0,
       Tags: [],
+      RoundCounter: 0,
+      ElapsedSeconds: 0,
       InterfaceVersion: persistentCharacter.Version
     };
 
@@ -378,6 +382,7 @@ export class Encounter {
           .filter(c => c.Id == encounterState.ActiveCombatantId)
           .pop()
       );
+      this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
       this.EncounterFlow.CombatTimer.Start();
     }

@@ -23,5 +23,7 @@ export interface CombatantState {
   Tags: string[] | TagState[];
   Hidden: boolean;
   RevealedAC: boolean;
+  RoundCounter?: number;
+  ElapsedSeconds?: number;
   InterfaceVersion: string;
 }

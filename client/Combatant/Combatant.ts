@@ -87,6 +87,8 @@ export class Combatant {
     this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
+    this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
+    this.CombatTimer.SetElapsedSeconds(savedCombatant.ElapsedSeconds || 0);
   }
 
   public AttachToPersistentCharacterLibrary(
@@ -270,6 +272,8 @@ export class Combatant {
         })),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
+      RoundCounter: this.CombatTimer.ElapsedRounds(),
+      ElapsedSeconds: this.CombatTimer.ElapsedSeconds(),
       InterfaceVersion: process.env.VERSION
     };
   };
