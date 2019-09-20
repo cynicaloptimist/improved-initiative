@@ -1,3 +1,4 @@
+import moment = require("moment");
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
@@ -141,7 +142,8 @@ export namespace LegacySynchronousLocalStore {
       if (!listingJSON) {
         console.warn(`Couldn't import ${fullKey} from JSON`);
       } else {
-        const listing = JSON.parse(listingJSON);
+        const listing: Listable = JSON.parse(listingJSON);
+        listing.LastUpdateMs = moment.now();
         Save(listName, key, listing);
       }
     }
