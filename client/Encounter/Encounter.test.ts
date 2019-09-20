@@ -175,7 +175,7 @@ describe("Encounter", () => {
     encounter.EncounterFlow.StartEncounter();
     jest.advanceTimersByTime(10000); // 10 seconds
     encounter.EncounterFlow.EndEncounter();
-    expect(encounter.EncounterFlow.TurnTimer.Readout()).toBe("0:00");
+    expect(encounter.EncounterFlow.TurnTimer.ReadoutTotalTime()).toBe("0:00");
   });
 });
 

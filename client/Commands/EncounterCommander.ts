@@ -136,8 +136,8 @@ export class EncounterCommander {
         }
       });
     }
-    this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Reset());
-    this.tracker.Encounter.EncounterFlow.CombatTimer.Reset();
+    this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Stop());
+    this.tracker.Encounter.EncounterFlow.CombatTimer.Stop();
 
     return false;
   };

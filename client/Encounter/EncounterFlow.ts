@@ -5,14 +5,13 @@ import { Combatant } from "../Combatant/Combatant";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings } from "../Settings/Settings";
 import { CombatTimer } from "../Widgets/CombatTimer";
-import { TurnTimer } from "../Widgets/TurnTimer";
 import { Encounter } from "./Encounter";
 
 export class EncounterFlow {
   public ActiveCombatant: KnockoutObservable<Combatant> = ko.observable<
     Combatant
   >();
-  public TurnTimer = new TurnTimer();
+  public TurnTimer = new CombatTimer();
   public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
     "active" | "inactive"
@@ -46,12 +45,12 @@ export class EncounterFlow {
     this.State("inactive");
 
     if (this.ActiveCombatant() != null) {
-      this.ActiveCombatant().CombatTimer.Stop();
+      this.ActiveCombatant().CombatTimer.Pause();
     }
 
-    this.CombatTimer.Stop();
-    this.ActiveCombatant(null);
+    this.CombatTimer.Pause();
     this.TurnTimer.Stop();
+    this.ActiveCombatant(null);
     this.encounter.TemporaryBackgroundImageUrl(null);
   };
 
@@ -83,7 +82,7 @@ export class EncounterFlow {
     const nextCombatant = this.encounter.Combatants()[nextIndex];
     this.ActiveCombatant(nextCombatant);
 
-    activeCombatant.CombatTimer.Stop();
+    activeCombatant.CombatTimer.Pause();
     nextCombatant.CombatTimer.IncrementCombatRounds();
     nextCombatant.CombatTimer.Start();
 
@@ -123,7 +122,7 @@ export class EncounterFlow {
     this.ActiveCombatant(previousCombatant);
 
     activeCombatant.CombatTimer.DecrementCombatRounds();
-    activeCombatant.CombatTimer.Stop();
+    activeCombatant.CombatTimer.Pause();
     previousCombatant.CombatTimer.Start();
 
     this.durationTags
