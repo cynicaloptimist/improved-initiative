@@ -139,8 +139,6 @@ export class EncounterCommander {
     this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Reset());
     this.tracker.Encounter.EncounterFlow.CombatTimer.Reset();
 
-    this.tracker.Encounter.EncounterFlow.RoundCounter(0);
-
     return false;
   };
 

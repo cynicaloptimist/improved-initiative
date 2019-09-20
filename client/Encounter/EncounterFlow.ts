@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import * as moment from "moment";
 
 import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { Combatant } from "../Combatant/Combatant";
@@ -13,7 +12,6 @@ export class EncounterFlow {
   public ActiveCombatant: KnockoutObservable<Combatant> = ko.observable<
     Combatant
   >();
-  public RoundCounter: KnockoutObservable<number> = ko.observable(0);
   public TurnTimer = new TurnTimer();
   public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
@@ -34,8 +32,7 @@ export class EncounterFlow {
   public StartEncounter = () => {
     this.encounter.SortByInitiative();
     if (this.State() == "inactive") {
-      this.RoundCounter(1);
-      this.CombatTimer.IncrementCombatRounds();
+      this.CombatTimer.SetElapsedRounds(1);
     }
     this.State("active");
     this.ActiveCombatant(this.encounter.Combatants()[0]);
@@ -80,7 +77,6 @@ export class EncounterFlow {
       if (autoRerollOption == AutoRerollInitiativeOption.Automatic) {
         this.rerollInitiativeWithoutPrompt();
       }
-      this.RoundCounter(this.RoundCounter() + 1);
       this.CombatTimer.IncrementCombatRounds();
     }
 
@@ -120,7 +116,6 @@ export class EncounterFlow {
 
     if (previousIndex < 0) {
       previousIndex = this.encounter.Combatants().length - 1;
-      this.RoundCounter(this.RoundCounter() - 1);
       this.CombatTimer.DecrementCombatRounds();
     }
 

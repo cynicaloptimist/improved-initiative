@@ -19,15 +19,15 @@ export class CombatTimer {
     clearInterval(this.intervalToken);
   };
 
-  public IncrementCombatRounds() {
+  public IncrementCombatRounds = () => {
     let currRounds = this.elapsedRounds();
 
     currRounds += 1;
 
     this.elapsedRounds(currRounds);
-  }
+  };
 
-  public DecrementCombatRounds() {
+  public DecrementCombatRounds = () => {
     let currRounds = this.elapsedRounds();
 
     if (currRounds == 0) {
@@ -37,7 +37,22 @@ export class CombatTimer {
     currRounds -= 1;
 
     this.elapsedRounds(currRounds);
-  }
+  };
+
+  // TODO: replace these with public observable?
+  public SetElapsedRounds = (rounds: number) => {
+    if (rounds < 0) {
+      this.elapsedRounds(0);
+    }
+    this.elapsedRounds(rounds);
+  };
+
+  public SetElapsedSeconds = (seconds: number) => {
+    if (seconds < 0) {
+      this.elapsedSeconds(0);
+    }
+    this.elapsedSeconds(seconds);
+  };
 
   public Reset = () => {
     this.Stop();
@@ -45,11 +60,11 @@ export class CombatTimer {
     this.elapsedRounds(0);
   };
 
-  public ElapsedSeconds = ko.computed(() => {
+  public ElapsedSeconds = ko.pureComputed(() => {
     return this.elapsedSeconds();
   });
 
-  public ElapsedRounds = ko.computed(() => {
+  public ElapsedRounds = ko.pureComputed(() => {
     return this.elapsedRounds();
   });
 

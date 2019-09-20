@@ -319,7 +319,8 @@ export class Encounter {
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-        RoundCounter: this.EncounterFlow.RoundCounter(),
+        RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
+        ElapsedSeconds: this.EncounterFlow.CombatTimer.ElapsedSeconds(),
         Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
         BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
       };
@@ -333,7 +334,7 @@ export class Encounter {
         .backgroundUrl;
       return {
         ActiveCombatantId: activeCombatantId,
-        RoundCounter: this.EncounterFlow.RoundCounter(),
+        RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
         Combatants: this.getCombatantsForPlayerView(activeCombatantId),
         BackgroundImageUrl:
           this.TemporaryBackgroundImageUrl() || defaultBackgroundUrl
@@ -378,8 +379,14 @@ export class Encounter {
           .pop()
       );
       this.EncounterFlow.TurnTimer.Start();
+      this.EncounterFlow.CombatTimer.Start();
     }
-    this.EncounterFlow.RoundCounter(encounterState.RoundCounter || 1);
+    this.EncounterFlow.CombatTimer.SetElapsedRounds(
+      encounterState.RoundCounter || 1
+    );
+    this.EncounterFlow.CombatTimer.SetElapsedSeconds(
+      encounterState.ElapsedSeconds || 0
+    );
     this.TemporaryBackgroundImageUrl(encounterState.BackgroundImageUrl || null);
   };
 

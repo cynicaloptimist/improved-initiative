@@ -239,7 +239,9 @@
           <!-- ko if: EncounterCommander.DisplayRoundCounter -->
           <span class="round-counter"
             >Current Round:
-            <span data-bind="text: Encounter.EncounterFlow.RoundCounter"></span
+            <span
+              data-bind="text: Encounter.EncounterFlow.CombatTimer.ElapsedRounds"
+            ></span
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayDifficulty -->
