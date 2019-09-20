@@ -14,7 +14,6 @@ export class EncounterFlow {
     Combatant
   >();
   public RoundCounter: KnockoutObservable<number> = ko.observable(0);
-  public CombatTimeSeconds: KnockoutObservable<number> = ko.observable(0);
   public TurnTimer = new TurnTimer();
   public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
