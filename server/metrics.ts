@@ -1,61 +1,14 @@
 import express = require("express");
-import KeenTracking = require("keen-tracking");
+import { MongoClient } from "mongodb";
 
-const keenProjectId = process.env.KEEN_PROJECT_ID || "";
-const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
+const metricsDbConnectionString = process.env.METRICS_DB_CONNECTION_STRING;
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const addons: any[] = [
-  {
-    name: "keen:url_parser",
-    input: {
-      url: "page.url"
-    },
-    output: "url.info"
-  },
-  {
-    name: "keen:url_parser",
-    input: {
-      url: "referrer.url"
-    },
-    output: "referrer.info"
-  },
-  {
-    name: "keen:date_time_parser",
-    input: {
-      date_time: "keen.timestamp"
-    },
-    output: "time.utc"
-  },
-  {
-    name: "keen:date_time_parser",
-    input: {
-      date_time: "localTime"
-    },
-    output: "time.local"
-  }
-];
-
-const onymousAddons = [
-  {
-    name: "keen:ip_to_geo",
-    input: {
-      ip: "ipAddress"
-    },
-    output: "geo"
-  }
-];
-
 export function configureMetricsRoutes(app: express.Application) {
-  const keenClient = new KeenTracking({
-    projectId: keenProjectId,
-    writeKey: keenWriteKey
-  });
-
-  app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
-    if (!keenProjectId || !keenWriteKey) {
+  app.post("/recordEvent/:eventName", async (req: Req, res: Res) => {
+    if (metricsDbConnectionString == undefined) {
       return res.status(204).send("No metrics pipeline configured.");
     }
 
@@ -69,22 +22,31 @@ export function configureMetricsRoutes(app: express.Application) {
     eventData.sessionId = session.id;
     eventData.userId = session.userId || null;
     eventData.ipAddress = req.ip;
-    eventData.keen = { addons: addons.concat(onymousAddons) };
-    keenClient.recordEvent(eventName, eventData);
+
+    const client = await new MongoClient(metricsDbConnectionString).connect();
+    const events = client.db().collection("events");
+    await events.insertOne({
+      eventName,
+      eventData
+    });
 
     return res.sendStatus(202);
   });
 
-  app.post("/recordAnonymousEvent/:eventName", (req: Req, res: Res) => {
-    if (!keenProjectId || !keenWriteKey) {
-      return res.status(501).send("No metrics pipeline configured.");
+  app.post("/recordAnonymousEvent/:eventName", async (req: Req, res: Res) => {
+    if (metricsDbConnectionString == undefined) {
+      return res.status(204).send("No metrics pipeline configured.");
     }
 
     const eventName = req.params.eventName;
     const eventData = req.body || {};
 
-    eventData.keen = { addons };
-    keenClient.recordEvent(eventName, eventData);
+    const client = await new MongoClient(metricsDbConnectionString).connect();
+    const events = client.db().collection("events");
+    await events.insertOne({
+      eventName,
+      eventData
+    });
 
     return res.sendStatus(200);
   });
