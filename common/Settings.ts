@@ -26,6 +26,7 @@ export interface Settings {
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
+    PostCombatStats: boolean;
   };
   PlayerView: PlayerViewSettings;
   Version: string;
@@ -44,7 +45,8 @@ export function getDefaultSettings(): Settings {
     TrackerView: {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
-      DisplayDifficulty: true
+      DisplayDifficulty: true,
+      PostCombatStats: false
     },
     PlayerView: {
       ActiveCombatantOnTop: false,

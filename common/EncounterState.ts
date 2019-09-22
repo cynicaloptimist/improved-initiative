@@ -1,6 +1,7 @@
 export interface EncounterState<T> {
   ActiveCombatantId: string | null;
   RoundCounter?: number;
+  ElapsedSeconds?: number;
   BackgroundImageUrl?: string;
   Combatants: T[];
 }
@@ -10,6 +11,7 @@ export namespace EncounterState {
     return {
       ActiveCombatantId: null,
       RoundCounter: 0,
+      ElapsedSeconds: 0,
       Combatants: []
     };
   }

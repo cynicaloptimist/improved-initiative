@@ -8,6 +8,7 @@ import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrar
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
+import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
 
 export class Combatant {
@@ -54,6 +55,8 @@ export class Combatant {
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
 
+  public CombatTimer = new CombatTimer();
+
   public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
   public CurrentNotes: KnockoutObservable<string>;
@@ -84,6 +87,8 @@ export class Combatant {
     this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
+    this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
+    this.CombatTimer.SetElapsedSeconds(savedCombatant.ElapsedSeconds || 0);
   }
 
   public AttachToPersistentCharacterLibrary(
@@ -258,6 +263,8 @@ export class Combatant {
         })),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
+      RoundCounter: this.CombatTimer.ElapsedRounds(),
+      ElapsedSeconds: this.CombatTimer.ElapsedSeconds(),
       InterfaceVersion: process.env.VERSION
     };
   };
