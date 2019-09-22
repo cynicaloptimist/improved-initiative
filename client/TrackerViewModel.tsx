@@ -249,6 +249,11 @@ export class TrackerViewModel {
         ...StatBlock.Default(),
         ...parsedStatBlock
       };
+
+      Metrics.TrackEvent("StatBlockImported", {
+        Name: statBlock.Name
+      });
+
       this.EditStatBlock({
         editorTarget: "library",
         onSave: this.Libraries.NPCs.SaveNewStatBlock,
