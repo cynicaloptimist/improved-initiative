@@ -233,13 +233,15 @@
           <!-- ko if: EncounterCommander.DisplayTurnTimer -->
           <span
             class="turn-timer"
-            data-bind="text: Encounter.EncounterFlow.TurnTimer.Readout"
+            data-bind="text: Encounter.EncounterFlow.TurnTimerReadout"
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayRoundCounter -->
           <span class="round-counter"
             >Current Round:
-            <span data-bind="text: Encounter.EncounterFlow.RoundCounter"></span
+            <span
+              data-bind="text: Encounter.EncounterFlow.CombatTimer.ElapsedRounds"
+            ></span
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayDifficulty -->

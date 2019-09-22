@@ -9,6 +9,7 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
+import { CombatStatsPrompt } from "./Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "./Prompts/InitiativePrompt";
 import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
@@ -122,6 +123,29 @@ export class EncounterCommander {
     Metrics.TrackEvent("EncounterEnded", {
       Combatants: this.tracker.Encounter.Combatants().length
     });
+
+    const displayPostCombatStats = CurrentSettings().TrackerView
+      .PostCombatStats;
+
+    if (displayPostCombatStats) {
+      const combatTimer = this.tracker.Encounter.EncounterFlow.CombatTimer;
+      const combatStatsPrompt = CombatStatsPrompt(
+        combatTimer.ElapsedRounds(),
+        combatTimer.ElapsedSeconds(),
+        this.tracker.Encounter.Combatants()
+          .filter(c => c.IsPlayerCharacter())
+          .map(c => ({
+            displayName: c.DisplayName(),
+            elapsedRounds: c.CombatTimer.ElapsedRounds(),
+            elapsedSeconds: c.CombatTimer.ElapsedSeconds()
+          }))
+      );
+
+      this.tracker.PromptQueue.Add(combatStatsPrompt);
+    }
+
+    this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Stop());
+    this.tracker.Encounter.EncounterFlow.CombatTimer.Stop();
 
     return false;
   };
