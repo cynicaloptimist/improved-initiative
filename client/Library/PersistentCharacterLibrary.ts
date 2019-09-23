@@ -65,6 +65,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
         },
         "account"
       );
+
+      this.persistentCharacters.push(listing);
     }
     return await listing.GetWithTemplate(PersistentCharacter.Default());
   }
