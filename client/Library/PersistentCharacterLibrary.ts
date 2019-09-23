@@ -107,9 +107,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       updates.Path = updates.StatBlock.Path;
       updates.Version = updates.StatBlock.Version;
     }
-    const currentCharacterListing = find(
-      this.persistentCharacters(),
-      p => p.Listing().Id == persistentCharacterId
+    const currentCharacterListing = this.getPersistentCharacterListing(
+      persistentCharacterId
     );
     const currentCharacter = await currentCharacterListing.GetWithTemplate(
       PersistentCharacter.Default()
