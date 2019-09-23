@@ -8,7 +8,6 @@ import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLo
 export class LauncherViewModel {
   constructor() {
     const pageLoadData = {
-      referrer: document.referrer,
       userAgent: navigator.userAgent
     };
     Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
