@@ -47,6 +47,11 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   };
 
   public async GetPersistentCharacter(persistentCharacterId: string) {
+    const listing = this.getPersistentCharacterListing(persistentCharacterId);
+    return await listing.GetWithTemplate(PersistentCharacter.Default());
+  }
+
+  private getPersistentCharacterListing(persistentCharacterId: string) {
     let listing = find(
       this.persistentCharacters(),
       c => c.Listing().Id == persistentCharacterId
@@ -68,7 +73,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
       this.persistentCharacters.push(listing);
     }
-    return await listing.GetWithTemplate(PersistentCharacter.Default());
+
+    return listing;
   }
 
   public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
