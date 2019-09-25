@@ -1,12 +1,13 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import * as compression from "json-url";
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
-import { Omit } from "../common/Toolbox";
+import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -41,9 +42,11 @@ import {
   StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
+
+const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
@@ -66,7 +69,12 @@ export class TrackerViewModel {
     this.LibrariesCommander.SaveEncounter
   );
 
-  public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
+  public TutorialVisible = ko.observable(
+    !LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.User,
+      "SkipIntro"
+    )
+  );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public ToolbarWide = ko.observable(false);
@@ -229,21 +237,29 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
-    if (!env.PostedStatBlock) {
+    if (!env.ImportedCompressedStatBlockJSON) {
       return;
     }
 
-    const statBlock = {
-      ...StatBlock.Default(),
-      ...env.PostedStatBlock
-    };
-
     this.TutorialVisible(false);
-    this.EditStatBlock({
-      editorTarget: "library",
-      onSave: this.Libraries.NPCs.SaveNewStatBlock,
-      statBlock,
-      currentListings: this.Libraries.NPCs.GetStatBlocks()
+
+    codec.decompress(env.ImportedCompressedStatBlockJSON).then(json => {
+      const parsedStatBlock = ParseJSONOrDefault(json, {});
+      const statBlock: StatBlock = {
+        ...StatBlock.Default(),
+        ...parsedStatBlock
+      };
+
+      Metrics.TrackEvent("StatBlockImported", {
+        Name: statBlock.Name
+      });
+
+      this.EditStatBlock({
+        editorTarget: "library",
+        onSave: this.Libraries.NPCs.SaveNewStatBlock,
+        statBlock,
+        currentListings: this.Libraries.NPCs.GetStatBlocks()
+      });
     });
   };
 
@@ -433,7 +449,11 @@ export class TrackerViewModel {
   private getAccountOrSampleCharacters() {
     this.accountClient.GetAccount(account => {
       if (!account) {
-        if (Store.List(Store.PersistentCharacters).length == 0) {
+        if (
+          LegacySynchronousLocalStore.List(
+            LegacySynchronousLocalStore.PersistentCharacters
+          ).length == 0
+        ) {
           this.getAndAddSamplePersistentCharacters("/sample_players.json");
         }
         return;
@@ -458,9 +478,9 @@ export class TrackerViewModel {
   };
 
   private loadAutoSavedEncounterIfAvailable() {
-    const autosavedEncounter = Store.Load(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId
+    const autosavedEncounter = LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
     );
 
     if (autosavedEncounter) {
@@ -524,7 +544,12 @@ export class TrackerViewModel {
   }
 
   private displayPrivacyNotificationIfNeeded = () => {
-    if (Store.Load(Store.User, "AllowTracking") == null) {
+    if (
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      ) == null
+    ) {
       this.ReviewPrivacyPolicy();
     }
   };
@@ -532,7 +557,11 @@ export class TrackerViewModel {
   private saveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
-    Store.Save(Store.User, "Settings", newSettings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      newSettings
+    );
     new AccountClient().SaveSettings(newSettings);
   }
 }

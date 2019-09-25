@@ -1,3 +1,4 @@
+import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
 interface EventData {
@@ -5,55 +6,77 @@ interface EventData {
 }
 
 export class Metrics {
-  public static TrackLoad(): void {
+  public static async TrackLoad() {
     const counts = {
-      Encounters: Store.List(Store.SavedEncounters).length,
-      NpcStatBlocks: Store.List(Store.StatBlocks).length,
-      PcStatBlocks: Store.List(Store.PlayerCharacters).length,
-      PersistentCharacters: Store.List(Store.PersistentCharacters).length,
-      Spells: Store.List(Store.Spells).length
+      Encounters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.SavedEncounters
+      ).length,
+      NpcStatBlocks: (await Store.LoadAllAndUpdateIds(Store.StatBlocks)).length,
+      PcStatBlocks: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PlayerCharacters
+      ).length,
+      PersistentCharacters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PersistentCharacters
+      ).length,
+      Spells: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.Spells
+      ).length
     };
 
     Metrics.TrackEvent("AppLoad", counts);
   }
 
-  public static TrackEvent(name: string, data: EventData = {}): void {
-    if (!Store.Load(Store.User, "AllowTracking")) {
+  public static TrackEvent(name: string, eventData: EventData = {}): void {
+    if (
+      !LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      )
+    ) {
       return;
     }
 
     console.log(`Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
-
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
 
     $.ajax({
       type: "POST",
       url: `/recordEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
   }
 
-  public static TrackAnonymousEvent(name: string, data: EventData = {}): void {
+  public static TrackAnonymousEvent(
+    name: string,
+    eventData: EventData = {}
+  ): void {
     console.log(`Anonymous Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
-
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
 
     $.ajax({
       type: "POST",
       url: `/recordAnonymousEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
+  }
+
+  private static getLocalMeta() {
+    return {
+      referrerUrl: document.referrer,
+      pageUrl: document.URL,
+      localTime: new Date().getTime()
+    };
   }
 }

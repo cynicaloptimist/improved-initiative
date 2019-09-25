@@ -116,8 +116,8 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     e: React.MouseEvent<HTMLDivElement>
   ) => {
     let previewPosition = {
-      left: e.pageX,
-      top: e.pageY
+      left: e.pageX - 10,
+      top: e.pageY - 10
     };
 
     const isSingleColumnLayout = window.matchMedia("(max-width: 650px)")

@@ -1,61 +1,19 @@
 import express = require("express");
-import KeenTracking = require("keen-tracking");
+import { MongoClient } from "mongodb";
 
-const keenProjectId = process.env.KEEN_PROJECT_ID || "";
-const keenWriteKey = process.env.KEEN_WRITE_KEY || "";
+let dbClient: MongoClient | null = null;
+if (process.env.METRICS_DB_CONNECTION_STRING != undefined) {
+  new MongoClient(process.env.METRICS_DB_CONNECTION_STRING)
+    .connect()
+    .then(client => (dbClient = client));
+}
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-const addons: any[] = [
-  {
-    name: "keen:url_parser",
-    input: {
-      url: "page.url"
-    },
-    output: "url.info"
-  },
-  {
-    name: "keen:url_parser",
-    input: {
-      url: "referrer.url"
-    },
-    output: "referrer.info"
-  },
-  {
-    name: "keen:date_time_parser",
-    input: {
-      date_time: "keen.timestamp"
-    },
-    output: "time.utc"
-  },
-  {
-    name: "keen:date_time_parser",
-    input: {
-      date_time: "localTime"
-    },
-    output: "time.local"
-  }
-];
-
-const onymousAddons = [
-  {
-    name: "keen:ip_to_geo",
-    input: {
-      ip: "ipAddress"
-    },
-    output: "geo"
-  }
-];
-
 export function configureMetricsRoutes(app: express.Application) {
-  const keenClient = new KeenTracking({
-    projectId: keenProjectId,
-    writeKey: keenWriteKey
-  });
-
-  app.post("/recordEvent/:eventName", (req: Req, res: Res) => {
-    if (!keenProjectId || !keenWriteKey) {
+  app.post("/recordEvent/:eventName", async (req: Req, res: Res) => {
+    if (dbClient == null) {
       return res.status(204).send("No metrics pipeline configured.");
     }
 
@@ -64,27 +22,50 @@ export function configureMetricsRoutes(app: express.Application) {
       throw "Session is undefined.";
     }
 
-    const eventName = req.params.eventName;
-    const eventData = req.body || {};
-    eventData.sessionId = session.id;
-    eventData.userId = session.userId || null;
-    eventData.ipAddress = req.ip;
-    eventData.keen = { addons: addons.concat(onymousAddons) };
-    keenClient.recordEvent(eventName, eventData);
+    const name = req.params.eventName;
+    const eventData = req.body.eventData || {};
+    const meta = {
+      ...req.body.meta,
+      sessionId: session.id,
+      userId: session.userId || null,
+      ipAddress: req.ip,
+      serverTime: new Date().getTime(),
+      anonymous: false
+    };
+
+    await dbClient
+      .db()
+      .collection("events")
+      .insertOne({
+        name,
+        eventData,
+        meta
+      });
 
     return res.sendStatus(202);
   });
 
-  app.post("/recordAnonymousEvent/:eventName", (req: Req, res: Res) => {
-    if (!keenProjectId || !keenWriteKey) {
-      return res.status(501).send("No metrics pipeline configured.");
+  app.post("/recordAnonymousEvent/:eventName", async (req: Req, res: Res) => {
+    if (dbClient == null) {
+      return res.status(204).send("No metrics pipeline configured.");
     }
 
     const eventName = req.params.eventName;
-    const eventData = req.body || {};
+    const eventData = req.body.eventData || {};
+    const meta = {
+      ...req.body.meta,
+      serverTime: new Date().getTime(),
+      anonymous: true
+    };
 
-    eventData.keen = { addons };
-    keenClient.recordEvent(eventName, eventData);
+    await dbClient
+      .db()
+      .collection("events")
+      .insertOne({
+        eventName,
+        eventData,
+        meta
+      });
 
     return res.sendStatus(200);
   });

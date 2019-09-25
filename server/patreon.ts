@@ -216,34 +216,41 @@ export function configurePatreonWebhookReceiver(app: express.Application) {
 }
 
 async function handleWebhook(req: Req, res: Res) {
-  const userId = _.get(req.body, "data.relationships.user.data.id", null);
+  try {
+    const userId = _.get(req.body, "data.relationships.user.data.id", null);
 
-  if (!userId) {
-    return res.status(400).send("Missing data.relationships.user.data.id");
+    if (!userId) {
+      return res.status(400).send("Missing data.relationships.user.data.id");
+    }
+
+    const entitledTiers: { id: string }[] | null = _.get(
+      req.body,
+      "data.relationships.currently_entitled_tiers.data",
+      null
+    );
+
+    if (!entitledTiers) {
+      return res
+        .status(400)
+        .send("Missing data.relationships.currently_entitled_tiers.data");
+    }
+
+    const userEmail = _.get(req.body, "data.attributes.email", "");
+
+    const isDeletedPledge =
+      req.header("X-Patreon-Event") == "members:pledge:delete";
+
+    const userAccountLevel = isDeletedPledge
+      ? "none"
+      : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+    console.log(
+      `Updating account level for ${userEmail} to ${userAccountLevel}`
+    );
+    await DB.upsertUser(userId, userAccountLevel, userEmail);
+    return res.send(201);
+  } catch (e) {
+    return res.status(500).send(e);
   }
-
-  const entitledTiers: { id: string }[] | null = _.get(
-    req.body,
-    "data.relationships.currently_entitled_tiers.data",
-    null
-  );
-
-  if (!entitledTiers) {
-    return res
-      .status(400)
-      .send("Missing data.relationships.currently_entitled_tiers.data");
-  }
-
-  const userEmail = _.get(req.body, "data.attributes.email", "");
-
-  const isDeletedPledge =
-    req.header("X-Patreon-Event") == "members:pledge:delete";
-
-  const userAccountLevel = isDeletedPledge
-    ? "none"
-    : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
-  await DB.upsertUser(userId, userAccountLevel, userEmail);
-  return res.send(201);
 }
 
 function verifySender(req: Req, res: Res, next) {

@@ -1,9 +1,14 @@
 import * as ko from "knockout";
 
 import { Listable, StoredListing } from "../../common/Listable";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 
-export type ListingOrigin = "server" | "account" | "localStorage";
+export type ListingOrigin =
+  | "server"
+  | "account"
+  | "localAsync"
+  | "localStorage";
 
 export class Listing<T extends Listable> {
   constructor(
@@ -38,8 +43,20 @@ export class Listing<T extends Listable> {
       return callback(this.value());
     }
 
+    if (this.Origin === "localAsync") {
+      return Store.Load(this.storedListing.Link, this.storedListing.Id)
+        .then(callback)
+        .catch(err =>
+          console.error(
+            `Couldn't load item keyed '${
+              this.storedListing.Id
+            }' from async localForage store:\n\n${err}`
+          )
+        );
+    }
+
     if (this.Origin === "localStorage") {
-      const item = Store.Load<T>(
+      const item = LegacySynchronousLocalStore.Load<T>(
         this.storedListing.Link,
         this.storedListing.Id
       );
@@ -73,7 +90,8 @@ export class Listing<T extends Listable> {
         Path: current.Path || "",
         Link: this.storedListing.Link,
         SearchHint: this.storedListing.SearchHint,
-        Metadata: this.storedListing.Metadata
+        Metadata: this.storedListing.Metadata,
+        LastUpdateMs: current.LastUpdateMs || 0
       };
     }
     return this.storedListing;

@@ -3,6 +3,7 @@ export interface Listable {
   Version: string;
   Name: string;
   Path: string;
+  LastUpdateMs?: number;
 }
 
 export interface ListingMetadata {
@@ -18,4 +19,5 @@ export interface StoredListing {
   SearchHint: string;
   Metadata: ListingMetadata;
   Path: string;
+  LastUpdateMs: number;
 }

@@ -4,15 +4,16 @@ import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { Combatant } from "../Combatant/Combatant";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings } from "../Settings/Settings";
-import { TurnTimer } from "../Widgets/TurnTimer";
+import { CombatTimer } from "../Widgets/CombatTimer";
+import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 export class EncounterFlow {
   public ActiveCombatant: KnockoutObservable<Combatant> = ko.observable<
     Combatant
   >();
-  public RoundCounter: KnockoutObservable<number> = ko.observable(0);
-  public TurnTimer = new TurnTimer();
+  public TurnTimer = new CombatTimer();
+  public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<
     "active" | "inactive"
   >("inactive");
@@ -28,21 +29,33 @@ export class EncounterFlow {
     this.State() === "active" ? "Encounter Active" : "Encounter Inactive"
   );
 
+  public TurnTimerReadout = ko.pureComputed(() =>
+    GetTimerReadout(this.TurnTimer.ElapsedSeconds())
+  );
+
   public StartEncounter = () => {
     this.encounter.SortByInitiative();
     if (this.State() == "inactive") {
-      this.RoundCounter(1);
+      this.CombatTimer.SetElapsedRounds(1);
     }
     this.State("active");
     this.ActiveCombatant(this.encounter.Combatants()[0]);
+    this.ActiveCombatant().CombatTimer.Start();
+    this.ActiveCombatant().CombatTimer.IncrementCombatRounds();
     this.TurnTimer.Start();
+    this.CombatTimer.Start();
   };
 
   public EndEncounter = () => {
     this.State("inactive");
-    this.RoundCounter(0);
-    this.ActiveCombatant(null);
+
+    if (this.ActiveCombatant() != null) {
+      this.ActiveCombatant().CombatTimer.Pause();
+    }
+
+    this.CombatTimer.Pause();
     this.TurnTimer.Stop();
+    this.ActiveCombatant(null);
     this.encounter.TemporaryBackgroundImageUrl(null);
   };
 
@@ -68,11 +81,15 @@ export class EncounterFlow {
       if (autoRerollOption == AutoRerollInitiativeOption.Automatic) {
         this.rerollInitiativeWithoutPrompt();
       }
-      this.RoundCounter(this.RoundCounter() + 1);
+      this.CombatTimer.IncrementCombatRounds();
     }
 
     const nextCombatant = this.encounter.Combatants()[nextIndex];
     this.ActiveCombatant(nextCombatant);
+
+    activeCombatant.CombatTimer.Pause();
+    nextCombatant.CombatTimer.IncrementCombatRounds();
+    nextCombatant.CombatTimer.Start();
 
     this.durationTags
       .filter(
@@ -88,6 +105,7 @@ export class EncounterFlow {
 
   public PreviousTurn = () => {
     const activeCombatant = this.ActiveCombatant();
+
     this.durationTags
       .filter(
         t =>
@@ -102,11 +120,16 @@ export class EncounterFlow {
 
     if (previousIndex < 0) {
       previousIndex = this.encounter.Combatants().length - 1;
-      this.RoundCounter(this.RoundCounter() - 1);
+      this.CombatTimer.DecrementCombatRounds();
     }
 
     const previousCombatant = this.encounter.Combatants()[previousIndex];
     this.ActiveCombatant(previousCombatant);
+
+    activeCombatant.CombatTimer.DecrementCombatRounds();
+    activeCombatant.CombatTimer.Pause();
+    previousCombatant.CombatTimer.Start();
+
     this.durationTags
       .filter(
         t =>
@@ -115,6 +138,8 @@ export class EncounterFlow {
           t.DurationTiming == "EndOfTurn"
       )
       .forEach(t => t.Increment());
+
+    this.TurnTimer.Reset();
   };
 
   public AddDurationTag = (tag: Tag) => {

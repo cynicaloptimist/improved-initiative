@@ -21,7 +21,7 @@ import {
 import { PlayerViewClient } from "../Player/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import {
   DifficultyCalculator,
   EncounterDifficulty
@@ -181,6 +181,8 @@ export class Encounter {
       RevealedAC: false,
       Initiative: 0,
       Tags: [],
+      RoundCounter: 0,
+      ElapsedSeconds: 0,
       InterfaceVersion: process.env.VERSION
     };
 
@@ -217,6 +219,8 @@ export class Encounter {
       RevealedAC: false,
       Initiative: 0,
       Tags: [],
+      RoundCounter: 0,
+      ElapsedSeconds: 0,
       InterfaceVersion: persistentCharacter.Version
     };
 
@@ -305,9 +309,9 @@ export class Encounter {
 
   public StartEncounterAutosaves = () => {
     this.GetEncounterState.subscribe(newState => {
-      Store.Save<EncounterState<CombatantState>>(
-        Store.AutoSavedEncounters,
-        Store.DefaultSavedEncounterId,
+      LegacySynchronousLocalStore.Save<EncounterState<CombatantState>>(
+        LegacySynchronousLocalStore.AutoSavedEncounters,
+        LegacySynchronousLocalStore.DefaultSavedEncounterId,
         newState
       );
     });
@@ -319,7 +323,8 @@ export class Encounter {
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
-        RoundCounter: this.EncounterFlow.RoundCounter(),
+        RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
+        ElapsedSeconds: this.EncounterFlow.CombatTimer.ElapsedSeconds(),
         Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
         BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
       };
@@ -333,7 +338,7 @@ export class Encounter {
         .backgroundUrl;
       return {
         ActiveCombatantId: activeCombatantId,
-        RoundCounter: this.EncounterFlow.RoundCounter(),
+        RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
         Combatants: this.getCombatantsForPlayerView(activeCombatantId),
         BackgroundImageUrl:
           this.TemporaryBackgroundImageUrl() || defaultBackgroundUrl
@@ -377,9 +382,16 @@ export class Encounter {
           .filter(c => c.Id == encounterState.ActiveCombatantId)
           .pop()
       );
+      this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
+      this.EncounterFlow.CombatTimer.Start();
     }
-    this.EncounterFlow.RoundCounter(encounterState.RoundCounter || 1);
+    this.EncounterFlow.CombatTimer.SetElapsedRounds(
+      encounterState.RoundCounter || 1
+    );
+    this.EncounterFlow.CombatTimer.SetElapsedSeconds(
+      encounterState.ElapsedSeconds || 0
+    );
     this.TemporaryBackgroundImageUrl(encounterState.BackgroundImageUrl || null);
   };
 

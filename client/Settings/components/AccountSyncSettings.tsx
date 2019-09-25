@@ -9,6 +9,7 @@ import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEnc
 import { env } from "../../Environment";
 import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Store } from "../../Utility/Store";
 
 interface AccountSyncSettingsProps {
@@ -127,9 +128,10 @@ export class AccountSyncSettings extends React.Component<
     </span>
   );
 
-  private syncAll = () => {
+  private syncAll = async () => {
     this.setState({ syncError: "" });
-    let blob = Store.ExportAll();
+    const asyncKeys = await Store.GetAllKeys();
+    let blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
     this.props.accountClient.SaveAllUnsyncedItems(
       this.props.libraries,
@@ -176,7 +178,9 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localCount = items.filter(c => c.Origin === "localStorage").length;
+    const localCount = items.filter(
+      c => c.Origin === "localAsync" || c.Origin === "localStorage"
+    ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;
   }

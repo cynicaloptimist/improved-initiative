@@ -4,7 +4,7 @@ import { ParseJSONOrDefault } from "../common/Toolbox";
 interface Environment {
   EncounterId: string;
   PostedEncounter: { Combatants: {}[] } | null;
-  PostedStatBlock: {} | null;
+  ImportedCompressedStatBlockJSON: string | null;
   IsLoggedIn: boolean;
   HasStorage: boolean;
   HasEpicInitiative: boolean;
@@ -16,7 +16,7 @@ export const env: Environment = {
   EncounterId: null,
   BaseUrl: null,
   PostedEncounter: null,
-  PostedStatBlock: null,
+  ImportedCompressedStatBlockJSON: null,
   HasStorage: false,
   HasEpicInitiative: false,
   IsLoggedIn: false,
@@ -35,9 +35,10 @@ export function LoadEnvironment() {
   }
 
   const urlParams = new URLSearchParams(window.location.search);
-  const statBlockJSON = urlParams.get("importStatBlock");
-  if (statBlockJSON) {
-    env.PostedStatBlock = ParseJSONOrDefault(statBlockJSON, null);
+  const compressedStatBlockJSON = urlParams.get("s");
+  if (compressedStatBlockJSON) {
+    env.ImportedCompressedStatBlockJSON = compressedStatBlockJSON;
+    window.history.replaceState({}, document.title, window.location.pathname);
   }
 
   env.HasStorage = html.getAttribute("hasStorage") == "true";

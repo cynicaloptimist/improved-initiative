@@ -2,11 +2,12 @@ import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Listing, ListingOrigin } from "./Listing";
 
 export interface PersistentCharacterUpdater {
@@ -22,15 +23,15 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   > = ko.observableArray([]);
 
   constructor(private accountClient: AccountClient) {
-    const listings = Store.List(Store.PersistentCharacters).map(
-      this.loadPersistentCharacterListing
-    );
+    const listings = LegacySynchronousLocalStore.List(
+      LegacySynchronousLocalStore.PersistentCharacters
+    ).map(this.loadPersistentCharacterListing);
 
     if (listings.length > 0) {
       this.persistentCharacters.push(...listings);
     } else {
-      const convertedPlayerCharacterListings = Store.List(
-        Store.PlayerCharacters
+      const convertedPlayerCharacterListings = LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PlayerCharacters
       ).map(this.convertPlayerCharacterListing);
       this.persistentCharacters.push(...convertedPlayerCharacterListings);
     }
@@ -46,6 +47,11 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   };
 
   public async GetPersistentCharacter(persistentCharacterId: string) {
+    const listing = this.getPersistentCharacterListing(persistentCharacterId);
+    return await listing.GetWithTemplate(PersistentCharacter.Default());
+  }
+
+  private getPersistentCharacterListing(persistentCharacterId: string) {
     let listing = find(
       this.persistentCharacters(),
       c => c.Listing().Id == persistentCharacterId
@@ -59,12 +65,16 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
           Metadata: {},
           Name: "",
           Path: "",
-          SearchHint: ""
+          SearchHint: "",
+          LastUpdateMs: 0
         },
         "account"
       );
+
+      this.persistentCharacters.push(listing);
     }
-    return await listing.GetWithTemplate(PersistentCharacter.Default());
+
+    return listing;
   }
 
   public AddNewPersistentCharacter(persistentCharacter: PersistentCharacter) {
@@ -79,8 +89,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       persistentCharacter
     );
     this.persistentCharacters.push(listing);
-    Store.Save(
-      Store.PersistentCharacters,
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.PersistentCharacters,
       persistentCharacter.Id,
       persistentCharacter
     );
@@ -97,9 +107,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       updates.Path = updates.StatBlock.Path;
       updates.Version = updates.StatBlock.Version;
     }
-    const currentCharacterListing = find(
-      this.persistentCharacters(),
-      p => p.Listing().Id == persistentCharacterId
+    const currentCharacterListing = this.getPersistentCharacterListing(
+      persistentCharacterId
     );
     const currentCharacter = await currentCharacterListing.GetWithTemplate(
       PersistentCharacter.Default()
@@ -114,8 +123,8 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     currentCharacterListing.SetValue(updatedCharacter);
     this.persistentCharacters.push(currentCharacterListing);
 
-    Store.Save<PersistentCharacter>(
-      Store.PersistentCharacters,
+    LegacySynchronousLocalStore.Save<PersistentCharacter>(
+      LegacySynchronousLocalStore.PersistentCharacters,
       persistentCharacterId,
       updatedCharacter
     );
@@ -127,14 +136,20 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
     this.persistentCharacters.remove(
       p => p.Listing().Id == persistentCharacterId
     );
-    Store.Delete(Store.PersistentCharacters, persistentCharacterId);
+    LegacySynchronousLocalStore.Delete(
+      LegacySynchronousLocalStore.PersistentCharacters,
+      persistentCharacterId
+    );
     this.accountClient.DeletePersistentCharacter(persistentCharacterId);
   }
 
   private loadPersistentCharacterListing = id => {
     const persistentCharacter = {
       ...PersistentCharacter.Default(),
-      ...Store.Load<PersistentCharacter>(Store.PersistentCharacters, id)
+      ...LegacySynchronousLocalStore.Load<PersistentCharacter>(
+        LegacySynchronousLocalStore.PersistentCharacters,
+        id
+      )
     };
 
     RepairPersistentCharacterIdIfNeeded(persistentCharacter, id);
@@ -144,7 +159,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
         ...persistentCharacter,
         SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
         Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
-        Link: Store.PersistentCharacters
+        Link: LegacySynchronousLocalStore.PersistentCharacters
       },
       "localStorage"
     );
@@ -153,11 +168,14 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   private convertPlayerCharacterListing = id => {
     const statBlock = {
       ...StatBlock.Default(),
-      ...Store.Load<StatBlock>(Store.PlayerCharacters, id)
+      ...LegacySynchronousLocalStore.Load<StatBlock>(
+        LegacySynchronousLocalStore.PlayerCharacters,
+        id
+      )
     };
     const persistentCharacter = PersistentCharacter.Initialize(statBlock);
-    Store.Save<PersistentCharacter>(
-      Store.PersistentCharacters,
+    LegacySynchronousLocalStore.Save<PersistentCharacter>(
+      LegacySynchronousLocalStore.PersistentCharacters,
       id,
       persistentCharacter
     );
@@ -166,7 +184,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
         ...persistentCharacter,
         SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
         Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
-        Link: Store.PersistentCharacters
+        Link: LegacySynchronousLocalStore.PersistentCharacters
       },
       "localStorage"
     );
@@ -187,5 +205,9 @@ function RepairPersistentCharacterIdIfNeeded(
   persistentCharacter.Id = id;
   persistentCharacter.StatBlock.Id = id;
 
-  Store.Save(Store.PersistentCharacters, id, persistentCharacter);
+  LegacySynchronousLocalStore.Save(
+    LegacySynchronousLocalStore.PersistentCharacters,
+    id,
+    persistentCharacter
+  );
 }

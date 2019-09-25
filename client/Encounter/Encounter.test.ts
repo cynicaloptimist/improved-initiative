@@ -3,6 +3,7 @@ import { buildEncounter } from "../test/buildEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { Tag } from "../Combatant/Tag";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 describe("Encounter", () => {
@@ -47,6 +48,46 @@ describe("Encounter", () => {
       encounter.Combatants()[0]
     );
     expect(promptReroll).not.toBeCalled();
+  });
+
+  test("Display post-combat stats produces reasonable results", () => {
+    const settings = CurrentSettings();
+    settings.TrackerView.PostCombatStats = true;
+
+    jest.useFakeTimers();
+
+    for (let i = 0; i < 2; i++) {
+      let thisCombatant = encounter.AddCombatantFromStatBlock(
+        StatBlock.Default()
+      );
+      thisCombatant.Initiative(2 - i);
+      thisCombatant.Alias(`Combatant ${i}`);
+    }
+
+    encounter.EncounterFlow.StartEncounter();
+
+    for (let i = 0; i < 5; i++) {
+      jest.advanceTimersByTime(60 * 1000);
+      encounter.EncounterFlow.NextTurn(jest.fn());
+    }
+
+    expect(
+      GetTimerReadout(encounter.EncounterFlow.CombatTimer.ElapsedSeconds())
+    ).toBe("5:00");
+
+    let combatant0Elapsed = encounter
+        .Combatants()[0]
+        .CombatTimer.ElapsedSeconds(),
+      combatant0Rounds = encounter.Combatants()[0].CombatTimer.ElapsedRounds();
+
+    expect(GetTimerReadout(combatant0Elapsed / combatant0Rounds)).toBe("1:00");
+
+    let combatant1Elapsed = encounter
+        .Combatants()[1]
+        .CombatTimer.ElapsedSeconds(),
+      combatant1Rounds = encounter.Combatants()[1].CombatTimer.ElapsedRounds();
+
+    expect(GetTimerReadout(combatant1Elapsed / combatant1Rounds)).toBe("0:40");
   });
 
   describe("Initiative Ordering", () => {
@@ -141,7 +182,7 @@ describe("Encounter", () => {
     encounter.EncounterFlow.StartEncounter();
     jest.advanceTimersByTime(10000); // 10 seconds
     encounter.EncounterFlow.EndEncounter();
-    expect(encounter.EncounterFlow.TurnTimer.Readout()).toBe("0:00");
+    expect(encounter.EncounterFlow.TurnTimerReadout()).toBe("0:00");
   });
 });
 

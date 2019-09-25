@@ -26,9 +26,10 @@ describe("StatBlockEditor", () => {
         ...statBlock,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
-        Link: "/"
+        Link: "/",
+        LastUpdateMs: 0
       },
-      "localStorage",
+      "localAsync",
       statBlock
     );
     saveCallback = jest.fn();

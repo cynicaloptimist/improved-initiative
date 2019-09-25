@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Listable } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { SavedEncounter } from "../../common/SavedEncounter";
@@ -41,42 +42,46 @@ export class AccountClient {
     return await $.getJSON("/my/fullaccount");
   }
 
-  public SaveAllUnsyncedItems(
+  public async SaveAllUnsyncedItems(
     libraries: Libraries,
     messageCallback: (message: string) => void
   ) {
     if (!env.HasStorage) {
-      return emptyPromise();
+      return;
     }
 
-    $.when(
+    const promises = [
       saveEntitySet(
-        prepareForSync(libraries.NPCs.GetStatBlocks()),
+        await getUnsyncedItemsFromListings(libraries.NPCs.GetStatBlocks()),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.PersistentCharacters.GetListings()),
+        await getUnsyncedItemsFromListings(
+          libraries.PersistentCharacters.GetListings()
+        ),
         "persistentcharacters",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.Spells.GetSpells()),
+        await getUnsyncedItemsFromListings(libraries.Spells.GetSpells()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        prepareForSync(libraries.Encounters.Encounters()),
+        await getUnsyncedItemsFromListings(libraries.Encounters.Encounters()),
         "encounters",
         ENCOUNTER_BATCH_SIZE,
         messageCallback
       )
-    ).done(_ => {
-      messageCallback("Account Sync complete.");
-    });
+    ];
+
+    await Promise.all(promises);
+
+    return messageCallback("Account Sync complete.");
   }
 
   public SaveSettings(settings: Settings) {
@@ -158,19 +163,40 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
   });
 }
 
-function prepareForSync(items: Listing<Listable>[]) {
-  const unsynced = getUnsyncedItems(items);
+export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
+  const unsynced = await getUnsyncedItems(items);
   return sanitizeItems(unsynced);
 }
 
-function getUnsyncedItems(items: Listing<Listable>[]) {
-  const local = items.filter(i => i.Origin === "localStorage");
-  const synced = items.filter(i => i.Origin === "account");
-  const unsynced = local.filter(
-    l => !synced.some(s => s.Listing().Name == l.Listing().Name)
+async function getUnsyncedItems(items: Listing<Listable>[]) {
+  const itemsByName: _.Dictionary<Listing<Listable>> = {};
+  for (const item of items) {
+    const name = item.Listing().Name;
+    if (itemsByName[name] == undefined) {
+      itemsByName[name] = item;
+    } else {
+      if (item.Origin == "account") {
+        itemsByName[name] = item;
+      }
+    }
+  }
+
+  const unsynced = _.values(itemsByName).filter(
+    i => i.Origin == "localStorage" || i.Origin == "localAsync"
   );
-  const unsyncedItems = [];
-  unsynced.forEach(l => l.GetAsyncWithUpdatedId(i => unsyncedItems.push(i)));
+
+  const unsyncedItems = await Promise.all(
+    unsynced.map(
+      async listing =>
+        await listing.GetWithTemplate({
+          Id: listing.Listing().Id,
+          Name: listing.Listing().Name,
+          Path: listing.Listing().Path,
+          Version: process.env.VERSION
+        })
+    )
+  );
+
   return unsyncedItems;
 }
 
@@ -190,14 +216,14 @@ function sanitizeItems(items: Listable[]) {
   });
 }
 
-function saveEntitySet<Listable>(
+async function saveEntitySet<Listable>(
   entitySet: Listable[],
   entityType: string,
   batchSize: number,
   messageCallback: (message: string) => void
 ) {
   if (!env.HasStorage || !entitySet.length) {
-    return emptyPromise();
+    return;
   }
 
   const uploadByBatch = (remaining: Listable[]) => {

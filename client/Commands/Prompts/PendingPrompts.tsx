@@ -1,14 +1,14 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
 
-export interface PromptProps<T> {
-  onSubmit: (T) => boolean;
+export interface PromptProps<T extends object> {
+  onSubmit: (submittedValues: T) => boolean;
   children: React.ReactChild;
   autoFocusSelector: string;
   initialValues: T;
 }
 
-class Prompt<T> extends React.Component<
+class Prompt<T extends object> extends React.Component<
   PromptProps<T> & {
     onCancel: () => void;
   }
@@ -47,6 +47,11 @@ class Prompt<T> extends React.Component<
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector
     );
+
+    if (!element) {
+      return;
+    }
+
     if (element.focus) {
       element.focus();
     }
@@ -57,7 +62,7 @@ class Prompt<T> extends React.Component<
 }
 
 interface PendingPromptsProps {
-  promptsAndIds: [PromptProps<unknown>, string][];
+  promptsAndIds: [PromptProps<object>, string][];
   removeResolvedPrompt: (promptId: string) => void;
 }
 

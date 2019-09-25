@@ -42,7 +42,7 @@ describe("EncounterCommander", () => {
     );
     expect(!encounter.EncounterFlow.ActiveCombatant());
     encounterCommander.NextTurn();
-    expect(encounter.EncounterFlow.RoundCounter() == 1);
+    expect(encounter.EncounterFlow.CombatTimer.ElapsedRounds() == 1);
     expect(encounter.EncounterFlow.NextTurn).not.toBeCalled();
   });
 

@@ -10,12 +10,15 @@ import {
   Settings
 } from "../../common/Settings";
 import { Command } from "../Commands/Command";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export const CurrentSettings = ko.observable<Settings>();
 
 function getLegacySetting<T>(settingName: string, def: T): T {
-  const setting = Store.Load<T>(Store.User, settingName);
+  const setting = LegacySynchronousLocalStore.Load<T>(
+    LegacySynchronousLocalStore.User,
+    settingName
+  );
   if (setting === null) {
     return def;
   }
@@ -23,12 +26,20 @@ function getLegacySetting<T>(settingName: string, def: T): T {
 }
 
 function getLegacySettings(): Settings {
-  const commandNames = Store.List(Store.KeyBindings);
+  const commandNames = LegacySynchronousLocalStore.List(
+    LegacySynchronousLocalStore.KeyBindings
+  );
   const commands: CommandSetting[] = commandNames.map(n => {
     return {
       Name: n,
-      KeyBinding: Store.Load<string>(Store.KeyBindings, n),
-      ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
+      KeyBinding: LegacySynchronousLocalStore.Load<string>(
+        LegacySynchronousLocalStore.KeyBindings,
+        n
+      ),
+      ShowOnActionBar: LegacySynchronousLocalStore.Load<boolean>(
+        LegacySynchronousLocalStore.ActionBar,
+        n
+      )
     };
   });
   const defaultSettings = getDefaultSettings();
@@ -55,7 +66,8 @@ function getLegacySettings(): Settings {
         false
       ),
       DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
-      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true)
+      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true),
+      PostCombatStats: getLegacySetting<boolean>("PostCombatStats", false)
     },
     PlayerView: {
       ...defaultSettings.PlayerView,
@@ -164,7 +176,10 @@ export function UpdateSettings(settings: any): Settings {
 }
 
 export function InitializeSettings() {
-  const localSettings = Store.Load<any>(Store.User, "Settings");
+  const localSettings = LegacySynchronousLocalStore.Load<any>(
+    LegacySynchronousLocalStore.User,
+    "Settings"
+  );
 
   if (localSettings) {
     const updatedSettings = UpdateSettings(localSettings);
@@ -174,7 +189,11 @@ export function InitializeSettings() {
     CurrentSettings(legacySettings);
   }
 
-  Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
+  LegacySynchronousLocalStore.Save<Settings>(
+    LegacySynchronousLocalStore.User,
+    "Settings",
+    CurrentSettings()
+  );
 }
 
 export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
@@ -198,6 +217,10 @@ export function AddMissingCommandsAndSaveSettings(
     }
   }
 
-  Store.Save(Store.User, "Settings", settings);
+  LegacySynchronousLocalStore.Save(
+    LegacySynchronousLocalStore.User,
+    "Settings",
+    settings
+  );
   CurrentSettings(settings);
 }
