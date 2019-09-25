@@ -2,7 +2,7 @@ import { Listable } from "../../common/Listable";
 import { KeyValueSet } from "../../common/Toolbox";
 import { Listing, ListingOrigin } from "./Listing";
 
-export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
+function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
   parentSubset: T[],
   filter: string
 ) {
@@ -17,10 +17,11 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
   ];
 
   parentSubset.forEach(listing => {
-    const dedupeKey =
-      listing.Listing().Path.toLocaleLowerCase() +
-      "-" +
-      listing.Listing().Name.toLocaleLowerCase();
+    const storedListing = listing.Listing();
+
+    const dedupeKey = `${storedListing.Path}-${
+      storedListing.Name
+    }`.toLocaleLowerCase();
 
     if (dedupedItems[dedupeKey] == undefined) {
       dedupedItems[dedupeKey] = listing;
@@ -30,7 +31,7 @@ export function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     const currentListing = dedupedItems[dedupeKey];
 
     const isNewer =
-      listing.Listing().LastUpdateMs > currentListing.Listing().LastUpdateMs;
+      storedListing.LastUpdateMs > currentListing.Listing().LastUpdateMs;
     const hasBetterSource =
       sourceRankings.indexOf(listing.Origin) <
       sourceRankings.indexOf(currentListing.Origin);
