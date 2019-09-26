@@ -148,8 +148,10 @@ export class AccountSyncSettings extends React.Component<
     const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
-    forIn(account.statblocks, statBlock =>
-      libraries.NPCs.SaveNewStatBlock(statBlock)
+    await Promise.all(
+      account.statblocks.map(statBlock =>
+        libraries.NPCs.SaveNewStatBlock(statBlock)
+      )
     );
 
     forIn(account.persistentcharacters, persistentCharacter => {
