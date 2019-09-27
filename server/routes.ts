@@ -123,18 +123,22 @@ export default function(
       throw "Session is not available";
     }
 
-    if (session.userId) {
-      const account = await getAccount(session.userId);
-      updateSessionAccountFeatures(session, account.accountStatus);
-    }
+    updateSession(session);
 
     const options = getClientEnvironment(session);
     if (session.postedEncounter) {
       options.postedEncounter = JSON.stringify(session.postedEncounter);
       delete session.postedEncounter;
     }
-    res.render("tracker", options);
+    return res.render("tracker", options);
   });
+
+  async function updateSession(session: Express.Session) {
+    if (session.userId) {
+      const account = await getAccount(session.userId);
+      updateSessionAccountFeatures(session, account.accountStatus);
+    }
+  }
 
   app.get("/p/:id", (req: Req, res: Res) => {
     const session = req.session;

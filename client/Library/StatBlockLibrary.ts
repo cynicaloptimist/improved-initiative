@@ -80,13 +80,10 @@ export class StatBlockLibrary {
   public SaveNewStatBlock = async (newStatBlock: StatBlock) => {
     const oldStatBlocks = this.GetStatBlocks().filter(
       l =>
+        l.Origin === "localAsync" &&
         l.Listing().Path + l.Listing().Name ==
-        newStatBlock.Path + newStatBlock.Name
+          newStatBlock.Path + newStatBlock.Name
     );
-    for (const statBlock of oldStatBlocks) {
-      await this.DeleteListing(statBlock.Listing().Id);
-    }
-
     const listing = new Listing<StatBlock>(
       {
         ...newStatBlock,
@@ -98,5 +95,9 @@ export class StatBlockLibrary {
       "localAsync"
     );
     await this.saveStatBlock(listing, newStatBlock);
+
+    for (const statBlock of oldStatBlocks) {
+      await this.DeleteListing(statBlock.Listing().Id);
+    }
   };
 }

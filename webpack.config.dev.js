@@ -7,6 +7,7 @@ module.exports = merge(baseConfig,
   {
     devtool: 'inline-source-map',
     watch: true,
+    mode: "development",
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify("development"),
