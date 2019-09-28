@@ -1,10 +1,12 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { CombatStats } from "../../../common/CombatStats";
 import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
+import { CombatStatsPopup } from "./CombatStatsPopup";
 import { CustomStyles } from "./CustomStyles";
 import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
@@ -25,6 +27,7 @@ interface LocalState {
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
   onSuggestTag: (combatantId: string, tagState: TagState) => void;
+  combatStats: CombatStats;
 }
 
 export class PlayerView extends React.Component<
@@ -58,7 +61,8 @@ export class PlayerView extends React.Component<
     const modalVisible =
       this.state.showPortrait ||
       this.state.suggestDamageCombatant ||
-      this.state.suggestTagCombatant;
+      this.state.suggestTagCombatant ||
+      this.props.combatStats;
 
     const combatantsById = _.keyBy(
       this.props.encounterState.Combatants,
@@ -97,6 +101,12 @@ export class PlayerView extends React.Component<
             activeCombatantId={this.props.encounterState.ActiveCombatantId}
             combatantNamesById={combatantNamesById}
             onApply={this.handleSuggestTagPrompt}
+          />
+        )}
+        {this.props.combatStats && (
+          <CombatStatsPopup
+            stats={this.props.combatStats}
+            onClose={this.closeAllModals}
           />
         )}
         <PlayerViewCombatantHeader

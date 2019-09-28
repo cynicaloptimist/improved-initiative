@@ -3,6 +3,7 @@ import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
 import _ = require("lodash");
+import { CombatStats } from "../../common/CombatStats";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
@@ -445,5 +446,9 @@ export class Encounter {
     return combatants.map<PlayerViewCombatantState>(c =>
       ToPlayerViewCombatantState(c)
     );
+  }
+
+  public DisplayPlayerViewCombatStats(stats: CombatStats) {
+    this.playerViewClient.DisplayCombatStats(env.EncounterId, stats);
   }
 }
