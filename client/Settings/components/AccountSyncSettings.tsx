@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Button } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../../Environment";
@@ -30,6 +31,7 @@ export class AccountSyncSettings extends React.Component<
     this.state = {
       syncError: ""
     };
+    linkComponentToObservables(this);
   }
   public render() {
     if (!env.IsLoggedIn) {
@@ -148,8 +150,10 @@ export class AccountSyncSettings extends React.Component<
     const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
-    forIn(account.statblocks, statBlock =>
-      libraries.NPCs.SaveNewStatBlock(statBlock)
+    await Promise.all(
+      account.statblocks.map(statBlock =>
+        libraries.NPCs.SaveNewStatBlock(statBlock)
+      )
     );
 
     forIn(account.persistentcharacters, persistentCharacter => {

@@ -26,7 +26,7 @@ export class Metrics {
     Metrics.TrackEvent("AppLoad", counts);
   }
 
-  public static TrackEvent(name: string, data: EventData = {}): void {
+  public static TrackEvent(name: string, eventData: EventData = {}): void {
     if (
       !LegacySynchronousLocalStore.Load(
         LegacySynchronousLocalStore.User,
@@ -37,37 +37,46 @@ export class Metrics {
     }
 
     console.log(`Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
-
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
 
     $.ajax({
       type: "POST",
       url: `/recordEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
   }
 
-  public static TrackAnonymousEvent(name: string, data: EventData = {}): void {
+  public static TrackAnonymousEvent(
+    name: string,
+    eventData: EventData = {}
+  ): void {
     console.log(`Anonymous Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
-
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
 
     $.ajax({
       type: "POST",
       url: `/recordAnonymousEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
+  }
+
+  private static getLocalMeta() {
+    return {
+      referrerUrl: document.referrer,
+      pageUrl: document.URL,
+      localTime: new Date().getTime()
+    };
   }
 }

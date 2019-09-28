@@ -22,18 +22,24 @@ export function configureMetricsRoutes(app: express.Application) {
       throw "Session is undefined.";
     }
 
-    const eventName = req.params.eventName;
-    const eventData = req.body || {};
-    eventData.sessionId = session.id;
-    eventData.userId = session.userId || null;
-    eventData.ipAddress = req.ip;
+    const name = req.params.eventName;
+    const eventData = req.body.eventData || {};
+    const meta = {
+      ...req.body.meta,
+      sessionId: session.id,
+      userId: session.userId || null,
+      ipAddress: req.ip,
+      serverTime: new Date().getTime(),
+      anonymous: false
+    };
 
     await dbClient
       .db()
       .collection("events")
       .insertOne({
-        eventName,
-        eventData
+        name,
+        eventData,
+        meta
       });
 
     return res.sendStatus(202);
@@ -45,14 +51,20 @@ export function configureMetricsRoutes(app: express.Application) {
     }
 
     const eventName = req.params.eventName;
-    const eventData = req.body || {};
+    const eventData = req.body.eventData || {};
+    const meta = {
+      ...req.body.meta,
+      serverTime: new Date().getTime(),
+      anonymous: true
+    };
 
     await dbClient
       .db()
       .collection("events")
       .insertOne({
         eventName,
-        eventData
+        eventData,
+        meta
       });
 
     return res.sendStatus(200);

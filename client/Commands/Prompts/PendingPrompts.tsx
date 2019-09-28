@@ -47,6 +47,11 @@ class Prompt<T extends object> extends React.Component<
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector
     );
+
+    if (!element) {
+      return;
+    }
+
     if (element.focus) {
       element.focus();
     }

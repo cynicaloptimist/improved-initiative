@@ -71,6 +71,7 @@ export class Listing<T extends Listable> {
             this.storedListing.Id
           }' from localStorage.`
         );
+        return null;
       }
     }
 
