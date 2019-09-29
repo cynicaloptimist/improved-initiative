@@ -34,6 +34,10 @@ export class EncounterFlow {
   );
 
   public StartEncounter = () => {
+    if (this.encounter.Combatants().length == 0) {
+      console.warn("Can't start an encounter with no combatants");
+      return;
+    }
     this.encounter.SortByInitiative();
     if (this.State() == "inactive") {
       this.CombatTimer.SetElapsedRounds(1);
