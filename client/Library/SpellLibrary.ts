@@ -15,7 +15,7 @@ export class SpellLibrary {
     concatenatedStringRegex(
       this.GetSpells()
         .map(s => s.Listing().Name)
-        .filter(n => n.length > 0)
+        .filter(n => n.length > 2)
     )
   );
 
