@@ -27,7 +27,7 @@ interface LocalState {
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
   onSuggestTag: (combatantId: string, tagState: TagState) => void;
-  combatStats: CombatStats;
+  combatStats?: CombatStats;
 }
 
 export class PlayerView extends React.Component<

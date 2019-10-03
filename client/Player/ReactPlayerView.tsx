@@ -17,8 +17,7 @@ export class ReactPlayerView {
   constructor(private element: Element, private encounterId: string) {
     this.renderPlayerView({
       encounterState: EncounterState.Default<PlayerViewCombatantState>(),
-      settings: getDefaultSettings().PlayerView,
-      combatStats: null
+      settings: getDefaultSettings().PlayerView
     });
   }
 

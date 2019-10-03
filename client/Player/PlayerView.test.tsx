@@ -28,7 +28,6 @@ describe("PlayerViewModel", () => {
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
         onSuggestTag={jest.fn()}
-        combatStats={null}
       />
     );
   });
@@ -98,7 +97,6 @@ describe("PlayerViewModel", () => {
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
         onSuggestTag={jest.fn()}
-        combatStats={null}
       />
     );
 
@@ -135,7 +133,6 @@ describe("PlayerViewModel", () => {
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
         onSuggestTag={jest.fn()}
-        combatStats={null}
       />
     );
 
@@ -175,7 +172,6 @@ describe("Tag Suggestor", () => {
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
         onSuggestTag={suggestTag}
-        combatStats={null}
       />
     );
   });
