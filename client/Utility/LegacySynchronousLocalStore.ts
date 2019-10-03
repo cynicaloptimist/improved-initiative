@@ -162,7 +162,9 @@ export namespace LegacySynchronousLocalStore {
       }
       localStorage.clear();
       for (let key in importedStorage) {
-        localStorage.setItem(key, importedStorage[key]);
+        if (key.startsWith(_prefix)) {
+          localStorage.setItem(key, importedStorage[key]);
+        }
       }
       location.reload();
     };
