@@ -58,14 +58,26 @@ export class LocalDataSettings extends React.Component<{}> {
     saveAs(blob, "improved-initiative.json");
   };
 
-  private importDataAndReplace = (file: File) => {
-    Store.ImportAll(file);
-    LegacySynchronousLocalStore.ImportAllAndReplace(file);
+  private importDataAndReplace = async (file: File) => {
+    if (
+      confirm(
+        `Replace your Improved Initiative data with imported ${
+          file.name
+        } and reload?`
+      )
+    ) {
+      await Store.ImportAll(file);
+      LegacySynchronousLocalStore.ImportAllAndReplace(file);
+    }
   };
 
-  private importDataAndAdd = (file: File) => {
-    Store.ImportAll(file);
-    LegacySynchronousLocalStore.ImportAll(file);
+  private importDataAndAdd = async (file: File) => {
+    if (
+      confirm(`Import all statblocks and spells in ${file.name} and reload?`)
+    ) {
+      await Store.ImportAll(file);
+      LegacySynchronousLocalStore.ImportAll(file);
+    }
   };
 
   private importDndAppFile = (file: File) => {
