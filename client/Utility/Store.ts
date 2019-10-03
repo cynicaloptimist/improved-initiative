@@ -69,7 +69,7 @@ export namespace Store {
 
   export async function ImportAll(file: File) {
     let reader = new FileReader();
-    reader.onload = (event: any) => {
+    reader.onload = async (event: any) => {
       let json = event.target.result;
       let importedStorage = {};
       try {
@@ -79,10 +79,12 @@ export namespace Store {
         return;
       }
 
-      importList(StatBlocks, importedStorage);
-      importList(PersistentCharacters, importedStorage);
-      importList(SavedEncounters, importedStorage);
-      importList(Spells, importedStorage);
+      await Promise.all([
+        importList(StatBlocks, importedStorage),
+        importList(PersistentCharacters, importedStorage),
+        importList(SavedEncounters, importedStorage),
+        importList(Spells, importedStorage)
+      ]);
 
       location.reload();
     };
@@ -96,78 +98,23 @@ export namespace Store {
       return;
     }
     const listings: string[] = JSON.parse(listingsJSON);
-    for (const key of listings) {
+    if (!listings.length) {
+      return;
+    }
+    const savePromises = listings.map(async key => {
       const fullKey = `${listName}.${key}`;
       const listingJSON = importSource[fullKey];
       if (!listingJSON) {
         console.warn(`Couldn't import ${fullKey} from JSON`);
+        return;
       } else {
         const listing: Listable = JSON.parse(listingJSON);
         listing.LastUpdateMs = moment.now();
-        Save(listName, key, listing);
+        return Save(listName, key, listing);
       }
-    }
-  }
-
-  export async function ImportAllAndReplace(file: File) {
-    let reader = new FileReader();
-    reader.onload = async (event: any) => {
-      let json = event.target.result;
-      let importedStorage = {};
-      try {
-        importedStorage = JSON.parse(json);
-      } catch (error) {
-        alert(`There was a problem importing ${file.name}: ${error}`);
-        return;
-      }
-      if (
-        confirm(
-          `Replace your Improved Initiative data with imported ${
-            file.name
-          } and reload?`
-        )
-      ) {
-        await DeleteAll();
-        let promises = [];
-        for (let fullKey in importedStorage) {
-          const [listName, key] = fullKey.split(".");
-          const store = localforage.createInstance({ name: listName });
-          promises.push(store.setItem(key, importedStorage[key]));
-        }
-        await Promise.all(promises);
-        location.reload();
-      }
-    };
-    reader.readAsText(file);
-  }
-
-  export async function ImportFromDnDAppFile(file: File) {
-    const statBlocksCallback = (statBlocks: StatBlock[]) => {
-      statBlocks.forEach(c => {
-        Save(Store.StatBlocks, c.Id, c);
-      });
-    };
-
-    const spellsCallback = (spells: Spell[]) => {
-      spells.forEach(c => {
-        Save(Store.Spells, c.Id, c);
-      });
-    };
-
-    if (
-      confirm(`Import all statblocks and spells in ${file.name} and reload?`)
-    ) {
-      const importer = new DnDAppFilesImporter();
-
-      importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
-    }
-  }
-
-  export async function ExportStatBlocks() {
-    let statBlocks = await LoadAllAndUpdateIds(StatBlocks);
-    return new Blob([JSON.stringify(statBlocks, null, 2)], {
-      type: "application/json"
     });
+
+    return Promise.all(savePromises);
   }
 
   async function save(listName: string, key: string, value) {
