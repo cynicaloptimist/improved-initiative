@@ -68,6 +68,7 @@ export class LocalDataSettings extends React.Component<{}> {
     ) {
       await Store.ImportAll(file);
       LegacySynchronousLocalStore.ImportAllAndReplace(file);
+      location.reload();
     }
   };
 
@@ -77,6 +78,7 @@ export class LocalDataSettings extends React.Component<{}> {
     ) {
       await Store.ImportAll(file);
       LegacySynchronousLocalStore.ImportAll(file);
+      location.reload();
     }
   };
 

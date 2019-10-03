@@ -85,8 +85,6 @@ export namespace Store {
         importList(SavedEncounters, importedStorage),
         importList(Spells, importedStorage)
       ]);
-
-      location.reload();
     };
     reader.readAsText(file);
   }

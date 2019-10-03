@@ -122,8 +122,6 @@ export namespace LegacySynchronousLocalStore {
       );
       importList(SavedEncounters, importedStorage);
       importList(LegacySynchronousLocalStore.Spells, importedStorage);
-
-      location.reload();
     };
     reader.readAsText(file);
   }
@@ -166,7 +164,6 @@ export namespace LegacySynchronousLocalStore {
           localStorage.setItem(key, importedStorage[key]);
         }
       }
-      location.reload();
     };
     reader.readAsText(file);
   }
