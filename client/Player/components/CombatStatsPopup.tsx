@@ -8,6 +8,7 @@ export class CombatStatsPopup extends React.Component<CombatStatsProps> {
     .reduce((total, curr) => total + curr, 0);
   private dmElapsedSeconds =
     this.props.stats.elapsedSeconds - this.totalPlayerTime;
+  private numberOfCombatants = this.props.stats.combatants.length;
 
   public render() {
     return (
@@ -16,22 +17,24 @@ export class CombatStatsPopup extends React.Component<CombatStatsProps> {
           <div className="combat-stats__header">
             <h4>Post-Combat Breakdown</h4>
           </div>
-          <ul className={"playercharacters"}>
-            {this.props.stats.combatants.map((c, index) => (
-              <li key={index}>
-                <span>
-                  <strong>{c.displayName}</strong>
-                  {" participated in "}
-                  <strong>{c.elapsedRounds}</strong>
-                  {" rounds, averaging "}
-                  <strong>
-                    {GetTimerReadout(c.elapsedSeconds / c.elapsedRounds)}
-                  </strong>
-                  {" per round."}
-                </span>
-              </li>
-            ))}
-          </ul>
+          {this.numberOfCombatants > 0 && (
+            <ul className={"playercharacters"}>
+              {this.props.stats.combatants.map((c, index) => (
+                <li key={index}>
+                  <span>
+                    <strong>{c.displayName}</strong>
+                    {" participated in "}
+                    <strong>{c.elapsedRounds}</strong>
+                    {" rounds, averaging "}
+                    <strong>
+                      {GetTimerReadout(c.elapsedSeconds / c.elapsedRounds)}
+                    </strong>
+                    {" per round."}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
           <ul className={"nonplayercharacters"}>
             <li key={0}>
               <span>
