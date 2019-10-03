@@ -16,6 +16,7 @@ import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
 
 interface LocalState {
   showPortrait: boolean;
+  showCombatStats: boolean;
   portraitWasRequestedByClick: boolean;
   portraitURL: string;
   portraitCaption: string;
@@ -40,6 +41,7 @@ export class PlayerView extends React.Component<
     super(props);
     this.state = {
       showPortrait: false,
+      showCombatStats: false,
       portraitWasRequestedByClick: false,
       portraitURL: "",
       portraitCaption: "",
@@ -62,7 +64,7 @@ export class PlayerView extends React.Component<
       this.state.showPortrait ||
       this.state.suggestDamageCombatant ||
       this.state.suggestTagCombatant ||
-      this.props.combatStats;
+      this.state.showCombatStats;
 
     const combatantsById = _.keyBy(
       this.props.encounterState.Combatants,
@@ -103,11 +105,8 @@ export class PlayerView extends React.Component<
             onApply={this.handleSuggestTagPrompt}
           />
         )}
-        {this.props.combatStats && (
-          <CombatStatsPopup
-            stats={this.props.combatStats}
-            onClose={this.closeAllModals}
-          />
+        {this.state.showCombatStats && (
+          <CombatStatsPopup stats={this.props.combatStats} />
         )}
         <PlayerViewCombatantHeader
           portraitColumnVisible={this.hasImages()}
@@ -150,6 +149,7 @@ export class PlayerView extends React.Component<
 
   public componentDidUpdate(prevProps: PlayerViewState) {
     this.splashPortraitIfNeeded(prevProps.encounterState.ActiveCombatantId);
+    this.showCombatStatsIfNeeded(prevProps.combatStats);
     this.scrollToActiveCombatant();
   }
 
@@ -185,6 +185,18 @@ export class PlayerView extends React.Component<
     }
   }
 
+  private showCombatStatsIfNeeded(prevStats: CombatStats) {
+    if (!this.props.combatStats) {
+      return;
+    }
+
+    if (this.props.combatStats != prevStats) {
+      this.setState({
+        showCombatStats: true
+      });
+    }
+  }
+
   private scrollToActiveCombatant() {
     const activeCombatantElement = document.getElementsByClassName("active")[0];
     if (activeCombatantElement) {
@@ -209,6 +221,7 @@ export class PlayerView extends React.Component<
   private closeAllModals = () => {
     this.setState({
       showPortrait: false,
+      showCombatStats: false,
       portraitWasRequestedByClick: false,
       suggestDamageCombatant: null,
       suggestTagCombatant: null

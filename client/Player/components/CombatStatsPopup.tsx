@@ -1,6 +1,5 @@
 import * as React from "react";
 import { CombatStats } from "../../../common/CombatStats";
-import { SubmitButton } from "../../Components/Button";
 import { GetTimerReadout } from "../../Widgets/GetTimerReadout";
 
 export class CombatStatsPopup extends React.Component<CombatStatsProps> {
@@ -12,11 +11,10 @@ export class CombatStatsPopup extends React.Component<CombatStatsProps> {
 
   public render() {
     return (
-      <form onSubmit={this.props.onClose} className="combat-stats-popup">
+      <form className="combat-stats-popup">
         <div className="combat-stats">
           <div className="combat-stats__header">
             <h4>Post-Combat Breakdown</h4>
-            <SubmitButton />
           </div>
           <ul className={"playercharacters"}>
             {this.props.stats.combatants.map((c, index) => (
@@ -73,5 +71,4 @@ export class CombatStatsPopup extends React.Component<CombatStatsProps> {
 
 interface CombatStatsProps {
   stats: CombatStats;
-  onClose: () => void;
 }
