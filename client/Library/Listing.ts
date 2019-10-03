@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import _ = require("lodash");
 import { Listable, StoredListing } from "../../common/Listable";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
@@ -28,12 +29,7 @@ export class Listing<T extends Listable> {
   public GetWithTemplate(template: T) {
     return new Promise<T>(done => {
       return this.GetAsyncWithUpdatedId(item => {
-        const templateCast = template as object;
-        const finalListable = {
-          ...templateCast,
-          ...item
-        } as T;
-        return done(finalListable);
+        return done(_.merge(template, item));
       });
     });
   }
