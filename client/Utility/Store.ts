@@ -68,47 +68,44 @@ export namespace Store {
   }
 
   export async function ImportAll(file: File) {
-    let reader = new FileReader();
-    reader.onload = async (event: any) => {
-      let json = event.target.result;
-      let importedStorage = {};
-      try {
-        importedStorage = JSON.parse(json);
-      } catch (error) {
-        alert(`There was a problem importing ${file.name}: ${error}`);
-        return;
-      }
+    return new Promise((done, fail) => {
+      let reader = new FileReader();
+      reader.onload = async (event: any) => {
+        let json = event.target.result;
+        let importedStorage = {};
+        try {
+          importedStorage = JSON.parse(json);
+        } catch (error) {
+          alert(`There was a problem importing ${file.name}: ${error}`);
+          return fail();
+        }
 
-      await Promise.all([
-        importList(StatBlocks, importedStorage),
-        importList(PersistentCharacters, importedStorage),
-        importList(SavedEncounters, importedStorage),
-        importList(Spells, importedStorage)
-      ]);
-    };
-    reader.readAsText(file);
+        await Promise.all([
+          importList(StatBlocks, importedStorage),
+          importList(PersistentCharacters, importedStorage),
+          importList(SavedEncounters, importedStorage),
+          importList(Spells, importedStorage)
+        ]);
+
+        done();
+      };
+
+      reader.readAsText(file);
+    });
   }
 
   async function importList(listName: string, importSource: any) {
-    const listingsJSON = importSource[listName];
-    if (!listingsJSON) {
-      console.warn(`Couldn't import ${listName} from JSON`);
-      return;
-    }
-    const listings: string[] = JSON.parse(listingsJSON);
-    if (!listings.length) {
-      return;
-    }
+    const listings = Object.keys(importSource).filter(k =>
+      k.startsWith(listName)
+    );
     const savePromises = listings.map(async key => {
-      const fullKey = `${listName}.${key}`;
-      const listingJSON = importSource[fullKey];
-      if (!listingJSON) {
-        console.warn(`Couldn't import ${fullKey} from JSON`);
+      const listing = importSource[key];
+      if (!listing) {
+        console.warn(`Couldn't import ${key} from JSON`);
         return;
       } else {
-        const listing: Listable = JSON.parse(listingJSON);
         listing.LastUpdateMs = moment.now();
-        return Save(listName, key, listing);
+        return await Save(listName, key, listing);
       }
     });
 
