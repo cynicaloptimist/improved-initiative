@@ -115,13 +115,6 @@
 
   .combat-stats-popup {
     .suggestion-prompt();
-    .add-tag > div {
-      flex-flow: row;
-      align-items: center;
-      > * {
-        margin: @extra-small-spacer;
-      }
-    }
   }
 
   .combat-stats {
@@ -132,9 +125,7 @@
 
     ul {
       flex: 1;
-      text-align: left;
       list-style-type: none;
-      padding: 0;
       margin: 0 @large-spacer;
 
       &:first-of-type {
@@ -148,12 +139,7 @@
 
     li {
       display: flex;
-      margin: 0;
       padding: @medium-spacer;
-
-      &:last-of-type {
-        margin-bottom: 0;
-      }
 
       &:nth-child(2n-1) {
         background-color: @zebra-white;
@@ -163,10 +149,6 @@
         flex: 1;
         align-self: center;
       }
-    }
-
-    input {
-      height: 2rem;
     }
   }
 
