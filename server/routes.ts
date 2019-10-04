@@ -50,7 +50,9 @@ const getClientEnvironment = (session: Express.Session): ClientEnvironment => {
     patreonLoginUrl:
       "http://www.patreon.com/oauth2/authorize" +
       `?response_type=code&client_id=${patreonClientId}` +
-      `&redirect_uri=${baseUrl}/r/patreon&state=${encounterId}`,
+      `&redirect_uri=${baseUrl}/r/patreon` +
+      `&scope=users pledges-to-me` +
+      `&state=${encounterId}`,
     isLoggedIn: session.isLoggedIn || false,
     hasStorage: session.hasStorage || false,
     hasEpicInitiative: session.hasEpicInitiative || false,
