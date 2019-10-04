@@ -13,6 +13,13 @@ export enum AutoRerollInitiativeOption {
   Automatic = "Automatic"
 }
 
+export enum PostCombatStatsOption {
+  None = "None",
+  EncounterViewOnly = "Encounter view only",
+  PlayerViewOnly = "Player view only",
+  Both = "Both"
+}
+
 export interface Settings {
   Commands: CommandSetting[];
   Rules: {
@@ -26,7 +33,7 @@ export interface Settings {
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
-    PostCombatStats: boolean;
+    PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
   Version: string;
@@ -46,7 +53,7 @@ export function getDefaultSettings(): Settings {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayDifficulty: true,
-      PostCombatStats: false
+      PostCombatStats: PostCombatStatsOption.None
     },
     PlayerView: {
       ActiveCombatantOnTop: false,

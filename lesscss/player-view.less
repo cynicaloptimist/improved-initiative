@@ -113,6 +113,70 @@
     }
   }
 
+  .combat-stats-popup {
+    .suggestion-prompt();
+    .add-tag > div {
+      flex-flow: row;
+      align-items: center;
+      > * {
+        margin: @extra-small-spacer;
+      }
+    }
+  }
+
+  .combat-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex: 1;
+
+    ul {
+      flex: 1;
+      text-align: left;
+      list-style-type: none;
+      padding: 0;
+      margin: 0 @large-spacer;
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+
+    li {
+      display: flex;
+      margin: 0;
+      padding: @medium-spacer;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+
+      &:nth-child(2n-1) {
+        background-color: @zebra-white;
+      }
+
+      span {
+        flex: 1;
+        align-self: center;
+      }
+    }
+
+    input {
+      height: 2rem;
+    }
+  }
+
+  .combat-stats__header {
+    margin: @medium-spacer;
+    flex-flow: row;
+    justify-content: space-between;
+    flex-basis: 100%;
+  }
+
   /* Add Animation */
   .combatant-portrait__image,
   .combatant-portrait__caption {

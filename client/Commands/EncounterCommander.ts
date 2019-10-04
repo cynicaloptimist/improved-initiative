@@ -1,6 +1,7 @@
 import * as ko from "knockout";
-
 import _ = require("lodash");
+import { CombatStats } from "../../common/CombatStats";
+import { PostCombatStatsOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../Environment";
@@ -127,21 +128,35 @@ export class EncounterCommander {
     const displayPostCombatStats = CurrentSettings().TrackerView
       .PostCombatStats;
 
-    if (displayPostCombatStats) {
+    if (displayPostCombatStats != PostCombatStatsOption.None) {
       const combatTimer = this.tracker.Encounter.EncounterFlow.CombatTimer;
-      const combatStatsPrompt = CombatStatsPrompt(
-        combatTimer.ElapsedRounds(),
-        combatTimer.ElapsedSeconds(),
-        this.tracker.Encounter.Combatants()
+
+      const combatStats: CombatStats = {
+        elapsedRounds: combatTimer.ElapsedRounds(),
+        elapsedSeconds: combatTimer.ElapsedSeconds(),
+        combatants: this.tracker.Encounter.Combatants()
           .filter(c => c.IsPlayerCharacter())
           .map(c => ({
             displayName: c.DisplayName(),
             elapsedRounds: c.CombatTimer.ElapsedRounds(),
             elapsedSeconds: c.CombatTimer.ElapsedSeconds()
           }))
-      );
+      };
 
-      this.tracker.PromptQueue.Add(combatStatsPrompt);
+      if (
+        displayPostCombatStats == PostCombatStatsOption.EncounterViewOnly ||
+        displayPostCombatStats == PostCombatStatsOption.Both
+      ) {
+        const combatStatsPrompt = CombatStatsPrompt(combatStats);
+        this.tracker.PromptQueue.Add(combatStatsPrompt);
+      }
+
+      if (
+        displayPostCombatStats == PostCombatStatsOption.PlayerViewOnly ||
+        displayPostCombatStats == PostCombatStatsOption.Both
+      ) {
+        this.tracker.Encounter.DisplayPlayerViewCombatStats(combatStats);
+      }
     }
 
     this.tracker.Encounter.Combatants().forEach(c => c.CombatTimer.Stop());

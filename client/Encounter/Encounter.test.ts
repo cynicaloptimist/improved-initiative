@@ -51,9 +51,6 @@ describe("Encounter", () => {
   });
 
   test("Display post-combat stats produces reasonable results", () => {
-    const settings = CurrentSettings();
-    settings.TrackerView.PostCombatStats = true;
-
     jest.useFakeTimers();
 
     for (let i = 0; i < 2; i++) {
