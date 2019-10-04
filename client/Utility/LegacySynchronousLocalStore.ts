@@ -122,8 +122,6 @@ export namespace LegacySynchronousLocalStore {
       );
       importList(SavedEncounters, importedStorage);
       importList(LegacySynchronousLocalStore.Spells, importedStorage);
-
-      location.reload();
     };
     reader.readAsText(file);
   }
@@ -160,18 +158,11 @@ export namespace LegacySynchronousLocalStore {
         alert(`There was a problem importing ${file.name}: ${error}`);
         return;
       }
-      if (
-        confirm(
-          `Replace your Improved Initiative data with imported ${
-            file.name
-          } and reload?`
-        )
-      ) {
-        localStorage.clear();
-        for (let key in importedStorage) {
+      localStorage.clear();
+      for (let key in importedStorage) {
+        if (key.startsWith(_prefix)) {
           localStorage.setItem(key, importedStorage[key]);
         }
-        location.reload();
       }
     };
     reader.readAsText(file);
@@ -190,13 +181,9 @@ export namespace LegacySynchronousLocalStore {
       });
     };
 
-    if (
-      confirm(`Import all statblocks and spells in ${file.name} and reload?`)
-    ) {
-      const importer = new DnDAppFilesImporter();
+    const importer = new DnDAppFilesImporter();
 
-      importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
-    }
+    importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
   }
 
   const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));

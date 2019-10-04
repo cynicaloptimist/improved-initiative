@@ -12,7 +12,11 @@ export class SpellLibrary {
   private spells = ko.observableArray<Listing<Spell>>([]);
   public GetSpells = ko.pureComputed(() => this.spells());
   public SpellsByNameRegex = ko.pureComputed(() =>
-    concatenatedStringRegex(this.GetSpells().map(s => s.Listing().Name))
+    concatenatedStringRegex(
+      this.GetSpells()
+        .map(s => s.Listing().Name)
+        .filter(n => n.length > 2)
+    )
   );
 
   constructor(private accountClient: AccountClient) {}
