@@ -59,3 +59,7 @@ Assuming you started the container with the name `improved-initiative` as shown 
 `docker stop improved-initiative`
 
 `docker rm improved-initiative`
+
+## License
+
+The Improved Initiative app is made available under the [MIT](license) license. 
