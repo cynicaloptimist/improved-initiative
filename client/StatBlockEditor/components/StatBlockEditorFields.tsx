@@ -1,5 +1,7 @@
 import { Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
+import { DndProvider } from "react-dnd";
+import HTML5Backend from "react-dnd-html5-backend";
 import { StatBlock } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
@@ -168,20 +170,21 @@ export const powerFields = (api: FormApi, powerType: string) => {
           );
         } else {
           return (
-            <React.Fragment>
+            <DndProvider backend={HTML5Backend}>
               <div className="c-statblock-editor__label">{powerType}</div>
               <div className="inline-powers">
                 {api.values[powerType].map((_, i: number) => (
                   <PowerField
                     key={i}
                     remove={arrayHelpers.remove}
+                    move={arrayHelpers.move}
                     powerType={powerType}
                     index={i}
                   />
                 ))}
               </div>
               {addButton}
-            </React.Fragment>
+            </DndProvider>
           );
         }
       }}
