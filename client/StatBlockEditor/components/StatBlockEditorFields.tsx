@@ -82,43 +82,18 @@ export const NameAndModifierFields = (props: {
 };
 
 export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
-  const { keywordType, api } = props;
   return (
-    <FieldArray
-      name={keywordType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() => arrayHelpers.push("")}
-          />
-        );
-
-        if (api.values[keywordType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {keywordType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <React.Fragment>
-              <span className="c-statblock-editor__label">{keywordType}</span>
-              {api.values[keywordType].map((_, i: number) => (
-                <KeywordField
-                  key={i}
-                  remove={arrayHelpers.remove}
-                  keywordType={keywordType}
-                  index={i}
-                />
-              ))}
-              {addButton}
-            </React.Fragment>
-          );
-        }
-      }}
+    <SortableList
+      api={props.api}
+      listType={props.keywordType}
+      makeComponent={(index: number, arrayHelpers: ArrayHelpers) => (
+        <KeywordField
+          key={index}
+          arrayHelpers={arrayHelpers}
+          keywordType={props.keywordType}
+          index={index}
+        />
+      )}
     />
   );
 };
