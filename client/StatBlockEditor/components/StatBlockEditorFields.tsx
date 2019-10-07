@@ -1,4 +1,4 @@
-import { Field, FieldArray, FormikProps } from "formik";
+import { ArrayHelpers, Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
 import {
   useDrag,
@@ -13,6 +13,7 @@ import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
+import { useDragDrop } from "./UseDragDrop";
 
 type FormApi = FormikProps<any>;
 
@@ -158,87 +159,72 @@ export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
   );
 };
 
-interface DraggedPowerField {
-  type: "power-field";
-  index: number;
-}
-
 export const PowerFields = (props: { api: FormApi; powerType: string }) => {
   const { api, powerType } = props;
 
-  const useDragDrop = function(
-    powerType: string,
-    index: number,
-    move: (from: number, to: number) => void
-  ): [DragElementWrapper<DragSourceOptions>, DragElementWrapper<any>] {
-    const dragDropType = "power-field-" + powerType;
-
-    const [, drag] = useDrag({
-      item: { index: index, type: dragDropType }
-    });
-
-    const [, drop] = useDrop({
-      accept: dragDropType,
-      drop: (item: DraggedPowerField) => {
-        const from = item.index;
-        const to = index;
-        console.log("from", item.index, "to", to);
-        if (to > from) {
-          move(from, to - 1);
-        } else {
-          move(from, to);
-        }
-      }
-    });
-
-    return [drag, drop];
-  };
-
   return (
-    <FieldArray
-      name={powerType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() =>
-              arrayHelpers.push({ Name: "", Content: "", Usage: "" })
-            }
+    <DndProvider backend={HTML5Backend}>
+      <FieldArray
+        name={powerType}
+        render={arrayHelpers => (
+          <PowerFieldsInner
+            api={api}
+            powerType={powerType}
+            arrayHelpers={arrayHelpers}
           />
-        );
-
-        if (api.values[powerType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {powerType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <DndProvider backend={HTML5Backend}>
-              <div className="c-statblock-editor__label">{powerType}</div>
-              <div className="inline-powers">
-                {api.values[powerType].map((_, i: number) => (
-                  <PowerField
-                    key={i}
-                    remove={arrayHelpers.remove}
-                    move={arrayHelpers.move}
-                    useDragDrop={useDragDrop}
-                    powerType={powerType}
-                    index={i}
-                  />
-                ))}
-              </div>
-              {addButton}
-            </DndProvider>
-          );
-        }
-      }}
-    />
+        )}
+      />
+    </DndProvider>
   );
 };
+
+function PowerFieldsInner(props: {
+  api: FormApi;
+  arrayHelpers: ArrayHelpers;
+  powerType: string;
+}) {
+  const { api, arrayHelpers, powerType } = props;
+  const addButton = (
+    <Button
+      fontAwesomeIcon="plus"
+      additionalClassNames="c-add-button"
+      onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })}
+    />
+  );
+
+  if (api.values[powerType].length == 0) {
+    return (
+      <span className="c-statblock-editor__label">
+        {powerType}
+        {addButton}
+      </span>
+    );
+  } else {
+    const [, finalDrop] = useDragDrop(
+      powerType,
+      api.values[powerType].length,
+      arrayHelpers.move
+    );
+    return (
+      <React.Fragment>
+        <div className="c-statblock-editor__label">{powerType}</div>
+        <div className="inline-powers">
+          {api.values[powerType].map((_, i: number) => (
+            <PowerField
+              key={i}
+              remove={arrayHelpers.remove}
+              move={arrayHelpers.move}
+              powerType={powerType}
+              index={i}
+            />
+          ))}
+          <div className="drop-zone" ref={finalDrop} />
+        </div>
+        {addButton}
+      </React.Fragment>
+    );
+  }
+}
 
 export const DescriptionField = () => (
   <label className="c-statblock-editor__text">

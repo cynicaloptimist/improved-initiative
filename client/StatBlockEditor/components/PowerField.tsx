@@ -2,18 +2,11 @@ import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
 import { useCallback, useRef } from "react";
-import { DragElementWrapper, DragSourceOptions } from "react-dnd";
-
-type UseDragDrop = (
-  powerType: string,
-  index: number,
-  move: (from: number, to: number) => void
-) => [DragElementWrapper<DragSourceOptions>, DragElementWrapper<any>];
+import { useDragDrop } from "./UseDragDrop";
 
 interface PowerFieldProps {
   remove: (index: number) => void;
   move: (from: number, to: number) => void;
-  useDragDrop: UseDragDrop;
   powerType: string;
   index: number;
 }
@@ -30,11 +23,7 @@ export function PowerField(props: PowerFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop] = props.useDragDrop(
-    props.powerType,
-    props.index,
-    props.move
-  );
+  const [drag, drop] = useDragDrop(props.powerType, props.index, props.move);
 
   return (
     <div>
