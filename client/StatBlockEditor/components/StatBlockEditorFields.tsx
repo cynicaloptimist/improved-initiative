@@ -1,6 +1,12 @@
 import { Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
-import { DndProvider } from "react-dnd";
+import {
+  useDrag,
+  useDrop,
+  DndProvider,
+  DragElementWrapper,
+  DragSourceOptions
+} from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { StatBlock } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
@@ -152,8 +158,42 @@ export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
   );
 };
 
+interface DraggedPowerField {
+  type: "power-field";
+  index: number;
+}
+
 export const PowerFields = (props: { api: FormApi; powerType: string }) => {
   const { api, powerType } = props;
+
+  const useDragDrop = function(
+    powerType: string,
+    index: number,
+    move: (from: number, to: number) => void
+  ): [DragElementWrapper<DragSourceOptions>, DragElementWrapper<any>] {
+    const dragDropType = "power-field-" + powerType;
+
+    const [, drag] = useDrag({
+      item: { index: index, type: dragDropType }
+    });
+
+    const [, drop] = useDrop({
+      accept: dragDropType,
+      drop: (item: DraggedPowerField) => {
+        const from = item.index;
+        const to = index;
+        console.log("from", item.index, "to", to);
+        if (to > from) {
+          move(from, to - 1);
+        } else {
+          move(from, to);
+        }
+      }
+    });
+
+    return [drag, drop];
+  };
+
   return (
     <FieldArray
       name={powerType}
@@ -185,6 +225,7 @@ export const PowerFields = (props: { api: FormApi; powerType: string }) => {
                     key={i}
                     remove={arrayHelpers.remove}
                     move={arrayHelpers.move}
+                    useDragDrop={useDragDrop}
                     powerType={powerType}
                     index={i}
                   />
