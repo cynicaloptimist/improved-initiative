@@ -67,12 +67,10 @@ function SortableListInner(props: {
     return (
       <React.Fragment>
         <div className="c-statblock-editor__label">{listType}</div>
-        <div className="inline-powers">
-          {api.values[listType].map((_, i: number) =>
-            props.makeComponent(i, arrayHelpers)
-          )}
-          <div className="drop-zone" ref={finalDrop} />
-        </div>
+        {api.values[listType].map((_, i: number) =>
+          props.makeComponent(i, arrayHelpers)
+        )}
+        <div className="drop-zone" ref={finalDrop} />
         {addButton}
       </React.Fragment>
     );
