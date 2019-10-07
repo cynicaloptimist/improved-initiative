@@ -62,10 +62,13 @@ export const abilityScoreField = (abilityName: string) => (
   </div>
 );
 
-export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
+export const NameAndModifierFields = (props: {
+  api: FormApi;
+  modifierType: string;
+}) => {
   return (
     <FieldArray
-      name={modifierType}
+      name={props.modifierType}
       render={arrayHelpers => {
         const addButton = (
           <Button
@@ -75,23 +78,25 @@ export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
           />
         );
 
-        if (api.values[modifierType].length == 0) {
+        if (props.api.values[props.modifierType].length == 0) {
           return (
             <span className="c-statblock-editor__label">
-              {modifierType}
+              {props.modifierType}
               {addButton}
             </span>
           );
         } else {
           return (
             <React.Fragment>
-              <span className="c-statblock-editor__label">{modifierType}</span>
+              <span className="c-statblock-editor__label">
+                {props.modifierType}
+              </span>
               <div className="inline-names-and-modifiers">
-                {api.values[modifierType].map((_, i: number) => (
+                {props.api.values[props.modifierType].map((_, i: number) => (
                   <NameAndModifierField
                     key={i}
                     remove={arrayHelpers.remove}
-                    modifierType={modifierType}
+                    modifierType={props.modifierType}
                     index={i}
                   />
                 ))}

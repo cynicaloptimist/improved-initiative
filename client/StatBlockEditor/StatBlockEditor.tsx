@@ -15,9 +15,9 @@ import {
   descriptionField,
   getAnonymizedStatBlockJSON,
   keywordFields,
-  nameAndModifierFields,
   powerFields,
   InitiativeField,
+  NameAndModifierFields,
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
@@ -152,10 +152,10 @@ export class StatBlockEditor extends React.Component<
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndModifierFields(api, "Saves")}
+        <NameAndModifierFields api={api} modifierType="Saves" />
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndModifierFields(api, "Skills")}
+        <NameAndModifierFields api={api} modifierType="Skills" />
       </div>
       {[
         "Speed",
