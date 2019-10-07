@@ -1,44 +1,50 @@
-import { Field } from "formik";
+import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
+import { useCallback, useRef } from "react";
+import { useDragDrop } from "./UseDragDrop";
 
 interface NameAndModifierFieldProps {
-  remove: (index: number) => void;
+  arrayHelpers: ArrayHelpers;
   modifierType: string;
   index: number;
 }
-interface NameAndModifierFieldState {}
 
-export class NameAndModifierField extends React.Component<
-  NameAndModifierFieldProps,
-  NameAndModifierFieldState
-> {
-  private nameInput: HTMLInputElement;
+export function NameAndModifierField(props: NameAndModifierFieldProps) {
+  let nameInput = useRef<HTMLInputElement>();
+  useCallback(
+    () => {
+      if (nameInput.current.value == "") {
+        nameInput.current.focus();
+      }
+    },
+    [nameInput]
+  );
 
-  public componentDidMount() {
-    if (this.nameInput.value == "") {
-      this.nameInput.focus();
-    }
-  }
-
-  public render() {
-    return (
-      <div>
+  const [drag, drop] = useDragDrop(
+    props.modifierType,
+    props.index,
+    props.arrayHelpers.move
+  );
+  return (
+    <React.Fragment>
+      <div className="drop-zone" ref={drop} />
+      <div ref={drag} className="inline">
         <Field
           type="text"
           className="name"
-          name={`${this.props.modifierType}[${this.props.index}].Name`}
-          innerRef={f => (this.nameInput = f)}
+          name={`${props.modifierType}[${props.index}].Name`}
+          innerRef={f => (nameInput = f)}
         />
         <Field
           type="number"
           className="modifier"
-          name={`${this.props.modifierType}[${this.props.index}].Modifier`}
+          name={`${props.modifierType}[${props.index}].Modifier`}
         />
         <span
           className="fa-clickable fa-trash"
-          onClick={() => this.props.remove(this.props.index)}
+          onClick={() => props.arrayHelpers.remove(props.index)}
         />
       </div>
-    );
-  }
+    </React.Fragment>
+  );
 }

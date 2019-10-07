@@ -66,45 +66,17 @@ export const NameAndModifierFields = (props: {
   modifierType: string;
 }) => {
   return (
-    <FieldArray
-      name={props.modifierType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })}
-          />
-        );
-
-        if (props.api.values[props.modifierType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {props.modifierType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <React.Fragment>
-              <span className="c-statblock-editor__label">
-                {props.modifierType}
-              </span>
-              <div className="inline-names-and-modifiers">
-                {props.api.values[props.modifierType].map((_, i: number) => (
-                  <NameAndModifierField
-                    key={i}
-                    remove={arrayHelpers.remove}
-                    modifierType={props.modifierType}
-                    index={i}
-                  />
-                ))}
-              </div>
-              {addButton}
-            </React.Fragment>
-          );
-        }
-      }}
+    <SortableList
+      api={props.api}
+      listType={props.modifierType}
+      makeComponent={(index: number, arrayHelpers: ArrayHelpers) => (
+        <NameAndModifierField
+          key={index}
+          arrayHelpers={arrayHelpers}
+          modifierType={props.modifierType}
+          index={index}
+        />
+      )}
     />
   );
 };
