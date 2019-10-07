@@ -110,7 +110,8 @@ export const NameAndModifierFields = (props: {
   );
 };
 
-export const keywordFields = (api: FormApi, keywordType: string) => {
+export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
+  const { keywordType, api } = props;
   return (
     <FieldArray
       name={keywordType}
@@ -151,7 +152,8 @@ export const keywordFields = (api: FormApi, keywordType: string) => {
   );
 };
 
-export const powerFields = (api: FormApi, powerType: string) => {
+export const PowerFields = (props: { api: FormApi; powerType: string }) => {
+  const { api, powerType } = props;
   return (
     <FieldArray
       name={powerType}
@@ -197,7 +199,7 @@ export const powerFields = (api: FormApi, powerType: string) => {
   );
 };
 
-export const descriptionField = () => (
+export const DescriptionField = () => (
   <label className="c-statblock-editor__text">
     <div className="c-statblock-editor__label">Description</div>
     <Field
