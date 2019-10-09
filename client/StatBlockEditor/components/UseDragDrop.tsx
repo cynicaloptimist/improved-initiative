@@ -1,3 +1,4 @@
+import React = require("react");
 import {
   useDrag,
   useDrop,
@@ -10,16 +11,25 @@ interface DraggedField {
   index: number;
 }
 
+interface CollectedDropTargetProps {
+  isOver: boolean;
+  canDrop: boolean;
+}
+
 export const useDragDrop = function(
   dragDropType: string,
   index: number,
   move: (from: number, to: number) => void
-): [DragElementWrapper<DragSourceOptions>, DragElementWrapper<DraggedField>] {
+): [
+  DragElementWrapper<DragSourceOptions>,
+  DragElementWrapper<DraggedField>,
+  CollectedDropTargetProps
+] {
   const [, drag] = useDrag({
     item: { index: index, type: dragDropType }
   });
 
-  const [, drop] = useDrop({
+  const [collected, drop] = useDrop({
     accept: dragDropType,
     drop: (item: DraggedField) => {
       const from = item.index;
@@ -30,8 +40,24 @@ export const useDragDrop = function(
       } else {
         move(from, to);
       }
-    }
+    },
+    collect: monitor => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
   });
 
-  return [drag, drop];
+  return [drag, drop, collected];
 };
+
+export function DropZone(props: {
+  drop: DragElementWrapper<DraggedField>;
+  dropProps: CollectedDropTargetProps;
+}) {
+  return (
+    <div
+      className={"drop-zone" + (props.dropProps.isOver ? "--can-drop" : "")}
+      ref={props.drop}
+    />
+  );
+}

@@ -3,7 +3,7 @@ import React = require("react");
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { Button } from "../../Components/Button";
-import { useDragDrop } from "./UseDragDrop";
+import { useDragDrop, DropZone } from "./UseDragDrop";
 
 type FormApi = FormikProps<any>;
 
@@ -59,7 +59,7 @@ function SortableListInner(props: {
       </span>
     );
   } else {
-    const [, finalDrop] = useDragDrop(
+    const [, finalDrop, finalDropProps] = useDragDrop(
       listType,
       api.values[listType].length,
       arrayHelpers.move
@@ -70,7 +70,7 @@ function SortableListInner(props: {
         {api.values[listType].map((_, i: number) =>
           props.makeComponent(i, arrayHelpers)
         )}
-        <div className="drop-zone" ref={finalDrop} />
+        <DropZone drop={finalDrop} dropProps={finalDropProps} />
         {addButton}
       </React.Fragment>
     );

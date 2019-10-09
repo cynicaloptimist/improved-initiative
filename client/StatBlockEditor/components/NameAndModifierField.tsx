@@ -1,7 +1,7 @@
 import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
 import { useCallback, useRef } from "react";
-import { useDragDrop } from "./UseDragDrop";
+import { useDragDrop, DropZone } from "./UseDragDrop";
 
 interface NameAndModifierFieldProps {
   arrayHelpers: ArrayHelpers;
@@ -20,14 +20,14 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop] = useDragDrop(
+  const [drag, drop, dropProps] = useDragDrop(
     props.modifierType,
     props.index,
     props.arrayHelpers.move
   );
   return (
     <React.Fragment>
-      <div className="drop-zone" ref={drop} />
+      <DropZone drop={drop} dropProps={dropProps} />
       <div ref={drag} className="inline">
         <Field
           type="text"

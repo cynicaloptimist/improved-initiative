@@ -1,7 +1,7 @@
 import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
 import { useCallback, useRef } from "react";
-import { useDragDrop } from "./UseDragDrop";
+import { useDragDrop, DropZone } from "./UseDragDrop";
 
 interface KeywordFieldProps {
   arrayHelpers: ArrayHelpers;
@@ -20,7 +20,7 @@ export function KeywordField(props: KeywordFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop] = useDragDrop(
+  const [drag, drop, dropProps] = useDragDrop(
     props.keywordType,
     props.index,
     props.arrayHelpers.move
@@ -28,7 +28,7 @@ export function KeywordField(props: KeywordFieldProps) {
 
   return (
     <React.Fragment>
-      <div className="drop-zone" ref={drop} />
+      <DropZone drop={drop} dropProps={dropProps} />
       <div className="inline" ref={drag}>
         <Field
           type="text"
