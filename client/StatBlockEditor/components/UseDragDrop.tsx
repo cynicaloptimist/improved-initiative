@@ -54,10 +54,11 @@ export function DropZone(props: {
   drop: DragElementWrapper<DraggedField>;
   dropProps: CollectedDropTargetProps;
 }) {
-  return (
-    <div
-      className={"drop-zone" + (props.dropProps.isOver ? "--can-drop" : "")}
-      ref={props.drop}
-    />
-  );
+  let className = "drop-zone";
+  if (props.dropProps.isOver) {
+    className += "--is-over";
+  } else if (props.dropProps.canDrop) {
+    className += "--can-drop";
+  }
+  return <div className={className} ref={props.drop} />;
 }
