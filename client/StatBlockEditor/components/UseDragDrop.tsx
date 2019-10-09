@@ -31,6 +31,9 @@ export const useDragDrop = function(
 
   const [collected, drop] = useDrop({
     accept: dragDropType,
+    canDrop: item => {
+      return index < item.index || index > item.index + 1;
+    },
     drop: (item: DraggedField) => {
       const from = item.index;
       const to = index;
@@ -57,7 +60,8 @@ export function DropZone(props: {
   let className = "drop-zone";
   if (props.dropProps.isOver) {
     className += "--is-over";
-  } else if (props.dropProps.canDrop) {
+  }
+  if (props.dropProps.canDrop) {
     className += "--can-drop";
   }
   return <div className={className} ref={props.drop} />;
