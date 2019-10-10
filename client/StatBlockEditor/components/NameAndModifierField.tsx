@@ -28,7 +28,8 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
   return (
     <React.Fragment>
       <DropZone drop={drop} dropProps={dropProps} />
-      <div ref={drag} className="inline">
+      <div className="inline">
+        <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"
           className="name"

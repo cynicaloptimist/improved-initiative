@@ -29,7 +29,8 @@ export function KeywordField(props: KeywordFieldProps) {
   return (
     <React.Fragment>
       <DropZone drop={drop} dropProps={dropProps} />
-      <div className="inline" ref={drag}>
+      <div className="inline">
+        <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"
           className="name"
