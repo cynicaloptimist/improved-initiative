@@ -16,6 +16,7 @@ export function SortableList(props: {
   api: FormApi;
   listType: string;
   makeComponent: makeSortableComponent;
+  makeNew: () => any;
 }) {
   return (
     <DndProvider backend={HTML5Backend}>
@@ -34,13 +35,14 @@ function SortableListInner(props: {
   arrayHelpers: ArrayHelpers;
   listType: string;
   makeComponent: makeSortableComponent;
+  makeNew: () => any;
 }) {
-  const { api, arrayHelpers, listType } = props;
+  const { api, arrayHelpers, listType, makeNew } = props;
   const addButton = (
     <Button
       fontAwesomeIcon="plus"
       additionalClassNames="c-add-button"
-      onClick={() => arrayHelpers.push({ Name: "", Content: "", Usage: "" })}
+      onClick={() => arrayHelpers.push(makeNew())}
     />
   );
 

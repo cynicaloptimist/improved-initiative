@@ -77,6 +77,7 @@ export const NameAndModifierFields = (props: {
           index={index}
         />
       )}
+      makeNew={() => ({ Name: "", Modifier: "" })}
     />
   );
 };
@@ -94,6 +95,7 @@ export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
           index={index}
         />
       )}
+      makeNew={() => ""}
     />
   );
 };
@@ -112,6 +114,7 @@ export function PowerFields(props: { api: FormApi; powerType: string }) {
           index={index}
         />
       )}
+      makeNew={() => ({ Name: "", Content: "", Usage: "" })}
     />
   );
 }
