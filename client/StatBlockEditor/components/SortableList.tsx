@@ -17,19 +17,12 @@ export function SortableList(props: {
   listType: string;
   makeComponent: makeSortableComponent;
 }) {
-  const { api, listType, makeComponent } = props;
-
   return (
     <DndProvider backend={HTML5Backend}>
       <FieldArray
-        name={listType}
+        name={props.listType}
         render={arrayHelpers => (
-          <SortableListInner
-            api={api}
-            listType={listType}
-            arrayHelpers={arrayHelpers}
-            makeComponent={makeComponent}
-          />
+          <SortableListInner {...props} arrayHelpers={arrayHelpers} />
         )}
       />
     </DndProvider>
