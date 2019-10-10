@@ -20,7 +20,7 @@ export function KeywordField(props: KeywordFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop, dropProps] = useDragDrop(
+  const [drag, drop, dropProps, preview] = useDragDrop(
     props.keywordType,
     props.index,
     props.arrayHelpers.move
@@ -29,7 +29,7 @@ export function KeywordField(props: KeywordFieldProps) {
   return (
     <React.Fragment>
       <DropZone drop={drop} dropProps={dropProps} />
-      <div className="inline">
+      <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"

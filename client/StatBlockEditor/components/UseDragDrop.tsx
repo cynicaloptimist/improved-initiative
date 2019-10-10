@@ -3,6 +3,7 @@ import {
   useDrag,
   useDrop,
   DragElementWrapper,
+  DragPreviewOptions,
   DragSourceOptions
 } from "react-dnd";
 
@@ -23,9 +24,10 @@ export const useDragDrop = function(
 ): [
   DragElementWrapper<DragSourceOptions>,
   DragElementWrapper<DraggedField>,
-  CollectedDropTargetProps
+  CollectedDropTargetProps,
+  DragElementWrapper<DragPreviewOptions>
 ] {
-  const [, drag] = useDrag({
+  const [, drag, preview] = useDrag({
     item: { index: index, type: dragDropType }
   });
 
@@ -50,7 +52,7 @@ export const useDragDrop = function(
     })
   });
 
-  return [drag, drop, collected];
+  return [drag, drop, collected, preview];
 };
 
 export function DropZone(props: {

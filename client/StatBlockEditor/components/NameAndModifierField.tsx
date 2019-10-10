@@ -20,7 +20,7 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop, dropProps] = useDragDrop(
+  const [drag, drop, dropProps, preview] = useDragDrop(
     props.modifierType,
     props.index,
     props.arrayHelpers.move
@@ -28,7 +28,7 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
   return (
     <React.Fragment>
       <DropZone drop={drop} dropProps={dropProps} />
-      <div className="inline">
+      <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"

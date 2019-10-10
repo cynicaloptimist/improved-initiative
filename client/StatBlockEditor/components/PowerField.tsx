@@ -23,7 +23,7 @@ export function PowerField(props: PowerFieldProps) {
     [nameInput]
   );
 
-  const [drag, drop, dropProps] = useDragDrop(
+  const [drag, drop, dropProps, preview] = useDragDrop(
     props.powerType,
     props.index,
     props.move
@@ -32,7 +32,7 @@ export function PowerField(props: PowerFieldProps) {
   return (
     <div>
       <DropZone drop={drop} dropProps={dropProps} />
-      <div className="inline">
+      <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"
