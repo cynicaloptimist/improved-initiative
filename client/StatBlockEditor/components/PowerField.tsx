@@ -33,7 +33,7 @@ export function PowerField(props: PowerFieldProps) {
     <div>
       <DropZone drop={drop} dropProps={dropProps} />
       <div className="inline">
-        <div className="grab-handle" ref={drag} />
+        <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"
           className="name"
