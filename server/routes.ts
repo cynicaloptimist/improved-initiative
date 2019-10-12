@@ -27,7 +27,6 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 interface ClientOptions {
-  rootDirectory: string;
   encounterId: string;
   baseUrl: string;
   patreonLoginUrl: string;
@@ -44,7 +43,6 @@ const appVersion = require("../package.json").version;
 const getClientOptions = (session: Express.Session): ClientOptions => {
   const encounterId = session.encounterId || probablyUniqueString();
   return {
-    rootDirectory: "../..",
     encounterId,
     baseUrl,
     patreonLoginUrl:
