@@ -7,4 +7,5 @@ export interface ClientEnvironment {
   HasEpicInitiative: boolean;
   BaseUrl: string;
   PatreonLoginUrl: string;
+  SentryDSN: string | null;
 }

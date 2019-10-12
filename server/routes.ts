@@ -3,6 +3,7 @@ import express = require("express");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
+import { ClientEnvironment } from "../common/ClientEnvironment";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
@@ -27,14 +28,8 @@ type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
 interface ClientOptions {
-  encounterId: string;
+  environmentJSON: string;
   baseUrl: string;
-  patreonLoginUrl: string;
-  isLoggedIn: boolean;
-  hasStorage: boolean;
-  hasEpicInitiative: boolean;
-  postedEncounter: string | null;
-  sentryDsn: string | null;
   appVersion: string;
 }
 
@@ -42,21 +37,34 @@ const appVersion = require("../package.json").version;
 
 const getClientOptions = (session: Express.Session): ClientOptions => {
   const encounterId = session.encounterId || probablyUniqueString();
+  const patreonLoginUrl =
+    "http://www.patreon.com/oauth2/authorize" +
+    `?response_type=code&client_id=${patreonClientId}` +
+    `&redirect_uri=${baseUrl}/r/patreon` +
+    `&scope=users pledges-to-me` +
+    `&state=${encounterId}`;
+
+  const environment: ClientEnvironment = {
+    EncounterId: encounterId,
+    BaseUrl: baseUrl,
+    PatreonLoginUrl: patreonLoginUrl,
+    IsLoggedIn: session.isLoggedIn || false,
+    HasStorage: session.hasStorage || false,
+    HasEpicInitiative: session.hasEpicInitiative || false,
+    ImportedCompressedStatBlockJSON: null,
+    PostedEncounter: null,
+    SentryDSN: process.env.SENTRY_DSN || null
+  };
+
+  if (session.postedEncounter) {
+    environment.PostedEncounter = session.postedEncounter;
+    delete session.postedEncounter;
+  }
+
   return {
-    encounterId,
+    environmentJSON: JSON.stringify(environment),
     baseUrl,
-    patreonLoginUrl:
-      "http://www.patreon.com/oauth2/authorize" +
-      `?response_type=code&client_id=${patreonClientId}` +
-      `&redirect_uri=${baseUrl}/r/patreon` +
-      `&scope=users pledges-to-me` +
-      `&state=${encounterId}`,
-    isLoggedIn: session.isLoggedIn || false,
-    hasStorage: session.hasStorage || false,
-    hasEpicInitiative: session.hasEpicInitiative || false,
-    postedEncounter: null,
-    sentryDsn: process.env.SENTRY_DSN || null,
-    appVersion: appVersion
+    appVersion
   };
 };
 
@@ -126,10 +134,6 @@ export default function(
     updateSession(session);
 
     const options = getClientOptions(session);
-    if (session.postedEncounter) {
-      options.postedEncounter = JSON.stringify(session.postedEncounter);
-      delete session.postedEncounter;
-    }
     return res.render("tracker", options);
   });
 
