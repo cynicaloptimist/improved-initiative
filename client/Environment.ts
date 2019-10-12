@@ -1,18 +1,8 @@
 import * as Sentry from "@sentry/browser";
+import { ClientEnvironment } from "../common/ClientEnvironment";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 
-interface Environment {
-  EncounterId: string;
-  PostedEncounter: { Combatants: {}[] } | null;
-  ImportedCompressedStatBlockJSON: string | null;
-  IsLoggedIn: boolean;
-  HasStorage: boolean;
-  HasEpicInitiative: boolean;
-  BaseUrl: string;
-  PatreonLoginUrl: string;
-}
-
-export const env: Environment = {
+export const env: ClientEnvironment = {
   EncounterId: null,
   BaseUrl: null,
   PostedEncounter: null,
