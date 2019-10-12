@@ -4,7 +4,6 @@ import { ClientEnvironment } from "../common/ClientEnvironment";
 export const env: ClientEnvironment = {
   EncounterId: null,
   PostedEncounter: null,
-  ImportedCompressedStatBlockJSON: null,
   HasStorage: false,
   HasEpicInitiative: false,
   IsLoggedIn: false,
@@ -18,13 +17,6 @@ export function LoadEnvironment() {
 
   const environmentJSON = html.getAttribute("environmentJSON");
   Object.assign(env, JSON.parse(environmentJSON));
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const compressedStatBlockJSON = urlParams.get("s");
-  if (compressedStatBlockJSON) {
-    env.ImportedCompressedStatBlockJSON = compressedStatBlockJSON;
-    window.history.replaceState({}, document.title, window.location.pathname);
-  }
 
   if (env.SentryDSN !== null) {
     Sentry.init({

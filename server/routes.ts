@@ -51,7 +51,6 @@ const getClientOptions = (session: Express.Session): ClientOptions => {
     IsLoggedIn: session.isLoggedIn || false,
     HasStorage: session.hasStorage || false,
     HasEpicInitiative: session.hasEpicInitiative || false,
-    ImportedCompressedStatBlockJSON: null,
     PostedEncounter: null,
     SentryDSN: process.env.SENTRY_DSN || null
   };

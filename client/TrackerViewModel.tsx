@@ -237,13 +237,16 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
-    if (!env.ImportedCompressedStatBlockJSON) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const compressedStatBlockJSON = urlParams.get("s");
+    if (!compressedStatBlockJSON) {
       return;
     }
 
+    window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
 
-    codec.decompress(env.ImportedCompressedStatBlockJSON).then(json => {
+    codec.decompress(compressedStatBlockJSON).then(json => {
       const parsedStatBlock = ParseJSONOrDefault(json, {});
       const statBlock: StatBlock = {
         ...StatBlock.Default(),
