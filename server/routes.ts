@@ -26,7 +26,7 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-interface ClientEnvironment {
+interface ClientOptions {
   rootDirectory: string;
   encounterId: string;
   baseUrl: string;
@@ -41,7 +41,7 @@ interface ClientEnvironment {
 
 const appVersion = require("../package.json").version;
 
-const getClientEnvironment = (session: Express.Session): ClientEnvironment => {
+const getClientOptions = (session: Express.Session): ClientOptions => {
   const encounterId = session.encounterId || probablyUniqueString();
   return {
     rootDirectory: "../..",
@@ -104,7 +104,7 @@ export default function(
     if (defaultAccountLevel !== "free") {
       return await setupLocalDefaultUser(session, res);
     } else {
-      const renderOptions = getClientEnvironment(session);
+      const renderOptions = getClientOptions(session);
       return res.render("landing", renderOptions);
     }
   });
@@ -127,7 +127,7 @@ export default function(
 
     updateSession(session);
 
-    const options = getClientEnvironment(session);
+    const options = getClientOptions(session);
     if (session.postedEncounter) {
       options.postedEncounter = JSON.stringify(session.postedEncounter);
       delete session.postedEncounter;
@@ -149,7 +149,7 @@ export default function(
     }
 
     session.encounterId = req.params.id;
-    res.render("playerview", getClientEnvironment(session));
+    res.render("playerview", getClientOptions(session));
   });
 
   app.get("/playerviews/:id", async (req: Req, res: Res) => {
@@ -163,7 +163,7 @@ export default function(
       throw "Session is not available";
     }
 
-    res.render(`templates/${req.params.name}`, getClientEnvironment(session));
+    res.render(`templates/${req.params.name}`, getClientOptions(session));
   });
 
   app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
@@ -233,5 +233,5 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
     session.userId = user._id;
   }
 
-  return res.render("landing", getClientEnvironment(session));
+  return res.render("landing", getClientOptions(session));
 }
