@@ -173,7 +173,9 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     scrollEvent: React.UIEvent<HTMLUListElement>
   ) => {
     const target = scrollEvent.target as HTMLUListElement;
-    if (target.offsetHeight + target.scrollTop == target.scrollHeight) {
+    const isScrolledToBottom =
+      target.offsetHeight + target.scrollTop == target.scrollHeight;
+    if (isScrolledToBottom) {
       this.setState({
         countOfItemsToRender: this.state.countOfItemsToRender + 100
       });
