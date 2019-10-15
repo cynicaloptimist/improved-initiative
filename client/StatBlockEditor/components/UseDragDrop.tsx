@@ -46,10 +46,12 @@ export const useDragDrop = function(
         move(from, to);
       }
     },
-    collect: monitor => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop()
-    })
+    collect: monitor => {
+      return {
+        isOver: monitor.isOver(),
+        canDrop: monitor.canDrop()
+      };
+    }
   });
 
   return [drag, drop, collected, preview];
