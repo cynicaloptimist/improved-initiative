@@ -1,21 +1,14 @@
 import React = require("react");
+import { CombatStats } from "../../../common/CombatStats";
 import { SubmitButton } from "../../Components/Button";
 import { GetTimerReadout } from "../../Widgets/GetTimerReadout";
 import { PromptProps } from "./PendingPrompts";
 
-export const CombatStatsPrompt = (
-  elapsedRounds: number,
-  elapsedSeconds: number,
-  combatants: {
-    displayName: string;
-    elapsedRounds: number;
-    elapsedSeconds: number;
-  }[]
-): PromptProps<{}> => {
-  const totalPlayerTime = combatants
+export const CombatStatsPrompt = (stats: CombatStats): PromptProps<{}> => {
+  const totalPlayerTime = stats.combatants
     .map(c => c.elapsedSeconds)
     .reduce((total, curr) => total + curr, 0);
-  const dmElapsedSeconds = elapsedSeconds - totalPlayerTime;
+  const dmElapsedSeconds = stats.elapsedSeconds - totalPlayerTime;
 
   return {
     onSubmit: () => true,
@@ -31,7 +24,7 @@ export const CombatStatsPrompt = (
           <SubmitButton />
         </div>
         <ul className={"playercharacters"}>
-          {combatants.map((c, index) => (
+          {stats.combatants.map((c, index) => (
             <li key={index}>
               <span>
                 <strong>{c.displayName}</strong>
@@ -50,11 +43,13 @@ export const CombatStatsPrompt = (
           <li key={0}>
             <span>
               {"Combat lasted "}
-              <strong>{elapsedRounds}</strong>
+              <strong>{stats.elapsedRounds}</strong>
               {" rounds, taking "}
-              <strong>{GetTimerReadout(elapsedSeconds)}</strong>
+              <strong>{GetTimerReadout(stats.elapsedSeconds)}</strong>
               {", for an average of "}
-              <strong>{GetTimerReadout(elapsedSeconds / elapsedRounds)}</strong>
+              <strong>
+                {GetTimerReadout(stats.elapsedSeconds / stats.elapsedRounds)}
+              </strong>
               {" per round."}
             </span>
           </li>
@@ -62,7 +57,7 @@ export const CombatStatsPrompt = (
             <span>
               {"The DM took, on average "}
               <strong>
-                {GetTimerReadout(dmElapsedSeconds / elapsedRounds)}
+                {GetTimerReadout(dmElapsedSeconds / stats.elapsedRounds)}
               </strong>
               {" per round."}
             </span>

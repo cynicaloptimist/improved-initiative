@@ -7,6 +7,7 @@ import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import {
   getDefaultSettings,
   AutoGroupInitiativeOption,
+  PostCombatStatsOption,
   Settings
 } from "../../common/Settings";
 import { Command } from "../Commands/Command";
@@ -67,7 +68,10 @@ function getLegacySettings(): Settings {
       ),
       DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
       DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true),
-      PostCombatStats: getLegacySetting<boolean>("PostCombatStats", false)
+      PostCombatStats: getLegacySetting<PostCombatStatsOption>(
+        "PostCombatStats",
+        PostCombatStatsOption.None
+      )
     },
     PlayerView: {
       ...defaultSettings.PlayerView,

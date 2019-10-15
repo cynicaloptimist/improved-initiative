@@ -2,7 +2,8 @@ import React = require("react");
 import { HpVerbosityOption } from "../../../common/PlayerViewSettings";
 import {
   AutoGroupInitiativeOption,
-  AutoRerollInitiativeOption
+  AutoRerollInitiativeOption,
+  PostCombatStatsOption
 } from "../../../common/Settings";
 import { Dropdown } from "./Dropdown";
 import { Toggle } from "./Toggle";
@@ -47,9 +48,12 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="TrackerView.DisplayDifficulty">
           Display Encounter Difficulty
         </Toggle>
-        <Toggle fieldName="TrackerView.PostCombatStats">
+        <Dropdown
+          fieldName="TrackerView.PostCombatStats"
+          options={PostCombatStatsOption}
+        >
           Display Post-Combat Stats Summary
-        </Toggle>
+        </Dropdown>
 
         <h3>Player View</h3>
         <Toggle fieldName="PlayerView.DisplayRoundCounter">

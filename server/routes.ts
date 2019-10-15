@@ -3,6 +3,7 @@ import express = require("express");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
+import { ClientEnvironment } from "../common/ClientEnvironment";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
@@ -26,39 +27,44 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-interface ClientEnvironment {
-  rootDirectory: string;
-  encounterId: string;
+interface ClientOptions {
+  environmentJSON: string;
   baseUrl: string;
-  patreonLoginUrl: string;
-  isLoggedIn: boolean;
-  hasStorage: boolean;
-  hasEpicInitiative: boolean;
-  postedEncounter: string | null;
-  sentryDsn: string | null;
   appVersion: string;
 }
 
 const appVersion = require("../package.json").version;
 
-const getClientEnvironment = (session: Express.Session): ClientEnvironment => {
+const getClientOptions = (session: Express.Session): ClientOptions => {
   const encounterId = session.encounterId || probablyUniqueString();
+  const patreonLoginUrl =
+    "http://www.patreon.com/oauth2/authorize" +
+    `?response_type=code&client_id=${patreonClientId}` +
+    `&redirect_uri=${baseUrl}/r/patreon` +
+    `&scope=users pledges-to-me` +
+    `&state=${encounterId}`;
+
+  const environment: ClientEnvironment = {
+    EncounterId: encounterId,
+    BaseUrl: baseUrl,
+    PatreonLoginUrl: patreonLoginUrl,
+    IsLoggedIn: session.isLoggedIn || false,
+    HasStorage: session.hasStorage || false,
+    HasEpicInitiative: session.hasEpicInitiative || false,
+    SendMetrics: process.env.METRICS_DB_CONNECTION_STRING != undefined,
+    PostedEncounter: null,
+    SentryDSN: process.env.SENTRY_DSN || null
+  };
+
+  if (session.postedEncounter) {
+    environment.PostedEncounter = session.postedEncounter;
+    delete session.postedEncounter;
+  }
+
   return {
-    rootDirectory: "../..",
-    encounterId,
+    environmentJSON: JSON.stringify(environment),
     baseUrl,
-    patreonLoginUrl:
-      "http://www.patreon.com/oauth2/authorize" +
-      `?response_type=code&client_id=${patreonClientId}` +
-      `&redirect_uri=${baseUrl}/r/patreon` +
-      `&scope=users pledges-to-me` +
-      `&state=${encounterId}`,
-    isLoggedIn: session.isLoggedIn || false,
-    hasStorage: session.hasStorage || false,
-    hasEpicInitiative: session.hasEpicInitiative || false,
-    postedEncounter: null,
-    sentryDsn: process.env.SENTRY_DSN || null,
-    appVersion: appVersion
+    appVersion
   };
 };
 
@@ -104,7 +110,7 @@ export default function(
     if (defaultAccountLevel !== "free") {
       return await setupLocalDefaultUser(session, res);
     } else {
-      const renderOptions = getClientEnvironment(session);
+      const renderOptions = getClientOptions(session);
       return res.render("landing", renderOptions);
     }
   });
@@ -127,11 +133,7 @@ export default function(
 
     updateSession(session);
 
-    const options = getClientEnvironment(session);
-    if (session.postedEncounter) {
-      options.postedEncounter = JSON.stringify(session.postedEncounter);
-      delete session.postedEncounter;
-    }
+    const options = getClientOptions(session);
     return res.render("tracker", options);
   });
 
@@ -149,7 +151,7 @@ export default function(
     }
 
     session.encounterId = req.params.id;
-    res.render("playerview", getClientEnvironment(session));
+    res.render("playerview", getClientOptions(session));
   });
 
   app.get("/playerviews/:id", async (req: Req, res: Res) => {
@@ -163,7 +165,7 @@ export default function(
       throw "Session is not available";
     }
 
-    res.render(`templates/${req.params.name}`, getClientEnvironment(session));
+    res.render(`templates/${req.params.name}`, getClientOptions(session));
   });
 
   app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
@@ -233,5 +235,5 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
     session.userId = user._id;
   }
 
-  return res.render("landing", getClientEnvironment(session));
+  return res.render("landing", getClientOptions(session));
 }

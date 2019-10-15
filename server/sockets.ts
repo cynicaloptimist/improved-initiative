@@ -2,6 +2,7 @@ import express = require("express");
 import provideSessionToSocketIo = require("express-socket.io-session");
 import redis = require("socket.io-redis");
 
+import { CombatStats } from "../common/CombatStats";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { getDefaultSettings } from "../common/Settings";
 import { PlayerViewManager } from "./playerviewmanager";
@@ -86,6 +87,11 @@ export default function(
       socket.broadcast
         .to(id)
         .emit("suggest tag", suggestedCombatantIds, suggestedTag, suggester);
+    });
+
+    socket.on("combat stats", function(id: string, combatStats: CombatStats) {
+      joinEncounter(id);
+      socket.broadcast.to(id).emit("combat stats", combatStats);
     });
 
     socket.on("disconnect", function() {

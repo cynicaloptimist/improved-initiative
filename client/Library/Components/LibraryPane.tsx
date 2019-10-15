@@ -26,6 +26,7 @@ interface LibraryPaneProps<T extends Listable> {
 
 interface State<T extends Listable> {
   filter: string;
+  countOfItemsToRender: number;
   groupingFunctionIndex: number;
   previewedItem: T;
   previewIconHovered: boolean;
@@ -43,6 +44,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     super(props);
     this.state = {
       filter: "",
+      countOfItemsToRender: 100,
       groupingFunctionIndex: 0,
       previewedItem: props.defaultItem,
       previewIconHovered: false,
@@ -80,7 +82,9 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
             />
           )}
         </div>
-        <ul className="listings">{listingAndFolderComponents}</ul>
+        <ul className="listings" onScroll={this.handleListingsScroll}>
+          {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
+        </ul>
         <div className="buttons">
           <Button
             text="Add New"
@@ -162,6 +166,19 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     }
     if (e.type === "mouseleave") {
       this.setState({ previewWindowHovered: false });
+    }
+  };
+
+  private handleListingsScroll = (
+    scrollEvent: React.UIEvent<HTMLUListElement>
+  ) => {
+    const target = scrollEvent.target as HTMLUListElement;
+    const isScrolledToBottom =
+      target.offsetHeight + target.scrollTop == target.scrollHeight;
+    if (isScrolledToBottom) {
+      this.setState({
+        countOfItemsToRender: this.state.countOfItemsToRender + 100
+      });
     }
   };
 }

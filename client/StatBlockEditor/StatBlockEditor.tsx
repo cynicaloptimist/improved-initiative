@@ -12,12 +12,12 @@ import { EnumToggle } from "./EnumToggle";
 import { IdentityFields } from "./components/IdentityFields";
 import {
   abilityScoreField,
-  descriptionField,
   getAnonymizedStatBlockJSON,
-  keywordFields,
-  nameAndModifierFields,
-  powerFields,
+  DescriptionField,
   InitiativeField,
+  KeywordFields,
+  NameAndModifierFields,
+  PowerFields,
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
@@ -152,10 +152,10 @@ export class StatBlockEditor extends React.Component<
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndModifierFields(api, "Saves")}
+        <NameAndModifierFields api={api} modifierType="Saves" />
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndModifierFields(api, "Skills")}
+        <NameAndModifierFields api={api} modifierType="Skills" />
       </div>
       {[
         "Speed",
@@ -167,16 +167,16 @@ export class StatBlockEditor extends React.Component<
         "Languages"
       ].map(keywordType => (
         <div key={keywordType} className="c-statblock-editor__keywords">
-          {keywordFields(api, keywordType)}
+          <KeywordFields api={api} keywordType={keywordType} />
         </div>
       ))}
       {["Traits", "Actions", "Reactions", "LegendaryActions"].map(powerType => (
         <div key={powerType} className="c-statblock-editor__powers">
-          {powerFields(api, powerType)}
+          <PowerFields api={api} powerType={powerType} />
         </div>
       ))}
       <div className="c-statblock-editor__description">
-        {descriptionField()}
+        <DescriptionField />
       </div>
     </React.Fragment>
   );

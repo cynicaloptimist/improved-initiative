@@ -1,40 +1,47 @@
-import { Field } from "formik";
+import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
+import { useCallback, useRef } from "react";
+import { useDragDrop, DropZone } from "./UseDragDrop";
 
 interface KeywordFieldProps {
-  remove: (index: number) => void;
+  arrayHelpers: ArrayHelpers;
   keywordType: string;
   index: number;
 }
 
-interface KeywordFieldState {}
+export function KeywordField(props: KeywordFieldProps) {
+  let nameInput = useRef<HTMLInputElement>();
+  useCallback(
+    () => {
+      if (nameInput.current.value == "") {
+        nameInput.current.focus();
+      }
+    },
+    [nameInput]
+  );
 
-export class KeywordField extends React.Component<
-  KeywordFieldProps,
-  KeywordFieldState
-> {
-  private nameInput: HTMLInputElement;
+  const [drag, drop, dropProps, preview] = useDragDrop(
+    props.keywordType,
+    props.index,
+    props.arrayHelpers.move
+  );
 
-  public componentDidMount() {
-    if (this.nameInput.value == "") {
-      this.nameInput.focus();
-    }
-  }
-
-  public render() {
-    return (
-      <div className="inline">
+  return (
+    <React.Fragment>
+      <DropZone drop={drop} dropProps={dropProps} />
+      <div className="inline" ref={preview}>
+        <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
           type="text"
           className="name"
-          name={`${this.props.keywordType}[${this.props.index}]`}
-          innerRef={f => (this.nameInput = f)}
+          name={`${props.keywordType}[${props.index}]`}
+          innerRef={f => (nameInput = f)}
         />
         <span
           className="fa-clickable fa-trash"
-          onClick={() => this.props.remove(this.props.index)}
+          onClick={() => props.arrayHelpers.remove(props.index)}
         />
       </div>
-    );
-  }
+    </React.Fragment>
+  );
 }

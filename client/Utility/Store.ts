@@ -96,7 +96,7 @@ export namespace Store {
 
   async function importList(listName: string, importSource: any) {
     const listings = Object.keys(importSource).filter(k =>
-      k.startsWith(listName)
+      k.startsWith(listName + ".")
     );
     const savePromises = listings.map(async key => {
       const listing = importSource[key];

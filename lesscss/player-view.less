@@ -113,6 +113,52 @@
     }
   }
 
+  .combat-stats-popup {
+    .suggestion-prompt();
+  }
+
+  .combat-stats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex: 1;
+
+    ul {
+      flex: 1;
+      list-style-type: none;
+      margin: 0 @large-spacer;
+
+      &:first-of-type {
+        margin-left: 0;
+      }
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+
+    li {
+      display: flex;
+      padding: @medium-spacer;
+
+      &:nth-child(2n-1) {
+        background-color: @zebra-white;
+      }
+
+      span {
+        flex: 1;
+        align-self: center;
+      }
+    }
+  }
+
+  .combat-stats__header {
+    margin: @medium-spacer;
+    flex-flow: row;
+    justify-content: space-between;
+    flex-basis: 100%;
+  }
+
   /* Add Animation */
   .combatant-portrait__image,
   .combatant-portrait__caption {

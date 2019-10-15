@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html encounterId="{{ encounterId }}" sentryDsn="{{ sentryDsn }}">
+<html environmentJSON="{{ environmentJSON }}">
   <head>
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ rootDirectory }}/css/improved-initiative.{{ appVersion }}.css"
+      href="/css/improved-initiative.{{ appVersion }}.css"
     />
     <meta
       name="description"
@@ -18,13 +18,10 @@
 
     <title>Player View - Improved Initiative</title>
 
+    <script type="text/javascript" src="/js/dependencies.js"></script>
     <script
       type="text/javascript"
-      src="{{ rootDirectory }}/js/dependencies.js"
-    ></script>
-    <script
-      type="text/javascript"
-      src="{{ rootDirectory }}/js/ImprovedInitiative.{{ appVersion }}.js"
+      src="/js/ImprovedInitiative.{{ appVersion }}.js"
     ></script>
   </head>
 

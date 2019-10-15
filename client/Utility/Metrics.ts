@@ -1,3 +1,4 @@
+import { env } from "../Environment";
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
@@ -41,6 +42,10 @@ export class Metrics {
       console.table(eventData);
     }
 
+    if (!env.SendMetrics) {
+      return;
+    }
+
     $.ajax({
       type: "POST",
       url: `/recordEvent/${name}`,
@@ -59,6 +64,10 @@ export class Metrics {
     console.log(`Anonymous Event ${name}`);
     if (eventData !== {}) {
       console.table(eventData);
+    }
+
+    if (!env.SendMetrics) {
+      return;
     }
 
     $.ajax({

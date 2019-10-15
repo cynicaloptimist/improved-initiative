@@ -1,10 +1,11 @@
-import { Field, FieldArray, FormikProps } from "formik";
+import { ArrayHelpers, Field, FieldArray, FormikProps } from "formik";
 import React = require("react");
 import { StatBlock } from "../../../common/StatBlock";
 import { Button } from "../../Components/Button";
 import { KeywordField } from "./KeywordField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
+import { SortableList } from "./SortableList";
 
 type FormApi = FormikProps<any>;
 
@@ -60,136 +61,65 @@ export const abilityScoreField = (abilityName: string) => (
   </div>
 );
 
-export const nameAndModifierFields = (api: FormApi, modifierType: string) => {
+export const NameAndModifierFields = (props: {
+  api: FormApi;
+  modifierType: string;
+}) => {
   return (
-    <FieldArray
-      name={modifierType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() => arrayHelpers.push({ Name: "", Modifier: "" })}
-          />
-        );
-
-        if (api.values[modifierType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {modifierType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <React.Fragment>
-              <span className="c-statblock-editor__label">{modifierType}</span>
-              <div className="inline-names-and-modifiers">
-                {api.values[modifierType].map((_, i: number) => (
-                  <NameAndModifierField
-                    key={i}
-                    remove={arrayHelpers.remove}
-                    modifierType={modifierType}
-                    index={i}
-                  />
-                ))}
-              </div>
-              {addButton}
-            </React.Fragment>
-          );
-        }
-      }}
+    <SortableList
+      api={props.api}
+      listType={props.modifierType}
+      makeComponent={(index: number, arrayHelpers: ArrayHelpers) => (
+        <NameAndModifierField
+          key={index}
+          arrayHelpers={arrayHelpers}
+          modifierType={props.modifierType}
+          index={index}
+        />
+      )}
+      makeNew={() => ({ Name: "", Modifier: "" })}
     />
   );
 };
 
-export const keywordFields = (api: FormApi, keywordType: string) => {
+export const KeywordFields = (props: { api: FormApi; keywordType: string }) => {
   return (
-    <FieldArray
-      name={keywordType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() => arrayHelpers.push("")}
-          />
-        );
-
-        if (api.values[keywordType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {keywordType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <React.Fragment>
-              <span className="c-statblock-editor__label">{keywordType}</span>
-              {api.values[keywordType].map((_, i: number) => (
-                <KeywordField
-                  key={i}
-                  remove={arrayHelpers.remove}
-                  keywordType={keywordType}
-                  index={i}
-                />
-              ))}
-              {addButton}
-            </React.Fragment>
-          );
-        }
-      }}
+    <SortableList
+      api={props.api}
+      listType={props.keywordType}
+      makeComponent={(index: number, arrayHelpers: ArrayHelpers) => (
+        <KeywordField
+          key={index}
+          arrayHelpers={arrayHelpers}
+          keywordType={props.keywordType}
+          index={index}
+        />
+      )}
+      makeNew={() => ""}
     />
   );
 };
 
-export const powerFields = (api: FormApi, powerType: string) => {
+export function PowerFields(props: { api: FormApi; powerType: string }) {
   return (
-    <FieldArray
-      name={powerType}
-      render={arrayHelpers => {
-        const addButton = (
-          <Button
-            fontAwesomeIcon="plus"
-            additionalClassNames="c-add-button"
-            onClick={() =>
-              arrayHelpers.push({ Name: "", Content: "", Usage: "" })
-            }
-          />
-        );
-
-        if (api.values[powerType].length == 0) {
-          return (
-            <span className="c-statblock-editor__label">
-              {powerType}
-              {addButton}
-            </span>
-          );
-        } else {
-          return (
-            <React.Fragment>
-              <div className="c-statblock-editor__label">{powerType}</div>
-              <div className="inline-powers">
-                {api.values[powerType].map((_, i: number) => (
-                  <PowerField
-                    key={i}
-                    remove={arrayHelpers.remove}
-                    powerType={powerType}
-                    index={i}
-                  />
-                ))}
-              </div>
-              {addButton}
-            </React.Fragment>
-          );
-        }
-      }}
+    <SortableList
+      api={props.api}
+      listType={props.powerType}
+      makeComponent={(index: number, arrayHelpers: ArrayHelpers) => (
+        <PowerField
+          key={index}
+          remove={arrayHelpers.remove}
+          move={arrayHelpers.move}
+          powerType={props.powerType}
+          index={index}
+        />
+      )}
+      makeNew={() => ({ Name: "", Content: "", Usage: "" })}
     />
   );
-};
+}
 
-export const descriptionField = () => (
+export const DescriptionField = () => (
   <label className="c-statblock-editor__text">
     <div className="c-statblock-editor__label">Description</div>
     <Field
