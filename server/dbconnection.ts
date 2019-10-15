@@ -245,6 +245,10 @@ export async function setSettings(userId, settings) {
     throw "No connection string found.";
   }
 
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
 

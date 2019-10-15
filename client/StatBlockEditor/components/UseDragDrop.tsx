@@ -39,7 +39,6 @@ export const useDragDrop = function(
     drop: (item: DraggedField) => {
       const from = item.index;
       const to = index;
-      console.log("from", item.index, "to", to);
       if (to > from) {
         move(from, to - 1);
       } else {
