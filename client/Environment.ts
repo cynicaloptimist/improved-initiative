@@ -7,6 +7,7 @@ export const env: ClientEnvironment = {
   HasStorage: false,
   HasEpicInitiative: false,
   IsLoggedIn: false,
+  SendMetrics: false,
   BaseUrl: null,
   PatreonLoginUrl: "http://www.patreon.com/",
   SentryDSN: null
