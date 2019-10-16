@@ -68,13 +68,13 @@ export class StatBlockEditor extends React.Component<
       }[this.props.editorTarget] || "Edit StatBlock";
 
     const buttons = (
-      <React.Fragment>
+      <>
         <Button onClick={this.close} fontAwesomeIcon="times" />
         {this.props.onDelete && (
           <Button onClick={this.delete} fontAwesomeIcon="trash" />
         )}
         <SubmitButton faClass="save" />
-      </React.Fragment>
+      </>
     );
 
     const initialValues = {
@@ -122,7 +122,7 @@ export class StatBlockEditor extends React.Component<
   }
 
   private fieldEditor = (api: FormikProps<any>) => (
-    <React.Fragment>
+    <>
       <div className="c-statblock-editor__headers">
         <TextField label="Portrait URL" fieldName="ImageURL" />
         <TextField label="Source" fieldName="Source" />
@@ -178,7 +178,7 @@ export class StatBlockEditor extends React.Component<
       <div className="c-statblock-editor__description">
         <DescriptionField />
       </div>
-    </React.Fragment>
+    </>
   );
 
   private jsonEditor = api => (

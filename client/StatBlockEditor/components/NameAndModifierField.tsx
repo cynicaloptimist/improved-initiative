@@ -1,7 +1,7 @@
 import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
-import { useCallback, useRef } from "react";
 import { useDragDrop, DropZone } from "./UseDragDrop";
+import { useFocusIfEmpty } from "./useFocus";
 
 interface NameAndModifierFieldProps {
   arrayHelpers: ArrayHelpers;
@@ -10,15 +10,7 @@ interface NameAndModifierFieldProps {
 }
 
 export function NameAndModifierField(props: NameAndModifierFieldProps) {
-  let nameInput = useRef<HTMLInputElement>();
-  useCallback(
-    () => {
-      if (nameInput.current.value == "") {
-        nameInput.current.focus();
-      }
-    },
-    [nameInput]
-  );
+  const nameInput = useFocusIfEmpty();
 
   const [drag, drop, dropProps, preview] = useDragDrop(
     props.modifierType,
@@ -26,7 +18,7 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
     props.arrayHelpers.move
   );
   return (
-    <React.Fragment>
+    <>
       <DropZone drop={drop} dropProps={dropProps} />
       <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
@@ -34,7 +26,7 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
           type="text"
           className="name"
           name={`${props.modifierType}[${props.index}].Name`}
-          innerRef={f => (nameInput = f)}
+          innerRef={nameInput}
         />
         <Field
           type="number"
@@ -46,6 +38,6 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
           onClick={() => props.arrayHelpers.remove(props.index)}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }

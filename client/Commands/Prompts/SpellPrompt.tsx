@@ -16,10 +16,10 @@ interface SpellPromptProps {
 class SpellPromptComponent extends React.Component<SpellPromptProps> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <SpellDetails {...this.props} />
         <SubmitButton />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -32,7 +32,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
     const showSaveAs =
       this.props.allowSaveAsCopy || this.props.allowSaveAsCharacter;
     return (
-      <React.Fragment>
+      <>
         <div className="c-statblock-editor__path-and-name">
           {this.folderElement()}
           <div>
@@ -75,7 +75,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
             text="JSON"
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 

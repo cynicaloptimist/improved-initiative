@@ -19,7 +19,7 @@ class PlayerViewPromptComponent extends React.Component<
   public render() {
     const playerViewUrl = `${env.BaseUrl}/p/${this.props.encounterId}`;
     return (
-      <React.Fragment>
+      <>
         <div className="launch-player-view">
           <input
             className="hidden-input"
@@ -63,7 +63,7 @@ class PlayerViewPromptComponent extends React.Component<
           )}
         </div>
         <SubmitButton />
-      </React.Fragment>
+      </>
     );
   }
 

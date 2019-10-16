@@ -8,7 +8,7 @@ import { FileUploadButton } from "./FileUploadButton";
 export class LocalDataSettings extends React.Component<{}> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <h3>Local Data</h3>
         <div className="c-button-with-label">
           <span>Export your user data as JSON file</span>
@@ -48,7 +48,7 @@ export class LocalDataSettings extends React.Component<{}> {
             onClick={this.confirmClearLocalData}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 

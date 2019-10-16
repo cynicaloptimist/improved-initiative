@@ -42,7 +42,7 @@ export class TagPromptComponent extends React.Component<
       _.values(this.props.combatantNamesById)
     );
     return (
-      <React.Fragment>
+      <>
         <div className="add-tag">
           <div>
             <label className="add-tag__label" htmlFor="tagText">
@@ -91,7 +91,7 @@ export class TagPromptComponent extends React.Component<
             this.renderAdvancedFields(encounterIsActive)}
         </div>
         <SubmitButton />
-      </React.Fragment>
+      </>
     );
   }
 
