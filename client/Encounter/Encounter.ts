@@ -421,7 +421,18 @@ export class Encounter {
   private getCombatantsForPlayerView(activeCombatantId: string) {
     const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
       .HideMonstersOutsideEncounter;
-    const combatants = this.combatants().filter(c => {
+
+    const combatants = this.combatants();
+
+    const activeCombatantOnTop = CurrentSettings().PlayerView
+      .ActiveCombatantOnTop;
+    if (activeCombatantOnTop && activeCombatantId && combatants.length) {
+      while (combatants[0].Id != activeCombatantId) {
+        combatants.push(combatants.shift());
+      }
+    }
+
+    const visibleCombatants = combatants.filter(c => {
       if (c.Hidden()) {
         return false;
       }
@@ -435,15 +446,7 @@ export class Encounter {
       return true;
     });
 
-    const activeCombatantOnTop = CurrentSettings().PlayerView
-      .ActiveCombatantOnTop;
-    if (activeCombatantOnTop && activeCombatantId && combatants.length) {
-      while (combatants[0].Id != activeCombatantId) {
-        combatants.push(combatants.shift());
-      }
-    }
-
-    return combatants.map<PlayerViewCombatantState>(c =>
+    return visibleCombatants.map<PlayerViewCombatantState>(c =>
       ToPlayerViewCombatantState(c)
     );
   }
