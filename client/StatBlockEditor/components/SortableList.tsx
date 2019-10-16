@@ -70,10 +70,10 @@ function SortableListInner(props: {
           );
 
           return (
-            <>
+            <React.Fragment key={listType + i}>
               <DropZone drop={drop} dropProps={dropProps} />
               {makeComponent(i, arrayHelpers)}
-            </>
+            </React.Fragment>
           );
         })}
         <DropZone drop={finalDrop} dropProps={finalDropProps} />
