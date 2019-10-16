@@ -1,8 +1,8 @@
 import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
-import { useCallback, useRef } from "react";
 import { useDragDrop, DropZone } from "./UseDragDrop";
+import { useFocusIfEmpty } from "./useFocus";
 
 interface PowerFieldProps {
   remove: (index: number) => void;
@@ -12,16 +12,7 @@ interface PowerFieldProps {
 }
 
 export function PowerField(props: PowerFieldProps) {
-  let nameInput = useRef({ value: "", focus: () => {} });
-
-  useCallback(
-    () => {
-      if (nameInput.current.value == "") {
-        nameInput.current.focus();
-      }
-    },
-    [nameInput]
-  );
+  const nameInput = useFocusIfEmpty();
 
   const [drag, drop, dropProps, preview] = useDragDrop(
     props.powerType,
@@ -39,7 +30,7 @@ export function PowerField(props: PowerFieldProps) {
           className="name"
           placeholder="Name"
           name={`${props.powerType}[${props.index}].Name`}
-          innerRef={f => (nameInput = f)}
+          innerRef={nameInput}
         />
         <span
           className="fa-clickable fa-trash"
