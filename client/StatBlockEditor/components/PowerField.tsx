@@ -21,8 +21,7 @@ export function PowerField(props: PowerFieldProps) {
   );
 
   return (
-    <div>
-      <DropZone drop={drop} dropProps={dropProps} />
+    <>
       <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
@@ -43,6 +42,6 @@ export function PowerField(props: PowerFieldProps) {
         placeholder="Details"
         name={`${props.powerType}[${props.index}].Content`}
       />
-    </div>
+    </>
   );
 }

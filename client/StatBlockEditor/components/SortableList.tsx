@@ -37,7 +37,7 @@ function SortableListInner(props: {
   makeComponent: makeSortableComponent;
   makeNew: () => any;
 }) {
-  const { api, arrayHelpers, listType, makeNew } = props;
+  const { api, arrayHelpers, listType, makeComponent, makeNew } = props;
   const addButton = (
     <Button
       fontAwesomeIcon="plus"
@@ -62,9 +62,20 @@ function SortableListInner(props: {
     return (
       <>
         <div className="c-statblock-editor__label">{listType}</div>
-        {api.values[listType].map((_, i: number) =>
-          props.makeComponent(i, arrayHelpers)
-        )}
+        {api.values[listType].map((_, i: number) => {
+          const [drag, drop, dropProps, preview] = useDragDrop(
+            listType,
+            i,
+            arrayHelpers.move
+          );
+
+          return (
+            <>
+              <DropZone drop={drop} dropProps={dropProps} />
+              {makeComponent(i, arrayHelpers)}
+            </>
+          );
+        })}
         <DropZone drop={finalDrop} dropProps={finalDropProps} />
         {addButton}
       </>
