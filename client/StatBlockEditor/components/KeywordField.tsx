@@ -19,7 +19,7 @@ export function KeywordField(props: KeywordFieldProps) {
   );
 
   return (
-    <React.Fragment>
+    <>
       <DropZone drop={drop} dropProps={dropProps} />
       <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
@@ -34,6 +34,6 @@ export function KeywordField(props: KeywordFieldProps) {
           onClick={() => props.arrayHelpers.remove(props.index)}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 }

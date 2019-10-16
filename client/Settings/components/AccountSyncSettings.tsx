@@ -43,7 +43,7 @@ export class AccountSyncSettings extends React.Component<
     }
 
     return (
-      <React.Fragment>
+      <>
         <h3>Account Sync</h3>
         <p>Account Sync is enabled.</p>
         <div className="sync-counts">
@@ -85,13 +85,13 @@ export class AccountSyncSettings extends React.Component<
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private loginMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
           Log in with Patreon to access patron benefits. Account Sync allows you
           to access your custom statblocks and encounters from anywhere!
@@ -99,13 +99,13 @@ export class AccountSyncSettings extends React.Component<
         <a className="login button" href={env.PatreonLoginUrl}>
           Log In with Patreon
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private noSyncMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
           {"You're logged in with Patreon, but you have not selected the "}
           <a
@@ -119,7 +119,7 @@ export class AccountSyncSettings extends React.Component<
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 

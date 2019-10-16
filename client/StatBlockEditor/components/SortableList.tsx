@@ -60,14 +60,14 @@ function SortableListInner(props: {
       arrayHelpers.move
     );
     return (
-      <React.Fragment>
+      <>
         <div className="c-statblock-editor__label">{listType}</div>
         {api.values[listType].map((_, i: number) =>
           props.makeComponent(i, arrayHelpers)
         )}
         <DropZone drop={finalDrop} dropProps={finalDropProps} />
         {addButton}
-      </React.Fragment>
+      </>
     );
   }
 }

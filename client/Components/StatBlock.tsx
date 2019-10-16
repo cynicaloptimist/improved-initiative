@@ -42,7 +42,7 @@ export class StatBlockComponent extends React.Component<
     ];
 
     const headerEntries = (
-      <React.Fragment>
+      <>
         {this.props.hideName || (
           <StatBlockHeader
             name={statBlock.Name}
@@ -53,11 +53,11 @@ export class StatBlockComponent extends React.Component<
         )}
 
         <hr />
-      </React.Fragment>
+      </>
     );
 
     const statEntries = (
-      <React.Fragment>
+      <>
         <div className="AC">
           <span className="stat-label">Armor Class</span>
           <span>{statBlock.AC.Value}</span>
@@ -136,7 +136,7 @@ export class StatBlockComponent extends React.Component<
         )}
 
         <hr />
-      </React.Fragment>
+      </>
     );
 
     const actionEntries = powerTypes
@@ -168,17 +168,17 @@ export class StatBlockComponent extends React.Component<
     let innerEntries;
     if (this.props.displayMode == "active") {
       innerEntries = (
-        <React.Fragment>
+        <>
           {actionEntries}
           {statEntries}
-        </React.Fragment>
+        </>
       );
     } else {
       innerEntries = (
-        <React.Fragment>
+        <>
           {statEntries}
           {actionEntries}
-        </React.Fragment>
+        </>
       );
     }
     return (
