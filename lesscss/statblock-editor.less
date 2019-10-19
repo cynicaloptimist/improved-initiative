@@ -254,19 +254,13 @@
   cursor: grab;
 }
 
-.drop-zone {
-  height: 0;
-  background-color: desaturate(@primary-red, 20);
-}
-
 .drop-zone--can-drop {
-  transition: background-color 0.4s ease;
-  background-color: @primary-white;
-  height: 0.8rem;
-  border: 1px dashed @primary-red;
+  height: 1rem;
+  margin-bottom: -1rem;
+  z-index: 10;
 }
 
 .drop-zone--is-over--can-drop {
-  height: 0.8rem;
-  border: 1px solid @primary-red;
+  height: 2rem;
+  border: 1px dashed @primary-red;
 }
