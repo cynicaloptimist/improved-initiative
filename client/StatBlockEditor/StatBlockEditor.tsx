@@ -123,60 +123,8 @@ export class StatBlockEditor extends React.Component<
 
   private fieldEditor = (api: FormikProps<any>) => (
     <>
-      <div className="c-statblock-editor__headers">
-        <TextField label="Portrait URL" fieldName="ImageURL" />
-        <TextField label="Source" fieldName="Source" />
-        <TextField label="Type" fieldName="Type" />
-        {this.props.editorTarget == "persistentcharacter" && (
-          <EnumToggle
-            labelsByOption={{
-              "": "Non Player Character",
-              player: "Player Character"
-            }}
-            fieldName="Player"
-          />
-        )}
-      </div>
-      <div className="c-statblock-editor__stats">
-        <TextField
-          label={
-            this.props.statBlock.Player == "player" ? "Level" : "Challenge"
-          }
-          fieldName="Challenge"
-        />
-        <ValueAndNotesField label="Hit Points" fieldName="HP" />
-        <ValueAndNotesField label="Armor Class" fieldName="AC" />
-        <InitiativeField />
-      </div>
-      <div className="c-statblock-editor__abilityscores">
-        {StatBlock.AbilityNames.map(abilityScoreField)}
-      </div>
       <div className="c-statblock-editor__saves">
         <NameAndModifierFields api={api} modifierType="Saves" />
-      </div>
-      <div className="c-statblock-editor__skills">
-        <NameAndModifierFields api={api} modifierType="Skills" />
-      </div>
-      {[
-        "Speed",
-        "Senses",
-        "DamageVulnerabilities",
-        "DamageResistances",
-        "DamageImmunities",
-        "ConditionImmunities",
-        "Languages"
-      ].map(keywordType => (
-        <div key={keywordType} className="c-statblock-editor__keywords">
-          <KeywordFields api={api} keywordType={keywordType} />
-        </div>
-      ))}
-      {["Traits", "Actions", "Reactions", "LegendaryActions"].map(powerType => (
-        <div key={powerType} className="c-statblock-editor__powers">
-          <PowerFields api={api} powerType={powerType} />
-        </div>
-      ))}
-      <div className="c-statblock-editor__description">
-        <DescriptionField />
       </div>
     </>
   );

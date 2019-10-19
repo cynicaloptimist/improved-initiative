@@ -1,6 +1,6 @@
 import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
-import { useDragDrop, DropZone } from "./UseDragDrop";
+import { useDrag } from "react-dnd";
 import { useFocusIfEmpty } from "./useFocus";
 
 interface KeywordFieldProps {
@@ -12,11 +12,9 @@ interface KeywordFieldProps {
 export function KeywordField(props: KeywordFieldProps) {
   const nameInput = useFocusIfEmpty();
 
-  const [drag, drop, dropProps, preview] = useDragDrop(
-    props.keywordType,
-    props.index,
-    props.arrayHelpers.move
-  );
+  const [, drag, preview] = useDrag({
+    item: { index: props.index, type: props.keywordType }
+  });
 
   return (
     <div className="inline" ref={preview}>
