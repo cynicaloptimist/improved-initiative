@@ -8,10 +8,10 @@ export const BuildEncounterCommandList = (
   [
     new Command(
       "toggle-menu",
-      "Toggle Menu",
+      "Toggle Wide Menu",
       c.ToggleToolbarWidth,
       "alt+m",
-      "bars",
+      "chevron-right",
       true,
       true
     ),
