@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
-import { useDragDrop, DropZone } from "./UseDragDrop";
+import { useDrag } from "react-dnd";
 import { useFocusIfEmpty } from "./useFocus";
 
 interface PowerFieldProps {
@@ -14,15 +14,12 @@ interface PowerFieldProps {
 export function PowerField(props: PowerFieldProps) {
   const nameInput = useFocusIfEmpty();
 
-  const [drag, drop, dropProps, preview] = useDragDrop(
-    props.powerType,
-    props.index,
-    props.move
-  );
+  const [, drag, preview] = useDrag({
+    item: { index: props.index, type: props.powerType }
+  });
 
   return (
-    <div>
-      <DropZone drop={drop} dropProps={dropProps} />
+    <>
       <div className="inline" ref={preview}>
         <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
         <Field
@@ -43,6 +40,6 @@ export function PowerField(props: PowerFieldProps) {
         placeholder="Details"
         name={`${props.powerType}[${props.index}].Content`}
       />
-    </div>
+    </>
   );
 }

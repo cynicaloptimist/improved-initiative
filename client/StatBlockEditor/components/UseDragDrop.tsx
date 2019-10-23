@@ -1,37 +1,18 @@
 import React = require("react");
-import {
-  useDrag,
-  useDrop,
-  DragElementWrapper,
-  DragPreviewOptions,
-  DragSourceOptions
-} from "react-dnd";
+import { useDrop } from "react-dnd";
 
 interface DraggedField {
   type: string;
   index: number;
 }
 
-interface CollectedDropTargetProps {
-  isOver: boolean;
-  canDrop: boolean;
-}
-
-export const useDragDrop = function(
-  dragDropType: string,
-  index: number,
-  move: (from: number, to: number) => void
-): [
-  DragElementWrapper<DragSourceOptions>,
-  DragElementWrapper<DraggedField>,
-  CollectedDropTargetProps,
-  DragElementWrapper<DragPreviewOptions>
-] {
-  const [, drag, preview] = useDrag({
-    item: { index: index, type: dragDropType }
-  });
-
-  const [collected, drop] = useDrop({
+export function DropZone(props: {
+  dragDropType: string;
+  index: number;
+  move: (from: number, to: number) => void;
+}) {
+  const { dragDropType, index, move } = props;
+  const [collectedProps, drop] = useDrop({
     accept: dragDropType,
     canDrop: item => {
       return index < item.index || index > item.index + 1;
@@ -46,6 +27,16 @@ export const useDragDrop = function(
       }
     },
     collect: monitor => {
+      console.log(
+        "collecting: dropzone",
+        index,
+        monitor.getItemType(),
+        monitor.getItem() && monitor.getItem().index,
+        "isOver",
+        monitor.isOver(),
+        "canDrop",
+        monitor.canDrop()
+      );
       return {
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop()
@@ -53,19 +44,12 @@ export const useDragDrop = function(
     }
   });
 
-  return [drag, drop, collected, preview];
-};
-
-export function DropZone(props: {
-  drop: DragElementWrapper<DraggedField>;
-  dropProps: CollectedDropTargetProps;
-}) {
   let className = "drop-zone";
-  if (props.dropProps.isOver) {
+  if (collectedProps.isOver) {
     className += "--is-over";
   }
-  if (props.dropProps.canDrop) {
+  if (collectedProps.canDrop) {
     className += "--can-drop";
   }
-  return <div className={className} ref={props.drop} />;
+  return <div className={className} ref={drop} />;
 }

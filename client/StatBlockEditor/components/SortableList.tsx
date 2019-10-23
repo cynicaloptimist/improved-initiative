@@ -3,7 +3,7 @@ import React = require("react");
 import { DndProvider } from "react-dnd";
 import HTML5Backend from "react-dnd-html5-backend";
 import { Button } from "../../Components/Button";
-import { useDragDrop, DropZone } from "./UseDragDrop";
+import { DropZone } from "./UseDragDrop";
 
 type FormApi = FormikProps<any>;
 
@@ -37,7 +37,7 @@ function SortableListInner(props: {
   makeComponent: makeSortableComponent;
   makeNew: () => any;
 }) {
-  const { api, arrayHelpers, listType, makeNew } = props;
+  const { api, arrayHelpers, listType, makeComponent, makeNew } = props;
   const addButton = (
     <Button
       fontAwesomeIcon="plus"
@@ -54,18 +54,24 @@ function SortableListInner(props: {
       </span>
     );
   } else {
-    const [, finalDrop, finalDropProps] = useDragDrop(
-      listType,
-      api.values[listType].length,
-      arrayHelpers.move
-    );
     return (
       <>
         <div className="c-statblock-editor__label">{listType}</div>
-        {api.values[listType].map((_, i: number) =>
-          props.makeComponent(i, arrayHelpers)
-        )}
-        <DropZone drop={finalDrop} dropProps={finalDropProps} />
+        {api.values[listType].map((_, i: number) => (
+          <>
+            <DropZone
+              index={i}
+              dragDropType={props.listType}
+              move={props.arrayHelpers.move}
+            />
+            {makeComponent(i, arrayHelpers)}
+          </>
+        ))}
+        <DropZone
+          index={api.values[listType].length}
+          dragDropType={props.listType}
+          move={props.arrayHelpers.move}
+        />
         {addButton}
       </>
     );

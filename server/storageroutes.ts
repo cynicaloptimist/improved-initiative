@@ -38,7 +38,8 @@ export default function(app: express.Application) {
         }
         return res.json(account);
       })
-      .catch(() => {
+      .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -52,7 +53,8 @@ export default function(app: express.Application) {
       .then(account => {
         return res.json(account);
       })
-      .catch(() => {
+      .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -118,7 +120,8 @@ function configureEntityRoute<T extends Listable>(
           return res.sendStatus(404);
         }
       })
-      .catch(() => {
+      .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -133,12 +136,14 @@ function configureEntityRoute<T extends Listable>(
         await DB.saveEntity<T>(route, req.session.userId, req.body);
         return res.sendStatus(201);
       } catch (err) {
+        console.error(err);
         return res.status(500).send(err);
       }
     } else if (req.body.length) {
       return DB.saveEntitySet<T>(route, req.session.userId, req.body, () => {
         return res.sendStatus(201);
       }).catch(err => {
+        console.error(err);
         return res.status(500).send(err);
       });
     } else {
@@ -159,6 +164,7 @@ function configureEntityRoute<T extends Listable>(
 
       return res.sendStatus(204);
     }).catch(err => {
+      console.error(err);
       return res.status(500).send(err);
     });
   });
