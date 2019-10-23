@@ -23,6 +23,7 @@ import configureStorageRoutes from "./storageroutes";
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
+const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -31,6 +32,7 @@ interface ClientOptions {
   environmentJSON: string;
   baseUrl: string;
   appVersion: string;
+  googleAnalyticsId: string;
 }
 
 const appVersion = require("../package.json").version;
@@ -64,7 +66,8 @@ const getClientOptions = (session: Express.Session): ClientOptions => {
   return {
     environmentJSON: JSON.stringify(environment),
     baseUrl,
-    appVersion
+    appVersion,
+    googleAnalyticsId
   };
 };
 
