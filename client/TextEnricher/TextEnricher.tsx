@@ -108,10 +108,10 @@ export class TextEnricher {
 }
 
 function CounterOrBracketedText(props: { children: React.ReactChildren }) {
-  const innerText = props.children[0].props.value;
+  const innerText = (props.children[0] && props.children[0].props.value) || "";
   const matches = innerText.match(/\d+/g);
   if (!matches || matches.length < 2) {
-    return <>"["{innerText}"]"</>;
+    return <>[{innerText}]</>;
   }
   return <Counter current={matches[0]} maximum={matches[1]} />;
 }
