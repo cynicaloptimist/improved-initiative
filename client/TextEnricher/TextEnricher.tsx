@@ -119,8 +119,11 @@ function CounterOrBracketedText(props: { children: React.ReactChildren }) {
 
 function Counter(props: { current: string; maximum: string }) {
   return (
-    <strong>
-      {props.current}/{props.maximum}
-    </strong>
+    <input
+      type="number"
+      min="0"
+      max={props.maximum}
+      defaultValue={props.current}
+    />
   );
 }
