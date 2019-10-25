@@ -99,9 +99,27 @@ export class TextEnricher {
     const replacer = ReactReplace(replaceConfig);
 
     const renderers = {
-      text: props => replacer(props.children)
+      text: props => replacer(props.children),
+      linkReference: CounterOrBracketedText
     };
 
     return <Markdown source={text} renderers={renderers} />;
   };
+}
+
+function CounterOrBracketedText(props: { children: React.ReactChildren }) {
+  const innerText = props.children[0].props.value;
+  const matches = innerText.match(/\d+/g);
+  if (!matches || matches.length < 2) {
+    return <>"["{innerText}"]"</>;
+  }
+  return <Counter current={matches[0]} maximum={matches[1]} />;
+}
+
+function Counter(props: { current: string; maximum: string }) {
+  return (
+    <strong>
+      {props.current}/{props.maximum}
+    </strong>
+  );
 }
