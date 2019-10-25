@@ -100,6 +100,7 @@ export class TextEnricher {
 
     const renderers = {
       text: props => replacer(props.children),
+      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
       linkReference: CounterOrBracketedText
     };
 
