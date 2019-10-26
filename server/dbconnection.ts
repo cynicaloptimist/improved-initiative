@@ -296,11 +296,11 @@ export async function getEntity(
   client.close();
 
   if (!user) {
-    throw "User not found";
+    return null;
   }
   const entities = user[entityPath];
   if (entities === undefined) {
-    throw `User has no ${entityPath} entities.`;
+    return null;
   }
 
   return entities[entityId];
