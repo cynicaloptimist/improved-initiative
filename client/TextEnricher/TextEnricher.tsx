@@ -100,43 +100,46 @@ export class TextEnricher {
       }
     };
 
-    const counterOrBracketedText = (props: {
-      children: React.ReactChildren;
-    }) => {
-      const element = props.children[0];
-      if (!element) {
-        return <>[]</>;
-      }
-      const innerText: string = element.props.value || "";
-      const matches = innerText.match(/\d+/g);
-      if (updateText === undefined || !matches || matches.length < 2) {
-        return <>[{innerText}]</>;
-      }
-
-      return (
-        <Counter
-          current={matches[0]}
-          maximum={matches[1]}
-          onChange={newValue => {
-            const location = element.props.sourcePosition.start.offset;
-            const newText =
-              text.substr(0, location) +
-              newValue +
-              text.substr(location + matches[0].length);
-            updateText(newText);
-          }}
-        />
-      );
-    };
-
     const replacer = ReactReplace(replaceConfig);
 
     const renderers = {
       text: props => replacer(props.children),
       //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: counterOrBracketedText
+      linkReference: counterOrBracketedText(text, updateText)
     };
 
     return <Markdown source={text} renderers={renderers} rawSourcePos />;
+  };
+}
+
+function counterOrBracketedText(
+  text: string,
+  updateText?: (newText: string) => void
+) {
+  return (props: { children: React.ReactChildren }) => {
+    const element = props.children[0];
+    if (!element) {
+      return <>[]</>;
+    }
+    const innerText: string = element.props.value || "";
+    const matches = innerText.match(/\d+/g);
+    if (updateText === undefined || !matches || matches.length < 2) {
+      return <>[{innerText}]</>;
+    }
+
+    return (
+      <Counter
+        current={matches[0]}
+        maximum={matches[1]}
+        onChange={newValue => {
+          const location = element.props.sourcePosition.start.offset;
+          const newText =
+            text.substr(0, location) +
+            newValue +
+            text.substr(location + matches[0].length);
+          updateText(newText);
+        }}
+      />
+    );
   };
 }
