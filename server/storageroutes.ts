@@ -148,7 +148,7 @@ function configureEntityRoute<T extends Listable>(
         req.session.userId,
         req.body
       );
-      if (saved == 1) {
+      if (saved) {
         return res.sendStatus(201);
       } else {
         console.error("Could not save items for user: " + req.session.userId);
