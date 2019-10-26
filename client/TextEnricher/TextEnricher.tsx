@@ -56,7 +56,7 @@ export class TextEnricher {
     );
   };
 
-  public EnrichText = (text: string, name = "") => {
+  public EnrichText = (text: string) => {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
