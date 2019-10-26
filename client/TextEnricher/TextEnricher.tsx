@@ -56,7 +56,10 @@ export class TextEnricher {
     );
   };
 
-  public EnrichText = (text: string) => {
+  public EnrichText = (
+    text: string,
+    updateText?: (newText: string) => void
+  ) => {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -99,13 +102,30 @@ export class TextEnricher {
     const counterOrBracketedText = (props: {
       children: React.ReactChildren;
     }) => {
-      const innerText =
-        (props.children[0] && props.children[0].props.value) || "";
+      const element = props.children[0];
+      if (!element) {
+        return <>[]</>;
+      }
+      const innerText: string = element.props.value || "";
       const matches = innerText.match(/\d+/g);
-      if (!matches || matches.length < 2) {
+      if (updateText === undefined || !matches || matches.length < 2) {
         return <>[{innerText}]</>;
       }
-      return <Counter current={matches[0]} maximum={matches[1]} />;
+
+      return (
+        <Counter
+          current={matches[0]}
+          maximum={matches[1]}
+          onChange={newValue => {
+            const location = element.props.sourcePosition.start.offset;
+            const newText =
+              text.substr(0, location) +
+              newValue +
+              text.substr(location + matches[0].length);
+            updateText(newText);
+          }}
+        />
+      );
     };
 
     const replacer = ReactReplace(replaceConfig);
@@ -116,17 +136,22 @@ export class TextEnricher {
       linkReference: counterOrBracketedText
     };
 
-    return <Markdown source={text} renderers={renderers} />;
+    return <Markdown source={text} renderers={renderers} rawSourcePos />;
   };
 }
 
-function Counter(props: { current: string; maximum: string }) {
+function Counter(props: {
+  current: string;
+  maximum: string;
+  onChange: (newValue: string) => void;
+}) {
   return (
     <input
       type="number"
       min="0"
       max={props.maximum}
       defaultValue={props.current}
+      onBlur={e => props.onChange(e.target.value)}
     />
   );
 }
