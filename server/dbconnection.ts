@@ -67,6 +67,9 @@ export async function upsertUser(
 
 export async function getAccount(userId: mongo.ObjectId) {
   const user = await getFullAccount(userId);
+  if (!user) {
+    return null;
+  }
 
   const userWithListings = {
     accountStatus: user.accountStatus,
@@ -98,7 +101,7 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const user = await users.findOne({ _id: userId });
   if (user === null) {
     client.close();
-    throw `User ${userId} not found.`;
+    return null;
   }
 
   await updatePersistentCharactersIfNeeded(user, users);

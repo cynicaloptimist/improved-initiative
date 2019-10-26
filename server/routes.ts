@@ -143,7 +143,9 @@ export default function(
   async function updateSession(session: Express.Session) {
     if (session.userId) {
       const account = await getAccount(session.userId);
-      updateSessionAccountFeatures(session, account.accountStatus);
+      if (account) {
+        updateSessionAccountFeatures(session, account.accountStatus);
+      }
     }
   }
 

@@ -33,6 +33,9 @@ export default function(app: express.Application) {
 
     return DB.getAccount(req.session.userId)
       .then(account => {
+        if (!account) {
+          return res.sendStatus(404);
+        }
         if (req.session && account.accountStatus) {
           updateSessionAccountFeatures(req.session, account.accountStatus);
         }
