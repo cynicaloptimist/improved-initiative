@@ -382,8 +382,7 @@ export async function saveEntity<T extends Listable>(
 export async function saveEntitySet<T extends Listable>(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
-  entities: T[],
-  callBack: (result: number) => void
+  entities: T[]
 ) {
   if (!connectionString) {
     console.error("No connection string found.");
@@ -405,24 +404,30 @@ export async function saveEntitySet<T extends Listable>(
     userId = new mongo.ObjectId(userId);
   }
 
-  const result = await users.findOne({ _id: userId }).then(u => {
-    if (u == null) {
-      throw "User ID not found: " + userId;
-    }
+  const user = await users.findOne({ _id: userId });
+  if (user == null) {
+    return null;
+  }
 
-    const updatedEntities = u[entityPath] || {};
-    for (const entity of entities) {
-      updatedEntities[entity.Id] = entity;
-    }
-    return users.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          [`${entityPath}`]: updatedEntities
-        }
+  const updatedEntities = user[entityPath] || {};
+  for (const entity of entities) {
+    updatedEntities[entity.Id] = entity;
+  }
+
+  const result = await users.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        [`${entityPath}`]: updatedEntities
       }
-    );
-  });
+    }
+  );
+
   client.close();
-  callBack(result.modifiedCount);
+
+  if (!result) {
+    return 0;
+  }
+
+  return result.modifiedCount;
 }
