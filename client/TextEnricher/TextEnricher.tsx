@@ -13,6 +13,7 @@ import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
+import { Counter } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -138,20 +139,4 @@ export class TextEnricher {
 
     return <Markdown source={text} renderers={renderers} rawSourcePos />;
   };
-}
-
-function Counter(props: {
-  current: string;
-  maximum: string;
-  onChange: (newValue: string) => void;
-}) {
-  return (
-    <input
-      type="number"
-      min="0"
-      max={props.maximum}
-      defaultValue={props.current}
-      onBlur={e => props.onChange(e.target.value)}
-    />
-  );
 }
