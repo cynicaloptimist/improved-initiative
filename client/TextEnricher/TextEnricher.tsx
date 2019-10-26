@@ -96,25 +96,28 @@ export class TextEnricher {
       }
     };
 
+    const counterOrBracketedText = (props: {
+      children: React.ReactChildren;
+    }) => {
+      const innerText =
+        (props.children[0] && props.children[0].props.value) || "";
+      const matches = innerText.match(/\d+/g);
+      if (!matches || matches.length < 2) {
+        return <>[{innerText}]</>;
+      }
+      return <Counter current={matches[0]} maximum={matches[1]} />;
+    };
+
     const replacer = ReactReplace(replaceConfig);
 
     const renderers = {
       text: props => replacer(props.children),
       //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: CounterOrBracketedText
+      linkReference: counterOrBracketedText
     };
 
     return <Markdown source={text} renderers={renderers} />;
   };
-}
-
-function CounterOrBracketedText(props: { children: React.ReactChildren }) {
-  const innerText = (props.children[0] && props.children[0].props.value) || "";
-  const matches = innerText.match(/\d+/g);
-  if (!matches || matches.length < 2) {
-    return <>[{innerText}]</>;
-  }
-  return <Counter current={matches[0]} maximum={matches[1]} />;
 }
 
 function Counter(props: { current: string; maximum: string }) {
