@@ -7,6 +7,7 @@ export function Counter(props: {
 }) {
   return (
     <input
+      className="counter"
       type="number"
       min="0"
       max={props.maximum}

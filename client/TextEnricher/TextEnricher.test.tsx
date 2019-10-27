@@ -33,6 +33,30 @@ describe("TextEnricher", () => {
     expect.assertions(1);
   });
 
+  test("Counter", async done => {
+    const library = GetSpellLibrary();
+    const textEnricher = new TextEnricher(
+      () => {},
+      () => {},
+      () => {},
+      library,
+      new DefaultRules()
+    );
+
+    const inputText = "[100/1000000] gp.";
+
+    const enrichedText = textEnricher.EnrichText(inputText, newText => {
+      expect(newText).toEqual("[200/1000000] gp.");
+      done();
+    });
+
+    const tree = Enzyme.mount(enrichedText);
+    tree.find(".counter").simulate("blur", {
+      target: { value: "200" }
+    });
+    expect.assertions(1);
+  });
+
   function GetSpellLibrary() {
     const library = new SpellLibrary(new AccountClient());
     const spell = {
