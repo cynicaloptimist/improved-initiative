@@ -61,6 +61,18 @@ export class TextEnricher {
     text: string,
     updateText?: (newText: string) => void
   ) => {
+    const replacer = this.buildReactReplacer();
+
+    const renderers = {
+      text: props => replacer(props.children),
+      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
+      linkReference: counterOrBracketedText(text, updateText)
+    };
+
+    return <Markdown source={text} renderers={renderers} rawSourcePos />;
+  };
+
+  private buildReactReplacer() {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -100,16 +112,8 @@ export class TextEnricher {
       }
     };
 
-    const replacer = ReactReplace(replaceConfig);
-
-    const renderers = {
-      text: props => replacer(props.children),
-      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: counterOrBracketedText(text, updateText)
-    };
-
-    return <Markdown source={text} renderers={renderers} rawSourcePos />;
-  };
+    return ReactReplace(replaceConfig);
+  }
 }
 
 function counterOrBracketedText(
