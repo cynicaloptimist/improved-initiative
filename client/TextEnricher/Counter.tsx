@@ -32,8 +32,36 @@ export function CounterOrBracketedText(
       }
     };
 
+    if (maximum <= 5) {
+      return <BeanCounter {...counterProps} />;
+    }
+
     return <Counter {...counterProps} />;
   };
+}
+
+export function BeanCounter(props: {
+  current: number;
+  maximum: number;
+  onChange: (newValue: string) => void;
+}) {
+  return (
+    <span className="bean-counter inline">
+      <i className="fa-clickable fa-ban" onClick={_ => props.onChange("0")} />
+      {_.range(1, props.maximum + 1).map(index => {
+        return (
+          <i
+            className={
+              props.current >= index
+                ? "fa-clickable fa-circle"
+                : "far-clickable fa-circle"
+            }
+            onClick={_ => props.onChange(index.toString())}
+          />
+        );
+      })}
+    </span>
+  );
 }
 
 export function Counter(props: {
