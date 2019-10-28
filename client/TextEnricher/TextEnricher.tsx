@@ -13,7 +13,7 @@ import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
-import { Counter } from "./Counter";
+import { Counter, CounterOrBracketedText } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -66,7 +66,7 @@ export class TextEnricher {
     const renderers = {
       text: props => replacer(props.children),
       //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: counterOrBracketedText(text, updateText)
+      linkReference: CounterOrBracketedText(text, updateText)
     };
 
     return <Markdown source={text} renderers={renderers} rawSourcePos />;
@@ -114,36 +114,4 @@ export class TextEnricher {
 
     return ReactReplace(replaceConfig);
   }
-}
-
-function counterOrBracketedText(
-  text: string,
-  updateText?: (newText: string) => void
-) {
-  return (props: { children: React.ReactChildren }) => {
-    const element = props.children[0];
-    if (!element) {
-      return <>[]</>;
-    }
-    const innerText: string = element.props.value || "";
-    const matches = innerText.match(/\d+/g);
-    if (updateText === undefined || !matches || matches.length < 2) {
-      return <>[{innerText}]</>;
-    }
-
-    return (
-      <Counter
-        current={matches[0]}
-        maximum={matches[1]}
-        onChange={newValue => {
-          const location = element.props.sourcePosition.start.offset;
-          const newText =
-            text.substr(0, location) +
-            newValue +
-            text.substr(location + matches[0].length);
-          updateText(newText);
-        }}
-      />
-    );
-  };
 }
