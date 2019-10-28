@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import React = require("react");
 
 export function CounterOrBracketedText(
@@ -15,10 +16,13 @@ export function CounterOrBracketedText(
       return <>[{innerText}]</>;
     }
 
+    const current = parseInt(matches[0]);
+    const maximum = parseInt(matches[1]);
+
     return (
       <Counter
-        current={matches[0]}
-        maximum={matches[1]}
+        current={current}
+        maximum={maximum}
         onChange={newValue => {
           const location = element.props.sourcePosition.start.offset;
           const newText =
@@ -33,8 +37,8 @@ export function CounterOrBracketedText(
 }
 
 export function Counter(props: {
-  current: string;
-  maximum: string;
+  current: number;
+  maximum: number;
   onChange: (newValue: string) => void;
 }) {
   return (
