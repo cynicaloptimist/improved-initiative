@@ -59,14 +59,14 @@ export class TextEnricher {
 
   public EnrichText = (
     text: string,
-    updateText?: (newText: string) => void
+    updateTextSource?: (newText: string) => void
   ) => {
     const replacer = this.buildReactReplacer();
 
     const renderers = {
       text: props => replacer(props.children),
       //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: CounterOrBracketedText(text, updateText)
+      linkReference: CounterOrBracketedText(text, updateTextSource)
     };
 
     return <Markdown source={text} renderers={renderers} rawSourcePos />;
