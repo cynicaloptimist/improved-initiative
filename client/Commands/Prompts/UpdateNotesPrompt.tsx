@@ -13,7 +13,7 @@ function UpdateNotesPromptComponent() {
         name="Notes"
         className="p-update-notes__notes"
         component="textarea"
-        placeholder="Track notes, resources, spell slots, etc. **Markdown** is supported."
+        placeholder="Track notes, resources, spell slots, etc. **Markdown** and Counters (e.g. [5/5]) are supported."
       />
       <SubmitButton />
     </div>
