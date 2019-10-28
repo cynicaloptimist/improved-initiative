@@ -19,20 +19,20 @@ export function CounterOrBracketedText(
     const current = parseInt(matches[0]);
     const maximum = parseInt(matches[1]);
 
-    return (
-      <Counter
-        current={current}
-        maximum={maximum}
-        onChange={newValue => {
-          const location = element.props.sourcePosition.start.offset;
-          const newText =
-            text.substr(0, location) +
-            newValue +
-            text.substr(location + matches[0].length);
-          updateText(newText);
-        }}
-      />
-    );
+    const counterProps = {
+      current,
+      maximum,
+      onChange: newValue => {
+        const location = element.props.sourcePosition.start.offset;
+        const newText =
+          text.substr(0, location) +
+          newValue +
+          text.substr(location + matches[0].length);
+        updateText(newText);
+      }
+    };
+
+    return <Counter {...counterProps} />;
   };
 }
 
