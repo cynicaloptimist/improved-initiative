@@ -46,7 +46,7 @@ export function BeanCounter(props: {
   onChange: (newValue: string) => void;
 }) {
   return (
-    <span className="bean-counter inline">
+    <span className="bean-counter">
       <i className="fa-clickable fa-ban" onClick={_ => props.onChange("0")} />
       {_.range(1, props.maximum + 1).map(index => {
         return (
