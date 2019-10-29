@@ -28,16 +28,9 @@ const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-interface ClientOptions {
-  environmentJSON: string;
-  baseUrl: string;
-  appVersion: string;
-  googleAnalyticsId: string;
-}
-
 const appVersion = require("../package.json").version;
 
-const getClientOptions = (session: Express.Session): ClientOptions => {
+const getClientOptions = (session: Express.Session) => {
   const encounterId = session.encounterId || probablyUniqueString();
   const patreonLoginUrl =
     "http://www.patreon.com/oauth2/authorize" +
