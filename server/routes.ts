@@ -24,6 +24,7 @@ const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
+const twitterPixelId = process.env.TWITTER_PIXEL_ID || "";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -60,9 +61,24 @@ const getClientOptions = (session: Express.Session) => {
     environmentJSON: JSON.stringify(environment),
     baseUrl,
     appVersion,
-    googleAnalyticsId
+    googleAnalyticsId,
+    twitterPixelId,
+    accountLevel: getAccountLevel(session)
   };
 };
+
+function getAccountLevel(session) {
+  if (!session.isLoggedIn) {
+    return "LoggedOut";
+  }
+  if (!session.hasStorage) {
+    return "LoggedInFree";
+  }
+  if (!session.hasEpicInitiative) {
+    return "AccountSync";
+  }
+  return "EpicInitiative";
+}
 
 export default function(
   app: express.Application,
