@@ -8,10 +8,7 @@ interface TabsProps<T> {
 
 interface TabsState {}
 
-export class Tabs<T extends string> extends React.Component<
-  TabsProps<T>,
-  TabsState
-> {
+export class Tabs<T> extends React.Component<TabsProps<T>, TabsState> {
   public render() {
     const buttonElements = this.props.options.map((option, i) => (
       <button

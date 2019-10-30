@@ -20,7 +20,7 @@ enum SettingsTab {
   EpicInitiative = "Epic Initiative"
 }
 
-const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
+const SettingsTabOptions = _.values<SettingsTab>(SettingsTab);
 
 interface SettingsPaneProps {
   repeatTutorial: () => void;
