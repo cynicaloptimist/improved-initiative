@@ -5,6 +5,7 @@ import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
+import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { StatBlockLibrary } from "../Library/StatBlockLibrary";
@@ -29,11 +30,16 @@ export class LibrariesCommander {
 
   public AddStatBlockFromListing = (
     listing: Listing<StatBlock>,
-    hideOnAdd: boolean
+    hideOnAdd: boolean,
+    variantMaximumHP: VariantMaximumHP
   ) => {
     listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
       const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
-      this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
+      this.tracker.Encounter.AddCombatantFromStatBlock(
+        statBlock,
+        hideOnAdd,
+        variantMaximumHP
+      );
       Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
     });

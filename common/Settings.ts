@@ -24,6 +24,7 @@ export interface Settings {
   Commands: CommandSetting[];
   Rules: {
     RollMonsterHp: boolean;
+    EnableBossAndMinionHP: boolean;
     AllowNegativeHP: boolean;
     AutoCheckConcentration: boolean;
     AutoGroupInitiative: AutoGroupInitiativeOption;
@@ -44,6 +45,7 @@ export function getDefaultSettings(): Settings {
     Commands: [],
     Rules: {
       RollMonsterHp: false,
+      EnableBossAndMinionHP: false,
       AllowNegativeHP: false,
       AutoCheckConcentration: true,
       AutoGroupInitiative: AutoGroupInitiativeOption.None,

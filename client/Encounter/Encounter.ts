@@ -11,7 +11,10 @@ import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState"
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
-import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
+import {
+  GetOrRollMaximumHP,
+  VariantMaximumHP
+} from "../Combatant/GetOrRollMaximumHP";
 import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
 import { env } from "../Environment";
 import {
@@ -163,11 +166,15 @@ export class Encounter {
     return combatant;
   };
 
-  public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
+  public AddCombatantFromStatBlock = (
+    statBlockJson: {},
+    hideOnAdd = false,
+    variantMaximumHP: VariantMaximumHP = null
+  ) => {
     const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
     statBlock.HP = {
       ...statBlock.HP,
-      Value: GetOrRollMaximumHP(statBlock)
+      Value: GetOrRollMaximumHP(statBlock, variantMaximumHP)
     };
 
     const initialState: CombatantState = {

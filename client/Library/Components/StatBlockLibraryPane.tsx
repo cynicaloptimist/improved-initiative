@@ -3,13 +3,14 @@ import { StatBlock } from "../../../common/StatBlock";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
+import { CurrentSettings } from "../../Settings/Settings";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
 import { ListingGroupFn } from "./BuildListingTree";
 import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ExtraButton, ListingRow } from "./ListingRow";
 
 export type StatBlockLibraryPaneProps = {
   librariesCommander: LibrariesCommander;
@@ -101,8 +102,34 @@ export class StatBlockLibraryPane extends React.Component<
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
       listing={l}
+      extraButtons={
+        CurrentSettings().Rules.EnableBossAndMinionHP &&
+        this.bossAndMinionButtons
+      }
     />
   );
+
+  private loadSavedStatBlockAsMinion = (
+    listing: StatBlockListing,
+    hideOnAdd: boolean
+  ) => {
+    return this.props.librariesCommander.AddStatBlockFromListing(
+      listing,
+      hideOnAdd,
+      "MINION"
+    );
+  };
+
+  private loadSavedStatBlockAsBoss = (
+    listing: StatBlockListing,
+    hideOnAdd: boolean
+  ) => {
+    return this.props.librariesCommander.AddStatBlockFromListing(
+      listing,
+      hideOnAdd,
+      "BOSS"
+    );
+  };
 
   private loadSavedStatBlock = (
     listing: StatBlockListing,
@@ -110,7 +137,8 @@ export class StatBlockLibraryPane extends React.Component<
   ) => {
     return this.props.librariesCommander.AddStatBlockFromListing(
       listing,
-      hideOnAdd
+      hideOnAdd,
+      null
     );
   };
 
@@ -118,4 +146,19 @@ export class StatBlockLibraryPane extends React.Component<
     l.Listing.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
+
+  private bossAndMinionButtons: ExtraButton<StatBlock>[] = [
+    {
+      faClass: "chess-pawn",
+      buttonClass: "minion",
+      title: "Add with 1 HP",
+      onClick: this.loadSavedStatBlockAsMinion
+    },
+    {
+      faClass: "crown",
+      buttonClass: "boss",
+      title: "Add with maximum HP",
+      onClick: this.loadSavedStatBlockAsBoss
+    }
+  ];
 }
