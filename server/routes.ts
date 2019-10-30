@@ -19,6 +19,7 @@ import {
 } from "./patreon";
 import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
+import { AccountStatus } from "./user";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
@@ -228,20 +229,23 @@ export default function(
 }
 
 async function setupLocalDefaultUser(session: Express.Session, res: Res) {
+  let accountStatus = AccountStatus.None;
   if (defaultAccountLevel === "accountsync") {
     session.hasStorage = true;
+    accountStatus = AccountStatus.Pledge;
   }
 
   if (defaultAccountLevel === "epicinitiative") {
     session.hasStorage = true;
     session.hasEpicInitiative = true;
+    accountStatus = AccountStatus.Epic;
   }
 
   session.isLoggedIn = true;
 
   const user = await upsertUser(
     process.env.DEFAULT_PATREON_ID || "defaultPatreonId",
-    "pledge",
+    accountStatus,
     ""
   );
 

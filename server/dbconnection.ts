@@ -6,7 +6,7 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { User } from "./user";
+import { AccountStatus, User } from "./user";
 
 let connectionString: string;
 
@@ -26,7 +26,7 @@ export const initialize = async initialConnectionString => {
 
 export async function upsertUser(
   patreonId: string,
-  accountStatus: string,
+  accountStatus: AccountStatus,
   emailAddress: string
 ) {
   if (!connectionString) {
