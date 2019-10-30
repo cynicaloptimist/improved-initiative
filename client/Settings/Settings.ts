@@ -50,10 +50,6 @@ function getLegacySettings(): Settings {
     Rules: {
       ...defaultSettings.Rules,
       RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
-      EnableBossAndMinionHP: getLegacySetting<boolean>(
-        "EnableBossAndMinionHp",
-        false
-      ),
       AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
       AutoCheckConcentration: getLegacySetting<boolean>(
         "AutoCheckConcentration",
