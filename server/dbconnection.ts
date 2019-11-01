@@ -429,5 +429,5 @@ export async function saveEntitySet<T extends Listable>(
     return 0;
   }
 
-  return result.modifiedCount;
+  return result.matchedCount;
 }
