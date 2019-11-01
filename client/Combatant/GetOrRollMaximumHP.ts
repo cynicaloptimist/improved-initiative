@@ -2,7 +2,11 @@ import { StatBlock } from "../../common/StatBlock";
 import { Dice } from "../Rules/Dice";
 import { CurrentSettings } from "../Settings/Settings";
 
-export type VariantMaximumHP = "MINION" | "BOSS" | null;
+export enum VariantMaximumHP {
+  DEFAULT,
+  MINION,
+  BOSS
+}
 
 export function GetOrRollMaximumHP(
   statBlock: StatBlock,
@@ -10,12 +14,12 @@ export function GetOrRollMaximumHP(
 ) {
   const rollMonsterHp = CurrentSettings().Rules.RollMonsterHp;
   if (statBlock.Player !== "player") {
-    if (variant == "MINION") {
+    if (variant == VariantMaximumHP.MINION) {
       return 1;
-    } else if (variant == "BOSS" || rollMonsterHp) {
+    } else if (variant == VariantMaximumHP.BOSS || rollMonsterHp) {
       try {
         const hpResult = Dice.RollDiceExpression(statBlock.HP.Notes);
-        if (variant == "BOSS") {
+        if (variant == VariantMaximumHP.BOSS) {
           return hpResult.Maximum;
         }
         const rolledHP = hpResult.Total;

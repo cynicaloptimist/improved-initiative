@@ -169,7 +169,7 @@ export class Encounter {
   public AddCombatantFromStatBlock = (
     statBlockJson: {},
     hideOnAdd = false,
-    variantMaximumHP: VariantMaximumHP = null
+    variantMaximumHP: VariantMaximumHP = VariantMaximumHP.DEFAULT
   ) => {
     const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
     statBlock.HP = {
