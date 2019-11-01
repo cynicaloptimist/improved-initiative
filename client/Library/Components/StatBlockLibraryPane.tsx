@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StatBlock } from "../../../common/StatBlock";
+import { VariantMaximumHP } from "../../Combatant/GetOrRollMaximumHP";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
@@ -97,7 +98,7 @@ export class StatBlockLibraryPane extends React.Component<
       key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
       name={l.Listing().Name}
       showCount
-      onAdd={this.loadSavedStatBlock}
+      onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
       onEdit={this.editStatBlock}
       onPreview={onPreview}
       onPreviewOut={onPreviewOut}
@@ -109,36 +110,14 @@ export class StatBlockLibraryPane extends React.Component<
     />
   );
 
-  private loadSavedStatBlockAsMinion = (
+  private loadSavedStatBlock = (variantMaximumHP: VariantMaximumHP) => (
     listing: StatBlockListing,
     hideOnAdd: boolean
   ) => {
     return this.props.librariesCommander.AddStatBlockFromListing(
       listing,
       hideOnAdd,
-      "MINION"
-    );
-  };
-
-  private loadSavedStatBlockAsBoss = (
-    listing: StatBlockListing,
-    hideOnAdd: boolean
-  ) => {
-    return this.props.librariesCommander.AddStatBlockFromListing(
-      listing,
-      hideOnAdd,
-      "BOSS"
-    );
-  };
-
-  private loadSavedStatBlock = (
-    listing: StatBlockListing,
-    hideOnAdd: boolean
-  ) => {
-    return this.props.librariesCommander.AddStatBlockFromListing(
-      listing,
-      hideOnAdd,
-      null
+      variantMaximumHP
     );
   };
 
@@ -152,13 +131,13 @@ export class StatBlockLibraryPane extends React.Component<
       faClass: "chess-pawn",
       buttonClass: "minion",
       title: "Add with 1 HP",
-      onClick: this.loadSavedStatBlockAsMinion
+      onClick: this.loadSavedStatBlock(VariantMaximumHP.MINION)
     },
     {
       faClass: "crown",
       buttonClass: "boss",
       title: "Add with maximum HP",
-      onClick: this.loadSavedStatBlockAsBoss
+      onClick: this.loadSavedStatBlock(VariantMaximumHP.BOSS)
     }
   ];
 }
