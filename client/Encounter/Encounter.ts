@@ -190,7 +190,7 @@ export class Encounter {
       Tags: [],
       RoundCounter: 0,
       ElapsedSeconds: 0,
-      InterfaceVersion: process.env.VERSION
+      InterfaceVersion: process.env.VERSION || "legacy"
     };
 
     const combatant = this.AddCombatantFromState(initialState);
