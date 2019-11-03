@@ -189,7 +189,7 @@ export namespace LegacySynchronousLocalStore {
   const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
   const load = key => {
     let value = localStorage.getItem(key);
-    if (value === "undefined") {
+    if (value === "undefined" || value == null) {
       return null;
     }
     return JSON.parse(value);
