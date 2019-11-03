@@ -34,7 +34,7 @@ import { EncounterFlow } from "./EncounterFlow";
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
 
-  private lastVisibleActiveCombatantId = null;
+  private lastVisibleActiveCombatantId: string | null = null;
 
   constructor(
     private playerViewClient: PlayerViewClient,
@@ -208,7 +208,7 @@ export class Encounter {
     persistentCharacter: PersistentCharacter,
     library: PersistentCharacterUpdater,
     hideOnAdd = false
-  ): Combatant {
+  ): Combatant | null {
     if (!this.CanAddCombatant(persistentCharacter.Id)) {
       return null;
     }
