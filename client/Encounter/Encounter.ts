@@ -431,13 +431,13 @@ export class Encounter {
 
     const activeCombatantOnTop = CurrentSettings().PlayerView
       .ActiveCombatantOnTop;
-    if (activeCombatantOnTop && activeCombatantId && combatants.length) {
+    if (activeCombatantOnTop && activeCombatantId && combatants.length > 0) {
       let combatantsMoved = 0;
       while (
         combatants[0].Id != activeCombatantId &&
         combatantsMoved < combatants.length //prevent infinite loop in case we can't find active combatant
       ) {
-        combatants.push(combatants.shift());
+        combatants.push(combatants.shift() as Combatant);
         combatantsMoved++;
       }
     }
