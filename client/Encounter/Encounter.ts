@@ -423,7 +423,7 @@ export class Encounter {
     return this.lastVisibleActiveCombatantId;
   }
 
-  private getCombatantsForPlayerView(activeCombatantId: string) {
+  private getCombatantsForPlayerView(activeCombatantId: string | null) {
     const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
       .HideMonstersOutsideEncounter;
 
