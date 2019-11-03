@@ -31,8 +31,8 @@ export namespace Store {
     listName: string
   ): Promise<T[]> {
     const store = localforage.createInstance({ name: listName });
-    let items = [];
-    await store.iterate((item: Listable, key) => {
+    let items: T[] = [];
+    await store.iterate((item: T, key) => {
       item.Id = key;
       items.push(item);
     });
