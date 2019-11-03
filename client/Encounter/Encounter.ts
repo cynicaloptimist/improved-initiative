@@ -357,7 +357,10 @@ export class Encounter {
     encounterState: EncounterState<CombatantState>,
     persistentCharacterLibrary: PersistentCharacterLibrary
   ) => {
-    const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
+    let activeCombatant = _.find(
+      this.combatants(),
+      c => c.Id == encounterState.ActiveCombatantId
+    );
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,
       c => c.IndexLabel
@@ -369,7 +372,7 @@ export class Encounter {
 
       const combatant = this.AddCombatantFromState(savedCombatant);
 
-      if (combatant.PersistentCharacterId) {
+      if (combatant.PersistentCharacterId !== null) {
         const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(
           combatant.PersistentCharacterId
         );
@@ -382,13 +385,9 @@ export class Encounter {
       }
     });
 
-    if (savedEncounterIsActive) {
+    if (activeCombatant !== undefined) {
       this.EncounterFlow.State("active");
-      this.EncounterFlow.ActiveCombatant(
-        this.combatants()
-          .filter(c => c.Id == encounterState.ActiveCombatantId)
-          .pop()
-      );
+      this.EncounterFlow.ActiveCombatant(activeCombatant);
       this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
       this.EncounterFlow.CombatTimer.Start();
