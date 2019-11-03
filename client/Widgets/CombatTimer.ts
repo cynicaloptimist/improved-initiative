@@ -5,20 +5,26 @@ export class CombatTimer {
   private elapsedRounds = ko.observable(0);
   private incrementElapsedSeconds = () =>
     this.elapsedSeconds(this.elapsedSeconds() + 1);
-  private intervalToken = null;
+  private intervalToken: number | null = null;
 
   public Start = () => {
     if (this.intervalToken) {
       this.Pause();
     }
-    this.intervalToken = setInterval(this.incrementElapsedSeconds, 1000);
+    this.intervalToken = window.setInterval(this.incrementElapsedSeconds, 1000);
   };
 
   public Pause = () => {
+    if (!this.intervalToken) {
+      return;
+    }
     clearInterval(this.intervalToken);
   };
 
   public Stop = () => {
+    if (!this.intervalToken) {
+      return;
+    }
     clearInterval(this.intervalToken);
     this.elapsedSeconds(0);
     this.elapsedRounds(0);
