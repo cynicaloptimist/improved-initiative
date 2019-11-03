@@ -109,4 +109,4 @@ export const BuildEncounterCommandList = (
       "save"
     ),
     new Command("settings", "Settings", c.ShowSettings, "?", "cog", true, true)
-  ].filter(c => c);
+  ].filter(c => c) as Command[];

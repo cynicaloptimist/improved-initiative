@@ -119,10 +119,14 @@ export class TrackerViewModel {
 
   public Encounter = new Encounter(
     this.playerViewClient,
-    combatantId =>
-      this.OrderedCombatants()
-        .find((c: CombatantViewModel) => c.Combatant.Id == combatantId)
-        .EditInitiative(),
+    combatantId => {
+      const combatant = this.OrderedCombatants().find(
+        (c: CombatantViewModel) => c.Combatant.Id == combatantId
+      );
+      if (combatant) {
+        combatant.EditInitiative();
+      }
+    },
     this.Rules
   );
 
@@ -146,6 +150,9 @@ export class TrackerViewModel {
       this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
     );
+    if (!combatantViewModel) {
+      return null;
+    }
     return (
       <CombatantDetails
         combatantViewModel={combatantViewModel}
