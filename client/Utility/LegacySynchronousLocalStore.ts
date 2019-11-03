@@ -21,7 +21,7 @@ export namespace LegacySynchronousLocalStore {
   export const ActionBar = "ActionBar";
 
   export async function MigrateItemsToStore() {
-    const allSaveItemPromises = [];
+    const allSaveItemPromises: Promise<void>[] = [];
     for (const listName of Store.SupportedLists) {
       const allItems = LoadAllAndUpdateIds(listName);
       const saveItemPromises = allItems.map(async item => {
