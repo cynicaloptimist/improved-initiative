@@ -224,7 +224,7 @@ export class StatBlockEditor extends React.Component<
       Id: submittedStatBlock.Id,
       Name: submittedStatBlock.Name,
       Path: submittedStatBlock.Path,
-      Version: process.env.VERSION
+      Version: process.env.VERSION || "unknown"
     };
 
     ConvertStringsToNumbersWhereNeeded(editedStatBlock);
@@ -247,7 +247,10 @@ export class StatBlockEditor extends React.Component<
   };
 
   private delete = () => {
-    if (confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)) {
+    if (
+      this.props.onDelete &&
+      confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)
+    ) {
       this.props.onDelete();
       this.props.onClose();
     }
@@ -255,6 +258,7 @@ export class StatBlockEditor extends React.Component<
 
   private willOverwriteStatBlock = _.memoize(
     (path: string, name: string) =>
+      this.props.currentListings &&
       this.props.currentListings.some(
         l => l.Listing().Path == path && l.Listing().Name == name
       ),
