@@ -427,7 +427,7 @@ export class Encounter {
     const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
       .HideMonstersOutsideEncounter;
 
-    const combatants = this.combatants();
+    const combatants = this.combatants().slice();
 
     const activeCombatantOnTop = CurrentSettings().PlayerView
       .ActiveCombatantOnTop;
