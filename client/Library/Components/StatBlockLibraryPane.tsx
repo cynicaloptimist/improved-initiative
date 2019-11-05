@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Settings } from "../../../common/Settings";
 import { StatBlock } from "../../../common/StatBlock";
 import { VariantMaximumHP } from "../../Combatant/GetOrRollMaximumHP";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
@@ -55,7 +56,7 @@ export class StatBlockLibraryPane extends React.Component<
       <LibraryPane
         defaultItem={StatBlock.Default()}
         listings={listings}
-        renderListingRow={this.renderListingRow}
+        renderListingRow={this.renderListingRow(CurrentSettings())}
         groupByFunctions={this.groupingFunctions}
         addNewItem={() =>
           this.props.librariesCommander.CreateAndEditStatBlock(
@@ -89,7 +90,7 @@ export class StatBlockLibraryPane extends React.Component<
     })
   ];
 
-  private renderListingRow = (
+  private renderListingRow = (settings: Settings) => (
     l: Listing<StatBlock>,
     onPreview,
     onPreviewOut
@@ -104,8 +105,7 @@ export class StatBlockLibraryPane extends React.Component<
       onPreviewOut={onPreviewOut}
       listing={l}
       extraButtons={
-        CurrentSettings().Rules.EnableBossAndMinionHP &&
-        this.bossAndMinionButtons
+        settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
       }
     />
   );
