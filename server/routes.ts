@@ -120,12 +120,8 @@ export default function(
 
     session.encounterId = await playerViews.InitializeNew();
 
-    if (defaultAccountLevel !== "free") {
-      return await setupLocalDefaultUser(session, res);
-    } else {
-      const renderOptions = getClientOptions(session);
-      return res.render("landing", renderOptions);
-    }
+    const renderOptions = getClientOptions(session);
+    return res.render("landing", renderOptions);
   });
 
   app.get("/e/:id", (req: Req, res: Res) => {
@@ -142,6 +138,10 @@ export default function(
     const session = req.session;
     if (session === undefined) {
       throw "Session is not available";
+    }
+
+    if (defaultAccountLevel !== "free") {
+      await setupLocalDefaultUser(session);
     }
 
     updateSession(session);
@@ -228,7 +228,7 @@ export default function(
   startNewsUpdates(app);
 }
 
-async function setupLocalDefaultUser(session: Express.Session, res: Res) {
+async function setupLocalDefaultUser(session: Express.Session) {
   let accountStatus = AccountStatus.None;
   if (defaultAccountLevel === "accountsync") {
     session.hasStorage = true;
@@ -253,5 +253,5 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
     session.userId = user._id;
   }
 
-  return res.render("landing", getClientOptions(session));
+  return;
 }
