@@ -19,6 +19,10 @@ export function CounterOrBracketedText(
     const current = parseInt(matches[0]);
     const maximum = parseInt(matches[1]);
 
+    if (maximum < 1) {
+      return <>[{innerText}]</>;
+    }
+
     const counterProps = {
       current,
       maximum,
