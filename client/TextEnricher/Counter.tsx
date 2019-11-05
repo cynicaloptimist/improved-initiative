@@ -32,7 +32,7 @@ export function CounterOrBracketedText(
       }
     };
 
-    if (maximum <= 5) {
+    if (maximum <= 9) {
       return <BeanCounter {...counterProps} />;
     }
 
