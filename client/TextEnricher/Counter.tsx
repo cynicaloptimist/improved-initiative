@@ -82,7 +82,12 @@ export function Counter(props: {
       defaultValue={props.current}
       onBlur={e => {
         const newValue = parseInt(e.target.value);
-        props.onChange(newValue);
+        if (isNaN(newValue) || newValue < 0 || newValue > props.maximum) {
+          e.target.value = props.current.toString();
+          return;
+        } else {
+          props.onChange(newValue);
+        }
       }}
     />
   );
