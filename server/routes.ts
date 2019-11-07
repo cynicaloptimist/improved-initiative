@@ -19,23 +19,20 @@ import {
 } from "./patreon";
 import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
+import { AccountStatus } from "./user";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
+const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
+const twitterPixelId = process.env.TWITTER_PIXEL_ID || "";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
 
-interface ClientOptions {
-  environmentJSON: string;
-  baseUrl: string;
-  appVersion: string;
-}
-
 const appVersion = require("../package.json").version;
 
-const getClientOptions = (session: Express.Session): ClientOptions => {
+const getClientOptions = (session: Express.Session) => {
   const encounterId = session.encounterId || probablyUniqueString();
   const patreonLoginUrl =
     "http://www.patreon.com/oauth2/authorize" +
@@ -64,9 +61,25 @@ const getClientOptions = (session: Express.Session): ClientOptions => {
   return {
     environmentJSON: JSON.stringify(environment),
     baseUrl,
-    appVersion
+    appVersion,
+    googleAnalyticsId,
+    twitterPixelId,
+    accountLevel: getAccountLevel(session)
   };
 };
+
+function getAccountLevel(session) {
+  if (!session.isLoggedIn) {
+    return "LoggedOut";
+  }
+  if (!session.hasStorage) {
+    return "LoggedInFree";
+  }
+  if (!session.hasEpicInitiative) {
+    return "AccountSync";
+  }
+  return "EpicInitiative";
+}
 
 export default function(
   app: express.Application,
@@ -107,12 +120,8 @@ export default function(
 
     session.encounterId = await playerViews.InitializeNew();
 
-    if (defaultAccountLevel !== "free") {
-      return await setupLocalDefaultUser(session, res);
-    } else {
-      const renderOptions = getClientOptions(session);
-      return res.render("landing", renderOptions);
-    }
+    const renderOptions = getClientOptions(session);
+    return res.render("landing", renderOptions);
   });
 
   app.get("/e/:id", (req: Req, res: Res) => {
@@ -131,6 +140,10 @@ export default function(
       throw "Session is not available";
     }
 
+    if (defaultAccountLevel !== "free") {
+      await setupLocalDefaultUser(session);
+    }
+
     updateSession(session);
 
     const options = getClientOptions(session);
@@ -140,7 +153,9 @@ export default function(
   async function updateSession(session: Express.Session) {
     if (session.userId) {
       const account = await getAccount(session.userId);
-      updateSessionAccountFeatures(session, account.accountStatus);
+      if (account) {
+        updateSessionAccountFeatures(session, account.accountStatus);
+      }
     }
   }
 
@@ -213,21 +228,24 @@ export default function(
   startNewsUpdates(app);
 }
 
-async function setupLocalDefaultUser(session: Express.Session, res: Res) {
+async function setupLocalDefaultUser(session: Express.Session) {
+  let accountStatus = AccountStatus.None;
   if (defaultAccountLevel === "accountsync") {
     session.hasStorage = true;
+    accountStatus = AccountStatus.Pledge;
   }
 
   if (defaultAccountLevel === "epicinitiative") {
     session.hasStorage = true;
     session.hasEpicInitiative = true;
+    accountStatus = AccountStatus.Epic;
   }
 
   session.isLoggedIn = true;
 
   const user = await upsertUser(
     process.env.DEFAULT_PATREON_ID || "defaultPatreonId",
-    "pledge",
+    accountStatus,
     ""
   );
 
@@ -235,5 +253,5 @@ async function setupLocalDefaultUser(session: Express.Session, res: Res) {
     session.userId = user._id;
   }
 
-  return res.render("landing", getClientOptions(session));
+  return;
 }

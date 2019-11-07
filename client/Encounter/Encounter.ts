@@ -11,7 +11,10 @@ import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState"
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
-import { GetOrRollMaximumHP } from "../Combatant/GetOrRollMaximumHP";
+import {
+  GetOrRollMaximumHP,
+  VariantMaximumHP
+} from "../Combatant/GetOrRollMaximumHP";
 import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
 import { env } from "../Environment";
 import {
@@ -31,7 +34,7 @@ import { EncounterFlow } from "./EncounterFlow";
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
 
-  private lastVisibleActiveCombatantId = null;
+  private lastVisibleActiveCombatantId: string | null = null;
 
   constructor(
     private playerViewClient: PlayerViewClient,
@@ -163,11 +166,15 @@ export class Encounter {
     return combatant;
   };
 
-  public AddCombatantFromStatBlock = (statBlockJson: {}, hideOnAdd = false) => {
+  public AddCombatantFromStatBlock = (
+    statBlockJson: {},
+    hideOnAdd = false,
+    variantMaximumHP: VariantMaximumHP = VariantMaximumHP.DEFAULT
+  ) => {
     const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
     statBlock.HP = {
       ...statBlock.HP,
-      Value: GetOrRollMaximumHP(statBlock)
+      Value: GetOrRollMaximumHP(statBlock, variantMaximumHP)
     };
 
     const initialState: CombatantState = {
@@ -183,7 +190,7 @@ export class Encounter {
       Tags: [],
       RoundCounter: 0,
       ElapsedSeconds: 0,
-      InterfaceVersion: process.env.VERSION
+      InterfaceVersion: process.env.VERSION || "unknown"
     };
 
     const combatant = this.AddCombatantFromState(initialState);
@@ -201,7 +208,7 @@ export class Encounter {
     persistentCharacter: PersistentCharacter,
     library: PersistentCharacterUpdater,
     hideOnAdd = false
-  ): Combatant {
+  ): Combatant | null {
     if (!this.CanAddCombatant(persistentCharacter.Id)) {
       return null;
     }
@@ -350,7 +357,10 @@ export class Encounter {
     encounterState: EncounterState<CombatantState>,
     persistentCharacterLibrary: PersistentCharacterLibrary
   ) => {
-    const savedEncounterIsActive = !!encounterState.ActiveCombatantId;
+    let activeCombatant = _.find(
+      this.combatants(),
+      c => c.Id == encounterState.ActiveCombatantId
+    );
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,
       c => c.IndexLabel
@@ -362,7 +372,7 @@ export class Encounter {
 
       const combatant = this.AddCombatantFromState(savedCombatant);
 
-      if (combatant.PersistentCharacterId) {
+      if (combatant.PersistentCharacterId !== null) {
         const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(
           combatant.PersistentCharacterId
         );
@@ -375,13 +385,9 @@ export class Encounter {
       }
     });
 
-    if (savedEncounterIsActive) {
+    if (activeCombatant !== undefined) {
       this.EncounterFlow.State("active");
-      this.EncounterFlow.ActiveCombatant(
-        this.combatants()
-          .filter(c => c.Id == encounterState.ActiveCombatantId)
-          .pop()
-      );
+      this.EncounterFlow.ActiveCombatant(activeCombatant);
       this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
       this.EncounterFlow.CombatTimer.Start();
@@ -417,21 +423,21 @@ export class Encounter {
     return this.lastVisibleActiveCombatantId;
   }
 
-  private getCombatantsForPlayerView(activeCombatantId: string) {
+  private getCombatantsForPlayerView(activeCombatantId: string | null) {
     const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
       .HideMonstersOutsideEncounter;
 
-    const combatants = this.combatants();
+    const combatants = this.combatants().slice();
 
     const activeCombatantOnTop = CurrentSettings().PlayerView
       .ActiveCombatantOnTop;
-    if (activeCombatantOnTop && activeCombatantId && combatants.length) {
+    if (activeCombatantOnTop && activeCombatantId && combatants.length > 0) {
       let combatantsMoved = 0;
       while (
         combatants[0].Id != activeCombatantId &&
         combatantsMoved < combatants.length //prevent infinite loop in case we can't find active combatant
       ) {
-        combatants.push(combatants.shift());
+        combatants.push(combatants.shift() as Combatant);
         combatantsMoved++;
       }
     }

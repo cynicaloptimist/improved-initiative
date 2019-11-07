@@ -33,6 +33,9 @@ export default function(app: express.Application) {
 
     return DB.getAccount(req.session.userId)
       .then(account => {
+        if (!account) {
+          return res.sendStatus(404);
+        }
         if (req.session && account.accountStatus) {
           updateSessionAccountFeatures(req.session, account.accountStatus);
         }
@@ -140,12 +143,17 @@ function configureEntityRoute<T extends Listable>(
         return res.status(500).send(err);
       }
     } else if (req.body.length) {
-      return DB.saveEntitySet<T>(route, req.session.userId, req.body, () => {
+      const saved = await DB.saveEntitySet<T>(
+        route,
+        req.session.userId,
+        req.body
+      );
+      if (saved) {
         return res.sendStatus(201);
-      }).catch(err => {
-        console.error(err);
-        return res.status(500).send(err);
-      });
+      } else {
+        console.error("Could not save items for user: " + req.session.userId);
+        return res.sendStatus(500).send();
+      }
     } else {
       return res.status(400).send("Missing Version");
     }

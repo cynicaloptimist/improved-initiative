@@ -5,6 +5,7 @@ function transferLocalStorageToCanonicalUrl(canonicalUrl: string) {
     "localstorage-transfer-target"
   ) as HTMLIFrameElement;
   iframe.onload = () =>
+    iframe.contentWindow &&
     iframe.contentWindow.postMessage(
       { transferredLocalStorage: JSON.stringify(localStorage) },
       "*"

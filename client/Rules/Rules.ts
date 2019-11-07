@@ -21,14 +21,14 @@ export class DefaultRules implements IRules {
       return _.max([
         Math.ceil(Math.random() * 20) + mod,
         Math.ceil(Math.random() * 20) + mod
-      ]);
+      ]) as number;
     }
 
     if (specialRoll == "disadvantage") {
       return _.min([
         Math.ceil(Math.random() * 20) + mod,
         Math.ceil(Math.random() * 20) + mod
-      ]);
+      ]) as number;
     }
 
     if (specialRoll == "take-ten") {

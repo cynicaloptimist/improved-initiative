@@ -2,13 +2,13 @@ import * as Sentry from "@sentry/browser";
 import { ClientEnvironment } from "../common/ClientEnvironment";
 
 export const env: ClientEnvironment = {
-  EncounterId: null,
+  EncounterId: "",
   PostedEncounter: null,
   HasStorage: false,
   HasEpicInitiative: false,
   IsLoggedIn: false,
   SendMetrics: false,
-  BaseUrl: null,
+  BaseUrl: "",
   PatreonLoginUrl: "http://www.patreon.com/",
   SentryDSN: null
 };
@@ -17,7 +17,7 @@ export function LoadEnvironment() {
   const html = document.getElementsByTagName("html")[0];
 
   const environmentJSON = html.getAttribute("environmentJSON");
-  Object.assign(env, JSON.parse(environmentJSON));
+  Object.assign(env, JSON.parse(environmentJSON || "{}"));
 
   if (env.SentryDSN !== null) {
     Sentry.init({

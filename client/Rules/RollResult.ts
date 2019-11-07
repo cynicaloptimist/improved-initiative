@@ -4,6 +4,9 @@ export class RollResult {
     public Modifier: number,
     public DieSize: number
   ) {}
+  get Maximum(): number {
+    return this.DieSize * this.Rolls.length + this.Modifier;
+  }
   get Total(): number {
     return this.Rolls.reduce((p, c) => c + p, 0) + this.Modifier;
   }

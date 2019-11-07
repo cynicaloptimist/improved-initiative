@@ -2,6 +2,7 @@ import { saveAs } from "browser-filesaver";
 import { forIn } from "lodash";
 import * as React from "react";
 
+import _ = require("lodash");
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
@@ -195,8 +196,11 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localCount = items.filter(
-      c => c.Origin === "localAsync" || c.Origin === "localStorage"
+    const localCount = _.uniqBy(
+      items.filter(
+        c => c.Origin === "localAsync" || c.Origin === "localStorage"
+      ),
+      i => [i.Listing().Path, i.Listing().Name].toString()
     ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;

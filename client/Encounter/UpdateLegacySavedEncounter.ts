@@ -19,7 +19,7 @@ function updateLegacySavedCombatant(savedCombatant: any) {
   }
 }
 
-function getActiveCombatantId(savedEncounter: any): string {
+function getActiveCombatantId(savedEncounter: any): string | null {
   if (savedEncounter.ActiveCombatantId) {
     return savedEncounter.ActiveCombatantId;
   }

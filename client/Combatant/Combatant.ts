@@ -45,7 +45,7 @@ export class Combatant {
     });
   }
   public Id = probablyUniqueString();
-  public PersistentCharacterId = null;
+  public PersistentCharacterId: string | null = null;
   public Alias = ko.observable("");
   public TemporaryHP = ko.observable(0);
   public Tags = ko.observableArray<Tag>();

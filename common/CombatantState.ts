@@ -19,7 +19,7 @@ export interface CombatantState {
   Initiative: number;
   InitiativeGroup?: string;
   Alias: string;
-  IndexLabel: number;
+  IndexLabel: number | null;
   Tags: string[] | TagState[];
   Hidden: boolean;
   RevealedAC: boolean;
