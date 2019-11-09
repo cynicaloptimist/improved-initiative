@@ -11,7 +11,7 @@ import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 
-const animatedCombatantIds = ko.observableArray([]);
+const animatedCombatantIds = ko.observableArray<string>([]);
 
 export class CombatantViewModel {
   public HP: KnockoutComputed<string>;
