@@ -27,7 +27,7 @@
     "@types/mongodb": "^3.1.19",
     "@types/mongodb-memory-server": "^1.8.0",
     "@types/mousetrap": "^1.6.0",
-    "@types/node": "^8.0.34",
+    "@types/node": "^12.12.7",
     "@types/react": "^16.9.5",
     "@types/react-color": "^2.13.4",
     "@types/react-dom": "^16.0.5",
