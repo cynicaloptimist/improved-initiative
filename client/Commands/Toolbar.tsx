@@ -9,71 +9,56 @@ interface ToolbarProps {
   showCombatantCommands: boolean;
 }
 
-interface ToolbarState {
-  widthStyle: string;
-}
+export function Toolbar(props: ToolbarProps) {
+  const [widthStyle, setWidthStyle] = React.useState<string>("auto");
 
-export class Toolbar extends React.Component<ToolbarProps, ToolbarState> {
-  private innerElement: HTMLDivElement;
-  private outerElement: HTMLDivElement;
+  let outerElement = React.useRef<HTMLDivElement>(null);
+  let innerElement = React.useRef<HTMLDivElement>(null);
 
-  constructor(props: ToolbarProps) {
-    super(props);
-    this.state = {
-      widthStyle: null
-    };
-  }
-
-  public componentDidMount() {
+  React.useEffect(() => {
+    if (!outerElement.current || !innerElement.current) {
+      return;
+    }
+    //Force the scrollbar out of view
     const width =
-      this.outerElement.offsetWidth +
-      this.innerElement.offsetWidth -
-      this.innerElement.clientWidth;
-    this.setState({ widthStyle: width.toString() + "px" });
-  }
+      outerElement.current.offsetWidth +
+      innerElement.current.offsetWidth -
+      innerElement.current.clientWidth;
+    setWidthStyle(width.toString() + "px");
+  });
 
-  public render() {
-    const className = `c-toolbar s-${this.props.width}`;
-    const commandButtonTooltip = (c: Command) => {
-      if (c.KeyBinding) {
-        return `${c.Description} [${c.KeyBinding}]`;
-      } else {
-        return c.Description;
-      }
-    };
-    const commandToButton = (c: Command) => (
-      <Button
-        additionalClassNames={"c-button--" + c.Id}
-        key={c.Description}
-        tooltip={commandButtonTooltip(c)}
-        onClick={c.ActionBinding}
-        fontAwesomeIcon={c.FontAwesomeIcon}
-        text={this.props.width == "wide" ? c.Description : null}
-      />
-    );
-    const encounterCommandButtons = this.props.encounterCommands.map(
-      commandToButton
-    );
-    const combatantCommandButtons = this.props.combatantCommands.map(
-      commandToButton
-    );
+  const className = `c-toolbar s-${props.width}`;
+  const commandButtonTooltip = (c: Command) => {
+    if (c.KeyBinding) {
+      return `${c.Description} [${c.KeyBinding}]`;
+    } else {
+      return c.Description;
+    }
+  };
+  const commandToButton = (c: Command) => (
+    <Button
+      additionalClassNames={"c-button--" + c.Id}
+      key={c.Description}
+      tooltip={commandButtonTooltip(c)}
+      onClick={c.ActionBinding}
+      fontAwesomeIcon={c.FontAwesomeIcon}
+      text={props.width == "wide" ? c.Description : ""}
+    />
+  );
+  const encounterCommandButtons = props.encounterCommands.map(commandToButton);
+  const combatantCommandButtons = props.combatantCommands.map(commandToButton);
 
-    const style =
-      this.props.width == "narrow" ? { width: this.state.widthStyle } : null;
+  const style: React.CSSProperties =
+    props.width == "narrow" ? { width: widthStyle } : {};
 
-    return (
-      <div className={className} ref={e => (this.outerElement = e)}>
-        <div
-          className="scrollframe"
-          ref={e => (this.innerElement = e)}
-          style={style}
-        >
-          <div className="commands-encounter">{encounterCommandButtons}</div>
-          {this.props.showCombatantCommands && (
-            <div className="commands-combatant">{combatantCommandButtons}</div>
-          )}
-        </div>
+  return (
+    <div className={className} ref={outerElement}>
+      <div className="scrollframe" ref={innerElement} style={style}>
+        <div className="commands-encounter">{encounterCommandButtons}</div>
+        {props.showCombatantCommands && (
+          <div className="commands-combatant">{combatantCommandButtons}</div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 }
