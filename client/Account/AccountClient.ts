@@ -192,7 +192,7 @@ async function getUnsyncedItems(items: Listing<Listable>[]) {
           Id: listing.Listing().Id,
           Name: listing.Listing().Name,
           Path: listing.Listing().Path,
-          Version: process.env.VERSION
+          Version: process.env.VERSION || "unknown"
         })
     )
   );
