@@ -69,6 +69,7 @@ export class Combatant {
     }
 
     this.setAutoInitiativeGroup();
+    this.AutoPopulateNotes();
     if (oldStatBlock) {
       this.Encounter.Combatants.notifySubscribers();
     }
@@ -310,4 +311,28 @@ export class Combatant {
       .filter(c => c.IsPlayerCharacter() === this.IsPlayerCharacter())
       .sort((a, b) => a.Initiative() - b.Initiative())[0];
   }
+
+  private AutoPopulateNotes = () => {
+    if (this.PersistentCharacterId) {
+      return;
+    }
+
+    let notes = "";
+
+    let spellcasting = this.StatBlock().Traits.find(
+      t => t.Name === "Spellcasting"
+    );
+    if (spellcasting) {
+      notes += "Spellcasting Slots\n";
+      let content = spellcasting.Content;
+      let pattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
+      let match = [];
+      while ((match = pattern.exec(content))) {
+        notes += `${match[1]}${match[2]} Level [${match[3]}/${match[3]}]\n`;
+      }
+    }
+
+    console.log(notes);
+    //this.CurrentNotes(notes);
+  };
 }
