@@ -59,6 +59,9 @@ export class About extends React.Component<AboutProps> {
             onClick={this.props.repeatTutorial}
           />
         </div>
+        <div className="about__version">
+          Version {process.env.VERSION || "unknown"}
+        </div>
       </div>
     );
   }
