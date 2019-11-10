@@ -4,6 +4,7 @@ import { Listable, ListingMetadata, StoredListing } from "../common/Listable";
 
 const sourceAbbreviations = {
   "monster-manual": "mm",
+  "basic-rules": "mm", //kobold fight club looks for basic rules creatures in the monster manual
   "players-handbook": "phb"
 };
 

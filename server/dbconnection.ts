@@ -6,7 +6,7 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { User } from "./user";
+import { AccountStatus, User } from "./user";
 
 let connectionString: string;
 
@@ -26,7 +26,7 @@ export const initialize = async initialConnectionString => {
 
 export async function upsertUser(
   patreonId: string,
-  accountStatus: string,
+  accountStatus: AccountStatus,
   emailAddress: string
 ) {
   if (!connectionString) {
@@ -67,6 +67,9 @@ export async function upsertUser(
 
 export async function getAccount(userId: mongo.ObjectId) {
   const user = await getFullAccount(userId);
+  if (!user) {
+    return null;
+  }
 
   const userWithListings = {
     accountStatus: user.accountStatus,
@@ -98,7 +101,7 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   const user = await users.findOne({ _id: userId });
   if (user === null) {
     client.close();
-    throw `User ${userId} not found.`;
+    return null;
   }
 
   await updatePersistentCharactersIfNeeded(user, users);
@@ -245,6 +248,10 @@ export async function setSettings(userId, settings) {
     throw "No connection string found.";
   }
 
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const client = await new mongo.MongoClient(connectionString).connect();
   const db = client.db();
 
@@ -289,11 +296,11 @@ export async function getEntity(
   client.close();
 
   if (!user) {
-    throw "User not found";
+    return null;
   }
   const entities = user[entityPath];
   if (entities === undefined) {
-    throw `User has no ${entityPath} entities.`;
+    return null;
   }
 
   return entities[entityId];
@@ -375,8 +382,7 @@ export async function saveEntity<T extends Listable>(
 export async function saveEntitySet<T extends Listable>(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
-  entities: T[],
-  callBack: (result: number) => void
+  entities: T[]
 ) {
   if (!connectionString) {
     console.error("No connection string found.");
@@ -398,24 +404,30 @@ export async function saveEntitySet<T extends Listable>(
     userId = new mongo.ObjectId(userId);
   }
 
-  const result = await users.findOne({ _id: userId }).then(u => {
-    if (u == null) {
-      throw "User ID not found: " + userId;
-    }
+  const user = await users.findOne({ _id: userId });
+  if (user == null) {
+    return null;
+  }
 
-    const updatedEntities = u[entityPath] || {};
-    for (const entity of entities) {
-      updatedEntities[entity.Id] = entity;
-    }
-    return users.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          [`${entityPath}`]: updatedEntities
-        }
+  const updatedEntities = user[entityPath] || {};
+  for (const entity of entities) {
+    updatedEntities[entity.Id] = entity;
+  }
+
+  const result = await users.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        [`${entityPath}`]: updatedEntities
       }
-    );
-  });
+    }
+  );
+
   client.close();
-  callBack(result.modifiedCount);
+
+  if (!result) {
+    return 0;
+  }
+
+  return result.matchedCount;
 }

@@ -7,7 +7,15 @@ export const Conditions = {
     <li>A charmed creature can’t Attack the charmer or target the charmer with harmful Abilities or magical effects.</li>
     <li>The charmer has advantage on any ability check to interact socially with the creature.</li>
     </ul>`,
-  Concentrating: ``,
+  Concentrating: `<p>Some spells require you to maintain concentration in order to keep their magic active. If you lose concentration, such a spell ends.</p>
+  <p>If a spell must be maintained with concentration, that fact appears in its Duration entry, and the spell specifies how long you can concentrate on it. You can end concentration at any time (no action required).</p>
+  <p>Normal activity, such as moving and attacking, doesn't interfere with concentration. The following factors can break concentration:</p>
+  <ul>
+  <li><strong>Casting another spell that requires concentration.</strong> You lose concentration on a spell if you cast another spell that requires concentration. You can't concentrate on two spells at once.</li>
+  <li><strong>Taking damage.</strong> Whenever you take damage while you are concentrating on a spell, you must make a Constitution saving throw to maintain your concentration. The DC equals 10 or half the damage you take, whichever number is higher. If you take damage from multiple sources, such as an arrow and a dragon's breath, you make a separate saving throw for each source of damage.</li>
+  <li><strong>Being incapacitated or killed.</strong> You lose concentration on a spell if you are incapacitated or if you die.</li>
+  </ul>
+  <p>The DM might also decide that certain environmental phenomena, such as a wave crashing over you while you're on a storm-tossed ship, require you to succeed on a DC 10 Constitution saving throw to maintain concentration on a spell.</p>`,
   Deafened: `<ul>
     <li>A deafened creature can’t hear and automatically fails any ability check that requires hearing.</li>
     </ul>`,

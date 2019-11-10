@@ -34,8 +34,10 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
         return tag.Text;
       });
 
-    const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
-    const renderedNotes = notes ? this.props.enricher.EnrichText(notes) : null;
+    const notes = this.props.combatantViewModel.Combatant.CurrentNotes;
+    const renderedNotes = notes().length
+      ? this.props.enricher.EnrichText(notes(), notes)
+      : null;
 
     const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
 
@@ -63,7 +65,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
             hideName
           />
         )}
-        {notes && notes.length > 0 && (
+        {renderedNotes && (
           <div className="c-combatant-details__notes">{renderedNotes}</div>
         )}
       </div>

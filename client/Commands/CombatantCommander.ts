@@ -84,7 +84,7 @@ export class CombatantCommander {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
       pendingLink.prompt.Resolve(null);
     }
-    if (!((e && e.ctrlKey) || (e && e.metaKey))) {
+    if (!(e?.ctrlKey || e?.metaKey)) {
       this.selectedCombatantIds.removeAll();
     }
     this.selectedCombatantIds.push(data.Combatant.Id);

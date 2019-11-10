@@ -73,7 +73,7 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
     const hasAccountSync = env.HasStorage;
 
     return (
-      <React.Fragment>
+      <>
         <h2>
           {hasAccountSync && (
             <span className="fas fa-cloud" title="Account Sync is enabled" />
@@ -91,7 +91,7 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
           selected={this.state.selectedLibrary}
         />
         {selectedLibrary}
-      </React.Fragment>
+      </>
     );
   }
 }

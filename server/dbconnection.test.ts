@@ -5,6 +5,7 @@ import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
 import { handleCurrentUser } from "./patreon";
+import { AccountStatus } from "./user";
 
 describe("User Accounts", () => {
   let mongod: MongodbMemoryServer;
@@ -18,7 +19,11 @@ describe("User Accounts", () => {
   }, 60000);
 
   beforeEach(async () => {
-    const user = await DB.upsertUser(probablyUniqueString(), "pledge", "");
+    const user = await DB.upsertUser(
+      probablyUniqueString(),
+      AccountStatus.Pledge,
+      ""
+    );
     userId = user._id;
   });
 

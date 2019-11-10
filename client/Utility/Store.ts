@@ -2,9 +2,6 @@ import * as localforage from "localforage";
 
 import moment = require("moment");
 import { Listable } from "../../common/Listable";
-import { Spell } from "../../common/Spell";
-import { StatBlock } from "../../common/StatBlock";
-import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
@@ -34,8 +31,8 @@ export namespace Store {
     listName: string
   ): Promise<T[]> {
     const store = localforage.createInstance({ name: listName });
-    let items = [];
-    await store.iterate((item: Listable, key) => {
+    let items: T[] = [];
+    await store.iterate((item: T, key) => {
       item.Id = key;
       items.push(item);
     });
@@ -96,7 +93,7 @@ export namespace Store {
 
   async function importList(listName: string, importSource: any) {
     const listings = Object.keys(importSource).filter(k =>
-      k.startsWith(listName)
+      k.startsWith(listName + ".")
     );
     const savePromises = listings.map(async key => {
       const listing = importSource[key];

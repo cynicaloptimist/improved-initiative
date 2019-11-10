@@ -20,50 +20,39 @@ interface AutoHideFieldProps {
   children: React.ReactNode;
 }
 
-interface AutoHideFieldState {
-  isExpanded: boolean;
-}
-
-export class InnerAutoHideField extends React.Component<
-  AutoHideFieldProps & {
+export function InnerAutoHideField(
+  props: AutoHideFieldProps & {
     fieldApi: FieldProps;
-  },
-  AutoHideFieldState
-> {
-  constructor(props) {
-    super(props);
-    const isExpanded =
-      this.props.fieldApi.form.values[this.props.fieldName] &&
-      this.props.fieldApi.form.values[this.props.fieldName].length > 0;
-    this.state = {
-      isExpanded
-    };
   }
+) {
+  const defaultExpandedState =
+    props.fieldApi.form.values[props.fieldName] &&
+    props.fieldApi.form.values[props.fieldName].length > 0;
 
-  public render() {
-    if (this.state.isExpanded) {
-      return (
-        <div className="autohide-field inline">
-          <span
-            className="autohide-field__drop-button fa-clickable fa-times"
-            onClick={() => {
-              this.setState({ isExpanded: false });
-              this.props.fieldApi.form.setFieldValue(this.props.fieldName, "");
-            }}
-          />
-          <div className="autohide-field__children">{this.props.children}</div>
-        </div>
-      );
-    } else {
-      return (
+  const [isExpanded, setIsExpanded] = React.useState(defaultExpandedState);
+
+  if (isExpanded) {
+    return (
+      <div className="autohide-field inline">
         <span
-          className={`autohide-field__open-button fa-clickable fa-${
-            this.props.faClass
-          }`}
-          title={this.props.tooltip}
-          onClick={() => this.setState({ isExpanded: true })}
+          className="autohide-field__drop-button fa-clickable fa-times"
+          onClick={() => {
+            setIsExpanded(false);
+            props.fieldApi.form.setFieldValue(props.fieldName, "");
+          }}
         />
-      );
-    }
+        <div className="autohide-field__children">{props.children}</div>
+      </div>
+    );
+  } else {
+    return (
+      <span
+        className={`autohide-field__open-button fa-clickable fa-${
+          props.faClass
+        }`}
+        title={props.tooltip}
+        onClick={() => setIsExpanded(true)}
+      />
+    );
   }
 }

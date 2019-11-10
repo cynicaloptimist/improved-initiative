@@ -10,14 +10,24 @@ export interface TutorialStep {
   CalculatePosition: (element: JQuery) => Position;
 }
 
+function getLocation(element: JQuery<HTMLElement>) {
+  const offset = element.offset() || { left: 0, top: 0 };
+  return {
+    ...offset,
+    width: element.outerWidth() || 0,
+    height: element.outerHeight() || 0
+  };
+}
+
 export const TutorialSteps: TutorialStep[] = [
   {
     Message:
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
     RaiseSelector: ".left-column, .prompt, .combatants",
     CalculatePosition: elements => {
-      const left = elements.offset().left + elements.outerWidth() + 10;
-      const top = elements.offset().top + 200;
+      const location = getLocation(elements);
+      const left = location.left + location.width + 10;
+      const top = location.top + 200;
       return { left, top };
     }
   },
@@ -28,8 +38,9 @@ export const TutorialSteps: TutorialStep[] = [
     AwaitAction: "SelectCharactersTab",
     CalculatePosition: elements => {
       const element = elements.last();
-      const left = element.offset().left + element.outerWidth() + 10;
-      const top = element.offset().top + 5;
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
       return { left, top };
     }
   },
@@ -38,8 +49,9 @@ export const TutorialSteps: TutorialStep[] = [
       "It's easy to add your own player characters to Improved Initiative. For now, <strong>add a few sample characters</strong>.",
     RaiseSelector: ".left-column, .combatants",
     CalculatePosition: elements => {
-      const left = elements.offset().left + elements.outerWidth() + 10;
-      const top = elements.offset().top + 200;
+      const location = getLocation(elements);
+      const left = location.left + location.width + 10;
+      const top = location.top + 200;
       return { left, top };
     }
   },
@@ -50,8 +62,9 @@ export const TutorialSteps: TutorialStep[] = [
     AwaitAction: "ShowInitiativeDialog",
     CalculatePosition: elements => {
       const element = elements.last();
-      const left = element.offset().left + element.outerWidth() + 10;
-      const top = element.offset().top + 5;
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
       return { left, top };
     }
   },
@@ -62,8 +75,9 @@ export const TutorialSteps: TutorialStep[] = [
     AwaitAction: "CompleteInitiativeRolls",
     CalculatePosition: elements => {
       const element = elements.add(".combat-footer").first();
-      const left = element.offset().left;
-      const top = element.offset().top - ($(".tutorial").outerHeight() + 10);
+      const location = getLocation(element);
+      const left = location.left;
+      const top = location.top - ($(".tutorial").outerHeight() || 0 + 10);
       return { left, top };
     }
   },
@@ -73,8 +87,9 @@ export const TutorialSteps: TutorialStep[] = [
     RaiseSelector: ".combatants, .right-column",
     CalculatePosition: elements => {
       const element = elements.first();
-      const left = element.offset().left + 5;
-      const top = element.offset().top + element.outerHeight() + 10;
+      const location = getLocation(element);
+      const left = location.left + 5;
+      const top = location.top + location.height + 10;
       return { left, top };
     }
   },
@@ -85,8 +100,9 @@ export const TutorialSteps: TutorialStep[] = [
     AwaitAction: "ApplyDamage",
     CalculatePosition: elements => {
       const element = elements.first();
-      const left = element.offset().left + element.outerWidth() + 10;
-      const top = element.offset().top + 5;
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
       return { left, top };
     }
   },
@@ -95,8 +111,8 @@ export const TutorialSteps: TutorialStep[] = [
         RaiseSelector: ".c-button--next-turn, .left-column, .combatants",
         CalculatePosition: elements => {
             const element = elements.first();
-            const left = element.offset().left + element.outerWidth() + 10;
-            const top = element.offset().top + 5;
+            const left = location.left + element.outerWidth() + 10;
+            const top = location.top + 5;
             return { left, top };
         }
     },*/
@@ -107,8 +123,9 @@ export const TutorialSteps: TutorialStep[] = [
     AwaitAction: "ShowSettings",
     CalculatePosition: elements => {
       const element = elements.last();
-      const left = element.offset().left + element.outerWidth() + 10;
-      const top = element.offset().top + 5;
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
       return { left, top };
     }
   }

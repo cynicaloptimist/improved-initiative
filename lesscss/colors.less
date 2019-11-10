@@ -1,5 +1,5 @@
 @primary-green: #00643c;
-@hover-green: lighten(@primary-green, 75);
+@hover-green: lighten(@primary-green, 20);
 @active-green: lighten(@primary-green, 15);
 @accent-green: darken(@primary-green, 5);
 
@@ -42,9 +42,10 @@
 }
 
 .green-button() {
-  .colors(@primary-black, @button-face-green, @shadow);
+  .colors(@primary-white, @button-face-green, @shadow);
 
   &:hover {
+    color: @primary-white;
     background-color: @hover-green;
   }
 }

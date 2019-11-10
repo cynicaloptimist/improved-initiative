@@ -119,10 +119,14 @@ export class TrackerViewModel {
 
   public Encounter = new Encounter(
     this.playerViewClient,
-    combatantId =>
-      this.OrderedCombatants()
-        .find((c: CombatantViewModel) => c.Combatant.Id == combatantId)
-        .EditInitiative(),
+    combatantId => {
+      const combatant = this.OrderedCombatants().find(
+        (c: CombatantViewModel) => c.Combatant.Id == combatantId
+      );
+      if (combatant) {
+        combatant.EditInitiative();
+      }
+    },
     this.Rules
   );
 
@@ -146,6 +150,9 @@ export class TrackerViewModel {
       this.OrderedCombatants(),
       c => c.Combatant == activeCombatant
     );
+    if (!combatantViewModel) {
+      return null;
+    }
     return (
       <CombatantDetails
         combatantViewModel={combatantViewModel}
@@ -237,13 +244,16 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
-    if (!env.ImportedCompressedStatBlockJSON) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const compressedStatBlockJSON = urlParams.get("s");
+    if (!compressedStatBlockJSON) {
       return;
     }
 
+    window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
 
-    codec.decompress(env.ImportedCompressedStatBlockJSON).then(json => {
+    codec.decompress(compressedStatBlockJSON).then(json => {
       const parsedStatBlock = ParseJSONOrDefault(json, {});
       const statBlock: StatBlock = {
         ...StatBlock.Default(),

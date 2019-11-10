@@ -136,7 +136,7 @@ export class AccountClient {
   }
 
   public static MakeId(name: string, path?: string) {
-    if (path && path.length) {
+    if (path?.length) {
       return this.SanitizeForId(path) + "-" + this.SanitizeForId(name);
     } else {
       return this.SanitizeForId(name);
@@ -192,7 +192,7 @@ async function getUnsyncedItems(items: Listing<Listable>[]) {
           Id: listing.Listing().Id,
           Name: listing.Listing().Name,
           Path: listing.Listing().Path,
-          Version: process.env.VERSION
+          Version: process.env.VERSION || "unknown"
         })
     )
   );
@@ -226,27 +226,20 @@ async function saveEntitySet<Listable>(
     return;
   }
 
-  const uploadByBatch = (remaining: Listable[]) => {
-    const batch = remaining.slice(0, batchSize);
-    return $.ajax({
-      type: "POST",
-      url: `/my/${entityType}/`,
-      data: JSON.stringify(batch),
-      contentType: "application/json",
-      error: (e, text) => messageCallback(text)
-    }).then(r => {
-      messageCallback(
-        `Syncing, ${remaining.length} ${entityType} remaining...`
-      );
-      const next = remaining.slice(DEFAULT_BATCH_SIZE);
-      if (!next.length) {
-        return r;
-      }
-      return uploadByBatch(next);
-    });
-  };
-
-  return uploadByBatch(entitySet);
+  for (let cursor = 0; cursor < entitySet.length; cursor += batchSize) {
+    const batch = entitySet.slice(cursor, cursor + batchSize);
+    try {
+      await $.ajax({
+        type: "POST",
+        url: `/my/${entityType}/`,
+        data: JSON.stringify(batch),
+        contentType: "application/json"
+      });
+      messageCallback(`Syncing ${cursor}/${entitySet.length} ${entityType}`);
+    } catch (err) {
+      messageCallback(err);
+    }
+  }
 }
 
 function deleteEntity(entityId: string, entityType: string) {

@@ -25,7 +25,7 @@ export function ToPlayerViewCombatantState(
           DurationCombatantId: t.DurationCombatantId
         };
       }),
-    ImageURL: sendImage && combatant.StatBlock().ImageURL,
+    ImageURL: sendImage ? combatant.StatBlock().ImageURL : "",
     AC: combatant.RevealedAC() ? combatant.StatBlock().AC.Value : undefined
   };
 }

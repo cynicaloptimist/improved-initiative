@@ -1,40 +1,34 @@
-import { Field } from "formik";
+import { ArrayHelpers, Field } from "formik";
 import * as React from "react";
+import { useDrag } from "react-dnd";
+import { useFocusIfEmpty } from "./useFocus";
 
 interface KeywordFieldProps {
-  remove: (index: number) => void;
+  arrayHelpers: ArrayHelpers;
   keywordType: string;
   index: number;
 }
 
-interface KeywordFieldState {}
+export function KeywordField(props: KeywordFieldProps) {
+  const nameInput = useFocusIfEmpty();
 
-export class KeywordField extends React.Component<
-  KeywordFieldProps,
-  KeywordFieldState
-> {
-  private nameInput: HTMLInputElement;
+  const [, drag, preview] = useDrag({
+    item: { index: props.index, type: props.keywordType }
+  });
 
-  public componentDidMount() {
-    if (this.nameInput.value == "") {
-      this.nameInput.focus();
-    }
-  }
-
-  public render() {
-    return (
-      <div className="inline">
-        <Field
-          type="text"
-          className="name"
-          name={`${this.props.keywordType}[${this.props.index}]`}
-          innerRef={f => (this.nameInput = f)}
-        />
-        <span
-          className="fa-clickable fa-trash"
-          onClick={() => this.props.remove(this.props.index)}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="inline" ref={preview}>
+      <div className="grab-handle fas fa-grip-horizontal" ref={drag} />
+      <Field
+        type="text"
+        className="name"
+        name={`${props.keywordType}[${props.index}]`}
+        innerRef={nameInput}
+      />
+      <span
+        className="fa-clickable fa-trash"
+        onClick={() => props.arrayHelpers.remove(props.index)}
+      />
+    </div>
+  );
 }

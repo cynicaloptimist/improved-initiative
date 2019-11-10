@@ -9,7 +9,7 @@ export class CustomStyles extends React.Component<{
 }> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <style
           dangerouslySetInnerHTML={{
             __html: CSSFrom(
@@ -19,7 +19,7 @@ export class CustomStyles extends React.Component<{
           }}
         />
         <style dangerouslySetInnerHTML={{ __html: this.props.CustomCSS }} />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -19,6 +19,9 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         <Toggle fieldName="Rules.RollMonsterHp">
           Roll HP when adding combatant from statblock
         </Toggle>
+        <Toggle fieldName="Rules.EnableBossAndMinionHP">
+          Choose maximum or minimum HP when adding combatant from statblock
+        </Toggle>
         <Toggle fieldName="Rules.AllowNegativeHP">
           Allow combatants to have negative hit points
         </Toggle>

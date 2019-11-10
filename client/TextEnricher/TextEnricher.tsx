@@ -13,6 +13,7 @@ import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
+import { Counter, CounterOrBracketedText } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -56,7 +57,22 @@ export class TextEnricher {
     );
   };
 
-  public EnrichText = (text: string, name = "") => {
+  public EnrichText = (
+    text: string,
+    updateTextSource?: (newText: string) => void
+  ) => {
+    const replacer = this.buildReactReplacer();
+
+    const renderers = {
+      text: props => replacer(props.children),
+      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
+      linkReference: CounterOrBracketedText(text, updateTextSource)
+    };
+
+    return <Markdown source={text} renderers={renderers} rawSourcePos />;
+  };
+
+  private buildReactReplacer() {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -96,12 +112,6 @@ export class TextEnricher {
       }
     };
 
-    const replacer = ReactReplace(replaceConfig);
-
-    const renderers = {
-      text: props => replacer(props.children)
-    };
-
-    return <Markdown source={text} renderers={renderers} />;
-  };
+    return ReactReplace(replaceConfig);
+  }
 }

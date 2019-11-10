@@ -26,10 +26,11 @@ $(async () => {
 
   if ($("#playerview").length) {
     let encounterId = env.EncounterId;
-    const playerView = new ReactPlayerView(
-      document.getElementById("playerview__container"),
-      encounterId
-    );
+    const container = document.getElementById("playerview__container");
+    if (!container) {
+      throw "#playerview__container not found";
+    }
+    const playerView = new ReactPlayerView(container, encounterId);
     playerView.LoadEncounterFromServer();
     playerView.ConnectToSocket(io());
   }

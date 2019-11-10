@@ -12,12 +12,12 @@ import { EnumToggle } from "./EnumToggle";
 import { IdentityFields } from "./components/IdentityFields";
 import {
   abilityScoreField,
-  descriptionField,
   getAnonymizedStatBlockJSON,
-  keywordFields,
-  nameAndModifierFields,
-  powerFields,
+  DescriptionField,
   InitiativeField,
+  KeywordFields,
+  NameAndModifierFields,
+  PowerFields,
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
@@ -68,13 +68,13 @@ export class StatBlockEditor extends React.Component<
       }[this.props.editorTarget] || "Edit StatBlock";
 
     const buttons = (
-      <React.Fragment>
+      <>
         <Button onClick={this.close} fontAwesomeIcon="times" />
         {this.props.onDelete && (
           <Button onClick={this.delete} fontAwesomeIcon="trash" />
         )}
         <SubmitButton faClass="save" />
-      </React.Fragment>
+      </>
     );
 
     const initialValues = {
@@ -122,7 +122,7 @@ export class StatBlockEditor extends React.Component<
   }
 
   private fieldEditor = (api: FormikProps<any>) => (
-    <React.Fragment>
+    <>
       <div className="c-statblock-editor__headers">
         <TextField label="Portrait URL" fieldName="ImageURL" />
         <TextField label="Source" fieldName="Source" />
@@ -152,10 +152,10 @@ export class StatBlockEditor extends React.Component<
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndModifierFields(api, "Saves")}
+        <NameAndModifierFields api={api} modifierType="Saves" />
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndModifierFields(api, "Skills")}
+        <NameAndModifierFields api={api} modifierType="Skills" />
       </div>
       {[
         "Speed",
@@ -167,18 +167,18 @@ export class StatBlockEditor extends React.Component<
         "Languages"
       ].map(keywordType => (
         <div key={keywordType} className="c-statblock-editor__keywords">
-          {keywordFields(api, keywordType)}
+          <KeywordFields api={api} keywordType={keywordType} />
         </div>
       ))}
       {["Traits", "Actions", "Reactions", "LegendaryActions"].map(powerType => (
         <div key={powerType} className="c-statblock-editor__powers">
-          {powerFields(api, powerType)}
+          <PowerFields api={api} powerType={powerType} />
         </div>
       ))}
       <div className="c-statblock-editor__description">
-        {descriptionField()}
+        <DescriptionField />
       </div>
-    </React.Fragment>
+    </>
   );
 
   private jsonEditor = api => (
@@ -224,7 +224,7 @@ export class StatBlockEditor extends React.Component<
       Id: submittedStatBlock.Id,
       Name: submittedStatBlock.Name,
       Path: submittedStatBlock.Path,
-      Version: process.env.VERSION
+      Version: process.env.VERSION || "unknown"
     };
 
     ConvertStringsToNumbersWhereNeeded(editedStatBlock);
@@ -247,7 +247,10 @@ export class StatBlockEditor extends React.Component<
   };
 
   private delete = () => {
-    if (confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)) {
+    if (
+      this.props.onDelete &&
+      confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)
+    ) {
       this.props.onDelete();
       this.props.onClose();
     }
@@ -255,6 +258,7 @@ export class StatBlockEditor extends React.Component<
 
   private willOverwriteStatBlock = _.memoize(
     (path: string, name: string) =>
+      this.props.currentListings &&
       this.props.currentListings.some(
         l => l.Listing().Path == path && l.Listing().Name == name
       ),

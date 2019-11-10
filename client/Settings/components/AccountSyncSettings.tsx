@@ -2,6 +2,7 @@ import { saveAs } from "browser-filesaver";
 import { forIn } from "lodash";
 import * as React from "react";
 
+import _ = require("lodash");
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
@@ -43,7 +44,7 @@ export class AccountSyncSettings extends React.Component<
     }
 
     return (
-      <React.Fragment>
+      <>
         <h3>Account Sync</h3>
         <p>Account Sync is enabled.</p>
         <div className="sync-counts">
@@ -85,13 +86,13 @@ export class AccountSyncSettings extends React.Component<
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private loginMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
           Log in with Patreon to access patron benefits. Account Sync allows you
           to access your custom statblocks and encounters from anywhere!
@@ -99,13 +100,13 @@ export class AccountSyncSettings extends React.Component<
         <a className="login button" href={env.PatreonLoginUrl}>
           Log In with Patreon
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private noSyncMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
           {"You're logged in with Patreon, but you have not selected the "}
           <a
@@ -119,7 +120,7 @@ export class AccountSyncSettings extends React.Component<
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -195,8 +196,11 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localCount = items.filter(
-      c => c.Origin === "localAsync" || c.Origin === "localStorage"
+    const localCount = _.uniqBy(
+      items.filter(
+        c => c.Origin === "localAsync" || c.Origin === "localStorage"
+      ),
+      i => [i.Listing().Path, i.Listing().Name].toString()
     ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;

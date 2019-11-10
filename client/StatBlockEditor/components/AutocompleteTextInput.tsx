@@ -9,9 +9,12 @@ class InnerAwesomeplete extends React.Component<{
   fieldProps: FieldProps<any>;
   autoFocus?: boolean;
 }> {
-  private inputField: HTMLInputElement;
+  private inputField: HTMLInputElement | null;
 
   public componentDidMount() {
+    if (!this.inputField) {
+      return;
+    }
     const awesomeplete = new Awesomplete(this.inputField, {
       list: this.props.options,
       minChars: 1

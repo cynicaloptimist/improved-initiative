@@ -34,7 +34,7 @@ class SaveEncounterPromptComponent extends React.Component<
   public render() {
     const fieldLabelId = probablyUniqueString();
     return (
-      <React.Fragment>
+      <>
         <div className="p-save-encounter">
           <div className="p-save-encounter__basic">
             <label>
@@ -58,7 +58,7 @@ class SaveEncounterPromptComponent extends React.Component<
           {this.state.advancedPrompt && this.renderAdvanced()}
         </div>
         <SubmitButton />
-      </React.Fragment>
+      </>
     );
   }
 

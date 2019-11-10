@@ -8,10 +8,10 @@ export const BuildEncounterCommandList = (
   [
     new Command(
       "toggle-menu",
-      "Toggle Menu",
+      "Toggle Wide Menu",
       c.ToggleToolbarWidth,
       "alt+m",
-      "bars",
+      "chevron-right",
       true,
       true
     ),
@@ -109,4 +109,4 @@ export const BuildEncounterCommandList = (
       "save"
     ),
     new Command("settings", "Settings", c.ShowSettings, "?", "cog", true, true)
-  ].filter(c => c);
+  ].filter(c => c) as Command[];

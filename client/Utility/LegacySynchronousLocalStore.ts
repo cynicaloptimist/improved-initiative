@@ -21,7 +21,7 @@ export namespace LegacySynchronousLocalStore {
   export const ActionBar = "ActionBar";
 
   export async function MigrateItemsToStore() {
-    const allSaveItemPromises = [];
+    const allSaveItemPromises: Promise<void>[] = [];
     for (const listName of Store.SupportedLists) {
       const allItems = LoadAllAndUpdateIds(listName);
       const saveItemPromises = allItems.map(async item => {
@@ -186,12 +186,15 @@ export namespace LegacySynchronousLocalStore {
     importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
   }
 
-  const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-  const load = key => {
+  function save(key: string, value: any) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function load(key: string) {
     let value = localStorage.getItem(key);
-    if (value === "undefined") {
+    if (value === "undefined" || value == null) {
       return null;
     }
     return JSON.parse(value);
-  };
+  }
 }

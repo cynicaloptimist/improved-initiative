@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
 import { TipCarousel } from "./TipCarousel";
 
@@ -51,12 +52,12 @@ export class About extends React.Component<AboutProps> {
           >
             Review Privacy Policy
           </span>
-          <span
-            className="button repeat-tutorial"
+          <Button
+            additionalClassNames="repeat-tutorial"
+            fontAwesomeIcon="hat-wizard"
+            text="Repeat Tutorial"
             onClick={this.props.repeatTutorial}
-          >
-            Repeat Tutorial
-          </span>
+          />
         </div>
       </div>
     );

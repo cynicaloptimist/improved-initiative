@@ -25,6 +25,32 @@ function TestPlayerViewManagerImplementation(
       const isAvailable = await playerViewManager.IdAvailable("someId");
       expect(isAvailable).toBe(true);
     });
+
+    it("Should show initialized views as unavailable", async () => {
+      const playerViewManager = makePlayerViewManager();
+      const playerViewId = await playerViewManager.InitializeNew();
+
+      const isAvailable = await playerViewManager.IdAvailable(playerViewId);
+      expect(isAvailable).toBe(false);
+    });
+
+    it("Should implicitly initialize encounter", async () => {
+      const playerViewManager = makePlayerViewManager();
+      const encounterState = {
+        ...EncounterState.Default(),
+        RoundCounter: 3
+      };
+      await playerViewManager.UpdateEncounter("someId", encounterState);
+
+      const isAvailable = await playerViewManager.IdAvailable("someId");
+      expect(isAvailable).toBe(false);
+
+      const playerView = await playerViewManager.Get("someId");
+      expect(playerView).toEqual({
+        encounterState: encounterState,
+        settings: getDefaultSettings().PlayerView
+      });
+    });
   });
 }
 

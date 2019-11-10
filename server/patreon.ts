@@ -9,6 +9,7 @@ import * as DB from "./dbconnection";
 
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
+import { AccountStatus } from "./user";
 
 type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
@@ -118,14 +119,17 @@ export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
 
 export function updateSessionAccountFeatures(
   session: Express.Session,
-  standing: string
+  standing: AccountStatus
 ) {
   session.hasStorage = standing == "pledge" || standing == "epic";
   session.hasEpicInitiative = standing == "epic";
   session.isLoggedIn = true;
 }
 
-function getUserAccountLevel(userId: string, rewardIds: string[]) {
+function getUserAccountLevel(
+  userId: string,
+  rewardIds: string[]
+): AccountStatus {
   const hasStorageReward =
     _.intersection(rewardIds, storageRewardIds).length > 0;
 
@@ -139,10 +143,10 @@ function getUserAccountLevel(userId: string, rewardIds: string[]) {
   const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
 
   const standing = hasEpicInitiative
-    ? "epic"
+    ? AccountStatus.Epic
     : hasStorageReward
-    ? "pledge"
-    : "none";
+    ? AccountStatus.Pledge
+    : AccountStatus.None;
 
   return standing;
 }
@@ -241,7 +245,7 @@ async function handleWebhook(req: Req, res: Res) {
       req.header("X-Patreon-Event") == "members:pledge:delete";
 
     const userAccountLevel = isDeletedPledge
-      ? "none"
+      ? AccountStatus.None
       : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
     console.log(
       `Updating account level for ${userEmail} to ${userAccountLevel}`
