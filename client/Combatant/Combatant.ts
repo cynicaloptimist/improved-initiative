@@ -69,7 +69,6 @@ export class Combatant {
     }
 
     this.setAutoInitiativeGroup();
-    this.AutoPopulateNotes();
     if (oldStatBlock) {
       this.Encounter.Combatants.notifySubscribers();
     }
@@ -78,7 +77,7 @@ export class Combatant {
   private processCombatantState(savedCombatant: CombatantState) {
     this.IndexLabel = savedCombatant.IndexLabel || 0;
     this.CurrentHP(savedCombatant.CurrentHP);
-    this.CurrentNotes(savedCombatant.CurrentNotes || "");
+    this.CurrentNotes(savedCombatant.CurrentNotes || this.AutoPopulatedNotes());
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
@@ -311,27 +310,73 @@ export class Combatant {
       .sort((a, b) => a.Initiative() - b.Initiative())[0];
   }
 
-  private AutoPopulateNotes = () => {
+  private AutoPopulatedNotes: () => string = () => {
+    let notes = "";
     if (this.PersistentCharacterId) {
-      return;
+      return notes;
     }
 
-    let notes = "";
+    let match = [];
+    let perDayPattern = /(\d)\/day/gim;
 
     let spellcasting = this.StatBlock().Traits.find(
       t => t.Name === "Spellcasting"
     );
     if (spellcasting) {
-      notes += "Spellcasting Slots\n";
+      notes += "Spellcasting Slots\n\n";
       let content = spellcasting.Content;
-      let pattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
-      let match = [];
-      while ((match = pattern.exec(content))) {
-        notes += `${match[1]}${match[2]} Level [${match[3]}/${match[3]}]\n`;
+
+      let spellPattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
+      while ((match = spellPattern.exec(content))) {
+        notes += `${match[1]}${match[2]} Level [${match[3]}/${match[3]}]\n\n`;
       }
     }
 
-    console.log(notes);
-    //this.CurrentNotes(notes);
+    let innateSpellcasting = this.StatBlock().Traits.find(t =>
+      t.Name.includes("Innate Spellcasting")
+    );
+
+    if (innateSpellcasting) {
+      notes += "Innate Spellcasting Slots\n\n";
+
+      match = perDayPattern.exec(innateSpellcasting.Name);
+      if (match) {
+        notes += `[${match[1]}/${match[1]}]\n\n`;
+      } else {
+        let content = innateSpellcasting.Content;
+
+        while ((match = perDayPattern.exec(content))) {
+          notes += `[${match[1]}/${match[1]}]\n\n`;
+        }
+      }
+    }
+
+    perDayPattern.lastIndex = 0;
+
+    let legendaryResistance = this.StatBlock().Traits.find(t =>
+      t.Name.includes("Legendary Resistance")
+    );
+
+    if (legendaryResistance) {
+      notes += "Legendary Resistance\n\n";
+      match = perDayPattern.exec(legendaryResistance.Name);
+
+      if (match) {
+        notes += `[${match[1]}/${match[1]}]\n\n`;
+      }
+    }
+
+    if (this.StatBlock().LegendaryActions.length > 0) {
+      notes += "Legendary Actions\n\n[3/3]\n\n";
+    }
+
+    this.StatBlock()
+      .Traits.filter(t => t.Name.includes("(Recharge"))
+      .forEach(t => (notes += `${t.Name.replace(/\(.*?\)/, "")} [1/1]\n\n`));
+    this.StatBlock()
+      .Actions.filter(t => t.Name.includes("(Recharge"))
+      .forEach(t => (notes += `${t.Name.replace(/\(.*?\)/, "")} [1/1]\n\n`));
+
+    return notes;
   };
 }
