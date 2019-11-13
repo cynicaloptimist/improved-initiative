@@ -273,6 +273,8 @@ body > .login.button {
     &.s-selected {
       background-color: @primary-red;
       color: @primary-white;
+      min-width: auto;
+      overflow-x: unset;
 
       &:hover {
         background-color: @accent-red;
@@ -286,6 +288,7 @@ body > .login.button {
     border-radius: 0 @border-radius 0 0;
     align-items: center;
     text-align: center;
+    overflow-x: hidden;
 
     &:last-of-type {
       margin-right: 0;
