@@ -152,6 +152,7 @@ function configureEntityRoute<T extends Listable>(
         return res.sendStatus(201);
       } else {
         console.error("Could not save items for user: " + req.session.userId);
+        console.log("post body was: " + JSON.stringify(req.body));
         return res.sendStatus(500).send();
       }
     } else {
