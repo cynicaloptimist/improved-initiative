@@ -77,7 +77,7 @@ export class Combatant {
   private processCombatantState(savedCombatant: CombatantState) {
     this.IndexLabel = savedCombatant.IndexLabel || 0;
     this.CurrentHP(savedCombatant.CurrentHP);
-    this.CurrentNotes(savedCombatant.CurrentNotes || this.AutoPopulatedNotes());
+    this.CurrentNotes(savedCombatant.CurrentNotes || "");
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
@@ -309,70 +309,4 @@ export class Combatant {
       .filter(c => c.IsPlayerCharacter() === this.IsPlayerCharacter())
       .sort((a, b) => a.Initiative() - b.Initiative())[0];
   }
-
-  private AutoPopulatedNotes: () => string = () => {
-    let notes = "";
-    if (this.IsPlayerCharacter()) {
-      return notes;
-    }
-
-    let match = [];
-
-    let spellcasting = this.StatBlock().Traits.find(
-      t => t.Name === "Spellcasting"
-    );
-    if (spellcasting) {
-      notes += "Spellcasting Slots\n\n";
-      let content = spellcasting.Content;
-
-      let spellPattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
-      while ((match = spellPattern.exec(content))) {
-        notes += `${match[1]}${match[2]} Level [${match[3]}/${match[3]}]\n\n`;
-      }
-    }
-
-    let innateSpellcasting = this.StatBlock().Traits.find(
-      t => t.Name === "Innate Spellcasting"
-    );
-
-    if (innateSpellcasting) {
-      notes += "Innate Spellcasting Slots\n\n";
-
-      let content = innateSpellcasting.Content;
-
-      let innatePattern = /(\d)\/day/gim;
-      while ((match = innatePattern.exec(content))) {
-        notes += `[${match[1]}/${match[1]}]\n\n`;
-      }
-    }
-
-    if (this.StatBlock().LegendaryActions.length > 0) {
-      notes += "Legendary Actions [3/3]\n\n";
-    }
-
-    let perDayPattern = /\((\d)\/day\)/gim;
-
-    this.StatBlock()
-      .Traits.filter(t => t.Name.match(perDayPattern))
-      .forEach(
-        t => (notes += `${t.Name.replace(perDayPattern, "[$1/$1]")}\n\n`)
-      );
-
-    perDayPattern.lastIndex = 0;
-
-    this.StatBlock()
-      .Actions.filter(t => t.Name.match(perDayPattern))
-      .forEach(
-        t => (notes += `${t.Name.replace(perDayPattern, "[$1/$1]")}\n\n`)
-      );
-
-    this.StatBlock()
-      .Traits.filter(t => t.Name.includes("(Recharge"))
-      .forEach(t => (notes += `${t.Name.replace(/\(.*?\)/, "")}[1/1]\n\n`));
-    this.StatBlock()
-      .Actions.filter(t => t.Name.includes("(Recharge"))
-      .forEach(t => (notes += `${t.Name.replace(/\(.*?\)/, "")}[1/1]\n\n`));
-
-    return notes.trim();
-  };
 }
