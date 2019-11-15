@@ -42,7 +42,7 @@ describe("getUnsyncedItemsFromListings", () => {
         Id: "item1",
         Name: "Unsynced",
         Path: "",
-        Version: "legacy"
+        Version: "unknown"
       }
     ]);
   });
@@ -59,7 +59,7 @@ describe("getUnsyncedItemsFromListings", () => {
         Id: "item1",
         Name: "Unsynced",
         Path: "",
-        Version: "legacy"
+        Version: "unknown"
       }
     ]);
   });
@@ -85,7 +85,7 @@ describe("getUnsyncedItemsFromListings", () => {
         Id: "item2",
         Name: "Unsynced",
         Path: "",
-        Version: "legacy"
+        Version: "unknown"
       }
     ]);
   });
