@@ -468,10 +468,6 @@ export class Encounter {
 
   private AutoPopulatedNotes(statBlock: StatBlock) {
     let notes = [];
-    //if (this.IsPlayerCharacter()) {
-    //  return notes;
-    //}
-
     let match = [];
 
     let spellcasting = statBlock.Traits.find(t => t.Name === "Spellcasting");
