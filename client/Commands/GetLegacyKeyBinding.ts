@@ -35,11 +35,11 @@ export function GetLegacyKeyBinding(id: string) {
     "Settings"
   );
   const legacyId = LegacyCommandSettingsKeys[id];
-  const commandSetting =
-    settings &&
-    settings.Commands &&
-    _.find(settings.Commands, c => c.Name == legacyId);
-  if (commandSetting && commandSetting.KeyBinding) {
+  const commandSetting = _.find(
+    settings?.Commands || [],
+    c => c.Name == legacyId
+  );
+  if (commandSetting?.KeyBinding) {
     return commandSetting.KeyBinding;
   }
 
