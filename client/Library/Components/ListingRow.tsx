@@ -83,8 +83,7 @@ export class ListingRow<T extends Listable> extends React.Component<
         >
           {countElements}
         </ListingButton>
-        {this.props.extraButtons &&
-          this.props.extraButtons.map((button, index) => (
+        {this.props.extraButtons?.map((button, index) => (
             <ListingButton
               key={index}
               title={button.title}

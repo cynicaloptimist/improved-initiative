@@ -14,7 +14,7 @@ type Res = Express.Response & express.Response;
 const verifyStorage = (
   req: Express.Request
 ): req is { session: Express.Session } => {
-  return req.session && req.session.hasStorage;
+  return req.session?.hasStorage;
 };
 
 const parsePossiblyMalformedIdFromParams = params => {

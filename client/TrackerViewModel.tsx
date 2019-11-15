@@ -522,7 +522,7 @@ export class TrackerViewModel {
   };
 
   private handleAccountSync(account: Account) {
-    if (account.settings && account.settings.Version) {
+    if (account.settings?.Version) {
       const updatedSettings = UpdateSettings(account.settings);
       const allCommands = [
         ...this.EncounterToolbar,
