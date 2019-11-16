@@ -1,5 +1,3 @@
-import { CombatStats } from "./CombatStats";
-
 export interface EncounterState<T> {
   ActiveCombatantId: string | null;
   RoundCounter?: number;
