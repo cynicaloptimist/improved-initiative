@@ -7,6 +7,8 @@ To run, install node.js and run the following in the cloned directory:
 
 `npm install`
 
+`npm build`
+
 `npm start`
 
 Once the Improved Initiative app is running, the ui can be accessed at <http://localhost>
