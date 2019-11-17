@@ -66,6 +66,7 @@ export class LocalDataSettings extends React.Component<{}> {
         } and reload?`
       )
     ) {
+      await Store.DeleteAll();
       await Store.ImportAll(file);
       LegacySynchronousLocalStore.ImportAllAndReplace(file);
       location.reload();
