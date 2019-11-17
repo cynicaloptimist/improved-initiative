@@ -148,7 +148,6 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private downloadAndSaveAllSyncedItems = async () => {
-    const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
     await Promise.all(
