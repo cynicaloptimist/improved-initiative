@@ -1,3 +1,4 @@
+import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
@@ -45,7 +46,7 @@ describe("LegacySynchronousLocalStore", () => {
     expect(item).toEqual({ Label: "SomeValue", Amount: 5 });
   });
 
-  it("Migrates items to the new store", async () => {
+  it("Migrates statblocks to the new store", async () => {
     const statBlock = { ...StatBlock.Default(), Name: "Saved Statblock" };
     LegacySynchronousLocalStore.Save(Store.StatBlocks, statBlock.Id, statBlock);
 
@@ -55,6 +56,19 @@ describe("LegacySynchronousLocalStore", () => {
     expect(migratedStatBlock).toEqual(statBlock);
 
     const legacyListings = LegacySynchronousLocalStore.List(Store.StatBlocks);
+    expect(legacyListings).toEqual([]);
+  });
+
+  it("Migrates spells to the new store", async () => {
+    const spell = { ...Spell.Default(), Name: "Saved Spell" };
+    LegacySynchronousLocalStore.Save(Store.Spells, spell.Id, spell);
+
+    await LegacySynchronousLocalStore.MigrateItemsToStore();
+
+    const migratedSpell = await Store.Load(Store.Spells, spell.Id);
+    expect(migratedSpell).toEqual(spell);
+
+    const legacyListings = LegacySynchronousLocalStore.List(Store.Spells);
     expect(legacyListings).toEqual([]);
   });
 });

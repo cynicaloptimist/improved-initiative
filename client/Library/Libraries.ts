@@ -56,7 +56,7 @@ export class Libraries {
     await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
 
-  private initializeSpells = () => {
+  private initializeSpells = async () => {
     $.ajax("../spells/").done(listings => {
       if (!listings) {
         return;
@@ -64,30 +64,25 @@ export class Libraries {
       return this.Spells.AddListings(listings, "server");
     });
 
-    const localSpells = LegacySynchronousLocalStore.List(
-      LegacySynchronousLocalStore.Spells
-    );
-    const newListings = localSpells.map(id => {
+    const localSpells =  await Store.LoadAllAndUpdateIds(Store.Spells);
+    const newListings = localSpells.map(savedSpell => {
       const spell = {
         ...Spell.Default(),
-        ...LegacySynchronousLocalStore.Load<Spell>(
-          LegacySynchronousLocalStore.Spells,
-          id
-        )
+        ...savedSpell
       };
       const listing = {
-        Id: id,
+        Id: savedSpell.Id,
         Name: spell.Name,
         Path: spell.Path,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: LegacySynchronousLocalStore.Spells,
+        Link: Store.Spells,
         LastUpdateMs: spell.LastUpdateMs || 0
       };
 
       return listing;
     });
 
-    this.Spells.AddListings(newListings, "localStorage");
+    this.Spells.AddListings(newListings, "localAsync");
   };
 }
