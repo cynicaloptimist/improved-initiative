@@ -8,19 +8,16 @@ import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { AccountStatus, User } from "./user";
 
-let connectionString: string;
+let mongoClient: mongo.MongoClient;
 
-export const initialize = async initialConnectionString => {
-  if (!initialConnectionString) {
+export const initialize = async connectionString => {
+  if (!connectionString) {
     console.log("No connection string found.");
     return;
   }
 
-  connectionString = initialConnectionString;
-
-  const client = new mongo.MongoClient(connectionString);
-  await client.connect();
-  client.close();
+  mongoClient = new mongo.MongoClient(connectionString);
+  await mongoClient.connect();
   return;
 };
 
@@ -29,13 +26,12 @@ export async function upsertUser(
   accountStatus: AccountStatus,
   emailAddress: string
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = await db.collection<User>("users");
   const result = await users.findOneAndUpdate(
     {
@@ -61,7 +57,6 @@ export async function upsertUser(
     }
   );
   const user = result.value;
-  client.close();
   return user;
 }
 
@@ -86,12 +81,11 @@ export async function getAccount(userId: mongo.ObjectId) {
 }
 
 export async function getFullAccount(userId: mongo.ObjectId) {
-  if (!connectionString) {
-    throw "No connection string found.";
+  if (!mongoClient) {
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = db.collection<User>("users");
 
   if (typeof userId === "string") {
@@ -100,13 +94,11 @@ export async function getFullAccount(userId: mongo.ObjectId) {
 
   const user = await users.findOne({ _id: userId });
   if (user === null) {
-    client.close();
     return null;
   }
 
   await updatePersistentCharactersIfNeeded(user, users);
-  client.close();
-
+  
   const userAccount = {
     accountStatus: user.accountStatus,
     settings: user.settings,
@@ -120,12 +112,11 @@ export async function getFullAccount(userId: mongo.ObjectId) {
 }
 
 export async function deleteAccount(userId: mongo.ObjectId) {
-  if (!connectionString) {
-    throw "No connection string found.";
+  if (!mongoClient) {
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = db.collection<User>("users");
 
   if (typeof userId === "string") {
@@ -133,7 +124,6 @@ export async function deleteAccount(userId: mongo.ObjectId) {
   }
 
   const result = await users.deleteOne({ _id: userId });
-  client.close();
   return result.deletedCount;
 }
 
@@ -243,21 +233,19 @@ function getPersistentCharacterListings(persistentCharacters: {
 }
 
 export async function setSettings(userId, settings) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
   if (typeof userId === "string") {
     userId = new mongo.ObjectId(userId);
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
   const result = await users.updateOne({ _id: userId }, { $set: { settings } });
-  client.close();
   return result.modifiedCount;
 }
 
@@ -273,12 +261,12 @@ export async function getEntity(
   userId: mongo.ObjectId,
   entityId: string
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  
+  const db = mongoClient.db();
 
   if (typeof userId === "string") {
     userId = new mongo.ObjectId(userId);
@@ -292,8 +280,6 @@ export async function getEntity(
       }
     }
   );
-
-  client.close();
 
   if (!user) {
     return null;
@@ -312,13 +298,12 @@ export async function deleteEntity(
   entityId: string,
   callBack: (result: number) => void
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
 
@@ -336,7 +321,6 @@ export async function deleteEntity(
   );
 
   callBack(result.modifiedCount);
-  client.close();
   return;
 }
 
@@ -345,9 +329,9 @@ export async function saveEntity<T extends Listable>(
   userId: mongo.ObjectId,
   entity: T
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
   if (!entity.Id || !entity.Version) {
@@ -358,8 +342,7 @@ export async function saveEntity<T extends Listable>(
     throw "Entity Id cannot contain .";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   if (typeof userId === "string") {
     userId = new mongo.ObjectId(userId);
@@ -374,8 +357,6 @@ export async function saveEntity<T extends Listable>(
     }
   );
 
-  client.close();
-
   return result.modifiedCount;
 }
 
@@ -384,9 +365,9 @@ export async function saveEntitySet<T extends Listable>(
   userId: mongo.ObjectId,
   entities: T[]
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
   for (const entity of entities) {
@@ -395,8 +376,7 @@ export async function saveEntitySet<T extends Listable>(
     }
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
 
@@ -422,8 +402,6 @@ export async function saveEntitySet<T extends Listable>(
       }
     }
   );
-
-  client.close();
 
   if (!result) {
     return 0;
