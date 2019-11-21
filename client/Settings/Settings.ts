@@ -108,12 +108,7 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
 
   Mousetrap.bind("backspace", e => {
-    if (e.preventDefault) {
-      e.preventDefault();
-    } else {
-      // internet explorer
-      e.returnValue = false;
-    }
+    e.preventDefault();
   });
 
   commands.forEach(command => {
@@ -125,7 +120,10 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
       command.KeyBinding = commandSetting.KeyBinding;
       command.ShowOnActionBar(commandSetting.ShowOnActionBar);
     }
-    Mousetrap.bind(command.KeyBinding, command.ActionBinding);
+    Mousetrap.bind(command.KeyBinding, (e: Event, combo: string) => {
+      e.preventDefault();
+      command.ActionBinding();
+    });
   });
 }
 
