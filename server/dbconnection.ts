@@ -21,6 +21,8 @@ export const initialize = async connectionString => {
   return;
 };
 
+export const close = async () => await mongoClient.close();
+
 export async function upsertUser(
   patreonId: string,
   accountStatus: AccountStatus,
@@ -98,7 +100,7 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   }
 
   await updatePersistentCharactersIfNeeded(user, users);
-  
+
   const userAccount = {
     accountStatus: user.accountStatus,
     settings: user.settings,
@@ -265,7 +267,7 @@ export async function getEntity(
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
   }
-  
+
   const db = mongoClient.db();
 
   if (typeof userId === "string") {
