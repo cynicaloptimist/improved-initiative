@@ -120,7 +120,7 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
       command.KeyBinding = commandSetting.KeyBinding;
       command.ShowOnActionBar(commandSetting.ShowOnActionBar);
     }
-    Mousetrap.bind(command.KeyBinding, (e: Event, combo: string) => {
+    Mousetrap.bind(command.KeyBinding, (e: Event) => {
       e.preventDefault();
       command.ActionBinding();
     });
