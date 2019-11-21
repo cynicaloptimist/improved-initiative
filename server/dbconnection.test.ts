@@ -15,17 +15,23 @@ describe("User Accounts", () => {
   beforeAll(async () => {
     mongod = new MongodbMemoryServer();
     uri = await mongod.getUri();
-    DB.initialize(uri);
   }, 60000);
 
-  beforeEach(async () => {
+  beforeEach(async done => {
+    await DB.initialize(uri);
     const user = await DB.upsertUser(
       probablyUniqueString(),
       AccountStatus.Pledge,
       ""
     );
     userId = user._id;
+    done();
   });
+
+  afterEach(async done => {
+    await DB.close();
+    done();
+  })
 
   afterAll(async () => {
     await mongod.stop();
