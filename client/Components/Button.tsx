@@ -47,7 +47,7 @@ export class Button extends React.Component<ButtonProps> {
       </button>
     );
 
-    if (this.props.tooltipProps) {
+    if (this.props.tooltip) {
       return (
         <Tippy content={this.props.tooltip} {...this.props.tooltipProps}>
           {button}
