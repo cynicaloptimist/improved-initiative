@@ -40,6 +40,11 @@ export function Toolbar(props: ToolbarProps) {
       additionalClassNames={"c-button--" + c.Id}
       key={c.Description}
       tooltip={commandButtonTooltip(c)}
+      tooltipProps={{
+        boundary: "window",
+        placement: "right",
+        flip: false
+      }}
       onClick={c.ActionBinding}
       fontAwesomeIcon={c.FontAwesomeIcon}
       text={props.width == "wide" ? c.Description : ""}

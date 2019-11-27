@@ -1,3 +1,4 @@
+import Tippy, { TippyProps } from "@tippy.js/react";
 import * as React from "react";
 
 export interface ButtonProps {
@@ -8,6 +9,7 @@ export interface ButtonProps {
   fontAwesomeIcon?: string;
   text?: string;
   tooltip?: string;
+  tooltipProps?: Omit<TippyProps, "children" | "content">;
   disabled?: boolean;
 }
 
@@ -33,18 +35,27 @@ export class Button extends React.Component<ButtonProps> {
       <span className={`fas fa-${this.props.fontAwesomeIcon}`} />
     );
 
-    return (
+    const button = (
       <button
         type="button"
         className={classNames.join(" ")}
         onClick={!disabled && this.props.onClick}
         onMouseOver={!disabled && this.props.onMouseOver}
-        title={this.props.tooltip}
       >
         {faElement}
         {text}
       </button>
     );
+
+    if (this.props.tooltipProps) {
+      return (
+        <Tippy content={this.props.tooltip} {...this.props.tooltipProps}>
+          {button}
+        </Tippy>
+      );
+    } else {
+      return button;
+    }
   }
 }
 
