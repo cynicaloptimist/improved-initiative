@@ -55,6 +55,7 @@ export function BeanCounter(props: {
       {_.range(1, props.maximum + 1).map(index => {
         return (
           <i
+            key={index}
             className={
               props.current >= index
                 ? "fa-clickable fa-circle"
