@@ -20,7 +20,7 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           Roll HP when adding combatant from statblock
         </Toggle>
         <Toggle fieldName="Rules.EnableBossAndMinionHP">
-          Choose maximum or minimum HP when adding combatant from statblock
+          Show Boss and Minion buttons in StatBlock Library
         </Toggle>
         <Toggle fieldName="Rules.AllowNegativeHP">
           Allow combatants to have negative hit points
