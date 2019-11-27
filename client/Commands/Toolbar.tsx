@@ -43,7 +43,6 @@ export function Toolbar(props: ToolbarProps) {
       tooltipProps={{
         boundary: "window",
         placement: "right",
-        flip: false,
         delay: 1000
       }}
       onClick={c.ActionBinding}
