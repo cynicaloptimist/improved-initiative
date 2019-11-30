@@ -50,9 +50,11 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         >
           Automatically add creatures to initiative group
           <Info>
-            Creatures in an initiative group will act on the same initiative
-            count. The group keeps its initiative count in sync when you roll or
-            edit initiative, but you can unlink individual members.
+            Creatures in an initiative group will keep the same initiative
+            count. Group members keep their initiative in sync when you roll or
+            edit initiative, and you can unlink individual members. "By Name"
+            will group creatures with the same name. "Side Initiative" creates
+            one group for Player Characters and one for everyone else.
           </Info>
         </Dropdown>
         <Dropdown
