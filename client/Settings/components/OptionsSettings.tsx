@@ -26,13 +26,23 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           </Info>
         </Toggle>
         <Toggle fieldName="Rules.EnableBossAndMinionHP">
-          Show Boss and Minion buttons in StatBlock Library
+          Show Boss and Minion buttons on Library Creatures
+          <Info>
+            Hover or preview a Creature in the Library Pane to reveal these
+            buttons. The pawn icon will add a creature as a 1HP "minion" and the
+            king icon will add it with the maximum possible HP roll.
+          </Info>
         </Toggle>
         <Toggle fieldName="Rules.AllowNegativeHP">
           Allow combatants to have negative hit points
         </Toggle>
         <Toggle fieldName="Rules.AutoCheckConcentration">
           Automatically prompt for concentration checks
+          <Info>
+            When a combatant has a tag with the text "Concentrating", a prompt
+            with a suggested concentration check will appear if they receive
+            damage. You can ignore the prompt or automatically clear the tag.
+          </Info>
         </Toggle>
         <Dropdown
           fieldName="Rules.AutoGroupInitiative"
