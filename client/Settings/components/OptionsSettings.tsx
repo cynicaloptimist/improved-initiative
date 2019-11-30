@@ -61,7 +61,7 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           fieldName="Rules.AutoRerollInitiative"
           options={AutoRerollInitiativeOption}
         >
-          Automatically reroll initiative each round
+          Automatically reroll initiative each round's end
         </Dropdown>
 
         <h3>Encounter View</h3>
