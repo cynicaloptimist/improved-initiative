@@ -73,12 +73,22 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
         </Toggle>
         <Toggle fieldName="TrackerView.DisplayDifficulty">
           Display Encounter Difficulty
+          <Info>
+            Encounter Difficulty is calculated based on the guidelines in the
+            Dungeon Master's Guide. It accounts for how many Player Characters
+            are in the combat, or assumes 4 characters if none are present. All
+            Creatures and Non Player Characters are counted as enemies.
+          </Info>
         </Toggle>
         <Dropdown
           fieldName="TrackerView.PostCombatStats"
           options={PostCombatStatsOption}
         >
           Display Post-Combat Stats Summary
+          <Info>
+            These statistics include elapsed time, and average time-per-turn,
+            for each Player Character in the encounter and the DM.
+          </Info>
         </Dropdown>
 
         <h3>Player View</h3>
@@ -92,7 +102,12 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           fieldName="PlayerView.MonsterHPVerbosity"
           options={HpVerbosityOption}
         >
-          Non Player Character HP Verbosity
+          Creature and NPC HP Verbosity
+          <Info>
+            Control how much information about combatants is revealed in the
+            Player View window. Colored Label will change from green to red, so
+            keen-eyed players might deduce exact HP percentage.
+          </Info>
         </Dropdown>
         <Dropdown
           fieldName="PlayerView.PlayerHPVerbosity"
@@ -101,13 +116,23 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           Player Character HP Verbosity
         </Dropdown>
         <Toggle fieldName="PlayerView.HideMonstersOutsideEncounter">
-          Don't show NPCs in Player View until encounter is started
+          Don't show Creatures and NPCs in Player View until encounter is
+          started
         </Toggle>
         <Toggle fieldName="PlayerView.AllowPlayerSuggestions">
           Allow players to suggest damage/healing
+          <Info>
+            Players can suggest damage (or healing, with a negative number) by
+            clicking or tapping the current HP of any combatant in the Player
+            View. You can accept the full or half amount of damage.
+          </Info>
         </Toggle>
         <Toggle fieldName="PlayerView.ActiveCombatantOnTop">
           Active combatant at top of initiative list
+          <Info>
+            The initiative list will display active and upcoming combatants
+            first, and include an "End of Round" marker.
+          </Info>
         </Toggle>
         <p>
           {"Additional player view options available with "}
