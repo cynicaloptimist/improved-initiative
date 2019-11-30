@@ -49,12 +49,17 @@ export class OptionsSettings extends React.Component<OptionsSettingsProps> {
           options={AutoGroupInitiativeOption}
         >
           Automatically add creatures to initiative group
+          <Info>
+            Creatures in an initiative group will act on the same initiative
+            count. The group keeps its initiative count in sync when you roll or
+            edit initiative, but you can unlink individual members.
+          </Info>
         </Dropdown>
         <Dropdown
           fieldName="Rules.AutoRerollInitiative"
           options={AutoRerollInitiativeOption}
         >
-          Automatically reroll initiative at the end of each round:
+          Automatically reroll initiative each round
         </Dropdown>
 
         <h3>Encounter View</h3>
