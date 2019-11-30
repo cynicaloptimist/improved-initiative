@@ -2,6 +2,7 @@ import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
+import { Button } from "../Components/Button";
 import { Command } from "./Command";
 import { Toolbar } from "./Toolbar";
 
@@ -12,7 +13,7 @@ const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
     new Command(id, description, () => {}, keyBinding, "gear")
   ];
 
-  return Enzyme.render(
+  return Enzyme.shallow(
     <Toolbar
       encounterCommands={encounterCommands}
       combatantCommands={[]}
@@ -34,9 +35,9 @@ describe("Toolbar component", () => {
     );
 
     const tooltip = component
-      .find(".c-button")
+      .find(Button)
       .first()
-      .prop("title");
+      .prop("tooltip");
     expect(tooltip).toEqual(`${description} [${keyBinding}]`);
   });
 
@@ -51,9 +52,9 @@ describe("Toolbar component", () => {
     );
 
     const tooltip = component
-      .find(".c-button")
+      .find(Button)
       .first()
-      .prop("title");
+      .prop("tooltip");
     expect(tooltip).toEqual(description);
   });
 });
