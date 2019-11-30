@@ -114,11 +114,7 @@ export class SettingsPane extends React.Component<
       );
     }
     if (this.state.currentTab == SettingsTab.EpicInitiative) {
-      return (
-        <EpicInitiativeSettings
-          playerViewSettings={this.props.settings.PlayerView}
-        />
-      );
+      return <EpicInitiativeSettings />;
     }
   };
 
