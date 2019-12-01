@@ -15,7 +15,7 @@ module.exports = merge(baseConfig, {
     }),
     new WebpackBuildNotifierPlugin({
       title: "Client",
-      logo: path.resolve("./public/img/logo-improved-initiative.svg"),
+      successIcon: path.resolve("./public/img/boot-transparent-white.png"),
       showDuration: true,
       notifierOptions: {
         timeout: 1
