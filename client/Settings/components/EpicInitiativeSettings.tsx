@@ -62,6 +62,7 @@ function loginMessage() {
       <h3>Epic Initiative</h3>
       <p>Log in with Patreon to access patron benefits.</p>
       {epicInitiativeFeatures()}
+      <hr />
       <a className="login button" href={env.PatreonLoginUrl}>
         Log In with Patreon
       </a>
@@ -78,6 +79,7 @@ function upgradeMessage() {
         Initiative reward level.
       </p>
       {epicInitiativeFeatures()}
+      <hr />
       <Button
         onClick={() =>
           window.open(
@@ -98,7 +100,9 @@ function epicInitiativeFeatures() {
       <li>Get access to the D&amp;D Beyond Stat Block Importer</li>
       <li>Player View Enhancements:</li>
       <ul className="bulleted">
-        <li>Customize the look and feel of your Player View with colors and CSS</li>
+        <li>
+          Customize the look and feel of your Player View with colors and CSS
+        </li>
         <li>Display Combatant Portraits and Encounter Background Images</li>
         <li>Players can suggest Tags for any combatant</li>
       </ul>
