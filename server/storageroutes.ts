@@ -87,9 +87,9 @@ export default function(app: express.Application) {
 
     const result = await DB.deleteAccount(req.session.userId);
     if (result) {
-      return res.status(200);
+      return res.sendStatus(200);
     } else {
-      return res.status(404);
+      return res.sendStatus(404);
     }
   });
 
