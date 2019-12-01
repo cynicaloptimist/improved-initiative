@@ -60,11 +60,8 @@ function loginMessage() {
   return (
     <div className="tab-content epicInitiativeLogin">
       <h3>Epic Initiative</h3>
-      <p>
-        Log in with Patreon to access patron benefits. Epic Initiative allows
-        you to customize your Player View's appearance with combatant portraits,
-        custom colors, fonts, and other CSS features.
-      </p>
+      <p>Log in with Patreon to access patron benefits.</p>
+      {epicInitiativeFeatures()}
       <a className="login button" href={env.PatreonLoginUrl}>
         Log In with Patreon
       </a>
@@ -78,10 +75,9 @@ function upgradeMessage() {
       <h3>Epic Initiative</h3>
       <p>
         You're logged in with Patreon, but you have not selected the Epic
-        Initiative reward level. Epic Initiative allows you to customize your
-        Player View's appearance with combatant portraits, custom colors, fonts,
-        and other CSS features.
+        Initiative reward level.
       </p>
+      {epicInitiativeFeatures()}
       <Button
         onClick={() =>
           window.open(
@@ -93,5 +89,19 @@ function upgradeMessage() {
         text="Pledge Now!"
       />
     </div>
+  );
+}
+
+function epicInitiativeFeatures() {
+  return (
+    <ul className="bulleted">
+      <li>Get access to the D&amp;D Beyond Stat Block Importer</li>
+      <li>Player View Enhancements:</li>
+      <ul className="bulleted">
+        <li>Customize the look and feel of your Player View with colors and CSS</li>
+        <li>Display Combatant Portraits and Encounter Background Images</li>
+        <li>Players can suggest Tags for any combatant</li>
+      </ul>
+    </ul>
   );
 }
