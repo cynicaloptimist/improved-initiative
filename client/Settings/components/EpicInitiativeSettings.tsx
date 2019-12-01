@@ -7,11 +7,11 @@ import { Toggle } from "./Toggle";
 
 export function EpicInitiativeSettings() {
   if (!env.IsLoggedIn) {
-    return loginMessage;
+    return loginMessage();
   }
 
   if (!env.HasEpicInitiative) {
-    return upgradeMessage;
+    return upgradeMessage();
   }
 
   return (
@@ -56,38 +56,42 @@ export function EpicInitiativeSettings() {
   );
 }
 
-const loginMessage = (
-  <div className="tab-content epicInitiativeLogin">
-    <h3>Epic Initiative</h3>
-    <p>
-      Log in with Patreon to access patron benefits. Epic Initiative allows you
-      to customize your Player View's appearance with combatant portraits,
-      custom colors, fonts, and other CSS features.
-    </p>
-    <a className="login button" href={env.PatreonLoginUrl}>
-      Log In with Patreon
-    </a>
-  </div>
-);
+function loginMessage() {
+  return (
+    <div className="tab-content epicInitiativeLogin">
+      <h3>Epic Initiative</h3>
+      <p>
+        Log in with Patreon to access patron benefits. Epic Initiative allows
+        you to customize your Player View's appearance with combatant portraits,
+        custom colors, fonts, and other CSS features.
+      </p>
+      <a className="login button" href={env.PatreonLoginUrl}>
+        Log In with Patreon
+      </a>
+    </div>
+  );
+}
 
-const upgradeMessage = (
-  <div className="tab-content epicInitiativeLogin">
-    <h3>Epic Initiative</h3>
-    <p>
-      You're logged in with Patreon, but you have not selected the Epic
-      Initiative reward level. Epic Initiative allows you to customize your
-      Player View's appearance with combatant portraits, custom colors, fonts,
-      and other CSS features.
-    </p>
-    <Button
-      onClick={() =>
-        window.open(
-          "https://www.patreon.com/bePatron?c=716070&rid=1937132",
-          "_blank"
-        )
-      }
-      additionalClassNames="button--upgrade"
-      text="Pledge Now!"
-    />
-  </div>
-);
+function upgradeMessage() {
+  return (
+    <div className="tab-content epicInitiativeLogin">
+      <h3>Epic Initiative</h3>
+      <p>
+        You're logged in with Patreon, but you have not selected the Epic
+        Initiative reward level. Epic Initiative allows you to customize your
+        Player View's appearance with combatant portraits, custom colors, fonts,
+        and other CSS features.
+      </p>
+      <Button
+        onClick={() =>
+          window.open(
+            "https://www.patreon.com/bePatron?c=716070&rid=1937132",
+            "_blank"
+          )
+        }
+        additionalClassNames="button--upgrade"
+        text="Pledge Now!"
+      />
+    </div>
+  );
+}
