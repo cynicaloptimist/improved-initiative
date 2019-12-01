@@ -65,6 +65,7 @@
     "uglify-js": "^3.6.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.0",
+    "webpack-build-notifier": "^2.0.0",
     "webpack-merge": "^4.1.2"
   },
   "dependencies": {
