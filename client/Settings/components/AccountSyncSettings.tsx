@@ -190,8 +190,10 @@ export class AccountSyncSettings extends React.Component<
     const promptText =
       "To delete all of the user data synced to your account, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
-      await this.props.accountClient.DeleteAccount();
-      location.href = env.BaseUrl;
+      try {
+        await this.props.accountClient.DeleteAccount();
+      } catch {}
+      location.href = env.BaseUrl + "/logout";
     }
   };
 
