@@ -15,7 +15,7 @@ export const CommandInfoById = {
     "You can set a timer to automatically remove a tag after a set number of rounds have passed.",
   "update-notes":
     "You can keep long-form notes to track things like illnesses, inventory, and spell slots. " +
-    "These notes will persist across encounters when they are set on Characters.",
+    "For Characters, these notes will persist across encounters.",
   "edit-statblock":
     "If you edit a creature's statblock, it will only affect this combatant. " +
     "If you edit a character's statblock, it will persist across encounters.",
