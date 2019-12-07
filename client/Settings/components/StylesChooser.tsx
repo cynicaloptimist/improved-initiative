@@ -50,6 +50,7 @@ export class StylesChooser extends React.Component<
                 }
               />
               <Button
+                fontAwesomeIcon="tint-slash"
                 text="Clear"
                 onClick={() => this.clearSelectedStyle(fieldProps)}
               />
