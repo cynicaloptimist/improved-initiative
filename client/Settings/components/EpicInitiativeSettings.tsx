@@ -64,6 +64,25 @@ export function EpicInitiativeSettings() {
 
       <h4>
         Additional Player View CSS <strong>(experimental)</strong>
+        <Info
+          tippyProps={{
+            interactive: true,
+            placement: "bottom",
+            popperOptions: { positionFixed: true }
+          }}
+        >
+          <span>
+            Cascading Style Sheets (CSS) is a web technology used to apply
+            visual styles to web pages. You can override the CSS used in the
+            Player View with your own.{" "}
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps"
+              target="_blank"
+            >
+              Learn yourself some CSS.
+            </a>
+          </span>
+        </Info>
       </h4>
       <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
     </div>
