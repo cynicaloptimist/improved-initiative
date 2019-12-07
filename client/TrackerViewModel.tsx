@@ -245,6 +245,9 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
+    if (!URLSearchParams) {
+      return;
+    }
     const urlParams = new URLSearchParams(window.location.search);
     const compressedStatBlockJSON = urlParams.get("s");
     if (!compressedStatBlockJSON) {
