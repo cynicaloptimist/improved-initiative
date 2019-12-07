@@ -1,6 +1,7 @@
 import { Field, FieldProps } from "formik";
 import * as React from "react";
 import { Button } from "../../Components/Button";
+import { Info } from "../../Components/Info";
 import { env } from "../../Environment";
 import { StylesChooser } from "./StylesChooser";
 import { Toggle } from "./Toggle";
@@ -30,12 +31,18 @@ export function EpicInitiativeSettings() {
       <h4>Additional Player View Settings</h4>
       <Toggle fieldName="PlayerView.DisplayPortraits">
         Show combatant portraits
+        <Info>Portraits will appear inline in combatant list</Info>
       </Toggle>
       <Toggle fieldName="PlayerView.SplashPortraits">
         Show turn start portrait splash
       </Toggle>
       <Toggle fieldName="PlayerView.AllowTagSuggestions">
         Allow players to suggest tags
+        <Info>
+          Players can suggest a tag by clicking or tapping the tag icon on any
+          combatant in the Player View. You can accept the full or half amount
+          of damage.
+        </Info>
       </Toggle>
       <StylesChooser />
       <h4>Other Styles</h4>
