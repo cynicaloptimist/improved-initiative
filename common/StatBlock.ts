@@ -27,6 +27,8 @@ export interface NameAndContent {
   Usage?: string;
 }
 
+export type InitiativeSpecialRoll = "advantage" | "disadvantage" | "take-ten";
+
 export interface StatBlock extends Listable {
   Source: string;
   Type: string;
@@ -35,7 +37,7 @@ export interface StatBlock extends Listable {
   Speed: string[];
   Abilities: AbilityScores;
   InitiativeModifier?: number;
-  InitiativeSpecialRoll?: "advantage" | "disadvantage" | "take-ten";
+  InitiativeSpecialRoll?: InitiativeSpecialRoll;
   InitiativeAdvantage?: boolean;
   DamageVulnerabilities: string[];
   DamageResistances: string[];

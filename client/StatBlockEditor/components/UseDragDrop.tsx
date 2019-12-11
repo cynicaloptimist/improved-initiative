@@ -31,7 +31,7 @@ export function DropZone(props: {
         "collecting: dropzone",
         index,
         monitor.getItemType(),
-        monitor.getItem() && monitor.getItem().index,
+        monitor.getItem()?.index,
         "isOver",
         monitor.isOver(),
         "canDrop",

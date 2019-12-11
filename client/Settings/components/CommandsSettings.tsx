@@ -3,6 +3,8 @@ import _ = require("lodash");
 import * as React from "react";
 import { CommandSetting } from "../../../common/CommandSetting";
 import { Command } from "../../Commands/Command";
+import { Info } from "../../Components/Info";
+import { CommandInfoById } from "./CommandInfo";
 import { ToggleButton } from "./Toggle";
 
 interface CommandSettingRowProps {
@@ -12,10 +14,12 @@ interface CommandSettingRowProps {
 
 class CommandSettingRow extends React.Component<CommandSettingRowProps> {
   public render() {
+    const info = CommandInfoById[this.props.command.Id];
     return (
       <div>
         <span className="command-description">
           {this.props.command.Description}
+          {info && <Info>{info}</Info>}
         </span>
         <Field
           className="keybinding"

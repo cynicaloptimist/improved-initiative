@@ -14,7 +14,7 @@ type Res = Express.Response & express.Response;
 const verifyStorage = (
   req: Express.Request
 ): req is { session: Express.Session } => {
-  return req.session && req.session.hasStorage;
+  return req.session?.hasStorage;
 };
 
 const parsePossiblyMalformedIdFromParams = params => {
@@ -134,28 +134,29 @@ function configureEntityRoute<T extends Listable>(
       return res.sendStatus(403);
     }
 
-    if (req.body.Version) {
-      try {
+    try {
+      if (req.body.Version) {
         await DB.saveEntity<T>(route, req.session.userId, req.body);
         return res.sendStatus(201);
-      } catch (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-    } else if (req.body.length) {
-      const saved = await DB.saveEntitySet<T>(
-        route,
-        req.session.userId,
-        req.body
-      );
-      if (saved) {
-        return res.sendStatus(201);
+      } else if (req.body.length) {
+        const saved = await DB.saveEntitySet<T>(
+          route,
+          req.session.userId,
+          req.body
+        );
+        if (saved) {
+          return res.sendStatus(201);
+        } else {
+          console.error("Could not save items for user: " + req.session.userId);
+          console.log("post body was: " + JSON.stringify(req.body));
+          return res.sendStatus(500).send();
+        }
       } else {
-        console.error("Could not save items for user: " + req.session.userId);
-        return res.sendStatus(500).send();
+        return res.status(400).send("Missing Version");
       }
-    } else {
-      return res.status(400).send("Missing Version");
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send(err);
     }
   });
 

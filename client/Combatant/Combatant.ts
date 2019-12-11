@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
 import { CombatantState, TagState } from "../../common/CombatantState";
-import { StatBlock } from "../../common/StatBlock";
+import { InitiativeSpecialRoll, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
@@ -15,7 +15,7 @@ export class Combatant {
   constructor(combatantState: CombatantState, public Encounter: Encounter) {
     let statBlock = combatantState.StatBlock;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
-    this.PersistentCharacterId = combatantState.PersistentCharacterId;
+    this.PersistentCharacterId = combatantState.PersistentCharacterId || null;
 
     this.StatBlock(statBlock);
 
@@ -75,7 +75,7 @@ export class Combatant {
   }
 
   private processCombatantState(savedCombatant: CombatantState) {
-    this.IndexLabel = savedCombatant.IndexLabel;
+    this.IndexLabel = savedCombatant.IndexLabel || 0;
     this.CurrentHP(savedCombatant.CurrentHP);
     this.CurrentNotes(savedCombatant.CurrentNotes || "");
     this.TemporaryHP(savedCombatant.TemporaryHP);
@@ -94,22 +94,21 @@ export class Combatant {
   public AttachToPersistentCharacterLibrary(
     library: PersistentCharacterUpdater
   ) {
-    if (!this.PersistentCharacterId) {
+    const persistentCharacterId = this.PersistentCharacterId;
+    if (persistentCharacterId == null) {
       throw "Combatant is not a persistent character";
     }
 
     this.CurrentHP.subscribe(async c => {
-      return await library.UpdatePersistentCharacter(
-        this.PersistentCharacterId,
-        { CurrentHP: c }
-      );
+      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+        CurrentHP: c
+      });
     });
 
     this.CurrentNotes.subscribe(async n => {
-      return await library.UpdatePersistentCharacter(
-        this.PersistentCharacterId,
-        { Notes: n }
-      );
+      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+        Notes: n
+      });
     });
   }
 
@@ -167,7 +166,7 @@ export class Combatant {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
 
-    let initiativeSpecialRoll = undefined;
+    let initiativeSpecialRoll: InitiativeSpecialRoll | undefined = undefined;
     if (!sideInitiative) {
       if (this.StatBlock().InitiativeAdvantage) {
         initiativeSpecialRoll = "advantage";
@@ -243,7 +242,7 @@ export class Combatant {
   public GetState: () => CombatantState = () => {
     return {
       Id: this.Id,
-      PersistentCharacterId: this.PersistentCharacterId,
+      PersistentCharacterId: this.PersistentCharacterId || undefined,
       StatBlock: this.StatBlock(),
       CurrentHP: this.CurrentHP(),
       CurrentNotes: this.CurrentNotes(),
@@ -265,13 +264,13 @@ export class Combatant {
       RevealedAC: this.RevealedAC(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),
       ElapsedSeconds: this.CombatTimer.ElapsedSeconds(),
-      InterfaceVersion: process.env.VERSION
+      InterfaceVersion: process.env.VERSION || "unknown"
     };
   };
 
   private setAutoInitiativeGroup = () => {
     const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
-    let lowestInitiativeCombatant = null;
+    let lowestInitiativeCombatant: Combatant | null = null;
     if (autoInitiativeGroup == "None") {
       return;
     }

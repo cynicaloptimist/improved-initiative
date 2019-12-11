@@ -174,7 +174,7 @@ export class PlayerView extends React.Component<
       c => c.Id == this.props.encounterState.ActiveCombatantId
     );
 
-    if (newActiveCombatant && newActiveCombatant.ImageURL.length) {
+    if (newActiveCombatant?.ImageURL.length) {
       this.setState({
         portraitURL: newActiveCombatant.ImageURL,
         portraitCaption: newActiveCombatant.Name,

@@ -98,7 +98,7 @@ export class FilterCache<T extends Listing<Listable>> {
   private initializeItems(items: T[]) {
     this.initialLength = items.length;
     this.allItems = items.filter(i => {
-      if (!(i.Listing().Name && i.Listing().Name.length)) {
+      if (!(i.Listing().Name?.length)) {
         console.warn("Removing unnamed statblock: " + JSON.stringify(i));
         return false;
       }

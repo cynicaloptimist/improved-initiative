@@ -6,6 +6,17 @@ interface EventData {
   [key: string]: any;
 }
 
+type GoogleAnalyticsTag = (
+  command: "send",
+  event: "event",
+  eventCategory: string,
+  eventAction: string,
+  eventLabel?: string,
+  eventValue?: number
+) => void;
+
+declare var gtag: GoogleAnalyticsTag | undefined;
+
 export class Metrics {
   public static async TrackLoad() {
     const counts = {
@@ -19,9 +30,7 @@ export class Metrics {
       PersistentCharacters: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.PersistentCharacters
       ).length,
-      Spells: LegacySynchronousLocalStore.List(
-        LegacySynchronousLocalStore.Spells
-      ).length
+      Spells: (await Store.LoadAllAndUpdateIds(Store.Spells)).length
     };
 
     Metrics.TrackEvent("AppLoad", counts);
@@ -40,6 +49,16 @@ export class Metrics {
     console.log(`Event ${name}`);
     if (eventData !== {}) {
       console.table(eventData);
+    }
+
+    if (typeof gtag == "function") {
+      for (const key of Object.keys(eventData)) {
+        if (typeof eventData[key] == "number") {
+          gtag("send", "event", name, key, undefined, eventData[key]);
+        } else {
+          gtag("send", "event", name, key, JSON.stringify(eventData[key]));
+        }
+      }
     }
 
     if (!env.SendMetrics) {

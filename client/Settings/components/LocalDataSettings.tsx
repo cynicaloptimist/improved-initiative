@@ -66,6 +66,7 @@ export class LocalDataSettings extends React.Component<{}> {
         } and reload?`
       )
     ) {
+      await Store.DeleteAll();
       await Store.ImportAll(file);
       LegacySynchronousLocalStore.ImportAllAndReplace(file);
       location.reload();
@@ -83,7 +84,7 @@ export class LocalDataSettings extends React.Component<{}> {
   };
 
   private importDndAppFile = (file: File) => {
-    LegacySynchronousLocalStore.ImportFromDnDAppFile(file);
+    Store.ImportFromDnDAppFile(file);
   };
 
   private confirmClearLocalData = async () => {

@@ -148,7 +148,6 @@ export class AccountSyncSettings extends React.Component<
   };
 
   private downloadAndSaveAllSyncedItems = async () => {
-    const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
     await Promise.all(
@@ -158,19 +157,18 @@ export class AccountSyncSettings extends React.Component<
       })
     );
 
+    await Promise.all(
+      Object.keys(account.spells).map(async spellId => {
+        const spell = account.spells[spellId];
+        return await Store.Save(Store.Spells, spellId, spell);
+      })
+    );
+
     forIn(account.persistentcharacters, persistentCharacter => {
       LegacySynchronousLocalStore.Save(
         LegacySynchronousLocalStore.PersistentCharacters,
         persistentCharacter.Id,
         persistentCharacter
-      );
-    });
-
-    forIn(account.spells, spell => {
-      LegacySynchronousLocalStore.Save(
-        LegacySynchronousLocalStore.Spells,
-        spell.Id,
-        spell
       );
     });
 

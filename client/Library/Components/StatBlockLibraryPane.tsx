@@ -83,7 +83,7 @@ export class StatBlockLibraryPane extends React.Component<
       key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
     }),
     l => ({
-      key: l.Listing().Metadata.Source
+      key: l.Listing().Metadata.Source?.split(",")[0]
     }),
     l => ({
       key: l.Listing().Metadata.Type

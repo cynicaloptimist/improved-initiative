@@ -136,7 +136,7 @@ export class AccountClient {
   }
 
   public static MakeId(name: string, path?: string) {
-    if (path && path.length) {
+    if (path?.length) {
       return this.SanitizeForId(path) + "-" + this.SanitizeForId(name);
     } else {
       return this.SanitizeForId(name);
@@ -192,7 +192,7 @@ async function getUnsyncedItems(items: Listing<Listable>[]) {
           Id: listing.Listing().Id,
           Name: listing.Listing().Name,
           Path: listing.Listing().Path,
-          Version: process.env.VERSION
+          Version: process.env.VERSION || "unknown"
         })
     )
   );

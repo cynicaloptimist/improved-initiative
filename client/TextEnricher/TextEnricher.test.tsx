@@ -4,7 +4,7 @@ import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { DefaultRules } from "../Rules/Rules";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import { Store } from "../Utility/Store";
 import { TextEnricher } from "./TextEnricher";
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -70,7 +70,7 @@ describe("TextEnricher", () => {
       Path: spell.Path,
       SearchHint: Spell.GetSearchHint(spell),
       Metadata: Spell.GetMetadata(spell),
-      Link: LegacySynchronousLocalStore.Spells,
+      Link: Store.Spells,
       LastUpdateMs: spell.LastUpdateMs || 0
     };
 

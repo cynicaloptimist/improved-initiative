@@ -74,6 +74,8 @@ export class ListingRow<T extends Listable> extends React.Component<
           </span>
         ))
       : "";
+
+    const extraButtons = this.props.extraButtons || [];
     return (
       <li className="c-listing">
         <ListingButton
@@ -83,16 +85,15 @@ export class ListingRow<T extends Listable> extends React.Component<
         >
           {countElements}
         </ListingButton>
-        {this.props.extraButtons &&
-          this.props.extraButtons.map((button, index) => (
-            <ListingButton
-              key={index}
-              title={button.title}
-              buttonClass={button.buttonClass}
-              faClass={button.faClass}
-              onClick={this.makeExtraButtonFn(button)}
-            />
-          ))}
+        {extraButtons.map((button, index) => (
+          <ListingButton
+            key={index}
+            title={button.title}
+            buttonClass={button.buttonClass}
+            faClass={button.faClass}
+            onClick={this.makeExtraButtonFn(button)}
+          />
+        ))}
         {this.props.onDelete && (
           <ListingButton
             buttonClass="delete"

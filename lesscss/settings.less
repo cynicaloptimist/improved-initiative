@@ -3,6 +3,10 @@
     .green-button();
   }
 
+  .get-importer-extension {
+    .green-button();
+  }
+
   .overlay-dialog();
   display: flex;
   flex-direction: column;
@@ -33,8 +37,16 @@
     }
   }
 
-  .about > div {
-    margin: @medium-spacer;
+  .about {
+    > div {
+      margin: @medium-spacer;
+    }
+
+    .about__version {
+      text-align: right;
+      margin: @small-spacer;
+      color: @shadow;
+    }
   }
 
   .tips {
@@ -89,7 +101,7 @@
   }
 
   .command-description {
-    flex-grow: 1;
+    flex: 1 1;
   }
 
   .options p {

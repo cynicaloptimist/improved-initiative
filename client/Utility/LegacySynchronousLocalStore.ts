@@ -1,15 +1,11 @@
 import moment = require("moment");
 import { Listable } from "../../common/Listable";
-import { Spell } from "../../common/Spell";
-import { StatBlock } from "../../common/StatBlock";
-import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 import { Store } from "./Store";
 
 const _prefix = "ImprovedInitiative";
 export namespace LegacySynchronousLocalStore {
   export const PersistentCharacters = "PersistentCharacters";
   export const PlayerCharacters = "PlayerCharacters";
-  export const Spells = "Spells";
   export const SavedEncounters = "SavedEncounters";
   export const AutoSavedEncounters = "AutoSavedEncounters";
   export const User = "User";
@@ -121,7 +117,7 @@ export namespace LegacySynchronousLocalStore {
         importedStorage
       );
       importList(SavedEncounters, importedStorage);
-      importList(LegacySynchronousLocalStore.Spells, importedStorage);
+      importList(Store.Spells, importedStorage);
     };
     reader.readAsText(file);
   }
@@ -168,30 +164,15 @@ export namespace LegacySynchronousLocalStore {
     reader.readAsText(file);
   }
 
-  export function ImportFromDnDAppFile(file: File) {
-    const statBlocksCallback = (statBlocks: StatBlock[]) => {
-      statBlocks.forEach(c => {
-        Save(Store.StatBlocks, c.Id, c);
-      });
-    };
-
-    const spellsCallback = (spells: Spell[]) => {
-      spells.forEach(c => {
-        Save(LegacySynchronousLocalStore.Spells, c.Id, c);
-      });
-    };
-
-    const importer = new DnDAppFilesImporter();
-
-    importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+  function save(key: string, value: any) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  const save = (key, value) => localStorage.setItem(key, JSON.stringify(value));
-  const load = key => {
+  function load(key: string) {
     let value = localStorage.getItem(key);
     if (value === "undefined" || value == null) {
       return null;
     }
     return JSON.parse(value);
-  };
+  }
 }

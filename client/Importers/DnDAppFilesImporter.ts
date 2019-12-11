@@ -26,31 +26,29 @@ const getSpellsFromXml = (xmlString: string) => {
 export class DnDAppFilesImporter {
   public ImportEntitiesFromXml = (
     xmlFile: File,
-    statBlocksCallback: (statBlocks: StatBlock[]) => void,
-    spellsCallback: (spells: Spell[]) => void
+    statBlocksCallback: (statBlocks: StatBlock[]) => Promise<void>,
+    spellsCallback: (spells: Spell[]) => Promise<void>
   ) => {
     const reader = new FileReader();
 
-    reader.onload = (event: any) => {
+    reader.onload = async (event: any) => {
       const xml: string = event.target.result;
       const statBlocks = getStatBlocksFromXml(xml);
       const spells = getSpellsFromXml(xml);
 
       if (statBlocks.length) {
-        statBlocksCallback(statBlocks);
+        await statBlocksCallback(statBlocks);
       }
 
       if (spells.length) {
-        spellsCallback(spells);
+        await spellsCallback(spells);
       }
 
       if (spells.length || statBlocks.length) {
         location.reload();
       } else {
         alert(
-          `Could not retrieve any statblocks or spells from ${
-            xmlFile.name
-          }. Please ensure that a valid DnDAppFile XML file is used.`
+          `Could not retrieve any statblocks or spells from ${xmlFile.name}. Please ensure that a valid DnDAppFile XML file is used.`
         );
       }
     };

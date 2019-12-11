@@ -45,6 +45,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
       <div className="c-combatant-details">
         <StatBlockHeader
           name={this.props.combatantViewModel.Name()}
+          statBlockName={statBlock.Name}
           source={statBlock.Source}
           type={statBlock.Type}
           imageUrl={statBlock.ImageURL}

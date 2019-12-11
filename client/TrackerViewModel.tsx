@@ -21,6 +21,7 @@ import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
 import { Toolbar } from "./Commands/Toolbar";
+import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
@@ -244,6 +245,9 @@ export class TrackerViewModel {
   };
 
   public ImportStatBlockIfAvailable = () => {
+    if (!URLSearchParams) {
+      return;
+    }
     const urlParams = new URLSearchParams(window.location.search);
     const compressedStatBlockJSON = urlParams.get("s");
     if (!compressedStatBlockJSON) {
@@ -252,6 +256,32 @@ export class TrackerViewModel {
 
     window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
+
+    if (!env.HasEpicInitiative) {
+      this.PromptQueue.Add({
+        autoFocusSelector: ".submit",
+        initialValues: {},
+        onSubmit: () => true,
+        children: (
+          <span className="no-epic-initiative-for-import">
+            {"The D&D Beyond StatBlock Importer is available for "}
+            <a
+              href={
+                "https://www.patreon.com/join/improvedinitiative/checkout" +
+                "?rid=1937132&amp;redirect_uri=%2Fposts%2F31705918"
+              }
+              target="_blank"
+            >
+              Epic Initiative
+            </a>
+            {" Patrons."}
+            <SubmitButton />
+          </span>
+        )
+      });
+
+      return;
+    }
 
     codec.decompress(compressedStatBlockJSON).then(json => {
       const parsedStatBlock = ParseJSONOrDefault(json, {});
@@ -276,9 +306,7 @@ export class TrackerViewModel {
   public GetWhatsNewIfAvailable = () => {
     $.getJSON("/whatsnew/").done((latestPost: PatreonPost) => {
       this.EventLog.AddEvent(
-        `Welcome to Improved Initiative! Here's what's new: <a href="${
-          latestPost.attributes.url
-        }" target="_blank">${latestPost.attributes.title}</a>`
+        `Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`
       );
     });
   };
@@ -522,7 +550,7 @@ export class TrackerViewModel {
   };
 
   private handleAccountSync(account: Account) {
-    if (account.settings && account.settings.Version) {
+    if (account.settings?.Version) {
       const updatedSettings = UpdateSettings(account.settings);
       const allCommands = [
         ...this.EncounterToolbar,

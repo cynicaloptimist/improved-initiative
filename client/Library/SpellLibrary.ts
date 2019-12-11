@@ -5,7 +5,7 @@ import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export class SpellLibrary {
@@ -30,7 +30,7 @@ export class SpellLibrary {
     );
   };
 
-  public AddOrUpdateSpell = (spell: Spell) => {
+  public AddOrUpdateSpell = async (spell: Spell) => {
     spell.LastUpdateMs = moment.now();
     this.spells.remove(listing => listing.Listing().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
@@ -39,18 +39,14 @@ export class SpellLibrary {
         ...spell,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: LegacySynchronousLocalStore.Spells,
+        Link: Store.Spells,
         LastUpdateMs: spell.LastUpdateMs
       },
-      "localStorage",
+      "localAsync",
       spell
     );
     this.spells.push(listing);
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.Spells,
-      spell.Id,
-      spell
-    );
+    await Store.Save(Store.Spells, spell.Id, spell);
     this.accountClient.SaveSpell(spell).then(r => {
       if (!r) return;
       if (listing.Origin === "account") return;
@@ -71,9 +67,9 @@ export class SpellLibrary {
     });
   };
 
-  public DeleteSpellById = (id: string) => {
+  public DeleteSpellById = async (id: string) => {
     this.spells.remove(listing => listing.Listing().Id === id);
-    LegacySynchronousLocalStore.Delete(LegacySynchronousLocalStore.Spells, id);
+    await Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };
 }

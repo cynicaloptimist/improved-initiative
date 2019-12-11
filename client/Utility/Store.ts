@@ -2,6 +2,9 @@ import * as localforage from "localforage";
 
 import moment = require("moment");
 import { Listable } from "../../common/Listable";
+import { Spell } from "../../common/Spell";
+import { StatBlock } from "../../common/StatBlock";
+import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
@@ -14,7 +17,7 @@ export namespace Store {
 
   export const DefaultSavedEncounterId = "default";
 
-  export const SupportedLists = [StatBlocks];
+  export const SupportedLists = [StatBlocks, Spells];
 
   export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
@@ -107,6 +110,26 @@ export namespace Store {
     });
 
     return Promise.all(savePromises);
+  }
+
+  export function ImportFromDnDAppFile(file: File) {
+    const statBlocksCallback = async (statBlocks: StatBlock[]) => {
+      await Promise.all(
+        statBlocks.map(statBlock =>
+          Save(Store.StatBlocks, statBlock.Id, statBlock)
+        )
+      );
+    };
+
+    const spellsCallback = async (spells: Spell[]) => {
+      await Promise.all(
+        spells.map(spell => Save(Store.Spells, spell.Id, spell))
+      );
+    };
+
+    const importer = new DnDAppFilesImporter();
+
+    importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
   }
 
   async function save(listName: string, key: string, value) {

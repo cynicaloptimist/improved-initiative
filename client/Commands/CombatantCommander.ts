@@ -84,7 +84,7 @@ export class CombatantCommander {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
       pendingLink.prompt.Resolve(null);
     }
-    if (!((e && e.ctrlKey) || (e && e.metaKey))) {
+    if (!(e?.ctrlKey || e?.metaKey)) {
       this.selectedCombatantIds.removeAll();
     }
     this.selectedCombatantIds.push(data.Combatant.Id);
@@ -182,7 +182,7 @@ export class CombatantCommander {
   };
 
   private editHPForCombatants(combatantViewModels: CombatantViewModel[]) {
-    const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
+    const latestRollTotal = (this.latestRoll?.Total) || 0;
     const prompt = ApplyDamagePrompt(
       combatantViewModels,
       latestRollTotal.toString(),
@@ -209,7 +209,7 @@ export class CombatantCommander {
       return;
     }
     const selectedCombatants = this.SelectedCombatants();
-    const latestRollTotal = (this.latestRoll && this.latestRoll.Total) || 0;
+    const latestRollTotal = (this.latestRoll?.Total) || 0;
     const prompt = ApplyHealingPrompt(
       selectedCombatants,
       latestRollTotal.toString(),
