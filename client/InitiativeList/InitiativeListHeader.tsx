@@ -11,7 +11,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
     <li className="combatant--header">
       <span className="combatant__leftsection">
         <span className="combatant__initiative">
-          <Tippy content={encounterStateTip}>
+          <Tippy content={encounterStateTip} boundary="window">
             <span className={"fas " + encounterStateIcon}></span>
           </Tippy>
         </span>
