@@ -194,6 +194,11 @@
       ></div>
       <!-- /ko -->
       <!-- ko if: CenterColumn() === "combat" -->
+      <div
+        data-bind="react: {
+                component: initiativeListComponent
+        }"
+      ></div>
       <h2>Combatants by Initiative</h2>
       <ul class="combatants">
         <li class="combatant--header">

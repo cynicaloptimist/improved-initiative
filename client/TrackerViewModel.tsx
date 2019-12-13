@@ -25,6 +25,7 @@ import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
+import { InitiativeList } from "./InitiativeList/InitiativeList";
 import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
@@ -138,6 +139,11 @@ export class TrackerViewModel {
       statBlockTextEnricher={this.StatBlockTextEnricher}
     />
   );
+
+  public initiativeListComponent = ko.pureComputed(() => {
+    const encounterState = this.Encounter.GetEncounterState();
+    return <InitiativeList {...encounterState} />;
+  });
 
   public OrderedCombatants: KnockoutComputed<
     CombatantViewModel[]
