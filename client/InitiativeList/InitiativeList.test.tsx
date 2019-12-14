@@ -11,14 +11,14 @@ Enzyme.configure({ adapter: new Adapter() });
 describe("InitiativeList", () => {
   it("Shows a pause icon when encounter is inactive", () => {
     const encounterState = EncounterState.Default<CombatantState>();
-    const initiativeList = Enzyme.mount(<InitiativeList encounterState={encounterState} />);
+    const initiativeList = Enzyme.mount(<InitiativeList encounterState={encounterState} selectedCombatantIds={[]} />);
     expect(initiativeList.find(".fa-pause").length).toEqual(1);
   });
 
   it("Shows a play icon when encounter is active", () => {
     const encounterState = EncounterState.Default<CombatantState>();
     encounterState.ActiveCombatantId = "someId";
-    const initiativeList = Enzyme.mount(<InitiativeList encounterState={encounterState} />);
+    const initiativeList = Enzyme.mount(<InitiativeList encounterState={encounterState} selectedCombatantIds={[]} />);
     expect(initiativeList.find(".fa-play").length).toEqual(1);
   });
 });

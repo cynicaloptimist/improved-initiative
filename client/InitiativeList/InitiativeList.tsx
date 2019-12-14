@@ -7,6 +7,7 @@ import { InitiativeListHeader } from "./InitiativeListHeader";
 
 export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;
+  selectedCombatantIds: string [];
 }) {
   const encounterState = props.encounterState;
   return (
@@ -21,7 +22,7 @@ export function InitiativeList(props: {
             <CombatantRow
               combatantState={combatantState}
               isActive={encounterState.ActiveCombatantId == combatantState.Id}
-              isSelected={false}
+              isSelected={props.selectedCombatantIds.some(id => id ==combatantState.Id)}
               showIndexLabel={
                 encounterState.Combatants.filter(
                   c => c.StatBlock.Name == combatantState.StatBlock.Name
