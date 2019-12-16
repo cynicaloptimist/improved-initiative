@@ -367,10 +367,6 @@ export class Encounter {
       c => c.IndexLabel
     );
     combatantsInLabelOrder.forEach(async savedCombatant => {
-      if (this.combatants().some(c => c.Id == savedCombatant.Id)) {
-        savedCombatant.Id = probablyUniqueString();
-      }
-
       const combatant = this.AddCombatantFromState(savedCombatant);
 
       if (combatant.PersistentCharacterId !== null) {
