@@ -19,6 +19,12 @@ Development of Improved Initiative is supported through [Patreon](https://www.pa
 
 Refer to **CONTRIBUTING.md** if you'd like to contribute code.
 
+## Linting
+
+Improved Initiative uses Eslint with prettier to lint the code files.
+
+Linting happens automatically on commit, but you can also run it manually via: `npm run lint`.
+
 ## App Settings
 You can configure your instance of Improved Initiative with these settings. All are optional, basic functionality should work if you don't specify any.
 
@@ -64,4 +70,4 @@ Assuming you started the container with the name `improved-initiative` as shown 
 
 ## License
 
-The Improved Initiative app is made available under the [MIT](license) license. 
+The Improved Initiative app is made available under the [MIT](license) license.
