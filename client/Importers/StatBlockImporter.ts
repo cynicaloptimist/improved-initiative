@@ -5,7 +5,7 @@ import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
   public getType() {
-    let sizeString = StatBlockImporter.Sizes[this.getString("size")];
+    const sizeString = StatBlockImporter.Sizes[this.getString("size")];
     return (
       sizeString +
       " " +
@@ -31,7 +31,7 @@ export class StatBlockImporter extends Importer {
   }
 
   public GetStatBlock() {
-    let statBlock = StatBlock.Default();
+    const statBlock = StatBlock.Default();
 
     statBlock.Name = this.getString("name");
     statBlock.Id = AccountClient.MakeId(statBlock.Name);

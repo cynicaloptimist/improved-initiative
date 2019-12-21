@@ -38,7 +38,7 @@ export class CombatantViewModel {
   }
 
   public ApplyDamage(inputDamage: string) {
-    let damage = parseInt(inputDamage),
+    const damage = parseInt(inputDamage),
       healing = -damage,
       shouldAutoCheckConcentration = CurrentSettings().Rules
         .AutoCheckConcentration;
@@ -62,7 +62,7 @@ export class CombatantViewModel {
   }
 
   public ApplyTemporaryHP(inputTHP: string) {
-    let newTemporaryHP = parseInt(inputTHP);
+    const newTemporaryHP = parseInt(inputTHP);
 
     if (isNaN(newTemporaryHP)) {
       return;
@@ -86,8 +86,8 @@ export class CombatantViewModel {
   public GetHPColor() {
     const maxHP = this.Combatant.MaxHP(),
       currentHP = this.Combatant.CurrentHP();
-    let green = Math.floor((currentHP / maxHP) * 170);
-    let red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
+    const green = Math.floor((currentHP / maxHP) * 170);
+    const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
     return "rgb(" + red + "," + green + ",0)";
   }
 
@@ -98,7 +98,7 @@ export class CombatantViewModel {
   public EditInitiative() {
     const currentInitiative = this.Combatant.Initiative();
     const modifier = toModifierString(this.Combatant.InitiativeBonus());
-    let preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
+    const preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
     let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
     if (this.Combatant.InitiativeGroup()) {
       message += ` Break Link: <input class='response' name='break-link' type='checkbox' value='break' />`;
@@ -120,7 +120,7 @@ export class CombatantViewModel {
   }
 
   public SetAlias() {
-    let currentName = this.Name();
+    const currentName = this.Name();
     const prompt = new DefaultPrompt(
       `Change alias for ${currentName}: <input id='alias' class='response' />`,
       response => {
@@ -194,9 +194,7 @@ export class CombatantViewModel {
     const casedConditionName = _.startCase(tag.Text);
     if (Conditions[casedConditionName]) {
       const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${
-          Conditions[casedConditionName]
-        }</div>`
+        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
       );
       this.PromptUser(prompt);
     }

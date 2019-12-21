@@ -4,9 +4,9 @@ export interface LegacyPrompt {
   Resolve: (form: HTMLFormElement) => void;
 }
 
-export type LegacyPromptResolver = (
-  responses: { [id: string]: string }
-) => void;
+export type LegacyPromptResolver = (responses: {
+  [id: string]: string;
+}) => void;
 
 export class DefaultPrompt implements LegacyPrompt {
   public InputSelector = ".response";

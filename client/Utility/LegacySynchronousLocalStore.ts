@@ -31,8 +31,8 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function List(listName: string): string[] {
-    let listKey = `${_prefix}.${listName}`;
-    let list = load(listKey);
+    const listKey = `${_prefix}.${listName}`;
+    const list = load(listKey);
     if (list && list.constructor === Array) {
       return list;
     }
@@ -44,9 +44,9 @@ export namespace LegacySynchronousLocalStore {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
-    let listKey = `${_prefix}.${listName}`;
-    let fullKey = `${_prefix}.${listName}.${key}`;
-    let list = LegacySynchronousLocalStore.List(listName);
+    const listKey = `${_prefix}.${listName}`;
+    const fullKey = `${_prefix}.${listName}.${key}`;
+    const list = LegacySynchronousLocalStore.List(listName);
     if (list.indexOf(key) == -1) {
       list.push(key);
       save(listKey, list);
@@ -55,7 +55,7 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function Load<T>(listName: string, key: string): T {
-    let fullKey = `${_prefix}.${listName}.${key}`;
+    const fullKey = `${_prefix}.${listName}.${key}`;
     return load(fullKey);
   }
 
@@ -74,10 +74,10 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function Delete(listName: string, key: string) {
-    let listKey = `${_prefix}.${listName}`;
-    let fullKey = `${_prefix}.${listName}.${key}`;
-    let list = LegacySynchronousLocalStore.List(listName);
-    let keyIndex = list.indexOf(key);
+    const listKey = `${_prefix}.${listName}`;
+    const fullKey = `${_prefix}.${listName}.${key}`;
+    const list = LegacySynchronousLocalStore.List(listName);
+    const keyIndex = list.indexOf(key);
     if (keyIndex != -1) {
       list.splice(keyIndex, 1);
       save(listKey, list);
@@ -100,9 +100,9 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function ImportAll(file: File) {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (event: any) => {
-      let json = event.target.result;
+      const json = event.target.result;
       let importedStorage = {};
       try {
         importedStorage = JSON.parse(json);
@@ -144,9 +144,9 @@ export namespace LegacySynchronousLocalStore {
   }
 
   export function ImportAllAndReplace(file: File) {
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = (event: any) => {
-      let json = event.target.result;
+      const json = event.target.result;
       let importedStorage = {};
       try {
         importedStorage = JSON.parse(json);
@@ -155,7 +155,7 @@ export namespace LegacySynchronousLocalStore {
         return;
       }
       localStorage.clear();
-      for (let key in importedStorage) {
+      for (const key in importedStorage) {
         if (key.startsWith(_prefix)) {
           localStorage.setItem(key, importedStorage[key]);
         }
@@ -169,7 +169,7 @@ export namespace LegacySynchronousLocalStore {
   }
 
   function load(key: string) {
-    let value = localStorage.getItem(key);
+    const value = localStorage.getItem(key);
     if (value === "undefined" || value == null) {
       return null;
     }

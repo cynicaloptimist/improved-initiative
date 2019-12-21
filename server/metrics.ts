@@ -17,7 +17,7 @@ export function configureMetricsRoutes(app: express.Application) {
       return res.status(204).send("No metrics pipeline configured.");
     }
 
-    let session = req.session;
+    const session = req.session;
     if (session === undefined) {
       throw "Session is undefined.";
     }

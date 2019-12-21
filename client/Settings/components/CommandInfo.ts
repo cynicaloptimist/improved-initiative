@@ -11,7 +11,7 @@ export const CommandInfoById = {
   "apply-temporary-hp":
     "Temporary HP follows the D&D 5e rules. When a combatant is granted THP, it won't stack with existing THP.",
   "add-tag":
-    "Tags can be used to track conditions like \"Stunned\" or \"Concentrating\". " +
+    'Tags can be used to track conditions like "Stunned" or "Concentrating". ' +
     "You can set a timer to automatically remove a tag after a set number of rounds have passed.",
   "update-notes":
     "You can keep long-form notes to track things like illnesses, inventory, and spell slots. " +

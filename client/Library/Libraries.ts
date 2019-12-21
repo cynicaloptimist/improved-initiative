@@ -64,7 +64,7 @@ export class Libraries {
       return this.Spells.AddListings(listings, "server");
     });
 
-    const localSpells =  await Store.LoadAllAndUpdateIds(Store.Spells);
+    const localSpells = await Store.LoadAllAndUpdateIds(Store.Spells);
     const newListings = localSpells.map(savedSpell => {
       const spell = {
         ...Spell.Default(),
