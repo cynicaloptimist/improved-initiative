@@ -1,5 +1,4 @@
 import * as Enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
 import { TagState } from "../../common/CombatantState";
@@ -11,8 +10,6 @@ import { buildEncounter } from "../test/buildEncounter";
 import { PlayerView } from "./components/PlayerView";
 import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
 import { PortraitWithCaption } from "./components/PortraitModal";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("PlayerViewModel", () => {
   let encounter: Encounter;

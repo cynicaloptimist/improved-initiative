@@ -1,5 +1,4 @@
 import * as Enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
 import { StatBlockEditor } from "./StatBlockEditor";
@@ -9,8 +8,6 @@ import { Listing } from "../Library/Listing";
 
 const CURRENT_APP_VERSION = require("../../package.json").version;
 process.env.VERSION = CURRENT_APP_VERSION;
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("StatBlockEditor", () => {
   let editor: Enzyme.ReactWrapper<any, any>;
