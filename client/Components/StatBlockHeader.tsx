@@ -25,7 +25,7 @@ export class StatBlockHeader extends React.Component<
     const nameNeedsFallback =
       this.props.statBlockName &&
       this.props.name.indexOf(this.props.statBlockName) == -1;
-    
+
     const statBlockName = (
       <span className="StatBlockName"> ({this.props.statBlockName})</span>
     );

@@ -32,23 +32,17 @@ export function CSSFrom(
   }
   if (customStyles.activeCombatantIndicator) {
     declarations.push(
-      `.combatant.active { border-color: ${
-        customStyles.activeCombatantIndicator
-      } }`
+      `.combatant.active { border-color: ${customStyles.activeCombatantIndicator} }`
     );
   }
   if (customStyles.headerText) {
     declarations.push(
-      `.combatant--header, .combat-footer { color: ${
-        customStyles.headerText
-      }; }`
+      `.combatant--header, .combat-footer { color: ${customStyles.headerText}; }`
     );
   }
   if (customStyles.headerBackground) {
     declarations.push(
-      `.combatant--header, .combat-footer { background-color: ${
-        customStyles.headerBackground
-      }; border-color: ${customStyles.headerBackground} }`
+      `.combatant--header, .combat-footer { background-color: ${customStyles.headerBackground}; border-color: ${customStyles.headerBackground} }`
     );
   }
   if (customStyles.mainBackground) {

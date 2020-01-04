@@ -71,8 +71,8 @@ export class LibrariesCommander {
   };
 
   public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
-    let statBlock = StatBlock.Default();
-    let newId = probablyUniqueString();
+    const statBlock = StatBlock.Default();
+    const newId = probablyUniqueString();
 
     statBlock.Name = "New Creature";
     statBlock.Id = newId;
@@ -208,9 +208,7 @@ export class LibrariesCommander {
     const casedConditionName = _.startCase(conditionName);
     if (Conditions[casedConditionName]) {
       const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${
-          Conditions[casedConditionName]
-        }</div>`
+        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
       );
       this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     }

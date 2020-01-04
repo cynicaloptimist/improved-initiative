@@ -1,4 +1,4 @@
-export let TextAssets = {
+export const TextAssets = {
   LegendaryActions: "Legendary Actions",
   DamageVulnerabilities: "Damage Vulnerabilities",
   DamageResistances: "Damage Resistances",

@@ -1,0 +1,52 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "overrides": [
+    {
+      "files": ["client/**/*.ts", "client/**/**.tsx"],
+      "parserOptions": {
+        "project": "./client/tsconfig.json"
+      },
+      "env": {
+        "es6": true
+      }
+    },
+    {
+      "files": ["server/**/*.ts", "server/**/**.tsx"],
+      "parserOptions": {
+        "project": "./server/tsconfig.json"
+      },
+      "env": {
+        "node": true
+      }
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-inferrable-types": "error",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/prefer-namespace-keyword": "error",
+    "indent": "off",
+    "no-async-promise-executor": "off",
+    "no-empty": "off",
+    "no-inner-declarations": "off",
+    "no-undef": "off",
+    "no-var": "error",
+    "no-unused-expressions": "error"
+  }
+}

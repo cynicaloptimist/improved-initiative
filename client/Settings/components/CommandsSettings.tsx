@@ -60,7 +60,7 @@ export class CommandsSettings extends React.Component<CommandsSettingsProps> {
   }
 
   private buildCommandSettingRow = (command: Command) => {
-    let index = _.findIndex(
+    const index = _.findIndex(
       this.props.commandSettings,
       s => s.Name == command.Id
     );

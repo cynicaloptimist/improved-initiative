@@ -187,8 +187,8 @@ export class Combatant {
 
   public ApplyDamage(damage: number) {
     let currHP = this.CurrentHP(),
-      tempHP = this.TemporaryHP(),
-      allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
+      tempHP = this.TemporaryHP();
+    const allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
 
     tempHP -= damage;
     if (tempHP < 0) {

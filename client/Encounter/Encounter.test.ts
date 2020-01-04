@@ -54,7 +54,7 @@ describe("Encounter", () => {
     jest.useFakeTimers();
 
     for (let i = 0; i < 2; i++) {
-      let thisCombatant = encounter.AddCombatantFromStatBlock(
+      const thisCombatant = encounter.AddCombatantFromStatBlock(
         StatBlock.Default()
       );
       thisCombatant.Initiative(2 - i);
@@ -72,14 +72,14 @@ describe("Encounter", () => {
       GetTimerReadout(encounter.EncounterFlow.CombatTimer.ElapsedSeconds())
     ).toBe("5:00");
 
-    let combatant0Elapsed = encounter
+    const combatant0Elapsed = encounter
         .Combatants()[0]
         .CombatTimer.ElapsedSeconds(),
       combatant0Rounds = encounter.Combatants()[0].CombatTimer.ElapsedRounds();
 
     expect(GetTimerReadout(combatant0Elapsed / combatant0Rounds)).toBe("1:00");
 
-    let combatant1Elapsed = encounter
+    const combatant1Elapsed = encounter
         .Combatants()[1]
         .CombatTimer.ElapsedSeconds(),
       combatant1Rounds = encounter.Combatants()[1].CombatTimer.ElapsedRounds();
@@ -192,7 +192,7 @@ describe("Encounter", () => {
     settings.PlayerView.ActiveCombatantOnTop = true;
 
     for (let i = 0; i < 5; i++) {
-      let thisCombatant = encounter.AddCombatantFromStatBlock(
+      const thisCombatant = encounter.AddCombatantFromStatBlock(
         StatBlock.Default()
       );
       thisCombatant.Initiative(i);

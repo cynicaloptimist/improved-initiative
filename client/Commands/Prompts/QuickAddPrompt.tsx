@@ -77,5 +77,5 @@ export class QuickAddPrompt implements LegacyPrompt {
     Metrics.TrackEvent("CombatantQuickAdded", { Name: name });
   };
 
-  public component = <QuickAddPromptComponent />;
+  public component = (<QuickAddPromptComponent />);
 }

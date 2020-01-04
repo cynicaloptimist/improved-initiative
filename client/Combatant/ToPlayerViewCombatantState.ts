@@ -73,7 +73,7 @@ function GetHPColor(combatant: Combatant) {
   ) {
     return "auto";
   }
-  let green = Math.floor((currentHP / maxHP) * 170);
-  let red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
+  const green = Math.floor((currentHP / maxHP) * 170);
+  const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
   return "rgb(" + red + "," + green + ",0)";
 }

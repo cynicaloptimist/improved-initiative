@@ -10,7 +10,7 @@ export class Importer {
   }
 
   public getInt(selector) {
-    let int = $(this.domElement)
+    const int = $(this.domElement)
       .find(selector)
       .html();
     if (int) {
@@ -32,7 +32,7 @@ export class Importer {
   }
 
   public getCommaSeparatedStrings(selector: string) {
-    let commaDelimitedString = this.getString(selector);
+    const commaDelimitedString = this.getString(selector);
     if (commaDelimitedString.length > 0) {
       return commaDelimitedString.split(/, ?/);
     }
@@ -40,7 +40,7 @@ export class Importer {
   }
 
   public getCommaSeparatedModifiers(selector: string) {
-    let entries = this.getCommaSeparatedStrings(selector);
+    const entries = this.getCommaSeparatedStrings(selector);
     return entries.map(e => {
       // Extract the last piece of the name/modifier, and parse an int from only that, ensuring the name can contain any manner of spacing.
       const nameAndModifier = e.split(" ");

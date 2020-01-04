@@ -38,9 +38,14 @@
     "@types/socket.io": "^1.4.33",
     "@types/socket.io-client": "^1.4.32",
     "@types/socket.io-redis": "^1.0.25",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
     "ajv": "^6.9.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
     "formik": "^1.0.0-beta.5",
     "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
@@ -60,7 +65,6 @@
     "requirejs": "^2.3.5",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
-    "tslint": "^5.20.1",
     "typescript": "^3.7.2",
     "uglify-js": "^3.6.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
@@ -148,12 +152,12 @@
     }
   },
   "lint-staged": {
-    "*.{less,html,ts,tsx}": [
+    "*.{less,html}": [
       "prettier --write",
       "git add"
     ],
     "*.{ts,tsx}": [
-      "tslint --fix",
+      "npm run lint",
       "git add"
     ]
   },
@@ -164,6 +168,6 @@
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
-    "lint": "tslint --fix -p client && tslint --fix -p server && prettier **/*.{less,html,ts,tsx} --write"
+    "lint": "eslint --fix '**/**/*.{ts,tsx}'"
   }
 }

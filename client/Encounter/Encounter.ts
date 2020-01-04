@@ -327,7 +327,7 @@ export class Encounter {
 
   public GetEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
-      let activeCombatant = this.EncounterFlow.ActiveCombatant();
+      const activeCombatant = this.EncounterFlow.ActiveCombatant();
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
@@ -358,7 +358,7 @@ export class Encounter {
     encounterState: EncounterState<CombatantState>,
     persistentCharacterLibrary: PersistentCharacterLibrary
   ) => {
-    let activeCombatant = _.find(
+    const activeCombatant = _.find(
       this.combatants(),
       c => c.Id == encounterState.ActiveCombatantId
     );
@@ -467,30 +467,30 @@ export class Encounter {
   }
 
   private AutoPopulatedNotes(statBlock: StatBlock) {
-    let notes = [];
+    const notes = [];
     let match = [];
 
-    let spellcasting = statBlock.Traits.find(t => t.Name === "Spellcasting");
+    const spellcasting = statBlock.Traits.find(t => t.Name === "Spellcasting");
     if (spellcasting) {
       notes.push("Spellcasting Slots");
-      let content = spellcasting.Content;
+      const content = spellcasting.Content;
 
-      let spellPattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
+      const spellPattern = /([1-9])(st|nd|rd|th) level \(([1-9])/gm;
       while ((match = spellPattern.exec(content))) {
         notes.push(`${match[1]}${match[2]} Level [${match[3]}/${match[3]}]`);
       }
     }
 
-    let innateSpellcasting = statBlock.Traits.find(
+    const innateSpellcasting = statBlock.Traits.find(
       t => t.Name === "Innate Spellcasting"
     );
 
     if (innateSpellcasting) {
       notes.push("Innate Spellcasting Slots");
 
-      let content = innateSpellcasting.Content;
+      const content = innateSpellcasting.Content;
 
-      let innatePattern = /(\d)\/day/gim;
+      const innatePattern = /(\d)\/day/gim;
       while ((match = innatePattern.exec(content))) {
         notes.push(`[${match[1]}/${match[1]}]`);
       }
@@ -500,7 +500,7 @@ export class Encounter {
       notes.push("Legendary Actions [3/3]");
     }
 
-    let perDayPattern = /\((\d)\/day\)/gim;
+    const perDayPattern = /\((\d)\/day\)/gim;
 
     statBlock.Traits.filter(t => t.Name.match(perDayPattern)).forEach(t =>
       notes.push(`${t.Name.replace(perDayPattern, "[$1/$1]")}`)
