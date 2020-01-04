@@ -99,7 +99,7 @@ export class Encounter {
         c => (c.IsPlayerCharacter() ? 0 : 1),
         c => c.InitiativeGroup(),
         c => c.StatBlock().Name,
-        c => c.IndexLabel
+        c => c.IndexLabel()
       ];
     }
   }
