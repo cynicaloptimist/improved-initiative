@@ -16,11 +16,13 @@ export function CombatantRow(props: {
     classNames.push("selected");
   }
 
-  const displayName = props.combatantState.Alias.length
-    ? props.combatantState.Alias
-    : props.combatantState.StatBlock.Name +
-      " " +
-      props.combatantState.IndexLabel;
+  let displayName = props.combatantState.StatBlock.Name;
+  if (props.combatantState.Alias.length) {
+    displayName = props.combatantState.Alias;
+  } else if (props.showIndexLabel) {
+    displayName += " " + props.combatantState.IndexLabel;
+  }
+      
   return (
     <span className={classNames.join(" ")}>
       <span className="combatant__leftsection">

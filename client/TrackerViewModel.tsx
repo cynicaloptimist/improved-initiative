@@ -145,10 +145,12 @@ export class TrackerViewModel {
     const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
       c => c.Combatant.Id
     );
+    const combatantCountsByName = this.Encounter.CombatantCountsByName();
     return (
       <InitiativeList
         encounterState={encounterState}
         selectedCombatantIds={selectedCombatantIds}
+        combatantCountsByName={combatantCountsByName}
       />
     );
   });

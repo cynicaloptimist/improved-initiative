@@ -7,7 +7,8 @@ import { InitiativeListHeader } from "./InitiativeListHeader";
 
 export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;
-  selectedCombatantIds: string [];
+  selectedCombatantIds: string[];
+  combatantCountsByName: { [name: string]: number };
 }) {
   const encounterState = props.encounterState;
   return (
@@ -18,16 +19,19 @@ export function InitiativeList(props: {
           encounterActive={encounterState.ActiveCombatantId != null}
         />
         {encounterState.Combatants.map(combatantState => {
+          const siblingCount =
+            props.combatantCountsByName[combatantState.StatBlock.Name] || 1;
+          
           return (
             <CombatantRow
               combatantState={combatantState}
               isActive={encounterState.ActiveCombatantId == combatantState.Id}
-              isSelected={props.selectedCombatantIds.some(id => id ==combatantState.Id)}
-              showIndexLabel={
-                encounterState.Combatants.filter(
-                  c => c.StatBlock.Name == combatantState.StatBlock.Name
-                ).length > 1
-              }
+              isSelected={props.selectedCombatantIds.some(
+                id => id == combatantState.Id
+              )}
+              // Show index labels if the encounter has ever had more than one
+              // creature with this name.
+              showIndexLabel={siblingCount > 1}
             />
           );
         })}
