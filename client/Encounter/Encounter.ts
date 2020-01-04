@@ -327,7 +327,7 @@ export class Encounter {
 
   public GetEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
-      let activeCombatant = this.EncounterFlow.ActiveCombatant();
+      const activeCombatant = this.EncounterFlow.ActiveCombatant();
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
