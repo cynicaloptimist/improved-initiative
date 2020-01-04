@@ -175,9 +175,7 @@ describe("PersistentCharacter", () => {
       library
     );
 
-    const encounterState: EncounterState<
-      CombatantState
-    > = encounter.GetEncounterState();
+    const encounterState: EncounterState<CombatantState> = encounter.GetEncounterState();
     expect(encounterState.Combatants.length).toEqual(1);
   });
 });

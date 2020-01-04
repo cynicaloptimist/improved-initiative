@@ -41,10 +41,7 @@ export class Tag implements Tag {
     return !this.HasDuration || this.DurationRemaining() > 0;
   });
 
-  public static getLegacyTags = (
-    tags: (any)[],
-    combatant: Combatant
-  ): Tag[] => {
+  public static getLegacyTags = (tags: any[], combatant: Combatant): Tag[] => {
     return tags.map(tag => {
       if (tag.Text) {
         const savedTag: TagState = tag;

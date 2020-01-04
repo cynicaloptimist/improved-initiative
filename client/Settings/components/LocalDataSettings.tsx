@@ -54,16 +54,14 @@ export class LocalDataSettings extends React.Component<{}> {
 
   private exportData = async () => {
     const asyncKeys = await Store.GetAllKeys();
-    let blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
+    const blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
   };
 
   private importDataAndReplace = async (file: File) => {
     if (
       confirm(
-        `Replace your Improved Initiative data with imported ${
-          file.name
-        } and reload?`
+        `Replace your Improved Initiative data with imported ${file.name} and reload?`
       )
     ) {
       await Store.DeleteAll();

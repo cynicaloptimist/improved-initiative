@@ -47,9 +47,7 @@ export function InnerAutoHideField(
   } else {
     return (
       <span
-        className={`autohide-field__open-button fa-clickable fa-${
-          props.faClass
-        }`}
+        className={`autohide-field__open-button fa-clickable fa-${props.faClass}`}
         title={props.tooltip}
         onClick={() => setIsExpanded(true)}
       />

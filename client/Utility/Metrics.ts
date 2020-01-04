@@ -15,7 +15,7 @@ type GoogleAnalyticsTag = (
   eventValue?: number
 ) => void;
 
-declare var gtag: GoogleAnalyticsTag | undefined;
+declare let gtag: GoogleAnalyticsTag | undefined;
 
 export class Metrics {
   public static async TrackLoad() {

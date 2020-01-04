@@ -12,7 +12,11 @@ export class ColorBlock extends React.Component<ColorBlockProps, {}> {
     };
 
     return (
-      <span className="c-color-block" style={style} onClick={this.props.click} />
+      <span
+        className="c-color-block"
+        style={style}
+        onClick={this.props.click}
+      />
     );
   }
 }

@@ -12,8 +12,8 @@ interface ToolbarProps {
 export function Toolbar(props: ToolbarProps) {
   const [widthStyle, setWidthStyle] = React.useState<string>("auto");
 
-  let outerElement = React.useRef<HTMLDivElement>(null);
-  let innerElement = React.useRef<HTMLDivElement>(null);
+  const outerElement = React.useRef<HTMLDivElement>(null);
+  const innerElement = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (!outerElement.current || !innerElement.current) {

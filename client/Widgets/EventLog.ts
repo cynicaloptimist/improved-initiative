@@ -42,7 +42,7 @@ export class EventLog {
   private element = document.getElementsByClassName("event-log")[0];
 
   private scrollToBottomOfLog = () => {
-    let scrollHeight = this.element.scrollHeight;
+    const scrollHeight = this.element.scrollHeight;
     this.element.scrollTop = scrollHeight;
   };
 }

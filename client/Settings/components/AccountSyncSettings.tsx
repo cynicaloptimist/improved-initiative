@@ -134,7 +134,7 @@ export class AccountSyncSettings extends React.Component<
   private syncAll = async () => {
     this.setState({ syncError: "" });
     const asyncKeys = await Store.GetAllKeys();
-    let blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
+    const blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
     this.props.accountClient.SaveAllUnsyncedItems(
       this.props.libraries,

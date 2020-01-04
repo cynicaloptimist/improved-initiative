@@ -44,9 +44,7 @@ export class Listing<T extends Listable> {
         .then(callback)
         .catch(err =>
           console.error(
-            `Couldn't load item keyed '${
-              this.storedListing.Id
-            }' from async localForage store:\n\n${err}`
+            `Couldn't load item keyed '${this.storedListing.Id}' from async localForage store:\n\n${err}`
           )
         );
     }
@@ -63,9 +61,7 @@ export class Listing<T extends Listable> {
         return callback(item);
       } else {
         console.error(
-          `Couldn't load item keyed '${
-            this.storedListing.Id
-          }' from localStorage.`
+          `Couldn't load item keyed '${this.storedListing.Id}' from localStorage.`
         );
         return null;
       }

@@ -5,11 +5,11 @@ export function GetTimerReadout(elapsedSeconds: number) {
     return "0:00";
   }
 
-  let time = moment.duration({ seconds: elapsedSeconds });
+  const time = moment.duration({ seconds: elapsedSeconds });
   let paddedSeconds = time.seconds().toString(),
     paddedMinutes = time.minutes().toString();
 
-  let hours = time.hours();
+  const hours = time.hours();
 
   if (paddedSeconds.length < 2) {
     paddedSeconds = "0" + paddedSeconds;

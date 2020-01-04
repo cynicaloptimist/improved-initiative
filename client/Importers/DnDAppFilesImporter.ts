@@ -8,7 +8,7 @@ const getStatBlocksFromXml = (xmlString: string) => {
     .find("monster")
     .toArray();
   return statBlocks.map(xmlDoc => {
-    let importer = new StatBlockImporter(xmlDoc);
+    const importer = new StatBlockImporter(xmlDoc);
     return importer.GetStatBlock();
   });
 };
@@ -18,7 +18,7 @@ const getSpellsFromXml = (xmlString: string) => {
     .find("spell")
     .toArray();
   return spells.map(xmlDoc => {
-    let importer = new SpellImporter(xmlDoc);
+    const importer = new SpellImporter(xmlDoc);
     return importer.GetSpell();
   });
 };

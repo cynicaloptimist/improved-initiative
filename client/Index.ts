@@ -25,7 +25,7 @@ $(async () => {
   }
 
   if ($("#playerview").length) {
-    let encounterId = env.EncounterId;
+    const encounterId = env.EncounterId;
     const container = document.getElementById("playerview__container");
     if (!container) {
       throw "#playerview__container not found";
@@ -36,7 +36,7 @@ $(async () => {
   }
 
   if ($("#landing").length) {
-    let launcherViewModel = new LauncherViewModel();
+    const launcherViewModel = new LauncherViewModel();
     ko.applyBindings(launcherViewModel, document.body);
   }
 
