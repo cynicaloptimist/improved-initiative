@@ -96,7 +96,7 @@
     "mustache": "^2.2.0",
     "mustache-express": "^1.2.5",
     "node": "^10.3.0",
-    "npm": "^6.13.0",
+    "npm": "^6.13.4",
     "patreon": "^0.4.1",
     "react": "^16.10.2",
     "react-color": "^2.17.0",
