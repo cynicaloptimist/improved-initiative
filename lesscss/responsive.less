@@ -1,5 +1,5 @@
 //Two columns
-@media (max-width: 1200px) {
+@media (max-width: @large) {
   body > .login.button {
     display: none;
   }
@@ -28,31 +28,9 @@
     }
   }
 }
-@media (max-width: 900px) {
-  #tracker {
-    .combatant .name {
-      width: 25%;
-    }
 
-    .c-statblock,
-    .left-column,
-    .preview.statblock,
-    .right-column {
-      max-width: 300px;
-    }
-
-    .c-statblock .Abilities {
-      margin: 0.5rem 0.25rem 0.5rem 0.25rem;
-    }
-
-    .c-statblock .Abilities div .score,
-    .c-statblock .Abilities div .modifier {
-      font-size: 0.75rem;
-    }
-  }
-}
 //One column
-@media (max-width: 650px) {
+@media (max-width: @small) {
   .tutorial {
     position: fixed !important;
     top: auto !important;

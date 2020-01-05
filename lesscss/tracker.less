@@ -7,6 +7,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     margin: @large-spacer;
+    overflow: auto;
   }
 
   .left-column,
@@ -37,6 +38,28 @@
       bottom: -6px;
       left: -3px;
       right: -3px;
+    }
+  }
+
+  @media (max-width: @medium) {
+    .combatant .name {
+      width: 25%;
+    }
+
+    .c-statblock,
+    .left-column,
+    .preview.statblock,
+    .right-column {
+      max-width: 300px;
+    }
+
+    .c-statblock .Abilities {
+      margin: 0.5rem 0.25rem 0.5rem 0.25rem;
+    }
+
+    .c-statblock .Abilities div .score,
+    .c-statblock .Abilities div .modifier {
+      font-size: 0.75rem;
     }
   }
 }
