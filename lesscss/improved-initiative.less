@@ -6,7 +6,9 @@
 
 @import (inline) "node_modules/awesomplete/awesomplete.css";
 @import (inline) "node_modules/tippy.js/dist/tippy.css";
+
 //Spacers
+
 @extra-small-spacer: 0.125rem;
 @small-spacer: 0.25rem;
 @medium-spacer: 0.5rem;
@@ -18,6 +20,7 @@
 @fixed-column-width: 375px;
 @scrollbar-width: 14px;
 // Typography
+
 @font-family-serif: "Spectral SC", serif;
 @font-family-sans-serif: "Roboto", sans-serif;
 @font-family-headers: @font-family-serif;
@@ -42,24 +45,26 @@
 }
 
 * {
+  border-color: @shadow;
+  box-shadow: @shadow;
   font-family: @font-family-body;
   position: relative;
   margin: 0;
   padding: 0;
   flex-shrink: 0;
-  border-color: @shadow;
-  box-shadow: @shadow;
+  touch-action: manipulation;
 }
 
 body,
 html {
+  color: @primary-black;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   max-height: 100%;
   max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  cursor: default;
-  color: @primary-black;
+  touch-action: manipulation;
 }
 
 #tracker,
