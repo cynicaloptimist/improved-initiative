@@ -115,37 +115,6 @@
     "socket.io-client": "^2.1.1",
     "socket.io-redis": "^5.2.0"
   },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "client/tsconfig.json"
-      }
-    },
-    "setupFiles": [
-      "jest-localstorage-mock"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest",
-      "^.+\\.md?$": "markdown-loader-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "moduleNameMapper": {
-      "^dnd-core$": "dnd-core/dist/cjs",
-      "^react-dnd$": "react-dnd/dist/cjs",
-      "^react-dnd-html5-backend$": "react-dnd-html5-backend/dist/cjs",
-      "^react-dnd-touch-backend$": "react-dnd-touch-backend/dist/cjs",
-      "^react-dnd-test-backend$": "react-dnd-test-backend/dist/cjs",
-      "^react-dnd-test-utils$": "react-dnd-test-utils/dist/cjs"
-    }
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

@@ -8,12 +8,12 @@ The official Improved Initiative app lives at https://www.improved-initiative.co
 
 ### Requirements
 
-- node.js
+- node.js 12+
 - npm
 
 ### Setup
 
-- `npm install
+- `npm install`
 - `npm run build`
 - `npm run start`
 
