@@ -16,16 +16,24 @@ export function CombatantRow(props: {
     classNames.push("selected");
   }
 
+  let initiativeClass = "combatant__initiative";
+  if (props.combatantState.InitiativeGroup) {
+    initiativeClass += " fas fa-link";
+  }
+
   let displayName = props.combatantState.StatBlock.Name;
   if (props.combatantState.Alias.length) {
     displayName = props.combatantState.Alias;
   } else if (props.showIndexLabel) {
     displayName += " " + props.combatantState.IndexLabel;
   }
-      
+
   return (
     <span className={classNames.join(" ")}>
       <span className="combatant__leftsection">
+        <span className={initiativeClass} title="Initiative Roll">
+          {props.combatantState.Initiative}
+        </span>
         <span className="combatant__name" title={displayName}>
           {displayName}
         </span>
