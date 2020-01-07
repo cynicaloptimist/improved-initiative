@@ -55,4 +55,3 @@ function getDisplayName(props: CombatantRowProps) {
   }
   return displayName;
 }
-
