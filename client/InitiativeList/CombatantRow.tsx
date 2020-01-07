@@ -21,6 +21,9 @@ export function CombatantRow(props: CombatantRowProps) {
         <span className="combatant__name" title={displayName}>
           {displayName}
         </span>
+        <span className="combatant__hp" style={getHPStyle(props)}>
+          {getHPText(props)}
+        </span>
       </span>
     </span>
   );
@@ -49,9 +52,25 @@ function getDisplayName(props: CombatantRowProps) {
   let displayName = props.combatantState.StatBlock.Name;
   if (props.combatantState.Alias.length) {
     displayName = props.combatantState.Alias;
-  }
-  else if (props.showIndexLabel) {
+  } else if (props.showIndexLabel) {
     displayName += " " + props.combatantState.IndexLabel;
   }
   return displayName;
+}
+
+function getHPStyle(props: CombatantRowProps) {
+  const maxHP = props.combatantState.StatBlock.HP.Value,
+    currentHP = props.combatantState.CurrentHP;
+  const green = Math.floor((currentHP / maxHP) * 170);
+  const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
+  return { color: "rgb(" + red + "," + green + ",0)" };
+}
+
+function getHPText(props: CombatantRowProps) {
+  const maxHP = props.combatantState.StatBlock.HP.Value;
+  if (props.combatantState.TemporaryHP) {
+    return `${props.combatantState.CurrentHP}+${props.combatantState.TemporaryHP}/${maxHP}`;
+  } else {
+    return `${props.combatantState.CurrentHP}/${maxHP}`;
+  }
 }
