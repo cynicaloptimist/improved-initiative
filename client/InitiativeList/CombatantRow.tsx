@@ -2,31 +2,19 @@ import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
 
-export function CombatantRow(props: {
+type CombatantRowProps = {
   combatantState: CombatantState;
   isActive: boolean;
   isSelected: boolean;
   showIndexLabel: boolean;
-}) {
-  const classNames = ["combatant"];
-  if (props.isActive) {
-    classNames.push("active");
-  }
-  if (props.isSelected) {
-    classNames.push("selected");
-  }
+};
 
-  let initiativeClass = "combatant__initiative";
-  if (props.combatantState.InitiativeGroup) {
-    initiativeClass += " fas fa-link";
-  }
+export function CombatantRow(props: CombatantRowProps) {
+  const classNames = getClassNames(props);
 
-  let displayName = props.combatantState.StatBlock.Name;
-  if (props.combatantState.Alias.length) {
-    displayName = props.combatantState.Alias;
-  } else if (props.showIndexLabel) {
-    displayName += " " + props.combatantState.IndexLabel;
-  }
+  let initiativeClass = getInitiativeClass(props);
+
+  let displayName = getDisplayName(props);
 
   return (
     <span className={classNames.join(" ")}>
@@ -41,3 +29,34 @@ export function CombatantRow(props: {
     </span>
   );
 }
+
+function getClassNames(props: CombatantRowProps) {
+  const classNames = ["combatant"];
+  if (props.isActive) {
+    classNames.push("active");
+  }
+  if (props.isSelected) {
+    classNames.push("selected");
+  }
+  return classNames;
+}
+
+function getInitiativeClass(props: CombatantRowProps) {
+  let initiativeClass = "combatant__initiative";
+  if (props.combatantState.InitiativeGroup) {
+    initiativeClass += " fas fa-link";
+  }
+  return initiativeClass;
+}
+
+function getDisplayName(props: CombatantRowProps) {
+  let displayName = props.combatantState.StatBlock.Name;
+  if (props.combatantState.Alias.length) {
+    displayName = props.combatantState.Alias;
+  }
+  else if (props.showIndexLabel) {
+    displayName += " " + props.combatantState.IndexLabel;
+  }
+  return displayName;
+}
+
