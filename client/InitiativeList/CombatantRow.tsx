@@ -10,16 +10,12 @@ type CombatantRowProps = {
 };
 
 export function CombatantRow(props: CombatantRowProps) {
-  const classNames = getClassNames(props);
-
-  let initiativeClass = getInitiativeClass(props);
-
-  let displayName = getDisplayName(props);
+  const displayName = getDisplayName(props);
 
   return (
-    <span className={classNames.join(" ")}>
+    <span className={getClassNames(props).join(" ")}>
       <span className="combatant__leftsection">
-        <span className={initiativeClass} title="Initiative Roll">
+        <span className={getInitiativeClass(props)} title="Initiative Roll">
           {props.combatantState.Initiative}
         </span>
         <span className="combatant__name" title={displayName}>
