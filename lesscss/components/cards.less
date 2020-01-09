@@ -1,0 +1,27 @@
+.card-bg (@margin, @padding) {
+  .colors(@primary-black, @primary-white);
+  margin: @margin;
+  padding: @padding;
+  background-color: @primary-white;
+  border-radius: 0;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25), 0 7px 14px rgba(0, 0, 0, 0.25);
+}
+
+.card-bg-2 (@margin, @padding) {
+  .colors(@primary-black, @primary-white);
+  margin: @margin;
+  padding: @padding;
+  background-color: @primary-white;
+  border-radius: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card {
+  .colors(@primary-black, @primary-white);
+  margin: @medium-spacer;
+  padding: @medium-spacer;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: @border-radius;
+  box-shadow: 2px 2px 1px;
+}

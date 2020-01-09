@@ -33,7 +33,7 @@
 
 @modal-background-color: rgba(0, 0, 0, 0.7);
 
-//TODO: move all rules to associated .less module.
+// TODO: move all rules to associated .less module.
 
 .colors(@text, @background, @border: @shadow) {
   color: @text;
@@ -58,18 +58,6 @@
 
 .toolbar-container {
   .colors(@primary-white, @primary-grey);
-}
-
-#landing {
-  .disabled {
-    color: @disabled-black;
-    &:hover {
-      background-color: @button-face;
-    }
-  }
-  .start-encounter .button {
-    .green-button();
-  }
 }
 
 .tutorial .next,
