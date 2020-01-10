@@ -1,0 +1,36 @@
+.c-tabs {
+  justify-content: center;
+  flex-flow: row wrap;
+  margin: @medium-spacer 0 0 0;
+
+  .c-tab {
+    background-color: @active-white;
+    &:hover {
+      background-color: @selected-light;
+    }
+    &.selected,
+    &.s-selected {
+      background-color: @primary-red;
+      color: @primary-white;
+      min-width: auto;
+      overflow-x: unset;
+
+      &:hover {
+        background-color: @accent-red;
+      }
+    }
+
+    flex: 1;
+    padding: @medium-spacer @small-spacer;
+    margin-right: @extra-small-spacer;
+    border-style: none;
+    border-radius: 0 @border-radius 0 0;
+    align-items: center;
+    text-align: center;
+    overflow-x: hidden;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}

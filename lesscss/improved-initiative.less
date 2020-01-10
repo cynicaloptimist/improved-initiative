@@ -1,11 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Spectral+SC:400,400i,700,700i");
-@import "colors.less";
+@import "base/colors.less";
 @import "node_modules/@fortawesome/fontawesome-free/less/solid.less";
 @import "node_modules/@fortawesome/fontawesome-free/less/regular.less";
 @import "node_modules/@fortawesome/fontawesome-free/less/fontawesome.less";
 
 @import (inline) "node_modules/awesomplete/awesomplete.css";
 @import (inline) "node_modules/tippy.js/dist/tippy.css";
+
+@import "utilities/animations";
+@import "utilities/helpers";
 
 //Spacers
 
@@ -19,20 +22,8 @@
 @prompt-minimum-height: 42px;
 @fixed-column-width: 375px;
 @scrollbar-width: 14px;
-// Typography
 
-@font-family-serif: "Spectral SC", serif;
-@font-family-sans-serif: "Roboto", sans-serif;
-@font-family-headers: @font-family-serif;
-@font-family-body: @font-family-sans-serif;
-@font-size-h1: 2.75rem;
-@font-size-h2: 1.25rem;
-@font-size-h3: 1.75rem;
-@font-size-h4: 1.15rem;
-@font-size-large: 1.5rem;
-@font-size-body: 1rem;
-@font-size-small: 0.875rem;
-@font-size-mice: 0.75rem;
+@import "base/typography";
 
 // Breakpoints
 
@@ -40,39 +31,9 @@
 @medium: 900px;
 @small: 650px;
 
-//elements
-*,
-::after,
-::before {
-  box-sizing: border-box;
-}
+// elements
 
-:focus {
-  outline: @primary-red auto 5px;
-}
-
-* {
-  border-color: @shadow;
-  box-shadow: @shadow;
-  font-family: @font-family-body;
-  position: relative;
-  margin: 0;
-  padding: 0;
-  flex-shrink: 0;
-  touch-action: manipulation;
-}
-
-body,
-html {
-  color: @primary-black;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  touch-action: manipulation;
-}
+@import "layout/base";
 
 #tracker,
 #playerview {
@@ -87,20 +48,6 @@ html {
   font-size: 20px;
 }
 
-div {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  max-height: 100%;
-
-  & > * {
-    min-width: 0;
-    min-height: 0;
-    max-height: 100%;
-    max-width: 100%;
-  }
-}
-
 div.awesomplete > ul {
   max-height: unset;
 }
@@ -108,40 +55,6 @@ div.awesomplete > ul {
 a,
 a * {
   cursor: pointer;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: @font-family-headers;
-  color: @primary-red;
-  * {
-    font-family: @font-family-headers;
-  }
-}
-
-h1 {
-  font-family: @font-family-headers;
-  font-size: @font-size-h1;
-}
-
-h2 {
-  margin: @extra-small-spacer 0 @medium-spacer;
-  font-size: @font-size-h2;
-  font-weight: normal;
-  color: @primary-black;
-}
-
-h3 {
-  margin: @medium-spacer 0 @extra-small-spacer;
-  font-size: @font-size-h3;
-  line-height: 1;
-}
-
-h4 {
-  margin: @extra-small-spacer @extra-small-spacer @medium-spacer;
-  font-size: @font-size-h4;
 }
 
 ul.bulleted {
@@ -155,49 +68,10 @@ hr {
   margin: @medium-spacer 0;
 }
 
-input[type="number"] {
-  width: 80px;
-  text-align: center;
-}
+@import "layout/forms";
 
-input[type="number"]::-webkit-inner-spin-button {
-  opacity: 1;
-}
-
-input,
-textarea {
-  .colors(@primary-black, @input-white);
-  padding: @medium-spacer;
-  border: 1px solid @primary-black;
-}
-//Common
-@import "buttons.less";
-
-.hop {
-  animation-name: hop;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5);
-}
-@keyframes hop {
-  20%,
-  30% {
-    transform: translateY(0);
-  }
-
-  25% {
-    transform: translateY(-5px);
-  }
-}
-
-.absolute-center {
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-@import "overlay.less";
+@import "components/buttons";
+@import "components/overlay";
 
 .preview.statblock {
   .card-bg-2(@large-spacer, @large-spacer);
@@ -206,7 +80,7 @@ textarea {
   border: none;
 }
 
-@import "tutorial.less";
+@import "components/tutorial";
 
 body > .login.button {
   display: block;
@@ -217,7 +91,8 @@ body > .login.button {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-@import "settings.less";
+
+@import "components/settings";
 
 .social-media {
   display: none;
@@ -241,92 +116,23 @@ body > .login.button {
   box-shadow: 2px 2px 1px inset;
 }
 
-.card-bg (@margin, @padding) {
-  .colors(@primary-black, @primary-white);
-  margin: @margin;
-  padding: @padding;
-  background-color: @primary-white;
-  border-radius: 0;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25), 0 7px 14px rgba(0, 0, 0, 0.25);
-}
+@import "components/cards";
 
-.card-bg-2 (@margin, @padding) {
-  .colors(@primary-black, @primary-white);
-  margin: @margin;
-  padding: @padding;
-  background-color: @primary-white;
-  border-radius: 0;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
+@import "pages/landing";
+@import "pages/tracker";
 
-.card {
-  .colors(@primary-black, @primary-white);
-  margin: @medium-spacer;
-  padding: @medium-spacer;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: @border-radius;
-  box-shadow: 2px 2px 1px;
-}
-//Layout
-@import "landing.less";
-@import "tracker.less";
-@import "libraries.less";
-@import "listing.less";
-@import "toolbar.less";
+@import "components/libraries";
+@import "components/listing";
+@import "components/toolbar";
+@import "components/spell-editor";
+@import "components/statblock-editor";
+@import "components/tabs";
+@import "components/statblock";
+@import "components/combat-footer";
+@import "components/combatants";
+@import "components/prompts";
+@import "components/spell";
 
-.scrollframe {
-  flex-shrink: 1;
-  overflow-y: scroll;
-}
-@import "spell-editor.less";
-@import "statblock-editor.less";
+@import "pages/player-view";
 
-.c-tabs {
-  justify-content: center;
-  flex-flow: row wrap;
-  margin: @medium-spacer 0 0 0;
-
-  .c-tab {
-    background-color: @active-white;
-    &:hover {
-      background-color: @selected-light;
-    }
-    &.selected,
-    &.s-selected {
-      background-color: @primary-red;
-      color: @primary-white;
-      min-width: auto;
-      overflow-x: unset;
-
-      &:hover {
-        background-color: @accent-red;
-      }
-    }
-
-    flex: 1;
-    padding: @medium-spacer @small-spacer;
-    margin-right: @extra-small-spacer;
-    border-style: none;
-    border-radius: 0 @border-radius 0 0;
-    align-items: center;
-    text-align: center;
-    overflow-x: hidden;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
-  }
-}
-
-.c-checkbox-label {
-  padding-right: @small-spacer;
-}
-
-@import "statblock.less";
-@import "combat-footer.less";
-@import "combatants.less";
-@import "prompts.less";
-@import "player-view.less";
-@import "responsive.less";
-@import "spell.less";
+@import "base/responsive";
