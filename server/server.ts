@@ -1,3 +1,4 @@
+require('newrelic');
 import express = require("express");
 import socketIO = require("socket.io");
 
