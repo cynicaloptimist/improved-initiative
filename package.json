@@ -8,7 +8,8 @@
     "url": "https://github.com/cynicaloptimist/improved-initiative.git"
   },
   "engines": {
-    "npm": "6.1.0"
+    "npm": "6.13.4",
+    "node": "12.14.1"
   },
   "devDependencies": {
     "@types/awesomplete": "^1.1.6",
