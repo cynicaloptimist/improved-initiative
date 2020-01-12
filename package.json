@@ -63,11 +63,11 @@
     "markdown-loader-jest": "^0.1.1",
     "prettier": "^1.19.0",
     "requirejs": "^2.3.5",
+    "terser-webpack-plugin": "^2.3.2",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
     "uglify-js": "^3.6.0",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.41.0",
     "webpack-build-notifier": "^2.0.0",
     "webpack-merge": "^4.1.2"
