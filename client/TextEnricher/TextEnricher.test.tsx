@@ -1,13 +1,10 @@
 import * as Enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
 import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { DefaultRules } from "../Rules/Rules";
 import { Store } from "../Utility/Store";
 import { TextEnricher } from "./TextEnricher";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("TextEnricher", () => {
   test("Spell Reference", async done => {

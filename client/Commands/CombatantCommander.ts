@@ -182,7 +182,7 @@ export class CombatantCommander {
   };
 
   private editHPForCombatants(combatantViewModels: CombatantViewModel[]) {
-    const latestRollTotal = (this.latestRoll?.Total) || 0;
+    const latestRollTotal = this.latestRoll?.Total || 0;
     const prompt = ApplyDamagePrompt(
       combatantViewModels,
       latestRollTotal.toString(),
@@ -209,7 +209,7 @@ export class CombatantCommander {
       return;
     }
     const selectedCombatants = this.SelectedCombatants();
-    const latestRollTotal = (this.latestRoll?.Total) || 0;
+    const latestRollTotal = this.latestRoll?.Total || 0;
     const prompt = ApplyHealingPrompt(
       selectedCombatants,
       latestRollTotal.toString(),
@@ -433,7 +433,7 @@ export class CombatantCommander {
     }
 
     if (this.SelectedCombatants().length == 1) {
-      let selectedCombatant = this.SelectedCombatants()[0].Combatant;
+      const selectedCombatant = this.SelectedCombatants()[0].Combatant;
       if (selectedCombatant.PersistentCharacterId) {
         this.tracker.EditPersistentCharacterStatBlock(
           selectedCombatant.PersistentCharacterId

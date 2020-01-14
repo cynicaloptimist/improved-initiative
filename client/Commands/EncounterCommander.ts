@@ -295,7 +295,7 @@ export class EncounterCommander {
     }
 
     this.tracker.Encounter.EncounterFlow.PreviousTurn();
-    let currentCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+    const currentCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Initiative rewound to ${currentCombatant.DisplayName()}.`
     );

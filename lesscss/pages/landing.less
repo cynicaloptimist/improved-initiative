@@ -5,6 +5,16 @@
     display: none;
   }
 
+  .disabled {
+    color: @disabled-black;
+    &:hover {
+      background-color: @button-face;
+    }
+  }
+  .start-encounter .button {
+    .green-button();
+  }
+
   .page {
     display: flex;
     flex-direction: column;

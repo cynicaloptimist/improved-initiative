@@ -3,10 +3,7 @@ import { InitiativeSpecialRoll } from "../../common/StatBlock";
 
 export interface IRules {
   GetModifierFromScore: (attribute: number) => number;
-  AbilityCheck: (
-    mod?: number,
-    specialRoll?: InitiativeSpecialRoll
-  ) => number;
+  AbilityCheck: (mod?: number, specialRoll?: InitiativeSpecialRoll) => number;
   EnemyHPTransparency: string;
 }
 
@@ -14,10 +11,7 @@ export class DefaultRules implements IRules {
   public GetModifierFromScore = (abilityScore: number) => {
     return Math.floor((abilityScore - 10) / 2);
   };
-  public AbilityCheck = (
-    mod = 0,
-    specialRoll?: InitiativeSpecialRoll
-  ) => {
+  public AbilityCheck = (mod = 0, specialRoll?: InitiativeSpecialRoll) => {
     if (specialRoll == "advantage") {
       return _.max([
         Math.ceil(Math.random() * 20) + mod,

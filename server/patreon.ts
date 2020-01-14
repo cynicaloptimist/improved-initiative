@@ -51,7 +51,8 @@ interface ApiResponse {
     | {
         id: string;
         type: string;
-      })[];
+      }
+  )[];
 }
 
 interface TokensResponse {
@@ -246,7 +247,10 @@ async function handleWebhook(req: Req, res: Res) {
 
     const userAccountLevel = isDeletedPledge
       ? AccountStatus.None
-      : getUserAccountLevel(userId, entitledTiers.map(tier => tier.id));
+      : getUserAccountLevel(
+          userId,
+          entitledTiers.map(tier => tier.id)
+        );
     console.log(
       `Updating account level for ${userEmail} to ${userAccountLevel}`
     );

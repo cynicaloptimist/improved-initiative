@@ -34,7 +34,7 @@ export namespace Store {
     listName: string
   ): Promise<T[]> {
     const store = localforage.createInstance({ name: listName });
-    let items: T[] = [];
+    const items: T[] = [];
     await store.iterate((item: T, key) => {
       item.Id = key;
       items.push(item);
@@ -57,7 +57,7 @@ export namespace Store {
   }
 
   export async function GetAllKeys() {
-    let storage = {};
+    const storage = {};
     for (const listName of SupportedLists) {
       const store = localforage.createInstance({ name: listName });
       await store.iterate((value, key) => {
@@ -69,9 +69,9 @@ export namespace Store {
 
   export async function ImportAll(file: File) {
     return new Promise((done, fail) => {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = async (event: any) => {
-        let json = event.target.result;
+        const json = event.target.result;
         let importedStorage = {};
         try {
           importedStorage = JSON.parse(json);
