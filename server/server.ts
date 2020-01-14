@@ -1,6 +1,7 @@
 require('newrelic');
 import express = require("express");
 import socketIO = require("socket.io");
+import http = require("http");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -15,7 +16,7 @@ import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
   const app = express();
-  const http = require("http").Server(app);
+  const server = new http.Server(app);
 
   const dbConnectionString = await getDbConnectionString();
   await DB.initialize(dbConnectionString);
@@ -39,10 +40,10 @@ async function improvedInitiativeServer() {
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-  const io = socketIO(http);
+  const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
 
-  LaunchServer(http);
+  LaunchServer(server);
 }
 
 improvedInitiativeServer();
