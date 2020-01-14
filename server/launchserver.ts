@@ -1,8 +1,10 @@
-export default function(http) {
+import http = require("http");
+import { AddressInfo } from "net";
+
+export default function (server: http.Server) {
   const defaultPort = process.env.PORT || 80;
-  const server = http.listen(defaultPort, () => {
-    const host = server.address().address;
-    const port = server.address().port;
-    console.log("Improved Initiative listening at http://%s:%s", host, port);
+  server.listen(defaultPort, () => {
+    const address = server.address() as AddressInfo;
+    console.log("Improved Initiative listening at http://%s:%s", address.address, address.port);
   });
 }
