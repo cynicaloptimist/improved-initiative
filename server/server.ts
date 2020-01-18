@@ -7,12 +7,12 @@ import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
-import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
+import { AddressInfo } from "net";
 
 if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
   require("newrelic");
@@ -47,7 +47,11 @@ async function improvedInitiativeServer() {
   const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
 
-  LaunchServer(server);
+  const defaultPort = process.env.PORT || 80;
+  server.listen(defaultPort, () => {
+    const address = server.address() as AddressInfo;
+    console.log("Improved Initiative listening at http://%s:%s", address.address, address.port);
+  });
 }
 
 const num_processes = require("os").cpus().length;
