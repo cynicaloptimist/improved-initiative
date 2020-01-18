@@ -1,4 +1,3 @@
-require("newrelic");
 import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
@@ -14,6 +13,10 @@ import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
+
+if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
+  require("newrelic");
+}
 
 async function improvedInitiativeServer() {
   const app = express();
