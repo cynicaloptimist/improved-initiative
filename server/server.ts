@@ -1,7 +1,8 @@
-require('newrelic');
+require("newrelic");
 import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
+import cluster = require("cluster");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -46,4 +47,11 @@ async function improvedInitiativeServer() {
   LaunchServer(server);
 }
 
-improvedInitiativeServer();
+const num_processes = require("os").cpus().length;
+if (cluster.isMaster) {
+  for (var i = 0; i < num_processes; i++) {
+    cluster.fork();
+  }
+} else {
+  improvedInitiativeServer();
+}
