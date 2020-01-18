@@ -2,6 +2,7 @@ import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
 import cluster = require("cluster");
+import sticky = require("sticky-session");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -12,7 +13,6 @@ import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
-import { AddressInfo } from "net";
 
 if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
   require("newrelic");
@@ -47,18 +47,12 @@ async function improvedInitiativeServer() {
   const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
 
-  const defaultPort = process.env.PORT || 80;
-  server.listen(defaultPort, () => {
-    const address = server.address() as AddressInfo;
-    console.log("Improved Initiative listening at http://%s:%s", address.address, address.port);
-  });
+  const defaultPort = parseInt(process.env.PORT || "80");
+  await sticky.listen(server, defaultPort);
+  
+  if (cluster.worker) {
+    console.log("Improved Initiative node %s running", cluster.worker.id);
+  }
 }
 
-const num_processes = require("os").cpus().length;
-if (cluster.isMaster) {
-  for (var i = 0; i < num_processes; i++) {
-    cluster.fork();
-  }
-} else {
-  improvedInitiativeServer();
-}
+improvedInitiativeServer();
