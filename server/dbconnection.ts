@@ -16,7 +16,9 @@ export const initialize = async connectionString => {
     return;
   }
 
-  mongoClient = new mongo.MongoClient(connectionString);
+  mongoClient = new mongo.MongoClient(connectionString, {
+    useNewUrlParser: true
+  });
   await mongoClient.connect();
   return;
 };
