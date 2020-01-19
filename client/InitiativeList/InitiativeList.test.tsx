@@ -16,6 +16,7 @@ describe("InitiativeList", () => {
         encounterState={encounterState}
         selectedCombatantIds={[]}
         combatantCountsByName={{}}
+        selectCombatant={() => { }}
       />
     );
     expect(initiativeList.find(".fa-pause").length).toEqual(1);
@@ -29,6 +30,7 @@ describe("InitiativeList", () => {
         encounterState={encounterState}
         selectedCombatantIds={[]}
         combatantCountsByName={{}}
+        selectCombatant={() => { }}
       />
     );
     expect(initiativeList.find(".fa-play").length).toEqual(1);

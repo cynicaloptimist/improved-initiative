@@ -7,13 +7,17 @@ type CombatantRowProps = {
   isActive: boolean;
   isSelected: boolean;
   showIndexLabel: boolean;
+  selectCombatant: (combatantId: string) => void;
 };
 
 export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
 
   return (
-    <span className={getClassNames(props).join(" ")}>
+    <span
+      className={getClassNames(props).join(" ")}
+      onClick={() => props.selectCombatant(props.combatantState.Id)}
+    >
       <span className="combatant__leftsection">
         <span className={getInitiativeClass(props)} title="Initiative Roll">
           {props.combatantState.Initiative}

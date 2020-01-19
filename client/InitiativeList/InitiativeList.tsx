@@ -4,11 +4,13 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantRow } from "./CombatantRow";
 import { InitiativeListHeader } from "./InitiativeListHeader";
+import { Command } from "../Commands/Command";
 
 export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;
   selectedCombatantIds: string[];
   combatantCountsByName: { [name: string]: number };
+  selectCombatant: (combatantId: string) => void;
 }) {
   const encounterState = props.encounterState;
   return (
@@ -32,6 +34,7 @@ export function InitiativeList(props: {
               // Show index labels if the encounter has ever had more than one
               // creature with this name.
               showIndexLabel={siblingCount > 1}
+              selectCombatant={props.selectCombatant}
             />
           );
         })}
