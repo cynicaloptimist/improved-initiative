@@ -1,0 +1,32 @@
+{
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Improved Initiative Server",
+      "program": "${workspaceRoot}\\server\\server.js",
+      "autoAttachChildProcesses": true,
+      "outFiles": [],
+      "env": {
+        "NODE_ENV": "development",
+        "BASE_URL": "http://localhost",
+        "PATREON_URL": "https://api.patreon.com/campaigns/716070/posts",
+        "DEFAULT_ACCOUNT_LEVEL": "free",
+        //"DEFAULT_ACCOUNT_LEVEL": "epicinitiative",
+        "PORT": "80"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest",
+      "args": ["-i", "${fileBasenameNoExtension}"],
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ]
+}

@@ -1,11 +1,17 @@
+if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
+  require("newrelic");
+}
+
 import express = require("express");
 import socketIO = require("socket.io");
+import http = require("http");
+import cluster = require("cluster");
+import sticky = require("sticky-session");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
-import LaunchServer from "./launchserver";
 import * as L from "./library";
 import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
@@ -14,7 +20,7 @@ import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
   const app = express();
-  const http = require("http").Server(app);
+  const server = new http.Server(app);
 
   const dbConnectionString = await getDbConnectionString();
   await DB.initialize(dbConnectionString);
@@ -38,10 +44,17 @@ async function improvedInitiativeServer() {
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-  const io = socketIO(http);
+  const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
 
-  LaunchServer(http);
+  const defaultPort = parseInt(process.env.PORT || "80");
+  await sticky.listen(server, defaultPort, {
+    workers: parseInt(process.env.WEB_CONCURRENCY || "1")
+  });
+
+  if (cluster.worker) {
+    console.log("Improved Initiative node %s running", cluster.worker.id);
+  }
 }
 
 improvedInitiativeServer();
