@@ -28,6 +28,9 @@ export function CombatantRow(props: CombatantRowProps) {
         <span className="combatant__hp" style={getHPStyle(props)}>
           {getHPText(props)}
         </span>
+        <span className="combatant__ac">
+          {props.combatantState.StatBlock.AC.Value}
+        </span>
       </span>
     </span>
   );
