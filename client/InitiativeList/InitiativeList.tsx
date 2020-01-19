@@ -4,7 +4,6 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantRow } from "./CombatantRow";
 import { InitiativeListHeader } from "./InitiativeListHeader";
-import { Command } from "../Commands/Command";
 
 export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;

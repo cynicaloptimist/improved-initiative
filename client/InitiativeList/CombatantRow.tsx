@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { CombatantState } from "../../common/CombatantState";
+import { Tags } from "./Tags";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -31,6 +32,9 @@ export function CombatantRow(props: CombatantRowProps) {
         <span className="combatant__ac">
           {props.combatantState.StatBlock.AC.Value}
         </span>
+      </span>
+      <span className="combatant__rightsection">
+        <Tags tags={props.combatantState.Tags} />
       </span>
     </span>
   );
