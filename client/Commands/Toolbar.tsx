@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "../Components/Button";
 import { Command } from "./Command";
+import { CommandButton } from "./CommandButton";
 
 interface ToolbarProps {
   encounterCommands: Command[];
@@ -28,30 +29,13 @@ export function Toolbar(props: ToolbarProps) {
   }, [innerElement, outerElement]);
 
   const className = `c-toolbar s-${props.width}`;
-  const commandButtonTooltip = (c: Command) => {
-    if (c.KeyBinding) {
-      return `${c.Description} [${c.KeyBinding}]`;
-    } else {
-      return c.Description;
-    }
-  };
-  const commandToButton = (c: Command) => (
-    <Button
-      additionalClassNames={"c-button--" + c.Id}
-      key={c.Description}
-      tooltip={commandButtonTooltip(c)}
-      tooltipProps={{
-        boundary: "window",
-        placement: "right",
-        delay: 1000
-      }}
-      onClick={c.ActionBinding}
-      fontAwesomeIcon={c.FontAwesomeIcon}
-      text={props.width == "wide" ? c.Description : ""}
-    />
+
+  const toCommandButton = c => (
+    <CommandButton command={c} showLabel={widthStyle == "wide"} />
   );
-  const encounterCommandButtons = props.encounterCommands.map(commandToButton);
-  const combatantCommandButtons = props.combatantCommands.map(commandToButton);
+
+  const encounterCommandButtons = props.encounterCommands.map(toCommandButton);
+  const combatantCommandButtons = props.combatantCommands.map(toCommandButton);
 
   const style: React.CSSProperties =
     props.width == "narrow" ? { width: widthStyle } : {};
