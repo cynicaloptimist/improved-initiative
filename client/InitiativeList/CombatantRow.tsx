@@ -27,7 +27,7 @@ export function CombatantRow(props: CombatantRowProps) {
           {displayName}
         </span>
         <span className="combatant__hp" style={getHPStyle(props)}>
-          {getHPText(props)}
+          {renderHPText(props)}
         </span>
         <span className="combatant__ac">
           {props.combatantState.StatBlock.AC.Value}
@@ -77,7 +77,7 @@ function getHPStyle(props: CombatantRowProps) {
   return { color: "rgb(" + red + "," + green + ",0)" };
 }
 
-function getHPText(props: CombatantRowProps) {
+function renderHPText(props: CombatantRowProps) {
   const maxHP = props.combatantState.StatBlock.HP.Value;
   if (props.combatantState.TemporaryHP) {
     return `${props.combatantState.CurrentHP}+${props.combatantState.TemporaryHP}/${maxHP}`;
