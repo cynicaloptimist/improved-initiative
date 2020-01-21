@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { CombatantState } from "../../common/CombatantState";
+import { CombatantState, TagState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 
 type CombatantRowProps = {
@@ -9,6 +9,7 @@ type CombatantRowProps = {
   isSelected: boolean;
   showIndexLabel: boolean;
   selectCombatant: (combatantId: string) => void;
+  removeCombatantTag: (combatantId: string, tagState: TagState) => void;
 };
 
 export function CombatantRow(props: CombatantRowProps) {
@@ -34,7 +35,12 @@ export function CombatantRow(props: CombatantRowProps) {
         </span>
       </span>
       <span className="combatant__rightsection">
-        <Tags tags={props.combatantState.Tags} />
+        <Tags
+          tags={props.combatantState.Tags}
+          removeTag={tag =>
+            props.removeCombatantTag(props.combatantState.Id, tag)
+          }
+        />
       </span>
     </span>
   );

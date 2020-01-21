@@ -152,6 +152,7 @@ export class TrackerViewModel {
         selectedCombatantIds={selectedCombatantIds}
         combatantCountsByName={combatantCountsByName}
         selectCombatant={this.selectCombatantById}
+        removeCombatantTag={this.removeCombatantTag}
       />
     );
   });
@@ -160,6 +161,13 @@ export class TrackerViewModel {
     this.CombatantCommander.Select(
       this.OrderedCombatants().find(c => c.Combatant.Id == combatantId)
     );
+  };
+
+  private removeCombatantTag = (combatantId: string, tagState: TagState) => {
+    const combatantViewModel = this.OrderedCombatants().find(
+      c => c.Combatant.Id == combatantId
+    );
+    combatantViewModel.RemoveTagByState(tagState);
   };
 
   public OrderedCombatants: KnockoutComputed<

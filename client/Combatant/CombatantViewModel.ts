@@ -10,6 +10,7 @@ import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
+import { TagState } from "../../common/CombatantState";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 
@@ -188,6 +189,10 @@ export class CombatantViewModel {
   public RemoveTag = (tag: Tag) => {
     this.Combatant.Tags.splice(this.Combatant.Tags.indexOf(tag), 1);
     this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
+  };
+
+  public RemoveTagByState = (tagState: TagState) => {
+    this.Combatant.Tags.remove(t => _.isEqual(tagState, t.GetState()));
   };
 
   public ReferenceTaggedCondition = (tag: Tag) => {

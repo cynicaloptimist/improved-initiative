@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { CombatantState } from "../../common/CombatantState";
+import { CombatantState, TagState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantRow } from "./CombatantRow";
 import { InitiativeListHeader } from "./InitiativeListHeader";
@@ -10,6 +10,7 @@ export function InitiativeList(props: {
   selectedCombatantIds: string[];
   combatantCountsByName: { [name: string]: number };
   selectCombatant: (combatantId: string) => void;
+  removeCombatantTag: (combatantId: string, tagState: TagState) => void;
 }) {
   const encounterState = props.encounterState;
   return (
@@ -22,7 +23,7 @@ export function InitiativeList(props: {
         {encounterState.Combatants.map(combatantState => {
           const siblingCount =
             props.combatantCountsByName[combatantState.StatBlock.Name] || 1;
-          
+
           return (
             <CombatantRow
               combatantState={combatantState}
@@ -34,6 +35,7 @@ export function InitiativeList(props: {
               // creature with this name.
               showIndexLabel={siblingCount > 1}
               selectCombatant={props.selectCombatant}
+              removeCombatantTag={props.removeCombatantTag}
             />
           );
         })}
