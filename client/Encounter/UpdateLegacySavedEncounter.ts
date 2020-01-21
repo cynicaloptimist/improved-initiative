@@ -1,4 +1,4 @@
-import { CombatantState } from "../../common/CombatantState";
+import { CombatantState, TagState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { probablyUniqueString } from "../../common/Toolbox";
@@ -16,6 +16,20 @@ function updateLegacySavedCombatant(savedCombatant: any) {
   }
   if (savedCombatant.MaxHP) {
     savedCombatant.StatBlock.HP.Value = savedCombatant.MaxHP;
+  }
+  if (savedCombatant.Tags) {
+    savedCombatant.Tags = savedCombatant.Tags.map((tag: string | TagState) => {
+      if (typeof tag == "string") {
+        const tagState: TagState = {
+          Text: tag,
+          DurationRemaining: 0,
+          DurationTiming: null,
+          DurationCombatantId: ""
+        };
+        return tagState;
+      }
+      return tag;
+    });
   }
 }
 
