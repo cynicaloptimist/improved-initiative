@@ -55,9 +55,9 @@ export class Combatant {
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
   public IndexLabel = ko.observable(0);
-  
+
   public CombatTimer = new CombatTimer();
-  
+
   public CurrentHP: KnockoutObservable<number>;
   public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
@@ -253,13 +253,7 @@ export class Combatant {
       IndexLabel: this.IndexLabel(),
       Tags: this.Tags()
         .filter(t => t.NotExpired())
-        .map<TagState>(t => ({
-          Text: t.Text,
-          Hidden: t.HiddenFromPlayerView,
-          DurationRemaining: t.DurationRemaining(),
-          DurationTiming: t.DurationTiming,
-          DurationCombatantId: t.DurationCombatantId
-        })),
+        .map(t => t.GetState()),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),
