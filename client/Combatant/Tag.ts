@@ -41,20 +41,20 @@ export class Tag implements Tag {
     return !this.HasDuration || this.DurationRemaining() > 0;
   });
 
-  public static getLegacyTags = (tags: any[], combatant: Combatant): Tag[] => {
-    return tags.map(tag => {
-      if (tag.Text) {
-        const savedTag: TagState = tag;
-        return new Tag(
-          savedTag.Text,
+  public static FromTagStates = (
+    tags: TagState[],
+    combatant: Combatant
+  ): Tag[] => {
+    return tags.map(
+      tag =>
+        new Tag(
+          tag.Text,
           combatant,
-          savedTag.Hidden || false,
-          savedTag.DurationRemaining,
-          savedTag.DurationTiming,
-          savedTag.DurationCombatantId
-        );
-      }
-      return new Tag(tag, combatant, false);
-    });
+          tag.Hidden || false,
+          tag.DurationRemaining,
+          tag.DurationTiming,
+          tag.DurationCombatantId
+        )
+    );
   };
 }

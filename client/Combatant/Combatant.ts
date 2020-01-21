@@ -84,7 +84,7 @@ export class Combatant {
       savedCombatant.InitiativeGroup || this.InitiativeGroup()
     );
     this.Alias(savedCombatant.Alias);
-    this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
+    this.Tags(Tag.FromTagStates(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
     this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
