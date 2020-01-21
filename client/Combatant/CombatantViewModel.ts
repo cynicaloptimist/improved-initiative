@@ -192,7 +192,10 @@ export class CombatantViewModel {
   };
 
   public RemoveTagByState = (tagState: TagState) => {
-    this.Combatant.Tags.remove(t => _.isEqual(tagState, t.GetState()));
+    const tag = this.Combatant.Tags().find(t =>
+      _.isEqual(tagState, t.GetState())
+    );
+    this.Combatant.Tags.remove(tag);
   };
 
   public ReferenceTaggedCondition = (tag: Tag) => {
