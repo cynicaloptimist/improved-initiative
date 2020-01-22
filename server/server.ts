@@ -46,7 +46,11 @@ async function improvedInitiativeServer() {
 
   const defaultPort = parseInt(process.env.PORT || "80");
   await sticky.listen(server, defaultPort, {
-    workers: parseInt(process.env.WEB_CONCURRENCY || "1")
+    workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
+    env: {
+      DB_CONNECTION_STRING: dbConnectionString,
+      ...process.env
+    }
   });
 
   const io = socketIO(server);
