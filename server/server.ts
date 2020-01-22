@@ -44,13 +44,13 @@ async function improvedInitiativeServer() {
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-  const io = socketIO(server);
-  ConfigureSockets(io, session, playerViews);
-
   const defaultPort = parseInt(process.env.PORT || "80");
   await sticky.listen(server, defaultPort, {
     workers: parseInt(process.env.WEB_CONCURRENCY || "1")
   });
+
+  const io = socketIO(server);
+  ConfigureSockets(io, session, playerViews);
 
   if (cluster.worker) {
     console.log("Improved Initiative node %s running", cluster.worker.id);
