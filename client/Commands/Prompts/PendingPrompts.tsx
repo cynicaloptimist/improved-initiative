@@ -43,6 +43,10 @@ class Prompt<T extends object> extends React.Component<
   }
 
   private delaySoAutoFocusedFieldDoesntSwallowHotkey = () => {
+    if (!this.formElement) {
+      return;
+    }
+
     //prevent mounted element from swallowing hotkey
     const element: HTMLInputElement = this.formElement.querySelector(
       this.props.autoFocusSelector

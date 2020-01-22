@@ -10,7 +10,7 @@ public/webfonts/*
 *.tmp.txt
 *.gitignore.*
 .tscache
-.vscode
+!.vscode/launch.json
 .baseDir
 !Gruntfile.js
 !webpack.*.js
