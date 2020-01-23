@@ -17,11 +17,7 @@ $(async () => {
   InitializeSettings();
   if ($("#tracker").length) {
     await LegacySynchronousLocalStore.MigrateItemsToStore();
-    const viewModel = new TrackerViewModel(
-      io({
-        transports: ["websocket"]
-      })
-    );
+    const viewModel = new TrackerViewModel(io());
     ko.applyBindings(viewModel, document.body);
     viewModel.ImportEncounterIfAvailable();
     viewModel.ImportStatBlockIfAvailable();
@@ -36,11 +32,7 @@ $(async () => {
     }
     const playerView = new ReactPlayerView(container, encounterId);
     playerView.LoadEncounterFromServer();
-    playerView.ConnectToSocket(
-      io({
-        transports: ["websocket"]
-      })
-    );
+    playerView.ConnectToSocket(io());
   }
 
   if ($("#landing").length) {
