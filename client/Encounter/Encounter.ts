@@ -393,7 +393,9 @@ export class Encounter {
       this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
       this.EncounterFlow.CombatTimer.Start();
+      this.SortByInitiative();
     }
+    
     this.EncounterFlow.CombatTimer.SetElapsedRounds(
       encounterState.RoundCounter || 1
     );
