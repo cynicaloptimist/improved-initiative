@@ -20,6 +20,7 @@ import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
   const app = express();
+  app.set("trust proxy", true);
   const server = new http.Server(app);
 
   const dbConnectionString = await getDbConnectionString();
