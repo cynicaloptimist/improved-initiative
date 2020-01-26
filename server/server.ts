@@ -6,7 +6,7 @@ import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
 import cluster = require("cluster");
-import sticky = require("sticky-session");
+import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
