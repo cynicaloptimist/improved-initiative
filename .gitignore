@@ -14,3 +14,4 @@ public/webfonts/*
 .baseDir
 !Gruntfile.js
 !webpack.*.js
+!local_node_modules/**

@@ -6,7 +6,7 @@ import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
 import cluster = require("cluster");
-import sticky = require("sticky-session");
+import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
@@ -20,6 +20,7 @@ import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
   const app = express();
+  app.set("trust proxy", true);
   const server = new http.Server(app);
 
   const dbConnectionString = await getDbConnectionString();
@@ -44,13 +45,17 @@ async function improvedInitiativeServer() {
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-  const io = socketIO(server);
-  ConfigureSockets(io, session, playerViews);
-
   const defaultPort = parseInt(process.env.PORT || "80");
   await sticky.listen(server, defaultPort, {
-    workers: parseInt(process.env.WEB_CONCURRENCY || "1")
+    workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
+    env: {
+      DB_CONNECTION_STRING: dbConnectionString,
+      ...process.env
+    }
   });
+
+  const io = socketIO(server);
+  ConfigureSockets(io, session, playerViews);
 
   if (cluster.worker) {
     console.log("Improved Initiative node %s running", cluster.worker.id);

@@ -41,7 +41,7 @@ export class CombatantCommander {
   public SelectedCombatants = ko.pureComputed<CombatantViewModel[]>(() => {
     const selectedCombatantIds = this.selectedCombatantIds();
     return this.tracker
-      .OrderedCombatants()
+      .CombatantViewModels()
       .filter(c => selectedCombatantIds.some(id => c.Combatant.Id == id));
   });
   public HasSelected = ko.pureComputed(
@@ -95,16 +95,16 @@ export class CombatantCommander {
 
   private selectByOffset = (offset: number) => {
     let newIndex =
-      this.tracker.OrderedCombatants().indexOf(this.SelectedCombatants()[0]) +
+      this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) +
       offset;
     if (newIndex < 0) {
       newIndex = 0;
-    } else if (newIndex >= this.tracker.OrderedCombatants().length) {
-      newIndex = this.tracker.OrderedCombatants().length - 1;
+    } else if (newIndex >= this.tracker.CombatantViewModels().length) {
+      newIndex = this.tracker.CombatantViewModels().length - 1;
     }
     this.selectedCombatantIds.removeAll();
     this.selectedCombatantIds.push(
-      this.tracker.OrderedCombatants()[newIndex].Combatant.Id
+      this.tracker.CombatantViewModels()[newIndex].Combatant.Id
     );
   };
 
@@ -116,13 +116,13 @@ export class CombatantCommander {
     const combatantsToRemove = this.SelectedCombatants();
     this.selectedCombatantIds.removeAll();
     const firstDeletedIndex = this.tracker
-      .OrderedCombatants()
+      .CombatantViewModels()
       .indexOf(combatantsToRemove[0]);
     const deletedCombatantNames = combatantsToRemove.map(
       c => c.Combatant.StatBlock().Name
     );
 
-    if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
+    if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
       let activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
         this.tracker.Encounter.EncounterFlow.NextTurn(
@@ -136,13 +136,13 @@ export class CombatantCommander {
       this.tracker.Encounter.RemoveCombatant(vm.Combatant)
     );
 
-    const remainingCombatants = this.tracker.OrderedCombatants();
+    const remainingCombatants = this.tracker.CombatantViewModels();
     if (remainingCombatants.length > 0) {
       const newSelectionIndex =
         firstDeletedIndex > remainingCombatants.length
           ? remainingCombatants.length - 1
           : firstDeletedIndex;
-      this.Select(this.tracker.OrderedCombatants()[newSelectionIndex]);
+      this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
     }
 
     this.tracker.EventLog.AddEvent(
@@ -156,12 +156,12 @@ export class CombatantCommander {
   };
 
   public SelectPrevious = () => {
-    if (this.tracker.OrderedCombatants().length == 0) {
+    if (this.tracker.CombatantViewModels().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.OrderedCombatants()[0]);
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
@@ -169,12 +169,12 @@ export class CombatantCommander {
   };
 
   public SelectNext = () => {
-    if (this.tracker.OrderedCombatants().length == 0) {
+    if (this.tracker.CombatantViewModels().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.OrderedCombatants()[0]);
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
@@ -372,7 +372,7 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.OrderedCombatants().indexOf(combatant);
+    const index = this.tracker.CombatantViewModels().indexOf(combatant);
     if (combatant && index > 0) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
@@ -390,8 +390,8 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.OrderedCombatants().indexOf(combatant);
-    if (combatant && index < this.tracker.OrderedCombatants().length - 1) {
+    const index = this.tracker.CombatantViewModels().indexOf(combatant);
+    if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
         index + 1

@@ -122,7 +122,7 @@ export class TrackerViewModel {
   public Encounter = new Encounter(
     this.playerViewClient,
     combatantId => {
-      const combatant = this.OrderedCombatants().find(
+      const combatant = this.CombatantViewModels().find(
         (c: CombatantViewModel) => c.Combatant.Id == combatantId
       );
       if (combatant) {
@@ -159,18 +159,18 @@ export class TrackerViewModel {
 
   private selectCombatantById = (combatantId: string) => {
     this.CombatantCommander.Select(
-      this.OrderedCombatants().find(c => c.Combatant.Id == combatantId)
+      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId)
     );
   };
 
   private removeCombatantTag = (combatantId: string, tagState: TagState) => {
-    const combatantViewModel = this.OrderedCombatants().find(
+    const combatantViewModel = this.CombatantViewModels().find(
       c => c.Combatant.Id == combatantId
     );
     combatantViewModel.RemoveTagByState(tagState);
   };
 
-  public OrderedCombatants: KnockoutComputed<
+  public CombatantViewModels: KnockoutComputed<
     CombatantViewModel[]
   > = ko.pureComputed(() =>
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
@@ -179,7 +179,7 @@ export class TrackerViewModel {
   public ActiveCombatantDetails = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
     const combatantViewModel = find(
-      this.OrderedCombatants(),
+      this.CombatantViewModels(),
       c => c.Combatant == activeCombatant
     );
     if (!combatantViewModel) {
@@ -462,7 +462,7 @@ export class TrackerViewModel {
         suggestedDamage: number,
         suggester: string
       ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
+        const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
         this.CombatantCommander.PromptAcceptSuggestedDamage(
@@ -480,7 +480,7 @@ export class TrackerViewModel {
         suggestedTag: TagState,
         suggester: string
       ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
+        const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 

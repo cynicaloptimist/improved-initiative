@@ -358,10 +358,6 @@ export class Encounter {
     encounterState: EncounterState<CombatantState>,
     persistentCharacterLibrary: PersistentCharacterLibrary
   ) => {
-    const activeCombatant = _.find(
-      this.combatants(),
-      c => c.Id == encounterState.ActiveCombatantId
-    );
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,
       c => c.IndexLabel
@@ -382,13 +378,20 @@ export class Encounter {
       }
     });
 
+    const activeCombatant = _.find(
+      this.combatants(),
+      c => c.Id == encounterState.ActiveCombatantId
+    );
+    
     if (activeCombatant !== undefined) {
       this.EncounterFlow.State("active");
       this.EncounterFlow.ActiveCombatant(activeCombatant);
       this.EncounterFlow.ActiveCombatant().CombatTimer.Start();
       this.EncounterFlow.TurnTimer.Start();
       this.EncounterFlow.CombatTimer.Start();
+      this.SortByInitiative();
     }
+    
     this.EncounterFlow.CombatTimer.SetElapsedRounds(
       encounterState.RoundCounter || 1
     );
