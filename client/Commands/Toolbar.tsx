@@ -15,7 +15,7 @@ export function Toolbar(props: ToolbarProps) {
   const outerElement = React.useRef<HTMLDivElement>(null);
   const innerElement = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!outerElement.current || !innerElement.current) {
       return;
     }
@@ -25,7 +25,7 @@ export function Toolbar(props: ToolbarProps) {
       innerElement.current.offsetWidth -
       innerElement.current.clientWidth;
     setWidthStyle(width.toString() + "px");
-  });
+  }, [innerElement, outerElement]);
 
   const className = `c-toolbar s-${props.width}`;
   const commandButtonTooltip = (c: Command) => {
