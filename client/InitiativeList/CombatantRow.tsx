@@ -39,6 +39,12 @@ export function CombatantRow(props: CombatantRowProps) {
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}
         />
+        {props.combatantState.Hidden && (
+          <span
+            className="fas fa-eye-slash"
+            title="Tag hidden from Player View"
+          />
+        )}
       </span>
     </span>
   );
