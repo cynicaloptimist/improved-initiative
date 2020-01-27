@@ -9,10 +9,9 @@ export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;
   selectedCombatantIds: string[];
   combatantCountsByName: { [name: string]: number };
-  selectCombatant: (combatantId: string) => void;
-  removeCombatantTag: (combatantId: string, tagState: TagState) => void;
 }) {
   const encounterState = props.encounterState;
+  
   return (
     <div className="initiative-list">
       <h2>Combatants by Initiative</h2>
@@ -34,8 +33,6 @@ export function InitiativeList(props: {
               // Show index labels if the encounter has ever had more than one
               // creature with this name.
               showIndexLabel={siblingCount > 1}
-              selectCombatant={props.selectCombatant}
-              removeCombatantTag={props.removeCombatantTag}
             />
           );
         })}

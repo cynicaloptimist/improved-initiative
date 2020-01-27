@@ -47,6 +47,7 @@ import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
+import { CommandContext } from "./InitiativeList/CommandContext";
 
 const codec = compression("lzma");
 
@@ -146,14 +147,20 @@ export class TrackerViewModel {
       c => c.Combatant.Id
     );
     const combatantCountsByName = this.Encounter.CombatantCountsByName();
+
     return (
-      <InitiativeList
-        encounterState={encounterState}
-        selectedCombatantIds={selectedCombatantIds}
-        combatantCountsByName={combatantCountsByName}
-        selectCombatant={this.selectCombatantById}
-        removeCombatantTag={this.removeCombatantTag}
-      />
+      <CommandContext.Provider
+        value={{
+          SelectCombatant: this.selectCombatantById,
+          RemoveTagFromCombatant: this.removeCombatantTag
+        }}
+      >
+        <InitiativeList
+          encounterState={encounterState}
+          selectedCombatantIds={selectedCombatantIds}
+          combatantCountsByName={combatantCountsByName}
+        />
+      </CommandContext.Provider>
     );
   });
 

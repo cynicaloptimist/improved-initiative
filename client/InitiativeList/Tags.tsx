@@ -14,7 +14,6 @@ export function Tags(props: {
             <span
               className="fa-clickable fa-times"
               onClick={() => props.removeTag(tag)}
-              data-bind="click: $parent.RemoveTag, clickBubble:false"
             ></span>
           </span>
         );

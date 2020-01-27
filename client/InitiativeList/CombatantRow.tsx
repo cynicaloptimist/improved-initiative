@@ -2,23 +2,23 @@ import * as React from "react";
 
 import { CombatantState, TagState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
+import { CommandContext } from "./CommandContext";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
   isActive: boolean;
   isSelected: boolean;
   showIndexLabel: boolean;
-  selectCombatant: (combatantId: string) => void;
-  removeCombatantTag: (combatantId: string, tagState: TagState) => void;
 };
 
 export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
+  const commandContext = React.useContext(CommandContext);
 
   return (
     <span
       className={getClassNames(props).join(" ")}
-      onClick={() => props.selectCombatant(props.combatantState.Id)}
+      onClick={() => commandContext.SelectCombatant(props.combatantState.Id)}
     >
       <span className="combatant__leftsection">
         <span className={getInitiativeClass(props)} title="Initiative Roll">
@@ -38,7 +38,7 @@ export function CombatantRow(props: CombatantRowProps) {
         <Tags
           tags={props.combatantState.Tags}
           removeTag={tag =>
-            props.removeCombatantTag(props.combatantState.Id, tag)
+            commandContext.RemoveTagFromCombatant(props.combatantState.Id, tag)
           }
         />
       </span>
