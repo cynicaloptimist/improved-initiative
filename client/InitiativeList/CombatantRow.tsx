@@ -37,9 +37,7 @@ export function CombatantRow(props: CombatantRowProps) {
       <span className="combatant__rightsection">
         <Tags
           tags={props.combatantState.Tags}
-          removeTag={tag =>
-            commandContext.RemoveTagFromCombatant(props.combatantState.Id, tag)
-          }
+          combatantId={props.combatantState.Id}
         />
       </span>
     </span>
