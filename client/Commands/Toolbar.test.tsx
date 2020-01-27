@@ -8,7 +8,13 @@ import { CommandButton } from "./CommandButton";
 
 const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
   const encounterCommands = [
-    new Command(id, description, () => {}, keyBinding, "gear")
+    new Command({
+      id: id,
+      description: description,
+      defaultKeyBinding: keyBinding,
+      actionBinding: () => {},
+      fontAwesomeIcon: "gear"
+    })
   ];
 
   return Enzyme.shallow(
