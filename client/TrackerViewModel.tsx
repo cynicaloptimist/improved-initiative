@@ -152,7 +152,8 @@ export class TrackerViewModel {
       <CommandContext.Provider
         value={{
           SelectCombatant: this.selectCombatantById,
-          RemoveTagFromCombatant: this.removeCombatantTag
+          RemoveTagFromCombatant: this.removeCombatantTag,
+          EnrichText: this.StatBlockTextEnricher.EnrichText
         }}
       >
         <InitiativeList
