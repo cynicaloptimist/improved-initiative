@@ -186,7 +186,7 @@ export class EncounterCommander {
   public CleanEncounter = () => {
     if (confirm("Remove NPCs and end encounter?")) {
       const npcViewModels = this.tracker
-        .OrderedCombatants()
+        .CombatantViewModels()
         .filter(c => !c.Combatant.IsPlayerCharacter());
       this.tracker.CombatantCommander.Deselect();
       this.tracker.Encounter.EncounterFlow.EndEncounter();

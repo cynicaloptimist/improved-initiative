@@ -5,6 +5,9 @@ import { Tag } from "../Combatant/Tag";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
+import { EncounterState } from "../../common/EncounterState";
+import { CombatantState } from "../../common/CombatantState";
+import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 
 describe("Encounter", () => {
   let encounter: Encounter;
@@ -253,5 +256,40 @@ describe("Tags", () => {
     const playerView = encounter.GetPlayerView();
     const playerViewCombatant = playerView.Combatants[0];
     expect(playerViewCombatant.Tags).toEqual([]);
+  });
+});
+
+describe("LoadEncounterState", () => {
+  test("Should load combatants in order", () => {
+    const baseEncounter = buildEncounter();
+
+    for (const initiative of [10, 5, 15]) {
+      const combatant = baseEncounter.AddCombatantFromStatBlock({
+        ...StatBlock.Default(),
+        Name: "Initiative " + initiative
+      });
+      combatant.Initiative(initiative);
+    }
+
+    baseEncounter.EncounterFlow.StartEncounter();
+
+    expect(baseEncounter.Combatants().map(c => c.Initiative())).toEqual([
+      15,
+      10,
+      5
+    ]);
+    expect(baseEncounter.EncounterFlow.State()).toEqual("active");
+
+    const encounterState = baseEncounter.GetEncounterState();
+    const encounter = buildEncounter();
+    encounter.LoadEncounterState(encounterState, null);
+    
+    expect(encounter.Combatants().map(c => c.Initiative())).toEqual([
+      15,
+      10,
+      5
+    ]);
+    expect(encounter.EncounterFlow.State()).toEqual("active");
+
   });
 });
