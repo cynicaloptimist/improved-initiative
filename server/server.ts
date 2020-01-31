@@ -46,13 +46,19 @@ async function improvedInitiativeServer() {
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
   const defaultPort = parseInt(process.env.PORT || "80");
-  await sticky.listen(server, defaultPort, {
-    workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
-    env: {
-      DB_CONNECTION_STRING: dbConnectionString,
-      ...process.env
-    }
-  });
+
+  if (process.env.DISABLE_CONCURRENCY) {
+    await server.listen(defaultPort);
+    console.log("Launched server without concurrency.");
+  } else {
+    await sticky.listen(server, defaultPort, {
+      workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
+      env: {
+        DB_CONNECTION_STRING: dbConnectionString,
+        ...process.env
+      }
+    });
+  }
 
   const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
