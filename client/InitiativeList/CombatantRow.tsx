@@ -26,6 +26,11 @@ export function CombatantRow(props: CombatantRowProps) {
           {props.combatantState.Initiative}
         </span>
         <span className="combatant__name" title={displayName}>
+          {props.combatantState.Hidden && (
+            <Tippy content="Hidden from Player View">
+              <span className="combatant__hidden-icon fas fa-eye-slash" />
+            </Tippy>
+          )}
           {displayName}
         </span>
         <span className="combatant__hp" style={getHPStyle(props)}>
@@ -41,11 +46,6 @@ export function CombatantRow(props: CombatantRowProps) {
           combatantId={props.combatantState.Id}
         />
         {props.isSelected && <Commands />}
-        {props.combatantState.Hidden && (
-          <Tippy content="Hidden from Player View">
-            <span className="fas fa-eye-slash" />
-          </Tippy>
-        )}
       </span>
     </li>
   );
