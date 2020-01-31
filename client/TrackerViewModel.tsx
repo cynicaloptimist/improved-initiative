@@ -153,7 +153,10 @@ export class TrackerViewModel {
         value={{
           SelectCombatant: this.selectCombatantById,
           RemoveTagFromCombatant: this.removeCombatantTag,
-          EnrichText: this.StatBlockTextEnricher.EnrichText
+          EnrichText: this.StatBlockTextEnricher.EnrichText,
+          InlineCommands: this.CombatantCommander.Commands.filter(c =>
+            c.ShowInCombatantRow()
+          )
         }}
       >
         <InitiativeList

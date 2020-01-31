@@ -3,6 +3,7 @@ import * as React from "react";
 import { CombatantState, TagState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
+import { CommandButton } from "../Commands/CommandButton";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -39,6 +40,7 @@ export function CombatantRow(props: CombatantRowProps) {
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}
         />
+        {props.isSelected && <Commands combatantId={props.combatantState.Id} />}
         {props.combatantState.Hidden && (
           <span
             className="fas fa-eye-slash"
@@ -46,6 +48,18 @@ export function CombatantRow(props: CombatantRowProps) {
           />
         )}
       </span>
+    </span>
+  );
+}
+
+function Commands(props: { combatantId: string }) {
+  const commandContext = React.useContext(CommandContext);
+
+  return (
+    <span className="combatant__commands">
+      {commandContext.InlineCommands.map(c => (
+        <CommandButton command={c} key={c.Id} showLabel={false} />
+      ))}
     </span>
   );
 }

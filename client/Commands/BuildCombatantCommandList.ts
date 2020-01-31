@@ -33,7 +33,8 @@ export const BuildCombatantCommandList: (
     actionBinding: c.AddTag,
     defaultKeyBinding: "g",
     fontAwesomeIcon: "tag",
-    defaultShowOnActionBar: false
+    defaultShowOnActionBar: false,
+    defaultShowInCombatantRow: true
   }),
   new Command({
     id: "update-notes",
@@ -63,7 +64,8 @@ export const BuildCombatantCommandList: (
     actionBinding: c.ToggleHidden,
     defaultKeyBinding: "h",
     fontAwesomeIcon: "eye",
-    defaultShowOnActionBar: false
+    defaultShowOnActionBar: false,
+    defaultShowInCombatantRow: true
   }),
   new Command({
     id: "toggle-reveal-ac",

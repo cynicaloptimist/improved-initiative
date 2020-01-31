@@ -7,6 +7,7 @@ import { GetLegacyKeyBinding } from "./GetLegacyKeyBinding";
 
 export class Command {
   public ShowOnActionBar: KnockoutObservable<boolean>;
+  public ShowInCombatantRow: KnockoutObservable<boolean>;
   public ToolTip: KnockoutComputed<string>;
   public KeyBinding: string;
   public Id: string;
@@ -22,6 +23,7 @@ export class Command {
     defaultKeyBinding: string;
     fontAwesomeIcon: string;
     defaultShowOnActionBar?: boolean;
+    defaultShowInCombatantRow?: boolean;
     lockOnActionBar?: boolean;
   }) {
     this.Id = props.id;
@@ -31,6 +33,8 @@ export class Command {
     this.LockOnActionBar = props.lockOnActionBar || false;
 
     this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar || true);
+    this.ShowInCombatantRow = ko.observable(props.defaultShowInCombatantRow || false);
+
     if (this.LockOnActionBar) {
       this.ShowOnActionBar.subscribe(_ => {
         this.ShowOnActionBar(true);
