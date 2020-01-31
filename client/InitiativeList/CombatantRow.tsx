@@ -1,9 +1,9 @@
 import * as React from "react";
 
-import { CombatantState, TagState } from "../../common/CombatantState";
+import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
-import { CommandButton } from "../Commands/CommandButton";
+import Tippy from "@tippy.js/react";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -40,7 +40,7 @@ export function CombatantRow(props: CombatantRowProps) {
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}
         />
-        {props.isSelected && <Commands combatantId={props.combatantState.Id} />}
+        {props.isSelected && <Commands />}
         {props.combatantState.Hidden && (
           <span
             className="fas fa-eye-slash"
@@ -52,13 +52,18 @@ export function CombatantRow(props: CombatantRowProps) {
   );
 }
 
-function Commands(props: { combatantId: string }) {
+function Commands() {
   const commandContext = React.useContext(CommandContext);
 
   return (
     <span className="combatant__commands">
       {commandContext.InlineCommands.map(c => (
-        <CommandButton command={c} key={c.Id} showLabel={false} />
+        <Tippy content={c.Description} key={c.Id}>
+          <span
+            className={"fa-clickable fa-" + c.FontAwesomeIcon}
+            onClick={c.ActionBinding}
+          />
+        </Tippy>
       ))}
     </span>
   );
