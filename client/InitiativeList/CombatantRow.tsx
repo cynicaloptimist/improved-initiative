@@ -42,10 +42,9 @@ export function CombatantRow(props: CombatantRowProps) {
         />
         {props.isSelected && <Commands />}
         {props.combatantState.Hidden && (
-          <span
-            className="fas fa-eye-slash"
-            title="Tag hidden from Player View"
-          />
+          <Tippy content="Hidden from Player View">
+            <span className="fas fa-eye-slash" />
+          </Tippy>
         )}
       </span>
     </li>
