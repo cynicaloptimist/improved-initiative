@@ -14,9 +14,10 @@ export function Tags(props: { tags: TagState[]; combatantId: string }) {
             </span>
             <span
               className="fa-clickable fa-times"
-              onClick={() =>
-                commandContext.RemoveTagFromCombatant(props.combatantId, tag)
-              }
+              onClick={event => {
+                commandContext.RemoveTagFromCombatant(props.combatantId, tag);
+                event.stopPropagation();
+              }}
             ></span>
           </span>
         );
