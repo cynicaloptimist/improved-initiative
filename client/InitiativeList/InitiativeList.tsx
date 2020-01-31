@@ -11,7 +11,7 @@ export function InitiativeList(props: {
   combatantCountsByName: { [name: string]: number };
 }) {
   const encounterState = props.encounterState;
-  
+
   return (
     <div className="initiative-list">
       <h2>Combatants by Initiative</h2>
@@ -25,6 +25,7 @@ export function InitiativeList(props: {
 
           return (
             <CombatantRow
+              key={combatantState.Id}
               combatantState={combatantState}
               isActive={encounterState.ActiveCombatantId == combatantState.Id}
               isSelected={props.selectedCombatantIds.some(
