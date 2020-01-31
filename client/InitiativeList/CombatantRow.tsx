@@ -17,7 +17,7 @@ export function CombatantRow(props: CombatantRowProps) {
   const commandContext = React.useContext(CommandContext);
 
   return (
-    <span
+    <li
       className={getClassNames(props).join(" ")}
       onClick={() => commandContext.SelectCombatant(props.combatantState.Id)}
     >
@@ -48,7 +48,7 @@ export function CombatantRow(props: CombatantRowProps) {
           />
         )}
       </span>
-    </span>
+    </li>
   );
 }
 
