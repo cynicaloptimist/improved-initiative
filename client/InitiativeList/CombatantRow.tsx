@@ -33,7 +33,14 @@ export function CombatantRow(props: CombatantRowProps) {
           )}
           {displayName}
         </span>
-        <span className="combatant__hp" style={getHPStyle(props)}>
+        <span
+          className="combatant__hp"
+          style={getHPStyle(props)}
+          onClick={event => {
+            commandContext.ApplyDamageToCombatant(props.combatantState.Id);
+            event.stopPropagation();
+          }}
+        >
           {renderHPText(props)}
         </span>
         <span className="combatant__ac">

@@ -153,6 +153,7 @@ export class TrackerViewModel {
         value={{
           SelectCombatant: this.selectCombatantById,
           RemoveTagFromCombatant: this.removeCombatantTag,
+          ApplyDamageToCombatant: this.applyDamageToCombatant,
           EnrichText: this.StatBlockTextEnricher.EnrichText,
           InlineCommands: this.CombatantCommander.Commands.filter(c =>
             c.ShowInCombatantRow()
@@ -179,6 +180,13 @@ export class TrackerViewModel {
       c => c.Combatant.Id == combatantId
     );
     combatantViewModel.RemoveTagByState(tagState);
+  };
+
+  private applyDamageToCombatant = (combatantId: string) => {
+    const combatantViewModel = this.CombatantViewModels().find(
+      c => c.Combatant.Id == combatantId
+    );
+    this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
 
   public CombatantViewModels: KnockoutComputed<
