@@ -64,7 +64,7 @@ function Commands() {
   return (
     <span className="combatant__commands">
       {commandContext.InlineCommands.map(c => (
-        <Tippy content={c.Description} key={c.Id}>
+        <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
           <span
             className={"fa-clickable fa-" + c.FontAwesomeIcon}
             onClick={c.ActionBinding}
