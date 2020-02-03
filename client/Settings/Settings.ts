@@ -26,6 +26,7 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
     if (commandSetting) {
       command.KeyBinding = commandSetting.KeyBinding;
       command.ShowOnActionBar(commandSetting.ShowOnActionBar);
+      command.ShowInCombatantRow(commandSetting.ShowInCombatantRow);
     }
     Mousetrap.bind(command.KeyBinding, (e: Event) => {
       e.preventDefault();
@@ -111,17 +112,23 @@ export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
   );
 }
 
-export function AddMissingCommandsAndSaveSettings(
+export function UpdateLegacyCommandSettingsAndSave(
   settings: Settings,
   commands: Command[]
 ) {
   for (const command of commands) {
-    if (!settings.Commands.some(c => c.Name == command.Id)) {
+    const commandSetting = settings.Commands.find(c => c.Name == command.Id);
+    if (!commandSetting) {
       settings.Commands.push({
         Name: command.Id,
         KeyBinding: command.KeyBinding,
-        ShowOnActionBar: command.ShowOnActionBar()
+        ShowOnActionBar: command.ShowOnActionBar(),
+        ShowInCombatantRow: command.ShowInCombatantRow()
       });
+    } else {
+      if (commandSetting.ShowInCombatantRow === undefined) {
+        commandSetting.ShowInCombatantRow = command.ShowInCombatantRow();
+      }
     }
   }
 

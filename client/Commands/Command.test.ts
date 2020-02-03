@@ -22,7 +22,8 @@ describe("Command", () => {
       {
         Name: "some-command-id",
         KeyBinding: "saved-keybinding",
-        ShowOnActionBar: true
+        ShowOnActionBar: true,
+        ShowInCombatantRow: false
       }
     ];
     LegacySynchronousLocalStore.Save(
@@ -41,7 +42,8 @@ describe("Command", () => {
       {
         Name: "Add Note",
         KeyBinding: "legacy-keybinding",
-        ShowOnActionBar: true
+        ShowOnActionBar: true,
+        ShowInCombatantRow: false
       }
     ];
     LegacySynchronousLocalStore.Save(
@@ -63,7 +65,8 @@ describe("Command", () => {
       {
         Name: "Clear Encounter",
         KeyBinding: "legacy-clear-encounter-keybinding",
-        ShowOnActionBar: true
+        ShowOnActionBar: true,
+        ShowInCombatantRow: false
       }
     ];
     LegacySynchronousLocalStore.Save(

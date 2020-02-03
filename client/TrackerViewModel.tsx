@@ -32,7 +32,7 @@ import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
-  AddMissingCommandsAndSaveSettings,
+  UpdateLegacyCommandSettingsAndSave,
   CurrentSettings,
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
@@ -90,7 +90,7 @@ export class TrackerViewModel {
       ...this.EncounterToolbar,
       ...this.CombatantCommander.Commands
     ];
-    AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
+    UpdateLegacyCommandSettingsAndSave(CurrentSettings(), allCommands);
     SubscribeCommandsToSettingsChanges(allCommands);
 
     this.subscribeToSocketMessages();
@@ -606,7 +606,7 @@ export class TrackerViewModel {
         ...this.EncounterToolbar,
         ...this.CombatantCommander.Commands
       ];
-      AddMissingCommandsAndSaveSettings(updatedSettings, allCommands);
+      UpdateLegacyCommandSettingsAndSave(updatedSettings, allCommands);
     }
 
     if (account.statblocks) {
