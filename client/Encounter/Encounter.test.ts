@@ -283,13 +283,12 @@ describe("LoadEncounterState", () => {
     const encounterState = baseEncounter.GetEncounterState();
     const encounter = buildEncounter();
     encounter.LoadEncounterState(encounterState, null);
-    
+
     expect(encounter.Combatants().map(c => c.Initiative())).toEqual([
       15,
       10,
       5
     ]);
     expect(encounter.EncounterFlow.State()).toEqual("active");
-
   });
 });

@@ -6,7 +6,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
   const encounterStateTip = props.encounterActive
     ? "Encounter Active"
     : "Encounter Inactive";
-  
+
   return (
     <li className="combatant--header">
       <span className="combatant__leftsection">
