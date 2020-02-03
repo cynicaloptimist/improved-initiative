@@ -68,27 +68,38 @@
   }
 
   .command-options-labels {
-    position: absolute;
+    margin-top: -30px;
     align-self: flex-end;
     font-style: italic;
   }
 
   .toolbar-label,
-  .toolbar-setting {
+  .toolbar-setting,
+  .combatant-label,
+  .combatant-setting {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 100px;
     i {
       width: 30px;
     }
   }
 
+  .toolbar-label,
+  .toolbar-setting {
+    width: 80px;
+  }
+
+  .combatant-label,
+  .combatant-setting {
+    width: 45px;
+  }
+
   .hotkey-label,
   .keybinding {
     text-align: center;
-    width: 100px;
+    width: 80px;
   }
 
   .keybindings > div {

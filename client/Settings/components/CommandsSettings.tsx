@@ -10,6 +10,7 @@ import { ToggleButton } from "./Toggle";
 interface CommandSettingRowProps {
   command: Command;
   commandIndex: number;
+  withCombatantRow: boolean;
 }
 
 class CommandSettingRow extends React.Component<CommandSettingRowProps> {
@@ -32,6 +33,13 @@ class CommandSettingRow extends React.Component<CommandSettingRowProps> {
             disabled={this.props.command.LockOnActionBar}
           />
         </label>
+        {this.props.withCombatantRow && (
+          <label className="combatant-setting">
+            <ToggleButton
+              fieldName={`Commands[${this.props.commandIndex}].ShowInCombatantRow`}
+            />
+          </label>
+        )}
       </div>
     );
   }
@@ -50,23 +58,35 @@ export class CommandsSettings extends React.Component<CommandsSettingsProps> {
         <h2>Encounter Commands</h2>
         <div className="command-options-labels">
           <span className="hotkey-label">Hotkey</span>
-          <span className="toolbar-label">Show on Toolbar</span>
+          <span className="toolbar-label">Toolbar</span>
         </div>
-        {this.props.encounterCommands.map(this.buildCommandSettingRow)}
+        {this.props.encounterCommands.map(this.buildCommandSettingRow(false))}
         <h2>Combatant Commands</h2>
-        {this.props.combatantCommands.map(this.buildCommandSettingRow)}
+        <div className="command-options-labels">
+          <span className="hotkey-label">Hotkey</span>
+          <span className="toolbar-label">Toolbar</span>
+          <span className="combatant-label">Inline</span>
+        </div>
+        {this.props.combatantCommands.map(this.buildCommandSettingRow(true))}
       </div>
     );
   }
 
-  private buildCommandSettingRow = (command: Command) => {
-    const index = _.findIndex(
-      this.props.commandSettings,
-      s => s.Name == command.Id
-    );
+  private buildCommandSettingRow(withCombatantRow: boolean) {
+    return (command: Command) => {
+      const index = _.findIndex(
+        this.props.commandSettings,
+        s => s.Name == command.Id
+      );
 
-    return (
-      <CommandSettingRow command={command} commandIndex={index} key={index} />
-    );
-  };
+      return (
+        <CommandSettingRow
+          withCombatantRow={withCombatantRow}
+          command={command}
+          commandIndex={index}
+          key={index}
+        />
+      );
+    };
+  }
 }
