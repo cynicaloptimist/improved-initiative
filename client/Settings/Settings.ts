@@ -2,107 +2,14 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import * as Mousetrap from "mousetrap";
 
-import { CommandSetting } from "../../common/CommandSetting";
-import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import {
   getDefaultSettings,
-  AutoGroupInitiativeOption,
-  PostCombatStatsOption,
   Settings
 } from "../../common/Settings";
 import { Command } from "../Commands/Command";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export const CurrentSettings = ko.observable<Settings>();
-
-function getLegacySetting<T>(settingName: string, def: T): T {
-  const setting = LegacySynchronousLocalStore.Load<T>(
-    LegacySynchronousLocalStore.User,
-    settingName
-  );
-  if (setting === null) {
-    return def;
-  }
-  return setting;
-}
-
-function getLegacySettings(): Settings {
-  const commandNames = LegacySynchronousLocalStore.List(
-    LegacySynchronousLocalStore.KeyBindings
-  );
-  const commands: CommandSetting[] = commandNames.map(n => {
-    return {
-      Name: n,
-      KeyBinding: LegacySynchronousLocalStore.Load<string>(
-        LegacySynchronousLocalStore.KeyBindings,
-        n
-      ),
-      ShowOnActionBar: LegacySynchronousLocalStore.Load<boolean>(
-        LegacySynchronousLocalStore.ActionBar,
-        n
-      )
-    };
-  });
-  const defaultSettings = getDefaultSettings();
-
-  return {
-    Commands: commands,
-    Rules: {
-      ...defaultSettings.Rules,
-      RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
-      AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
-      AutoCheckConcentration: getLegacySetting<boolean>(
-        "AutoCheckConcentration",
-        true
-      ),
-      AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>(
-        "AutoGroupInitiative",
-        AutoGroupInitiativeOption.None
-      )
-    },
-    TrackerView: {
-      ...defaultSettings.TrackerView,
-      DisplayRoundCounter: getLegacySetting<boolean>(
-        "DisplayRoundCounter",
-        false
-      ),
-      DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
-      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", true),
-      PostCombatStats: getLegacySetting<PostCombatStatsOption>(
-        "PostCombatStats",
-        PostCombatStatsOption.None
-      )
-    },
-    PlayerView: {
-      ...defaultSettings.PlayerView,
-      AllowPlayerSuggestions: getLegacySetting<boolean>(
-        "PlayerViewAllowPlayerSuggestions",
-        false
-      ),
-      ActiveCombatantOnTop: getLegacySetting<boolean>(
-        "ActiveCombatantOnTop",
-        false
-      ),
-      MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>(
-        "MonsterHPVerbosity",
-        HpVerbosityOption.ColoredLabel
-      ),
-      HideMonstersOutsideEncounter: getLegacySetting<boolean>(
-        "HideMonstersOutsideEncounter",
-        false
-      ),
-      DisplayRoundCounter: getLegacySetting<boolean>(
-        "PlayerViewDisplayRoundCounter",
-        false
-      ),
-      DisplayTurnTimer: getLegacySetting<boolean>(
-        "PlayerViewDisplayTurnTimer",
-        false
-      )
-    },
-    Version: defaultSettings.Version
-  };
-}
 
 function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
@@ -187,8 +94,7 @@ export function InitializeSettings() {
     const updatedSettings = UpdateSettings(localSettings);
     CurrentSettings(updatedSettings);
   } else {
-    const legacySettings = getLegacySettings();
-    CurrentSettings(legacySettings);
+    CurrentSettings(getDefaultSettings());
   }
 
   LegacySynchronousLocalStore.Save<Settings>(
