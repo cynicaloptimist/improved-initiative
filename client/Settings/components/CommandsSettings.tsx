@@ -7,86 +7,82 @@ import { Info } from "../../Components/Info";
 import { CommandInfoById } from "./CommandInfo";
 import { ToggleButton } from "./Toggle";
 
-interface CommandSettingRowProps {
+type CommandSettingRowProps = {
   command: Command;
   commandIndex: number;
   withCombatantRow: boolean;
-}
+};
 
-class CommandSettingRow extends React.Component<CommandSettingRowProps> {
-  public render() {
-    const info = CommandInfoById[this.props.command.Id];
-    return (
-      <div>
-        <span className="command-description">
-          {this.props.command.Description}
-          {info && <Info>{info}</Info>}
-        </span>
-        <Field
-          className="keybinding"
-          name={`Commands[${this.props.commandIndex}].KeyBinding`}
+function CommandSettingRow(props: CommandSettingRowProps) {
+  const info = CommandInfoById[props.command.Id];
+  return (
+    <div>
+      <span className="command-description">
+        {props.command.Description}
+        {info && <Info>{info}</Info>}
+      </span>
+      <Field
+        className="keybinding"
+        name={`Commands[${props.commandIndex}].KeyBinding`}
+      />
+      <label className="toolbar-setting">
+        <i className={"fas fa-" + props.command.FontAwesomeIcon} />
+        <ToggleButton
+          fieldName={`Commands[${props.commandIndex}].ShowOnActionBar`}
+          disabled={props.command.LockOnActionBar}
         />
-        <label className="toolbar-setting">
-          <i className={"fas fa-" + this.props.command.FontAwesomeIcon} />
+      </label>
+      {props.withCombatantRow && (
+        <label className="combatant-setting">
           <ToggleButton
-            fieldName={`Commands[${this.props.commandIndex}].ShowOnActionBar`}
-            disabled={this.props.command.LockOnActionBar}
+            fieldName={`Commands[${props.commandIndex}].ShowInCombatantRow`}
           />
         </label>
-        {this.props.withCombatantRow && (
-          <label className="combatant-setting">
-            <ToggleButton
-              fieldName={`Commands[${this.props.commandIndex}].ShowInCombatantRow`}
-            />
-          </label>
-        )}
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
-interface CommandsSettingsProps {
+type CommandsSettingsProps = {
   commandSettings: CommandSetting[];
   encounterCommands: Command[];
   combatantCommands: Command[];
+};
+
+export function CommandsSettings(props: CommandsSettingsProps) {
+  return (
+    <div className="tab-content keybindings">
+      <h2>Encounter Commands</h2>
+      <div className="command-options-labels">
+        <span className="hotkey-label">Hotkey</span>
+        <span className="toolbar-label">Toolbar</span>
+      </div>
+      {props.encounterCommands.map(buildCommandSettingRow(props, false))}
+      <h2>Combatant Commands</h2>
+      <div className="command-options-labels">
+        <span className="hotkey-label">Hotkey</span>
+        <span className="toolbar-label">Toolbar</span>
+        <span className="combatant-label">Inline</span>
+      </div>
+      {props.combatantCommands.map(buildCommandSettingRow(props, true))}
+    </div>
+  );
 }
 
-export class CommandsSettings extends React.Component<CommandsSettingsProps> {
-  public render() {
+function buildCommandSettingRow(
+  props: CommandsSettingsProps,
+  withCombatantRow: boolean
+) {
+  return (command: Command) => {
+    const index = _.findIndex(props.commandSettings, s => s.Name == command.Id);
+
     return (
-      <div className="tab-content keybindings">
-        <h2>Encounter Commands</h2>
-        <div className="command-options-labels">
-          <span className="hotkey-label">Hotkey</span>
-          <span className="toolbar-label">Toolbar</span>
-        </div>
-        {this.props.encounterCommands.map(this.buildCommandSettingRow(false))}
-        <h2>Combatant Commands</h2>
-        <div className="command-options-labels">
-          <span className="hotkey-label">Hotkey</span>
-          <span className="toolbar-label">Toolbar</span>
-          <span className="combatant-label">Inline</span>
-        </div>
-        {this.props.combatantCommands.map(this.buildCommandSettingRow(true))}
-      </div>
+      <CommandSettingRow
+        withCombatantRow={withCombatantRow}
+        command={command}
+        commandIndex={index}
+        key={index}
+      />
     );
-  }
-
-  private buildCommandSettingRow(withCombatantRow: boolean) {
-    return (command: Command) => {
-      const index = _.findIndex(
-        this.props.commandSettings,
-        s => s.Name == command.Id
-      );
-
-      return (
-        <CommandSettingRow
-          withCombatantRow={withCombatantRow}
-          command={command}
-          commandIndex={index}
-          key={index}
-        />
-      );
-    };
-  }
+  };
 }
