@@ -16,6 +16,9 @@ export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
 
+  const { combatantState } = props;
+  const { StatBlock } = combatantState;
+
   return (
     <li
       className={getClassNames(props).join(" ")}
@@ -25,6 +28,14 @@ export function CombatantRow(props: CombatantRowProps) {
         <span className={getInitiativeClass(props)} title="Initiative Roll">
           {props.combatantState.Initiative}
         </span>
+        <img
+          // Double size default image is intentional for better clarity on high res screens
+          src={StatBlock.ImageURL || "/img/DnD-logo-70x70.png"}
+          alt="" // Image is only decorative
+          className="combatant__image"
+          height={35}
+          width={35}
+        />
         <span className="combatant__name" title={displayName}>
           {props.combatantState.Hidden && (
             <Tippy content="Hidden from Player View" boundary="window">
