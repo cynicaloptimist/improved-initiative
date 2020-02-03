@@ -2,15 +2,17 @@ import { getDefaultSettings } from "../../common/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Command } from "./Command";
 
+const MakeCommand = () => ({
+  id: "some-command-id",
+  description: "Some Command",
+  actionBinding: jest.fn(),
+  defaultKeyBinding: "default-keybinding",
+  fontAwesomeIcon: "square"
+});
+
 describe("Command", () => {
   test("Should use a default keybinding", () => {
-    const command = new Command(
-      "some-command-id",
-      "Some Command",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+    const command = new Command(MakeCommand());
     expect(command.KeyBinding).toEqual("default-keybinding");
   });
 
@@ -29,13 +31,7 @@ describe("Command", () => {
       settings
     );
 
-    const command = new Command(
-      "some-command-id",
-      "Some Command",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+    const command = new Command(MakeCommand());
     expect(command.KeyBinding).toEqual("saved-keybinding");
   });
 
@@ -53,13 +49,11 @@ describe("Command", () => {
       "Settings",
       settings
     );
-    const command = new Command(
-      "add-tag",
-      "Add Tag",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+
+    const command = new Command({
+      ...MakeCommand(),
+      id: "add-tag"
+    });
     expect(command.KeyBinding).toEqual("legacy-keybinding");
   });
 
@@ -77,22 +71,18 @@ describe("Command", () => {
       "Settings",
       settings
     );
-    const clearEncounterCommand = new Command(
-      "clear-encounter",
-      "Clear Encounter",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+
+    const clearEncounterCommand = new Command({
+      ...MakeCommand(),
+      id: "clear-encounter"
+    });
+
     expect(clearEncounterCommand.KeyBinding).toEqual("default-keybinding");
 
-    const cleanEncounterCommand = new Command(
-      "clean-encounter",
-      "Clean Encounter",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+    const cleanEncounterCommand = new Command({
+      ...MakeCommand(),
+      id: "clean-encounter"
+    });
     expect(cleanEncounterCommand.KeyBinding).toEqual(
       "legacy-clear-encounter-keybinding"
     );
@@ -104,13 +94,10 @@ describe("Command", () => {
       "Add Note",
       "legacy-keybinding"
     );
-    const command = new Command(
-      "add-tag",
-      "Add Tag",
-      jest.fn(),
-      "default-keybinding",
-      "square"
-    );
+    const command = new Command({
+      ...MakeCommand(),
+      id: "add-tag"
+    });
     expect(command.KeyBinding).toEqual("legacy-keybinding");
   });
 });

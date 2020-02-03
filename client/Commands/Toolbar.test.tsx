@@ -4,10 +4,17 @@ import * as React from "react";
 import { Button } from "../Components/Button";
 import { Command } from "./Command";
 import { Toolbar } from "./Toolbar";
+import { CommandButton } from "./CommandButton";
 
 const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
   const encounterCommands = [
-    new Command(id, description, () => {}, keyBinding, "gear")
+    new Command({
+      id: id,
+      description: description,
+      defaultKeyBinding: keyBinding,
+      actionBinding: () => {},
+      fontAwesomeIcon: "gear"
+    })
   ];
 
   return Enzyme.shallow(
@@ -32,8 +39,10 @@ describe("Toolbar component", () => {
     );
 
     const tooltip = component
-      .find(Button)
+      .find(CommandButton)
       .first()
+      .dive()
+      .find(Button)
       .prop("tooltip");
     expect(tooltip).toEqual(`${description} [${keyBinding}]`);
   });
@@ -49,8 +58,10 @@ describe("Toolbar component", () => {
     );
 
     const tooltip = component
-      .find(Button)
+      .find(CommandButton)
       .first()
+      .dive()
+      .find(Button)
       .prop("tooltip");
     expect(tooltip).toEqual(description);
   });

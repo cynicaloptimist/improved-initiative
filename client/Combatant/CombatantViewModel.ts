@@ -5,20 +5,17 @@ import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
 import { DefaultPrompt, LegacyPrompt } from "../Commands/Prompts/Prompt";
-import { Conditions } from "../Rules/Conditions";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
+import { TagState } from "../../common/CombatantState";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 
 export class CombatantViewModel {
   public HP: KnockoutComputed<string>;
   public Name: KnockoutComputed<string>;
-  public NeedsAnimate = ko.pureComputed(
-    () => animatedCombatantIds().indexOf(this.Combatant.Id) == -1
-  );
 
   constructor(
     public Combatant: Combatant,
@@ -77,24 +74,6 @@ export class CombatantViewModel {
     this.Combatant.Encounter.SortByInitiative(true);
   }
 
-  public InitiativeClass = ko.pureComputed(() => {
-    if (this.Combatant.InitiativeGroup()) {
-      return "fas fa-link";
-    }
-  });
-
-  public GetHPColor() {
-    const maxHP = this.Combatant.MaxHP(),
-      currentHP = this.Combatant.CurrentHP();
-    const green = Math.floor((currentHP / maxHP) * 170);
-    const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
-    return "rgb(" + red + "," + green + ",0)";
-  }
-
-  public EditHP() {
-    this.CombatantCommander.EditSingleCombatantHP(this);
-  }
-
   public EditInitiative() {
     const currentInitiative = this.Combatant.Initiative();
     const modifier = toModifierString(this.Combatant.InitiativeBonus());
@@ -140,19 +119,6 @@ export class CombatantViewModel {
     this.PromptUser(prompt);
   }
 
-  public HiddenClass = ko.pureComputed(() => {
-    return this.Combatant.Hidden() ? "fa-eye-slash" : "fa-eye";
-  });
-
-  public IsSelected = ko.pureComputed(() => {
-    return this.CombatantCommander.SelectedCombatants().some(c => c === this);
-  });
-
-  public IsActive = ko.pureComputed(() => {
-    const activeCombatant = this.Combatant.Encounter.EncounterFlow.ActiveCombatant();
-    return this.Combatant === activeCombatant;
-  });
-
   public ToggleHidden() {
     if (this.Combatant.Hidden()) {
       this.Combatant.Hidden(false);
@@ -190,18 +156,10 @@ export class CombatantViewModel {
     this.LogEvent(`${this.Name()} removed tag: "${tag.Text}"`);
   };
 
-  public ReferenceTaggedCondition = (tag: Tag) => {
-    const casedConditionName = _.startCase(tag.Text);
-    if (Conditions[casedConditionName]) {
-      const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
-      );
-      this.PromptUser(prompt);
-    }
-  };
-
-  public TagHasReference = (tag: Tag) => {
-    const casedConditionName = _.startCase(tag.Text);
-    return Conditions[casedConditionName] !== undefined;
+  public RemoveTagByState = (tagState: TagState) => {
+    const tag = this.Combatant.Tags().find(t =>
+      _.isEqual(tagState, t.GetState())
+    );
+    this.Combatant.Tags.remove(tag);
   };
 }

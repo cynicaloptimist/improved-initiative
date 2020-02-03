@@ -7,19 +7,35 @@ import { GetLegacyKeyBinding } from "./GetLegacyKeyBinding";
 
 export class Command {
   public ShowOnActionBar: KnockoutObservable<boolean>;
+  public ShowInCombatantRow: KnockoutObservable<boolean>;
   public ToolTip: KnockoutComputed<string>;
   public KeyBinding: string;
-  constructor(
-    public Id: string,
-    public Description: string,
-    public ActionBinding: () => any,
-    defaultKeyBinding: string,
-    public FontAwesomeIcon: string,
-    defaultShowOnActionBar = true,
-    public LockOnActionBar = false
-  ) {
-    this.ShowOnActionBar = ko.observable(defaultShowOnActionBar);
-    if (LockOnActionBar) {
+  public Id: string;
+  public Description: string;
+  public ActionBinding: () => any;
+  public FontAwesomeIcon: string;
+  public LockOnActionBar?: boolean;
+
+  constructor(props: {
+    id: string;
+    description: string;
+    actionBinding: () => any;
+    defaultKeyBinding: string;
+    fontAwesomeIcon: string;
+    defaultShowOnActionBar?: boolean;
+    defaultShowInCombatantRow?: boolean;
+    lockOnActionBar?: boolean;
+  }) {
+    this.Id = props.id;
+    this.Description = props.description;
+    this.ActionBinding = props.actionBinding;
+    this.FontAwesomeIcon = props.fontAwesomeIcon;
+    this.LockOnActionBar = props.lockOnActionBar || false;
+
+    this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar || true);
+    this.ShowInCombatantRow = ko.observable(props.defaultShowInCombatantRow || false);
+
+    if (this.LockOnActionBar) {
       this.ShowOnActionBar.subscribe(_ => {
         this.ShowOnActionBar(true);
       });
@@ -37,7 +53,7 @@ export class Command {
       settings && _.find(settings.Commands, c => c.Name == this.Id);
 
     if (commandSetting == undefined) {
-      this.KeyBinding = GetLegacyKeyBinding(this.Id) || defaultKeyBinding;
+      this.KeyBinding = GetLegacyKeyBinding(this.Id) || props.defaultKeyBinding;
       const showOnActionBarSetting = LegacySynchronousLocalStore.Load<boolean>(
         LegacySynchronousLocalStore.ActionBar,
         this.Description
