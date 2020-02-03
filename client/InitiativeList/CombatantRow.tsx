@@ -27,7 +27,7 @@ export function CombatantRow(props: CombatantRowProps) {
         </span>
         <span className="combatant__name" title={displayName}>
           {props.combatantState.Hidden && (
-            <Tippy content="Hidden from Player View">
+            <Tippy content="Hidden from Player View" boundary="window">
               <span className="combatant__hidden-icon fas fa-eye-slash" />
             </Tippy>
           )}
