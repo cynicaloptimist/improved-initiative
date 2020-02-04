@@ -75,13 +75,10 @@
     animation: slide-from-left 0.5s;
   }
 
-  &.active .combatant__name {
-    font-weight: bold;
-  }
-
   &.active {
-    border-color: @primary-red;
     background-color: @active-white;
+    font-weight: bold;
+    box-shadow: inset 0 0 5px 2px @active-red;
   }
 
   &.selected {
@@ -101,9 +98,14 @@
 .combatant__initiative {
   width: 2.5rem;
   justify-content: center;
+  border-left: 5px solid transparent;
   &.fa-link:before {
     font-size: 60%;
     vertical-align: top;
+  }
+
+  .selected & {
+    border-color: @primary-red;
   }
 }
 
