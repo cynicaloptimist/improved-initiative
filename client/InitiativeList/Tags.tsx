@@ -5,23 +5,24 @@ import { CommandContext } from "./CommandContext";
 export function Tags(props: { tags: TagState[]; combatantId: string }) {
   const commandContext = React.useContext(CommandContext);
   return (
-    <span className="combatant__tags">
+    <ul className="combatant__tags">
       {props.tags.map((tag, i) => {
         return (
-          <span key={i} className="tag">
+          <li key={i} className="tag">
             <span className="tag__text">
               {commandContext.EnrichText(tag.Text)}
             </span>
-            <span
-              className="fa-clickable fa-times"
+            <button
+              aria-label={`Remove ${tag.Text}`}
+              className="tag__button fa-clickable fa-times"
               onClick={event => {
                 commandContext.RemoveTagFromCombatant(props.combatantId, tag);
                 event.stopPropagation();
               }}
-            ></span>
-          </span>
+            ></button>
+          </li>
         );
       })}
-    </span>
+    </ul>
   );
 }

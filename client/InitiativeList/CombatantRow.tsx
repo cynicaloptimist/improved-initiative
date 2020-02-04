@@ -20,52 +20,53 @@ export function CombatantRow(props: CombatantRowProps) {
   const { StatBlock } = combatantState;
 
   return (
-    <li
+    <tr
       className={getClassNames(props).join(" ")}
       onClick={() => commandContext.SelectCombatant(props.combatantState.Id)}
     >
-      <span className="combatant__leftsection">
-        <span className={getInitiativeClass(props)} title="Initiative Roll">
-          {props.combatantState.Initiative}
-        </span>
+      <td className={getInitiativeClass(props)} title="Initiative Roll">
+        {props.combatantState.Initiative}
+      </td>
+      <td aria-hidden="true">
         <img
-          // Double size default image is intentional for better clarity on high res screens
-          src={StatBlock.ImageURL || "/img/DnD-logo-70x70.png"}
+          src={StatBlock.ImageURL || "/img/logo-improved-initiative.svg"}
           alt="" // Image is only decorative
           className="combatant__image"
           height={35}
           width={35}
         />
-        <span className="combatant__name" title={displayName}>
-          {props.combatantState.Hidden && (
-            <Tippy content="Hidden from Player View" boundary="window">
-              <span className="combatant__hidden-icon fas fa-eye-slash" />
-            </Tippy>
-          )}
-          {displayName}
-        </span>
-        <span
-          className="combatant__hp"
-          style={getHPStyle(props)}
-          onClick={event => {
-            commandContext.ApplyDamageToCombatant(props.combatantState.Id);
-            event.stopPropagation();
-          }}
-        >
-          {renderHPText(props)}
-        </span>
-        <span className="combatant__ac">
-          {props.combatantState.StatBlock.AC.Value}
-        </span>
-      </span>
-      <span className="combatant__rightsection">
+      </td>
+      <td className="combatant__name" title={displayName} align="left">
+        {props.combatantState.Hidden && (
+          <Tippy content="Hidden from Player View" boundary="window">
+            <span className="combatant__hidden-icon fas fa-eye-slash" />
+          </Tippy>
+        )}
+        {displayName}
+      </td>
+      <td
+        className="combatant__hp"
+        style={getHPStyle(props)}
+        onClick={event => {
+          commandContext.ApplyDamageToCombatant(props.combatantState.Id);
+          event.stopPropagation();
+        }}
+      >
+        {renderHPText(props)}
+      </td>
+      <td className="combatant__ac">
+        {props.combatantState.StatBlock.AC.Value}
+      </td>
+      <td>
         <Tags
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}
         />
-        {props.isSelected && <Commands />}
-      </span>
-    </li>
+      </td>
+      <td className="combatant__commands">
+        <Commands />
+      </td>
+    </tr>
   );
 }
 
@@ -76,10 +77,11 @@ function Commands() {
     <span className="combatant__commands">
       {commandContext.InlineCommands.map(c => (
         <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
-          <span
-            className={"fa-clickable fa-" + c.FontAwesomeIcon}
+          <button
+            className={"commandBtn fa-clickable fa-" + c.FontAwesomeIcon}
             onClick={c.ActionBinding}
-          />
+            aria-label={c.Description}
+          ></button>
         </Tippy>
       ))}
     </span>

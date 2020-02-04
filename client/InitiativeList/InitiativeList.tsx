@@ -15,29 +15,31 @@ export function InitiativeList(props: {
   return (
     <div className="initiative-list">
       <h2>Combatants by Initiative</h2>
-      <ul className="combatants">
+      <table className="combatants">
         <InitiativeListHeader
           encounterActive={encounterState.ActiveCombatantId != null}
         />
-        {encounterState.Combatants.map(combatantState => {
-          const siblingCount =
-            props.combatantCountsByName[combatantState.StatBlock.Name] || 1;
+        <tbody>
+          {encounterState.Combatants.map(combatantState => {
+            const siblingCount =
+              props.combatantCountsByName[combatantState.StatBlock.Name] || 1;
 
-          return (
-            <CombatantRow
-              key={combatantState.Id}
-              combatantState={combatantState}
-              isActive={encounterState.ActiveCombatantId == combatantState.Id}
-              isSelected={props.selectedCombatantIds.some(
-                id => id == combatantState.Id
-              )}
-              // Show index labels if the encounter has ever had more than one
-              // creature with this name.
-              showIndexLabel={siblingCount > 1}
-            />
-          );
-        })}
-      </ul>
+            return (
+              <CombatantRow
+                key={combatantState.Id}
+                combatantState={combatantState}
+                isActive={encounterState.ActiveCombatantId == combatantState.Id}
+                isSelected={props.selectedCombatantIds.some(
+                  id => id == combatantState.Id
+                )}
+                // Show index labels if the encounter has ever had more than one
+                // creature with this name.
+                showIndexLabel={siblingCount > 1}
+              />
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
