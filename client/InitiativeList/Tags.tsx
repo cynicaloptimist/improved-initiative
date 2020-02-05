@@ -12,6 +12,15 @@ export function Tags(props: { tags: TagState[]; combatantId: string }) {
             <span className="tag__text">
               {commandContext.EnrichText(tag.Text)}
             </span>
+            {tag.DurationCombatantId.length > 0 && (
+              <span className="fas fa-hourglass" />
+            )}
+            {tag.Hidden && (
+              <span
+                className="fas fa-eye-slash"
+                title="Tag hidden from Player View"
+              />
+            )}
             <span
               className="fa-clickable fa-times"
               onClick={event => {
