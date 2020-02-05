@@ -90,6 +90,11 @@ export function CombatantRow(props: CombatantRowProps) {
         />
 
         {props.combatantState.StatBlock.AC.Value}
+        {props.combatantState.RevealedAC && (
+          <Tippy content="Revealed in Player View" boundary="window">
+            <span className="combatant__ac-revealed-icon fas fa-eye" />
+          </Tippy>
+        )}
       </td>
 
       <td className="combatant__tags-cell">
