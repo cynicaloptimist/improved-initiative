@@ -197,45 +197,11 @@
       ></div>
       <!-- /ko -->
       <!-- ko if: CenterColumn() === "combat" -->
-      <h2>Combatants by Initiative</h2>
-      <ul class="combatants">
-        <li class="combatant--header">
-          <span class="combatant__leftsection">
-            <span class="combatant__initiative"
-              ><span
-                class="fas"
-                data-bind="css: Encounter.EncounterFlow.StateIcon, attr: { title: Encounter.EncounterFlow.StateTip }"
-              ></span
-            ></span>
-            <span class="combatant__name">Name</span>
-            <span class="combatant__hp"
-              ><span class="fas fa-heart"></span
-            ></span>
-            <span class="combatant__ac"
-              ><span class="fas fa-shield-alt"></span
-            ></span>
-          </span>
-          <span class="combatant__rightsection"></span>
-        </li>
-        <!-- ko foreach: CombatantViewModels -->
-        <li
-          class="combatant"
-          data-bind="
-        css: {
-            selected: IsSelected,
-            active: IsActive,
-            animate: NeedsAnimate
-        },
-        click: $root.CombatantCommander.Select,
-        component: {
-            name: 'combatant',
-            params: {
-                viewModel: $data
-            }
+      <div
+        data-bind="react: {
+                component: initiativeListComponent
         }"
-        ></li>
-        <!-- /ko -->
-      </ul>
+      ></div>
       <!-- /ko -->
       <div class="all-prompts">
         <div

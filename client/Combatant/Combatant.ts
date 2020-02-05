@@ -54,10 +54,10 @@ export class Combatant {
   public StatBlock = ko.observable<StatBlock>(StatBlock.Default());
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
+  public IndexLabel = ko.observable(0);
 
   public CombatTimer = new CombatTimer();
 
-  public IndexLabel: number;
   public CurrentHP: KnockoutObservable<number>;
   public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
@@ -75,7 +75,7 @@ export class Combatant {
   }
 
   private processCombatantState(savedCombatant: CombatantState) {
-    this.IndexLabel = savedCombatant.IndexLabel || 0;
+    this.IndexLabel(savedCombatant.IndexLabel || 0);
     this.CurrentHP(savedCombatant.CurrentHP);
     this.CurrentNotes(savedCombatant.CurrentNotes || "");
     this.TemporaryHP(savedCombatant.TemporaryHP);
@@ -84,7 +84,7 @@ export class Combatant {
       savedCombatant.InitiativeGroup || this.InitiativeGroup()
     );
     this.Alias(savedCombatant.Alias);
-    this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
+    this.Tags(Tag.FromTagStates(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
     this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
@@ -135,11 +135,11 @@ export class Combatant {
     );
 
     if (
-      !this.IndexLabel ||
-      this.IndexLabel < counts[name] ||
+      !this.IndexLabel() ||
+      this.IndexLabel() < counts[name] ||
       displayNameIsTaken
     ) {
-      this.IndexLabel = counts[name];
+      this.IndexLabel(counts[name]);
     }
 
     this.Encounter.CombatantCountsByName(counts);
@@ -227,7 +227,7 @@ export class Combatant {
     const alias = ko.unwrap(this.Alias),
       name = ko.unwrap(this.StatBlock).Name,
       combatantCount = this.Encounter.CombatantCountsByName()[name],
-      index = this.IndexLabel;
+      index = this.IndexLabel();
 
     if (alias) {
       return alias;
@@ -250,16 +250,10 @@ export class Combatant {
       Initiative: this.Initiative(),
       InitiativeGroup: this.InitiativeGroup(),
       Alias: this.Alias(),
-      IndexLabel: this.IndexLabel,
+      IndexLabel: this.IndexLabel(),
       Tags: this.Tags()
         .filter(t => t.NotExpired())
-        .map<TagState>(t => ({
-          Text: t.Text,
-          Hidden: t.HiddenFromPlayerView,
-          DurationRemaining: t.DurationRemaining(),
-          DurationTiming: t.DurationTiming,
-          DurationCombatantId: t.DurationCombatantId
-        })),
+        .map(t => t.GetState()),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),

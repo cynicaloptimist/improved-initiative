@@ -155,12 +155,25 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
     return emptyPromise();
   }
 
-  return $.ajax({
-    type: "POST",
-    url: `/my/${entityType}/`,
-    data: JSON.stringify(entity),
-    contentType: "application/json"
-  });
+  trySaveWithRetries(entity, entityType, 3);
+}
+
+function trySaveWithRetries<T extends object>(
+  entity: T,
+  entityType: string,
+  retryCount: number,
+  err?: JQuery.jqXHR<any>
+) {
+  if (retryCount > 0) {
+    return $.ajax({
+      type: "POST",
+      url: `/my/${entityType}/`,
+      data: JSON.stringify(entity),
+      contentType: "application/json"
+    }).fail(err => setTimeout(() => trySaveWithRetries(entity, entityType, retryCount--, err), 500));
+  } else {
+    return err;
+  }
 }
 
 export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {

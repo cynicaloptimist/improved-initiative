@@ -33,6 +33,16 @@ export class Tag implements Tag {
     this.Remove = () => combatant.Tags.remove(this);
   }
 
+  public GetState = ko.pureComputed<TagState>(() => {
+    return {
+      Text: this.Text,
+      Hidden: this.HiddenFromPlayerView,
+      DurationRemaining: this.DurationRemaining(),
+      DurationTiming: this.DurationTiming,
+      DurationCombatantId: this.DurationCombatantId
+    };
+  });
+
   public Decrement = () => this.DurationRemaining(this.DurationRemaining() - 1);
 
   public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
@@ -41,20 +51,20 @@ export class Tag implements Tag {
     return !this.HasDuration || this.DurationRemaining() > 0;
   });
 
-  public static getLegacyTags = (tags: any[], combatant: Combatant): Tag[] => {
-    return tags.map(tag => {
-      if (tag.Text) {
-        const savedTag: TagState = tag;
-        return new Tag(
-          savedTag.Text,
+  public static FromTagStates = (
+    tags: TagState[],
+    combatant: Combatant
+  ): Tag[] => {
+    return tags.map(
+      tag =>
+        new Tag(
+          tag.Text,
           combatant,
-          savedTag.Hidden || false,
-          savedTag.DurationRemaining,
-          savedTag.DurationTiming,
-          savedTag.DurationCombatantId
-        );
-      }
-      return new Tag(tag, combatant, false);
-    });
+          tag.Hidden || false,
+          tag.DurationRemaining,
+          tag.DurationTiming,
+          tag.DurationCombatantId
+        )
+    );
   };
 }

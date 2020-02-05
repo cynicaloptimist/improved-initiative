@@ -38,7 +38,7 @@ describe("UpdateLegacySavedEncounter", () => {
           TemporaryHP: 0,
           Initiative: 10,
           Alias: "",
-          Tags: []
+          Tags: ["string tag"]
         }
       ]
     };
@@ -55,6 +55,14 @@ describe("UpdateLegacySavedEncounter", () => {
     expect(updatedCombatant.Id).toHaveLength(8);
     expect(updatedCombatant.CurrentHP).toBe(1);
     expect(updatedCombatant.RevealedAC).toBe(false);
+    expect(updatedCombatant.Tags).toEqual([
+      {
+        Text: "string tag",
+        DurationRemaining: 0,
+        DurationTiming: null,
+        DurationCombatantId: ""
+      }
+    ]);
   });
 });
 

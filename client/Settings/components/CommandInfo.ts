@@ -16,6 +16,8 @@ export const CommandInfoById = {
   "update-notes":
     "You can keep long-form notes to track things like illnesses, inventory, and spell slots. " +
     "For Characters, these notes will persist across encounters.",
+  "set-alias":
+    "You can view the original name of a renamed combatant by viewing its statblock.",
   "edit-statblock":
     "If you edit a creature's statblock, it will only affect this combatant. " +
     "If you edit a character's statblock, it will persist across encounters.",
