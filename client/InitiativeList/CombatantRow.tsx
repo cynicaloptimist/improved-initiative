@@ -45,6 +45,11 @@ export function CombatantRow(props: CombatantRowProps) {
         </span>
         <span className="combatant__ac">
           {props.combatantState.StatBlock.AC.Value}
+          {props.combatantState.RevealedAC && (
+            <Tippy content="Revealed in Player View" boundary="window">
+              <span className="combatant__ac-revealed-icon fas fa-eye" />
+            </Tippy>
+          )}
         </span>
       </span>
       <span className="combatant__rightsection">
