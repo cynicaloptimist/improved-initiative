@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
 
-import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
@@ -52,17 +51,11 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   }
 
   private getPersistentCharacterListing(persistentCharacterId: string) {
-    let listing = find(
-      this.persistentCharacters(),
-      c => c.Origin == "account" && c.Listing().Id == persistentCharacterId
+    const listings = this.persistentCharacters().filter(
+      c => c.Listing().Id == persistentCharacterId
     );
 
-    if (!listing) {
-      listing = find(
-        this.persistentCharacters(),
-        c => c.Listing().Id == persistentCharacterId
-      );
-    }
+    let listing = find(listings, c => c.Origin == "account") || listings[0];
 
     if (!listing) {
       listing = new Listing(
