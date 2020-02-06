@@ -54,8 +54,15 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
   private getPersistentCharacterListing(persistentCharacterId: string) {
     let listing = find(
       this.persistentCharacters(),
-      c => c.Listing().Id == persistentCharacterId
+      c => c.Origin == "account" && c.Listing().Id == persistentCharacterId
     );
+
+    if (!listing) {
+      listing = find(
+        this.persistentCharacters(),
+        c => c.Listing().Id == persistentCharacterId
+      );
+    }
 
     if (!listing) {
       listing = new Listing(

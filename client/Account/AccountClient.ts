@@ -155,7 +155,7 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
     return emptyPromise();
   }
 
-  trySaveWithRetries(entity, entityType, 3);
+  return trySaveWithRetries(entity, entityType, 3);
 }
 
 function trySaveWithRetries<T extends object>(
