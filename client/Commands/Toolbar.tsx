@@ -30,7 +30,7 @@ export function Toolbar(props: ToolbarProps) {
   const className = `c-toolbar s-${props.width}`;
 
   const toCommandButton = (c: Command) => (
-    <CommandButton key={c.Id} command={c} showLabel={widthStyle == "wide"} />
+    <CommandButton key={c.Id} command={c} showLabel={props.width == "wide"} />
   );
 
   const encounterCommandButtons = props.encounterCommands.map(toCommandButton);
