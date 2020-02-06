@@ -6,7 +6,12 @@ import { Command } from "./Command";
 import { Toolbar } from "./Toolbar";
 import { CommandButton } from "./CommandButton";
 
-const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
+const renderToolbarWithSingleCommand = (
+  id,
+  description,
+  keyBinding,
+  width: "narrow" | "wide" = "narrow"
+) => {
   const encounterCommands = [
     new Command({
       id: id,
@@ -21,7 +26,7 @@ const renderToolbarWithSingleCommand = (id, description, keyBinding) => {
     <Toolbar
       encounterCommands={encounterCommands}
       combatantCommands={[]}
-      width="narrow"
+      width={width}
       showCombatantCommands={true}
     />
   );
@@ -64,5 +69,25 @@ describe("Toolbar component", () => {
       .find(Button)
       .prop("tooltip");
     expect(tooltip).toEqual(description);
+  });
+
+  test("Button shows label when toolbar is wide", () => {
+    const id = "test-command";
+    const description = "Test command";
+    const keyBinding = "";
+    const component = renderToolbarWithSingleCommand(
+      id,
+      description,
+      keyBinding,
+      "wide"
+    );
+
+    const label = component
+      .find(CommandButton)
+      .first()
+      .dive()
+      .find(Button)
+      .prop("text");
+    expect(label).toEqual(description);
   });
 });
