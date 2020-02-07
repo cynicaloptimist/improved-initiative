@@ -22,8 +22,10 @@ export function CombatantRow(props: CombatantRowProps) {
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
 
-  const selectCombatant = () => {
-    commandContext.SelectCombatant(props.combatantState.Id);
+  const selectCombatant = (mouseEvent?: React.MouseEvent) => {
+    const appendSelection =
+      mouseEvent && (mouseEvent.ctrlKey || mouseEvent.metaKey);
+    commandContext.SelectCombatant(props.combatantState.Id, appendSelection);
   };
 
   return (
@@ -59,7 +61,7 @@ export function CombatantRow(props: CombatantRowProps) {
           className="combatant__selection-button"
           onClick={e => {
             e.stopPropagation();
-            selectCombatant();
+            selectCombatant(e);
           }}
           aria-pressed={isSelected ? "true" : "false"}
         >
