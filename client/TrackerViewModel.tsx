@@ -169,9 +169,13 @@ export class TrackerViewModel {
     );
   });
 
-  private selectCombatantById = (combatantId: string) => {
+  private selectCombatantById = (
+    combatantId: string,
+    appendSelection: boolean
+  ) => {
     this.CombatantCommander.Select(
-      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId)
+      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId),
+      appendSelection
     );
   };
 
