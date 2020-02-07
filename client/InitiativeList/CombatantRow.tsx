@@ -29,7 +29,7 @@ export function CombatantRow(props: CombatantRowProps) {
         {props.combatantState.Initiative}
       </td>
 
-      <td aria-hidden="true">
+      <td aria-hidden="true" className="combatant__image-cell">
         <img
           src={StatBlock.ImageURL || "/img/logo-improved-initiative.svg"}
           alt="" // Image is only decorative
@@ -70,14 +70,24 @@ export function CombatantRow(props: CombatantRowProps) {
           event.stopPropagation();
         }}
       >
+        <span
+          className="combatant__mobile-icon fas fa-heart"
+          aria-hidden="true"
+        />
+
         {renderHPText(props)}
       </td>
 
       <td className="combatant__ac">
+        <span
+          className="combatant__mobile-icon fas fa-shield-alt"
+          aria-hidden="true"
+        />
+
         {props.combatantState.StatBlock.AC.Value}
       </td>
 
-      <td>
+      <td className="combatant__tags-cell">
         <Tags
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}

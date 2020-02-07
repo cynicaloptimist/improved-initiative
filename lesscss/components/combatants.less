@@ -1,3 +1,5 @@
+@combatant-mobile-view: 100em;
+
 .combatants {
   overflow-y: auto;
   flex-shrink: 1;
@@ -27,6 +29,18 @@
   & * {
     // position relative produces a warning in the console
     position: static;
+  }
+
+  @media (max-width: @combatant-mobile-view) {
+    &,
+    & tbody {
+      display: block;
+      width: 100%;
+    }
+
+    thead {
+      display: none;
+    }
   }
 }
 
@@ -84,6 +98,24 @@
   &.selected {
     background-color: @selected-light;
   }
+
+  @media (max-width: @combatant-mobile-view) {
+    border: 0;
+    display: grid;
+    /* prettier-ignore */
+    grid-template:
+      "init image name           ac       hp"
+      "init image tags           commands commands" /
+       auto auto  minmax(0, 1fr) auto     auto;
+  }
+}
+
+.combatant__mobile-icon {
+  display: none;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: block;
+  }
 }
 
 .combatant--header {
@@ -99,6 +131,8 @@
   width: 2.5rem;
   justify-content: center;
   border-left: 5px solid transparent;
+  grid-area: init;
+
   &.fa-link:before {
     font-size: 60%;
     vertical-align: top;
@@ -107,8 +141,24 @@
   .selected & {
     border-color: @primary-red;
   }
+
+  @media (max-width: @combatant-mobile-view) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+  }
 }
 
+.combatant__image-cell {
+  grid-area: image;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 .combatant__image {
   height: 35px;
   width: 35px;
@@ -122,15 +172,27 @@
 
 .combatant__name {
   width: 40%;
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  grid-area: name;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: block;
+    width: 100%;
+    font-size: 1.5em;
+    border-bottom: 1px solid @primary-red;
+  }
 }
 
 .combatant__selection-button {
   pointer-events: none;
   border: 0;
   background: transparent;
+  font-weight: inherit;
+  font-family: inherit;
+  font-size: 1em;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .combatant__hidden-icon {
@@ -141,10 +203,13 @@
   width: 4rem;
   justify-content: center;
   border: 1px dashed transparent;
+  grid-area: hp;
 }
 
 .combatant__ac {
   width: 1.9rem;
+  grid-area: ac;
+  margin-left: 3px;
 }
 
 .combatant__ac--revealed-badge {
@@ -152,6 +217,9 @@
   position: absolute;
   right: -8px;
   top: 0;
+}
+.combatant__tags-cell {
+  grid-area: tags;
 }
 
 .combatant__tags {
@@ -192,6 +260,16 @@
 
 .combatant__commands {
   width: 6rem;
+  grid-area: commands;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: flex;
+
+    .fa-eye {
+      margin: auto;
+      padding-left: 6px;
+    }
+  }
 }
 
 .combatant__command-button {
