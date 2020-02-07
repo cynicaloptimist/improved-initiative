@@ -65,7 +65,6 @@
 
 .combatant {
   padding: @medium-spacer;
-  border-left: @active-combatant-indicator-width solid;
 
   .fa-clickable {
     padding: 3px;
@@ -125,7 +124,7 @@
 .combatant__initiative {
   width: 2.5rem;
   justify-content: center;
-  border-left: 5px solid transparent;
+  border-left: @active-combatant-indicator-width solid transparent;
   grid-area: init;
 
   &.fa-link:before {
@@ -253,11 +252,17 @@
   width: 1rem;
 }
 
-.combatant__commands {
+.combatant__commands-cell {
   width: 4rem;
   grid-area: commands;
+  border-right: @active-combatant-indicator-width solid transparent;
+
+  .selected & {
+    border-color: @primary-red;
+  }
 
   @media (max-width: @combatant-mobile-view) {
+    border-right: none;
     display: flex;
     width: 100%;
 
@@ -265,6 +270,11 @@
       margin-left: 25px;
     }
   }
+}
+
+.combatant__commands {
+  display: flex;
+  flex-direction: row;
 }
 
 .combatant__command-button {

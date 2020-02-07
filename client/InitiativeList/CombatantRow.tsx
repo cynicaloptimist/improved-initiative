@@ -94,7 +94,7 @@ export function CombatantRow(props: CombatantRowProps) {
         />
       </td>
 
-      <td className="combatant__commands">
+      <td className="combatant__commands-cell">
         <Commands />
       </td>
     </tr>
@@ -105,7 +105,7 @@ function Commands() {
   const commandContext = React.useContext(CommandContext);
 
   return (
-    <span className="combatant__commands">
+    <div className="combatant__commands">
       {commandContext.InlineCommands.map(c => (
         <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
           <button
@@ -117,7 +117,7 @@ function Commands() {
           ></button>
         </Tippy>
       ))}
-    </span>
+    </div>
   );
 }
 
