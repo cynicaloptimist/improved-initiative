@@ -78,7 +78,9 @@ function Commands() {
       {commandContext.InlineCommands.map(c => (
         <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
           <button
-            className={"commandBtn fa-clickable fa-" + c.FontAwesomeIcon}
+            className={
+              "combatant__command-button fa-clickable fa-" + c.FontAwesomeIcon
+            }
             onClick={c.ActionBinding}
             aria-label={c.Description}
           ></button>
