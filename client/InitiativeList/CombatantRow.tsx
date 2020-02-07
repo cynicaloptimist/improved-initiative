@@ -19,7 +19,13 @@ export function CombatantRow(props: CombatantRowProps) {
   return (
     <li
       className={getClassNames(props).join(" ")}
-      onClick={() => commandContext.SelectCombatant(props.combatantState.Id)}
+      onClick={e => {
+        const appendSelection = e.ctrlKey || e.metaKey;
+        commandContext.SelectCombatant(
+          props.combatantState.Id,
+          appendSelection
+        );
+      }}
     >
       <span className="combatant__leftsection">
         <span className={getInitiativeClass(props)} title="Initiative Roll">

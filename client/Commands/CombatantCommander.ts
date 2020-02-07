@@ -75,7 +75,7 @@ export class CombatantCommander {
     });
   });
 
-  public Select = (data: CombatantViewModel, e?: MouseEvent) => {
+  public Select = (data: CombatantViewModel, appendSelection?: boolean) => {
     if (!data) {
       return;
     }
@@ -84,7 +84,7 @@ export class CombatantCommander {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
       pendingLink.prompt.Resolve(null);
     }
-    if (!(e?.ctrlKey || e?.metaKey)) {
+    if (!appendSelection) {
       this.selectedCombatantIds.removeAll();
     }
     this.selectedCombatantIds.push(data.Combatant.Id);
