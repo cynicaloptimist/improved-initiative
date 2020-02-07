@@ -170,7 +170,12 @@ function trySaveWithRetries<T extends object>(
       url: `/my/${entityType}/`,
       data: JSON.stringify(entity),
       contentType: "application/json"
-    }).fail(err => setTimeout(() => trySaveWithRetries(entity, entityType, retryCount--, err), 500));
+    }).fail(err =>
+      setTimeout(
+        () => trySaveWithRetries(entity, entityType, retryCount--, err),
+        500
+      )
+    );
   } else {
     return err;
   }
