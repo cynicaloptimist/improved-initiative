@@ -153,7 +153,8 @@ function getDisplayName(props: CombatantRowProps) {
 function getHPStyle(props: CombatantRowProps) {
   const maxHP = props.combatantState.StatBlock.HP.Value,
     currentHP = props.combatantState.CurrentHP;
-  const green = Math.floor((currentHP / maxHP) * 170);
+  // Do not set green any higher, low value is needed for contrast against light background
+  const green = Math.floor((currentHP / maxHP) * 120);
   const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
   return { color: "rgb(" + red + "," + green + ",0)" };
 }
