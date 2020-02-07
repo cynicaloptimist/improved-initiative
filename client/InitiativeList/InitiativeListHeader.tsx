@@ -18,10 +18,13 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
             </Tippy>
           </div>
         </th>
+
         <th className="combatant__image" aria-hidden="true"></th>
+
         <th className="combatant__name" align="left">
           Name
         </th>
+
         <th className="combatant__hp">
           <span className="screen-reader-only">Health</span>
           <span
@@ -30,6 +33,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
             aria-hidden="true"
           ></span>
         </th>
+
         <th className="combatant__ac">
           <span className="screen-reader-only">Armour Class</span>
           <span
@@ -38,9 +42,11 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
             aria-hidden="true"
           ></span>
         </th>
+
         <th align="right">
           <span className="screen-reader-only">Tags</span>
         </th>
+
         <th className="combatant__commands">
           <span className="screen-reader-only">Commands</span>
         </th>

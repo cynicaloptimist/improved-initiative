@@ -28,6 +28,7 @@ export function CombatantRow(props: CombatantRowProps) {
       <td className={getInitiativeClass(props)} title="Initiative Roll">
         {props.combatantState.Initiative}
       </td>
+
       <td aria-hidden="true">
         <img
           src={StatBlock.ImageURL || "/img/logo-improved-initiative.svg"}
@@ -37,6 +38,7 @@ export function CombatantRow(props: CombatantRowProps) {
           width={35}
         />
       </td>
+
       <td
         className="combatant__name"
         title={displayName}
@@ -59,6 +61,7 @@ export function CombatantRow(props: CombatantRowProps) {
           {displayName}
         </button>
       </td>
+
       <td
         className="combatant__hp"
         style={getHPStyle(props)}
@@ -69,15 +72,18 @@ export function CombatantRow(props: CombatantRowProps) {
       >
         {renderHPText(props)}
       </td>
+
       <td className="combatant__ac">
         {props.combatantState.StatBlock.AC.Value}
       </td>
+
       <td>
         <Tags
           tags={props.combatantState.Tags}
           combatantId={props.combatantState.Id}
         />
       </td>
+
       <td className="combatant__commands">
         <Commands />
       </td>
