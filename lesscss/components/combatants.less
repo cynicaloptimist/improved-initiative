@@ -127,6 +127,12 @@
   text-overflow: ellipsis;
 }
 
+.combatant__selection-button {
+  pointer-events: none;
+  border: 0;
+  background: transparent;
+}
+
 .combatant__hidden-icon {
   margin-right: @medium-spacer;
 }
@@ -192,13 +198,15 @@
   background: transparent;
   border: 0;
   padding: 0;
+  pointer-events: none;
   margin-left: 5px;
-  opacity: 0.2;
+  visibility: hidden;
 
   .active &,
   .selected &,
   &:hover,
   &:focus {
-    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 }

@@ -16,14 +16,15 @@ export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
 
-  const { combatantState } = props;
+  const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
 
+  const selectCombatant = () => {
+    commandContext.SelectCombatant(props.combatantState.Id);
+  };
+
   return (
-    <tr
-      className={getClassNames(props).join(" ")}
-      onClick={() => commandContext.SelectCombatant(props.combatantState.Id)}
-    >
+    <tr className={getClassNames(props).join(" ")} onClick={selectCombatant}>
       <td className={getInitiativeClass(props)} title="Initiative Roll">
         {props.combatantState.Initiative}
       </td>
@@ -36,13 +37,27 @@ export function CombatantRow(props: CombatantRowProps) {
           width={35}
         />
       </td>
-      <td className="combatant__name" title={displayName} align="left">
+      <td
+        className="combatant__name"
+        title={displayName}
+        align="left"
+        aria-current={isActive ? "true" : "false"}
+      >
         {props.combatantState.Hidden && (
           <Tippy content="Hidden from Player View" boundary="window">
             <span className="combatant__hidden-icon fas fa-eye-slash" />
           </Tippy>
         )}
-        {displayName}
+        <button
+          className="combatant__selection-button"
+          onClick={e => {
+            e.stopPropagation();
+            selectCombatant();
+          }}
+          aria-pressed={isSelected ? "true" : "false"}
+        >
+          {displayName}
+        </button>
       </td>
       <td
         className="combatant__hp"
