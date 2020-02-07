@@ -38,8 +38,12 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
             aria-hidden="true"
           ></span>
         </th>
-        <th align="right">Tags</th>
-        <th className="combatant__commands">Commands</th>
+        <th align="right">
+          <span className="screen-reader-only">Tags</span>
+        </th>
+        <th className="combatant__commands">
+          <span className="screen-reader-only">Commands</span>
+        </th>
       </tr>
     </thead>
   );
