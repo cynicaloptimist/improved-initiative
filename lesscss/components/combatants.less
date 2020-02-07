@@ -66,18 +66,6 @@
 .combatant {
   padding: @medium-spacer;
 
-  .fa-clickable {
-    padding: 3px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .fa-clickable:hover {
-    box-shadow: 0 0 5px 1px @primary-red;
-  }
-
   .colors(@primary-black, @primary-white, transparent);
 
   &:nth-child(2n-1) {
@@ -280,13 +268,21 @@
 .combatant__command-button {
   background: transparent;
   border: 0;
-  padding: 0;
+  border-radius: 50%;
   pointer-events: none;
   margin-left: 5px;
   visibility: hidden;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   .selected & {
     visibility: visible;
     pointer-events: auto;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 2px @primary-red;
   }
 }
