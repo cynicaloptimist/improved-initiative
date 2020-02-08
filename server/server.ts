@@ -53,7 +53,7 @@ async function improvedInitiativeServer() {
   } else {
     await sticky.listen(server, defaultPort, {
       workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
-      proxyHeader: 'x-forwarded-for',
+      proxyHeader: "x-forwarded-for",
       env: {
         DB_CONNECTION_STRING: dbConnectionString,
         ...process.env

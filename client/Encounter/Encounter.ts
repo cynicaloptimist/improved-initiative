@@ -382,7 +382,7 @@ export class Encounter {
       this.combatants(),
       c => c.Id == encounterState.ActiveCombatantId
     );
-    
+
     if (activeCombatant !== undefined) {
       this.EncounterFlow.State("active");
       this.EncounterFlow.ActiveCombatant(activeCombatant);
@@ -391,7 +391,7 @@ export class Encounter {
       this.EncounterFlow.CombatTimer.Start();
       this.SortByInitiative();
     }
-    
+
     this.EncounterFlow.CombatTimer.SetElapsedRounds(
       encounterState.RoundCounter || 1
     );

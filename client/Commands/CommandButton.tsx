@@ -2,7 +2,7 @@ import { Command } from "./Command";
 import { Button } from "../Components/Button";
 import React = require("react");
 
-export function CommandButton(props: { command: Command, showLabel: boolean }) {
+export function CommandButton(props: { command: Command; showLabel: boolean }) {
   const c = props.command;
   const buttonText = props.showLabel && c.Description;
   return (

@@ -74,7 +74,9 @@ describe("CombatantCommander", () => {
     combatant2.Initiative(10);
     encounter.SortByInitiative(false);
 
-    expect(trackerViewModel.CombatantViewModels()[0].Combatant).toBe(combatant1);
+    expect(trackerViewModel.CombatantViewModels()[0].Combatant).toBe(
+      combatant1
+    );
 
     const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
     expect(combatantViewModel.Combatant).toBe(combatant1);
@@ -82,7 +84,9 @@ describe("CombatantCommander", () => {
     combatantCommander.Select(combatantViewModel);
     combatantViewModel.ApplyInitiative("5");
 
-    expect(trackerViewModel.CombatantViewModels()[1].Combatant).toBe(combatant1);
+    expect(trackerViewModel.CombatantViewModels()[1].Combatant).toBe(
+      combatant1
+    );
 
     expect(combatantCommander.SelectedCombatants()[0]).toBe(
       trackerViewModel.CombatantViewModels()[1]
