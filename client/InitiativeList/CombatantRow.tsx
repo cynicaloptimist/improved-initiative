@@ -4,6 +4,7 @@ import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
 import Tippy from "@tippy.js/react";
+import { CurrentSettings } from "../Settings/Settings";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -15,6 +16,8 @@ type CombatantRowProps = {
 export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
+
+  const { DisplayPortraits } = CurrentSettings().TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
@@ -30,13 +33,15 @@ export function CombatantRow(props: CombatantRowProps) {
       </td>
 
       <td aria-hidden="true" className="combatant__image-cell">
-        <img
-          src={StatBlock.ImageURL || "/img/logo-improved-initiative.svg"}
-          alt="" // Image is only decorative
-          className="combatant__image"
-          height={35}
-          width={35}
-        />
+        {DisplayPortraits && (
+          <img
+            src={StatBlock.ImageURL || "/img/logo-improved-initiative.svg"}
+            alt="" // Image is only decorative
+            className="combatant__image"
+            height={35}
+            width={35}
+          />
+        )}
       </td>
 
       <td

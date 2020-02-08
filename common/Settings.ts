@@ -31,6 +31,7 @@ export interface Settings {
     AutoRerollInitiative: AutoRerollInitiativeOption;
   };
   TrackerView: {
+    DisplayPortraits: boolean;
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
@@ -52,6 +53,7 @@ export function getDefaultSettings(): Settings {
       AutoRerollInitiative: AutoRerollInitiativeOption.No
     },
     TrackerView: {
+      DisplayPortraits: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayDifficulty: true,
