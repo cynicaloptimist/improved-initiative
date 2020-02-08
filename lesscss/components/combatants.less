@@ -87,8 +87,16 @@
     /* prettier-ignore */
     grid-template:
       "init image name           ac       hp"
+      "init image divider        divider  divider"
       "init image tags           commands commands" /
        auto auto  minmax(0, 1fr) auto     auto;
+
+    &::before {
+      content: "";
+      display: block;
+      grid-area: divider;
+      border-bottom: 1px solid @primary-red;
+    }
   }
 }
 
@@ -160,7 +168,6 @@
     display: block;
     width: 100%;
     font-size: 1.5em;
-    border-bottom: 1px solid @primary-red;
   }
 }
 
@@ -212,6 +219,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
+  min-height: 1.6rem;
 }
 
 .combatant .tag {
@@ -241,7 +249,6 @@
 }
 
 .combatant__commands-cell {
-  width: 4rem;
   grid-area: commands;
   border-right: @active-combatant-indicator-width solid transparent;
 
@@ -253,33 +260,34 @@
     border-right: none;
     display: flex;
     width: 100%;
-
-    .fa-eye {
-      margin-left: 25px;
-    }
   }
 }
 
 .combatant__commands {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(4, auto);
+  direction: rtl;
 }
 
 .combatant__command-button {
+  width: 25px;
+  height: 25px;
   background: transparent;
   border: 0;
   border-radius: 50%;
   pointer-events: none;
-  margin-left: 5px;
   visibility: hidden;
   padding: 3px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
 
   .selected & {
     visibility: visible;
     pointer-events: auto;
+    position: static;
   }
 
   &:hover {
