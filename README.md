@@ -9,14 +9,13 @@ The official Improved Initiative app lives at https://www.improved-initiative.co
 ### Requirements
 
 - [Node.js](https://nodejs.org/en/) (v12+)
-- [Visual Studio Code](https://code.visualstudio.com/) (VS Code)
 
 ### Setup
 
 - Clone the repo to a folder on your computer
-- Open the cloned folder in VS Code
-- Press <code>ctrl + `</code> (key next to "1" on your keyboard) to open terminal
-- Run the following commands in the Terminal window:
+- Open the cloned folder in a code editor such as [Visual Studio Code](https://code.visualstudio.com/)
+- Open a terminal window (Powershell is the recommend terminal application for this project)
+- Run the following commands in the Terminal window to build the dev environment code:
 
 ```
 npm install
@@ -24,9 +23,11 @@ npm run build-dev
 npx grunt
 ```
 
-- When it gets to 100% build complete, press the `F5` Key in VS Code
-- Visit <http://localhost> in a web browser to view a development version of the UI that responds to your code changes
-- Every time you make a change, wait for it to finish compiling then manually reload your browser
+- To get the dev server running, you can either:
+  - Press `F5` in Visual Studio Code _or_
+  - In a new terminal window run `npm run start`
+- Once the server is running, visit <http://localhost> in a web browser to view a development version of the UI that responds to your code changes.
+- Every time you make a change, wait for it to finish compiling then manually reload your browser.
 
 Development of Improved Initiative is supported through [Patreon](https://www.patreon.com/improvedinitiative).
 
