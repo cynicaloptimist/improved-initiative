@@ -267,6 +267,8 @@
 .combatant__commands-cell {
   grid-area: commands;
   border-right: @active-combatant-indicator-width solid transparent;
+  // forces table cell to be the minimum width it can be
+  width: 135px;
 
   .selected & {
     border-color: @primary-red;
