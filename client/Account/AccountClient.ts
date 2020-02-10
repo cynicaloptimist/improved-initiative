@@ -1,4 +1,6 @@
 import _ = require("lodash");
+import retry = require("retry");
+
 import { Listable } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { SavedEncounter } from "../../common/SavedEncounter";
@@ -152,28 +154,29 @@ function emptyPromise(): JQuery.jqXHR {
 
 function saveEntity<T extends object>(entity: T, entityType: string) {
   if (!env.HasStorage) {
-    return emptyPromise();
+    return Promise.resolve();
   }
 
-  return trySaveWithRetries(entity, entityType, 3);
-}
+  const saveOperation = retry.operation({ retries: 3 });
 
-function trySaveWithRetries<T extends object>(
-  entity: T,
-  entityType: string,
-  retryCount: number,
-  err?: JQuery.jqXHR<any>
-) {
-  if (retryCount > 0) {
-    return $.ajax({
-      type: "POST",
-      url: `/my/${entityType}/`,
-      data: JSON.stringify(entity),
-      contentType: "application/json"
-    }).fail(err => setTimeout(() => trySaveWithRetries(entity, entityType, retryCount--, err), 500));
-  } else {
-    return err;
-  }
+  return new Promise(resolve => {
+    saveOperation.attempt(() => {
+      $.ajax({
+        type: "POST",
+        url: `/my/${entityType}/`,
+        data: JSON.stringify(entity),
+        contentType: "application/json"
+      })
+        .done(() => resolve())
+        .fail((_, err) => {
+          if (saveOperation.retry(new Error(err))) {
+            return;
+          }
+          console.warn(`Failed to save ${entityType}: ${err}`);
+          resolve();
+        });
+    });
+  });
 }
 
 export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
