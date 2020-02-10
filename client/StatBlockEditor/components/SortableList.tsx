@@ -58,14 +58,14 @@ function SortableListInner(props: {
       <>
         <div className="c-statblock-editor__label">{listType}</div>
         {api.values[listType].map((_, i: number) => (
-          <>
+          <React.Fragment key={i}>
             <DropZone
               index={i}
               dragDropType={props.listType}
               move={props.arrayHelpers.move}
             />
             {makeComponent(i, arrayHelpers)}
-          </>
+          </React.Fragment>
         ))}
         <DropZone
           index={api.values[listType].length}
