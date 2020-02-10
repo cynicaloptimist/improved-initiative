@@ -10,3 +10,11 @@
   flex-shrink: 1;
   overflow-y: scroll;
 }
+
+.screen-reader-only {
+  // "!important" is there to almost guarantee that other styles
+  // won't interfere with this utility class and cause styling bugs
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

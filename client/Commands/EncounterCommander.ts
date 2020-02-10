@@ -69,6 +69,9 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
+  public DisplayPortraits = ko.pureComputed(
+    () => CurrentSettings().TrackerView.DisplayPortraits
+  );
   public DisplayRoundCounter = ko.pureComputed(
     () => CurrentSettings().TrackerView.DisplayRoundCounter
   );

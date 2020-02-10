@@ -2,10 +2,7 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import * as Mousetrap from "mousetrap";
 
-import {
-  getDefaultSettings,
-  Settings
-} from "../../common/Settings";
+import { getDefaultSettings, Settings } from "../../common/Settings";
 import { Command } from "../Commands/Command";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 

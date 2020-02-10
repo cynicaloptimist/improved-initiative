@@ -1,4 +1,4 @@
-import { Command as Command } from "./Command";
+import { Command } from "./Command";
 import { EncounterCommander } from "./EncounterCommander";
 
 export const BuildEncounterCommandList = (

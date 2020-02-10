@@ -1,3 +1,5 @@
+@combatant-mobile-view: 100em;
+
 .initiative-list {
   flex-shrink: 1;
 }
@@ -6,6 +8,44 @@
   border: 1px solid @accent-white;
   overflow-y: auto;
   flex-shrink: 1;
+  width: 100%;
+  border-spacing: 0;
+
+  th,
+  td {
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+
+    &[align="left"] {
+      text-align: left;
+    }
+    &[align="right"] {
+      text-align: right;
+    }
+  }
+
+  th {
+    padding: 8px 5px;
+  }
+
+  &,
+  & * {
+    // position relative produces a warning in the console
+    position: static;
+  }
+
+  @media (max-width: @combatant-mobile-view) {
+    &,
+    & tbody {
+      display: block;
+      width: 100%;
+    }
+
+    thead {
+      display: none;
+    }
+  }
 }
 
 @keyframes slide-from-left {
@@ -28,23 +68,7 @@
 }
 
 .combatant {
-  span {
-    display: flex;
-  }
-
-  display: flex;
   padding: @medium-spacer;
-  height: 2.2rem;
-  border-left: @active-combatant-indicator-width solid;
-  align-items: flex-start;
-
-  .fa-clickable {
-    padding: @extra-small-spacer;
-  }
-
-  .fa-clickable:hover {
-    color: @hover-green;
-  }
 
   .colors(@primary-black, @primary-white, transparent);
 
@@ -56,62 +80,113 @@
     animation: slide-from-left 0.5s;
   }
 
-  &.active .combatant__name {
-    font-weight: bold;
-  }
-
   &.active {
-    border-color: @primary-red;
-    background-color: @active-white;
+    font-weight: bold;
+    box-shadow: inset 0 0 0 3px @primary-green;
   }
 
-  &.selected {
-    background-color: @selected-light;
+  @media (max-width: @combatant-mobile-view) {
+    border: 0;
+    display: grid;
+    /* prettier-ignore */
+    grid-template:
+      "init image name           ac       hp"
+      "init image divider        divider  divider"
+      "init image tags           commands commands" /
+       auto auto  minmax(0, 1fr) auto     auto;
+
+    &::before {
+      content: "";
+      display: block;
+      grid-area: divider;
+      border-bottom: 1px solid @primary-red;
+    }
+  }
+}
+
+.combatant__mobile-icon {
+  display: none;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: block;
   }
 }
 
 .combatant--header {
   .colors(@primary-white, @primary-grey, @primary-grey);
-  display: flex;
-  flex-flow: row;
   padding: @medium-spacer;
-  border-left: @active-combatant-indicator-width solid @primary-grey;
-  align-items: baseline;
-
-  span {
-    display: flex;
-  }
 
   .fa-clickable {
     padding-left: @medium-spacer;
   }
 }
 
-.combatant__leftsection {
-  flex-basis: 60%;
-  height: 100%;
-  align-items: center;
-}
-
-.combatant__rightsection {
-  flex: 1;
-  height: 100%;
-  align-items: center;
-}
-
 .combatant__initiative {
-  width: 40px;
+  width: 2.5rem;
   justify-content: center;
+  border-left: @active-combatant-indicator-width solid transparent;
+  grid-area: init;
+
   &.fa-link:before {
     font-size: 60%;
     vertical-align: top;
   }
+
+  .selected & {
+    border-color: @primary-red;
+  }
+
+  @media (max-width: @combatant-mobile-view) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+  }
+}
+
+.combatant__image-cell {
+  grid-area: image;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 10px;
+  }
+}
+.combatant__image {
+  height: 35px;
+  width: 35px;
+  object-fit: cover;
+  margin-right: 10px;
+
+  .combatant--header & {
+    height: auto;
+  }
 }
 
 .combatant__name {
-  flex-grow: 1;
-  flex-basis: 40%;
+  width: 40%;
+  grid-area: name;
+
+  @media (max-width: @combatant-mobile-view) {
+    display: block;
+    width: 100%;
+    font-size: 1.5em;
+  }
+}
+
+.combatant__selection-button {
+  pointer-events: none;
+  border: 0;
+  background: transparent;
+  font-weight: inherit;
+  font-family: inherit;
+  font-size: 1em;
   overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .combatant__hidden-icon {
@@ -119,16 +194,16 @@
 }
 
 .combatant__hp {
-  align-self: stretch;
-
-  width: 70px;
+  width: 4rem;
   justify-content: center;
   border: 1px dashed transparent;
+  grid-area: hp;
 }
 
 .combatant__ac {
-  width: 30px;
-  justify-content: center;
+  width: 1.9rem;
+  grid-area: ac;
+  margin-left: 3px;
 }
 
 .combatant__ac--revealed-badge {
@@ -137,20 +212,103 @@
   right: -8px;
   top: 0;
 }
+.combatant__tags-cell {
+  grid-area: tags;
+}
 
 .combatant__tags {
+  display: flex;
   flex: 1;
   flex-flow: row wrap;
   justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 1.6rem;
 }
 
 .combatant .tag {
   padding-right: @extra-small-spacer;
   flex-shrink: 1;
+  display: flex;
+  align-items: center;
+  margin-left: 0.5rem;
 }
 
 .combatant .tag__text {
   display: block;
   flex-shrink: 1;
   text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.combatant .tag__icon {
+  display: block;
+  margin-left: 0.5em;
+
+  &.fa-hourglass {
+    &::before {
+      margin-right: 0.2em;
+    }
+  }
+}
+
+.combatant .tag__button {
+  flex-shrink: 1;
+  text-align: right;
+  background: transparent;
+  border: 0;
+  height: 1rem;
+  width: 1rem;
+}
+
+.combatant__commands-cell {
+  grid-area: commands;
+  border-right: @active-combatant-indicator-width solid transparent;
+  // forces table cell to be the minimum width it can be
+  width: 135px;
+
+  .selected & {
+    border-color: @primary-red;
+  }
+
+  @media (max-width: @combatant-mobile-view) {
+    border-right: none;
+    display: flex;
+    width: 100%;
+  }
+}
+
+.combatant__commands {
+  display: grid;
+  grid-gap: 5px;
+  grid-template-columns: repeat(4, auto);
+  direction: rtl;
+}
+
+.combatant__command-button {
+  width: 25px;
+  height: 25px;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  visibility: hidden;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+
+  .selected & {
+    visibility: visible;
+    pointer-events: auto;
+    position: static;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 2px @primary-red;
+  }
 }

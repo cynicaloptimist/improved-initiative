@@ -143,6 +143,6 @@
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
-    "lint": "eslint --fix '**/**/*.{ts,tsx}'"
+    "lint": "eslint --fix **/*.{ts,tsx}"
   }
 }
