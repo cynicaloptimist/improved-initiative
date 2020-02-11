@@ -64,11 +64,7 @@ export function OptionsSettings(props: {
 
       <h3>Encounter View</h3>
       <Toggle fieldName="TrackerView.DisplayPortraits">
-        Display Character portraits
-        <Info>
-          Any combatants that do not have a character portrait will display the
-          Improved Initiative logo instead.
-        </Info>
+        Display Character Portraits
       </Toggle>
       <Toggle fieldName="TrackerView.DisplayRoundCounter">
         Display Round Counter
