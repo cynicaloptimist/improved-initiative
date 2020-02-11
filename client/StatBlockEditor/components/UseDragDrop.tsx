@@ -27,7 +27,7 @@ export function DropZone(props: {
       }
     },
     collect: monitor => {
-      console.log(
+      /*console.log(
         "collecting: dropzone",
         index,
         monitor.getItemType(),
@@ -36,7 +36,7 @@ export function DropZone(props: {
         monitor.isOver(),
         "canDrop",
         monitor.canDrop()
-      );
+      );*/
       return {
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop()
