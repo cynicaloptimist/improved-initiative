@@ -99,15 +99,14 @@ export function CombatantRow(props: CombatantRowProps) {
         )}
       </td>
 
-      <td className="combatant__tags-cell">
-        <Tags
-          tags={props.combatantState.Tags}
-          combatantId={props.combatantState.Id}
-        />
-      </td>
-
-      <td className="combatant__commands-cell">
-        <Commands />
+      <td className="combatant__tags-commands-cell">
+        <div className="combatant__tags-commands-wrapper">
+          <Tags
+            tags={props.combatantState.Tags}
+            combatantId={props.combatantState.Id}
+          />
+          <Commands />
+        </div>
       </td>
     </tr>
   );
