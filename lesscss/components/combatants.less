@@ -82,6 +82,9 @@
 
   &.active {
     font-weight: bold;
+  }
+
+  &.selected {
     box-shadow: inset 0 0 0 3px @primary-green;
   }
 
@@ -132,7 +135,7 @@
     vertical-align: top;
   }
 
-  .selected & {
+  .active & {
     border-color: @primary-red;
   }
 
@@ -266,13 +269,8 @@
 
 .combatant__commands-cell {
   grid-area: commands;
-  border-right: @active-combatant-indicator-width solid transparent;
   // forces table cell to be the minimum width it can be
   width: 135px;
-
-  .selected & {
-    border-color: @primary-red;
-  }
 
   @media (max-width: @combatant-mobile-view) {
     border-right: none;
