@@ -47,18 +47,18 @@ async function improvedInitiativeServer() {
 
   const defaultPort = parseInt(process.env.PORT || "80");
 
-  if (process.env.DISABLE_CONCURRENCY) {
-    await server.listen(defaultPort);
-    console.log("Launched server without concurrency.");
-  } else {
+  if (process.env.ENABLE_CONCURRENCY) {
     await sticky.listen(server, defaultPort, {
       workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
-      proxyHeader: 'x-forwarded-for',
+      proxyHeader: "x-forwarded-for",
       env: {
         DB_CONNECTION_STRING: dbConnectionString,
         ...process.env
       }
     });
+  } else {
+    await server.listen(defaultPort);
+    console.log("Launched server without concurrency.");
   }
 
   const io = socketIO(server);
