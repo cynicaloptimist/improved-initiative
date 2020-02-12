@@ -44,11 +44,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
         </th>
 
         <th align="right">
-          <span className="screen-reader-only">Tags</span>
-        </th>
-
-        <th className="combatant__commands">
-          <span className="screen-reader-only">Commands</span>
+          <span className="screen-reader-only">Tags and commands</span>
         </th>
       </tr>
     </thead>

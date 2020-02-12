@@ -94,9 +94,9 @@
     display: grid;
     /* prettier-ignore */
     grid-template:
-      "init image name           ac       hp"
-      "init image divider        divider  divider"
-      "init image tags           commands commands" /
+      "init image name           ac           hp"
+      "init image divider        divider      divider"
+      "init image tagsCommands   tagsCommands tagsCommands" /
        auto auto  minmax(0, 1fr) auto     auto;
 
     &::before {
@@ -216,13 +216,31 @@
   right: -8px;
   top: 0;
 }
-.combatant__tags-cell {
-  grid-area: tags;
+.combatant__tags-commands-cell {
+  grid-area: tagsCommands;
+
+  border-right: @active-combatant-indicator-width solid transparent;
+  // forces table cell to be the minimum width it can be
+  // width: 135px;
+
+  .selected & {
+    border-color: @primary-red;
+  }
+
+  @media (max-width: @combatant-mobile-view) {
+    border-right: none;
+    width: 100%;
+  }
+}
+
+.combatant__tags-commands-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
 }
 
 .combatant__tags {
   display: flex;
-  flex: 1;
   flex-flow: row wrap;
   justify-content: flex-end;
   list-style: none;
@@ -276,15 +294,7 @@
   @media (max-width: @combatant-mobile-view) {
     border-right: none;
     display: flex;
-    width: 100%;
   }
-}
-
-.combatant__commands {
-  display: grid;
-  grid-gap: 5px;
-  grid-template-columns: repeat(4, auto);
-  direction: rtl;
 }
 
 .combatant__command-button {
