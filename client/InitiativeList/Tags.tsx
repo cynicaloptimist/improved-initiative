@@ -9,7 +9,7 @@ export function Tags(props: { tags: TagState[]; combatantId: string }) {
     <ul className="combatant__tags">
       {props.tags.map((tag, i) => {
         return (
-          <li key={i} className="tag">
+          <li key={props.combatantId + "_tag_" + i} className="tag">
             <span className="tag__text">
               {commandContext.EnrichText(tag.Text)}
             </span>
