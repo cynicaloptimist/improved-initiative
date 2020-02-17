@@ -136,7 +136,7 @@ describe("EncounterCommander", () => {
     oldEncounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
       UpdatePersistentCharacter: async () => {}
     });
-    const savedEncounter = oldEncounter.GetEncounterState();
+    const savedEncounter = oldEncounter.ObservableEncounterState();
     return savedEncounter;
   }
 
@@ -174,7 +174,7 @@ describe("EncounterCommander", () => {
         combatant.Initiative(initiative);
       }
       oldEncounter.EncounterFlow.StartEncounter();
-      const savedEncounter = oldEncounter.GetEncounterState();
+      const savedEncounter = oldEncounter.ObservableEncounterState();
       return savedEncounter;
     }
 

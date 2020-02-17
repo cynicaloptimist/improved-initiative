@@ -316,7 +316,7 @@ export class Encounter {
   }
 
   public StartEncounterAutosaves = () => {
-    this.GetEncounterState.subscribe(newState => {
+    this.ObservableEncounterState.subscribe(newState => {
       LegacySynchronousLocalStore.Save<EncounterState<CombatantState>>(
         LegacySynchronousLocalStore.AutoSavedEncounters,
         LegacySynchronousLocalStore.DefaultSavedEncounterId,
@@ -325,16 +325,25 @@ export class Encounter {
     });
   };
 
-  public GetEncounterState = ko.computed(
+  public ObservableEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
       const activeCombatant = this.EncounterFlow.ActiveCombatant();
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
         RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
-        ElapsedSeconds: this.EncounterFlow.CombatTimer.ElapsedSeconds(),
+        //ElapsedSeconds: omitted to avoid repeated re-renders,
         Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
         BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
+      };
+    }
+  );
+
+  public FullEncounterState = ko.computed(
+    (): EncounterState<CombatantState> => {
+      return {
+        ElapsedSeconds: this.EncounterFlow.TurnTimer.ElapsedSeconds(),
+        ...this.ObservableEncounterState()
       };
     }
   );

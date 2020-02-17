@@ -77,7 +77,7 @@ describe("Index labeling", () => {
       combatant.Initiative(initiative);
     }
     oldEncounter.EncounterFlow.StartEncounter();
-    const savedEncounter = oldEncounter.GetEncounterState();
+    const savedEncounter = oldEncounter.ObservableEncounterState();
     return savedEncounter;
   }
 

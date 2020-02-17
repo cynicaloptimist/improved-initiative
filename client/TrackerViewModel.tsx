@@ -142,7 +142,7 @@ export class TrackerViewModel {
   );
 
   public initiativeListComponent = ko.pureComputed(() => {
-    const encounterState = this.Encounter.GetEncounterState();
+    const encounterState = this.Encounter.ObservableEncounterState();
     const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
       c => c.Combatant.Id
     );

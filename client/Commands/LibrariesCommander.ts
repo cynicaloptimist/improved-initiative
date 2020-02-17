@@ -181,7 +181,7 @@ export class LibrariesCommander {
 
   public SaveEncounter = () => {
     const prompt = SaveEncounterPrompt(
-      this.tracker.Encounter.GetEncounterState(),
+      this.tracker.Encounter.FullEncounterState(),
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       this.libraries.Encounters.Save,
       this.tracker.EventLog.AddEvent,
