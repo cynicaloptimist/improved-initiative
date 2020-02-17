@@ -345,8 +345,13 @@ export class Encounter {
   public FullEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
       return {
+        ...this.ObservableEncounterState(),
         ElapsedSeconds: this.EncounterFlow.TurnTimer.ElapsedSeconds(),
-        ...this.ObservableEncounterState()
+        Combatants: this.combatants().map<CombatantState>(c => {
+          const combatantState = c.GetState();
+          combatantState.ElapsedSeconds = c.CombatTimer.ElapsedSeconds();
+          return combatantState;
+        })
       };
     }
   );

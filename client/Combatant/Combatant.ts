@@ -257,7 +257,6 @@ export class Combatant {
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),
-      ElapsedSeconds: this.CombatTimer.ElapsedSeconds(),
       InterfaceVersion: process.env.VERSION || "unknown"
     };
   };
