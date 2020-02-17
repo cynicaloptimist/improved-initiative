@@ -286,13 +286,13 @@
   width: 1rem;
 }
 
-.combatant__commands-cell {
-  grid-area: commands;
-  // forces table cell to be the minimum width it can be
-  width: 135px;
+.combatant__commands {
+  display: none;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  margin-left: 20px;
 
-  @media (max-width: @combatant-mobile-view) {
-    border-right: none;
+  .selected & {
     display: flex;
   }
 }
