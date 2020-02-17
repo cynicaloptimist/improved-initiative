@@ -317,6 +317,9 @@ export class Encounter {
 
   public StartEncounterAutosaves = () => {
     this.ObservableEncounterState.subscribe(newState => {
+      //Short circuit this observable so we don't save every second
+      newState.ElapsedSeconds = this.EncounterFlow.TurnTimer.ElapsedSeconds();
+
       LegacySynchronousLocalStore.Save<EncounterState<CombatantState>>(
         LegacySynchronousLocalStore.AutoSavedEncounters,
         LegacySynchronousLocalStore.DefaultSavedEncounterId,
