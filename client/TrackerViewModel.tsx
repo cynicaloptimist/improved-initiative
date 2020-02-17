@@ -448,35 +448,6 @@ export class TrackerViewModel {
     />
   ));
 
-  public contextualCommandSuggestion = () => {
-    const encounterEmpty = this.Encounter.Combatants().length === 0;
-    const librariesVisible = this.LibrariesVisible();
-    const encounterActive = this.Encounter.EncounterFlow.State() === "active";
-
-    if (encounterEmpty) {
-      if (librariesVisible) {
-        //No creatures, Library open: Creature listing
-        return "listing";
-      } else {
-        //No creatures, library closed: Add Creatures
-        return "add-creatures";
-      }
-    }
-
-    if (!encounterActive) {
-      //Creatures, encounter stopped: Start Encounter
-      return "start-encounter";
-    }
-
-    if (librariesVisible) {
-      //Creatures, library open, encounter active: Hide Libraries
-      return "hide-libraries";
-    }
-
-    //Creatures, library closed, encounter active: Next turn
-    return "next-turn";
-  };
-
   private subscribeToSocketMessages = () => {
     this.Socket.on(
       "suggest damage",
