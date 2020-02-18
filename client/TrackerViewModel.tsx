@@ -106,12 +106,6 @@ export class TrackerViewModel {
     Metrics.TrackLoad();
   }
 
-  public ReviewPrivacyPolicy = () => {
-    this.SettingsVisible(false);
-    const prompt = new PrivacyPolicyPrompt();
-    this.PromptQueue.AddLegacyPrompt(prompt);
-  };
-
   public StatBlockTextEnricher = new TextEnricher(
     this.CombatantCommander.RollDice,
     this.LibrariesCommander.ReferenceSpell,
@@ -132,6 +126,14 @@ export class TrackerViewModel {
     },
     this.Rules
   );
+
+  public CombatantViewModels: KnockoutComputed<
+    CombatantViewModel[]
+  > = ko.pureComputed(() =>
+    this.Encounter.Combatants().map(this.buildCombatantViewModel)
+  );
+
+  protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public librariesComponent = (
     <LibraryPanes
@@ -169,6 +171,56 @@ export class TrackerViewModel {
     );
   });
 
+  public settingsComponent = ko.pureComputed(() => {
+    return (
+      <SettingsPane
+        settings={CurrentSettings()}
+        handleNewSettings={this.saveUpdatedSettings}
+        encounterCommands={this.EncounterToolbar}
+        combatantCommands={this.CombatantCommander.Commands}
+        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
+        repeatTutorial={this.RepeatTutorial}
+        closeSettings={() => this.SettingsVisible(false)}
+        libraries={this.Libraries}
+        accountClient={new AccountClient()}
+      />
+    );
+  });
+
+  public toolbarComponent = ko.pureComputed(() => {
+    const commandsToHideById =
+      this.Encounter.EncounterFlow.State() == "active"
+        ? ["start-encounter"]
+        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
+
+    if (!this.CombatantCommander.HasOneSelected()) {
+      commandsToHideById.push("update-notes");
+    }
+
+    const encounterCommands = this.EncounterToolbar.filter(
+      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+    );
+    const combatantCommands = this.CombatantCommander.Commands.filter(
+      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+    );
+
+    return (
+      <Toolbar
+        encounterCommands={encounterCommands}
+        combatantCommands={combatantCommands}
+        width={this.ToolbarWide() ? "wide" : "narrow"}
+        showCombatantCommands={this.CombatantCommander.HasSelected()}
+      />
+    );
+  });
+
+  public PromptsComponent = ko.pureComputed(() => (
+    <PendingPrompts
+      promptsAndIds={this.PromptQueue.GetPrompts()}
+      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
+    />
+  ));
+
   private selectCombatantById = (
     combatantId: string,
     appendSelection: boolean
@@ -192,12 +244,6 @@ export class TrackerViewModel {
     );
     this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
-
-  public CombatantViewModels: KnockoutComputed<
-    CombatantViewModel[]
-  > = ko.pureComputed(() =>
-    this.Encounter.Combatants().map(this.buildCombatantViewModel)
-  );
 
   public ActiveCombatantDetails = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
@@ -233,9 +279,48 @@ export class TrackerViewModel {
     () => this.TutorialVisible() || this.SettingsVisible()
   );
 
+  public InterfacePriority = ko.pureComputed(() => {
+    if (
+      this.CenterColumn() === "statblockeditor" ||
+      this.CenterColumn() === "spelleditor"
+    ) {
+      if (this.LibrariesVisible()) {
+        return "show-center-left-right";
+      }
+      return "show-center-right-left";
+    }
+
+    if (this.LibrariesVisible()) {
+      return "show-left-center-right";
+    }
+
+    if (this.PromptQueue.HasPrompt()) {
+      if (this.CombatantCommander.HasSelected()) {
+        return "show-center-right-left";
+      }
+      return "show-center-left-right";
+    }
+
+    if (this.CombatantCommander.HasSelected()) {
+      return "show-right-center-left";
+    }
+
+    if (this.Encounter.EncounterFlow.State() == "active") {
+      return "show-center-left-right";
+    }
+
+    return "show-center-right-left";
+  });
+
   public CloseSettings = () => {
     this.SettingsVisible(false);
     //this.TutorialVisible(false);
+  };
+
+  public ReviewPrivacyPolicy = () => {
+    this.SettingsVisible(false);
+    const prompt = new PrivacyPolicyPrompt();
+    this.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
@@ -279,8 +364,6 @@ export class TrackerViewModel {
       />
     );
   }
-
-  protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public RepeatTutorial = () => {
     this.Encounter.EncounterFlow.EndEncounter();
@@ -364,89 +447,6 @@ export class TrackerViewModel {
       );
     });
   };
-
-  public InterfacePriority = ko.pureComputed(() => {
-    if (
-      this.CenterColumn() === "statblockeditor" ||
-      this.CenterColumn() === "spelleditor"
-    ) {
-      if (this.LibrariesVisible()) {
-        return "show-center-left-right";
-      }
-      return "show-center-right-left";
-    }
-
-    if (this.LibrariesVisible()) {
-      return "show-left-center-right";
-    }
-
-    if (this.PromptQueue.HasPrompt()) {
-      if (this.CombatantCommander.HasSelected()) {
-        return "show-center-right-left";
-      }
-      return "show-center-left-right";
-    }
-
-    if (this.CombatantCommander.HasSelected()) {
-      return "show-right-center-left";
-    }
-
-    if (this.Encounter.EncounterFlow.State() == "active") {
-      return "show-center-left-right";
-    }
-
-    return "show-center-right-left";
-  });
-
-  public settingsComponent = ko.pureComputed(() => {
-    return (
-      <SettingsPane
-        settings={CurrentSettings()}
-        handleNewSettings={this.saveUpdatedSettings}
-        encounterCommands={this.EncounterToolbar}
-        combatantCommands={this.CombatantCommander.Commands}
-        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
-        repeatTutorial={this.RepeatTutorial}
-        closeSettings={() => this.SettingsVisible(false)}
-        libraries={this.Libraries}
-        accountClient={new AccountClient()}
-      />
-    );
-  });
-
-  public toolbarComponent = ko.pureComputed(() => {
-    const commandsToHideById =
-      this.Encounter.EncounterFlow.State() == "active"
-        ? ["start-encounter"]
-        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
-
-    if (!this.CombatantCommander.HasOneSelected()) {
-      commandsToHideById.push("update-notes");
-    }
-
-    const encounterCommands = this.EncounterToolbar.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-    const combatantCommands = this.CombatantCommander.Commands.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-
-    return (
-      <Toolbar
-        encounterCommands={encounterCommands}
-        combatantCommands={combatantCommands}
-        width={this.ToolbarWide() ? "wide" : "narrow"}
-        showCombatantCommands={this.CombatantCommander.HasSelected()}
-      />
-    );
-  });
-
-  public PromptsComponent = ko.pureComputed(() => (
-    <PendingPrompts
-      promptsAndIds={this.PromptQueue.GetPrompts()}
-      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
-    />
-  ));
 
   private subscribeToSocketMessages = () => {
     this.Socket.on(
