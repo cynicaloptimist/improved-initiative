@@ -4,7 +4,7 @@ import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
 import Tippy from "@tippy.js/react";
-import { CurrentSettings } from "../Settings/Settings";
+import { SettingsContext } from "../Settings/SettingsContext";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -17,7 +17,7 @@ export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
 
-  const { DisplayPortraits } = CurrentSettings().TrackerView;
+  const { DisplayPortraits } = React.useContext(SettingsContext).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;

@@ -48,6 +48,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { CommandContext } from "./InitiativeList/CommandContext";
+import { SettingsContext } from "./Settings/SettingsContext";
 
 const codec = compression("lzma");
 
@@ -162,11 +163,13 @@ export class TrackerViewModel {
           )
         }}
       >
-        <InitiativeList
-          encounterState={encounterState}
-          selectedCombatantIds={selectedCombatantIds}
-          combatantCountsByName={combatantCountsByName}
-        />
+        <SettingsContext.Provider value={CurrentSettings()}>
+          <InitiativeList
+            encounterState={encounterState}
+            selectedCombatantIds={selectedCombatantIds}
+            combatantCountsByName={combatantCountsByName}
+          />
+        </SettingsContext.Provider>
       </CommandContext.Provider>
     );
   });
