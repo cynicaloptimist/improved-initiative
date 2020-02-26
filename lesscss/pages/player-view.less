@@ -17,6 +17,11 @@
   .combatant {
     height: unset;
     display: flex;
+    border-left: @active-combatant-indicator-width solid transparent;
+  }
+
+  .combatant.active {
+    border-left: @active-combatant-indicator-width solid @primary-red;
   }
 
   .combatant--header {
@@ -30,6 +35,10 @@
     &.show-hover:hover {
       background-color: @hover-red;
     }
+  }
+
+  .combatant__initiative {
+    border-left: 0;
   }
 
   .combatant__portrait {
