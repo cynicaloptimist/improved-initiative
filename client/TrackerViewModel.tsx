@@ -329,7 +329,10 @@ export class TrackerViewModel {
     );
   }
 
-  public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+  public async EditPersistentCharacterStatBlock(
+    persistentCharacterId: string,
+    newStatBlock?: StatBlock
+  ) {
     this.StatBlockEditor(null);
     const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
       persistentCharacterId
@@ -339,7 +342,7 @@ export class TrackerViewModel {
 
     this.StatBlockEditor(
       <StatBlockEditor
-        statBlock={persistentCharacter.StatBlock}
+        statBlock={newStatBlock || persistentCharacter.StatBlock}
         editorTarget="persistentcharacter"
         onSave={(statBlock: StatBlock) => {
           this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
@@ -431,12 +434,39 @@ export class TrackerViewModel {
         Name: statBlock.Name
       });
 
-      this.EditStatBlock({
-        editorTarget: "library",
-        onSave: this.Libraries.NPCs.SaveNewStatBlock,
-        statBlock,
-        currentListings: this.Libraries.NPCs.GetStatBlocks()
-      });
+      if (statBlock.Player == "") {
+        this.EditStatBlock({
+          editorTarget: "library",
+          onSave: this.Libraries.NPCs.SaveNewStatBlock,
+          statBlock,
+          currentListings: this.Libraries.NPCs.GetStatBlocks()
+        });
+      } else {
+        const currentListings = this.Libraries.PersistentCharacters.GetListings();
+        const existingListing = currentListings.find(
+          l => l.Listing().Name == statBlock.Name
+        );
+        if (existingListing) {
+          this.EditPersistentCharacterStatBlock(
+            existingListing.Listing().Id,
+            statBlock
+          );
+        } else {
+          this.EditStatBlock({
+            editorTarget: "persistentcharacter",
+            onSave: statBlock => {
+              const persistentCharacter = PersistentCharacter.Initialize(
+                statBlock
+              );
+              this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+                persistentCharacter
+              );
+            },
+            statBlock,
+            currentListings
+          });
+        }
+      }
     });
   };
 
