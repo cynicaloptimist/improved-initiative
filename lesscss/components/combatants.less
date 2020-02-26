@@ -89,6 +89,7 @@
 
   @media (max-width: @medium) {
     border: 0;
+    padding: 0;
     display: grid;
     /* prettier-ignore */
     grid-template:
@@ -111,6 +112,7 @@
 
   @media (max-width: @medium) {
     display: block;
+    padding-right: @small-spacer;
   }
 }
 
@@ -174,7 +176,6 @@
   @media (max-width: @medium) {
     display: block;
     width: 100%;
-    font-size: 1.5em;
   }
 }
 
@@ -196,16 +197,28 @@
 }
 
 .combatant__hp {
-  width: 4rem;
+  width: 5rem;
   justify-content: center;
   border: 1px dashed transparent;
   grid-area: hp;
+
+  @media (max-width: @medium) {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+  }
 }
 
 .combatant__ac {
-  width: 1.9rem;
+  width: 3rem;
   grid-area: ac;
   margin-left: 3px;
+
+  @media (max-width: @medium) {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+  }
 }
 
 .combatant__ac--revealed-badge {
