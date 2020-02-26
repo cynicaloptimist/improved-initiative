@@ -11,7 +11,6 @@
 
   th,
   td {
-    padding: 5px;
     vertical-align: middle;
     text-align: center;
 
@@ -89,7 +88,7 @@
 
   @media (max-width: @medium) {
     border: 0;
-    padding: 0;
+    padding: @small-spacer;
     display: grid;
     /* prettier-ignore */
     grid-template:
@@ -162,6 +161,7 @@
   height: 35px;
   width: 35px;
   object-fit: contain;
+  margin: @extra-small-spacer;
   margin-right: 10px;
 
   .combatant--header & {
@@ -257,6 +257,7 @@
 
   @media (max-width: @medium) {
     min-height: 1rem;
+    margin: @extra-small-spacer;
   }
 }
 
