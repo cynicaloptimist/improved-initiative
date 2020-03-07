@@ -35,10 +35,10 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
         </th>
 
         <th className="combatant__ac">
-          <span className="screen-reader-only">Armour Class</span>
+          <span className="screen-reader-only">Armor Class</span>
           <span
             className="fas fa-shield-alt"
-            title="Armour Class"
+            title="Armor Class"
             aria-hidden="true"
           ></span>
         </th>
