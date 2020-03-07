@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { CombatantState, TagState } from "../../common/CombatantState";
+import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantRow } from "./CombatantRow";
 import { InitiativeListHeader } from "./InitiativeListHeader";
