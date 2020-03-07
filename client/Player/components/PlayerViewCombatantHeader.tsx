@@ -1,5 +1,8 @@
 import * as React from "react";
-import { ToggleFullscreen } from "../../Commands/ToggleFullscreen";
+import {
+  ToggleFullscreen,
+  FullscreenSupported
+} from "../../Commands/ToggleFullscreen";
 
 export const PlayerViewCombatantHeader = (props: {
   portraitColumnVisible: boolean;
@@ -21,11 +24,13 @@ export const PlayerViewCombatantHeader = (props: {
     )}
     <div className="combatant__tags">
       <span className="fas fa-tag" />
-      <span
-        className="fas fa-expand fa-clickable"
-        title="Toggle Full Screen"
-        onClick={ToggleFullscreen}
-      />
+      {FullscreenSupported() && (
+        <span
+          className="fas fa-expand fa-clickable"
+          title="Toggle Full Screen"
+          onClick={ToggleFullscreen}
+        />
+      )}
     </div>
   </div>
 );

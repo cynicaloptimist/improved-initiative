@@ -1,5 +1,5 @@
 export function ToggleFullscreen() {
-  if (typeof document.documentElement.requestFullscreen != "function") {
+  if (!FullscreenSupported()) {
     return;
   }
   if (!document["fullscreenElement"]) {
@@ -7,4 +7,8 @@ export function ToggleFullscreen() {
   } else if (document.exitFullscreen) {
     document.exitFullscreen();
   }
+}
+
+export function FullscreenSupported() {
+  return typeof document.documentElement.requestFullscreen == "function";
 }
