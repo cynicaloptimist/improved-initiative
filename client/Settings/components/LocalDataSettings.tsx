@@ -1,13 +1,14 @@
 import { saveAs } from "browser-filesaver";
 import * as React from "react";
 import { Button } from "../../Components/Button";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Store } from "../../Utility/Store";
 import { FileUploadButton } from "./FileUploadButton";
 
 export class LocalDataSettings extends React.Component<{}> {
   public render() {
     return (
-      <React.Fragment>
+      <>
         <h3>Local Data</h3>
         <div className="c-button-with-label">
           <span>Export your user data as JSON file</span>
@@ -47,32 +48,50 @@ export class LocalDataSettings extends React.Component<{}> {
             onClick={this.confirmClearLocalData}
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
-  private exportData = () => {
-    let blob = Store.ExportAll();
+  private exportData = async () => {
+    const asyncKeys = await Store.GetAllKeys();
+    const blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
   };
 
-  private importDataAndReplace = (file: File) => {
-    Store.ImportAllAndReplace(file);
+  private importDataAndReplace = async (file: File) => {
+    if (
+      confirm(
+        `Replace your Improved Initiative data with imported ${file.name} and reload?`
+      )
+    ) {
+      await Store.DeleteAll();
+      await Store.ImportAll(file);
+      LegacySynchronousLocalStore.ImportAllAndReplace(file);
+      location.reload();
+    }
   };
 
-  private importDataAndAdd = (file: File) => {
-    Store.ImportAll(file);
+  private importDataAndAdd = async (file: File) => {
+    if (
+      confirm(`Import all statblocks and spells in ${file.name} and reload?`)
+    ) {
+      await Store.ImportAll(file);
+      LegacySynchronousLocalStore.ImportAll(file);
+      location.reload();
+    }
   };
 
   private importDndAppFile = (file: File) => {
     Store.ImportFromDnDAppFile(file);
   };
 
-  private confirmClearLocalData = () => {
+  private confirmClearLocalData = async () => {
     const promptText =
       "To clear all of your saved player characters, statblocks, encounters, and settings, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
-      Store.DeleteAll();
+      await Store.DeleteAll();
+      LegacySynchronousLocalStore.DeleteAll();
+      location.reload();
     }
   };
 }

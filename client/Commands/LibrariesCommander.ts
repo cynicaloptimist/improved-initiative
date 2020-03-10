@@ -5,6 +5,7 @@ import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
+import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { StatBlockLibrary } from "../Library/StatBlockLibrary";
@@ -14,6 +15,7 @@ import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
 
 export class LibrariesCommander {
@@ -28,11 +30,16 @@ export class LibrariesCommander {
 
   public AddStatBlockFromListing = (
     listing: Listing<StatBlock>,
-    hideOnAdd: boolean
+    hideOnAdd: boolean,
+    variantMaximumHP: VariantMaximumHP
   ) => {
     listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
       const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
-      this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
+      this.tracker.Encounter.AddCombatantFromStatBlock(
+        statBlock,
+        hideOnAdd,
+        variantMaximumHP
+      );
       Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
     });
@@ -64,8 +71,8 @@ export class LibrariesCommander {
   };
 
   public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
-    let statBlock = StatBlock.Default();
-    let newId = probablyUniqueString();
+    const statBlock = StatBlock.Default();
+    const newId = probablyUniqueString();
 
     statBlock.Name = "New Creature";
     statBlock.Id = newId;
@@ -97,6 +104,7 @@ export class LibrariesCommander {
           editorTarget: "library",
           statBlock: statBlockWithNewId,
           onSave: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
           currentListings: library.GetStatBlocks()
         });
       } else {
@@ -106,7 +114,8 @@ export class LibrariesCommander {
           onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
           onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
-          onSaveAs: library.SaveNewStatBlock
+          onSaveAsCopy: library.SaveNewStatBlock,
+          onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
       }
     });
@@ -167,29 +176,18 @@ export class LibrariesCommander {
   };
 
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
-    this.encounterCommander.LoadEncounter(savedEncounter);
+    this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
 
   public SaveEncounter = () => {
-    const prompt = new DefaultPrompt(
-      `Save Encounter As: <input id='encounterName' class='response' type='text' />`,
-      response => {
-        const encounterName = response["encounterName"];
-        const path = ""; //TODO
-        if (encounterName) {
-          const savedEncounter = this.tracker.Encounter.GetSavedEncounter(
-            encounterName,
-            path
-          );
-          this.libraries.Encounters.Save(savedEncounter);
-          this.tracker.EventLog.AddEvent(
-            `Encounter saved as ${encounterName}.`
-          );
-          Metrics.TrackEvent("EncounterSaved", { Name: encounterName });
-        }
-      }
+    const prompt = SaveEncounterPrompt(
+      this.tracker.Encounter.GetEncounterState(),
+      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
+      this.libraries.Encounters.Save,
+      this.tracker.EventLog.AddEvent,
+      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Listing().Path))
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
@@ -210,9 +208,7 @@ export class LibrariesCommander {
     const casedConditionName = _.startCase(conditionName);
     if (Conditions[casedConditionName]) {
       const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${
-          Conditions[casedConditionName]
-        }</div>`
+        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
       );
       this.tracker.PromptQueue.AddLegacyPrompt(prompt);
     }
@@ -221,5 +217,12 @@ export class LibrariesCommander {
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.NPCs.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+  };
+
+  private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {
+    const persistentCharacter = PersistentCharacter.Initialize(statBlock);
+    this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+      persistentCharacter
+    );
   };
 }

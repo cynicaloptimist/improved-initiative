@@ -1,20 +1,27 @@
+if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
+  require("newrelic");
+}
+
 import express = require("express");
 import socketIO = require("socket.io");
+import http = require("http");
+import cluster = require("cluster");
+import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
 
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
-import LaunchServer from "./launchserver";
 import * as L from "./library";
-import { PlayerViewManager } from "./playerviewmanager";
+import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
 import ConfigureSockets from "./sockets";
 
 async function improvedInitiativeServer() {
   const app = express();
-  const http = require("http").Server(app);
+  app.set("trust proxy", true);
+  const server = new http.Server(app);
 
   const dbConnectionString = await getDbConnectionString();
   await DB.initialize(dbConnectionString);
@@ -31,17 +38,35 @@ async function improvedInitiativeServer() {
     Spell.GetSearchHint,
     Spell.GetMetadata
   );
-  const playerViews = new PlayerViewManager();
+  const playerViews = GetPlayerViewManager();
 
-  const session = await GetSessionMiddleware(dbConnectionString);
+  const session = await GetSessionMiddleware(process.env.REDIS_URL);
   app.use(session);
 
   ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
 
-  const io = socketIO(http);
+  const defaultPort = parseInt(process.env.PORT || "80");
+
+  if (process.env.ENABLE_CONCURRENCY) {
+    await sticky.listen(server, defaultPort, {
+      workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
+      proxyHeader: "x-forwarded-for",
+      env: {
+        DB_CONNECTION_STRING: dbConnectionString,
+        ...process.env
+      }
+    });
+  } else {
+    await server.listen(defaultPort);
+    console.log("Launched server without concurrency.");
+  }
+
+  const io = socketIO(server);
   ConfigureSockets(io, session, playerViews);
 
-  LaunchServer(http);
+  if (cluster.worker) {
+    console.log("Improved Initiative node %s running", cluster.worker.id);
+  }
 }
 
 improvedInitiativeServer();

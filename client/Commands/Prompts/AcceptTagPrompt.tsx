@@ -61,25 +61,27 @@ export class AcceptTagPrompt implements LegacyPrompt {
       const tag = new Tag(
         this.tagState.Text,
         this.combatant,
+        false,
         this.tagState.DurationRemaining,
         this.tagState.DurationTiming,
         this.tagState.DurationCombatantId
       );
 
-      this.encounter.AddDurationTag(tag);
+      this.encounter.EncounterFlow.AddDurationTag(tag);
       this.combatant.Tags.push(tag);
       Metrics.TrackEvent("TagAddedFromSuggestion", {
         Text: tag.Text,
         Duration: tag.DurationRemaining()
       });
     } else {
-      this.combatant.Tags.push(new Tag(this.tagState.Text, this.combatant));
+      this.combatant.Tags.push(
+        new Tag(this.tagState.Text, this.combatant, false)
+      );
       Metrics.TrackEvent("TagAddedFromSuggestion", {
         Text: this.tagState.Text
       });
     }
 
-    this.encounter.QueueEmitEncounter();
     return true;
   };
 }

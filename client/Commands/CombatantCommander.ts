@@ -16,8 +16,11 @@ import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
 import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
 import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
+import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
 import { DefaultPrompt } from "./Prompts/Prompt";
+import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 
@@ -38,7 +41,7 @@ export class CombatantCommander {
   public SelectedCombatants = ko.pureComputed<CombatantViewModel[]>(() => {
     const selectedCombatantIds = this.selectedCombatantIds();
     return this.tracker
-      .OrderedCombatants()
+      .CombatantViewModels()
       .filter(c => selectedCombatantIds.some(id => c.Combatant.Id == id));
   });
   public HasSelected = ko.pureComputed(
@@ -72,7 +75,7 @@ export class CombatantCommander {
     });
   });
 
-  public Select = (data: CombatantViewModel, e?: MouseEvent) => {
+  public Select = (data: CombatantViewModel, appendSelection?: boolean) => {
     if (!data) {
       return;
     }
@@ -81,7 +84,7 @@ export class CombatantCommander {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
       pendingLink.prompt.Resolve(null);
     }
-    if (!((e && e.ctrlKey) || (e && e.metaKey))) {
+    if (!appendSelection) {
       this.selectedCombatantIds.removeAll();
     }
     this.selectedCombatantIds.push(data.Combatant.Id);
@@ -92,16 +95,16 @@ export class CombatantCommander {
 
   private selectByOffset = (offset: number) => {
     let newIndex =
-      this.tracker.OrderedCombatants().indexOf(this.SelectedCombatants()[0]) +
+      this.tracker.CombatantViewModels().indexOf(this.SelectedCombatants()[0]) +
       offset;
     if (newIndex < 0) {
       newIndex = 0;
-    } else if (newIndex >= this.tracker.OrderedCombatants().length) {
-      newIndex = this.tracker.OrderedCombatants().length - 1;
+    } else if (newIndex >= this.tracker.CombatantViewModels().length) {
+      newIndex = this.tracker.CombatantViewModels().length - 1;
     }
     this.selectedCombatantIds.removeAll();
     this.selectedCombatantIds.push(
-      this.tracker.OrderedCombatants()[newIndex].Combatant.Id
+      this.tracker.CombatantViewModels()[newIndex].Combatant.Id
     );
   };
 
@@ -113,19 +116,19 @@ export class CombatantCommander {
     const combatantsToRemove = this.SelectedCombatants();
     this.selectedCombatantIds.removeAll();
     const firstDeletedIndex = this.tracker
-      .OrderedCombatants()
+      .CombatantViewModels()
       .indexOf(combatantsToRemove[0]);
     const deletedCombatantNames = combatantsToRemove.map(
       c => c.Combatant.StatBlock().Name
     );
 
-    if (this.tracker.OrderedCombatants().length > combatantsToRemove.length) {
-      let activeCombatant = this.tracker.Encounter.ActiveCombatant();
+    if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
+      let activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
-        this.tracker.Encounter.NextTurn(
+        this.tracker.Encounter.EncounterFlow.NextTurn(
           this.tracker.EncounterCommander.RerollInitiative
         );
-        activeCombatant = this.tracker.Encounter.ActiveCombatant();
+        activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       }
     }
 
@@ -133,21 +136,19 @@ export class CombatantCommander {
       this.tracker.Encounter.RemoveCombatant(vm.Combatant)
     );
 
-    const remainingCombatants = this.tracker.OrderedCombatants();
+    const remainingCombatants = this.tracker.CombatantViewModels();
     if (remainingCombatants.length > 0) {
       const newSelectionIndex =
         firstDeletedIndex > remainingCombatants.length
           ? remainingCombatants.length - 1
           : firstDeletedIndex;
-      this.Select(this.tracker.OrderedCombatants()[newSelectionIndex]);
+      this.Select(this.tracker.CombatantViewModels()[newSelectionIndex]);
     }
 
     this.tracker.EventLog.AddEvent(
       `${deletedCombatantNames.join(", ")} removed from encounter.`
     );
     Metrics.TrackEvent("CombatantsRemoved", { Names: deletedCombatantNames });
-
-    this.tracker.Encounter.QueueEmitEncounter();
   };
 
   public Deselect = () => {
@@ -155,12 +156,12 @@ export class CombatantCommander {
   };
 
   public SelectPrevious = () => {
-    if (this.tracker.OrderedCombatants().length == 0) {
+    if (this.tracker.CombatantViewModels().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.OrderedCombatants()[0]);
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
@@ -168,45 +169,26 @@ export class CombatantCommander {
   };
 
   public SelectNext = () => {
-    if (this.tracker.OrderedCombatants().length == 0) {
+    if (this.tracker.CombatantViewModels().length == 0) {
       return;
     }
 
     if (!this.HasSelected()) {
-      this.Select(this.tracker.OrderedCombatants()[0]);
+      this.Select(this.tracker.CombatantViewModels()[0]);
       return;
     }
 
     this.selectByOffset(1);
   };
 
-  private CreateEditHPCallback = (
-    combatants: CombatantViewModel[],
-    combatantNames: string
-  ) => {
-    return response => {
-      const damage = response["damage"];
-      if (damage) {
-        combatants.forEach(c => c.ApplyDamage(damage));
-        const damageNum = parseInt(damage);
-        this.tracker.EventLog.LogHPChange(damageNum, combatantNames);
-        this.tracker.Encounter.QueueEmitEncounter();
-      }
-    };
-  };
-
   private editHPForCombatants(combatantViewModels: CombatantViewModel[]) {
-    const combatantNames = combatantViewModels.map(c => c.Name()).join(", ");
-    const callback = this.CreateEditHPCallback(
+    const latestRollTotal = this.latestRoll?.Total || 0;
+    const prompt = ApplyDamagePrompt(
       combatantViewModels,
-      combatantNames
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
     );
-    const latestRollTotal = this.latestRoll && this.latestRoll.Total;
-    const prompt = new DefaultPrompt(
-      `Apply damage to ${combatantNames}: <input id='damage' class='response' type='number' value='${latestRollTotal}'/>`,
-      callback
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   }
 
   public EditHP = () => {
@@ -222,29 +204,27 @@ export class CombatantCommander {
     this.editHPForCombatants([combatantViewModel]);
   };
 
-  public UpdateNotes = async () => {
+  public ApplyHealing = () => {
     if (!this.HasSelected()) {
       return;
     }
-
-    const selectedCombatants = this.SelectedCombatants().filter(
-      c => c.Combatant.PersistentCharacterId != null
+    const selectedCombatants = this.SelectedCombatants();
+    const latestRollTotal = this.latestRoll?.Total || 0;
+    const prompt = ApplyHealingPrompt(
+      selectedCombatants,
+      latestRollTotal.toString(),
+      this.tracker.EventLog.LogHPChange
     );
-    if (selectedCombatants.length == 0) {
-      throw "Can't edit non-persistent combatant notes";
+    this.tracker.PromptQueue.Add(prompt);
+  };
+
+  public UpdateNotes = async () => {
+    if (!this.HasOneSelected()) {
+      return;
     }
-    const combatant = selectedCombatants[0].Combatant;
 
-    const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
-      combatant.PersistentCharacterId
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(
-      new UpdateNotesPrompt(
-        combatant,
-        persistentCharacter,
-        this.tracker.Libraries.PersistentCharacters
-      )
-    );
+    const combatant = this.SelectedCombatants()[0].Combatant;
+    this.tracker.PromptQueue.Add(UpdateNotesPrompt(combatant));
     return false;
   };
 
@@ -312,7 +292,6 @@ export class CombatantCommander {
             `${thp} temporary hit points granted to ${combatantNames}.`
           );
           Metrics.TrackEvent("TemporaryHPAdded", { Amount: thp });
-          this.tracker.Encounter.QueueEmitEncounter();
         }
       }
     );
@@ -330,16 +309,16 @@ export class CombatantCommander {
       targetCombatants = this.SelectedCombatants().map(c => c.Combatant);
     }
 
-    if (targetCombatants == []) {
+    if (targetCombatants.length == 0) {
       return;
     }
 
-    const prompt = new TagPrompt(
+    const prompt = TagPrompt(
       this.tracker.Encounter,
       targetCombatants,
       this.tracker.EventLog.AddEvent
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 
@@ -393,7 +372,7 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.OrderedCombatants().indexOf(combatant);
+    const index = this.tracker.CombatantViewModels().indexOf(combatant);
     if (combatant && index > 0) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
@@ -411,8 +390,8 @@ export class CombatantCommander {
     }
 
     const combatant = this.SelectedCombatants()[0];
-    const index = this.tracker.OrderedCombatants().indexOf(combatant);
-    if (combatant && index < this.tracker.OrderedCombatants().length - 1) {
+    const index = this.tracker.CombatantViewModels().indexOf(combatant);
+    if (combatant && index < this.tracker.CombatantViewModels().length - 1) {
       const newInitiative = this.tracker.Encounter.MoveCombatant(
         combatant.Combatant,
         index + 1
@@ -454,7 +433,7 @@ export class CombatantCommander {
     }
 
     if (this.SelectedCombatants().length == 1) {
-      let selectedCombatant = this.SelectedCombatants()[0].Combatant;
+      const selectedCombatant = this.SelectedCombatants()[0].Combatant;
       if (selectedCombatant.PersistentCharacterId) {
         this.tracker.EditPersistentCharacterStatBlock(
           selectedCombatant.PersistentCharacterId
@@ -465,7 +444,6 @@ export class CombatantCommander {
           statBlock: selectedCombatant.StatBlock(),
           onSave: newStatBlock => {
             selectedCombatant.StatBlock(newStatBlock);
-            this.tracker.Encounter.QueueEmitEncounter();
           },
           onDelete: () => this.Remove()
         });
@@ -476,15 +454,12 @@ export class CombatantCommander {
   public RollDice = (diceExpression: string) => {
     const diceRoll = Dice.RollDiceExpression(diceExpression);
     this.latestRoll = diceRoll;
-    const prompt = new DefaultPrompt(
-      `Rolled: ${diceExpression} -> ${
-        diceRoll.FormattedString
-      } <input class='response' type='number' value='${diceRoll.Total}' />`
-    );
+    const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
+
     Metrics.TrackEvent("DiceRolled", {
       Expression: diceExpression,
       Result: diceRoll.FormattedString
     });
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 }

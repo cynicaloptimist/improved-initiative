@@ -13,7 +13,7 @@ export interface Tag {
   DurationRemaining: KnockoutObservable<number>;
   DurationTiming: DurationTiming;
   DurationCombatantId: string;
-  Visible: KnockoutComputed<boolean>;
+  NotExpired: KnockoutComputed<boolean>;
   Remove: () => void;
   Decrement: () => void;
   Increment: () => void;
@@ -23,6 +23,7 @@ export class Tag implements Tag {
   constructor(
     public Text: string,
     combatant: Combatant,
+    public HiddenFromPlayerView: boolean,
     duration = -1,
     public DurationTiming = StartOfTurn,
     public DurationCombatantId = ""
@@ -32,30 +33,38 @@ export class Tag implements Tag {
     this.Remove = () => combatant.Tags.remove(this);
   }
 
+  public GetState = ko.pureComputed<TagState>(() => {
+    return {
+      Text: this.Text,
+      Hidden: this.HiddenFromPlayerView,
+      DurationRemaining: this.DurationRemaining(),
+      DurationTiming: this.DurationTiming,
+      DurationCombatantId: this.DurationCombatantId
+    };
+  });
+
   public Decrement = () => this.DurationRemaining(this.DurationRemaining() - 1);
 
   public Increment = () => this.DurationRemaining(this.DurationRemaining() + 1);
 
-  public Visible = ko.pureComputed(() => {
+  public NotExpired = ko.pureComputed(() => {
     return !this.HasDuration || this.DurationRemaining() > 0;
   });
 
-  public static getLegacyTags = (
-    tags: (any)[],
+  public static FromTagStates = (
+    tags: TagState[],
     combatant: Combatant
   ): Tag[] => {
-    return tags.map(tag => {
-      if (tag.Text) {
-        const savedTag: TagState = tag;
-        return new Tag(
-          savedTag.Text,
+    return tags.map(
+      tag =>
+        new Tag(
+          tag.Text,
           combatant,
-          savedTag.DurationRemaining,
-          savedTag.DurationTiming,
-          savedTag.DurationCombatantId
-        );
-      }
-      return new Tag(tag, combatant);
-    });
+          tag.Hidden || false,
+          tag.DurationRemaining,
+          tag.DurationTiming,
+          tag.DurationCombatantId
+        )
+    );
   };
 }

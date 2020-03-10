@@ -1,5 +1,5 @@
 import { getDefaultSettings, Settings } from "../../common/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { CurrentSettings, InitializeSettings } from "./Settings";
 
 describe("Settings", () => {
@@ -10,8 +10,11 @@ describe("Settings", () => {
 
   test("Saves default settings to localStorage", () => {
     InitializeSettings();
-    expect(Store.Load<Settings>(Store.User, "Settings")).toEqual(
-      getDefaultSettings()
-    );
+    expect(
+      LegacySynchronousLocalStore.Load<Settings>(
+        LegacySynchronousLocalStore.User,
+        "Settings"
+      )
+    ).toEqual(getDefaultSettings());
   });
 });

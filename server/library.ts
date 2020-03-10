@@ -4,6 +4,7 @@ import { Listable, ListingMetadata, StoredListing } from "../common/Listable";
 
 const sourceAbbreviations = {
   "monster-manual": "mm",
+  "basic-rules": "mm", //kobold fight club looks for basic rules creatures in the monster manual
   "players-handbook": "phb"
 };
 
@@ -73,7 +74,8 @@ export class Library<TItem extends Listable> {
         Path: c.Path || "",
         SearchHint: this.getSearchHint(c),
         Metadata: this.getMetadata(c),
-        Link: this.route + c.Id
+        Link: this.route + c.Id,
+        LastUpdateMs: 0
       };
       this.listings.push(listing);
     });

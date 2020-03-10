@@ -1,43 +1,41 @@
 import mongo = require("mongodb");
 
 import * as _ from "lodash";
-import { CombatantState } from "../common/CombatantState";
-import { EncounterState } from "../common/EncounterState";
 import { Listable, StoredListing } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
+import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
-import { User } from "./user";
+import { AccountStatus, User } from "./user";
 
-let connectionString: string;
+let mongoClient: mongo.MongoClient;
 
-export const initialize = async initialConnectionString => {
-  if (!initialConnectionString) {
+export const initialize = async connectionString => {
+  if (!connectionString) {
     console.log("No connection string found.");
     return;
   }
 
-  connectionString = initialConnectionString;
-
-  const client = new mongo.MongoClient(connectionString);
-  await client.connect();
-  client.close();
+  mongoClient = new mongo.MongoClient(connectionString, {
+    useNewUrlParser: true
+  });
+  await mongoClient.connect();
   return;
 };
 
+export const close = async () => await mongoClient.close();
+
 export async function upsertUser(
   patreonId: string,
-  accessKey: string,
-  refreshKey: string,
-  accountStatus: string
+  accountStatus: AccountStatus,
+  emailAddress: string
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = await db.collection<User>("users");
   const result = await users.findOneAndUpdate(
     {
@@ -46,9 +44,8 @@ export async function upsertUser(
     {
       $set: {
         patreonId,
-        accessKey,
-        refreshKey,
-        accountStatus
+        accountStatus,
+        emailAddress
       },
       $setOnInsert: {
         statblocks: {},
@@ -64,14 +61,17 @@ export async function upsertUser(
     }
   );
   const user = result.value;
-  client.close();
   return user;
 }
 
 export async function getAccount(userId: mongo.ObjectId) {
   const user = await getFullAccount(userId);
+  if (!user) {
+    return null;
+  }
 
   const userWithListings = {
+    accountStatus: user.accountStatus,
     settings: user.settings,
     statblocks: getStatBlockListings(user.statblocks),
     persistentcharacters: getPersistentCharacterListings(
@@ -85,23 +85,26 @@ export async function getAccount(userId: mongo.ObjectId) {
 }
 
 export async function getFullAccount(userId: mongo.ObjectId) {
-  if (!connectionString) {
-    throw "No connection string found.";
+  if (!mongoClient) {
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const user = await users.findOne({ _id: userId });
   if (user === null) {
-    client.close();
-    throw `User ${userId} not found.`;
+    return null;
   }
 
   await updatePersistentCharactersIfNeeded(user, users);
-  client.close();
 
   const userAccount = {
+    accountStatus: user.accountStatus,
     settings: user.settings,
     statblocks: user.statblocks,
     persistentcharacters: user.persistentcharacters || {},
@@ -113,15 +116,18 @@ export async function getFullAccount(userId: mongo.ObjectId) {
 }
 
 export async function deleteAccount(userId: mongo.ObjectId) {
-  if (!connectionString) {
-    throw "No connection string found.";
+  if (!mongoClient) {
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await users.deleteOne({ _id: userId });
-  client.close();
   return result.deletedCount;
 }
 
@@ -166,7 +172,8 @@ function getStatBlockListings(statBlocks: {
       SearchHint: StatBlock.GetSearchHint(c),
       Metadata: StatBlock.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/statblocks/${c.Id}`
+      Link: `/my/statblocks/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -181,7 +188,8 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
       SearchHint: Spell.GetSearchHint(c),
       Metadata: Spell.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/spells/${c.Id}`
+      Link: `/my/spells/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -191,17 +199,18 @@ function getEncounterListings(encounters: {
 }): StoredListing[] {
   return Object.keys(encounters).map(key => {
     const c = {
-      ...EncounterState.Default<CombatantState>(),
+      ...SavedEncounter.Default(),
       ...encounters[key]
     };
     return {
       Name: c.Name,
       Id: c.Id,
       Path: c.Path,
-      SearchHint: EncounterState.GetSearchHint(c),
+      SearchHint: SavedEncounter.GetSearchHint(c),
       Metadata: {},
       Version: c.Version,
-      Link: `/my/encounters/${c.Id}`
+      Link: `/my/encounters/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
@@ -221,23 +230,26 @@ function getPersistentCharacterListings(persistentCharacters: {
       SearchHint: PersistentCharacter.GetSearchHint(c),
       Metadata: PersistentCharacter.GetMetadata(c),
       Version: c.Version,
-      Link: `/my/persistentcharacters/${c.Id}`
+      Link: `/my/persistentcharacters/${c.Id}`,
+      LastUpdateMs: c.LastUpdateMs || 0
     };
   });
 }
 
 export async function setSettings(userId, settings) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
   const result = await users.updateOne({ _id: userId }, { $set: { settings } });
-  client.close();
   return result.modifiedCount;
 }
 
@@ -253,12 +265,17 @@ export async function getEntity(
   userId: mongo.ObjectId,
   entityId: string
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+
+  const db = mongoClient.db();
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const user = await db.collection<User>("users").findOne(
     { _id: userId },
     {
@@ -268,14 +285,12 @@ export async function getEntity(
     }
   );
 
-  client.close();
-
   if (!user) {
-    throw "User not found";
+    return null;
   }
   const entities = user[entityPath];
   if (entities === undefined) {
-    throw `User has no ${entityPath} entities.`;
+    return null;
   }
 
   return entities[entityId];
@@ -287,15 +302,18 @@ export async function deleteEntity(
   entityId: string,
   callBack: (result: number) => void
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
 
   const result = await users.updateOne(
     { _id: userId },
@@ -307,7 +325,6 @@ export async function deleteEntity(
   );
 
   callBack(result.modifiedCount);
-  client.close();
   return;
 }
 
@@ -316,9 +333,9 @@ export async function saveEntity<T extends Listable>(
   userId: mongo.ObjectId,
   entity: T
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
   if (!entity.Id || !entity.Version) {
@@ -329,8 +346,12 @@ export async function saveEntity<T extends Listable>(
     throw "Entity Id cannot contain .";
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
   const result = await db.collection("users").updateOne(
     { _id: userId },
     {
@@ -340,20 +361,17 @@ export async function saveEntity<T extends Listable>(
     }
   );
 
-  client.close();
-
   return result.modifiedCount;
 }
 
 export async function saveEntitySet<T extends Listable>(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
-  entities: T[],
-  callBack: (result: number) => void
+  entities: T[]
 ) {
-  if (!connectionString) {
-    console.error("No connection string found.");
-    throw "No connection string found.";
+  if (!mongoClient) {
+    console.error("No mongo client initialized");
+    throw "No mongo client initialized";
   }
 
   for (const entity of entities) {
@@ -362,28 +380,36 @@ export async function saveEntitySet<T extends Listable>(
     }
   }
 
-  const client = await new mongo.MongoClient(connectionString).connect();
-  const db = client.db();
+  const db = mongoClient.db();
 
   const users = db.collection<User>("users");
-  const result = await users.findOne({ _id: userId }).then(u => {
-    if (u == null) {
-      throw "User ID not found: " + userId;
-    }
 
-    const updatedEntities = u[entityPath] || {};
-    for (const entity of entities) {
-      updatedEntities[entity.Id] = entity;
-    }
-    return users.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          [`${entityPath}`]: updatedEntities
-        }
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
+  const user = await users.findOne({ _id: userId });
+  if (user == null) {
+    return null;
+  }
+
+  const updatedEntities = user[entityPath] || {};
+  for (const entity of entities) {
+    updatedEntities[entity.Id] = entity;
+  }
+
+  const result = await users.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        [`${entityPath}`]: updatedEntities
       }
-    );
-  });
-  client.close();
-  callBack(result.modifiedCount);
+    }
+  );
+
+  if (!result) {
+    return 0;
+  }
+
+  return result.matchedCount;
 }

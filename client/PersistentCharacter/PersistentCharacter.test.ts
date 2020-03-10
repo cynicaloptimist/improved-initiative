@@ -1,11 +1,13 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
+import { SaveEncounterPrompt } from "../Commands/Prompts/SaveEncounterPrompt";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { InitializeSettings } from "../Settings/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { buildEncounter } from "../test/buildEncounter";
 
 describe("InitializeCharacter", () => {
@@ -26,8 +28,8 @@ describe("PersistentCharacterLibrary", () => {
   function savePersistentCharacterWithName(name: string) {
     const persistentCharacter = PersistentCharacter.Default();
     persistentCharacter.Name = name;
-    Store.Save(
-      Store.PersistentCharacters,
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.PersistentCharacters,
       persistentCharacter.Id,
       persistentCharacter
     );
@@ -37,7 +39,11 @@ describe("PersistentCharacterLibrary", () => {
   function savePlayerCharacterWithName(name: string) {
     const playerCharacter = StatBlock.Default();
     playerCharacter.Name = name;
-    Store.Save(Store.PlayerCharacters, playerCharacter.Id, playerCharacter);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.PlayerCharacters,
+      playerCharacter.Id,
+      playerCharacter
+    );
     return playerCharacter.Id;
   }
 
@@ -102,8 +108,24 @@ describe("PersistentCharacter", () => {
       PersistentCharacter.Default(),
       library
     );
-    const savedEncounter = encounter.GetSavedEncounter("test", "");
-    expect(savedEncounter.Combatants.length).toEqual(0);
+
+    encounter.AddCombatantFromStatBlock(StatBlock.Default());
+
+    const prompt = SaveEncounterPrompt(
+      encounter.GetEncounterState(),
+      "",
+      savedEncounter => {
+        expect(savedEncounter.Combatants.length).toEqual(1);
+      },
+      () => {},
+      []
+    );
+
+    const formValues = prompt.initialValues;
+    formValues.Name = "Test";
+    prompt.onSubmit(formValues);
+
+    expect.assertions(1);
   });
 
   it("Should not allow the same Persistent Character to be added twice", () => {
@@ -153,9 +175,7 @@ describe("PersistentCharacter", () => {
       library
     );
 
-    const encounterState: EncounterState<
-      CombatantState
-    > = encounter.GetEncounterState("", "");
+    const encounterState: EncounterState<CombatantState> = encounter.GetEncounterState();
     expect(encounterState.Combatants.length).toEqual(1);
   });
 });

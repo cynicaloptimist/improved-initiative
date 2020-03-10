@@ -1,6 +1,6 @@
 import _ = require("lodash");
 import { Settings } from "../../common/Settings";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 const LegacyCommandSettingsKeys = {
   "toggle-menu": "Toggle Menu",
@@ -30,17 +30,23 @@ const LegacyCommandSettingsKeys = {
 };
 
 export function GetLegacyKeyBinding(id: string) {
-  const settings = Store.Load<Settings>(Store.User, "Settings");
+  const settings = LegacySynchronousLocalStore.Load<Settings>(
+    LegacySynchronousLocalStore.User,
+    "Settings"
+  );
   const legacyId = LegacyCommandSettingsKeys[id];
-  const commandSetting =
-    settings &&
-    settings.Commands &&
-    _.find(settings.Commands, c => c.Name == legacyId);
-  if (commandSetting && commandSetting.KeyBinding) {
+  const commandSetting = _.find(
+    settings?.Commands || [],
+    c => c.Name == legacyId
+  );
+  if (commandSetting?.KeyBinding) {
     return commandSetting.KeyBinding;
   }
 
-  const legacyKeybinding = Store.Load<string>(Store.KeyBindings, legacyId);
+  const legacyKeybinding = LegacySynchronousLocalStore.Load<string>(
+    LegacySynchronousLocalStore.KeyBindings,
+    legacyId
+  );
   if (legacyKeybinding) {
     return legacyKeybinding;
   }

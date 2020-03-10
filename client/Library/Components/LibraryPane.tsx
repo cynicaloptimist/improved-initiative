@@ -20,13 +20,13 @@ interface LibraryPaneProps<T extends Listable> {
     onPreviewOut: () => void
   ) => JSX.Element;
   groupByFunctions: ListingGroupFn[];
-  hideLibraries: () => void;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
 }
 
 interface State<T extends Listable> {
   filter: string;
+  countOfItemsToRender: number;
   groupingFunctionIndex: number;
   previewedItem: T;
   previewIconHovered: boolean;
@@ -44,6 +44,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     super(props);
     this.state = {
       filter: "",
+      countOfItemsToRender: 100,
       groupingFunctionIndex: 0,
       previewedItem: props.defaultItem,
       previewIconHovered: false,
@@ -81,14 +82,12 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
             />
           )}
         </div>
-        <ul className="listings">{listingAndFolderComponents}</ul>
+        <ul className="listings" onScroll={this.handleListingsScroll}>
+          {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
+        </ul>
         <div className="buttons">
           <Button
-            additionalClassNames="hide"
-            fontAwesomeIcon="chevron-up"
-            onClick={this.props.hideLibraries}
-          />
-          <Button
+            text="Add New"
             additionalClassNames="new"
             fontAwesomeIcon="plus"
             onClick={this.props.addNewItem}
@@ -121,8 +120,8 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     e: React.MouseEvent<HTMLDivElement>
   ) => {
     let previewPosition = {
-      left: e.pageX,
-      top: e.pageY
+      left: e.pageX - 10,
+      top: e.pageY - 10
     };
 
     const isSingleColumnLayout = window.matchMedia("(max-width: 650px)")
@@ -167,6 +166,19 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
     }
     if (e.type === "mouseleave") {
       this.setState({ previewWindowHovered: false });
+    }
+  };
+
+  private handleListingsScroll = (
+    scrollEvent: React.UIEvent<HTMLUListElement>
+  ) => {
+    const target = scrollEvent.target as HTMLUListElement;
+    const isScrolledToBottom =
+      target.offsetHeight + target.scrollTop == target.scrollHeight;
+    if (isScrolledToBottom) {
+      this.setState({
+        countOfItemsToRender: this.state.countOfItemsToRender + 100
+      });
     }
   };
 }

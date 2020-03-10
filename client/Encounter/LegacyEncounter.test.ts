@@ -1,4 +1,7 @@
-import { UpdateLegacySavedEncounter } from "./UpdateLegacySavedEncounter";
+import {
+  UpdateLegacyEncounterState,
+  UpdateLegacySavedEncounter
+} from "./UpdateLegacySavedEncounter";
 
 function makev0_1StatBlock() {
   return {
@@ -23,7 +26,47 @@ function makev0_1StatBlock() {
   };
 }
 
-describe("Legacy Encounter", () => {
+describe("UpdateLegacySavedEncounter", () => {
+  test("Loads a v0.1 encounter", () => {
+    const v1Encounter = {
+      Name: "V0.1 Encounter",
+      ActiveCreatureIndex: 0,
+      Creatures: [
+        {
+          Statblock: makev0_1StatBlock(),
+          CurrentHP: 1,
+          TemporaryHP: 0,
+          Initiative: 10,
+          Alias: "",
+          Tags: ["string tag"]
+        }
+      ]
+    };
+
+    const updatedEncounter = UpdateLegacySavedEncounter(v1Encounter);
+    expect(updatedEncounter.Id).toBe("V01_Encounter");
+    expect(updatedEncounter.Name).toBe("V0.1 Encounter");
+    expect(updatedEncounter.Path).toBe("");
+    expect(updatedEncounter.Version).toBe("legacy");
+    expect(updatedEncounter.Combatants).toHaveLength(1);
+
+    const updatedCombatant = updatedEncounter.Combatants[0];
+
+    expect(updatedCombatant.Id).toHaveLength(8);
+    expect(updatedCombatant.CurrentHP).toBe(1);
+    expect(updatedCombatant.RevealedAC).toBe(false);
+    expect(updatedCombatant.Tags).toEqual([
+      {
+        Text: "string tag",
+        DurationRemaining: 0,
+        DurationTiming: null,
+        DurationCombatantId: ""
+      }
+    ]);
+  });
+});
+
+describe("UpdateLegacyEncounterState", () => {
   test("Loads a v0.1 encounter", () => {
     const v1Encounter = {
       Name: "V0.1 Encounter",
@@ -40,12 +83,9 @@ describe("Legacy Encounter", () => {
       ]
     };
 
-    const updatedEncounter = UpdateLegacySavedEncounter(v1Encounter);
-    expect(updatedEncounter.Id).toBe("V01_Encounter");
-    expect(updatedEncounter.Name).toBe("V0.1 Encounter");
-    expect(updatedEncounter.Path).toBe("");
-    expect(updatedEncounter.Version).toBe("legacy");
+    const updatedEncounter = UpdateLegacyEncounterState(v1Encounter);
     expect(updatedEncounter.Combatants).toHaveLength(1);
+    expect(updatedEncounter.RoundCounter).toEqual(0);
 
     const updatedCombatant = updatedEncounter.Combatants[0];
 

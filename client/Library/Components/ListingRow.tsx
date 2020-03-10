@@ -5,6 +5,13 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { Listing } from "../Listing";
 import { ListingButton } from "./ListingButton";
 
+export interface ExtraButton<T extends Listable> {
+  title: string;
+  buttonClass: string;
+  faClass: string;
+  onClick: (listing: Listing<T>, modified?: boolean) => void;
+}
+
 export interface ListingProps<T extends Listable> {
   name: string;
   listing: Listing<T>;
@@ -17,6 +24,7 @@ export interface ListingProps<T extends Listable> {
     e: React.MouseEvent<HTMLDivElement>
   ) => void;
   onPreviewOut?: (listing: Listing<T>) => void;
+  extraButtons?: ExtraButton<T>[];
   showCount?: boolean;
 }
 
@@ -42,6 +50,15 @@ export class ListingRow<T extends Listable> extends React.Component<
   private moveFn = () => this.props.onMove(this.props.listing);
   private previewFn = e => this.props.onPreview(this.props.listing, e);
   private previewOutFn = () => this.props.onPreviewOut(this.props.listing);
+  private makeExtraButtonFn = (extraButton: ExtraButton<T>) => {
+    if (!extraButton.onClick) {
+      return undefined;
+    }
+
+    return (event: React.MouseEvent<HTMLSpanElement>) => {
+      extraButton.onClick(this.props.listing, event.altKey);
+    };
+  };
 
   constructor(props) {
     super(props);
@@ -57,6 +74,8 @@ export class ListingRow<T extends Listable> extends React.Component<
           </span>
         ))
       : "";
+
+    const extraButtons = this.props.extraButtons || [];
     return (
       <li className="c-listing">
         <ListingButton
@@ -66,6 +85,15 @@ export class ListingRow<T extends Listable> extends React.Component<
         >
           {countElements}
         </ListingButton>
+        {extraButtons.map((button, index) => (
+          <ListingButton
+            key={index}
+            title={button.title}
+            buttonClass={button.buttonClass}
+            faClass={button.faClass}
+            onClick={this.makeExtraButtonFn(button)}
+          />
+        ))}
         {this.props.onDelete && (
           <ListingButton
             buttonClass="delete"

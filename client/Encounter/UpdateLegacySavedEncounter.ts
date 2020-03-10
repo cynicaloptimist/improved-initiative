@@ -1,5 +1,6 @@
-import { CombatantState } from "../../common/CombatantState";
+import { CombatantState, TagState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 
@@ -16,9 +17,23 @@ function updateLegacySavedCombatant(savedCombatant: any) {
   if (savedCombatant.MaxHP) {
     savedCombatant.StatBlock.HP.Value = savedCombatant.MaxHP;
   }
+  if (savedCombatant.Tags) {
+    savedCombatant.Tags = savedCombatant.Tags.map((tag: string | TagState) => {
+      if (typeof tag == "string") {
+        const tagState: TagState = {
+          Text: tag,
+          DurationRemaining: 0,
+          DurationTiming: null,
+          DurationCombatantId: ""
+        };
+        return tagState;
+      }
+      return tag;
+    });
+  }
 }
 
-function getActiveCombatantId(savedEncounter: any): string {
+function getActiveCombatantId(savedEncounter: any): string | null {
   if (savedEncounter.ActiveCombatantId) {
     return savedEncounter.ActiveCombatantId;
   }
@@ -33,23 +48,38 @@ function getActiveCombatantId(savedEncounter: any): string {
 
 export function UpdateLegacySavedEncounter(
   savedEncounter: any
-): EncounterState<CombatantState> {
+): SavedEncounter {
   const someName = probablyUniqueString();
 
-  const updatedEncounter: EncounterState<CombatantState> = {
+  const updatedEncounter: SavedEncounter = {
     Version: savedEncounter.Version || "legacy",
     Id:
       savedEncounter.Id ||
       AccountClient.MakeId(savedEncounter.Name || someName),
     Combatants: savedEncounter.Combatants || savedEncounter.Creatures || [],
-    ActiveCombatantId: null,
     Name: savedEncounter.Name || someName,
     Path: savedEncounter.Path || "",
-    RoundCounter: savedEncounter.RoundCounter
+    BackgroundImageUrl: savedEncounter.BackgroundImageUrl || undefined
   };
 
   updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
-  updatedEncounter.ActiveCombatantId = getActiveCombatantId(savedEncounter);
+
+  return updatedEncounter;
+}
+
+export function UpdateLegacyEncounterState(
+  encounterState: any
+): EncounterState<CombatantState> {
+  const updatedEncounter: EncounterState<CombatantState> = {
+    Combatants: encounterState.Combatants || encounterState.Creatures || [],
+    RoundCounter: encounterState.RoundCounter || 0,
+    ElapsedSeconds: encounterState.ElapsedSeconds || 0,
+    ActiveCombatantId: null,
+    BackgroundImageUrl: encounterState.BackgroundImageUrl
+  };
+
+  updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);
+  updatedEncounter.ActiveCombatantId = getActiveCombatantId(encounterState);
 
   return updatedEncounter;
 }

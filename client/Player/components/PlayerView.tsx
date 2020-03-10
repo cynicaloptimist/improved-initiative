@@ -1,10 +1,12 @@
 import * as React from "react";
 
 import _ = require("lodash");
+import { CombatStats } from "../../../common/CombatStats";
 import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../../../common/PlayerViewState";
 import { CombatFooter } from "./CombatFooter";
+import { CombatStatsPopup } from "./CombatStatsPopup";
 import { CustomStyles } from "./CustomStyles";
 import { ApplyDamageCallback, DamageSuggestor } from "./DamageSuggestor";
 import { PlayerViewCombatant } from "./PlayerViewCombatant";
@@ -14,6 +16,7 @@ import { ApplyTagCallback, TagSuggestor } from "./TagSuggestor";
 
 interface LocalState {
   showPortrait: boolean;
+  showCombatStats: boolean;
   portraitWasRequestedByClick: boolean;
   portraitURL: string;
   portraitCaption: string;
@@ -25,6 +28,7 @@ interface LocalState {
 interface OwnProps {
   onSuggestDamage: ApplyDamageCallback;
   onSuggestTag: (combatantId: string, tagState: TagState) => void;
+  combatStats?: CombatStats;
 }
 
 export class PlayerView extends React.Component<
@@ -37,6 +41,7 @@ export class PlayerView extends React.Component<
     super(props);
     this.state = {
       showPortrait: false,
+      showCombatStats: false,
       portraitWasRequestedByClick: false,
       portraitURL: "",
       portraitCaption: "",
@@ -58,7 +63,8 @@ export class PlayerView extends React.Component<
     const modalVisible =
       this.state.showPortrait ||
       this.state.suggestDamageCombatant ||
-      this.state.suggestTagCombatant;
+      this.state.suggestTagCombatant ||
+      this.state.showCombatStats;
 
     const combatantsById = _.keyBy(
       this.props.encounterState.Combatants,
@@ -71,6 +77,9 @@ export class PlayerView extends React.Component<
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
+          TemporaryBackgroundImageUrl={
+            this.props.encounterState.BackgroundImageUrl
+          }
         />
         {modalVisible && (
           <div className="modal-blur" onClick={this.closeAllModals} />
@@ -95,6 +104,9 @@ export class PlayerView extends React.Component<
             combatantNamesById={combatantNamesById}
             onApply={this.handleSuggestTagPrompt}
           />
+        )}
+        {this.state.showCombatStats && (
+          <CombatStatsPopup stats={this.props.combatStats} />
         )}
         <PlayerViewCombatantHeader
           portraitColumnVisible={this.hasImages()}
@@ -137,6 +149,7 @@ export class PlayerView extends React.Component<
 
   public componentDidUpdate(prevProps: PlayerViewState) {
     this.splashPortraitIfNeeded(prevProps.encounterState.ActiveCombatantId);
+    this.showCombatStatsIfNeeded(prevProps.combatStats);
     this.scrollToActiveCombatant();
   }
 
@@ -161,7 +174,7 @@ export class PlayerView extends React.Component<
       c => c.Id == this.props.encounterState.ActiveCombatantId
     );
 
-    if (newActiveCombatant && newActiveCombatant.ImageURL.length) {
+    if (newActiveCombatant?.ImageURL.length) {
       this.setState({
         portraitURL: newActiveCombatant.ImageURL,
         portraitCaption: newActiveCombatant.Name,
@@ -169,6 +182,18 @@ export class PlayerView extends React.Component<
         portraitWasRequestedByClick: false
       });
       this.modalTimeout = window.setTimeout(this.closeAllModals, 5000);
+    }
+  }
+
+  private showCombatStatsIfNeeded(prevStats: CombatStats) {
+    if (!this.props.combatStats) {
+      return;
+    }
+
+    if (this.props.combatStats != prevStats) {
+      this.setState({
+        showCombatStats: true
+      });
     }
   }
 
@@ -196,6 +221,7 @@ export class PlayerView extends React.Component<
   private closeAllModals = () => {
     this.setState({
       showPortrait: false,
+      showCombatStats: false,
       portraitWasRequestedByClick: false,
       suggestDamageCombatant: null,
       suggestTagCombatant: null

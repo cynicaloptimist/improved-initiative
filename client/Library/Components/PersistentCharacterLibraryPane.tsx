@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
-import { StatBlock } from "../../../common/StatBlock";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
@@ -83,7 +82,6 @@ export class PersistentCharacterLibraryPane extends React.Component<
         listings={listings}
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupingFunctions}
-        hideLibraries={this.props.librariesCommander.HideLibraries}
         addNewItem={this.createAndEditStatBlock}
         renderPreview={character => (
           <StatBlockComponent

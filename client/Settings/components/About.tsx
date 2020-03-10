@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
 import { TipCarousel } from "./TipCarousel";
 
@@ -17,7 +18,7 @@ export class About extends React.Component<AboutProps> {
             {" was created by "}
             <a href="mailto:improvedinitiativedev@gmail.com">Evan Bailey</a>
             {". All Wizards of the Coast content provided under terms of the "}
-            <a href={env.CanonicalURL + "/SRD-OGL_V1.1.pdf"} target="_blank">
+            <a href={env.BaseUrl + "/SRD-OGL_V1.1.pdf"} target="_blank">
               Open Gaming License Version 1.0a
             </a>
             {"."}
@@ -51,12 +52,15 @@ export class About extends React.Component<AboutProps> {
           >
             Review Privacy Policy
           </span>
-          <span
-            className="button repeat-tutorial"
+          <Button
+            additionalClassNames="repeat-tutorial"
+            fontAwesomeIcon="hat-wizard"
+            text="Repeat Tutorial"
             onClick={this.props.repeatTutorial}
-          >
-            Repeat Tutorial
-          </span>
+          />
+        </div>
+        <div className="about__version">
+          Version {process.env.VERSION || "unknown"}
         </div>
       </div>
     );

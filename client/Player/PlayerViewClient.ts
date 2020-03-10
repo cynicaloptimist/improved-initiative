@@ -1,3 +1,4 @@
+import { CombatStats } from "../../common/CombatStats";
 import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
@@ -5,9 +6,12 @@ import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 export class PlayerViewClient {
   constructor(private socket: SocketIOClient.Socket) {}
 
+  public DisplayCombatStats(encounterId: string, stats: CombatStats) {
+    this.socket.emit("combat stats", encounterId, stats);
+  }
+
   public JoinEncounter(encounterId: string): any {
     this.socket.emit("join encounter", encounterId);
-    window.setInterval(() => this.socket.emit("heartbeat", encounterId), 10000);
   }
 
   public UpdateEncounter(

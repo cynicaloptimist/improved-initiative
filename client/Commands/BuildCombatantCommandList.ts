@@ -4,88 +4,129 @@ import { Command } from "./Command";
 export const BuildCombatantCommandList: (
   c: CombatantCommander
 ) => Command[] = c => [
-  new Command("apply-damage", "Damage/Heal", c.EditHP, "t", "plus-circle"),
-  new Command(
-    "apply-temporary-hp",
-    "Apply Temporary HP",
-    c.AddTemporaryHP,
-    "alt+t",
-    "medkit",
-    false
-  ),
-  new Command("add-tag", "Add Tag", c.AddTag, "g", "tag", false),
-  new Command(
-    "update-notes",
-    "Update Persistent Notes",
-    c.UpdateNotes,
-    "y",
-    "file-alt",
-    false
-  ),
-  new Command("remove", "Remove from Encounter", c.Remove, "del", "times"),
-  new Command("set-alias", "Rename", c.SetAlias, "f2", "i-cursor"),
-  new Command(
-    "toggle-hidden",
-    "Hide/Reveal in Player View",
-    c.ToggleHidden,
-    "h",
-    "eye",
-    false
-  ),
-  new Command(
-    "toggle-reveal-ac",
-    "Reveal/Hide AC in Player View",
-    c.ToggleRevealedAC,
-    "alt-h",
-    "shield-alt",
-    false
-  ),
-  new Command(
-    "edit-statblock",
-    "Edit Unique Statblock",
-    c.EditOwnStatBlock,
-    "e",
-    "edit",
-    false
-  ),
-  new Command(
-    "set-initiative",
-    "Edit Initiative",
-    c.EditInitiative,
-    "alt+i",
-    "stopwatch",
-    false
-  ),
-  new Command(
-    "link-initiative",
-    "Link Initiative",
-    c.LinkInitiative,
-    "alt+l",
-    "link",
-    false
-  ),
-  new Command(
-    "move-down",
-    "Move Down",
-    c.MoveDown,
-    "alt+j",
-    "angle-double-down"
-  ),
-  new Command("move-up", "Move Up", c.MoveUp, "alt+k", "angle-double-up"),
-  new Command(
-    "select-next",
-    "Select Next",
-    c.SelectNext,
-    "j",
-    "arrow-down",
-    false
-  ),
-  new Command(
-    "select-previous",
-    "Select Previous",
-    c.SelectPrevious,
-    "k",
-    "arrow-up",
-    false
-  )
+  new Command({
+    id: "apply-damage",
+    description: "Apply Damage",
+    actionBinding: c.EditHP,
+    defaultKeyBinding: "t",
+    fontAwesomeIcon: "fist-raised"
+  }),
+  new Command({
+    id: "apply-healing",
+    description: "Apply Healing",
+    actionBinding: c.ApplyHealing,
+    defaultKeyBinding: "l",
+    fontAwesomeIcon: "heart",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "apply-temporary-hp",
+    description: "Apply Temporary HP",
+    actionBinding: c.AddTemporaryHP,
+    defaultKeyBinding: "alt+t",
+    fontAwesomeIcon: "medkit",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "add-tag",
+    description: "Add Tag",
+    actionBinding: c.AddTag,
+    defaultKeyBinding: "g",
+    fontAwesomeIcon: "tag",
+    defaultShowOnActionBar: false,
+    defaultShowInCombatantRow: true
+  }),
+  new Command({
+    id: "update-notes",
+    description: "Update Persistent Notes",
+    actionBinding: c.UpdateNotes,
+    defaultKeyBinding: "y",
+    fontAwesomeIcon: "file-alt",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "remove",
+    description: "Remove from Encounter",
+    actionBinding: c.Remove,
+    defaultKeyBinding: "del",
+    fontAwesomeIcon: "times"
+  }),
+  new Command({
+    id: "set-alias",
+    description: "Rename",
+    actionBinding: c.SetAlias,
+    defaultKeyBinding: "f2",
+    fontAwesomeIcon: "i-cursor"
+  }),
+  new Command({
+    id: "toggle-hidden",
+    description: "Hide/Reveal in Player View",
+    actionBinding: c.ToggleHidden,
+    defaultKeyBinding: "h",
+    fontAwesomeIcon: "eye",
+    defaultShowOnActionBar: false,
+    defaultShowInCombatantRow: true
+  }),
+  new Command({
+    id: "toggle-reveal-ac",
+    description: "Reveal/Hide AC in Player View",
+    actionBinding: c.ToggleRevealedAC,
+    defaultKeyBinding: "alt+h",
+    fontAwesomeIcon: "shield-alt",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "edit-statblock",
+    description: "Edit Unique Statblock",
+    actionBinding: c.EditOwnStatBlock,
+    defaultKeyBinding: "e",
+    fontAwesomeIcon: "edit",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "set-initiative",
+    description: "Edit Initiative",
+    actionBinding: c.EditInitiative,
+    defaultKeyBinding: "alt+i",
+    fontAwesomeIcon: "stopwatch",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "link-initiative",
+    description: "Link Initiative",
+    actionBinding: c.LinkInitiative,
+    defaultKeyBinding: "alt+l",
+    fontAwesomeIcon: "link",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "move-down",
+    description: "Move Down",
+    actionBinding: c.MoveDown,
+    defaultKeyBinding: "alt+j",
+    fontAwesomeIcon: "angle-double-down"
+  }),
+  new Command({
+    id: "move-up",
+    description: "Move Up",
+    actionBinding: c.MoveUp,
+    defaultKeyBinding: "alt+k",
+    fontAwesomeIcon: "angle-double-up"
+  }),
+  new Command({
+    id: "select-next",
+    description: "Select Next",
+    actionBinding: c.SelectNext,
+    defaultKeyBinding: "j",
+    fontAwesomeIcon: "arrow-down",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "select-previous",
+    description: "Select Previous",
+    actionBinding: c.SelectPrevious,
+    defaultKeyBinding: "k",
+    fontAwesomeIcon: "arrow-up",
+    defaultShowOnActionBar: false
+  })
 ];

@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -23,41 +24,44 @@ export class StatBlockLibrary {
     );
   };
 
-  public DeleteListing = (id: string) => {
+  public DeleteListing = async (id: string) => {
     this.statBlocks.remove(s => s.Listing().Id == id);
-    Store.Delete(this.StoreName, id);
-    this.accountClient.DeleteStatBlock(id);
+    await Store.Delete(this.StoreName, id);
+    try {
+      await this.accountClient.DeleteStatBlock(id);
+    } catch {}
   };
 
-  private saveStatBlock = (
+  private saveStatBlock = async (
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
+    newStatBlock.LastUpdateMs = moment.now();
     listing.Listing().Id = newStatBlock.Id;
     this.statBlocks.push(listing);
 
-    Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
+    await Store.Save<StatBlock>(this.StoreName, newStatBlock.Id, newStatBlock);
     listing.SetValue(newStatBlock);
 
-    this.accountClient.SaveStatBlock(newStatBlock).then(r => {
-      if (!r || listing.Origin === "account") {
-        return;
-      }
-      const accountListing = new Listing<StatBlock>(
-        {
-          ...newStatBlock,
-          SearchHint: StatBlock.GetSearchHint(newStatBlock),
-          Metadata: StatBlock.GetMetadata(newStatBlock),
-          Link: `/my/statblocks/${newStatBlock.Id}`
-        },
-        "account",
-        newStatBlock
-      );
-      this.statBlocks.push(accountListing);
-    });
+    const saveResult = await this.accountClient.SaveStatBlock(newStatBlock);
+    if (!saveResult || listing.Origin === "account") {
+      return;
+    }
+    const accountListing = new Listing<StatBlock>(
+      {
+        ...newStatBlock,
+        SearchHint: StatBlock.GetSearchHint(newStatBlock),
+        Metadata: StatBlock.GetMetadata(newStatBlock),
+        Link: `/my/statblocks/${newStatBlock.Id}`,
+        LastUpdateMs: moment.now()
+      },
+      "account",
+      newStatBlock
+    );
+    this.statBlocks.push(accountListing);
   };
 
-  public SaveEditedStatBlock = (
+  public SaveEditedStatBlock = async (
     listing: Listing<StatBlock>,
     newStatBlock: StatBlock
   ) => {
@@ -68,21 +72,32 @@ export class StatBlockLibrary {
           listing.Listing().Path + listing.Listing().Name
     );
     for (const statBlock of oldStatBlocks) {
-      this.DeleteListing(statBlock.Listing().Id);
+      await this.DeleteListing(statBlock.Listing().Id);
     }
-    this.saveStatBlock(listing, newStatBlock);
+    await this.saveStatBlock(listing, newStatBlock);
   };
 
-  public SaveNewStatBlock = (newStatBlock: StatBlock) => {
+  public SaveNewStatBlock = async (newStatBlock: StatBlock) => {
+    const oldStatBlocks = this.GetStatBlocks().filter(
+      l =>
+        l.Origin === "localAsync" &&
+        l.Listing().Path + l.Listing().Name ==
+          newStatBlock.Path + newStatBlock.Name
+    );
     const listing = new Listing<StatBlock>(
       {
         ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
         Metadata: StatBlock.GetMetadata(newStatBlock),
-        Link: this.StoreName
+        Link: this.StoreName,
+        LastUpdateMs: moment.now()
       },
-      "localStorage"
+      "localAsync"
     );
-    this.saveStatBlock(listing, newStatBlock);
+    await this.saveStatBlock(listing, newStatBlock);
+
+    for (const statBlock of oldStatBlocks) {
+      await this.DeleteListing(statBlock.Listing().Id);
+    }
   };
 }

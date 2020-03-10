@@ -1,9 +1,15 @@
 import * as ko from "knockout";
 
+import _ = require("lodash");
 import { Listable, StoredListing } from "../../common/Listable";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 
-export type ListingOrigin = "server" | "account" | "localStorage";
+export type ListingOrigin =
+  | "server"
+  | "account"
+  | "localAsync"
+  | "localStorage";
 
 export class Listing<T extends Listable> {
   constructor(
@@ -23,12 +29,7 @@ export class Listing<T extends Listable> {
   public GetWithTemplate(template: T) {
     return new Promise<T>(done => {
       return this.GetAsyncWithUpdatedId(item => {
-        const templateCast = template as object;
-        const finalListable = {
-          ...templateCast,
-          ...item
-        } as T;
-        return done(finalListable);
+        return done(_.merge(template, item));
       });
     });
   }
@@ -38,22 +39,31 @@ export class Listing<T extends Listable> {
       return callback(this.value());
     }
 
+    if (this.Origin === "localAsync") {
+      return Store.Load(this.storedListing.Link, this.storedListing.Id)
+        .then(callback)
+        .catch(err =>
+          console.error(
+            `Couldn't load item keyed '${this.storedListing.Id}' from async localForage store:\n\n${err}`
+          )
+        );
+    }
+
     if (this.Origin === "localStorage") {
-      const item = Store.Load<T>(
+      const item = LegacySynchronousLocalStore.Load<T>(
         this.storedListing.Link,
         this.storedListing.Id
       );
-      item.Id = this.storedListing.Id;
 
       if (item !== null) {
+        item.Id = this.storedListing.Id;
         this.value(item);
         return callback(item);
       } else {
         console.error(
-          `Couldn't load item keyed '${
-            this.storedListing.Id
-          }' from localStorage.`
+          `Couldn't load item keyed '${this.storedListing.Id}' from localStorage.`
         );
+        return null;
       }
     }
 
@@ -73,7 +83,8 @@ export class Listing<T extends Listable> {
         Path: current.Path || "",
         Link: this.storedListing.Link,
         SearchHint: this.storedListing.SearchHint,
-        Metadata: this.storedListing.Metadata
+        Metadata: this.storedListing.Metadata,
+        LastUpdateMs: current.LastUpdateMs || 0
       };
     }
     return this.storedListing;

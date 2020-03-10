@@ -1,19 +1,48 @@
 <!DOCTYPE html>
-<html
-  encounterId="{{ encounterId }}"
-  postedEncounter="{{ postedEncounter }}"
-  hasStorage="{{ hasStorage }}"
-  hasEpicInitiative="{{ hasEpicInitiative }}"
-  isLoggedIn="{{ isLoggedIn }}"
-  baseUrl="{{ baseUrl }}"
->
+<html environmentJSON="{{ environmentJSON }}">
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsId }}"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "{{ googleAnalyticsId }}");
+    </script>
+    <!-- Twitter universal website tag code -->
+    <script>
+      !(function(e, t, n, s, u, a) {
+        e.twq ||
+          ((s = e.twq = function() {
+            s.exe ? s.exe.apply(s, arguments) : s.queue.push(arguments);
+          }),
+          (s.version = "1.1"),
+          (s.queue = []),
+          (u = t.createElement(n)),
+          (u.async = !0),
+          (u.src = "//static.ads-twitter.com/uwt.js"),
+          (a = t.getElementsByTagName(n)[0]),
+          a.parentNode.insertBefore(u, a));
+      })(window, document, "script");
+      // Insert Twitter Pixel ID and Standard Event data below
+      twq("init", "{{ twitterPixelId }}");
+      twq("track", "PageView");
+      twq("track", "TrackerLoad_{{ accountLevel }}");
+    </script>
+    <!-- End Twitter universal website tag code -->
+
     <link
       rel="stylesheet"
       type="text/css"
-      href="{{ rootDirectory }}/css/improved-initiative.{{ appVersion }}.css"
+      href="/css/improved-initiative.{{ appVersion }}.css"
     />
-    <link rel="manifest" href="{{ rootDirectory }}/manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <meta
       name="description"
       content="Improved Initiative is a combat tracker for D&amp;D 5E that won't get between you and your players."
@@ -22,22 +51,45 @@
       property="og:image"
       content="img/improved-initiative-transparent-darkgreen.png"
     />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no"
+    />
 
     <title>Combat Tracker - Improved Initiative</title>
 
-    <script type="text/javascript">
-      window.patreonLoginUrl =
-        "http://www.patreon.com/oauth2/authorize?response_type=code&client_id={{patreonClientId}}&redirect_uri={{{baseUrl}}}/r/patreon&state={{encounterId}}";
-    </script>
+    <script type="text/javascript" src="/js/dependencies.js"></script>
     <script
       type="text/javascript"
-      src="{{ rootDirectory }}/js/dependencies.js"
+      src="/js/ImprovedInitiative.{{ appVersion }}.js"
     ></script>
-    <script
-      type="text/javascript"
-      src="{{ rootDirectory }}/js/ImprovedInitiative.{{ appVersion }}.js"
-    ></script>
+    <style type="text/css">
+      .loading-splash {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
+      }
+
+      .loading-splash img {
+        animation: bob 1s ease infinite;
+      }
+
+      @keyframes bob {
+        0% {
+          margin-top: 0;
+        }
+        50% {
+          margin-top: 20px;
+        }
+      }
+    </style>
   </head>
 
   <body id="tracker" data-bind="css: InterfacePriority">
@@ -53,15 +105,10 @@
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
     </script>
-    <div
-      class="loading-splash"
-      style="
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    background: #f4efe7 url('../img/paper-bg.jpg') no-repeat top/cover;"
-    ></div>
+    <div class="loading-splash">
+      <img src="../img/boot-white-on-darkred-192.png" />
+      <p>Loading Improved Initiative</p>
+    </div>
     <div
       class="modal-blur"
       data-bind="visible: BlurVisible, click: CloseSettings"
@@ -109,7 +156,7 @@
       <!-- ko ifnot: LibrariesVisible -->
       <div class="active-combatant">
         <h2>Active Combatant</h2>
-        <!-- ko if: Encounter.ActiveCombatant -->
+        <!-- ko if: Encounter.EncounterFlow.ActiveCombatant -->
         <div
           class="combatant-details__wrapper"
           style="flex-shrink: 1"
@@ -118,10 +165,11 @@
             }"
         ></div>
         <!-- /ko -->
-        <!-- ko ifnot: Encounter.ActiveCombatant -->
+        <!-- ko ifnot: Encounter.EncounterFlow.ActiveCombatant -->
         <p class="start-encounter-hint">
           Click [ <span class="fas fa-play"></span> Start Encounter ] to roll
-          initiative. Active creature will be displayed here.
+          initiative. The StatBlock for the Active Combatant will be displayed
+          here.
         </p>
         <!-- /ko -->
       </div>
@@ -149,64 +197,39 @@
       ></div>
       <!-- /ko -->
       <!-- ko if: CenterColumn() === "combat" -->
-      <h2>Combatants by Initiative</h2>
-      <ul class="combatants">
-        <li class="combatant--header">
-          <span class="combatant__leftsection">
-            <span class="combatant__initiative"
-              ><span
-                class="fas"
-                data-bind="css: Encounter.StateIcon, attr: { title: Encounter.StateTip }"
-              ></span
-            ></span>
-            <span class="combatant__name">Name</span>
-            <span class="combatant__hp"
-              ><span class="fas fa-heart"></span
-            ></span>
-            <span class="combatant__ac"
-              ><span class="fas fa-shield-alt"></span
-            ></span>
-          </span>
-          <span class="combatant__rightsection"></span>
-        </li>
-        <!-- ko foreach: OrderedCombatants -->
-        <li
-          class="combatant"
-          data-bind="
-        css: {
-            selected: IsSelected,
-            active: IsActive,
-            animate: NeedsAnimate
-        },
-        click: $root.CombatantCommander.Select,
-        component: {
-            name: 'combatant',
-            params: {
-                viewModel: $data
-            }
-        }"
-        ></li>
-        <!-- /ko -->
-      </ul>
-      <!-- /ko -->
       <div
-        class="prompts"
-        data-bind="with: PromptQueue, css: { empty: PromptQueue.Prompts().length === 0}"
-      >
-        <!-- ko foreach: Prompts -->
-        <form
-          class="prompt"
-          data-bind="
-                submit: $parent.Resolve($data),
+        class="initiative-list"
+        data-bind="react: {
+                component: initiativeListComponent
+        }"
+      ></div>
+      <!-- /ko -->
+      <div class="all-prompts">
+        <div
+          class="prompts"
+          data-bind="react: {
+                component: PromptsComponent
+        }"
+        ></div>
+        <div
+          class="prompts legacy-prompts"
+          data-bind="with: PromptQueue, css: { empty: !PromptQueue.HasLegacyPrompt() }"
+        >
+          <!-- ko foreach: LegacyPrompts -->
+          <form
+            class="prompt"
+            data-bind="
+                submit: $parent.ResolveLegacyPrompt($data),
                 component: {
                     name: ComponentName,
                     params: {
                         prompt: $data,
                     }
                 },
-                afterRender: $parent.UpdateDom"
-        ></form>
-        <!-- /ko -->
+                afterRender: $parent.UpdateLegacyDom"
+          ></form>
+          <!-- /ko -->
+        </div>
       </div>
 
       <div class="combat-footer">
@@ -228,13 +251,15 @@
           <!-- ko if: EncounterCommander.DisplayTurnTimer -->
           <span
             class="turn-timer"
-            data-bind="text: Encounter.TurnTimer.Readout"
+            data-bind="text: Encounter.EncounterFlow.TurnTimerReadout"
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayRoundCounter -->
           <span class="round-counter"
             >Current Round:
-            <span data-bind="text: Encounter.RoundCounter"></span
+            <span
+              data-bind="text: Encounter.EncounterFlow.CombatTimer.ElapsedRounds"
+            ></span
           ></span>
           <!-- /ko -->
           <!-- ko if: EncounterCommander.DisplayDifficulty -->
@@ -253,6 +278,9 @@
     </div>
     <div class="right-column">
       <div class="selected-combatant">
+        <!-- ko ifnot: CombatantCommander.HasSelected -->
+        <h2>No Combatant Selected</h2>
+        <!-- /ko -->
         <!-- ko if: CombatantCommander.HasSelected -->
         <!-- ko if: CombatantCommander.HasOneSelected -->
         <h2>Selected Combatant</h2>

@@ -79,9 +79,9 @@ export function RegisterBindingHandlers() {
       viewModel?: any,
       bindingContext?: KnockoutBindingContext
     ) => {
-      let callback = valueAccessor();
+      const callback = valueAccessor();
       $(element).keypress(event => {
-        let keyCode = event.which ? event.which : event.keyCode;
+        const keyCode = event.which ? event.which : event.keyCode;
         if (keyCode === 13) {
           callback.call(viewModel);
           return false;

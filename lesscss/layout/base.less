@@ -1,0 +1,46 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+:focus {
+  outline: @primary-red auto 5px;
+}
+
+* {
+  border-color: @shadow;
+  box-shadow: @shadow;
+  font-family: @font-family-body;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+
+body,
+html {
+  color: @primary-black;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  touch-action: manipulation;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 100%;
+
+  & > * {
+    min-width: 0;
+    min-height: 0;
+    max-height: 100%;
+    max-width: 100%;
+  }
+}

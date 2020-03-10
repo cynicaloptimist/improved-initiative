@@ -25,7 +25,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
 
     const currentHp = this.props.combatantViewModel.HP();
     const tags = this.props.combatantViewModel.Combatant.Tags()
-      .filter(tag => tag.Visible())
+      .filter(tag => tag.NotExpired())
       .map(tag => {
         if (tag.HasDuration) {
           return `${tag.Text} (${tag.DurationRemaining()} more rounds)`;
@@ -34,8 +34,10 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
         return tag.Text;
       });
 
-    const notes = this.props.combatantViewModel.Combatant.CurrentNotes();
-    const renderedNotes = notes ? this.props.enricher.EnrichText(notes) : null;
+    const notes = this.props.combatantViewModel.Combatant.CurrentNotes;
+    const renderedNotes = notes().length
+      ? this.props.enricher.EnrichText(notes(), notes)
+      : null;
 
     const statBlock = this.props.combatantViewModel.Combatant.StatBlock();
 
@@ -43,6 +45,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
       <div className="c-combatant-details">
         <StatBlockHeader
           name={this.props.combatantViewModel.Name()}
+          statBlockName={statBlock.Name}
           source={statBlock.Source}
           type={statBlock.Type}
           imageUrl={statBlock.ImageURL}
@@ -63,7 +66,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
             hideName
           />
         )}
-        {notes && notes.length > 0 && (
+        {renderedNotes && (
           <div className="c-combatant-details__notes">{renderedNotes}</div>
         )}
       </div>

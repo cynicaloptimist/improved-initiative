@@ -2,6 +2,7 @@ import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
@@ -20,57 +21,68 @@ export class Libraries {
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 
-    this.initializeStatBlocks();
+    this.initializeStatBlocks(accountClient);
     this.initializeSpells();
   }
 
-  private initializeStatBlocks = () => {
-    $.ajax("../statblocks/").done(s => this.NPCs.AddListings(s, "server"));
+  private initializeStatBlocks = async (accountClient: AccountClient) => {
+    $.ajax("../statblocks/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      return this.NPCs.AddListings(listings, "server");
+    });
 
-    const localStatBlocks = Store.List(Store.StatBlocks);
-    const listings = localStatBlocks.map(id => {
+    const localStatBlocks = await Store.LoadAllAndUpdateIds(Store.StatBlocks);
+    const listings = localStatBlocks.map(savedStatBlock => {
       const statBlock = {
         ...StatBlock.Default(),
-        ...Store.Load<StatBlock>(Store.StatBlocks, id)
+        ...savedStatBlock
       };
 
       const listing: StoredListing = {
-        Id: id,
+        Id: statBlock.Id,
         Name: statBlock.Name,
         Path: statBlock.Path,
         SearchHint: StatBlock.GetSearchHint(statBlock),
         Metadata: StatBlock.GetMetadata(statBlock),
-        Link: Store.StatBlocks
+        Link: Store.StatBlocks,
+        LastUpdateMs: statBlock.LastUpdateMs || 0
       };
 
       return listing;
     });
-    this.NPCs.AddListings(listings, "localStorage");
+    this.NPCs.AddListings(listings, "localAsync");
+    await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
 
-  private initializeSpells = () => {
-    $.ajax("../spells/").done(listings =>
-      this.Spells.AddListings(listings, "server")
-    );
+  private initializeSpells = async () => {
+    $.ajax("../spells/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      return this.Spells.AddListings(listings, "server");
+    });
 
-    const localSpells = Store.List(Store.Spells);
-    const newListings = localSpells.map(id => {
+    const localSpells = await Store.LoadAllAndUpdateIds(Store.Spells);
+    const newListings = localSpells.map(savedSpell => {
       const spell = {
         ...Spell.Default(),
-        ...Store.Load<Spell>(Store.Spells, id)
+        ...savedSpell
       };
       const listing = {
-        Id: id,
+        Id: savedSpell.Id,
         Name: spell.Name,
         Path: spell.Path,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: Store.Spells
+        Link: Store.Spells,
+        LastUpdateMs: spell.LastUpdateMs || 0
       };
 
       return listing;
     });
 
-    this.Spells.AddListings(newListings, "localStorage");
+    this.Spells.AddListings(newListings, "localAsync");
   };
 }

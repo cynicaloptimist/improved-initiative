@@ -4,6 +4,17 @@ Thanks for your interest in contributing to Improved Initiative! It means a lot 
 
 If this is your first time contributing to an open source project, don't sweat it. It's my first time maintaining an open source project. We'll learn together- look over [this article](https://opensource.guide/how-to-contribute/) for some general advice.
 
+## Getting Started
+Evan uses and recommends [Visual Studio Code](https://code.visualstudio.com/) when developing Improved Initiative. You can hit F5 and accept the default Node.js environment to get the server running. You can set environment variables as described in the README in this default launch.json.
+
+Most of the Typescript code for the frontend lives in `/client/`. Everything is in the process of gradually being migrated to React, so use React components in .tsx files when possible.
+
+The backend lives in `/server/`. It's also Typescript, but it has its own build step. The server must be restarted to take new builds.
+
+Shared data structures are located in `/common/`. Any interfaces in this folder are saved to localstorage or databases, so only make additive, backwards-compatible changes to them and consider backwards compatability when handling them.
+
+**I'm happy to provide guidance on how to approach any open issue.**
+
 ## Guidelines
 Here is a short list of coding guidelines (adapted from [TypeScript Coding Guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)). This is not an exhaustive guide, so please be willing to make requested modifications to your code.
 
@@ -13,21 +24,12 @@ Here is a short list of coding guidelines (adapted from [TypeScript Coding Guide
 * Include at least one test for your code.
 * Don't add any game content that isn't covered by the [Open-Gaming License](http://dnd.wizards.com/articles/features/systems-reference-document-srd).
 
-**I'm happy to provide guidance on how to approach any open issue.**
-
 ### Names
 * Use whole words, not abbreviations, in names.
 * Use PascalCase for type names and public methods.
 * Do not use "I" as a prefix for interface names.
 * Use camelCase for local variables and private properties.
 * Do not use "_" as a prefix for private properties.
-
-### Project Structure
-Most of the Typescript code for the frontend lives in `/client/`. Everything is in the process of gradually being migrated to React, so use React components in .tsx files when possible.
-
-The backend lives in `/server/`. It's also Typescript but it has its own build step.
-
-Shared data structures are located in `/common/`.
 
 ## Epic Initiative
 While Improved Initiative is open source, the MIT license allows anyone to use this code to make a profit. I've chosen to make a subset of the app's features available as rewards to [Patreon](https://www.patreon.com/improvedinitiative) subscribers as "Epic Initiative". At the time of this writing, this mainly covers cosmetic benefits associated with the Player View such as custom CSS. As the license indicates, you are always free to run your own instance of Improved Initiative and modify this functionality to meet your needs.

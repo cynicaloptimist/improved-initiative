@@ -13,10 +13,18 @@ export enum AutoRerollInitiativeOption {
   Automatic = "Automatic"
 }
 
+export enum PostCombatStatsOption {
+  None = "None",
+  EncounterViewOnly = "Encounter view only",
+  PlayerViewOnly = "Player view only",
+  Both = "Both"
+}
+
 export interface Settings {
   Commands: CommandSetting[];
   Rules: {
     RollMonsterHp: boolean;
+    EnableBossAndMinionHP: boolean;
     AllowNegativeHP: boolean;
     AutoCheckConcentration: boolean;
     AutoGroupInitiative: AutoGroupInitiativeOption;
@@ -26,6 +34,7 @@ export interface Settings {
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
+    PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
   Version: string;
@@ -36,6 +45,7 @@ export function getDefaultSettings(): Settings {
     Commands: [],
     Rules: {
       RollMonsterHp: false,
+      EnableBossAndMinionHP: false,
       AllowNegativeHP: false,
       AutoCheckConcentration: true,
       AutoGroupInitiative: AutoGroupInitiativeOption.None,
@@ -44,7 +54,8 @@ export function getDefaultSettings(): Settings {
     TrackerView: {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
-      DisplayDifficulty: false
+      DisplayDifficulty: true,
+      PostCombatStats: PostCombatStatsOption.None
     },
     PlayerView: {
       ActiveCombatantOnTop: false,

@@ -1,0 +1,47 @@
+.sketch-picker {
+  .flexbox-fix {
+    flex-direction: row;
+  }
+  .flexbox-fix > div {
+    display: initial;
+  }
+}
+
+.c-color-block {
+  cursor: pointer;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px @primary-grey solid;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin: @extra-small-spacer @medium-spacer @medium-spacer @extra-small-spacer;
+
+  &:hover {
+    border-color: @hover-grey;
+  }
+}
+
+.c-label-and-color-block.s-selected {
+  span {
+    font-weight: bold;
+  }
+  .c-color-block {
+    border: 2px @primary-red solid;
+  }
+}
+
+.c-styles-chooser-colors {
+  flex-flow: row wrap;
+  padding: @medium-spacer 0;
+  border-bottom: 1px solid @accent-white;
+}
+
+.c-styles-chooser-slot-chooser {
+  flex-grow: 1;
+}
+
+.c-label-and-color-block {
+  flex-flow: row;
+  justify-content: space-between;
+}

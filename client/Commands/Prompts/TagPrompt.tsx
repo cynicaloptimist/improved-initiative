@@ -1,19 +1,23 @@
-import * as Awesomplete from "awesomplete";
 import * as _ from "lodash";
 import * as React from "react";
 
+import { Field, FieldProps } from "formik";
+import { DurationTiming } from "../../../common/DurationTiming";
 import { Combatant } from "../../Combatant/Combatant";
 import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Button, SubmitButton } from "../../Components/Button";
 import { Encounter } from "../../Encounter/Encounter";
 import { Conditions } from "../../Rules/Conditions";
+import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
+import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./PendingPrompts";
 
 interface TagPromptProps {
   targetDisplayNames: string;
   combatantNamesById: { [id: string]: string };
-  activeCombatantId: string;
+  encounterIsActive: () => boolean;
 }
 
 interface TagPromptState {
@@ -29,66 +33,100 @@ export class TagPromptComponent extends React.Component<
     this.state = {
       advancedMode: false
     };
-  }
-
-  public componentDidMount() {
-    this.Awesomeplete = new Awesomplete(this.textInput, {
-      list: Object.keys(Conditions),
-      minChars: 1
-    });
-
-    const inputElement = this.Awesomeplete.input as HTMLElement;
-    inputElement.focus();
+    linkComponentToObservables(this);
   }
 
   public render() {
+    const encounterIsActive = this.props.encounterIsActive();
+    const autoCompleteOptions = _.keys(Conditions).concat(
+      _.values(this.props.combatantNamesById)
+    );
     return (
-      <div className="add-tag">
-        <div>
-          Add a tag to {this.props.targetDisplayNames}:
-          <input
-            ref={i => (this.textInput = i)}
-            id="tag-text"
-            className="response"
-          />
-          <Button fontAwesomeIcon="hourglass" onClick={this.toggleAdvanced} />
-          <SubmitButton />
+      <>
+        <div className="add-tag">
+          <div>
+            <label className="add-tag__label" htmlFor="tagText">
+              Add a tag to {this.props.targetDisplayNames}
+            </label>
+            <AutocompleteTextInput
+              fieldName="tagText"
+              options={autoCompleteOptions}
+              autoFocus
+            />
+            <Field name="tagHidden">
+              {(fieldApi: FieldProps) => {
+                if (fieldApi.field.value == true) {
+                  return (
+                    <Button
+                      fontAwesomeIcon="eye-slash"
+                      tooltip="Hide/Show tag in Player View"
+                      onClick={() =>
+                        fieldApi.form.setFieldValue(fieldApi.field.name, false)
+                      }
+                    />
+                  );
+                } else {
+                  return (
+                    <Button
+                      fontAwesomeIcon="eye"
+                      tooltip="Hide/Show tag in Player View"
+                      onClick={() =>
+                        fieldApi.form.setFieldValue(fieldApi.field.name, true)
+                      }
+                    />
+                  );
+                }
+              }}
+            </Field>
+            <Field name="useDuration">
+              {(fieldApi: FieldProps) => (
+                <Button
+                  fontAwesomeIcon="hourglass"
+                  onClick={() => this.toggleAdvanced(fieldApi)}
+                />
+              )}
+            </Field>
+          </div>
+          {this.state.advancedMode &&
+            this.renderAdvancedFields(encounterIsActive)}
         </div>
-        {this.state.advancedMode && this.renderAdvancedFields()}
-      </div>
+        <SubmitButton />
+      </>
     );
   }
 
-  private Awesomeplete: Awesomplete;
-  private textInput: HTMLInputElement;
+  private toggleAdvanced = (fieldApi: FieldProps) => {
+    const toggledMode = !this.state.advancedMode;
+    fieldApi.form.setFieldValue(fieldApi.field.name, toggledMode);
+    this.setState({ advancedMode: toggledMode });
+  };
 
-  private toggleAdvanced = () =>
-    this.setState({ advancedMode: !this.state.advancedMode });
+  private renderAdvancedFields = (encounterIsActive: boolean) => {
+    if (!encounterIsActive) {
+      return (
+        <div className="add-tag__advanced">
+          Start Encounter to enable tag durations.
+        </div>
+      );
+    }
 
-  private renderAdvancedFields = () => (
-    <div className="tag-advanced">
-      ...until
-      <select id="tag-timing" className="response">
-        <option value="start">start of</option>
-        <option value="end">end of</option>
-      </select>
-      <select
-        id="tag-timing-id"
-        className="response"
-        defaultValue={this.props.activeCombatantId}
-      >
-        {this.renderCombatantOptions()}
-      </select>
-      's turn in{" "}
-      <input
-        type="number"
-        id="tag-duration"
-        className="response"
-        defaultValue="1"
-      />{" "}
-      round
-    </div>
-  );
+    return (
+      <div className="add-tag__advanced">
+        ...until
+        <EnumToggle
+          fieldName="tagTiming"
+          labelsByOption={{
+            [StartOfTurn]: "start of",
+            [EndOfTurn]: "end of"
+          }}
+        />
+        <Field component="select" name="tagTimingId">
+          {this.renderCombatantOptions()}
+        </Field>
+        's turn in <Field type="number" name="tagDuration" /> round
+      </div>
+    );
+  };
 
   private renderCombatantOptions = () =>
     _.toPairs(this.props.combatantNamesById).map(([id, name]) => (
@@ -98,89 +136,99 @@ export class TagPromptComponent extends React.Component<
     ));
 }
 
-export class TagPrompt implements LegacyPrompt {
-  public InputSelector = ".response";
-  public ComponentName = "reactprompt";
+export interface TagModel {
+  tagText: string;
+  tagDuration?: number;
+  tagTimingId?: string;
+  tagTiming?: DurationTiming;
+  useDuration: boolean;
+  tagHidden: boolean;
+}
 
-  public Resolve = form => {
-    const inputs = $(form).find(this.InputSelector);
-    const responsesById = {};
-    inputs.map((_, element) => {
-      responsesById[element.id] = $(element).val();
-    });
-    const text: string = responsesById["tag-text"];
-    if (text.length) {
-      if (responsesById["tag-duration"] && responsesById["tag-timing-id"]) {
-        const duration = parseInt(responsesById["tag-duration"]);
-        const timing =
-          responsesById["tag-timing"] == "end" ? EndOfTurn : StartOfTurn;
-        const timingId = responsesById["tag-timing-id"];
+export function TagPrompt(
+  encounter: Encounter,
+  targetCombatants: Combatant[],
+  logEvent: (message: string) => void
+): PromptProps<TagModel> {
+  const activeCombatantId = encounter.EncounterFlow.ActiveCombatant()
+    ? encounter.EncounterFlow.ActiveCombatant().Id
+    : "";
+  const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
+  const combatantNamesById = _.mapValues(combatantsById, c => c.DisplayName());
 
+  return {
+    initialValues: {
+      tagText: "",
+      tagTimingId: activeCombatantId,
+      tagTiming: StartOfTurn,
+      tagDuration: 1,
+      useDuration: false,
+      tagHidden: false
+    },
+    children: (
+      <TagPromptComponent
+        combatantNamesById={combatantNamesById}
+        targetDisplayNames={targetCombatants
+          .map(t => t.DisplayName())
+          .join(", ")}
+        encounterIsActive={() => encounter.EncounterFlow.State() == "active"}
+      />
+    ),
+    onSubmit: (model: TagModel) => {
+      if (model.tagText.length == 0) {
+        return true;
+      }
+
+      if (
+        encounter.EncounterFlow.State() == "inactive" ||
+        !model.useDuration ||
+        !model.tagDuration ||
+        !model.tagTimingId
+      ) {
+        for (const combatant of targetCombatants) {
+          const tag = new Tag(model.tagText, combatant, model.tagHidden);
+          combatant.Tags.push(tag);
+          Metrics.TrackEvent("TagAdded", { Text: tag.Text });
+        }
+      } else {
         // If tag is set to expire at the end of the current combatant's turn in one round,
         // we need to add a grace round so it doesn't end immediately at the end of this turn.
         const timingKeyedCombatant = _.find(
-          this.encounter.Combatants(),
-          c => timingId == c.Id
+          encounter.Combatants(),
+          c => model.tagTimingId == c.Id
         );
         const timingKeyedCombatantIsActive =
-          timingKeyedCombatant.Id == this.encounter.ActiveCombatant().Id;
+          timingKeyedCombatant.Id ==
+          encounter.EncounterFlow.ActiveCombatant().Id;
         const durationGraceRound =
-          timingKeyedCombatantIsActive && timing == EndOfTurn ? 1 : 0;
+          timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
-        for (const combatant of this.targetCombatants) {
+        for (const combatant of targetCombatants) {
           const tag = new Tag(
-            text,
+            model.tagText,
             combatant,
-            duration + durationGraceRound,
-            timing,
-            timingId
+            model.tagHidden,
+            model.tagDuration + durationGraceRound,
+            model.tagTiming,
+            model.tagTimingId
           );
-          this.encounter.AddDurationTag(tag);
+          encounter.EncounterFlow.AddDurationTag(tag);
           combatant.Tags.push(tag);
           Metrics.TrackEvent("TagAdded", {
             Text: tag.Text,
             Duration: tag.DurationRemaining()
           });
         }
-      } else {
-        for (const combatant of this.targetCombatants) {
-          const tag = new Tag(text, combatant);
-          combatant.Tags.push(tag);
-          Metrics.TrackEvent("TagAdded", { Text: tag.Text });
-        }
       }
 
-      this.logEvent(
-        `Added "${text}" tag to ${this.targetCombatants
+      logEvent(
+        `Added "${model.tagText}" tag to ${targetCombatants
           .map(c => c.DisplayName())
           .join(", ")}`
       );
-      this.encounter.QueueEmitEncounter();
-    }
+
+      return true;
+    },
+    autoFocusSelector: "input"
   };
-
-  constructor(
-    private encounter: Encounter,
-    private targetCombatants: Combatant[],
-    private logEvent: (s: string) => void
-  ) {
-    const combatantsById = _.keyBy(encounter.Combatants(), c => c.Id);
-    const combatantNamesById = _.mapValues(combatantsById, c =>
-      c.DisplayName()
-    );
-
-    this.component = (
-      <TagPromptComponent
-        activeCombatantId={
-          encounter.ActiveCombatant() ? encounter.ActiveCombatant().Id : ""
-        }
-        combatantNamesById={combatantNamesById}
-        targetDisplayNames={targetCombatants
-          .map(t => t.DisplayName())
-          .join(", ")}
-      />
-    );
-  }
-
-  public component: JSX.Element;
 }

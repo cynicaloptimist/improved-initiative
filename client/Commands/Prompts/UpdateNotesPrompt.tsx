@@ -1,62 +1,43 @@
 import * as React from "react";
 
-import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { Field } from "formik";
 import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
-import { PersistentCharacterLibrary } from "../../Library/PersistentCharacterLibrary";
 import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { PromptProps } from "./PendingPrompts";
 
-interface UpdateNotesPromptComponentProps {
-  currentNotes: string;
+function UpdateNotesPromptComponent() {
+  return (
+    <div className="p-update-notes">
+      <Field
+        name="Notes"
+        className="p-update-notes__notes"
+        component="textarea"
+        placeholder="Track notes, resources, spell slots, etc. **Markdown** and Counters (e.g. [5/5]) are supported."
+      />
+      <SubmitButton />
+    </div>
+  );
 }
 
-interface UpdateNotesPromptComponentState {}
-
-class UpdateNotesPromptComponent extends React.Component<
-  UpdateNotesPromptComponentProps,
-  UpdateNotesPromptComponentState
-> {
-  public render() {
-    return (
-      <div className="p-update-notes">
-        <textarea
-          className="p-update-notes__notes"
-          defaultValue={this.props.currentNotes}
-          placeholder="Track long term resources and conditions. *Markdown* is supported."
-        />
-        <SubmitButton />
-      </div>
-    );
-  }
+interface NotesModel {
+  Notes: string;
 }
 
-export class UpdateNotesPrompt implements LegacyPrompt {
-  public InputSelector = ".p-update-notes__notes";
-  public ComponentName = "reactprompt";
-  public component: JSX.Element;
-
-  constructor(
-    private combatant: Combatant,
-    private persistentCharacter: PersistentCharacter,
-    private library: PersistentCharacterLibrary
-  ) {
-    this.component = (
-      <UpdateNotesPromptComponent currentNotes={persistentCharacter.Notes} />
-    );
-  }
-
-  public Resolve = (form: HTMLFormElement) => {
-    const input = form.getElementsByClassName(
-      "p-update-notes__notes"
-    )[0] as HTMLTextAreaElement;
-    this.library.UpdatePersistentCharacter(this.persistentCharacter.Id, {
-      Notes: input.value
-    });
-    this.combatant.CurrentNotes(input.value);
-    Metrics.TrackEvent("NotesUpdated", {
-      Name: this.combatant.DisplayName(),
-      Notes: input.value.substr(0, 100)
-    });
+export function UpdateNotesPrompt(
+  combatant: Combatant
+): PromptProps<NotesModel> {
+  return {
+    autoFocusSelector: ".p-update-notes__notes",
+    initialValues: { Notes: combatant.CurrentNotes() },
+    onSubmit: (model: NotesModel) => {
+      combatant.CurrentNotes(model.Notes);
+      Metrics.TrackEvent("NotesUpdated", {
+        Name: combatant.DisplayName(),
+        Notes: model.Notes.substr(0, 100)
+      });
+      return true;
+    },
+    children: <UpdateNotesPromptComponent />
   };
 }

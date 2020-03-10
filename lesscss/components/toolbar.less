@@ -1,0 +1,39 @@
+@toolbar-width: 42px;
+
+.commands-combatant {
+  border-color: @shadow;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid;
+}
+
+.c-toolbar .c-button {
+  margin: 1px 0;
+}
+
+.c-toolbar.s-narrow {
+  .scrollframe {
+    max-width: none;
+    width: @toolbar-width;
+    overflow-x: hidden;
+  }
+
+  width: @toolbar-width;
+  overflow: hidden;
+}
+
+.c-toolbar.s-wide {
+  .scrollframe {
+    overflow-y: auto;
+  }
+
+  .fas {
+    margin-left: @extra-small-spacer;
+    margin-right: @large-spacer;
+  }
+
+  .c-button {
+    display: flex;
+    justify-content: flex-start;
+  }
+}

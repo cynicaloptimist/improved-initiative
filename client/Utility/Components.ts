@@ -6,15 +6,15 @@ import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
 const pendingComponents: JQueryXHR[] = [];
 
 export const ComponentLoader = {
-  AfterComponentLoaded: (callback: (() => void)) =>
+  AfterComponentLoaded: (callback: () => void) =>
     $.when(...pendingComponents).always(callback)
 };
 
-export let RegisterComponents = () => {
-  let templateLoader = {
-    loadTemplate: function(name, templateConfig, callback) {
-      if (templateConfig.name) {
-        let fullUrl = "/templates/" + templateConfig.name;
+export const RegisterComponents = () => {
+  const templateLoader = {
+    loadTemplate: function(name, _template, callback) {
+      if (name) {
+        const fullUrl = "/templates/" + name;
         const request = $.get(fullUrl, function(markupString) {
           // We need an array of DOM nodes, not a string.
           // We can use the default loader to convert to the
@@ -39,14 +39,13 @@ export let RegisterComponents = () => {
   const registerComponent = (name: string, viewModel: any) =>
     ko.components.register(name, {
       viewModel,
-      template: { name }
+      template: name
     });
 
   registerComponent("acceptdamageprompt", params => params.prompt);
   registerComponent("combatant", params => params.viewModel);
   registerComponent("concentrationprompt", params => params.prompt);
   registerComponent("defaultprompt", params => params.prompt);
-  registerComponent("playerdisplaycombatant", params => params.combatant);
   registerComponent("reactprompt", params => params.prompt);
   registerComponent("spelleditor", params => params.editor);
   registerComponent("tutorial", params => new TutorialViewModel(params));

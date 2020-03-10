@@ -1,20 +1,21 @@
 import * as ko from "knockout";
 
-import { CombatantState } from "../../common/CombatantState";
-import { AbilityScores, StatBlock } from "../../common/StatBlock";
+import { CombatantState, TagState } from "../../common/CombatantState";
+import { InitiativeSpecialRoll, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { Metrics } from "../Utility/Metrics";
+import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
 
 export class Combatant {
   constructor(combatantState: CombatantState, public Encounter: Encounter) {
     let statBlock = combatantState.StatBlock;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
-    this.PersistentCharacterId = combatantState.PersistentCharacterId;
+    this.PersistentCharacterId = combatantState.PersistentCharacterId || null;
 
     this.StatBlock(statBlock);
 
@@ -26,6 +27,7 @@ export class Combatant {
     });
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
+    this.CurrentNotes = ko.observable(combatantState.CurrentNotes || "");
 
     this.processCombatantState(combatantState);
 
@@ -43,9 +45,8 @@ export class Combatant {
     });
   }
   public Id = probablyUniqueString();
-  public PersistentCharacterId = null;
+  public PersistentCharacterId: string | null = null;
   public Alias = ko.observable("");
-  public CurrentNotes = ko.observable(null);
   public TemporaryHP = ko.observable(0);
   public Tags = ko.observableArray<Tag>();
   public Initiative = ko.observable(0);
@@ -53,9 +54,12 @@ export class Combatant {
   public StatBlock = ko.observable<StatBlock>(StatBlock.Default());
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
+  public IndexLabel = ko.observable(0);
 
-  public IndexLabel: number;
+  public CombatTimer = new CombatTimer();
+
   public CurrentHP: KnockoutObservable<number>;
+  public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
@@ -71,31 +75,40 @@ export class Combatant {
   }
 
   private processCombatantState(savedCombatant: CombatantState) {
-    this.IndexLabel = savedCombatant.IndexLabel;
+    this.IndexLabel(savedCombatant.IndexLabel || 0);
     this.CurrentHP(savedCombatant.CurrentHP);
+    this.CurrentNotes(savedCombatant.CurrentNotes || "");
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
       savedCombatant.InitiativeGroup || this.InitiativeGroup()
     );
     this.Alias(savedCombatant.Alias);
-    this.Tags(Tag.getLegacyTags(savedCombatant.Tags, this));
+    this.Tags(Tag.FromTagStates(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
+    this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
+    this.CombatTimer.SetElapsedSeconds(savedCombatant.ElapsedSeconds || 0);
   }
 
   public AttachToPersistentCharacterLibrary(
     library: PersistentCharacterUpdater
   ) {
-    if (!this.PersistentCharacterId) {
+    const persistentCharacterId = this.PersistentCharacterId;
+    if (persistentCharacterId == null) {
       throw "Combatant is not a persistent character";
     }
 
     this.CurrentHP.subscribe(async c => {
-      return await library.UpdatePersistentCharacter(
-        this.PersistentCharacterId,
-        { CurrentHP: c }
-      );
+      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+        CurrentHP: c
+      });
+    });
+
+    this.CurrentNotes.subscribe(async n => {
+      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+        Notes: n
+      });
     });
   }
 
@@ -122,11 +135,11 @@ export class Combatant {
     );
 
     if (
-      !this.IndexLabel ||
-      this.IndexLabel < counts[name] ||
+      !this.IndexLabel() ||
+      this.IndexLabel() < counts[name] ||
       displayNameIsTaken
     ) {
-      this.IndexLabel = counts[name];
+      this.IndexLabel(counts[name]);
     }
 
     this.Encounter.CombatantCountsByName(counts);
@@ -153,7 +166,7 @@ export class Combatant {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
 
-    let initiativeSpecialRoll = undefined;
+    let initiativeSpecialRoll: InitiativeSpecialRoll | undefined = undefined;
     if (!sideInitiative) {
       if (this.StatBlock().InitiativeAdvantage) {
         initiativeSpecialRoll = "advantage";
@@ -174,8 +187,8 @@ export class Combatant {
 
   public ApplyDamage(damage: number) {
     let currHP = this.CurrentHP(),
-      tempHP = this.TemporaryHP(),
-      allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
+      tempHP = this.TemporaryHP();
+    const allowNegativeHP = CurrentSettings().Rules.AllowNegativeHP;
 
     tempHP -= damage;
     if (tempHP < 0) {
@@ -214,7 +227,7 @@ export class Combatant {
     const alias = ko.unwrap(this.Alias),
       name = ko.unwrap(this.StatBlock).Name,
       combatantCount = this.Encounter.CombatantCountsByName()[name],
-      index = this.IndexLabel;
+      index = this.IndexLabel();
 
     if (alias) {
       return alias;
@@ -226,9 +239,32 @@ export class Combatant {
     return name;
   });
 
+  public GetState: () => CombatantState = () => {
+    return {
+      Id: this.Id,
+      PersistentCharacterId: this.PersistentCharacterId || undefined,
+      StatBlock: this.StatBlock(),
+      CurrentHP: this.CurrentHP(),
+      CurrentNotes: this.CurrentNotes(),
+      TemporaryHP: this.TemporaryHP(),
+      Initiative: this.Initiative(),
+      InitiativeGroup: this.InitiativeGroup(),
+      Alias: this.Alias(),
+      IndexLabel: this.IndexLabel(),
+      Tags: this.Tags()
+        .filter(t => t.NotExpired())
+        .map(t => t.GetState()),
+      Hidden: this.Hidden(),
+      RevealedAC: this.RevealedAC(),
+      RoundCounter: this.CombatTimer.ElapsedRounds(),
+      ElapsedSeconds: this.CombatTimer.ElapsedSeconds(),
+      InterfaceVersion: process.env.VERSION || "unknown"
+    };
+  };
+
   private setAutoInitiativeGroup = () => {
     const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
-    let lowestInitiativeCombatant = null;
+    let lowestInitiativeCombatant: Combatant | null = null;
     if (autoInitiativeGroup == "None") {
       return;
     }

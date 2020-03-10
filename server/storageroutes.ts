@@ -1,12 +1,12 @@
 import express = require("express");
 
-import { CombatantState } from "../common/CombatantState";
-import { EncounterState } from "../common/EncounterState";
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
+import { SavedEncounter } from "./library";
+import { updateSessionAccountFeatures } from "./patreon";
 
 type Req = Express.Request & express.Request;
 type Res = Express.Response & express.Response;
@@ -14,7 +14,7 @@ type Res = Express.Response & express.Response;
 const verifyStorage = (
   req: Express.Request
 ): req is { session: Express.Session } => {
-  return req.session && req.session.hasStorage;
+  return req.session?.hasStorage;
 };
 
 const parsePossiblyMalformedIdFromParams = params => {
@@ -33,9 +33,16 @@ export default function(app: express.Application) {
 
     return DB.getAccount(req.session.userId)
       .then(account => {
+        if (!account) {
+          return res.sendStatus(404);
+        }
+        if (req.session && account.accountStatus) {
+          updateSessionAccountFeatures(req.session, account.accountStatus);
+        }
         return res.json(account);
       })
       .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -50,6 +57,7 @@ export default function(app: express.Application) {
         return res.json(account);
       })
       .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -62,7 +70,7 @@ export default function(app: express.Application) {
     const newSettings = req.body;
 
     if (newSettings.Version) {
-      return DB.setSettings(req.session.userId, newSettings).then(r => {
+      return DB.setSettings(req.session.userId, newSettings).then(() => {
         return res.sendStatus(200);
       });
     } else {
@@ -79,16 +87,16 @@ export default function(app: express.Application) {
 
     const result = await DB.deleteAccount(req.session.userId);
     if (result) {
-      return res.status(200);
+      return res.sendStatus(200);
     } else {
-      return res.status(404);
+      return res.sendStatus(404);
     }
   });
 
   configureEntityRoute<PersistentCharacter>(app, "persistentcharacters");
   configureEntityRoute<StatBlock>(app, "statblocks");
   configureEntityRoute<Spell>(app, "spells");
-  configureEntityRoute<EncounterState<CombatantState>>(app, "encounters");
+  configureEntityRoute<SavedEncounter>(app, "encounters");
 }
 
 function configureEntityRoute<T extends Listable>(
@@ -116,6 +124,7 @@ function configureEntityRoute<T extends Listable>(
         }
       })
       .catch(err => {
+        console.error(err);
         return res.sendStatus(500);
       });
   });
@@ -125,26 +134,29 @@ function configureEntityRoute<T extends Listable>(
       return res.sendStatus(403);
     }
 
-    if (req.body.Version) {
-      try {
+    try {
+      if (req.body.Version) {
         await DB.saveEntity<T>(route, req.session.userId, req.body);
         return res.sendStatus(201);
-      } catch (err) {
-        return res.status(500).send(err);
-      }
-    } else if (req.body.length) {
-      return DB.saveEntitySet<T>(
-        route,
-        req.session.userId,
-        req.body,
-        result => {
+      } else if (req.body.length) {
+        const saved = await DB.saveEntitySet<T>(
+          route,
+          req.session.userId,
+          req.body
+        );
+        if (saved) {
           return res.sendStatus(201);
+        } else {
+          console.error("Could not save items for user: " + req.session.userId);
+          console.log("post body was: " + JSON.stringify(req.body));
+          return res.sendStatus(500).send();
         }
-      ).catch(err => {
-        return res.status(500).send(err);
-      });
-    } else {
-      return res.status(400).send("Missing Version");
+      } else {
+        return res.status(400).send("Missing Version");
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send(err);
     }
   });
 
@@ -161,6 +173,7 @@ function configureEntityRoute<T extends Listable>(
 
       return res.sendStatus(204);
     }).catch(err => {
+      console.error(err);
       return res.status(500).send(err);
     });
   });

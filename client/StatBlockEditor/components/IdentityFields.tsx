@@ -1,4 +1,3 @@
-import Awesomplete = require("awesomplete");
 import { Field, FormikProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
@@ -6,26 +5,20 @@ import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../../Library/Listing";
 import { Toggle } from "../../Settings/components/Toggle";
+import { AutoHideField } from "./AutoHideField";
+import { AutocompleteTextInput } from "./AutocompleteTextInput";
 
 interface IdentityFieldsProps {
   formApi: FormikProps<any>;
   allowFolder: boolean;
-  allowSaveAs: boolean;
+  allowSaveAsCopy: boolean;
+  allowSaveAsCharacter: boolean;
   setEditorMode: (editorMode: "standard" | "json") => void;
   currentListings?: Listing<Listable>[];
 }
 
-interface IdentityFieldsState {
-  folderExpanded: boolean;
-}
-
-export class IdentityFields extends React.Component<
-  IdentityFieldsProps,
-  IdentityFieldsState
-> {
-  private folderInput: HTMLInputElement;
+export class IdentityFields extends React.Component<IdentityFieldsProps> {
   private autoCompletePaths: string[];
-  private initializedAutocomplete = false;
 
   constructor(props) {
     super(props);
@@ -33,38 +26,13 @@ export class IdentityFields extends React.Component<
       this.props.currentListings &&
         this.props.currentListings.map(l => l.Listing().Path)
     );
-
-    const folderExpanded =
-      this.props.formApi.values["Path"] &&
-      this.props.formApi.values["Path"].length > 0;
-
-    this.state = {
-      folderExpanded
-    };
-  }
-
-  public componentDidUpdate() {
-    if (!this.folderInput || this.initializedAutocomplete) {
-      return;
-    }
-
-    const awesomeplete = new Awesomplete(this.folderInput, {
-      list: this.autoCompletePaths,
-      minChars: 1
-    });
-
-    this.folderInput.addEventListener("awesomplete-select", (event: any) => {
-      this.props.formApi.setFieldValue("Path", event.text.value);
-      event.preventDefault();
-      awesomeplete.close();
-    });
-
-    this.initializedAutocomplete = true;
   }
 
   public render() {
+    const showSaveAs =
+      this.props.allowSaveAsCopy || this.props.allowSaveAsCharacter;
     return (
-      <React.Fragment>
+      <>
         <div className="c-statblock-editor__path-and-name">
           {this.folderElement()}
           <div>
@@ -74,10 +42,25 @@ export class IdentityFields extends React.Component<
             <Field type="text" name="Name" id="name" />
           </div>
         </div>
-        {this.props.allowSaveAs && (
+        {showSaveAs && (
           <div className="c-statblock-editor__save-as">
-            <Toggle fieldName="SaveAs">Save as a copy</Toggle>
+            {this.props.allowSaveAsCopy && (
+              <Toggle
+                fieldName="SaveAs"
+                disabled={this.props.formApi.values.SaveAsCharacter}
+              >
+                Save as a copy
+              </Toggle>
+            )}
             {this.props.formApi.errors.PathAndName}
+            {this.props.allowSaveAsCharacter && (
+              <Toggle
+                fieldName="SaveAsCharacter"
+                disabled={this.props.formApi.values.SaveAs}
+              >
+                Save as a <strong>Character</strong>
+              </Toggle>
+            )}
           </div>
         )}
         <div className="c-statblock-editor__mode-toggle">
@@ -92,7 +75,7 @@ export class IdentityFields extends React.Component<
             text="JSON"
           />
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -100,33 +83,17 @@ export class IdentityFields extends React.Component<
     if (!this.props.allowFolder) {
       return null;
     }
-    if (this.state.folderExpanded) {
-      return (
-        <div className="inline">
-          <span
-            className="statblock-editor__folder-button fa-clickable fa-times"
-            onClick={() => this.setState({ folderExpanded: false })}
-          />
-          <div>
-            <label className="label" htmlFor="Path">
-              Folder
-            </label>
-            <Field
-              type="text"
-              name="Path"
-              innerRef={i => (this.folderInput = i)}
-            />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <span
-          className="statblock-editor__folder-button fa-clickable fa-folder"
-          title="Move to folder"
-          onClick={() => this.setState({ folderExpanded: true })}
+    return (
+      <AutoHideField faClass="folder" fieldName="Path" tooltip="Add to folder">
+        <label className="autohide-field__label label" htmlFor="Path">
+          {"Folder: "}
+        </label>
+        <AutocompleteTextInput
+          fieldName="Path"
+          options={this.autoCompletePaths}
+          autoFocus
         />
-      );
-    }
+      </AutoHideField>
+    );
   };
 }

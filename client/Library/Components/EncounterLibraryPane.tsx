@@ -1,6 +1,5 @@
 import * as React from "react";
-import { CombatantState } from "../../../common/CombatantState";
-import { EncounterState } from "../../../common/EncounterState";
+import { SavedEncounter } from "../../../common/SavedEncounter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { EncounterLibrary } from "../EncounterLibrary";
@@ -14,7 +13,7 @@ export type EncounterLibraryPaneProps = {
   library: EncounterLibrary;
 };
 
-type EncounterListing = Listing<EncounterState<CombatantState>>;
+type EncounterListing = Listing<SavedEncounter>;
 
 export class EncounterLibraryPane extends React.Component<
   EncounterLibraryPaneProps
@@ -29,11 +28,10 @@ export class EncounterLibraryPane extends React.Component<
     return (
       <LibraryPane
         listings={listings}
-        defaultItem={EncounterState.Default()}
+        defaultItem={SavedEncounter.Default()}
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupByFunctions}
         addNewItem={this.props.librariesCommander.SaveEncounter}
-        hideLibraries={this.props.librariesCommander.HideLibraries}
         renderPreview={this.renderPreview}
       />
     );
@@ -63,7 +61,7 @@ export class EncounterLibraryPane extends React.Component<
     />
   );
 
-  private renderPreview = (encounter: EncounterState<CombatantState>) => (
+  private renderPreview = (encounter: SavedEncounter) => (
     <ul className="c-encounter-preview">
       {encounter.Combatants.map(c => (
         <li key={c.Id}>{c.Alias || c.StatBlock.Name}</li>

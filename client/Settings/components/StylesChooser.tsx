@@ -24,7 +24,7 @@ export class StylesChooser extends React.Component<
   public render() {
     return (
       <div className="c-styles-chooser-colors">
-        <div>
+        <div className="c-styles-chooser-slot-chooser">
           <h4>Colors</h4>
           {this.getLabelAndColorBlock("Combatant Text", "combatantText")}
           {this.getLabelAndColorBlock(
@@ -50,6 +50,7 @@ export class StylesChooser extends React.Component<
                 }
               />
               <Button
+                fontAwesomeIcon="tint-slash"
                 text="Clear"
                 onClick={() => this.clearSelectedStyle(fieldProps)}
               />
@@ -64,17 +65,22 @@ export class StylesChooser extends React.Component<
     label: string,
     style: keyof PlayerViewCustomStyles
   ) {
+    const labelSelectedClass =
+      this.state.selectedStyle == style ? " s-selected" : "";
+
     return (
       <Field name={"PlayerView.CustomStyles." + style}>
         {(fieldProps: FieldProps) => (
-          <p>
-            {label}:{" "}
+          <div
+            className={"c-label-and-color-block" + labelSelectedClass}
+            onClick={this.bindClickToSelectStyle(style)}
+          >
+            <span>{label}</span>
             <ColorBlock
               color={fieldProps.field.value}
               click={this.bindClickToSelectStyle(style)}
-              selected={this.state.selectedStyle == style}
             />
-          </p>
+          </div>
         )}
       </Field>
     );

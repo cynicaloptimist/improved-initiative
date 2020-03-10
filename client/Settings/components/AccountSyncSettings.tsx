@@ -2,13 +2,16 @@ import { saveAs } from "browser-filesaver";
 import { forIn } from "lodash";
 import * as React from "react";
 
+import _ = require("lodash");
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
+import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Button } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../../Environment";
 import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
+import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Store } from "../../Utility/Store";
 
 interface AccountSyncSettingsProps {
@@ -29,6 +32,7 @@ export class AccountSyncSettings extends React.Component<
     this.state = {
       syncError: ""
     };
+    linkComponentToObservables(this);
   }
   public render() {
     if (!env.IsLoggedIn) {
@@ -40,7 +44,7 @@ export class AccountSyncSettings extends React.Component<
     }
 
     return (
-      <React.Fragment>
+      <>
         <h3>Account Sync</h3>
         <p>Account Sync is enabled.</p>
         <div className="sync-counts">
@@ -82,13 +86,13 @@ export class AccountSyncSettings extends React.Component<
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private loginMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
           Log in with Patreon to access patron benefits. Account Sync allows you
           to access your custom statblocks and encounters from anywhere!
@@ -96,27 +100,27 @@ export class AccountSyncSettings extends React.Component<
         <a className="login button" href={env.PatreonLoginUrl}>
           Log In with Patreon
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
   private noSyncMessage() {
     return (
-      <React.Fragment>
+      <>
         <p>
-          You're logged in with Patreon, but you have not selected the
+          {"You're logged in with Patreon, but you have not selected the "}
           <a
             href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
             target="_blank"
           >
             Account Sync
           </a>
-          reward level.
+          {" reward level."}
         </p>
         <a className="button logout" href="/logout">
           Log Out
         </a>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -127,36 +131,54 @@ export class AccountSyncSettings extends React.Component<
     </span>
   );
 
-  private syncAll = () => {
+  private syncAll = async () => {
     this.setState({ syncError: "" });
-    let blob = Store.ExportAll();
+    const asyncKeys = await Store.GetAllKeys();
+    const blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
-    this.props.accountClient.SaveAll(this.props.libraries, progressMessage => {
-      this.setState({
-        syncError: this.state.syncError + "\n" + JSON.stringify(progressMessage)
-      });
-    });
+    this.props.accountClient.SaveAllUnsyncedItems(
+      this.props.libraries,
+      progressMessage => {
+        this.setState({
+          syncError:
+            this.state.syncError + "\n" + JSON.stringify(progressMessage)
+        });
+      }
+    );
   };
 
   private downloadAndSaveAllSyncedItems = async () => {
-    const libraries = this.props.libraries;
     const account = await this.props.accountClient.GetFullAccount();
 
-    forIn(account.statblocks, statBlock =>
-      libraries.NPCs.SaveNewStatBlock(statBlock)
+    await Promise.all(
+      Object.keys(account.statblocks).map(async statBlockId => {
+        const statBlock = account.statblocks[statBlockId];
+        return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
+      })
+    );
+
+    await Promise.all(
+      Object.keys(account.spells).map(async spellId => {
+        const spell = account.spells[spellId];
+        return await Store.Save(Store.Spells, spellId, spell);
+      })
     );
 
     forIn(account.persistentcharacters, persistentCharacter => {
-      libraries.PersistentCharacters.AddNewPersistentCharacter(
+      LegacySynchronousLocalStore.Save(
+        LegacySynchronousLocalStore.PersistentCharacters,
+        persistentCharacter.Id,
         persistentCharacter
       );
     });
 
-    forIn(account.spells, spell => libraries.Spells.AddOrUpdateSpell(spell));
-
     forIn(account.encounters, downloadedEncounter => {
       const encounter = UpdateLegacySavedEncounter(downloadedEncounter);
-      libraries.Encounters.Save(encounter);
+      LegacySynchronousLocalStore.Save(
+        LegacySynchronousLocalStore.SavedEncounters,
+        encounter.Id,
+        encounter
+      );
     });
 
     location.reload();
@@ -166,13 +188,20 @@ export class AccountSyncSettings extends React.Component<
     const promptText =
       "To delete all of the user data synced to your account, enter DELETE.";
     if (prompt(promptText) == "DELETE") {
-      await this.props.accountClient.DeleteAccount();
-      location.href = env.CanonicalURL;
+      try {
+        await this.props.accountClient.DeleteAccount();
+      } catch {}
+      location.href = env.BaseUrl + "/logout";
     }
   };
 
   private getCounts<T extends Listable>(items: Listing<T>[]) {
-    const localCount = items.filter(c => c.Origin === "localStorage").length;
+    const localCount = _.uniqBy(
+      items.filter(
+        c => c.Origin === "localAsync" || c.Origin === "localStorage"
+      ),
+      i => [i.Listing().Path, i.Listing().Name].toString()
+    ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;
   }

@@ -4,7 +4,8 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
-import { User } from "./user";
+import { handleCurrentUser } from "./patreon";
+import { AccountStatus } from "./user";
 
 describe("User Accounts", () => {
   let mongod: MongodbMemoryServer;
@@ -14,18 +15,23 @@ describe("User Accounts", () => {
   beforeAll(async () => {
     mongod = new MongodbMemoryServer();
     uri = await mongod.getUri();
-    DB.initialize(uri);
   }, 60000);
 
-  beforeEach(async () => {
+  beforeEach(async done => {
+    await DB.initialize(uri);
     const user = await DB.upsertUser(
       probablyUniqueString(),
-      "accessKey",
-      "refreshKey",
-      "pledge"
+      AccountStatus.Pledge,
+      ""
     );
     userId = user._id;
+    done();
   });
+
+  afterEach(async done => {
+    await DB.close();
+    done();
+  })
 
   afterAll(async () => {
     await mongod.stop();
@@ -95,5 +101,34 @@ describe("User Accounts", () => {
       playerCharacterStatBlock.Type
     );
     done();
+  });
+
+  describe("Handle user account response from Patreon API", () => {
+    test("Epic Initiative", async () => {
+      const apiResponse = require("./api_response_epic_account.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("epic");
+    });
+
+    test("No Pledge", async () => {
+      const apiResponse = require("./api_response_no_pledge.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("none");
+    });
+
+    test("Declined Pledge", async () => {
+      const apiResponse = require("./api_response_declined_pledge.json");
+      const req: any = { query: { state: "encounterId" }, session: {} };
+      const res: any = { redirect: jest.fn() };
+      await handleCurrentUser(req, res, apiResponse);
+      const user = await DB.getAccount(req.session.userId);
+      expect(user.accountStatus).toEqual("none");
+    });
   });
 });

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { AutoGroupInitiativeOption } from "../../../common/Settings";
 import { toModifierString } from "../../../common/Toolbox";
 import { Combatant } from "../../Combatant/Combatant";
 import { SubmitButton } from "../../Components/Button";
@@ -45,7 +46,8 @@ class InitiativePromptComponent extends React.Component<
 
 function combatantInitiativeField(combatant: Combatant) {
   const sideInitiative =
-    CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+    CurrentSettings().Rules.AutoGroupInitiative ==
+    AutoGroupInitiativeOption.SideInitiative;
   const initiativeBonus = sideInitiative
     ? 0
     : toModifierString(combatant.InitiativeBonus());

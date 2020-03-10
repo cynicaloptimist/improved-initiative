@@ -1,59 +1,110 @@
+import { env } from "../Environment";
+import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
 interface EventData {
   [key: string]: any;
 }
 
+type GoogleAnalyticsTag = (
+  command: "send",
+  event: "event",
+  eventCategory: string,
+  eventAction: string,
+  eventLabel?: string,
+  eventValue?: number
+) => void;
+
+declare let gtag: GoogleAnalyticsTag | undefined;
+
 export class Metrics {
-  public static TrackLoad(): void {
+  public static async TrackLoad() {
     const counts = {
-      Encounters: Store.List(Store.SavedEncounters).length,
-      NpcStatBlocks: Store.List(Store.StatBlocks).length,
-      PcStatBlocks: Store.List(Store.PlayerCharacters).length,
-      PersistentCharacters: Store.List(Store.PersistentCharacters).length,
-      Spells: Store.List(Store.Spells).length
+      Encounters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.SavedEncounters
+      ).length,
+      NpcStatBlocks: (await Store.LoadAllAndUpdateIds(Store.StatBlocks)).length,
+      PcStatBlocks: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PlayerCharacters
+      ).length,
+      PersistentCharacters: LegacySynchronousLocalStore.List(
+        LegacySynchronousLocalStore.PersistentCharacters
+      ).length,
+      Spells: (await Store.LoadAllAndUpdateIds(Store.Spells)).length
     };
 
     Metrics.TrackEvent("AppLoad", counts);
   }
 
-  public static TrackEvent(name: string, data: EventData = {}): void {
-    if (!Store.Load(Store.User, "AllowTracking")) {
+  public static TrackEvent(name: string, eventData: EventData = {}): void {
+    if (
+      !LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      )
+    ) {
       return;
     }
 
     console.log(`Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
 
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
+    if (typeof gtag == "function") {
+      for (const key of Object.keys(eventData)) {
+        if (typeof eventData[key] == "number") {
+          gtag("send", "event", name, key, undefined, eventData[key]);
+        } else {
+          gtag("send", "event", name, key, JSON.stringify(eventData[key]));
+        }
+      }
+    }
+
+    if (!env.SendMetrics) {
+      return;
+    }
 
     $.ajax({
       type: "POST",
       url: `/recordEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
   }
 
-  public static TrackAnonymousEvent(name: string, data: EventData = {}): void {
+  public static TrackAnonymousEvent(
+    name: string,
+    eventData: EventData = {}
+  ): void {
     console.log(`Anonymous Event ${name}`);
-    if (data !== {}) {
-      console.table(data);
+    if (eventData !== {}) {
+      console.table(eventData);
     }
 
-    data.referrer = { url: document.referrer };
-    data.page = { url: document.URL };
-    data.localTime = new Date().getTime();
+    if (!env.SendMetrics) {
+      return;
+    }
 
     $.ajax({
       type: "POST",
       url: `/recordAnonymousEvent/${name}`,
-      data: JSON.stringify(data || {}),
+      data: JSON.stringify({
+        eventData,
+        meta: Metrics.getLocalMeta()
+      }),
       contentType: "application/json"
     });
+  }
+
+  private static getLocalMeta() {
+    return {
+      referrerUrl: document.referrer,
+      pageUrl: document.URL,
+      localTime: new Date().getTime()
+    };
   }
 }

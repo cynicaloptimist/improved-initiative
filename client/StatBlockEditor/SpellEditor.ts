@@ -32,12 +32,12 @@ export class SpellEditor {
   };
 
   private makeEditable = (spell: Spell) => {
-    let observableSpell = koMapping.fromJS(this.spell);
+    const observableSpell = koMapping.fromJS(this.spell);
     return observableSpell;
   };
 
   private unMakeEditable = (editableSpell: any) => {
-    let unObservableSpell = ko.toJS(editableSpell);
+    const unObservableSpell = ko.toJS(editableSpell);
     delete unObservableSpell.__ko_mapping__;
     const classes = unObservableSpell.Classes;
     if (typeof classes === "string") {
@@ -51,7 +51,7 @@ export class SpellEditor {
   };
 
   public SaveSpell = () => {
-    let editedSpell: Spell = Spell.Default();
+    const editedSpell: Spell = Spell.Default();
 
     if (this.EditorType() === "advanced") {
       let spellFromJSON = {};

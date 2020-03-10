@@ -1,0 +1,29 @@
+.tutorial {
+  .overlay-dialog();
+  z-index: 4;
+  width: 450px;
+  font-size: 150%;
+
+  > * {
+    margin: @extra-small-spacer;
+  }
+
+  .hop();
+
+  @media (max-width: @small) {
+    position: fixed !important;
+    top: auto !important;
+    bottom: @medium-spacer !important;
+    left: @medium-spacer !important;
+    right: 0 !important;
+    max-width: 90%;
+  }
+}
+
+.tutorial-focus {
+  z-index: 3;
+}
+
+.tutorial-focus.c-button {
+  background-color: @button-face-green;
+}

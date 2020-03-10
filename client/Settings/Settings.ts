@@ -2,102 +2,20 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 import * as Mousetrap from "mousetrap";
 
-import { CommandSetting } from "../../common/CommandSetting";
-import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import {
   getDefaultSettings,
-  AutoGroupInitiativeOption,
   Settings
 } from "../../common/Settings";
 import { Command } from "../Commands/Command";
-import { Store } from "../Utility/Store";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export const CurrentSettings = ko.observable<Settings>();
-
-function getLegacySetting<T>(settingName: string, def: T): T {
-  const setting = Store.Load<T>(Store.User, settingName);
-  if (setting === null) {
-    return def;
-  }
-  return setting;
-}
-
-function getLegacySettings(): Settings {
-  const commandNames = Store.List(Store.KeyBindings);
-  const commands: CommandSetting[] = commandNames.map(n => {
-    return {
-      Name: n,
-      KeyBinding: Store.Load<string>(Store.KeyBindings, n),
-      ShowOnActionBar: Store.Load<boolean>(Store.ActionBar, n)
-    };
-  });
-  const defaultSettings = getDefaultSettings();
-
-  return {
-    Commands: commands,
-    Rules: {
-      ...defaultSettings.Rules,
-      RollMonsterHp: getLegacySetting<boolean>("RollMonsterHP", false),
-      AllowNegativeHP: getLegacySetting<boolean>("AllowNegativeHP", false),
-      AutoCheckConcentration: getLegacySetting<boolean>(
-        "AutoCheckConcentration",
-        true
-      ),
-      AutoGroupInitiative: getLegacySetting<AutoGroupInitiativeOption>(
-        "AutoGroupInitiative",
-        AutoGroupInitiativeOption.None
-      )
-    },
-    TrackerView: {
-      ...defaultSettings.TrackerView,
-      DisplayRoundCounter: getLegacySetting<boolean>(
-        "DisplayRoundCounter",
-        false
-      ),
-      DisplayTurnTimer: getLegacySetting<boolean>("DisplayTurnTimer", false),
-      DisplayDifficulty: getLegacySetting<boolean>("DisplayDifficulty", false)
-    },
-    PlayerView: {
-      ...defaultSettings.PlayerView,
-      AllowPlayerSuggestions: getLegacySetting<boolean>(
-        "PlayerViewAllowPlayerSuggestions",
-        false
-      ),
-      ActiveCombatantOnTop: getLegacySetting<boolean>(
-        "ActiveCombatantOnTop",
-        false
-      ),
-      MonsterHPVerbosity: getLegacySetting<HpVerbosityOption>(
-        "MonsterHPVerbosity",
-        HpVerbosityOption.ColoredLabel
-      ),
-      HideMonstersOutsideEncounter: getLegacySetting<boolean>(
-        "HideMonstersOutsideEncounter",
-        false
-      ),
-      DisplayRoundCounter: getLegacySetting<boolean>(
-        "PlayerViewDisplayRoundCounter",
-        false
-      ),
-      DisplayTurnTimer: getLegacySetting<boolean>(
-        "PlayerViewDisplayTurnTimer",
-        false
-      )
-    },
-    Version: defaultSettings.Version
-  };
-}
 
 function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
 
   Mousetrap.bind("backspace", e => {
-    if (e.preventDefault) {
-      e.preventDefault();
-    } else {
-      // internet explorer
-      e.returnValue = false;
-    }
+    e.preventDefault();
   });
 
   commands.forEach(command => {
@@ -108,8 +26,12 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
     if (commandSetting) {
       command.KeyBinding = commandSetting.KeyBinding;
       command.ShowOnActionBar(commandSetting.ShowOnActionBar);
+      command.ShowInCombatantRow(commandSetting.ShowInCombatantRow);
     }
-    Mousetrap.bind(command.KeyBinding, command.ActionBinding);
+    Mousetrap.bind(command.KeyBinding, (e: Event) => {
+      e.preventDefault();
+      command.ActionBinding();
+    });
   });
 }
 
@@ -164,17 +86,23 @@ export function UpdateSettings(settings: any): Settings {
 }
 
 export function InitializeSettings() {
-  const localSettings = Store.Load<any>(Store.User, "Settings");
+  const localSettings = LegacySynchronousLocalStore.Load<any>(
+    LegacySynchronousLocalStore.User,
+    "Settings"
+  );
 
   if (localSettings) {
     const updatedSettings = UpdateSettings(localSettings);
     CurrentSettings(updatedSettings);
   } else {
-    const legacySettings = getLegacySettings();
-    CurrentSettings(legacySettings);
+    CurrentSettings(getDefaultSettings());
   }
 
-  Store.Save<Settings>(Store.User, "Settings", CurrentSettings());
+  LegacySynchronousLocalStore.Save<Settings>(
+    LegacySynchronousLocalStore.User,
+    "Settings",
+    CurrentSettings()
+  );
 }
 
 export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
@@ -184,20 +112,30 @@ export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
   );
 }
 
-export function AddMissingCommandsAndSaveSettings(
+export function UpdateLegacyCommandSettingsAndSave(
   settings: Settings,
   commands: Command[]
 ) {
   for (const command of commands) {
-    if (!settings.Commands.some(c => c.Name == command.Id)) {
+    const commandSetting = settings.Commands.find(c => c.Name == command.Id);
+    if (!commandSetting) {
       settings.Commands.push({
         Name: command.Id,
         KeyBinding: command.KeyBinding,
-        ShowOnActionBar: command.ShowOnActionBar()
+        ShowOnActionBar: command.ShowOnActionBar(),
+        ShowInCombatantRow: command.ShowInCombatantRow()
       });
+    } else {
+      if (commandSetting.ShowInCombatantRow === undefined) {
+        commandSetting.ShowInCombatantRow = command.ShowInCombatantRow();
+      }
     }
   }
 
-  Store.Save(Store.User, "Settings", settings);
+  LegacySynchronousLocalStore.Save(
+    LegacySynchronousLocalStore.User,
+    "Settings",
+    settings
+  );
   CurrentSettings(settings);
 }

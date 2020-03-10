@@ -1,6 +1,7 @@
 import * as React from "react";
 import { render as renderReact } from "react-dom";
 
+import { CombatStats } from "../../common/CombatStats";
 import { TagState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
@@ -25,6 +26,11 @@ export class ReactPlayerView {
       const playerView: PlayerViewState = await $.ajax(
         `../playerviews/${this.encounterId}`
       );
+      playerView.encounterState =
+        playerView.encounterState ||
+        EncounterState.Default<PlayerViewCombatantState>();
+      playerView.settings =
+        playerView.settings || getDefaultSettings().PlayerView;
       this.renderPlayerView(playerView);
     } catch (e) {}
   }
@@ -36,14 +42,23 @@ export class ReactPlayerView {
       (encounter: EncounterState<PlayerViewCombatantState>) => {
         this.renderPlayerView({
           encounterState: encounter,
-          settings: this.playerViewState.settings
+          settings: this.playerViewState.settings,
+          combatStats: this.playerViewState.combatStats
         });
       }
     );
     this.socket.on("settings updated", (settings: PlayerViewSettings) => {
       this.renderPlayerView({
         encounterState: this.playerViewState.encounterState,
-        settings: settings
+        settings: settings,
+        combatStats: this.playerViewState.combatStats
+      });
+    });
+    this.socket.on("combat stats", (stats: CombatStats) => {
+      this.renderPlayerView({
+        encounterState: this.playerViewState.encounterState,
+        settings: this.playerViewState.settings,
+        combatStats: stats
       });
     });
 
@@ -56,6 +71,7 @@ export class ReactPlayerView {
       <PlayerView
         encounterState={this.playerViewState.encounterState}
         settings={this.playerViewState.settings}
+        combatStats={this.playerViewState.combatStats}
         onSuggestDamage={this.suggestDamage}
         onSuggestTag={this.suggestTag}
       />,

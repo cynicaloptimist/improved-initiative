@@ -1,42 +1,26 @@
+import * as redis from "redis";
 import { PlayerViewState } from "../common/PlayerViewState";
-import { probablyUniqueString } from "../common/Toolbox";
+import { InMemoryPlayerViewManager } from "./InMemoryPlayerViewManager";
+import { RedisPlayerViewManager } from "./RedisPlayerViewManager";
 
-export class PlayerViewManager {
-  private playerViews: { [encounterId: string]: PlayerViewState } = {};
+export interface PlayerViewManager {
+  Get(id: string): Promise<PlayerViewState>;
 
-  constructor() {}
+  IdAvailable(id: string): Promise<boolean>;
 
-  public Get(id: string) {
-    return this.playerViews[id];
+  UpdateEncounter(id: string, newState: any): void;
+
+  UpdateSettings(id: string, newSettings: any): void;
+
+  InitializeNew(): Promise<string>;
+
+  Destroy(id: string): void;
+}
+
+export function GetPlayerViewManager(): PlayerViewManager {
+  if (process.env.REDIS_URL) {
+    const client = redis.createClient(process.env.REDIS_URL);
+    return new RedisPlayerViewManager(client);
   }
-
-  public UpdateEncounter(id: string, newState: any) {
-    this.playerViews[id].encounterState = newState;
-  }
-
-  public UpdateSettings(id: string, newSettings: any) {
-    this.playerViews[id].settings = newSettings;
-  }
-
-  public InitializeNew() {
-    const encounterId = probablyUniqueString();
-    this.playerViews[encounterId] = {
-      encounterState: null,
-      settings: null
-    };
-    return encounterId;
-  }
-
-  public EnsureInitialized(id: string) {
-    if (this.playerViews[id] === undefined) {
-      this.playerViews[id] = {
-        encounterState: null,
-        settings: null
-      };
-    }
-  }
-
-  public Destroy(id: string) {
-    delete this.playerViews[id];
-  }
+  return new InMemoryPlayerViewManager();
 }

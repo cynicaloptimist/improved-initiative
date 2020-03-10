@@ -1,17 +1,18 @@
-import dbSession = require("connect-mongodb-session");
+import connectRedis = require("connect-redis");
 import expressSession = require("express-session");
 import moment = require("moment");
+import redis = require("redis");
+
+const RedisStore = connectRedis(expressSession);
 
 import { probablyUniqueString } from "../common/Toolbox";
 
-export default async function(dbConnectionString?: string) {
-  const MongoDBStore = dbSession(expressSession);
+export default async function(redisConnectionString?: string) {
   let store = null;
 
-  if (dbConnectionString) {
-    store = new MongoDBStore({
-      uri: dbConnectionString,
-      collection: "sessions"
+  if (redisConnectionString) {
+    store = new RedisStore({
+      client: redis.createClient(redisConnectionString)
     });
   }
 

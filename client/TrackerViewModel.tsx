@@ -1,11 +1,13 @@
 import * as ko from "knockout";
 import * as React from "react";
 
+import * as compression from "json-url";
 import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
+import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
@@ -15,20 +17,22 @@ import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList"
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
+import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/Prompts/PromptQueue";
-import { Toolbar } from "./Commands/components/Toolbar";
+import { Toolbar } from "./Commands/Toolbar";
+import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
-import { UpdateLegacySavedEncounter } from "./Encounter/UpdateLegacySavedEncounter";
+import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
+import { InitiativeList } from "./InitiativeList/InitiativeList";
 import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
-import { Listing } from "./Library/Listing";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
-  AddMissingCommandsAndSaveSettings,
+  UpdateLegacyCommandSettingsAndSave,
   CurrentSettings,
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
@@ -37,12 +41,15 @@ import { SettingsPane } from "./Settings/components/SettingsPane";
 import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
-  StatBlockEditorTarget
+  StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
 import { EventLog } from "./Widgets/EventLog";
+import { CommandContext } from "./InitiativeList/CommandContext";
+
+const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
@@ -65,7 +72,12 @@ export class TrackerViewModel {
     this.LibrariesCommander.SaveEncounter
   );
 
-  public TutorialVisible = ko.observable(!Store.Load(Store.User, "SkipIntro"));
+  public TutorialVisible = ko.observable(
+    !LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.User,
+      "SkipIntro"
+    )
+  );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public ToolbarWide = ko.observable(false);
@@ -78,7 +90,7 @@ export class TrackerViewModel {
       ...this.EncounterToolbar,
       ...this.CombatantCommander.Commands
     ];
-    AddMissingCommandsAndSaveSettings(CurrentSettings(), allCommands);
+    UpdateLegacyCommandSettingsAndSave(CurrentSettings(), allCommands);
     SubscribeCommandsToSettingsChanges(allCommands);
 
     this.subscribeToSocketMessages();
@@ -110,10 +122,14 @@ export class TrackerViewModel {
 
   public Encounter = new Encounter(
     this.playerViewClient,
-    combatantId =>
-      this.OrderedCombatants()
-        .find((c: CombatantViewModel) => c.Combatant.Id == combatantId)
-        .EditInitiative(),
+    combatantId => {
+      const combatant = this.CombatantViewModels().find(
+        (c: CombatantViewModel) => c.Combatant.Id == combatantId
+      );
+      if (combatant) {
+        combatant.EditInitiative();
+      }
+    },
     this.Rules
   );
 
@@ -125,18 +141,73 @@ export class TrackerViewModel {
     />
   );
 
-  public OrderedCombatants: KnockoutComputed<
+  public initiativeListComponent = ko.pureComputed(() => {
+    const encounterState = this.Encounter.GetEncounterState();
+    const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
+      c => c.Combatant.Id
+    );
+    const combatantCountsByName = this.Encounter.CombatantCountsByName();
+
+    return (
+      <CommandContext.Provider
+        value={{
+          SelectCombatant: this.selectCombatantById,
+          RemoveTagFromCombatant: this.removeCombatantTag,
+          ApplyDamageToCombatant: this.applyDamageToCombatant,
+          EnrichText: this.StatBlockTextEnricher.EnrichText,
+          InlineCommands: this.CombatantCommander.Commands.filter(c =>
+            c.ShowInCombatantRow()
+          )
+        }}
+      >
+        <InitiativeList
+          encounterState={encounterState}
+          selectedCombatantIds={selectedCombatantIds}
+          combatantCountsByName={combatantCountsByName}
+        />
+      </CommandContext.Provider>
+    );
+  });
+
+  private selectCombatantById = (
+    combatantId: string,
+    appendSelection: boolean
+  ) => {
+    this.CombatantCommander.Select(
+      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId),
+      appendSelection
+    );
+  };
+
+  private removeCombatantTag = (combatantId: string, tagState: TagState) => {
+    const combatantViewModel = this.CombatantViewModels().find(
+      c => c.Combatant.Id == combatantId
+    );
+    combatantViewModel.RemoveTagByState(tagState);
+  };
+
+  private applyDamageToCombatant = (combatantId: string) => {
+    const combatantViewModel = this.CombatantViewModels().find(
+      c => c.Combatant.Id == combatantId
+    );
+    this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
+  };
+
+  public CombatantViewModels: KnockoutComputed<
     CombatantViewModel[]
   > = ko.pureComputed(() =>
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
   );
 
   public ActiveCombatantDetails = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.ActiveCombatant();
+    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
     const combatantViewModel = find(
-      this.OrderedCombatants(),
+      this.CombatantViewModels(),
       c => c.Combatant == activeCombatant
     );
+    if (!combatantViewModel) {
+      return null;
+    }
     return (
       <CombatantDetails
         combatantViewModel={combatantViewModel}
@@ -167,14 +238,7 @@ export class TrackerViewModel {
     //this.TutorialVisible(false);
   };
 
-  public EditStatBlock(props: {
-    editorTarget: StatBlockEditorTarget;
-    statBlock: StatBlock;
-    currentListings?: Listing<StatBlock>[];
-    onSave: (newStatBlock: StatBlock) => void;
-    onDelete?: () => void;
-    onSaveAs?: (newStatBlock: StatBlock) => void;
-  }) {
+  public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
     this.StatBlockEditor(
       <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
     );
@@ -219,7 +283,7 @@ export class TrackerViewModel {
   protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public RepeatTutorial = () => {
-    this.Encounter.EndEncounter();
+    this.Encounter.EncounterFlow.EndEncounter();
     this.EncounterCommander.ShowLibraries();
     this.SettingsVisible(false);
     this.TutorialVisible(true);
@@ -234,12 +298,69 @@ export class TrackerViewModel {
     }
   };
 
+  public ImportStatBlockIfAvailable = () => {
+    if (!URLSearchParams) {
+      return;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const compressedStatBlockJSON = urlParams.get("s");
+    if (!compressedStatBlockJSON) {
+      return;
+    }
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+    this.TutorialVisible(false);
+
+    if (!env.HasEpicInitiative) {
+      this.PromptQueue.Add({
+        autoFocusSelector: ".submit",
+        initialValues: {},
+        onSubmit: () => true,
+        children: (
+          <span className="no-epic-initiative-for-import">
+            {"The D&D Beyond StatBlock Importer is available for "}
+            <a
+              href={
+                "https://www.patreon.com/join/improvedinitiative/checkout" +
+                "?rid=1937132&amp;redirect_uri=%2Fposts%2F31705918"
+              }
+              target="_blank"
+            >
+              Epic Initiative
+            </a>
+            {" Patrons."}
+            <SubmitButton />
+          </span>
+        )
+      });
+
+      return;
+    }
+
+    codec.decompress(compressedStatBlockJSON).then(json => {
+      const parsedStatBlock = ParseJSONOrDefault(json, {});
+      const statBlock: StatBlock = {
+        ...StatBlock.Default(),
+        ...parsedStatBlock
+      };
+
+      Metrics.TrackEvent("StatBlockImported", {
+        Name: statBlock.Name
+      });
+
+      this.EditStatBlock({
+        editorTarget: "library",
+        onSave: this.Libraries.NPCs.SaveNewStatBlock,
+        statBlock,
+        currentListings: this.Libraries.NPCs.GetStatBlocks()
+      });
+    });
+  };
+
   public GetWhatsNewIfAvailable = () => {
     $.getJSON("/whatsnew/").done((latestPost: PatreonPost) => {
       this.EventLog.AddEvent(
-        `Welcome to Improved Initiative! Here's what's new: <a href="${
-          latestPost.attributes.url
-        }" target="_blank">${latestPost.attributes.title}</a>`
+        `Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`
       );
     });
   };
@@ -270,7 +391,7 @@ export class TrackerViewModel {
       return "show-right-center-left";
     }
 
-    if (this.Encounter.State() == "active") {
+    if (this.Encounter.EncounterFlow.State() == "active") {
       return "show-center-left-right";
     }
 
@@ -295,15 +416,11 @@ export class TrackerViewModel {
 
   public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =
-      this.Encounter.State() == "active"
+      this.Encounter.EncounterFlow.State() == "active"
         ? ["start-encounter"]
         : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
 
-    const onePersistentCharacterSelected =
-      this.CombatantCommander.HasOneSelected() &&
-      this.CombatantCommander.SelectedCombatants()[0].Combatant
-        .PersistentCharacterId != null;
-    if (!onePersistentCharacterSelected) {
+    if (!this.CombatantCommander.HasOneSelected()) {
       commandsToHideById.push("update-notes");
     }
 
@@ -324,10 +441,17 @@ export class TrackerViewModel {
     );
   });
 
+  public PromptsComponent = ko.pureComputed(() => (
+    <PendingPrompts
+      promptsAndIds={this.PromptQueue.GetPrompts()}
+      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
+    />
+  ));
+
   public contextualCommandSuggestion = () => {
     const encounterEmpty = this.Encounter.Combatants().length === 0;
     const librariesVisible = this.LibrariesVisible();
-    const encounterActive = this.Encounter.State() === "active";
+    const encounterActive = this.Encounter.EncounterFlow.State() === "active";
 
     if (encounterEmpty) {
       if (librariesVisible) {
@@ -361,7 +485,7 @@ export class TrackerViewModel {
         suggestedDamage: number,
         suggester: string
       ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
+        const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
         this.CombatantCommander.PromptAcceptSuggestedDamage(
@@ -379,7 +503,7 @@ export class TrackerViewModel {
         suggestedTag: TagState,
         suggester: string
       ) => {
-        const suggestedCombatants = this.OrderedCombatants().filter(
+        const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 
@@ -393,25 +517,22 @@ export class TrackerViewModel {
   };
 
   private joinPlayerViewEncounter() {
-    this.playerViewClient.JoinEncounter(this.Encounter.EncounterId);
+    this.playerViewClient.JoinEncounter(env.EncounterId);
 
     this.playerViewClient.UpdateSettings(
-      this.Encounter.EncounterId,
+      env.EncounterId,
       CurrentSettings().PlayerView
     );
 
     this.playerViewClient.UpdateEncounter(
-      this.Encounter.EncounterId,
+      env.EncounterId,
       this.Encounter.GetPlayerView()
     );
 
     CurrentSettings.subscribe(v => {
-      this.playerViewClient.UpdateSettings(
-        this.Encounter.EncounterId,
-        v.PlayerView
-      );
+      this.playerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
       this.playerViewClient.UpdateEncounter(
-        this.Encounter.EncounterId,
+        env.EncounterId,
         this.Encounter.GetPlayerView()
       );
     });
@@ -420,7 +541,11 @@ export class TrackerViewModel {
   private getAccountOrSampleCharacters() {
     this.accountClient.GetAccount(account => {
       if (!account) {
-        if (Store.List(Store.PersistentCharacters).length == 0) {
+        if (
+          LegacySynchronousLocalStore.List(
+            LegacySynchronousLocalStore.PersistentCharacters
+          ).length == 0
+        ) {
           this.getAndAddSamplePersistentCharacters("/sample_players.json");
         }
         return;
@@ -445,17 +570,19 @@ export class TrackerViewModel {
   };
 
   private loadAutoSavedEncounterIfAvailable() {
-    const autosavedEncounter = Store.Load(
-      Store.AutoSavedEncounters,
-      Store.DefaultSavedEncounterId
+    const autosavedEncounter = LegacySynchronousLocalStore.Load(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
     );
 
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
-        UpdateLegacySavedEncounter(autosavedEncounter),
+        UpdateLegacyEncounterState(autosavedEncounter),
         this.Libraries.PersistentCharacters
       );
     }
+
+    this.Encounter.StartEncounterAutosaves();
   }
 
   private showPrivacyNotificationAfterTutorial() {
@@ -477,13 +604,13 @@ export class TrackerViewModel {
   };
 
   private handleAccountSync(account: Account) {
-    if (account.settings && account.settings.Version) {
+    if (account.settings?.Version) {
       const updatedSettings = UpdateSettings(account.settings);
       const allCommands = [
         ...this.EncounterToolbar,
         ...this.CombatantCommander.Commands
       ];
-      AddMissingCommandsAndSaveSettings(updatedSettings, allCommands);
+      UpdateLegacyCommandSettingsAndSave(updatedSettings, allCommands);
     }
 
     if (account.statblocks) {
@@ -504,10 +631,17 @@ export class TrackerViewModel {
     if (account.encounters) {
       this.Libraries.Encounters.AddListings(account.encounters, "account");
     }
+
+    this.accountClient.SaveAllUnsyncedItems(this.Libraries, () => {});
   }
 
   private displayPrivacyNotificationIfNeeded = () => {
-    if (Store.Load(Store.User, "AllowTracking") == null) {
+    if (
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      ) == null
+    ) {
       this.ReviewPrivacyPolicy();
     }
   };
@@ -515,7 +649,11 @@ export class TrackerViewModel {
   private saveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
-    Store.Save(Store.User, "Settings", newSettings);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "Settings",
+      newSettings
+    );
     new AccountClient().SaveSettings(newSettings);
   }
 }

@@ -1,19 +1,18 @@
 import * as ko from "knockout";
 
 import { env } from "./Environment";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
-import { Store } from "./Utility/Store";
 import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLocalStorage";
 
 export class LauncherViewModel {
   constructor() {
     const pageLoadData = {
-      referrer: document.referrer,
       userAgent: navigator.userAgent
     };
     Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
 
-    TransferLocalStorageToCanonicalURLIfNeeded(env.CanonicalURL);
+    TransferLocalStorageToCanonicalURLIfNeeded(env.BaseUrl);
   }
 
   public GeneratedEncounterId = env.EncounterId;
@@ -23,7 +22,10 @@ export class LauncherViewModel {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
-    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+    LegacySynchronousLocalStore.Delete(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
+    );
     window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
   };
 
@@ -31,7 +33,7 @@ export class LauncherViewModel {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
-    Store.Delete(Store.AutoSavedEncounters, Store.DefaultSavedEncounterId);
+
     if (encounterId) {
       window.location.href = `p/${encounterId}`;
     }

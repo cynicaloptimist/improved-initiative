@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 
+import moment = require("moment");
 import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
@@ -11,7 +12,11 @@ export class SpellLibrary {
   private spells = ko.observableArray<Listing<Spell>>([]);
   public GetSpells = ko.pureComputed(() => this.spells());
   public SpellsByNameRegex = ko.pureComputed(() =>
-    concatenatedStringRegex(this.GetSpells().map(s => s.Listing().Name))
+    concatenatedStringRegex(
+      this.GetSpells()
+        .map(s => s.Listing().Name)
+        .filter(n => n.length > 2)
+    )
   );
 
   constructor(private accountClient: AccountClient) {}
@@ -25,7 +30,8 @@ export class SpellLibrary {
     );
   };
 
-  public AddOrUpdateSpell = (spell: Spell) => {
+  public AddOrUpdateSpell = async (spell: Spell) => {
+    spell.LastUpdateMs = moment.now();
     this.spells.remove(listing => listing.Listing().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
@@ -33,13 +39,14 @@ export class SpellLibrary {
         ...spell,
         SearchHint: Spell.GetSearchHint(spell),
         Metadata: Spell.GetMetadata(spell),
-        Link: Store.Spells
+        Link: Store.Spells,
+        LastUpdateMs: spell.LastUpdateMs
       },
-      "localStorage",
+      "localAsync",
       spell
     );
     this.spells.push(listing);
-    Store.Save(Store.Spells, spell.Id, spell);
+    await Store.Save(Store.Spells, spell.Id, spell);
     this.accountClient.SaveSpell(spell).then(r => {
       if (!r) return;
       if (listing.Origin === "account") return;
@@ -50,7 +57,8 @@ export class SpellLibrary {
           Path: spell.Path,
           SearchHint: Spell.GetSearchHint(spell),
           Metadata: Spell.GetMetadata(spell),
-          Link: `/my/spells/${spell.Id}`
+          Link: `/my/spells/${spell.Id}`,
+          LastUpdateMs: moment.now()
         },
         "account",
         spell
@@ -59,9 +67,9 @@ export class SpellLibrary {
     });
   };
 
-  public DeleteSpellById = (id: string) => {
+  public DeleteSpellById = async (id: string) => {
     this.spells.remove(listing => listing.Listing().Id === id);
-    Store.Delete(Store.Spells, id);
+    await Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };
 }

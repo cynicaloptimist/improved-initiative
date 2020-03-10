@@ -1,52 +1,57 @@
+import { Formik, FormikProps } from "formik";
 import * as React from "react";
 import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
-import { TagPromptComponent } from "../../Commands/Prompts/TagPrompt";
+import { TagModel, TagPromptComponent } from "../../Commands/Prompts/TagPrompt";
 
 export class TagSuggestor extends React.Component<TagSuggestorProps> {
   public render() {
     return (
-      <form onSubmit={this.applyTag} className="tag-suggestion">
-        <TagPromptComponent
-          targetDisplayNames={this.props.targetCombatant.Name}
-          activeCombatantId={this.props.activeCombatantId}
-          combatantNamesById={this.props.combatantNamesById}
-        />
-      </form>
+      <Formik
+        initialValues={{
+          tagText: "",
+          tagTimingId: this.props.activeCombatantId,
+          tagTiming: StartOfTurn
+        }}
+        onSubmit={this.applyTag}
+        render={(props: FormikProps<any>) => (
+          <form className="tag-suggestion" onSubmit={props.handleSubmit}>
+            <TagPromptComponent
+              targetDisplayNames={this.props.targetCombatant.Name}
+              combatantNamesById={this.props.combatantNamesById}
+              encounterIsActive={() => this.props.activeCombatantId != null}
+            />
+          </form>
+        )}
+      />
     );
   }
 
-  private applyTag = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.target;
+  private applyTag = (model: TagModel) => {
+    if (model.tagText.length == 0) {
+      return true;
+    }
 
-    const text: string = form["tag-text"].value;
-
-    if (form["tag-duration"] && form["tag-timing-id"]) {
-      const duration = parseInt(form["tag-duration"].value);
-      const timing =
-        form["tag-timing"].value == "end" ? EndOfTurn : StartOfTurn;
-      const timingId = form["tag-timing-id"].value;
-
+    if (model.tagDuration) {
       // If tag is set to expire at the end of the current combatant's turn in one round,
       // we need to add a grace round so it doesn't end immediately at the end of this turn.
       const timingKeyedCombatantIsActive =
-        timingId == this.props.activeCombatantId;
+        model.tagTimingId == this.props.activeCombatantId;
       const durationGraceRound =
-        timingKeyedCombatantIsActive && timing == EndOfTurn ? 1 : 0;
+        timingKeyedCombatantIsActive && model.tagTiming == EndOfTurn ? 1 : 0;
 
       const tagState: TagState = {
-        Text: text,
-        DurationCombatantId: timingId,
-        DurationRemaining: duration + durationGraceRound,
-        DurationTiming: timing
+        Text: model.tagText,
+        DurationCombatantId: model.tagTimingId,
+        DurationRemaining: model.tagDuration + durationGraceRound,
+        DurationTiming: model.tagTiming
       };
 
       this.props.onApply(tagState);
     } else {
       const tagState: TagState = {
-        Text: text,
+        Text: model.tagText,
         DurationCombatantId: "",
         DurationRemaining: 0,
         DurationTiming: null

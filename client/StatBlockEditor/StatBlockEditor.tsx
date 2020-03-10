@@ -1,5 +1,6 @@
-import { Field, FieldProps, Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import * as _ from "lodash";
+import moment = require("moment");
 import * as React from "react";
 import { Listable } from "../../common/Listable";
 import { StatBlock } from "../../common/StatBlock";
@@ -7,63 +8,31 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Button, SubmitButton } from "../Components/Button";
 import { Listing } from "../Library/Listing";
 import { ConvertStringsToNumbersWhereNeeded } from "./ConvertStringsToNumbersWhereNeeded";
+import { EnumToggle } from "./EnumToggle";
 import { IdentityFields } from "./components/IdentityFields";
 import {
   abilityScoreField,
-  descriptionField,
   getAnonymizedStatBlockJSON,
-  keywordFields,
-  nameAndModifierFields,
-  powerFields,
+  DescriptionField,
   InitiativeField,
+  KeywordFields,
+  NameAndModifierFields,
+  PowerFields,
   ValueAndNotesField
 } from "./components/StatBlockEditorFields";
 import { TextField } from "./components/TextField";
-
-export interface EnumToggleProps {
-  labelsByOption: { [value: string]: string };
-  fieldName: string;
-}
-
-class EnumToggle extends React.Component<EnumToggleProps> {
-  public render() {
-    return (
-      <Field name={this.props.fieldName}>
-        {(fieldProps: FieldProps) => {
-          const buttonLabel =
-            this.props.labelsByOption[fieldProps.field.value] || "UNKNOWN";
-          return (
-            <Button
-              text={buttonLabel}
-              onClick={() => this.toggle(fieldProps)}
-            />
-          );
-        }}
-      </Field>
-    );
-  }
-
-  private toggle = (fieldProps: FieldProps) => {
-    const allOptions = Object.keys(this.props.labelsByOption);
-    const nextOptionIndex =
-      (allOptions.indexOf(fieldProps.field.value) + 1) % allOptions.length;
-    fieldProps.form.setFieldValue(
-      this.props.fieldName,
-      allOptions[nextOptionIndex]
-    );
-  };
-}
 
 export type StatBlockEditorTarget =
   | "library"
   | "combatant"
   | "persistentcharacter";
 
-interface StatBlockEditorProps {
+export interface StatBlockEditorProps {
   statBlock: StatBlock;
   onSave: (statBlock: StatBlock) => void;
   onDelete?: () => void;
-  onSaveAs?: (statBlock: StatBlock) => void;
+  onSaveAsCopy?: (statBlock: StatBlock) => void;
+  onSaveAsCharacter?: (statBlock: StatBlock) => void;
   onClose: () => void;
   editorTarget: StatBlockEditorTarget;
   currentListings?: Listing<Listable>[];
@@ -99,13 +68,13 @@ export class StatBlockEditor extends React.Component<
       }[this.props.editorTarget] || "Edit StatBlock";
 
     const buttons = (
-      <React.Fragment>
+      <>
         <Button onClick={this.close} fontAwesomeIcon="times" />
         {this.props.onDelete && (
           <Button onClick={this.delete} fontAwesomeIcon="trash" />
         )}
         <SubmitButton faClass="save" />
-      </React.Fragment>
+      </>
     );
 
     const initialValues = {
@@ -132,7 +101,10 @@ export class StatBlockEditor extends React.Component<
                   this.props.editorTarget === "library" ||
                   this.props.editorTarget === "persistentcharacter"
                 }
-                allowSaveAs={this.props.onSaveAs !== undefined}
+                allowSaveAsCopy={this.props.onSaveAsCopy !== undefined}
+                allowSaveAsCharacter={
+                  this.props.onSaveAsCharacter !== undefined
+                }
                 currentListings={this.props.currentListings}
                 setEditorMode={(editorMode: "standard" | "json") =>
                   this.setState({ editorMode })
@@ -150,7 +122,7 @@ export class StatBlockEditor extends React.Component<
   }
 
   private fieldEditor = (api: FormikProps<any>) => (
-    <React.Fragment>
+    <>
       <div className="c-statblock-editor__headers">
         <TextField label="Portrait URL" fieldName="ImageURL" />
         <TextField label="Source" fieldName="Source" />
@@ -180,10 +152,10 @@ export class StatBlockEditor extends React.Component<
         {StatBlock.AbilityNames.map(abilityScoreField)}
       </div>
       <div className="c-statblock-editor__saves">
-        {nameAndModifierFields(api, "Saves")}
+        <NameAndModifierFields api={api} modifierType="Saves" />
       </div>
       <div className="c-statblock-editor__skills">
-        {nameAndModifierFields(api, "Skills")}
+        <NameAndModifierFields api={api} modifierType="Skills" />
       </div>
       {[
         "Speed",
@@ -195,18 +167,18 @@ export class StatBlockEditor extends React.Component<
         "Languages"
       ].map(keywordType => (
         <div key={keywordType} className="c-statblock-editor__keywords">
-          {keywordFields(api, keywordType)}
+          <KeywordFields api={api} keywordType={keywordType} />
         </div>
       ))}
       {["Traits", "Actions", "Reactions", "LegendaryActions"].map(powerType => (
         <div key={powerType} className="c-statblock-editor__powers">
-          {powerFields(api, powerType)}
+          <PowerFields api={api} powerType={powerType} />
         </div>
       ))}
       <div className="c-statblock-editor__description">
-        {descriptionField()}
+        <DescriptionField />
       </div>
-    </React.Fragment>
+    </>
   );
 
   private jsonEditor = api => (
@@ -232,7 +204,12 @@ export class StatBlockEditor extends React.Component<
   );
 
   private saveAndClose = submittedValues => {
-    const { SaveAs, StatBlockJSON, ...submittedStatBlock } = submittedValues;
+    const {
+      SaveAs,
+      SaveAsCharacter,
+      StatBlockJSON,
+      ...submittedStatBlock
+    } = submittedValues;
 
     let statBlockFromActiveEditor: StatBlock;
     if (this.state.editorMode == "standard") {
@@ -241,20 +218,23 @@ export class StatBlockEditor extends React.Component<
       statBlockFromActiveEditor = JSON.parse(StatBlockJSON);
     }
 
-    const editedStatBlock = {
+    const editedStatBlock: StatBlock = {
       ...StatBlock.Default(),
       ...statBlockFromActiveEditor,
       Id: submittedStatBlock.Id,
       Name: submittedStatBlock.Name,
       Path: submittedStatBlock.Path,
-      Version: process.env.VERSION
+      Version: process.env.VERSION || "unknown"
     };
 
     ConvertStringsToNumbersWhereNeeded(editedStatBlock);
 
-    if (SaveAs && this.props.onSaveAs) {
+    if (SaveAsCharacter && this.props.onSaveAsCharacter) {
       editedStatBlock.Id = probablyUniqueString();
-      this.props.onSaveAs(editedStatBlock);
+      this.props.onSaveAsCharacter(editedStatBlock);
+    } else if (SaveAs && this.props.onSaveAsCopy) {
+      editedStatBlock.Id = probablyUniqueString();
+      this.props.onSaveAsCopy(editedStatBlock);
     } else {
       this.props.onSave(editedStatBlock);
     }
@@ -267,7 +247,10 @@ export class StatBlockEditor extends React.Component<
   };
 
   private delete = () => {
-    if (confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)) {
+    if (
+      this.props.onDelete &&
+      confirm(`Delete Statblock for ${this.props.statBlock.Name}?`)
+    ) {
       this.props.onDelete();
       this.props.onClose();
     }
@@ -275,7 +258,7 @@ export class StatBlockEditor extends React.Component<
 
   private willOverwriteStatBlock = _.memoize(
     (path: string, name: string) =>
-      this.props.currentListings.some(
+      this.props.currentListings?.some(
         l => l.Listing().Path == path && l.Listing().Name == name
       ),
     (path: string, name: string) => JSON.stringify({ path, name })

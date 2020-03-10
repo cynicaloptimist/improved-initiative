@@ -16,7 +16,7 @@ export function ToPlayerViewCombatantState(
     IsPlayerCharacter: combatant.IsPlayerCharacter(),
     Tags: combatant
       .Tags()
-      .filter(t => t.Visible())
+      .filter(t => t.NotExpired() && !t.HiddenFromPlayerView)
       .map(t => {
         return {
           Text: t.Text,
@@ -25,7 +25,7 @@ export function ToPlayerViewCombatantState(
           DurationCombatantId: t.DurationCombatantId
         };
       }),
-    ImageURL: sendImage && combatant.StatBlock().ImageURL,
+    ImageURL: sendImage ? combatant.StatBlock().ImageURL : "",
     AC: combatant.RevealedAC() ? combatant.StatBlock().AC.Value : undefined
   };
 }
@@ -73,7 +73,7 @@ function GetHPColor(combatant: Combatant) {
   ) {
     return "auto";
   }
-  let green = Math.floor((currentHP / maxHP) * 170);
-  let red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
+  const green = Math.floor((currentHP / maxHP) * 170);
+  const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
   return "rgb(" + red + "," + green + ",0)";
 }

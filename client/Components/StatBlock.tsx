@@ -42,7 +42,7 @@ export class StatBlockComponent extends React.Component<
     ];
 
     const headerEntries = (
-      <React.Fragment>
+      <>
         {this.props.hideName || (
           <StatBlockHeader
             name={statBlock.Name}
@@ -53,11 +53,11 @@ export class StatBlockComponent extends React.Component<
         )}
 
         <hr />
-      </React.Fragment>
+      </>
     );
 
     const statEntries = (
-      <React.Fragment>
+      <>
         <div className="AC">
           <span className="stat-label">Armor Class</span>
           <span>{statBlock.AC.Value}</span>
@@ -136,7 +136,7 @@ export class StatBlockComponent extends React.Component<
         )}
 
         <hr />
-      </React.Fragment>
+      </>
     );
 
     const actionEntries = powerTypes
@@ -146,7 +146,9 @@ export class StatBlockComponent extends React.Component<
           <h4 className="stat-label">{powerType.name}</h4>
           {powerType.data.map((power, j) => (
             <div key={j + power.Name}>
-              <span className="stat-label">{power.Name}</span>
+              {power.Name?.length ? (
+                <span className="stat-label">{power.Name}</span>
+              ) : null}
               {power.Usage && <span className="stat-label">{power.Usage}</span>}
               <span className="power-content">
                 {enricher.EnrichText(power.Content)}
@@ -166,17 +168,17 @@ export class StatBlockComponent extends React.Component<
     let innerEntries;
     if (this.props.displayMode == "active") {
       innerEntries = (
-        <React.Fragment>
+        <>
           {actionEntries}
           {statEntries}
-        </React.Fragment>
+        </>
       );
     } else {
       innerEntries = (
-        <React.Fragment>
+        <>
           {statEntries}
           {actionEntries}
-        </React.Fragment>
+        </>
       );
     }
     return (

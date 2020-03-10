@@ -1,5 +1,4 @@
 import * as Enzyme from "enzyme";
-import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
 
 import { StatBlock } from "../../common/StatBlock";
@@ -7,8 +6,6 @@ import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 import { CombatFooter } from "./components/CombatFooter";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Turn Timer", () => {
   let encounter: Encounter;
@@ -23,7 +20,7 @@ describe("Turn Timer", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
+    encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     const combatFooter = Enzyme.shallow(
       <CombatFooter
@@ -42,8 +39,8 @@ describe("Turn Timer", () => {
       HP: { Value: 10, Notes: "" },
       Player: "player"
     });
-    encounter.StartEncounter();
-    encounter.EndEncounter();
+    encounter.EncounterFlow.StartEncounter();
+    encounter.EncounterFlow.EndEncounter();
     const playerViewState = encounter.GetPlayerView();
     const combatFooter = Enzyme.shallow(
       <CombatFooter

@@ -14,10 +14,10 @@ export function toModifierString(number: number): string {
 export function probablyUniqueString(): string {
   //string contains only easily relayable characters for forward
   //compatability with speech-based data transfer ;-)
-  let chars = "1234567890abcdefghijkmnpqrstuvxyz";
+  const chars = "1234567890abcdefghijkmnpqrstuvxyz";
   let probablyUniqueString = "";
   for (let i = 0; i < 8; i++) {
-    let index = Math.floor(Math.random() * chars.length);
+    const index = Math.floor(Math.random() * chars.length);
     probablyUniqueString += chars[index];
   }
 
@@ -33,3 +33,13 @@ export function concatenatedStringRegex(strings: string[]) {
   }
   return new RegExp(`\\b(${allStrings.join("|")})\\b`, "gim");
 }
+
+export function ParseJSONOrDefault<T>(json, defaultValue: T) {
+  try {
+    return JSON.parse(json);
+  } catch {
+    return defaultValue;
+  }
+}
+
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

@@ -23,12 +23,16 @@ describe("CombatantCommander", () => {
     combatantCommander = trackerViewModel.CombatantCommander;
   });
 
+  afterEach(() => {
+    encounter.ClearEncounter();
+  });
+
   test("Apply Damage", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
       HP: { Value: 10 }
     });
-    const combatantViewModel = trackerViewModel.OrderedCombatants()[0];
+    const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
     expect(combatantViewModel.HP()).toEqual("10/10");
     combatantViewModel.ApplyDamage("5");
     expect(combatantViewModel.HP()).toEqual("5/10");
@@ -36,7 +40,7 @@ describe("CombatantCommander", () => {
 
   test("Toggle Hidden", () => {
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    const combatantViewModel = trackerViewModel.OrderedCombatants()[0];
+    const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
 
     const playerViewBeforeToggle = encounter.GetPlayerView();
     expect(playerViewBeforeToggle.Combatants).toHaveLength(1);
@@ -50,7 +54,7 @@ describe("CombatantCommander", () => {
 
   test("Toggle Reveal AC", () => {
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    const combatantViewModel = trackerViewModel.OrderedCombatants()[0];
+    const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
 
     const playerViewBeforeToggle = encounter.GetPlayerView();
     expect(playerViewBeforeToggle.Combatants[0].AC).toBeUndefined();
@@ -70,18 +74,18 @@ describe("CombatantCommander", () => {
     combatant2.Initiative(10);
     encounter.SortByInitiative(false);
 
-    expect(trackerViewModel.OrderedCombatants()[0].Combatant).toBe(combatant1);
+    expect(trackerViewModel.CombatantViewModels()[0].Combatant).toBe(combatant1);
 
-    const combatantViewModel = trackerViewModel.OrderedCombatants()[0];
+    const combatantViewModel = trackerViewModel.CombatantViewModels()[0];
     expect(combatantViewModel.Combatant).toBe(combatant1);
 
     combatantCommander.Select(combatantViewModel);
     combatantViewModel.ApplyInitiative("5");
 
-    expect(trackerViewModel.OrderedCombatants()[1].Combatant).toBe(combatant1);
+    expect(trackerViewModel.CombatantViewModels()[1].Combatant).toBe(combatant1);
 
     expect(combatantCommander.SelectedCombatants()[0]).toBe(
-      trackerViewModel.OrderedCombatants()[1]
+      trackerViewModel.CombatantViewModels()[1]
     );
   });
 });

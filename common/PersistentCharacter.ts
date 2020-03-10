@@ -32,12 +32,8 @@ export namespace PersistentCharacter {
   export const GetSearchHint = (character: PersistentCharacter) =>
     character.StatBlock.Type;
 
-  export const GetMetadata = (character: PersistentCharacter) => ({
-    Level: GetTotalLevelFromString(character.StatBlock.Challenge)
-  });
-
   const GetTotalLevelFromString = (levelString: string) => {
-    const matches = levelString.match(/\d+/g);
+    const matches = levelString.toString().match(/\d+/g);
     if (!matches) {
       return "";
     }
@@ -52,4 +48,8 @@ export namespace PersistentCharacter {
       }, 0)
       .toString();
   };
+
+  export const GetMetadata = (character: PersistentCharacter) => ({
+    Level: GetTotalLevelFromString(character.StatBlock.Challenge)
+  });
 }

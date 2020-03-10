@@ -1,197 +1,144 @@
+import * as localforage from "localforage";
+
+import moment = require("moment");
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
 
-export class Store {
-  private static _prefix = "ImprovedInitiative";
+export namespace Store {
+  export const PersistentCharacters = "PersistentCharacters";
+  export const PlayerCharacters = "PlayerCharacters";
+  export const StatBlocks = "Creatures";
+  export const Spells = "Spells";
+  export const SavedEncounters = "SavedEncounters";
+  export const AutoSavedEncounters = "AutoSavedEncounters";
+  export const User = "User";
 
-  public static readonly PersistentCharacters = "PersistentCharacters";
-  public static readonly PlayerCharacters = "PlayerCharacters";
-  public static readonly StatBlocks = "Creatures";
-  public static readonly Spells = "Spells";
-  public static readonly SavedEncounters = "SavedEncounters";
-  public static readonly AutoSavedEncounters = "AutoSavedEncounters";
-  public static readonly User = "User";
+  export const DefaultSavedEncounterId = "default";
 
-  public static readonly DefaultSavedEncounterId = "default";
+  export const SupportedLists = [StatBlocks, Spells];
 
-  //Legacy
-  public static readonly KeyBindings = "KeyBindings";
-  public static readonly ActionBar = "ActionBar";
-
-  public static List(listName: string): string[] {
-    let listKey = `${Store._prefix}.${listName}`;
-    let list = Store.load(listKey);
-    if (list && list.constructor === Array) {
-      return list;
-    }
-    Store.save(listKey, []);
-    return [];
-  }
-
-  public static Save<T>(listName: string, key: string, value: T) {
+  export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
-    let listKey = `${Store._prefix}.${listName}`;
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
-    if (list.indexOf(key) == -1) {
-      list.push(key);
-      Store.save(listKey, list);
+    await save(listName, key, value);
+  }
+
+  export async function Load<T>(listName: string, key: string): Promise<T> {
+    return await load(listName, key);
+  }
+
+  export async function LoadAllAndUpdateIds<T extends Listable>(
+    listName: string
+  ): Promise<T[]> {
+    const store = localforage.createInstance({ name: listName });
+    const items: T[] = [];
+    await store.iterate((item: T, key) => {
+      item.Id = key;
+      items.push(item);
+    });
+
+    return items;
+  }
+
+  export async function Delete(listName: string, key: string) {
+    const store = localforage.createInstance({ name: listName });
+
+    return await store.removeItem(key);
+  }
+
+  export async function DeleteAll() {
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.clear();
     }
-    Store.save(fullKey, value);
   }
 
-  public static Load<T>(listName: string, key: string): T {
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    return Store.load(fullKey);
+  export async function GetAllKeys() {
+    const storage = {};
+    for (const listName of SupportedLists) {
+      const store = localforage.createInstance({ name: listName });
+      await store.iterate((value, key) => {
+        storage[`${listName}.${key}`] = value;
+      });
+    }
+    return storage;
   }
 
-  public static LoadAllAndUpdateIds<T extends Listable>(listName: string): T[] {
-    return Store.List(listName)
-      .map(key => {
-        const item = Store.Load<T>(listName, key);
-        if (item) {
-          item.Id = key;
+  export async function ImportAll(file: File) {
+    return new Promise((done, fail) => {
+      const reader = new FileReader();
+      reader.onload = async (event: any) => {
+        const json = event.target.result;
+        let importedStorage = {};
+        try {
+          importedStorage = JSON.parse(json);
+        } catch (error) {
+          alert(`There was a problem importing ${file.name}: ${error}`);
+          return fail();
         }
-        return item;
-      })
-      .filter(value => !!value);
-  }
 
-  public static Delete(listName: string, key: string) {
-    let listKey = `${Store._prefix}.${listName}`;
-    let fullKey = `${Store._prefix}.${listName}.${key}`;
-    let list = Store.List(listName);
-    let keyIndex = list.indexOf(key);
-    if (keyIndex != -1) {
-      list.splice(keyIndex, 1);
-      Store.save(listKey, list);
-    }
-    localStorage.removeItem(fullKey);
-  }
+        await Promise.all([
+          importList(StatBlocks, importedStorage),
+          importList(PersistentCharacters, importedStorage),
+          importList(SavedEncounters, importedStorage),
+          importList(Spells, importedStorage)
+        ]);
 
-  public static DeleteAll() {
-    localStorage.clear();
-    location.reload();
-  }
+        done();
+      };
 
-  public static ExportAll() {
-    return new Blob([JSON.stringify(localStorage, null, 2)], {
-      type: "application/json"
+      reader.readAsText(file);
     });
   }
 
-  public static ImportAll(file: File) {
-    let reader = new FileReader();
-    reader.onload = (event: any) => {
-      let json = event.target.result;
-      let importedStorage = {};
-      try {
-        importedStorage = JSON.parse(json);
-      } catch (error) {
-        alert(`There was a problem importing ${file.name}: ${error}`);
-        return;
-      }
-
-      this.importList(Store.StatBlocks, importedStorage);
-      this.importList(Store.PersistentCharacters, importedStorage);
-      this.importList(Store.SavedEncounters, importedStorage);
-      this.importList(Store.Spells, importedStorage);
-
-      location.reload();
-    };
-    reader.readAsText(file);
-  }
-
-  private static importList(listName: string, importSource: any) {
-    const listKey = `${Store._prefix}.${listName}`;
-    const listingsJSON = importSource[listKey];
-    if (!listingsJSON) {
-      console.warn(`Couldn't import ${listName} from JSON`);
-      return;
-    }
-    const listings: string[] = JSON.parse(listingsJSON);
-    for (const key of listings) {
-      const fullKey = `${Store._prefix}.${listName}.${key}`;
-      const listingJSON = importSource[fullKey];
-      if (!listingJSON) {
-        console.warn(`Couldn't import ${fullKey} from JSON`);
-      } else {
-        const listing = JSON.parse(listingJSON);
-        Store.Save(listName, key, listing);
-      }
-    }
-  }
-
-  public static ImportAllAndReplace(file: File) {
-    let reader = new FileReader();
-    reader.onload = (event: any) => {
-      let json = event.target.result;
-      let importedStorage = {};
-      try {
-        importedStorage = JSON.parse(json);
-      } catch (error) {
-        alert(`There was a problem importing ${file.name}: ${error}`);
-        return;
-      }
-      if (
-        confirm(
-          `Replace your Improved Initiative data with imported ${
-            file.name
-          } and reload?`
-        )
-      ) {
-        localStorage.clear();
-        for (let key in importedStorage) {
-          localStorage.setItem(key, importedStorage[key]);
-        }
-        location.reload();
-      }
-    };
-    reader.readAsText(file);
-  }
-
-  public static ImportFromDnDAppFile(file: File) {
-    const statBlocksCallback = (statBlocks: StatBlock[]) => {
-      statBlocks.forEach(c => {
-        this.Save(Store.StatBlocks, c.Id, c);
-      });
-    };
-
-    const spellsCallback = (spells: Spell[]) => {
-      spells.forEach(c => {
-        this.Save(Store.Spells, c.Id, c);
-      });
-    };
-
-    if (
-      confirm(`Import all statblocks and spells in ${file.name} and reload?`)
-    ) {
-      const importer = new DnDAppFilesImporter();
-
-      importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
-    }
-  }
-
-  public static ExportStatBlocks() {
-    let statBlocks = this.List(Store.StatBlocks).map(id =>
-      Store.Load(Store.StatBlocks, id)
+  async function importList(listName: string, importSource: any) {
+    const listings = Object.keys(importSource).filter(k =>
+      k.startsWith(listName + ".")
     );
-    return new Blob([JSON.stringify(statBlocks, null, 2)], {
-      type: "application/json"
+    const savePromises = listings.map(async key => {
+      const listing = importSource[key];
+      if (!listing) {
+        console.warn(`Couldn't import ${key} from JSON`);
+        return;
+      } else {
+        listing.LastUpdateMs = moment.now();
+        return await Save(listName, key, listing);
+      }
     });
+
+    return Promise.all(savePromises);
   }
 
-  private static save = (key, value) =>
-    localStorage.setItem(key, JSON.stringify(value));
-  private static load = key => {
-    let value = localStorage.getItem(key);
-    if (value === "undefined") {
-      return null;
-    }
-    return JSON.parse(value);
-  };
+  export function ImportFromDnDAppFile(file: File) {
+    const statBlocksCallback = async (statBlocks: StatBlock[]) => {
+      await Promise.all(
+        statBlocks.map(statBlock =>
+          Save(Store.StatBlocks, statBlock.Id, statBlock)
+        )
+      );
+    };
+
+    const spellsCallback = async (spells: Spell[]) => {
+      await Promise.all(
+        spells.map(spell => Save(Store.Spells, spell.Id, spell))
+      );
+    };
+
+    const importer = new DnDAppFilesImporter();
+
+    importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+  }
+
+  async function save(listName: string, key: string, value) {
+    const store = localforage.createInstance({ name: listName });
+    return await store.setItem(key, value);
+  }
+
+  async function load<T>(listName: string, key: string) {
+    const store = localforage.createInstance({ name: listName });
+    return await store.getItem<T>(key);
+  }
 }

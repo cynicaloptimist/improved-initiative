@@ -1,8 +1,11 @@
 import * as Color from "color";
 import { PlayerViewCustomStyles } from "../common/PlayerViewSettings";
 
-export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
-  const declarations = [];
+export function CSSFrom(
+  customStyles: PlayerViewCustomStyles,
+  temporaryBackgroundImageUrl?: string
+): string {
+  const declarations: string[] = [];
   if (customStyles.combatantText) {
     declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
   }
@@ -29,23 +32,17 @@ export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
   }
   if (customStyles.activeCombatantIndicator) {
     declarations.push(
-      `.combatant.active { border-color: ${
-        customStyles.activeCombatantIndicator
-      } }`
+      `.combatant.active { border-color: ${customStyles.activeCombatantIndicator} }`
     );
   }
   if (customStyles.headerText) {
     declarations.push(
-      `.combatant--header, .combat-footer { color: ${
-        customStyles.headerText
-      }; }`
+      `.combatant--header, .combat-footer { color: ${customStyles.headerText}; }`
     );
   }
   if (customStyles.headerBackground) {
     declarations.push(
-      `.combatant--header, .combat-footer { background-color: ${
-        customStyles.headerBackground
-      }; border-color: ${customStyles.headerBackground} }`
+      `.combatant--header, .combat-footer { background-color: ${customStyles.headerBackground}; border-color: ${customStyles.headerBackground} }`
     );
   }
   if (customStyles.mainBackground) {
@@ -56,9 +53,10 @@ export function CSSFrom(customStyles: PlayerViewCustomStyles): string {
       declarations.push(`#playerview { background-image: none; }`);
     }
   }
-  if (customStyles.backgroundUrl) {
+  if (temporaryBackgroundImageUrl || customStyles.backgroundUrl) {
     declarations.push(
-      `#playerview { background-image: url(${customStyles.backgroundUrl}); }`
+      `#playerview { background-image: url(${temporaryBackgroundImageUrl ||
+        customStyles.backgroundUrl}); }`
     );
   }
   if (customStyles.font) {

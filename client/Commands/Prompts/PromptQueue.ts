@@ -1,27 +1,40 @@
 import * as ko from "knockout";
 
+import { probablyUniqueString } from "../../../common/Toolbox";
+import { PromptProps } from "./PendingPrompts";
 import { LegacyPrompt } from "./Prompt";
 
 export class PromptQueue {
   constructor() {}
 
-  public Prompts = ko.observableArray<LegacyPrompt>();
+  protected LegacyPrompts = ko.observableArray<LegacyPrompt>();
+  private prompts = ko.observableArray<[PromptProps<any>, string]>();
+
+  public Add = (prompt: PromptProps<any>) =>
+    this.prompts.push([prompt, probablyUniqueString()]);
+
+  public RemoveResolvedPrompt = (promptId: string) =>
+    this.prompts.remove(p => p[1] == promptId);
+
+  public GetPrompts = () => this.prompts();
 
   public AddLegacyPrompt = (prompt: LegacyPrompt) => {
-    this.Prompts.push(prompt);
+    this.LegacyPrompts.push(prompt);
   };
 
-  public Resolve = (prompt: LegacyPrompt) => (form: HTMLFormElement) => {
+  protected ResolveLegacyPrompt = (prompt: LegacyPrompt) => (
+    form: HTMLFormElement
+  ) => {
     prompt.Resolve(form);
-    this.Prompts.remove(prompt);
-    if (this.HasPrompt()) {
-      $(this.Prompts()[0].InputSelector)
+    this.LegacyPrompts.remove(prompt);
+    if (this.HasLegacyPrompt()) {
+      $(this.LegacyPrompts()[0].InputSelector)
         .first()
         .select();
     }
   };
 
-  public UpdateDom = (
+  protected UpdateLegacyDom = (
     element: HTMLFormElement,
     valueAccessor,
     allBindings,
@@ -40,17 +53,21 @@ export class PromptQueue {
   };
 
   public HasPrompt = ko.pureComputed(() => {
-    return this.Prompts().length > 0;
+    return this.prompts().length > 0 || this.LegacyPrompts().length > 0;
+  });
+
+  public HasLegacyPrompt = ko.pureComputed(() => {
+    return this.LegacyPrompts().length > 0;
   });
 
   public Dismiss = () => {
-    if (this.HasPrompt()) {
-      this.Prompts.remove(this.Prompts()[0]);
+    if (this.HasLegacyPrompt()) {
+      this.LegacyPrompts.remove(this.LegacyPrompts()[0]);
     }
   };
 
   public AnimatePrompt = () => {
-    if (!this.HasPrompt()) {
+    if (!this.HasLegacyPrompt()) {
       return;
     }
     const opts = { duration: 200 };
@@ -59,7 +76,7 @@ export class PromptQueue {
     $(".prompt")
       .animate(up, opts)
       .animate(down, opts)
-      .find(this.Prompts()[0].InputSelector)
+      .find(this.LegacyPrompts()[0].InputSelector)
       .first()
       .select();
   };

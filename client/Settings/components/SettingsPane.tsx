@@ -20,7 +20,7 @@ enum SettingsTab {
   EpicInitiative = "Epic Initiative"
 }
 
-const SettingsTabOptions = _.values<typeof SettingsTab>(SettingsTab);
+const SettingsTabOptions = _.values(SettingsTab);
 
 interface SettingsPaneProps {
   repeatTutorial: () => void;
@@ -64,7 +64,9 @@ export class SettingsPane extends React.Component<
             <Tabs
               selected={this.state.currentTab}
               options={SettingsTabOptions}
-              onChoose={tab => this.setState({ currentTab: tab })}
+              onChoose={(tab: SettingsTab) =>
+                this.setState({ currentTab: tab })
+              }
             />
             {this.getActiveTabContent(props)}
             <button type="submit" className="c-button save-and-close">
@@ -112,11 +114,7 @@ export class SettingsPane extends React.Component<
       );
     }
     if (this.state.currentTab == SettingsTab.EpicInitiative) {
-      return (
-        <EpicInitiativeSettings
-          playerViewSettings={this.props.settings.PlayerView}
-        />
-      );
+      return <EpicInitiativeSettings />;
     }
   };
 

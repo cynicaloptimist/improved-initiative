@@ -52,9 +52,9 @@ export class Overlay extends React.Component<OverlayProps, OverlayState> {
   }
 
   private updateHeight() {
-    let domElement = ReactDOM.findDOMNode(this);
+    const domElement = ReactDOM.findDOMNode(this);
     if (domElement instanceof Element) {
-      let newHeight = domElement.getBoundingClientRect().height;
+      const newHeight = domElement.getBoundingClientRect().height;
       if (newHeight != this.state.height) {
         this.setState({
           height: newHeight

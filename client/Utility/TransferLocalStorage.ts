@@ -1,11 +1,11 @@
-import { Store } from "./Store";
+import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 
 function transferLocalStorageToCanonicalUrl(canonicalUrl: string) {
   const iframe = document.getElementById(
     "localstorage-transfer-target"
   ) as HTMLIFrameElement;
   iframe.onload = () =>
-    iframe.contentWindow.postMessage(
+    iframe.contentWindow?.postMessage(
       { transferredLocalStorage: JSON.stringify(localStorage) },
       "*"
     );
@@ -17,7 +17,11 @@ function getTransferCompleteCallback(canonicalUrl: string) {
     if (e.origin !== canonicalUrl) {
       return;
     }
-    Store.Save(Store.User, "StorageTransferred", true);
+    LegacySynchronousLocalStore.Save(
+      LegacySynchronousLocalStore.User,
+      "StorageTransferred",
+      true
+    );
     window.location.href = canonicalUrl;
   };
 }
@@ -28,9 +32,16 @@ export function TransferLocalStorageToCanonicalURLIfNeeded(
   const notAtCanonicalUrl =
     canonicalUrl.length > 0 && window.location.href != canonicalUrl + "/";
   if (notAtCanonicalUrl) {
-    const isFirstVisit = Store.Load(Store.User, "SkipIntro") === null;
+    const isFirstVisit =
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "SkipIntro"
+      ) === null;
     const storageAlreadyTransferred =
-      Store.Load(Store.User, "StorageTransferred") == true;
+      LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "StorageTransferred"
+      ) == true;
     if (isFirstVisit || storageAlreadyTransferred) {
       window.location.href = canonicalUrl;
     } else {
