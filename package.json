@@ -92,6 +92,7 @@
     "ip": "^1.1.5",
     "jquery": "^3.4.1",
     "json-url": "^2.4.2",
+    "keen-tracking": "^4.4.1",
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0",
     "localforage": "^1.7.3",
