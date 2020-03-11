@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "2.12.3",
+  "version": "2.13.0",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -127,12 +127,12 @@
     }
   },
   "lint-staged": {
-    "*.{less,html}": [
+    "*.{less,html,ts,tsx,json}": [
       "prettier --write",
       "git add"
     ],
     "*.{ts,tsx}": [
-      "npm run lint",
+      "eslint --fix 'client/**/*.{ts,tsx}' 'server/**/*.{ts,tsx}'",
       "git add"
     ]
   },
@@ -142,7 +142,6 @@
     "build-dev": "grunt build_dev",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
-    "test": "jest",
-    "lint": "eslint --fix '**/**/*.{ts,tsx}'"
+    "test": "jest"
   }
 }

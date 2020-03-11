@@ -33,7 +33,9 @@ export class Command {
     this.LockOnActionBar = props.lockOnActionBar || false;
 
     this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar || true);
-    this.ShowInCombatantRow = ko.observable(props.defaultShowInCombatantRow || false);
+    this.ShowInCombatantRow = ko.observable(
+      props.defaultShowInCombatantRow || false
+    );
 
     if (this.LockOnActionBar) {
       this.ShowOnActionBar.subscribe(_ => {

@@ -7,7 +7,8 @@
     flex-grow: 1;
     flex-shrink: 1;
     margin: @large-spacer;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .left-column,
@@ -46,9 +47,8 @@
       width: 25%;
     }
 
-    .c-statblock,
     .left-column,
-    .preview.statblock,
+    .c-overlay .c-statblock,
     .right-column {
       max-width: 300px;
     }

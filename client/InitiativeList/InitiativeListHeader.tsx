@@ -6,24 +6,47 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
   const encounterStateTip = props.encounterActive
     ? "Encounter Active"
     : "Encounter Inactive";
-  
+
   return (
-    <li className="combatant--header">
-      <span className="combatant__leftsection">
-        <span className="combatant__initiative">
-          <Tippy content={encounterStateTip} boundary="window">
-            <span className={"fas " + encounterStateIcon}></span>
-          </Tippy>
-        </span>
-        <span className="combatant__name">Name</span>
-        <span className="combatant__hp">
-          <span className="fas fa-heart"></span>
-        </span>
-        <span className="combatant__ac">
-          <span className="fas fa-shield-alt"></span>
-        </span>
-      </span>
-      <span className="combatant__rightsection"></span>
-    </li>
+    <thead className="combatant--header">
+      <tr>
+        <th className="combatant__initiative">
+          <span className="screen-reader-only">Initiative Score</span>
+          <div aria-hidden="true">
+            <Tippy content={encounterStateTip} boundary="window">
+              <span className={"fas " + encounterStateIcon}></span>
+            </Tippy>
+          </div>
+        </th>
+
+        <th className="combatant__image" aria-hidden="true"></th>
+
+        <th className="combatant__name" align="left">
+          Name
+        </th>
+
+        <th className="combatant__hp">
+          <span className="screen-reader-only">Health</span>
+          <span
+            className="fas fa-heart"
+            title="Health"
+            aria-hidden="true"
+          ></span>
+        </th>
+
+        <th className="combatant__ac">
+          <span className="screen-reader-only">Armor Class</span>
+          <span
+            className="fas fa-shield-alt"
+            title="Armor Class"
+            aria-hidden="true"
+          ></span>
+        </th>
+
+        <th align="right">
+          <span className="screen-reader-only">Tags and commands</span>
+        </th>
+      </tr>
+    </thead>
   );
 }

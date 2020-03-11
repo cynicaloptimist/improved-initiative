@@ -63,6 +63,9 @@ export function OptionsSettings(props: {
       </Dropdown>
 
       <h3>Encounter View</h3>
+      <Toggle fieldName="TrackerView.DisplayPortraits">
+        Display Character Portraits
+      </Toggle>
       <Toggle fieldName="TrackerView.DisplayRoundCounter">
         Display Round Counter
       </Toggle>

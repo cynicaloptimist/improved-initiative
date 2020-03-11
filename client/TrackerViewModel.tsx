@@ -48,6 +48,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { CommandContext } from "./InitiativeList/CommandContext";
+import { SettingsContext } from "./Settings/SettingsContext";
 
 const codec = compression("lzma");
 
@@ -106,12 +107,6 @@ export class TrackerViewModel {
     Metrics.TrackLoad();
   }
 
-  public ReviewPrivacyPolicy = () => {
-    this.SettingsVisible(false);
-    const prompt = new PrivacyPolicyPrompt();
-    this.PromptQueue.AddLegacyPrompt(prompt);
-  };
-
   public StatBlockTextEnricher = new TextEnricher(
     this.CombatantCommander.RollDice,
     this.LibrariesCommander.ReferenceSpell,
@@ -133,6 +128,14 @@ export class TrackerViewModel {
     this.Rules
   );
 
+  public CombatantViewModels: KnockoutComputed<
+    CombatantViewModel[]
+  > = ko.pureComputed(() =>
+    this.Encounter.Combatants().map(this.buildCombatantViewModel)
+  );
+
+  protected StatBlockEditor = ko.observable<JSX.Element>(null);
+
   public librariesComponent = (
     <LibraryPanes
       librariesCommander={this.LibrariesCommander}
@@ -142,7 +145,7 @@ export class TrackerViewModel {
   );
 
   public initiativeListComponent = ko.pureComputed(() => {
-    const encounterState = this.Encounter.GetEncounterState();
+    const encounterState = this.Encounter.ObservableEncounterState();
     const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
       c => c.Combatant.Id
     );
@@ -160,14 +163,66 @@ export class TrackerViewModel {
           )
         }}
       >
-        <InitiativeList
-          encounterState={encounterState}
-          selectedCombatantIds={selectedCombatantIds}
-          combatantCountsByName={combatantCountsByName}
-        />
+        <SettingsContext.Provider value={CurrentSettings()}>
+          <InitiativeList
+            encounterState={encounterState}
+            selectedCombatantIds={selectedCombatantIds}
+            combatantCountsByName={combatantCountsByName}
+          />
+        </SettingsContext.Provider>
       </CommandContext.Provider>
     );
   });
+
+  public settingsComponent = ko.pureComputed(() => {
+    return (
+      <SettingsPane
+        settings={CurrentSettings()}
+        handleNewSettings={this.saveUpdatedSettings}
+        encounterCommands={this.EncounterToolbar}
+        combatantCommands={this.CombatantCommander.Commands}
+        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
+        repeatTutorial={this.RepeatTutorial}
+        closeSettings={() => this.SettingsVisible(false)}
+        libraries={this.Libraries}
+        accountClient={new AccountClient()}
+      />
+    );
+  });
+
+  public toolbarComponent = ko.pureComputed(() => {
+    const commandsToHideById =
+      this.Encounter.EncounterFlow.State() == "active"
+        ? ["start-encounter"]
+        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
+
+    if (!this.CombatantCommander.HasOneSelected()) {
+      commandsToHideById.push("update-notes");
+    }
+
+    const encounterCommands = this.EncounterToolbar.filter(
+      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+    );
+    const combatantCommands = this.CombatantCommander.Commands.filter(
+      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+    );
+
+    return (
+      <Toolbar
+        encounterCommands={encounterCommands}
+        combatantCommands={combatantCommands}
+        width={this.ToolbarWide() ? "wide" : "narrow"}
+        showCombatantCommands={this.CombatantCommander.HasSelected()}
+      />
+    );
+  });
+
+  public PromptsComponent = ko.pureComputed(() => (
+    <PendingPrompts
+      promptsAndIds={this.PromptQueue.GetPrompts()}
+      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
+    />
+  ));
 
   private selectCombatantById = (
     combatantId: string,
@@ -192,12 +247,6 @@ export class TrackerViewModel {
     );
     this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
-
-  public CombatantViewModels: KnockoutComputed<
-    CombatantViewModel[]
-  > = ko.pureComputed(() =>
-    this.Encounter.Combatants().map(this.buildCombatantViewModel)
-  );
 
   public ActiveCombatantDetails = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
@@ -233,9 +282,48 @@ export class TrackerViewModel {
     () => this.TutorialVisible() || this.SettingsVisible()
   );
 
+  public InterfacePriority = ko.pureComputed(() => {
+    if (
+      this.CenterColumn() === "statblockeditor" ||
+      this.CenterColumn() === "spelleditor"
+    ) {
+      if (this.LibrariesVisible()) {
+        return "show-center-left-right";
+      }
+      return "show-center-right-left";
+    }
+
+    if (this.LibrariesVisible()) {
+      return "show-left-center-right";
+    }
+
+    if (this.PromptQueue.HasPrompt()) {
+      if (this.CombatantCommander.HasSelected()) {
+        return "show-center-right-left";
+      }
+      return "show-center-left-right";
+    }
+
+    if (this.CombatantCommander.HasSelected()) {
+      return "show-right-center-left";
+    }
+
+    if (this.Encounter.EncounterFlow.State() == "active") {
+      return "show-center-left-right";
+    }
+
+    return "show-center-right-left";
+  });
+
   public CloseSettings = () => {
     this.SettingsVisible(false);
     //this.TutorialVisible(false);
+  };
+
+  public ReviewPrivacyPolicy = () => {
+    this.SettingsVisible(false);
+    const prompt = new PrivacyPolicyPrompt();
+    this.PromptQueue.AddLegacyPrompt(prompt);
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
@@ -244,7 +332,10 @@ export class TrackerViewModel {
     );
   }
 
-  public async EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+  public async EditPersistentCharacterStatBlock(
+    persistentCharacterId: string,
+    newStatBlock?: StatBlock
+  ) {
     this.StatBlockEditor(null);
     const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
       persistentCharacterId
@@ -254,7 +345,7 @@ export class TrackerViewModel {
 
     this.StatBlockEditor(
       <StatBlockEditor
-        statBlock={persistentCharacter.StatBlock}
+        statBlock={newStatBlock || persistentCharacter.StatBlock}
         editorTarget="persistentcharacter"
         onSave={(statBlock: StatBlock) => {
           this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
@@ -279,8 +370,6 @@ export class TrackerViewModel {
       />
     );
   }
-
-  protected StatBlockEditor = ko.observable<JSX.Element>(null);
 
   public RepeatTutorial = () => {
     this.Encounter.EncounterFlow.EndEncounter();
@@ -348,12 +437,39 @@ export class TrackerViewModel {
         Name: statBlock.Name
       });
 
-      this.EditStatBlock({
-        editorTarget: "library",
-        onSave: this.Libraries.NPCs.SaveNewStatBlock,
-        statBlock,
-        currentListings: this.Libraries.NPCs.GetStatBlocks()
-      });
+      if (statBlock.Player == "") {
+        this.EditStatBlock({
+          editorTarget: "library",
+          onSave: this.Libraries.NPCs.SaveNewStatBlock,
+          statBlock,
+          currentListings: this.Libraries.NPCs.GetStatBlocks()
+        });
+      } else {
+        const currentListings = this.Libraries.PersistentCharacters.GetListings();
+        const existingListing = currentListings.find(
+          l => l.Listing().Name == statBlock.Name
+        );
+        if (existingListing) {
+          this.EditPersistentCharacterStatBlock(
+            existingListing.Listing().Id,
+            statBlock
+          );
+        } else {
+          this.EditStatBlock({
+            editorTarget: "persistentcharacter",
+            onSave: statBlock => {
+              const persistentCharacter = PersistentCharacter.Initialize(
+                statBlock
+              );
+              this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+                persistentCharacter
+              );
+            },
+            statBlock,
+            currentListings
+          });
+        }
+      }
     });
   };
 
@@ -363,118 +479,6 @@ export class TrackerViewModel {
         `Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`
       );
     });
-  };
-
-  public InterfacePriority = ko.pureComputed(() => {
-    if (
-      this.CenterColumn() === "statblockeditor" ||
-      this.CenterColumn() === "spelleditor"
-    ) {
-      if (this.LibrariesVisible()) {
-        return "show-center-left-right";
-      }
-      return "show-center-right-left";
-    }
-
-    if (this.LibrariesVisible()) {
-      return "show-left-center-right";
-    }
-
-    if (this.PromptQueue.HasPrompt()) {
-      if (this.CombatantCommander.HasSelected()) {
-        return "show-center-right-left";
-      }
-      return "show-center-left-right";
-    }
-
-    if (this.CombatantCommander.HasSelected()) {
-      return "show-right-center-left";
-    }
-
-    if (this.Encounter.EncounterFlow.State() == "active") {
-      return "show-center-left-right";
-    }
-
-    return "show-center-right-left";
-  });
-
-  public settingsComponent = ko.pureComputed(() => {
-    return (
-      <SettingsPane
-        settings={CurrentSettings()}
-        handleNewSettings={this.saveUpdatedSettings}
-        encounterCommands={this.EncounterToolbar}
-        combatantCommands={this.CombatantCommander.Commands}
-        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
-        repeatTutorial={this.RepeatTutorial}
-        closeSettings={() => this.SettingsVisible(false)}
-        libraries={this.Libraries}
-        accountClient={new AccountClient()}
-      />
-    );
-  });
-
-  public toolbarComponent = ko.pureComputed(() => {
-    const commandsToHideById =
-      this.Encounter.EncounterFlow.State() == "active"
-        ? ["start-encounter"]
-        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
-
-    if (!this.CombatantCommander.HasOneSelected()) {
-      commandsToHideById.push("update-notes");
-    }
-
-    const encounterCommands = this.EncounterToolbar.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-    const combatantCommands = this.CombatantCommander.Commands.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-
-    return (
-      <Toolbar
-        encounterCommands={encounterCommands}
-        combatantCommands={combatantCommands}
-        width={this.ToolbarWide() ? "wide" : "narrow"}
-        showCombatantCommands={this.CombatantCommander.HasSelected()}
-      />
-    );
-  });
-
-  public PromptsComponent = ko.pureComputed(() => (
-    <PendingPrompts
-      promptsAndIds={this.PromptQueue.GetPrompts()}
-      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
-    />
-  ));
-
-  public contextualCommandSuggestion = () => {
-    const encounterEmpty = this.Encounter.Combatants().length === 0;
-    const librariesVisible = this.LibrariesVisible();
-    const encounterActive = this.Encounter.EncounterFlow.State() === "active";
-
-    if (encounterEmpty) {
-      if (librariesVisible) {
-        //No creatures, Library open: Creature listing
-        return "listing";
-      } else {
-        //No creatures, library closed: Add Creatures
-        return "add-creatures";
-      }
-    }
-
-    if (!encounterActive) {
-      //Creatures, encounter stopped: Start Encounter
-      return "start-encounter";
-    }
-
-    if (librariesVisible) {
-      //Creatures, library open, encounter active: Hide Libraries
-      return "hide-libraries";
-    }
-
-    //Creatures, library closed, encounter active: Next turn
-    return "next-turn";
   };
 
   private subscribeToSocketMessages = () => {

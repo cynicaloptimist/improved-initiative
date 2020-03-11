@@ -316,7 +316,10 @@ export class Encounter {
   }
 
   public StartEncounterAutosaves = () => {
-    this.GetEncounterState.subscribe(newState => {
+    this.ObservableEncounterState.subscribe(_ => {
+      //Short circuit this observable so we don't save when seconds update
+      const newState = this.FullEncounterState();
+
       LegacySynchronousLocalStore.Save<EncounterState<CombatantState>>(
         LegacySynchronousLocalStore.AutoSavedEncounters,
         LegacySynchronousLocalStore.DefaultSavedEncounterId,
@@ -325,16 +328,30 @@ export class Encounter {
     });
   };
 
-  public GetEncounterState = ko.computed(
+  public ObservableEncounterState = ko.computed(
     (): EncounterState<CombatantState> => {
       const activeCombatant = this.EncounterFlow.ActiveCombatant();
 
       return {
         ActiveCombatantId: activeCombatant ? activeCombatant.Id : null,
         RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
-        ElapsedSeconds: this.EncounterFlow.CombatTimer.ElapsedSeconds(),
+        //ElapsedSeconds: omitted to avoid repeated re-renders,
         Combatants: this.combatants().map<CombatantState>(c => c.GetState()),
         BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
+      };
+    }
+  );
+
+  public FullEncounterState = ko.computed(
+    (): EncounterState<CombatantState> => {
+      return {
+        ...this.ObservableEncounterState(),
+        ElapsedSeconds: this.EncounterFlow.TurnTimer.ElapsedSeconds(),
+        Combatants: this.combatants().map<CombatantState>(c => {
+          const combatantState = c.GetState();
+          combatantState.ElapsedSeconds = c.CombatTimer.ElapsedSeconds();
+          return combatantState;
+        })
       };
     }
   );
@@ -382,7 +399,7 @@ export class Encounter {
       this.combatants(),
       c => c.Id == encounterState.ActiveCombatantId
     );
-    
+
     if (activeCombatant !== undefined) {
       this.EncounterFlow.State("active");
       this.EncounterFlow.ActiveCombatant(activeCombatant);
@@ -391,7 +408,7 @@ export class Encounter {
       this.EncounterFlow.CombatTimer.Start();
       this.SortByInitiative();
     }
-    
+
     this.EncounterFlow.CombatTimer.SetElapsedRounds(
       encounterState.RoundCounter || 1
     );

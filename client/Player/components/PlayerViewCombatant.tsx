@@ -62,16 +62,16 @@ export class PlayerViewCombatant extends React.Component<
               {tag.Text}
             </div>
           ))}
+          {this.props.suggestTag && (
+            <div className="combatant__add-tag-button">
+              <span
+                className="fas fa-tag fa-clickable"
+                title="Suggest a Tag"
+                onClick={() => this.props.suggestTag(this.props.combatant)}
+              />
+            </div>
+          )}
         </div>
-        {this.props.suggestTag && (
-          <div className="combatant__add-tag-button">
-            <span
-              className="fas fa-tag fa-clickable"
-              title="Suggest a Tag"
-              onClick={() => this.props.suggestTag(this.props.combatant)}
-            />
-          </div>
-        )}
       </li>
     );
   }
