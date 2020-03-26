@@ -19,7 +19,6 @@ The official Improved Initiative app lives at https://www.improved-initiative.co
 
 ```
 npm install
-npm run build-dev
 npx grunt
 ```
 
