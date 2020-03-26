@@ -13,7 +13,7 @@ export function InitiativeList(props: {
   const encounterState = props.encounterState;
 
   return (
-    <div>
+    <div className="initiative-list">
       <h2>Combatants by Initiative</h2>
       <table className="combatants">
         <InitiativeListHeader
