@@ -12,6 +12,7 @@ import { Tag } from "./Tag";
 import { TagState } from "../../common/CombatantState";
 import { EditInitiativePrompt } from "../Commands/Prompts/EditInitiativePrompt";
 import { PromptProps } from "../Commands/Prompts/PendingPrompts";
+import { EditAliasPrompt } from "../Commands/Prompts/EditAliasPrompt";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 
@@ -97,24 +98,21 @@ export class CombatantViewModel {
   }
 
   public SetAlias() {
-    const currentName = this.Name();
-    const prompt = new DefaultPrompt(
-      `Change alias for ${currentName}: <input id='alias' class='response' />`,
-      response => {
-        const alias = response["alias"];
-        this.Combatant.Alias(alias);
-        if (alias) {
-          this.LogEvent(`${currentName} alias changed to ${alias}.`);
-          Metrics.TrackEvent("AliasSet", {
-            StatBlockName: this.Combatant.StatBlock().Name,
-            Alias: alias
-          });
-        } else {
-          this.LogEvent(`${currentName} alias removed.`);
-        }
+    const currentName = this.Combatant.DisplayName();
+    const prompt = EditAliasPrompt(this.Combatant, model => {
+      this.Combatant.Alias(model.alias);
+      if (model.alias) {
+        this.LogEvent(`${currentName} alias changed to ${model.alias}.`);
+        Metrics.TrackEvent("AliasSet", {
+          StatBlockName: this.Combatant.StatBlock().Name,
+          Alias: model.alias
+        });
+      } else {
+        this.LogEvent(`${currentName} alias removed.`);
       }
-    );
-    this.EnqueueLegacyPrompt(prompt);
+      return true;
+    });
+    this.EnqueuePrompt(prompt);
   }
 
   public ToggleHidden() {
