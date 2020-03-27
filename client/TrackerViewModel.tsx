@@ -601,7 +601,6 @@ export class TrackerViewModel {
     const vm = new CombatantViewModel(
       combatant,
       this.CombatantCommander,
-      this.PromptQueue.AddLegacyPrompt,
       this.PromptQueue.Add,
       this.EventLog.AddEvent
     );

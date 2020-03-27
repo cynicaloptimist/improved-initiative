@@ -1,10 +1,9 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
 import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
-import { DefaultPrompt, LegacyPrompt } from "../Commands/Prompts/Prompt";
+import { LegacyPrompt } from "../Commands/Prompts/Prompt";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
@@ -23,7 +22,6 @@ export class CombatantViewModel {
   constructor(
     public Combatant: Combatant,
     public CombatantCommander: CombatantCommander,
-    public EnqueueLegacyPrompt: (prompt: LegacyPrompt) => void,
     public EnqueuePrompt: (prompt: PromptProps<any>) => void,
     public LogEvent: (message: string) => void
   ) {
