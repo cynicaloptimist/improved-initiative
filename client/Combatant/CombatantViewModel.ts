@@ -10,6 +10,8 @@ import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 import { TagState } from "../../common/CombatantState";
+import { EditInitiativePrompt } from "../Commands/Prompts/EditInitiativePrompt";
+import { PromptProps } from "../Commands/Prompts/PendingPrompts";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 
@@ -20,7 +22,8 @@ export class CombatantViewModel {
   constructor(
     public Combatant: Combatant,
     public CombatantCommander: CombatantCommander,
-    public PromptUser: (prompt: LegacyPrompt) => void,
+    public EnqueueLegacyPrompt: (prompt: LegacyPrompt) => void,
+    public EnqueuePrompt: (prompt: PromptProps<any>) => void,
     public LogEvent: (message: string) => void
   ) {
     this.HP = ko.pureComputed(() => {
@@ -68,34 +71,29 @@ export class CombatantViewModel {
     this.Combatant.ApplyTemporaryHP(newTemporaryHP);
   }
 
-  public ApplyInitiative(inputInitiative: string) {
-    const initiative = parseInt(inputInitiative);
+  public ApplyInitiative(initiative: number) {
     this.Combatant.Initiative(initiative);
     this.Combatant.Encounter.SortByInitiative(true);
   }
 
   public EditInitiative() {
-    const currentInitiative = this.Combatant.Initiative();
-    const modifier = toModifierString(this.Combatant.InitiativeBonus());
-    const preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
-    let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
-    if (this.Combatant.InitiativeGroup()) {
-      message += ` Break Link: <input class='response' name='break-link' type='checkbox' value='break' />`;
-    }
-    const prompt = new DefaultPrompt(message, response => {
-      const initiative = response["initiative"];
-      const breakLink = response["break-link"] === "break";
-      if (initiative) {
-        if (breakLink) {
+    const prompt = EditInitiativePrompt(this.Combatant, model => {
+      if (model.initiativeRoll) {
+        if (model.breakLink) {
           this.Combatant.InitiativeGroup(null);
           this.Combatant.Encounter.CleanInitiativeGroups();
         }
-        this.ApplyInitiative(initiative);
-        this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
+        this.ApplyInitiative(model.initiativeRoll);
+        this.LogEvent(
+          `${this.Name()} initiative set to ${model.initiativeRoll}.`
+        );
         Metrics.TrackEvent("InitiativeSet", { Name: this.Name() });
+        return true;
       }
+      return false;
     });
-    this.PromptUser(prompt);
+
+    this.EnqueuePrompt(prompt);
   }
 
   public SetAlias() {
@@ -116,7 +114,7 @@ export class CombatantViewModel {
         }
       }
     );
-    this.PromptUser(prompt);
+    this.EnqueueLegacyPrompt(prompt);
   }
 
   public ToggleHidden() {

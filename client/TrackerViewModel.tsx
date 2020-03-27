@@ -602,6 +602,7 @@ export class TrackerViewModel {
       combatant,
       this.CombatantCommander,
       this.PromptQueue.AddLegacyPrompt,
+      this.PromptQueue.Add,
       this.EventLog.AddEvent
     );
     return vm;
