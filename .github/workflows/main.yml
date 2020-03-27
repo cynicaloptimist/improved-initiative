@@ -19,10 +19,10 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      with:
+        ref: 'development'
 
     # Runs a single command using the runners shell
     - name: Bump patch version on development
       run: |
-        git checkout development
         npm version patch
-        git push
