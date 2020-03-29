@@ -46,5 +46,10 @@ export default [
     Name: "Daniel Tonon",
     Github: "https://github.com/Dan503",
     PatreonId: "3892078"
+  },
+  {
+    Name: "Nate Whittington",
+    Github: "https://github.com/bluecliffadventures",
+    PatreonId: ""
   }
 ];
