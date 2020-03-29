@@ -32,7 +32,7 @@ export const RollDicePrompt = (
     autoFocusSelector: ".autofocus",
 
     children: (
-      <div className="prompt--with-submit-on-right">
+      <div className="p-roll-dice">
         <div>
           <label htmlFor={fieldLabelId}>{"Roll Dice: "}</label>
           <Field
@@ -55,7 +55,7 @@ export const ShowDiceRollPrompt = (
   initialValues: {},
   autoFocusSelector: ".response",
   children: (
-    <div className="prompt--with-submit-on-right">
+    <div className="p-roll-dice">
       <div>
         {"Rolled: "}
         {diceExpression}
