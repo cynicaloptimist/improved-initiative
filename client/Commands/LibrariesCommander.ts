@@ -9,14 +9,13 @@ import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { StatBlockLibrary } from "../Library/StatBlockLibrary";
-import { Conditions } from "../Rules/Conditions";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
 import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
-import { DefaultPrompt } from "./Prompts/Prompt";
 import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "./Prompts/SpellPrompt";
+import { ConditionReferencePrompt } from "./Prompts/ConditionReferencePrompt";
 
 export class LibrariesCommander {
   constructor(
@@ -205,12 +204,9 @@ export class LibrariesCommander {
   };
 
   public ReferenceCondition = (conditionName: string) => {
-    const casedConditionName = _.startCase(conditionName);
-    if (Conditions[casedConditionName]) {
-      const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
-      );
-      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    const promptProps = ConditionReferencePrompt(conditionName);
+    if (promptProps) {
+      this.tracker.PromptQueue.Add(promptProps);
     }
   };
 
