@@ -13,7 +13,7 @@ export class PromptQueue {
   public Add = (prompt: PromptProps<any>) =>
     this.prompts.push([prompt, probablyUniqueString()]);
 
-  public RemoveResolvedPrompt = (promptId: string) =>
+  public Remove = (promptId: string) =>
     this.prompts.remove(p => p[1] == promptId);
 
   public GetPrompts = () => this.prompts();

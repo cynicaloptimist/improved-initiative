@@ -67,7 +67,7 @@ class Prompt<T extends object> extends React.Component<
 
 interface PendingPromptsProps {
   promptsAndIds: [PromptProps<object>, string][];
-  removeResolvedPrompt: (promptId: string) => void;
+  removePrompt: (promptId: string) => void;
 }
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
@@ -82,12 +82,12 @@ export class PendingPrompts extends React.Component<PendingPromptsProps> {
           onSubmit={values => {
             const shouldResolve = prompt.onSubmit(values);
             if (shouldResolve) {
-              this.props.removeResolvedPrompt(promptId);
+              this.props.removePrompt(promptId);
             }
             return shouldResolve;
           }}
           onCancel={() => {
-            this.props.removeResolvedPrompt(promptId);
+            this.props.removePrompt(promptId);
           }}
         />
       );
