@@ -23,6 +23,7 @@ import { DefaultPrompt } from "./Prompts/Prompt";
 import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
+import { ApplyTemporaryHPPrompt } from "./Prompts/ApplyTemporaryHPPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -282,20 +283,18 @@ export class CombatantCommander {
 
     const selectedCombatants = this.SelectedCombatants();
     const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
-    const prompt = new DefaultPrompt(
-      `Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
-      response => {
-        const thp = response["thp"];
-        if (thp) {
-          selectedCombatants.forEach(c => c.ApplyTemporaryHP(thp));
-          this.tracker.EventLog.AddEvent(
-            `${thp} temporary hit points granted to ${combatantNames}.`
-          );
-          Metrics.TrackEvent("TemporaryHPAdded", { Amount: thp });
-        }
+    const prompt = ApplyTemporaryHPPrompt(combatantNames, model => {
+      if (model.hpAmount) {
+        selectedCombatants.forEach(c => c.ApplyTemporaryHP(model.hpAmount));
+        this.tracker.EventLog.AddEvent(
+          `${model.hpAmount} temporary hit points granted to ${combatantNames}.`
+        );
+        Metrics.TrackEvent("TemporaryHPAdded", { Amount: model.hpAmount });
       }
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+      return true;
+    });
+
+    this.tracker.PromptQueue.Add(prompt);
 
     return false;
   };

@@ -60,9 +60,7 @@ export class CombatantViewModel {
     }
   }
 
-  public ApplyTemporaryHP(inputTHP: string) {
-    const newTemporaryHP = parseInt(inputTHP);
-
+  public ApplyTemporaryHP(newTemporaryHP: number) {
     if (isNaN(newTemporaryHP)) {
       return;
     }
