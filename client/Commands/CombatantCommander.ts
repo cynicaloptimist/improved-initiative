@@ -353,7 +353,7 @@ export class CombatantCommander {
 
     const selected = this.SelectedCombatants();
 
-    if (selected.length <= 1) {
+    if (selected.length == 1) {
       const message = `<p>Select another combatant to link initiative. <br /><em>Tip:</em> You can select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.</p>`;
       const prompt = new DefaultPrompt(message, _ =>
         this.pendingLinkInitiative(null)
