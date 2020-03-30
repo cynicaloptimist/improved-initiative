@@ -294,6 +294,9 @@
   flex-grow: 1;
   flex-direction: column;
   align-items: flex-end;
+  label {
+    flex-grow: 1;
+  }
 }
 
 .p-save-encounter__basic,
@@ -317,12 +320,21 @@
   flex-flow: row;
   align-items: center;
   flex-grow: 1;
+
+  label {
+    display: flex;
+    flex-flow: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+
   .p-standard-prompt__label {
     flex-flow: row wrap;
     align-items: center;
     flex-grow: 1;
     flex-shrink: 1;
   }
+
   .p-standard-prompt__fields {
     flex-flow: row;
     align-items: center;
