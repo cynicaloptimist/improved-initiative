@@ -19,15 +19,15 @@ import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
 import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
 import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
-import { DefaultPrompt } from "./Prompts/Prompt";
 import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
 import { TagPrompt } from "./Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
 import { ApplyTemporaryHPPrompt } from "./Prompts/ApplyTemporaryHPPrompt";
+import { LinkInitiativePrompt } from "./Prompts/LinkInitiativePrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
-  prompt: DefaultPrompt;
+  promptId: string;
 }
 
 export class CombatantCommander {
@@ -83,7 +83,7 @@ export class CombatantCommander {
     const pendingLink = this.pendingLinkInitiative();
     if (pendingLink) {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
-      pendingLink.prompt.Resolve(null);
+      this.tracker.PromptQueue.Remove(pendingLink.promptId);
     }
     if (!appendSelection) {
       this.selectedCombatantIds.removeAll();
@@ -353,12 +353,11 @@ export class CombatantCommander {
     const selected = this.SelectedCombatants();
 
     if (selected.length == 1) {
-      const message = `<p>Select another combatant to link initiative. <br /><em>Tip:</em> You can select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.</p>`;
-      const prompt = new DefaultPrompt(message, _ =>
+      const prompt = LinkInitiativePrompt(() =>
         this.pendingLinkInitiative(null)
       );
-      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
-      this.pendingLinkInitiative({ combatant: selected[0], prompt: prompt });
+      const promptId = this.tracker.PromptQueue.Add(prompt);
+      this.pendingLinkInitiative({ combatant: selected[0], promptId });
       return;
     }
 

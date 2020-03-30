@@ -10,8 +10,11 @@ export class PromptQueue {
   protected LegacyPrompts = ko.observableArray<LegacyPrompt>();
   private prompts = ko.observableArray<[PromptProps<any>, string]>();
 
-  public Add = (prompt: PromptProps<any>) =>
-    this.prompts.push([prompt, probablyUniqueString()]);
+  public Add = (prompt: PromptProps<any>) => {
+    const promptId = probablyUniqueString();
+    this.prompts.push([prompt, promptId]);
+    return promptId;
+  };
 
   public Remove = (promptId: string) =>
     this.prompts.remove(p => p[1] == promptId);
