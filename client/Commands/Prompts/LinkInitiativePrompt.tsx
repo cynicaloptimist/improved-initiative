@@ -9,11 +9,11 @@ export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
       <StandardPromptLayout
         className="p-link-initiative"
         label={
-          <>
+          <p>
             Select another combatant to link initiative. <br />
             <em>Tip:</em> You can select multiple combatants with 'ctrl', then
             use this command to link them to one shared initiative count.
-          </>
+          </p>
         }
         noSubmit
       >
