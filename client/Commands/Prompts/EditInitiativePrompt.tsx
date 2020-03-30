@@ -7,6 +7,7 @@ import {
 } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
 import { Field } from "formik";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
 type EditInitiativeModel = { initiativeRoll: number; breakLink: boolean };
 
@@ -35,10 +36,10 @@ export function EditInitiativePrompt(
   return {
     autoFocusSelector: ".response",
     children: (
-      <span className="p-edit-initiative">
-        <label className="message" htmlFor={initiativeLabelId}>
-          Set initiative for {combatant.DisplayName()} ({modifier}):
-        </label>
+      <StandardPromptLayout
+        className="p-edit-initiative"
+        label={`Set initiative for ${combatant.DisplayName()} (${modifier}):`}
+      >
         <Field
           name="initiativeRoll"
           className="response"
@@ -47,8 +48,7 @@ export function EditInitiativePrompt(
           id={initiativeLabelId}
         />
         {breakLinkCheckbox}
-        <SubmitButton />
-      </span>
+      </StandardPromptLayout>
     ),
     initialValues: {
       initiativeRoll: preRoll,
