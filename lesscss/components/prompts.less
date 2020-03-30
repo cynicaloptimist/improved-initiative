@@ -289,14 +289,19 @@
   }
 }
 
-.p-save-encounter,
-.p-save-encounter__advanced {
+.p-save-encounter {
   flex-grow: 1;
-  flex-direction: column;
-  align-items: flex-end;
   label {
+    display: flex;
     flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
   }
+}
+
+.p-save-encounter__label {
+  flex-grow: 1;
+  flex-direction: row;
 }
 
 .p-save-encounter__basic,

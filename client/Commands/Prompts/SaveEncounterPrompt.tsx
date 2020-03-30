@@ -38,7 +38,7 @@ class SaveEncounterPromptComponent extends React.Component<
         <div className="p-save-encounter">
           <div className="p-save-encounter__basic">
             <label>
-              {"Save Encounter As: "}
+              <div className="p-save-encounter__label">Save Encounter As</div>
               <Field
                 id={fieldLabelId}
                 name="Name"
@@ -47,7 +47,7 @@ class SaveEncounterPromptComponent extends React.Component<
               />
             </label>
             <Button
-              fontAwesomeIcon="caret-down"
+              fontAwesomeIcon="wrench"
               onClick={() =>
                 this.setState(oldState => ({
                   advancedPrompt: !oldState.advancedPrompt
@@ -66,7 +66,7 @@ class SaveEncounterPromptComponent extends React.Component<
     return (
       <div className="p-save-encounter__advanced">
         <label>
-          {"Folder: "}
+          <div className="p-save-encounter__label">Folder</div>
           <AutocompleteTextInput
             fieldName="Path"
             options={this.props.autocompletePaths}
@@ -74,6 +74,7 @@ class SaveEncounterPromptComponent extends React.Component<
           />
         </label>
         <div className="p-save-encounter__include-combatants">
+          <div className="p-save-encounter__label">Include Combatants</div>
           <div className="p-save-encounter__character-combatants">
             <Field
               name="CharacterCombatants"
@@ -89,7 +90,7 @@ class SaveEncounterPromptComponent extends React.Component<
         </div>
         {env.HasEpicInitiative && (
           <label>
-            {"Background Image URL: "}
+            <div className="p-save-encounter__label">Background Image URL</div>
             <Field type="text" name="BackgroundImageUrl" />
           </label>
         )}
