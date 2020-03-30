@@ -4,6 +4,7 @@ import { Combatant } from "../../Combatant/Combatant";
 import { probablyUniqueString } from "../../../common/Toolbox";
 import { SubmitButton } from "../../Components/Button";
 import { Field } from "formik";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
 type EditAliasModel = { alias: string };
 
@@ -16,10 +17,10 @@ export function EditAliasPrompt(
   return {
     autoFocusSelector: ".response",
     children: (
-      <span className="p-edit-alias">
-        <label className="message" htmlFor={labelId}>
-          Change alias for {combatant.DisplayName()}:
-        </label>
+      <StandardPromptLayout
+        className="p-edit-alias"
+        label={`Change alias for ${combatant.DisplayName()}:`}
+      >
         <Field
           name="alias"
           className="response"
@@ -27,8 +28,7 @@ export function EditAliasPrompt(
           defaultValue={combatant.Alias()}
           id={labelId}
         />
-        <SubmitButton />
-      </span>
+      </StandardPromptLayout>
     ),
     initialValues: {
       alias: combatant.Alias()
