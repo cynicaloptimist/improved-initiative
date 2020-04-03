@@ -166,11 +166,10 @@ export class LibrariesCommander {
   };
 
   public ReferenceSpell = (spellListing: Listing<Spell>) => {
-    const prompt = new SpellPrompt(
-      spellListing,
-      this.tracker.StatBlockTextEnricher
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    spellListing.GetWithTemplate(Spell.Default()).then(spell => {
+      const prompt = SpellPrompt(spell, this.tracker.StatBlockTextEnricher);
+      this.tracker.PromptQueue.Add(prompt);
+    });
     return true;
   };
 
