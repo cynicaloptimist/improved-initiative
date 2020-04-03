@@ -12,10 +12,6 @@ type PrivacyPolicyPromptProps = {
   callback: (optin: boolean) => void;
 };
 
-type PrivacyPolicyPromptModel = {
-  optIn: boolean;
-};
-
 function PrivacyPolicyComponent(props: PrivacyPolicyPromptProps) {
   const [displayFullText, setDisplayFullText] = React.useState(false);
   const privacyBrief =
@@ -63,11 +59,11 @@ function PrivacyPolicyComponent(props: PrivacyPolicyPromptProps) {
   );
 }
 
-export function PrivacyPolicyPrompt(): PromptProps<PrivacyPolicyPromptModel> {
+export function PrivacyPolicyPrompt(): PromptProps<{}> {
   return {
     autoFocusSelector: "." + promptClassName + "-optin",
     children: <PrivacyPolicyComponent callback={promptCallback} />,
-    initialValues: { optIn: true },
+    initialValues: {},
     onSubmit: () => true
   };
 }
