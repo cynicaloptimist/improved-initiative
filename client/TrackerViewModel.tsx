@@ -322,8 +322,8 @@ export class TrackerViewModel {
 
   public ReviewPrivacyPolicy = () => {
     this.SettingsVisible(false);
-    const prompt = new PrivacyPolicyPrompt();
-    this.PromptQueue.AddLegacyPrompt(prompt);
+    const prompt = PrivacyPolicyPrompt();
+    this.PromptQueue.Add(prompt);
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
