@@ -194,12 +194,12 @@ export class LibrariesCommander {
       .uniq()
       .compact()
       .value();
-    const prompt = new MoveEncounterPrompt(
+    const prompt = MoveEncounterPrompt(
       legacySavedEncounter,
       this.libraries.Encounters.Move,
       folderNames
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public ReferenceCondition = (conditionName: string) => {
