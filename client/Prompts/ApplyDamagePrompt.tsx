@@ -1,6 +1,6 @@
 import { Field } from "formik";
 import React = require("react");
-import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { PromptProps } from "./PendingPrompts";
 import { StandardPromptLayout } from "./StandardPromptLayout";
 

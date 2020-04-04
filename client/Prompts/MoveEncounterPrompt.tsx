@@ -1,11 +1,11 @@
 import * as React from "react";
-import { SavedEncounter } from "../../../common/SavedEncounter";
-import { AccountClient } from "../../Account/AccountClient";
-import { SubmitButton } from "../../Components/Button";
-import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
-import { Metrics } from "../../Utility/Metrics";
+import { SavedEncounter } from "../../common/SavedEncounter";
+import { AccountClient } from "../Account/AccountClient";
+import { SubmitButton } from "../Components/Button";
+import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
+import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
-import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
+import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
 
 export interface MoveEncounterPromptProps {
   encounterName: string;

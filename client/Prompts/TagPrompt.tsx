@@ -2,16 +2,16 @@ import * as _ from "lodash";
 import * as React from "react";
 
 import { Field, FieldProps } from "formik";
-import { DurationTiming } from "../../../common/DurationTiming";
-import { Combatant } from "../../Combatant/Combatant";
-import { EndOfTurn, StartOfTurn, Tag } from "../../Combatant/Tag";
-import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
-import { Button, SubmitButton } from "../../Components/Button";
-import { Encounter } from "../../Encounter/Encounter";
-import { Conditions } from "../../Rules/Conditions";
-import { EnumToggle } from "../../StatBlockEditor/EnumToggle";
-import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
-import { Metrics } from "../../Utility/Metrics";
+import { DurationTiming } from "../../common/DurationTiming";
+import { Combatant } from "../Combatant/Combatant";
+import { EndOfTurn, StartOfTurn, Tag } from "../Combatant/Tag";
+import { linkComponentToObservables } from "../Combatant/linkComponentToObservables";
+import { Button, SubmitButton } from "../Components/Button";
+import { Encounter } from "../Encounter/Encounter";
+import { Conditions } from "../Rules/Conditions";
+import { EnumToggle } from "../StatBlockEditor/EnumToggle";
+import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
+import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 
 interface TagPromptProps {

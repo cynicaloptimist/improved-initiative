@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PromptProps } from "./PendingPrompts";
 import { Field } from "formik";
-import { SubmitButton } from "../../Components/Button";
+import { SubmitButton } from "../Components/Button";
 import { StandardPromptLayout } from "./StandardPromptLayout";
 
 type ApplyTemporaryHPModel = { hpAmount: number };

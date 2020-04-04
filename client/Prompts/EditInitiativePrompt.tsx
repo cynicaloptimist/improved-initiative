@@ -1,11 +1,11 @@
 import * as React from "react";
 import { PromptProps } from "./PendingPrompts";
-import { Combatant } from "../../Combatant/Combatant";
+import { Combatant } from "../Combatant/Combatant";
 import {
   toModifierString,
   probablyUniqueString
-} from "../../../common/Toolbox";
-import { SubmitButton } from "../../Components/Button";
+} from "../../common/Toolbox";
+import { SubmitButton } from "../Components/Button";
 import { Field } from "formik";
 import { StandardPromptLayout } from "./StandardPromptLayout";
 

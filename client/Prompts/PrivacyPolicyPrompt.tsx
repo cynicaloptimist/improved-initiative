@@ -1,10 +1,10 @@
 import * as React from "react";
-import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
-import { Metrics } from "../../Utility/Metrics";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 import ReactMarkdown = require("react-markdown");
 
-const privacyPolicyText: string = require("../../../PRIVACY.md").default;
+const privacyPolicyText: string = require("../../PRIVACY.md").default;
 
 const promptClassName = "p-privacy-policy";
 

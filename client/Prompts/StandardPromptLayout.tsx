@@ -1,5 +1,5 @@
 import React = require("react");
-import { SubmitButton } from "../../Components/Button";
+import { SubmitButton } from "../Components/Button";
 
 type Props = {
   label: React.ReactNode;

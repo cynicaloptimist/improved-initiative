@@ -1,17 +1,17 @@
 import { Field, FieldArray, FieldProps } from "formik";
 import * as React from "react";
-import { CombatantState } from "../../../common/CombatantState";
-import { EncounterState } from "../../../common/EncounterState";
-import { SavedEncounter } from "../../../common/SavedEncounter";
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { AccountClient } from "../../Account/AccountClient";
-import { Button, SubmitButton } from "../../Components/Button";
-import { env } from "../../Environment";
-import { EncounterLibrary } from "../../Library/EncounterLibrary";
-import { ToggleButton } from "../../Settings/components/Toggle";
-import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
-import { Metrics } from "../../Utility/Metrics";
-import { EventLog } from "../../Widgets/EventLog";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
+import { SavedEncounter } from "../../common/SavedEncounter";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { AccountClient } from "../Account/AccountClient";
+import { Button, SubmitButton } from "../Components/Button";
+import { env } from "../Environment";
+import { EncounterLibrary } from "../Library/EncounterLibrary";
+import { ToggleButton } from "../Settings/components/Toggle";
+import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
+import { Metrics } from "../Utility/Metrics";
+import { EventLog } from "../Widgets/EventLog";
 import { PromptProps } from "./PendingPrompts";
 
 interface SaveEncounterPromptComponentProps {

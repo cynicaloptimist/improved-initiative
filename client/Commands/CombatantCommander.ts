@@ -14,16 +14,16 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
-import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
-import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
-import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
-import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
-import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
-import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
-import { TagPrompt } from "./Prompts/TagPrompt";
-import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
-import { ApplyTemporaryHPPrompt } from "./Prompts/ApplyTemporaryHPPrompt";
-import { LinkInitiativePrompt } from "./Prompts/LinkInitiativePrompt";
+import { AcceptDamagePrompt } from "../Prompts/AcceptDamagePrompt";
+import { AcceptTagPrompt } from "../Prompts/AcceptTagPrompt";
+import { ApplyDamagePrompt } from "../Prompts/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "../Prompts/ApplyHealingPrompt";
+import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
+import { ShowDiceRollPrompt } from "../Prompts/RollDicePrompt";
+import { TagPrompt } from "../Prompts/TagPrompt";
+import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
+import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
+import { LinkInitiativePrompt } from "../Prompts/LinkInitiativePrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;

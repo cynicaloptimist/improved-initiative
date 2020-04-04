@@ -1,8 +1,8 @@
 import * as React from "react";
-import { StatBlock } from "../../../common/StatBlock";
-import { SubmitButton } from "../../Components/Button";
-import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { StatBlock } from "../../common/StatBlock";
+import { SubmitButton } from "../Components/Button";
+import { Metrics } from "../Utility/Metrics";
+import { LegacyPrompt } from "../Commands/Prompt";
 
 const promptClassName = "p-quick-add";
 const inputClassName = promptClassName + "-input";

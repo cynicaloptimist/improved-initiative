@@ -1,9 +1,9 @@
 import { Field } from "formik";
 import React = require("react");
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { SubmitButton } from "../../Components/Button";
-import { Dice } from "../../Rules/Dice";
-import { RollResult } from "../../Rules/RollResult";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { SubmitButton } from "../Components/Button";
+import { Dice } from "../Rules/Dice";
+import { RollResult } from "../Rules/RollResult";
 import { PromptProps } from "./PendingPrompts";
 
 interface RollDiceModel {

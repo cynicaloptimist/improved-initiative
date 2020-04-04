@@ -2,16 +2,16 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 
 import { CombatantCommander } from "../Commands/CombatantCommander";
-import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
-import { LegacyPrompt } from "../Commands/Prompts/Prompt";
+import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
+import { LegacyPrompt } from "../Commands/Prompt";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 import { TagState } from "../../common/CombatantState";
-import { EditInitiativePrompt } from "../Commands/Prompts/EditInitiativePrompt";
-import { PromptProps } from "../Commands/Prompts/PendingPrompts";
-import { EditAliasPrompt } from "../Commands/Prompts/EditAliasPrompt";
+import { EditInitiativePrompt } from "../Prompts/EditInitiativePrompt";
+import { PromptProps } from "../Prompts/PendingPrompts";
+import { EditAliasPrompt } from "../Prompts/EditAliasPrompt";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 

@@ -1,5 +1,5 @@
 import { PromptQueue } from "./PromptQueue";
-import { PromptProps } from "./PendingPrompts";
+import { PromptProps } from "../Prompts/PendingPrompts";
 
 function MockPrompt(): PromptProps<{}> {
   return {

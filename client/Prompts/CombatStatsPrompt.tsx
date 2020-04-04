@@ -1,7 +1,7 @@
 import React = require("react");
-import { CombatStats } from "../../../common/CombatStats";
-import { SubmitButton } from "../../Components/Button";
-import { GetTimerReadout } from "../../Widgets/GetTimerReadout";
+import { CombatStats } from "../../common/CombatStats";
+import { SubmitButton } from "../Components/Button";
+import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { PromptProps } from "./PendingPrompts";
 
 export const CombatStatsPrompt = (stats: CombatStats): PromptProps<{}> => {

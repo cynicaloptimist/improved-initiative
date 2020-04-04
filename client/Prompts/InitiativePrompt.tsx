@@ -1,11 +1,11 @@
 import * as React from "react";
-import { AutoGroupInitiativeOption } from "../../../common/Settings";
-import { toModifierString } from "../../../common/Toolbox";
-import { Combatant } from "../../Combatant/Combatant";
-import { SubmitButton } from "../../Components/Button";
-import { CurrentSettings } from "../../Settings/Settings";
-import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
-import { LegacyPrompt } from "./Prompt";
+import { AutoGroupInitiativeOption } from "../../common/Settings";
+import { toModifierString } from "../../common/Toolbox";
+import { Combatant } from "../Combatant/Combatant";
+import { SubmitButton } from "../Components/Button";
+import { CurrentSettings } from "../Settings/Settings";
+import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { LegacyPrompt } from "../Commands/Prompt";
 
 interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];

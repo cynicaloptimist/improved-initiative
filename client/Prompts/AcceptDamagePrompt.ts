@@ -1,7 +1,7 @@
-import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
-import { TrackerViewModel } from "../../TrackerViewModel";
-import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { Metrics } from "../Utility/Metrics";
+import { LegacyPrompt } from "../Commands/Prompt";
 
 export class AcceptDamagePrompt implements LegacyPrompt {
   public InputSelector = ".acceptfull";

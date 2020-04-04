@@ -1,9 +1,9 @@
 import * as React from "react";
 
 import { Field } from "formik";
-import { Combatant } from "../../Combatant/Combatant";
-import { SubmitButton } from "../../Components/Button";
-import { Metrics } from "../../Utility/Metrics";
+import { Combatant } from "../Combatant/Combatant";
+import { SubmitButton } from "../Components/Button";
+import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 
 function UpdateNotesPromptComponent() {

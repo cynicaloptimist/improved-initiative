@@ -12,10 +12,10 @@ import { StatBlockLibrary } from "../Library/StatBlockLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
-import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
-import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
-import { SpellPrompt } from "./Prompts/SpellPrompt";
-import { ConditionReferencePrompt } from "./Prompts/ConditionReferencePrompt";
+import { MoveEncounterPrompt } from "../Prompts/MoveEncounterPrompt";
+import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
+import { SpellPrompt } from "../Prompts/SpellPrompt";
+import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 
 export class LibrariesCommander {
   constructor(

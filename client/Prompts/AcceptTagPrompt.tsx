@@ -1,11 +1,11 @@
 import * as React from "react";
-import { TagState } from "../../../common/CombatantState";
-import { Combatant } from "../../Combatant/Combatant";
-import { Tag } from "../../Combatant/Tag";
-import { SubmitButton } from "../../Components/Button";
-import { Encounter } from "../../Encounter/Encounter";
-import { Metrics } from "../../Utility/Metrics";
-import { LegacyPrompt } from "./Prompt";
+import { TagState } from "../../common/CombatantState";
+import { Combatant } from "../Combatant/Combatant";
+import { Tag } from "../Combatant/Tag";
+import { SubmitButton } from "../Components/Button";
+import { Encounter } from "../Encounter/Encounter";
+import { Metrics } from "../Utility/Metrics";
+import { LegacyPrompt } from "../Commands/Prompt";
 
 interface AcceptTagPromptComponentProps {
   combatantName: string;

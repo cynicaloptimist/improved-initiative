@@ -1,5 +1,5 @@
-import { Combatant } from "../../Combatant/Combatant";
-import { LegacyPrompt } from "./Prompt";
+import { Combatant } from "../Combatant/Combatant";
+import { LegacyPrompt } from "../Commands/Prompt";
 
 export class ConcentrationPrompt implements LegacyPrompt {
   public static Tag = "Concentrating";

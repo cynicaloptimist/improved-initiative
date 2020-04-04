@@ -1,8 +1,8 @@
 import { Field } from "formik";
 import React = require("react");
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
-import { SubmitButton } from "../../Components/Button";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
+import { SubmitButton } from "../Components/Button";
 import { PromptProps } from "./PendingPrompts";
 
 interface ApplyHealingModel {

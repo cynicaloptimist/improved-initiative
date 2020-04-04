@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { PromptProps } from "./PendingPrompts";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { PromptProps } from "../Prompts/PendingPrompts";
 import { LegacyPrompt } from "./Prompt";
 
 export class PromptQueue {

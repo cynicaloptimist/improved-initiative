@@ -10,11 +10,11 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
-import { CombatStatsPrompt } from "./Prompts/CombatStatsPrompt";
-import { InitiativePrompt } from "./Prompts/InitiativePrompt";
-import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
-import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
-import { RollDicePrompt } from "./Prompts/RollDicePrompt";
+import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
+import { InitiativePrompt } from "../Prompts/InitiativePrompt";
+import { PlayerViewPrompt } from "../Prompts/PlayerViewPrompt";
+import { QuickAddPrompt } from "../Prompts/QuickAddPrompt";
+import { RollDicePrompt } from "../Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {

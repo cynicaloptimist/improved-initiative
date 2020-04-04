@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PromptProps } from "./PendingPrompts";
-import { SubmitButton } from "../../Components/Button";
+import { SubmitButton } from "../Components/Button";
 import { StandardPromptLayout } from "./StandardPromptLayout";
 
 export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
