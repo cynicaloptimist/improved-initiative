@@ -5,6 +5,7 @@ import { SubmitButton } from "../Components/Button";
 import { Dice } from "../Rules/Dice";
 import { RollResult } from "../Rules/RollResult";
 import { PromptProps } from "./PendingPrompts";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
 interface RollDiceModel {
   diceExpression: string;
@@ -16,6 +17,10 @@ export const RollDicePrompt = (
   const fieldLabelId = probablyUniqueString();
   return {
     onSubmit: (model: RollDiceModel) => {
+      if (!model.diceExpression) {
+        rollDiceExpression("1d20");
+        return true;
+      }
       const isLegalExpression = Dice.ValidDicePattern.test(
         model.diceExpression
       );
@@ -32,17 +37,14 @@ export const RollDicePrompt = (
     autoFocusSelector: ".autofocus",
 
     children: (
-      <div className="p-roll-dice">
-        <div>
-          <label htmlFor={fieldLabelId}>{"Roll Dice: "}</label>
-          <Field
-            id={fieldLabelId}
-            className="autofocus"
-            name="diceExpression"
-          />
-        </div>
-        <SubmitButton />
-      </div>
+      <StandardPromptLayout className="p-roll-dice" label="Roll Dice:">
+        <Field
+          id={fieldLabelId}
+          className="autofocus"
+          name="diceExpression"
+          placeholder="1d20"
+        />
+      </StandardPromptLayout>
     )
   };
 };
