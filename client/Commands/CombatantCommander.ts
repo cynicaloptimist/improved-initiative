@@ -256,17 +256,15 @@ export class CombatantCommander {
 
   public PromptAcceptSuggestedTag = (
     suggestedCombatant: Combatant,
-    suggestedTag: TagState,
-    suggester: string
+    suggestedTag: TagState
   ) => {
-    const prompt = new AcceptTagPrompt(
+    const prompt = AcceptTagPrompt(
       suggestedCombatant,
       this.tracker.Encounter,
-      suggestedTag,
-      suggester
+      suggestedTag
     );
 
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 

@@ -5,83 +5,59 @@ import { Tag } from "../Combatant/Tag";
 import { SubmitButton } from "../Components/Button";
 import { Encounter } from "../Encounter/Encounter";
 import { Metrics } from "../Utility/Metrics";
-import { LegacyPrompt } from "../Commands/Prompt";
+import { PromptProps } from "./PendingPrompts";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
-interface AcceptTagPromptComponentProps {
-  combatantName: string;
-  tagState: TagState;
-  suggestor: string;
-  acceptTag: () => boolean;
-}
+type AcceptTagModel = {
+  accept: boolean;
+};
 
-interface AcceptTagPromptComponentState {}
-
-class AcceptTagPromptComponent extends React.Component<
-  AcceptTagPromptComponentProps,
-  AcceptTagPromptComponentState
-> {
-  public render() {
-    return (
-      <div className="p-accept-tag">
-        <span className="p-accept-tag__label">
-          Add tag "{this.props.tagState.Text}" to {this.props.combatantName}?
-        </span>
+export function AcceptTagPrompt(
+  combatant: Combatant,
+  encounter: Encounter,
+  tagState: TagState
+): PromptProps<AcceptTagModel> {
+  return {
+    autoFocusSelector: ".accept",
+    children: (
+      <StandardPromptLayout
+        label={`Add tag "${tagState.Text}" to ${combatant.DisplayName()}?`}
+        noSubmit
+      >
         <SubmitButton fontAwesomeIcon="times" />
-        <SubmitButton onClick={this.props.acceptTag} />
-      </div>
-    );
-  }
-}
+        <SubmitButton bindModel={["accept", true]} />
+      </StandardPromptLayout>
+    ),
+    initialValues: { accept: false },
+    onSubmit: model => {
+      if (!model.accept) {
+        return true;
+      }
 
-export class AcceptTagPrompt implements LegacyPrompt {
-  public InputSelector = ".p-accept-tag__notes";
-  public ComponentName = "reactprompt";
-  public component: JSX.Element;
+      if (tagState.DurationCombatantId.length > 0) {
+        const tag = new Tag(
+          tagState.Text,
+          combatant,
+          false,
+          tagState.DurationRemaining,
+          tagState.DurationTiming,
+          tagState.DurationCombatantId
+        );
 
-  constructor(
-    private combatant: Combatant,
-    private encounter: Encounter,
-    private tagState: TagState,
-    suggestor: string
-  ) {
-    this.component = (
-      <AcceptTagPromptComponent
-        combatantName={combatant.DisplayName()}
-        tagState={tagState}
-        suggestor={suggestor}
-        acceptTag={this.acceptTag}
-      />
-    );
-  }
+        encounter.EncounterFlow.AddDurationTag(tag);
+        combatant.Tags.push(tag);
+        Metrics.TrackEvent("TagAddedFromSuggestion", {
+          Text: tag.Text,
+          Duration: tag.DurationRemaining()
+        });
+      } else {
+        combatant.Tags.push(new Tag(tagState.Text, combatant, false));
+        Metrics.TrackEvent("TagAddedFromSuggestion", {
+          Text: tagState.Text
+        });
+      }
 
-  public Resolve = () => {};
-
-  private acceptTag = () => {
-    if (this.tagState.DurationCombatantId.length > 0) {
-      const tag = new Tag(
-        this.tagState.Text,
-        this.combatant,
-        false,
-        this.tagState.DurationRemaining,
-        this.tagState.DurationTiming,
-        this.tagState.DurationCombatantId
-      );
-
-      this.encounter.EncounterFlow.AddDurationTag(tag);
-      this.combatant.Tags.push(tag);
-      Metrics.TrackEvent("TagAddedFromSuggestion", {
-        Text: tag.Text,
-        Duration: tag.DurationRemaining()
-      });
-    } else {
-      this.combatant.Tags.push(
-        new Tag(this.tagState.Text, this.combatant, false)
-      );
-      Metrics.TrackEvent("TagAddedFromSuggestion", {
-        Text: this.tagState.Text
-      });
+      return true;
     }
-
-    return true;
   };
 }

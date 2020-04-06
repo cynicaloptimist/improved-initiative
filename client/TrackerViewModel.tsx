@@ -502,19 +502,14 @@ export class TrackerViewModel {
 
     this.Socket.on(
       "suggest tag",
-      (
-        suggestedCombatantIds: string[],
-        suggestedTag: TagState,
-        suggester: string
-      ) => {
+      (suggestedCombatantIds: string[], suggestedTag: TagState) => {
         const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 
         this.CombatantCommander.PromptAcceptSuggestedTag(
           suggestedCombatants[0].Combatant,
-          suggestedTag,
-          suggester
+          suggestedTag
         );
       }
     );
