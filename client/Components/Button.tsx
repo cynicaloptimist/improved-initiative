@@ -1,5 +1,6 @@
 import Tippy, { TippyProps } from "@tippy.js/react";
 import * as React from "react";
+import { FieldProps, Field } from "formik";
 
 export interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -11,7 +12,7 @@ export interface ButtonProps {
   tooltip?: string;
   tooltipProps?: Omit<TippyProps, "children" | "content">;
 
-  type?: "button" | "submit"
+  type?: "button" | "submit";
   disabled?: boolean;
 }
 
@@ -57,14 +58,34 @@ export function Button(props: ButtonProps) {
   }
 }
 
-export function SubmitButton(props: ButtonProps) {
-  const fontAwesomeIcon = props.fontAwesomeIcon || "check";
-  const onClick = props.onClick || (() => true);
-  return (
-    <button
-      type="submit"
-      className={`c-button fas fa-${fontAwesomeIcon} button`}
-      onClick={onClick}
-    />
-  );
+export function SubmitButton(
+  props: ButtonProps & { bindModel?: [string, any] }
+) {
+  const buttonProps: ButtonProps = {
+    ...props,
+    type: "submit",
+    fontAwesomeIcon: props.fontAwesomeIcon ?? "check",
+    onClick: props.onClick || (() => true)
+  };
+
+  if (props.bindModel) {
+    return (
+      <Field>
+        {(formik: FieldProps) => (
+          <Button
+            {...buttonProps}
+            onClick={e => {
+              if (buttonProps.disabled) {
+                return;
+              }
+              formik.form.setFieldValue(props.bindModel[0], props.bindModel[1]);
+              buttonProps.onClick(e);
+            }}
+          />
+        )}
+      </Field>
+    );
+  } else {
+    return <Button {...buttonProps} />;
+  }
 }

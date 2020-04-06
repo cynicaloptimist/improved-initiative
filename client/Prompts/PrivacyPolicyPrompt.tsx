@@ -3,16 +3,13 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 import ReactMarkdown = require("react-markdown");
+import { SubmitButton } from "../Components/Button";
 
 const privacyPolicyText: string = require("../../PRIVACY.md").default;
 
 const promptClassName = "p-privacy-policy";
 
-type PrivacyPolicyPromptProps = {
-  callback: (optin: boolean) => void;
-};
-
-function PrivacyPolicyComponent(props: PrivacyPolicyPromptProps) {
+function PrivacyPolicyComponent() {
   const [displayFullText, setDisplayFullText] = React.useState(false);
   const privacyBrief =
     "Improved Initiative has a privacy policy. Your data is never sold to third parties. You can help improve the app by sharing your usage data.";
@@ -23,20 +20,20 @@ function PrivacyPolicyComponent(props: PrivacyPolicyPromptProps) {
   );
 
   const noThanksButton = (
-    <input
-      className={promptClassName + "-nothanks button"}
-      type="submit"
-      value="No Thanks"
-      onClick={() => props.callback(false)}
+    <SubmitButton
+      additionalClassNames={promptClassName + "-nothanks"}
+      fontAwesomeIcon=""
+      text="No Thanks"
+      bindModel={["optIn", false]}
     />
   );
 
   const optInButton = (
-    <input
-      className={promptClassName + "-optin button"}
-      type="submit"
-      value="Opt In"
-      onClick={() => props.callback(true)}
+    <SubmitButton
+      additionalClassNames={promptClassName + "-optin"}
+      fontAwesomeIcon=""
+      text="Opt In"
+      bindModel={["optIn", true]}
     />
   );
 
@@ -59,28 +56,27 @@ function PrivacyPolicyComponent(props: PrivacyPolicyPromptProps) {
   );
 }
 
-export function PrivacyPolicyPrompt(): PromptProps<{}> {
+export function PrivacyPolicyPrompt(): PromptProps<{ optIn: boolean }> {
   return {
     autoFocusSelector: "." + promptClassName + "-optin",
-    children: <PrivacyPolicyComponent callback={promptCallback} />,
-    initialValues: {},
-    onSubmit: () => true
+    children: <PrivacyPolicyComponent />,
+    initialValues: { optIn: false },
+    onSubmit: model => {
+      if (model.optIn) {
+        LegacySynchronousLocalStore.Save(
+          LegacySynchronousLocalStore.User,
+          "AllowTracking",
+          true
+        );
+        Metrics.TrackLoad();
+      } else {
+        LegacySynchronousLocalStore.Save(
+          LegacySynchronousLocalStore.User,
+          "AllowTracking",
+          false
+        );
+      }
+      return true;
+    }
   };
-}
-
-function promptCallback(optIn: boolean) {
-  if (optIn) {
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.User,
-      "AllowTracking",
-      true
-    );
-    Metrics.TrackLoad();
-  } else {
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.User,
-      "AllowTracking",
-      false
-    );
-  }
 }
