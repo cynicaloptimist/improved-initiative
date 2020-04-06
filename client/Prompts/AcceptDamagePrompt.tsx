@@ -23,7 +23,7 @@ export function AcceptDamagePrompt(
   return {
     autoFocusSelector: ".accept-full",
     children: (
-      <StandardPromptLayout label={promptLabel} noSubmit>
+      <StandardPromptLayout label={promptLabel} fieldsDoSubmit>
         <SubmitButton text="Yes" bindModel={["damageAmount", "full"]} />
         <SubmitButton
           text="No"

@@ -15,7 +15,7 @@ export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
             use this command to link them to one shared initiative count.
           </p>
         }
-        noSubmit
+        fieldsDoSubmit
       >
         <SubmitButton fontAwesomeIcon="times" />
       </StandardPromptLayout>

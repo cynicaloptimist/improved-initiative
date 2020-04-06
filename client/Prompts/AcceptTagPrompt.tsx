@@ -22,7 +22,7 @@ export function AcceptTagPrompt(
     children: (
       <StandardPromptLayout
         label={`Add tag "${tagState.Text}" to ${combatant.DisplayName()}?`}
-        noSubmit
+        fieldsDoSubmit
       >
         <SubmitButton fontAwesomeIcon="times" />
         <SubmitButton additionalClassNames="accept" bindModel={["accept", true]} />
