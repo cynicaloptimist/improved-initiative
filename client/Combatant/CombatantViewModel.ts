@@ -2,8 +2,7 @@ import * as ko from "knockout";
 import * as _ from "lodash";
 
 import { CombatantCommander } from "../Commands/CombatantCommander";
-import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
-import { LegacyPrompt } from "../Commands/Prompt";
+import { ConcentrationTagText } from "../Prompts/ConcentrationPrompt";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
@@ -50,7 +49,7 @@ export class CombatantViewModel {
       Metrics.TrackEvent("DamageApplied", { Amount: damage.toString() });
       if (
         shouldAutoCheckConcentration &&
-        this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)
+        this.Combatant.Tags().some(t => t.Text === ConcentrationTagText)
       ) {
         this.CombatantCommander.CheckConcentration(this.Combatant, damage);
       }
