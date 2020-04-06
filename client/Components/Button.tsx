@@ -18,11 +18,9 @@ export interface ButtonProps {
 export function Button(props: ButtonProps) {
   const text = props.text || "";
 
-  const disabled = props.disabled || false;
-
   const classNames = ["c-button"];
 
-  if (disabled) {
+  if (props.disabled) {
     classNames.push("c-button--disabled");
   }
   if (props.fontAwesomeIcon && props.text) {
@@ -40,8 +38,8 @@ export function Button(props: ButtonProps) {
     <button
       type={props.type ?? "button"}
       className={classNames.join(" ")}
-      onClick={!disabled && props.onClick}
-      onMouseOver={!disabled && props.onMouseOver}
+      onClick={!props.disabled && props.onClick}
+      onMouseOver={!props.disabled && props.onMouseOver}
     >
       {faElement}
       {text}
