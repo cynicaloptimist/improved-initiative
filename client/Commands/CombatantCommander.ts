@@ -241,14 +241,16 @@ export class CombatantCommander {
       return false;
     }
 
-    const prompt = new AcceptDamagePrompt(
+    Metrics.TrackEvent("DamageSuggested", { Amount: suggestedDamage });
+
+    const prompt = AcceptDamagePrompt(
       suggestedCombatants,
       suggestedDamage,
       suggester,
       this.tracker
     );
 
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 
