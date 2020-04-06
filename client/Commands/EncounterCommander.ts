@@ -83,8 +83,8 @@ export class EncounterCommander {
   );
 
   private rollInitiative = () => {
-    this.tracker.PromptQueue.AddLegacyPrompt(
-      new InitiativePrompt(
+    this.tracker.PromptQueue.Add(
+      InitiativePrompt(
         this.tracker.Encounter.Combatants(),
         this.tracker.Encounter.EncounterFlow.StartEncounter
       )
