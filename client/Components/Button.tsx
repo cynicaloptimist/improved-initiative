@@ -2,8 +2,8 @@ import Tippy, { TippyProps } from "@tippy.js/react";
 import * as React from "react";
 
 export interface ButtonProps {
-  onClick?: React.MouseEventHandler<HTMLSpanElement>;
-  onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseOver?: React.MouseEventHandler<HTMLButtonElement>;
 
   additionalClassNames?: string;
   fontAwesomeIcon?: string;
