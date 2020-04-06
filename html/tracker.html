@@ -204,34 +204,12 @@
         }"
       ></div>
       <!-- /ko -->
-      <div class="all-prompts">
-        <div
-          class="prompts"
-          data-bind="react: {
+      <div
+        class="prompts"
+        data-bind="react: {
                 component: PromptsComponent
         }"
-        ></div>
-        <div
-          class="prompts legacy-prompts"
-          data-bind="with: PromptQueue, css: { empty: !PromptQueue.HasLegacyPrompt() }"
-        >
-          <!-- ko foreach: LegacyPrompts -->
-          <form
-            class="prompt"
-            data-bind="
-                submit: $parent.ResolveLegacyPrompt($data),
-                component: {
-                    name: ComponentName,
-                    params: {
-                        prompt: $data,
-                    }
-                },
-                afterRender: $parent.UpdateLegacyDom"
-          ></form>
-          <!-- /ko -->
-        </div>
-      </div>
-
+      ></div>
       <div class="combat-footer">
         <ul
           class="event-log"

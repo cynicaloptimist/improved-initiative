@@ -42,9 +42,6 @@ export const RegisterComponents = () => {
       template: name
     });
 
-  registerComponent("acceptdamageprompt", params => params.prompt);
-  registerComponent("concentrationprompt", params => params.prompt);
-  registerComponent("reactprompt", params => params.prompt);
   registerComponent("spelleditor", params => params.editor);
   registerComponent("tutorial", params => new TutorialViewModel(params));
 };
