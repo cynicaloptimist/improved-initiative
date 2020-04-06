@@ -2,7 +2,7 @@ import Tippy, { TippyProps } from "@tippy.js/react";
 import * as React from "react";
 
 export interface ButtonProps {
-  onClick: React.MouseEventHandler<HTMLSpanElement>;
+  onClick?: React.MouseEventHandler<HTMLSpanElement>;
   onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
 
   additionalClassNames?: string;
@@ -10,6 +10,8 @@ export interface ButtonProps {
   text?: string;
   tooltip?: string;
   tooltipProps?: Omit<TippyProps, "children" | "content">;
+
+  type?: "button" | "submit"
   disabled?: boolean;
 }
 
@@ -36,7 +38,7 @@ export function Button(props: ButtonProps) {
 
   const button = (
     <button
-      type="button"
+      type={props.type ?? "button"}
       className={classNames.join(" ")}
       onClick={!disabled && props.onClick}
       onMouseOver={!disabled && props.onMouseOver}
@@ -57,19 +59,14 @@ export function Button(props: ButtonProps) {
   }
 }
 
-interface SubmitButtonProps {
-  faClass?: string;
-  beforeSubmit?: () => boolean;
-}
-
-export function SubmitButton(props: SubmitButtonProps) {
-  const faClass = props.faClass || "check";
-  const beforeSubmit = props.beforeSubmit || (() => true);
+export function SubmitButton(props: ButtonProps) {
+  const fontAwesomeIcon = props.fontAwesomeIcon || "check";
+  const onClick = props.onClick || (() => true);
   return (
     <button
       type="submit"
-      className={`c-button fas fa-${faClass} button`}
-      onClick={beforeSubmit}
+      className={`c-button fas fa-${fontAwesomeIcon} button`}
+      onClick={onClick}
     />
   );
 }

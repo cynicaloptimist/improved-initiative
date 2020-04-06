@@ -17,7 +17,7 @@ export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
         }
         noSubmit
       >
-        <SubmitButton faClass="times" />
+        <SubmitButton fontAwesomeIcon="times" />
       </StandardPromptLayout>
     ),
     autoFocusSelector: "button",

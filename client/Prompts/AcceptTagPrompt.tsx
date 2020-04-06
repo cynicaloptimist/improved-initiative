@@ -26,8 +26,8 @@ class AcceptTagPromptComponent extends React.Component<
         <span className="p-accept-tag__label">
           Add tag "{this.props.tagState.Text}" to {this.props.combatantName}?
         </span>
-        <SubmitButton faClass="times" />
-        <SubmitButton beforeSubmit={this.props.acceptTag} />
+        <SubmitButton fontAwesomeIcon="times" />
+        <SubmitButton onClick={this.props.acceptTag} />
       </div>
     );
   }

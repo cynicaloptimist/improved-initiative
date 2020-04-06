@@ -73,7 +73,7 @@ export class StatBlockEditor extends React.Component<
         {this.props.onDelete && (
           <Button onClick={this.delete} fontAwesomeIcon="trash" />
         )}
-        <SubmitButton faClass="save" />
+        <SubmitButton fontAwesomeIcon="save" />
       </>
     );
 
