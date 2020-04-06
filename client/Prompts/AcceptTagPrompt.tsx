@@ -25,7 +25,7 @@ export function AcceptTagPrompt(
         noSubmit
       >
         <SubmitButton fontAwesomeIcon="times" />
-        <SubmitButton bindModel={["accept", true]} />
+        <SubmitButton additionalClassNames="accept" bindModel={["accept", true]} />
       </StandardPromptLayout>
     ),
     initialValues: { accept: false },
