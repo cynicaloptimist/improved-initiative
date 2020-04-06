@@ -1,81 +1,52 @@
 import * as React from "react";
 import { StatBlock } from "../../common/StatBlock";
-import { SubmitButton } from "../Components/Button";
 import { Metrics } from "../Utility/Metrics";
-import { LegacyPrompt } from "../Commands/Prompt";
+import { PromptProps } from "./PendingPrompts";
+import { Field } from "formik";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
-const promptClassName = "p-quick-add";
-const inputClassName = promptClassName + "-input";
+type QuickAddModel = {
+  Name: string;
+  MaxHP: number;
+  AC: number;
+  Initiative: number;
+};
 
-interface QuickAddPromptProps {}
-interface QuickAddPromptState {}
-class QuickAddPromptComponent extends React.Component<
-  QuickAddPromptProps,
-  QuickAddPromptState
-> {
-  private focusInput: HTMLInputElement;
-  public componentDidMount() {
-    this.focusInput.focus();
-  }
+export function QuickAddPrompt(
+  addStatBlock: (statBlock: StatBlock) => void
+): PromptProps<QuickAddModel> {
+  return {
+    autoFocusSelector: "input[name='Name']",
+    children: (
+      <StandardPromptLayout className="p-quick-add" label="Quick Add Combatant">
+        <Field name="Name" type="text" placeholder="Name" />
+        <Field name="MaxHP" type="number" placeholder="HP" />
+        <Field name="AC" type="number" placeholder="AC" />
+        <Field name="Initiative" type="number" placeholder="Init" />
+      </StandardPromptLayout>
+    ),
+    initialValues: {
+      Name: "",
+      MaxHP: null,
+      AC: null,
+      Initiative: null
+    },
+    onSubmit: model => {
+      if (model.MaxHP == null) {
+        return false;
+      }
 
-  public render() {
-    return (
-      <div className={promptClassName}>
-        Quick Add Combatant
-        <input
-          ref={i => (this.focusInput = i)}
-          name="name"
-          className={inputClassName}
-          type="text"
-          placeholder="Name"
-        />
-        <input
-          className={inputClassName}
-          name="hp"
-          type="number"
-          placeholder="HP"
-        />
-        <input
-          className={inputClassName}
-          name="ac"
-          type="number"
-          placeholder="AC"
-        />
-        <input
-          className={inputClassName}
-          name="initiative"
-          type="number"
-          placeholder="Init"
-        />
-        <SubmitButton />
-      </div>
-    );
-  }
-}
+      const statBlock: StatBlock = {
+        ...StatBlock.Default(),
+        Name: model.Name || "New Combatant",
+        HP: { Value: model.MaxHP, Notes: "" },
+        AC: { Value: model.AC ?? 10, Notes: "" },
+        InitiativeModifier: model.Initiative ?? 0
+      };
 
-export class QuickAddPrompt implements LegacyPrompt {
-  public InputSelector = "." + inputClassName;
-  public ComponentName = "reactprompt";
-
-  constructor(private addStatBlock: (statBlock: StatBlock) => void) {}
-
-  public Resolve = (form: HTMLFormElement) => {
-    const name = form.elements["name"].value || "New Combatant";
-    const maxHP = parseInt(form.elements["hp"].value) || 1;
-    const ac = parseInt(form.elements["ac"].value) || 10;
-    const initiative = parseInt(form.elements["initiative"].value) || 0;
-
-    const statBlock: StatBlock = {
-      ...StatBlock.Default(),
-      Name: name,
-      HP: { Value: maxHP, Notes: "" },
-      AC: { Value: ac, Notes: "" },
-      InitiativeModifier: initiative
-    };
-
-    this.addStatBlock(statBlock);
-    Metrics.TrackEvent("CombatantQuickAdded", { Name: name });
+      addStatBlock(statBlock);
+      Metrics.TrackEvent("CombatantQuickAdded", { Name: model.Name });
+      return true;
+    }
   };
-
-  public component = (<QuickAddPromptComponent />);
 }

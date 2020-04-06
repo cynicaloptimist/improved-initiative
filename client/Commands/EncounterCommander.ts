@@ -30,10 +30,10 @@ export class EncounterCommander {
   };
 
   public QuickAddStatBlock = () => {
-    const prompt = new QuickAddPrompt(
+    const prompt = QuickAddPrompt(
       this.tracker.Encounter.AddCombatantFromStatBlock
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
