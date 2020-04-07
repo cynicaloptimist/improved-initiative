@@ -69,19 +69,6 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  public DisplayPortraits = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayPortraits
-  );
-  public DisplayRoundCounter = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayRoundCounter
-  );
-  public DisplayTurnTimer = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayTurnTimer
-  );
-  public DisplayDifficulty = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayDifficulty
-  );
-
   private rollInitiative = () => {
     this.tracker.PromptQueue.Add(
       InitiativePrompt(

@@ -25,8 +25,9 @@ export class EventLog {
     }
   };
 
-  public ToggleCSS = () =>
-    this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up";
+  public ToggleCSS = ko.observable(() =>
+    this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up"
+  );
 
   public ShowFullLog = ko.observable<boolean>(false);
 
@@ -39,10 +40,12 @@ export class EventLog {
     }
   };
 
-  private element = document.getElementsByClassName("event-log")[0];
-
   private scrollToBottomOfLog = () => {
-    const scrollHeight = this.element.scrollHeight;
-    this.element.scrollTop = scrollHeight;
+    const element = document.getElementsByClassName("event-log")[0];
+    if (!element) {
+      return;
+    }
+    const scrollHeight = element.scrollHeight;
+    element.scrollTop = scrollHeight;
   };
 }

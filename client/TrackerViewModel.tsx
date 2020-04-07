@@ -49,6 +49,7 @@ import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { CommandContext } from "./InitiativeList/CommandContext";
 import { SettingsContext } from "./Settings/SettingsContext";
+import { CombatFooter } from "./CombatFooter/CombatFooter";
 
 const codec = compression("lzma");
 
@@ -239,6 +240,18 @@ export class TrackerViewModel {
         displayMode="active"
         enricher={this.StatBlockTextEnricher}
       />
+    );
+  });
+
+  public combatFooterComponent = ko.computed(() => {
+    const props = {
+      encounter: this.Encounter,
+      eventLog: this.EventLog
+    };
+    return (
+      <SettingsContext.Provider value={CurrentSettings()}>
+        <CombatFooter {...props} />
+      </SettingsContext.Provider>
     );
   });
 

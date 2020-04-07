@@ -1,3 +1,4 @@
+import * as React from "react";
 import * as ko from "knockout";
 import { noop } from "lodash";
 
@@ -15,4 +16,10 @@ export function linkComponentToObservables(component: React.Component) {
     observableSubscription.dispose();
     oldComponentWillUnmount();
   };
+}
+
+export function useSubscription<T>(binding: KnockoutObservable<T>): T {
+  const [value, setValue] = React.useState(binding());
+  binding.subscribe(setValue);
+  return value;
 }
