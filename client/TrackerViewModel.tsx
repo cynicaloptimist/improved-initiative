@@ -224,6 +224,24 @@ export class TrackerViewModel {
     />
   ));
 
+  public activeCombatantComponent = ko.pureComputed(() => {
+    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
+    const combatantViewModel = find(
+      this.CombatantViewModels(),
+      c => c.Combatant == activeCombatant
+    );
+    if (!combatantViewModel) {
+      return null;
+    }
+    return (
+      <CombatantDetails
+        combatantViewModel={combatantViewModel}
+        displayMode="active"
+        enricher={this.StatBlockTextEnricher}
+      />
+    );
+  });
+
   private selectCombatantById = (
     combatantId: string,
     appendSelection: boolean
@@ -247,24 +265,6 @@ export class TrackerViewModel {
     );
     this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
-
-  public activeCombatantComponent = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
-    const combatantViewModel = find(
-      this.CombatantViewModels(),
-      c => c.Combatant == activeCombatant
-    );
-    if (!combatantViewModel) {
-      return null;
-    }
-    return (
-      <CombatantDetails
-        combatantViewModel={combatantViewModel}
-        displayMode="active"
-        enricher={this.StatBlockTextEnricher}
-      />
-    );
-  });
 
   public CenterColumn = ko.pureComputed(() => {
     const editStatBlock = this.StatBlockEditor() !== null;
