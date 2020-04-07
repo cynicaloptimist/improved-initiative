@@ -12,9 +12,7 @@ type CombatFooterProps = {
 
 export function CombatFooter(props: CombatFooterProps) {
   const settingsContext = React.useContext(SettingsContext);
-  const showFullLog = useSubscription(props.eventLog.ShowFullLog);
   const eventsTail = useSubscription(props.eventLog.EventsTail);
-  const togglerButtonCSS = useSubscription(props.eventLog.ToggleCSS);
   const latestEvent = useSubscription(props.eventLog.LatestEvent);
   const turnTimerReadout = useSubscription(
     props.encounter.EncounterFlow.TurnTimerReadout
@@ -24,19 +22,16 @@ export function CombatFooter(props: CombatFooterProps) {
   );
   const encounterDifficulty = useSubscription(props.encounter.Difficulty);
 
+  const [fullLogVisible, setFullLogVisible] = React.useState(false);
+  const togglerButtonCSS = fullLogVisible ? "fa-caret-down" : "fa-caret-up";
+
   return (
     <div className="combat-footer">
-      {showFullLog && (
-        <ul className="event-log">
-          {eventsTail.map((eventHtml, index) => (
-            <li key={index} dangerouslySetInnerHTML={{__html: eventHtml}} />
-          ))}
-        </ul>
-      )}
+      {fullLogVisible && <FullEventLog eventsTail={eventsTail} />}
       <div className="footer-bar">
         <i
           className={"fa-clickable " + togglerButtonCSS}
-          onClick={props.eventLog.ToggleFullLog}
+          onClick={() => setFullLogVisible(!fullLogVisible)}
         ></i>
         <span
           className="latest-event"
@@ -64,4 +59,23 @@ function getDifficultyString(difficulty: EncounterDifficulty) {
     return xpString;
   }
   return difficulty.Difficulty + ": " + xpString;
+}
+
+function FullEventLog(props: { eventsTail: string[] }) {
+  const eventsEndRef = React.useRef(null);
+
+  const scrollToBottom = () => {
+    eventsEndRef.current.scrollIntoView(true);
+  };
+
+  React.useEffect(scrollToBottom, []);
+
+  return (
+    <ul className="event-log">
+      {props.eventsTail.map((eventHtml, index) => (
+        <li key={index} dangerouslySetInnerHTML={{ __html: eventHtml }} />
+      ))}
+      <div ref={eventsEndRef} />
+    </ul>
+  );
 }

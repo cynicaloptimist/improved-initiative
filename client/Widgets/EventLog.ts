@@ -16,21 +16,6 @@ export class EventLog {
     this.Events.push(event);
   };
 
-  public ToggleFullLog = () => {
-    if (this.ShowFullLog()) {
-      this.ShowFullLog(false);
-    } else {
-      this.ShowFullLog(true);
-      this.scrollToBottomOfLog();
-    }
-  };
-
-  public ToggleCSS = ko.observable(() =>
-    this.ShowFullLog() ? "fa-caret-down" : "fa-caret-up"
-  );
-
-  public ShowFullLog = ko.observable<boolean>(false);
-
   public LogHPChange = (damage: number, combatantNames: string) => {
     if (damage > 0) {
       this.AddEvent(`${damage} damage applied to ${combatantNames}.`);
@@ -38,14 +23,5 @@ export class EventLog {
     if (damage < 0) {
       this.AddEvent(`${-damage} HP restored to ${combatantNames}.`);
     }
-  };
-
-  private scrollToBottomOfLog = () => {
-    const element = document.getElementsByClassName("event-log")[0];
-    if (!element) {
-      return;
-    }
-    const scrollHeight = element.scrollHeight;
-    element.scrollTop = scrollHeight;
   };
 }
