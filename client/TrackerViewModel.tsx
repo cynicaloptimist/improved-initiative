@@ -248,7 +248,7 @@ export class TrackerViewModel {
     this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
 
-  public ActiveCombatantDetails = ko.pureComputed(() => {
+  public activeCombatantComponent = ko.pureComputed(() => {
     const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
     const combatantViewModel = find(
       this.CombatantViewModels(),
