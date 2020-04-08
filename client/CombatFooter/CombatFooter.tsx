@@ -38,7 +38,9 @@ export function CombatFooter(props: CombatFooterProps) {
           dangerouslySetInnerHTML={{ __html: latestEvent }}
         />
         {settingsContext.TrackerView.DisplayTurnTimer && (
-          <span className="turn-timer">{turnTimerReadout}</span>
+          <TurnTimerReadout
+            observableReadout={props.encounter.EncounterFlow.TurnTimerReadout}
+          />
         )}
         {settingsContext.TrackerView.DisplayRoundCounter && (
           <span className="round-counter">Current Round: {elapsedRounds}</span>
@@ -78,4 +80,12 @@ function FullEventLog(props: { eventsTail: string[] }) {
       <div ref={eventsEndRef} />
     </ul>
   );
+}
+
+function TurnTimerReadout(props: {
+  observableReadout: KnockoutObservable<string>;
+}) {
+  const turnTimerReadout = useSubscription(props.observableReadout);
+
+  return <span className="turn-timer">{turnTimerReadout}</span>;
 }
