@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ko from "knockout";
 import { noop } from "lodash";
-import { useEffect } from "react";
 
 export function linkComponentToObservables(component: React.Component) {
   let observableSubscription = ko.observable().subscribe(noop);
@@ -21,7 +20,7 @@ export function linkComponentToObservables(component: React.Component) {
 
 export function useSubscription<T>(observable: KnockoutObservable<T>): T {
   const [value, setValue] = React.useState(observable());
-  useEffect(() => {
+  React.useEffect(() => {
     const subscription = observable.subscribe(newValue => setValue(newValue));
     return () => subscription.dispose();
   }, [observable]);
