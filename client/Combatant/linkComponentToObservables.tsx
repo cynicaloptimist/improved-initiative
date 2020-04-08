@@ -19,10 +19,17 @@ export function linkComponentToObservables(component: React.Component) {
 }
 
 export function useSubscription<T>(observable: KnockoutObservable<T>): T {
-  const [value, setValue] = React.useState(observable());
+  const [value, setValue] = React.useState({ current: observable() });
+
   React.useEffect(() => {
-    const subscription = observable.subscribe(newValue => setValue(newValue));
+    const subscription = observable.subscribe(newValue => {
+      // In case newValue is a reference to the same object as before
+      // such as with KnockoutObservableArray, we instantiate a wrapper
+      // object for setValue.
+      setValue({ current: newValue });
+    });
     return () => subscription.dispose();
   }, [observable]);
-  return value;
+
+  return value.current;
 }
