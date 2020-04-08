@@ -9,14 +9,12 @@ import { CommandButton } from "./CommandButton";
 const renderToolbarWithSingleCommand = (
   id,
   description,
-  keyBinding,
   width: "narrow" | "wide" = "narrow"
 ) => {
   const encounterCommands = [
     new Command({
       id: id,
       description: description,
-      defaultKeyBinding: keyBinding,
       actionBinding: () => {},
       fontAwesomeIcon: "gear"
     })
@@ -34,14 +32,9 @@ const renderToolbarWithSingleCommand = (
 
 describe("Toolbar component", () => {
   test("Button shows the command's description and key binding", () => {
-    const id = "test-command";
+    const id = "start-encounter";
     const description = "Test command";
-    const keyBinding = "alt+t";
-    const component = renderToolbarWithSingleCommand(
-      id,
-      description,
-      keyBinding
-    );
+    const component = renderToolbarWithSingleCommand(id, description);
 
     const tooltip = component
       .find(CommandButton)
@@ -49,18 +42,13 @@ describe("Toolbar component", () => {
       .dive()
       .find(Button)
       .prop("tooltip");
-    expect(tooltip).toEqual(`${description} [${keyBinding}]`);
+    expect(tooltip).toEqual(`${description} [alt+r]`);
   });
 
   test("Button shows the command's description if key binding is blank", () => {
     const id = "test-command";
     const description = "Test command";
-    const keyBinding = "";
-    const component = renderToolbarWithSingleCommand(
-      id,
-      description,
-      keyBinding
-    );
+    const component = renderToolbarWithSingleCommand(id, description);
 
     const tooltip = component
       .find(CommandButton)
@@ -74,13 +62,7 @@ describe("Toolbar component", () => {
   test("Button shows label when toolbar is wide", () => {
     const id = "test-command";
     const description = "Test command";
-    const keyBinding = "";
-    const component = renderToolbarWithSingleCommand(
-      id,
-      description,
-      keyBinding,
-      "wide"
-    );
+    const component = renderToolbarWithSingleCommand(id, description, "wide");
 
     const label = component
       .find(CommandButton)
