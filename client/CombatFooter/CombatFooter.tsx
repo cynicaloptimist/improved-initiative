@@ -12,11 +12,7 @@ type CombatFooterProps = {
 
 export function CombatFooter(props: CombatFooterProps) {
   const settingsContext = React.useContext(SettingsContext);
-  const eventsTail = useSubscription(props.eventLog.EventsTail);
-  const latestEvent = useSubscription(props.eventLog.LatestEvent);
-  const turnTimerReadout = useSubscription(
-    props.encounter.EncounterFlow.TurnTimerReadout
-  );
+  const allEvents = useSubscription(props.eventLog.Events);
   const elapsedRounds = useSubscription(
     props.encounter.EncounterFlow.CombatTimer.ElapsedRounds
   );
@@ -27,7 +23,7 @@ export function CombatFooter(props: CombatFooterProps) {
 
   return (
     <div className="combat-footer">
-      {fullLogVisible && <FullEventLog eventsTail={eventsTail} />}
+      {fullLogVisible && <FullEventLog eventsTail={allEvents.slice(1)} />}
       <div className="footer-bar">
         <i
           className={"fa-clickable " + togglerButtonCSS}
@@ -35,7 +31,7 @@ export function CombatFooter(props: CombatFooterProps) {
         ></i>
         <span
           className="latest-event"
-          dangerouslySetInnerHTML={{ __html: latestEvent }}
+          dangerouslySetInnerHTML={{ __html: allEvents[0] }}
         />
         {settingsContext.TrackerView.DisplayTurnTimer && (
           <TurnTimerReadout
@@ -74,7 +70,7 @@ function FullEventLog(props: { eventsTail: string[] }) {
 
   return (
     <ul className="event-log">
-      {props.eventsTail.map((eventHtml, index) => (
+      {props.eventsTail.reverse().map((eventHtml, index) => (
         <li key={index} dangerouslySetInnerHTML={{ __html: eventHtml }} />
       ))}
       <div ref={eventsEndRef} />
