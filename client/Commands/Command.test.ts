@@ -6,14 +6,16 @@ const MakeCommand = () => ({
   id: "some-command-id",
   description: "Some Command",
   actionBinding: jest.fn(),
-  defaultKeyBinding: "default-keybinding",
   fontAwesomeIcon: "square"
 });
 
 describe("Command", () => {
-  test("Should use a default keybinding", () => {
-    const command = new Command(MakeCommand());
-    expect(command.KeyBinding).toEqual("default-keybinding");
+  test("Should look up default keybinding by id", () => {
+    const command = new Command({
+      ...MakeCommand(),
+      id: "start-encounter"
+    });
+    expect(command.KeyBinding).toEqual("alt+r");
   });
 
   test("Should load a saved keybinding", () => {
