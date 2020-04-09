@@ -6,9 +6,10 @@ import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncoun
 import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
+import { StandardPromptLayout } from "./StandardPromptLayout";
+import { Field } from "formik";
 
 export interface MoveEncounterPromptProps {
-  encounterName: string;
   folderNames: string[];
 }
 
@@ -16,19 +17,23 @@ const promptClassName = "p-move-encounter";
 
 function MoveEncounterPromptComponent(props: MoveEncounterPromptProps) {
   return (
-    <span className={promptClassName}>
-      Move encounter {props.encounterName} to Folder:
+    <StandardPromptLayout
+      className={promptClassName}
+      label="Move or rename encounter"
+    >
+      <span className="fas fa-folder" />
       <AutocompleteTextInput
         autoFocus
         fieldName="folderName"
         options={props.folderNames}
       />
-      <SubmitButton />
-    </span>
+      <Field type="text" name="encounterName" />
+    </StandardPromptLayout>
   );
 }
 
 type MoveEncounterModel = {
+  encounterName: string;
   folderName: string;
 };
 
@@ -37,24 +42,19 @@ export function MoveEncounterPrompt(
   moveListingFn: (encounter: SavedEncounter, oldId: string) => void,
   folderNames: string[]
 ): PromptProps<MoveEncounterModel> {
+  const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
+
   return {
     autoFocusSelector: "input[type='text']",
-    initialValues: { folderName: "" },
-    children: (
-      <MoveEncounterPromptComponent
-        encounterName={legacySavedEncounter.Name || ""}
-        folderNames={folderNames}
-      />
-    ),
+    initialValues: {
+      folderName: savedEncounter.Path,
+      encounterName: savedEncounter.Name
+    },
+    children: <MoveEncounterPromptComponent folderNames={folderNames} />,
     onSubmit: model => {
-      const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
-
-      if (savedEncounter.Path == model.folderName) {
-        return true;
-      }
-
       const oldId = savedEncounter.Id;
       savedEncounter.Path = model.folderName;
+      savedEncounter.Name = model.encounterName;
       savedEncounter.Id = AccountClient.MakeId(
         savedEncounter.Name,
         savedEncounter.Path
