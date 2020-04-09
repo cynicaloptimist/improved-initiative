@@ -2,6 +2,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
+import { ToPlayerViewCombatantState } from "./ToPlayerViewCombatantState";
 
 describe("Combatant", () => {
   let encounter: Encounter;
@@ -45,5 +46,24 @@ describe("Combatant", () => {
       HP: { Value: 15, Notes: "" }
     });
     expect(combatantsSpy).toBeCalled();
+  });
+
+  describe("ToPlayerViewCombatantState", () => {
+    test("Should show full HP for player characters", () => {
+      const combatant = encounter.AddCombatantFromStatBlock({
+        ...StatBlock.Default(),
+        Player: "player"
+      });
+      const playerViewCombatantState = ToPlayerViewCombatantState(combatant);
+      expect(playerViewCombatantState.HPDisplay).toEqual("1/1");
+    });
+
+    test("Should show qualitative HP for creatures", () => {
+      const combatant = encounter.AddCombatantFromStatBlock({
+        ...StatBlock.Default()
+      });
+      const playerViewCombatantState = ToPlayerViewCombatantState(combatant);
+      expect(playerViewCombatantState.HPDisplay).toEqual("<span class='healthyHP'>Healthy</span>");
+    });
   });
 });
