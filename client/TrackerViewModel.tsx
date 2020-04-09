@@ -453,9 +453,9 @@ export class TrackerViewModel {
       if (statBlock.Player == "") {
         this.EditStatBlock({
           editorTarget: "library",
-          onSave: this.Libraries.NPCs.SaveNewStatBlock,
+          onSave: this.Libraries.StatBlocks.SaveNewStatBlock,
           statBlock,
-          currentListings: this.Libraries.NPCs.GetStatBlocks()
+          currentListings: this.Libraries.StatBlocks.GetStatBlocks()
         });
       } else {
         const currentListings = this.Libraries.PersistentCharacters.GetListings();
@@ -626,7 +626,7 @@ export class TrackerViewModel {
     }
 
     if (account.statblocks) {
-      this.Libraries.NPCs.AddListings(account.statblocks, "account");
+      this.Libraries.StatBlocks.AddListings(account.statblocks, "account");
     }
 
     if (account.persistentcharacters) {

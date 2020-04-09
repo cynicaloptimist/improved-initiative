@@ -54,7 +54,7 @@ export class AccountClient {
 
     const promises = [
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.NPCs.GetStatBlocks()),
+        await getUnsyncedItemsFromListings(libraries.StatBlocks.GetStatBlocks()),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback

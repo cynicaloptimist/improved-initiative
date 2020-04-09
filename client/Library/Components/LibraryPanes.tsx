@@ -42,7 +42,7 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
       Creatures: (
         <StatBlockLibraryPane
           librariesCommander={this.props.librariesCommander}
-          library={this.props.libraries.NPCs}
+          library={this.props.libraries.StatBlocks}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
