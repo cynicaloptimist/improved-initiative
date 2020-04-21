@@ -219,6 +219,7 @@
   width: 3rem;
   grid-area: ac;
   margin-left: 3px;
+  position: relative;
 
   @media (max-width: @medium) {
     display: flex;
@@ -230,8 +231,11 @@
 .combatant__ac--revealed-badge {
   font-size: 80%;
   position: absolute;
-  right: -8px;
-  top: 0;
+  right: 4px;
+  top: 12px;
+  @media (max-width: @medium) {
+    top: -4px;
+  }
 }
 .combatant__tags-commands-cell {
   grid-area: tagsCommands;
