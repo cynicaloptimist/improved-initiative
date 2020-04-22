@@ -23,7 +23,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Jest Tests",
+      "name": "Debug Tests for this File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest",
       "args": ["-i", "${fileBasenameNoExtension}"],
       "internalConsoleOptions": "openOnSessionStart"

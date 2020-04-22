@@ -1,15 +1,16 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { toModifierString } from "../../common/Toolbox";
 import { CombatantCommander } from "../Commands/CombatantCommander";
-import { ConcentrationPrompt } from "../Commands/Prompts/ConcentrationPrompt";
-import { DefaultPrompt, LegacyPrompt } from "../Commands/Prompts/Prompt";
+import { ConcentrationTagText } from "../Prompts/ConcentrationPrompt";
 import { CurrentSettings } from "../Settings/Settings";
 import { Metrics } from "../Utility/Metrics";
 import { Combatant } from "./Combatant";
 import { Tag } from "./Tag";
 import { TagState } from "../../common/CombatantState";
+import { EditInitiativePrompt } from "../Prompts/EditInitiativePrompt";
+import { PromptProps } from "../Prompts/PendingPrompts";
+import { EditAliasPrompt } from "../Prompts/EditAliasPrompt";
 
 const animatedCombatantIds = ko.observableArray<string>([]);
 
@@ -20,7 +21,7 @@ export class CombatantViewModel {
   constructor(
     public Combatant: Combatant,
     public CombatantCommander: CombatantCommander,
-    public PromptUser: (prompt: LegacyPrompt) => void,
+    public EnqueuePrompt: (prompt: PromptProps<any>) => void,
     public LogEvent: (message: string) => void
   ) {
     this.HP = ko.pureComputed(() => {
@@ -48,7 +49,7 @@ export class CombatantViewModel {
       Metrics.TrackEvent("DamageApplied", { Amount: damage.toString() });
       if (
         shouldAutoCheckConcentration &&
-        this.Combatant.Tags().some(t => t.Text === ConcentrationPrompt.Tag)
+        this.Combatant.Tags().some(t => t.Text === ConcentrationTagText)
       ) {
         this.CombatantCommander.CheckConcentration(this.Combatant, damage);
       }
@@ -58,9 +59,7 @@ export class CombatantViewModel {
     }
   }
 
-  public ApplyTemporaryHP(inputTHP: string) {
-    const newTemporaryHP = parseInt(inputTHP);
-
+  public ApplyTemporaryHP(newTemporaryHP: number) {
     if (isNaN(newTemporaryHP)) {
       return;
     }
@@ -68,55 +67,47 @@ export class CombatantViewModel {
     this.Combatant.ApplyTemporaryHP(newTemporaryHP);
   }
 
-  public ApplyInitiative(inputInitiative: string) {
-    const initiative = parseInt(inputInitiative);
+  public ApplyInitiative(initiative: number) {
     this.Combatant.Initiative(initiative);
     this.Combatant.Encounter.SortByInitiative(true);
   }
 
   public EditInitiative() {
-    const currentInitiative = this.Combatant.Initiative();
-    const modifier = toModifierString(this.Combatant.InitiativeBonus());
-    const preRoll = currentInitiative || this.Combatant.GetInitiativeRoll();
-    let message = `Set initiative for ${this.Name()} (${modifier}): <input id='initiative' class='response' type='number' value='${preRoll}' />`;
-    if (this.Combatant.InitiativeGroup()) {
-      message += ` Break Link: <input class='response' name='break-link' type='checkbox' value='break' />`;
-    }
-    const prompt = new DefaultPrompt(message, response => {
-      const initiative = response["initiative"];
-      const breakLink = response["break-link"] === "break";
-      if (initiative) {
-        if (breakLink) {
+    const prompt = EditInitiativePrompt(this.Combatant, model => {
+      if (model.initiativeRoll) {
+        if (model.breakLink) {
           this.Combatant.InitiativeGroup(null);
           this.Combatant.Encounter.CleanInitiativeGroups();
         }
-        this.ApplyInitiative(initiative);
-        this.LogEvent(`${this.Name()} initiative set to ${initiative}.`);
+        this.ApplyInitiative(model.initiativeRoll);
+        this.LogEvent(
+          `${this.Name()} initiative set to ${model.initiativeRoll}.`
+        );
         Metrics.TrackEvent("InitiativeSet", { Name: this.Name() });
+        return true;
       }
+      return false;
     });
-    this.PromptUser(prompt);
+
+    this.EnqueuePrompt(prompt);
   }
 
   public SetAlias() {
-    const currentName = this.Name();
-    const prompt = new DefaultPrompt(
-      `Change alias for ${currentName}: <input id='alias' class='response' />`,
-      response => {
-        const alias = response["alias"];
-        this.Combatant.Alias(alias);
-        if (alias) {
-          this.LogEvent(`${currentName} alias changed to ${alias}.`);
-          Metrics.TrackEvent("AliasSet", {
-            StatBlockName: this.Combatant.StatBlock().Name,
-            Alias: alias
-          });
-        } else {
-          this.LogEvent(`${currentName} alias removed.`);
-        }
+    const currentName = this.Combatant.DisplayName();
+    const prompt = EditAliasPrompt(this.Combatant, model => {
+      this.Combatant.Alias(model.alias);
+      if (model.alias) {
+        this.LogEvent(`${currentName} alias changed to ${model.alias}.`);
+        Metrics.TrackEvent("AliasSet", {
+          StatBlockName: this.Combatant.StatBlock().Name,
+          Alias: model.alias
+        });
+      } else {
+        this.LogEvent(`${currentName} alias removed.`);
       }
-    );
-    this.PromptUser(prompt);
+      return true;
+    });
+    this.EnqueuePrompt(prompt);
   }
 
   public ToggleHidden() {

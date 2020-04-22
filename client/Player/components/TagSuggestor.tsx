@@ -3,7 +3,7 @@ import * as React from "react";
 import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
 import { EndOfTurn, StartOfTurn } from "../../Combatant/Tag";
-import { TagModel, TagPromptComponent } from "../../Commands/Prompts/TagPrompt";
+import { TagModel, TagPromptComponent } from "../../Prompts/TagPrompt";
 
 export class TagSuggestor extends React.Component<TagSuggestorProps> {
   public render() {

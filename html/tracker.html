@@ -161,7 +161,7 @@
           class="combatant-details__wrapper"
           style="flex-shrink: 1"
           data-bind="react: {
-                component: ActiveCombatantDetails
+                component: activeCombatantComponent
             }"
         ></div>
         <!-- /ko -->
@@ -204,77 +204,18 @@
         }"
       ></div>
       <!-- /ko -->
-      <div class="all-prompts">
-        <div
-          class="prompts"
-          data-bind="react: {
-                component: PromptsComponent
+      <div
+        class="prompts"
+        data-bind="react: {
+                component: promptsComponent 
         }"
-        ></div>
-        <div
-          class="prompts legacy-prompts"
-          data-bind="with: PromptQueue, css: { empty: !PromptQueue.HasLegacyPrompt() }"
-        >
-          <!-- ko foreach: LegacyPrompts -->
-          <form
-            class="prompt"
-            data-bind="
-                submit: $parent.ResolveLegacyPrompt($data),
-                component: {
-                    name: ComponentName,
-                    params: {
-                        prompt: $data,
-                    }
-                },
-                afterRender: $parent.UpdateLegacyDom"
-          ></form>
-          <!-- /ko -->
-        </div>
-      </div>
-
-      <div class="combat-footer">
-        <ul
-          class="event-log"
-          data-bind="visible: EventLog.ShowFullLog, foreach: EventLog.EventsTail"
-        >
-          <li data-bind="html: $data"></li>
-        </ul>
-        <div class="footer-bar">
-          <i
-            class="fa-clickable"
-            data-bind="click: EventLog.ToggleFullLog, css: EventLog.ToggleCSS()"
-          ></i>
-          <span
-            class="latest-event"
-            data-bind="html: EventLog.LatestEvent"
-          ></span>
-          <!-- ko if: EncounterCommander.DisplayTurnTimer -->
-          <span
-            class="turn-timer"
-            data-bind="text: Encounter.EncounterFlow.TurnTimerReadout"
-          ></span>
-          <!-- /ko -->
-          <!-- ko if: EncounterCommander.DisplayRoundCounter -->
-          <span class="round-counter"
-            >Current Round:
-            <span
-              data-bind="text: Encounter.EncounterFlow.CombatTimer.ElapsedRounds"
-            ></span
-          ></span>
-          <!-- /ko -->
-          <!-- ko if: EncounterCommander.DisplayDifficulty -->
-          <span
-            class="encounter-challenge"
-            data-bind="with: Encounter.Difficulty()"
-          >
-            <!-- ko if: Difficulty -->
-            <span class="difficulty" data-bind="text: Difficulty"></span>
-            <!-- /ko -->
-            <span data-bind="text: EarnedExperience"></span> XP
-          </span>
-          <!-- /ko -->
-        </div>
-      </div>
+      ></div>
+      <div
+        class="combat-footer-host"
+        data-bind="react: {
+                component: combatFooterComponent
+        }"
+      ></div>
     </div>
     <div class="right-column">
       <div class="selected-combatant">

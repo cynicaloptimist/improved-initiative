@@ -1,9 +1,6 @@
 import * as ko from "knockout";
 
 import { render as renderReact } from "react-dom";
-import { TrackerViewModel } from "../TrackerViewModel";
-import { ComponentLoader } from "./Components";
-import { TextAssets } from "./TextAssets";
 
 export function RegisterBindingHandlers() {
   ko.bindingHandlers.react = {
@@ -16,25 +13,6 @@ export function RegisterBindingHandlers() {
       const component = ko.unwrap(reactOptions.component);
 
       renderReact(component, el);
-    }
-  };
-
-  ko.bindingHandlers.focusOnRender = {
-    update: (
-      element: any,
-      valueAccessor: () => any,
-      allBindingsAccessor?: KnockoutAllBindingsAccessor,
-      viewModel?: TrackerViewModel,
-      bindingContext?: KnockoutBindingContext
-    ) => {
-      ComponentLoader.AfterComponentLoaded(() => {
-        const focusTarget = $(element).find(valueAccessor());
-        if (focusTarget.length == 0) {
-          return;
-        }
-        focusTarget.get(0).focus();
-        focusTarget.first().select();
-      });
     }
   };
 
@@ -68,42 +46,6 @@ export function RegisterBindingHandlers() {
         viewModel,
         bindingContext
       );
-    }
-  };
-
-  ko.bindingHandlers.onEnter = {
-    init: (
-      element: any,
-      valueAccessor: () => any,
-      allBindingsAccessor?: KnockoutAllBindingsAccessor,
-      viewModel?: any,
-      bindingContext?: KnockoutBindingContext
-    ) => {
-      const callback = valueAccessor();
-      $(element).keypress(event => {
-        const keyCode = event.which ? event.which : event.keyCode;
-        if (keyCode === 13) {
-          callback.call(viewModel);
-          return false;
-        }
-        return true;
-      });
-    }
-  };
-
-  ko.bindingHandlers.uiText = {
-    update: (
-      element: any,
-      valueAccessor: () => any,
-      allBindingsAccessor?: KnockoutAllBindingsAccessor,
-      viewModel?: any,
-      bindingContext?: KnockoutBindingContext
-    ) => {
-      if (TextAssets[valueAccessor()]) {
-        $(element).html(TextAssets[valueAccessor()]);
-      } else {
-        $(element).html(valueAccessor());
-      }
     }
   };
 }

@@ -4,6 +4,7 @@ import _ = require("lodash");
 import { Settings } from "../../common/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { GetLegacyKeyBinding } from "./GetLegacyKeyBinding";
+import { DefaultKeybindings } from "./DefaultKeybindings";
 
 export class Command {
   public ShowOnActionBar: KnockoutObservable<boolean>;
@@ -20,7 +21,6 @@ export class Command {
     id: string;
     description: string;
     actionBinding: () => any;
-    defaultKeyBinding: string;
     fontAwesomeIcon: string;
     defaultShowOnActionBar?: boolean;
     defaultShowInCombatantRow?: boolean;
@@ -55,7 +55,8 @@ export class Command {
       settings && _.find(settings.Commands, c => c.Name == this.Id);
 
     if (commandSetting == undefined) {
-      this.KeyBinding = GetLegacyKeyBinding(this.Id) || props.defaultKeyBinding;
+      this.KeyBinding =
+        GetLegacyKeyBinding(this.Id) || DefaultKeybindings[this.Id] || "";
       const showOnActionBarSetting = LegacySynchronousLocalStore.Load<boolean>(
         LegacySynchronousLocalStore.ActionBar,
         this.Description

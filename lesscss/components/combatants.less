@@ -1,9 +1,11 @@
 .initiative-list-host {
   flex-shrink: 1;
+  min-height: 7.4rem;
 }
 
 .initiative-list {
   overflow: hidden auto;
+  min-height: 6rem;
 }
 
 .combatants {
@@ -134,7 +136,7 @@
   border-left: @active-combatant-indicator-width solid transparent;
   grid-area: init;
 
-  &.fa-link:before {
+  .fa-link:before {
     font-size: 60%;
     vertical-align: top;
   }
@@ -217,6 +219,7 @@
   width: 3rem;
   grid-area: ac;
   margin-left: 3px;
+  position: relative;
 
   @media (max-width: @medium) {
     display: flex;
@@ -228,8 +231,11 @@
 .combatant__ac--revealed-badge {
   font-size: 80%;
   position: absolute;
-  right: -8px;
-  top: 0;
+  right: 4px;
+  top: 12px;
+  @media (max-width: @medium) {
+    top: -4px;
+  }
 }
 .combatant__tags-commands-cell {
   grid-area: tagsCommands;

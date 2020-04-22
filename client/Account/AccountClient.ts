@@ -54,7 +54,7 @@ export class AccountClient {
 
     const promises = [
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.NPCs.GetStatBlocks()),
+        await getUnsyncedItemsFromListings(libraries.StatBlocks.GetStatBlocks()),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
@@ -187,7 +187,7 @@ export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
 async function getUnsyncedItems(items: Listing<Listable>[]) {
   const itemsByName: _.Dictionary<Listing<Listable>> = {};
   for (const item of items) {
-    const name = item.Listing().Name;
+    const name = [item.Listing().Path + item.Listing().Name].toString();
     if (itemsByName[name] == undefined) {
       itemsByName[name] = item;
     } else {

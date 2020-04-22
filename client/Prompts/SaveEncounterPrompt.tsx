@@ -1,17 +1,17 @@
 import { Field, FieldArray, FieldProps } from "formik";
 import * as React from "react";
-import { CombatantState } from "../../../common/CombatantState";
-import { EncounterState } from "../../../common/EncounterState";
-import { SavedEncounter } from "../../../common/SavedEncounter";
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { AccountClient } from "../../Account/AccountClient";
-import { Button, SubmitButton } from "../../Components/Button";
-import { env } from "../../Environment";
-import { EncounterLibrary } from "../../Library/EncounterLibrary";
-import { ToggleButton } from "../../Settings/components/Toggle";
-import { AutocompleteTextInput } from "../../StatBlockEditor/components/AutocompleteTextInput";
-import { Metrics } from "../../Utility/Metrics";
-import { EventLog } from "../../Widgets/EventLog";
+import { CombatantState } from "../../common/CombatantState";
+import { EncounterState } from "../../common/EncounterState";
+import { SavedEncounter } from "../../common/SavedEncounter";
+import { probablyUniqueString } from "../../common/Toolbox";
+import { AccountClient } from "../Account/AccountClient";
+import { Button, SubmitButton } from "../Components/Button";
+import { env } from "../Environment";
+import { EncounterLibrary } from "../Library/EncounterLibrary";
+import { ToggleButton } from "../Settings/components/Toggle";
+import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
+import { Metrics } from "../Utility/Metrics";
+import { EventLog } from "../Widgets/EventLog";
 import { PromptProps } from "./PendingPrompts";
 
 interface SaveEncounterPromptComponentProps {
@@ -38,7 +38,7 @@ class SaveEncounterPromptComponent extends React.Component<
         <div className="p-save-encounter">
           <div className="p-save-encounter__basic">
             <label>
-              {"Save Encounter As: "}
+              <div className="p-save-encounter__label">Save Encounter As</div>
               <Field
                 id={fieldLabelId}
                 name="Name"
@@ -47,7 +47,7 @@ class SaveEncounterPromptComponent extends React.Component<
               />
             </label>
             <Button
-              fontAwesomeIcon="caret-down"
+              fontAwesomeIcon="wrench"
               onClick={() =>
                 this.setState(oldState => ({
                   advancedPrompt: !oldState.advancedPrompt
@@ -66,7 +66,7 @@ class SaveEncounterPromptComponent extends React.Component<
     return (
       <div className="p-save-encounter__advanced">
         <label>
-          {"Folder: "}
+          <div className="p-save-encounter__label">Folder</div>
           <AutocompleteTextInput
             fieldName="Path"
             options={this.props.autocompletePaths}
@@ -74,6 +74,7 @@ class SaveEncounterPromptComponent extends React.Component<
           />
         </label>
         <div className="p-save-encounter__include-combatants">
+          <div className="p-save-encounter__label">Include Combatants</div>
           <div className="p-save-encounter__character-combatants">
             <Field
               name="CharacterCombatants"
@@ -89,7 +90,7 @@ class SaveEncounterPromptComponent extends React.Component<
         </div>
         {env.HasEpicInitiative && (
           <label>
-            {"Background Image URL: "}
+            <div className="p-save-encounter__label">Background Image URL</div>
             <Field type="text" name="BackgroundImageUrl" />
           </label>
         )}

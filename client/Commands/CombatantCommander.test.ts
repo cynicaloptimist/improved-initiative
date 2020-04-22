@@ -82,7 +82,7 @@ describe("CombatantCommander", () => {
     expect(combatantViewModel.Combatant).toBe(combatant1);
 
     combatantCommander.Select(combatantViewModel);
-    combatantViewModel.ApplyInitiative("5");
+    combatantViewModel.ApplyInitiative(5);
 
     expect(trackerViewModel.CombatantViewModels()[1].Combatant).toBe(
       combatant1

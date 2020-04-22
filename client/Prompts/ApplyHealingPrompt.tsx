@@ -1,9 +1,9 @@
-import { Field } from "formik";
 import React = require("react");
-import { probablyUniqueString } from "../../../common/Toolbox";
-import { CombatantViewModel } from "../../Combatant/CombatantViewModel";
-import { SubmitButton } from "../../Components/Button";
+import { Field } from "formik";
+
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 import { PromptProps } from "./PendingPrompts";
+import { StandardPromptLayout } from "./StandardPromptLayout";
 
 interface ApplyHealingModel {
   healingAmount: string;
@@ -14,7 +14,7 @@ export const ApplyHealingPrompt = (
   suggestedHealing: string,
   logHpChange: (healing: number, combatantNames: string) => void
 ): PromptProps<ApplyHealingModel> => {
-  const fieldLabelId = probablyUniqueString();
+  const combatantNames = combatantViewModels.map(c => c.Name()).join(", ");
   return {
     onSubmit: (model: ApplyHealingModel) => {
       const healingAmount = parseInt(model.healingAmount);
@@ -36,19 +36,9 @@ export const ApplyHealingPrompt = (
     autoFocusSelector: ".autofocus",
 
     children: (
-      <div className="p-apply-damage">
-        <label htmlFor={fieldLabelId}>
-          {"Apply healing to "}
-          {combatantViewModels.map(c => c.Name()).join(", ")}:
-        </label>
-        <Field
-          id={fieldLabelId}
-          type="number"
-          className="autofocus"
-          name="healingAmount"
-        />
-        <SubmitButton />
-      </div>
+      <StandardPromptLayout label={`Apply healing to ${combatantNames}:`}>
+        <Field type="number" className="autofocus" name="healingAmount" />
+      </StandardPromptLayout>
     )
   };
 };

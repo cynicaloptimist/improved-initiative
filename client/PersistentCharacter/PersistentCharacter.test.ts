@@ -1,10 +1,9 @@
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
-import { SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { SaveEncounterPrompt } from "../Commands/Prompts/SaveEncounterPrompt";
+import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
 import { InitializeSettings } from "../Settings/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";

@@ -10,11 +10,11 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialViewModel";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
-import { CombatStatsPrompt } from "./Prompts/CombatStatsPrompt";
-import { InitiativePrompt } from "./Prompts/InitiativePrompt";
-import { PlayerViewPrompt } from "./Prompts/PlayerViewPrompt";
-import { QuickAddPrompt } from "./Prompts/QuickAddPrompt";
-import { RollDicePrompt } from "./Prompts/RollDicePrompt";
+import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
+import { InitiativePrompt } from "../Prompts/InitiativePrompt";
+import { PlayerViewPrompt } from "../Prompts/PlayerViewPrompt";
+import { QuickAddPrompt } from "../Prompts/QuickAddPrompt";
+import { RollDicePrompt } from "../Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
 
 export class EncounterCommander {
@@ -30,10 +30,10 @@ export class EncounterCommander {
   };
 
   public QuickAddStatBlock = () => {
-    const prompt = new QuickAddPrompt(
+    const prompt = QuickAddPrompt(
       this.tracker.Encounter.AddCombatantFromStatBlock
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
@@ -69,22 +69,9 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  public DisplayPortraits = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayPortraits
-  );
-  public DisplayRoundCounter = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayRoundCounter
-  );
-  public DisplayTurnTimer = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayTurnTimer
-  );
-  public DisplayDifficulty = ko.pureComputed(
-    () => CurrentSettings().TrackerView.DisplayDifficulty
-  );
-
   private rollInitiative = () => {
-    this.tracker.PromptQueue.AddLegacyPrompt(
-      new InitiativePrompt(
+    this.tracker.PromptQueue.Add(
+      InitiativePrompt(
         this.tracker.Encounter.Combatants(),
         this.tracker.Encounter.EncounterFlow.StartEncounter
       )

@@ -30,7 +30,8 @@ export function CombatantRow(props: CombatantRowProps) {
 
   return (
     <tr className={getClassNames(props).join(" ")} onClick={selectCombatant}>
-      <td className={getInitiativeClass(props)} title="Initiative Roll">
+      <td className="combatant__initiative" title="Initiative Roll">
+        {props.combatantState.InitiativeGroup && <i className="fas fa-link" />}
         {props.combatantState.Initiative}
       </td>
 
@@ -141,14 +142,6 @@ function getClassNames(props: CombatantRowProps) {
     classNames.push("selected");
   }
   return classNames;
-}
-
-function getInitiativeClass(props: CombatantRowProps) {
-  let initiativeClass = "combatant__initiative";
-  if (props.combatantState.InitiativeGroup) {
-    initiativeClass += " fas fa-link";
-  }
-  return initiativeClass;
 }
 
 function getDisplayName(props: CombatantRowProps) {

@@ -1,0 +1,21 @@
+name: Bump Patch Version on development branch
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: 'development'
+
+    - name: Bump patch version and git push
+      run: |
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        npm version patch
+        git push

@@ -17,9 +17,9 @@ import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList"
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
-import { PendingPrompts } from "./Commands/Prompts/PendingPrompts";
-import { PrivacyPolicyPrompt } from "./Commands/Prompts/PrivacyPolicyPrompt";
-import { PromptQueue } from "./Commands/Prompts/PromptQueue";
+import { PendingPrompts } from "./Prompts/PendingPrompts";
+import { PrivacyPolicyPrompt } from "./Prompts/PrivacyPolicyPrompt";
+import { PromptQueue } from "./Commands/PromptQueue";
 import { Toolbar } from "./Commands/Toolbar";
 import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
@@ -49,6 +49,7 @@ import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { CommandContext } from "./InitiativeList/CommandContext";
 import { SettingsContext } from "./Settings/SettingsContext";
+import { CombatFooter } from "./CombatFooter/CombatFooter";
 
 const codec = compression("lzma");
 
@@ -217,12 +218,42 @@ export class TrackerViewModel {
     );
   });
 
-  public PromptsComponent = ko.pureComputed(() => (
+  public promptsComponent = ko.pureComputed(() => (
     <PendingPrompts
       promptsAndIds={this.PromptQueue.GetPrompts()}
-      removeResolvedPrompt={this.PromptQueue.RemoveResolvedPrompt}
+      removePrompt={this.PromptQueue.Remove}
     />
   ));
+
+  public activeCombatantComponent = ko.pureComputed(() => {
+    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
+    const combatantViewModel = find(
+      this.CombatantViewModels(),
+      c => c.Combatant == activeCombatant
+    );
+    if (!combatantViewModel) {
+      return null;
+    }
+    return (
+      <CombatantDetails
+        combatantViewModel={combatantViewModel}
+        displayMode="active"
+        enricher={this.StatBlockTextEnricher}
+      />
+    );
+  });
+
+  public combatFooterComponent = ko.computed(() => {
+    const props = {
+      encounter: this.Encounter,
+      eventLog: this.EventLog
+    };
+    return (
+      <SettingsContext.Provider value={CurrentSettings()}>
+        <CombatFooter {...props} />
+      </SettingsContext.Provider>
+    );
+  });
 
   private selectCombatantById = (
     combatantId: string,
@@ -247,24 +278,6 @@ export class TrackerViewModel {
     );
     this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
   };
-
-  public ActiveCombatantDetails = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
-    const combatantViewModel = find(
-      this.CombatantViewModels(),
-      c => c.Combatant == activeCombatant
-    );
-    if (!combatantViewModel) {
-      return null;
-    }
-    return (
-      <CombatantDetails
-        combatantViewModel={combatantViewModel}
-        displayMode="active"
-        enricher={this.StatBlockTextEnricher}
-      />
-    );
-  });
 
   public CenterColumn = ko.pureComputed(() => {
     const editStatBlock = this.StatBlockEditor() !== null;
@@ -322,8 +335,8 @@ export class TrackerViewModel {
 
   public ReviewPrivacyPolicy = () => {
     this.SettingsVisible(false);
-    const prompt = new PrivacyPolicyPrompt();
-    this.PromptQueue.AddLegacyPrompt(prompt);
+    const prompt = PrivacyPolicyPrompt();
+    this.PromptQueue.Add(prompt);
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
@@ -440,9 +453,9 @@ export class TrackerViewModel {
       if (statBlock.Player == "") {
         this.EditStatBlock({
           editorTarget: "library",
-          onSave: this.Libraries.NPCs.SaveNewStatBlock,
+          onSave: this.Libraries.StatBlocks.SaveNewStatBlock,
           statBlock,
-          currentListings: this.Libraries.NPCs.GetStatBlocks()
+          currentListings: this.Libraries.StatBlocks.GetStatBlocks()
         });
       } else {
         const currentListings = this.Libraries.PersistentCharacters.GetListings();
@@ -502,19 +515,14 @@ export class TrackerViewModel {
 
     this.Socket.on(
       "suggest tag",
-      (
-        suggestedCombatantIds: string[],
-        suggestedTag: TagState,
-        suggester: string
-      ) => {
+      (suggestedCombatantIds: string[], suggestedTag: TagState) => {
         const suggestedCombatants = this.CombatantViewModels().filter(
           c => suggestedCombatantIds.indexOf(c.Combatant.Id) > -1
         );
 
         this.CombatantCommander.PromptAcceptSuggestedTag(
           suggestedCombatants[0].Combatant,
-          suggestedTag,
-          suggester
+          suggestedTag
         );
       }
     );
@@ -601,7 +609,7 @@ export class TrackerViewModel {
     const vm = new CombatantViewModel(
       combatant,
       this.CombatantCommander,
-      this.PromptQueue.AddLegacyPrompt,
+      this.PromptQueue.Add,
       this.EventLog.AddEvent
     );
     return vm;
@@ -618,7 +626,7 @@ export class TrackerViewModel {
     }
 
     if (account.statblocks) {
-      this.Libraries.NPCs.AddListings(account.statblocks, "account");
+      this.Libraries.StatBlocks.AddListings(account.statblocks, "account");
     }
 
     if (account.persistentcharacters) {

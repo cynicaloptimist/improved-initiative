@@ -9,14 +9,13 @@ import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { StatBlockLibrary } from "../Library/StatBlockLibrary";
-import { Conditions } from "../Rules/Conditions";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
-import { MoveEncounterPrompt } from "./Prompts/MoveEncounterPrompt";
-import { DefaultPrompt } from "./Prompts/Prompt";
-import { SaveEncounterPrompt } from "./Prompts/SaveEncounterPrompt";
-import { SpellPrompt } from "./Prompts/SpellPrompt";
+import { MoveEncounterPrompt } from "../Prompts/MoveEncounterPrompt";
+import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
+import { SpellPrompt } from "../Prompts/SpellPrompt";
+import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 
 export class LibrariesCommander {
   constructor(
@@ -167,11 +166,10 @@ export class LibrariesCommander {
   };
 
   public ReferenceSpell = (spellListing: Listing<Spell>) => {
-    const prompt = new SpellPrompt(
-      spellListing,
-      this.tracker.StatBlockTextEnricher
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    spellListing.GetWithTemplate(Spell.Default()).then(spell => {
+      const prompt = SpellPrompt(spell, this.tracker.StatBlockTextEnricher);
+      this.tracker.PromptQueue.Add(prompt);
+    });
     return true;
   };
 
@@ -196,26 +194,23 @@ export class LibrariesCommander {
       .uniq()
       .compact()
       .value();
-    const prompt = new MoveEncounterPrompt(
+    const prompt = MoveEncounterPrompt(
       legacySavedEncounter,
       this.libraries.Encounters.Move,
       folderNames
     );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public ReferenceCondition = (conditionName: string) => {
-    const casedConditionName = _.startCase(conditionName);
-    if (Conditions[casedConditionName]) {
-      const prompt = new DefaultPrompt(
-        `<div class="p-condition-reference"><h3>${casedConditionName}</h3>${Conditions[casedConditionName]}</div>`
-      );
-      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    const promptProps = ConditionReferencePrompt(conditionName);
+    if (promptProps) {
+      this.tracker.PromptQueue.Add(promptProps);
     }
   };
 
   private deleteSavedStatBlock = (statBlockId: string) => () => {
-    this.libraries.NPCs.DeleteListing(statBlockId);
+    this.libraries.StatBlocks.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
   };
 

@@ -1,21 +1,14 @@
-.all-prompts {
+.prompts {
   padding: @medium-spacer;
   flex-shrink: 1;
   flex-grow: 1;
   overflow-y: auto;
   min-height: @prompt-minimum-height + (@medium-spacer * 4);
-}
-
-.prompts {
   align-items: center;
 
   &.empty {
     display: none;
   }
-}
-
-.legacy-prompts {
-  flex-grow: 1;
 }
 
 .ko-react-prompt-wrapper {
@@ -205,7 +198,7 @@
   }
 }
 
-.prompt--with-submit-on-right {
+.p-roll-dice {
   flex-flow: row;
   flex-grow: 1;
   div:first-child {
@@ -215,12 +208,10 @@
   }
 }
 
-.p-quick-add {
-  flex-flow: row wrap;
-  align-items: center;
-
-  > * {
-    margin: @medium-spacer;
+.p-standard-prompt.p-quick-add {
+  .p-standard-prompt__fields {
+    flex-flow: row wrap;
+    flex-shrink: 1;
   }
 }
 
@@ -242,6 +233,8 @@
 }
 
 .p-condition-reference {
+  flex-direction: row;
+  align-items: center;
   li,
   p {
     margin: @medium-spacer 0;
@@ -256,6 +249,7 @@
 .p-update-notes {
   flex-direction: row;
   flex-grow: 1;
+  align-items: flex-start;
 }
 
 .p-update-notes__notes {
@@ -275,37 +269,67 @@
 }
 
 .p-apply-damage {
-  flex-grow: 1;
-  flex-direction: row;
-  align-items: center;
-  label {
-    flex-grow: 1;
-    flex-shrink: 1;
-  }
   input {
     width: 60px;
   }
 }
 
-.p-save-encounter,
-.p-save-encounter__advanced {
+.p-save-encounter {
   flex-grow: 1;
-  flex-direction: column;
-  align-items: flex-end;
+  label {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+  }
+  .p-save-encounter__label {
+    flex-grow: 1;
+    flex-direction: row;
+  }
+
+  .p-save-encounter__basic,
+  .p-save-encounter__include-combatant {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+  }
+
+  .p-save-encounter__include-combatants {
+    flex-direction: row;
+    label {
+      flex-grow: 0;
+    }
+  }
+
+  .p-save-encounter__include-combatant {
+    height: 28px;
+    justify-content: flex-end;
+  }
 }
 
-.p-save-encounter__basic,
-.p-save-encounter__include-combatant {
+.p-standard-prompt {
   display: flex;
   flex-flow: row;
   align-items: center;
-}
+  flex-grow: 1;
 
-.p-save-encounter__include-combatants {
-  flex-direction: row;
-}
+  label {
+    display: flex;
+    flex-flow: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
 
-.p-save-encounter__include-combatant {
-  height: 28px;
-  justify-content: flex-end;
+  .p-standard-prompt__label {
+    flex-flow: row wrap;
+    align-items: center;
+    flex-grow: 1;
+    flex-shrink: 1;
+  }
+
+  .p-standard-prompt__fields {
+    flex-flow: row;
+    align-items: center;
+    flex-shrink: 0;
+  }
 }

@@ -2,7 +2,6 @@ import { StoredListing } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
@@ -11,13 +10,13 @@ import { StatBlockLibrary } from "./StatBlockLibrary";
 
 export class Libraries {
   public PersistentCharacters: PersistentCharacterLibrary;
-  public NPCs: StatBlockLibrary;
+  public StatBlocks: StatBlockLibrary;
   public Encounters: EncounterLibrary;
   public Spells: SpellLibrary;
 
   constructor(accountClient: AccountClient) {
     this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
-    this.NPCs = new StatBlockLibrary(accountClient);
+    this.StatBlocks = new StatBlockLibrary(accountClient);
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 
@@ -30,7 +29,7 @@ export class Libraries {
       if (!listings) {
         return;
       }
-      return this.NPCs.AddListings(listings, "server");
+      return this.StatBlocks.AddListings(listings, "server");
     });
 
     const localStatBlocks = await Store.LoadAllAndUpdateIds(Store.StatBlocks);
@@ -52,7 +51,7 @@ export class Libraries {
 
       return listing;
     });
-    this.NPCs.AddListings(listings, "localAsync");
+    this.StatBlocks.AddListings(listings, "localAsync");
     await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
 

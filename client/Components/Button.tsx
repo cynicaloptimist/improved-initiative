@@ -1,79 +1,91 @@
 import Tippy, { TippyProps } from "@tippy.js/react";
 import * as React from "react";
+import { FieldProps, Field } from "formik";
 
 export interface ButtonProps {
-  onClick: React.MouseEventHandler<HTMLSpanElement>;
-  onMouseOver?: React.MouseEventHandler<HTMLSpanElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onMouseOver?: React.MouseEventHandler<HTMLButtonElement>;
 
   additionalClassNames?: string;
   fontAwesomeIcon?: string;
   text?: string;
   tooltip?: string;
   tooltipProps?: Omit<TippyProps, "children" | "content">;
+
+  type?: "button" | "submit";
   disabled?: boolean;
 }
 
-export class Button extends React.Component<ButtonProps> {
-  public render() {
-    const text = this.props.text || "";
+export function Button(props: ButtonProps) {
+  const text = props.text || "";
 
-    const disabled = this.props.disabled || false;
+  const classNames = ["c-button"];
 
-    const classNames = ["c-button"];
+  if (props.disabled) {
+    classNames.push("c-button--disabled");
+  }
+  if (props.fontAwesomeIcon && props.text) {
+    classNames.push("c-button--icon-and-text");
+  }
+  if (props.additionalClassNames) {
+    classNames.push(props.additionalClassNames);
+  }
 
-    if (disabled) {
-      classNames.push("c-button--disabled");
-    }
-    if (this.props.fontAwesomeIcon && this.props.text) {
-      classNames.push("c-button--icon-and-text");
-    }
-    if (this.props.additionalClassNames) {
-      classNames.push(this.props.additionalClassNames);
-    }
+  const faElement = props.fontAwesomeIcon && (
+    <span className={`fas fa-${props.fontAwesomeIcon}`} />
+  );
 
-    const faElement = this.props.fontAwesomeIcon && (
-      <span className={`fas fa-${this.props.fontAwesomeIcon}`} />
+  const button = (
+    <button
+      type={props.type ?? "button"}
+      className={classNames.join(" ")}
+      onClick={!props.disabled && props.onClick}
+      onMouseOver={!props.disabled && props.onMouseOver}
+    >
+      {faElement}
+      {text}
+    </button>
+  );
+
+  if (props.tooltip) {
+    return (
+      <Tippy content={props.tooltip} {...props.tooltipProps}>
+        {button}
+      </Tippy>
     );
-
-    const button = (
-      <button
-        type="button"
-        className={classNames.join(" ")}
-        onClick={!disabled && this.props.onClick}
-        onMouseOver={!disabled && this.props.onMouseOver}
-      >
-        {faElement}
-        {text}
-      </button>
-    );
-
-    if (this.props.tooltip) {
-      return (
-        <Tippy content={this.props.tooltip} {...this.props.tooltipProps}>
-          {button}
-        </Tippy>
-      );
-    } else {
-      return button;
-    }
+  } else {
+    return button;
   }
 }
 
-interface SubmitButtonProps {
-  faClass?: string;
-  beforeSubmit?: () => boolean;
-}
+export function SubmitButton(
+  props: ButtonProps & { bindModel?: [string, any] }
+) {
+  const buttonProps: ButtonProps = {
+    ...props,
+    type: "submit",
+    fontAwesomeIcon: props.fontAwesomeIcon ?? "check",
+    onClick: props.onClick || (() => true)
+  };
 
-export class SubmitButton extends React.Component<SubmitButtonProps> {
-  public render() {
-    const faClass = this.props.faClass || "check";
-    const beforeSubmit = this.props.beforeSubmit || (() => true);
+  if (props.bindModel) {
     return (
-      <button
-        type="submit"
-        className={`c-button fas fa-${faClass} button`}
-        onClick={beforeSubmit}
-      />
+      <Field>
+        {(formik: FieldProps) => (
+          <Button
+            {...buttonProps}
+            onClick={e => {
+              if (buttonProps.disabled) {
+                return;
+              }
+              formik.form.setFieldValue(props.bindModel[0], props.bindModel[1]);
+              buttonProps.onClick(e);
+            }}
+          />
+        )}
+      </Field>
     );
+  } else {
+    return <Button {...buttonProps} />;
   }
 }

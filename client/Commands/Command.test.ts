@@ -6,14 +6,16 @@ const MakeCommand = () => ({
   id: "some-command-id",
   description: "Some Command",
   actionBinding: jest.fn(),
-  defaultKeyBinding: "default-keybinding",
   fontAwesomeIcon: "square"
 });
 
 describe("Command", () => {
-  test("Should use a default keybinding", () => {
-    const command = new Command(MakeCommand());
-    expect(command.KeyBinding).toEqual("default-keybinding");
+  test("Should look up default keybinding by id", () => {
+    const command = new Command({
+      ...MakeCommand(),
+      id: "start-encounter"
+    });
+    expect(command.KeyBinding).toEqual("alt+r");
   });
 
   test("Should load a saved keybinding", () => {
@@ -57,38 +59,6 @@ describe("Command", () => {
       id: "add-tag"
     });
     expect(command.KeyBinding).toEqual("legacy-keybinding");
-  });
-
-  test("Should switch legacy Clear Encounter keybinding to Clean Encounter", () => {
-    const settings = getDefaultSettings();
-    settings.Commands = [
-      {
-        Name: "Clear Encounter",
-        KeyBinding: "legacy-clear-encounter-keybinding",
-        ShowOnActionBar: true,
-        ShowInCombatantRow: false
-      }
-    ];
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.User,
-      "Settings",
-      settings
-    );
-
-    const clearEncounterCommand = new Command({
-      ...MakeCommand(),
-      id: "clear-encounter"
-    });
-
-    expect(clearEncounterCommand.KeyBinding).toEqual("default-keybinding");
-
-    const cleanEncounterCommand = new Command({
-      ...MakeCommand(),
-      id: "clean-encounter"
-    });
-    expect(cleanEncounterCommand.KeyBinding).toEqual(
-      "legacy-clear-encounter-keybinding"
-    );
   });
 
   test("Should load a keybinding from the old Store", () => {

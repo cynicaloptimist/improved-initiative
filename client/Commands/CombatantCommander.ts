@@ -14,19 +14,20 @@ import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { BuildCombatantCommandList } from "./BuildCombatantCommandList";
 import { Command } from "./Command";
-import { AcceptDamagePrompt } from "./Prompts/AcceptDamagePrompt";
-import { AcceptTagPrompt } from "./Prompts/AcceptTagPrompt";
-import { ApplyDamagePrompt } from "./Prompts/ApplyDamagePrompt";
-import { ApplyHealingPrompt } from "./Prompts/ApplyHealingPrompt";
-import { ConcentrationPrompt } from "./Prompts/ConcentrationPrompt";
-import { DefaultPrompt } from "./Prompts/Prompt";
-import { ShowDiceRollPrompt } from "./Prompts/RollDicePrompt";
-import { TagPrompt } from "./Prompts/TagPrompt";
-import { UpdateNotesPrompt } from "./Prompts/UpdateNotesPrompt";
+import { AcceptDamagePrompt } from "../Prompts/AcceptDamagePrompt";
+import { AcceptTagPrompt } from "../Prompts/AcceptTagPrompt";
+import { ApplyDamagePrompt } from "../Prompts/ApplyDamagePrompt";
+import { ApplyHealingPrompt } from "../Prompts/ApplyHealingPrompt";
+import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
+import { ShowDiceRollPrompt } from "../Prompts/RollDicePrompt";
+import { TagPrompt } from "../Prompts/TagPrompt";
+import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
+import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
+import { LinkInitiativePrompt } from "../Prompts/LinkInitiativePrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
-  prompt: DefaultPrompt;
+  promptId: string;
 }
 
 export class CombatantCommander {
@@ -82,7 +83,7 @@ export class CombatantCommander {
     const pendingLink = this.pendingLinkInitiative();
     if (pendingLink) {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
-      pendingLink.prompt.Resolve(null);
+      this.tracker.PromptQueue.Remove(pendingLink.promptId);
     }
     if (!appendSelection) {
       this.selectedCombatantIds.removeAll();
@@ -240,37 +241,37 @@ export class CombatantCommander {
       return false;
     }
 
-    const prompt = new AcceptDamagePrompt(
+    Metrics.TrackEvent("DamageSuggested", { Amount: suggestedDamage });
+
+    const prompt = AcceptDamagePrompt(
       suggestedCombatants,
       suggestedDamage,
       suggester,
       this.tracker
     );
 
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 
   public PromptAcceptSuggestedTag = (
     suggestedCombatant: Combatant,
-    suggestedTag: TagState,
-    suggester: string
+    suggestedTag: TagState
   ) => {
-    const prompt = new AcceptTagPrompt(
+    const prompt = AcceptTagPrompt(
       suggestedCombatant,
       this.tracker.Encounter,
-      suggestedTag,
-      suggester
+      suggestedTag
     );
 
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+    this.tracker.PromptQueue.Add(prompt);
     return false;
   };
 
   public CheckConcentration = (combatant: Combatant, damageAmount: number) => {
     setTimeout(() => {
-      const prompt = new ConcentrationPrompt(combatant, damageAmount);
-      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+      const prompt = ConcentrationPrompt(combatant, damageAmount);
+      this.tracker.PromptQueue.Add(prompt);
       Metrics.TrackEvent("ConcentrationCheckTriggered");
     }, 1);
   };
@@ -282,20 +283,18 @@ export class CombatantCommander {
 
     const selectedCombatants = this.SelectedCombatants();
     const combatantNames = selectedCombatants.map(c => c.Name()).join(", ");
-    const prompt = new DefaultPrompt(
-      `Grant temporary hit points to ${combatantNames}: <input id='thp' class='response' type='number' />`,
-      response => {
-        const thp = response["thp"];
-        if (thp) {
-          selectedCombatants.forEach(c => c.ApplyTemporaryHP(thp));
-          this.tracker.EventLog.AddEvent(
-            `${thp} temporary hit points granted to ${combatantNames}.`
-          );
-          Metrics.TrackEvent("TemporaryHPAdded", { Amount: thp });
-        }
+    const prompt = ApplyTemporaryHPPrompt(combatantNames, model => {
+      if (model.hpAmount) {
+        selectedCombatants.forEach(c => c.ApplyTemporaryHP(model.hpAmount));
+        this.tracker.EventLog.AddEvent(
+          `${model.hpAmount} temporary hit points granted to ${combatantNames}.`
+        );
+        Metrics.TrackEvent("TemporaryHPAdded", { Amount: model.hpAmount });
       }
-    );
-    this.tracker.PromptQueue.AddLegacyPrompt(prompt);
+      return true;
+    });
+
+    this.tracker.PromptQueue.Add(prompt);
 
     return false;
   };
@@ -353,13 +352,12 @@ export class CombatantCommander {
 
     const selected = this.SelectedCombatants();
 
-    if (selected.length <= 1) {
-      const message = `<p>Select another combatant to link initiative. <br /><em>Tip:</em> You can select multiple combatants with 'ctrl', then use this command to link them to one shared initiative count.</p>`;
-      const prompt = new DefaultPrompt(message, _ =>
+    if (selected.length == 1) {
+      const prompt = LinkInitiativePrompt(() =>
         this.pendingLinkInitiative(null)
       );
-      this.tracker.PromptQueue.AddLegacyPrompt(prompt);
-      this.pendingLinkInitiative({ combatant: selected[0], prompt: prompt });
+      const promptId = this.tracker.PromptQueue.Add(prompt);
+      this.pendingLinkInitiative({ combatant: selected[0], promptId });
       return;
     }
 
