@@ -43,6 +43,7 @@ export class CombatantDetails extends React.Component<CombatantDetailsProps> {
 
     return (
       <div className="c-combatant-details">
+        <hr />
         <StatBlockHeader
           name={this.props.combatantViewModel.Name()}
           statBlockName={statBlock.Name}
