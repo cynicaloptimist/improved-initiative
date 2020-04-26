@@ -42,6 +42,5 @@ export const RegisterComponents = () => {
       template: name
     });
 
-  registerComponent("spelleditor", params => params.editor);
   registerComponent("tutorial", params => new TutorialViewModel(params));
 };
