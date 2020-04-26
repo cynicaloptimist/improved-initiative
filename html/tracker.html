@@ -187,13 +187,9 @@
       <!-- ko if: CenterColumn() === "spelleditor" -->
       <div
         class="spell-editor"
-        data-bind="
-    component: {
-        name: 'spelleditor',
-        params: {
-            editor: SpellEditor
-        }
-    }"
+        data-bind="react: {
+                component: SpellEditor
+        }"
       ></div>
       <!-- /ko -->
       <!-- ko if: CenterColumn() === "combat" -->

@@ -38,7 +38,6 @@ import {
   UpdateSettings
 } from "./Settings/Settings";
 import { SettingsPane } from "./Settings/components/SettingsPane";
-import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
   StatBlockEditorProps
@@ -50,6 +49,7 @@ import { EventLog } from "./Widgets/EventLog";
 import { CommandContext } from "./InitiativeList/CommandContext";
 import { SettingsContext } from "./Settings/SettingsContext";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
+import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 
 const codec = compression("lzma");
 
@@ -61,7 +61,6 @@ export class TrackerViewModel {
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
   public Libraries = new Libraries(this.accountClient);
-  public SpellEditor = new SpellEditor();
   public EncounterCommander = new EncounterCommander(this);
   public CombatantCommander = new CombatantCommander(this);
   public LibrariesCommander = new LibrariesCommander(
@@ -136,6 +135,7 @@ export class TrackerViewModel {
   );
 
   protected StatBlockEditor = ko.observable<JSX.Element>(null);
+  protected SpellEditor = ko.observable<JSX.Element>(null);
 
   public librariesComponent = (
     <LibraryPanes
@@ -281,7 +281,7 @@ export class TrackerViewModel {
 
   public CenterColumn = ko.pureComputed(() => {
     const editStatBlock = this.StatBlockEditor() !== null;
-    const editSpell = this.SpellEditor.HasSpell();
+    const editSpell = this.SpellEditor() !== null;
     if (editStatBlock) {
       return "statblockeditor";
     }
@@ -342,6 +342,12 @@ export class TrackerViewModel {
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
     this.StatBlockEditor(
       <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
+    );
+  }
+
+  public EditSpell(props: Omit<SpellEditorProps, "onClose">) {
+    this.SpellEditor(
+      <SpellEditor {...props} onClose={() => this.SpellEditor(null)} />
     );
   }
 
