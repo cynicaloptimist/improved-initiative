@@ -59,6 +59,7 @@ export function SpellEditor(props: SpellEditorProps) {
               className="json-editor"
               spellCheck={false}
               ref={jsonEditor}
+              defaultValue={JSON.stringify(props.spell, null, 2)}
             />
           )}
           <div className="buttons">
