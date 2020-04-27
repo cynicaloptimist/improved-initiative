@@ -4,6 +4,7 @@ import { Formik, Field, Form } from "formik";
 import { Spell } from "../../common/Spell";
 import { useState, useRef } from "react";
 import { Button } from "../Components/Button";
+import { ToggleButton } from "../Settings/components/Toggle";
 
 export type SpellEditorProps = {
   spell: Spell;
@@ -44,8 +45,8 @@ export function SpellEditor(props: SpellEditorProps) {
         props.onClose();
       }}
       initialValues={formValues}
-      render={api => (
-        <Form autoComplete="false">
+      render={() => (
+        <Form autoComplete="false" className="spell-editor">
           <h2>Edit Spell</h2>
           <div className="editor-type">
             Editor:
@@ -53,7 +54,7 @@ export function SpellEditor(props: SpellEditorProps) {
               <input
                 type="radio"
                 checked={editorMode === "standard"}
-                onChange={e => setEditorMode("standard")}
+                onChange={() => setEditorMode("standard")}
               />
               Form
             </label>
@@ -61,7 +62,7 @@ export function SpellEditor(props: SpellEditorProps) {
               <input
                 type="radio"
                 checked={editorMode === "json"}
-                onChange={e => setEditorMode("json")}
+                onChange={() => setEditorMode("json")}
               />
               JSON
             </label>
@@ -105,39 +106,30 @@ export function SpellEditor(props: SpellEditorProps) {
 function StandardEditor() {
   return (
     <div className="stats">
-      <label>
-        Name <Field className="name" name="Name" />
+      <FieldRow label="Name" name="Name" />
+      <FieldRow label="Source" name="Source" />
+      <FieldRow label="Level" name="Level" />
+      <FieldRow label="School" name="School" />
+      <FieldRow label="Casting Time" name="CastingTime" />
+      <label className="field-row">
+        <span>Ritual</span>
+        <ToggleButton fieldName="Ritual" />
       </label>
-      <label>
-        Source <Field name="Source" />
-      </label>
-      <label>
-        Level <Field name="Level" />
-      </label>
-      <label>
-        School <Field name="School" />
-      </label>
-      <label>
-        Casting Time <Field name="CastingTime" />
-      </label>
-      <label>
-        Ritual <Field type="checkbox" name="Ritual" />
-      </label>
-      <label>
-        Range <Field name="Range" />
-      </label>
-      <label>
-        Components <Field name="Components" />
-      </label>
-      <label>
-        Duration <Field name="Duration" />
-      </label>
-      <label>
-        Classes
-        <Field name="AllClasses" />
-      </label>
+      <FieldRow label="Range" name="Range" />
+      <FieldRow label="Components" name="Components" />
+      <FieldRow label="Duration" name="Duration" />
+      <FieldRow label="Classes" name="AllClasses" />
       <label>Description</label>
-      <textarea name="Description"></textarea>
+      <Field component="textarea" name="Description" />
     </div>
+  );
+}
+
+function FieldRow(props: { label: string; name: string; type?: string }) {
+  return (
+    <label className="field-row">
+      <span>{props.label}</span>
+      <Field name={props.name} type={props.type} />
+    </label>
   );
 }
