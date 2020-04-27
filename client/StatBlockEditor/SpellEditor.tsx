@@ -49,23 +49,9 @@ export function SpellEditor(props: SpellEditorProps) {
         <Form autoComplete="false" className="spell-editor">
           <h2>Edit Spell</h2>
           <div className="editor-type">
-            Editor:
-            <label>
-              <input
-                type="radio"
-                checked={editorMode === "standard"}
-                onChange={() => setEditorMode("standard")}
-              />
-              Form
-            </label>
-            <label>
-              <input
-                type="radio"
-                checked={editorMode === "json"}
-                onChange={() => setEditorMode("json")}
-              />
-              JSON
-            </label>
+            <label>Editor Mode: </label>
+            <Button onClick={() => setEditorMode("standard")} text="Standard" />
+            <Button onClick={() => setEditorMode("json")} text="JSON" />
           </div>
           {editorMode === "standard" && <StandardEditor />}
           {editorMode === "json" && (
