@@ -6,14 +6,12 @@ import { LauncherViewModel } from "./LauncherViewModel";
 import { ReactPlayerView } from "./Player/ReactPlayerView";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
-import { RegisterComponents } from "./Utility/Components";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 
 $(async () => {
   LoadEnvironment();
   RegisterBindingHandlers();
-  RegisterComponents();
   InitializeSettings();
   if ($("#tracker").length) {
     await LegacySynchronousLocalStore.MigrateItemsToStore();

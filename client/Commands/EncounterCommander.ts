@@ -1,4 +1,3 @@
-import * as ko from "knockout";
 import _ = require("lodash");
 import { CombatStats } from "../../common/CombatStats";
 import { PostCombatStatsOption } from "../../common/Settings";
@@ -8,7 +7,6 @@ import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { TutorialSpy } from "../Tutorial/TutorialSpy";
-import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "../Prompts/InitiativePrompt";
@@ -92,9 +90,7 @@ export class EncounterCommander {
 
     this.rollInitiative();
 
-    ComponentLoader.AfterComponentLoaded(() =>
-      TutorialSpy("ShowInitiativeDialog")
-    );
+    TutorialSpy("ShowInitiativeDialog");
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {
