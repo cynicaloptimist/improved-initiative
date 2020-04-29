@@ -1,8 +1,6 @@
 import * as ko from "knockout";
 import * as _ from "lodash";
 
-import { TutorialViewModel } from "../Tutorial/TutorialViewModel";
-
 const pendingComponents: JQueryXHR[] = [];
 
 export const ComponentLoader = {
@@ -35,12 +33,4 @@ export const RegisterComponents = () => {
   };
 
   ko.components.loaders.unshift(templateLoader);
-
-  const registerComponent = (name: string, viewModel: any) =>
-    ko.components.register(name, {
-      viewModel,
-      template: name
-    });
-
-  registerComponent("tutorial", params => new TutorialViewModel(params));
 };

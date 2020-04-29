@@ -50,6 +50,7 @@ import { CommandContext } from "./InitiativeList/CommandContext";
 import { SettingsContext } from "./Settings/SettingsContext";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
+import { Tutorial } from "./Tutorial/Tutorial";
 
 const codec = compression("lzma");
 
@@ -190,6 +191,10 @@ export class TrackerViewModel {
       />
     );
   });
+
+  public tutorialComponent = (
+    <Tutorial onClose={() => this.TutorialVisible(false)} />
+  );
 
   public toolbarComponent = ko.pureComputed(() => {
     const commandsToHideById =

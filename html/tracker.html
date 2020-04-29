@@ -121,18 +121,14 @@
       }"
     ></div>
     <!-- /ko -->
+    <!-- ko if: TutorialVisible -->
     <div
-      class="tutorial"
-      data-bind="
-        visible: TutorialVisible,
-        component: {
-            name: 'tutorial',
-            params: {
-                showTutorial: TutorialVisible
-            }
-        }
-    "
+      class="tutorial-host"
+      data-bind="react: {
+        component: tutorialComponent
+      }"
     ></div>
+    <!-- /ko -->
     <!-- ko if: DisplayLogin -->
     <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
       >Log In with Patreon</a
@@ -142,7 +138,7 @@
       class="toolbar-container"
       data-bind="react: {
         component: toolbarComponent()
-    }"
+      }"
     ></div>
     <div class="left-column">
       <!-- ko if: LibrariesVisible -->
