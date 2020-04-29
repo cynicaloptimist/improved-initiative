@@ -4,7 +4,7 @@ import { toModifierString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { SubmitButton } from "../Components/Button";
 import { CurrentSettings } from "../Settings/Settings";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { TutorialSpy } from "../Tutorial/TutorialSpy";
 import { PromptProps } from "./PendingPrompts";
 import _ = require("lodash");
 import { Field } from "formik";

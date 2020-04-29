@@ -4,7 +4,7 @@ import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
+import { TutorialSpy } from "../../Tutorial/TutorialSpy";
 import { Libraries } from "../Libraries";
 import { EncounterLibraryPane } from "./EncounterLibraryPane";
 import { PersistentCharacterLibraryPane } from "./PersistentCharacterLibraryPane";

@@ -3,8 +3,7 @@ import * as ko from "knockout";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Metrics } from "../Utility/Metrics";
 import { TutorialSteps } from "./TutorialSteps";
-
-export const TutorialSpy = ko.observable<string>(null);
+import { TutorialSpy } from "./TutorialSpy";
 
 export class TutorialViewModel {
   private stepIndex = ko.observable<number>(null);

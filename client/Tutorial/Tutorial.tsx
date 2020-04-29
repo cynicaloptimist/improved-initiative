@@ -3,7 +3,7 @@ import * as React from "react";
 import { TutorialSteps } from "./TutorialSteps";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
-import { TutorialSpy } from "./TutorialViewModel";
+import { TutorialSpy } from "./TutorialSpy";
 import { useCallback } from "react";
 
 export function Tutorial(props: { onClose: () => void }) {

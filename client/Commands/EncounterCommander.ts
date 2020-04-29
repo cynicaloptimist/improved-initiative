@@ -7,7 +7,7 @@ import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncoun
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { TutorialSpy } from "../Tutorial/TutorialSpy";
 import { ComponentLoader } from "../Utility/Components";
 import { Metrics } from "../Utility/Metrics";
 import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";

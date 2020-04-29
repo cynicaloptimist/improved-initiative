@@ -6,7 +6,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
 import { CurrentSettings } from "../Settings/Settings";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
+import { TutorialSpy } from "../Tutorial/TutorialSpy";
 import { Metrics } from "../Utility/Metrics";
 import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
