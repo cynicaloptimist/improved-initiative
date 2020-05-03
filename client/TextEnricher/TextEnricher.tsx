@@ -13,7 +13,7 @@ import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules } from "../Rules/Rules";
-import { Counter, CounterOrBracketedText } from "./Counter";
+import { CounterOrBracketedText } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -22,6 +22,10 @@ interface ReplaceConfig {
     ignore?: string[];
   };
 }
+
+export const TextEnricherContext = React.createContext((text: string) => (
+  <React.Fragment>{text}</React.Fragment>
+));
 
 export class TextEnricher {
   constructor(

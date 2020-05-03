@@ -42,7 +42,7 @@ import {
   StatBlockEditor,
   StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
-import { TextEnricher } from "./TextEnricher/TextEnricher";
+import { TextEnricher, TextEnricherContext } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
@@ -160,19 +160,22 @@ export class TrackerViewModel {
           SelectCombatant: this.selectCombatantById,
           RemoveTagFromCombatant: this.removeCombatantTag,
           ApplyDamageToCombatant: this.applyDamageToCombatant,
-          EnrichText: this.StatBlockTextEnricher.EnrichText,
           InlineCommands: this.CombatantCommander.Commands.filter(c =>
             c.ShowInCombatantRow()
           )
         }}
       >
-        <SettingsContext.Provider value={CurrentSettings()}>
-          <InitiativeList
-            encounterState={encounterState}
-            selectedCombatantIds={selectedCombatantIds}
-            combatantCountsByName={combatantCountsByName}
-          />
-        </SettingsContext.Provider>
+        <TextEnricherContext.Provider
+          value={this.StatBlockTextEnricher.EnrichText}
+        >
+          <SettingsContext.Provider value={CurrentSettings()}>
+            <InitiativeList
+              encounterState={encounterState}
+              selectedCombatantIds={selectedCombatantIds}
+              combatantCountsByName={combatantCountsByName}
+            />
+          </SettingsContext.Provider>
+        </TextEnricherContext.Provider>
       </CommandContext.Provider>
     );
   });
