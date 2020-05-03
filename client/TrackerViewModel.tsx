@@ -180,7 +180,7 @@ export class TrackerViewModel {
     return (
       <SettingsContext.Provider value={CurrentSettings()}>
         <SettingsPane
-          handleNewSettings={this.saveUpdatedSettings}
+          handleNewSettings={this.SaveUpdatedSettings}
           encounterCommands={this.EncounterToolbar}
           combatantCommands={this.CombatantCommander.Commands}
           reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
@@ -670,7 +670,7 @@ export class TrackerViewModel {
     }
   };
 
-  private saveUpdatedSettings(newSettings: Settings) {
+  public SaveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
     LegacySynchronousLocalStore.Save(
