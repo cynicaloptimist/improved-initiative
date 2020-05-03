@@ -51,6 +51,7 @@ import { SettingsContext } from "./Settings/SettingsContext";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 import { Tutorial } from "./Tutorial/Tutorial";
+import { Command } from "./Commands/Command";
 
 const codec = compression("lzma");
 
@@ -207,11 +208,12 @@ export class TrackerViewModel {
       commandsToHideById.push("update-notes");
     }
 
-    const encounterCommands = this.EncounterToolbar.filter(
-      c => !commandsToHideById.some(d => c.Id == d)
-    );
+    const shouldShowCommand = (c: Command) =>
+      !commandsToHideById.some(d => c.Id == d);
+
+    const encounterCommands = this.EncounterToolbar.filter(shouldShowCommand);
     const combatantCommands = this.CombatantCommander.Commands.filter(
-      c => !commandsToHideById.some(d => c.Id == d)
+      shouldShowCommand
     );
 
     return (
