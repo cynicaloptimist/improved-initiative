@@ -24,6 +24,7 @@ import { TagPrompt } from "../Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
 import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
 import { LinkInitiativePrompt } from "../Prompts/LinkInitiativePrompt";
+import { TextEnricherContext } from "../TextEnricher/TextEnricher";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -63,17 +64,23 @@ export class CombatantCommander {
 
     if (selectedCombatants.length == 1) {
       const combatantViewModel = selectedCombatants[0];
-      return React.createElement(CombatantDetails, {
-        combatantViewModel,
-        enricher: this.tracker.StatBlockTextEnricher,
-        displayMode: "default"
-      });
+      return (
+        <TextEnricherContext.Provider
+          value={this.tracker.StatBlockTextEnricher}
+        >
+          <CombatantDetails
+            combatantViewModel={combatantViewModel}
+            displayMode="default"
+          />
+        </TextEnricherContext.Provider>
+      );
     }
 
-    return React.createElement(MultipleCombatantDetails, {
-      combatants: selectedCombatants,
-      enricher: this.tracker.StatBlockTextEnricher
-    });
+    return (
+      <TextEnricherContext.Provider value={this.tracker.StatBlockTextEnricher}>
+        <MultipleCombatantDetails combatants={selectedCombatants} />
+      </TextEnricherContext.Provider>
+    );
   });
 
   public Select = (data: CombatantViewModel, appendSelection?: boolean) => {

@@ -165,9 +165,7 @@ export class TrackerViewModel {
           )
         }}
       >
-        <TextEnricherContext.Provider
-          value={this.StatBlockTextEnricher.EnrichText}
-        >
+        <TextEnricherContext.Provider value={this.StatBlockTextEnricher}>
           <SettingsContext.Provider value={CurrentSettings()}>
             <InitiativeList
               encounterState={encounterState}
@@ -246,11 +244,12 @@ export class TrackerViewModel {
       return null;
     }
     return (
-      <CombatantDetails
-        combatantViewModel={combatantViewModel}
-        displayMode="active"
-        enricher={this.StatBlockTextEnricher}
-      />
+      <TextEnricherContext.Provider value={this.StatBlockTextEnricher}>
+        <CombatantDetails
+          combatantViewModel={combatantViewModel}
+          displayMode="active"
+        />
+      </TextEnricherContext.Provider>
     );
   });
 

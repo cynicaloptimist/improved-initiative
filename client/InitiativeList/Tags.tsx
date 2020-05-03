@@ -20,7 +20,7 @@ export function Tags(props: { tags: TagState[]; combatantId: string }) {
 
 function Tag(props: { combatantId: string; tag: TagState }) {
   const commandContext = React.useContext(CommandContext);
-  const enrichText = React.useContext(TextEnricherContext);
+  const TextEnricher = React.useContext(TextEnricherContext);
 
   const removeTag = React.useCallback(
     event => {
@@ -32,7 +32,7 @@ function Tag(props: { combatantId: string; tag: TagState }) {
 
   return (
     <li className="tag">
-      <span className="tag__text">{enrichText(props.tag.Text)}</span>
+      <span className="tag__text">{TextEnricher.EnrichText(props.tag.Text)}</span>
       {props.tag.DurationCombatantId.length > 0 && (
         <Tippy
           content={`Remaining rounds: ${props.tag.DurationRemaining}`}

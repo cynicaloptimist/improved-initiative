@@ -86,7 +86,6 @@ export class PersistentCharacterLibraryPane extends React.Component<
         renderPreview={character => (
           <StatBlockComponent
             statBlock={character.StatBlock}
-            enricher={this.props.statBlockTextEnricher}
             displayMode="default"
           />
         )}

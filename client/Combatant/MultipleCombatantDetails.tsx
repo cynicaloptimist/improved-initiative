@@ -5,7 +5,6 @@ import { CombatantViewModel } from "./CombatantViewModel";
 
 interface MultipleCombatantDetailsProps {
   combatants: CombatantViewModel[];
-  enricher: TextEnricher;
 }
 
 export class MultipleCombatantDetails extends React.Component<
@@ -17,7 +16,6 @@ export class MultipleCombatantDetails extends React.Component<
         {this.props.combatants.map(c => (
           <CombatantDetails
             combatantViewModel={c}
-            enricher={this.props.enricher}
             displayMode="status-only"
             key={c.Combatant.Id}
           />

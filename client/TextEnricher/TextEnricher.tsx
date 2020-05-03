@@ -12,7 +12,7 @@ import { Listing } from "../Library/Listing";
 import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
-import { IRules } from "../Rules/Rules";
+import { IRules, DefaultRules } from "../Rules/Rules";
 import { CounterOrBracketedText } from "./Counter";
 
 interface ReplaceConfig {
@@ -23,16 +23,17 @@ interface ReplaceConfig {
   };
 }
 
-export const TextEnricherContext = React.createContext((text: string) => (
-  <React.Fragment>{text}</React.Fragment>
-));
+interface SpellLookupProvider {
+  GetSpells: () => Listing<Spell>[];
+  SpellsByNameRegex: () => RegExp;
+}
 
 export class TextEnricher {
   constructor(
     private rollDice: (diceExpression: string) => void,
     private referenceSpellListing: (listing: Listing<Spell>) => void,
     private referenceCondition: (condition: string) => void,
-    private spellLibrary: SpellLibrary,
+    private spellLibrary: SpellLookupProvider,
     private rules: IRules
   ) {}
 
@@ -119,3 +120,16 @@ export class TextEnricher {
     return ReactReplace(replaceConfig);
   }
 }
+
+export const TextEnricherContext = React.createContext(
+  new TextEnricher(
+    () => {},
+    () => {},
+    () => {},
+    {
+      GetSpells: () => [],
+      SpellsByNameRegex: () => new RegExp("$^")
+    },
+    new DefaultRules()
+  )
+);

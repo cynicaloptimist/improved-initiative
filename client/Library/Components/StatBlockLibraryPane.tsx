@@ -66,7 +66,6 @@ export class StatBlockLibraryPane extends React.Component<
         renderPreview={statBlock => (
           <StatBlockComponent
             statBlock={statBlock}
-            enricher={this.props.statBlockTextEnricher}
             displayMode="default"
           />
         )}
