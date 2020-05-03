@@ -178,17 +178,18 @@ export class TrackerViewModel {
 
   public settingsComponent = ko.pureComputed(() => {
     return (
-      <SettingsPane
-        settings={CurrentSettings()}
-        handleNewSettings={this.saveUpdatedSettings}
-        encounterCommands={this.EncounterToolbar}
-        combatantCommands={this.CombatantCommander.Commands}
-        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
-        repeatTutorial={this.RepeatTutorial}
-        closeSettings={() => this.SettingsVisible(false)}
-        libraries={this.Libraries}
-        accountClient={new AccountClient()}
-      />
+      <SettingsContext.Provider value={CurrentSettings()}>
+        <SettingsPane
+          handleNewSettings={this.saveUpdatedSettings}
+          encounterCommands={this.EncounterToolbar}
+          combatantCommands={this.CombatantCommander.Commands}
+          reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
+          repeatTutorial={this.RepeatTutorial}
+          closeSettings={() => this.SettingsVisible(false)}
+          libraries={this.Libraries}
+          accountClient={new AccountClient()}
+        />
+      </SettingsContext.Provider>
     );
   });
 

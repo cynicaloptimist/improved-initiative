@@ -11,6 +11,8 @@ import { AccountSettings } from "./AccountSettings";
 import { CommandsSettings } from "./CommandsSettings";
 import { EpicInitiativeSettings } from "./EpicInitiativeSettings";
 import { OptionsSettings } from "./OptionsSettings";
+import { useContext, useState, useCallback } from "react";
+import { SettingsContext } from "../SettingsContext";
 
 enum SettingsTab {
   About = "About",
@@ -21,6 +23,7 @@ enum SettingsTab {
 }
 
 const SettingsTabOptions = _.values(SettingsTab);
+let lastTab: SettingsTab = SettingsTab.About;
 
 interface SettingsPaneProps {
   repeatTutorial: () => void;
@@ -29,97 +32,78 @@ interface SettingsPaneProps {
   combatantCommands: Command[];
   accountClient: AccountClient;
   libraries: Libraries;
-  settings: Settings;
   handleNewSettings: (newSettings: Settings) => void;
   closeSettings: () => void;
 }
-interface SettingsPaneState {
-  currentTab: SettingsTab;
-}
 
-let lastTab: SettingsTab = SettingsTab.About;
+export function SettingsPane(props: SettingsPaneProps) {
+  const settings = useContext(SettingsContext);
+  const handleFormSubmit = useCallback(
+    (newSettings: Settings) => {
+      props.handleNewSettings(newSettings);
+      props.closeSettings();
+    },
+    [props.handleNewSettings, props.closeSettings]
+  );
 
-export class SettingsPane extends React.Component<
-  SettingsPaneProps,
-  SettingsPaneState
-> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentTab: lastTab
-    };
-  }
+  const [currentTab, setCurrentTab] = useState(lastTab);
 
-  public componentDidUpdate = () => {
-    lastTab = this.state.currentTab;
-  };
-
-  public render() {
-    return (
-      <Formik
-        initialValues={this.props.settings}
-        onSubmit={this.handleFormSubmit}
-        render={(props: FormikProps<Settings>) => (
-          <form className="settings" onSubmit={props.handleSubmit}>
-            <Tabs
-              selected={this.state.currentTab}
-              options={SettingsTabOptions}
-              onChoose={(tab: SettingsTab) =>
-                this.setState({ currentTab: tab })
-              }
-            />
-            {this.getActiveTabContent(props)}
-            <button type="submit" className="c-button save-and-close">
-              Save and Close
-            </button>
-          </form>
-        )}
-      />
-    );
-  }
-
-  private getActiveTabContent = (formikProps: FormikProps<Settings>) => {
-    if (this.state.currentTab == SettingsTab.About) {
+  const getTabContent = () => {
+    if (currentTab == SettingsTab.About) {
       return (
         <About
-          repeatTutorial={this.props.repeatTutorial}
-          reviewPrivacyPolicy={this.props.reviewPrivacyPolicy}
+          repeatTutorial={props.repeatTutorial}
+          reviewPrivacyPolicy={props.reviewPrivacyPolicy}
         />
       );
     }
-    if (this.state.currentTab == SettingsTab.Commands) {
+    if (currentTab == SettingsTab.Commands) {
       return (
         <CommandsSettings
-          commandSettings={formikProps.values.Commands}
-          encounterCommands={this.props.encounterCommands}
-          combatantCommands={this.props.combatantCommands}
+          encounterCommands={props.encounterCommands}
+          combatantCommands={props.combatantCommands}
         />
       );
     }
-    if (this.state.currentTab == SettingsTab.Options) {
+    if (currentTab == SettingsTab.Options) {
       return (
         <OptionsSettings
           goToEpicInitiativeSettings={() =>
-            this.setState({ currentTab: SettingsTab.EpicInitiative })
+            setCurrentTab(SettingsTab.EpicInitiative)
           }
         />
       );
     }
-    if (this.state.currentTab == SettingsTab.Account) {
+    if (currentTab == SettingsTab.Account) {
       return (
         <AccountSettings
-          accountClient={this.props.accountClient}
-          libraries={this.props.libraries}
+          accountClient={props.accountClient}
+          libraries={props.libraries}
         />
       );
     }
-    if (this.state.currentTab == SettingsTab.EpicInitiative) {
+    if (currentTab == SettingsTab.EpicInitiative) {
       return <EpicInitiativeSettings />;
     }
   };
 
-  private handleFormSubmit = (newSettings: Settings) => {
-    this.props.handleNewSettings(newSettings);
-    this.props.closeSettings();
-  };
+  return (
+    <Formik
+      initialValues={settings}
+      onSubmit={handleFormSubmit}
+      render={(props: FormikProps<Settings>) => (
+        <form className="settings" onSubmit={props.handleSubmit}>
+          <Tabs
+            selected={currentTab}
+            options={SettingsTabOptions}
+            onChoose={setCurrentTab}
+          />
+          {getTabContent()}
+          <button type="submit" className="c-button save-and-close">
+            Save and Close
+          </button>
+        </form>
+      )}
+    />
+  );
 }

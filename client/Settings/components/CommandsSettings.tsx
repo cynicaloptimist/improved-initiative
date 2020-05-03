@@ -1,42 +1,40 @@
 import { Field } from "formik";
 import _ = require("lodash");
 import * as React from "react";
-import { CommandSetting } from "../../../common/CommandSetting";
 import { Command } from "../../Commands/Command";
 import { Info } from "../../Components/Info";
 import { CommandInfoById } from "./CommandInfo";
 import { ToggleButton } from "./Toggle";
+import { useContext } from "react";
+import { SettingsContext } from "../SettingsContext";
 
 type CommandSettingRowProps = {
   command: Command;
-  commandIndex: number;
   withCombatantRow: boolean;
 };
 
 function CommandSettingRow(props: CommandSettingRowProps) {
   const info = CommandInfoById[props.command.Id];
+  const settings = useContext(SettingsContext);
+  const index = _.findIndex(settings.Commands, s => s.Name == props.command.Id);
+
   return (
     <div>
       <span className="command-description">
         {props.command.Description}
         {info && <Info>{info}</Info>}
       </span>
-      <Field
-        className="keybinding"
-        name={`Commands[${props.commandIndex}].KeyBinding`}
-      />
+      <Field className="keybinding" name={`Commands[${index}].KeyBinding`} />
       <label className="toolbar-setting">
         <i className={"fas fa-" + props.command.FontAwesomeIcon} />
         <ToggleButton
-          fieldName={`Commands[${props.commandIndex}].ShowOnActionBar`}
+          fieldName={`Commands[${index}].ShowOnActionBar`}
           disabled={props.command.LockOnActionBar}
         />
       </label>
       {props.withCombatantRow && (
         <label className="combatant-setting">
-          <ToggleButton
-            fieldName={`Commands[${props.commandIndex}].ShowInCombatantRow`}
-          />
+          <ToggleButton fieldName={`Commands[${index}].ShowInCombatantRow`} />
         </label>
       )}
     </div>
@@ -44,7 +42,6 @@ function CommandSettingRow(props: CommandSettingRowProps) {
 }
 
 type CommandsSettingsProps = {
-  commandSettings: CommandSetting[];
   encounterCommands: Command[];
   combatantCommands: Command[];
 };
@@ -74,14 +71,11 @@ function buildCommandSettingRow(
   withCombatantRow: boolean
 ) {
   return (command: Command) => {
-    const index = _.findIndex(props.commandSettings, s => s.Name == command.Id);
-
     return (
       <CommandSettingRow
         withCombatantRow={withCombatantRow}
         command={command}
-        commandIndex={index}
-        key={index}
+        key={command.Id}
       />
     );
   };
