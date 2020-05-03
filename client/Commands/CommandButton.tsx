@@ -1,9 +1,16 @@
 import { Command } from "./Command";
 import { Button } from "../Components/Button";
 import React = require("react");
+import { useSubscription } from "../Combatant/linkComponentToObservables";
 
 export function CommandButton(props: { command: Command; showLabel: boolean }) {
   const c = props.command;
+  const buttonIsOnActionBar = useSubscription(c.ShowOnActionBar);
+
+  if (!buttonIsOnActionBar) {
+    return null;
+  }
+
   const buttonText = props.showLabel && c.Description;
   return (
     <Button

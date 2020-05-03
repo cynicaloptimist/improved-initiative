@@ -208,10 +208,10 @@ export class TrackerViewModel {
     }
 
     const encounterCommands = this.EncounterToolbar.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+      c => !commandsToHideById.some(d => c.Id == d)
     );
     const combatantCommands = this.CombatantCommander.Commands.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
+      c => !commandsToHideById.some(d => c.Id == d)
     );
 
     return (
