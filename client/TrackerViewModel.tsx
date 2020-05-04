@@ -136,8 +136,8 @@ export class TrackerViewModel {
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
   );
 
-  protected StatBlockEditor = ko.observable<JSX.Element>(null);
-  protected SpellEditor = ko.observable<JSX.Element>(null);
+  protected StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
+  protected SpellEditorProps = ko.observable<SpellEditorProps>(null);
 
   public librariesComponent = (
     <LibraryPanes
@@ -290,8 +290,8 @@ export class TrackerViewModel {
   };
 
   public CenterColumn = ko.pureComputed(() => {
-    const editStatBlock = this.StatBlockEditor() !== null;
-    const editSpell = this.SpellEditor() !== null;
+    const editStatBlock = this.StatBlockEditorProps() !== null;
+    const editSpell = this.SpellEditorProps() !== null;
     if (editStatBlock) {
       return "statblockeditor";
     }
@@ -350,54 +350,69 @@ export class TrackerViewModel {
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
-    this.StatBlockEditor(
-      <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
-    );
+    this.StatBlockEditorProps({
+      ...props,
+      onClose: () => this.StatBlockEditorProps(null)
+    });
   }
 
+  public StatBlockEditor = ko.computed(() => {
+    const props = this.StatBlockEditorProps();
+    if (!props) {
+      return null;
+    }
+    return <StatBlockEditor {...props} />;
+  });
+
   public EditSpell(props: Omit<SpellEditorProps, "onClose">) {
-    this.SpellEditor(
-      <SpellEditor {...props} onClose={() => this.SpellEditor(null)} />
-    );
+    this.SpellEditorProps({
+      ...props,
+      onClose: () => this.SpellEditorProps(null)
+    });
   }
+
+  public SpellEditor = ko.computed(() => {
+    const props = this.SpellEditorProps();
+    if (!props) {
+      return null;
+    }
+    return <SpellEditor {...props} />;
+  });
 
   public async EditPersistentCharacterStatBlock(
     persistentCharacterId: string,
     newStatBlock?: StatBlock
   ) {
-    this.StatBlockEditor(null);
+    this.StatBlockEditorProps(null);
     const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
       persistentCharacterId
     );
     const hpDown =
       persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
 
-    this.StatBlockEditor(
-      <StatBlockEditor
-        statBlock={newStatBlock || persistentCharacter.StatBlock}
-        editorTarget="persistentcharacter"
-        onSave={(statBlock: StatBlock) => {
-          this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
-            persistentCharacterId,
-            {
-              StatBlock: statBlock,
-              CurrentHP: statBlock.HP.Value - hpDown
-            }
-          );
-          this.Encounter.UpdatePersistentCharacterStatBlock(
-            persistentCharacterId,
-            statBlock
-          );
-        }}
-        onDelete={() =>
-          this.Libraries.PersistentCharacters.DeletePersistentCharacter(
-            persistentCharacterId
-          )
-        }
-        onClose={() => this.StatBlockEditor(null)}
-        currentListings={this.Libraries.PersistentCharacters.GetListings()}
-      />
-    );
+    this.StatBlockEditorProps({
+      statBlock: newStatBlock || persistentCharacter.StatBlock,
+      editorTarget: "persistentcharacter",
+      onSave: (statBlock: StatBlock) => {
+        this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
+          persistentCharacterId,
+          {
+            StatBlock: statBlock,
+            CurrentHP: statBlock.HP.Value - hpDown
+          }
+        );
+        this.Encounter.UpdatePersistentCharacterStatBlock(
+          persistentCharacterId,
+          statBlock
+        );
+      },
+      onDelete: () =>
+        this.Libraries.PersistentCharacters.DeletePersistentCharacter(
+          persistentCharacterId
+        ),
+      onClose: () => this.StatBlockEditorProps(null),
+      currentListings: this.Libraries.PersistentCharacters.GetListings()
+    });
   }
 
   public RepeatTutorial = () => {
