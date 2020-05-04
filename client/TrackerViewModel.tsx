@@ -136,8 +136,8 @@ export class TrackerViewModel {
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
   );
 
-  protected StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
-  protected SpellEditorProps = ko.observable<SpellEditorProps>(null);
+  public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
+  public SpellEditorProps = ko.observable<SpellEditorProps>(null);
 
   public librariesComponent = (
     <LibraryPanes
@@ -160,9 +160,7 @@ export class TrackerViewModel {
           SelectCombatant: this.selectCombatantById,
           RemoveTagFromCombatant: this.removeCombatantTag,
           ApplyDamageToCombatant: this.applyDamageToCombatant,
-          InlineCommands: this.CombatantCommander.Commands.filter(c =>
-            c.ShowInCombatantRow()
-          )
+          CombatantCommands: this.CombatantCommander.Commands
         }}
       >
         <TextEnricherContext.Provider value={this.StatBlockTextEnricher}>

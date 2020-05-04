@@ -6,5 +6,5 @@ export const CommandContext = React.createContext({
   SelectCombatant: (combatantId: string, appendSelection: boolean) => {},
   RemoveTagFromCombatant: (combatantId: string, tagState: TagState) => {},
   ApplyDamageToCombatant: (combatantId: string) => {},
-  InlineCommands: [] as Command[]
+  CombatantCommands: [] as Command[]
 });

@@ -5,6 +5,8 @@ import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
 import Tippy from "@tippy.js/react";
 import { SettingsContext } from "../Settings/SettingsContext";
+import { Command } from "../Commands/Command";
+import { useSubscription } from "../Combatant/linkComponentToObservables";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -118,18 +120,29 @@ function Commands() {
 
   return (
     <div className="combatant__commands">
-      {commandContext.InlineCommands.map(c => (
-        <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
-          <button
-            className={
-              "combatant__command-button fa-clickable fa-" + c.FontAwesomeIcon
-            }
-            onClick={c.ActionBinding}
-            aria-label={c.Description}
-          ></button>
-        </Tippy>
+      {commandContext.CombatantCommands.map(c => (
+        <CommandButton command={c} key={c.Id} />
       ))}
     </div>
+  );
+}
+
+function CommandButton(props: { command: Command }) {
+  const { command } = props;
+  const showInCombatantRow = useSubscription(command.ShowInCombatantRow);
+  if (!showInCombatantRow) {
+    return null;
+  }
+  return (
+    <Tippy content={`${command.Description} [${command.KeyBinding}]`}>
+      <button
+        className={
+          "combatant__command-button fa-clickable fa-" + command.FontAwesomeIcon
+        }
+        onClick={command.ActionBinding}
+        aria-label={command.Description}
+      ></button>
+    </Tippy>
   );
 }
 
