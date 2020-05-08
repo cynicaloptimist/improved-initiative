@@ -29,7 +29,12 @@ export function CombatantDetails(props: CombatantDetailsProps) {
     return null;
   }
 
-  const renderedNotes = notes.length ? TextEnricher.EnrichText(notes) : null;
+  const renderedNotes = notes.length
+    ? TextEnricher.EnrichText(
+        notes,
+        props.combatantViewModel.Combatant.CurrentNotes
+      )
+    : null;
 
   return (
     <div className="c-combatant-details">
