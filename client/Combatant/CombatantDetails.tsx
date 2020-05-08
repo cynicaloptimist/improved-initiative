@@ -47,10 +47,10 @@ export function CombatantDetails(props: CombatantDetailsProps) {
         <div className="c-combatant-details__tags">
           <span className="stat-label">Tags</span>{" "}
           {tags.map((tag, index) => (
-            <>
-              <TagDetails tag={tag} key={index} />
+            <React.Fragment key={index}>
+              <TagDetails tag={tag} />
               {index !== tags.length - 1 && "; "}
-            </>
+            </React.Fragment>
           ))}
         </div>
       )}
