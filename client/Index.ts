@@ -1,13 +1,16 @@
 import * as ko from "knockout";
+import * as React from "react";
 import * as io from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
 import { ReactPlayerView } from "./Player/ReactPlayerView";
+import { render as renderReact } from "react-dom";
 import { InitializeSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
+import { App } from "./App";
 
 $(async () => {
   LoadEnvironment();
@@ -16,7 +19,13 @@ $(async () => {
   if ($("#tracker").length) {
     await LegacySynchronousLocalStore.MigrateItemsToStore();
     const viewModel = new TrackerViewModel(io());
-    ko.applyBindings(viewModel, document.body);
+
+    const container = document.getElementById("app__container");
+    if (!container) {
+      throw "#app__container not found";
+    }
+    renderReact(React.createElement(App, { tracker: viewModel }), container);
+
     viewModel.ImportEncounterIfAvailable();
     viewModel.ImportStatBlockIfAvailable();
     viewModel.GetWhatsNewIfAvailable();

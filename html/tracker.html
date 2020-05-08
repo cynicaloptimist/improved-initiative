@@ -92,7 +92,7 @@
     </style>
   </head>
 
-  <body id="tracker" data-bind="css: InterfacePriority">
+  <body id="tracker">
     <div id="fb-root"></div>
     <script>
       (function(d, s, id) {
@@ -109,133 +109,6 @@
       <img src="../img/boot-white-on-darkred-192.png" />
       <p>Loading Improved Initiative</p>
     </div>
-    <div
-      class="modal-blur"
-      data-bind="visible: BlurVisible, click: CloseSettings"
-    ></div>
-    <!-- ko if: SettingsVisible -->
-    <div
-      class="settings-container"
-      data-bind="react: {
-        component: settingsComponent()
-      }"
-    ></div>
-    <!-- /ko -->
-    <!-- ko if: TutorialVisible -->
-    <div
-      class="tutorial-host"
-      data-bind="react: {
-        component: tutorialComponent
-      }"
-    ></div>
-    <!-- /ko -->
-    <!-- ko if: DisplayLogin -->
-    <a class="login button" data-bind="attr: { href: PatreonLoginUrl }"
-      >Log In with Patreon</a
-    >
-    <!-- /ko -->
-    <div
-      class="toolbar-container"
-      data-bind="react: {
-        component: toolbarComponent()
-      }"
-    ></div>
-    <div class="left-column">
-      <!-- ko if: LibrariesVisible -->
-      <div
-        class="libraries"
-        data-bind="react: {
-            component: librariesComponent
-        }"
-      ></div>
-      <!-- /ko -->
-      <!-- ko ifnot: LibrariesVisible -->
-      <div class="active-combatant">
-        <h2>Active Combatant</h2>
-        <!-- ko if: Encounter.EncounterFlow.ActiveCombatant -->
-        <div
-          class="combatant-details__wrapper"
-          style="flex-shrink: 1"
-          data-bind="react: {
-                component: activeCombatantComponent
-            }"
-        ></div>
-        <!-- /ko -->
-        <!-- ko ifnot: Encounter.EncounterFlow.ActiveCombatant -->
-        <p class="start-encounter-hint">
-          Click [ <span class="fas fa-play"></span> Start Encounter ] to roll
-          initiative. The StatBlock for the Active Combatant will be displayed
-          here.
-        </p>
-        <!-- /ko -->
-      </div>
-      <!-- /ko -->
-    </div>
-    <div class="center-column">
-      <!-- ko if: CenterColumn() === "statblockeditor" -->
-      <div
-        class="statblock-editor"
-        data-bind="react: {
-                component: StatBlockEditor
-        }"
-      ></div>
-      <!-- /ko -->
-      <!-- ko if: CenterColumn() === "spelleditor" -->
-      <div
-        class="spell-editor-host"
-        data-bind="react: {
-                component: SpellEditor
-        }"
-      ></div>
-      <!-- /ko -->
-      <!-- ko if: CenterColumn() === "combat" -->
-      <div
-        class="initiative-list-host"
-        data-bind="react: {
-                component: initiativeListComponent
-        }"
-      ></div>
-      <!-- /ko -->
-      <div
-        class="prompts"
-        data-bind="react: {
-                component: promptsComponent 
-        }"
-      ></div>
-      <div
-        class="combat-footer-host"
-        data-bind="react: {
-                component: combatFooterComponent
-        }"
-      ></div>
-    </div>
-    <div class="right-column">
-      <div class="selected-combatant">
-        <!-- ko ifnot: CombatantCommander.HasSelected -->
-        <h2>No Combatant Selected</h2>
-        <!-- /ko -->
-        <!-- ko if: CombatantCommander.HasSelected -->
-        <!-- ko if: CombatantCommander.HasOneSelected -->
-        <h2>Selected Combatant</h2>
-        <!-- /ko -->
-        <!-- ko if: CombatantCommander.HasMultipleSelected -->
-        <h2>Selected Combatants</h2>
-        <!-- /ko -->
-        <div
-          class="button button--close"
-          data-bind="click: CombatantCommander.Deselect"
-        >
-          <span class="fas fa-times"></span>
-        </div>
-        <div
-          class="combatant-details__wrapper"
-          style="flex-shrink: 1"
-          data-bind="react: {
-                component: CombatantCommander.CombatantDetails
-            }"
-        ></div>
-        <!-- /ko -->
-      </div>
-    </div>
+    <div id="app__container"></div>
   </body>
 </html>
