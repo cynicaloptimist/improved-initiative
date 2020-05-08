@@ -3,7 +3,7 @@ import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
-import Tippy from "@tippy.js/react";
+import Tippy from "@tippyjs/react";
 import { SettingsContext } from "../Settings/SettingsContext";
 import { Command } from "../Commands/Command";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
@@ -56,7 +56,7 @@ export function CombatantRow(props: CombatantRowProps) {
         aria-current={isActive ? "true" : "false"}
       >
         {props.combatantState.Hidden && (
-          <Tippy content="Hidden from Player View" boundary="window">
+          <Tippy content="Hidden from Player View">
             <span className="combatant__hidden-icon fas fa-eye-slash" />
           </Tippy>
         )}
@@ -96,7 +96,7 @@ export function CombatantRow(props: CombatantRowProps) {
 
         {props.combatantState.StatBlock.AC.Value}
         {props.combatantState.RevealedAC && (
-          <Tippy content="Revealed in Player View" boundary="window">
+          <Tippy content="Revealed in Player View">
             <span className="combatant__ac--revealed-badge fas fa-eye" />
           </Tippy>
         )}

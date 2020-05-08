@@ -1,4 +1,4 @@
-import Tippy from "@tippy.js/react";
+import Tippy from "@tippyjs/react";
 import React = require("react");
 
 export function InitiativeListHeader(props: { encounterActive: boolean }) {
@@ -13,7 +13,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
         <th className="combatant__initiative">
           <span className="screen-reader-only">Initiative Score</span>
           <div aria-hidden="true">
-            <Tippy content={encounterStateTip} boundary="window">
+            <Tippy content={encounterStateTip}>
               <span className={"fas " + encounterStateIcon}></span>
             </Tippy>
           </div>

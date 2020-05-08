@@ -67,7 +67,6 @@ export function EpicInitiativeSettings() {
           tippyProps={{
             interactive: true,
             placement: "bottom",
-            popperOptions: { positionFixed: true }
           }}
         >
           <span>

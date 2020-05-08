@@ -18,7 +18,6 @@ export function CommandButton(props: { command: Command; showLabel: boolean }) {
       key={c.Description}
       tooltip={commandButtonTooltip(c)}
       tooltipProps={{
-        boundary: "window",
         placement: "right",
         delay: 1000
       }}

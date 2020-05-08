@@ -1,4 +1,4 @@
-import Tippy, { TippyProps } from "@tippy.js/react";
+import Tippy, { TippyProps } from "@tippyjs/react";
 import * as React from "react";
 import { FieldProps, Field } from "formik";
 
