@@ -97,7 +97,7 @@ export function App(props: { tracker: TrackerViewModel }) {
                     displayMode="active"
                   />
                 )}
-                {activeCombatant || (
+                {!activeCombatant && (
                   <p className="start-encounter-hint">
                     Click [<span className="fas fa-play" /> Start Encounter ] to
                     roll initiative. The StatBlock for the Active Combatant will
