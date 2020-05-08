@@ -91,6 +91,9 @@ export function App(props: { tracker: TrackerViewModel }) {
             )}
             {librariesVisible || (
               <div className="active-combatant">
+                <div className="combatant-details__header">
+                  <h2>Active Combatant</h2>
+                </div>
                 {activeCombatant && (
                   <CombatantDetails
                     combatantViewModel={activeCombatantViewModel}
@@ -236,7 +239,9 @@ function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
 function SelectedCombatants(props: { combatantCommander: CombatantCommander }) {
   const { combatantCommander } = props;
-  const selectedCombatants = useSubscription(combatantCommander.SelectedCombatants);
+  const selectedCombatants = useSubscription(
+    combatantCommander.SelectedCombatants
+  );
 
   if (selectedCombatants.length === 0) {
     return (
@@ -249,7 +254,13 @@ function SelectedCombatants(props: { combatantCommander: CombatantCommander }) {
   if (selectedCombatants.length === 1) {
     return (
       <div className="selected-combatant">
-        <Button fontAwesomeIcon="times" onClick={combatantCommander.Deselect} />
+        <div className="combatant-details__header">
+          <h2>Selected Combatant</h2>
+          <Button
+            fontAwesomeIcon="times"
+            onClick={combatantCommander.Deselect}
+          />
+        </div>
         <CombatantDetails
           key={selectedCombatants[0].Combatant.Id}
           combatantViewModel={selectedCombatants[0]}
@@ -260,7 +271,13 @@ function SelectedCombatants(props: { combatantCommander: CombatantCommander }) {
   } else {
     return (
       <div className="selected-combatant">
-        <Button fontAwesomeIcon="times" onClick={combatantCommander.Deselect} />
+        <div className="combatant-details__header">
+          <h2>Selected Combatants</h2>
+          <Button
+            fontAwesomeIcon="times"
+            onClick={combatantCommander.Deselect}
+          />
+        </div>
         <MultipleCombatantDetails combatants={selectedCombatants} />
       </div>
     );
