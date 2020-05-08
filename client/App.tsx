@@ -236,7 +236,7 @@ function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
 function SelectedCombatants(props: { combatantCommander: CombatantCommander }) {
   const { combatantCommander } = props;
-  const selectedCombatants = combatantCommander.SelectedCombatants();
+  const selectedCombatants = useSubscription(combatantCommander.SelectedCombatants);
 
   if (selectedCombatants.length === 0) {
     return (
@@ -251,6 +251,7 @@ function SelectedCombatants(props: { combatantCommander: CombatantCommander }) {
       <div className="selected-combatant">
         <Button fontAwesomeIcon="times" onClick={combatantCommander.Deselect} />
         <CombatantDetails
+          key={selectedCombatants[0].Combatant.Id}
           combatantViewModel={selectedCombatants[0]}
           displayMode="default"
         />
