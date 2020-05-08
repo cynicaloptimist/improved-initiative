@@ -92,10 +92,15 @@ export class CombatantCommander {
       this.linkCombatantInitiatives([data, pendingLink.combatant]);
       this.tracker.PromptQueue.Remove(pendingLink.promptId);
     }
-    if (!appendSelection) {
-      this.selectedCombatantIds.removeAll();
-    }
-    this.selectedCombatantIds.push(data.Combatant.Id);
+
+    const combatantsToRemainSelected = appendSelection
+      ? this.selectedCombatantIds()
+      : [];
+
+    const allSelected = [...combatantsToRemainSelected, data.Combatant.Id];
+
+    this.selectedCombatantIds(allSelected);
+    
     Metrics.TrackEvent("CombatantsSelected", {
       Count: this.selectedCombatantIds().length
     });
