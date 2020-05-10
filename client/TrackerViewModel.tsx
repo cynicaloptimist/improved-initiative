@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import * as compression from "json-url";
-import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
@@ -11,22 +10,17 @@ import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
-import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList";
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
-import { PendingPrompts } from "./Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/PromptQueue";
-import { Toolbar } from "./Commands/Toolbar";
 import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { InitiativeList } from "./InitiativeList/InitiativeList";
-import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
@@ -37,21 +31,15 @@ import {
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
-import { SettingsPane } from "./Settings/components/SettingsPane";
 import {
   StatBlockEditor,
   StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
-import { TextEnricher, TextEnricherContext } from "./TextEnricher/TextEnricher";
+import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
-import { CommandContext } from "./InitiativeList/CommandContext";
-import { SettingsContext } from "./Settings/SettingsContext";
-import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
-import { Tutorial } from "./Tutorial/Tutorial";
-import { Command } from "./Commands/Command";
 
 const codec = compression("lzma");
 
@@ -86,8 +74,7 @@ export class TrackerViewModel {
   public ToolbarWide = ko.observable(false);
 
   public DisplayLogin = !env.IsLoggedIn;
-  public PatreonLoginUrl = env.PatreonLoginUrl;
-
+  
   constructor(private Socket: SocketIOClient.Socket) {
     const allCommands = [
       ...this.EncounterToolbar,
@@ -138,154 +125,6 @@ export class TrackerViewModel {
 
   public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
   public SpellEditorProps = ko.observable<SpellEditorProps>(null);
-
-  public librariesComponent = (
-    <LibraryPanes
-      librariesCommander={this.LibrariesCommander}
-      libraries={this.Libraries}
-      statBlockTextEnricher={this.StatBlockTextEnricher}
-    />
-  );
-
-  public initiativeListComponent = ko.pureComputed(() => {
-    const encounterState = this.Encounter.ObservableEncounterState();
-    const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
-      c => c.Combatant.Id
-    );
-    const combatantCountsByName = this.Encounter.CombatantCountsByName();
-
-    return (
-      <CommandContext.Provider
-        value={{
-          SelectCombatant: this.selectCombatantById,
-          RemoveTagFromCombatant: this.removeCombatantTag,
-          ApplyDamageToCombatant: this.applyDamageToCombatant,
-          CombatantCommands: this.CombatantCommander.Commands
-        }}
-      >
-        <TextEnricherContext.Provider value={this.StatBlockTextEnricher}>
-          <SettingsContext.Provider value={CurrentSettings()}>
-            <InitiativeList
-              encounterState={encounterState}
-              selectedCombatantIds={selectedCombatantIds}
-              combatantCountsByName={combatantCountsByName}
-            />
-          </SettingsContext.Provider>
-        </TextEnricherContext.Provider>
-      </CommandContext.Provider>
-    );
-  });
-
-  public settingsComponent = ko.pureComputed(() => {
-    return (
-      <SettingsContext.Provider value={CurrentSettings()}>
-        <SettingsPane
-          handleNewSettings={this.SaveUpdatedSettings}
-          encounterCommands={this.EncounterToolbar}
-          combatantCommands={this.CombatantCommander.Commands}
-          reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
-          repeatTutorial={this.RepeatTutorial}
-          closeSettings={() => this.SettingsVisible(false)}
-          libraries={this.Libraries}
-          accountClient={new AccountClient()}
-        />
-      </SettingsContext.Provider>
-    );
-  });
-
-  public tutorialComponent = (
-    <Tutorial onClose={() => this.TutorialVisible(false)} />
-  );
-
-  public toolbarComponent = ko.pureComputed(() => {
-    const commandsToHideById =
-      this.Encounter.EncounterFlow.State() == "active"
-        ? ["start-encounter"]
-        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
-
-    if (!this.CombatantCommander.HasOneSelected()) {
-      commandsToHideById.push("update-notes");
-    }
-
-    const shouldShowCommand = (c: Command) =>
-      !commandsToHideById.some(d => c.Id == d);
-
-    const encounterCommands = this.EncounterToolbar.filter(shouldShowCommand);
-    const combatantCommands = this.CombatantCommander.Commands.filter(
-      shouldShowCommand
-    );
-
-    return (
-      <Toolbar
-        encounterCommands={encounterCommands}
-        combatantCommands={combatantCommands}
-        width={this.ToolbarWide() ? "wide" : "narrow"}
-        showCombatantCommands={this.CombatantCommander.HasSelected()}
-      />
-    );
-  });
-
-  public promptsComponent = ko.pureComputed(() => (
-    <PendingPrompts
-      promptsAndIds={this.PromptQueue.GetPrompts()}
-      removePrompt={this.PromptQueue.Remove}
-    />
-  ));
-
-  public activeCombatantComponent = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
-    const combatantViewModel = find(
-      this.CombatantViewModels(),
-      c => c.Combatant == activeCombatant
-    );
-    if (!combatantViewModel) {
-      return null;
-    }
-    return (
-      <TextEnricherContext.Provider value={this.StatBlockTextEnricher}>
-        <CombatantDetails
-          combatantViewModel={combatantViewModel}
-          displayMode="active"
-        />
-      </TextEnricherContext.Provider>
-    );
-  });
-
-  public combatFooterComponent = ko.computed(() => {
-    const props = {
-      encounter: this.Encounter,
-      eventLog: this.EventLog
-    };
-    return (
-      <SettingsContext.Provider value={CurrentSettings()}>
-        <CombatFooter {...props} />
-      </SettingsContext.Provider>
-    );
-  });
-
-  private selectCombatantById = (
-    combatantId: string,
-    appendSelection: boolean
-  ) => {
-    this.CombatantCommander.Select(
-      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId),
-      appendSelection
-    );
-  };
-
-  private removeCombatantTag = (combatantId: string, tagState: TagState) => {
-    const combatantViewModel = this.CombatantViewModels().find(
-      c => c.Combatant.Id == combatantId
-    );
-    combatantViewModel.RemoveTagByState(tagState);
-  };
-
-  private applyDamageToCombatant = (combatantId: string) => {
-    const combatantViewModel = this.CombatantViewModels().find(
-      c => c.Combatant.Id == combatantId
-    );
-    this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
-  };
 
   public CenterColumn = ko.pureComputed(() => {
     const editStatBlock = this.StatBlockEditorProps() !== null;
@@ -354,28 +193,12 @@ export class TrackerViewModel {
     });
   }
 
-  public StatBlockEditor = ko.computed(() => {
-    const props = this.StatBlockEditorProps();
-    if (!props) {
-      return null;
-    }
-    return <StatBlockEditor {...props} />;
-  });
-
   public EditSpell(props: Omit<SpellEditorProps, "onClose">) {
     this.SpellEditorProps({
       ...props,
       onClose: () => this.SpellEditorProps(null)
     });
   }
-
-  public SpellEditor = ko.computed(() => {
-    const props = this.SpellEditorProps();
-    if (!props) {
-      return null;
-    }
-    return <SpellEditor {...props} />;
-  });
 
   public async EditPersistentCharacterStatBlock(
     persistentCharacterId: string,
