@@ -1,4 +1,3 @@
-import { LineClampProperty } from "csstype";
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
@@ -174,7 +173,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
   ) => {
     const target = scrollEvent.target as HTMLUListElement;
     const isScrolledToBottom =
-      target.offsetHeight + target.scrollTop == target.scrollHeight;
+      target.offsetHeight + target.scrollTop > target.scrollHeight - 10;
     if (isScrolledToBottom) {
       this.setState({
         countOfItemsToRender: this.state.countOfItemsToRender + 100
