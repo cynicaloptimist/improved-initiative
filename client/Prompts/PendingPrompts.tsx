@@ -72,25 +72,29 @@ interface PendingPromptsProps {
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    return this.props.promptsAndIds.map(promptAndId => {
-      const [prompt, promptId] = promptAndId;
+    return (
+      <div className="prompts">
+        {this.props.promptsAndIds.map(promptAndId => {
+          const [prompt, promptId] = promptAndId;
 
-      return (
-        <Prompt
-          key={promptId}
-          {...prompt}
-          onSubmit={values => {
-            const shouldResolve = prompt.onSubmit(values);
-            if (shouldResolve) {
-              this.props.removePrompt(promptId);
-            }
-            return shouldResolve;
-          }}
-          onCancel={() => {
-            this.props.removePrompt(promptId);
-          }}
-        />
-      );
-    });
+          return (
+            <Prompt
+              key={promptId}
+              {...prompt}
+              onSubmit={values => {
+                const shouldResolve = prompt.onSubmit(values);
+                if (shouldResolve) {
+                  this.props.removePrompt(promptId);
+                }
+                return shouldResolve;
+              }}
+              onCancel={() => {
+                this.props.removePrompt(promptId);
+              }}
+            />
+          );
+        })}
+      </div>
+    );
   }
 }
