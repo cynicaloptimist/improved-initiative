@@ -14,21 +14,7 @@ interface PlayerViewPromptComponentProps {
 }
 
 function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
-  const hiddenInput = useRef<HTMLInputElement>(null);
-
-  const copyUrlToClipboard = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!hiddenInput.current) {
-        return;
-      }
-
-      hiddenInput.current.select();
-      document.execCommand("copy");
-      const button = e.target as HTMLButtonElement;
-      button.focus();
-    },
-    [hiddenInput.current]
-  );
+  const { hiddenInput, copyUrlToClipboard } = useCopyableText();
 
   const openPlayerViewWindow = useCallback(() => {
     window.open(`/p/${props.encounterId}`, "Player View");
@@ -82,6 +68,25 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
       <SubmitButton />
     </>
   );
+}
+
+function useCopyableText() {
+  const hiddenInput = useRef<HTMLInputElement>(null);
+
+  const copyUrlToClipboard = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (!hiddenInput.current) {
+        return;
+      }
+      hiddenInput.current.select();
+      document.execCommand("copy");
+      const button = e.target as HTMLButtonElement;
+      button.focus();
+    },
+    [hiddenInput.current]
+  );
+
+  return { hiddenInput, copyUrlToClipboard };
 }
 
 interface PlayerViewPromptModel {
