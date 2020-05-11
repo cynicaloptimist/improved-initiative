@@ -14,7 +14,7 @@ interface PlayerViewPromptComponentProps {
 }
 
 function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
-  const { hiddenInput, copyUrlToClipboard } = useCopyableText();
+  const { targetInput, copyTargetInputToClipboard } = useCopyableText();
 
   const openPlayerViewWindow = useCallback(() => {
     window.open(`/p/${props.encounterId}`, "Player View");
@@ -28,7 +28,7 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
           className="hidden-input"
           readOnly
           value={playerViewUrl}
-          ref={hiddenInput}
+          ref={targetInput}
         />
         <p>
           {`Player View launched. Encounter ID: `}
@@ -37,7 +37,7 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
         <Button
           fontAwesomeIcon="copy"
           text="Copy URL to clipboard"
-          onClick={copyUrlToClipboard}
+          onClick={copyTargetInputToClipboard}
         />
         <Button
           fontAwesomeIcon="external-link-alt"
@@ -71,22 +71,22 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
 }
 
 function useCopyableText() {
-  const hiddenInput = useRef<HTMLInputElement>(null);
+  const targetInput = useRef<HTMLInputElement>(null);
 
-  const copyUrlToClipboard = useCallback(
+  const copyTargetInputToClipboard = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!hiddenInput.current) {
+      if (!targetInput.current) {
         return;
       }
-      hiddenInput.current.select();
+      targetInput.current.select();
       document.execCommand("copy");
       const button = e.target as HTMLButtonElement;
       button.focus();
     },
-    [hiddenInput.current]
+    [targetInput.current]
   );
 
-  return { hiddenInput, copyUrlToClipboard };
+  return { targetInput, copyTargetInputToClipboard };
 }
 
 interface PlayerViewPromptModel {
