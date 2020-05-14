@@ -40,7 +40,7 @@ export class EncounterCommander {
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
       env.EncounterId,
-      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
+      this.tracker.Encounter.TemporaryBackgroundImageUrl() ?? "",
       backgroundImageUrl =>
         this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
     );
