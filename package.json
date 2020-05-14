@@ -67,7 +67,7 @@
     "terser-webpack-plugin": "^2.3.2",
     "ts-jest": "^25.3.0",
     "ts-loader": "^6.2.1",
-    "typescript": "^3.7.2",
+    "typescript": "^3.9.2",
     "uglify-js": "^3.6.0",
     "webpack": "^4.41.0",
     "webpack-build-notifier": "^2.0.0",
