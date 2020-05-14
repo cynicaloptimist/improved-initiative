@@ -69,7 +69,7 @@ export default function(
       joinEncounter(id);
     });
 
-    socket.on("request custom id", function(
+    socket.on("request custom id", async function(
       id: string,
       callback: (didGrantId: boolean) => void
     ) {
@@ -77,7 +77,8 @@ export default function(
         return callback(false);
       }
 
-      if (playerViews.IdAvailable(id)) {
+      const idAvailable = await playerViews.IdAvailable(id);
+      if (idAvailable) {
         const oldId = socket.handshake.session.encounterId;
         playerViews.Destroy(oldId);
         joinEncounter(id);
