@@ -6,6 +6,8 @@ import { CombatStats } from "../common/CombatStats";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { getDefaultSettings } from "../common/Settings";
 import { PlayerViewManager } from "./playerviewmanager";
+import { EncounterState } from "../common/EncounterState";
+import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 
 interface SocketWithSessionData {
   handshake: {
@@ -32,7 +34,14 @@ export default function(
       socket.join(id);
     }
 
-    socket.on("update encounter", function(id: string, updatedEncounter: {}) {
+    socket.on("update encounter", function(
+      id: string,
+      updatedEncounter: EncounterState<PlayerViewCombatantState>
+    ) {
+      if (!socket.handshake.session.hasEpicInitiative) {
+        resetEpicInitiativeEncounterFeatures(updatedEncounter);
+      }
+
       joinEncounter(id);
       playerViews.UpdateEncounter(id, updatedEncounter);
 
@@ -115,4 +124,10 @@ function resetEpicInitiativeSettings(settings: PlayerViewSettings) {
   settings.DisplayPortraits = false;
   settings.SplashPortraits = false;
   settings.AllowTagSuggestions = false;
+}
+
+function resetEpicInitiativeEncounterFeatures(
+  encounterState: EncounterState<PlayerViewCombatantState>
+) {
+  encounterState.BackgroundImageUrl = undefined;
 }
