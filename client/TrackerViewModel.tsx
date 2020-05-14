@@ -45,8 +45,8 @@ const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
-  private playerViewClient = new PlayerViewClient(this.Socket);
-
+  
+  public PlayerViewClient = new PlayerViewClient(this.Socket);
   public Rules = new DefaultRules();
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
@@ -74,7 +74,7 @@ export class TrackerViewModel {
   public ToolbarWide = ko.observable(false);
 
   public DisplayLogin = !env.IsLoggedIn;
-  
+
   constructor(private Socket: SocketIOClient.Socket) {
     const allCommands = [
       ...this.EncounterToolbar,
@@ -105,7 +105,7 @@ export class TrackerViewModel {
   );
 
   public Encounter = new Encounter(
-    this.playerViewClient,
+    this.PlayerViewClient,
     combatantId => {
       const combatant = this.CombatantViewModels().find(
         (c: CombatantViewModel) => c.Combatant.Id == combatantId
@@ -381,21 +381,21 @@ export class TrackerViewModel {
   };
 
   private joinPlayerViewEncounter() {
-    this.playerViewClient.JoinEncounter(env.EncounterId);
+    this.PlayerViewClient.JoinEncounter(env.EncounterId);
 
-    this.playerViewClient.UpdateSettings(
+    this.PlayerViewClient.UpdateSettings(
       env.EncounterId,
       CurrentSettings().PlayerView
     );
 
-    this.playerViewClient.UpdateEncounter(
+    this.PlayerViewClient.UpdateEncounter(
       env.EncounterId,
       this.Encounter.GetPlayerView()
     );
 
     CurrentSettings.subscribe(v => {
-      this.playerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
-      this.playerViewClient.UpdateEncounter(
+      this.PlayerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
+      this.PlayerViewClient.UpdateEncounter(
         env.EncounterId,
         this.Encounter.GetPlayerView()
       );
