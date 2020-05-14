@@ -14,6 +14,11 @@ export class PlayerViewClient {
     this.socket.emit("join encounter", encounterId);
   }
 
+  public RequestCustomEncounterId = (requestedId: string) =>
+    new Promise<boolean>(done => {
+      this.socket.emit("request custom id", requestedId, done);
+    });
+
   public UpdateEncounter(
     encounterId: string,
     updatedEncounter: EncounterState<PlayerViewCombatantState>

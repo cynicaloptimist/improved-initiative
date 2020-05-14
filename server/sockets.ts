@@ -69,6 +69,24 @@ export default function(
       joinEncounter(id);
     });
 
+    socket.on("request custom id", function(
+      id: string,
+      callback: (didGrantId: boolean) => void
+    ) {
+      if (!socket.handshake.session.hasEpicInitiative) {
+        return callback(false);
+      }
+
+      if (playerViews.IdAvailable(id)) {
+        const oldId = socket.handshake.session.encounterId;
+        playerViews.Destroy(oldId);
+        joinEncounter(id);
+        return callback(true);
+      } else {
+        return callback(false);
+      }
+    });
+
     socket.on("suggest damage", function(
       id: string,
       suggestedCombatantIds: string[],
