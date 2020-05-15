@@ -60,7 +60,11 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
             </label>
             <label>
               {"Background Image URL: "}
-              <Field type="text" name="backgroundImageUrl" />
+              <Field
+                type="text"
+                name="backgroundImageUrl"
+                style={{ width: 200 }}
+              />
             </label>
           </>
         ) : (
@@ -114,7 +118,11 @@ function CustomEncounterId(props: {
 
   return (
     <span>
-      <input value={input} onChange={e => setInput(e.target.value)} />
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        style={{ width: 200 }}
+      />
       <Button
         text="Request"
         disabled={props.encounterId == input || input.length < 4}
