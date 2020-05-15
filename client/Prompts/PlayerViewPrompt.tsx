@@ -117,7 +117,7 @@ function CustomEncounterId(props: {
       <input value={input} onChange={e => setInput(e.target.value)} />
       <Button
         text="Request"
-        disabled={props.encounterId == input}
+        disabled={props.encounterId == input || input.length < 4}
         onClick={async () => {
           const requestedId = input;
           if (requestedId === props.encounterId) {
