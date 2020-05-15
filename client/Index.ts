@@ -6,7 +6,7 @@ import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
 import { ReactPlayerView } from "./Player/ReactPlayerView";
 import { render as renderReact } from "react-dom";
-import { InitializeSettings } from "./Settings/Settings";
+import { InitializeSettings, CurrentSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
@@ -18,6 +18,12 @@ $(async () => {
   InitializeSettings();
   if ($("#tracker").length) {
     await LegacySynchronousLocalStore.MigrateItemsToStore();
+    if (env.HasEpicInitiative) {
+      const customEncounterId = CurrentSettings().PlayerView.CustomEncounterId;
+      if (customEncounterId.length) {
+        env.EncounterId = customEncounterId;
+      }
+    }
     const viewModel = new TrackerViewModel(io());
 
     const container = document.getElementById("app__container");

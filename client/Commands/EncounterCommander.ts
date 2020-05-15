@@ -42,13 +42,35 @@ export class EncounterCommander {
       env.EncounterId,
       this.tracker.Encounter.TemporaryBackgroundImageUrl() ?? "",
       backgroundImageUrl =>
-        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
+        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl),
+      this.requestCustomEncounterIdAndUpdateEncounter
     );
     this.tracker.PromptQueue.Add(prompt);
 
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: env.EncounterId
     });
+  };
+
+  private requestCustomEncounterIdAndUpdateEncounter = async (
+    requestedId: string
+  ) => {
+    const didGrantId = await this.tracker.PlayerViewClient.RequestCustomEncounterId(
+      requestedId
+    );
+
+    if (didGrantId) {
+      env.EncounterId = requestedId;
+      const settings = CurrentSettings();
+      settings.PlayerView.CustomEncounterId = requestedId;
+      this.tracker.SaveUpdatedSettings(settings);
+      this.tracker.PlayerViewClient.UpdateEncounter(
+        requestedId,
+        this.tracker.Encounter.GetPlayerView()
+      );
+    }
+    
+    return didGrantId;
   };
 
   public ToggleFullScreen = () => {

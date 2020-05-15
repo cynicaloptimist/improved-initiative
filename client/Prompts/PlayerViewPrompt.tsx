@@ -5,22 +5,25 @@ import { env } from "../Environment";
 import { PromptProps } from "./PendingPrompts";
 import { useRef } from "react";
 import { useCallback } from "react";
+import { useState } from "react";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
 
 interface PlayerViewPromptComponentProps {
   encounterId: string;
+  requestCustomEncounterId: (requestedId: string) => Promise<boolean>;
 }
 
 function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
+  const [encounterId, setEncounterId] = useState(props.encounterId);
   const { targetInput, copyTargetInputToClipboard } = useCopyableText();
 
   const openPlayerViewWindow = useCallback(() => {
-    window.open(`/p/${props.encounterId}`, "Player View");
-  }, [props.encounterId]);
+    window.open(`/p/${encounterId}`, "Player View");
+  }, [encounterId]);
 
-  const playerViewUrl = `${env.BaseUrl}/p/${props.encounterId}`;
+  const playerViewUrl = `${env.BaseUrl}/p/${encounterId}`;
   return (
     <>
       <div className="launch-player-view">
@@ -32,7 +35,7 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
         />
         <p>
           {`Player View launched. Encounter ID: `}
-          <strong>{props.encounterId}</strong>
+          <strong>{encounterId}</strong>
         </p>
         <Button
           fontAwesomeIcon="copy"
@@ -46,10 +49,20 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
           additionalClassNames={inputClassName}
         />
         {env.HasEpicInitiative ? (
-          <label>
-            {"Background Image URL: "}
-            <Field type="text" name="backgroundImageUrl" />
-          </label>
+          <>
+            <label>
+              {"Custom Encounter ID: "}
+              <CustomEncounterId
+                encounterId={encounterId}
+                setEncounterId={setEncounterId}
+                requestCustomEncounterId={props.requestCustomEncounterId}
+              />
+            </label>
+            <label>
+              {"Background Image URL: "}
+              <Field type="text" name="backgroundImageUrl" />
+            </label>
+          </>
         ) : (
           <p>
             <label>
@@ -89,6 +102,46 @@ function useCopyableText() {
   return { targetInput, copyTargetInputToClipboard };
 }
 
+function CustomEncounterId(props: {
+  encounterId: string;
+  requestCustomEncounterId: (requestedId: string) => Promise<boolean>;
+  setEncounterId: (newId: string) => void;
+}) {
+  const [status, setStatus] = useState<
+    "unchanged" | "unavailable" | "successfulChange"
+  >("unchanged");
+  const inputElement = useRef<HTMLInputElement>(null);
+
+  return (
+    <span>
+      <input value={undefined} ref={inputElement} />
+      <Button
+        text="Request"
+        onClick={async () => {
+          if (!inputElement.current) {
+            return;
+          }
+
+          const requestedId = inputElement.current.value;
+          if (requestedId === props.encounterId) {
+            return;
+          }
+
+          const didGrantId = await props.requestCustomEncounterId(requestedId);
+
+          if (didGrantId) {
+            props.setEncounterId(requestedId);
+            setStatus("successfulChange");
+          } else {
+            setStatus("unavailable");
+          }
+        }}
+      />
+      {status}
+    </span>
+  );
+}
+
 interface PlayerViewPromptModel {
   backgroundImageUrl: string;
 }
@@ -96,12 +149,18 @@ interface PlayerViewPromptModel {
 export function PlayerViewPrompt(
   encounterId: string,
   currentBackgroundImageUrl: string,
-  setBackgroundImageUrl: (url: string) => void
+  setBackgroundImageUrl: (url: string) => void,
+  requestCustomEncounterId: (requestedId: string) => Promise<boolean>
 ): PromptProps<PlayerViewPromptModel> {
   return {
     initialValues: { backgroundImageUrl: currentBackgroundImageUrl },
     autoFocusSelector: "." + inputClassName,
-    children: <PlayerViewPromptComponent encounterId={encounterId} />,
+    children: (
+      <PlayerViewPromptComponent
+        encounterId={encounterId}
+        requestCustomEncounterId={requestCustomEncounterId}
+      />
+    ),
     onSubmit: (model: PlayerViewPromptModel) => {
       setBackgroundImageUrl(model.backgroundImageUrl);
       return true;
