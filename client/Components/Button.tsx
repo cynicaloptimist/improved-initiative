@@ -41,6 +41,7 @@ export function Button(props: ButtonProps) {
       className={classNames.join(" ")}
       onClick={!props.disabled && props.onClick}
       onMouseOver={!props.disabled && props.onMouseOver}
+      tabIndex={props.disabled ? -1 : 0}
     >
       {faElement}
       {text}
