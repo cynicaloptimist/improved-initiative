@@ -66,8 +66,8 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
         ) : (
           <p>
             <label>
-              Epic Initiative patrons can set a background image for your Player
-              View.{" "}
+              Epic Initiative patrons can configure a custom Encounter Id and
+              other features for the Player View.{" "}
             </label>
             <a
               href="https://www.patreon.com/bePatron?c=716070&amp;rid=1937132"
@@ -110,19 +110,16 @@ function CustomEncounterId(props: {
   const [status, setStatus] = useState<
     "unchanged" | "unavailable" | "successfulChange"
   >("unchanged");
-  const inputElement = useRef<HTMLInputElement>(null);
+  const [input, setInput] = useState(props.encounterId);
 
   return (
     <span>
-      <input value={undefined} ref={inputElement} />
+      <input value={input} onChange={e => setInput(e.target.value)} />
       <Button
         text="Request"
+        disabled={props.encounterId == input}
         onClick={async () => {
-          if (!inputElement.current) {
-            return;
-          }
-
-          const requestedId = inputElement.current.value;
+          const requestedId = input;
           if (requestedId === props.encounterId) {
             return;
           }
