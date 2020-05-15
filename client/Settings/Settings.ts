@@ -32,54 +32,8 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   });
 }
 
-function updateToSemanticVersionIsRequired(
-  settingsVersion: string,
-  targetVersion: string
-) {
-  const settingsVersionParts = settingsVersion.split(".").map(n => parseInt(n));
-  const targetVersionParts = targetVersion.split(".").map(n => parseInt(n));
-  if (settingsVersionParts[0] < targetVersionParts[0]) {
-    return true;
-  }
-  if (settingsVersionParts[0] > targetVersionParts[0]) {
-    return false;
-  }
-  if (settingsVersionParts[1] < targetVersionParts[1]) {
-    return true;
-  }
-  if (settingsVersionParts[1] > targetVersionParts[1]) {
-    return false;
-  }
-  if (settingsVersionParts[2] < targetVersionParts[2]) {
-    return true;
-  }
-  if (settingsVersionParts[2] > targetVersionParts[2]) {
-    return false;
-  }
-  return false;
-}
-
-export function UpdateSettings(settings: any): Settings {
-  const defaultSettings = getDefaultSettings();
-
-  if (!settings.PlayerView) {
-    settings.PlayerView = defaultSettings.PlayerView;
-  }
-
-  if (!settings.PlayerView.CustomStyles) {
-    settings.PlayerView.CustomStyles = defaultSettings.PlayerView.CustomStyles;
-  }
-
-  if (updateToSemanticVersionIsRequired(settings.Version, "1.2.0")) {
-    settings.PlayerView.CustomCSS = defaultSettings.PlayerView.CustomCSS;
-  }
-
-  if (updateToSemanticVersionIsRequired(settings.Version, "1.3.0")) {
-    settings.PlayerView.CustomStyles.backgroundUrl =
-      defaultSettings.PlayerView.CustomStyles.backgroundUrl;
-  }
-
-  return settings;
+export function UpdateSettings(settings: {}): Settings {
+  return _.merge(getDefaultSettings(), settings);
 }
 
 export function InitializeSettings() {
