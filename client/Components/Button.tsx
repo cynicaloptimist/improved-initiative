@@ -39,8 +39,8 @@ export function Button(props: ButtonProps) {
     <button
       type={props.type ?? "button"}
       className={classNames.join(" ")}
-      onClick={!props.disabled && props.onClick}
-      onMouseOver={!props.disabled && props.onMouseOver}
+      onClick={props.disabled ? undefined : props.onClick}
+      onMouseOver={props.disabled ? undefined : props.onMouseOver}
       tabIndex={props.disabled ? -1 : 0}
     >
       {faElement}
