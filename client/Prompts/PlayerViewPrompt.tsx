@@ -111,9 +111,7 @@ function CustomEncounterId(props: {
   requestCustomEncounterId: (requestedId: string) => Promise<boolean>;
   setEncounterId: (newId: string) => void;
 }) {
-  const [status, setStatus] = useState<
-    "unchanged" | "unavailable" | "successfulChange"
-  >("unchanged");
+  const [buttonText, setButtonText] = useState<string>("Request Id");
   const [input, setInput] = useState(props.encounterId);
 
   return (
@@ -124,7 +122,7 @@ function CustomEncounterId(props: {
         style={{ width: 200 }}
       />
       <Button
-        text="Request"
+        text={buttonText}
         disabled={props.encounterId == input || input.length < 4}
         onClick={async () => {
           const requestedId = input;
@@ -132,17 +130,17 @@ function CustomEncounterId(props: {
             return;
           }
 
+          setButtonText("Requesting...");
           const didGrantId = await props.requestCustomEncounterId(requestedId);
 
           if (didGrantId) {
             props.setEncounterId(requestedId);
-            setStatus("successfulChange");
+            setButtonText("Successfully Changed");
           } else {
-            setStatus("unavailable");
+            setButtonText("Id Unavailable");
           }
         }}
       />
-      {status}
     </span>
   );
 }
