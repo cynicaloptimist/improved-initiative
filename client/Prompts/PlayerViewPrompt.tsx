@@ -1,11 +1,10 @@
 import { Field } from "formik";
 import * as React from "react";
+import { useRef, useCallback, useState } from "react";
 import { Button, SubmitButton } from "../Components/Button";
 import { env } from "../Environment";
 import { PromptProps } from "./PendingPrompts";
-import { useRef } from "react";
-import { useCallback } from "react";
-import { useState } from "react";
+import { ValidateEncounterId } from "../../common/ValidateEncounterId";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -112,34 +111,46 @@ function CustomEncounterId(props: {
   setEncounterId: (newId: string) => void;
 }) {
   const [buttonText, setButtonText] = useState<string>("Request Id");
-  const [input, setInput] = useState(props.encounterId);
+  const [idToRequest, setIdToRequest] = useState(props.encounterId);
+
+  const requestCustomId = useCallback(async () => {
+    if (
+      idToRequest === props.encounterId ||
+      !ValidateEncounterId(idToRequest)
+    ) {
+      return;
+    }
+
+    setButtonText("Requesting...");
+    const didGrantId = await props.requestCustomEncounterId(idToRequest);
+
+    if (didGrantId) {
+      props.setEncounterId(idToRequest);
+      setButtonText("Successfully Changed");
+    } else {
+      setButtonText("Id Unavailable");
+    }
+  }, [props.encounterId, props.requestCustomEncounterId, idToRequest]);
+
+  const isRequestedIdValid = ValidateEncounterId(idToRequest);
 
   return (
     <span>
       <input
-        value={input}
-        onChange={e => setInput(e.target.value)}
+        value={idToRequest}
+        onChange={e => setIdToRequest(e.target.value)}
         style={{ width: 200 }}
+        onKeyDown={e => {
+          if (e.key === "Enter") {
+            requestCustomId();
+            return false;
+          }
+        }}
       />
       <Button
         text={buttonText}
-        disabled={props.encounterId == input || input.length < 4}
-        onClick={async () => {
-          const requestedId = input;
-          if (requestedId === props.encounterId) {
-            return;
-          }
-
-          setButtonText("Requesting...");
-          const didGrantId = await props.requestCustomEncounterId(requestedId);
-
-          if (didGrantId) {
-            props.setEncounterId(requestedId);
-            setButtonText("Successfully Changed");
-          } else {
-            setButtonText("Id Unavailable");
-          }
-        }}
+        disabled={props.encounterId == idToRequest || !isRequestedIdValid}
+        onClick={requestCustomId}
       />
     </span>
   );

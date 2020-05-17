@@ -8,6 +8,7 @@ import { getDefaultSettings } from "../common/Settings";
 import { PlayerViewManager } from "./playerviewmanager";
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
+import { ValidateEncounterId } from "../common/ValidateEncounterId";
 
 interface SocketWithSessionData {
   handshake: {
@@ -73,7 +74,10 @@ export default function(
       id: string,
       callback: (didGrantId: boolean) => void
     ) {
-      if (!socket.handshake.session.hasEpicInitiative) {
+      if (
+        !socket.handshake.session.hasEpicInitiative ||
+        !ValidateEncounterId(id)
+      ) {
         return callback(false);
       }
 
