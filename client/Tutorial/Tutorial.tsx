@@ -56,7 +56,7 @@ export function Tutorial(props: { onClose: () => void }) {
       {stepIndex === 0 && <h3>Welcome to Improved Initiative!</h3>}
       <p dangerouslySetInnerHTML={{ __html: step.Message }} />
       {step.AwaitAction === undefined && (
-        <Button onClick={advance} text="Next" />
+        <Button onClick={advance} text="Next" additionalClassNames="next" />
       )}
       <Button onClick={close} text="End Tutorial" />
     </div>
