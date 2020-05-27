@@ -32,6 +32,24 @@
   flex-direction: row;
 }
 
+.combatant-details__header {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
+.c-combatant-details {
+  flex: 1;
+}
+
+.c-multiple-combatant-details {
+  flex: 1;
+  overflow-y: auto;
+  .c-combatant-details {
+    flex: 1 0 auto;
+  }
+}
+
 .c-statblock-header {
   .Name {
     font-size: @font-size-h3;

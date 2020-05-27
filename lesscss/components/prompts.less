@@ -1,7 +1,6 @@
 .prompts {
   padding: @medium-spacer;
-  flex-shrink: 1;
-  flex-grow: 1;
+  flex: 1;
   overflow-y: auto;
   min-height: @prompt-minimum-height + (@medium-spacer * 4);
   align-items: center;
@@ -12,8 +11,7 @@
 }
 
 .ko-react-prompt-wrapper {
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 1;
   display: flex;
   flex-flow: row;
   align-items: flex-start;
@@ -264,8 +262,7 @@
 }
 
 .p-accept-tag__label {
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 1;
 }
 
 .p-apply-damage {
@@ -316,15 +313,13 @@
   label {
     display: flex;
     flex-flow: row;
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1;
   }
 
   .p-standard-prompt__label {
     flex-flow: row wrap;
     align-items: center;
-    flex-grow: 1;
-    flex-shrink: 1;
+    flex: 1;
   }
 
   .p-standard-prompt__fields {

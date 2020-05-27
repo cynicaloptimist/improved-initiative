@@ -6,6 +6,9 @@ import { CombatStats } from "../common/CombatStats";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
 import { getDefaultSettings } from "../common/Settings";
 import { PlayerViewManager } from "./playerviewmanager";
+import { EncounterState } from "../common/EncounterState";
+import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
+import { ValidateEncounterId } from "../common/ValidateEncounterId";
 
 interface SocketWithSessionData {
   handshake: {
@@ -32,7 +35,14 @@ export default function(
       socket.join(id);
     }
 
-    socket.on("update encounter", function(id: string, updatedEncounter: {}) {
+    socket.on("update encounter", function(
+      id: string,
+      updatedEncounter: EncounterState<PlayerViewCombatantState>
+    ) {
+      if (!socket.handshake.session.hasEpicInitiative) {
+        resetEpicInitiativeEncounterFeatures(updatedEncounter);
+      }
+
       joinEncounter(id);
       playerViews.UpdateEncounter(id, updatedEncounter);
 
@@ -58,6 +68,28 @@ export default function(
 
     socket.on("join encounter", function(id: string) {
       joinEncounter(id);
+    });
+
+    socket.on("request custom id", async function(
+      id: string,
+      callback: (didGrantId: boolean) => void
+    ) {
+      if (
+        !socket.handshake.session.hasEpicInitiative ||
+        !ValidateEncounterId(id)
+      ) {
+        return callback(false);
+      }
+
+      const idAvailable = await playerViews.IdAvailable(id);
+      if (idAvailable) {
+        const oldId = socket.handshake.session.encounterId;
+        playerViews.Destroy(oldId);
+        joinEncounter(id);
+        return callback(true);
+      } else {
+        return callback(false);
+      }
     });
 
     socket.on("suggest damage", function(
@@ -94,6 +126,7 @@ export default function(
       socket.broadcast.to(id).emit("combat stats", combatStats);
     });
 
+    /*
     socket.on("disconnect", function() {
       const encounterId = socket.handshake.session.encounterId;
       io.in(encounterId).clients((error, clients) => {
@@ -102,6 +135,7 @@ export default function(
         }
       });
     });
+    */
   });
 }
 
@@ -113,4 +147,10 @@ function resetEpicInitiativeSettings(settings: PlayerViewSettings) {
   settings.DisplayPortraits = false;
   settings.SplashPortraits = false;
   settings.AllowTagSuggestions = false;
+}
+
+function resetEpicInitiativeEncounterFeatures(
+  encounterState: EncounterState<PlayerViewCombatantState>
+) {
+  encounterState.BackgroundImageUrl = undefined;
 }

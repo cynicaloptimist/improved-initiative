@@ -80,7 +80,8 @@ export function getDefaultSettings(): Settings {
         headerText: "",
         mainBackground: "",
         backgroundUrl: ""
-      }
+      },
+      CustomEncounterId: ""
     },
     Version: process.env.VERSION || "0.0.0"
   };

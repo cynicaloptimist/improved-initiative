@@ -148,20 +148,20 @@ export class LibrariesCommander {
       Source: "Custom",
       Id: probablyUniqueString()
     };
-    this.tracker.SpellEditor.EditSpell(
-      newSpell,
-      this.libraries.Spells.AddOrUpdateSpell,
-      this.libraries.Spells.DeleteSpellById
-    );
+    this.tracker.EditSpell({
+      spell: newSpell,
+      onSave: this.libraries.Spells.AddOrUpdateSpell,
+      onDelete: this.libraries.Spells.DeleteSpellById
+    });
   };
 
   public EditSpell = (listing: Listing<Spell>) => {
     listing.GetAsyncWithUpdatedId(spell => {
-      this.tracker.SpellEditor.EditSpell(
-        { ...Spell.Default(), ...spell },
-        this.libraries.Spells.AddOrUpdateSpell,
-        this.libraries.Spells.DeleteSpellById
-      );
+      this.tracker.EditSpell({
+        spell: { ...Spell.Default(), ...spell },
+        onSave: this.libraries.Spells.AddOrUpdateSpell,
+        onDelete: this.libraries.Spells.DeleteSpellById
+      });
     });
   };
 

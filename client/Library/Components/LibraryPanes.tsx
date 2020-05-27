@@ -4,7 +4,7 @@ import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { TutorialSpy } from "../../Tutorial/TutorialViewModel";
+import { TutorialSpy } from "../../Tutorial/TutorialSpy";
 import { Libraries } from "../Libraries";
 import { EncounterLibraryPane } from "./EncounterLibraryPane";
 import { PersistentCharacterLibraryPane } from "./PersistentCharacterLibraryPane";
@@ -73,25 +73,27 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
     const hasAccountSync = env.HasStorage;
 
     return (
-      <>
-        <h2>
-          {hasAccountSync && (
-            <span className="fas fa-cloud" title="Account Sync is enabled" />
-          )}{" "}
-          Library
-        </h2>
-        <Button
-          additionalClassNames="button--close"
-          fontAwesomeIcon="times"
-          onClick={this.hideLibraries}
-        />
+      <div className="libraries">
+        <div className="libraries__header">
+          <h2>
+            {hasAccountSync && (
+              <span className="fas fa-cloud" title="Account Sync is enabled" />
+            )}{" "}
+            Library
+          </h2>
+          <Button
+            additionalClassNames="button--close"
+            fontAwesomeIcon="times"
+            onClick={this.hideLibraries}
+          />
+        </div>
         <Tabs
           options={Object.keys(libraries)}
           onChoose={this.selectLibrary}
           selected={this.state.selectedLibrary}
         />
         {selectedLibrary}
-      </>
+      </div>
     );
   }
 }

@@ -11,28 +11,23 @@ interface Props {
   children?: React.ReactNode;
 }
 
-export class ListingButton extends React.Component<Props> {
-  public render() {
-    const text = this.props.text || "";
+export function ListingButton(props: Props) {
+  const text = props.text || "";
 
-    const cssClasses = [
-      `c-listing-button`,
-      `c-listing-${this.props.buttonClass}`
-    ];
-    if (this.props.faClass) {
-      cssClasses.push("fas", `fa-${this.props.faClass}`);
-    }
-
-    return (
-      <span
-        className={cssClasses.join(" ")}
-        onClick={this.props.onClick}
-        onMouseEnter={this.props.onMouseEnter}
-        onMouseLeave={this.props.onMouseLeave}
-        title={this.props.title}
-      >
-        {text} {this.props.children}
-      </span>
-    );
+  const cssClasses = [`c-listing-button`, `c-listing-${props.buttonClass}`];
+  if (props.faClass) {
+    cssClasses.push("fas", `fa-${props.faClass}`);
   }
+
+  return (
+    <span
+      className={cssClasses.join(" ")}
+      onClick={props.onClick}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
+      title={props.title}
+    >
+      {text} {props.children}
+    </span>
+  );
 }

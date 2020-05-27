@@ -1,4 +1,3 @@
-import * as ko from "knockout";
 import _ = require("lodash");
 import { CombatStats } from "../../common/CombatStats";
 import { PostCombatStatsOption } from "../../common/Settings";
@@ -7,8 +6,7 @@ import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncoun
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { TutorialSpy } from "../Tutorial/TutorialViewModel";
-import { ComponentLoader } from "../Utility/Components";
+import { TutorialSpy } from "../Tutorial/TutorialSpy";
 import { Metrics } from "../Utility/Metrics";
 import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "../Prompts/InitiativePrompt";
@@ -42,15 +40,37 @@ export class EncounterCommander {
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
       env.EncounterId,
-      this.tracker.Encounter.TemporaryBackgroundImageUrl(),
+      this.tracker.Encounter.TemporaryBackgroundImageUrl() ?? "",
       backgroundImageUrl =>
-        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl)
+        this.tracker.Encounter.TemporaryBackgroundImageUrl(backgroundImageUrl),
+      this.requestCustomEncounterIdAndUpdateEncounter
     );
     this.tracker.PromptQueue.Add(prompt);
 
     Metrics.TrackEvent("PlayerViewLaunched", {
       Id: env.EncounterId
     });
+  };
+
+  private requestCustomEncounterIdAndUpdateEncounter = async (
+    requestedId: string
+  ) => {
+    const didGrantId = await this.tracker.PlayerViewClient.RequestCustomEncounterId(
+      requestedId
+    );
+
+    if (didGrantId) {
+      env.EncounterId = requestedId;
+      const settings = CurrentSettings();
+      settings.PlayerView.CustomEncounterId = requestedId;
+      this.tracker.SaveUpdatedSettings(settings);
+      this.tracker.PlayerViewClient.UpdateEncounter(
+        requestedId,
+        this.tracker.Encounter.GetPlayerView()
+      );
+    }
+    
+    return didGrantId;
   };
 
   public ToggleFullScreen = () => {
@@ -92,9 +112,7 @@ export class EncounterCommander {
 
     this.rollInitiative();
 
-    ComponentLoader.AfterComponentLoaded(() =>
-      TutorialSpy("ShowInitiativeDialog")
-    );
+    TutorialSpy("ShowInitiativeDialog");
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {

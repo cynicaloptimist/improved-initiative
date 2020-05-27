@@ -1,11 +1,11 @@
 .spell-editor {
-  flex-grow: 1;
-  flex-shrink: 1;
+  display: flex;
+  flex-flow: column;
+  flex: 1;
 
-  textarea {
-    flex-grow: 1;
-    flex-shrink: 1;
-    height: 50px;
+  textarea[name="Description"] {
+    flex: 1;
+    height: 300px;
   }
 
   input,
@@ -24,9 +24,15 @@
     margin-left: @medium-spacer;
   }
 
+  .field-row {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+  }
+
   .json-editor {
-    flex-grow: 1;
-    font-family: Courier New, Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
+    height: 500px;
   }
 
   .buttons {

@@ -3,8 +3,10 @@ import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
-import Tippy from "@tippy.js/react";
+import Tippy from "@tippyjs/react";
 import { SettingsContext } from "../Settings/SettingsContext";
+import { Command } from "../Commands/Command";
+import { useSubscription } from "../Combatant/linkComponentToObservables";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -54,7 +56,7 @@ export function CombatantRow(props: CombatantRowProps) {
         aria-current={isActive ? "true" : "false"}
       >
         {props.combatantState.Hidden && (
-          <Tippy content="Hidden from Player View" boundary="window">
+          <Tippy content="Hidden from Player View">
             <span className="combatant__hidden-icon fas fa-eye-slash" />
           </Tippy>
         )}
@@ -94,7 +96,7 @@ export function CombatantRow(props: CombatantRowProps) {
 
         {props.combatantState.StatBlock.AC.Value}
         {props.combatantState.RevealedAC && (
-          <Tippy content="Revealed in Player View" boundary="window">
+          <Tippy content="Revealed in Player View">
             <span className="combatant__ac--revealed-badge fas fa-eye" />
           </Tippy>
         )}
@@ -118,18 +120,29 @@ function Commands() {
 
   return (
     <div className="combatant__commands">
-      {commandContext.InlineCommands.map(c => (
-        <Tippy content={`${c.Description} [${c.KeyBinding}]`} key={c.Id}>
-          <button
-            className={
-              "combatant__command-button fa-clickable fa-" + c.FontAwesomeIcon
-            }
-            onClick={c.ActionBinding}
-            aria-label={c.Description}
-          ></button>
-        </Tippy>
+      {commandContext.CombatantCommands.map(c => (
+        <CommandButton command={c} key={c.Id} />
       ))}
     </div>
+  );
+}
+
+function CommandButton(props: { command: Command }) {
+  const { command } = props;
+  const showInCombatantRow = useSubscription(command.ShowInCombatantRow);
+  if (!showInCombatantRow) {
+    return null;
+  }
+  return (
+    <Tippy content={`${command.Description} [${command.KeyBinding}]`}>
+      <button
+        className={
+          "combatant__command-button fa-clickable fa-" + command.FontAwesomeIcon
+        }
+        onClick={command.ActionBinding}
+        aria-label={command.Description}
+      ></button>
+    </Tippy>
   );
 }
 

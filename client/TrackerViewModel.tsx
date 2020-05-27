@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import * as React from "react";
 
 import * as compression from "json-url";
-import { find } from "lodash";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
@@ -11,22 +10,17 @@ import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
 import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
-import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
 import { BuildEncounterCommandList } from "./Commands/BuildEncounterCommandList";
 import { CombatantCommander } from "./Commands/CombatantCommander";
 import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
-import { PendingPrompts } from "./Prompts/PendingPrompts";
 import { PrivacyPolicyPrompt } from "./Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/PromptQueue";
-import { Toolbar } from "./Commands/Toolbar";
 import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { InitiativeList } from "./InitiativeList/InitiativeList";
-import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./Player/PlayerViewClient";
@@ -37,8 +31,6 @@ import {
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
-import { SettingsPane } from "./Settings/components/SettingsPane";
-import { SpellEditor } from "./StatBlockEditor/SpellEditor";
 import {
   StatBlockEditor,
   StatBlockEditorProps
@@ -47,21 +39,18 @@ import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
-import { CommandContext } from "./InitiativeList/CommandContext";
-import { SettingsContext } from "./Settings/SettingsContext";
-import { CombatFooter } from "./CombatFooter/CombatFooter";
+import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 
 const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
-  private playerViewClient = new PlayerViewClient(this.Socket);
-
+  
+  public PlayerViewClient = new PlayerViewClient(this.Socket);
   public Rules = new DefaultRules();
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
   public Libraries = new Libraries(this.accountClient);
-  public SpellEditor = new SpellEditor();
   public EncounterCommander = new EncounterCommander(this);
   public CombatantCommander = new CombatantCommander(this);
   public LibrariesCommander = new LibrariesCommander(
@@ -85,7 +74,6 @@ export class TrackerViewModel {
   public ToolbarWide = ko.observable(false);
 
   public DisplayLogin = !env.IsLoggedIn;
-  public PatreonLoginUrl = env.PatreonLoginUrl;
 
   constructor(private Socket: SocketIOClient.Socket) {
     const allCommands = [
@@ -117,7 +105,7 @@ export class TrackerViewModel {
   );
 
   public Encounter = new Encounter(
-    this.playerViewClient,
+    this.PlayerViewClient,
     combatantId => {
       const combatant = this.CombatantViewModels().find(
         (c: CombatantViewModel) => c.Combatant.Id == combatantId
@@ -135,153 +123,12 @@ export class TrackerViewModel {
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
   );
 
-  protected StatBlockEditor = ko.observable<JSX.Element>(null);
-
-  public librariesComponent = (
-    <LibraryPanes
-      librariesCommander={this.LibrariesCommander}
-      libraries={this.Libraries}
-      statBlockTextEnricher={this.StatBlockTextEnricher}
-    />
-  );
-
-  public initiativeListComponent = ko.pureComputed(() => {
-    const encounterState = this.Encounter.ObservableEncounterState();
-    const selectedCombatantIds = this.CombatantCommander.SelectedCombatants().map(
-      c => c.Combatant.Id
-    );
-    const combatantCountsByName = this.Encounter.CombatantCountsByName();
-
-    return (
-      <CommandContext.Provider
-        value={{
-          SelectCombatant: this.selectCombatantById,
-          RemoveTagFromCombatant: this.removeCombatantTag,
-          ApplyDamageToCombatant: this.applyDamageToCombatant,
-          EnrichText: this.StatBlockTextEnricher.EnrichText,
-          InlineCommands: this.CombatantCommander.Commands.filter(c =>
-            c.ShowInCombatantRow()
-          )
-        }}
-      >
-        <SettingsContext.Provider value={CurrentSettings()}>
-          <InitiativeList
-            encounterState={encounterState}
-            selectedCombatantIds={selectedCombatantIds}
-            combatantCountsByName={combatantCountsByName}
-          />
-        </SettingsContext.Provider>
-      </CommandContext.Provider>
-    );
-  });
-
-  public settingsComponent = ko.pureComputed(() => {
-    return (
-      <SettingsPane
-        settings={CurrentSettings()}
-        handleNewSettings={this.saveUpdatedSettings}
-        encounterCommands={this.EncounterToolbar}
-        combatantCommands={this.CombatantCommander.Commands}
-        reviewPrivacyPolicy={this.ReviewPrivacyPolicy}
-        repeatTutorial={this.RepeatTutorial}
-        closeSettings={() => this.SettingsVisible(false)}
-        libraries={this.Libraries}
-        accountClient={new AccountClient()}
-      />
-    );
-  });
-
-  public toolbarComponent = ko.pureComputed(() => {
-    const commandsToHideById =
-      this.Encounter.EncounterFlow.State() == "active"
-        ? ["start-encounter"]
-        : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
-
-    if (!this.CombatantCommander.HasOneSelected()) {
-      commandsToHideById.push("update-notes");
-    }
-
-    const encounterCommands = this.EncounterToolbar.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-    const combatantCommands = this.CombatantCommander.Commands.filter(
-      c => c.ShowOnActionBar() && !commandsToHideById.some(d => c.Id == d)
-    );
-
-    return (
-      <Toolbar
-        encounterCommands={encounterCommands}
-        combatantCommands={combatantCommands}
-        width={this.ToolbarWide() ? "wide" : "narrow"}
-        showCombatantCommands={this.CombatantCommander.HasSelected()}
-      />
-    );
-  });
-
-  public promptsComponent = ko.pureComputed(() => (
-    <PendingPrompts
-      promptsAndIds={this.PromptQueue.GetPrompts()}
-      removePrompt={this.PromptQueue.Remove}
-    />
-  ));
-
-  public activeCombatantComponent = ko.pureComputed(() => {
-    const activeCombatant = this.Encounter.EncounterFlow.ActiveCombatant();
-    const combatantViewModel = find(
-      this.CombatantViewModels(),
-      c => c.Combatant == activeCombatant
-    );
-    if (!combatantViewModel) {
-      return null;
-    }
-    return (
-      <CombatantDetails
-        combatantViewModel={combatantViewModel}
-        displayMode="active"
-        enricher={this.StatBlockTextEnricher}
-      />
-    );
-  });
-
-  public combatFooterComponent = ko.computed(() => {
-    const props = {
-      encounter: this.Encounter,
-      eventLog: this.EventLog
-    };
-    return (
-      <SettingsContext.Provider value={CurrentSettings()}>
-        <CombatFooter {...props} />
-      </SettingsContext.Provider>
-    );
-  });
-
-  private selectCombatantById = (
-    combatantId: string,
-    appendSelection: boolean
-  ) => {
-    this.CombatantCommander.Select(
-      this.CombatantViewModels().find(c => c.Combatant.Id == combatantId),
-      appendSelection
-    );
-  };
-
-  private removeCombatantTag = (combatantId: string, tagState: TagState) => {
-    const combatantViewModel = this.CombatantViewModels().find(
-      c => c.Combatant.Id == combatantId
-    );
-    combatantViewModel.RemoveTagByState(tagState);
-  };
-
-  private applyDamageToCombatant = (combatantId: string) => {
-    const combatantViewModel = this.CombatantViewModels().find(
-      c => c.Combatant.Id == combatantId
-    );
-    this.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
-  };
+  public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
+  public SpellEditorProps = ko.observable<SpellEditorProps>(null);
 
   public CenterColumn = ko.pureComputed(() => {
-    const editStatBlock = this.StatBlockEditor() !== null;
-    const editSpell = this.SpellEditor.HasSpell();
+    const editStatBlock = this.StatBlockEditorProps() !== null;
+    const editSpell = this.SpellEditorProps() !== null;
     if (editStatBlock) {
       return "statblockeditor";
     }
@@ -340,48 +187,53 @@ export class TrackerViewModel {
   };
 
   public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
-    this.StatBlockEditor(
-      <StatBlockEditor {...props} onClose={() => this.StatBlockEditor(null)} />
-    );
+    this.StatBlockEditorProps({
+      ...props,
+      onClose: () => this.StatBlockEditorProps(null)
+    });
+  }
+
+  public EditSpell(props: Omit<SpellEditorProps, "onClose">) {
+    this.SpellEditorProps({
+      ...props,
+      onClose: () => this.SpellEditorProps(null)
+    });
   }
 
   public async EditPersistentCharacterStatBlock(
     persistentCharacterId: string,
     newStatBlock?: StatBlock
   ) {
-    this.StatBlockEditor(null);
+    this.StatBlockEditorProps(null);
     const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
       persistentCharacterId
     );
     const hpDown =
       persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
 
-    this.StatBlockEditor(
-      <StatBlockEditor
-        statBlock={newStatBlock || persistentCharacter.StatBlock}
-        editorTarget="persistentcharacter"
-        onSave={(statBlock: StatBlock) => {
-          this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
-            persistentCharacterId,
-            {
-              StatBlock: statBlock,
-              CurrentHP: statBlock.HP.Value - hpDown
-            }
-          );
-          this.Encounter.UpdatePersistentCharacterStatBlock(
-            persistentCharacterId,
-            statBlock
-          );
-        }}
-        onDelete={() =>
-          this.Libraries.PersistentCharacters.DeletePersistentCharacter(
-            persistentCharacterId
-          )
-        }
-        onClose={() => this.StatBlockEditor(null)}
-        currentListings={this.Libraries.PersistentCharacters.GetListings()}
-      />
-    );
+    this.StatBlockEditorProps({
+      statBlock: newStatBlock || persistentCharacter.StatBlock,
+      editorTarget: "persistentcharacter",
+      onSave: (statBlock: StatBlock) => {
+        this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
+          persistentCharacterId,
+          {
+            StatBlock: statBlock,
+            CurrentHP: statBlock.HP.Value - hpDown
+          }
+        );
+        this.Encounter.UpdatePersistentCharacterStatBlock(
+          persistentCharacterId,
+          statBlock
+        );
+      },
+      onDelete: () =>
+        this.Libraries.PersistentCharacters.DeletePersistentCharacter(
+          persistentCharacterId
+        ),
+      onClose: () => this.StatBlockEditorProps(null),
+      currentListings: this.Libraries.PersistentCharacters.GetListings()
+    });
   }
 
   public RepeatTutorial = () => {
@@ -529,21 +381,21 @@ export class TrackerViewModel {
   };
 
   private joinPlayerViewEncounter() {
-    this.playerViewClient.JoinEncounter(env.EncounterId);
+    this.PlayerViewClient.JoinEncounter(env.EncounterId);
 
-    this.playerViewClient.UpdateSettings(
+    this.PlayerViewClient.UpdateSettings(
       env.EncounterId,
       CurrentSettings().PlayerView
     );
 
-    this.playerViewClient.UpdateEncounter(
+    this.PlayerViewClient.UpdateEncounter(
       env.EncounterId,
       this.Encounter.GetPlayerView()
     );
 
     CurrentSettings.subscribe(v => {
-      this.playerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
-      this.playerViewClient.UpdateEncounter(
+      this.PlayerViewClient.UpdateSettings(env.EncounterId, v.PlayerView);
+      this.PlayerViewClient.UpdateEncounter(
         env.EncounterId,
         this.Encounter.GetPlayerView()
       );
@@ -658,7 +510,7 @@ export class TrackerViewModel {
     }
   };
 
-  private saveUpdatedSettings(newSettings: Settings) {
+  public SaveUpdatedSettings(newSettings: Settings) {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
     LegacySynchronousLocalStore.Save(

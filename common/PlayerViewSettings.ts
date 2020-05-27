@@ -19,6 +19,7 @@ export interface PlayerViewSettings {
   SplashPortraits: boolean;
   CustomCSS: string;
   CustomStyles: PlayerViewCustomStyles;
+  CustomEncounterId: string;
 }
 
 export interface PlayerViewCustomStyles {
