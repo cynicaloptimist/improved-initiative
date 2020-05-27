@@ -60,6 +60,10 @@ export class StatBlockEditor extends React.Component<
   }
 
   public render() {
+    if (!this.props.statBlock) {
+      return null;
+    }
+    
     const header =
       {
         combatant: "Edit Combatant Statblock",
