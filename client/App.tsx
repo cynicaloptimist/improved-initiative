@@ -118,12 +118,14 @@ export function App(props: { tracker: TrackerViewModel }) {
               <SpellEditor {...spellEditorProps} />
             )}
             {centerColumn === "combat" && (
-              <InitiativeListHost tracker={tracker} />
+              <>
+                <InitiativeListHost tracker={tracker} />
+                <PendingPrompts
+                  promptsAndIds={prompts}
+                  removePrompt={tracker.PromptQueue.Remove}
+                />
+              </>
             )}
-            <PendingPrompts
-              promptsAndIds={prompts}
-              removePrompt={tracker.PromptQueue.Remove}
-            />
             <CombatFooter
               encounter={tracker.Encounter}
               eventLog={tracker.EventLog}
