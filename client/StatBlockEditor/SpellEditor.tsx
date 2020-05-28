@@ -17,6 +17,10 @@ export function SpellEditor(props: SpellEditorProps) {
   const [editorMode, setEditorMode] = useState<"standard" | "json">("standard");
   const jsonEditor = useRef<HTMLTextAreaElement>(null);
 
+  if (!props.spell) {
+    return null;
+  }
+
   const formValues = {
     ...props.spell,
     AllClasses: props.spell.Classes.join(", ")
