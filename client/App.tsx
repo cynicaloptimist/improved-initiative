@@ -43,10 +43,10 @@ export function App(props: { tracker: TrackerViewModel }) {
     tracker.Encounter.EncounterFlow.ActiveCombatant
   );
   const combatantViewModels = useSubscription(tracker.CombatantViewModels);
-  const centerColumn = useSubscription(tracker.CenterColumn);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
   const prompts = useSubscription(tracker.PromptQueue.GetPrompts);
+  const centerColumn = useSubscription(tracker.CenterColumn);
 
   const activeCombatantViewModel = find(
     combatantViewModels,
