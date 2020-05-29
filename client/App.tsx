@@ -98,6 +98,7 @@ export function App(props: { tracker: TrackerViewModel }) {
                   <CombatantDetails
                     combatantViewModel={activeCombatantViewModel}
                     displayMode="active"
+                    key={activeCombatantViewModel.Combatant.Id}
                   />
                 )}
                 {!activeCombatant && (
