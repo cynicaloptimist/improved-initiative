@@ -71,6 +71,7 @@ export class CombatantCommander {
           <CombatantDetails
             combatantViewModel={combatantViewModel}
             displayMode="default"
+            key={combatantViewModel.Combatant.Id}
           />
         </TextEnricherContext.Provider>
       );
