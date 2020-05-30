@@ -23,7 +23,7 @@ import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncount
 import { env } from "./Environment";
 import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
-import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
   UpdateLegacyCommandSettingsAndSave,

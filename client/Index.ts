@@ -4,7 +4,7 @@ import * as io from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
-import { ReactPlayerView } from "./Player/ReactPlayerView";
+import { ReactPlayerView } from "./PlayerView/ReactPlayerView";
 import { render as renderReact } from "react-dom";
 import { InitializeSettings, CurrentSettings } from "./Settings/Settings";
 import { TrackerViewModel } from "./TrackerViewModel";
