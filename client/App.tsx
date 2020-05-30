@@ -75,7 +75,7 @@ export function App(props: { tracker: TrackerViewModel }) {
           {tutorialVisible && (
             <Tutorial onClose={() => tracker.TutorialVisible(false)} />
           )}
-          {tracker.DisplayLogin && (
+          {!env.IsLoggedIn && (
             <a className="login button" href={env.PatreonLoginUrl}>
               Log In with Patreon
             </a>

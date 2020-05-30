@@ -43,7 +43,7 @@ const codec = compression("lzma");
 export class TrackerViewModel {
   private accountClient = new AccountClient();
   private rules = new DefaultRules();
-  
+
   public PlayerViewClient = new PlayerViewClient(this.Socket);
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
@@ -69,8 +69,6 @@ export class TrackerViewModel {
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public ToolbarWide = ko.observable(false);
-
-  public DisplayLogin = !env.IsLoggedIn;
 
   constructor(private Socket: SocketIOClient.Socket) {
     const allCommands = [
