@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PlayerViewCustomStyles } from "../../../common/PlayerViewSettings";
-import { CSSFrom } from "../../CSSFrom";
+import { CSSFrom } from "../CSSFrom";
 
 export class CustomStyles extends React.Component<{
   CustomCSS: string;
