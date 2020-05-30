@@ -42,9 +42,9 @@ const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
+  private rules = new DefaultRules();
   
   public PlayerViewClient = new PlayerViewClient(this.Socket);
-  public Rules = new DefaultRules();
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
   public Libraries = new Libraries(this.accountClient);
@@ -98,7 +98,7 @@ export class TrackerViewModel {
     this.LibrariesCommander.ReferenceSpell,
     this.LibrariesCommander.ReferenceCondition,
     this.Libraries.Spells,
-    this.Rules
+    this.rules
   );
 
   public Encounter = new Encounter(
@@ -111,7 +111,7 @@ export class TrackerViewModel {
         combatant.EditInitiative();
       }
     },
-    this.Rules
+    this.rules
   );
 
   public CombatantViewModels: KnockoutComputed<
