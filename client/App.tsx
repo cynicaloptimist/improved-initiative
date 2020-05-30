@@ -111,7 +111,7 @@ export function App(props: { tracker: TrackerViewModel }) {
                 <div className="combatant-details__header">
                   <h2>Active Combatant</h2>
                 </div>
-                {activeCombatant && (
+                {activeCombatantViewModel && (
                   <CombatantDetails
                     combatantViewModel={activeCombatantViewModel}
                     displayMode="active"
@@ -263,10 +263,13 @@ function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
   const selectCombatantById = useCallback(
     (combatantId: string, appendSelection: boolean) => {
-      tracker.CombatantCommander.Select(
-        combatantViewModels.find(c => c.Combatant.Id == combatantId),
-        appendSelection
+      const selectedViewModel = combatantViewModels.find(
+        c => c.Combatant.Id == combatantId
       );
+
+      if (selectedViewModel !== undefined) {
+        tracker.CombatantCommander.Select(selectedViewModel, appendSelection);
+      }
     },
     [tracker, combatantViewModels]
   );
@@ -276,7 +279,7 @@ function InitiativeListHost(props: { tracker: TrackerViewModel }) {
       const combatantViewModel = combatantViewModels.find(
         c => c.Combatant.Id == combatantId
       );
-      combatantViewModel.RemoveTagByState(tagState);
+      combatantViewModel?.RemoveTagByState(tagState);
     },
     [tracker, combatantViewModels]
   );
@@ -286,7 +289,10 @@ function InitiativeListHost(props: { tracker: TrackerViewModel }) {
       const combatantViewModel = combatantViewModels.find(
         c => c.Combatant.Id == combatantId
       );
-      tracker.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
+
+      if (combatantViewModel !== undefined) {
+        tracker.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
+      }
     },
     [tracker, combatantViewModels]
   );
