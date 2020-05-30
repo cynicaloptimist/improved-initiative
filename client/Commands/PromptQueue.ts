@@ -18,8 +18,4 @@ export class PromptQueue {
     this.prompts.remove(p => p[1] == promptId);
 
   public GetPrompts = ko.pureComputed(() => this.prompts());
-
-  public HasPrompt = ko.pureComputed(() => {
-    return this.prompts().length > 0;
-  });
 }

@@ -13,8 +13,11 @@ import { LibraryPanes } from "./Library/Components/LibraryPanes";
 import { find } from "lodash";
 import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { TextEnricherContext } from "./TextEnricher/TextEnricher";
-import { StatBlockEditor } from "./StatBlockEditor/StatBlockEditor";
-import { SpellEditor } from "./StatBlockEditor/SpellEditor";
+import {
+  StatBlockEditor,
+  StatBlockEditorProps
+} from "./StatBlockEditor/StatBlockEditor";
+import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 import { InitiativeList } from "./InitiativeList/InitiativeList";
 import { CommandContext } from "./InitiativeList/CommandContext";
 import { useCallback } from "react";
@@ -32,18 +35,33 @@ export function App(props: { tracker: TrackerViewModel }) {
   const { tracker } = props;
   const settings = useSubscription(CurrentSettings);
 
-  const interfacePriority = useSubscription(tracker.InterfacePriority);
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
-  const activeCombatant = useSubscription(
-    tracker.Encounter.EncounterFlow.ActiveCombatant
-  );
   const combatantViewModels = useSubscription(tracker.CombatantViewModels);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
   const prompts = useSubscription(tracker.PromptQueue.GetPrompts);
-  const centerColumn = useSubscription(tracker.CenterColumn);
+
+  const activeCombatant = useSubscription(
+    tracker.Encounter.EncounterFlow.ActiveCombatant
+  );
+  const encounterFlowState = useSubscription(
+    tracker.Encounter.EncounterFlow.State
+  );
+
+  const isACombatantSelected = useSubscription(
+    tracker.CombatantCommander.HasSelected
+  );
+
+  const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
+  const interfacePriority = interfacePriorityClass(
+    centerColumn,
+    librariesVisible,
+    prompts.length > 0,
+    isACombatantSelected,
+    encounterFlowState
+  );
 
   const activeCombatantViewModel = find(
     combatantViewModels,
@@ -140,6 +158,58 @@ export function App(props: { tracker: TrackerViewModel }) {
       </TextEnricherContext.Provider>
     </SettingsContext.Provider>
   );
+}
+
+function centerColumnView(
+  statBlockEditorProps: StatBlockEditorProps,
+  spellEditorProps: SpellEditorProps
+) {
+  if (statBlockEditorProps !== null) {
+    return "statblockeditor";
+  }
+  if (spellEditorProps !== null) {
+    return "spelleditor";
+  }
+  return "combat";
+}
+
+function interfacePriorityClass(
+  centerColumnView: string,
+  librariesVisible: boolean,
+  hasPrompt: boolean,
+  isACombatantSelected: boolean,
+  encounterState: "active" | "inactive"
+) {
+  if (
+    centerColumnView === "statblockeditor" ||
+    centerColumnView === "spelleditor"
+  ) {
+    if (librariesVisible) {
+      return "show-center-left-right";
+    }
+    return "show-center-right-left";
+  }
+
+  if (librariesVisible) {
+    return "show-left-center-right";
+  }
+
+  if (hasPrompt) {
+    if (isACombatantSelected) {
+      return "show-center-right-left";
+    }
+    return "show-center-left-right";
+  }
+
+  if (isACombatantSelected) {
+    return "show-right-center-left";
+  }
+
+  if (encounterState == "active") {
+    return "show-center-left-right";
+  }
+
+  return "show-center-right-left";
 }
 
 function ToolbarHost(props: { tracker: TrackerViewModel }) {

@@ -121,51 +121,6 @@ export class TrackerViewModel {
   public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
   public SpellEditorProps = ko.observable<SpellEditorProps>(null);
 
-  public CenterColumn = ko.pureComputed(() => {
-    const editStatBlock = this.StatBlockEditorProps() !== null;
-    const editSpell = this.SpellEditorProps() !== null;
-    if (editStatBlock) {
-      return "statblockeditor";
-    }
-    if (editSpell) {
-      return "spelleditor";
-    }
-    return "combat";
-  });
-
-  public InterfacePriority = ko.pureComputed(() => {
-    if (
-      this.CenterColumn() === "statblockeditor" ||
-      this.CenterColumn() === "spelleditor"
-    ) {
-      if (this.LibrariesVisible()) {
-        return "show-center-left-right";
-      }
-      return "show-center-right-left";
-    }
-
-    if (this.LibrariesVisible()) {
-      return "show-left-center-right";
-    }
-
-    if (this.PromptQueue.HasPrompt()) {
-      if (this.CombatantCommander.HasSelected()) {
-        return "show-center-right-left";
-      }
-      return "show-center-left-right";
-    }
-
-    if (this.CombatantCommander.HasSelected()) {
-      return "show-right-center-left";
-    }
-
-    if (this.Encounter.EncounterFlow.State() == "active") {
-      return "show-center-left-right";
-    }
-
-    return "show-center-right-left";
-  });
-
   public CloseSettings = () => {
     this.SettingsVisible(false);
     //this.TutorialVisible(false);
