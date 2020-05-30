@@ -133,10 +133,6 @@ export class TrackerViewModel {
     return "combat";
   });
 
-  public BlurVisible = ko.pureComputed(
-    () => this.TutorialVisible() || this.SettingsVisible()
-  );
-
   public InterfacePriority = ko.pureComputed(() => {
     if (
       this.CenterColumn() === "statblockeditor" ||

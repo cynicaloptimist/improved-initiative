@@ -35,7 +35,6 @@ export function App(props: { tracker: TrackerViewModel }) {
   const settings = useSubscription(CurrentSettings);
 
   const interfacePriority = useSubscription(tracker.InterfacePriority);
-  const blurVisible = useSubscription(tracker.BlurVisible);
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
@@ -52,6 +51,8 @@ export function App(props: { tracker: TrackerViewModel }) {
     combatantViewModels,
     c => c.Combatant == activeCombatant
   );
+
+  const blurVisible = tutorialVisible || settingsVisible;
 
   return (
     <SettingsContext.Provider value={settings}>
