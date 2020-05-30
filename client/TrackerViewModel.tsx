@@ -31,15 +31,12 @@ import {
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
-import {
-  StatBlockEditor,
-  StatBlockEditorProps
-} from "./StatBlockEditor/StatBlockEditor";
+import { StatBlockEditorProps } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
-import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
+import { SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 
 const codec = compression("lzma");
 
