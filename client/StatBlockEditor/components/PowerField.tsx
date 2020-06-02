@@ -34,12 +34,14 @@ export function PowerField(props: PowerFieldProps) {
           onClick={() => props.remove(props.index)}
         />
       </div>
-      <Field
-        className="c-statblock-editor__textarea"
-        component="textarea"
-        placeholder="Details"
-        name={`${props.powerType}[${props.index}].Content`}
-      />
+      <div className="inline">
+        <Field
+          className="c-statblock-editor__textarea"
+          component="textarea"
+          placeholder="Details"
+          name={`${props.powerType}[${props.index}].Content`}
+        />
+      </div>
     </>
   );
 }
