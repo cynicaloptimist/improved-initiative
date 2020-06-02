@@ -21,14 +21,17 @@
     font-size: 1rem;
   }
 
-  input.name {
+  input {
+    width: 12rem;
+    height: 3rem;
     flex-grow: 1;
   }
 
-  input.notes {
-    flex-grow: 1;
+  input[type="number"] {
+    width: 6rem;
+    flex-grow: 0;
   }
-
+  
   input[name="SaveAs"] {
     margin: @medium-spacer @large-spacer @medium-spacer @small-spacer;
   }
