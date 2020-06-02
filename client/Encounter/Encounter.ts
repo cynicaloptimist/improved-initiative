@@ -21,7 +21,7 @@ import {
   PersistentCharacterLibrary,
   PersistentCharacterUpdater
 } from "../Library/PersistentCharacterLibrary";
-import { PlayerViewClient } from "../Player/PlayerViewClient";
+import { PlayerViewClient } from "../PlayerView/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";

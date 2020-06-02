@@ -1,28 +1,31 @@
 import * as React from "react";
+import { useRef, useCallback } from "react";
+import { useEffect } from "react";
 
 interface LibraryFilterProps {
   applyFilterFn: (filter: string) => void;
 }
 
-export class LibraryFilter extends React.Component<LibraryFilterProps> {
-  private inputElement: HTMLInputElement;
+export function LibraryFilter(props: LibraryFilterProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [inputRef]);
 
-  public render() {
-    const applyFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-      this.props.applyFilterFn(event.currentTarget.value.toLocaleLowerCase());
-    };
+  const applyFilter = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const filterValue = event.currentTarget.value.toLocaleLowerCase();
+      setImmediate(() => props.applyFilterFn(filterValue));
+    },
+    [props.applyFilterFn]
+  );
 
-    return (
-      <input
-        className="filter-library"
-        placeholder="Filter..."
-        onChange={applyFilter}
-        ref={e => (this.inputElement = e)}
-      />
-    );
-  }
-
-  public componentDidMount = () => {
-    this.inputElement.focus();
-  };
+  return (
+    <input
+      className="filter-library"
+      placeholder="Filter..."
+      onChange={applyFilter}
+      ref={inputRef}
+    />
+  );
 }

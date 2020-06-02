@@ -23,7 +23,7 @@ import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncount
 import { env } from "./Environment";
 import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
-import { PlayerViewClient } from "./Player/PlayerViewClient";
+import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
   UpdateLegacyCommandSettingsAndSave,
@@ -31,23 +31,20 @@ import {
   SubscribeCommandsToSettingsChanges,
   UpdateSettings
 } from "./Settings/Settings";
-import {
-  StatBlockEditor,
-  StatBlockEditorProps
-} from "./StatBlockEditor/StatBlockEditor";
+import { StatBlockEditorProps } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
-import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
+import { SpellEditorProps } from "./StatBlockEditor/SpellEditor";
 
 const codec = compression("lzma");
 
 export class TrackerViewModel {
   private accountClient = new AccountClient();
-  
+  private rules = new DefaultRules();
+
   public PlayerViewClient = new PlayerViewClient(this.Socket);
-  public Rules = new DefaultRules();
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
   public Libraries = new Libraries(this.accountClient);
@@ -72,8 +69,6 @@ export class TrackerViewModel {
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public ToolbarWide = ko.observable(false);
-
-  public DisplayLogin = !env.IsLoggedIn;
 
   constructor(private Socket: SocketIOClient.Socket) {
     const allCommands = [
@@ -101,7 +96,7 @@ export class TrackerViewModel {
     this.LibrariesCommander.ReferenceSpell,
     this.LibrariesCommander.ReferenceCondition,
     this.Libraries.Spells,
-    this.Rules
+    this.rules
   );
 
   public Encounter = new Encounter(
@@ -114,7 +109,7 @@ export class TrackerViewModel {
         combatant.EditInitiative();
       }
     },
-    this.Rules
+    this.rules
   );
 
   public CombatantViewModels: KnockoutComputed<
@@ -125,55 +120,6 @@ export class TrackerViewModel {
 
   public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
   public SpellEditorProps = ko.observable<SpellEditorProps>(null);
-
-  public CenterColumn = ko.pureComputed(() => {
-    const editStatBlock = this.StatBlockEditorProps() !== null;
-    const editSpell = this.SpellEditorProps() !== null;
-    if (editStatBlock) {
-      return "statblockeditor";
-    }
-    if (editSpell) {
-      return "spelleditor";
-    }
-    return "combat";
-  });
-
-  public BlurVisible = ko.pureComputed(
-    () => this.TutorialVisible() || this.SettingsVisible()
-  );
-
-  public InterfacePriority = ko.pureComputed(() => {
-    if (
-      this.CenterColumn() === "statblockeditor" ||
-      this.CenterColumn() === "spelleditor"
-    ) {
-      if (this.LibrariesVisible()) {
-        return "show-center-left-right";
-      }
-      return "show-center-right-left";
-    }
-
-    if (this.LibrariesVisible()) {
-      return "show-left-center-right";
-    }
-
-    if (this.PromptQueue.HasPrompt()) {
-      if (this.CombatantCommander.HasSelected()) {
-        return "show-center-right-left";
-      }
-      return "show-center-left-right";
-    }
-
-    if (this.CombatantCommander.HasSelected()) {
-      return "show-right-center-left";
-    }
-
-    if (this.Encounter.EncounterFlow.State() == "active") {
-      return "show-center-left-right";
-    }
-
-    return "show-center-right-left";
-  });
 
   public CloseSettings = () => {
     this.SettingsVisible(false);

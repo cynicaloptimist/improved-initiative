@@ -119,13 +119,15 @@ export function PowerFields(props: { api: FormApi; powerType: string }) {
 }
 
 export const DescriptionField = () => (
-  <label className="c-statblock-editor__text">
+  <label className="c-statblock-editor__description">
     <div className="c-statblock-editor__label">Description</div>
-    <Field
-      className="c-statblock-editor__textarea"
-      component="textarea"
-      name="Description"
-    />
+    <div className="inline">
+      <Field
+        className="c-statblock-editor__textarea"
+        component="textarea"
+        name="Description"
+      />
+    </div>
   </label>
 );
 

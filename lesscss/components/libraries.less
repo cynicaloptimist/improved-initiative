@@ -23,11 +23,6 @@
   flex: 1;
   overflow-x: hidden;
 
-  input {
-    min-height: 20px;
-    cursor: text;
-  }
-
   ul {
     overflow-y: auto;
     flex: 1;
@@ -42,12 +37,13 @@
   .search-controls {
     flex-flow: row;
     .filter-library {
-      flex-grow: 1;
+      height: 34px;
+      width: 300px;
     }
     .group-by {
       padding: @extra-small-spacer;
-      min-height: 34px;
-      min-width: 34px;
+      flex-grow: 1;
+      min-height: unset;
     }
   }
 

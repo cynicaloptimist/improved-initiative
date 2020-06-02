@@ -1,5 +1,5 @@
 import * as Color from "color";
-import { PlayerViewCustomStyles } from "../common/PlayerViewSettings";
+import { PlayerViewCustomStyles } from "../../common/PlayerViewSettings";
 
 export function CSSFrom(
   customStyles: PlayerViewCustomStyles,

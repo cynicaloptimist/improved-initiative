@@ -11,6 +11,7 @@ import { useContext } from "react";
 interface CombatantDetailsProps {
   combatantViewModel: CombatantViewModel;
   displayMode: "default" | "active" | "status-only";
+  key: string;
 }
 
 export function CombatantDetails(props: CombatantDetailsProps) {

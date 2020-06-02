@@ -60,10 +60,10 @@ function getDifficultyString(difficulty: EncounterDifficulty) {
 }
 
 function FullEventLog(props: { eventsTail: string[] }) {
-  const eventsEndRef = React.useRef(null);
+  const eventsEndRef = React.useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    eventsEndRef.current.scrollIntoView(true);
+    eventsEndRef.current?.scrollIntoView(true);
   };
 
   React.useEffect(scrollToBottom, []);

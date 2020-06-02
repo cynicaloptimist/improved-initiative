@@ -151,6 +151,8 @@ export class CombatantViewModel {
     const tag = this.Combatant.Tags().find(t =>
       _.isEqual(tagState, t.GetState())
     );
-    this.Combatant.Tags.remove(tag);
+    if (tag !== undefined) {
+      this.Combatant.Tags.remove(tag);
+    }
   };
 }
