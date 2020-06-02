@@ -63,7 +63,7 @@ export class StatBlockEditor extends React.Component<
     if (!this.props.statBlock) {
       return null;
     }
-    
+
     const header =
       {
         combatant: "Edit Combatant Statblock",
@@ -179,9 +179,7 @@ export class StatBlockEditor extends React.Component<
           <PowerFields api={api} powerType={powerType} />
         </div>
       ))}
-      <div className="c-statblock-editor__description">
-        <DescriptionField />
-      </div>
+      <DescriptionField />
     </>
   );
 

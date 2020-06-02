@@ -31,7 +31,7 @@
     width: 6rem;
     flex-grow: 0;
   }
-  
+
   input[name="SaveAs"] {
     margin: @medium-spacer @large-spacer @medium-spacer @small-spacer;
   }
@@ -139,11 +139,8 @@
 }
 
 .c-statblock-editor__description {
-  .c-statblock-editor__label,
-  .c-text-field > .label,
-  .c-statblock-editor__identity .label {
-    flex-basis: 100%;
-  }
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .c-add-button {
