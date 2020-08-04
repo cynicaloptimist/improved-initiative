@@ -21,8 +21,6 @@
     .card-bg(@larger-spacer, @larger-spacer);
     margin: @large-spacer;
     padding: @large-spacer;
-    max-width: @fixed-column-width;
-    width: @fixed-column-width;
 
     &:before,
     &:after {
@@ -44,6 +42,14 @@
       bottom: -6px;
       left: -3px;
       right: -3px;
+    }
+  }
+
+  .vertical-resizer {
+    width: 6px;
+    cursor: col-resize;
+    &:hover, &.drag-active {
+      border: 3px dotted @primary-red;
     }
   }
 
