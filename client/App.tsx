@@ -25,6 +25,9 @@ import { TagState } from "../common/CombatantState";
 import { PendingPrompts } from "./Prompts/PendingPrompts";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SelectedCombatants } from "./SelectedCombatants";
+import { VerticalResizer } from "./VerticalResizer";
+import { useStoreBackedState } from "./Utility/useStoreBackedState";
+import { Store } from "./Utility/Store";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -70,6 +73,26 @@ export function App(props: { tracker: TrackerViewModel }) {
 
   const blurVisible = tutorialVisible || settingsVisible;
 
+  const [leftColumnWidth, setLeftColumnWidth] = useStoreBackedState(
+    Store.User,
+    "leftColumnWidth",
+    375
+  );
+  const [rightColumnWidth, setRightColumnWidth] = useStoreBackedState(
+    Store.User,
+    "rightColumnWidth",
+    375
+  );
+
+  const droppableCallback = useCallback(
+    (e: React.DragEvent<any>) => e.preventDefault(),
+    []
+  );
+  const droppableProps: React.HTMLProps<any> = {
+    onDragEnter: droppableCallback,
+    onDragOver: droppableCallback
+  };
+
   return (
     <SettingsContext.Provider value={settings}>
       <TextEnricherContext.Provider value={tracker.StatBlockTextEnricher}>
@@ -98,7 +121,11 @@ export function App(props: { tracker: TrackerViewModel }) {
             </a>
           )}
           <ToolbarHost tracker={tracker} />
-          <div className="left-column">
+          <div
+            className="left-column"
+            style={{ width: leftColumnWidth, maxWidth: leftColumnWidth }}
+            {...droppableProps}
+          >
             {librariesVisible && (
               <LibraryPanes
                 librariesCommander={tracker.LibrariesCommander}
@@ -128,7 +155,10 @@ export function App(props: { tracker: TrackerViewModel }) {
               </div>
             )}
           </div>
-          <div className="center-column">
+          <VerticalResizer
+            adjustWidth={offset => setLeftColumnWidth(leftColumnWidth + offset)}
+          />
+          <div className="center-column" {...droppableProps}>
             {centerColumn === "statblockeditor" && (
               <StatBlockEditor {...statblockEditorProps} />
             )}
@@ -149,7 +179,16 @@ export function App(props: { tracker: TrackerViewModel }) {
               eventLog={tracker.EventLog}
             />
           </div>
-          <div className="right-column">
+          <VerticalResizer
+            adjustWidth={offset =>
+              setRightColumnWidth(rightColumnWidth - offset)
+            }
+          />
+          <div
+            className="right-column"
+            style={{ width: rightColumnWidth, maxWidth: rightColumnWidth }}
+            {...droppableProps}
+          >
             <SelectedCombatants
               combatantCommander={tracker.CombatantCommander}
             />
