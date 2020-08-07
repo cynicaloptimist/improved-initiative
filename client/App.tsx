@@ -73,14 +73,9 @@ export function App(props: { tracker: TrackerViewModel }) {
 
   const blurVisible = tutorialVisible || settingsVisible;
 
-  const [leftColumnWidth, setLeftColumnWidth] = useStoreBackedState(
+  const [columnWidth, setColumnWidth] = useStoreBackedState(
     Store.User,
-    "leftColumnWidth",
-    375
-  );
-  const [rightColumnWidth, setRightColumnWidth] = useStoreBackedState(
-    Store.User,
-    "rightColumnWidth",
+    "columnWidth",
     375
   );
 
@@ -123,7 +118,7 @@ export function App(props: { tracker: TrackerViewModel }) {
           <ToolbarHost tracker={tracker} />
           <div
             className="left-column"
-            style={{ width: leftColumnWidth, maxWidth: leftColumnWidth }}
+            style={{ width: columnWidth, maxWidth: columnWidth }}
             {...droppableProps}
           >
             {librariesVisible && (
@@ -156,7 +151,7 @@ export function App(props: { tracker: TrackerViewModel }) {
             )}
           </div>
           <VerticalResizer
-            adjustWidth={offset => setLeftColumnWidth(leftColumnWidth + offset)}
+            adjustWidth={offset => setColumnWidth(columnWidth + offset)}
           />
           <div className="center-column" {...droppableProps}>
             {centerColumn === "statblockeditor" && (
@@ -181,12 +176,12 @@ export function App(props: { tracker: TrackerViewModel }) {
           </div>
           <VerticalResizer
             adjustWidth={offset =>
-              setRightColumnWidth(rightColumnWidth - offset)
+              setColumnWidth(columnWidth - offset)
             }
           />
           <div
             className="right-column"
-            style={{ width: rightColumnWidth, maxWidth: rightColumnWidth }}
+            style={{ width: columnWidth, maxWidth: columnWidth }}
             {...droppableProps}
           >
             <SelectedCombatants
