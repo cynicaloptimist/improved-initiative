@@ -8,7 +8,11 @@ export function useStoreBackedState<T>(
 ): [T, (newValue: T) => void] {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {
-    Store.Load<T>(listName, key).then(value => setValue(value));
+    Store.Load<T>(listName, key).then(value => {
+      if (value !== null) {
+        setValue(value);
+      }
+    });
   }, [listName, key]);
 
   const setValueWithStore = (newValue: T) => {
