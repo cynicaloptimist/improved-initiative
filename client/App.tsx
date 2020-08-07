@@ -28,6 +28,7 @@ import { SelectedCombatants } from "./SelectedCombatants";
 import { VerticalResizer } from "./VerticalResizer";
 import { useStoreBackedState } from "./Utility/useStoreBackedState";
 import { Store } from "./Utility/Store";
+import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -108,7 +109,16 @@ export function App(props: { tracker: TrackerViewModel }) {
             />
           )}
           {tutorialVisible && (
-            <Tutorial onClose={() => tracker.TutorialVisible(false)} />
+            <Tutorial
+              onClose={() => {
+                tracker.TutorialVisible(false);
+                LegacySynchronousLocalStore.Save(
+                  LegacySynchronousLocalStore.User,
+                  "SkipIntro",
+                  true
+                );
+              }}
+            />
           )}
           {!env.IsLoggedIn && (
             <a className="login button" href={env.PatreonLoginUrl}>
@@ -175,9 +185,7 @@ export function App(props: { tracker: TrackerViewModel }) {
             />
           </div>
           <VerticalResizer
-            adjustWidth={offset =>
-              setColumnWidth(columnWidth - offset)
-            }
+            adjustWidth={offset => setColumnWidth(columnWidth - offset)}
           />
           <div
             className="right-column"
