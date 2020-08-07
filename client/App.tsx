@@ -25,8 +25,9 @@ import { TagState } from "../common/CombatantState";
 import { PendingPrompts } from "./Prompts/PendingPrompts";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SelectedCombatants } from "./SelectedCombatants";
-import { useState } from "react";
 import { VerticalResizer } from "./VerticalResizer";
+import { useStoreBackedState } from "./Utility/useStoreBackedState";
+import { Store } from "./Utility/Store";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -72,8 +73,16 @@ export function App(props: { tracker: TrackerViewModel }) {
 
   const blurVisible = tutorialVisible || settingsVisible;
 
-  const [leftColumnWidth, setLeftColumnWidth] = useState(375);
-  const [rightColumnWidth, setRightColumnWidth] = useState(375);
+  const [leftColumnWidth, setLeftColumnWidth] = useStoreBackedState(
+    Store.User,
+    "leftColumnWidth",
+    375
+  );
+  const [rightColumnWidth, setRightColumnWidth] = useStoreBackedState(
+    Store.User,
+    "rightColumnWidth",
+    375
+  );
 
   const droppableCallback = useCallback(
     (e: React.DragEvent<any>) => e.preventDefault(),
