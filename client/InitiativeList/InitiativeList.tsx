@@ -23,7 +23,7 @@ export function InitiativeList(props: {
         />
         <DndProvider backend={HTML5Backend}>
           <tbody>
-            {encounterState.Combatants.map(combatantState => {
+            {encounterState.Combatants.map((combatantState, index) => {
               const siblingCount =
                 props.combatantCountsByName[combatantState.StatBlock.Name] || 1;
 
@@ -40,6 +40,7 @@ export function InitiativeList(props: {
                   // Show index labels if the encounter has ever had more than one
                   // creature with this name.
                   showIndexLabel={siblingCount > 1}
+                  initiativeIndex={index}
                 />
               );
             })}

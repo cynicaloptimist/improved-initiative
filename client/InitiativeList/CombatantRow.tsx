@@ -7,13 +7,14 @@ import Tippy from "@tippyjs/react";
 import { SettingsContext } from "../Settings/SettingsContext";
 import { Command } from "../Commands/Command";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
   isActive: boolean;
   isSelected: boolean;
   showIndexLabel: boolean;
+  initiativeIndex: number;
 };
 
 type CombatantDragData = {
@@ -37,22 +38,48 @@ export function CombatantRow(props: CombatantRowProps) {
   };
 
   const [, drag] = useDrag({
-    item: { id: props.combatantState.Id, type: "combatant" }
+    item: {
+      id: props.combatantState.Id,
+      initiativeIndex: props.initiativeIndex,
+      type: "combatant"
+    }
   });
 
-  const [, drop] = useDrop({
+  const [collectedProps, drop] = useDrop({
     accept: "combatant",
     drop: (dragData: CombatantDragData) => {
       if (combatantState.Id !== dragData.id) {
         commandContext.MoveCombatantFromDrag(dragData.id, combatantState.Id);
       }
+    },
+    collect: (monitor: DropTargetMonitor) => {
+      if (!monitor.isOver() || monitor.getItemType() !== "combatant") {
+        return {
+          id: null,
+          initiativeIndex: null
+        };
+      }
+      return {
+        id: monitor.getItem().id,
+        initiativeIndex: monitor.getItem().initiativeIndex
+      };
     }
   });
+
+  const classNames = getClassNames(props);
+  if (collectedProps.initiativeIndex !== null) {
+    if (collectedProps.initiativeIndex > props.initiativeIndex) {
+      classNames.push("drop-before");
+    }
+    if (collectedProps.initiativeIndex < props.initiativeIndex) {
+      classNames.push("drop-after");
+    }
+  }
 
   return (
     <tr
       ref={node => drag(drop(node))}
-      className={getClassNames(props).join(" ")}
+      className={classNames.join(" ")}
       onClick={selectCombatant}
     >
       <td className="combatant__initiative" title="Initiative Roll">

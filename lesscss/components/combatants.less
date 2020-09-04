@@ -8,6 +8,7 @@
   border: 1px solid @accent-white;
   width: 100%;
   border-spacing: 0;
+  border-collapse: collapse;
 
   th,
   td {
@@ -85,6 +86,14 @@
 
   &.selected {
     box-shadow: inset 0 0 0 3px @primary-green;
+  }
+
+  &.drop-before {
+    border-top: 2px dashed @primary-green;
+  }
+
+  &.drop-after {
+    border-bottom: 2px dashed @primary-green;
   }
 
   @media (max-width: @medium) {
