@@ -20,6 +20,8 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
   );
   const combatantViewModels = useSubscription(tracker.CombatantViewModels);
 
+  const combatants = useSubscription(tracker.Encounter.Combatants);
+
   const selectCombatantById = useCallback(
     (combatantId: string, appendSelection: boolean) => {
       const selectedViewModel = combatantViewModels.find(
@@ -56,13 +58,26 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
     [tracker, combatantViewModels]
   );
 
+  const moveCombatantFromDrag = useCallback(
+    (draggedCombatantId: string, droppedOntoCombatantId: string | null) => {
+      const draggedCombatant = combatants.find(c => c.Id == draggedCombatantId);
+      const droppedCombatantIndex =
+        droppedOntoCombatantId === null
+          ? combatants.length
+          : combatants.findIndex(c => c.Id == droppedOntoCombatantId);
+      tracker.Encounter.MoveCombatant(draggedCombatant, droppedCombatantIndex);
+    },
+    [tracker, combatants]
+  );
+
   return (
     <CommandContext.Provider
       value={{
         SelectCombatant: selectCombatantById,
         RemoveTagFromCombatant: removeCombatantTag,
         ApplyDamageToCombatant: applyDamageToCombatant,
-        CombatantCommands: tracker.CombatantCommander.Commands
+        CombatantCommands: tracker.CombatantCommander.Commands,
+        MoveCombatantFromDrag: moveCombatantFromDrag
       }}
     >
       <InitiativeList
