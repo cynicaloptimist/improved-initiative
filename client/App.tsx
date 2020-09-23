@@ -1,5 +1,5 @@
 import * as React from "react";
-import HTML5Backend from "react-dnd-html5-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { TrackerViewModel } from "./TrackerViewModel";
 import { useSubscription } from "./Combatant/linkComponentToObservables";
@@ -20,7 +20,6 @@ import {
   StatBlockEditorProps
 } from "./StatBlockEditor/StatBlockEditor";
 import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
-import { useCallback } from "react";
 import { PendingPrompts } from "./Prompts/PendingPrompts";
 import { CombatFooter } from "./CombatFooter/CombatFooter";
 import { SelectedCombatants } from "./SelectedCombatants";
@@ -43,14 +42,10 @@ export function App(props: { tracker: TrackerViewModel }) {
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
-  const combatantViewModels = useSubscription(tracker.CombatantViewModels);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
   const prompts = useSubscription(tracker.PromptQueue.GetPrompts);
 
-  const activeCombatant = useSubscription(
-    tracker.Encounter.EncounterFlow.ActiveCombatant
-  );
   const encounterFlowState = useSubscription(
     tracker.Encounter.EncounterFlow.State
   );
@@ -66,11 +61,6 @@ export function App(props: { tracker: TrackerViewModel }) {
     prompts.length > 0,
     isACombatantSelected,
     encounterFlowState
-  );
-
-  const activeCombatantViewModel = find(
-    combatantViewModels,
-    c => c.Combatant == activeCombatant
   );
 
   const blurVisible = tutorialVisible || settingsVisible;
@@ -119,78 +109,51 @@ export function App(props: { tracker: TrackerViewModel }) {
               </a>
             )}
             <ToolbarHost tracker={tracker} />
-            <div
-              className="left-column"
-              style={{ width: columnWidth, maxWidth: columnWidth }}
-            >
-              {librariesVisible && (
-                <LibraryPanes
-                  librariesCommander={tracker.LibrariesCommander}
-                  libraries={tracker.Libraries}
-                  statBlockTextEnricher={tracker.StatBlockTextEnricher}
-                />
-              )}
-              {librariesVisible || (
-                <div className="active-combatant">
-                  <div className="combatant-details__header">
-                    <h2>Active Combatant</h2>
-                  </div>
-                  {activeCombatantViewModel && (
-                    <CombatantDetails
-                      combatantViewModel={activeCombatantViewModel}
-                      displayMode="active"
-                      key={activeCombatantViewModel.Combatant.Id}
-                    />
-                  )}
-                  {!activeCombatant && (
-                    <p className="start-encounter-hint">
-                      Click [<span className="fas fa-play" /> Start Encounter ]
-                      to roll initiative. The StatBlock for the Active Combatant
-                      will be displayed here.
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
+            <LeftColumn tracker={tracker} columnWidth={columnWidth} />
+
             <VerticalResizer
               adjustWidth={offset => setColumnWidth(columnWidth + offset)}
             />
-            <div className="center-column">
-              {centerColumn === "statblockeditor" && (
-                <StatBlockEditor {...statblockEditorProps} />
-              )}
-              {centerColumn === "spelleditor" && (
-                <SpellEditor {...spellEditorProps} />
-              )}
-              {centerColumn === "combat" && (
-                <>
-                  <InitiativeListHost tracker={tracker} />
-                  <PendingPrompts
-                    promptsAndIds={prompts}
-                    removePrompt={tracker.PromptQueue.Remove}
-                  />
-                </>
-              )}
-              <CombatFooter
-                encounter={tracker.Encounter}
-                eventLog={tracker.EventLog}
-              />
-            </div>
+            <CenterColumn tracker={tracker} />
             <VerticalResizer
               adjustWidth={offset => setColumnWidth(columnWidth - offset)}
             />
-            <div
-              className="right-column"
-              style={{ width: columnWidth, maxWidth: columnWidth }}
-            >
-              <SelectedCombatants
-                combatantCommander={tracker.CombatantCommander}
-              />
-            </div>
+            <RightColumn tracker={tracker} columnWidth={columnWidth} />
           </div>
         </TextEnricherContext.Provider>
       </SettingsContext.Provider>
     </DndProvider>
+  );
+}
+
+function CenterColumn(props: { tracker: TrackerViewModel }) {
+  const statblockEditorProps = useSubscription(
+    props.tracker.StatBlockEditorProps
+  );
+  const spellEditorProps = useSubscription(props.tracker.SpellEditorProps);
+  const prompts = useSubscription(props.tracker.PromptQueue.GetPrompts);
+  const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
+
+  return (
+    <div className="center-column" ref={useVerticalResizerDrop()}>
+      {centerColumn === "statblockeditor" && (
+        <StatBlockEditor {...statblockEditorProps} />
+      )}
+      {centerColumn === "spelleditor" && <SpellEditor {...spellEditorProps} />}
+      {centerColumn === "combat" && (
+        <>
+          <InitiativeListHost tracker={props.tracker} />
+          <PendingPrompts
+            promptsAndIds={prompts}
+            removePrompt={props.tracker.PromptQueue.Remove}
+          />
+        </>
+      )}
+      <CombatFooter
+        encounter={props.tracker.Encounter}
+        eventLog={props.tracker.EventLog}
+      />
+    </div>
   );
 }
 
@@ -279,4 +242,87 @@ function ToolbarHost(props: { tracker: TrackerViewModel }) {
       showCombatantCommands={combatantSelected}
     />
   );
+}
+
+function LeftColumn(props: { tracker: TrackerViewModel; columnWidth: number }) {
+  const librariesVisible = useSubscription(props.tracker.LibrariesVisible);
+
+  const combatantViewModels = useSubscription(
+    props.tracker.CombatantViewModels
+  );
+  const activeCombatant = useSubscription(
+    props.tracker.Encounter.EncounterFlow.ActiveCombatant
+  );
+
+  const activeCombatantViewModel = find(
+    combatantViewModels,
+    c => c.Combatant == activeCombatant
+  );
+
+  return (
+    <div
+      className="left-column"
+      style={{ width: props.columnWidth, maxWidth: props.columnWidth }}
+      ref={useVerticalResizerDrop()}
+    >
+      {librariesVisible && (
+        <LibraryPanes
+          librariesCommander={props.tracker.LibrariesCommander}
+          libraries={props.tracker.Libraries}
+          statBlockTextEnricher={props.tracker.StatBlockTextEnricher}
+        />
+      )}
+      {librariesVisible || (
+        <div className="active-combatant">
+          <div className="combatant-details__header">
+            <h2>Active Combatant</h2>
+          </div>
+          {activeCombatantViewModel && (
+            <CombatantDetails
+              combatantViewModel={activeCombatantViewModel}
+              displayMode="active"
+              key={activeCombatantViewModel.Combatant.Id}
+            />
+          )}
+          {!activeCombatant && (
+            <p className="start-encounter-hint">
+              Click [<span className="fas fa-play" /> Start Encounter ] to roll
+              initiative. The StatBlock for the Active Combatant will be
+              displayed here.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RightColumn(props: {
+  tracker: TrackerViewModel;
+  columnWidth: number;
+}) {
+  return (
+    <div
+      className="right-column"
+      style={{ width: props.columnWidth, maxWidth: props.columnWidth }}
+      ref={useVerticalResizerDrop()}
+    >
+      <SelectedCombatants
+        combatantCommander={props.tracker.CombatantCommander}
+      />
+    </div>
+  );
+}
+
+function useVerticalResizerDrop() {
+  const [, drop] = useDrop({
+    accept: "vertical-resizer",
+    drop: (item, monitor) => {
+      return {
+        finalClientX: monitor.getClientOffset().x
+      };
+    }
+  });
+
+  return drop;
 }
