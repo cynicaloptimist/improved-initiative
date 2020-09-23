@@ -1,4 +1,6 @@
 import * as React from "react";
+import HTML5Backend from "react-dnd-html5-backend";
+
 import { TrackerViewModel } from "./TrackerViewModel";
 import { useSubscription } from "./Combatant/linkComponentToObservables";
 import { CurrentSettings } from "./Settings/Settings";
@@ -27,6 +29,7 @@ import { useStoreBackedState } from "./Utility/useStoreBackedState";
 import { Store } from "./Utility/Store";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { InitiativeListHost } from "./InitiativeListHost";
+import { DndProvider, useDrop } from "react-dnd";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -78,125 +81,116 @@ export function App(props: { tracker: TrackerViewModel }) {
     375
   );
 
-  const droppableCallback = useCallback(
-    (e: React.DragEvent<any>) => e.preventDefault(),
-    []
-  );
-  const droppableProps: React.HTMLProps<any> = {
-    onDragEnter: droppableCallback,
-    onDragOver: droppableCallback
-  };
-
   return (
-    <SettingsContext.Provider value={settings}>
-      <TextEnricherContext.Provider value={tracker.StatBlockTextEnricher}>
-        <div className={"encounter-view " + interfacePriority}>
-          {blurVisible && (
-            <div className="modal-blur" onClick={tracker.CloseSettings} />
-          )}
-          {settingsVisible && (
-            <SettingsPane
-              handleNewSettings={tracker.SaveUpdatedSettings}
-              encounterCommands={tracker.EncounterToolbar}
-              combatantCommands={tracker.CombatantCommander.Commands}
-              reviewPrivacyPolicy={tracker.ReviewPrivacyPolicy}
-              repeatTutorial={tracker.RepeatTutorial}
-              closeSettings={() => tracker.SettingsVisible(false)}
-              libraries={tracker.Libraries}
-              accountClient={new AccountClient()}
-            />
-          )}
-          {tutorialVisible && (
-            <Tutorial
-              onClose={() => {
-                tracker.TutorialVisible(false);
-                LegacySynchronousLocalStore.Save(
-                  LegacySynchronousLocalStore.User,
-                  "SkipIntro",
-                  true
-                );
-              }}
-            />
-          )}
-          {!env.IsLoggedIn && (
-            <a className="login button" href={env.PatreonLoginUrl}>
-              Log In with Patreon
-            </a>
-          )}
-          <ToolbarHost tracker={tracker} />
-          <div
-            className="left-column"
-            style={{ width: columnWidth, maxWidth: columnWidth }}
-            {...droppableProps}
-          >
-            {librariesVisible && (
-              <LibraryPanes
-                librariesCommander={tracker.LibrariesCommander}
+    <DndProvider backend={HTML5Backend}>
+      <SettingsContext.Provider value={settings}>
+        <TextEnricherContext.Provider value={tracker.StatBlockTextEnricher}>
+          <div className={"encounter-view " + interfacePriority}>
+            {blurVisible && (
+              <div className="modal-blur" onClick={tracker.CloseSettings} />
+            )}
+            {settingsVisible && (
+              <SettingsPane
+                handleNewSettings={tracker.SaveUpdatedSettings}
+                encounterCommands={tracker.EncounterToolbar}
+                combatantCommands={tracker.CombatantCommander.Commands}
+                reviewPrivacyPolicy={tracker.ReviewPrivacyPolicy}
+                repeatTutorial={tracker.RepeatTutorial}
+                closeSettings={() => tracker.SettingsVisible(false)}
                 libraries={tracker.Libraries}
-                statBlockTextEnricher={tracker.StatBlockTextEnricher}
+                accountClient={new AccountClient()}
               />
             )}
-            {librariesVisible || (
-              <div className="active-combatant">
-                <div className="combatant-details__header">
-                  <h2>Active Combatant</h2>
-                </div>
-                {activeCombatantViewModel && (
-                  <CombatantDetails
-                    combatantViewModel={activeCombatantViewModel}
-                    displayMode="active"
-                    key={activeCombatantViewModel.Combatant.Id}
-                  />
-                )}
-                {!activeCombatant && (
-                  <p className="start-encounter-hint">
-                    Click [<span className="fas fa-play" /> Start Encounter ] to
-                    roll initiative. The StatBlock for the Active Combatant will
-                    be displayed here.
-                  </p>
-                )}
-              </div>
+            {tutorialVisible && (
+              <Tutorial
+                onClose={() => {
+                  tracker.TutorialVisible(false);
+                  LegacySynchronousLocalStore.Save(
+                    LegacySynchronousLocalStore.User,
+                    "SkipIntro",
+                    true
+                  );
+                }}
+              />
             )}
-          </div>
-          <VerticalResizer
-            adjustWidth={offset => setColumnWidth(columnWidth + offset)}
-          />
-          <div className="center-column" {...droppableProps}>
-            {centerColumn === "statblockeditor" && (
-              <StatBlockEditor {...statblockEditorProps} />
+            {!env.IsLoggedIn && (
+              <a className="login button" href={env.PatreonLoginUrl}>
+                Log In with Patreon
+              </a>
             )}
-            {centerColumn === "spelleditor" && (
-              <SpellEditor {...spellEditorProps} />
-            )}
-            {centerColumn === "combat" && (
-              <>
-                <InitiativeListHost tracker={tracker} />
-                <PendingPrompts
-                  promptsAndIds={prompts}
-                  removePrompt={tracker.PromptQueue.Remove}
+            <ToolbarHost tracker={tracker} />
+            <div
+              className="left-column"
+              style={{ width: columnWidth, maxWidth: columnWidth }}
+            >
+              {librariesVisible && (
+                <LibraryPanes
+                  librariesCommander={tracker.LibrariesCommander}
+                  libraries={tracker.Libraries}
+                  statBlockTextEnricher={tracker.StatBlockTextEnricher}
                 />
-              </>
-            )}
-            <CombatFooter
-              encounter={tracker.Encounter}
-              eventLog={tracker.EventLog}
+              )}
+              {librariesVisible || (
+                <div className="active-combatant">
+                  <div className="combatant-details__header">
+                    <h2>Active Combatant</h2>
+                  </div>
+                  {activeCombatantViewModel && (
+                    <CombatantDetails
+                      combatantViewModel={activeCombatantViewModel}
+                      displayMode="active"
+                      key={activeCombatantViewModel.Combatant.Id}
+                    />
+                  )}
+                  {!activeCombatant && (
+                    <p className="start-encounter-hint">
+                      Click [<span className="fas fa-play" /> Start Encounter ]
+                      to roll initiative. The StatBlock for the Active Combatant
+                      will be displayed here.
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+            <VerticalResizer
+              adjustWidth={offset => setColumnWidth(columnWidth + offset)}
             />
-          </div>
-          <VerticalResizer
-            adjustWidth={offset => setColumnWidth(columnWidth - offset)}
-          />
-          <div
-            className="right-column"
-            style={{ width: columnWidth, maxWidth: columnWidth }}
-            {...droppableProps}
-          >
-            <SelectedCombatants
-              combatantCommander={tracker.CombatantCommander}
+            <div className="center-column">
+              {centerColumn === "statblockeditor" && (
+                <StatBlockEditor {...statblockEditorProps} />
+              )}
+              {centerColumn === "spelleditor" && (
+                <SpellEditor {...spellEditorProps} />
+              )}
+              {centerColumn === "combat" && (
+                <>
+                  <InitiativeListHost tracker={tracker} />
+                  <PendingPrompts
+                    promptsAndIds={prompts}
+                    removePrompt={tracker.PromptQueue.Remove}
+                  />
+                </>
+              )}
+              <CombatFooter
+                encounter={tracker.Encounter}
+                eventLog={tracker.EventLog}
+              />
+            </div>
+            <VerticalResizer
+              adjustWidth={offset => setColumnWidth(columnWidth - offset)}
             />
+            <div
+              className="right-column"
+              style={{ width: columnWidth, maxWidth: columnWidth }}
+            >
+              <SelectedCombatants
+                combatantCommander={tracker.CombatantCommander}
+              />
+            </div>
           </div>
-        </div>
-      </TextEnricherContext.Provider>
-    </SettingsContext.Provider>
+        </TextEnricherContext.Provider>
+      </SettingsContext.Provider>
+    </DndProvider>
   );
 }
 

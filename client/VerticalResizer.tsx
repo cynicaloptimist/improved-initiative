@@ -1,30 +1,27 @@
 import * as React from "react";
-import { useState } from "react";
-import { useCallback } from "react";
+import { useDrag } from "react-dnd";
+
 export function VerticalResizer(props: {
   adjustWidth: (widthOffset: number) => void;
 }) {
-  const [dragStart, setDragStart] = useState(0);
-  const [dragActive, setDragActive] = useState(false);
-
-  const dragEnd = useCallback(
-    e => {
-      const horizontalOffset = e.clientX - dragStart;
-      props.adjustWidth(horizontalOffset);
-      setDragActive(false);
+  const [collectedProps, drag] = useDrag({
+    item: { type: "vertical-resizer" },
+    collect: monitor => {
+      return {
+        dragActive: monitor.isDragging()
+      };
     },
-    [dragStart, props.adjustWidth, setDragActive]
-  );
+    end: (_, monitor) => {
+      props.adjustWidth(monitor.getDifferenceFromInitialOffset().x);
+    }
+  });
 
   return (
     <div
-      className={"vertical-resizer" + (dragActive ? " drag-active" : "")}
-      draggable
-      onDragStart={e => {
-        setDragStart(e.clientX);
-        setDragActive(true);
-      }}
-      onDragEnd={dragEnd}
+      ref={drag}
+      className={
+        "vertical-resizer" + (collectedProps.dragActive ? " drag-active" : "")
+      }
     />
   );
 }

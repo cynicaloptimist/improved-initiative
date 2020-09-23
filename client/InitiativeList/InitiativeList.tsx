@@ -1,11 +1,9 @@
 import * as React from "react";
-import HTML5Backend from "react-dnd-html5-backend";
 
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantRow } from "./CombatantRow";
 import { InitiativeListHeader } from "./InitiativeListHeader";
-import { DndProvider } from "react-dnd";
 
 export function InitiativeList(props: {
   encounterState: EncounterState<CombatantState>;
@@ -21,7 +19,6 @@ export function InitiativeList(props: {
         <InitiativeListHeader
           encounterActive={encounterState.ActiveCombatantId != null}
         />
-        <DndProvider backend={HTML5Backend}>
           <tbody>
             {encounterState.Combatants.map((combatantState, index) => {
               const siblingCount =
@@ -45,7 +42,6 @@ export function InitiativeList(props: {
               );
             })}
           </tbody>
-        </DndProvider>
       </table>
     </div>
   );
