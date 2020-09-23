@@ -82,6 +82,7 @@ export function CombatantRow(props: CombatantRowProps) {
       className={classNames.join(" ")}
       onClick={selectCombatant}
     >
+      {<td className="combatant__left-gutter"><i className="fas fa-grip-vertical" /></td>}
       <td className="combatant__initiative" title="Initiative Roll">
         {props.combatantState.InitiativeGroup && <i className="fas fa-link" />}
         {props.combatantState.Initiative}
