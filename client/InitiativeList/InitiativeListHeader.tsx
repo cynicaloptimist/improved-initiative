@@ -10,6 +10,7 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
   return (
     <thead className="combatant--header">
       <tr>
+        <th className="combatant__left-gutter" />
         <th className="combatant__initiative">
           <span className="screen-reader-only">Initiative Score</span>
           <div aria-hidden="true">

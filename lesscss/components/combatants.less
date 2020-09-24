@@ -8,6 +8,7 @@
   border: 1px solid @accent-white;
   width: 100%;
   border-spacing: 0;
+  border-collapse: collapse;
 
   th,
   td {
@@ -87,6 +88,14 @@
     box-shadow: inset 0 0 0 3px @primary-green;
   }
 
+  &.drop-before {
+    border-top: 2px dashed @primary-green;
+  }
+
+  &.drop-after {
+    border-bottom: 2px dashed @primary-green;
+  }
+
   @media (max-width: @medium) {
     height: auto;
     border: 0;
@@ -94,10 +103,10 @@
     display: grid;
     /* prettier-ignore */
     grid-template:
-      "init image name           ac           hp"
-      "init image divider        divider      divider"
-      "init image tagsCommands   tagsCommands tagsCommands" /
-       auto auto  minmax(0, 1fr) auto     auto;
+      "leftgutter init image name           ac           hp"
+      "leftgutter init image divider        divider      divider"
+      "leftgutter init image tagsCommands   tagsCommands tagsCommands" /
+       auto auto auto  minmax(0, 1fr) auto     auto;
 
     &::before {
       content: "";
@@ -126,19 +135,26 @@
   }
 }
 
-.combatant__initiative {
-  width: 2.5rem;
-  justify-content: center;
+.combatant__left-gutter {
+  grid-area: leftgutter;
+  width: 1.4rem;
   border-left: @active-combatant-indicator-width solid transparent;
+  cursor: grab;
+
+  .active & {
+    color: @primary-red;
+    border-color: @primary-red;
+  }
+}
+
+.combatant__initiative {
+  width: 1.6rem;
+  justify-content: center;
   grid-area: init;
 
   .fa-link:before {
     font-size: 60%;
     vertical-align: top;
-  }
-
-  .active & {
-    border-color: @primary-red;
   }
 
   @media (max-width: @medium) {

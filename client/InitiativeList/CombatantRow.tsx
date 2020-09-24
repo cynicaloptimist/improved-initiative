@@ -7,12 +7,19 @@ import Tippy from "@tippyjs/react";
 import { SettingsContext } from "../Settings/SettingsContext";
 import { Command } from "../Commands/Command";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
+import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
   isActive: boolean;
   isSelected: boolean;
   showIndexLabel: boolean;
+  initiativeIndex: number;
+};
+
+type CombatantDragData = {
+  type: "combatant";
+  id: string;
 };
 
 export function CombatantRow(props: CombatantRowProps) {
@@ -30,8 +37,52 @@ export function CombatantRow(props: CombatantRowProps) {
     commandContext.SelectCombatant(props.combatantState.Id, appendSelection);
   };
 
+  const [, drag] = useDrag({
+    item: {
+      id: props.combatantState.Id,
+      initiativeIndex: props.initiativeIndex,
+      type: "combatant"
+    }
+  });
+
+  const [collectedProps, drop] = useDrop({
+    accept: "combatant",
+    drop: (dragData: CombatantDragData) => {
+      if (combatantState.Id !== dragData.id) {
+        commandContext.MoveCombatantFromDrag(dragData.id, combatantState.Id);
+      }
+    },
+    collect: (monitor: DropTargetMonitor) => {
+      if (!monitor.isOver() || monitor.getItemType() !== "combatant") {
+        return {
+          id: null,
+          initiativeIndex: null
+        };
+      }
+      return {
+        id: monitor.getItem().id,
+        initiativeIndex: monitor.getItem().initiativeIndex
+      };
+    }
+  });
+
+  const classNames = getClassNames(props);
+  if (collectedProps.initiativeIndex !== null) {
+    if (collectedProps.initiativeIndex > props.initiativeIndex) {
+      classNames.push("drop-before");
+    }
+    if (collectedProps.initiativeIndex < props.initiativeIndex) {
+      classNames.push("drop-after");
+    }
+  }
+
   return (
-    <tr className={getClassNames(props).join(" ")} onClick={selectCombatant}>
+    <tr
+      ref={node => drag(drop(node))}
+      className={classNames.join(" ")}
+      onClick={selectCombatant}
+    >
+      {<td className="combatant__left-gutter"><i className="fas fa-grip-vertical" /></td>}
       <td className="combatant__initiative" title="Initiative Roll">
         {props.combatantState.InitiativeGroup && <i className="fas fa-link" />}
         {props.combatantState.Initiative}

@@ -32,9 +32,9 @@ export class Command {
     this.FontAwesomeIcon = props.fontAwesomeIcon;
     this.LockOnActionBar = props.lockOnActionBar || false;
 
-    this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar || true);
+    this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar ?? true);
     this.ShowInCombatantRow = ko.observable(
-      props.defaultShowInCombatantRow || false
+      props.defaultShowInCombatantRow ?? false
     );
 
     if (this.LockOnActionBar) {

@@ -1,7 +1,5 @@
 import { ArrayHelpers, FieldArray, FormikProps } from "formik";
 import React = require("react");
-import { DndProvider } from "react-dnd";
-import HTML5Backend from "react-dnd-html5-backend";
 import { Button } from "../../Components/Button";
 import { DropZone } from "./UseDragDrop";
 
@@ -19,14 +17,12 @@ export function SortableList(props: {
   makeNew: () => any;
 }) {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <FieldArray
-        name={props.listType}
-        render={arrayHelpers => (
-          <SortableListInner {...props} arrayHelpers={arrayHelpers} />
-        )}
-      />
-    </DndProvider>
+    <FieldArray
+      name={props.listType}
+      render={arrayHelpers => (
+        <SortableListInner {...props} arrayHelpers={arrayHelpers} />
+      )}
+    />
   );
 }
 
