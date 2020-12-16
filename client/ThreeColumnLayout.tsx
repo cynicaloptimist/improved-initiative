@@ -8,7 +8,7 @@ import { ToolbarHost } from "./Layout/ToolbarHost";
 import { LeftColumn } from "./Layout/LeftColumn";
 import { RightColumn } from "./Layout/RightColumn";
 
-export function ThreeColumnLayout(props: { tracker: TrackerViewModel; }) {
+export function ThreeColumnLayout(props: { tracker: TrackerViewModel }) {
   const [columnWidth, setColumnWidth] = useStoreBackedState(
     Store.User,
     "columnWidth",
@@ -19,12 +19,13 @@ export function ThreeColumnLayout(props: { tracker: TrackerViewModel; }) {
     <>
       <ToolbarHost tracker={props.tracker} />
       <LeftColumn tracker={props.tracker} columnWidth={columnWidth} />
-
       <VerticalResizer
-        adjustWidth={offset => setColumnWidth(columnWidth + offset)} />
+        adjustWidth={offset => setColumnWidth(columnWidth + offset)}
+      />
       <CenterColumn tracker={props.tracker} />
       <VerticalResizer
-        adjustWidth={offset => setColumnWidth(columnWidth - offset)} />
+        adjustWidth={offset => setColumnWidth(columnWidth - offset)}
+      />
       <RightColumn tracker={props.tracker} columnWidth={columnWidth} />
     </>
   );
