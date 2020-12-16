@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useSubscription } from "./Combatant/linkComponentToObservables";
-import { CombatantDetails } from "./Combatant/CombatantDetails";
-import { Button } from "./Components/Button";
-import { CombatantCommander } from "./Commands/CombatantCommander";
-import { MultipleCombatantDetails } from "./Combatant/MultipleCombatantDetails";
+import { useSubscription } from "../Combatant/linkComponentToObservables";
+import { CombatantDetails } from "../Combatant/CombatantDetails";
+import { Button } from "../Components/Button";
+import { CombatantCommander } from "../Commands/CombatantCommander";
+import { MultipleCombatantDetails } from "../Combatant/MultipleCombatantDetails";
 
 export function SelectedCombatants(props: {
   combatantCommander: CombatantCommander;
