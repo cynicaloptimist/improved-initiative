@@ -5,6 +5,7 @@ import { LibraryPanes } from "../Library/Components/LibraryPanes";
 import { find } from "lodash";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { useVerticalResizerDrop } from "./VerticalResizer";
+import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 
 export function LeftColumn(props: {
   tracker: TrackerViewModel;
@@ -38,25 +39,33 @@ export function LeftColumn(props: {
         />
       )}
       {librariesVisible || (
-        <div className="active-combatant">
-          <div className="combatant-details__header">
-            <h2>Active Combatant</h2>
-          </div>
-          {activeCombatantViewModel && (
-            <CombatantDetails
-              combatantViewModel={activeCombatantViewModel}
-              displayMode="active"
-              key={activeCombatantViewModel.Combatant.Id}
-            />
-          )}
-          {!activeCombatant && (
-            <p className="start-encounter-hint">
-              Click [<span className="fas fa-play" /> Start Encounter ] to roll
-              initiative. The StatBlock for the Active Combatant will be
-              displayed here.
-            </p>
-          )}
-        </div>
+        <ActiveCombatant activeCombatantViewModel={activeCombatantViewModel} />
+      )}
+    </div>
+  );
+}
+
+function ActiveCombatant(props: {
+  activeCombatantViewModel: CombatantViewModel;
+}) {
+  return (
+    <div className="active-combatant">
+      <div className="combatant-details__header">
+        <h2>Active Combatant</h2>
+      </div>
+      {props.activeCombatantViewModel && (
+        <CombatantDetails
+          combatantViewModel={props.activeCombatantViewModel}
+          displayMode="active"
+          key={props.activeCombatantViewModel.Combatant.Id}
+        />
+      )}
+      {!props.activeCombatantViewModel && (
+        <p className="start-encounter-hint">
+          Click [<span className="fas fa-play" /> Start Encounter ] to roll
+          initiative. The StatBlock for the Active Combatant will be displayed
+          here.
+        </p>
       )}
     </div>
   );
