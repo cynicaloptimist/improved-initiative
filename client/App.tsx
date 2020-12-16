@@ -10,19 +10,11 @@ import { AccountClient } from "./Account/AccountClient";
 import { Tutorial } from "./Tutorial/Tutorial";
 import { env } from "./Environment";
 import { TextEnricherContext } from "./TextEnricher/TextEnricher";
-import { VerticalResizer } from "./Layout/VerticalResizer";
-import { useStoreBackedState } from "./Utility/useStoreBackedState";
-import { Store } from "./Utility/Store";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { DndProvider } from "react-dnd";
-import {
-  centerColumnView,
-  interfacePriorityClass,
-  CenterColumn
-} from "./Layout/CenterColumn";
-import { ToolbarHost } from "./Layout/ToolbarHost";
-import { LeftColumn } from "./Layout/LeftColumn";
-import { RightColumn } from "./Layout/RightColumn";
+import { interfacePriorityClass } from "./Layout/interfacePriorityClass";
+import { centerColumnView } from "./Layout/centerColumnView";
+import { ThreeColumnLayout } from "./ThreeColumnLayout";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -101,29 +93,5 @@ export function App(props: { tracker: TrackerViewModel }) {
         </TextEnricherContext.Provider>
       </SettingsContext.Provider>
     </DndProvider>
-  );
-}
-
-function ThreeColumnLayout(props: { tracker: TrackerViewModel }) {
-  const [columnWidth, setColumnWidth] = useStoreBackedState(
-    Store.User,
-    "columnWidth",
-    375
-  );
-
-  return (
-    <>
-      <ToolbarHost tracker={props.tracker} />
-      <LeftColumn tracker={props.tracker} columnWidth={columnWidth} />
-
-      <VerticalResizer
-        adjustWidth={offset => setColumnWidth(columnWidth + offset)}
-      />
-      <CenterColumn tracker={props.tracker} />
-      <VerticalResizer
-        adjustWidth={offset => setColumnWidth(columnWidth - offset)}
-      />
-      <RightColumn tracker={props.tracker} columnWidth={columnWidth} />
-    </>
   );
 }
