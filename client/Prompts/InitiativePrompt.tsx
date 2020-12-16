@@ -98,7 +98,7 @@ export function InitiativePrompt(
 
   const preRolledInitiatives: InitiativeModel = {
     initiativesById: _.mapValues(
-      _.keyBy(combatants, c => c.Id),
+      _.keyBy(byGroup, c => c.Id),
       c => c.GetInitiativeRoll()
     )
   };
@@ -113,7 +113,11 @@ export function InitiativePrompt(
     ),
     initialValues: preRolledInitiatives,
     onSubmit: model => {
-      combatants.forEach(c => c.Initiative(model.initiativesById[c.Id]));
+      combatants.forEach(c => {
+        if (model.initiativesById[c.Id] !== undefined) {
+          c.Initiative(model.initiativesById[c.Id]);
+        }
+      });
       startEncounter();
       TutorialSpy("CompleteInitiativeRolls");
       return true;
