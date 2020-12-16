@@ -25,6 +25,7 @@ import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
 import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
 import { LinkInitiativePrompt } from "../Prompts/LinkInitiativePrompt";
 import { TextEnricherContext } from "../TextEnricher/TextEnricher";
+import { QuickEditStatBlockPrompt } from "../Prompts/QuickEditStatBlockPrompt";
 
 interface PendingLinkInitiative {
   combatant: CombatantViewModel;
@@ -101,7 +102,7 @@ export class CombatantCommander {
     const allSelected = [...combatantsToRemainSelected, data.Combatant.Id];
 
     this.selectedCombatantIds(allSelected);
-    
+
     Metrics.TrackEvent("CombatantsSelected", {
       Count: this.selectedCombatantIds().length
     });
@@ -460,6 +461,33 @@ export class CombatantCommander {
         });
       }
     }
+  };
+
+  public QuickEditStatBlock = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
+    if (this.SelectedCombatants().length !== 1) {
+      return;
+    }
+
+    const selectedCombatant = this.SelectedCombatants()[0].Combatant;
+
+    const prompt = QuickEditStatBlockPrompt(
+      selectedCombatant,
+      updatedStatBlock => {
+        if (selectedCombatant.PersistentCharacterId) {
+          this.tracker.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
+            selectedCombatant.PersistentCharacterId,
+            updatedStatBlock
+          );
+        } else {
+          selectedCombatant.StatBlock(updatedStatBlock);
+        }
+      }
+    );
+    this.tracker.PromptQueue.Add(prompt);
   };
 
   public RollDice = (diceExpression: string) => {
