@@ -4,7 +4,7 @@ import { useSubscription } from "../Combatant/linkComponentToObservables";
 import { LibraryPanes } from "../Library/Components/LibraryPanes";
 import { find } from "lodash";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
-import { useVerticalResizerDrop } from "./useVerticalResizerDrop";
+import { useVerticalResizerDrop } from "./VerticalResizer";
 
 export function LeftColumn(props: {
   tracker: TrackerViewModel;

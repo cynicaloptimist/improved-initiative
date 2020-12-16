@@ -6,7 +6,7 @@ import { SpellEditor } from "../StatBlockEditor/SpellEditor";
 import { PendingPrompts } from "../Prompts/PendingPrompts";
 import { CombatFooter } from "../CombatFooter/CombatFooter";
 import { InitiativeListHost } from "./InitiativeListHost";
-import { useVerticalResizerDrop } from "./useVerticalResizerDrop";
+import { useVerticalResizerDrop } from "./VerticalResizer";
 import { centerColumnView } from "./centerColumnView";
 
 export function CenterColumn(props: { tracker: TrackerViewModel }) {

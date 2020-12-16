@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { SelectedCombatants } from "./SelectedCombatants";
-import { useVerticalResizerDrop } from "./useVerticalResizerDrop";
+import { useVerticalResizerDrop } from "./VerticalResizer";
 
 export function RightColumn(props: {
   tracker: TrackerViewModel;
