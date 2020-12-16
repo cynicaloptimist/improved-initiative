@@ -87,8 +87,17 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
           {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
           {this.props.launchQuickAddPrompt && (
             <li style={{ margin: 5, fontStyle: "italic" }}>
-              Improved Initiative only comes pre-loaded with creature statblocks from the
-              D&amp;D Basic Rules.
+              <p style={{ flexShrink: 1 }}>
+                Improved Initiative comes pre-loaded with statblocks and spells
+                from only the{" "}
+                <a
+                  href="https://dnd.wizards.com/articles/features/basicrules"
+                  target="_blank"
+                >
+                  D&amp;D Basic Rules
+                </a>
+                .
+              </p>
             </li>
           )}
           {this.props.launchQuickAddPrompt && (
