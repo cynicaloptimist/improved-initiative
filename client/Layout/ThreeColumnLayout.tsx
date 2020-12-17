@@ -1,12 +1,12 @@
 import * as React from "react";
-import { TrackerViewModel } from "./TrackerViewModel";
-import { VerticalResizer } from "./Layout/VerticalResizer";
-import { useStoreBackedState } from "./Utility/useStoreBackedState";
-import { Store } from "./Utility/Store";
-import { CenterColumn } from "./Layout/CenterColumn";
-import { ToolbarHost } from "./Layout/ToolbarHost";
-import { LeftColumn } from "./Layout/LeftColumn";
-import { RightColumn } from "./Layout/RightColumn";
+import { TrackerViewModel } from "../TrackerViewModel";
+import { VerticalResizer } from "./VerticalResizer";
+import { useStoreBackedState } from "../Utility/useStoreBackedState";
+import { Store } from "../Utility/Store";
+import { CenterColumn } from "./CenterColumn";
+import { ToolbarHost } from "./ToolbarHost";
+import { LeftColumn } from "./LeftColumn";
+import { RightColumn } from "./RightColumn";
 
 export function ThreeColumnLayout(props: { tracker: TrackerViewModel }) {
   const [columnWidth, setColumnWidth] = useStoreBackedState(

@@ -14,7 +14,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { DndProvider } from "react-dnd";
 import { interfacePriorityClass } from "./Layout/interfacePriorityClass";
 import { centerColumnView } from "./Layout/centerColumnView";
-import { ThreeColumnLayout } from "./ThreeColumnLayout";
+import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
