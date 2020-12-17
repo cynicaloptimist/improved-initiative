@@ -5,9 +5,8 @@ import { Tag } from "../Combatant/Tag";
 import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
-import { EncounterState } from "../../common/EncounterState";
-import { CombatantState } from "../../common/CombatantState";
-import { PersistentCharacterLibrary } from "../Library/PersistentCharacterLibrary";
+
+console.log(process.version);
 
 describe("Encounter", () => {
   let encounter: Encounter;
