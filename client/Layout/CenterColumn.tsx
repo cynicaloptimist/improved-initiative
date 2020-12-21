@@ -5,7 +5,7 @@ import { StatBlockEditor } from "../StatBlockEditor/StatBlockEditor";
 import { SpellEditor } from "../StatBlockEditor/SpellEditor";
 import { PendingPrompts } from "../Prompts/PendingPrompts";
 import { CombatFooter } from "../CombatFooter/CombatFooter";
-import { InitiativeListHost } from "./InitiativeListHost";
+import { InitiativeListHost } from "../InitiativeList/InitiativeListHost";
 import { useVerticalResizerDrop } from "./VerticalResizer";
 import { centerColumnView } from "./centerColumnView";
 

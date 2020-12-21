@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
-import { InitiativeList } from "../InitiativeList/InitiativeList";
-import { CommandContext } from "../InitiativeList/CommandContext";
+import { InitiativeList } from "./InitiativeList";
+import { CommandContext } from "./CommandContext";
 import { useCallback } from "react";
 import { TagState } from "../../common/CombatantState";
 
