@@ -1,21 +1,15 @@
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "plugin:jest/recommended"
   ],
   "overrides": [
-    {
-      "files": ["client/**/*.ts", "client/**/**.tsx"],
-      "parserOptions": {
-        "project": "./client/tsconfig.json"
-      },
-      "env": {
-        "es6": true
-      }
-    },
     {
       "files": ["server/**/*.ts", "server/**/**.tsx"],
       "parserOptions": {
