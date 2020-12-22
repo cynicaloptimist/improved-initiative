@@ -56,6 +56,17 @@ describe("StatBlockImporter", () => {
     expect(result.Source).toEqual("Monster Manual");
   });
 
+  test("Description field should populate description", () => {
+    const description =
+      'Summoned by the "Skull" card from the Deck of Many Things.\nSource: Dungeon Master\'s Guide p. 164';
+    const descriptionElement = document.createElement("description");
+    descriptionElement.innerHTML = description;
+    monster.appendChild(descriptionElement);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Description).toEqual(description);
+  });
+
   test("Save and skills strings should populate as Names and Modifiers correctly", () => {
     const size = document.createElement("save");
     size.innerHTML = "Con +3, Cha -1";

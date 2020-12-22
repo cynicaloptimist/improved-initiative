@@ -63,6 +63,8 @@ export class StatBlockImporter extends Importer {
     statBlock.Reactions = this.getPowers("reaction");
     statBlock.LegendaryActions = this.getPowers("legendary");
 
+    statBlock.Description = this.getString("description");
+
     return statBlock;
   }
 
