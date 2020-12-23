@@ -463,7 +463,7 @@ export class CombatantCommander {
     }
   };
 
-  public QuickEditStatBlock = () => {
+  public QuickEditOwnStatBlock = () => {
     if (!this.HasSelected()) {
       return;
     }
