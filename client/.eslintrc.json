@@ -1,0 +1,9 @@
+{
+  "parserOptions": {
+    "tsconfigRootDir": "client",
+    "project": "./tsconfig.eslint.json"
+  },
+  "env": {
+    "es6": true
+  }
+}

@@ -63,11 +63,11 @@ export class StatBlockLibraryPane extends React.Component<
             this.props.library
           )
         }
+        launchQuickAddPrompt={() =>
+          this.props.librariesCommander.LaunchQuickAddPrompt()
+        }
         renderPreview={statBlock => (
-          <StatBlockComponent
-            statBlock={statBlock}
-            displayMode="default"
-          />
+          <StatBlockComponent statBlock={statBlock} displayMode="default" />
         )}
       />
     );

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDrag, XYCoord } from "react-dnd";
+import { useDrag } from "react-dnd";
 
 export function VerticalResizer(props: {
   adjustWidth: (widthOffset: number) => void;
@@ -26,4 +26,19 @@ export function VerticalResizer(props: {
   });
 
   return <div ref={drag} className={"vertical-resizer"} />;
+}
+
+import { useDrop } from "react-dnd";
+
+export function useVerticalResizerDrop() {
+  const [, drop] = useDrop({
+    accept: "vertical-resizer",
+    drop: (item, monitor) => {
+      return {
+        finalClientX: monitor.getClientOffset().x
+      };
+    }
+  });
+
+  return drop;
 }

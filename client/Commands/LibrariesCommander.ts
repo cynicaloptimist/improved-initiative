@@ -209,6 +209,10 @@ export class LibrariesCommander {
     }
   };
 
+  public LaunchQuickAddPrompt = () => {
+    this.encounterCommander.QuickAddStatBlock();
+  }
+
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.StatBlocks.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });

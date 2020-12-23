@@ -9,26 +9,12 @@ import { SettingsPane } from "./Settings/components/SettingsPane";
 import { AccountClient } from "./Account/AccountClient";
 import { Tutorial } from "./Tutorial/Tutorial";
 import { env } from "./Environment";
-import { Command } from "./Commands/Command";
-import { Toolbar } from "./Commands/Toolbar";
-import { LibraryPanes } from "./Library/Components/LibraryPanes";
-import { find } from "lodash";
-import { CombatantDetails } from "./Combatant/CombatantDetails";
 import { TextEnricherContext } from "./TextEnricher/TextEnricher";
-import {
-  StatBlockEditor,
-  StatBlockEditorProps
-} from "./StatBlockEditor/StatBlockEditor";
-import { SpellEditor, SpellEditorProps } from "./StatBlockEditor/SpellEditor";
-import { PendingPrompts } from "./Prompts/PendingPrompts";
-import { CombatFooter } from "./CombatFooter/CombatFooter";
-import { SelectedCombatants } from "./SelectedCombatants";
-import { VerticalResizer } from "./VerticalResizer";
-import { useStoreBackedState } from "./Utility/useStoreBackedState";
-import { Store } from "./Utility/Store";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
-import { InitiativeListHost } from "./InitiativeListHost";
-import { DndProvider, useDrop } from "react-dnd";
+import { DndProvider } from "react-dnd";
+import { interfacePriorityClass } from "./Layout/interfacePriorityClass";
+import { centerColumnView } from "./Layout/centerColumnView";
+import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -64,12 +50,6 @@ export function App(props: { tracker: TrackerViewModel }) {
   );
 
   const blurVisible = tutorialVisible || settingsVisible;
-
-  const [columnWidth, setColumnWidth] = useStoreBackedState(
-    Store.User,
-    "columnWidth",
-    375
-  );
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -108,221 +88,10 @@ export function App(props: { tracker: TrackerViewModel }) {
                 Log In with Patreon
               </a>
             )}
-            <ToolbarHost tracker={tracker} />
-            <LeftColumn tracker={tracker} columnWidth={columnWidth} />
-
-            <VerticalResizer
-              adjustWidth={offset => setColumnWidth(columnWidth + offset)}
-            />
-            <CenterColumn tracker={tracker} />
-            <VerticalResizer
-              adjustWidth={offset => setColumnWidth(columnWidth - offset)}
-            />
-            <RightColumn tracker={tracker} columnWidth={columnWidth} />
+            <ThreeColumnLayout tracker={tracker} />
           </div>
         </TextEnricherContext.Provider>
       </SettingsContext.Provider>
     </DndProvider>
   );
-}
-
-function CenterColumn(props: { tracker: TrackerViewModel }) {
-  const statblockEditorProps = useSubscription(
-    props.tracker.StatBlockEditorProps
-  );
-  const spellEditorProps = useSubscription(props.tracker.SpellEditorProps);
-  const prompts = useSubscription(props.tracker.PromptQueue.GetPrompts);
-  const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
-
-  return (
-    <div className="center-column" ref={useVerticalResizerDrop()}>
-      {centerColumn === "statblockeditor" && (
-        <StatBlockEditor {...statblockEditorProps} />
-      )}
-      {centerColumn === "spelleditor" && <SpellEditor {...spellEditorProps} />}
-      {centerColumn === "combat" && (
-        <>
-          <InitiativeListHost tracker={props.tracker} />
-          <PendingPrompts
-            promptsAndIds={prompts}
-            removePrompt={props.tracker.PromptQueue.Remove}
-          />
-        </>
-      )}
-      <CombatFooter
-        encounter={props.tracker.Encounter}
-        eventLog={props.tracker.EventLog}
-      />
-    </div>
-  );
-}
-
-function centerColumnView(
-  statBlockEditorProps: StatBlockEditorProps,
-  spellEditorProps: SpellEditorProps
-) {
-  if (statBlockEditorProps !== null) {
-    return "statblockeditor";
-  }
-  if (spellEditorProps !== null) {
-    return "spelleditor";
-  }
-  return "combat";
-}
-
-function interfacePriorityClass(
-  centerColumnView: string,
-  librariesVisible: boolean,
-  hasPrompt: boolean,
-  isACombatantSelected: boolean,
-  encounterState: "active" | "inactive"
-) {
-  if (
-    centerColumnView === "statblockeditor" ||
-    centerColumnView === "spelleditor"
-  ) {
-    if (librariesVisible) {
-      return "show-center-left-right";
-    }
-    return "show-center-right-left";
-  }
-
-  if (librariesVisible) {
-    return "show-left-center-right";
-  }
-
-  if (hasPrompt) {
-    if (isACombatantSelected) {
-      return "show-center-right-left";
-    }
-    return "show-center-left-right";
-  }
-
-  if (isACombatantSelected) {
-    return "show-right-center-left";
-  }
-
-  if (encounterState == "active") {
-    return "show-center-left-right";
-  }
-
-  return "show-center-right-left";
-}
-
-function ToolbarHost(props: { tracker: TrackerViewModel }) {
-  const { tracker } = props;
-  const encounterState = useSubscription(tracker.Encounter.EncounterFlow.State);
-  const combatantSelected = useSubscription(
-    tracker.CombatantCommander.HasSelected
-  );
-  const oneCombatantSelected = useSubscription(
-    tracker.CombatantCommander.HasOneSelected
-  );
-  const toolbarWide = useSubscription(tracker.ToolbarWide);
-
-  const commandsToHideById =
-    encounterState === "active"
-      ? ["start-encounter"]
-      : ["reroll-initiative", "end-encounter", "next-turn", "previous-turn"];
-
-  if (!oneCombatantSelected) {
-    commandsToHideById.push("update-notes");
-  }
-
-  const shouldShowCommand = (c: Command) =>
-    !commandsToHideById.some(d => c.Id == d);
-
-  return (
-    <Toolbar
-      encounterCommands={tracker.EncounterToolbar.filter(shouldShowCommand)}
-      combatantCommands={tracker.CombatantCommander.Commands.filter(
-        shouldShowCommand
-      )}
-      width={toolbarWide ? "wide" : "narrow"}
-      showCombatantCommands={combatantSelected}
-    />
-  );
-}
-
-function LeftColumn(props: { tracker: TrackerViewModel; columnWidth: number }) {
-  const librariesVisible = useSubscription(props.tracker.LibrariesVisible);
-
-  const combatantViewModels = useSubscription(
-    props.tracker.CombatantViewModels
-  );
-  const activeCombatant = useSubscription(
-    props.tracker.Encounter.EncounterFlow.ActiveCombatant
-  );
-
-  const activeCombatantViewModel = find(
-    combatantViewModels,
-    c => c.Combatant == activeCombatant
-  );
-
-  return (
-    <div
-      className="left-column"
-      style={{ width: props.columnWidth, maxWidth: props.columnWidth }}
-      ref={useVerticalResizerDrop()}
-    >
-      {librariesVisible && (
-        <LibraryPanes
-          librariesCommander={props.tracker.LibrariesCommander}
-          libraries={props.tracker.Libraries}
-          statBlockTextEnricher={props.tracker.StatBlockTextEnricher}
-        />
-      )}
-      {librariesVisible || (
-        <div className="active-combatant">
-          <div className="combatant-details__header">
-            <h2>Active Combatant</h2>
-          </div>
-          {activeCombatantViewModel && (
-            <CombatantDetails
-              combatantViewModel={activeCombatantViewModel}
-              displayMode="active"
-              key={activeCombatantViewModel.Combatant.Id}
-            />
-          )}
-          {!activeCombatant && (
-            <p className="start-encounter-hint">
-              Click [<span className="fas fa-play" /> Start Encounter ] to roll
-              initiative. The StatBlock for the Active Combatant will be
-              displayed here.
-            </p>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function RightColumn(props: {
-  tracker: TrackerViewModel;
-  columnWidth: number;
-}) {
-  return (
-    <div
-      className="right-column"
-      style={{ width: props.columnWidth, maxWidth: props.columnWidth }}
-      ref={useVerticalResizerDrop()}
-    >
-      <SelectedCombatants
-        combatantCommander={props.tracker.CombatantCommander}
-      />
-    </div>
-  );
-}
-
-function useVerticalResizerDrop() {
-  const [, drop] = useDrop({
-    accept: "vertical-resizer",
-    drop: (item, monitor) => {
-      return {
-        finalClientX: monitor.getClientOffset().x
-      };
-    }
-  });
-
-  return drop;
 }

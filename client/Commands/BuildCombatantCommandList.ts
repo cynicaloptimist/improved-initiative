@@ -74,6 +74,13 @@ export const BuildCombatantCommandList: (
     defaultShowOnActionBar: false
   }),
   new Command({
+    id: "quick-edit-statblock",
+    description: "Quick Edit Statblock",
+    actionBinding: c.QuickEditStatBlock,
+    fontAwesomeIcon: "magic",
+    defaultShowOnActionBar: true
+  }),
+  new Command({
     id: "set-initiative",
     description: "Edit Initiative",
     actionBinding: c.EditInitiative,

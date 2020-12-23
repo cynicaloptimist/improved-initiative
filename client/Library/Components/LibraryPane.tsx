@@ -6,6 +6,7 @@ import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
 import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
 import { LibraryFilter } from "./LibraryFilter";
+import { ListingButton } from "./ListingButton";
 
 interface LibraryPaneProps<T extends Listable> {
   listings: Listing<T>[];
@@ -21,6 +22,7 @@ interface LibraryPaneProps<T extends Listable> {
   groupByFunctions: ListingGroupFn[];
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
+  launchQuickAddPrompt?: () => void;
 }
 
 interface State<T extends Listable> {
@@ -83,6 +85,31 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
         </div>
         <ul className="listings" onScroll={this.handleListingsScroll}>
           {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
+          {this.props.launchQuickAddPrompt && (
+            <li style={{ margin: 5, fontStyle: "italic" }}>
+              <p style={{ flexShrink: 1 }}>
+                Improved Initiative comes pre-loaded with statblocks and spells
+                from only the{" "}
+                <a
+                  href="https://dnd.wizards.com/articles/features/basicrules"
+                  target="_blank"
+                >
+                  D&amp;D Basic Rules
+                </a>
+                .
+              </p>
+            </li>
+          )}
+          {this.props.launchQuickAddPrompt && (
+            <li>
+              <ListingButton
+                buttonClass="add"
+                text={"Quick Add a Combatant without a Statblock"}
+                faClass="bolt"
+                onClick={this.props.launchQuickAddPrompt}
+              />
+            </li>
+          )}
         </ul>
         <div className="buttons">
           <Button

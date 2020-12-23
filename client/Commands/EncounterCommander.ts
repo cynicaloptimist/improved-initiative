@@ -69,7 +69,7 @@ export class EncounterCommander {
         this.tracker.Encounter.GetPlayerView()
       );
     }
-    
+
     return didGrantId;
   };
 
@@ -239,7 +239,7 @@ export class EncounterCommander {
 
     const persistentCharactersPromise = persistentCharacters.map(
       pc =>
-        new Promise(async resolve => {
+        new Promise<void>(async resolve => {
           const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
             pc.PersistentCharacterId
           );
