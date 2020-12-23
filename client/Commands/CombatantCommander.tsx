@@ -59,11 +59,11 @@ export class CombatantCommander {
 
   public CombatantDetails = ko.pureComputed(() => {
     const selectedCombatants = this.SelectedCombatants();
-    if (selectedCombatants.length == 0) {
+    if (!this.HasSelected()) {
       return null;
     }
 
-    if (selectedCombatants.length == 1) {
+    if (this.HasOneSelected()) {
       const combatantViewModel = selectedCombatants[0];
       return (
         <TextEnricherContext.Provider
@@ -76,13 +76,15 @@ export class CombatantCommander {
           />
         </TextEnricherContext.Provider>
       );
+    } else {
+      return (
+        <TextEnricherContext.Provider
+          value={this.tracker.StatBlockTextEnricher}
+        >
+          <MultipleCombatantDetails combatants={selectedCombatants} />
+        </TextEnricherContext.Provider>
+      );
     }
-
-    return (
-      <TextEnricherContext.Provider value={this.tracker.StatBlockTextEnricher}>
-        <MultipleCombatantDetails combatants={selectedCombatants} />
-      </TextEnricherContext.Provider>
-    );
   });
 
   public Select = (data: CombatantViewModel, appendSelection?: boolean) => {
