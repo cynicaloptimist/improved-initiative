@@ -440,35 +440,29 @@ export class CombatantCommander {
   };
 
   public EditOwnStatBlock = () => {
-    if (!this.HasSelected()) {
+    if (!this.HasOneSelected()) {
       return;
     }
 
-    if (this.SelectedCombatants().length == 1) {
-      const selectedCombatant = this.SelectedCombatants()[0].Combatant;
-      if (selectedCombatant.PersistentCharacterId) {
-        this.tracker.EditPersistentCharacterStatBlock(
-          selectedCombatant.PersistentCharacterId
-        );
-      } else {
-        this.tracker.EditStatBlock({
-          editorTarget: "combatant",
-          statBlock: selectedCombatant.StatBlock(),
-          onSave: newStatBlock => {
-            selectedCombatant.StatBlock(newStatBlock);
-          },
-          onDelete: () => this.Remove()
-        });
-      }
+    const selectedCombatant = this.SelectedCombatants()[0].Combatant;
+    if (selectedCombatant.PersistentCharacterId) {
+      this.tracker.EditPersistentCharacterStatBlock(
+        selectedCombatant.PersistentCharacterId
+      );
+    } else {
+      this.tracker.EditStatBlock({
+        editorTarget: "combatant",
+        statBlock: selectedCombatant.StatBlock(),
+        onSave: newStatBlock => {
+          selectedCombatant.StatBlock(newStatBlock);
+        },
+        onDelete: () => this.Remove()
+      });
     }
   };
 
   public QuickEditOwnStatBlock = () => {
-    if (!this.HasSelected()) {
-      return;
-    }
-
-    if (this.SelectedCombatants().length !== 1) {
+    if (!this.HasOneSelected()) {
       return;
     }
 
