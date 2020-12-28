@@ -4,19 +4,53 @@ import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
+  /**
+   * Represents the Size, Type, and Alignment of creature.
+   * Presented in the form:
+   *  <Size> <Type>, <Alignment>
+   * @returns {string} The type description of this creature.
+   */
   public getType() {
+    // Strip any trailing text after the last comma,
+    // to remove any source information
+    let typeString = this.getString("type");
+    const pos = typeString.lastIndexOf(",");
+    if (pos != -1) {
+      typeString = typeString.substr(0, pos);
+    }
     const sizeString = StatBlockImporter.Sizes[this.getString("size")];
-    return (
-      sizeString +
-      " " +
-      this.getCommaSeparatedStrings("type")[0] +
-      ", " +
-      this.getString("alignment")
-    );
+    if (sizeString) {
+      typeString = sizeString + " " + typeString;
+    }
+    const alignment = this.getString("alignment");
+    if (alignment) {
+      typeString = typeString + ", " + alignment;
+    }
+    return typeString;
   }
 
+  /**
+   * Represents the source material this creature originated from.
+   * @returns {string} The name of the source book and page number.
+   */
   public getSource() {
-    return _.startCase(this.getCommaSeparatedStrings("type")[1]);
+    let source = "";
+    const description = this.getString("description");
+    const searchString = "Source: ";
+    const sourcePos = description.lastIndexOf(searchString);
+    if (sourcePos != -1) {
+      const sources = description
+        .substr(sourcePos + searchString.length)
+        .split(/, ?/);
+      source = sources[0];
+    } else {
+      const typeString = this.getString("type");
+      const pos = typeString.lastIndexOf(",");
+      if (pos != -1) {
+        source = _.startCase(typeString.substr(pos));
+      }
+    }
+    return source;
   }
 
   public getAbilities() {
