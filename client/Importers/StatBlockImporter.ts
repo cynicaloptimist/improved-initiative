@@ -8,9 +8,8 @@ export class StatBlockImporter extends Importer {
    * Represents the Size, Type, and Alignment of creature.
    * Presented in the form:
    *  <Size> <Type>, <Alignment>
-   * @returns {string} The type description of this creature.
    */
-  public getType() {
+  public getType(): string {
     // Strip any trailing text after the last comma,
     // to remove any source information
     let typeString = this.getString("type");
@@ -31,9 +30,8 @@ export class StatBlockImporter extends Importer {
 
   /**
    * Represents the source material this creature originated from.
-   * @returns {string} The name of the source book and page number.
    */
-  public getSource() {
+  public getSource(): string {
     let source = "";
     const description = this.getString("description");
     const searchString = "Source: ";
