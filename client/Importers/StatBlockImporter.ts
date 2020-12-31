@@ -42,11 +42,8 @@ export class StatBlockImporter extends Importer {
         .split(/, ?/);
       source = sources[0];
     } else {
-      const typeString = this.getString("type");
-      const pos = typeString.lastIndexOf(",");
-      if (pos != -1) {
-        source = _.startCase(typeString.substr(pos));
-      }
+      const types = this.getCommaSeparatedStrings("type");
+      source = _.startCase(types.length > 1 ? types[types.length - 1] : "");
     }
     return source;
   }
