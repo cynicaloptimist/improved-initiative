@@ -107,4 +107,55 @@ describe("StatBlockImporter", () => {
       }
     ]);
   });
+
+  test("Type should ignore missing source from type field", () => {
+    const type = document.createElement("type");
+    type.innerHTML = "aberration";
+    monster.appendChild(type);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Type).toEqual("aberration");
+    expect(result.Source).toEqual("");
+  });
+
+  test("Source should use phrase after the last comma from type field", () => {
+    const type = document.createElement("type");
+    type.innerHTML = "humanoid (human, shapechanger), monster manual";
+    monster.appendChild(type);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Type).toEqual("humanoid (human, shapechanger)");
+    expect(result.Source).toEqual("Monster Manual");
+  });
+
+  test("Source should populate from description when missing from type", () => {
+    const description = document.createElement("description");
+    description.innerHTML = "Source: Basic Rules p. 243";
+    monster.appendChild(description);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Source).toEqual("Basic Rules p. 243");
+  });
+
+  test("Source should populate from description before type", () => {
+    const type = document.createElement("type");
+    type.innerHTML = "humanoid (human, shapechanger), monster manual";
+    monster.appendChild(type);
+    const description = document.createElement("description");
+    description.innerHTML = "Source: Basic Rules p. 243";
+    monster.appendChild(description);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Source).toEqual("Basic Rules p. 243");
+  });
+
+  test("Source should populate from first source entry in description", () => {
+    const description = document.createElement("description");
+    description.innerHTML =
+      "Source: Basic Rules p. 243, Monster Manual p. 342, Curse of Strahd, Hoard of the Dragon Queen, Princes of the Apocalypse";
+    monster.appendChild(description);
+
+    const result = new StatBlockImporter(monster).GetStatBlock();
+    expect(result.Source).toEqual("Basic Rules p. 243");
+  });
 });
