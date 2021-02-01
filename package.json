@@ -106,7 +106,7 @@
     "newrelic": "^6.2.0",
     "node": "~12.14.1",
     "npm": "^6.14.9",
-    "patreon": "^0.0.1",
+    "patreon": "^0.4.1",
     "raw-loader": "^4.0.0",
     "react": "^16.10.2",
     "react-color": "^2.17.0",
