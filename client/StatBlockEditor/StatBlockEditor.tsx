@@ -93,7 +93,7 @@ export class StatBlockEditor extends React.Component<
         validate={this.validate}
         validateOnBlur
         render={api => (
-          <Form className="c-statblock-editor" autoComplete="false">
+          <Form className="c-statblock-editor" autoComplete="false" translate={false}>
             <div className="c-statblock-editor__title-row">
               <h2 className="c-statblock-editor__title">{header}</h2>
               {buttons}

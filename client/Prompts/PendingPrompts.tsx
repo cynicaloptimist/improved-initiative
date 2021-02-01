@@ -19,7 +19,9 @@ class Prompt<T extends object> extends React.Component<
     return (
       <Formik
         initialValues={this.props.initialValues || {}}
-        onSubmit={this.props.onSubmit}
+        onSubmit={values => {
+          this.props.onSubmit(values);
+        }}
         render={(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
