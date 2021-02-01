@@ -68,11 +68,6 @@ export function SpellEditor(props: SpellEditorProps) {
           )}
           <div className="buttons">
             <Button
-              type="submit"
-              tooltip="Save changes to spell"
-              fontAwesomeIcon="save"
-            />
-            <Button
               tooltip="Cancel and revert spell"
               fontAwesomeIcon="times"
               onClick={props.onClose}
@@ -86,6 +81,11 @@ export function SpellEditor(props: SpellEditorProps) {
                   props.onClose();
                 }
               }}
+            />
+            <Button
+              type="submit"
+              tooltip="Save changes to spell"
+              fontAwesomeIcon="save"
             />
           </div>
         </Form>
