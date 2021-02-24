@@ -50,7 +50,7 @@ export function SpellEditor(props: SpellEditorProps) {
       }}
       initialValues={formValues}
       render={() => (
-        <Form autoComplete="false" className="spell-editor" translate={false}>
+        <Form autoComplete="false" className="spell-editor" translate="false">
           <h2>Edit Spell</h2>
           <div className="editor-type">
             <label>Editor Mode: </label>
