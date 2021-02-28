@@ -60,18 +60,21 @@ export class PersistentCharacterLibraryPane extends React.Component<
     l: Listing<PersistentCharacter>,
     onPreview,
     onPreviewOut
-  ) => (
-    <ListingRow
-      key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
-      name={l.Listing().Name}
-      showCount
-      onAdd={this.loadSavedStatBlock}
-      onEdit={this.editStatBlock}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={l}
-    />
-  );
+  ) => {
+    const storedListing = l.Listing();
+    return (
+      <ListingRow
+        key={storedListing.Id + storedListing.Path + storedListing.Name}
+        name={storedListing.Name}
+        showCount
+        onAdd={this.loadSavedStatBlock}
+        onEdit={this.editStatBlock}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+      />
+    );
+  };
 
   public render() {
     const listings = this.props.library.GetListings();

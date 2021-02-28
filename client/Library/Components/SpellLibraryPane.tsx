@@ -47,19 +47,20 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
     l => ({ key: l.Listing().Metadata.Type })
   ];
 
-  private renderListingRow = (listing, onPreview, onPreviewOut) => (
-    <ListingRow
-      key={
-        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
-      }
-      name={listing.Listing().Name}
-      onAdd={this.loadSavedSpell}
-      onEdit={this.editSpell}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={listing}
-    />
-  );
+  private renderListingRow = (l, onPreview, onPreviewOut) => {
+    const storedListing = l.Listing();
+    return (
+      <ListingRow
+        key={storedListing.Id + storedListing.Path + storedListing.Name}
+        name={storedListing.Name}
+        onAdd={this.loadSavedSpell}
+        onEdit={this.editSpell}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+      />
+    );
+  };
 
   private renderPreview = (spell: Spell) => (
     <div className="spell-preview">

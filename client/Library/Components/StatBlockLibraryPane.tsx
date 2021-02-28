@@ -93,21 +93,24 @@ export class StatBlockLibraryPane extends React.Component<
     l: Listing<StatBlock>,
     onPreview,
     onPreviewOut
-  ) => (
-    <ListingRow
-      key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
-      name={l.Listing().Name}
-      showCount
-      onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
-      onEdit={this.editStatBlock}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={l}
-      extraButtons={
-        settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
-      }
-    />
-  );
+  ) => {
+    const storedListing = l.Listing();
+    return (
+      <ListingRow
+        key={storedListing.Id + storedListing.Path + storedListing.Name}
+        name={storedListing.Name}
+        showCount
+        onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
+        onEdit={this.editStatBlock}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+        extraButtons={
+          settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
+        }
+      />
+    );
+  };
 
   private loadSavedStatBlock = (variantMaximumHP: VariantMaximumHP) => (
     listing: StatBlockListing,

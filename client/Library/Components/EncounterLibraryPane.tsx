@@ -41,25 +41,22 @@ export class EncounterLibraryPane extends React.Component<
     l => ({ key: l.Listing().Path })
   ];
 
-  private renderListingRow = (
-    listing: EncounterListing,
-    onPreview,
-    onPreviewOut
-  ) => (
-    <ListingRow
-      key={
-        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
-      }
-      name={listing.Listing().Name}
-      onAdd={this.loadSavedEncounter}
-      onDelete={this.deleteListing}
-      onMove={this.moveListing}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={listing}
-      showCount
-    />
-  );
+  private renderListingRow = (l: EncounterListing, onPreview, onPreviewOut) => {
+    const storedListing = l.Listing();
+    return (
+      <ListingRow
+        key={storedListing.Id + storedListing.Path + storedListing.Name}
+        name={storedListing.Name}
+        onAdd={this.loadSavedEncounter}
+        onDelete={this.deleteListing}
+        onMove={this.moveListing}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+        showCount
+      />
+    );
+  };
 
   private renderPreview = (encounter: SavedEncounter) => (
     <ul className="c-encounter-preview">
