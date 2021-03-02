@@ -6,12 +6,12 @@ import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialSpy";
 import { Libraries } from "../Libraries";
-import { EncounterLibraryPane } from "./EncounterLibraryPane";
-import { PersistentCharacterLibraryPane } from "./PersistentCharacterLibraryPane";
-import { SpellLibraryPane } from "./SpellLibraryPane";
-import { StatBlockLibraryPane } from "./StatBlockLibraryPane";
+import { EncounterLibraryReferencePane } from "./EncounterLibraryReferencePane";
+import { PersistentCharacterLibraryReferencePane } from "./PersistentCharacterLibraryReferencePane";
+import { SpellLibraryReferencePane } from "./SpellLibraryReferencePane";
+import { StatBlockLibraryReferencePane } from "./StatBlockLibraryReferencePane";
 
-export interface LibraryPanesProps {
+export interface LibraryReferencePanesProps {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
@@ -21,7 +21,7 @@ interface State {
   selectedLibrary: string;
 }
 
-export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
+export class LibraryReferencePanes extends React.Component<LibraryReferencePanesProps, State> {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,27 +40,27 @@ export class LibraryPanes extends React.Component<LibraryPanesProps, State> {
   public render() {
     const libraries = {
       Creatures: (
-        <StatBlockLibraryPane
+        <StatBlockLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.StatBlocks}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       Characters: (
-        <PersistentCharacterLibraryPane
+        <PersistentCharacterLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.PersistentCharacters}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       Encounters: (
-        <EncounterLibraryPane
+        <EncounterLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Encounters}
         />
       ),
       Spells: (
-        <SpellLibraryPane
+        <SpellLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Spells}
           textEnricher={this.props.statBlockTextEnricher}

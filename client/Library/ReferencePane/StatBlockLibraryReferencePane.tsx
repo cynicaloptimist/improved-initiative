@@ -10,11 +10,11 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { StatBlockLibrary } from "../StatBlockLibrary";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ExtraButton, ListingRow } from "./ListingRow";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ExtraButton, ListingRow } from "../Components/ListingRow";
 
-export type StatBlockLibraryPaneProps = {
+export type StatBlockLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: StatBlockLibrary;
   statBlockTextEnricher: TextEnricher;
@@ -31,11 +31,11 @@ interface State {
   previewPosition: { left: number; top: number };
 }
 
-export class StatBlockLibraryPane extends React.Component<
-  StatBlockLibraryPaneProps,
+export class StatBlockLibraryReferencePane extends React.Component<
+  StatBlockLibraryReferencePaneProps,
   State
 > {
-  constructor(props: StatBlockLibraryPaneProps) {
+  constructor(props: StatBlockLibraryReferencePaneProps) {
     super(props);
     this.state = {
       filter: "",
@@ -53,7 +53,7 @@ export class StatBlockLibraryPane extends React.Component<
     const listings = this.props.library.GetStatBlocks();
 
     return (
-      <LibraryPane
+      <LibraryReferencePane
         defaultItem={StatBlock.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow(CurrentSettings())}

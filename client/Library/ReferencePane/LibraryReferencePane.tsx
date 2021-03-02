@@ -4,11 +4,11 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
-import { LibraryFilter } from "./LibraryFilter";
-import { ListingButton } from "./ListingButton";
+import { BuildListingTree, ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryFilter } from "../Components/LibraryFilter";
+import { ListingButton } from "../Components/ListingButton";
 
-interface LibraryPaneProps<T extends Listable> {
+interface LibraryReferencePaneProps<T extends Listable> {
   listings: Listing<T>[];
   defaultItem: T;
   renderListingRow: (
@@ -35,13 +35,13 @@ interface State<T extends Listable> {
   previewPosition: { left: number; top: number };
 }
 
-export class LibraryPane<T extends Listable & object> extends React.Component<
-  LibraryPaneProps<T>,
+export class LibraryReferencePane<T extends Listable & object> extends React.Component<
+  LibraryReferencePaneProps<T>,
   State<T>
 > {
   private filterCache: FilterCache<Listing<T>>;
 
-  constructor(props: LibraryPaneProps<T>) {
+  constructor(props: LibraryReferencePaneProps<T>) {
     super(props);
     this.state = {
       filter: "",

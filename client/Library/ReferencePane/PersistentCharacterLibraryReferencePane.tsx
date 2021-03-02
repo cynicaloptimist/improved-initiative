@@ -8,20 +8,20 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ListingRow } from "../Components/ListingRow";
 
-export type PersistentCharacterLibraryPaneProps = {
+export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: PersistentCharacterLibrary;
   statBlockTextEnricher: TextEnricher;
 };
 
-export class PersistentCharacterLibraryPane extends React.Component<
-  PersistentCharacterLibraryPaneProps
+export class PersistentCharacterLibraryReferencePane extends React.Component<
+  PersistentCharacterLibraryReferencePaneProps
 > {
-  constructor(props: PersistentCharacterLibraryPaneProps) {
+  constructor(props: PersistentCharacterLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
   }
@@ -80,7 +80,7 @@ export class PersistentCharacterLibraryPane extends React.Component<
     const listings = this.props.library.GetListings();
 
     return (
-      <LibraryPane
+      <LibraryReferencePane
         defaultItem={PersistentCharacter.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow}

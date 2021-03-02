@@ -4,21 +4,21 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { EncounterLibrary } from "../EncounterLibrary";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ListingRow } from "../Components/ListingRow";
 
-export type EncounterLibraryPaneProps = {
+export type EncounterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: EncounterLibrary;
 };
 
 type EncounterListing = Listing<SavedEncounter>;
 
-export class EncounterLibraryPane extends React.Component<
-  EncounterLibraryPaneProps
+export class EncounterLibraryReferencePane extends React.Component<
+  EncounterLibraryReferencePaneProps
 > {
-  constructor(props: EncounterLibraryPaneProps) {
+  constructor(props: EncounterLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
   }
@@ -26,7 +26,7 @@ export class EncounterLibraryPane extends React.Component<
   public render() {
     const listings = this.props.library.Encounters();
     return (
-      <LibraryPane
+      <LibraryReferencePane
         listings={listings}
         defaultItem={SavedEncounter.Default()}
         renderListingRow={this.renderListingRow}
