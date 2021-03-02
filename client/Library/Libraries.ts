@@ -8,7 +8,14 @@ import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
 import { StatBlockLibrary } from "./StatBlockLibrary";
 
-export class Libraries {
+export interface Libraries {
+  PersistentCharacters: PersistentCharacterLibrary;
+  StatBlocks: StatBlockLibrary;
+  Encounters: EncounterLibrary;
+  Spells: SpellLibrary;
+}
+
+export class AccountBackedLibraries {
   public PersistentCharacters: PersistentCharacterLibrary;
   public StatBlocks: StatBlockLibrary;
   public Encounters: EncounterLibrary;

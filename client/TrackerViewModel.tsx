@@ -21,7 +21,7 @@ import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { Libraries } from "./Library/Libraries";
+import { AccountBackedLibraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -47,7 +47,7 @@ export class TrackerViewModel {
   public PlayerViewClient = new PlayerViewClient(this.Socket);
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
-  public Libraries = new Libraries(this.accountClient);
+  public Libraries = new AccountBackedLibraries(this.accountClient);
   public EncounterCommander = new EncounterCommander(this);
   public CombatantCommander = new CombatantCommander(this);
   public LibrariesCommander = new LibrariesCommander(
