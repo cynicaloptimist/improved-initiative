@@ -139,16 +139,13 @@ function configureEntityRoute<T extends Listable>(
         await DB.saveEntity<T>(route, req.session.userId, req.body);
         return res.sendStatus(201);
       } else if (req.body.length) {
-        const saved = await DB.saveEntitySet<T>(
-          route,
-          req.session.userId,
-          req.body
-        );
-        if (saved) {
+        try {
+          await DB.saveEntitySet<T>(route, req.session.userId, req.body);
           return res.sendStatus(201);
-        } else {
+        } catch (err) {
           console.error("Could not save items for user: " + req.session.userId);
           console.log("post body was: " + JSON.stringify(req.body));
+          console.log("Error was: " + err);
           return res.sendStatus(500).send();
         }
       } else {
