@@ -63,7 +63,7 @@ function useSelection<T>(items: T[]): [T[], Action<T>, Action<T>, Void] {
     (selected: T) => {
       setSelectedItems([selected]);
     },
-    [items]
+    [items, setSelectedItems]
   );
   const addSelected = React.useCallback(
     (selected: T) => {
@@ -71,11 +71,11 @@ function useSelection<T>(items: T[]): [T[], Action<T>, Action<T>, Void] {
         setSelectedItems([...selectedItems, selected]);
       }
     },
-    [items]
+    [items, selectedItems, setSelectedItems]
   );
   const clearSelected = React.useCallback(() => {
     setSelectedItems([]);
-  }, [items]);
+  }, [setSelectedItems, items]);
 
   return [selectedItems, setSelected, addSelected, clearSelected];
 }
@@ -95,6 +95,7 @@ function LibraryManagerPane(props: {
           listing={l}
           isSelected={selected.includes(l)}
           setSelected={setSelected}
+          addSelected={addSelected}
         />
       ))}
     </div>
@@ -104,15 +105,23 @@ function LibraryManagerPane(props: {
 function LibraryManagerRow(props: {
   listing: Listing<any>;
   setSelected: Action<Listing<any>>;
+  addSelected: Action<Listing<any>>;
   isSelected: boolean;
 }) {
   const listing = useSubscription(props.listing.Listing);
   return (
     <div
       style={{
-        backgroundColor: props.isSelected ? "red" : undefined
+        backgroundColor: props.isSelected ? "red" : undefined,
+        userSelect: "none"
       }}
-      onClick={() => props.setSelected(props.listing)}
+      onClick={mouseEvent => {
+        if (mouseEvent.shiftKey) {
+          props.addSelected(props.listing);
+        } else {
+          props.setSelected(props.listing);
+        }
+      }}
     >
       {listing.Name}
     </div>
