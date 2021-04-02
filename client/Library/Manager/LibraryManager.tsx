@@ -116,7 +116,7 @@ function LibraryManagerRow(props: {
         userSelect: "none"
       }}
       onClick={mouseEvent => {
-        if (mouseEvent.shiftKey) {
+        if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
           props.addSelected(props.listing);
         } else {
           props.setSelected(props.listing);
