@@ -15,6 +15,8 @@ import { DndProvider } from "react-dnd";
 import { interfacePriorityClass } from "./Layout/interfacePriorityClass";
 import { centerColumnView } from "./Layout/centerColumnView";
 import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
+import { LibraryManager } from "./Library/Manager/LibraryManager";
+import { useRef } from "react";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -50,6 +52,10 @@ export function App(props: { tracker: TrackerViewModel }) {
   );
 
   const blurVisible = tutorialVisible || settingsVisible;
+
+  const showManager = useRef(
+    new URLSearchParams(window?.location?.search).get("showmanager")
+  );
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -88,7 +94,15 @@ export function App(props: { tracker: TrackerViewModel }) {
                 Log In with Patreon
               </a>
             )}
-            <ThreeColumnLayout tracker={tracker} />
+            {showManager.current ? (
+              <LibraryManager
+                libraries={tracker.Libraries}
+                librariesCommander={tracker.LibrariesCommander}
+                statBlockTextEnricher={tracker.StatBlockTextEnricher}
+              />
+            ) : (
+              <ThreeColumnLayout tracker={tracker} />
+            )}
           </div>
         </TextEnricherContext.Provider>
       </SettingsContext.Provider>
