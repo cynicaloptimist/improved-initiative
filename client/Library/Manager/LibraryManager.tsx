@@ -54,20 +54,67 @@ export function LibraryManager(props: {
   );
 }
 
+type Action<T> = (val: T) => void;
+type Void = () => void;
+
+function useSelection<T>(items: T[]): [T[], Action<T>, Action<T>, Void] {
+  const [selectedItems, setSelectedItems] = useState<T[]>([]);
+  const setSelected = React.useCallback(
+    (selected: T) => {
+      setSelectedItems([selected]);
+    },
+    [items]
+  );
+  const addSelected = React.useCallback(
+    (selected: T) => {
+      if (!selectedItems.includes(selected)) {
+        setSelectedItems([...selectedItems, selected]);
+      }
+    },
+    [items]
+  );
+  const clearSelected = React.useCallback(() => {
+    setSelectedItems([]);
+  }, [items]);
+
+  return [selectedItems, setSelected, addSelected, clearSelected];
+}
+
 function LibraryManagerPane(props: {
   listingsComputed: KnockoutObservable<Listing<any>[]>;
 }) {
   const listings = useSubscription(props.listingsComputed);
+  const [selected, setSelected, addSelected, clearSelected] = useSelection(
+    listings
+  );
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
       {listings.map(l => (
-        <LibraryManagerRow key={l.Listing().Id} listing={l} />
+        <LibraryManagerRow
+          key={l.Listing().Id}
+          listing={l}
+          isSelected={selected.includes(l)}
+          setSelected={setSelected}
+        />
       ))}
     </div>
   );
 }
 
-function LibraryManagerRow(props: { listing: Listing<any> }) {
+function LibraryManagerRow(props: {
+  listing: Listing<any>;
+  setSelected: Action<Listing<any>>;
+  isSelected: boolean;
+}) {
   const listing = useSubscription(props.listing.Listing);
-  return <div>{listing.Name}</div>;
+  return (
+    <div
+      style={{
+        backgroundColor: props.isSelected ? "red" : undefined
+      }}
+      onClick={() => props.setSelected(props.listing)}
+    >
+      {listing.Name}
+    </div>
+  );
 }
