@@ -119,7 +119,7 @@ function LibraryManagerListing(props: {
 }
 
 function LibraryManagerRow(props: { listing: Listing<any> }) {
-  const listing = useSubscription(props.listing.Meta);
+  const listingMeta = useSubscription(props.listing.Meta);
   const selection = React.useContext(SelectionContext);
   const isSelected = selection.selected.includes(props.listing);
   return (
@@ -136,7 +136,7 @@ function LibraryManagerRow(props: { listing: Listing<any> }) {
         }
       }}
     >
-      {listing.Name}
+      {listingMeta.Name}
     </div>
   );
 }
