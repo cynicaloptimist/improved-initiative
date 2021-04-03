@@ -57,22 +57,22 @@ export function LibraryManager(props: {
 }) {
   const pageComponentsByTab = {
     Creatures: (
-      <LibraryManagerListing
+      <LibraryManagerListings
         listingsComputed={props.libraries.StatBlocks.GetStatBlocks}
       />
     ),
     Characters: (
-      <LibraryManagerListing
+      <LibraryManagerListings
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
       />
     ),
     Spells: (
-      <LibraryManagerListing
+      <LibraryManagerListings
         listingsComputed={props.libraries.Spells.GetSpells}
       />
     ),
     Encounters: (
-      <LibraryManagerListing
+      <LibraryManagerListings
         listingsComputed={props.libraries.Encounters.Encounters}
       />
     )
@@ -102,10 +102,7 @@ export function LibraryManager(props: {
   );
 }
 
-type Action<T> = (val: T) => void;
-type Void = () => void;
-
-function LibraryManagerListing(props: {
+function LibraryManagerListings(props: {
   listingsComputed: KnockoutObservable<Listing<any>[]>;
 }) {
   const listings = useSubscription(props.listingsComputed);
