@@ -101,14 +101,14 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
       key: l.Listing().Path
     }),
     l => ({
-      label: "Level " + l.Listing().Metadata.Level,
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: "Level " + l.Listing().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().Metadata.Source
+      key: l.Listing().FilterDimensions.Source
     }),
     l => ({
-      key: l.Listing().Metadata.Type
+      key: l.Listing().FilterDimensions.Type
     })
   ];
 }

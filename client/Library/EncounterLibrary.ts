@@ -31,7 +31,7 @@ export class EncounterLibrary {
       {
         ...encounterState,
         SearchHint: SavedEncounter.GetSearchHint(encounterState),
-        Metadata: {},
+        FilterDimensions: {},
         Link: link,
         LastUpdateMs: encounterState.LastUpdateMs || 0
       },

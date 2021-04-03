@@ -38,7 +38,7 @@ export class SpellLibrary {
       {
         ...spell,
         SearchHint: Spell.GetSearchHint(spell),
-        Metadata: Spell.GetMetadata(spell),
+        FilterDimensions: Spell.GetFilterDimensions(spell),
         Link: Store.Spells,
         LastUpdateMs: spell.LastUpdateMs
       },
@@ -56,7 +56,7 @@ export class SpellLibrary {
           Name: spell.Name,
           Path: spell.Path,
           SearchHint: Spell.GetSearchHint(spell),
-          Metadata: Spell.GetMetadata(spell),
+          FilterDimensions: Spell.GetFilterDimensions(spell),
           Link: `/my/spells/${spell.Id}`,
           LastUpdateMs: moment.now()
         },

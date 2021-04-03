@@ -78,14 +78,14 @@ export class StatBlockLibraryReferencePane extends React.Component<
       key: l.Listing().Path
     }),
     l => ({
-      label: "Challenge " + l.Listing().Metadata.Level,
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: "Challenge " + l.Listing().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().Metadata.Source?.split(",")[0]
+      key: l.Listing().FilterDimensions.Source?.split(",")[0]
     }),
     l => ({
-      key: l.Listing().Metadata.Type
+      key: l.Listing().FilterDimensions.Type
     })
   ];
 

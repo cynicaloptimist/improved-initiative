@@ -51,7 +51,7 @@ export class StatBlockLibrary {
       {
         ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
-        Metadata: StatBlock.GetMetadata(newStatBlock),
+        FilterDimensions: StatBlock.FilterDimensions(newStatBlock),
         Link: `/my/statblocks/${newStatBlock.Id}`,
         LastUpdateMs: moment.now()
       },
@@ -88,7 +88,7 @@ export class StatBlockLibrary {
       {
         ...newStatBlock,
         SearchHint: StatBlock.GetSearchHint(newStatBlock),
-        Metadata: StatBlock.GetMetadata(newStatBlock),
+        FilterDimensions: StatBlock.FilterDimensions(newStatBlock),
         Link: this.StoreName,
         LastUpdateMs: moment.now()
       },

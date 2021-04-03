@@ -51,7 +51,7 @@ export class AccountBackedLibraries {
         Name: statBlock.Name,
         Path: statBlock.Path,
         SearchHint: StatBlock.GetSearchHint(statBlock),
-        Metadata: StatBlock.GetMetadata(statBlock),
+        FilterDimensions: StatBlock.FilterDimensions(statBlock),
         Link: Store.StatBlocks,
         LastUpdateMs: statBlock.LastUpdateMs || 0
       };
@@ -76,12 +76,12 @@ export class AccountBackedLibraries {
         ...Spell.Default(),
         ...savedSpell
       };
-      const listing = {
+      const listing: StoredListing = {
         Id: savedSpell.Id,
         Name: spell.Name,
         Path: spell.Path,
         SearchHint: Spell.GetSearchHint(spell),
-        Metadata: Spell.GetMetadata(spell),
+        FilterDimensions: Spell.GetFilterDimensions(spell),
         Link: Store.Spells,
         LastUpdateMs: spell.LastUpdateMs || 0
       };

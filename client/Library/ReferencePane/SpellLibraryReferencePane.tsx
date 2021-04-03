@@ -41,10 +41,10 @@ export class SpellLibraryReferencePane extends React.Component<SpellLibraryRefer
   private groupByFunctions: ListingGroupFn[] = [
     l => ({ key: l.Listing().Path }),
     l => ({
-      label: LevelOrCantrip(l.Listing().Metadata.Level),
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: LevelOrCantrip(l.Listing().FilterDimensions.Level),
+      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
     }),
-    l => ({ key: l.Listing().Metadata.Type })
+    l => ({ key: l.Listing().FilterDimensions.Type })
   ];
 
   private renderListingRow = (l, onPreview, onPreviewOut) => {

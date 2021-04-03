@@ -62,7 +62,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
         {
           Id: persistentCharacterId,
           Link: `/my/persistentcharacters/${persistentCharacterId}`,
-          Metadata: {},
+          FilterDimensions: {},
           Name: "",
           Path: "",
           SearchHint: "",
@@ -82,7 +82,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       {
         ...persistentCharacter,
         SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
-        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
+        FilterDimensions: PersistentCharacter.GetFilterDimensions(persistentCharacter),
         Link: persistentCharacter.Id
       },
       "localStorage",
@@ -158,7 +158,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       {
         ...persistentCharacter,
         SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
-        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
+        FilterDimensions: PersistentCharacter.GetFilterDimensions(persistentCharacter),
         Link: LegacySynchronousLocalStore.PersistentCharacters
       },
       "localStorage"
@@ -183,7 +183,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
       {
         ...persistentCharacter,
         SearchHint: PersistentCharacter.GetSearchHint(persistentCharacter),
-        Metadata: PersistentCharacter.GetMetadata(persistentCharacter),
+        FilterDimensions: PersistentCharacter.GetFilterDimensions(persistentCharacter),
         Link: LegacySynchronousLocalStore.PersistentCharacters
       },
       "localStorage"
