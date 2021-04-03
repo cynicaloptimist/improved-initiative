@@ -159,7 +159,7 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
 
   const saveOperation = retry.operation({ retries: 3 });
 
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     saveOperation.attempt(() => {
       $.ajax({
         type: "POST",
