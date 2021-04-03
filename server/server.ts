@@ -30,13 +30,13 @@ async function improvedInitiativeServer() {
     "ogl_creatures.json",
     "/statblocks/",
     StatBlock.GetSearchHint,
-    StatBlock.GetMetadata
+    StatBlock.FilterDimensions
   );
   const spellLibrary = L.Library.FromFile<Spell>(
     "ogl_spells.json",
     "/spells/",
     Spell.GetSearchHint,
-    Spell.GetMetadata
+    Spell.GetFilterDimensions
   );
   const playerViews = GetPlayerViewManager();
 

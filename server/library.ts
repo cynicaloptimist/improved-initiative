@@ -1,6 +1,6 @@
 import fs = require("fs");
 import path = require("path");
-import { Listable, ListingMetadata, StoredListing } from "../common/Listable";
+import { Listable, FilterDimensions, ListingMeta} from "../common/Listable";
 
 const sourceAbbreviations = {
   "monster-manual": "mm",
@@ -31,19 +31,19 @@ export interface SavedEncounter extends Listable {
 
 export class Library<TItem extends Listable> {
   private items: { [id: string]: TItem } = {};
-  private listings: StoredListing[] = [];
+  private listings: ListingMeta[] = [];
 
   constructor(
     private route: string,
     private getSearchHint: (item: TItem) => string,
-    private getMetadata: (item: TItem) => ListingMetadata
+    private getFilterDimensions: (item: TItem) => FilterDimensions
   ) {}
 
   public static FromFile<I extends Listable>(
     filename: string,
     route: string,
     getSearchHint: (item: I) => string,
-    getMetadata: (item: I) => ListingMetadata
+    getMetadata: (item: I) => FilterDimensions
   ): Library<I> {
     const library = new Library<I>(route, getSearchHint, getMetadata);
 
@@ -68,12 +68,12 @@ export class Library<TItem extends Listable> {
       }
       c.Id = createId(c.Name, c.Source);
       this.items[c.Id] = c;
-      const listing: StoredListing = {
+      const listing: ListingMeta = {
         Name: c.Name,
         Id: c.Id,
         Path: c.Path || "",
         SearchHint: this.getSearchHint(c),
-        Metadata: this.getMetadata(c),
+        FilterDimensions: this.getFilterDimensions(c),
         Link: this.route + c.Id,
         LastUpdateMs: 0
       };
@@ -85,7 +85,7 @@ export class Library<TItem extends Listable> {
     return this.items[id];
   }
 
-  public GetListings(): StoredListing[] {
+  public GetListings(): ListingMeta[] {
     return this.listings;
   }
 
