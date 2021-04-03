@@ -8,6 +8,48 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Libraries } from "../Libraries";
 import { Listing } from "../Listing";
 
+type SelectionContext<T> = {
+  selected: T[];
+  setSelected: (val: T) => void;
+  addSelected: (val: T) => void;
+  clearSelected: () => void;
+};
+
+const SelectionContext = React.createContext<SelectionContext<Listing<any>>>({
+  selected: [],
+  setSelected: () => {},
+  addSelected: () => {},
+  clearSelected: () => {}
+});
+
+function useSelection<T>(): SelectionContext<T> {
+  const [selected, setSelectedItems] = useState<T[]>([]);
+  const setSelected = React.useCallback(
+    (selected: T) => {
+      setSelectedItems([selected]);
+    },
+    [setSelectedItems]
+  );
+  const addSelected = React.useCallback(
+    (newSelected: T) => {
+      if (!selected.includes(newSelected)) {
+        setSelectedItems([...selected, newSelected]);
+      }
+    },
+    [selected, setSelectedItems]
+  );
+  const clearSelected = React.useCallback(() => {
+    setSelectedItems([]);
+  }, [setSelectedItems]);
+
+  return {
+    selected,
+    setSelected,
+    addSelected,
+    clearSelected
+  };
+}
+
 export function LibraryManager(props: {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
@@ -15,20 +57,22 @@ export function LibraryManager(props: {
 }) {
   const pageComponentsByTab = {
     Creatures: (
-      <LibraryManagerPane
+      <LibraryManagerListing
         listingsComputed={props.libraries.StatBlocks.GetStatBlocks}
       />
     ),
     Characters: (
-      <LibraryManagerPane
+      <LibraryManagerListing
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
       />
     ),
     Spells: (
-      <LibraryManagerPane listingsComputed={props.libraries.Spells.GetSpells} />
+      <LibraryManagerListing
+        listingsComputed={props.libraries.Spells.GetSpells}
+      />
     ),
     Encounters: (
-      <LibraryManagerPane
+      <LibraryManagerListing
         listingsComputed={props.libraries.Encounters.Encounters}
       />
     )
@@ -36,90 +80,59 @@ export function LibraryManager(props: {
 
   const [activeTab, setActiveTab] = useState("Creatures");
   const [columnWidth, setColumnWidth] = useState(500);
+  const selectionContext = useSelection<Listing<any>>();
+
   return (
-    <div style={{ display: "flex", flexFlow: "row" }}>
-      <div style={{ width: columnWidth }}>
-        <Tabs
-          options={Object.keys(pageComponentsByTab)}
-          selected={activeTab}
-          onChoose={setActiveTab}
+    <SelectionContext.Provider value={selectionContext}>
+      <div style={{ display: "flex", flexFlow: "row" }}>
+        <div style={{ width: columnWidth }}>
+          <Tabs
+            options={Object.keys(pageComponentsByTab)}
+            selected={activeTab}
+            onChoose={setActiveTab}
+          />
+          {pageComponentsByTab[activeTab]}
+        </div>
+        <VerticalResizer
+          adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
-        {pageComponentsByTab[activeTab]}
+        <div>Viewer/Editor</div>
       </div>
-      <VerticalResizer
-        adjustWidth={offset => setColumnWidth(columnWidth + offset)}
-      />
-      <div>Viewer/Editor</div>
-    </div>
+    </SelectionContext.Provider>
   );
 }
 
 type Action<T> = (val: T) => void;
 type Void = () => void;
 
-function useSelection<T>(items: T[]): [T[], Action<T>, Action<T>, Void] {
-  const [selectedItems, setSelectedItems] = useState<T[]>([]);
-  const setSelected = React.useCallback(
-    (selected: T) => {
-      setSelectedItems([selected]);
-    },
-    [items, setSelectedItems]
-  );
-  const addSelected = React.useCallback(
-    (selected: T) => {
-      if (!selectedItems.includes(selected)) {
-        setSelectedItems([...selectedItems, selected]);
-      }
-    },
-    [items, selectedItems, setSelectedItems]
-  );
-  const clearSelected = React.useCallback(() => {
-    setSelectedItems([]);
-  }, [setSelectedItems, items]);
-
-  return [selectedItems, setSelected, addSelected, clearSelected];
-}
-
-function LibraryManagerPane(props: {
+function LibraryManagerListing(props: {
   listingsComputed: KnockoutObservable<Listing<any>[]>;
 }) {
   const listings = useSubscription(props.listingsComputed);
-  const [selected, setSelected, addSelected, clearSelected] = useSelection(
-    listings
-  );
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
       {listings.map(l => (
-        <LibraryManagerRow
-          key={l.Listing().Id}
-          listing={l}
-          isSelected={selected.includes(l)}
-          setSelected={setSelected}
-          addSelected={addSelected}
-        />
+        <LibraryManagerRow key={l.Listing().Id} listing={l} />
       ))}
     </div>
   );
 }
 
-function LibraryManagerRow(props: {
-  listing: Listing<any>;
-  setSelected: Action<Listing<any>>;
-  addSelected: Action<Listing<any>>;
-  isSelected: boolean;
-}) {
+function LibraryManagerRow(props: { listing: Listing<any> }) {
   const listing = useSubscription(props.listing.Listing);
+  const selection = React.useContext(SelectionContext);
+  const isSelected = selection.selected.includes(props.listing);
   return (
     <div
       style={{
-        backgroundColor: props.isSelected ? "red" : undefined,
+        backgroundColor: isSelected ? "red" : undefined,
         userSelect: "none"
       }}
       onClick={mouseEvent => {
         if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
-          props.addSelected(props.listing);
+          selection.addSelected(props.listing);
         } else {
-          props.setSelected(props.listing);
+          selection.setSelected(props.listing);
         }
       }}
     >
