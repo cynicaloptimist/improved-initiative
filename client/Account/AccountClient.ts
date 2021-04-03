@@ -154,12 +154,12 @@ function emptyPromise(): JQuery.jqXHR {
 
 function saveEntity<T extends object>(entity: T, entityType: string) {
   if (!env.HasStorage) {
-    return Promise.resolve();
+    return Promise.resolve(false);
   }
 
   const saveOperation = retry.operation({ retries: 3 });
 
-  return new Promise<void>(resolve => {
+  return new Promise(resolve => {
     saveOperation.attempt(() => {
       $.ajax({
         type: "POST",
@@ -167,13 +167,13 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
         data: JSON.stringify(entity),
         contentType: "application/json"
       })
-        .done(() => resolve())
+        .done(() => resolve(true))
         .fail((_, err) => {
           if (saveOperation.retry(new Error(err))) {
             return;
           }
           console.warn(`Failed to save ${entityType}: ${err}`);
-          resolve();
+          resolve(false);
         });
     });
   });
