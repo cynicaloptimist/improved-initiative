@@ -269,11 +269,11 @@ export class TrackerViewModel {
       } else {
         const currentListings = this.Libraries.PersistentCharacters.GetListings();
         const existingListing = currentListings.find(
-          l => l.Listing().Name == statBlock.Name
+          l => l.Meta().Name == statBlock.Name
         );
         if (existingListing) {
           this.EditPersistentCharacterStatBlock(
-            existingListing.Listing().Id,
+            existingListing.Meta().Id,
             statBlock
           );
         } else {

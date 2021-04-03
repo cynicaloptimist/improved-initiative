@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
 import moment = require("moment");
-import { StoredListing } from "../../common/Listable";
+import { ListingMeta } from "../../common/Listable";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { AccountClient } from "../Account/AccountClient";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
@@ -39,7 +39,7 @@ export class EncounterLibrary {
     );
   }
 
-  public AddListings(listings: StoredListing[], source: ListingOrigin) {
+  public AddListings(listings: ListingMeta[], source: ListingOrigin) {
     ko.utils.arrayPushAll<Listing<SavedEncounter>>(
       this.Encounters,
       listings.map(l => new Listing(l, source))
@@ -55,7 +55,7 @@ export class EncounterLibrary {
   public Save = (savedEncounter: SavedEncounter) => {
     savedEncounter.LastUpdateMs = moment.now();
     const listing = this.listingFrom(savedEncounter, "localStorage");
-    this.Encounters.remove(l => l.Listing().Id == listing.Listing().Id);
+    this.Encounters.remove(l => l.Meta().Id == listing.Meta().Id);
     this.Encounters.push(listing);
 
     LegacySynchronousLocalStore.Save(
@@ -74,11 +74,11 @@ export class EncounterLibrary {
   };
 
   public Delete = (listing: Listing<SavedEncounter>) => {
-    this.deleteById(listing.Listing().Id);
+    this.deleteById(listing.Meta().Id);
   };
 
   private deleteById = (listingId: string) => {
-    this.Encounters.remove(l => l.Listing().Id == listingId);
+    this.Encounters.remove(l => l.Meta().Id == listingId);
     this.accountClient.DeleteEncounter(listingId);
     LegacySynchronousLocalStore.Delete(
       LegacySynchronousLocalStore.SavedEncounters,

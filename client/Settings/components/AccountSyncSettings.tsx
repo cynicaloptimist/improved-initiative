@@ -200,7 +200,7 @@ export class AccountSyncSettings extends React.Component<
       items.filter(
         c => c.Origin === "localAsync" || c.Origin === "localStorage"
       ),
-      i => [i.Listing().Path, i.Listing().Name].toString()
+      i => [i.Meta().Path, i.Meta().Name].toString()
     ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;

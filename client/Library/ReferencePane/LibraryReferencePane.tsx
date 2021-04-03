@@ -161,7 +161,7 @@ export class LibraryReferencePane<T extends Listable & object> extends React.Com
 
     const outline: T = {
       ...this.props.defaultItem,
-      Name: l.Listing().Name
+      Name: l.Meta().Name
     };
 
     this.setState({

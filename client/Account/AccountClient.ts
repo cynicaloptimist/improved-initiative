@@ -187,7 +187,7 @@ export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
 async function getUnsyncedItems(items: Listing<Listable>[]) {
   const itemsByName: _.Dictionary<Listing<Listable>> = {};
   for (const item of items) {
-    const name = [item.Listing().Path + item.Listing().Name].toString();
+    const name = [item.Meta().Path + item.Meta().Name].toString();
     if (itemsByName[name] == undefined) {
       itemsByName[name] = item;
     } else {
@@ -205,9 +205,9 @@ async function getUnsyncedItems(items: Listing<Listable>[]) {
     unsynced.map(
       async listing =>
         await listing.GetWithTemplate({
-          Id: listing.Listing().Id,
-          Name: listing.Listing().Name,
-          Path: listing.Listing().Path,
+          Id: listing.Meta().Id,
+          Name: listing.Meta().Name,
+          Path: listing.Meta().Path,
           Version: process.env.VERSION || "unknown"
         })
     )

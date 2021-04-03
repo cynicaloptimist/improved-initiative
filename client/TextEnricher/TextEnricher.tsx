@@ -41,7 +41,7 @@ export class TextEnricher {
     const name = spellName.toLocaleLowerCase();
     const listing = _.find(
       this.spellLibrary.GetSpells(),
-      s => s.Listing().Name.toLocaleLowerCase() == name
+      s => s.Meta().Name.toLocaleLowerCase() == name
     );
     if (listing) {
       this.referenceSpellListing(listing);

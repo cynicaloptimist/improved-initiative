@@ -17,9 +17,9 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
   ];
 
   parentSubset.forEach(listing => {
-    const storedListing = listing.Listing();
+    const listingMeta = listing.Meta();
 
-    const dedupeKey = `${storedListing.Path}-${storedListing.Name}`.toLocaleLowerCase();
+    const dedupeKey = `${listingMeta.Path}-${listingMeta.Name}`.toLocaleLowerCase();
 
     if (dedupedItems[dedupeKey] == undefined) {
       dedupedItems[dedupeKey] = listing;
@@ -29,7 +29,7 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     const currentListing = dedupedItems[dedupeKey];
 
     const isNewer =
-      storedListing.LastUpdateMs > currentListing.Listing().LastUpdateMs;
+      listingMeta.LastUpdateMs > currentListing.Meta().LastUpdateMs;
     const hasBetterSource =
       sourceRankings.indexOf(listing.Origin) <
       sourceRankings.indexOf(currentListing.Origin);
@@ -44,14 +44,14 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
       const listing = dedupedItems[i];
       if (
         listing
-          .Listing()
+          .Meta()
           .Name.toLocaleLowerCase()
           .indexOf(filter) > -1
       ) {
         byName.push(listing);
       } else if (
         listing
-          .Listing()
+          .Meta()
           .SearchHint.toLocaleLowerCase()
           .indexOf(filter) > -1
       ) {
@@ -96,7 +96,7 @@ export class FilterCache<T extends Listing<Listable>> {
   private initializeItems(items: T[]) {
     this.initialLength = items.length;
     this.allItems = items.filter(i => {
-      if (!i.Listing().Name?.length) {
+      if (!i.Meta().Name?.length) {
         console.warn("Removing unnamed statblock: " + JSON.stringify(i));
         return false;
       }

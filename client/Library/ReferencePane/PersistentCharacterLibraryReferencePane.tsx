@@ -43,11 +43,11 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {
-    const subscription = l.Listing.subscribe(() => {
+    const subscription = l.Meta.subscribe(() => {
       this.forceUpdate(() => subscription.dispose());
     });
     this.props.librariesCommander.EditPersistentCharacterStatBlock(
-      l.Listing().Id
+      l.Meta().Id
     );
   };
 
@@ -61,11 +61,11 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
     onPreview,
     onPreviewOut
   ) => {
-    const storedListing = l.Listing();
+    const listingMeta = l.Meta();
     return (
       <ListingRow
-        key={storedListing.Id + storedListing.Path + storedListing.Name}
-        name={storedListing.Name}
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
         showCount
         onAdd={this.loadSavedStatBlock}
         onEdit={this.editStatBlock}
@@ -98,17 +98,17 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
 
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
-      key: l.Listing().Path
+      key: l.Meta().Path
     }),
     l => ({
-      label: "Level " + l.Listing().FilterDimensions.Level,
-      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
+      label: "Level " + l.Meta().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().FilterDimensions.Source
+      key: l.Meta().FilterDimensions.Source
     }),
     l => ({
-      key: l.Listing().FilterDimensions.Type
+      key: l.Meta().FilterDimensions.Type
     })
   ];
 }

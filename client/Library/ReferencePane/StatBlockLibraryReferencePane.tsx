@@ -75,17 +75,17 @@ export class StatBlockLibraryReferencePane extends React.Component<
 
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
-      key: l.Listing().Path
+      key: l.Meta().Path
     }),
     l => ({
-      label: "Challenge " + l.Listing().FilterDimensions.Level,
-      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
+      label: "Challenge " + l.Meta().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().FilterDimensions.Source?.split(",")[0]
+      key: l.Meta().FilterDimensions.Source?.split(",")[0]
     }),
     l => ({
-      key: l.Listing().FilterDimensions.Type
+      key: l.Meta().FilterDimensions.Type
     })
   ];
 
@@ -94,11 +94,11 @@ export class StatBlockLibraryReferencePane extends React.Component<
     onPreview,
     onPreviewOut
   ) => {
-    const storedListing = l.Listing();
+    const listingMeta = l.Meta();
     return (
       <ListingRow
-        key={storedListing.Id + storedListing.Path + storedListing.Name}
-        name={storedListing.Name}
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
         showCount
         onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
         onEdit={this.editStatBlock}
@@ -124,7 +124,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
-    l.Listing.subscribe(_ => this.forceUpdate());
+    l.Meta.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
 

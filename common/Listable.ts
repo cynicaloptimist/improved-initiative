@@ -13,7 +13,7 @@ export interface FilterDimensions {
   Type?: string;
 }
 
-export interface StoredListing {
+export interface ListingMeta {
   Id: string;
   Link: string;
   Name: string;

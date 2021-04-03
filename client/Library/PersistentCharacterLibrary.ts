@@ -2,7 +2,7 @@ import * as ko from "knockout";
 import { find } from "lodash";
 import { now } from "moment";
 
-import { StoredListing } from "../../common/Listable";
+import { ListingMeta } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -38,7 +38,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   public GetListings = ko.pureComputed(() => this.persistentCharacters());
 
-  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
+  public AddListings = (listings: ListingMeta[], source: ListingOrigin) => {
     const newListings = listings.map(c => {
       return new Listing<PersistentCharacter>(c, source);
     });
@@ -52,7 +52,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   private getPersistentCharacterListing(persistentCharacterId: string) {
     const listings = this.persistentCharacters().filter(
-      c => c.Listing().Id == persistentCharacterId
+      c => c.Meta().Id == persistentCharacterId
     );
 
     let listing = find(listings, c => c.Origin == "account") || listings[0];
@@ -134,7 +134,7 @@ export class PersistentCharacterLibrary implements PersistentCharacterUpdater {
 
   public async DeletePersistentCharacter(persistentCharacterId: string) {
     this.persistentCharacters.remove(
-      p => p.Listing().Id == persistentCharacterId
+      p => p.Meta().Id == persistentCharacterId
     );
     LegacySynchronousLocalStore.Delete(
       LegacySynchronousLocalStore.PersistentCharacters,

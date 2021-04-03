@@ -112,14 +112,14 @@ function LibraryManagerListing(props: {
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
       {listings.map(l => (
-        <LibraryManagerRow key={l.Listing().Id} listing={l} />
+        <LibraryManagerRow key={l.Meta().Id} listing={l} />
       ))}
     </div>
   );
 }
 
 function LibraryManagerRow(props: { listing: Listing<any> }) {
-  const listing = useSubscription(props.listing.Listing);
+  const listing = useSubscription(props.listing.Meta);
   const selection = React.useContext(SelectionContext);
   const isSelected = selection.selected.includes(props.listing);
   return (

@@ -1,7 +1,7 @@
 import * as ko from "knockout";
 
 import moment = require("moment");
-import { StoredListing } from "../../common/Listable";
+import { ListingMeta } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -14,14 +14,14 @@ export class SpellLibrary {
   public SpellsByNameRegex = ko.pureComputed(() =>
     concatenatedStringRegex(
       this.GetSpells()
-        .map(s => s.Listing().Name)
+        .map(s => s.Meta().Name)
         .filter(n => n.length > 2)
     )
   );
 
   constructor(private accountClient: AccountClient) {}
 
-  public AddListings = (listings: StoredListing[], source: ListingOrigin) => {
+  public AddListings = (listings: ListingMeta[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<Spell>>(
       this.spells,
       listings.map(c => {
@@ -32,7 +32,7 @@ export class SpellLibrary {
 
   public AddOrUpdateSpell = async (spell: Spell) => {
     spell.LastUpdateMs = moment.now();
-    this.spells.remove(listing => listing.Listing().Id === spell.Id);
+    this.spells.remove(listing => listing.Meta().Id === spell.Id);
     spell.Id = AccountClient.MakeId(spell.Id);
     const listing = new Listing<Spell>(
       {
@@ -68,7 +68,7 @@ export class SpellLibrary {
   };
 
   public DeleteSpellById = async (id: string) => {
-    this.spells.remove(listing => listing.Listing().Id === id);
+    this.spells.remove(listing => listing.Meta().Id === id);
     await Store.Delete(Store.Spells, id);
     this.accountClient.DeleteSpell(id);
   };

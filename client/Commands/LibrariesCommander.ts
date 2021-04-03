@@ -48,7 +48,7 @@ export class LibrariesCommander {
   public CanAddPersistentCharacter = (
     listing: Listing<PersistentCharacter>
   ) => {
-    return this.tracker.Encounter.CanAddCombatant(listing.Listing().Id);
+    return this.tracker.Encounter.CanAddCombatant(listing.Meta().Id);
   };
 
   public AddPersistentCharacterFromListing = async (
@@ -112,7 +112,7 @@ export class LibrariesCommander {
           statBlock: { ...StatBlock.Default(), ...statBlock },
           onSave: s => library.SaveEditedStatBlock(listing, s),
           currentListings: library.GetStatBlocks(),
-          onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
+          onDelete: this.deleteSavedStatBlock(listing.Meta().Id),
           onSaveAsCopy: library.SaveNewStatBlock,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
@@ -183,14 +183,14 @@ export class LibrariesCommander {
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       this.libraries.Encounters.Save,
       this.tracker.EventLog.AddEvent,
-      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Listing().Path))
+      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Meta().Path))
     );
     this.tracker.PromptQueue.Add(prompt);
   };
 
   public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
     const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.Listing().Path)
+      .map(e => e.Meta().Path)
       .uniq()
       .compact()
       .value();

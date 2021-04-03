@@ -1,4 +1,4 @@
-import { StoredListing } from "../../common/Listable";
+import { ListingMeta } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -46,7 +46,7 @@ export class AccountBackedLibraries {
         ...savedStatBlock
       };
 
-      const listing: StoredListing = {
+      const listing: ListingMeta = {
         Id: statBlock.Id,
         Name: statBlock.Name,
         Path: statBlock.Path,
@@ -76,7 +76,7 @@ export class AccountBackedLibraries {
         ...Spell.Default(),
         ...savedSpell
       };
-      const listing: StoredListing = {
+      const listing: ListingMeta = {
         Id: savedSpell.Id,
         Name: spell.Name,
         Path: spell.Path,

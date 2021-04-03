@@ -39,20 +39,20 @@ export class SpellLibraryReferencePane extends React.Component<SpellLibraryRefer
   }
 
   private groupByFunctions: ListingGroupFn[] = [
-    l => ({ key: l.Listing().Path }),
+    l => ({ key: l.Meta().Path }),
     l => ({
-      label: LevelOrCantrip(l.Listing().FilterDimensions.Level),
-      key: GetAlphaSortableLevelString(l.Listing().FilterDimensions.Level)
+      label: LevelOrCantrip(l.Meta().FilterDimensions.Level),
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
-    l => ({ key: l.Listing().FilterDimensions.Type })
+    l => ({ key: l.Meta().FilterDimensions.Type })
   ];
 
   private renderListingRow = (l, onPreview, onPreviewOut) => {
-    const storedListing = l.Listing();
+    const listingMeta = l.Listing();
     return (
       <ListingRow
-        key={storedListing.Id + storedListing.Path + storedListing.Name}
-        name={storedListing.Name}
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
         onAdd={this.loadSavedSpell}
         onEdit={this.editSpell}
         onPreview={onPreview}
@@ -73,7 +73,7 @@ export class SpellLibraryReferencePane extends React.Component<SpellLibraryRefer
   };
 
   private editSpell = (l: Listing<Spell>) => {
-    l.Listing.subscribe(_ => this.forceUpdate());
+    l.Meta.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
 }

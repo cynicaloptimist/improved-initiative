@@ -38,15 +38,15 @@ export class EncounterLibraryReferencePane extends React.Component<
   }
 
   private groupByFunctions: ListingGroupFn[] = [
-    l => ({ key: l.Listing().Path })
+    l => ({ key: l.Meta().Path })
   ];
 
   private renderListingRow = (l: EncounterListing, onPreview, onPreviewOut) => {
-    const storedListing = l.Listing();
+    const listingMeta = l.Meta();
     return (
       <ListingRow
-        key={storedListing.Id + storedListing.Path + storedListing.Name}
-        name={storedListing.Name}
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
         onAdd={this.loadSavedEncounter}
         onDelete={this.deleteListing}
         onMove={this.moveListing}
@@ -72,7 +72,7 @@ export class EncounterLibraryReferencePane extends React.Component<
   };
 
   private deleteListing = (listing: EncounterListing) => {
-    if (confirm(`Delete saved encounter "${listing.Listing().Name}"?`)) {
+    if (confirm(`Delete saved encounter "${listing.Meta().Name}"?`)) {
       this.props.library.Delete(listing);
     }
   };
