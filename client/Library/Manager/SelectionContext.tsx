@@ -1,21 +1,21 @@
 import { useCallback, useState } from "react";
 import React = require("react");
 
-export type SelectionContext<T> = {
+export type Selection<T> = {
   selected: T[];
   setSelected: (val: T) => void;
   addSelected: (val: T) => void;
   clearSelected: () => void;
 };
 
-export const SelectionContext = React.createContext<SelectionContext<any>>({
+export const SelectionContext = React.createContext<Selection<any>>({
   selected: [],
   setSelected: () => {},
   addSelected: () => {},
   clearSelected: () => {}
 });
 
-export function useSelection<T>() {
+export function useSelection<T>(): Selection<T> {
   const [selected, setSelectedItems] = useState<T[]>([]);
   const setSelected = useCallback(
     (selected: T) => {
@@ -39,6 +39,6 @@ export function useSelection<T>() {
     selected,
     setSelected,
     addSelected,
-    clearSelected,
+    clearSelected
   };
 }

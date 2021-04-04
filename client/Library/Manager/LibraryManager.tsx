@@ -39,10 +39,10 @@ export function LibraryManager(props: {
 
   const [activeTab, setActiveTab] = useState("Creatures");
   const [columnWidth, setColumnWidth] = useState(500);
-  const selectionContext = useSelection<Listing<any>>();
+  const selection = useSelection<Listing<any>>();
 
   return (
-    <SelectionContext.Provider value={selectionContext}>
+    <SelectionContext.Provider value={selection}>
       <div style={{ display: "flex", flexFlow: "row" }}>
         <div style={{ width: columnWidth }}>
           <Tabs
