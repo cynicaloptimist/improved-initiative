@@ -22,7 +22,7 @@ describe("StatBlockEditor", () => {
       {
         ...statBlock,
         SearchHint: StatBlock.GetSearchHint(statBlock),
-        Metadata: StatBlock.GetMetadata(statBlock),
+        FilterDimensions: StatBlock.FilterDimensions(statBlock),
         Link: "/",
         LastUpdateMs: 0
       },

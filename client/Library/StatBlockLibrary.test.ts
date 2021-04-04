@@ -21,7 +21,7 @@ describe("StatBlock Library", () => {
           Id: "creatureId",
           Link: Store.StatBlocks,
           Path: "",
-          Metadata: {},
+          FilterDimensions: {},
           SearchHint: "",
           LastUpdateMs: 0
         }

@@ -12,7 +12,7 @@ describe("TextEnricher", () => {
     const textEnricher = new TextEnricher(
       () => {},
       spell => {
-        expect(spell.Listing().Name).toEqual("Test Spell");
+        expect(spell.Meta().Name).toEqual("Test Spell");
         done();
       },
       () => {},
@@ -66,7 +66,7 @@ describe("TextEnricher", () => {
       Name: spell.Name,
       Path: spell.Path,
       SearchHint: Spell.GetSearchHint(spell),
-      Metadata: Spell.GetMetadata(spell),
+      FilterDimensions: Spell.GetFilterDimensions(spell),
       Link: Store.Spells,
       LastUpdateMs: spell.LastUpdateMs || 0
     };

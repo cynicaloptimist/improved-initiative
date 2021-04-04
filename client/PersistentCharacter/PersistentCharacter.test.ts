@@ -52,7 +52,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].Listing().Name).toEqual("Persistent Character");
+    expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
   it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
@@ -61,7 +61,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].Listing().Name).toEqual("Player Character");
+    expect(listings[0].Meta().Name).toEqual("Player Character");
   });
 
   it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {
@@ -71,7 +71,7 @@ describe("PersistentCharacterLibrary", () => {
     const library = new PersistentCharacterLibrary(new AccountClient());
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
-    expect(listings[0].Listing().Name).toEqual("Persistent Character");
+    expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
   it("Should provide the latest version of a Persistent Character", async done => {
@@ -179,14 +179,16 @@ describe("PersistentCharacter", () => {
   });
 });
 
-describe("Metadata", () => {
+describe("FilterDimensions.Level", () => {
   it("Should handle just a number", () => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Challenge: "1"
     });
-    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
-    expect(metadata.Level).toEqual("1");
+    const filterDimensions = PersistentCharacter.GetFilterDimensions(
+      persistentCharacter
+    );
+    expect(filterDimensions.Level).toEqual("1");
   });
 
   it("Should handle a class with level", () => {
@@ -194,8 +196,10 @@ describe("Metadata", () => {
       ...StatBlock.Default(),
       Challenge: "Fighter 5"
     });
-    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
-    expect(metadata.Level).toEqual("5");
+    const filterDimensions = PersistentCharacter.GetFilterDimensions(
+      persistentCharacter
+    );
+    expect(filterDimensions.Level).toEqual("5");
   });
 
   it("Should handle multiple classes with levels", () => {
@@ -203,8 +207,10 @@ describe("Metadata", () => {
       ...StatBlock.Default(),
       Challenge: "Fighter 5, Rogue 5"
     });
-    const metadata = PersistentCharacter.GetMetadata(persistentCharacter);
-    expect(metadata.Level).toEqual("10");
+    const filterDimensions = PersistentCharacter.GetFilterDimensions(
+      persistentCharacter
+    );
+    expect(filterDimensions.Level).toEqual("10");
   });
 });
 
