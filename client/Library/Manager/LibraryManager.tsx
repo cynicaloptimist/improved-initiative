@@ -7,48 +7,7 @@ import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Libraries } from "../Libraries";
 import { Listing } from "../Listing";
-
-type SelectionContext<T> = {
-  selected: T[];
-  setSelected: (val: T) => void;
-  addSelected: (val: T) => void;
-  clearSelected: () => void;
-};
-
-const SelectionContext = React.createContext<SelectionContext<Listing<any>>>({
-  selected: [],
-  setSelected: () => {},
-  addSelected: () => {},
-  clearSelected: () => {}
-});
-
-function useSelection<T>(): SelectionContext<T> {
-  const [selected, setSelectedItems] = useState<T[]>([]);
-  const setSelected = React.useCallback(
-    (selected: T) => {
-      setSelectedItems([selected]);
-    },
-    [setSelectedItems]
-  );
-  const addSelected = React.useCallback(
-    (newSelected: T) => {
-      if (!selected.includes(newSelected)) {
-        setSelectedItems([...selected, newSelected]);
-      }
-    },
-    [selected, setSelectedItems]
-  );
-  const clearSelected = React.useCallback(() => {
-    setSelectedItems([]);
-  }, [setSelectedItems]);
-
-  return {
-    selected,
-    setSelected,
-    addSelected,
-    clearSelected
-  };
-}
+import { SelectionContext, useSelection } from "./SelectionContext";
 
 export function LibraryManager(props: {
   librariesCommander: LibrariesCommander;
