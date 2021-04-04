@@ -88,10 +88,8 @@ export function SettingsPane(props: SettingsPaneProps) {
   };
 
   return (
-    <Formik
-      initialValues={settings}
-      onSubmit={handleFormSubmit}
-      render={(props: FormikProps<Settings>) => (
+    <Formik initialValues={settings} onSubmit={handleFormSubmit}>
+      {(props: FormikProps<Settings>) => (
         <form className="settings" onSubmit={props.handleSubmit}>
           <Tabs
             selected={currentTab}
@@ -104,6 +102,6 @@ export function SettingsPane(props: SettingsPaneProps) {
           </button>
         </form>
       )}
-    />
+    </Formik>
   );
 }

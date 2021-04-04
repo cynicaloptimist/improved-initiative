@@ -22,7 +22,8 @@ class Prompt<T extends object> extends React.Component<
         onSubmit={values => {
           this.props.onSubmit(values);
         }}
-        render={(props: FormikProps<any>) => (
+      >
+        {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
             className="prompt"
@@ -36,7 +37,7 @@ class Prompt<T extends object> extends React.Component<
             {this.props.children}
           </form>
         )}
-      />
+      </Formik>
     );
   }
 

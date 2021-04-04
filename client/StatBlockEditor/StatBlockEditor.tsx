@@ -92,8 +92,13 @@ export class StatBlockEditor extends React.Component<
         initialValues={initialValues}
         validate={this.validate}
         validateOnBlur
-        render={api => (
-          <Form className="c-statblock-editor" autoComplete="false" translate="false">
+      >
+        {api => (
+          <Form
+            className="c-statblock-editor"
+            autoComplete="false"
+            translate="false"
+          >
             <div className="c-statblock-editor__title-row">
               <h2 className="c-statblock-editor__title">{header}</h2>
               {buttons}
@@ -121,7 +126,7 @@ export class StatBlockEditor extends React.Component<
             <div className="c-statblock-editor__buttons">{buttons}</div>
           </Form>
         )}
-      />
+      </Formik>
     );
   }
 

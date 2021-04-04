@@ -76,16 +76,14 @@ class SaveEncounterPromptComponent extends React.Component<
         <div className="p-save-encounter__include-combatants">
           <div className="p-save-encounter__label">Include Combatants</div>
           <div className="p-save-encounter__character-combatants">
-            <Field
-              name="CharacterCombatants"
-              render={this.renderCombatantInclusionRow}
-            />
+            <Field name="CharacterCombatants">
+              {this.renderCombatantInclusionRow}
+            </Field>
           </div>
           <div className="p-save-encounter__non-character-combatants">
-            <Field
-              name="NonCharacterCombatants"
-              render={this.renderCombatantInclusionRow}
-            />
+            <Field name="NonCharacterCombatants">
+              {this.renderCombatantInclusionRow}
+            </Field>
           </div>
         </div>
         {env.HasEpicInitiative && (

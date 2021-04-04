@@ -17,7 +17,8 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
         onSubmit={model => {
           this.applyTag(model);
         }}
-        render={(props: FormikProps<any>) => (
+      >
+        {(props: FormikProps<any>) => (
           <form className="tag-suggestion" onSubmit={props.handleSubmit}>
             <TagPromptComponent
               targetDisplayNames={this.props.targetCombatant.Name}
@@ -26,7 +27,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
             />
           </form>
         )}
-      />
+      </Formik>
     );
   }
 
