@@ -7,6 +7,7 @@ import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Libraries } from "../Libraries";
 import { Listing } from "../Listing";
+import { LibraryManagerRow } from "./LibraryManagerRow";
 import { SelectionContext, useSelection } from "./SelectionContext";
 
 export function LibraryManager(props: {
@@ -70,29 +71,6 @@ function LibraryManagerListings(props: {
       {listings.map(l => (
         <LibraryManagerRow key={l.Meta().Id} listing={l} />
       ))}
-    </div>
-  );
-}
-
-function LibraryManagerRow(props: { listing: Listing<any> }) {
-  const listingMeta = useSubscription(props.listing.Meta);
-  const selection = React.useContext(SelectionContext);
-  const isSelected = selection.selected.includes(props.listing);
-  return (
-    <div
-      style={{
-        backgroundColor: isSelected ? "red" : undefined,
-        userSelect: "none"
-      }}
-      onClick={mouseEvent => {
-        if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
-          selection.addSelected(props.listing);
-        } else {
-          selection.setSelected(props.listing);
-        }
-      }}
-    >
-      {listingMeta.Name}
     </div>
   );
 }
