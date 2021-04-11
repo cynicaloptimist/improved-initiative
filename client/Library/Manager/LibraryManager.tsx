@@ -1,7 +1,9 @@
 import * as React from "react";
 import { useState } from "react";
+import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
@@ -56,7 +58,9 @@ export function LibraryManager(props: {
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
-        <div>Viewer/Editor</div>
+        <div>
+          <SelectedStatBlocksView listings={selection.selected} />
+        </div>
       </div>
     </SelectionContext.Provider>
   );
@@ -73,4 +77,46 @@ function LibraryManagerListings(props: {
       ))}
     </div>
   );
+}
+
+function SelectedStatBlocksView(props: { listings: Listing<StatBlock>[] }) {
+  const [loadedStatBlocksById, setLoadedStatBlocksById] = useState<
+    Record<string, StatBlock>
+  >({});
+
+  React.useEffect(() => {
+    setLoadedStatBlocksById({});
+    props.listings.forEach(async listing => {
+      const statBlock = await listing.GetWithTemplate(StatBlock.Default());
+      setLoadedStatBlocksById(loaded => ({
+        ...loaded,
+        [listing.Meta().Id]: statBlock
+      }));
+    });
+  }, [props.listings]);
+
+  const loadedStatBlocks = Object.values(loadedStatBlocksById);
+
+  if (loadedStatBlocks.length === 0) {
+    return null;
+  }
+  if (props.listings.length === 1 && loadedStatBlocks.length === 1) {
+    return (
+      <div style={{ width: 600 }}>
+        <StatBlockComponent
+          displayMode="default"
+          statBlock={loadedStatBlocks[0]}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <strong>Selected Statblocks</strong>
+        {props.listings.map(listing => {
+          return <div key={listing.Meta().Id}>{listing.Meta().Name}</div>;
+        })}
+      </div>
+    );
+  }
 }
