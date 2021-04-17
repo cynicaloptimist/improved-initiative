@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import { Listable } from "../../../common/Listable";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
@@ -59,7 +60,19 @@ export function LibraryManager(props: {
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
         <div>
-          <SelectedStatBlocksView listings={selection.selected} />
+          <SelectedItemsView
+            listings={selection.selected}
+            friendlyName="Statblocks"
+            defaultListing={StatBlock.Default()}
+            renderListing={statBlock => (
+              <div style={{ width: 600 }}>
+                <StatBlockComponent
+                  displayMode="default"
+                  statBlock={statBlock}
+                />
+              </div>
+            )}
+          />
         </div>
       </div>
     </SelectionContext.Provider>
@@ -79,40 +92,36 @@ function LibraryManagerListings(props: {
   );
 }
 
-function SelectedStatBlocksView(props: { listings: Listing<StatBlock>[] }) {
-  const [loadedStatBlocksById, setLoadedStatBlocksById] = useState<
-    Record<string, StatBlock>
-  >({});
+function SelectedItemsView<T extends Listable>(props: {
+  listings: Listing<T>[];
+  defaultListing: T;
+  renderListing: (item: T) => JSX.Element;
+  friendlyName: string;
+}) {
+  const [loadedItemsById, setLoadedItemsById] = useState<Record<string, T>>({});
 
   React.useEffect(() => {
-    setLoadedStatBlocksById({});
+    setLoadedItemsById({});
     props.listings.forEach(async listing => {
-      const statBlock = await listing.GetWithTemplate(StatBlock.Default());
-      setLoadedStatBlocksById(loaded => ({
+      const item = await listing.GetWithTemplate(props.defaultListing);
+      setLoadedItemsById(loaded => ({
         ...loaded,
-        [listing.Meta().Id]: statBlock
+        [listing.Meta().Id]: item
       }));
     });
   }, [props.listings]);
 
-  const loadedStatBlocks = Object.values(loadedStatBlocksById);
+  const loadedItems = Object.values(loadedItemsById);
 
-  if (loadedStatBlocks.length === 0) {
+  if (loadedItems.length === 0) {
     return null;
   }
-  if (props.listings.length === 1 && loadedStatBlocks.length === 1) {
-    return (
-      <div style={{ width: 600 }}>
-        <StatBlockComponent
-          displayMode="default"
-          statBlock={loadedStatBlocks[0]}
-        />
-      </div>
-    );
+  if (props.listings.length === 1 && loadedItems.length === 1) {
+    return props.renderListing(loadedItems[0]);
   } else {
     return (
       <div>
-        <strong>Selected Statblocks</strong>
+        <strong>Selected {props.friendlyName}</strong>
         {props.listings.map(listing => {
           return <div key={listing.Meta().Id}>{listing.Meta().Name}</div>;
         })}
