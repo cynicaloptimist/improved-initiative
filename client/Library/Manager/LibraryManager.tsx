@@ -18,32 +18,41 @@ export function LibraryManager(props: {
   statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
 }) {
+  const [activeTab, setActiveTab] = useState("Creatures");
+  const [columnWidth, setColumnWidth] = useState(500);
+  const selection = useSelection<Listing<any>>();
+  const [editorTarget, setEditorTarget] = useState<Listable | null>(null);
+
   const pageComponentsByTab = {
     Creatures: (
       <LibraryManagerListings
         listingsComputed={props.libraries.StatBlocks.GetStatBlocks}
+        defaultListing={StatBlock.Default()}
+        setEditorTarget={setEditorTarget}
       />
     ),
     Characters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
+        defaultListing={StatBlock.Default()}
+        setEditorTarget={setEditorTarget}
       />
     ),
     Spells: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Spells.GetSpells}
+        defaultListing={StatBlock.Default()}
+        setEditorTarget={setEditorTarget}
       />
     ),
     Encounters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Encounters.Encounters}
+        defaultListing={StatBlock.Default()}
+        setEditorTarget={setEditorTarget}
       />
     )
   };
-
-  const [activeTab, setActiveTab] = useState("Creatures");
-  const [columnWidth, setColumnWidth] = useState(500);
-  const selection = useSelection<Listing<any>>();
 
   return (
     <SelectionContext.Provider value={selection}>
@@ -60,33 +69,43 @@ export function LibraryManager(props: {
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
         <div>
-          <SelectedItemsView
-            listings={selection.selected}
-            friendlyName="Statblocks"
-            defaultListing={StatBlock.Default()}
-            renderListing={statBlock => (
-              <div style={{ width: 600 }}>
-                <StatBlockComponent
-                  displayMode="default"
-                  statBlock={statBlock}
-                />
-              </div>
-            )}
-          />
+          {editorTarget == null ? (
+            <SelectedItemsView
+              listings={selection.selected}
+              friendlyName="Statblocks"
+              defaultListing={StatBlock.Default()}
+              renderListing={statBlock => (
+                <div style={{ width: 600 }}>
+                  <StatBlockComponent
+                    displayMode="default"
+                    statBlock={statBlock}
+                  />
+                </div>
+              )}
+            />
+          ) : (
+            <EditorView editorTarget={editorTarget} />
+          )}
         </div>
       </div>
     </SelectionContext.Provider>
   );
 }
 
+function EditorView(props: { editorTarget: Listable }) {
+  return <>{props.editorTarget.Name}</>;
+}
+
 function LibraryManagerListings(props: {
   listingsComputed: KnockoutObservable<Listing<any>[]>;
+  defaultListing: Listable;
+  setEditorTarget: (item: Listable) => void;
 }) {
   const listings = useSubscription(props.listingsComputed);
   return (
     <div style={{ display: "flex", flexFlow: "column" }}>
       {listings.map(l => (
-        <LibraryManagerRow key={l.Meta().Id} listing={l} />
+        <LibraryManagerRow key={l.Meta().Id} listing={l} {...props} />
       ))}
     </div>
   );
