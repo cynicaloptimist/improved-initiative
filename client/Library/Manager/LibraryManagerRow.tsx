@@ -21,20 +21,18 @@ export function LibraryManagerRow(props: {
         flexFlow: "row",
         justifyContent: "space-between"
       }}
+      onClick={mouseEvent => {
+        if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
+          selection.addSelected(props.listing);
+        } else {
+          selection.setSelected(props.listing);
+        }
+      }}
     >
+      <span>{listingMeta.Name}</span>
       <span
-        onClick={mouseEvent => {
-          if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
-            selection.addSelected(props.listing);
-          } else {
-            selection.setSelected(props.listing);
-          }
-        }}
-      >
-        {listingMeta.Name}
-      </span>
-      <span
-        onClick={async () => {
+        onClick={async e => {
+          e.stopPropagation();
           const item = await props.listing.GetWithTemplate(
             props.defaultListing
           );
