@@ -51,7 +51,7 @@ export function LibraryManager(props: LibraryManagerProps) {
     ),
     Encounters: (
       <LibraryManagerListings
-        listingsComputed={props.libraries.Encounters.Encounters}
+        listingsComputed={props.libraries.Encounters.GetListings}
         setEditorTarget={t => setEditorTypeAndTarget(["Encounters", t])}
       />
     )

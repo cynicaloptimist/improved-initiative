@@ -2,15 +2,15 @@ import * as React from "react";
 import { SavedEncounter } from "../../../common/SavedEncounter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
-import { EncounterLibrary } from "../EncounterLibrary";
 import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
+import { Library } from "../Library";
 
 export type EncounterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: EncounterLibrary;
+  library: Library<SavedEncounter>;
 };
 
 type EncounterListing = Listing<SavedEncounter>;
@@ -24,7 +24,7 @@ export class EncounterLibraryReferencePane extends React.Component<
   }
 
   public render() {
-    const listings = this.props.library.Encounters();
+    const listings = this.props.library.GetListings();
     return (
       <LibraryReferencePane
         listings={listings}
@@ -37,9 +37,7 @@ export class EncounterLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupByFunctions: ListingGroupFn[] = [
-    l => ({ key: l.Meta().Path })
-  ];
+  private groupByFunctions: ListingGroupFn[] = [l => ({ key: l.Meta().Path })];
 
   private renderListingRow = (l: EncounterListing, onPreview, onPreviewOut) => {
     const listingMeta = l.Meta();
@@ -73,13 +71,11 @@ export class EncounterLibraryReferencePane extends React.Component<
 
   private deleteListing = (listing: EncounterListing) => {
     if (confirm(`Delete saved encounter "${listing.Meta().Name}"?`)) {
-      this.props.library.Delete(listing);
+      this.props.library.DeleteListing(listing.Meta().Id);
     }
   };
 
   private moveListing = (listing: EncounterListing) => {
-    listing.GetAsyncWithUpdatedId(savedEncounter =>
-      this.props.librariesCommander.MoveEncounter(savedEncounter)
-    );
+    this.props.librariesCommander.MoveEncounter(listing);
   };
 }

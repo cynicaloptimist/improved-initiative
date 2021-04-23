@@ -16,6 +16,8 @@ import { MoveEncounterPrompt } from "../Prompts/MoveEncounterPrompt";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "../Prompts/SpellPrompt";
 import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
+import { SavedEncounter } from "../../common/SavedEncounter";
+import { Encounter } from "../Encounter/Encounter";
 
 export class LibrariesCommander {
   constructor(
@@ -181,22 +183,28 @@ export class LibrariesCommander {
     const prompt = SaveEncounterPrompt(
       this.tracker.Encounter.FullEncounterState(),
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
-      this.libraries.Encounters.Save,
+      this.libraries.Encounters.SaveNewListing,
       this.tracker.EventLog.AddEvent,
-      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Meta().Path))
+      _.uniq(this.libraries.Encounters.GetListings().map(e => e.Meta().Path))
     );
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-    const folderNames = _(this.libraries.Encounters.Encounters())
+  public MoveEncounter = async (encounterListing: Listing<SavedEncounter>) => {
+    const folderNames = _(this.libraries.Encounters.GetListings())
       .map(e => e.Meta().Path)
       .uniq()
       .compact()
       .value();
+    const encounter = await encounterListing.GetWithTemplate(
+      SavedEncounter.Default()
+    );
     const prompt = MoveEncounterPrompt(
-      legacySavedEncounter,
-      this.libraries.Encounters.Move,
+      encounter,
+      (encounter: SavedEncounter, oldId: string) => {
+        this.libraries.Encounters.DeleteListing(oldId);
+        this.libraries.Encounters.SaveNewListing(encounter);
+      },
       folderNames
     );
     this.tracker.PromptQueue.Add(prompt);

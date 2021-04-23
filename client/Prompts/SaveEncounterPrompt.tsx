@@ -7,7 +7,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Button, SubmitButton } from "../Components/Button";
 import { env } from "../Environment";
-import { EncounterLibrary } from "../Library/EncounterLibrary";
+import { Library } from "../Library/Library";
 import { ToggleButton } from "../Settings/components/Toggle";
 import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../Utility/Metrics";
@@ -129,7 +129,7 @@ interface SaveEncounterModel {
 export function SaveEncounterPrompt(
   encounterState: EncounterState<CombatantState>,
   backgroundImageUrl: string,
-  saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
+  saveEncounterToLibrary: typeof Library.prototype.SaveNewListing,
   logEvent: typeof EventLog.prototype.AddEvent,
   autocompletePaths: string[]
 ): PromptProps<SaveEncounterModel> {

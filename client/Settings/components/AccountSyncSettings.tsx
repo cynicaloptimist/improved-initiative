@@ -64,7 +64,7 @@ export class AccountSyncSettings extends React.Component<
           )}
           {this.syncCount(
             "Encounters",
-            this.getCounts(this.props.libraries.Encounters.Encounters())
+            this.getCounts(this.props.libraries.Encounters.GetListings())
           )}
         </div>
         <div className="c-button-with-label">
