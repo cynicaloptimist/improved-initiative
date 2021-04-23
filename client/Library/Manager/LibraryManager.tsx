@@ -125,6 +125,10 @@ function EditorView(
             newStatBlock
           )
         }
+        /* TODO: */
+        onDelete={undefined}
+        onSaveAsCharacter={undefined}
+        onSaveAsCopy={undefined}
         onClose={props.closeEditor}
       />
     );
