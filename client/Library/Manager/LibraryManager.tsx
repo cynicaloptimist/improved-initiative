@@ -131,10 +131,14 @@ function SelectedItemsView<T extends Listable>(props: {
     return props.renderListing(loadedItems[0]);
   } else {
     return (
-      <div>
+      <div className="c-statblock-header">
         <strong>Selected {props.friendlyName}</strong>
         {props.listings.map(listing => {
-          return <div key={listing.Meta().Id}>{listing.Meta().Name}</div>;
+          return (
+            <h3 key={listing.Meta().Id} className="Name">
+              {listing.Meta().Name}
+            </h3>
+          );
         })}
       </div>
     );
