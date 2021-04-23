@@ -1,6 +1,6 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
-import { Library } from "./StatBlockLibrary";
+import { Library } from "./Library";
 
 describe("StatBlock Library", () => {
   test("", async done => {

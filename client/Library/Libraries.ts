@@ -6,7 +6,7 @@ import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
-import { Library } from "./StatBlockLibrary";
+import { Library } from "./Library";
 
 export interface Libraries {
   PersistentCharacters: PersistentCharacterLibrary;
