@@ -68,32 +68,24 @@ export function LibraryManager(props: {
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
-        <div>
-          {editorTarget == null ? (
-            <SelectedItemsView
-              listings={selection.selected}
-              friendlyName="Statblocks"
-              defaultListing={StatBlock.Default()}
-              renderListing={statBlock => (
-                <div style={{ width: 600 }}>
-                  <StatBlockComponent
-                    displayMode="default"
-                    statBlock={statBlock}
-                  />
-                </div>
-              )}
-            />
-          ) : (
-            <EditorView editorTarget={editorTarget} />
+        {editorTarget && <EditorView editorTarget={editorTarget} />}
+        <SelectedItemsView
+          listings={selection.selected}
+          friendlyName="Statblocks"
+          defaultListing={StatBlock.Default()}
+          renderListing={statBlock => (
+            <div style={{ width: 600 }}>
+              <StatBlockComponent displayMode="default" statBlock={statBlock} />
+            </div>
           )}
-        </div>
+        />
       </div>
     </SelectionContext.Provider>
   );
 }
 
 function EditorView(props: { editorTarget: Listable }) {
-  return <>{props.editorTarget.Name}</>;
+  return <div>{props.editorTarget.Name}</div>;
 }
 
 function LibraryManagerListings(props: {
