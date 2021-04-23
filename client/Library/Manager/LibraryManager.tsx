@@ -33,7 +33,7 @@ export function LibraryManager(props: LibraryManagerProps) {
   const pageComponentsByTab: Record<ListableType, JSX.Element> = {
     Creatures: (
       <LibraryManagerListings
-        listingsComputed={props.libraries.StatBlocks.GetStatBlocks}
+        listingsComputed={props.libraries.StatBlocks.GetListings}
         setEditorTarget={t => setEditorTypeAndTarget(["Creatures", t])}
       />
     ),
@@ -121,7 +121,7 @@ function EditorView(
         statBlock={loadedTarget as StatBlock}
         editorTarget="library"
         onSave={newStatBlock =>
-          props.libraries.StatBlocks.SaveEditedStatBlock(
+          props.libraries.StatBlocks.SaveEditedListing(
             editorTarget as Listing<StatBlock>,
             newStatBlock
           )

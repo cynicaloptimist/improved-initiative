@@ -8,7 +8,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { StatBlockLibrary } from "../Library/StatBlockLibrary";
+import { Library, StatBlockLibrary } from "../Library/StatBlockLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
@@ -69,7 +69,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
+  public CreateAndEditStatBlock = (library: Library<StatBlock>) => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -79,14 +79,14 @@ export class LibrariesCommander {
     this.tracker.EditStatBlock({
       editorTarget: "library",
       statBlock,
-      onSave: library.SaveNewStatBlock,
-      currentListings: library.GetStatBlocks()
+      onSave: library.SaveNewListing,
+      currentListings: library.GetListings()
     });
   };
 
   public EditStatBlock = (
     listing: Listing<StatBlock>,
-    library: StatBlockLibrary
+    library: Library<StatBlock>
   ) => {
     if (this.tracker.TutorialVisible()) {
       return;
@@ -102,18 +102,18 @@ export class LibrariesCommander {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: statBlockWithNewId,
-          onSave: library.SaveNewStatBlock,
+          onSave: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
-          currentListings: library.GetStatBlocks()
+          currentListings: library.GetListings()
         });
       } else {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: { ...StatBlock.Default(), ...statBlock },
-          onSave: s => library.SaveEditedStatBlock(listing, s),
-          currentListings: library.GetStatBlocks(),
+          onSave: s => library.SaveEditedListing(listing, s),
+          currentListings: library.GetListings(),
           onDelete: this.deleteSavedStatBlock(listing.Meta().Id),
-          onSaveAsCopy: library.SaveNewStatBlock,
+          onSaveAsCopy: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
       }
@@ -211,7 +211,7 @@ export class LibrariesCommander {
 
   public LaunchQuickAddPrompt = () => {
     this.encounterCommander.QuickAddStatBlock();
-  }
+  };
 
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.StatBlocks.DeleteListing(statBlockId);

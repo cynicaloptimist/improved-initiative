@@ -6,24 +6,29 @@ import { Store } from "../Utility/Store";
 import { EncounterLibrary } from "./EncounterLibrary";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
 import { SpellLibrary } from "./SpellLibrary";
-import { StatBlockLibrary } from "./StatBlockLibrary";
+import { Library, StatBlockLibrary } from "./StatBlockLibrary";
 
 export interface Libraries {
   PersistentCharacters: PersistentCharacterLibrary;
-  StatBlocks: StatBlockLibrary;
+  StatBlocks: Library<StatBlock>;
   Encounters: EncounterLibrary;
   Spells: SpellLibrary;
 }
 
 export class AccountBackedLibraries {
   public PersistentCharacters: PersistentCharacterLibrary;
-  public StatBlocks: StatBlockLibrary;
+  public StatBlocks: Library<StatBlock>;
   public Encounters: EncounterLibrary;
   public Spells: SpellLibrary;
 
   constructor(accountClient: AccountClient) {
     this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
-    this.StatBlocks = new StatBlockLibrary(accountClient);
+    this.StatBlocks = new Library<StatBlock>(Store.StatBlocks, {
+      accountSave: accountClient.SaveStatBlock,
+      accountDelete: accountClient.DeleteStatBlock,
+      getFilterDimensions: StatBlock.FilterDimensions,
+      getSearchHint: StatBlock.GetSearchHint
+    });
     this.Encounters = new EncounterLibrary(accountClient);
     this.Spells = new SpellLibrary(accountClient);
 

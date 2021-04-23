@@ -262,9 +262,9 @@ export class TrackerViewModel {
       if (statBlock.Player == "") {
         this.EditStatBlock({
           editorTarget: "library",
-          onSave: this.Libraries.StatBlocks.SaveNewStatBlock,
+          onSave: this.Libraries.StatBlocks.SaveNewListing,
           statBlock,
-          currentListings: this.Libraries.StatBlocks.GetStatBlocks()
+          currentListings: this.Libraries.StatBlocks.GetListings()
         });
       } else {
         const currentListings = this.Libraries.PersistentCharacters.GetListings();
