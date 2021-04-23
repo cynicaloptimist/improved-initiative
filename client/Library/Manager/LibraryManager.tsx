@@ -7,6 +7,7 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
+import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { Libraries } from "../Libraries";
 import { Listing } from "../Listing";
@@ -111,6 +112,22 @@ function EditorView(
 
   if (!loadedTarget) {
     return <div>{"Loading " + editorTarget.Meta().Name}</div>;
+  }
+
+  if (editorType === "Creatures") {
+    return (
+      <StatBlockEditor
+        statBlock={loadedTarget as StatBlock}
+        editorTarget="library"
+        onSave={newStatBlock =>
+          props.libraries.StatBlocks.SaveEditedStatBlock(
+            editorTarget as Listing<StatBlock>,
+            newStatBlock
+          )
+        }
+        onClose={props.closeEditor}
+      />
+    );
   }
 
   return <div>Editor: {editorTarget.Meta().Name}</div>;
