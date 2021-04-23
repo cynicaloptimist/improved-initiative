@@ -1,7 +1,6 @@
 import { StatBlock } from "../../common/StatBlock";
-import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
-import { StatBlockLibrary } from "./StatBlockLibrary";
+import { Library } from "./StatBlockLibrary";
 
 describe("StatBlock Library", () => {
   test("", async done => {
@@ -13,7 +12,12 @@ describe("StatBlock Library", () => {
       HP: { Value: 10 }
     });
 
-    const library = new StatBlockLibrary(new AccountClient());
+    const library = new Library(Store.StatBlocks, {
+      accountSave: () => {},
+      accountDelete: () => {},
+      getFilterDimensions: () => ({}),
+      getSearchHint: () => ""
+    });
     library.AddListings(
       [
         {
@@ -29,7 +33,7 @@ describe("StatBlock Library", () => {
       "localAsync"
     );
 
-    const listing = library.GetStatBlocks()[0];
+    const listing = library.GetListings()[0];
     const statBlockFromLibrary = await listing.GetWithTemplate(
       StatBlock.Default()
     );
