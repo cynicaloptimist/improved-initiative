@@ -1,13 +1,11 @@
 import * as React from "react";
-import { Listable } from "../../../common/Listable";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { Listing } from "../Listing";
 import { SelectionContext, Selection } from "./SelectionContext";
 
 export function LibraryManagerRow(props: {
   listing: Listing<any>;
-  defaultListing: Listable;
-  setEditorTarget: (item: Listable) => void;
+  setEditorTarget: (item: Listing<any>) => void;
 }) {
   const listingMeta = useSubscription(props.listing.Meta);
   const selection = React.useContext<Selection<Listing<any>>>(SelectionContext);
@@ -33,10 +31,7 @@ export function LibraryManagerRow(props: {
       <span
         onClick={async e => {
           e.stopPropagation();
-          const item = await props.listing.GetWithTemplate(
-            props.defaultListing
-          );
-          props.setEditorTarget(item);
+          props.setEditorTarget(props.listing);
         }}
       >
         edit

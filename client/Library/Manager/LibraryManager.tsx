@@ -26,35 +26,31 @@ export function LibraryManager(props: LibraryManagerProps) {
   const [columnWidth, setColumnWidth] = useState(500);
   const selection = useSelection<Listing<any>>();
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
-    [ListableType, Listable] | null
+    [ListableType, Listing<Listable>] | null
   >(null);
 
   const pageComponentsByTab: Record<ListableType, JSX.Element> = {
     Creatures: (
       <LibraryManagerListings
         listingsComputed={props.libraries.StatBlocks.GetStatBlocks}
-        defaultListing={StatBlock.Default()}
         setEditorTarget={t => setEditorTypeAndTarget(["Creatures", t])}
       />
     ),
     Characters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
-        defaultListing={StatBlock.Default()}
         setEditorTarget={t => setEditorTypeAndTarget(["Characters", t])}
       />
     ),
     Spells: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Spells.GetSpells}
-        defaultListing={StatBlock.Default()}
         setEditorTarget={t => setEditorTypeAndTarget(["Spells", t])}
       />
     ),
     Encounters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Encounters.Encounters}
-        defaultListing={StatBlock.Default()}
         setEditorTarget={t => setEditorTypeAndTarget(["Encounters", t])}
       />
     )
@@ -75,7 +71,12 @@ export function LibraryManager(props: LibraryManagerProps) {
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
         />
         {editorTypeAndTarget && (
-          <EditorView editorTypeAndTarget={editorTypeAndTarget} {...props} />
+          <EditorView
+            editorTypeAndTarget={editorTypeAndTarget}
+            defaultListing={StatBlock.Default()}
+            closeEditor={() => setEditorTypeAndTarget(null)}
+            {...props}
+          />
         )}
         <SelectedItemsView
           listings={selection.selected}
@@ -93,16 +94,31 @@ export function LibraryManager(props: LibraryManagerProps) {
 }
 
 function EditorView(
-  props: LibraryManagerProps & { editorTypeAndTarget: [ListableType, Listable] }
+  props: LibraryManagerProps & {
+    editorTypeAndTarget: [ListableType, Listing<Listable>];
+    defaultListing: Listable;
+    closeEditor: () => void;
+  }
 ) {
   const [editorType, editorTarget] = props.editorTypeAndTarget;
-  return <div>{editorTarget.Name}</div>;
+  const [loadedTarget, loadTarget] = useState<Listable | null>(null);
+
+  React.useEffect(() => {
+    editorTarget
+      .GetWithTemplate(props.defaultListing)
+      .then(item => loadTarget(item));
+  }, [editorTarget]);
+
+  if (!loadedTarget) {
+    return <div>{"Loading " + editorTarget.Meta().Name}</div>;
+  }
+
+  return <div>Editor: {editorTarget.Meta().Name}</div>;
 }
 
 function LibraryManagerListings(props: {
   listingsComputed: KnockoutObservable<Listing<any>[]>;
-  defaultListing: Listable;
-  setEditorTarget: (item: Listable) => void;
+  setEditorTarget: (item: Listing<any>) => void;
 }) {
   const listings = useSubscription(props.listingsComputed);
   return (
