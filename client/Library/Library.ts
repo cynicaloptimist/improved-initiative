@@ -2,8 +2,6 @@ import * as ko from "knockout";
 
 import moment = require("moment");
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
-import { StatBlock } from "../../common/StatBlock";
-import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
