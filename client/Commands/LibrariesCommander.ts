@@ -8,7 +8,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { Library, StatBlockLibrary } from "../Library/StatBlockLibrary";
+import { Library } from "../Library/StatBlockLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";

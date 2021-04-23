@@ -9,7 +9,7 @@ import { CurrentSettings } from "../../Settings/Settings";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { Library, StatBlockLibrary } from "../StatBlockLibrary";
+import { Library } from "../StatBlockLibrary";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ExtraButton, ListingRow } from "../Components/ListingRow";
