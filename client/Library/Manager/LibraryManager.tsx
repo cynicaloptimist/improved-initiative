@@ -45,7 +45,7 @@ export function LibraryManager(props: LibraryManagerProps) {
     ),
     Spells: (
       <LibraryManagerListings
-        listingsComputed={props.libraries.Spells.GetSpells}
+        listingsComputed={props.libraries.Spells.GetListings}
         setEditorTarget={t => setEditorTypeAndTarget(["Spells", t])}
       />
     ),

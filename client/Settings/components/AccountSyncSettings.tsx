@@ -60,7 +60,7 @@ export class AccountSyncSettings extends React.Component<
           )}
           {this.syncCount(
             "Spells",
-            this.getCounts(this.props.libraries.Spells.GetSpells())
+            this.getCounts(this.props.libraries.Spells.GetListings())
           )}
           {this.syncCount(
             "Encounters",

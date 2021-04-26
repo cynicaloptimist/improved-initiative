@@ -95,7 +95,8 @@ export class TrackerViewModel {
     this.CombatantCommander.RollDice,
     this.LibrariesCommander.ReferenceSpell,
     this.LibrariesCommander.ReferenceCondition,
-    this.Libraries.Spells,
+    this.Libraries.Spells.GetListings,
+    this.LibrariesCommander.GetSpellsByNameRegex,
     this.rules
   );
 

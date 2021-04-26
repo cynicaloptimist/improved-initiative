@@ -4,7 +4,10 @@ import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
-import { probablyUniqueString } from "../../common/Toolbox";
+import {
+  concatenatedStringRegex,
+  probablyUniqueString
+} from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
@@ -152,8 +155,8 @@ export class LibrariesCommander {
     };
     this.tracker.EditSpell({
       spell: newSpell,
-      onSave: this.libraries.Spells.AddOrUpdateSpell,
-      onDelete: this.libraries.Spells.DeleteSpellById
+      onSave: this.libraries.Spells.SaveNewListing,
+      onDelete: this.libraries.Spells.DeleteListing
     });
   };
 
@@ -161,8 +164,9 @@ export class LibrariesCommander {
     listing.GetAsyncWithUpdatedId(spell => {
       this.tracker.EditSpell({
         spell: { ...Spell.Default(), ...spell },
-        onSave: this.libraries.Spells.AddOrUpdateSpell,
-        onDelete: this.libraries.Spells.DeleteSpellById
+        onSave: spell =>
+          this.libraries.Spells.SaveEditedListing(listing, spell),
+        onDelete: this.libraries.Spells.DeleteListing
       });
     });
   };
@@ -174,6 +178,14 @@ export class LibrariesCommander {
     });
     return true;
   };
+
+  public GetSpellsByNameRegex = ko.pureComputed(() =>
+    concatenatedStringRegex(
+      this.libraries.Spells.GetListings()
+        .map(s => s.Meta().Name)
+        .filter(n => n.length > 2)
+    )
+  );
 
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
     this.encounterCommander.LoadSavedEncounter(savedEncounter);

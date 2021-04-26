@@ -5,21 +5,23 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { SpellLibrary } from "../SpellLibrary";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { SpellDetails } from "../Components/SpellDetails";
+import { Library } from "../Library";
 
 export type SpellLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: SpellLibrary;
+  library: Library<Spell>;
   textEnricher: TextEnricher;
 };
 
 type SpellListing = Listing<Spell>;
 
-export class SpellLibraryReferencePane extends React.Component<SpellLibraryReferencePaneProps> {
+export class SpellLibraryReferencePane extends React.Component<
+  SpellLibraryReferencePaneProps
+> {
   constructor(props: SpellLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
@@ -28,7 +30,7 @@ export class SpellLibraryReferencePane extends React.Component<SpellLibraryRefer
   public render() {
     return (
       <LibraryReferencePane
-        listings={this.props.library.GetSpells()}
+        listings={this.props.library.GetListings()}
         renderListingRow={this.renderListingRow}
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}

@@ -9,7 +9,6 @@ import {
   toModifierString
 } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
-import { SpellLibrary } from "../Library/SpellLibrary";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules, DefaultRules } from "../Rules/Rules";
@@ -23,24 +22,20 @@ interface ReplaceConfig {
   };
 }
 
-interface SpellLookupProvider {
-  GetSpells: () => Listing<Spell>[];
-  SpellsByNameRegex: () => RegExp;
-}
-
 export class TextEnricher {
   constructor(
     private rollDice: (diceExpression: string) => void,
     private referenceSpellListing: (listing: Listing<Spell>) => void,
     private referenceCondition: (condition: string) => void,
-    private spellLibrary: SpellLookupProvider,
+    private getSpellListings: () => Listing<Spell>[],
+    private getSpellsByNameRegex: () => RegExp,
     private rules: IRules
   ) {}
 
   private referenceSpell = (spellName: string) => {
     const name = spellName.toLocaleLowerCase();
     const listing = _.find(
-      this.spellLibrary.GetSpells(),
+      this.getSpellListings(),
       s => s.Meta().Name.toLocaleLowerCase() == name
     );
     if (listing) {
@@ -92,7 +87,7 @@ export class TextEnricher {
         )
       },
       spells: {
-        pattern: this.spellLibrary.SpellsByNameRegex(),
+        pattern: this.getSpellsByNameRegex(),
         matcherFn: (rawText, processed, key) => (
           <span
             className="spell-reference"
@@ -126,10 +121,8 @@ export const TextEnricherContext = React.createContext(
     () => {},
     () => {},
     () => {},
-    {
-      GetSpells: () => [],
-      SpellsByNameRegex: () => new RegExp("$^")
-    },
+    () => [],
+    () => new RegExp("$^"),
     new DefaultRules()
   )
 );

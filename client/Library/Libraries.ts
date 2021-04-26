@@ -4,7 +4,6 @@ import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
 import { PersistentCharacterLibrary } from "./PersistentCharacterLibrary";
-import { SpellLibrary } from "./SpellLibrary";
 import { Library } from "./Library";
 import { SavedEncounter } from "../../common/SavedEncounter";
 
@@ -12,14 +11,14 @@ export interface Libraries {
   PersistentCharacters: PersistentCharacterLibrary;
   StatBlocks: Library<StatBlock>;
   Encounters: Library<SavedEncounter>;
-  Spells: SpellLibrary;
+  Spells: Library<Spell>;
 }
 
 export class AccountBackedLibraries {
   public PersistentCharacters: PersistentCharacterLibrary;
   public StatBlocks: Library<StatBlock>;
   public Encounters: Library<SavedEncounter>;
-  public Spells: SpellLibrary;
+  public Spells: Library<Spell>;
 
   constructor(accountClient: AccountClient) {
     this.PersistentCharacters = new PersistentCharacterLibrary(accountClient);
@@ -36,7 +35,12 @@ export class AccountBackedLibraries {
       getSearchHint: SavedEncounter.GetSearchHint
     });
 
-    this.Spells = new SpellLibrary(accountClient);
+    this.Spells = new Library<Spell>(Store.SavedEncounters, {
+      accountSave: accountClient.SaveSpell,
+      accountDelete: accountClient.DeleteSpell,
+      getFilterDimensions: Spell.GetFilterDimensions,
+      getSearchHint: Spell.GetSearchHint
+    });
 
     this.initializeStatBlocks(accountClient);
     this.initializeSpells();

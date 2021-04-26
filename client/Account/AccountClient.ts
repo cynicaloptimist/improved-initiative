@@ -68,7 +68,7 @@ export class AccountClient {
         messageCallback
       ),
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.Spells.GetSpells()),
+        await getUnsyncedItemsFromListings(libraries.Spells.GetListings()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
