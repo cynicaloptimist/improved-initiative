@@ -116,20 +116,29 @@ function EditorView(
   }
 
   if (editorType === "Creatures") {
+    const statBlockListing = editorTarget as Listing<StatBlock>;
     return (
       <StatBlockEditor
         statBlock={loadedTarget as StatBlock}
         editorTarget="library"
         onSave={newStatBlock =>
           props.libraries.StatBlocks.SaveEditedListing(
-            editorTarget as Listing<StatBlock>,
+            statBlockListing,
             newStatBlock
           )
         }
-        /* TODO: */
-        onDelete={undefined}
-        onSaveAsCharacter={undefined}
-        onSaveAsCopy={undefined}
+        onDelete={() =>
+          props.libraries.StatBlocks.DeleteListing(statBlockListing.Meta().Id)
+        }
+        onSaveAsCharacter={statBlock =>
+          props.libraries.StatBlocks.SaveEditedListing(
+            statBlockListing,
+            statBlock
+          )
+        }
+        onSaveAsCopy={statBlock =>
+          props.libraries.StatBlocks.SaveNewListing(statBlock)
+        }
         onClose={props.closeEditor}
       />
     );
