@@ -49,8 +49,8 @@ export class SpellLibraryReferencePane extends React.Component<
     l => ({ key: l.Meta().FilterDimensions.Type })
   ];
 
-  private renderListingRow = (l, onPreview, onPreviewOut) => {
-    const listingMeta = l.Listing();
+  private renderListingRow = (l: Listing<Spell>, onPreview, onPreviewOut) => {
+    const listingMeta = l.Meta();
     return (
       <ListingRow
         key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
