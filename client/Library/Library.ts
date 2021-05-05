@@ -2,6 +2,7 @@ import * as ko from "knockout";
 
 import moment = require("moment");
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
@@ -20,7 +21,34 @@ export class Library<T extends Listable> {
       getSearchHint: (listable: T) => string;
       getFilterDimensions: (listable: T) => FilterDimensions;
     }
-  ) {}
+  ) {
+    Store.LoadAllAndUpdateIds(storeName).then(async storedListables => {
+      if (storedListables.length > 0) {
+        const listings = storedListables.map(this.makeListing);
+        this.AddListings(listings, "localAsync");
+      } else {
+        const legacyListings = await LegacySynchronousLocalStore.LoadAllAndUpdateIds(
+          storeName
+        );
+        const listings = legacyListings.map(this.makeListing);
+        this.AddListings(listings, "localStorage");
+      }
+    });
+  }
+
+  private makeListing = (listable: T) => {
+    const { Name, Path, Id, LastUpdateMs } = { ...listable };
+    const listing: ListingMeta = {
+      Name,
+      Path,
+      Id,
+      LastUpdateMs,
+      SearchHint: this.callbacks.getSearchHint(listable),
+      FilterDimensions: this.callbacks.getFilterDimensions(listable),
+      Link: this.storeName
+    };
+    return listing;
+  };
 
   public AddListings = (listings: ListingMeta[], source: ListingOrigin) => {
     ko.utils.arrayPushAll<Listing<T>>(

@@ -7,6 +7,7 @@ import { Library } from "./Library";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { now } from "moment";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -103,68 +104,25 @@ export class AccountBackedLibraries {
       }
     );
 
-    this.initializeStatBlocks(accountClient);
+    this.initializeStatBlocks();
     this.initializeSpells();
   }
 
-  private initializeStatBlocks = async (accountClient: AccountClient) => {
+  private initializeStatBlocks = () => {
     $.ajax("../statblocks/").done(listings => {
       if (!listings) {
         return;
       }
       return this.StatBlocks.AddListings(listings, "server");
     });
-
-    const localStatBlocks = await Store.LoadAllAndUpdateIds(Store.StatBlocks);
-    const listings = localStatBlocks.map(savedStatBlock => {
-      const statBlock = {
-        ...StatBlock.Default(),
-        ...savedStatBlock
-      };
-
-      const listing: ListingMeta = {
-        Id: statBlock.Id,
-        Name: statBlock.Name,
-        Path: statBlock.Path,
-        SearchHint: StatBlock.GetSearchHint(statBlock),
-        FilterDimensions: StatBlock.FilterDimensions(statBlock),
-        Link: Store.StatBlocks,
-        LastUpdateMs: statBlock.LastUpdateMs || 0
-      };
-
-      return listing;
-    });
-    this.StatBlocks.AddListings(listings, "localAsync");
-    await accountClient.SaveAllUnsyncedItems(this, () => {});
   };
 
-  private initializeSpells = async () => {
+  private initializeSpells = () => {
     $.ajax("../spells/").done(listings => {
       if (!listings) {
         return;
       }
       return this.Spells.AddListings(listings, "server");
     });
-
-    const localSpells = await Store.LoadAllAndUpdateIds(Store.Spells);
-    const newListings = localSpells.map(savedSpell => {
-      const spell = {
-        ...Spell.Default(),
-        ...savedSpell
-      };
-      const listing: ListingMeta = {
-        Id: savedSpell.Id,
-        Name: spell.Name,
-        Path: spell.Path,
-        SearchHint: Spell.GetSearchHint(spell),
-        FilterDimensions: Spell.GetFilterDimensions(spell),
-        Link: Store.Spells,
-        LastUpdateMs: spell.LastUpdateMs || 0
-      };
-
-      return listing;
-    });
-
-    this.Spells.AddListings(newListings, "localAsync");
   };
 }
