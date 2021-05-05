@@ -1,4 +1,6 @@
+import * as ko from "knockout";
 import * as _ from "lodash";
+
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
@@ -20,7 +22,6 @@ import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "../Prompts/SpellPrompt";
 import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 import { SavedEncounter } from "../../common/SavedEncounter";
-import { Encounter } from "../Encounter/Encounter";
 
 export class LibrariesCommander {
   constructor(
@@ -65,7 +66,7 @@ export class LibrariesCommander {
     );
     this.tracker.Encounter.AddCombatantFromPersistentCharacter(
       character,
-      this.libraries.PersistentCharacters,
+      this.libraries.UpdatePersistentCharacter,
       hideOnAdd
     );
     Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
@@ -125,7 +126,7 @@ export class LibrariesCommander {
     });
   };
 
-  public CreatePersistentCharacter = () => {
+  public CreatePersistentCharacter = async () => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -134,7 +135,7 @@ export class LibrariesCommander {
     statBlock.Id = newId;
 
     const persistentCharacter = PersistentCharacter.Initialize(statBlock);
-    return this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+    return await this.libraries.PersistentCharacters.SaveNewListing(
       persistentCharacter
     );
   };
@@ -240,8 +241,6 @@ export class LibrariesCommander {
 
   private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {
     const persistentCharacter = PersistentCharacter.Initialize(statBlock);
-    this.libraries.PersistentCharacters.AddNewPersistentCharacter(
-      persistentCharacter
-    );
+    this.libraries.PersistentCharacters.SaveNewListing(persistentCharacter);
   };
 }

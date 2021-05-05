@@ -17,10 +17,6 @@ import {
 } from "../Combatant/GetOrRollMaximumHP";
 import { ToPlayerViewCombatantState } from "../Combatant/ToPlayerViewCombatantState";
 import { env } from "../Environment";
-import {
-  PersistentCharacterLibrary,
-  PersistentCharacterUpdater
-} from "../Library/PersistentCharacterLibrary";
 import { PlayerViewClient } from "../PlayerView/PlayerViewClient";
 import { IRules } from "../Rules/Rules";
 import { CurrentSettings } from "../Settings/Settings";
@@ -30,6 +26,8 @@ import {
   EncounterDifficulty
 } from "../Widgets/DifficultyCalculator";
 import { EncounterFlow } from "./EncounterFlow";
+import { Library } from "../Library/Library";
+import { UpdatePersistentCharacter } from "../Library/Libraries";
 
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
@@ -207,7 +205,7 @@ export class Encounter {
 
   public AddCombatantFromPersistentCharacter(
     persistentCharacter: PersistentCharacter,
-    library: PersistentCharacterUpdater,
+    updatePersistentCharacter: UpdatePersistentCharacter,
     hideOnAdd = false
   ): Combatant | null {
     if (!this.CanAddCombatant(persistentCharacter.Id)) {
@@ -234,7 +232,7 @@ export class Encounter {
 
     const combatant = this.AddCombatantFromState(initialState);
 
-    combatant.AttachToPersistentCharacterLibrary(library);
+    combatant.AttachToPersistentCharacterLibrary(updatePersistentCharacter);
 
     return combatant;
   }
@@ -373,7 +371,8 @@ export class Encounter {
 
   public LoadEncounterState = (
     encounterState: EncounterState<CombatantState>,
-    persistentCharacterLibrary: PersistentCharacterLibrary
+    updatePersistentCharacter: UpdatePersistentCharacter,
+    persistentCharacterLibrary: Library<PersistentCharacter>
   ) => {
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,
@@ -383,15 +382,17 @@ export class Encounter {
       const combatant = this.AddCombatantFromState(savedCombatant);
 
       if (combatant.PersistentCharacterId !== null) {
-        const persistentCharacter = await persistentCharacterLibrary.GetPersistentCharacter(
+        const persistentCharacterListing = await persistentCharacterLibrary.GetOrCreateListingById(
           combatant.PersistentCharacterId
         );
+        const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
+          PersistentCharacter.Default()
+        );
+
         combatant.StatBlock(persistentCharacter.StatBlock);
         combatant.CurrentHP(persistentCharacter.CurrentHP);
         combatant.CurrentNotes(persistentCharacter.Notes);
-        combatant.AttachToPersistentCharacterLibrary(
-          persistentCharacterLibrary
-        );
+        combatant.AttachToPersistentCharacterLibrary(updatePersistentCharacter);
       }
     });
 

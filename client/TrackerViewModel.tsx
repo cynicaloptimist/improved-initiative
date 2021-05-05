@@ -152,9 +152,14 @@ export class TrackerViewModel {
     newStatBlock?: StatBlock
   ) {
     this.StatBlockEditorProps(null);
-    const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
-      persistentCharacterId
+    const persistentCharacterListing = await this.Libraries.PersistentCharacters.GetOrCreateListingById(
+      persistentCharacterId,
     );
+
+    const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
+
     const hpDown =
       persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
 
@@ -168,7 +173,7 @@ export class TrackerViewModel {
           hpDown
         ),
       onDelete: () =>
-        this.Libraries.PersistentCharacters.DeletePersistentCharacter(
+        this.Libraries.PersistentCharacters.DeleteListing(
           persistentCharacterId
         ),
       onClose: () => this.StatBlockEditorProps(null),
@@ -181,13 +186,10 @@ export class TrackerViewModel {
     updatedStatBlock: StatBlock,
     hpDifference?: number
   ) {
-    this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
-      persistentCharacterId,
-      {
-        StatBlock: updatedStatBlock,
-        CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
-      }
-    );
+    this.Libraries.UpdatePersistentCharacter(persistentCharacterId, {
+      StatBlock: updatedStatBlock,
+      CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
+    });
     this.Encounter.UpdatePersistentCharacterStatBlock(
       persistentCharacterId,
       updatedStatBlock
@@ -284,7 +286,7 @@ export class TrackerViewModel {
               const persistentCharacter = PersistentCharacter.Initialize(
                 statBlock
               );
-              this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+              this.Libraries.PersistentCharacters.SaveNewListing(
                 persistentCharacter
               );
             },
@@ -384,9 +386,7 @@ export class TrackerViewModel {
           ...statBlock
         });
         persistentCharacter.Path = "Sample Player Characters";
-        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
-          persistentCharacter
-        );
+        this.Libraries.PersistentCharacters.SaveNewListing(persistentCharacter);
       });
     });
   };
@@ -400,6 +400,7 @@ export class TrackerViewModel {
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
         UpdateLegacyEncounterState(autosavedEncounter),
+        this.Libraries.UpdatePersistentCharacter,
         this.Libraries.PersistentCharacters
       );
     }

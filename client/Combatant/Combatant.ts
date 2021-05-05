@@ -4,7 +4,7 @@ import { CombatantState, TagState } from "../../common/CombatantState";
 import { InitiativeSpecialRoll, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
-import { PersistentCharacterUpdater } from "../Library/PersistentCharacterLibrary";
+import { UpdatePersistentCharacter } from "../Library/Libraries";
 import { CurrentSettings } from "../Settings/Settings";
 import { TutorialSpy } from "../Tutorial/TutorialSpy";
 import { Metrics } from "../Utility/Metrics";
@@ -92,7 +92,7 @@ export class Combatant {
   }
 
   public AttachToPersistentCharacterLibrary(
-    library: PersistentCharacterUpdater
+    updatePersistentCharacter: UpdatePersistentCharacter
   ) {
     const persistentCharacterId = this.PersistentCharacterId;
     if (persistentCharacterId == null) {
@@ -100,13 +100,13 @@ export class Combatant {
     }
 
     this.CurrentHP.subscribe(async c => {
-      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+      return await updatePersistentCharacter(persistentCharacterId, {
         CurrentHP: c
       });
     });
 
     this.CurrentNotes.subscribe(async n => {
-      return await library.UpdatePersistentCharacter(persistentCharacterId, {
+      return await updatePersistentCharacter(persistentCharacterId, {
         Notes: n
       });
     });

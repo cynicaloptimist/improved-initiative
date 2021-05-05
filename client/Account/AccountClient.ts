@@ -152,9 +152,12 @@ function emptyPromise(): JQuery.jqXHR {
   return d;
 }
 
-function saveEntity<T extends object>(entity: T, entityType: string) {
+function saveEntity<T extends object>(
+  entity: T,
+  entityType: string
+): Promise<T | null> {
   if (!env.HasStorage) {
-    return Promise.resolve(false);
+    return Promise.resolve(null);
   }
 
   const saveOperation = retry.operation({ retries: 3 });
@@ -167,13 +170,13 @@ function saveEntity<T extends object>(entity: T, entityType: string) {
         data: JSON.stringify(entity),
         contentType: "application/json"
       })
-        .done(() => resolve(true))
+        .done(() => resolve(entity))
         .fail((_, err) => {
           if (saveOperation.retry(new Error(err))) {
             return;
           }
           console.warn(`Failed to save ${entityType}: ${err}`);
-          resolve(false);
+          resolve(null);
         });
     });
   });

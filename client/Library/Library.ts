@@ -12,6 +12,8 @@ export class Library<T extends Listable> {
 
   constructor(
     private storeName: string,
+    private accountRoute: string,
+    private create: () => T,
     private callbacks: {
       accountSave: (listable: T) => any;
       accountDelete: (listableId: string) => any;
@@ -28,6 +30,19 @@ export class Library<T extends Listable> {
       })
     );
   };
+
+  public async GetOrCreateListingById(listingId: string): Promise<Listing<T>> {
+    const template: T = {
+      ...this.create(),
+      Id: listingId
+    };
+    const currentListing = this.listings().find(l => l.Meta().Id === listingId);
+    if (currentListing) {
+      return currentListing;
+    }
+    const newListing = await this.SaveNewListing(template);
+    return newListing;
+  }
 
   public DeleteListing = async (id: string) => {
     this.listings.remove(s => s.Meta().Id == id);
@@ -47,20 +62,22 @@ export class Library<T extends Listable> {
 
     const saveResult = await this.callbacks.accountSave(newListable);
     if (!saveResult || listing.Origin === "account") {
-      return;
+      return listing;
     }
     const accountListing = new Listing<T>(
       {
         ...newListable,
         SearchHint: this.callbacks.getSearchHint(newListable),
         FilterDimensions: this.callbacks.getFilterDimensions(newListable),
-        Link: `/my/statblocks/${newListable.Id}`,
+        Link: `/my/${this.accountRoute}/${newListable.Id}`,
         LastUpdateMs: moment.now()
       },
       "account",
       newListable
     );
     this.listings.push(accountListing);
+
+    return listing;
   };
 
   public SaveEditedListing = async (listing: Listing<T>, newListable: T) => {
@@ -77,14 +94,16 @@ export class Library<T extends Listable> {
   };
 
   public SaveNewListing = async (newListable: T) => {
-    const oldStatBlocks = this.GetListings().filter(
+    const oldListings = this.GetListings().filter(
       l =>
         l.Origin === "localAsync" &&
         l.Meta().Path + l.Meta().Name == newListable.Path + newListable.Name
     );
     const listing = new Listing<T>(
       {
-        ...newListable,
+        Id: newListable.Id,
+        Path: newListable.Path,
+        Name: newListable.Name,
         SearchHint: this.callbacks.getSearchHint(newListable),
         FilterDimensions: this.callbacks.getFilterDimensions(newListable),
         Link: this.storeName,
@@ -92,11 +111,12 @@ export class Library<T extends Listable> {
       },
       "localAsync"
     );
-    await this.saveListing(listing, newListable);
+    const savedListing = await this.saveListing(listing, newListable);
 
-    for (const statBlock of oldStatBlocks) {
-      await this.DeleteListing(statBlock.Meta().Id);
+    for (const listing of oldListings) {
+      await this.DeleteListing(listing.Meta().Id);
     }
+
+    return savedListing;
   };
 }
-

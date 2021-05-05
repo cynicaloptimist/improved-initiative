@@ -7,14 +7,14 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
+import { Library } from "../Library";
 
 export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: PersistentCharacterLibrary;
+  library: Library<PersistentCharacter>;
   statBlockTextEnricher: TextEnricher;
 };
 
@@ -46,13 +46,11 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
     const subscription = l.Meta.subscribe(() => {
       this.forceUpdate(() => subscription.dispose());
     });
-    this.props.librariesCommander.EditPersistentCharacterStatBlock(
-      l.Meta().Id
-    );
+    this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Meta().Id);
   };
 
-  private createAndEditStatBlock = () => {
-    const listing = this.props.librariesCommander.CreatePersistentCharacter();
+  private createAndEditStatBlock = async () => {
+    const listing = await this.props.librariesCommander.CreatePersistentCharacter();
     this.editStatBlock(listing);
   };
 
