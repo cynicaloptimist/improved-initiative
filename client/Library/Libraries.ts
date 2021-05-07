@@ -1,4 +1,3 @@
-import { ListingMeta } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
@@ -7,7 +6,6 @@ import { Library } from "./Library";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { now } from "moment";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
