@@ -28,31 +28,34 @@ export function LibraryManager(props: LibraryManagerProps) {
     [LibraryType, Listing<Listable>] | null
   >(null);
 
+  const setEditorTarget = React.useCallback(
+    (target: Listing<Listable>) => setEditorTypeAndTarget([activeTab, target]),
+    [activeTab]
+  );
+
   const pageComponentsByTab: Record<LibraryType, JSX.Element> = {
     StatBlocks: (
       <LibraryManagerListings
         listingsComputed={props.libraries.StatBlocks.GetListings}
-        setEditorTarget={t => setEditorTypeAndTarget(["StatBlocks", t])}
+        setEditorTarget={setEditorTarget}
       />
     ),
     PersistentCharacters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
-        setEditorTarget={t =>
-          setEditorTypeAndTarget(["PersistentCharacters", t])
-        }
+        setEditorTarget={setEditorTarget}
       />
     ),
     Spells: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Spells.GetListings}
-        setEditorTarget={t => setEditorTypeAndTarget(["Spells", t])}
+        setEditorTarget={setEditorTarget}
       />
     ),
     Encounters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.Encounters.GetListings}
-        setEditorTarget={t => setEditorTypeAndTarget(["Encounters", t])}
+        setEditorTarget={setEditorTarget}
       />
     )
   };
