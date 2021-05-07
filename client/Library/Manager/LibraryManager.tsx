@@ -28,6 +28,55 @@ export function LibraryManager(props: LibraryManagerProps) {
     [LibraryType, Listing<Listable>] | null
   >(null);
 
+  const activeTabComponent = renderActiveTabComponent(
+    setEditorTypeAndTarget,
+    activeTab,
+    props
+  );
+
+  return (
+    <SelectionContext.Provider value={selection}>
+      <div style={{ display: "flex", flexFlow: "row" }}>
+        <div style={{ width: columnWidth }}>
+          <Tabs
+            optionNamesById={LibraryFriendlyNames}
+            selected={activeTab}
+            onChoose={tab => setActiveTab(tab)}
+          />
+          {activeTabComponent}
+        </div>
+        <VerticalResizer
+          adjustWidth={offset => setColumnWidth(columnWidth + offset)}
+        />
+        {editorTypeAndTarget && (
+          <EditorView
+            key={editorTypeAndTarget[1].Meta().Id}
+            editorTypeAndTarget={editorTypeAndTarget}
+            defaultListing={StatBlock.Default()}
+            closeEditor={() => setEditorTypeAndTarget(null)}
+            {...props}
+          />
+        )}
+        <SelectedItemsView
+          listings={selection.selected}
+          friendlyName={LibraryFriendlyNames[activeTab]}
+          defaultListing={StatBlock.Default()}
+          renderListing={statBlock => (
+            <div style={{ width: 600 }}>
+              <StatBlockComponent displayMode="default" statBlock={statBlock} />
+            </div>
+          )}
+        />
+      </div>
+    </SelectionContext.Provider>
+  );
+}
+
+function renderActiveTabComponent(
+  setEditorTypeAndTarget: (v: [LibraryType, Listing<Listable>]) => void,
+  activeTab: LibraryType,
+  props: LibraryManagerProps
+) {
   const setEditorTarget = React.useCallback(
     (target: Listing<Listable>) => setEditorTypeAndTarget([activeTab, target]),
     [activeTab]
@@ -60,42 +109,8 @@ export function LibraryManager(props: LibraryManagerProps) {
     )
   };
 
-  return (
-    <SelectionContext.Provider value={selection}>
-      <div style={{ display: "flex", flexFlow: "row" }}>
-        <div style={{ width: columnWidth }}>
-          <Tabs
-            optionNamesById={LibraryFriendlyNames}
-            selected={activeTab}
-            onChoose={tab => setActiveTab(tab)}
-          />
-          {pageComponentsByTab[activeTab]}
-        </div>
-        <VerticalResizer
-          adjustWidth={offset => setColumnWidth(columnWidth + offset)}
-        />
-        {editorTypeAndTarget && (
-          <EditorView
-            key={editorTypeAndTarget[1].Meta().Id}
-            editorTypeAndTarget={editorTypeAndTarget}
-            defaultListing={StatBlock.Default()}
-            closeEditor={() => setEditorTypeAndTarget(null)}
-            {...props}
-          />
-        )}
-        <SelectedItemsView
-          listings={selection.selected}
-          friendlyName={LibraryFriendlyNames[activeTab]}
-          defaultListing={StatBlock.Default()}
-          renderListing={statBlock => (
-            <div style={{ width: 600 }}>
-              <StatBlockComponent displayMode="default" statBlock={statBlock} />
-            </div>
-          )}
-        />
-      </div>
-    </SelectionContext.Provider>
-  );
+  const activeTabComponent = pageComponentsByTab[activeTab];
+  return activeTabComponent;
 }
 
 function EditorView(
