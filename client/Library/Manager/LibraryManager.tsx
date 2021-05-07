@@ -9,7 +9,7 @@ import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { Libraries } from "../Libraries";
+import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { LibraryManagerRow } from "./LibraryManagerRow";
 import { SelectionContext, useSelection } from "./SelectionContext";
@@ -20,27 +20,27 @@ type LibraryManagerProps = {
   libraries: Libraries;
 };
 
-type ListableType = "Creatures" | "Characters" | "Spells" | "Encounters";
-
 export function LibraryManager(props: LibraryManagerProps) {
-  const [activeTab, setActiveTab] = useState<ListableType>("Creatures");
+  const [activeTab, setActiveTab] = useState<LibraryType>("StatBlocks");
   const [columnWidth, setColumnWidth] = useState(500);
   const selection = useSelection<Listing<any>>();
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
-    [ListableType, Listing<Listable>] | null
+    [LibraryType, Listing<Listable>] | null
   >(null);
 
-  const pageComponentsByTab: Record<ListableType, JSX.Element> = {
-    Creatures: (
+  const pageComponentsByTab: Record<LibraryType, JSX.Element> = {
+    StatBlocks: (
       <LibraryManagerListings
         listingsComputed={props.libraries.StatBlocks.GetListings}
-        setEditorTarget={t => setEditorTypeAndTarget(["Creatures", t])}
+        setEditorTarget={t => setEditorTypeAndTarget(["StatBlocks", t])}
       />
     ),
-    Characters: (
+    PersistentCharacters: (
       <LibraryManagerListings
         listingsComputed={props.libraries.PersistentCharacters.GetListings}
-        setEditorTarget={t => setEditorTypeAndTarget(["Characters", t])}
+        setEditorTarget={t =>
+          setEditorTypeAndTarget(["PersistentCharacters", t])
+        }
       />
     ),
     Spells: (
@@ -62,9 +62,9 @@ export function LibraryManager(props: LibraryManagerProps) {
       <div style={{ display: "flex", flexFlow: "row" }}>
         <div style={{ width: columnWidth }}>
           <Tabs
-            options={Object.keys(pageComponentsByTab) as ListableType[]}
+            optionNamesById={LibraryFriendlyNames}
             selected={activeTab}
-            onChoose={setActiveTab}
+            onChoose={tab => setActiveTab(tab)}
           />
           {pageComponentsByTab[activeTab]}
         </div>
@@ -97,7 +97,7 @@ export function LibraryManager(props: LibraryManagerProps) {
 
 function EditorView(
   props: LibraryManagerProps & {
-    editorTypeAndTarget: [ListableType, Listing<Listable>];
+    editorTypeAndTarget: [LibraryType, Listing<Listable>];
     defaultListing: Listable;
     closeEditor: () => void;
   }
@@ -115,7 +115,7 @@ function EditorView(
     return <div>{"Loading " + editorTarget.Meta().Name}</div>;
   }
 
-  if (editorType === "Creatures") {
+  if (editorType === "StatBlocks") {
     const statBlockListing = editorTarget as Listing<StatBlock>;
     return (
       <StatBlockEditor

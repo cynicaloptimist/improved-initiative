@@ -1,18 +1,18 @@
 import * as React from "react";
 
-export function Tabs<T>(props: {
-  options: T[];
+export function Tabs<T extends string>(props: {
+  optionNamesById: Record<T, string>;
   selected?: T;
   onChoose: (option: T) => void;
 }) {
-  const buttonElements = props.options.map((option, i) => (
+  const buttonElements = Object.keys(props.optionNamesById).map((key: T, i) => (
     <button
       type="button"
-      key={i}
-      className={props.selected == option ? "c-tab s-selected" : "c-tab"}
-      onClick={() => props.onChoose(option)}
+      key={key}
+      className={props.selected == key ? "c-tab s-selected" : "c-tab"}
+      onClick={() => props.onChoose(key)}
     >
-      {option}
+      {props.optionNamesById[key]}
     </button>
   ));
 

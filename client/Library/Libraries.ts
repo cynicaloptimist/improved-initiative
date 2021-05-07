@@ -12,6 +12,14 @@ export type UpdatePersistentCharacter = (
   updates: Partial<PersistentCharacter>
 ) => void;
 
+export const LibraryFriendlyNames = {
+  StatBlocks: "Creatures",
+  PersistentCharacters: "Characters",
+  Encounters: "Encounters",
+  Spells: "Spells"
+};
+export type LibraryType = keyof typeof LibraryFriendlyNames;
+
 export interface Libraries {
   PersistentCharacters: Library<PersistentCharacter>;
   UpdatePersistentCharacter: UpdatePersistentCharacter;

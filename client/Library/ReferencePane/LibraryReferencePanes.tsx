@@ -5,7 +5,7 @@ import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialSpy";
-import { Libraries } from "../Libraries";
+import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { EncounterLibraryReferencePane } from "./EncounterLibraryReferencePane";
 import { PersistentCharacterLibraryReferencePane } from "./PersistentCharacterLibraryReferencePane";
 import { SpellLibraryReferencePane } from "./SpellLibraryReferencePane";
@@ -18,35 +18,38 @@ export interface LibraryReferencePanesProps {
 }
 
 interface State {
-  selectedLibrary: string;
+  selectedLibrary: LibraryType;
 }
 
-export class LibraryReferencePanes extends React.Component<LibraryReferencePanesProps, State> {
+export class LibraryReferencePanes extends React.Component<
+  LibraryReferencePanesProps,
+  State
+> {
   constructor(props) {
     super(props);
     this.state = {
-      selectedLibrary: "Creatures"
+      selectedLibrary: "StatBlocks"
     };
   }
 
   private hideLibraries = () => this.props.librariesCommander.HideLibraries();
-  private selectLibrary = (library: string) => {
-    if (library == "Characters") {
+  private selectLibrary = (library: LibraryType) => {
+    if (library == "PersistentCharacters") {
       TutorialSpy("SelectCharactersTab");
     }
     this.setState({ selectedLibrary: library });
   };
 
   public render() {
-    const libraries = {
-      Creatures: (
+    const libraries: Record<LibraryType, JSX.Element> = {
+      StatBlocks: (
         <StatBlockLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.StatBlocks}
           statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
-      Characters: (
+      PersistentCharacters: (
         <PersistentCharacterLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.PersistentCharacters}
@@ -88,7 +91,7 @@ export class LibraryReferencePanes extends React.Component<LibraryReferencePanes
           />
         </div>
         <Tabs
-          options={Object.keys(libraries)}
+          optionNamesById={LibraryFriendlyNames}
           onChoose={this.selectLibrary}
           selected={this.state.selectedLibrary}
         />
