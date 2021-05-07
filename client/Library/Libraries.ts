@@ -11,6 +11,7 @@ export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
   updates: Partial<PersistentCharacter>
 ) => void;
+
 export interface Libraries {
   PersistentCharacters: Library<PersistentCharacter>;
   UpdatePersistentCharacter: UpdatePersistentCharacter;
