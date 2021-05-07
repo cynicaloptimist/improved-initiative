@@ -85,7 +85,7 @@ export function LibraryManager(props: LibraryManagerProps) {
         )}
         <SelectedItemsView
           listings={selection.selected}
-          friendlyName="Statblocks"
+          friendlyName={LibraryFriendlyNames[activeTab]}
           defaultListing={StatBlock.Default()}
           renderListing={statBlock => (
             <div style={{ width: 600 }}>
