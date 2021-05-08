@@ -8,12 +8,17 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
-import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import {
+  GetDefaultForLibrary,
+  Libraries,
+  LibraryFriendlyNames,
+  LibraryType
+} from "../Libraries";
 import { Listing } from "../Listing";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
 import { SelectedItemsView } from "./SelectedItemsView";
-import { SelectionContext, useSelection } from "./SelectionContext";
+import { Selection, SelectionContext, useSelection } from "./SelectionContext";
 
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
@@ -33,6 +38,11 @@ export function LibraryManager(props: LibraryManagerProps) {
     setEditorTypeAndTarget,
     activeTab,
     props
+  );
+
+  const selectedItemsComponent = renderSelectedItemsComponent(
+    selection,
+    activeTab
   );
 
   return (
@@ -57,16 +67,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             {...props}
           />
         )}
-        <SelectedItemsView
-          listings={selection.selected}
-          friendlyName={LibraryFriendlyNames[activeTab]}
-          defaultListing={StatBlock.Default()}
-          renderListing={statBlock => (
-            <div style={{ width: 600 }}>
-              <StatBlockComponent displayMode="default" statBlock={statBlock} />
-            </div>
-          )}
-        />
+        {selectedItemsComponent}
       </div>
     </SelectionContext.Provider>
   );
@@ -125,4 +126,30 @@ function LibraryManagerListings(props: {
       ))}
     </div>
   );
+}
+
+function renderSelectedItemsComponent(
+  selection: Selection<Listing<any>>,
+  activeTab: LibraryType
+) {
+  const partialViewProps = {
+    listings: selection.selected,
+    friendlyName: LibraryFriendlyNames[activeTab],
+    defaultListing: GetDefaultForLibrary(activeTab)
+  };
+
+  if (activeTab === "StatBlocks") {
+    return (
+      <SelectedItemsView
+        {...partialViewProps}
+        renderListing={statBlock => (
+          <div style={{ width: 600 }}>
+            <StatBlockComponent displayMode="default" statBlock={statBlock} />
+          </div>
+        )}
+      />
+    );
+  }
+
+  return null;
 }
