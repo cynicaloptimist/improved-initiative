@@ -53,7 +53,6 @@ export function LibraryManager(props: LibraryManagerProps) {
           <EditorView
             key={editorTypeAndTarget[1].Meta().Id}
             editorTypeAndTarget={editorTypeAndTarget}
-            defaultListing={StatBlock.Default()}
             closeEditor={() => setEditorTypeAndTarget(null)}
             {...props}
           />

@@ -20,6 +20,23 @@ export const LibraryFriendlyNames = {
 };
 export type LibraryType = keyof typeof LibraryFriendlyNames;
 
+export function GetDefaultForLibrary(libraryType: LibraryType) {
+  if (libraryType === "StatBlocks") {
+    return StatBlock.Default();
+  }
+  if (libraryType === "PersistentCharacters") {
+    return PersistentCharacter.Default();
+  }
+  if (libraryType === "Encounters") {
+    return SavedEncounter.Default();
+  }
+  if (libraryType === "Spells") {
+    return Spell.Default();
+  }
+
+  return null;
+}
+
 export interface Libraries {
   PersistentCharacters: Library<PersistentCharacter>;
   UpdatePersistentCharacter: UpdatePersistentCharacter;

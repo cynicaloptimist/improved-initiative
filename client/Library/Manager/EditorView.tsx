@@ -3,24 +3,22 @@ import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { StatBlock } from "../../../common/StatBlock";
 import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
-import { LibraryType } from "../Libraries";
+import { GetDefaultForLibrary, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { LibraryManagerProps } from "./LibraryManager";
 
 export function EditorView(
   props: LibraryManagerProps & {
     editorTypeAndTarget: [LibraryType, Listing<Listable>];
-    defaultListing: Listable;
     closeEditor: () => void;
   }
 ) {
   const [editorType, editorTarget] = props.editorTypeAndTarget;
   const [loadedTarget, loadTarget] = useState<Listable | null>(null);
+  const defaultListing = GetDefaultForLibrary(editorType);
 
   React.useEffect(() => {
-    editorTarget
-      .GetWithTemplate(props.defaultListing)
-      .then(item => loadTarget(item));
+    editorTarget.GetWithTemplate(defaultListing).then(item => loadTarget(item));
   }, [editorTarget]);
 
   if (!loadedTarget) {
