@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
+import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { SavedEncounter } from "../../../common/SavedEncounter";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
@@ -8,6 +10,7 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { DifficultyCalculator } from "../../Widgets/DifficultyCalculator";
 import {
   GetDefaultForLibrary,
   Libraries,
@@ -142,11 +145,53 @@ function renderSelectedItemsComponent(
     return (
       <SelectedItemsView
         {...partialViewProps}
-        renderListing={statBlock => (
+        renderListing={(listing: StatBlock) => (
           <div style={{ width: 600 }}>
-            <StatBlockComponent displayMode="default" statBlock={statBlock} />
+            <StatBlockComponent displayMode="default" statBlock={listing} />
           </div>
         )}
+      />
+    );
+  }
+
+  if (activeTab === "PersistentCharacters") {
+    return (
+      <SelectedItemsView
+        {...partialViewProps}
+        renderListing={(listing: PersistentCharacter) => (
+          <div style={{ width: 600 }}>
+            <StatBlockComponent
+              displayMode="default"
+              statBlock={listing.StatBlock}
+            />
+          </div>
+        )}
+      />
+    );
+  }
+
+  if (activeTab === "Encounters") {
+    return (
+      <SelectedItemsView
+        {...partialViewProps}
+        renderListing={(listing: SavedEncounter) => {
+          const encounterDifficulty = DifficultyCalculator.Calculate(
+            listing.Combatants.map(c => c.StatBlock.Challenge),
+            []
+          );
+
+          return (
+            <div style={{ width: 600 }}>
+              <h2>{listing.Name}</h2>
+              <div>XP: {encounterDifficulty.EarnedExperience}</div>
+              {listing.Combatants.map(c => (
+                <div key={c.Id}>
+                  <span>{c.StatBlock.Name}</span>
+                </div>
+              ))}
+            </div>
+          );
+        }}
       />
     );
   }
