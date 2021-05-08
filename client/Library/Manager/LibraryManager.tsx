@@ -28,7 +28,7 @@ export function LibraryManager(props: LibraryManagerProps) {
     [LibraryType, Listing<Listable>] | null
   >(null);
 
-  const activeTabComponent = renderActiveTabComponent(
+  const activeListingsComponent = renderActiveListingsComponent(
     setEditorTypeAndTarget,
     activeTab,
     props
@@ -43,7 +43,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             selected={activeTab}
             onChoose={tab => setActiveTab(tab)}
           />
-          {activeTabComponent}
+          {activeListingsComponent}
         </div>
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
@@ -72,7 +72,7 @@ export function LibraryManager(props: LibraryManagerProps) {
   );
 }
 
-function renderActiveTabComponent(
+function renderActiveListingsComponent(
   setEditorTypeAndTarget: (v: [LibraryType, Listing<Listable>]) => void,
   activeTab: LibraryType,
   props: LibraryManagerProps
