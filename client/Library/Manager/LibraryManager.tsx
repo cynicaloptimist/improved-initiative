@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { SavedEncounter } from "../../../common/SavedEncounter";
+import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
@@ -32,7 +33,14 @@ export type LibraryManagerProps = {
 export function LibraryManager(props: LibraryManagerProps) {
   const [activeTab, setActiveTab] = useState<LibraryType>("StatBlocks");
   const [columnWidth, setColumnWidth] = useState(500);
-  const selection = useSelection<Listing<any>>();
+  const selectionsByTab: Record<LibraryType, Selection<Listing<Listable>>> = {
+    StatBlocks: useSelection<Listing<StatBlock>>(),
+    PersistentCharacters: useSelection<Listing<PersistentCharacter>>(),
+    Encounters: useSelection<Listing<SavedEncounter>>(),
+    Spells: useSelection<Listing<Spell>>()
+  };
+  const selection = selectionsByTab[activeTab];
+
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
     [LibraryType, Listing<Listable>] | null
   >(null);
@@ -136,7 +144,7 @@ function renderSelectedItemsComponent(
   activeTab: LibraryType
 ) {
   const partialViewProps = {
-    listings: selection.selected,
+    listings: selection.selected || [],
     friendlyName: LibraryFriendlyNames[activeTab],
     defaultListing: GetDefaultForLibrary(activeTab)
   };
