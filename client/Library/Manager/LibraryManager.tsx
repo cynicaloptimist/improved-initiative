@@ -144,6 +144,7 @@ function renderSelectedItemsComponent(
   activeTab: LibraryType
 ) {
   const partialViewProps = {
+    key: activeTab,
     listings: selection.selected || [],
     friendlyName: LibraryFriendlyNames[activeTab],
     defaultListing: GetDefaultForLibrary(activeTab)
