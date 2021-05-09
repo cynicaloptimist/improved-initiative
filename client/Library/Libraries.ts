@@ -117,7 +117,7 @@ export class AccountBackedLibraries {
     );
 
     this.Spells = new Library<Spell>(
-      Store.SavedEncounters,
+      Store.Spells,
       "spells",
       Spell.Default,
       {
