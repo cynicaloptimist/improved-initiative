@@ -84,6 +84,23 @@ export function LibraryManager(props: LibraryManagerProps) {
   );
 }
 
+function activeLibrary(libraries: Libraries, libraryType: LibraryType) {
+  if (libraryType === "StatBlocks") {
+    return libraries.StatBlocks;
+  }
+  if (libraryType === "PersistentCharacters") {
+    return libraries.PersistentCharacters;
+  }
+  if (libraryType === "Encounters") {
+    return libraries.Encounters;
+  }
+  if (libraryType === "Spells") {
+    return libraries.Spells;
+  }
+
+  return null;
+}
+
 function renderActiveListingsComponent(
   setEditorTypeAndTarget: (v: [LibraryType, Listing<Listable>]) => void,
   activeTab: LibraryType,
@@ -94,35 +111,12 @@ function renderActiveListingsComponent(
     [activeTab]
   );
 
-  const pageComponentsByTab: Record<LibraryType, JSX.Element> = {
-    StatBlocks: (
+  return (
       <LibraryManagerListings
-        listingsComputed={props.libraries.StatBlocks.GetListings}
+      listingsComputed={activeLibrary(props.libraries, activeTab).GetListings}
         setEditorTarget={setEditorTarget}
       />
-    ),
-    PersistentCharacters: (
-      <LibraryManagerListings
-        listingsComputed={props.libraries.PersistentCharacters.GetListings}
-        setEditorTarget={setEditorTarget}
-      />
-    ),
-    Spells: (
-      <LibraryManagerListings
-        listingsComputed={props.libraries.Spells.GetListings}
-        setEditorTarget={setEditorTarget}
-      />
-    ),
-    Encounters: (
-      <LibraryManagerListings
-        listingsComputed={props.libraries.Encounters.GetListings}
-        setEditorTarget={setEditorTarget}
-      />
-    )
-  };
-
-  const activeTabComponent = pageComponentsByTab[activeTab];
-  return activeTabComponent;
+  );
 }
 
 function LibraryManagerListings(props: {
