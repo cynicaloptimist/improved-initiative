@@ -7,6 +7,7 @@ import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
+import { Button } from "../../Components/Button";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
@@ -18,6 +19,7 @@ import {
   LibraryFriendlyNames,
   LibraryType
 } from "../Libraries";
+import { Library } from "../Library";
 import { Listing } from "../Listing";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
@@ -44,6 +46,10 @@ export function LibraryManager(props: LibraryManagerProps) {
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
     [LibraryType, Listing<Listable>] | null
   >(null);
+
+  const [moveTargets, setMoveTargets] = useState<Listing<Listable>[] | null>(
+    null
+  );
 
   const activeListingsComponent = renderActiveListingsComponent(
     setEditorTypeAndTarget,
@@ -78,9 +84,57 @@ export function LibraryManager(props: LibraryManagerProps) {
             {...props}
           />
         )}
-        {selectedItemsComponent}
+        <div>
+          <div style={{ flexShrink: 1 }}>{selectedItemsComponent}</div>
+          <div style={{ flexFlow: "row" }}>
+            <Button
+              text="Move"
+              fontAwesomeIcon="folder"
+              onClick={() => setMoveTargets(selection.selected)}
+            />
+          </div>
+          {moveTargets && (
+            <MovePrompt
+              targets={moveTargets}
+              library={activeLibrary(props.libraries, activeTab)}
+              done={() => setMoveTargets(null)}
+            />
+          )}
+        </div>
       </div>
     </SelectionContext.Provider>
+  );
+}
+
+function MovePrompt(props: {
+  targets: Listing<Listable>[];
+  library: Library<Listable>;
+  done: () => void;
+}) {
+  const inputRef = React.useRef<HTMLInputElement>();
+  return (
+    <div>
+      <input autoFocus ref={inputRef} />
+      <Button
+        fontAwesomeIcon="check"
+        onClick={async () => {
+          if (!inputRef.current) {
+            return;
+          }
+          const pathInput = inputRef.current.value;
+          await Promise.all(
+            props.targets.map(async targetListing => {
+              const item = await props.library.GetItemById(
+                targetListing.Meta().Id
+              );
+              item.Path = pathInput;
+              return await props.library.SaveEditedListing(targetListing, item);
+            })
+          );
+          props.done();
+        }}
+      />
+    </div>
   );
 }
 
@@ -112,10 +166,10 @@ function renderActiveListingsComponent(
   );
 
   return (
-      <LibraryManagerListings
+    <LibraryManagerListings
       listingsComputed={activeLibrary(props.libraries, activeTab).GetListings}
-        setEditorTarget={setEditorTarget}
-      />
+      setEditorTarget={setEditorTarget}
+    />
   );
 }
 

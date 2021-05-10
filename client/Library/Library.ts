@@ -72,6 +72,11 @@ export class Library<T extends Listable> {
     return newListing;
   }
 
+  public async GetItemById(listingId: string): Promise<T> {
+    const item = await this.GetOrCreateListingById(listingId);
+    return await item.GetWithTemplate(this.create());
+  }
+
   public DeleteListing = async (id: string) => {
     this.listings.remove(s => s.Meta().Id == id);
     await Store.Delete(this.storeName, id);
