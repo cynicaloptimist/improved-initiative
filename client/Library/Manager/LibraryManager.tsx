@@ -59,11 +59,6 @@ export function LibraryManager(props: LibraryManagerProps) {
     null
   );
 
-  const selectedItemsComponent = renderSelectedItemsComponent(
-    selection,
-    activeTab
-  );
-
   return (
     <SelectionContext.Provider value={selection}>
       <div style={{ display: "flex", flexFlow: "row" }}>
@@ -111,7 +106,12 @@ export function LibraryManager(props: LibraryManagerProps) {
               done={() => setMoveTargets(null)}
             />
           )}
-          <div style={{ flexShrink: 1 }}>{selectedItemsComponent}</div>
+          <div style={{ flexShrink: 1 }}>
+            <SelectedItemsViewForActiveTab
+              selection={selection}
+              activeTab={activeTab}
+            />
+          </div>
         </div>
       </div>
     </SelectionContext.Provider>
@@ -181,10 +181,13 @@ function LibraryManagerListings(props: {
   );
 }
 
-function renderSelectedItemsComponent(
-  selection: Selection<Listing<any>>,
-  activeTab: LibraryType
-) {
+function SelectedItemsViewForActiveTab({
+  selection,
+  activeTab
+}: {
+  selection: Selection<Listing<any>>;
+  activeTab: LibraryType;
+}) {
   const partialViewProps = {
     key: activeTab,
     listings: selection.selected || [],
