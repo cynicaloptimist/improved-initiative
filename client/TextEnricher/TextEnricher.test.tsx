@@ -1,14 +1,34 @@
 import * as Enzyme from "enzyme";
 import { Spell } from "../../common/Spell";
-import { AccountClient } from "../Account/AccountClient";
-import { SpellLibrary } from "../Library/SpellLibrary";
+import { concatenatedStringRegex } from "../../common/Toolbox";
+import { Listing } from "../Library/Listing";
 import { DefaultRules } from "../Rules/Rules";
 import { Store } from "../Utility/Store";
 import { TextEnricher } from "./TextEnricher";
 
+function getTestSpell() {
+  const spell = {
+    ...Spell.Default(),
+    Name: "Test Spell"
+  };
+
+  const listing = new Listing(
+    {
+      ...spell,
+      FilterDimensions: Spell.GetFilterDimensions(spell),
+      SearchHint: Spell.GetSearchHint(spell),
+      Link: Store.Spells,
+      LastUpdateMs: 0
+    },
+    "localStorage",
+    spell
+  );
+
+  return listing;
+}
+
 describe("TextEnricher", () => {
   test("Spell Reference", async done => {
-    const library = GetSpellLibrary();
     const textEnricher = new TextEnricher(
       () => {},
       spell => {
@@ -16,7 +36,8 @@ describe("TextEnricher", () => {
         done();
       },
       () => {},
-      library,
+      () => [getTestSpell()],
+      () => concatenatedStringRegex([getTestSpell().Meta().Name]),
       new DefaultRules()
     );
 
@@ -31,12 +52,12 @@ describe("TextEnricher", () => {
   });
 
   test("Counter", async done => {
-    const library = GetSpellLibrary();
     const textEnricher = new TextEnricher(
       () => {},
       () => {},
       () => {},
-      library,
+      () => [getTestSpell()],
+      () => new RegExp("asdf"),
       new DefaultRules()
     );
 
@@ -53,26 +74,4 @@ describe("TextEnricher", () => {
     });
     expect.assertions(1);
   });
-
-  function GetSpellLibrary() {
-    const library = new SpellLibrary(new AccountClient());
-    const spell = {
-      ...Spell.Default(),
-      Name: "Test Spell"
-    };
-
-    const listing = {
-      Id: spell.Id,
-      Name: spell.Name,
-      Path: spell.Path,
-      SearchHint: Spell.GetSearchHint(spell),
-      FilterDimensions: Spell.GetFilterDimensions(spell),
-      Link: Store.Spells,
-      LastUpdateMs: spell.LastUpdateMs || 0
-    };
-
-    library.AddListings([listing], "localStorage");
-
-    return library;
-  }
 });

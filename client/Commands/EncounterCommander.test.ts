@@ -62,11 +62,11 @@ describe.skip("EncounterCommander", () => {
       Player: "player"
     });
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
-      UpdatePersistentCharacter: async () => {
-        return;
-      }
-    });
+    await encounter.AddCombatantFromPersistentCharacter(
+      persistentCharacter,
+      () => {},
+      false
+    );
 
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.CleanEncounter();
@@ -80,11 +80,11 @@ describe.skip("EncounterCommander", () => {
       Player: "player"
     });
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    await encounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
-      UpdatePersistentCharacter: async () => {
-        return;
-      }
-    });
+    await encounter.AddCombatantFromPersistentCharacter(
+      persistentCharacter,
+      () => {},
+      false
+    );
 
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.ClearEncounter();
@@ -101,11 +101,8 @@ describe.skip("EncounterCommander", () => {
     const npc = encounter.AddCombatantFromStatBlock(StatBlock.Default());
     const pc = await encounter.AddCombatantFromPersistentCharacter(
       persistentCharacter,
-      {
-        UpdatePersistentCharacter: async () => {
-          return;
-        }
-      }
+      () => {},
+      false
     );
 
     expect(npc.CurrentHP()).toBe(1);
@@ -133,9 +130,11 @@ describe.skip("EncounterCommander", () => {
     });
     const oldEncounter = buildEncounter();
     oldEncounter.AddCombatantFromStatBlock(npcStatBlock);
-    oldEncounter.AddCombatantFromPersistentCharacter(persistentCharacter, {
-      UpdatePersistentCharacter: async () => {}
-    });
+    oldEncounter.AddCombatantFromPersistentCharacter(
+      persistentCharacter,
+      () => {},
+      false
+    );
     const savedEncounter = oldEncounter.ObservableEncounterState();
     return savedEncounter;
   }
@@ -155,7 +154,7 @@ describe.skip("EncounterCommander", () => {
     });
     persistentCharacter.Id = savedEncounter.Combatants[1].PersistentCharacterId;
 
-    trackerViewModel.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+    trackerViewModel.Libraries.PersistentCharacters.SaveNewListing(
       persistentCharacter
     );
 

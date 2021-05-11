@@ -12,12 +12,17 @@ describe("StatBlock Library", () => {
       HP: { Value: 10 }
     });
 
-    const library = new Library(Store.StatBlocks, {
-      accountSave: () => {},
-      accountDelete: () => {},
-      getFilterDimensions: () => ({}),
-      getSearchHint: () => ""
-    });
+    const library = new Library(
+      Store.StatBlocks,
+      "statblocks",
+      () => StatBlock.Default(),
+      {
+        accountSave: () => {},
+        accountDelete: () => {},
+        getFilterDimensions: () => ({}),
+        getSearchHint: () => ""
+      }
+    );
     library.AddListings(
       [
         {
