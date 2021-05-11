@@ -46,15 +46,13 @@ export function LibraryManager(props: LibraryManagerProps) {
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
     [LibraryType, Listing<Listable>] | null
   >(null);
+  const setEditorTarget = React.useCallback(
+    (target: Listing<Listable>) => setEditorTypeAndTarget([activeTab, target]),
+    [activeTab]
+  );
 
   const [moveTargets, setMoveTargets] = useState<Listing<Listable>[] | null>(
     null
-  );
-
-  const activeListingsComponent = renderActiveListingsComponent(
-    setEditorTypeAndTarget,
-    activeTab,
-    props
   );
 
   const selectedItemsComponent = renderSelectedItemsComponent(
@@ -71,7 +69,12 @@ export function LibraryManager(props: LibraryManagerProps) {
             selected={activeTab}
             onChoose={tab => setActiveTab(tab)}
           />
-          {activeListingsComponent}
+          <LibraryManagerListings
+            listingsComputed={
+              activeLibrary(props.libraries, activeTab).GetListings
+            }
+            setEditorTarget={setEditorTarget}
+          />
         </div>
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
@@ -153,24 +156,6 @@ function activeLibrary(libraries: Libraries, libraryType: LibraryType) {
   }
 
   return null;
-}
-
-function renderActiveListingsComponent(
-  setEditorTypeAndTarget: (v: [LibraryType, Listing<Listable>]) => void,
-  activeTab: LibraryType,
-  props: LibraryManagerProps
-) {
-  const setEditorTarget = React.useCallback(
-    (target: Listing<Listable>) => setEditorTypeAndTarget([activeTab, target]),
-    [activeTab]
-  );
-
-  return (
-    <LibraryManagerListings
-      listingsComputed={activeLibrary(props.libraries, activeTab).GetListings}
-      setEditorTarget={setEditorTarget}
-    />
-  );
 }
 
 function LibraryManagerListings(props: {
