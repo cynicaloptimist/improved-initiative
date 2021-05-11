@@ -11,7 +11,11 @@ export function MovePrompt(props: {
 }) {
   const inputRef = React.useRef<HTMLInputElement>();
   return (
-    <div>
+    <div
+      className="prompt"
+      style={{ flexDirection: "row", alignItems: "center" }}
+    >
+      <span style={{ flexGrow: 1 }}>Move selected items to folder</span>
       <input autoFocus ref={inputRef} />
       <Button
         fontAwesomeIcon="check"
@@ -21,7 +25,7 @@ export function MovePrompt(props: {
           }
           const pathInput = inputRef.current.value;
           await Promise.all(
-            props.targets.map(async (targetListing) => {
+            props.targets.map(async targetListing => {
               const item = await props.library.GetItemById(
                 targetListing.Meta().Id
               );
@@ -30,7 +34,8 @@ export function MovePrompt(props: {
             })
           );
           props.done();
-        }} />
+        }}
+      />
     </div>
   );
 }
