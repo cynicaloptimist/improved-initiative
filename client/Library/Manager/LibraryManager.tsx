@@ -74,6 +74,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             onChoose={tab => setActiveTab(tab)}
           />
           <LibraryManagerListings
+            key={activeTab}
             listingsComputed={
               activeLibrary(props.libraries, activeTab).GetListings
             }
