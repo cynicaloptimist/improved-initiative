@@ -11,8 +11,12 @@ import { Button } from "../../Components/Button";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import {
+  TextEnricher,
+  TextEnricherContext
+} from "../../TextEnricher/TextEnricher";
 import { DifficultyCalculator } from "../../Widgets/DifficultyCalculator";
+import { SpellDetails } from "../Components/SpellDetails";
 import {
   GetDefaultForLibrary,
   Libraries,
@@ -232,6 +236,22 @@ function renderSelectedItemsComponent(
                 </div>
               ))}
             </div>
+          );
+        }}
+      />
+    );
+  }
+
+  if (activeTab === "Spells") {
+    return (
+      <SelectedItemsView
+        {...partialViewProps}
+        renderListing={(listing: Spell) => {
+          return (
+            <SpellDetails
+              Spell={listing}
+              TextEnricher={React.useContext(TextEnricherContext)}
+            />
           );
         }}
       />
