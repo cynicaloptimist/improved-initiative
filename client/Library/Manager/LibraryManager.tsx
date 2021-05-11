@@ -73,6 +73,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             selected={activeTab}
             onChoose={tab => setActiveTab(tab)}
           />
+          <div style={{ overflowY: "auto" }}>
           <LibraryManagerListings
             key={activeTab}
             listingsComputed={
@@ -80,6 +81,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             }
             setEditorTarget={setEditorTarget}
           />
+        </div>
         </div>
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
