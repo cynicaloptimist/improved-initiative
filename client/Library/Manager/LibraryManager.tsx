@@ -11,6 +11,7 @@ import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { BuildListingTree } from "../Components/BuildListingTree";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { EditorView } from "./EditorView";
@@ -129,11 +130,13 @@ function LibraryManagerListings(props: {
   setEditorTarget: (item: Listing<any>) => void;
 }) {
   const listings = useSubscription(props.listingsComputed);
+  const listingTree = BuildListingTree(
+    l => <LibraryManagerRow key={l.Meta().Id} listing={l} {...props} />,
+    l => ({ key: l.Meta().Path }),
+    listings
+  );
+
   return (
-    <div style={{ display: "flex", flexFlow: "column" }}>
-      {listings.map(l => (
-        <LibraryManagerRow key={l.Meta().Id} listing={l} {...props} />
-      ))}
-    </div>
+    <div style={{ display: "flex", flexFlow: "column" }}>{listingTree}</div>
   );
 }
