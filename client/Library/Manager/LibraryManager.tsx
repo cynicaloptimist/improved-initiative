@@ -74,14 +74,14 @@ export function LibraryManager(props: LibraryManagerProps) {
             onChoose={tab => setActiveTab(tab)}
           />
           <div style={{ overflowY: "auto" }}>
-          <LibraryManagerListings
-            key={activeTab}
-            listingsComputed={
-              activeLibrary(props.libraries, activeTab).GetListings
-            }
-            setEditorTarget={setEditorTarget}
-          />
-        </div>
+            <LibraryManagerListings
+              key={activeTab}
+              listingsComputed={
+                activeLibrary(props.libraries, activeTab).GetListings
+              }
+              setEditorTarget={setEditorTarget}
+            />
+          </div>
         </div>
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
@@ -95,14 +95,15 @@ export function LibraryManager(props: LibraryManagerProps) {
           />
         )}
         <div>
-          <div style={{ flexShrink: 1 }}>{selectedItemsComponent}</div>
-          <div style={{ flexFlow: "row" }}>
-            <Button
-              text="Move"
-              fontAwesomeIcon="folder"
-              onClick={() => setMoveTargets(selection.selected)}
-            />
-          </div>
+          {selection.selected.length > 0 && (
+            <div style={{ flexFlow: "row" }}>
+              <Button
+                text="Move"
+                fontAwesomeIcon="folder"
+                onClick={() => setMoveTargets(selection.selected)}
+              />
+            </div>
+          )}
           {moveTargets && (
             <MovePrompt
               targets={moveTargets}
@@ -110,6 +111,7 @@ export function LibraryManager(props: LibraryManagerProps) {
               done={() => setMoveTargets(null)}
             />
           )}
+          <div style={{ flexShrink: 1 }}>{selectedItemsComponent}</div>
         </div>
       </div>
     </SelectionContext.Provider>
