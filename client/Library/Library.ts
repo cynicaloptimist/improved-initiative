@@ -2,6 +2,7 @@ import * as ko from "knockout";
 
 import moment = require("moment");
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
+import { probablyUniqueString } from "../../common/Toolbox";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
@@ -123,6 +124,9 @@ export class Library<T extends Listable> {
     for (const listing of oldListings) {
       await this.DeleteListing(listing.Meta().Id);
     }
+    if (listing.Origin === "server") {
+      newListable.Id = probablyUniqueString();
+    }
     await this.saveListing(listing, newListable);
   };
 
@@ -134,7 +138,7 @@ export class Library<T extends Listable> {
     );
     const listing = new Listing<T>(
       {
-        Id: newListable.Id,
+        Id: newListable.Id || probablyUniqueString(),
         Path: newListable.Path,
         Name: newListable.Name,
         SearchHint: this.callbacks.getSearchHint(newListable),
