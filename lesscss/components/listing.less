@@ -1,14 +1,22 @@
-.listings li:nth-child(2n-1) > span {
+.listings li:nth-child(2n-1) {
   background-color: @zebra-white;
-  &:hover {
+  > span:hover {
     background-color: @hover-white;
   }
 }
+
+.listings li.c-listing--selected {
+  background-color: @selected-light;
+}
+
 .listings span:hover {
   background-color: @hover-white;
 }
 
 .c-listing {
+  display: flex;
+  flex-flow: row;
+
   .c-listing-boss,
   .c-listing-minion,
   .c-listing-delete,

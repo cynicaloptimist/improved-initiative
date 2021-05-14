@@ -51,7 +51,7 @@ export function LibraryManager(props: LibraryManagerProps) {
 
   return (
     <SelectionContext.Provider value={selection}>
-      <div style={{ display: "flex", flexFlow: "row" }}>
+      <div className="c-library-manager">
         <div style={{ width: columnWidth }}>
           <Tabs
             optionNamesById={LibraryFriendlyNames}
@@ -136,7 +136,5 @@ function LibraryManagerListings(props: {
     listings
   );
 
-  return (
-    <div style={{ display: "flex", flexFlow: "column" }}>{listingTree}</div>
-  );
+  return <ul className="listings">{listingTree}</ul>;
 }
