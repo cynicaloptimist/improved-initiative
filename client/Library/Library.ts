@@ -21,6 +21,7 @@ export class Library<T extends Listable> {
       accountDelete: (listableId: string) => any;
       getSearchHint: (listable: T) => string;
       getFilterDimensions: (listable: T) => FilterDimensions;
+      loadingFinished?: (storeName: string) => void;
     }
   ) {
     Store.LoadAllAndUpdateIds(storeName).then(async storedListables => {
@@ -34,6 +35,7 @@ export class Library<T extends Listable> {
         const listings = legacyListings.map(this.makeListing);
         this.AddListings(listings, "localStorage");
       }
+      this.callbacks.loadingFinished?.(this.storeName);
     });
   }
 
@@ -121,13 +123,16 @@ export class Library<T extends Listable> {
         l.Meta().Path + l.Meta().Name ==
           listing.Meta().Path + listing.Meta().Name
     );
+
     for (const listing of oldListings) {
       await this.DeleteListing(listing.Meta().Id);
     }
+
     if (listing.Origin === "server") {
       newListable.Id = probablyUniqueString();
     }
-    await this.saveListing(listing, newListable);
+
+    return await this.saveListing(listing, newListable);
   };
 
   public SaveNewListing = async (newListable: T) => {

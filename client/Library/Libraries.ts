@@ -51,7 +51,10 @@ export class AccountBackedLibraries {
   public Encounters: Library<SavedEncounter>;
   public Spells: Library<Spell>;
 
-  constructor(accountClient: AccountClient) {
+  constructor(
+    accountClient: AccountClient,
+    loadingFinished?: (storeName: string) => void
+  ) {
     this.PersistentCharacters = new Library<PersistentCharacter>(
       Store.PersistentCharacters,
       "persistentcharacters",
@@ -60,7 +63,8 @@ export class AccountBackedLibraries {
         accountSave: accountClient.SavePersistentCharacter,
         accountDelete: accountClient.DeletePersistentCharacter,
         getFilterDimensions: PersistentCharacter.GetFilterDimensions,
-        getSearchHint: PersistentCharacter.GetSearchHint
+        getSearchHint: PersistentCharacter.GetSearchHint,
+        loadingFinished
       }
     );
     this.StatBlocks = new Library<StatBlock>(
@@ -71,7 +75,8 @@ export class AccountBackedLibraries {
         accountSave: accountClient.SaveStatBlock,
         accountDelete: accountClient.DeleteStatBlock,
         getFilterDimensions: StatBlock.FilterDimensions,
-        getSearchHint: StatBlock.GetSearchHint
+        getSearchHint: StatBlock.GetSearchHint,
+        loadingFinished
       }
     );
     this.Encounters = new Library<SavedEncounter>(
@@ -82,7 +87,8 @@ export class AccountBackedLibraries {
         accountSave: accountClient.SaveEncounter,
         accountDelete: accountClient.DeleteEncounter,
         getFilterDimensions: () => ({}),
-        getSearchHint: SavedEncounter.GetSearchHint
+        getSearchHint: SavedEncounter.GetSearchHint,
+        loadingFinished
       }
     );
 
@@ -90,17 +96,18 @@ export class AccountBackedLibraries {
       accountSave: accountClient.SaveSpell,
       accountDelete: accountClient.DeleteSpell,
       getFilterDimensions: Spell.GetFilterDimensions,
-      getSearchHint: Spell.GetSearchHint
+      getSearchHint: Spell.GetSearchHint,
+      loadingFinished
     });
 
     this.initializeStatBlocks();
     this.initializeSpells();
   }
 
-  public async UpdatePersistentCharacter(
+  public UpdatePersistentCharacter = async (
     persistentCharacterId: string,
     updates: Partial<PersistentCharacter>
-  ) {
+  ) => {
     if (updates.StatBlock) {
       updates.Name = updates.StatBlock.Name;
       updates.Path = updates.StatBlock.Path;
@@ -121,11 +128,11 @@ export class AccountBackedLibraries {
       LastUpdateMs: now()
     };
 
-    this.PersistentCharacters.SaveEditedListing(
+    return await this.PersistentCharacters.SaveEditedListing(
       currentCharacterListing,
       updatedCharacter
     );
-  }
+  };
 
   private initializeStatBlocks = () => {
     $.ajax("../statblocks/").done(listings => {

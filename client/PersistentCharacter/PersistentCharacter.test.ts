@@ -7,7 +7,12 @@ import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { InitializeSettings } from "../Settings/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { buildEncounter } from "../test/buildEncounter";
-import { AccountBackedLibraries } from "../Library/Libraries";
+import {
+  AccountBackedLibraries,
+  UpdatePersistentCharacter
+} from "../Library/Libraries";
+import { Store } from "../Utility/Store";
+import { Library } from "../Library/Library";
 
 describe("InitializeCharacter", () => {
   it("Should have the current HP of the provided statblock", () => {
@@ -18,12 +23,22 @@ describe("InitializeCharacter", () => {
   });
 });
 
-function makePersistentCharacterLibrary() {
-  const libraries = new AccountBackedLibraries(new AccountClient());
-  return [
-    libraries.PersistentCharacters,
-    libraries.UpdatePersistentCharacter
-  ] as const;
+async function makePersistentCharacterLibrary() {
+  return new Promise<[Library<PersistentCharacter>, UpdatePersistentCharacter]>(
+    resolve => {
+      const libraries = new AccountBackedLibraries(
+        new AccountClient(),
+        storeName => {
+          if (storeName === Store.PersistentCharacters) {
+            resolve([
+              libraries.PersistentCharacters,
+              libraries.UpdatePersistentCharacter
+            ]);
+          }
+        }
+      );
+    }
+  );
 }
 
 describe("PersistentCharacterLibrary", () => {
@@ -43,47 +58,16 @@ describe("PersistentCharacterLibrary", () => {
     return persistentCharacter.Id;
   }
 
-  function savePlayerCharacterWithName(name: string) {
-    const playerCharacter = StatBlock.Default();
-    playerCharacter.Name = name;
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.PlayerCharacters,
-      playerCharacter.Id,
-      playerCharacter
-    );
-    return playerCharacter.Id;
-  }
-
-  it("Should load stored PersistentCharacters", () => {
+  it("Should load stored PersistentCharacters", async () => {
     savePersistentCharacterWithName("Persistent Character");
 
-    const [library] = makePersistentCharacterLibrary();
-    const listings = library.GetListings();
-    expect(listings).toHaveLength(1);
-    expect(listings[0].Meta().Name).toEqual("Persistent Character");
-  });
-
-  it("Should create new PersistentCharacters for existing PlayerCharacter statblocks", () => {
-    savePlayerCharacterWithName("Player Character");
-
-    const [library] = makePersistentCharacterLibrary();
-    const listings = library.GetListings();
-    expect(listings).toHaveLength(1);
-    expect(listings[0].Meta().Name).toEqual("Player Character");
-  });
-
-  it("Should not create duplicate PersistentCharacters for already converted PlayerCharacters", () => {
-    savePersistentCharacterWithName("Persistent Character");
-    savePlayerCharacterWithName("Player Character");
-
-    const [library] = makePersistentCharacterLibrary();
+    const [library] = await makePersistentCharacterLibrary();
     const listings = library.GetListings();
     expect(listings).toHaveLength(1);
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
   it("Should provide the latest version of a Persistent Character", async done => {
-    jest.useFakeTimers();
     InitializeSettings();
 
     savePersistentCharacterWithName("Persistent Character");
@@ -91,7 +75,7 @@ describe("PersistentCharacterLibrary", () => {
     const [
       library,
       updatePersistentCharacter
-    ] = makePersistentCharacterLibrary();
+    ] = await makePersistentCharacterLibrary();
     const listing = library.GetListings()[0];
     const persistentCharacter = await listing.GetWithTemplate(
       PersistentCharacter.Default()
@@ -110,9 +94,9 @@ describe("PersistentCharacterLibrary", () => {
 });
 
 describe("PersistentCharacter", () => {
-  it("Should not save PersistentCharacters with Encounters", () => {
+  it("Should not save PersistentCharacters with Encounters", async () => {
     const encounter = buildEncounter();
-    const [library] = makePersistentCharacterLibrary();
+    const [library] = await makePersistentCharacterLibrary();
 
     encounter.AddCombatantFromPersistentCharacter(
       PersistentCharacter.Default(),
@@ -140,10 +124,10 @@ describe("PersistentCharacter", () => {
     expect.assertions(1);
   });
 
-  it("Should not allow the same Persistent Character to be added twice", () => {
+  it("Should not allow the same Persistent Character to be added twice", async () => {
     const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
-    const [library] = makePersistentCharacterLibrary();
+    const [library] = await makePersistentCharacterLibrary();
 
     encounter.AddCombatantFromPersistentCharacter(
       persistentCharacter,
