@@ -51,36 +51,6 @@ export class AccountBackedLibraries {
   public Encounters: Library<SavedEncounter>;
   public Spells: Library<Spell>;
 
-  public async UpdatePersistentCharacter(
-    persistentCharacterId: string,
-    updates: Partial<PersistentCharacter>
-  ) {
-    if (updates.StatBlock) {
-      updates.Name = updates.StatBlock.Name;
-      updates.Path = updates.StatBlock.Path;
-      updates.Version = updates.StatBlock.Version;
-    }
-
-    const currentCharacterListing = await this.PersistentCharacters.GetOrCreateListingById(
-      persistentCharacterId
-    );
-
-    const currentCharacter = await currentCharacterListing.GetWithTemplate(
-      PersistentCharacter.Default()
-    );
-
-    const updatedCharacter = {
-      ...currentCharacter,
-      ...updates,
-      LastUpdateMs: now()
-    };
-
-    this.PersistentCharacters.SaveEditedListing(
-      currentCharacterListing,
-      updatedCharacter
-    );
-  }
-
   constructor(accountClient: AccountClient) {
     this.PersistentCharacters = new Library<PersistentCharacter>(
       Store.PersistentCharacters,
@@ -130,6 +100,36 @@ export class AccountBackedLibraries {
 
     this.initializeStatBlocks();
     this.initializeSpells();
+  }
+
+  public async UpdatePersistentCharacter(
+    persistentCharacterId: string,
+    updates: Partial<PersistentCharacter>
+  ) {
+    if (updates.StatBlock) {
+      updates.Name = updates.StatBlock.Name;
+      updates.Path = updates.StatBlock.Path;
+      updates.Version = updates.StatBlock.Version;
+    }
+
+    const currentCharacterListing = await this.PersistentCharacters.GetOrCreateListingById(
+      persistentCharacterId
+    );
+
+    const currentCharacter = await currentCharacterListing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
+
+    const updatedCharacter = {
+      ...currentCharacter,
+      ...updates,
+      LastUpdateMs: now()
+    };
+
+    this.PersistentCharacters.SaveEditedListing(
+      currentCharacterListing,
+      updatedCharacter
+    );
   }
 
   private initializeStatBlocks = () => {
