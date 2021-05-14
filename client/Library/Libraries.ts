@@ -86,17 +86,12 @@ export class AccountBackedLibraries {
       }
     );
 
-    this.Spells = new Library<Spell>(
-      Store.Spells,
-      "spells",
-      Spell.Default,
-      {
-        accountSave: accountClient.SaveSpell,
-        accountDelete: accountClient.DeleteSpell,
-        getFilterDimensions: Spell.GetFilterDimensions,
-        getSearchHint: Spell.GetSearchHint
-      }
-    );
+    this.Spells = new Library<Spell>(Store.Spells, "spells", Spell.Default, {
+      accountSave: accountClient.SaveSpell,
+      accountDelete: accountClient.DeleteSpell,
+      getFilterDimensions: Spell.GetFilterDimensions,
+      getSearchHint: Spell.GetSearchHint
+    });
 
     this.initializeStatBlocks();
     this.initializeSpells();
