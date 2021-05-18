@@ -13,6 +13,7 @@ import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import { Library } from "../Library";
 import { Listing } from "../Listing";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
@@ -25,6 +26,8 @@ export type LibraryManagerProps = {
   statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
 };
+
+type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
 export function LibraryManager(props: LibraryManagerProps) {
   const [activeTab, setActiveTab] = useState<LibraryType>("StatBlocks");
@@ -40,14 +43,15 @@ export function LibraryManager(props: LibraryManagerProps) {
   const [editorTypeAndTarget, setEditorTypeAndTarget] = useState<
     [LibraryType, Listing<Listable>] | null
   >(null);
+
   const setEditorTarget = React.useCallback(
     (target: Listing<Listable>) => setEditorTypeAndTarget([activeTab, target]),
     [activeTab]
   );
 
-  const [moveTargets, setMoveTargets] = useState<Listing<Listable>[] | null>(
-    null
-  );
+  const [promptTypeAndTargets, setPromptTypeAndTargets] = useState<
+    PromptTypeAndTargets
+  >(null);
 
   return (
     <SelectionContext.Provider value={selection}>
@@ -85,17 +89,17 @@ export function LibraryManager(props: LibraryManagerProps) {
               <Button
                 text="Move"
                 fontAwesomeIcon="folder"
-                onClick={() => setMoveTargets(selection.selected)}
+                onClick={() =>
+                  setPromptTypeAndTargets(["move", selection.selected])
+                }
               />
             </div>
           )}
-          {moveTargets && (
-            <MovePrompt
-              targets={moveTargets}
-              library={activeLibrary(props.libraries, activeTab)}
-              done={() => setMoveTargets(null)}
-            />
-          )}
+          <ActivePrompt
+            promptTypeAndTargets={promptTypeAndTargets}
+            library={activeLibrary(props.libraries, activeTab)}
+            done={() => setPromptTypeAndTargets(null)}
+          />
           <div style={{ flexShrink: 1 }}>
             <SelectedItemsViewForActiveTab
               selection={selection}
@@ -106,6 +110,20 @@ export function LibraryManager(props: LibraryManagerProps) {
       </div>
     </SelectionContext.Provider>
   );
+}
+
+function ActivePrompt(props: {
+  promptTypeAndTargets: PromptTypeAndTargets;
+  library: Library<Listable>;
+  done: () => void;
+}) {
+  if (props.promptTypeAndTargets === null) {
+    return null;
+  }
+  if (props.promptTypeAndTargets[0] === "move") {
+    return <MovePrompt {...props} targets={props.promptTypeAndTargets[1]} />;
+  }
+  return null;
 }
 
 function activeLibrary(libraries: Libraries, libraryType: LibraryType) {
