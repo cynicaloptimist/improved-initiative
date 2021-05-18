@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as React from "react";
-import * as Markdown from "react-markdown";
+import ReactMarkdown = require("react-markdown");
 import * as ReactReplace from "react-string-replace-recursively";
 
 import { Spell } from "../../common/Spell";
@@ -69,7 +69,7 @@ export class TextEnricher {
       linkReference: CounterOrBracketedText(text, updateTextSource)
     };
 
-    return <Markdown source={text} renderers={renderers} rawSourcePos />;
+    return <ReactMarkdown source={text} renderers={renderers} rawSourcePos />;
   };
 
   private buildReactReplacer() {
