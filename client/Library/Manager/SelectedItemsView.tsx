@@ -32,7 +32,7 @@ export function SelectedItemsView<T extends Listable>(props: {
   } else {
     return (
       <div className="c-statblock-header">
-        <strong>Selected {props.friendlyName}</strong>
+        <h2>Selected {props.friendlyName}</h2>
         {props.listings.map(listing => {
           return (
             <h3 key={listing.Meta().Id} className="Name">
