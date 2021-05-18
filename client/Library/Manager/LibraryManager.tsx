@@ -58,7 +58,7 @@ export function LibraryManager(props: LibraryManagerProps) {
             selected={activeTab}
             onChoose={tab => setActiveTab(tab)}
           />
-          <div style={{ overflowY: "auto" }}>
+          <div className="library">
             <LibraryManagerListings
               key={activeTab}
               listingsComputed={
