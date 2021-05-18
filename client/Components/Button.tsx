@@ -60,7 +60,7 @@ export function Button(props: ButtonProps) {
 }
 
 export function SubmitButton(
-  props: ButtonProps & { bindModel?: [string, any] }
+  props: ButtonProps & { submitIntent?: [string, any] }
 ) {
   const buttonProps: ButtonProps = {
     ...props,
@@ -69,7 +69,7 @@ export function SubmitButton(
     onClick: props.onClick || (() => true)
   };
 
-  if (props.bindModel) {
+  if (props.submitIntent) {
     return (
       <Field>
         {(formik: FieldProps) => (
@@ -79,7 +79,7 @@ export function SubmitButton(
               if (buttonProps.disabled) {
                 return;
               }
-              formik.form.setFieldValue(props.bindModel[0], props.bindModel[1]);
+              formik.form.setFieldValue(props.submitIntent[0], props.submitIntent[1]);
               buttonProps.onClick(e);
             }}
           />
