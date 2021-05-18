@@ -9,7 +9,6 @@ import { DifficultyCalculator } from "../../Widgets/DifficultyCalculator";
 import { SpellDetails } from "../Components/SpellDetails";
 import {
   GetDefaultForLibrary,
-
   LibraryFriendlyNames,
   LibraryType
 } from "../Libraries";
@@ -31,6 +30,8 @@ export function SelectedItemsViewForActiveTab({
     defaultListing: GetDefaultForLibrary(activeTab)
   };
 
+  const textEnricher = React.useContext(TextEnricherContext);
+
   if (activeTab === "StatBlocks") {
     return (
       <SelectedItemsView
@@ -39,7 +40,8 @@ export function SelectedItemsViewForActiveTab({
           <div style={{ width: 600 }}>
             <StatBlockComponent displayMode="default" statBlock={listing} />
           </div>
-        )} />
+        )}
+      />
     );
   }
 
@@ -51,9 +53,11 @@ export function SelectedItemsViewForActiveTab({
           <div style={{ width: 600 }}>
             <StatBlockComponent
               displayMode="default"
-              statBlock={listing.StatBlock} />
+              statBlock={listing.StatBlock}
+            />
           </div>
-        )} />
+        )}
+      />
     );
   }
 
@@ -78,7 +82,8 @@ export function SelectedItemsViewForActiveTab({
               ))}
             </div>
           );
-        }} />
+        }}
+      />
     );
   }
 
@@ -87,12 +92,9 @@ export function SelectedItemsViewForActiveTab({
       <SelectedItemsView
         {...partialViewProps}
         renderListing={(listing: Spell) => {
-          return (
-            <SpellDetails
-              Spell={listing}
-              TextEnricher={React.useContext(TextEnricherContext)} />
-          );
-        }} />
+          return <SpellDetails Spell={listing} TextEnricher={textEnricher} />;
+        }}
+      />
     );
   }
 
