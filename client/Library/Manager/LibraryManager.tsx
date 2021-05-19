@@ -15,6 +15,7 @@ import { BuildListingTree } from "../Components/BuildListingTree";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Library } from "../Library";
 import { Listing } from "../Listing";
+import { DeletePrompt } from "./DeletePrompt";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
 import { MovePrompt } from "./MovePrompt";
@@ -93,6 +94,13 @@ export function LibraryManager(props: LibraryManagerProps) {
                   setPromptTypeAndTargets(["move", selection.selected])
                 }
               />
+              <Button
+                text="Delete"
+                fontAwesomeIcon="trash"
+                onClick={() =>
+                  setPromptTypeAndTargets(["delete", selection.selected])
+                }
+              />
             </div>
           )}
           <ActivePrompt
@@ -123,9 +131,11 @@ function ActivePrompt(props: {
   if (props.promptTypeAndTargets[0] === "move") {
     return <MovePrompt {...props} targets={props.promptTypeAndTargets[1]} />;
   }
+  if (props.promptTypeAndTargets[0] === "delete") {
+    return <DeletePrompt {...props} targets={props.promptTypeAndTargets[1]} />;
+  }
   return null;
 }
-
 
 function activeLibrary(
   libraries: Libraries,
