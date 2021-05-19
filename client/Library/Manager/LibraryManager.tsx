@@ -126,7 +126,11 @@ function ActivePrompt(props: {
   return null;
 }
 
-function activeLibrary(libraries: Libraries, libraryType: LibraryType) {
+
+function activeLibrary(
+  libraries: Libraries,
+  libraryType: LibraryType
+): Library<Listable> | null {
   if (libraryType === "StatBlocks") {
     return libraries.StatBlocks;
   }
