@@ -7,7 +7,6 @@ export function SelectedItemsView<T extends Listable>(props: {
   listings: Listing<T>[];
   defaultListing: T;
   renderListing: (item: T) => JSX.Element;
-  friendlyName: string;
 }) {
   const [loadedItemsById, setLoadedItemsById] = useState<Record<string, T>>({});
 
@@ -32,7 +31,6 @@ export function SelectedItemsView<T extends Listable>(props: {
   } else {
     return (
       <div className="c-statblock-header">
-        <h2>Selected {props.friendlyName}</h2>
         {props.listings.map(listing => {
           return (
             <h3 key={listing.Meta().Id} className="Name">

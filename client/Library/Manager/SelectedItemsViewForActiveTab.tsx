@@ -7,11 +7,7 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { TextEnricherContext } from "../../TextEnricher/TextEnricher";
 import { DifficultyCalculator } from "../../Widgets/DifficultyCalculator";
 import { SpellDetails } from "../Components/SpellDetails";
-import {
-  GetDefaultForLibrary,
-  LibraryFriendlyNames,
-  LibraryType
-} from "../Libraries";
+import { GetDefaultForLibrary, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { SelectedItemsView } from "./SelectedItemsView";
 import { Selection } from "./SelectionContext";
@@ -26,7 +22,6 @@ export function SelectedItemsViewForActiveTab({
   const partialViewProps = {
     key: activeTab,
     listings: selection.selected || [],
-    friendlyName: LibraryFriendlyNames[activeTab],
     defaultListing: GetDefaultForLibrary(activeTab)
   };
 

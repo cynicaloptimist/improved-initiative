@@ -84,9 +84,12 @@ export function LibraryManager(props: LibraryManagerProps) {
             {...props}
           />
         )}
-        <div>
+        <div style={{ width: 600 }}>
           {selection.selected.length > 0 && (
-            <div style={{ flexFlow: "row" }}>
+            <div style={{ flexFlow: "row", alignItems: "center" }}>
+              <h2 style={{ flexGrow: 1 }}>
+                Selected {LibraryFriendlyNames[activeTab]}
+              </h2>
               <Button
                 text="Move"
                 fontAwesomeIcon="folder"
