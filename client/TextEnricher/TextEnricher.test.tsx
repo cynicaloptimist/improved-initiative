@@ -27,7 +27,7 @@ function getTestSpell() {
   return listing;
 }
 
-describe("TextEnricher", () => {
+describe.skip("TextEnricher", () => {
   test("Spell Reference", async done => {
     const textEnricher = new TextEnricher(
       () => {},
