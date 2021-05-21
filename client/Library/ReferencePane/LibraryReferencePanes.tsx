@@ -73,17 +73,10 @@ export class LibraryReferencePanes extends React.Component<
 
     const selectedLibrary = libraries[this.state.selectedLibrary];
 
-    const hasAccountSync = env.HasStorage;
-
     return (
       <div className="libraries">
         <div className="libraries__header">
-          <h2>
-            {hasAccountSync && (
-              <span className="fas fa-cloud" title="Account Sync is enabled" />
-            )}{" "}
-            Library
-          </h2>
+          <LibraryHeader selectedLibrary={this.state.selectedLibrary} />
           <Button
             additionalClassNames="button--close"
             fontAwesomeIcon="times"
@@ -99,4 +92,23 @@ export class LibraryReferencePanes extends React.Component<
       </div>
     );
   }
+}
+
+function LibraryHeader(props: { selectedLibrary: LibraryType }) {
+  const headerTexts: Record<LibraryType, string> = {
+    StatBlocks: "Add Stat Blocks as Combatants",
+    PersistentCharacters: "Add Characters as Combatants",
+    Encounters: "Add Combatants from Encounters",
+    Spells: "Reference Spells"
+  };
+
+  const hasAccountSync = env.HasStorage;
+  return (
+    <h2>
+      {hasAccountSync && (
+        <span className="fas fa-cloud" title="Account Sync is enabled" />
+      )}
+      {" " + headerTexts[props.selectedLibrary]}
+    </h2>
+  );
 }
