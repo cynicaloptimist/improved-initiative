@@ -29,6 +29,7 @@ export function App(props: { tracker: TrackerViewModel }) {
 
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
+  const libraryManagerActive = useSubscription(tracker.LibraryManagerActive);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
@@ -52,10 +53,6 @@ export function App(props: { tracker: TrackerViewModel }) {
   );
 
   const blurVisible = tutorialVisible || settingsVisible;
-
-  const showManager = useRef(
-    new URLSearchParams(window?.location?.search).get("showmanager")
-  );
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -94,7 +91,7 @@ export function App(props: { tracker: TrackerViewModel }) {
                 Log In with Patreon
               </a>
             )}
-            {showManager.current ? (
+            {libraryManagerActive ? (
               <LibraryManager
                 libraries={tracker.Libraries}
                 librariesCommander={tracker.LibrariesCommander}

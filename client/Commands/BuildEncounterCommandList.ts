@@ -52,6 +52,13 @@ export const BuildEncounterCommandList = (
       fontAwesomeIcon: "book"
     }),
     new Command({
+      id: "open-library-manager",
+      description: "Library Manager",
+      actionBinding: c.ToggleLibraryManager,
+      fontAwesomeIcon: "book-open",
+      defaultShowOnActionBar: false
+    }),
+    new Command({
       id: "roll-dice",
       description: "Roll Dice",
       actionBinding: c.PromptRollDice,

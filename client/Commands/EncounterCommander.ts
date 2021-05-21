@@ -38,6 +38,9 @@ export class EncounterCommander {
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
+  public ToggleLibraryManager = () =>
+    this.tracker.LibraryManagerActive(!this.tracker.LibraryManagerActive());
+
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
       env.EncounterId,

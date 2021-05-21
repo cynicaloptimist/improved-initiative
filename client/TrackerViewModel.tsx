@@ -68,6 +68,7 @@ export class TrackerViewModel {
   );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
+  public LibraryManagerActive = ko.observable(false);
   public ToolbarWide = ko.observable(false);
 
   constructor(private Socket: SocketIOClient.Socket) {
@@ -153,7 +154,7 @@ export class TrackerViewModel {
   ) {
     this.StatBlockEditorProps(null);
     const persistentCharacterListing = await this.Libraries.PersistentCharacters.GetOrCreateListingById(
-      persistentCharacterId,
+      persistentCharacterId
     );
 
     const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
