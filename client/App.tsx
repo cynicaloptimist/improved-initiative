@@ -96,6 +96,7 @@ export function App(props: { tracker: TrackerViewModel }) {
                 libraries={tracker.Libraries}
                 librariesCommander={tracker.LibrariesCommander}
                 statBlockTextEnricher={tracker.StatBlockTextEnricher}
+                closeManager={() => tracker.LibraryManagerActive(false)}
               />
             ) : (
               <ThreeColumnLayout tracker={tracker} />

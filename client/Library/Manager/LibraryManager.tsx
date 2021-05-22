@@ -6,6 +6,7 @@ import { SavedEncounter } from "../../../common/SavedEncounter";
 import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
+import { CommandButton } from "../../Commands/CommandButton";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
@@ -26,6 +27,7 @@ export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
+  closeManager: () => void;
 };
 
 type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
@@ -57,6 +59,18 @@ export function LibraryManager(props: LibraryManagerProps) {
   return (
     <SelectionContext.Provider value={selection}>
       <div className="c-library-manager">
+        <div className="c-toolbar commands-library-manager">
+          <Button
+            additionalClassNames="c-button--return"
+            tooltip="Return to Tracker View"
+            tooltipProps={{
+              placement: "right",
+              delay: 1000
+            }}
+            onClick={() => props.closeManager()}
+            fontAwesomeIcon={"arrow-left"}
+          />
+        </div>
         <div style={{ width: columnWidth }}>
           <Tabs
             optionNamesById={LibraryFriendlyNames}
