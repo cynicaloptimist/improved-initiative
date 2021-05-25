@@ -185,5 +185,5 @@ function LibraryManagerListings(props: {
     listings
   );
 
-  return <ul className="listings">{listingTree}</ul>;
+  return <ul className="listings zebra-stripe">{listingTree}</ul>;
 }

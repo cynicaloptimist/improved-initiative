@@ -6,7 +6,10 @@ export function Folder(props: { name: string; children: React.ReactNode }) {
   const toggleOpen = () => setOpen(!isOpen);
   return (
     <div
-      className={"c-folder " + (isOpen ? "c-folder--open" : "c-folder--closed")}
+      className={
+        "c-folder " +
+        (isOpen ? "c-folder--open zebra-stripe" : "c-folder--closed")
+      }
     >
       <li className="c-listing">
         <ListingButton
