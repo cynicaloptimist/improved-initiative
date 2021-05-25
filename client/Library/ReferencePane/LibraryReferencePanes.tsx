@@ -1,6 +1,7 @@
 import * as React from "react";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
+import { Info } from "../../Components/Info";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
@@ -96,19 +97,32 @@ export class LibraryReferencePanes extends React.Component<
 
 function LibraryHeader(props: { selectedLibrary: LibraryType }) {
   const headerTexts: Record<LibraryType, string> = {
-    StatBlocks: "Add Stat Blocks as Combatants",
-    PersistentCharacters: "Add Characters as Combatants",
-    Encounters: "Add Combatants from Encounters",
+    StatBlocks: "Add Combatants",
+    PersistentCharacters: "Add Combatants",
+    Encounters: "Load Encounters",
     Spells: "Reference Spells"
+  };
+
+  const libraryInfos: Record<LibraryType, string | null> = {
+    StatBlocks:
+      "When you add a Creature, a copy of its Stat Block joins the Encounter as a Combatant.",
+    PersistentCharacters:
+      "Each Character can each only be added to an Encounter once, and they will be persistent across different Encounters.",
+    Encounters:
+      "Loading an Encounter adds all of the Combatants saved in it. Characters who are already present are not duplicated.",
+    Spells: null
   };
 
   const hasAccountSync = env.HasStorage;
   return (
-    <h2>
+    <h2 style={{ flexShrink: 1 }}>
       {hasAccountSync && (
         <span className="fas fa-cloud" title="Account Sync is enabled" />
       )}
       {" " + headerTexts[props.selectedLibrary]}
+      {libraryInfos[props.selectedLibrary] !== null && (
+        <Info children={libraryInfos[props.selectedLibrary]} />
+      )}
     </h2>
   );
 }
