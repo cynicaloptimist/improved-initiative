@@ -121,7 +121,10 @@ function LibraryHeader(props: { selectedLibrary: LibraryType }) {
       )}
       {" " + headerTexts[props.selectedLibrary]}
       {libraryInfos[props.selectedLibrary] !== null && (
-        <Info children={libraryInfos[props.selectedLibrary]} />
+        <Info
+          children={libraryInfos[props.selectedLibrary]}
+          tippyProps={{ placement: "right" }}
+        />
       )}
     </h2>
   );
