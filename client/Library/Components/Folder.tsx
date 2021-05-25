@@ -5,7 +5,9 @@ export function Folder(props: { name: string; children: React.ReactNode }) {
   const [isOpen, setOpen] = React.useState(false);
   const toggleOpen = () => setOpen(!isOpen);
   return (
-    <span className="c-folder">
+    <div
+      className={"c-folder " + (isOpen ? "c-folder--open" : "c-folder--closed")}
+    >
       <li className="c-listing">
         <ListingButton
           text={props.name}
@@ -15,6 +17,6 @@ export function Folder(props: { name: string; children: React.ReactNode }) {
         />
       </li>
       {isOpen && props.children}
-    </span>
+    </div>
   );
 }
