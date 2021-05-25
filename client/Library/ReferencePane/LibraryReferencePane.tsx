@@ -4,7 +4,10 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { BuildListingTree, ListingGroupFn } from "../Components/BuildListingTree";
+import {
+  BuildListingTree,
+  ListingGroupFn
+} from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { ListingButton } from "../Components/ListingButton";
 
@@ -20,6 +23,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
     onPreviewOut: () => void
   ) => JSX.Element;
   groupByFunctions: ListingGroupFn[];
+  addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
   launchQuickAddPrompt?: () => void;
@@ -35,10 +39,9 @@ interface State<T extends Listable> {
   previewPosition: { left: number; top: number };
 }
 
-export class LibraryReferencePane<T extends Listable & object> extends React.Component<
-  LibraryReferencePaneProps<T>,
-  State<T>
-> {
+export class LibraryReferencePane<
+  T extends Listable & object
+> extends React.Component<LibraryReferencePaneProps<T>, State<T>> {
   private filterCache: FilterCache<Listing<T>>;
 
   constructor(props: LibraryReferencePaneProps<T>) {
@@ -113,7 +116,7 @@ export class LibraryReferencePane<T extends Listable & object> extends React.Com
         </ul>
         <div className="buttons">
           <Button
-            text="Add New"
+            text={this.props.addNewText || "Add New"}
             additionalClassNames="new"
             fontAwesomeIcon="plus"
             onClick={this.props.addNewItem}
