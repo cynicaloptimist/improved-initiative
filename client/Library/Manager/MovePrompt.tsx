@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
+import { Info } from "../../Components/Info";
 import { Library } from "../Library";
 import { Listing } from "../Listing";
 
@@ -30,7 +31,10 @@ export function MovePrompt(props: {
       className="prompt"
       style={{ flexDirection: "row", alignItems: "center" }}
     >
-      <span style={{ flexGrow: 1 }}>Move selected items to folder</span>
+      <span style={{ flexGrow: 1 }}>
+        Move selected items to Folder
+        <Info>You can use the "/" character to specify a subfolder</Info>
+      </span>
       <input
         autoFocus
         ref={inputRef}
