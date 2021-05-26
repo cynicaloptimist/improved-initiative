@@ -1,5 +1,4 @@
 import { Listable } from "../../common/Listable";
-import { KeyValueSet } from "../../common/Toolbox";
 import { Listing, ListingOrigin } from "./Listing";
 
 function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
@@ -8,7 +7,7 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
 ) {
   const byName: T[] = [];
   const bySearchHint: T[] = [];
-  const dedupedItems: KeyValueSet<T> = {};
+  const dedupedItems: Record<string, T> = {};
   const sourceRankings: ListingOrigin[] = [
     "account",
     "localAsync",
@@ -69,7 +68,7 @@ export class FilterCache<T extends Listing<Listable>> {
     this.initializeItems(initialItems);
   }
 
-  private filterCache: KeyValueSet<T[]> = {};
+  private filterCache: Record<string, T[]> = {};
 
   public UpdateIfItemsChanged(newItems) {
     if (newItems.length != this.initialLength) {

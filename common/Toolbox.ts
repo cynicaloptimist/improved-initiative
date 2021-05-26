@@ -1,9 +1,4 @@
 import { escapeRegExp } from "lodash";
-
-export interface KeyValueSet<T> {
-  [key: string]: T;
-}
-
 export function toModifierString(number: number): string {
   if (number >= 0) {
     return `+${number}`;
