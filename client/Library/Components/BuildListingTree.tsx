@@ -8,18 +8,20 @@ export type ListingGroupFn = (
   l: Listing<any>
 ) => { label?: string; key: string };
 
+type Folder = {
+  label: string;
+  listings: Listing<any>[];
+  subFoldersByKey: Record<string, Folder>;
+};
+
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
   groupListingsBy: ListingGroupFn,
   listings: Listing<T>[]
 ): JSX.Element[] {
   const rootListingComponents: JSX.Element[] = [];
-  const foldersByKey: {
-    [key: string]: {
-      label: string;
-      listings: Listing<T>[];
-    };
-  } = {};
+
+  const foldersByKey: Record<string, Folder> = {};
 
   listings.forEach(listing => {
     const group = groupListingsBy(listing);
