@@ -125,7 +125,9 @@ export class Library<T extends Listable> {
     );
 
     for (const listing of oldListings) {
-      await this.DeleteListing(listing.Meta().Id);
+      if (listing.Origin !== "server") {
+        await this.DeleteListing(listing.Meta().Id);
+      }
     }
 
     if (listing.Origin === "server") {
