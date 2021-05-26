@@ -6,7 +6,6 @@ import { SavedEncounter } from "../../../common/SavedEncounter";
 import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
-import { CommandButton } from "../../Commands/CommandButton";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Button } from "../../Components/Button";
 import { Tabs } from "../../Components/Tabs";
@@ -19,6 +18,7 @@ import { Listing } from "../Listing";
 import { DeletePrompt } from "./DeletePrompt";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
+import { LibraryManagerToolbar } from "./LibraryManagerToolbar";
 import { MovePrompt } from "./MovePrompt";
 import { SelectedItemsViewForActiveTab } from "./SelectedItemsViewForActiveTab";
 import { Selection, SelectionContext, useSelection } from "./SelectionContext";
@@ -59,18 +59,7 @@ export function LibraryManager(props: LibraryManagerProps) {
   return (
     <SelectionContext.Provider value={selection}>
       <div className="c-library-manager">
-        <div className="c-toolbar commands-library-manager">
-          <Button
-            additionalClassNames="c-button--return"
-            tooltip="Return to Tracker View"
-            tooltipProps={{
-              placement: "right",
-              delay: 1000
-            }}
-            onClick={() => props.closeManager()}
-            fontAwesomeIcon={"arrow-left"}
-          />
-        </div>
+        <LibraryManagerToolbar closeManager={props.closeManager} />
         <div style={{ width: columnWidth }}>
           <Tabs
             optionNamesById={LibraryFriendlyNames}
