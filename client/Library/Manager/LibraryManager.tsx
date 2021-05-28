@@ -11,6 +11,8 @@ import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
+import { LibraryFilter } from "../Components/LibraryFilter";
+import { FilterCache } from "../FilterCache";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
@@ -57,15 +59,13 @@ export function LibraryManager(props: LibraryManagerProps) {
             selected={activeTab}
             onChoose={tab => setActiveTab(tab)}
           />
-          <div className="library">
-            <LibraryManagerListings
-              key={activeTab}
-              listingsComputed={
-                ActiveLibrary(props.libraries, activeTab).GetListings
-              }
-              setEditorTarget={setEditorTarget}
-            />
-          </div>
+          <LibraryManagerListings
+            key={activeTab}
+            listingsComputed={
+              ActiveLibrary(props.libraries, activeTab).GetListings
+            }
+            setEditorTarget={setEditorTarget}
+          />
         </div>
         <VerticalResizer
           adjustWidth={offset => setColumnWidth(columnWidth + offset)}
@@ -88,15 +88,29 @@ export function LibraryManager(props: LibraryManagerProps) {
 }
 
 function LibraryManagerListings(props: {
-  listingsComputed: KnockoutObservable<Listing<any>[]>;
+  listingsComputed: KnockoutObservable<Listing<Listable>[]>;
   setEditorTarget: (item: Listing<any>) => void;
 }) {
   const listings = useSubscription(props.listingsComputed);
+  const [filter, setFilter] = React.useState("");
+
+  const filterCache = React.useRef(new FilterCache(listings)).current;
+  filterCache.UpdateIfItemsChanged(listings);
+
+  const filteredListings = filterCache.GetFilteredEntries(filter);
+
   const listingTree = BuildListingTree(
     l => <LibraryManagerRow key={l.Meta().Id} listing={l} {...props} />,
     l => ({ key: l.Meta().Path }),
-    listings
+    filteredListings
   );
 
-  return <ul className="listings zebra-stripe">{listingTree}</ul>;
+  return (
+    <div className="library">
+      <div className="search-controls">
+        <LibraryFilter applyFilterFn={setFilter} />
+      </div>
+      <ul className="listings zebra-stripe">{listingTree}</ul>;
+    </div>
+  );
 }
