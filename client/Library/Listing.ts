@@ -24,10 +24,10 @@ export class Listing<T extends Listable> {
 
   private value = ko.observable<T>();
 
-  public SetValue = value => this.value(value);
+  public SetValue = (value: T) => this.value(value);
 
-  public GetWithTemplate<TTemplate extends T>(template: TTemplate) {
-    return new Promise<TTemplate>(done => {
+  public GetWithTemplate(template: T) {
+    return new Promise<T>(done => {
       return this.GetAsyncWithUpdatedId(item => {
         return done(_.merge(template, item));
       });
