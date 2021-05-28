@@ -53,7 +53,10 @@ export function LibraryManager(props: LibraryManagerProps) {
     <SelectionContext.Provider value={selection}>
       <div className="c-library-manager">
         <LibraryManagerToolbar closeManager={props.closeManager} />
-        <div style={{ width: columnWidth }}>
+        <div className="left-column" style={{ width: columnWidth }}>
+          <h2>
+            <i className="fas fa-book-open" /> Library Manager
+          </h2>
           <Tabs
             optionNamesById={LibraryFriendlyNames}
             selected={activeTab}
