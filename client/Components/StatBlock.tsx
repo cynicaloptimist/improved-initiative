@@ -14,7 +14,7 @@ interface StatBlockProps {
 }
 
 export function StatBlockComponent(props: StatBlockProps) {
-  const TextEnricher = useContext(TextEnricherContext);
+  const textEnricher = useContext(TextEnricherContext);
   const statBlock = props.statBlock;
 
   const modifierTypes = [
@@ -59,7 +59,7 @@ export function StatBlockComponent(props: StatBlockProps) {
         <span className="stat-label">Armor Class</span>
         <span>{statBlock.AC.Value}</span>
         <span className="notes">
-          {TextEnricher.EnrichText(statBlock.AC.Notes)}
+          {textEnricher.EnrichText(statBlock.AC.Notes)}
         </span>
       </div>
 
@@ -67,7 +67,7 @@ export function StatBlockComponent(props: StatBlockProps) {
         <span className="stat-label">Hit Points</span>
         <span>{statBlock.HP.Value}</span>
         <span className="notes">
-          {TextEnricher.EnrichText(statBlock.HP.Notes)}
+          {textEnricher.EnrichText(statBlock.HP.Notes)}
         </span>
       </div>
 
@@ -79,7 +79,7 @@ export function StatBlockComponent(props: StatBlockProps) {
       <div className="Abilities">
         {Object.keys(StatBlock.Default().Abilities).map(abilityName => {
           const abilityScore = statBlock.Abilities[abilityName];
-          const abilityModifier = TextEnricher.GetEnrichedModifierFromAbilityScore(
+          const abilityModifier = textEnricher.GetEnrichedModifierFromAbilityScore(
             abilityScore
           );
           return (
@@ -103,7 +103,7 @@ export function StatBlockComponent(props: StatBlockProps) {
               {modifierType.data.map((modifier, i) => (
                 <span key={i + modifier.Name}>
                   {modifier.Name}
-                  {TextEnricher.EnrichModifier(modifier.Modifier)}{" "}
+                  {textEnricher.EnrichModifier(modifier.Modifier)}{" "}
                 </span>
               ))}
             </div>
@@ -146,7 +146,7 @@ export function StatBlockComponent(props: StatBlockProps) {
             ) : null}
             {power.Usage && <span className="stat-label">{power.Usage}</span>}
             <span className="power-content">
-              {TextEnricher.EnrichText(power.Content)}
+              {textEnricher.EnrichText(power.Content)}
             </span>
           </div>
         ))}
@@ -156,7 +156,7 @@ export function StatBlockComponent(props: StatBlockProps) {
 
   const description = statBlock.Description && (
     <div className="Description">
-      {TextEnricher.EnrichText(statBlock.Description)}
+      {textEnricher.EnrichText(statBlock.Description)}
     </div>
   );
 

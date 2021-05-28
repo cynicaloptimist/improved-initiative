@@ -14,7 +14,6 @@ import { StatBlockLibraryReferencePane } from "./StatBlockLibraryReferencePane";
 
 export interface LibraryReferencePanesProps {
   librariesCommander: LibrariesCommander;
-  statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
 }
 
@@ -47,14 +46,12 @@ export class LibraryReferencePanes extends React.Component<
         <StatBlockLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.StatBlocks}
-          statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       PersistentCharacters: (
         <PersistentCharacterLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.PersistentCharacters}
-          statBlockTextEnricher={this.props.statBlockTextEnricher}
         />
       ),
       Encounters: (
@@ -67,7 +64,6 @@ export class LibraryReferencePanes extends React.Component<
         <SpellLibraryReferencePane
           librariesCommander={this.props.librariesCommander}
           library={this.props.libraries.Spells}
-          textEnricher={this.props.statBlockTextEnricher}
         />
       )
     };

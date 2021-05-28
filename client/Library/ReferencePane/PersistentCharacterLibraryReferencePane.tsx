@@ -15,7 +15,6 @@ import { Library } from "../Library";
 export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: Library<PersistentCharacter>;
-  statBlockTextEnricher: TextEnricher;
 };
 
 export class PersistentCharacterLibraryReferencePane extends React.Component<

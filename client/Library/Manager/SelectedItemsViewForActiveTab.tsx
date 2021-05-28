@@ -87,7 +87,7 @@ export function SelectedItemsViewForActiveTab({
       <SelectedItemsView
         {...partialViewProps}
         renderListing={(listing: Spell) => {
-          return <SpellDetails Spell={listing} TextEnricher={textEnricher} />;
+          return <SpellDetails Spell={listing} />;
         }}
       />
     );

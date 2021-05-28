@@ -35,7 +35,6 @@ export function LeftColumn(props: {
         <LibraryReferencePanes
           librariesCommander={props.tracker.LibrariesCommander}
           libraries={props.tracker.Libraries}
-          statBlockTextEnricher={props.tracker.StatBlockTextEnricher}
         />
       )}
       {librariesVisible || (

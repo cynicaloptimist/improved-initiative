@@ -14,7 +14,6 @@ import { Library } from "../Library";
 export type SpellLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: Library<Spell>;
-  textEnricher: TextEnricher;
 };
 
 type SpellListing = Listing<Spell>;
@@ -66,7 +65,7 @@ export class SpellLibraryReferencePane extends React.Component<
 
   private renderPreview = (spell: Spell) => (
     <div className="spell-preview">
-      <SpellDetails Spell={spell} TextEnricher={this.props.textEnricher} />
+      <SpellDetails Spell={spell} />
     </div>
   );
 

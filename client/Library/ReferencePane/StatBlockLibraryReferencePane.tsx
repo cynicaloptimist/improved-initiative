@@ -17,7 +17,6 @@ import { ExtraButton, ListingRow } from "../Components/ListingRow";
 export type StatBlockLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
   library: Library<StatBlock>;
-  statBlockTextEnricher: TextEnricher;
 };
 
 type StatBlockListing = Listing<StatBlock>;

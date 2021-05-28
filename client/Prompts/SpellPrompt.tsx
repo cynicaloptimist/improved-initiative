@@ -14,7 +14,7 @@ export function SpellPrompt(
     autoFocusSelector: "button",
     children: (
       <>
-        <SpellDetails Spell={spell} TextEnricher={textEnricher} />
+        <SpellDetails Spell={spell} />
         <SubmitButton />
       </>
     ),

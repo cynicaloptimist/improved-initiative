@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { TextEnricherContext } from "../../TextEnricher/TextEnricher";
 
 const numberSuffixes = [
   "0th",
@@ -15,10 +15,8 @@ const numberSuffixes = [
   "9th"
 ];
 
-export function SpellDetails(props: {
-  Spell: Spell;
-  TextEnricher: TextEnricher;
-}) {
+export function SpellDetails(props: { Spell: Spell }) {
+  const textEnricher = React.useContext(TextEnricherContext);
   return (
     <div className="spell">
       <h3>{props.Spell.Name}</h3>
@@ -41,7 +39,7 @@ export function SpellDetails(props: {
         </div>
       </div>
       <div className="spell-description">
-        {props.TextEnricher.EnrichText(props.Spell.Description)}
+        {textEnricher.EnrichText(props.Spell.Description)}
       </div>
       <div className="spell-source">Source: {props.Spell.Source}</div>
     </div>
