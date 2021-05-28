@@ -16,6 +16,7 @@ type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 export function SelectedItemsManager(props: {
   activeTab: LibraryType;
   libraries: Libraries;
+  editListing: (listing: Listing<Listable>) => void;
 }) {
   const [promptTypeAndTargets, setPromptTypeAndTargets] = useState<
     PromptTypeAndTargets
@@ -24,12 +25,19 @@ export function SelectedItemsManager(props: {
   const selection = React.useContext(SelectionContext);
 
   return (
-    <div style={{ width: 600 }}>
+    <div style={{ width: 600, margin: 5 }}>
       {selection.selected.length > 0 && (
         <div style={{ flexFlow: "row", alignItems: "center" }}>
           <h2 style={{ flexGrow: 1 }}>
             Selected {LibraryFriendlyNames[props.activeTab]}
           </h2>
+          {selection.selected.length === 1 && (
+            <Button
+              text="Edit"
+              fontAwesomeIcon="edit"
+              onClick={() => props.editListing(selection.selected[0])}
+            />
+          )}
           <Button
             text="Move"
             fontAwesomeIcon="folder"

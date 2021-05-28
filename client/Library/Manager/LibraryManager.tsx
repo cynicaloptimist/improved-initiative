@@ -76,6 +76,7 @@ export function LibraryManager(props: LibraryManagerProps) {
         <SelectedItemsManager
           activeTab={activeTab}
           libraries={props.libraries}
+          editListing={setEditorTarget}
         />
         {editorTypeAndTarget && (
           <EditorView
