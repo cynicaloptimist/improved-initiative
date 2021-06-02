@@ -32,7 +32,7 @@ export class EncounterLibraryReferencePane extends React.Component<
         renderListingRow={this.renderListingRow}
         groupByFunctions={this.groupByFunctions}
         addNewItem={this.props.librariesCommander.SaveEncounter}
-        addNewText="Save this Encounter"
+        addNewText="Save Current Encounter"
         renderPreview={this.renderPreview}
       />
     );
