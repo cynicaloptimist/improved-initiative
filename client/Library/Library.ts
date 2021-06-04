@@ -140,8 +140,9 @@ export class Library<T extends Listable> {
   public SaveNewListing = async (newListable: T) => {
     const oldListings = this.GetListings().filter(
       l =>
-        l.Origin === "localAsync" &&
-        l.Meta().Path + l.Meta().Name == newListable.Path + newListable.Name
+        (l.Origin === "localAsync" || l.Origin === "localStorage") &&
+        l.Meta().Path == newListable.Path &&
+        l.Meta().Name == newListable.Name
     );
     const listing = new Listing<T>(
       {
