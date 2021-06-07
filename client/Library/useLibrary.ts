@@ -6,6 +6,18 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
+export interface Library<T extends Listable> {
+  AddListings: (newListingMetas: ListingMeta[], source: ListingOrigin) => void;
+  DeleteListing: (id: string) => Promise<void>;
+  SaveNewListing: (newListable: T) => Promise<Listing<T>>;
+  SaveEditedListing: (
+    listing: Listing<T>,
+    newListable: T
+  ) => Promise<Listing<T>>;
+  GetOrCreateListingById: (listingId: string) => Promise<Listing<T>>;
+  GetAllListings: () => Listing<T>[];
+}
+
 export function useLibrary<T extends Listable>(
   storeName: string,
   accountRoute: string,
@@ -17,7 +29,7 @@ export function useLibrary<T extends Listable>(
     getFilterDimensions: (listable: T) => FilterDimensions;
     loadingFinished?: (storeName: string) => void;
   }
-) {
+): Library<T> {
   // locals
   const [listings, setListings] = React.useState<Listing<T>[]>([]);
 
