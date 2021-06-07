@@ -26,7 +26,7 @@ import {
   EncounterDifficulty
 } from "../Widgets/DifficultyCalculator";
 import { EncounterFlow } from "./EncounterFlow";
-import { Library } from "../Library/Library";
+import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
 import { UpdatePersistentCharacter } from "../Library/Libraries";
 
 export class Encounter {
@@ -372,7 +372,7 @@ export class Encounter {
   public LoadEncounterState = (
     encounterState: EncounterState<CombatantState>,
     updatePersistentCharacter: UpdatePersistentCharacter,
-    persistentCharacterLibrary: Library<PersistentCharacter>
+    persistentCharacterLibrary: ObservableBackedLibrary<PersistentCharacter>
   ) => {
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,

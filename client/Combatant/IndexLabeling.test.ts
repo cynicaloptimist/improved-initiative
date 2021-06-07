@@ -1,6 +1,5 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { Library } from "../Library/Library";
 import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { DeletePrompt } from "./DeletePrompt";
@@ -71,7 +71,7 @@ export function SelectedItemsManager(props: {
 
 function ActivePrompt(props: {
   promptTypeAndTargets: PromptTypeAndTargets;
-  library: Library<Listable>;
+  library: ObservableBackedLibrary<Listable>;
   done: () => void;
 }) {
   if (props.promptTypeAndTargets === null) {

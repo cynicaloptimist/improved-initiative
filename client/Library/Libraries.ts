@@ -2,7 +2,7 @@ import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
-import { Library } from "./Library";
+import { ObservableBackedLibrary } from "./ObservableBackedLibrary";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { now } from "moment";
@@ -38,24 +38,24 @@ export function GetDefaultForLibrary(libraryType: LibraryType) {
 }
 
 export interface Libraries {
-  PersistentCharacters: Library<PersistentCharacter>;
+  PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
   UpdatePersistentCharacter: UpdatePersistentCharacter;
-  StatBlocks: Library<StatBlock>;
-  Encounters: Library<SavedEncounter>;
-  Spells: Library<Spell>;
+  StatBlocks: ObservableBackedLibrary<StatBlock>;
+  Encounters: ObservableBackedLibrary<SavedEncounter>;
+  Spells: ObservableBackedLibrary<Spell>;
 }
 
 export class AccountBackedLibraries {
-  public PersistentCharacters: Library<PersistentCharacter>;
-  public StatBlocks: Library<StatBlock>;
-  public Encounters: Library<SavedEncounter>;
-  public Spells: Library<Spell>;
+  public PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
+  public StatBlocks: ObservableBackedLibrary<StatBlock>;
+  public Encounters: ObservableBackedLibrary<SavedEncounter>;
+  public Spells: ObservableBackedLibrary<Spell>;
 
   constructor(
     accountClient: AccountClient,
     loadingFinished?: (storeName: string) => void
   ) {
-    this.PersistentCharacters = new Library<PersistentCharacter>(
+    this.PersistentCharacters = new ObservableBackedLibrary<PersistentCharacter>(
       Store.PersistentCharacters,
       "persistentcharacters",
       PersistentCharacter.Default,
@@ -67,7 +67,7 @@ export class AccountBackedLibraries {
         loadingFinished
       }
     );
-    this.StatBlocks = new Library<StatBlock>(
+    this.StatBlocks = new ObservableBackedLibrary<StatBlock>(
       Store.StatBlocks,
       "statblocks",
       StatBlock.Default,
@@ -79,7 +79,7 @@ export class AccountBackedLibraries {
         loadingFinished
       }
     );
-    this.Encounters = new Library<SavedEncounter>(
+    this.Encounters = new ObservableBackedLibrary<SavedEncounter>(
       Store.SavedEncounters,
       "encounters",
       SavedEncounter.Default,
@@ -92,7 +92,7 @@ export class AccountBackedLibraries {
       }
     );
 
-    this.Spells = new Library<Spell>(Store.Spells, "spells", Spell.Default, {
+    this.Spells = new ObservableBackedLibrary<Spell>(Store.Spells, "spells", Spell.Default, {
       accountSave: accountClient.SaveSpell,
       accountDelete: accountClient.DeleteSpell,
       getFilterDimensions: Spell.GetFilterDimensions,

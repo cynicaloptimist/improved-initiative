@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { Listing } from "../Listing";
 
 export function DeletePrompt(props: {
   targets: Listing<Listable>[];
-  library: Library<Listable>;
+  library: ObservableBackedLibrary<Listable>;
   done: () => void;
 }) {
   return (

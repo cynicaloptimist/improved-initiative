@@ -12,7 +12,7 @@ import {
   UpdatePersistentCharacter
 } from "../Library/Libraries";
 import { Store } from "../Utility/Store";
-import { Library } from "../Library/Library";
+import { ObservableBackedLibrary } from "../Library/Library";
 
 describe("InitializeCharacter", () => {
   it("Should have the current HP of the provided statblock", () => {
@@ -24,21 +24,21 @@ describe("InitializeCharacter", () => {
 });
 
 async function makePersistentCharacterLibrary() {
-  return new Promise<[Library<PersistentCharacter>, UpdatePersistentCharacter]>(
-    resolve => {
-      const libraries = new AccountBackedLibraries(
-        new AccountClient(),
-        storeName => {
-          if (storeName === Store.PersistentCharacters) {
-            resolve([
-              libraries.PersistentCharacters,
-              libraries.UpdatePersistentCharacter
-            ]);
-          }
+  return new Promise<
+    [ObservableBackedLibrary<PersistentCharacter>, UpdatePersistentCharacter]
+  >(resolve => {
+    const libraries = new AccountBackedLibraries(
+      new AccountClient(),
+      storeName => {
+        if (storeName === Store.PersistentCharacters) {
+          resolve([
+            libraries.PersistentCharacters,
+            libraries.UpdatePersistentCharacter
+          ]);
         }
-      );
-    }
-  );
+      }
+    );
+  });
 }
 
 describe("PersistentCharacterLibrary", () => {

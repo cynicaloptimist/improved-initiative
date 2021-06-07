@@ -13,7 +13,7 @@ import {
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { Library } from "../Library/Library";
+import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
@@ -75,7 +75,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: Library<StatBlock>) => {
+  public CreateAndEditStatBlock = (library: ObservableBackedLibrary<StatBlock>) => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -92,7 +92,7 @@ export class LibrariesCommander {
 
   public EditStatBlock = (
     listing: Listing<StatBlock>,
-    library: Library<StatBlock>
+    library: ObservableBackedLibrary<StatBlock>
   ) => {
     if (this.tracker.TutorialVisible()) {
       return;

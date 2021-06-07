@@ -6,11 +6,11 @@ import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 
 export type EncounterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: Library<SavedEncounter>;
+  library: ObservableBackedLibrary<SavedEncounter>;
 };
 
 type EncounterListing = Listing<SavedEncounter>;

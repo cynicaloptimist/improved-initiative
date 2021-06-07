@@ -1,11 +1,11 @@
 import { Listable } from "../../../common/Listable";
 import { Libraries, LibraryType } from "../Libraries";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 
 export function ActiveLibrary(
   libraries: Libraries,
   libraryType: LibraryType
-): Library<Listable> | null {
+): ObservableBackedLibrary<Listable> | null {
   if (libraryType === "StatBlocks") {
     return libraries.StatBlocks;
   }

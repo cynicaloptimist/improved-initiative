@@ -9,14 +9,14 @@ import { CurrentSettings } from "../../Settings/Settings";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ExtraButton, ListingRow } from "../Components/ListingRow";
 
 export type StatBlockLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: Library<StatBlock>;
+  library: ObservableBackedLibrary<StatBlock>;
 };
 
 type StatBlockListing = Listing<StatBlock>;

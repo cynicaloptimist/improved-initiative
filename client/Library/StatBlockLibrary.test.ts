@@ -1,6 +1,6 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
-import { Library } from "./Library";
+import { ObservableBackedLibrary } from "./ObservableBackedLibrary";
 
 describe("StatBlock Library", () => {
   test("", async done => {
@@ -12,7 +12,7 @@ describe("StatBlock Library", () => {
       HP: { Value: 10 }
     });
 
-    const library = new Library(
+    const library = new ObservableBackedLibrary(
       Store.StatBlocks,
       "statblocks",
       () => StatBlock.Default(),

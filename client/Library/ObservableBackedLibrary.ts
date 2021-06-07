@@ -7,7 +7,7 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
-export class Library<T extends Listable> {
+export class ObservableBackedLibrary<T extends Listable> {
   private listings = ko.observableArray<Listing<T>>([]);
 
   public GetListings = ko.pureComputed(() => this.listings());

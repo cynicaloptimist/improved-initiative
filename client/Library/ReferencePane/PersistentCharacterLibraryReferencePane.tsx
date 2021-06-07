@@ -10,11 +10,11 @@ import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 
 export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: Library<PersistentCharacter>;
+  library: ObservableBackedLibrary<PersistentCharacter>;
 };
 
 export class PersistentCharacterLibraryReferencePane extends React.Component<

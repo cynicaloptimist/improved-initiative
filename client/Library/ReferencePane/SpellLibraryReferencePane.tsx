@@ -9,11 +9,11 @@ import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { SpellDetails } from "../Components/SpellDetails";
-import { Library } from "../Library";
+import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 
 export type SpellLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: Library<Spell>;
+  library: ObservableBackedLibrary<Spell>;
 };
 
 type SpellListing = Listing<Spell>;
