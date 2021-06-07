@@ -5,7 +5,6 @@ import { Store } from "../Utility/Store";
 import { ObservableBackedLibrary } from "./ObservableBackedLibrary";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
-import { now } from "moment";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -39,7 +38,6 @@ export function GetDefaultForLibrary(libraryType: LibraryType) {
 
 export interface Libraries {
   PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
-  UpdatePersistentCharacter: UpdatePersistentCharacter;
   StatBlocks: ObservableBackedLibrary<StatBlock>;
   Encounters: ObservableBackedLibrary<SavedEncounter>;
   Spells: ObservableBackedLibrary<Spell>;
@@ -55,7 +53,9 @@ export class AccountBackedLibraries {
     accountClient: AccountClient,
     loadingFinished?: (storeName: string) => void
   ) {
-    this.PersistentCharacters = new ObservableBackedLibrary<PersistentCharacter>(
+    this.PersistentCharacters = new ObservableBackedLibrary<
+      PersistentCharacter
+    >(
       Store.PersistentCharacters,
       "persistentcharacters",
       PersistentCharacter.Default,
@@ -92,47 +92,22 @@ export class AccountBackedLibraries {
       }
     );
 
-    this.Spells = new ObservableBackedLibrary<Spell>(Store.Spells, "spells", Spell.Default, {
-      accountSave: accountClient.SaveSpell,
-      accountDelete: accountClient.DeleteSpell,
-      getFilterDimensions: Spell.GetFilterDimensions,
-      getSearchHint: Spell.GetSearchHint,
-      loadingFinished
-    });
+    this.Spells = new ObservableBackedLibrary<Spell>(
+      Store.Spells,
+      "spells",
+      Spell.Default,
+      {
+        accountSave: accountClient.SaveSpell,
+        accountDelete: accountClient.DeleteSpell,
+        getFilterDimensions: Spell.GetFilterDimensions,
+        getSearchHint: Spell.GetSearchHint,
+        loadingFinished
+      }
+    );
 
     this.initializeStatBlocks();
     this.initializeSpells();
   }
-
-  public UpdatePersistentCharacter = async (
-    persistentCharacterId: string,
-    updates: Partial<PersistentCharacter>
-  ) => {
-    if (updates.StatBlock) {
-      updates.Name = updates.StatBlock.Name;
-      updates.Path = updates.StatBlock.Path;
-      updates.Version = updates.StatBlock.Version;
-    }
-
-    const currentCharacterListing = await this.PersistentCharacters.GetOrCreateListingById(
-      persistentCharacterId
-    );
-
-    const currentCharacter = await currentCharacterListing.GetWithTemplate(
-      PersistentCharacter.Default()
-    );
-
-    const updatedCharacter = {
-      ...currentCharacter,
-      ...updates,
-      LastUpdateMs: now()
-    };
-
-    return await this.PersistentCharacters.SaveEditedListing(
-      currentCharacterListing,
-      updatedCharacter
-    );
-  };
 
   private initializeStatBlocks = () => {
     $.ajax("../statblocks/").done(listings => {

@@ -187,7 +187,7 @@ export class TrackerViewModel {
     updatedStatBlock: StatBlock,
     hpDifference?: number
   ) {
-    this.Libraries.UpdatePersistentCharacter(persistentCharacterId, {
+    this.LibrariesCommander.UpdatePersistentCharacter(persistentCharacterId, {
       StatBlock: updatedStatBlock,
       CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
     });
@@ -401,7 +401,7 @@ export class TrackerViewModel {
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
         UpdateLegacyEncounterState(autosavedEncounter),
-        this.Libraries.UpdatePersistentCharacter,
+        this.LibrariesCommander.UpdatePersistentCharacter,
         this.Libraries.PersistentCharacters
       );
     }

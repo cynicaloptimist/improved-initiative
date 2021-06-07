@@ -22,6 +22,7 @@ import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "../Prompts/SpellPrompt";
 import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 import { SavedEncounter } from "../../common/SavedEncounter";
+import { now } from "moment";
 
 export class LibrariesCommander {
   constructor(
@@ -66,7 +67,7 @@ export class LibrariesCommander {
     );
     this.tracker.Encounter.AddCombatantFromPersistentCharacter(
       character,
-      this.libraries.UpdatePersistentCharacter,
+      this.UpdatePersistentCharacter,
       hideOnAdd
     );
     Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
@@ -75,7 +76,39 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: ObservableBackedLibrary<StatBlock>) => {
+  public UpdatePersistentCharacter = async (
+    persistentCharacterId: string,
+    updates: Partial<PersistentCharacter>
+  ) => {
+    if (updates.StatBlock) {
+      updates.Name = updates.StatBlock.Name;
+      updates.Path = updates.StatBlock.Path;
+      updates.Version = updates.StatBlock.Version;
+    }
+
+    const currentCharacterListing = await this.libraries.PersistentCharacters.GetOrCreateListingById(
+      persistentCharacterId
+    );
+
+    const currentCharacter = await currentCharacterListing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
+
+    const updatedCharacter = {
+      ...currentCharacter,
+      ...updates,
+      LastUpdateMs: now()
+    };
+
+    return await this.libraries.PersistentCharacters.SaveEditedListing(
+      currentCharacterListing,
+      updatedCharacter
+    );
+  };
+
+  public CreateAndEditStatBlock = (
+    library: ObservableBackedLibrary<StatBlock>
+  ) => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 

@@ -252,7 +252,7 @@ export class EncounterCommander {
           );
           this.tracker.Encounter.AddCombatantFromPersistentCharacter(
             persistentCharacter,
-            this.tracker.Libraries.UpdatePersistentCharacter
+            this.tracker.LibrariesCommander.UpdatePersistentCharacter
           );
           resolve();
         })
