@@ -35,6 +35,7 @@ export interface Settings {
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
+    DisplayHPBar: boolean;
     PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
@@ -57,6 +58,7 @@ export function getDefaultSettings(): Settings {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayDifficulty: true,
+      DisplayHPBar: false,
       PostCombatStats: PostCombatStatsOption.None
     },
     PlayerView: {
