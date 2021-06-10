@@ -9,8 +9,11 @@
   background-color: @selected-light;
 }
 
-.listings span:hover {
-  background-color: @hover-white;
+.listings span {
+  transition: background-color @transition-hover;
+  &:hover {
+    background-color: @hover-white;
+  }
 }
 
 .c-listing {
@@ -23,7 +26,8 @@
   .c-listing-edit,
   .c-listing-move,
   .c-listing__counter {
-    display: none;
+    transition: opacity @transition-hover;
+    opacity: 0;
   }
 
   &:hover {
@@ -32,7 +36,7 @@
     .c-listing-delete,
     .c-listing-edit,
     .c-listing-move {
-      display: flex;
+      opacity: 1;
     }
   }
 }
