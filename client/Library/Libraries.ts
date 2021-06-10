@@ -5,6 +5,8 @@ import { Store } from "../Utility/Store";
 import { ObservableBackedLibrary } from "./ObservableBackedLibrary";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { Library, useLibrary } from "./useLibrary";
+import React = require("react");
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -34,6 +36,80 @@ export function GetDefaultForLibrary(libraryType: LibraryType) {
   }
 
   return null;
+}
+
+export interface Libraries {
+  PersistentCharacters: Library<PersistentCharacter>;
+  StatBlocks: Library<StatBlock>;
+  Encounters: Library<SavedEncounter>;
+  Spells: Library<Spell>;
+}
+
+export function useLibraries(props: {
+  accountClient: AccountClient;
+  loadingFinished?: (storeName: string) => void;
+}): Libraries {
+  const { accountClient, loadingFinished } = props;
+  const PersistentCharacters = useLibrary(
+    Store.PersistentCharacters,
+    "persistentcharacters",
+    {
+      createEmptyListing: PersistentCharacter.Default,
+      accountSave: accountClient.SavePersistentCharacter,
+      accountDelete: accountClient.DeletePersistentCharacter,
+      getFilterDimensions: PersistentCharacter.GetFilterDimensions,
+      getSearchHint: PersistentCharacter.GetSearchHint,
+      loadingFinished
+    }
+  );
+  const StatBlocks = useLibrary(Store.StatBlocks, "statblocks", {
+    createEmptyListing: StatBlock.Default,
+    accountSave: accountClient.SaveStatBlock,
+    accountDelete: accountClient.DeleteStatBlock,
+    getFilterDimensions: StatBlock.FilterDimensions,
+    getSearchHint: StatBlock.GetSearchHint,
+    loadingFinished
+  });
+  const Encounters = useLibrary(Store.SavedEncounters, "encounters", {
+    createEmptyListing: SavedEncounter.Default,
+    accountSave: accountClient.SaveEncounter,
+    accountDelete: accountClient.DeleteEncounter,
+    getFilterDimensions: () => ({}),
+    getSearchHint: SavedEncounter.GetSearchHint,
+    loadingFinished
+  });
+
+  const Spells = useLibrary(Store.Spells, "spells", {
+    createEmptyListing: Spell.Default,
+    accountSave: accountClient.SaveSpell,
+    accountDelete: accountClient.DeleteSpell,
+    getFilterDimensions: Spell.GetFilterDimensions,
+    getSearchHint: Spell.GetSearchHint,
+    loadingFinished
+  });
+
+  React.useEffect(() => {
+    $.ajax("../statblocks/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      StatBlocks.AddListings(listings, "server");
+    });
+
+    $.ajax("../spells/").done(listings => {
+      if (!listings) {
+        return;
+      }
+      Spells.AddListings(listings, "server");
+    });
+  }, []);
+
+  return {
+    StatBlocks,
+    PersistentCharacters,
+    Encounters,
+    Spells
+  };
 }
 
 export interface ObservableBackedLibraries {
