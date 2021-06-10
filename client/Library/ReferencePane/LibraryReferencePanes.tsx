@@ -6,7 +6,7 @@ import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialSpy";
-import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { EncounterLibraryReferencePane } from "./EncounterLibraryReferencePane";
 import { PersistentCharacterLibraryReferencePane } from "./PersistentCharacterLibraryReferencePane";
 import { SpellLibraryReferencePane } from "./SpellLibraryReferencePane";
@@ -14,7 +14,7 @@ import { StatBlockLibraryReferencePane } from "./StatBlockLibraryReferencePane";
 
 export interface LibraryReferencePanesProps {
   librariesCommander: LibrariesCommander;
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
 }
 
 interface State {

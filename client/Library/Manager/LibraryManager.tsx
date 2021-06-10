@@ -13,7 +13,7 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { FilterCache } from "../FilterCache";
-import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";
@@ -25,7 +25,7 @@ import { Selection, SelectionContext, useSelection } from "./SelectionContext";
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
   closeManager: () => void;
 };
 

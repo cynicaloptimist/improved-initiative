@@ -5,7 +5,7 @@ import { Settings } from "../../../common/Settings";
 import { AccountClient } from "../../Account/AccountClient";
 import { Command } from "../../Commands/Command";
 import { Tabs } from "../../Components/Tabs";
-import { Libraries } from "../../Library/Libraries";
+import { ObservableBackedLibraries } from "../../Library/Libraries";
 import { About } from "./About";
 import { AccountSettings } from "./AccountSettings";
 import { CommandsSettings } from "./CommandsSettings";
@@ -28,7 +28,7 @@ interface SettingsPaneProps {
   encounterCommands: Command[];
   combatantCommands: Command[];
   accountClient: AccountClient;
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
   handleNewSettings: (newSettings: Settings) => void;
   closeSettings: () => void;
 }

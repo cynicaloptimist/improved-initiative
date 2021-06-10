@@ -1,12 +1,12 @@
 import * as React from "react";
 
 import { AccountClient } from "../../Account/AccountClient";
-import { Libraries } from "../../Library/Libraries";
+import { ObservableBackedLibraries } from "../../Library/Libraries";
 import { AccountSyncSettings } from "./AccountSyncSettings";
 import { LocalDataSettings } from "./LocalDataSettings";
 
 interface AccountSettingsProps {
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
   accountClient: AccountClient;
 }
 

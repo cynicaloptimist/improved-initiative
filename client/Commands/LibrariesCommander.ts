@@ -11,7 +11,7 @@ import {
   probablyUniqueString
 } from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import { Libraries } from "../Library/Libraries";
+import { ObservableBackedLibraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -27,7 +27,7 @@ import { now } from "moment";
 export class LibrariesCommander {
   constructor(
     private tracker: TrackerViewModel,
-    private libraries: Libraries,
+    private libraries: ObservableBackedLibraries,
     private encounterCommander: EncounterCommander
   ) {}
 

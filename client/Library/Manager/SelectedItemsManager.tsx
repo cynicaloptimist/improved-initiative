@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
-import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
@@ -15,7 +15,7 @@ type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
 export function SelectedItemsManager(props: {
   activeTab: LibraryType;
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
   editListing: (listing: Listing<Listable>) => void;
 }) {
   const [promptTypeAndTargets, setPromptTypeAndTargets] = useState<

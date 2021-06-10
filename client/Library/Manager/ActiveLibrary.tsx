@@ -1,9 +1,9 @@
 import { Listable } from "../../../common/Listable";
-import { Libraries, LibraryType } from "../Libraries";
+import { ObservableBackedLibraries, LibraryType } from "../Libraries";
 import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 
 export function ActiveLibrary(
-  libraries: Libraries,
+  libraries: ObservableBackedLibraries,
   libraryType: LibraryType
 ): ObservableBackedLibrary<Listable> | null {
   if (libraryType === "StatBlocks") {

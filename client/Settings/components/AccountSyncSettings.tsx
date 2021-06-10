@@ -9,13 +9,13 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { Button } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../../Environment";
-import { Libraries } from "../../Library/Libraries";
+import { ObservableBackedLibraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
 import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Store } from "../../Utility/Store";
 
 interface AccountSyncSettingsProps {
-  libraries: Libraries;
+  libraries: ObservableBackedLibraries;
   accountClient: AccountClient;
 }
 

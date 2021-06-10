@@ -36,7 +36,7 @@ export function GetDefaultForLibrary(libraryType: LibraryType) {
   return null;
 }
 
-export interface Libraries {
+export interface ObservableBackedLibraries {
   PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
   StatBlocks: ObservableBackedLibrary<StatBlock>;
   Encounters: ObservableBackedLibrary<SavedEncounter>;

@@ -8,7 +8,7 @@ import { Settings } from "../../common/Settings";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
-import { Libraries } from "../Library/Libraries";
+import { ObservableBackedLibraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 
 const DEFAULT_BATCH_SIZE = 10;
@@ -45,7 +45,7 @@ export class AccountClient {
   }
 
   public async SaveAllUnsyncedItems(
-    libraries: Libraries,
+    libraries: ObservableBackedLibraries,
     messageCallback: (message: string) => void
   ) {
     if (!env.HasStorage) {
