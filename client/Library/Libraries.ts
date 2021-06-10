@@ -45,11 +45,10 @@ export interface Libraries {
   Spells: Library<Spell>;
 }
 
-export function useLibraries(props: {
-  accountClient: AccountClient;
-  loadingFinished?: (storeName: string) => void;
-}): Libraries {
-  const { accountClient, loadingFinished } = props;
+export function useLibraries(
+  accountClient: AccountClient,
+  loadingFinished?: (storeName: string) => void
+): Libraries {
   const PersistentCharacters = useLibrary(
     Store.PersistentCharacters,
     "persistentcharacters",
