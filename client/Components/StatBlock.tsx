@@ -57,7 +57,7 @@ export function StatBlockComponent(props: StatBlockProps) {
     <>
       <div className="AC">
         <span className="stat-label">Armor Class</span>
-        <span>{statBlock.AC.Value}</span>
+        <span className="stat-value">{statBlock.AC.Value}</span>
         <span className="notes">
           {textEnricher.EnrichText(statBlock.AC.Notes)}
         </span>
@@ -65,7 +65,7 @@ export function StatBlockComponent(props: StatBlockProps) {
 
       <div className="HP">
         <span className="stat-label">Hit Points</span>
-        <span>{statBlock.HP.Value}</span>
+        <span className="stat-value">{statBlock.HP.Value}</span>
         <span className="notes">
           {textEnricher.EnrichText(statBlock.HP.Notes)}
         </span>
@@ -73,7 +73,7 @@ export function StatBlockComponent(props: StatBlockProps) {
 
       <div className="speed">
         <span className="stat-label">Speed</span>
-        <span>{statBlock.Speed.join(", ")}</span>
+        <span className="stat-value">{statBlock.Speed.join(", ")}</span>
       </div>
 
       <div className="Abilities">
@@ -83,10 +83,10 @@ export function StatBlockComponent(props: StatBlockProps) {
             abilityScore
           );
           return (
-            <div key={abilityName}>
+            <div className="Ability" key={abilityName}>
               <div className="stat-label">{abilityName}</div>
-              <div className={"score " + abilityName}>{abilityScore}</div>
-              <div className={"modifier " + abilityName}>{abilityModifier}</div>
+              <span className={"score " + abilityName}>{abilityScore}</span>
+              <span className={"modifier " + abilityName}>{abilityModifier}</span>
             </div>
           );
         })}
@@ -101,7 +101,7 @@ export function StatBlockComponent(props: StatBlockProps) {
             <div key={modifierType.name} className={modifierType.name}>
               <span className="stat-label">{modifierType.name}</span>
               {modifierType.data.map((modifier, i) => (
-                <span key={i + modifier.Name}>
+                <span className="stat-value" key={i + modifier.Name}>
                   {modifier.Name}
                   {textEnricher.EnrichModifier(modifier.Modifier)}{" "}
                 </span>
@@ -116,7 +116,15 @@ export function StatBlockComponent(props: StatBlockProps) {
           .map(keywordSetType => (
             <div key={keywordSetType.name} className={keywordSetType.name}>
               <span className="stat-label">{keywordSetType.name}</span>
-              {keywordSetType.data.join(", ")}
+              <span className="stat-value">
+                <span className="stat-value__item">
+                  {keywordSetType.data.map((keyword, index) => {
+                    return (
+                      <span className="stat-value__item">{keyword}</span>
+                    )
+                  })}
+                </span>
+              </span>
             </div>
           ))}
       </div>
@@ -126,7 +134,7 @@ export function StatBlockComponent(props: StatBlockProps) {
           <span className="stat-label">
             {statBlock.Player == "player" ? "Level" : "Challenge"}
           </span>
-          <span>{statBlock.Challenge}</span>
+          <span className="stat-value">{statBlock.Challenge}</span>
         </div>
       )}
 

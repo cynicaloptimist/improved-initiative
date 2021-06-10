@@ -4,7 +4,7 @@
 
   .c-statblock-header__portrait {
     max-height: 4rem;
-    padding: @small-spacer;
+    padding: 0 @small-spacer @small-spacer 0;
     cursor: zoom-in;
   }
 
@@ -30,6 +30,7 @@
 .c-combatant-details__hp,
 .c-combatant-details__tags {
   flex-direction: row;
+  margin-top: @extra-small-spacer;
 }
 
 .combatant-details__header {
@@ -79,7 +80,7 @@
 
 .stat-label {
   font-weight: bold;
-  margin: 0 @extra-small-spacer @extra-small-spacer 0;
+  margin: 0 @small-spacer 0 0;
   color: @primary-red;
 }
 
@@ -97,6 +98,10 @@
     align-items: center;
   }
 
+  p:not(:last-child), li:not(:last-child) {
+    margin-bottom: @extra-small-spacer;
+  }
+
   pre {
     white-space: pre-wrap;
   }
@@ -105,9 +110,13 @@
     flex-direction: row;
     flex-wrap: wrap;
     max-height: none;
-
-    span {
-      padding-right: @extra-small-spacer;
+  }
+  .stat-value + .notes {
+    margin-left: @small-spacer;
+  }
+  .stat-value + .stat-value, .stat-value__item + .stat-value__item {
+    &::before {
+      content: ", ";
     }
   }
 
@@ -115,45 +124,50 @@
     white-space: pre-line;
   }
 
+  .AC, .HP {
+    margin-bottom: @extra-small-spacer;
+  }
+
   .Abilities {
     justify-content: space-between;
-    margin: @medium-spacer @large-spacer @medium-spacer 0;
+    margin: @medium-spacer 0;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
 
-    div {
+    .Ability {
+      flex-basis: calc(100% / 6);
       flex-direction: row;
-      justify-content: center;
       flex-wrap: wrap;
-      width: calc(80% / 6);
-
-      .stat-label {
-        display: inline-block;
-        width: 100%;
-        text-align: center;
-      }
-
-      .modifier,
-      .score {
-        display: inline-block;
-        flex: 1;
-        font-size: @font-size-small;
-        text-align: center;
-      }
-
-      .modifier {
-        &:before {
-          content: "(";
-        }
-
-        &:after {
-          content: ")";
-        }
-      }
+      justify-content: center;
     }
 
     .stat-label {
+      display: block;
+      text-align: center;
+      margin-right: 0;
+      flex-basis: 100%;
       margin-bottom: @extra-small-spacer;
       font-size: @font-size-small;
       text-transform: uppercase;
+    }
+
+    .modifier,
+    .score {
+      display: inline-block;
+      font-size: @font-size-small;
+      text-align: center;
+    }
+
+    .modifier {
+      margin-left: @small-spacer;
+      &:before {
+        content: "(";
+      }
+
+      &:after {
+        content: ")";
+      }
     }
   }
 
@@ -170,12 +184,12 @@
   .Skills,
   .Saves {
     .rollable {
-      margin: 0 @small-spacer;
-
-      &:after {
-        content: ";";
-      }
+      margin-left: @small-spacer;
     }
+  }
+
+  .Skills, .Saves, .keyword-sets > div {
+    margin-bottom: @small-spacer;
   }
 
   .Actions,
@@ -187,7 +201,7 @@
     div {
       flex-direction: column;
       display: inline;
-      margin: 0 0 @medium-spacer 0;
+      margin: 0 0 @large-spacer 0;
 
       &:last-of-type {
         margin-bottom: 0;

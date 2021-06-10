@@ -56,5 +56,9 @@
   .spell-description {
     margin: @large-spacer 0 @medium-spacer;
     padding: 0 !important;
+
+    p:not(:last-child), li:not(:last-child) {
+      margin-bottom: @small-spacer;
+    }
   }
 }
