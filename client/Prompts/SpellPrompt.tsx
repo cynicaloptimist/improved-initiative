@@ -19,6 +19,7 @@ export function SpellPrompt(
       </>
     ),
     initialValues: {},
+    className: "prompt-spell",
     onSubmit: () => true
   };
 }

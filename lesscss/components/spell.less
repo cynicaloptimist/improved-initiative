@@ -6,6 +6,15 @@
   flex-shrink: 1;
 }
 
+// some overrides to allow spell details to go full width
+.prompt.prompt-spell {
+  > .c-button {
+    transform: translateX(-100%);
+    margin-left: 0;
+  }
+  .spell { min-width: 100%; }
+}
+
 .spell {
   flex-grow: 1;
   flex-flow: row;
