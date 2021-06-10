@@ -14,14 +14,14 @@ export class Command {
   public Id: string;
   public Description: string;
   public ActionBinding: () => any;
-  public FontAwesomeIcon: string;
+  public FontAwesomeIcon: KnockoutComputed<string>;
   public LockOnActionBar?: boolean;
 
   constructor(props: {
     id: string;
     description: string;
     actionBinding: () => any;
-    fontAwesomeIcon: string;
+    fontAwesomeIcon: string | (() => string);
     defaultShowOnActionBar?: boolean;
     defaultShowInCombatantRow?: boolean;
     lockOnActionBar?: boolean;
@@ -29,7 +29,13 @@ export class Command {
     this.Id = props.id;
     this.Description = props.description;
     this.ActionBinding = props.actionBinding;
-    this.FontAwesomeIcon = props.fontAwesomeIcon;
+
+    if (typeof props.fontAwesomeIcon === "string") {
+      this.FontAwesomeIcon = ko.computed(() => props.fontAwesomeIcon as string);
+    } else {
+      this.FontAwesomeIcon = ko.computed(props.fontAwesomeIcon);
+    }
+
     this.LockOnActionBar = props.lockOnActionBar || false;
 
     this.ShowOnActionBar = ko.observable(props.defaultShowOnActionBar ?? true);
