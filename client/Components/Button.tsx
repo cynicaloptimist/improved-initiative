@@ -21,19 +21,21 @@ export function Button(props: ButtonProps) {
 
   const classNames = ["c-button"];
 
-  if (props.disabled) {
-    classNames.push("c-button--disabled");
-  }
+  const faElement = props.fontAwesomeIcon && (
+    <span className={`fas fa-${props.fontAwesomeIcon}${
+        (props.text && props.additionalClassNames == "c-button--toggle-menu") ? " fa-flip-horizontal" : ""
+      }`} />
+  );
   if (props.fontAwesomeIcon && props.text) {
     classNames.push("c-button--icon-and-text");
+  }
+
+  if (props.disabled) {
+    classNames.push("c-button--disabled");
   }
   if (props.additionalClassNames) {
     classNames.push(props.additionalClassNames);
   }
-
-  const faElement = props.fontAwesomeIcon && (
-    <span className={`fas fa-${props.fontAwesomeIcon}`} />
-  );
 
   const button = (
     <button
