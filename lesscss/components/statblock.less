@@ -146,9 +146,8 @@
 
     .Ability {
       flex-basis: calc(100% / 6);
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: block;
+      text-align: center;
     }
 
     .stat-label {
@@ -169,8 +168,8 @@
     }
 
     .modifier {
-      margin-left: @small-spacer;
       &:before {
+        margin-left: @extra-small-spacer;
         content: "(";
       }
 
