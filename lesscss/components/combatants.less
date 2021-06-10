@@ -57,12 +57,21 @@
 }
 
 #tracker {
-  .combatant:hover {
-    background-color: @hover-white;
+  .combatant {
+    transition: box-shadow @transition-activation,
+      background-color @transition-hover,
+      border-color @transition-activation;
+
+    &:hover {
+      background-color: @hover-white;
+    }
   }
 
-  .combatant .combatant__hp:hover {
-    border-color: unset;
+  .combatant .combatant__hp {
+    transition: border @transition-hover;
+    &:hover {
+      border-color: unset;
+    }
   }
 }
 
@@ -140,10 +149,16 @@
   width: 1.4rem;
   border-left: @active-combatant-indicator-width solid transparent;
   cursor: grab;
+  opacity: .4;
+  transition: border-color @transition-automation, color @transition-automation, opacity @transition-hover;
 
   .active & {
     color: @primary-red;
     border-color: @primary-red;
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 
