@@ -24,6 +24,7 @@
     padding: @medium-spacer 0;
     border-top: 3px solid @primary-red;
     border-bottom: 3px solid @primary-red;
+    justify-content: space-between;
 
     p {
       flex-basis: 50%;
@@ -61,4 +62,11 @@
       margin-bottom: @small-spacer;
     }
   }
+
+  .spell-value + .spell-value, .spell-value__item + .spell-value__item {
+    &::before {
+      content: ", ";
+    }
+  }
+
 }
