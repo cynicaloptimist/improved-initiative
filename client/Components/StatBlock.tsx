@@ -73,7 +73,11 @@ export function StatBlockComponent(props: StatBlockProps) {
 
       <div className="speed">
         <span className="stat-label">Speed</span>
-        <span className="stat-value">{statBlock.Speed.join(", ")}</span>
+        <span className="stat-value">
+          {statBlock.Speed.map((speed, i) => (
+            <span className="stat-value__item">{speed}</span>
+          ))}
+        </span>
       </div>
 
       <div className="Abilities">
