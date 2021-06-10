@@ -31,7 +31,15 @@
 .c-combatant-details__tags {
   flex-direction: row;
   margin-top: @extra-small-spacer;
+
+  .stat-label {
+  }
+  .stat-value {
+    display: block;
+    flex: 1;
+  }
 }
+
 
 .combatant-details__header {
   display: flex;
@@ -83,6 +91,12 @@
   margin: 0 @small-spacer 0 0;
   color: @primary-red;
 }
+.stat-value + .stat-value, .stat-value__item + .stat-value__item {
+  &::before {
+    content: ", ";
+  }
+}
+
 
 .c-statblock {
   display: block;
@@ -113,11 +127,6 @@
   }
   .stat-value + .notes {
     margin-left: @small-spacer;
-  }
-  .stat-value + .stat-value, .stat-value__item + .stat-value__item {
-    &::before {
-      content: ", ";
-    }
   }
 
   .power-content {
