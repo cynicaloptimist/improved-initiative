@@ -27,6 +27,7 @@ export function CombatantRow(props: CombatantRowProps) {
   const commandContext = React.useContext(CommandContext);
 
   const { DisplayPortraits } = React.useContext(SettingsContext).TrackerView;
+  const { DisplayHPBar } = React.useContext(SettingsContext).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
@@ -141,6 +142,11 @@ export function CombatantRow(props: CombatantRowProps) {
         />
 
         {renderHPText(props)}
+        {DisplayHPBar && (
+          <span className="combatant__hp-bar">
+            <span className="combatant__hp-bar--filled" style={renderHPBarStyle(props)}/>
+          </span>
+        )}
       </td>
 
       <td className="combatant__ac">
@@ -239,4 +245,9 @@ function renderHPText(props: CombatantRowProps) {
   } else {
     return `${props.combatantState.CurrentHP}/${maxHP}`;
   }
+}
+function renderHPBarStyle(props: CombatantRowProps) {
+  const maxHP = props.combatantState.StatBlock.HP.Value,
+    currentHP = props.combatantState.CurrentHP;
+  return {width: Math.floor((currentHP / maxHP) * 100) + "%" };
 }

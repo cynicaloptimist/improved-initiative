@@ -5,6 +5,7 @@ import { StatBlockHeader } from "../Components/StatBlockHeader";
 import { TextEnricherContext } from "../TextEnricher/TextEnricher";
 import { CombatantViewModel } from "./CombatantViewModel";
 import { useSubscription } from "./linkComponentToObservables";
+import { SettingsContext } from "../Settings/SettingsContext";
 import { Tag } from "./Tag";
 import { useContext } from "react";
 
@@ -17,6 +18,7 @@ interface CombatantDetailsProps {
 export function CombatantDetails(props: CombatantDetailsProps) {
   const TextEnricher = useContext(TextEnricherContext);
   const currentHp = useSubscription(props.combatantViewModel.HP);
+  const currentHPPercentage = useSubscription(props.combatantViewModel.HPPercentage);
   const name = useSubscription(props.combatantViewModel.Name);
   const tags = useSubscription(props.combatantViewModel.Combatant.Tags);
   const notes = useSubscription(
@@ -26,6 +28,7 @@ export function CombatantDetails(props: CombatantDetailsProps) {
     props.combatantViewModel.Combatant.StatBlock
   );
 
+  const { DisplayHPBar } = useContext(SettingsContext).TrackerView;
   if (!props.combatantViewModel) {
     return null;
   }
@@ -47,7 +50,15 @@ export function CombatantDetails(props: CombatantDetailsProps) {
         imageUrl={statBlock.ImageURL}
       />
       <div className="c-combatant-details__hp">
-        <span className="stat-label">Current HP</span> {currentHp}
+        <span className="stat-label">Current HP</span>
+        <span>
+          {currentHp}
+          {DisplayHPBar && (
+            <span className="combatant__hp-bar">
+              <span className="combatant__hp-bar--filled" style={renderHPBarStyle(currentHPPercentage)}/>
+            </span>
+          )}
+        </span>
       </div>
       {tags.length > 0 && (
         <div className="c-combatant-details__tags">
@@ -89,4 +100,7 @@ function TagDetails(props: { tag: Tag }) {
   }
 
   return <>{props.tag.Text}</>;
+}
+function renderHPBarStyle(currentHPPercentage) {
+  return {width: currentHPPercentage };
 }

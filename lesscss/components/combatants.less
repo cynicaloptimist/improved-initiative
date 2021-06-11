@@ -75,6 +75,42 @@
   }
 }
 
+.combatant__hp-bar {
+  display: block;
+  height:3px;
+  background: #c00;
+  text-align: left;
+  position: relative;
+  margin-bottom:-3px;
+  .combatant__hp-bar--filled {
+    display: inline-block;
+    height: inherit;
+    background: #0c0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transition: width .5s;
+  }
+}
+
+// hidden from encounter view by default
+.combatant {
+  .combatant__hp-bar {
+    transition: opacity .3s;
+    opacity: 0;
+  }
+}
+// becomes visible for active/selected combatants, or on hover
+.combatant.active,
+.combatant.selected,
+.combatant__hp:hover {
+  .combatant__hp-bar {
+    opacity: 1;
+  }
+}
+
+
 .combatant {
   padding: @medium-spacer;
   height: 2.2rem;
