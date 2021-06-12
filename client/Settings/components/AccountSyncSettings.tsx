@@ -115,7 +115,9 @@ export class AccountSyncSettings extends React.Component<
           >
             Account Sync
           </a>
-          {" reward level."}
+          {
+            " reward level. If you have recently updated your pledge, try logging out and back in again to propagate your rewards."
+          }
         </p>
         <a className="button logout" href="/logout">
           Log Out
