@@ -8,7 +8,7 @@ import { Settings } from "../../common/Settings";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
-import { ObservableBackedLibraries } from "../Library/Libraries";
+import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 
 const DEFAULT_BATCH_SIZE = 10;
@@ -45,7 +45,7 @@ export class AccountClient {
   }
 
   public async SaveAllUnsyncedItems(
-    libraries: ObservableBackedLibraries,
+    libraries: Libraries,
     messageCallback: (message: string) => void
   ) {
     if (!env.HasStorage) {
@@ -54,27 +54,31 @@ export class AccountClient {
 
     const promises = [
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.StatBlocks.GetListings()),
+        await getUnsyncedItemsFromListings(
+          libraries.StatBlocks.GetAllListings()
+        ),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
         await getUnsyncedItemsFromListings(
-          libraries.PersistentCharacters.GetListings()
+          libraries.PersistentCharacters.GetAllListings()
         ),
         "persistentcharacters",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.Spells.GetListings()),
+        await getUnsyncedItemsFromListings(libraries.Spells.GetAllListings()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.Encounters.GetListings()),
+        await getUnsyncedItemsFromListings(
+          libraries.Encounters.GetAllListings()
+        ),
         "encounters",
         ENCOUNTER_BATCH_SIZE,
         messageCallback

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
@@ -7,10 +8,29 @@ import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { InitializeSettings } from "../Settings/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { buildEncounter } from "../test/buildEncounter";
-import { AccountBackedLibraries } from "../Library/Libraries";
-import { Store } from "../Utility/Store";
-import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
+import { useLibraries } from "../Library/Libraries";
 import { LibrariesCommander } from "../Commands/LibrariesCommander";
+import { useEffect } from "react";
+import { act, render } from "@testing-library/react";
+import { Library } from "../Library/useLibrary";
+
+function LibrariesCommanderTest(props: {
+  librariesCommander: LibrariesCommander;
+  loadingFinished: () => void;
+}) {
+  const libraries = useLibraries(new AccountClient(), props.loadingFinished);
+  useEffect(() => props.librariesCommander.Initialize(libraries), []);
+  return <div />;
+}
+
+function PersistentCharacterLibraryTest(props: {
+  ref: (library: Library<PersistentCharacter>) => void;
+  loadingFinished: () => void;
+}) {
+  const libraries = useLibraries(new AccountClient(), props.loadingFinished);
+  useEffect(() => props.ref(libraries.PersistentCharacters), []);
+  return <div />;
+}
 
 describe("InitializeCharacter", () => {
   it("Should have the current HP of the provided statblock", () => {
@@ -20,19 +40,6 @@ describe("InitializeCharacter", () => {
     expect(character.CurrentHP).toBe(10);
   });
 });
-
-async function makePersistentCharacterLibrary() {
-  return new Promise<ObservableBackedLibrary<PersistentCharacter>>(resolve => {
-    const libraries = new AccountBackedLibraries(
-      new AccountClient(),
-      storeName => {
-        if (storeName === Store.PersistentCharacters) {
-          resolve(libraries.PersistentCharacters);
-        }
-      }
-    );
-  });
-}
 
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
@@ -54,41 +61,63 @@ describe("PersistentCharacterLibrary", () => {
   it("Should load stored PersistentCharacters", async () => {
     savePersistentCharacterWithName("Persistent Character");
 
-    const library = await makePersistentCharacterLibrary();
-    const listings = library.GetListings();
+    let library: Library<PersistentCharacter>;
+    await new Promise<void>(done => {
+      render(
+        <PersistentCharacterLibraryTest
+          ref={r => (library = r)}
+          loadingFinished={done}
+        />
+      );
+    });
+
+    const listings = library.GetAllListings();
     expect(listings).toHaveLength(1);
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
   it("Should provide the latest version of a Persistent Character", async done => {
-    InitializeSettings();
+    let updatedPersistentCharacter: PersistentCharacter | null = null;
+    await act(async () => {
+      InitializeSettings();
+      savePersistentCharacterWithName("Persistent Character");
+      let library: Library<PersistentCharacter>;
+      await new Promise<void>(done => {
+        render(
+          <PersistentCharacterLibraryTest
+            ref={r => (library = r)}
+            loadingFinished={done}
+          />
+        );
+      });
+      const listing = library.GetAllListings()[0];
+      const persistentCharacter = await listing.GetWithTemplate(
+        PersistentCharacter.Default()
+      );
 
-    savePersistentCharacterWithName("Persistent Character");
+      const librariesCommander = new LibrariesCommander(null, null);
 
-    const library = await makePersistentCharacterLibrary();
-    const listing = library.GetListings()[0];
-    const persistentCharacter = await listing.GetWithTemplate(
-      PersistentCharacter.Default()
-    );
+      await new Promise<void>(done => {
+        render(
+          <LibrariesCommanderTest
+            librariesCommander={librariesCommander}
+            loadingFinished={done}
+          />
+        );
+      });
 
-    const librariesCommander = new LibrariesCommander(
-      null,
-      {
-        PersistentCharacters: library,
-        Encounters: null,
-        Spells: null,
-        StatBlocks: null
-      },
-      null
-    );
+      await librariesCommander.UpdatePersistentCharacter(
+        persistentCharacter.Id,
+        {
+          CurrentHP: 0
+        }
+      );
 
-    await librariesCommander.UpdatePersistentCharacter(persistentCharacter.Id, {
-      CurrentHP: 0
+      updatedPersistentCharacter = await listing.GetWithTemplate(
+        PersistentCharacter.Default()
+      );
     });
 
-    const updatedPersistentCharacter: PersistentCharacter = await listing.GetWithTemplate(
-      PersistentCharacter.Default()
-    );
     expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
     done();
   });
@@ -97,11 +126,18 @@ describe("PersistentCharacterLibrary", () => {
 describe("PersistentCharacter", () => {
   it("Should not save PersistentCharacters with Encounters", async () => {
     const encounter = buildEncounter();
-    const library = await makePersistentCharacterLibrary();
-
+    let library: Library<PersistentCharacter>;
+    await new Promise<void>(done => {
+      render(
+        <PersistentCharacterLibraryTest
+          ref={r => (library = r)}
+          loadingFinished={done}
+        />
+      );
+    });
     encounter.AddCombatantFromPersistentCharacter(
       PersistentCharacter.Default(),
-      library.GetListings,
+      library.GetAllListings,
       false
     );
 
@@ -128,17 +164,24 @@ describe("PersistentCharacter", () => {
   it("Should not allow the same Persistent Character to be added twice", async () => {
     const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
-    const library = await makePersistentCharacterLibrary();
-
+    let library: Library<PersistentCharacter>;
+    await new Promise<void>(done => {
+      render(
+        <PersistentCharacterLibraryTest
+          ref={r => (library = r)}
+          loadingFinished={done}
+        />
+      );
+    });
     encounter.AddCombatantFromPersistentCharacter(
       persistentCharacter,
-      library.GetListings
+      library.GetAllListings
     );
     expect(encounter.Combatants().length).toBe(1);
 
     encounter.AddCombatantFromPersistentCharacter(
       persistentCharacter,
-      library.GetListings
+      library.GetAllListings
     );
     expect(encounter.Combatants().length).toBe(1);
   });

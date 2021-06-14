@@ -2,12 +2,12 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Info } from "../../Components/Info";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { Listing } from "../Listing";
+import { Library } from "../useLibrary";
 
 export function MovePrompt(props: {
   targets: Listing<Listable>[];
-  library: ObservableBackedLibrary<Listable>;
+  library: Library<Listable>;
   done: () => void;
 }) {
   const inputRef = React.useRef<HTMLInputElement>();
@@ -18,7 +18,10 @@ export function MovePrompt(props: {
     const pathInput = inputRef.current.value;
     await Promise.all(
       props.targets.map(async targetListing => {
-        const item = await props.library.GetItemById(targetListing.Meta().Id);
+        const item = await targetListing.GetWithTemplate({
+          ...targetListing.Meta(),
+          Version: ""
+        });
         item.Path = pathInput;
         return await props.library.SaveEditedListing(targetListing, item);
       })

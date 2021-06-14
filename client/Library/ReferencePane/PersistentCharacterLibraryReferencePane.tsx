@@ -4,17 +4,16 @@ import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
+import { Library } from "../useLibrary";
 
 export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: ObservableBackedLibrary<PersistentCharacter>;
+  library: Library<PersistentCharacter>;
 };
 
 export class PersistentCharacterLibraryReferencePane extends React.Component<
@@ -74,7 +73,7 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
   };
 
   public render() {
-    const listings = this.props.library.GetListings();
+    const listings = this.props.library.GetAllListings();
 
     return (
       <LibraryReferencePane

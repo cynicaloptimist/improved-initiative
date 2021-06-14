@@ -1,12 +1,14 @@
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
+import { Account } from "../Account/Account";
 import { AccountClient } from "../Account/AccountClient";
 import { Store } from "../Utility/Store";
-import { ObservableBackedLibrary } from "./ObservableBackedLibrary";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Library, useLibrary } from "./useLibrary";
 import React = require("react");
+import { Listable } from "../../common/Listable";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -44,6 +46,24 @@ export interface Libraries {
   Encounters: Library<SavedEncounter>;
   Spells: Library<Spell>;
 }
+
+function dummyLibrary<T extends Listable>(): Library<T> {
+  return {
+    AddListings: () => {},
+    DeleteListing: () => Promise.resolve(),
+    GetAllListings: () => [],
+    GetOrCreateListingById: () => Promise.resolve(null),
+    SaveEditedListing: () => Promise.resolve(null),
+    SaveNewListing: () => Promise.resolve(null)
+  };
+}
+
+export const LibrariesContext = React.createContext<Libraries>({
+  StatBlocks: dummyLibrary(),
+  Encounters: dummyLibrary(),
+  PersistentCharacters: dummyLibrary(),
+  Spells: dummyLibrary()
+});
 
 export function useLibraries(
   accountClient: AccountClient,
@@ -87,6 +107,13 @@ export function useLibraries(
     loadingFinished
   });
 
+  const libraries: Libraries = {
+    StatBlocks,
+    PersistentCharacters,
+    Encounters,
+    Spells
+  };
+
   React.useEffect(() => {
     $.ajax("../statblocks/").done(listings => {
       if (!listings) {
@@ -101,104 +128,68 @@ export function useLibraries(
       }
       Spells.AddListings(listings, "server");
     });
+
+    accountClient.GetAccount(account => {
+      if (!account) {
+        if (
+          LegacySynchronousLocalStore.List(
+            LegacySynchronousLocalStore.PersistentCharacters
+          ).length == 0
+        ) {
+          getAndAddSamplePersistentCharacters(
+            "/sample_players.json",
+            PersistentCharacters
+          );
+        }
+        return;
+      }
+
+      handleAccountSync(account, accountClient, libraries);
+    });
   }, []);
 
-  return {
-    StatBlocks,
-    PersistentCharacters,
-    Encounters,
-    Spells
-  };
+  return libraries;
 }
 
-export interface ObservableBackedLibraries {
-  PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
-  StatBlocks: ObservableBackedLibrary<StatBlock>;
-  Encounters: ObservableBackedLibrary<SavedEncounter>;
-  Spells: ObservableBackedLibrary<Spell>;
-}
+const getAndAddSamplePersistentCharacters = (
+  url: string,
+  persistentCharacterLibrary: Library<PersistentCharacter>
+) => {
+  $.getJSON(url, (json: StatBlock[]) => {
+    json.forEach(statBlock => {
+      const persistentCharacter = PersistentCharacter.Initialize({
+        ...StatBlock.Default(),
+        ...statBlock
+      });
+      persistentCharacter.Path = "Sample Player Characters";
+      persistentCharacterLibrary.SaveNewListing(persistentCharacter);
+    });
+  });
+};
 
-export class AccountBackedLibraries {
-  public PersistentCharacters: ObservableBackedLibrary<PersistentCharacter>;
-  public StatBlocks: ObservableBackedLibrary<StatBlock>;
-  public Encounters: ObservableBackedLibrary<SavedEncounter>;
-  public Spells: ObservableBackedLibrary<Spell>;
-
-  constructor(
-    accountClient: AccountClient,
-    loadingFinished?: (storeName: string) => void
-  ) {
-    this.PersistentCharacters = new ObservableBackedLibrary<
-      PersistentCharacter
-    >(
-      Store.PersistentCharacters,
-      "persistentcharacters",
-      PersistentCharacter.Default,
-      {
-        accountSave: accountClient.SavePersistentCharacter,
-        accountDelete: accountClient.DeletePersistentCharacter,
-        getFilterDimensions: PersistentCharacter.GetFilterDimensions,
-        getSearchHint: PersistentCharacter.GetSearchHint,
-        loadingFinished
-      }
-    );
-    this.StatBlocks = new ObservableBackedLibrary<StatBlock>(
-      Store.StatBlocks,
-      "statblocks",
-      StatBlock.Default,
-      {
-        accountSave: accountClient.SaveStatBlock,
-        accountDelete: accountClient.DeleteStatBlock,
-        getFilterDimensions: StatBlock.FilterDimensions,
-        getSearchHint: StatBlock.GetSearchHint,
-        loadingFinished
-      }
-    );
-    this.Encounters = new ObservableBackedLibrary<SavedEncounter>(
-      Store.SavedEncounters,
-      "encounters",
-      SavedEncounter.Default,
-      {
-        accountSave: accountClient.SaveEncounter,
-        accountDelete: accountClient.DeleteEncounter,
-        getFilterDimensions: () => ({}),
-        getSearchHint: SavedEncounter.GetSearchHint,
-        loadingFinished
-      }
-    );
-
-    this.Spells = new ObservableBackedLibrary<Spell>(
-      Store.Spells,
-      "spells",
-      Spell.Default,
-      {
-        accountSave: accountClient.SaveSpell,
-        accountDelete: accountClient.DeleteSpell,
-        getFilterDimensions: Spell.GetFilterDimensions,
-        getSearchHint: Spell.GetSearchHint,
-        loadingFinished
-      }
-    );
-
-    this.initializeStatBlocks();
-    this.initializeSpells();
+const handleAccountSync = (
+  account: Account,
+  accountClient: AccountClient,
+  libraries: Libraries
+) => {
+  if (account.statblocks) {
+    libraries.StatBlocks.AddListings(account.statblocks, "account");
   }
 
-  private initializeStatBlocks = () => {
-    $.ajax("../statblocks/").done(listings => {
-      if (!listings) {
-        return;
-      }
-      return this.StatBlocks.AddListings(listings, "server");
-    });
-  };
+  if (account.persistentcharacters) {
+    libraries.PersistentCharacters.AddListings(
+      account.persistentcharacters,
+      "account"
+    );
+  }
 
-  private initializeSpells = () => {
-    $.ajax("../spells/").done(listings => {
-      if (!listings) {
-        return;
-      }
-      return this.Spells.AddListings(listings, "server");
-    });
-  };
-}
+  if (account.spells) {
+    libraries.Spells.AddListings(account.spells, "account");
+  }
+
+  if (account.encounters) {
+    libraries.Encounters.AddListings(account.encounters, "account");
+  }
+
+  accountClient.SaveAllUnsyncedItems(libraries, () => {});
+};

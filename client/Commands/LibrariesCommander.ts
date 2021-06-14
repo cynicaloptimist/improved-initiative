@@ -11,9 +11,8 @@ import {
   probablyUniqueString
 } from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import { ObservableBackedLibraries } from "../Library/Libraries";
+import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
@@ -23,13 +22,23 @@ import { SpellPrompt } from "../Prompts/SpellPrompt";
 import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { now } from "moment";
+import { Library } from "../Library/useLibrary";
 
 export class LibrariesCommander {
+  private libraries: Libraries;
+
   constructor(
     private tracker: TrackerViewModel,
-    private libraries: ObservableBackedLibraries,
     private encounterCommander: EncounterCommander
   ) {}
+
+  public Initialize = (libraries: Libraries) => {
+    // I don't like this pattern, but it's my first stab at a partial
+    // conversion to allow an observable-backed class to also depend
+    // on a React hook. This will probably catch fire at some point.
+    // It's also probably impossible to test.
+    this.libraries = libraries;
+  };
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
@@ -106,9 +115,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (
-    library: ObservableBackedLibrary<StatBlock>
-  ) => {
+  public CreateAndEditStatBlock = (library: Library<StatBlock>) => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -119,13 +126,13 @@ export class LibrariesCommander {
       editorTarget: "library",
       statBlock,
       onSave: library.SaveNewListing,
-      currentListings: library.GetListings()
+      currentListings: library.GetAllListings()
     });
   };
 
   public EditStatBlock = (
     listing: Listing<StatBlock>,
-    library: ObservableBackedLibrary<StatBlock>
+    library: Library<StatBlock>
   ) => {
     if (this.tracker.TutorialVisible()) {
       return;
@@ -143,14 +150,14 @@ export class LibrariesCommander {
           statBlock: statBlockWithNewId,
           onSave: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
-          currentListings: library.GetListings()
+          currentListings: library.GetAllListings()
         });
       } else {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: { ...StatBlock.Default(), ...statBlock },
           onSave: s => library.SaveEditedListing(listing, s),
-          currentListings: library.GetListings(),
+          currentListings: library.GetAllListings(),
           onDelete: this.deleteSavedStatBlock(listing.Meta().Id),
           onSaveAsCopy: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
@@ -215,7 +222,7 @@ export class LibrariesCommander {
 
   public GetSpellsByNameRegex = ko.pureComputed(() =>
     concatenatedStringRegex(
-      this.libraries.Spells.GetListings()
+      this.libraries.Spells.GetAllListings() //TODO: Ensure that computed is updated with this
         .map(s => s.Meta().Name)
         .filter(n => n.length > 2)
     )
@@ -231,13 +238,13 @@ export class LibrariesCommander {
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
       this.libraries.Encounters.SaveNewListing,
       this.tracker.EventLog.AddEvent,
-      _.uniq(this.libraries.Encounters.GetListings().map(e => e.Meta().Path))
+      _.uniq(this.libraries.Encounters.GetAllListings().map(e => e.Meta().Path))
     );
     this.tracker.PromptQueue.Add(prompt);
   };
 
   public MoveEncounter = async (encounterListing: Listing<SavedEncounter>) => {
-    const folderNames = _(this.libraries.Encounters.GetListings())
+    const folderNames = _(this.libraries.Encounters.GetAllListings())
       .map(e => e.Meta().Path)
       .uniq()
       .compact()

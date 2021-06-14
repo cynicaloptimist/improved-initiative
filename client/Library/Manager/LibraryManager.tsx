@@ -5,7 +5,6 @@ import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { SavedEncounter } from "../../../common/SavedEncounter";
 import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
-import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
@@ -13,11 +12,7 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { FilterCache } from "../FilterCache";
-import {
-  ObservableBackedLibraries,
-  LibraryFriendlyNames,
-  LibraryType
-} from "../Libraries";
+import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";
@@ -29,7 +24,7 @@ import { Selection, SelectionContext, useSelection } from "./SelectionContext";
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
   statBlockTextEnricher: TextEnricher;
-  libraries: ObservableBackedLibraries;
+  libraries: Libraries;
   closeManager: () => void;
 };
 
@@ -68,9 +63,10 @@ export function LibraryManager(props: LibraryManagerProps) {
           />
           <LibraryManagerListings
             key={activeTab}
-            listingsComputed={
-              ActiveLibrary(props.libraries, activeTab).GetListings
-            }
+            listings={ActiveLibrary(
+              props.libraries,
+              activeTab
+            ).GetAllListings()}
             setEditorTarget={setEditorTarget}
           />
         </div>
@@ -96,14 +92,13 @@ export function LibraryManager(props: LibraryManagerProps) {
 }
 
 function LibraryManagerListings(props: {
-  listingsComputed: KnockoutObservable<Listing<Listable>[]>;
+  listings: Listing<Listable>[];
   setEditorTarget: (item: Listing<any>) => void;
 }) {
-  const listings = useSubscription(props.listingsComputed);
   const [filter, setFilter] = React.useState("");
 
-  const filterCache = React.useRef(new FilterCache(listings)).current;
-  filterCache.UpdateIfItemsChanged(listings);
+  const filterCache = React.useRef(new FilterCache(props.listings)).current;
+  filterCache.UpdateIfItemsChanged(props.listings);
 
   const filteredListings = filterCache.GetFilteredEntries(filter);
 

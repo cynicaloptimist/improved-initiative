@@ -21,7 +21,7 @@ import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { AccountBackedLibraries } from "./Library/Libraries";
+import { Libraries } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -47,12 +47,11 @@ export class TrackerViewModel {
   public PlayerViewClient = new PlayerViewClient(this.Socket);
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
-  public Libraries = new AccountBackedLibraries(this.accountClient);
+  public Libraries: Libraries;
   public EncounterCommander = new EncounterCommander(this);
   public CombatantCommander = new CombatantCommander(this);
   public LibrariesCommander = new LibrariesCommander(
     this,
-    this.Libraries,
     this.EncounterCommander
   );
   public EncounterToolbar = BuildEncounterCommandList(
@@ -92,14 +91,22 @@ export class TrackerViewModel {
     Metrics.TrackLoad();
   }
 
-  public StatBlockTextEnricher = new TextEnricher(
-    this.CombatantCommander.RollDice,
-    this.LibrariesCommander.ReferenceSpell,
-    this.LibrariesCommander.ReferenceCondition,
-    this.Libraries.Spells.GetListings,
-    this.LibrariesCommander.GetSpellsByNameRegex,
-    this.rules
-  );
+  public Initialize = (libraries: Libraries) => {
+    this.Libraries = libraries;
+
+    this.StatBlockTextEnricher = new TextEnricher(
+      this.CombatantCommander.RollDice,
+      this.LibrariesCommander.ReferenceSpell,
+      this.LibrariesCommander.ReferenceCondition,
+      this.Libraries.Spells.GetAllListings,
+      this.LibrariesCommander.GetSpellsByNameRegex,
+      this.rules
+    );
+
+    this.LibrariesCommander.Initialize(libraries);
+  };
+
+  public StatBlockTextEnricher: TextEnricher;
 
   public Encounter = new Encounter(
     this.PlayerViewClient,
@@ -178,7 +185,7 @@ export class TrackerViewModel {
           persistentCharacterId
         ),
       onClose: () => this.StatBlockEditorProps(null),
-      currentListings: this.Libraries.PersistentCharacters.GetListings()
+      currentListings: this.Libraries.PersistentCharacters.GetAllListings()
     });
   }
 
@@ -268,10 +275,10 @@ export class TrackerViewModel {
           editorTarget: "library",
           onSave: this.Libraries.StatBlocks.SaveNewListing,
           statBlock,
-          currentListings: this.Libraries.StatBlocks.GetListings()
+          currentListings: this.Libraries.StatBlocks.GetAllListings()
         });
       } else {
-        const currentListings = this.Libraries.PersistentCharacters.GetListings();
+        const currentListings = this.Libraries.PersistentCharacters.GetAllListings();
         const existingListing = currentListings.find(
           l => l.Meta().Name == statBlock.Name
         );
@@ -436,27 +443,7 @@ export class TrackerViewModel {
       ];
       UpdateLegacyCommandSettingsAndSave(updatedSettings, allCommands);
     }
-
-    if (account.statblocks) {
-      this.Libraries.StatBlocks.AddListings(account.statblocks, "account");
-    }
-
-    if (account.persistentcharacters) {
-      this.Libraries.PersistentCharacters.AddListings(
-        account.persistentcharacters,
-        "account"
-      );
-    }
-
-    if (account.spells) {
-      this.Libraries.Spells.AddListings(account.spells, "account");
-    }
-
-    if (account.encounters) {
-      this.Libraries.Encounters.AddListings(account.encounters, "account");
-    }
-
-    this.accountClient.SaveAllUnsyncedItems(this.Libraries, () => {});
+    //Handling of account libraries happens in useLibrary hook
   }
 
   private displayPrivacyNotificationIfNeeded = () => {

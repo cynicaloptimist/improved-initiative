@@ -2,24 +2,20 @@ import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
-import {
-  ObservableBackedLibraries,
-  LibraryFriendlyNames,
-  LibraryType
-} from "../Libraries";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
+import { LibraryFriendlyNames, LibraryType, Libraries } from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { DeletePrompt } from "./DeletePrompt";
 import { MovePrompt } from "./MovePrompt";
 import { SelectedItemsViewForActiveTab } from "./SelectedItemsViewForActiveTab";
 import { SelectionContext } from "./SelectionContext";
+import { Library } from "../useLibrary";
 
 type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
 export function SelectedItemsManager(props: {
   activeTab: LibraryType;
-  libraries: ObservableBackedLibraries;
+  libraries: Libraries;
   editListing: (listing: Listing<Listable>) => void;
 }) {
   const [promptTypeAndTargets, setPromptTypeAndTargets] = useState<
@@ -75,7 +71,7 @@ export function SelectedItemsManager(props: {
 
 function ActivePrompt(props: {
   promptTypeAndTargets: PromptTypeAndTargets;
-  library: ObservableBackedLibrary<Listable>;
+  library: Library<Listable>;
   done: () => void;
 }) {
   if (props.promptTypeAndTargets === null) {

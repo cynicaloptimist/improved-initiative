@@ -26,8 +26,8 @@ import {
   EncounterDifficulty
 } from "../Widgets/DifficultyCalculator";
 import { EncounterFlow } from "./EncounterFlow";
-import { ObservableBackedLibrary } from "../Library/ObservableBackedLibrary";
 import { UpdatePersistentCharacter } from "../Library/Libraries";
+import { Library } from "../Library/useLibrary";
 
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
@@ -372,7 +372,7 @@ export class Encounter {
   public LoadEncounterState = (
     encounterState: EncounterState<CombatantState>,
     updatePersistentCharacter: UpdatePersistentCharacter,
-    persistentCharacterLibrary: ObservableBackedLibrary<PersistentCharacter>
+    persistentCharacterLibrary: Library<PersistentCharacter>
   ) => {
     const combatantsInLabelOrder = _.sortBy(
       encounterState.Combatants,

@@ -9,11 +9,11 @@ import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { SpellDetails } from "../Components/SpellDetails";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
+import { Library } from "../useLibrary";
 
 export type SpellLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: ObservableBackedLibrary<Spell>;
+  library: Library<Spell>;
 };
 
 type SpellListing = Listing<Spell>;
@@ -29,7 +29,7 @@ export class SpellLibraryReferencePane extends React.Component<
   public render() {
     return (
       <LibraryReferencePane
-        listings={this.props.library.GetListings()}
+        listings={this.props.library.GetAllListings()}
         renderListingRow={this.renderListingRow}
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}

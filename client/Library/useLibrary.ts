@@ -69,8 +69,8 @@ export function useLibrary<T extends Listable>(
 
   const AddListings = React.useCallback(
     (newListingMetas: ListingMeta[], source: ListingOrigin) => {
-      setListings([
-        ...listings,
+      setListings(currentListings => [
+        ...currentListings,
         ...newListingMetas.map(m => new Listing<T>(m, source))
       ]);
     },
@@ -179,7 +179,9 @@ export function useLibrary<T extends Listable>(
         const listings = legacyListings.map(makeListing);
         AddListings(listings, "localStorage");
       }
-      callbacks.loadingFinished?.(storeName);
+      if (callbacks.loadingFinished) {
+        callbacks.loadingFinished(storeName);
+      }
     });
   }, [storeName]);
 

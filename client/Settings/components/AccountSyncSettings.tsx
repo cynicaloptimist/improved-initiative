@@ -9,13 +9,13 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { Button } from "../../Components/Button";
 import { UpdateLegacySavedEncounter } from "../../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../../Environment";
-import { ObservableBackedLibraries } from "../../Library/Libraries";
+import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
 import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
 import { Store } from "../../Utility/Store";
 
 interface AccountSyncSettingsProps {
-  libraries: ObservableBackedLibraries;
+  libraries: Libraries;
   accountClient: AccountClient;
 }
 
@@ -50,21 +50,21 @@ export class AccountSyncSettings extends React.Component<
         <div className="sync-counts">
           {this.syncCount(
             "Statblocks",
-            this.getCounts(this.props.libraries.StatBlocks.GetListings())
+            this.getCounts(this.props.libraries.StatBlocks.GetAllListings())
           )}
           {this.syncCount(
             "Characters",
             this.getCounts(
-              this.props.libraries.PersistentCharacters.GetListings()
+              this.props.libraries.PersistentCharacters.GetAllListings()
             )
           )}
           {this.syncCount(
             "Spells",
-            this.getCounts(this.props.libraries.Spells.GetListings())
+            this.getCounts(this.props.libraries.Spells.GetAllListings())
           )}
           {this.syncCount(
             "Encounters",
-            this.getCounts(this.props.libraries.Encounters.GetListings())
+            this.getCounts(this.props.libraries.Encounters.GetAllListings())
           )}
         </div>
         <div className="c-button-with-label">

@@ -5,6 +5,7 @@ import { StatBlockEditor } from "./StatBlockEditor";
 
 import { StatBlock } from "../../common/StatBlock";
 import { Listing } from "../Library/Listing";
+import { Listable } from "../../common/Listable";
 
 const CURRENT_APP_VERSION = require("../../package.json").version;
 process.env.VERSION = CURRENT_APP_VERSION;
@@ -18,7 +19,7 @@ describe.skip("StatBlockEditor", () => {
 
   beforeEach(() => {
     statBlock = { ...StatBlock.Default(), Name: "Creature" };
-    const listing = new Listing(
+    const listing = new Listing<Listable>(
       {
         ...statBlock,
         SearchHint: StatBlock.GetSearchHint(statBlock),

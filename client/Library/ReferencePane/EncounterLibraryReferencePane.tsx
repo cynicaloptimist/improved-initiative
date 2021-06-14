@@ -6,11 +6,11 @@ import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
+import { Library } from "../useLibrary";
 
 export type EncounterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: ObservableBackedLibrary<SavedEncounter>;
+  library: Library<SavedEncounter>;
 };
 
 type EncounterListing = Listing<SavedEncounter>;
@@ -24,7 +24,7 @@ export class EncounterLibraryReferencePane extends React.Component<
   }
 
   public render() {
-    const listings = this.props.library.GetListings();
+    const listings = this.props.library.GetAllListings();
     return (
       <LibraryReferencePane
         listings={listings}

@@ -9,14 +9,14 @@ import { CurrentSettings } from "../../Settings/Settings";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { ListingGroupFn } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ExtraButton, ListingRow } from "../Components/ListingRow";
+import { Library } from "../useLibrary";
 
 export type StatBlockLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: ObservableBackedLibrary<StatBlock>;
+  library: Library<StatBlock>;
 };
 
 type StatBlockListing = Listing<StatBlock>;
@@ -49,7 +49,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
   }
 
   public render() {
-    const listings = this.props.library.GetListings();
+    const listings = this.props.library.GetAllListings();
 
     return (
       <LibraryReferencePane
