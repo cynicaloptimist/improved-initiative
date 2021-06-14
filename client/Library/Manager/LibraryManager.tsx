@@ -13,7 +13,11 @@ import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { FilterCache } from "../FilterCache";
-import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import {
+  ObservableBackedLibraries,
+  LibraryFriendlyNames,
+  LibraryType
+} from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";

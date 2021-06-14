@@ -86,7 +86,10 @@ export class LibraryReferencePane<
             />
           )}
         </div>
-        <ul className="listings zebra-stripe" onScroll={this.handleListingsScroll}>
+        <ul
+          className="listings zebra-stripe"
+          onScroll={this.handleListingsScroll}
+        >
           {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
           {this.props.launchQuickAddPrompt && (
             <li style={{ margin: 5, fontStyle: "italic" }}>

@@ -1,6 +1,6 @@
 import fs = require("fs");
 import path = require("path");
-import { Listable, FilterDimensions, ListingMeta} from "../common/Listable";
+import { Listable, FilterDimensions, ListingMeta } from "../common/Listable";
 
 const sourceAbbreviations = {
   "monster-manual": "mm",

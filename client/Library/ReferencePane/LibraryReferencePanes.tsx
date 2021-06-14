@@ -6,7 +6,11 @@ import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { TutorialSpy } from "../../Tutorial/TutorialSpy";
-import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import {
+  ObservableBackedLibraries,
+  LibraryFriendlyNames,
+  LibraryType
+} from "../Libraries";
 import { EncounterLibraryReferencePane } from "./EncounterLibraryReferencePane";
 import { PersistentCharacterLibraryReferencePane } from "./PersistentCharacterLibraryReferencePane";
 import { SpellLibraryReferencePane } from "./SpellLibraryReferencePane";

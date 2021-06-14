@@ -11,7 +11,7 @@ describe.skip("CombatantCommander", () => {
   beforeEach(() => {
     window["$"] = require("jquery");
     window.confirm = () => true;
-    
+
     InitializeSettings();
 
     const mockIo: any = {

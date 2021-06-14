@@ -40,7 +40,7 @@ export function EpicInitiativeSettings() {
         Allow players to suggest tags
         <Info>
           Players can suggest a tag by clicking or tapping the tag icon on any
-          combatant in the Player View. 
+          combatant in the Player View.
         </Info>
       </Toggle>
       <StylesChooser />
@@ -66,7 +66,7 @@ export function EpicInitiativeSettings() {
         <Info
           tippyProps={{
             interactive: true,
-            placement: "bottom",
+            placement: "bottom"
           }}
         >
           <span>

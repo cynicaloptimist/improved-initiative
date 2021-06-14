@@ -2,7 +2,11 @@ import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
-import { ObservableBackedLibraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
+import {
+  ObservableBackedLibraries,
+  LibraryFriendlyNames,
+  LibraryType
+} from "../Libraries";
 import { ObservableBackedLibrary } from "../ObservableBackedLibrary";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";

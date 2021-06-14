@@ -79,7 +79,10 @@ export function SubmitButton(
               if (buttonProps.disabled) {
                 return;
               }
-              formik.form.setFieldValue(props.submitIntent[0], props.submitIntent[1]);
+              formik.form.setFieldValue(
+                props.submitIntent[0],
+                props.submitIntent[1]
+              );
               buttonProps.onClick(e);
             }}
           />
