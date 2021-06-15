@@ -13,6 +13,7 @@ import { LibrariesCommander } from "../Commands/LibrariesCommander";
 import { useEffect } from "react";
 import { act, render } from "@testing-library/react";
 import { Library } from "../Library/useLibrary";
+import { Listing } from "../Library/Listing";
 
 function LibrariesCommanderTest(props: {
   librariesCommander: LibrariesCommander;
@@ -58,20 +59,23 @@ describe("PersistentCharacterLibrary", () => {
     return persistentCharacter.Id;
   }
 
-  it("Should load stored PersistentCharacters", async () => {
-    savePersistentCharacterWithName("Persistent Character");
+  it.only("Should load stored PersistentCharacters", async () => {
+    let listings: Listing<PersistentCharacter>[];
+    await act(async () => {
+      savePersistentCharacterWithName("Persistent Character");
 
-    let library: Library<PersistentCharacter>;
-    await new Promise<void>(done => {
-      render(
-        <PersistentCharacterLibraryTest
-          ref={r => (library = r)}
-          loadingFinished={done}
-        />
-      );
+      let library: Library<PersistentCharacter>;
+      await new Promise<void>(done => {
+        render(
+          <PersistentCharacterLibraryTest
+            ref={r => (library = r)}
+            loadingFinished={done}
+          />
+        );
+      });
+
+      listings = library.GetAllListings();
     });
-
-    const listings = library.GetAllListings();
     expect(listings).toHaveLength(1);
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
