@@ -82,8 +82,6 @@ export class TrackerViewModel {
 
     this.joinPlayerViewEncounter();
 
-    this.getAccountOrSampleCharacters();
-
     this.loadAutoSavedEncounterIfAvailable();
 
     this.showPrivacyNotificationAfterTutorial();
@@ -370,35 +368,6 @@ export class TrackerViewModel {
     });
   }
 
-  private getAccountOrSampleCharacters() {
-    this.accountClient.GetAccount(account => {
-      if (!account) {
-        if (
-          LegacySynchronousLocalStore.List(
-            LegacySynchronousLocalStore.PersistentCharacters
-          ).length == 0
-        ) {
-          this.getAndAddSamplePersistentCharacters("/sample_players.json");
-        }
-        return;
-      }
-      this.handleAccountSync(account);
-    });
-  }
-
-  private getAndAddSamplePersistentCharacters = (url: string) => {
-    $.getJSON(url, (json: StatBlock[]) => {
-      json.forEach(statBlock => {
-        const persistentCharacter = PersistentCharacter.Initialize({
-          ...StatBlock.Default(),
-          ...statBlock
-        });
-        persistentCharacter.Path = "Sample Player Characters";
-        this.Libraries.PersistentCharacters.SaveNewListing(persistentCharacter);
-      });
-    });
-  };
-
   private loadAutoSavedEncounterIfAvailable() {
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
@@ -433,18 +402,6 @@ export class TrackerViewModel {
     );
     return vm;
   };
-
-  private handleAccountSync(account: Account) {
-    if (account.settings?.Version) {
-      const updatedSettings = UpdateSettings(account.settings);
-      const allCommands = [
-        ...this.EncounterToolbar,
-        ...this.CombatantCommander.Commands
-      ];
-      UpdateLegacyCommandSettingsAndSave(updatedSettings, allCommands);
-    }
-    //Handling of account libraries happens in useLibrary hook
-  }
 
   private displayPrivacyNotificationIfNeeded = () => {
     if (
