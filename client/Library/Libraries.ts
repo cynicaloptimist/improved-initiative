@@ -129,32 +129,41 @@ export function useLibraries(
       Spells.AddListings(listings, "server");
     });
 
-    accountClient.GetAccount(account => {
-      if (!account) {
-        if (
-          LegacySynchronousLocalStore.List(
-            LegacySynchronousLocalStore.PersistentCharacters
-          ).length == 0
-        ) {
-          getAndAddSamplePersistentCharacters(
-            "/sample_players.json",
-            PersistentCharacters
-          );
-        }
-        return;
-      }
-
-      handleAccountSync(account, accountClient, libraries);
-    });
+    getAccountOrSampleCharacters(
+      accountClient,
+      PersistentCharacters,
+      libraries
+    );
   }, []);
 
   return libraries;
 }
 
+function getAccountOrSampleCharacters(
+  accountClient: AccountClient,
+  PersistentCharacters: Library<PersistentCharacter>,
+  libraries: Libraries
+) {
+  accountClient.GetAccount(account => {
+    if (!account) {
+      if (
+        LegacySynchronousLocalStore.List(
+          LegacySynchronousLocalStore.PersistentCharacters
+        ).length == 0
+      ) {
+        getAndAddSamplePersistentCharacters(PersistentCharacters);
+      }
+      return;
+    }
+
+    handleAccountSync(account, accountClient, libraries);
+  });
+}
+
 const getAndAddSamplePersistentCharacters = (
-  url: string,
   persistentCharacterLibrary: Library<PersistentCharacter>
 ) => {
+  const url = "/sample_players.json";
   $.getJSON(url, (json: StatBlock[]) => {
     json.forEach(statBlock => {
       const persistentCharacter = PersistentCharacter.Initialize({
