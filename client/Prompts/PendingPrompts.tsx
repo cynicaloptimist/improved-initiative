@@ -75,7 +75,8 @@ interface PendingPromptsProps {
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    const emptyClassName = this.props.promptsAndIds.length == 0 ? " empty" : "";
+    const emptyClassName =
+      this.props.promptsAndIds.length == 0 ? " empty" : " tutorial-focus";
     return (
       <div className={"prompts" + emptyClassName}>
         {this.props.promptsAndIds.map(promptAndId => {
