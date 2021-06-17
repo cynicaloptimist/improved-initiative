@@ -44,7 +44,7 @@ export function App(props: { tracker: TrackerViewModel }) {
   );
 
   const libraries = useLibraries(new AccountClient());
-  tracker.Initialize(libraries);
+  tracker.SetLibraries(libraries);
 
   const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
   const interfacePriority = interfacePriorityClass(

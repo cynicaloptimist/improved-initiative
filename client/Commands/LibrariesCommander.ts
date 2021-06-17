@@ -32,7 +32,7 @@ export class LibrariesCommander {
     private encounterCommander: EncounterCommander
   ) {}
 
-  public Initialize = (libraries: Libraries) => {
+  public SetLibraries = (libraries: Libraries) => {
     // I don't like this pattern, but it's my first stab at a partial
     // conversion to allow an observable-backed class to also depend
     // on a React hook. This will probably catch fire at some point.

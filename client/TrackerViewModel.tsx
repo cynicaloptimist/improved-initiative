@@ -82,14 +82,17 @@ export class TrackerViewModel {
 
     this.joinPlayerViewEncounter();
 
-    this.loadAutoSavedEncounterIfAvailable();
-
     this.showPrivacyNotificationAfterTutorial();
 
     Metrics.TrackLoad();
   }
 
-  public Initialize = (libraries: Libraries) => {
+  public SetLibraries = (libraries: Libraries) => {
+    // I don't like this pattern, but it's my first stab at a partial
+    // conversion to allow an observable-backed class to also depend
+    // on a React hook. This will probably catch fire at some point.
+    // It's also probably impossible to test.
+    const firstInitialization = this.Libraries === undefined;
     this.Libraries = libraries;
 
     this.StatBlockTextEnricher = new TextEnricher(
@@ -101,7 +104,11 @@ export class TrackerViewModel {
       this.rules
     );
 
-    this.LibrariesCommander.Initialize(libraries);
+    this.LibrariesCommander.SetLibraries(libraries);
+
+    if (firstInitialization) {
+      this.loadAutoSavedEncounterIfAvailable();
+    }
   };
 
   public StatBlockTextEnricher: TextEnricher;
