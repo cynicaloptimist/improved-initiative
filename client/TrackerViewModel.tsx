@@ -7,7 +7,6 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
-import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
@@ -28,8 +27,7 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   UpdateLegacyCommandSettingsAndSave,
   CurrentSettings,
-  SubscribeCommandsToSettingsChanges,
-  UpdateSettings
+  SubscribeCommandsToSettingsChanges
 } from "./Settings/Settings";
 import { StatBlockEditorProps } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
@@ -37,6 +35,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { SpellEditorProps } from "./StatBlockEditor/SpellEditor";
+import axios from "axios";
 
 const codec = compression("lzma");
 
@@ -312,7 +311,8 @@ export class TrackerViewModel {
   };
 
   public GetWhatsNewIfAvailable = () => {
-    $.getJSON("/whatsnew/").done((latestPost: PatreonPost) => {
+    axios.get<PatreonPost>("/whatsnew/").then(response => {
+      const latestPost = response.data;
       this.EventLog.AddEvent(
         `Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`
       );

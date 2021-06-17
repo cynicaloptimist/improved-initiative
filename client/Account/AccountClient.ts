@@ -1,3 +1,4 @@
+import axios from "axios";
 import _ = require("lodash");
 import retry = require("retry");
 
@@ -20,7 +21,7 @@ export class AccountClient {
       return callBack(null);
     }
 
-    $.getJSON("/my").done(callBack);
+    axios.get("/my").then(callBack);
 
     return true;
   }
@@ -30,10 +31,7 @@ export class AccountClient {
       return emptyPromise();
     }
 
-    return $.ajax({
-      type: "DELETE",
-      url: `/my`
-    });
+    return axios.delete("/my");
   }
 
   public async GetFullAccount() {
@@ -41,7 +39,7 @@ export class AccountClient {
       return emptyPromise();
     }
 
-    return await $.getJSON("/my/fullaccount");
+    return await axios.get("/my/fullaccount");
   }
 
   public async SaveAllUnsyncedItems(
@@ -150,10 +148,8 @@ export class AccountClient {
   }
 }
 
-function emptyPromise(): JQuery.jqXHR {
-  const d: any = $.Deferred(); //TODO: anything but this.
-  d.resolve(null);
-  return d;
+function emptyPromise() {
+  return Promise.resolve(null);
 }
 
 function saveEntity<T extends object>(
@@ -168,14 +164,12 @@ function saveEntity<T extends object>(
 
   return new Promise(resolve => {
     saveOperation.attempt(() => {
-      $.ajax({
-        type: "POST",
-        url: `/my/${entityType}/`,
-        data: JSON.stringify(entity),
-        contentType: "application/json"
-      })
-        .done(() => resolve(entity))
-        .fail((_, err) => {
+      axios
+        .post(`/my/${entityType}/`, JSON.stringify(entity), {
+          headers: { "content-type": "application/json" }
+        })
+        .then(() => resolve(entity))
+        .catch(err => {
           if (saveOperation.retry(new Error(err))) {
             return;
           }
@@ -252,11 +246,8 @@ async function saveEntitySet<Listable>(
   for (let cursor = 0; cursor < entitySet.length; cursor += batchSize) {
     const batch = entitySet.slice(cursor, cursor + batchSize);
     try {
-      await $.ajax({
-        type: "POST",
-        url: `/my/${entityType}/`,
-        data: JSON.stringify(batch),
-        contentType: "application/json"
+      await axios.post(`/my/${entityType}/`, JSON.stringify(batch), {
+        headers: { "content-type": "application/json" }
       });
       messageCallback(`Syncing ${cursor}/${entitySet.length} ${entityType}`);
     } catch (err) {
@@ -270,8 +261,5 @@ function deleteEntity(entityId: string, entityType: string) {
     return emptyPromise();
   }
 
-  return $.ajax({
-    type: "DELETE",
-    url: `/my/${entityType}/${entityId}`
-  });
+  return axios.delete(`/my/${entityType}/${entityId}`);
 }

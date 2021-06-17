@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as ko from "knockout";
 
 import _ = require("lodash");
@@ -67,11 +68,14 @@ export class Listing<T extends Listable> {
       }
     }
 
-    return $.getJSON(this.listingMeta.Link).done(item => {
-      item.Id = this.listingMeta.Id;
-      this.value(item);
-      return callback(item);
-    });
+    return axios
+      .get(this.listingMeta.Link)
+      .then(r => r.data)
+      .then(item => {
+        item.Id = this.listingMeta.Id;
+        this.value(item);
+        return callback(item);
+      });
   }
 
   public Meta = ko.pureComputed<ListingMeta>(() => {

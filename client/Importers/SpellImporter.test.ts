@@ -1,17 +1,10 @@
-import * as $ from "jquery";
-
 import { SpellImporter } from "./SpellImporter";
 
 describe("SpellImporter", () => {
   let spell: Element;
 
   beforeEach(() => {
-    window["$"] = $;
     spell = document.createElement("spell");
-  });
-
-  afterEach(() => {
-    delete window["$"];
   });
 
   test("Description should populate from combination of text elements", () => {

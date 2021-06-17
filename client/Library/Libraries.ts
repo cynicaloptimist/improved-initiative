@@ -7,8 +7,9 @@ import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Library, useLibrary } from "./useLibrary";
 import React = require("react");
-import { Listable } from "../../common/Listable";
+import { Listable, ListingMeta } from "../../common/Listable";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
+import axios from "axios";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -115,17 +116,19 @@ export function useLibraries(
   };
 
   React.useEffect(() => {
-    $.ajax("../statblocks/").done(listings => {
-      if (!listings) {
+    axios.get<ListingMeta[]>("../statblocks/").then(response => {
+      if (!response) {
         return;
       }
+      const listings = response.data;
       StatBlocks.AddListings(listings, "server");
     });
 
-    $.ajax("../spells/").done(listings => {
-      if (!listings) {
+    axios.get<ListingMeta[]>("../spells/").then(response => {
+      if (!response) {
         return;
       }
+      const listings = response.data;
       Spells.AddListings(listings, "server");
     });
 
@@ -163,9 +166,12 @@ function getAccountOrSampleCharacters(
 const getAndAddSamplePersistentCharacters = (
   persistentCharacterLibrary: Library<PersistentCharacter>
 ) => {
-  const url = "/sample_players.json";
-  $.getJSON(url, (json: StatBlock[]) => {
-    json.forEach(statBlock => {
+  axios.get<StatBlock[]>("/sample_players.json").then(response => {
+    if (!response) {
+      return;
+    }
+    const statblocks = response.data;
+    statblocks.forEach(statBlock => {
       const persistentCharacter = PersistentCharacter.Initialize({
         ...StatBlock.Default(),
         ...statBlock

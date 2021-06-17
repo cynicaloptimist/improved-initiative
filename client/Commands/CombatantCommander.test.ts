@@ -9,7 +9,6 @@ describe.skip("CombatantCommander", () => {
   let combatantCommander: CombatantCommander;
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
-    window["$"] = require("jquery");
     window.confirm = () => true;
 
     InitializeSettings();

@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";
@@ -29,11 +30,10 @@ export class SpellImporter extends Importer {
   }
 
   public getDescription() {
-    return $(this.domElement)
-      .find("text")
-      .map((i, e) => e.innerHTML)
-      .get()
-      .join("\n");
+    return _.map(
+      this.domElement.querySelectorAll("text"),
+      e => e.innerHTML
+    ).join("\n");
   }
 
   public GetSpell = () => {

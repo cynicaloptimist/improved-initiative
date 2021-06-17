@@ -11,7 +11,6 @@ describe.skip("EncounterCommander", () => {
   let encounterCommander: EncounterCommander;
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
-    window["$"] = require("jquery");
     window.confirm = () => true;
     InitializeSettings();
 

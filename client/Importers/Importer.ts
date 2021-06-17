@@ -1,18 +1,14 @@
+import _ = require("lodash");
+
 export class Importer {
   constructor(protected domElement: Element) {}
 
   public getString(selector) {
-    return (
-      $(this.domElement)
-        .find(selector)
-        .html() || ""
-    );
+    return this.domElement.querySelector<Element>(selector)?.innerHTML || "";
   }
 
   public getInt(selector) {
-    const int = $(this.domElement)
-      .find(selector)
-      .html();
+    const int = this.domElement.querySelector<Element>(selector)?.innerHTML;
     if (int) {
       return parseInt(int);
     }
@@ -55,19 +51,10 @@ export class Importer {
   }
 
   public getPowers(selector: string) {
-    return $(this.domElement)
-      .find(selector)
-      .toArray()
-      .map(p => ({
-        Name: $(p)
-          .find("name")
-          .html(),
-        Content: $(p)
-          .find("text")
-          .map((i, e) => e.innerHTML)
-          .get()
-          .join("\n"),
-        Usage: ""
-      }));
+    return _.map(this.domElement.querySelectorAll(selector), p => ({
+      Name: p.querySelector<Element>("name")?.innerHTML,
+      Content: p.querySelector<Element>("text")?.innerHTML,
+      Usage: ""
+    }));
   }
 }

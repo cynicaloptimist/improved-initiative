@@ -45,7 +45,6 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
-    window["$"] = require("jquery");
   });
 
   function savePersistentCharacterWithName(name: string) {
@@ -80,7 +79,7 @@ describe("PersistentCharacterLibrary", () => {
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
-  it("Should provide the latest version of a Persistent Character", async done => {
+  it("Should provide the latest version of a Persistent Character", async () => {
     let updatedPersistentCharacter: PersistentCharacter | null = null;
     await act(async () => {
       InitializeSettings();
@@ -123,7 +122,6 @@ describe("PersistentCharacterLibrary", () => {
     });
 
     expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
-    done();
   });
 });
 

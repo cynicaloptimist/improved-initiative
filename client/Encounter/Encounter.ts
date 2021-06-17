@@ -28,6 +28,7 @@ import {
 import { EncounterFlow } from "./EncounterFlow";
 import { UpdatePersistentCharacter } from "../Library/Libraries";
 import { Library } from "../Library/useLibrary";
+import axios from "axios";
 
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
@@ -111,7 +112,7 @@ export class Encounter {
   };
 
   public ImportEncounter = encounter => {
-    const deepMerge = (a, b) => $.extend(true, {}, a, b);
+    const deepMerge = (a, b) => _.extend(true, {}, a, b);
     const defaultAdd = c => {
       if (c.TotalInitiativeModifier !== undefined) {
         c.InitiativeModifier = c.TotalInitiativeModifier;
@@ -125,15 +126,17 @@ export class Encounter {
         }
 
         if (c.Id) {
-          $.ajax(`/statblocks/${c.Id}`)
-            .done(statBlockFromLibrary => {
+          axios
+            .get(`/statblocks/${c.Id}`)
+            .then(r => r.data)
+            .then(statBlockFromLibrary => {
               const modifiedStatBlockFromLibrary = deepMerge(
                 statBlockFromLibrary,
                 c
               );
               this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
             })
-            .fail(_ => defaultAdd(c));
+            .catch(_ => defaultAdd(c));
         } else {
           defaultAdd(c);
         }
