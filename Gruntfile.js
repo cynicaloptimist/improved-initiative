@@ -31,17 +31,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    concat: {
-      js_dependencies: {
-        src: ["node_modules/jquery/dist/jquery.js"],
-        dest: "public/js/dependencies.js",
-        sourceMap: true
-      },
-      js_dependencies_min: {
-        src: ["node_modules/jquery/dist/jquery.min.js"],
-        dest: "public/js/dependencies.js"
-      }
-    },
     watch: {
       tsserver: {
         files: "server/**/*.ts",
@@ -66,18 +55,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("build_dev", [
-    "webpack:dev",
-    "ts:server",
-    "less",
-    "concat:js_dependencies"
-  ]);
-  grunt.registerTask("build_min", [
-    "webpack:prod",
-    "ts:server",
-    "less",
-    "concat:js_dependencies_min"
-  ]);
+  grunt.registerTask("build_dev", ["webpack:dev", "ts:server", "less"]);
+  grunt.registerTask("build_min", ["webpack:prod", "ts:server", "less"]);
   grunt.registerTask("default", ["build_dev", "watch"]);
   grunt.registerTask("postinstall", ["copy"]);
 };
