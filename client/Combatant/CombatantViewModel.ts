@@ -15,9 +15,9 @@ import { EditAliasPrompt } from "../Prompts/EditAliasPrompt";
 const animatedCombatantIds = ko.observableArray<string>([]);
 
 export class CombatantViewModel {
-  public HP: KnockoutComputed<string>;
-  public HPPercentage: KnockoutComputed<string>;
-  public Name: KnockoutComputed<string>;
+  public HP: ko.PureComputed<string>;
+  public HPPercentage: ko.PureComputed<string>;
+  public Name: ko.PureComputed<string>;
 
   constructor(
     public Combatant: Combatant,

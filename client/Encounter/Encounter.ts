@@ -68,7 +68,7 @@ export class Encounter {
     [name: string]: number;
   }> = ko.observable({});
   public ActiveCombatantStatBlock: KnockoutComputed<React.ReactElement<any>>;
-  public Difficulty: KnockoutComputed<EncounterDifficulty>;
+  public Difficulty: ko.PureComputed<EncounterDifficulty>;
 
   public EncounterFlow = new EncounterFlow(this);
 
