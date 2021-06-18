@@ -51,7 +51,7 @@ export function SpellEditor(props: SpellEditorProps) {
       initialValues={formValues}
     >
       {() => (
-        <Form autoComplete="false" className="spell-editor" translate="false">
+        <Form autoComplete="false" className="spell-editor" translate="no">
           <h2>Edit Spell</h2>
           <div className="editor-type">
             <label>Editor Mode: </label>
