@@ -23,6 +23,7 @@ export function MovePrompt(props: {
           Version: ""
         });
         item.Path = pathInput;
+        targetListing.SetValue(item);
         return await props.library.SaveEditedListing(targetListing, item);
       })
     );
