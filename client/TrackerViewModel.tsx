@@ -125,7 +125,7 @@ export class TrackerViewModel {
     this.rules
   );
 
-  public CombatantViewModels: KnockoutComputed<
+  public CombatantViewModels: ko.PureComputed<
     CombatantViewModel[]
   > = ko.pureComputed(() =>
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
