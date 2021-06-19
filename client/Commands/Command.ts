@@ -9,12 +9,12 @@ import { DefaultKeybindings } from "./DefaultKeybindings";
 export class Command {
   public ShowOnActionBar: KnockoutObservable<boolean>;
   public ShowInCombatantRow: KnockoutObservable<boolean>;
-  public ToolTip: KnockoutComputed<string>;
+  public ToolTip: ko.PureComputed<string>;
   public KeyBinding: string;
   public Id: string;
   public Description: string;
   public ActionBinding: () => any;
-  public FontAwesomeIcon: KnockoutComputed<string>;
+  public FontAwesomeIcon: ko.Computed<string>;
   public LockOnActionBar?: boolean;
 
   constructor(props: {

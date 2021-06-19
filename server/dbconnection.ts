@@ -279,7 +279,7 @@ export async function getEntity(
   const user = await db.collection<User>("users").findOne(
     { _id: userId },
     {
-      fields: {
+      projection: {
         [`${entityPath}.${entityId}`]: true
       }
     }

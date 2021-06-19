@@ -89,8 +89,11 @@ export function configureLoginRedirect(app: express.Application) {
 
 export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
   //console.log(`api response: ${JSON.stringify(apiResponse)}`);
+  let encounterId = "";
+  if (req.query && req.query.state) {
+    encounterId = (req.query.state as string).replace(/['"]/g, "");
+  }
 
-  const encounterId = req.query.state.replace(/['"]/g, "");
   const pledges = (apiResponse.included || []).filter(
     item => item.type == "pledge" && item.attributes.declined_since == null
   );
