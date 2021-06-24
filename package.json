@@ -50,8 +50,6 @@
     "formik": "^2.2.6",
     "grunt": "^1.0.4",
     "grunt-cli": "^1.2.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-less": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-ts": "^6.0.0-beta.22",
@@ -136,7 +134,7 @@
     ]
   },
   "scripts": {
-    "postinstall": "grunt --no-color postinstall",
+    "postinstall": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/",
     "build": "grunt build_min",
     "build-dev": "grunt build_dev",
     "start": "node server/server.js",

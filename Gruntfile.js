@@ -4,9 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-webpack");
   grunt.loadNpmTasks("grunt-contrib-less");
-  grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-watch");
-  grunt.loadNpmTasks("grunt-contrib-copy");
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
@@ -40,23 +38,10 @@ module.exports = function(grunt) {
         files: "lesscss/**/*.less",
         tasks: ["less"]
       }
-    },
-    copy: {
-      main: {
-        files: [
-          {
-            expand: true,
-            cwd: "node_modules/@fortawesome/fontawesome-free/webfonts/",
-            src: ["**"],
-            dest: "public/webfonts/"
-          }
-        ]
-      }
     }
   });
 
   grunt.registerTask("build_dev", ["webpack:dev", "ts:server", "less"]);
   grunt.registerTask("build_min", ["webpack:prod", "ts:server", "less"]);
   grunt.registerTask("default", ["build_dev", "watch"]);
-  grunt.registerTask("postinstall", ["copy"]);
 };
