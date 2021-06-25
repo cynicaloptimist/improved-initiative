@@ -7,11 +7,15 @@
 }
 
 // some overrides to allow spell details to go full width
-.prompt.prompt-spell {
+.prompt-spell {
+  flex-direction: inherit;
+  align-items: flex-start;
+
   > .c-button {
     transform: translateX(-100%);
     margin-left: 0;
   }
+
   .spell { min-width: 100%; }
 }
 
