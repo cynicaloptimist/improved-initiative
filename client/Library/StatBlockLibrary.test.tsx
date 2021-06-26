@@ -1,18 +1,24 @@
 import * as React from "react";
+import axios from "axios";
 import { act, render } from "@testing-library/react";
 import { StatBlock } from "../../common/StatBlock";
 import { Store } from "../Utility/Store";
 import { Library, useLibrary } from "./useLibrary";
+import { resolve } from "dns";
+
+jest.mock("axios");
 
 function LibraryTest(props: {
   libraryRef: (library: Library<StatBlock>) => void;
+  loadingFinished: () => void;
 }) {
   const library = useLibrary(Store.StatBlocks, "statblocks", {
     createEmptyListing: () => StatBlock.Default(),
     accountSave: () => {},
     accountDelete: () => {},
     getFilterDimensions: () => ({}),
-    getSearchHint: () => ""
+    getSearchHint: () => "",
+    loadingFinished: props.loadingFinished
   });
 
   props.libraryRef(library);
@@ -22,6 +28,7 @@ function LibraryTest(props: {
 describe("StatBlock Library", () => {
   test("Saves statblock name and max HP", async () => {
     localStorage.clear();
+    (axios.get as jest.Mock).mockResolvedValue(false);
 
     await Store.Save(Store.StatBlocks, "creatureId", {
       ...StatBlock.Default(),
@@ -30,8 +37,17 @@ describe("StatBlock Library", () => {
     });
 
     let library: Library<StatBlock>;
-    act(() => {
-      render(<LibraryTest libraryRef={l => (library = l)} />);
+
+    await act(async () => {
+      await new Promise<void>(done => {
+        render(
+          <LibraryTest
+            libraryRef={l => (library = l)}
+            loadingFinished={() => done()}
+          />
+        );
+      });
+
       library.AddListings(
         [
           {
