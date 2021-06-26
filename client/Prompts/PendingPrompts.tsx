@@ -6,7 +6,6 @@ export interface PromptProps<T extends object> {
   children: React.ReactChild;
   autoFocusSelector: string;
   initialValues: T;
-  className?: string;
 }
 
 class Prompt<T extends object> extends React.Component<
@@ -27,7 +26,7 @@ class Prompt<T extends object> extends React.Component<
         {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
-            className={"prompt" + ((this.props.className) ? " " + this.props.className : "") }
+            className="prompt"
             onSubmit={props.handleSubmit}
             onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
               if (e.key == "Escape") {
