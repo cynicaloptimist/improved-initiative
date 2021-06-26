@@ -25,11 +25,11 @@ function LibrariesCommanderTest(props: {
 }
 
 function PersistentCharacterLibraryTest(props: {
-  ref: (library: Library<PersistentCharacter>) => void;
+  setLibrary: (library: Library<PersistentCharacter>) => void;
   loadingFinished: () => void;
 }) {
   const libraries = useLibraries(new AccountClient(), props.loadingFinished);
-  useEffect(() => props.ref(libraries.PersistentCharacters), []);
+  useEffect(() => props.setLibrary(libraries.PersistentCharacters), []);
   return <div />;
 }
 
@@ -67,7 +67,7 @@ describe("PersistentCharacterLibrary", () => {
       await new Promise<void>(done => {
         render(
           <PersistentCharacterLibraryTest
-            ref={r => (library = r)}
+            setLibrary={r => (library = r)}
             loadingFinished={done}
           />
         );
@@ -88,7 +88,7 @@ describe("PersistentCharacterLibrary", () => {
       await new Promise<void>(done => {
         render(
           <PersistentCharacterLibraryTest
-            ref={r => (library = r)}
+            setLibrary={r => (library = r)}
             loadingFinished={done}
           />
         );
@@ -132,7 +132,7 @@ describe("PersistentCharacter", () => {
     await new Promise<void>(done => {
       render(
         <PersistentCharacterLibraryTest
-          ref={r => (library = r)}
+          setLibrary={r => (library = r)}
           loadingFinished={done}
         />
       );
@@ -170,7 +170,7 @@ describe("PersistentCharacter", () => {
     await new Promise<void>(done => {
       render(
         <PersistentCharacterLibraryTest
-          ref={r => (library = r)}
+          setLibrary={r => (library = r)}
           loadingFinished={done}
         />
       );
