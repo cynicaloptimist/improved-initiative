@@ -29,7 +29,9 @@ function PersistentCharacterLibraryTest(props: {
   loadingFinished: () => void;
 }) {
   const libraries = useLibraries(new AccountClient(), props.loadingFinished);
-  useEffect(() => props.setLibrary(libraries.PersistentCharacters), []);
+  useEffect(() => {
+    props.setLibrary(libraries.PersistentCharacters);
+  }, []);
   return <div />;
 }
 
