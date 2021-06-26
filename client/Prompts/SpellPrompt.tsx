@@ -13,10 +13,10 @@ export function SpellPrompt(
   return {
     autoFocusSelector: "button",
     children: (
-      <>
+      <div className="prompt-spell">
         <SpellDetails Spell={spell} />
         <SubmitButton />
-      </>
+      </div>
     ),
     initialValues: {},
     onSubmit: () => true

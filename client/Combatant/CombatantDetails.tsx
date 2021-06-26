@@ -63,12 +63,13 @@ export function CombatantDetails(props: CombatantDetailsProps) {
       {tags.length > 0 && (
         <div className="c-combatant-details__tags">
           <span className="stat-label">Tags</span>{" "}
-          {tags.map((tag, index) => (
-            <React.Fragment key={index}>
-              <TagDetails tag={tag} />
-              {index !== tags.length - 1 && "; "}
-            </React.Fragment>
-          ))}
+          <span className="stat-value">
+            {tags.map((tag, index) => (
+              <React.Fragment key={index}>
+                <TagDetails tag={tag} />
+              </React.Fragment>
+            ))}
+          </span>
         </div>
       )}
       {props.displayMode !== "status-only" && (
@@ -93,13 +94,13 @@ function TagDetails(props: { tag: Tag }) {
   }
   if (props.tag.HasDuration) {
     return (
-      <>
+      <span className="stat-value__item">
         {props.tag.Text} ({durationRemaining} more rounds)
-      </>
+      </span>
     );
   }
 
-  return <>{props.tag.Text}</>;
+  return <span className="stat-value__item">{props.tag.Text}</span>;
 }
 function renderHPBarStyle(currentHPPercentage) {
   return {width: currentHPPercentage };
