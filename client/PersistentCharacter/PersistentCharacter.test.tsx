@@ -31,7 +31,7 @@ function PersistentCharacterLibraryTest(props: {
   const libraries = useLibraries(new AccountClient(), props.loadingFinished);
   useEffect(() => {
     props.setLibrary(libraries.PersistentCharacters);
-  }, []);
+  }, [libraries]);
   return <div />;
 }
 
@@ -62,10 +62,10 @@ describe("PersistentCharacterLibrary", () => {
 
   it.only("Should load stored PersistentCharacters", async () => {
     let listings: Listing<PersistentCharacter>[];
+    let library: Library<PersistentCharacter>;
     await act(async () => {
       savePersistentCharacterWithName("Persistent Character");
 
-      let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
         render(
           <PersistentCharacterLibraryTest
@@ -74,9 +74,10 @@ describe("PersistentCharacterLibrary", () => {
           />
         );
       });
-
-      listings = library.GetAllListings();
     });
+
+    listings = library.GetAllListings();
+
     expect(listings).toHaveLength(1);
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
