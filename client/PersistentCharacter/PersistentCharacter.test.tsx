@@ -20,7 +20,7 @@ function LibrariesCommanderTest(props: {
   loadingFinished: () => void;
 }) {
   const libraries = useLibraries(new AccountClient(), props.loadingFinished);
-  useEffect(() => props.librariesCommander.Initialize(libraries), []);
+  useEffect(() => props.librariesCommander.SetLibraries(libraries), []);
   return <div />;
 }
 
