@@ -15,7 +15,7 @@ import { act, render } from "@testing-library/react";
 import { Library } from "../Library/useLibrary";
 import { Listing } from "../Library/Listing";
 
-function LibrariesCommanderTest(props: {
+function LibrariesCommanderHarness(props: {
   librariesCommander: LibrariesCommander;
   loadingFinished: () => void;
 }) {
@@ -24,7 +24,7 @@ function LibrariesCommanderTest(props: {
   return <div />;
 }
 
-function PersistentCharacterLibraryTest(props: {
+function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
   loadingFinished: () => void;
 }) {
@@ -68,7 +68,7 @@ describe("PersistentCharacterLibrary", () => {
 
       await new Promise<void>(done => {
         render(
-          <PersistentCharacterLibraryTest
+          <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
             loadingFinished={done}
           />
@@ -90,7 +90,7 @@ describe("PersistentCharacterLibrary", () => {
       let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
         render(
-          <PersistentCharacterLibraryTest
+          <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
             loadingFinished={done}
           />
@@ -105,7 +105,7 @@ describe("PersistentCharacterLibrary", () => {
 
       await new Promise<void>(done => {
         render(
-          <LibrariesCommanderTest
+          <LibrariesCommanderHarness
             librariesCommander={librariesCommander}
             loadingFinished={done}
           />
@@ -134,7 +134,7 @@ describe("PersistentCharacter", () => {
     let library: Library<PersistentCharacter>;
     await new Promise<void>(done => {
       render(
-        <PersistentCharacterLibraryTest
+        <PersistentCharacterLibraryHarness
           setLibrary={r => (library = r)}
           loadingFinished={done}
         />
@@ -172,7 +172,7 @@ describe("PersistentCharacter", () => {
     let library: Library<PersistentCharacter>;
     await new Promise<void>(done => {
       render(
-        <PersistentCharacterLibraryTest
+        <PersistentCharacterLibraryHarness
           setLibrary={r => (library = r)}
           loadingFinished={done}
         />
