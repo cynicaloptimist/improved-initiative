@@ -178,7 +178,7 @@ describe("PersistentCharacter", () => {
     expect.assertions(1);
   });
 
-  it.only("Should not allow the same Persistent Character to be added twice", async () => {
+  it("Should not allow the same Persistent Character to be added twice", async () => {
     const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
     let library: Library<PersistentCharacter>;
