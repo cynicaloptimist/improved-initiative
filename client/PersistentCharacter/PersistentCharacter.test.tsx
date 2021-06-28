@@ -15,6 +15,9 @@ import { act, render } from "@testing-library/react";
 import { Library } from "../Library/useLibrary";
 import { Listing } from "../Library/Listing";
 
+import axios from "axios";
+jest.mock("axios");
+
 function LibrariesCommanderHarness(props: {
   librariesCommander: LibrariesCommander;
   loadingFinished: () => void;
@@ -47,6 +50,7 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
+    (axios.get as jest.Mock).mockResolvedValue(null);
   });
 
   function savePersistentCharacterWithName(name: string) {
@@ -60,7 +64,7 @@ describe("PersistentCharacterLibrary", () => {
     return persistentCharacter.Id;
   }
 
-  it.only("Should load stored PersistentCharacters", async () => {
+  it("Should load stored PersistentCharacters", async () => {
     let listings: Listing<PersistentCharacter>[];
     let library: Library<PersistentCharacter>;
     await act(async () => {
@@ -82,8 +86,9 @@ describe("PersistentCharacterLibrary", () => {
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
-  it("Should provide the latest version of a Persistent Character", async () => {
-    let updatedPersistentCharacter: PersistentCharacter | null = null;
+  it.only("Should provide the latest version of a Persistent Character", async () => {
+    let listing: Listing<PersistentCharacter>;
+
     await act(async () => {
       InitializeSettings();
       savePersistentCharacterWithName("Persistent Character");
@@ -96,7 +101,7 @@ describe("PersistentCharacterLibrary", () => {
           />
         );
       });
-      const listing = library.GetAllListings()[0];
+      listing = library.GetAllListings()[0];
       const persistentCharacter = await listing.GetWithTemplate(
         PersistentCharacter.Default()
       );
@@ -112,18 +117,17 @@ describe("PersistentCharacterLibrary", () => {
         );
       });
 
-      await librariesCommander.UpdatePersistentCharacter(
+      listing = await librariesCommander.UpdatePersistentCharacter(
         persistentCharacter.Id,
         {
           CurrentHP: 0
         }
       );
-
-      updatedPersistentCharacter = await listing.GetWithTemplate(
-        PersistentCharacter.Default()
-      );
     });
 
+    const updatedPersistentCharacter = await listing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
     expect(updatedPersistentCharacter.CurrentHP).toEqual(0);
   });
 });
