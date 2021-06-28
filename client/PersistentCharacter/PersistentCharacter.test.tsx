@@ -138,7 +138,7 @@ describe("PersistentCharacter", () => {
     InitializeSettings();
   });
 
-  it.only("Should not save PersistentCharacters with Encounters", async () => {
+  it("Should not save PersistentCharacters with Encounters", async () => {
     const encounter = buildEncounter();
     let library: Library<PersistentCharacter>;
     await act(async () => {
@@ -178,28 +178,31 @@ describe("PersistentCharacter", () => {
     expect.assertions(1);
   });
 
-  it("Should not allow the same Persistent Character to be added twice", async () => {
+  it.only("Should not allow the same Persistent Character to be added twice", async () => {
     const persistentCharacter = PersistentCharacter.Default();
     const encounter = buildEncounter();
     let library: Library<PersistentCharacter>;
-    await new Promise<void>(done => {
-      render(
-        <PersistentCharacterLibraryHarness
-          setLibrary={r => (library = r)}
-          loadingFinished={done}
-        />
+
+    await act(async () => {
+      await new Promise<void>(done => {
+        render(
+          <PersistentCharacterLibraryHarness
+            setLibrary={r => (library = r)}
+            loadingFinished={done}
+          />
+        );
+      });
+      encounter.AddCombatantFromPersistentCharacter(
+        persistentCharacter,
+        library.GetAllListings
+      );
+
+      encounter.AddCombatantFromPersistentCharacter(
+        persistentCharacter,
+        library.GetAllListings
       );
     });
-    encounter.AddCombatantFromPersistentCharacter(
-      persistentCharacter,
-      library.GetAllListings
-    );
-    expect(encounter.Combatants().length).toBe(1);
 
-    encounter.AddCombatantFromPersistentCharacter(
-      persistentCharacter,
-      library.GetAllListings
-    );
     expect(encounter.Combatants().length).toBe(1);
   });
 
