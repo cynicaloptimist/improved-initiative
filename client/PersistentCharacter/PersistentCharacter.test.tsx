@@ -86,7 +86,7 @@ describe("PersistentCharacterLibrary", () => {
     expect(listings[0].Meta().Name).toEqual("Persistent Character");
   });
 
-  it.only("Should provide the latest version of a Persistent Character", async () => {
+  it("Should provide the latest version of a Persistent Character", async () => {
     let listing: Listing<PersistentCharacter>;
 
     await act(async () => {
@@ -133,39 +133,47 @@ describe("PersistentCharacterLibrary", () => {
 });
 
 describe("PersistentCharacter", () => {
-  it("Should not save PersistentCharacters with Encounters", async () => {
+  beforeEach(() => {
+    (axios.get as jest.Mock).mockResolvedValue(null);
+    InitializeSettings();
+  });
+
+  it.only("Should not save PersistentCharacters with Encounters", async () => {
     const encounter = buildEncounter();
     let library: Library<PersistentCharacter>;
-    await new Promise<void>(done => {
-      render(
-        <PersistentCharacterLibraryHarness
-          setLibrary={r => (library = r)}
-          loadingFinished={done}
-        />
+    await act(async () => {
+      await new Promise<void>(done => {
+        render(
+          <PersistentCharacterLibraryHarness
+            setLibrary={r => (library = r)}
+            loadingFinished={done}
+          />
+        );
+      });
+
+      encounter.AddCombatantFromPersistentCharacter(
+        PersistentCharacter.Default(),
+        library.GetAllListings,
+        false
       );
+
+      encounter.AddCombatantFromStatBlock(StatBlock.Default());
+
+      const prompt = SaveEncounterPrompt(
+        encounter.ObservableEncounterState(),
+        "",
+        async savedEncounter => {
+          expect(savedEncounter.Combatants.length).toEqual(1);
+          return null;
+        },
+        () => {},
+        []
+      );
+
+      const formValues = prompt.initialValues;
+      formValues.Name = "Test";
+      prompt.onSubmit(formValues);
     });
-    encounter.AddCombatantFromPersistentCharacter(
-      PersistentCharacter.Default(),
-      library.GetAllListings,
-      false
-    );
-
-    encounter.AddCombatantFromStatBlock(StatBlock.Default());
-
-    const prompt = SaveEncounterPrompt(
-      encounter.ObservableEncounterState(),
-      "",
-      async savedEncounter => {
-        expect(savedEncounter.Combatants.length).toEqual(1);
-        return null;
-      },
-      () => {},
-      []
-    );
-
-    const formValues = prompt.initialValues;
-    formValues.Name = "Test";
-    prompt.onSubmit(formValues);
 
     expect.assertions(1);
   });
