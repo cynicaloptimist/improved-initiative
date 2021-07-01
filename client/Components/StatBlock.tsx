@@ -75,7 +75,9 @@ export function StatBlockComponent(props: StatBlockProps) {
         <span className="stat-label">Speed</span>
         <span className="stat-value">
           {statBlock.Speed.map((speed, i) => (
-            <span className="stat-value__item">{speed}</span>
+            <span className="stat-value__item" key={"stat-value__speed-" + i}>
+              {speed}
+            </span>
           ))}
         </span>
       </div>
@@ -90,7 +92,9 @@ export function StatBlockComponent(props: StatBlockProps) {
             <div className="Ability" key={abilityName}>
               <div className="stat-label">{abilityName}</div>
               <span className={"score " + abilityName}>{abilityScore}</span>
-              <span className={"modifier " + abilityName}>{abilityModifier}</span>
+              <span className={"modifier " + abilityName}>
+                {abilityModifier}
+              </span>
             </div>
           );
         })}
@@ -124,8 +128,13 @@ export function StatBlockComponent(props: StatBlockProps) {
                 <span className="stat-value__item">
                   {keywordSetType.data.map((keyword, index) => {
                     return (
-                      <span className="stat-value__item">{keyword}</span>
-                    )
+                      <span
+                        className="stat-value__item"
+                        key={`stat-value__${keywordSetType.name}-${index}`}
+                      >
+                        {keyword}
+                      </span>
+                    );
                   })}
                 </span>
               </span>
