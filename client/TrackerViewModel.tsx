@@ -91,7 +91,6 @@ export class TrackerViewModel {
     // conversion to allow an observable-backed class to also depend
     // on a React hook. This will probably catch fire at some point.
     // It's also probably impossible to test.
-    const firstInitialization = this.Libraries === undefined;
     this.Libraries = libraries;
 
     this.StatBlockTextEnricher = new TextEnricher(
@@ -104,10 +103,6 @@ export class TrackerViewModel {
     );
 
     this.LibrariesCommander.SetLibraries(libraries);
-
-    if (firstInitialization) {
-      this.loadAutoSavedEncounterIfAvailable();
-    }
   };
 
   public StatBlockTextEnricher: TextEnricher;
@@ -375,7 +370,7 @@ export class TrackerViewModel {
     });
   }
 
-  private loadAutoSavedEncounterIfAvailable() {
+  public LoadAutoSavedEncounterIfAvailable() {
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
       LegacySynchronousLocalStore.DefaultSavedEncounterId

@@ -43,7 +43,12 @@ export function App(props: { tracker: TrackerViewModel }) {
     tracker.CombatantCommander.HasSelected
   );
 
-  const libraries = useLibraries(new AccountClient());
+  const libraries = useLibraries(new AccountClient(), storeName => {
+    if (storeName === LegacySynchronousLocalStore.PersistentCharacters) {
+      tracker.LoadAutoSavedEncounterIfAvailable();
+    }
+  });
+
   tracker.SetLibraries(libraries);
 
   const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
