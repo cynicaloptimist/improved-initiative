@@ -24,7 +24,7 @@ export function SelectedItemsView<T extends Listable>(props: {
   const loadedItems = Object.values(loadedItemsById);
 
   if (loadedItems.length === 0) {
-    return null;
+    return <LibraryManagerInfo />;
   }
   if (props.listings.length === 1 && loadedItems.length === 1) {
     return props.renderListing(loadedItems[0]);
@@ -41,4 +41,17 @@ export function SelectedItemsView<T extends Listable>(props: {
       </div>
     );
   }
+}
+
+function LibraryManagerInfo() {
+  return (
+    <div className="c-library-manager__info">
+      <p>
+        The Library Manager allows you to move and delete multiple items at the
+        same time. Select multiple rows by holding the control/meta key. You can
+        also edit a statblock while viewing a different statblock.
+      </p>
+      <p>This UI is under active development and is subject to change.</p>
+    </div>
+  );
 }
