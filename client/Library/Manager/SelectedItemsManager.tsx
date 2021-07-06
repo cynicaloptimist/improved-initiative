@@ -59,7 +59,7 @@ export function SelectedItemsManager(props: {
         library={ActiveLibrary(props.libraries, props.activeTab)}
         done={() => setPromptTypeAndTargets(null)}
       />
-      <div style={{ flexShrink: 1 }}>
+      <div className="c-library-manager__selection" style={{ flexShrink: 1 }}>
         <SelectedItemsViewForActiveTab
           selection={selection}
           activeTab={props.activeTab}
