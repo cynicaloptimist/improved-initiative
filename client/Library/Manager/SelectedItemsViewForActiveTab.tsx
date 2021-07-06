@@ -25,8 +25,6 @@ export function SelectedItemsViewForActiveTab({
     defaultListing: GetDefaultForLibrary(activeTab)
   };
 
-  const textEnricher = React.useContext(TextEnricherContext);
-
   if (activeTab === "StatBlocks") {
     return (
       <SelectedItemsView
