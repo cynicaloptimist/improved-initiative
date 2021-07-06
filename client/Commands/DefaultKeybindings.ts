@@ -6,6 +6,7 @@ export const DefaultKeybindings: { [commandId: string]: string } = {
   "clear-encounter": "alt+shift+del",
   "clean-encounter": "alt+del",
   "open-library": "alt+a",
+  "open-library-manager": "alt+shift+a",
   "roll-dice": "d",
   "quick-add": "alt+q",
   "restore-all-player-character-hp": "alt+shift+t",
