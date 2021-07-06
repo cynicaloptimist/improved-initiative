@@ -172,11 +172,11 @@ const getAndAddSamplePersistentCharacters = (
     }
     const statblocks = response.data;
     statblocks.forEach(statBlock => {
+      statBlock.Path = "Sample Player Characters";
       const persistentCharacter = PersistentCharacter.Initialize({
         ...StatBlock.Default(),
         ...statBlock
       });
-      persistentCharacter.Path = "Sample Player Characters";
       persistentCharacterLibrary.SaveNewListing(persistentCharacter);
     });
   });
