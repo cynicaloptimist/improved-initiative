@@ -20,7 +20,7 @@ export function MovePrompt(props: {
       props.targets.map(async targetListing => {
         const item = await targetListing.GetWithTemplate({
           ...targetListing.Meta(),
-          Version: ""
+          Version: process.env.VERSION
         });
         item.Path = pathInput;
         targetListing.SetValue(item);
