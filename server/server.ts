@@ -1,7 +1,3 @@
-if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
-  require("newrelic");
-}
-
 import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
