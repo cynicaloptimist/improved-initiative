@@ -79,7 +79,9 @@ export function useLibrary<T extends Listable>(
 
   const DeleteListing = React.useCallback(
     async (id: string) => {
-      setListings(listings.filter(s => s.Meta().Id !== id));
+      setListings(currentListings =>
+        currentListings.filter(s => s.Meta().Id !== id)
+      );
       await Store.Delete(storeName, id);
       try {
         await callbacks.accountDelete(id);
