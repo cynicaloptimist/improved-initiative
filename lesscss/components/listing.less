@@ -1,21 +1,33 @@
-.listings li:nth-child(2n-1) > span {
+.zebra-stripe > *:nth-child(2n-1) {
   background-color: @zebra-white;
+  > span:hover {
+    background-color: @hover-white;
+  }
+}
+
+.listings li.c-listing--selected {
+  background-color: @selected-light;
+}
+
+.listings span {
+  transition: background-color @transition-hover;
   &:hover {
     background-color: @hover-white;
   }
 }
-.listings span:hover {
-  background-color: @hover-white;
-}
 
 .c-listing {
+  display: flex;
+  flex-flow: row;
+
   .c-listing-boss,
   .c-listing-minion,
   .c-listing-delete,
   .c-listing-edit,
   .c-listing-move,
   .c-listing__counter {
-    display: none;
+    transition: opacity @transition-hover;
+    opacity: 0;
   }
 
   &:hover {
@@ -24,7 +36,7 @@
     .c-listing-delete,
     .c-listing-edit,
     .c-listing-move {
-      display: flex;
+      opacity: 1;
     }
   }
 }
@@ -34,5 +46,14 @@
     &:not(:first-child) {
       margin-left: @medium-spacer;
     }
+  }
+}
+
+.c-folder--open {
+  box-shadow: inset 0px -10px 5px -5px rgba(0, 0, 0, 0.25);
+  border-left: 1px solid @primary-black;
+  padding-bottom: @medium-spacer;
+  .c-folder--open {
+    margin-left: @medium-spacer;
   }
 }

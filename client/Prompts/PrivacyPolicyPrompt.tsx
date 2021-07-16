@@ -2,8 +2,8 @@ import * as React from "react";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
-import ReactMarkdown = require("react-markdown");
 import { SubmitButton } from "../Components/Button";
+import ReactMarkdown = require("react-markdown");
 
 const privacyPolicyText: string = require("../../PRIVACY.md").default;
 
@@ -24,7 +24,7 @@ function PrivacyPolicyComponent() {
       additionalClassNames={promptClassName + "-nothanks"}
       fontAwesomeIcon=""
       text="No Thanks"
-      bindModel={["optIn", false]}
+      submitIntent={["optIn", false]}
     />
   );
 
@@ -33,7 +33,7 @@ function PrivacyPolicyComponent() {
       additionalClassNames={promptClassName + "-optin"}
       fontAwesomeIcon=""
       text="Opt In"
-      bindModel={["optIn", true]}
+      submitIntent={["optIn", true]}
     />
   );
 

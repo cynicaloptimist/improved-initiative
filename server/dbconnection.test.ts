@@ -7,7 +7,7 @@ import * as DB from "./dbconnection";
 import { handleCurrentUser } from "./patreon";
 import { AccountStatus } from "./user";
 
-describe("User Accounts", () => {
+describe.skip("User Accounts", () => {
   let mongod: MongodbMemoryServer;
   let uri;
   let userId: ObjectID;

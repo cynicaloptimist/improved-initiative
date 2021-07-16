@@ -51,11 +51,8 @@ export function AutocompleteTextInput(props: {
   autoFocus?: boolean;
 }) {
   return (
-    <Field
-      name={props.fieldName}
-      render={fieldProps => (
-        <InnerAwesomeplete {...props} fieldProps={fieldProps} />
-      )}
-    />
+    <Field name={props.fieldName}>
+      {fieldProps => <InnerAwesomeplete {...props} fieldProps={fieldProps} />}
+    </Field>
   );
 }

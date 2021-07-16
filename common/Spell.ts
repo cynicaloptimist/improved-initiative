@@ -1,4 +1,4 @@
-import { Listable, ListingMetadata } from "./Listable";
+import { Listable, FilterDimensions } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
 export interface Spell extends Listable {
@@ -18,7 +18,7 @@ export namespace Spell {
   export const GetSearchHint = (spell: Spell) =>
     [spell.Name, spell.School, ...spell.Classes].join(" ");
 
-  export const GetMetadata = (spell: Spell): ListingMetadata => ({
+  export const GetFilterDimensions = (spell: Spell): FilterDimensions => ({
     Level: spell.Level.toString(),
     Type: spell.School
   });

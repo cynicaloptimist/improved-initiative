@@ -1,14 +1,18 @@
+import * as ko from "knockout";
 import * as _ from "lodash";
+
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
-import { probablyUniqueString } from "../../common/Toolbox";
+import {
+  concatenatedStringRegex,
+  probablyUniqueString
+} from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
-import { StatBlockLibrary } from "../Library/StatBlockLibrary";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
 import { EncounterCommander } from "./EncounterCommander";
@@ -16,13 +20,25 @@ import { MoveEncounterPrompt } from "../Prompts/MoveEncounterPrompt";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { SpellPrompt } from "../Prompts/SpellPrompt";
 import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
+import { SavedEncounter } from "../../common/SavedEncounter";
+import { now } from "moment";
+import { Library } from "../Library/useLibrary";
 
 export class LibrariesCommander {
+  private libraries: Libraries;
+
   constructor(
     private tracker: TrackerViewModel,
-    private libraries: Libraries,
     private encounterCommander: EncounterCommander
   ) {}
+
+  public SetLibraries = (libraries: Libraries) => {
+    // I don't like this pattern, but it's my first stab at a partial
+    // conversion to allow an observable-backed class to also depend
+    // on a React hook. This will probably catch fire at some point.
+    // It's also probably impossible to test.
+    this.libraries = libraries;
+  };
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
@@ -48,7 +64,7 @@ export class LibrariesCommander {
   public CanAddPersistentCharacter = (
     listing: Listing<PersistentCharacter>
   ) => {
-    return this.tracker.Encounter.CanAddCombatant(listing.Listing().Id);
+    return this.tracker.Encounter.CanAddCombatant(listing.Meta().Id);
   };
 
   public AddPersistentCharacterFromListing = async (
@@ -60,7 +76,7 @@ export class LibrariesCommander {
     );
     this.tracker.Encounter.AddCombatantFromPersistentCharacter(
       character,
-      this.libraries.PersistentCharacters,
+      this.UpdatePersistentCharacter,
       hideOnAdd
     );
     Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
@@ -69,7 +85,37 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: StatBlockLibrary) => {
+  public UpdatePersistentCharacter = async (
+    persistentCharacterId: string,
+    updates: Partial<PersistentCharacter>
+  ) => {
+    if (updates.StatBlock) {
+      updates.Name = updates.StatBlock.Name;
+      updates.Path = updates.StatBlock.Path;
+      updates.Version = updates.StatBlock.Version;
+    }
+
+    const currentCharacterListing = await this.libraries.PersistentCharacters.GetOrCreateListingById(
+      persistentCharacterId
+    );
+
+    const currentCharacter = await currentCharacterListing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
+
+    const updatedCharacter = {
+      ...currentCharacter,
+      ...updates,
+      LastUpdateMs: now()
+    };
+
+    return await this.libraries.PersistentCharacters.SaveEditedListing(
+      currentCharacterListing,
+      updatedCharacter
+    );
+  };
+
+  public CreateAndEditStatBlock = (library: Library<StatBlock>) => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -79,14 +125,14 @@ export class LibrariesCommander {
     this.tracker.EditStatBlock({
       editorTarget: "library",
       statBlock,
-      onSave: library.SaveNewStatBlock,
-      currentListings: library.GetStatBlocks()
+      onSave: library.SaveNewListing,
+      currentListings: library.GetAllListings()
     });
   };
 
   public EditStatBlock = (
     listing: Listing<StatBlock>,
-    library: StatBlockLibrary
+    library: Library<StatBlock>
   ) => {
     if (this.tracker.TutorialVisible()) {
       return;
@@ -102,25 +148,25 @@ export class LibrariesCommander {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: statBlockWithNewId,
-          onSave: library.SaveNewStatBlock,
+          onSave: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter,
-          currentListings: library.GetStatBlocks()
+          currentListings: library.GetAllListings()
         });
       } else {
         this.tracker.EditStatBlock({
           editorTarget: "library",
           statBlock: { ...StatBlock.Default(), ...statBlock },
-          onSave: s => library.SaveEditedStatBlock(listing, s),
-          currentListings: library.GetStatBlocks(),
-          onDelete: this.deleteSavedStatBlock(listing.Listing().Id),
-          onSaveAsCopy: library.SaveNewStatBlock,
+          onSave: s => library.SaveEditedListing(listing, s),
+          currentListings: library.GetAllListings(),
+          onDelete: this.deleteSavedStatBlock(listing.Meta().Id),
+          onSaveAsCopy: library.SaveNewListing,
           onSaveAsCharacter: this.saveStatblockAsPersistentCharacter
         });
       }
     });
   };
 
-  public CreatePersistentCharacter = () => {
+  public CreatePersistentCharacter = async () => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -129,7 +175,7 @@ export class LibrariesCommander {
     statBlock.Id = newId;
 
     const persistentCharacter = PersistentCharacter.Initialize(statBlock);
-    return this.libraries.PersistentCharacters.AddNewPersistentCharacter(
+    return await this.libraries.PersistentCharacters.SaveNewListing(
       persistentCharacter
     );
   };
@@ -150,8 +196,8 @@ export class LibrariesCommander {
     };
     this.tracker.EditSpell({
       spell: newSpell,
-      onSave: this.libraries.Spells.AddOrUpdateSpell,
-      onDelete: this.libraries.Spells.DeleteSpellById
+      onSave: this.libraries.Spells.SaveNewListing,
+      onDelete: this.libraries.Spells.DeleteListing
     });
   };
 
@@ -159,8 +205,9 @@ export class LibrariesCommander {
     listing.GetAsyncWithUpdatedId(spell => {
       this.tracker.EditSpell({
         spell: { ...Spell.Default(), ...spell },
-        onSave: this.libraries.Spells.AddOrUpdateSpell,
-        onDelete: this.libraries.Spells.DeleteSpellById
+        onSave: spell =>
+          this.libraries.Spells.SaveEditedListing(listing, spell),
+        onDelete: this.libraries.Spells.DeleteListing
       });
     });
   };
@@ -173,6 +220,14 @@ export class LibrariesCommander {
     return true;
   };
 
+  public GetSpellsByNameRegex = ko.pureComputed(() =>
+    concatenatedStringRegex(
+      this.libraries.Spells.GetAllListings() //TODO: Ensure that computed is updated with this
+        .map(s => s.Meta().Name)
+        .filter(n => n.length > 2)
+    )
+  );
+
   public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
     this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
@@ -181,22 +236,28 @@ export class LibrariesCommander {
     const prompt = SaveEncounterPrompt(
       this.tracker.Encounter.FullEncounterState(),
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
-      this.libraries.Encounters.Save,
+      this.libraries.Encounters.SaveNewListing,
       this.tracker.EventLog.AddEvent,
-      _.uniq(this.libraries.Encounters.Encounters().map(e => e.Listing().Path))
+      _.uniq(this.libraries.Encounters.GetAllListings().map(e => e.Meta().Path))
     );
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public MoveEncounter = (legacySavedEncounter: { Name?: string }) => {
-    const folderNames = _(this.libraries.Encounters.Encounters())
-      .map(e => e.Listing().Path)
+  public MoveEncounter = async (encounterListing: Listing<SavedEncounter>) => {
+    const folderNames = _(this.libraries.Encounters.GetAllListings())
+      .map(e => e.Meta().Path)
       .uniq()
       .compact()
       .value();
+    const encounter = await encounterListing.GetWithTemplate(
+      SavedEncounter.Default()
+    );
     const prompt = MoveEncounterPrompt(
-      legacySavedEncounter,
-      this.libraries.Encounters.Move,
+      encounter,
+      (encounter: SavedEncounter, oldId: string) => {
+        this.libraries.Encounters.DeleteListing(oldId);
+        this.libraries.Encounters.SaveNewListing(encounter);
+      },
       folderNames
     );
     this.tracker.PromptQueue.Add(prompt);
@@ -211,7 +272,7 @@ export class LibrariesCommander {
 
   public LaunchQuickAddPrompt = () => {
     this.encounterCommander.QuickAddStatBlock();
-  }
+  };
 
   private deleteSavedStatBlock = (statBlockId: string) => () => {
     this.libraries.StatBlocks.DeleteListing(statBlockId);
@@ -220,8 +281,6 @@ export class LibrariesCommander {
 
   private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {
     const persistentCharacter = PersistentCharacter.Initialize(statBlock);
-    this.libraries.PersistentCharacters.AddNewPersistentCharacter(
-      persistentCharacter
-    );
+    this.libraries.PersistentCharacters.SaveNewListing(persistentCharacter);
   };
 }

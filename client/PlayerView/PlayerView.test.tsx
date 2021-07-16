@@ -11,7 +11,7 @@ import { PlayerView } from "./components/PlayerView";
 import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
 import { PortraitWithCaption } from "./components/PortraitModal";
 
-describe("PlayerViewModel", () => {
+describe.skip("PlayerViewModel", () => {
   let encounter: Encounter;
   let playerView: Enzyme.ShallowWrapper;
 
@@ -144,7 +144,7 @@ describe("PlayerViewModel", () => {
   });
 });
 
-describe("Tag Suggestor", () => {
+describe.skip("Tag Suggestor", () => {
   let encounter: Encounter;
   let suggestTag: jest.Mock<void>;
   let playerView: Enzyme.ReactWrapper<

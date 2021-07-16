@@ -22,6 +22,9 @@ export function useSubscription<T>(observable: KnockoutObservable<T>): T {
   const [value, setValue] = React.useState({ current: observable() });
 
   React.useEffect(() => {
+    //If the observable itself changed, we want to get its current value as part of this useEffect.
+    setValue({ current: observable() });
+
     const subscription = observable.subscribe(newValue => {
       // In case newValue is a reference to the same object as before
       // such as with KnockoutObservableArray, we instantiate a wrapper

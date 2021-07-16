@@ -9,15 +9,14 @@ import { CurrentSettings } from "../../Settings/Settings";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { StatBlockLibrary } from "../StatBlockLibrary";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ExtraButton, ListingRow } from "./ListingRow";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ExtraButton, ListingRow } from "../Components/ListingRow";
+import { Library } from "../useLibrary";
 
-export type StatBlockLibraryPaneProps = {
+export type StatBlockLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: StatBlockLibrary;
-  statBlockTextEnricher: TextEnricher;
+  library: Library<StatBlock>;
 };
 
 type StatBlockListing = Listing<StatBlock>;
@@ -31,11 +30,11 @@ interface State {
   previewPosition: { left: number; top: number };
 }
 
-export class StatBlockLibraryPane extends React.Component<
-  StatBlockLibraryPaneProps,
+export class StatBlockLibraryReferencePane extends React.Component<
+  StatBlockLibraryReferencePaneProps,
   State
 > {
-  constructor(props: StatBlockLibraryPaneProps) {
+  constructor(props: StatBlockLibraryReferencePaneProps) {
     super(props);
     this.state = {
       filter: "",
@@ -50,10 +49,10 @@ export class StatBlockLibraryPane extends React.Component<
   }
 
   public render() {
-    const listings = this.props.library.GetStatBlocks();
+    const listings = this.props.library.GetAllListings();
 
     return (
-      <LibraryPane
+      <LibraryReferencePane
         defaultItem={StatBlock.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow(CurrentSettings())}
@@ -75,17 +74,17 @@ export class StatBlockLibraryPane extends React.Component<
 
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
-      key: l.Listing().Path
+      key: l.Meta().Path
     }),
     l => ({
-      label: "Challenge " + l.Listing().Metadata.Level,
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: "Challenge " + l.Meta().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().Metadata.Source?.split(",")[0]
+      key: l.Meta().FilterDimensions.Source?.split(",")[0]
     }),
     l => ({
-      key: l.Listing().Metadata.Type
+      key: l.Meta().FilterDimensions.Type
     })
   ];
 
@@ -93,21 +92,24 @@ export class StatBlockLibraryPane extends React.Component<
     l: Listing<StatBlock>,
     onPreview,
     onPreviewOut
-  ) => (
-    <ListingRow
-      key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
-      name={l.Listing().Name}
-      showCount
-      onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
-      onEdit={this.editStatBlock}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={l}
-      extraButtons={
-        settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
-      }
-    />
-  );
+  ) => {
+    const listingMeta = l.Meta();
+    return (
+      <ListingRow
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
+        showCount
+        onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
+        onEdit={this.editStatBlock}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+        extraButtons={
+          settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
+        }
+      />
+    );
+  };
 
   private loadSavedStatBlock = (variantMaximumHP: VariantMaximumHP) => (
     listing: StatBlockListing,
@@ -121,7 +123,7 @@ export class StatBlockLibraryPane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
-    l.Listing.subscribe(_ => this.forceUpdate());
+    l.Meta.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
 

@@ -89,8 +89,11 @@ export function configureLoginRedirect(app: express.Application) {
 
 export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
   //console.log(`api response: ${JSON.stringify(apiResponse)}`);
+  let encounterId = "";
+  if (req.query && req.query.state) {
+    encounterId = (req.query.state as string).replace(/['"]/g, "");
+  }
 
-  const encounterId = req.query.state.replace(/['"]/g, "");
   const pledges = (apiResponse.included || []).filter(
     item => item.type == "pledge" && item.attributes.declined_since == null
   );
@@ -180,7 +183,7 @@ function updateLatestPost(latestPost: { post: Post | null }) {
 
   request.get(patreonUrl, (error, response, body) => {
     const json = ParseJSONOrDefault(body, { data: [] });
-    if (json.data.length) {
+    if (json.data?.length) {
       latestPost.post = json.data.filter(
         d => d.attributes.was_posted_by_campaign_owner
       )[0];

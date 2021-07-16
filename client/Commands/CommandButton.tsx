@@ -6,6 +6,7 @@ import { useSubscription } from "../Combatant/linkComponentToObservables";
 export function CommandButton(props: { command: Command; showLabel: boolean }) {
   const c = props.command;
   const buttonIsOnActionBar = useSubscription(c.ShowOnActionBar);
+  const fontAwesomeIcon = useSubscription(c.FontAwesomeIcon);
 
   if (!buttonIsOnActionBar) {
     return null;
@@ -22,7 +23,7 @@ export function CommandButton(props: { command: Command; showLabel: boolean }) {
         delay: 1000
       }}
       onClick={c.ActionBinding}
-      fontAwesomeIcon={c.FontAwesomeIcon}
+      fontAwesomeIcon={fontAwesomeIcon}
       text={buttonText}
     />
   );

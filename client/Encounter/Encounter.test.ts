@@ -281,7 +281,7 @@ describe("LoadEncounterState", () => {
 
     const encounterState = baseEncounter.ObservableEncounterState();
     const encounter = buildEncounter();
-    encounter.LoadEncounterState(encounterState, null);
+    encounter.LoadEncounterState(encounterState, () => {}, null);
 
     expect(encounter.Combatants().map(c => c.Initiative())).toEqual([
       15,

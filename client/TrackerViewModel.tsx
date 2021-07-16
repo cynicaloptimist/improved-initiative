@@ -7,7 +7,6 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
 import { StatBlock } from "../common/StatBlock";
 import { Omit, ParseJSONOrDefault } from "../common/Toolbox";
-import { Account } from "./Account/Account";
 import { AccountClient } from "./Account/AccountClient";
 import { Combatant } from "./Combatant/Combatant";
 import { CombatantViewModel } from "./Combatant/CombatantViewModel";
@@ -28,8 +27,7 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   UpdateLegacyCommandSettingsAndSave,
   CurrentSettings,
-  SubscribeCommandsToSettingsChanges,
-  UpdateSettings
+  SubscribeCommandsToSettingsChanges
 } from "./Settings/Settings";
 import { StatBlockEditorProps } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
@@ -37,6 +35,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { Metrics } from "./Utility/Metrics";
 import { EventLog } from "./Widgets/EventLog";
 import { SpellEditorProps } from "./StatBlockEditor/SpellEditor";
+import axios from "axios";
 
 const codec = compression("lzma");
 
@@ -47,12 +46,11 @@ export class TrackerViewModel {
   public PlayerViewClient = new PlayerViewClient(this.Socket);
   public PromptQueue = new PromptQueue();
   public EventLog = new EventLog();
-  public Libraries = new Libraries(this.accountClient);
+  public Libraries: Libraries;
   public EncounterCommander = new EncounterCommander(this);
   public CombatantCommander = new CombatantCommander(this);
   public LibrariesCommander = new LibrariesCommander(
     this,
-    this.Libraries,
     this.EncounterCommander
   );
   public EncounterToolbar = BuildEncounterCommandList(
@@ -68,6 +66,7 @@ export class TrackerViewModel {
   );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
+  public LibraryManagerActive = ko.observable(false);
   public ToolbarWide = ko.observable(false);
 
   constructor(private Socket: SocketIOClient.Socket) {
@@ -82,22 +81,31 @@ export class TrackerViewModel {
 
     this.joinPlayerViewEncounter();
 
-    this.getAccountOrSampleCharacters();
-
-    this.loadAutoSavedEncounterIfAvailable();
-
     this.showPrivacyNotificationAfterTutorial();
 
     Metrics.TrackLoad();
   }
 
-  public StatBlockTextEnricher = new TextEnricher(
-    this.CombatantCommander.RollDice,
-    this.LibrariesCommander.ReferenceSpell,
-    this.LibrariesCommander.ReferenceCondition,
-    this.Libraries.Spells,
-    this.rules
-  );
+  public SetLibraries = (libraries: Libraries) => {
+    // I don't like this pattern, but it's my first stab at a partial
+    // conversion to allow an observable-backed class to also depend
+    // on a React hook. This will probably catch fire at some point.
+    // It's also probably impossible to test.
+    this.Libraries = libraries;
+
+    this.StatBlockTextEnricher = new TextEnricher(
+      this.CombatantCommander.RollDice,
+      this.LibrariesCommander.ReferenceSpell,
+      this.LibrariesCommander.ReferenceCondition,
+      this.Libraries.Spells.GetAllListings,
+      this.LibrariesCommander.GetSpellsByNameRegex,
+      this.rules
+    );
+
+    this.LibrariesCommander.SetLibraries(libraries);
+  };
+
+  public StatBlockTextEnricher: TextEnricher;
 
   public Encounter = new Encounter(
     this.PlayerViewClient,
@@ -112,7 +120,7 @@ export class TrackerViewModel {
     this.rules
   );
 
-  public CombatantViewModels: KnockoutComputed<
+  public CombatantViewModels: ko.PureComputed<
     CombatantViewModel[]
   > = ko.pureComputed(() =>
     this.Encounter.Combatants().map(this.buildCombatantViewModel)
@@ -151,9 +159,14 @@ export class TrackerViewModel {
     newStatBlock?: StatBlock
   ) {
     this.StatBlockEditorProps(null);
-    const persistentCharacter = await this.Libraries.PersistentCharacters.GetPersistentCharacter(
+    const persistentCharacterListing = await this.Libraries.PersistentCharacters.GetOrCreateListingById(
       persistentCharacterId
     );
+
+    const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
+      PersistentCharacter.Default()
+    );
+
     const hpDown =
       persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
 
@@ -167,11 +180,11 @@ export class TrackerViewModel {
           hpDown
         ),
       onDelete: () =>
-        this.Libraries.PersistentCharacters.DeletePersistentCharacter(
+        this.Libraries.PersistentCharacters.DeleteListing(
           persistentCharacterId
         ),
       onClose: () => this.StatBlockEditorProps(null),
-      currentListings: this.Libraries.PersistentCharacters.GetListings()
+      currentListings: this.Libraries.PersistentCharacters.GetAllListings()
     });
   }
 
@@ -180,13 +193,10 @@ export class TrackerViewModel {
     updatedStatBlock: StatBlock,
     hpDifference?: number
   ) {
-    this.Libraries.PersistentCharacters.UpdatePersistentCharacter(
-      persistentCharacterId,
-      {
-        StatBlock: updatedStatBlock,
-        CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
-      }
-    );
+    this.LibrariesCommander.UpdatePersistentCharacter(persistentCharacterId, {
+      StatBlock: updatedStatBlock,
+      CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
+    });
     this.Encounter.UpdatePersistentCharacterStatBlock(
       persistentCharacterId,
       updatedStatBlock
@@ -262,18 +272,18 @@ export class TrackerViewModel {
       if (statBlock.Player == "") {
         this.EditStatBlock({
           editorTarget: "library",
-          onSave: this.Libraries.StatBlocks.SaveNewStatBlock,
+          onSave: this.Libraries.StatBlocks.SaveNewListing,
           statBlock,
-          currentListings: this.Libraries.StatBlocks.GetStatBlocks()
+          currentListings: this.Libraries.StatBlocks.GetAllListings()
         });
       } else {
-        const currentListings = this.Libraries.PersistentCharacters.GetListings();
+        const currentListings = this.Libraries.PersistentCharacters.GetAllListings();
         const existingListing = currentListings.find(
-          l => l.Listing().Name == statBlock.Name
+          l => l.Meta().Name == statBlock.Name
         );
         if (existingListing) {
           this.EditPersistentCharacterStatBlock(
-            existingListing.Listing().Id,
+            existingListing.Meta().Id,
             statBlock
           );
         } else {
@@ -283,7 +293,7 @@ export class TrackerViewModel {
               const persistentCharacter = PersistentCharacter.Initialize(
                 statBlock
               );
-              this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
+              this.Libraries.PersistentCharacters.SaveNewListing(
                 persistentCharacter
               );
             },
@@ -296,7 +306,8 @@ export class TrackerViewModel {
   };
 
   public GetWhatsNewIfAvailable = () => {
-    $.getJSON("/whatsnew/").done((latestPost: PatreonPost) => {
+    axios.get<PatreonPost>("/whatsnew/").then(response => {
+      const latestPost = response.data;
       this.EventLog.AddEvent(
         `Welcome to Improved Initiative! Here's what's new: <a href="${latestPost.attributes.url}" target="_blank">${latestPost.attributes.title}</a>`
       );
@@ -359,38 +370,7 @@ export class TrackerViewModel {
     });
   }
 
-  private getAccountOrSampleCharacters() {
-    this.accountClient.GetAccount(account => {
-      if (!account) {
-        if (
-          LegacySynchronousLocalStore.List(
-            LegacySynchronousLocalStore.PersistentCharacters
-          ).length == 0
-        ) {
-          this.getAndAddSamplePersistentCharacters("/sample_players.json");
-        }
-        return;
-      }
-      this.handleAccountSync(account);
-    });
-  }
-
-  private getAndAddSamplePersistentCharacters = (url: string) => {
-    $.getJSON(url, (json: StatBlock[]) => {
-      json.forEach(statBlock => {
-        const persistentCharacter = PersistentCharacter.Initialize({
-          ...StatBlock.Default(),
-          ...statBlock
-        });
-        persistentCharacter.Path = "Sample Player Characters";
-        this.Libraries.PersistentCharacters.AddNewPersistentCharacter(
-          persistentCharacter
-        );
-      });
-    });
-  };
-
-  private loadAutoSavedEncounterIfAvailable() {
+  public LoadAutoSavedEncounterIfAvailable() {
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
       LegacySynchronousLocalStore.DefaultSavedEncounterId
@@ -399,6 +379,7 @@ export class TrackerViewModel {
     if (autosavedEncounter) {
       this.Encounter.LoadEncounterState(
         UpdateLegacyEncounterState(autosavedEncounter),
+        this.LibrariesCommander.UpdatePersistentCharacter,
         this.Libraries.PersistentCharacters
       );
     }
@@ -423,38 +404,6 @@ export class TrackerViewModel {
     );
     return vm;
   };
-
-  private handleAccountSync(account: Account) {
-    if (account.settings?.Version) {
-      const updatedSettings = UpdateSettings(account.settings);
-      const allCommands = [
-        ...this.EncounterToolbar,
-        ...this.CombatantCommander.Commands
-      ];
-      UpdateLegacyCommandSettingsAndSave(updatedSettings, allCommands);
-    }
-
-    if (account.statblocks) {
-      this.Libraries.StatBlocks.AddListings(account.statblocks, "account");
-    }
-
-    if (account.persistentcharacters) {
-      this.Libraries.PersistentCharacters.AddListings(
-        account.persistentcharacters,
-        "account"
-      );
-    }
-
-    if (account.spells) {
-      this.Libraries.Spells.AddListings(account.spells, "account");
-    }
-
-    if (account.encounters) {
-      this.Libraries.Encounters.AddListings(account.encounters, "account");
-    }
-
-    this.accountClient.SaveAllUnsyncedItems(this.Libraries, () => {});
-  }
 
   private displayPrivacyNotificationIfNeeded = () => {
     if (

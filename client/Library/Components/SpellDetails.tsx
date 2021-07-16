@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
+import { TextEnricherContext } from "../../TextEnricher/TextEnricher";
 
 const numberSuffixes = [
   "0th",
@@ -15,33 +15,48 @@ const numberSuffixes = [
   "9th"
 ];
 
-export function SpellDetails(props: {
-  Spell: Spell;
-  TextEnricher: TextEnricher;
-}) {
+export function SpellDetails(props: { Spell: Spell }) {
+  const textEnricher = React.useContext(TextEnricherContext);
   return (
     <div className="spell">
       <h3>{props.Spell.Name}</h3>
       <div className="spell-type">{getSpellType(props.Spell)}</div>
       <div className="spell-details">
         <div>
-          <label>Casting Time:</label> {props.Spell.CastingTime}
+          <label className="spell-label">Casting Time:</label>
+          <span className="spell-value">{props.Spell.CastingTime}</span>
         </div>
         <div>
-          <label>Range:</label> {props.Spell.Range}
+          <label className="spell-label">Range:</label>
+          <span className="spell-value">{props.Spell.Range}</span>
         </div>
         <div>
-          <label>Components:</label> {props.Spell.Components}
+          <label className="spell-label">Components:</label>
+          <span className="spell-value">
+            {props.Spell.Components.split(/\s*,\s*/).map((component, index) => {
+              return (
+                <span className="spell-value__item">{component}</span>
+              )
+            })}
+          </span>
         </div>
         <div>
-          <label>Duration:</label> {props.Spell.Duration}
+          <label className="spell-label">Duration:</label>
+          <span className="spell-value">{props.Spell.Duration}</span>
         </div>
         <div>
-          <label>Classes:</label> {props.Spell.Classes.join(", ")}
+          <label className="spell-label">Classes:</label>
+          <span className="spell-value">
+            {props.Spell.Classes.map((spellClass, index) => {
+              return (
+                <span className="spell-value__item">{spellClass}</span>
+              )
+            })}
+          </span>
         </div>
       </div>
       <div className="spell-description">
-        {props.TextEnricher.EnrichText(props.Spell.Description)}
+        {textEnricher.EnrichText(props.Spell.Description)}
       </div>
       <div className="spell-source">Source: {props.Spell.Source}</div>
     </div>

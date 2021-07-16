@@ -49,8 +49,9 @@ export function SpellEditor(props: SpellEditorProps) {
         props.onClose();
       }}
       initialValues={formValues}
-      render={() => (
-        <Form autoComplete="false" className="spell-editor">
+    >
+      {() => (
+        <Form autoComplete="false" className="spell-editor" translate="no">
           <h2>Edit Spell</h2>
           <div className="editor-type">
             <label>Editor Mode: </label>
@@ -68,11 +69,6 @@ export function SpellEditor(props: SpellEditorProps) {
           )}
           <div className="buttons">
             <Button
-              type="submit"
-              tooltip="Save changes to spell"
-              fontAwesomeIcon="save"
-            />
-            <Button
               tooltip="Cancel and revert spell"
               fontAwesomeIcon="times"
               onClick={props.onClose}
@@ -87,10 +83,15 @@ export function SpellEditor(props: SpellEditorProps) {
                 }
               }}
             />
+            <Button
+              type="submit"
+              tooltip="Save changes to spell"
+              fontAwesomeIcon="save"
+            />
           </div>
         </Form>
       )}
-    />
+    </Formik>
   );
 }
 

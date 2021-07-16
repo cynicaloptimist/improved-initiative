@@ -68,7 +68,7 @@ export namespace Store {
   }
 
   export async function ImportAll(file: File) {
-    return new Promise((done, fail) => {
+    return new Promise<void>((done, fail) => {
       const reader = new FileReader();
       reader.onload = async (event: any) => {
         const json = event.target.result;

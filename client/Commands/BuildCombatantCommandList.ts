@@ -75,8 +75,8 @@ export const BuildCombatantCommandList: (
   }),
   new Command({
     id: "quick-edit-statblock",
-    description: "Quick Edit Statblock",
-    actionBinding: c.QuickEditStatBlock,
+    description: "Quick Edit Combatant",
+    actionBinding: c.QuickEditOwnStatBlock,
     fontAwesomeIcon: "magic",
     defaultShowOnActionBar: true
   }),

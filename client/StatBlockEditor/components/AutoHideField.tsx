@@ -4,12 +4,11 @@ import { Field, FieldProps } from "formik";
 
 export function AutoHideField(props: AutoHideFieldProps) {
   return (
-    <Field
-      name={props.fieldName}
-      render={(fieldApi: FieldProps) => (
+    <Field name={props.fieldName}>
+      {(fieldApi: FieldProps) => (
         <InnerAutoHideField {...props} fieldApi={fieldApi} />
       )}
-    />
+    </Field>
   );
 }
 

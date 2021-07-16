@@ -13,7 +13,7 @@ async function fakeListing(
       Id: id,
       Name: name,
       Link: "Test",
-      Metadata: {},
+      FilterDimensions: {},
       Path: "",
       SearchHint: "",
       LastUpdateMs: 0

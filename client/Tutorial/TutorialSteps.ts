@@ -1,3 +1,5 @@
+import _ = require("lodash");
+
 interface Position {
   left: number;
   top: number;
@@ -7,16 +9,15 @@ export interface TutorialStep {
   Message: string;
   RaiseSelector: string;
   AwaitAction?: string;
-  CalculatePosition: (element: JQuery) => Position;
+  CalculatePosition: (elements: NodeListOf<HTMLElement>) => Position;
 }
 
-function getLocation(element: JQuery<HTMLElement>) {
-  const offset = element.offset() || { left: 0, top: 0 };
-  return {
-    ...offset,
-    width: element.outerWidth() || 0,
-    height: element.outerHeight() || 0
-  };
+function getLocation(element: HTMLElement) {
+  if (!element) {
+    return { left: 0, top: 0, width: 0, height: 0 };
+  }
+
+  return element.getBoundingClientRect();
 }
 
 export const TutorialSteps: TutorialStep[] = [
@@ -25,7 +26,7 @@ export const TutorialSteps: TutorialStep[] = [
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
     RaiseSelector: ".left-column, .prompt, .combatants",
     CalculatePosition: elements => {
-      const location = getLocation(elements);
+      const location = getLocation(elements.item(0));
       const left = location.left + location.width + 10;
       const top = location.top + 200;
       return { left, top };
@@ -37,7 +38,7 @@ export const TutorialSteps: TutorialStep[] = [
     RaiseSelector: ".libraries .c-tabs .c-tab",
     AwaitAction: "SelectCharactersTab",
     CalculatePosition: elements => {
-      const element = elements.last();
+      const element = _.last(elements);
       const location = getLocation(element);
       const left = location.left + location.width + 10;
       const top = location.top + 5;
@@ -49,7 +50,7 @@ export const TutorialSteps: TutorialStep[] = [
       "It's easy to add your own player characters to Improved Initiative. For now, <strong>add a few sample characters</strong>.",
     RaiseSelector: ".left-column, .combatants",
     CalculatePosition: elements => {
-      const location = getLocation(elements);
+      const location = getLocation(elements[0]);
       const left = location.left + location.width + 10;
       const top = location.top + 200;
       return { left, top };
@@ -61,7 +62,7 @@ export const TutorialSteps: TutorialStep[] = [
     RaiseSelector: ".c-button--start-encounter",
     AwaitAction: "ShowInitiativeDialog",
     CalculatePosition: elements => {
-      const element = elements.last();
+      const element = _.last(elements);
       const location = getLocation(element);
       const left = location.left + location.width + 10;
       const top = location.top + 5;
@@ -74,10 +75,17 @@ export const TutorialSteps: TutorialStep[] = [
     RaiseSelector: ".prompt",
     AwaitAction: "CompleteInitiativeRolls",
     CalculatePosition: elements => {
-      const element = elements.add(".combat-footer").first();
+      let element;
+      elements.forEach(e => {
+        if (e.classList.contains("combat-footer")) {
+          element = e;
+        }
+      });
       const location = getLocation(element);
       const left = location.left;
-      const top = location.top - ($(".tutorial").outerHeight() || 0 + 10);
+      const top =
+        location.top -
+        (document.getElementsByClassName("tutorial")[0].clientHeight || 0 + 10);
       return { left, top };
     }
   },
@@ -86,7 +94,7 @@ export const TutorialSteps: TutorialStep[] = [
       "Select a combatant by clicking. You can select multiple combatants by holding the control key.",
     RaiseSelector: ".combatants, .right-column",
     CalculatePosition: elements => {
-      const element = elements.first();
+      const element = elements[0];
       const location = getLocation(element);
       const left = location.left + 5;
       const top = location.top + location.height + 10;
@@ -96,10 +104,10 @@ export const TutorialSteps: TutorialStep[] = [
   {
     Message:
       "Press 't' or click 'Apply Damage' to apply damage to selected combatants. You can enter a negative number to apply healing.",
-    RaiseSelector: ".combatants, .c-button--apply-damage, .prompts",
+    RaiseSelector: ".combatants, .c-button--apply-damage, .prompts, .prompt",
     AwaitAction: "ApplyDamage",
     CalculatePosition: elements => {
-      const element = elements.first();
+      const element = elements[0];
       const location = getLocation(element);
       const left = location.left + location.width + 10;
       const top = location.top + 5;
@@ -122,7 +130,7 @@ export const TutorialSteps: TutorialStep[] = [
     RaiseSelector: ".c-button--settings",
     AwaitAction: "ShowSettings",
     CalculatePosition: elements => {
-      const element = elements.last();
+      const element = _.last(elements);
       const location = getLocation(element);
       const left = location.left + location.width + 10;
       const top = location.top + 5;

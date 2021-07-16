@@ -14,16 +14,13 @@ import { OptionsSettings } from "./OptionsSettings";
 import { useContext, useState, useCallback } from "react";
 import { SettingsContext } from "../SettingsContext";
 
-enum SettingsTab {
-  About = "About",
-  Commands = "Commands",
-  Options = "Options",
-  Account = "Account",
-  EpicInitiative = "Epic Initiative"
-}
-
-const SettingsTabOptions = _.values(SettingsTab);
-let lastTab: SettingsTab = SettingsTab.About;
+const SettingsTab = {
+  About: "About",
+  Commands: "Commands",
+  Options: "Options",
+  Account: "Account",
+  EpicInitiative: "Epic Initiative"
+};
 
 interface SettingsPaneProps {
   repeatTutorial: () => void;
@@ -46,7 +43,7 @@ export function SettingsPane(props: SettingsPaneProps) {
     [props.handleNewSettings, props.closeSettings]
   );
 
-  const [currentTab, setCurrentTab] = useState(lastTab);
+  const [currentTab, setCurrentTab] = useState(SettingsTab.About);
 
   const getTabContent = () => {
     if (currentTab == SettingsTab.About) {
@@ -88,15 +85,13 @@ export function SettingsPane(props: SettingsPaneProps) {
   };
 
   return (
-    <Formik
-      initialValues={settings}
-      onSubmit={handleFormSubmit}
-      render={(props: FormikProps<Settings>) => (
+    <Formik initialValues={settings} onSubmit={handleFormSubmit}>
+      {(props: FormikProps<Settings>) => (
         <form className="settings" onSubmit={props.handleSubmit}>
           <Tabs
             selected={currentTab}
-            options={SettingsTabOptions}
-            onChoose={setCurrentTab}
+            optionNamesById={SettingsTab}
+            onChoose={tab => setCurrentTab(SettingsTab[tab])}
           />
           {getTabContent()}
           <button type="submit" className="c-button save-and-close">
@@ -104,6 +99,6 @@ export function SettingsPane(props: SettingsPaneProps) {
           </button>
         </form>
       )}
-    />
+    </Formik>
   );
 }

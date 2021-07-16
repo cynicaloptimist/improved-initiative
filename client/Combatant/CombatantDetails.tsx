@@ -5,6 +5,7 @@ import { StatBlockHeader } from "../Components/StatBlockHeader";
 import { TextEnricherContext } from "../TextEnricher/TextEnricher";
 import { CombatantViewModel } from "./CombatantViewModel";
 import { useSubscription } from "./linkComponentToObservables";
+import { SettingsContext } from "../Settings/SettingsContext";
 import { Tag } from "./Tag";
 import { useContext } from "react";
 
@@ -17,6 +18,7 @@ interface CombatantDetailsProps {
 export function CombatantDetails(props: CombatantDetailsProps) {
   const TextEnricher = useContext(TextEnricherContext);
   const currentHp = useSubscription(props.combatantViewModel.HP);
+  const currentHPPercentage = useSubscription(props.combatantViewModel.HPPercentage);
   const name = useSubscription(props.combatantViewModel.Name);
   const tags = useSubscription(props.combatantViewModel.Combatant.Tags);
   const notes = useSubscription(
@@ -26,6 +28,7 @@ export function CombatantDetails(props: CombatantDetailsProps) {
     props.combatantViewModel.Combatant.StatBlock
   );
 
+  const { DisplayHPBar } = useContext(SettingsContext).TrackerView;
   if (!props.combatantViewModel) {
     return null;
   }
@@ -47,17 +50,26 @@ export function CombatantDetails(props: CombatantDetailsProps) {
         imageUrl={statBlock.ImageURL}
       />
       <div className="c-combatant-details__hp">
-        <span className="stat-label">Current HP</span> {currentHp}
+        <span className="stat-label">Current HP</span>
+        <span>
+          {currentHp}
+          {DisplayHPBar && (
+            <span className="combatant__hp-bar">
+              <span className="combatant__hp-bar--filled" style={renderHPBarStyle(currentHPPercentage)}/>
+            </span>
+          )}
+        </span>
       </div>
       {tags.length > 0 && (
         <div className="c-combatant-details__tags">
           <span className="stat-label">Tags</span>{" "}
-          {tags.map((tag, index) => (
-            <React.Fragment key={index}>
-              <TagDetails tag={tag} />
-              {index !== tags.length - 1 && "; "}
-            </React.Fragment>
-          ))}
+          <span className="stat-value">
+            {tags.map((tag, index) => (
+              <React.Fragment key={index}>
+                <TagDetails tag={tag} />
+              </React.Fragment>
+            ))}
+          </span>
         </div>
       )}
       {props.displayMode !== "status-only" && (
@@ -82,11 +94,14 @@ function TagDetails(props: { tag: Tag }) {
   }
   if (props.tag.HasDuration) {
     return (
-      <>
+      <span className="stat-value__item">
         {props.tag.Text} ({durationRemaining} more rounds)
-      </>
+      </span>
     );
   }
 
-  return <>{props.tag.Text}</>;
+  return <span className="stat-value__item">{props.tag.Text}</span>;
+}
+function renderHPBarStyle(currentHPPercentage) {
+  return {width: currentHPPercentage };
 }

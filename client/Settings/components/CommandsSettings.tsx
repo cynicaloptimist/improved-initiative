@@ -7,6 +7,7 @@ import { CommandInfoById } from "./CommandInfo";
 import { ToggleButton } from "./Toggle";
 import { useContext } from "react";
 import { SettingsContext } from "../SettingsContext";
+import { useSubscription } from "../../Combatant/linkComponentToObservables";
 
 type CommandSettingRowProps = {
   command: Command;
@@ -17,6 +18,7 @@ function CommandSettingRow(props: CommandSettingRowProps) {
   const info = CommandInfoById[props.command.Id];
   const settings = useContext(SettingsContext);
   const index = _.findIndex(settings.Commands, s => s.Name == props.command.Id);
+  const fontAwesomeIcon = useSubscription(props.command.FontAwesomeIcon);
 
   return (
     <div>
@@ -26,7 +28,7 @@ function CommandSettingRow(props: CommandSettingRowProps) {
       </span>
       <Field className="keybinding" name={`Commands[${index}].KeyBinding`} />
       <label className="toolbar-setting">
-        <i className={"fas fa-" + props.command.FontAwesomeIcon} />
+        <i className={"fas fa-" + fontAwesomeIcon} />
         <ToggleButton
           fieldName={`Commands[${index}].ShowOnActionBar`}
           disabled={props.command.LockOnActionBar}

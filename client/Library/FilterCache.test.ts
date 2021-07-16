@@ -11,7 +11,7 @@ function makeStatBlockListing(partialStatblock: Partial<StatBlock>) {
     {
       ...statBlock,
       SearchHint: StatBlock.GetSearchHint(statBlock),
-      Metadata: StatBlock.GetMetadata(statBlock),
+      FilterDimensions: StatBlock.FilterDimensions(statBlock),
       Link: "/",
       LastUpdateMs: 0
     },
@@ -30,6 +30,6 @@ describe("FilterCache", () => {
 
     const results = filterCache.GetFilteredEntries("goblin");
 
-    expect(results.map(l => l.Listing().Name)).toEqual(["Goblin"]);
+    expect(results.map(l => l.Meta().Name)).toEqual(["Goblin"]);
   });
 });

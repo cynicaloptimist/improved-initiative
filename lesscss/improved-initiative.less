@@ -31,6 +31,12 @@
 @medium: 1000px;
 @small: 750px;
 
+// transition timings
+@transition-hover: 0.3s; // used for hover interactions
+@transition-activation: 0.4s; // used for click interactions
+@transition-automation: 0.5s; // used for slower, automated processes
+// note: other animations are powered by animxyz
+
 // elements
 
 @import "layout/base";
@@ -132,6 +138,7 @@ hr {
 @import "components/combatants";
 @import "components/prompts";
 @import "components/spell";
+@import "components/library-manager";
 
 @import "pages/player-view";
 

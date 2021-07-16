@@ -81,6 +81,13 @@ export function OptionsSettings(props: {
           Creatures and Non Player Characters are counted as enemies.
         </Info>
       </Toggle>
+      <Toggle fieldName="TrackerView.DisplayHPBar">
+        Display HP Bar of Active or Selected Character
+        <Info>
+          Show a small HP bar indicator for any selected combatant(s),
+          as well as for the currently-active combatant.
+        </Info>
+      </Toggle>
       <Dropdown
         fieldName="TrackerView.PostCombatStats"
         options={PostCombatStatsOption}

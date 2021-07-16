@@ -27,6 +27,7 @@ export function CombatantRow(props: CombatantRowProps) {
   const commandContext = React.useContext(CommandContext);
 
   const { DisplayPortraits } = React.useContext(SettingsContext).TrackerView;
+  const { DisplayHPBar } = React.useContext(SettingsContext).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
@@ -82,7 +83,11 @@ export function CombatantRow(props: CombatantRowProps) {
       className={classNames.join(" ")}
       onClick={selectCombatant}
     >
-      {<td className="combatant__left-gutter"><i className="fas fa-grip-vertical" /></td>}
+      {
+        <td className="combatant__left-gutter">
+          <i className="fas fa-grip-vertical" />
+        </td>
+      }
       <td className="combatant__initiative" title="Initiative Roll">
         {props.combatantState.InitiativeGroup && <i className="fas fa-link" />}
         {props.combatantState.Initiative}
@@ -137,6 +142,11 @@ export function CombatantRow(props: CombatantRowProps) {
         />
 
         {renderHPText(props)}
+        {DisplayHPBar && (
+          <span className="combatant__hp-bar">
+            <span className="combatant__hp-bar--filled" style={renderHPBarStyle(props)}/>
+          </span>
+        )}
       </td>
 
       <td className="combatant__ac">
@@ -181,6 +191,7 @@ function Commands() {
 function CommandButton(props: { command: Command }) {
   const { command } = props;
   const showInCombatantRow = useSubscription(command.ShowInCombatantRow);
+  const fontAwesomeIcon = useSubscription(command.FontAwesomeIcon);
   if (!showInCombatantRow) {
     return null;
   }
@@ -188,7 +199,7 @@ function CommandButton(props: { command: Command }) {
     <Tippy content={`${command.Description} [${command.KeyBinding}]`}>
       <button
         className={
-          "combatant__command-button fa-clickable fa-" + command.FontAwesomeIcon
+          "combatant__command-button fa-clickable fa-" + fontAwesomeIcon
         }
         onClick={command.ActionBinding}
         aria-label={command.Description}
@@ -234,4 +245,9 @@ function renderHPText(props: CombatantRowProps) {
   } else {
     return `${props.combatantState.CurrentHP}/${maxHP}`;
   }
+}
+function renderHPBarStyle(props: CombatantRowProps) {
+  const maxHP = props.combatantState.StatBlock.HP.Value,
+    currentHP = props.combatantState.CurrentHP;
+  return {width: Math.floor((currentHP / maxHP) * 100) + "%" };
 }

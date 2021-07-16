@@ -14,6 +14,7 @@ import { PlayerViewPrompt } from "../Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "../Prompts/QuickAddPrompt";
 import { RollDicePrompt } from "../Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 
 export class EncounterCommander {
   constructor(private tracker: TrackerViewModel) {}
@@ -36,6 +37,9 @@ export class EncounterCommander {
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
+
+  public ToggleLibraryManager = () =>
+    this.tracker.LibraryManagerActive(!this.tracker.LibraryManagerActive());
 
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
@@ -240,12 +244,15 @@ export class EncounterCommander {
     const persistentCharactersPromise = persistentCharacters.map(
       pc =>
         new Promise<void>(async resolve => {
-          const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
+          const persistentCharacterListing = await this.tracker.Libraries.PersistentCharacters.GetOrCreateListingById(
             pc.PersistentCharacterId
+          );
+          const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
+            PersistentCharacter.Default()
           );
           this.tracker.Encounter.AddCombatantFromPersistentCharacter(
             persistentCharacter,
-            this.tracker.Libraries.PersistentCharacters
+            this.tracker.LibrariesCommander.UpdatePersistentCharacter
           );
           resolve();
         })

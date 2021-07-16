@@ -57,14 +57,59 @@
 }
 
 #tracker {
-  .combatant:hover {
-    background-color: @hover-white;
+  .combatant {
+    transition: box-shadow @transition-activation,
+      background-color @transition-hover,
+      border-color @transition-activation;
+
+    &:hover {
+      background-color: @hover-white;
+    }
   }
 
-  .combatant .combatant__hp:hover {
-    border-color: unset;
+  .combatant .combatant__hp {
+    transition: border @transition-hover;
+    &:hover {
+      border-color: unset;
+    }
   }
 }
+
+.combatant__hp-bar {
+  display: block;
+  height:3px;
+  background: #c00;
+  text-align: left;
+  position: relative;
+  margin-bottom:-3px;
+  .combatant__hp-bar--filled {
+    display: inline-block;
+    height: inherit;
+    background: #0c0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transition: width .5s;
+  }
+}
+
+// hidden from encounter view by default
+.combatant {
+  .combatant__hp-bar {
+    transition: opacity .3s;
+    opacity: 0;
+  }
+}
+// becomes visible for active/selected combatants, or on hover
+.combatant.active,
+.combatant.selected,
+.combatant__hp:hover {
+  .combatant__hp-bar {
+    opacity: 1;
+  }
+}
+
 
 .combatant {
   padding: @medium-spacer;
@@ -140,10 +185,16 @@
   width: 1.4rem;
   border-left: @active-combatant-indicator-width solid transparent;
   cursor: grab;
+  opacity: .4;
+  transition: border-color @transition-automation, color @transition-automation, opacity @transition-hover;
 
   .active & {
     color: @primary-red;
     border-color: @primary-red;
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -156,7 +207,9 @@
     font-size: 60%;
     vertical-align: top;
   }
+}
 
+.initiative-list .combatant__initiative {
   @media (max-width: @medium) {
     display: flex;
     justify-content: center;

@@ -9,6 +9,7 @@ import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 import { PlayerViewState } from "../../common/PlayerViewState";
 import { getDefaultSettings } from "../../common/Settings";
 import { PlayerView } from "./components/PlayerView";
+import axios from "axios";
 
 export class ReactPlayerView {
   private playerViewState: PlayerViewState;
@@ -23,9 +24,9 @@ export class ReactPlayerView {
 
   public async LoadEncounterFromServer() {
     try {
-      const playerView: PlayerViewState = await $.ajax(
-        `../playerviews/${this.encounterId}`
-      );
+      const playerView: PlayerViewState = await axios
+        .get(`../playerviews/${this.encounterId}`)
+        .then(r => r.data);
       playerView.encounterState =
         playerView.encounterState ||
         EncounterState.Default<PlayerViewCombatantState>();

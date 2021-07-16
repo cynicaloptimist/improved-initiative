@@ -1,7 +1,3 @@
-if (process.env.NEW_RELIC_NO_CONFIG_FILE) {
-  require("newrelic");
-}
-
 import express = require("express");
 import socketIO = require("socket.io");
 import http = require("http");
@@ -30,13 +26,13 @@ async function improvedInitiativeServer() {
     "ogl_creatures.json",
     "/statblocks/",
     StatBlock.GetSearchHint,
-    StatBlock.GetMetadata
+    StatBlock.FilterDimensions
   );
   const spellLibrary = L.Library.FromFile<Spell>(
     "ogl_spells.json",
     "/spells/",
     Spell.GetSearchHint,
-    Spell.GetMetadata
+    Spell.GetFilterDimensions
   );
   const playerViews = GetPlayerViewManager();
 

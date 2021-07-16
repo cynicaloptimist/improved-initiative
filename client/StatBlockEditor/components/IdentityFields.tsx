@@ -24,7 +24,7 @@ export class IdentityFields extends React.Component<IdentityFieldsProps> {
     super(props);
     this.autoCompletePaths = _.uniq(
       this.props.currentListings &&
-        this.props.currentListings.map(l => l.Listing().Path)
+        this.props.currentListings.map(l => l.Meta().Path)
     );
   }
 

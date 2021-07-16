@@ -1,3 +1,4 @@
+import axios from "axios";
 import { env } from "../Environment";
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
@@ -65,15 +66,16 @@ export class Metrics {
       return;
     }
 
-    $.ajax({
-      type: "POST",
-      url: `/recordEvent/${name}`,
-      data: JSON.stringify({
+    axios.post(
+      `/recordEvent/${name}`,
+      JSON.stringify({
         eventData,
         meta: Metrics.getLocalMeta()
       }),
-      contentType: "application/json"
-    });
+      {
+        headers: { "content-type": "application/json" }
+      }
+    );
   }
 
   public static TrackAnonymousEvent(
@@ -89,15 +91,16 @@ export class Metrics {
       return;
     }
 
-    $.ajax({
-      type: "POST",
-      url: `/recordAnonymousEvent/${name}`,
-      data: JSON.stringify({
+    axios.post(
+      `/recordAnonymousEvent/${name}`,
+      JSON.stringify({
         eventData,
         meta: Metrics.getLocalMeta()
       }),
-      contentType: "application/json"
-    });
+      {
+        headers: { "content-type": "application/json" }
+      }
+    );
   }
 
   private static getLocalMeta() {

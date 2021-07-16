@@ -17,4 +17,11 @@ describe("Encounter Difficulty Calculator", () => {
     expect(difficulty.EarnedExperience).toBe(7200);
     expect(difficulty.EffectiveExperience).toBe(3600);
   });
+
+  it("4 CR 0, no Players", () => {
+    const difficulty = DifficultyCalculator.Calculate(["0", "0", "0", "0"], []);
+    expect(difficulty.Difficulty).toBe("");
+    expect(difficulty.EarnedExperience).toBe(40);
+    expect(difficulty.EffectiveExperience).toBe(40);
+  });
 });

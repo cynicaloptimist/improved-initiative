@@ -40,7 +40,7 @@ export function EpicInitiativeSettings() {
         Allow players to suggest tags
         <Info>
           Players can suggest a tag by clicking or tapping the tag icon on any
-          combatant in the Player View. 
+          combatant in the Player View.
         </Info>
       </Toggle>
       <StylesChooser />
@@ -66,7 +66,7 @@ export function EpicInitiativeSettings() {
         <Info
           tippyProps={{
             interactive: true,
-            placement: "bottom",
+            placement: "bottom"
           }}
         >
           <span>
@@ -107,7 +107,8 @@ function upgradeMessage() {
       <h3>Epic Initiative</h3>
       <p>
         You're logged in with Patreon, but you have not selected the Epic
-        Initiative reward level.
+        Initiative reward level. If you have recently updated your pledge, try
+        logging out and back in again to propagate your rewards.
       </p>
       {epicInitiativeFeatures()}
       <hr />
@@ -121,6 +122,9 @@ function upgradeMessage() {
         additionalClassNames="button--upgrade"
         text="Pledge Now!"
       />
+      <a className="button logout" href="/logout">
+        Log Out
+      </a>
     </div>
   );
 }

@@ -12,11 +12,11 @@ import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { App } from "./App";
 
-$(async () => {
+window.onload = async () => {
   LoadEnvironment();
   RegisterBindingHandlers();
   InitializeSettings();
-  if ($("#tracker").length) {
+  if (document.getElementById("tracker")) {
     await LegacySynchronousLocalStore.MigrateItemsToStore();
     if (env.HasEpicInitiative) {
       const customEncounterId = CurrentSettings().PlayerView.CustomEncounterId;
@@ -37,7 +37,7 @@ $(async () => {
     viewModel.GetWhatsNewIfAvailable();
   }
 
-  if ($("#playerview").length) {
+  if (document.getElementById("playerview")) {
     const encounterId = env.EncounterId;
     const container = document.getElementById("playerview__container");
     if (!container) {
@@ -48,10 +48,13 @@ $(async () => {
     playerView.ConnectToSocket(io());
   }
 
-  if ($("#landing").length) {
+  if (document.getElementById("landing")) {
     const launcherViewModel = new LauncherViewModel();
     ko.applyBindings(launcherViewModel, document.body);
   }
 
-  $(".loading-splash").hide();
-});
+  const loadingSplash = document.querySelector<HTMLElement>(".loading-splash");
+  if (loadingSplash) {
+    loadingSplash.style.display = "none";
+  }
+};

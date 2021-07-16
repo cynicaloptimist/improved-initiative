@@ -6,6 +6,19 @@
   flex-shrink: 1;
 }
 
+// some overrides to allow spell details to go full width
+.prompt-spell {
+  flex-direction: inherit;
+  align-items: flex-start;
+
+  > .c-button {
+    transform: translateX(-100%);
+    margin-left: 0;
+  }
+
+  .spell { min-width: 100%; }
+}
+
 .spell {
   flex-grow: 1;
   flex-flow: row;
@@ -24,6 +37,7 @@
     padding: @medium-spacer 0;
     border-top: 3px solid @primary-red;
     border-bottom: 3px solid @primary-red;
+    justify-content: space-between;
 
     p {
       flex-basis: 50%;
@@ -56,5 +70,16 @@
   .spell-description {
     margin: @large-spacer 0 @medium-spacer;
     padding: 0 !important;
+
+    p:not(:last-child), li:not(:last-child) {
+      margin-bottom: @small-spacer;
+    }
   }
+
+  .spell-value + .spell-value, .spell-value__item + .spell-value__item {
+    &::before {
+      content: ", ";
+    }
+  }
+
 }

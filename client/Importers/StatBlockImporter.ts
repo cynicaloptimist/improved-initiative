@@ -4,19 +4,48 @@ import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";
 
 export class StatBlockImporter extends Importer {
-  public getType() {
+  /**
+   * Represents the Size, Type, and Alignment of creature.
+   * Presented in the form:
+   *  <Size> <Type>, <Alignment>
+   */
+  public getType(): string {
+    // Strip any trailing text after the last comma,
+    // to remove any source information
+    let typeString = this.getString("type");
+    const pos = typeString.lastIndexOf(",");
+    if (pos != -1) {
+      typeString = typeString.substr(0, pos);
+    }
     const sizeString = StatBlockImporter.Sizes[this.getString("size")];
-    return (
-      sizeString +
-      " " +
-      this.getCommaSeparatedStrings("type")[0] +
-      ", " +
-      this.getString("alignment")
-    );
+    if (sizeString) {
+      typeString = sizeString + " " + typeString;
+    }
+    const alignment = this.getString("alignment");
+    if (alignment) {
+      typeString = typeString + ", " + alignment;
+    }
+    return typeString;
   }
 
-  public getSource() {
-    return _.startCase(this.getCommaSeparatedStrings("type")[1]);
+  /**
+   * Represents the source material this creature originated from.
+   */
+  public getSource(): string {
+    let source = "";
+    const description = this.getString("description");
+    const searchString = "Source: ";
+    const sourcePos = description.lastIndexOf(searchString);
+    if (sourcePos != -1) {
+      const sources = description
+        .substr(sourcePos + searchString.length)
+        .split(/, ?/);
+      source = sources[0];
+    } else {
+      const types = this.getCommaSeparatedStrings("type");
+      source = _.startCase(types.length > 1 ? types[types.length - 1] : "");
+    }
+    return source;
   }
 
   public getAbilities() {

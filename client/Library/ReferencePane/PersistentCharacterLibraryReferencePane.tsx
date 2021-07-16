@@ -4,24 +4,22 @@ import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { PersistentCharacterLibrary } from "../PersistentCharacterLibrary";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ListingRow } from "../Components/ListingRow";
+import { Library } from "../useLibrary";
 
-export type PersistentCharacterLibraryPaneProps = {
+export type PersistentCharacterLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: PersistentCharacterLibrary;
-  statBlockTextEnricher: TextEnricher;
+  library: Library<PersistentCharacter>;
 };
 
-export class PersistentCharacterLibraryPane extends React.Component<
-  PersistentCharacterLibraryPaneProps
+export class PersistentCharacterLibraryReferencePane extends React.Component<
+  PersistentCharacterLibraryReferencePaneProps
 > {
-  constructor(props: PersistentCharacterLibraryPaneProps) {
+  constructor(props: PersistentCharacterLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
   }
@@ -43,16 +41,14 @@ export class PersistentCharacterLibraryPane extends React.Component<
   };
 
   private editStatBlock = (l: Listing<PersistentCharacter>) => {
-    const subscription = l.Listing.subscribe(() => {
+    const subscription = l.Meta.subscribe(() => {
       this.forceUpdate(() => subscription.dispose());
     });
-    this.props.librariesCommander.EditPersistentCharacterStatBlock(
-      l.Listing().Id
-    );
+    this.props.librariesCommander.EditPersistentCharacterStatBlock(l.Meta().Id);
   };
 
-  private createAndEditStatBlock = () => {
-    const listing = this.props.librariesCommander.CreatePersistentCharacter();
+  private createAndEditStatBlock = async () => {
+    const listing = await this.props.librariesCommander.CreatePersistentCharacter();
     this.editStatBlock(listing);
   };
 
@@ -60,24 +56,27 @@ export class PersistentCharacterLibraryPane extends React.Component<
     l: Listing<PersistentCharacter>,
     onPreview,
     onPreviewOut
-  ) => (
-    <ListingRow
-      key={l.Listing().Id + l.Listing().Path + l.Listing().Name}
-      name={l.Listing().Name}
-      showCount
-      onAdd={this.loadSavedStatBlock}
-      onEdit={this.editStatBlock}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={l}
-    />
-  );
+  ) => {
+    const listingMeta = l.Meta();
+    return (
+      <ListingRow
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
+        showCount
+        onAdd={this.loadSavedStatBlock}
+        onEdit={this.editStatBlock}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+      />
+    );
+  };
 
   public render() {
-    const listings = this.props.library.GetListings();
+    const listings = this.props.library.GetAllListings();
 
     return (
-      <LibraryPane
+      <LibraryReferencePane
         defaultItem={PersistentCharacter.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow}
@@ -95,17 +94,17 @@ export class PersistentCharacterLibraryPane extends React.Component<
 
   private groupingFunctions: ListingGroupFn[] = [
     l => ({
-      key: l.Listing().Path
+      key: l.Meta().Path
     }),
     l => ({
-      label: "Level " + l.Listing().Metadata.Level,
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: "Level " + l.Meta().FilterDimensions.Level,
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
     l => ({
-      key: l.Listing().Metadata.Source
+      key: l.Meta().FilterDimensions.Source
     }),
     l => ({
-      key: l.Listing().Metadata.Type
+      key: l.Meta().FilterDimensions.Type
     })
   ];
 }

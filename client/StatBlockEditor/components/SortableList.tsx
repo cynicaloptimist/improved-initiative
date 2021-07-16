@@ -17,12 +17,11 @@ export function SortableList(props: {
   makeNew: () => any;
 }) {
   return (
-    <FieldArray
-      name={props.listType}
-      render={arrayHelpers => (
+    <FieldArray name={props.listType}>
+      {arrayHelpers => (
         <SortableListInner {...props} arrayHelpers={arrayHelpers} />
       )}
-    />
+    </FieldArray>
   );
 }
 

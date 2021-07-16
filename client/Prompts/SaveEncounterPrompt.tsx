@@ -7,7 +7,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
 import { Button, SubmitButton } from "../Components/Button";
 import { env } from "../Environment";
-import { EncounterLibrary } from "../Library/EncounterLibrary";
+import { Listing } from "../Library/Listing";
 import { ToggleButton } from "../Settings/components/Toggle";
 import { AutocompleteTextInput } from "../StatBlockEditor/components/AutocompleteTextInput";
 import { Metrics } from "../Utility/Metrics";
@@ -76,16 +76,14 @@ class SaveEncounterPromptComponent extends React.Component<
         <div className="p-save-encounter__include-combatants">
           <div className="p-save-encounter__label">Include Combatants</div>
           <div className="p-save-encounter__character-combatants">
-            <Field
-              name="CharacterCombatants"
-              render={this.renderCombatantInclusionRow}
-            />
+            <Field name="CharacterCombatants">
+              {this.renderCombatantInclusionRow}
+            </Field>
           </div>
           <div className="p-save-encounter__non-character-combatants">
-            <Field
-              name="NonCharacterCombatants"
-              render={this.renderCombatantInclusionRow}
-            />
+            <Field name="NonCharacterCombatants">
+              {this.renderCombatantInclusionRow}
+            </Field>
           </div>
         </div>
         {env.HasEpicInitiative && (
@@ -131,7 +129,9 @@ interface SaveEncounterModel {
 export function SaveEncounterPrompt(
   encounterState: EncounterState<CombatantState>,
   backgroundImageUrl: string,
-  saveEncounterToLibrary: typeof EncounterLibrary.prototype.Save,
+  saveEncounterToLibrary: (
+    newEncounter: SavedEncounter
+  ) => Promise<Listing<SavedEncounter>>,
   logEvent: typeof EventLog.prototype.AddEvent,
   autocompletePaths: string[]
 ): PromptProps<SaveEncounterModel> {

@@ -13,7 +13,7 @@ export interface Tag {
   DurationRemaining: KnockoutObservable<number>;
   DurationTiming: DurationTiming;
   DurationCombatantId: string;
-  NotExpired: KnockoutComputed<boolean>;
+  NotExpired: ko.PureComputed<boolean>;
   Remove: () => void;
   Decrement: () => void;
   Increment: () => void;

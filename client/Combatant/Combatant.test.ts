@@ -63,7 +63,9 @@ describe("Combatant", () => {
         ...StatBlock.Default()
       });
       const playerViewCombatantState = ToPlayerViewCombatantState(combatant);
-      expect(playerViewCombatantState.HPDisplay).toEqual("<span class='healthyHP'>Healthy</span>");
+      expect(playerViewCombatantState.HPDisplay).toEqual(
+        "<span class='healthyHP'>Healthy</span>"
+      );
     });
   });
 });

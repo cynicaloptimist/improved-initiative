@@ -49,7 +49,7 @@ export namespace PersistentCharacter {
       .toString();
   };
 
-  export const GetMetadata = (character: PersistentCharacter) => ({
+  export const GetFilterDimensions = (character: PersistentCharacter) => ({
     Level: GetTotalLevelFromString(character.StatBlock.Challenge)
   });
 }

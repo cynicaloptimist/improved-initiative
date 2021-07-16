@@ -29,7 +29,7 @@ export function ConcentrationPrompt(
         <SubmitButton
           text="Fail"
           fontAwesomeIcon="times"
-          bindModel={["failCheck", true]}
+          submitIntent={["failCheck", true]}
         />
         <SubmitButton text="Pass" additionalClassNames="pass" />
       </div>

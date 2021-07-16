@@ -29,7 +29,7 @@ const xpThresholdsByLevel: { [level: number]: XpThresholds } = {
 };
 
 const xpAmountsByChallenge = {
-  "0": 0,
+  "0": 10,
   "1/8": 25,
   "1/4": 50,
   "1/2": 100,

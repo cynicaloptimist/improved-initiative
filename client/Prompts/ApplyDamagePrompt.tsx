@@ -13,7 +13,7 @@ export const ApplyDamagePrompt = (
   suggestedDamage: string,
   logHpChange: (damage: number, combatantNames: string) => void
 ): PromptProps<ApplyDamageModel> => {
-  const combatantNames = combatantViewModels.map(c => c.Name());
+  const combatantNames = combatantViewModels.map(c => c.Name()).join(", ");
   return {
     onSubmit: (model: ApplyDamageModel) => {
       const damageAmount = parseInt(model.damageAmount);
@@ -21,7 +21,7 @@ export const ApplyDamagePrompt = (
         return false;
       }
 
-      logHpChange(damageAmount, combatantNames.join(", "));
+      logHpChange(damageAmount, combatantNames);
 
       combatantViewModels.forEach(c => c.ApplyDamage(model.damageAmount));
       return true;

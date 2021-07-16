@@ -6,18 +6,19 @@ export interface Listable {
   LastUpdateMs?: number;
 }
 
-export interface ListingMetadata {
+// Listings can be grouped or filtered by their FilterDimensions.
+export interface FilterDimensions {
   Level?: string;
   Source?: string;
   Type?: string;
 }
 
-export interface StoredListing {
+export interface ListingMeta {
   Id: string;
   Link: string;
   Name: string;
   SearchHint: string;
-  Metadata: ListingMetadata;
+  FilterDimensions: FilterDimensions;
   Path: string;
   LastUpdateMs: number;
 }

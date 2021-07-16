@@ -1,5 +1,5 @@
 import _ = require("lodash");
-import { Listable, ListingMetadata } from "./Listable";
+import { Listable, FilterDimensions } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 
 export interface AbilityScores {
@@ -80,7 +80,7 @@ export namespace StatBlock {
   export const GetSearchHint = (statBlock: StatBlock) =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
-  export const GetMetadata = (statBlock: StatBlock): ListingMetadata => {
+  export const FilterDimensions = (statBlock: StatBlock): FilterDimensions => {
     const baseType = _.find(BaseTypes, t => statBlock.Type.search(t) != -1);
     return {
       Level: statBlock.Challenge,
