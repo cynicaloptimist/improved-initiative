@@ -133,8 +133,10 @@ export function useLibrary<T extends Listable>(
       );
 
       for (const listingToOverwrite of listingsToOverwrite) {
-        if (listingToOverwrite.Origin !== "server") {
-          await DeleteListing(listingToOverwrite.Meta().Id);
+        if (listingToOverwrite.Origin === "account") {
+          try {
+            await DeleteListing(listingToOverwrite.Meta().Id);
+          } catch {}
         }
       }
 
