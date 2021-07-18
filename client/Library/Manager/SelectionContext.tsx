@@ -17,16 +17,18 @@ export const SelectionContext = React.createContext<Selection<any>>({
 
 export function useSelection<T>(): Selection<T> {
   const [selected, setSelectedItems] = useState<T[]>([]);
+
   const setSelected = useCallback(
-    (selected: T) => {
-      setSelectedItems([selected]);
+    (targetItems: T) => {
+      setSelectedItems([targetItems]);
     },
     [setSelectedItems]
   );
+
   const addSelected = useCallback(
-    (newSelected: T) => {
-      if (!selected.includes(newSelected)) {
-        setSelectedItems([...selected, newSelected]);
+    (targetItem: T) => {
+      if (!selected.includes(targetItem)) {
+        setSelectedItems(oldSelected => [...oldSelected, targetItem]);
       }
     },
     [selected, setSelectedItems]
