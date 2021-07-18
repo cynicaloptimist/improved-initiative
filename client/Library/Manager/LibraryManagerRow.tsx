@@ -14,7 +14,21 @@ export function LibraryManagerRow(props: {
   return (
     <li className={"c-listing" + (isSelected ? " c-listing--selected" : "")}>
       <ListingButton
-        buttonClass="select"
+        buttonClass={
+          "toggle-select " +
+          (isSelected ? "fas fa-check-circle" : "far fa-circle")
+        }
+        onClick={async e => {
+          e.stopPropagation();
+          if (!isSelected) {
+            selection.addSelected(props.listing);
+          } else {
+            selection.removeSelected(props.listing);
+          }
+        }}
+      />
+      <ListingButton
+        buttonClass="select c-listing-button--wide"
         text={listingMeta.Name}
         onClick={mouseEvent => {
           if (mouseEvent.ctrlKey || mouseEvent.metaKey) {
