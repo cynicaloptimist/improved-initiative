@@ -15,7 +15,9 @@ export function Folder(props: { name: string; children: React.ReactNode }) {
         <ListingButton
           text={props.name}
           buttonClass="toggle"
-          faClass={isOpen ? "folder-open" : "folder"}
+          faClass={
+            (isOpen ? "folder-open" : "folder") + " c-listing-button--wide"
+          }
           onClick={toggleOpen}
         />
       </li>
