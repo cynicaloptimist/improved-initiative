@@ -166,22 +166,26 @@ export class AccountSyncSettings extends React.Component<
       })
     );
 
-    forIn(account.persistentcharacters, persistentCharacter => {
-      LegacySynchronousLocalStore.Save(
-        LegacySynchronousLocalStore.PersistentCharacters,
-        persistentCharacter.Id,
-        persistentCharacter
-      );
-    });
+    await Promise.all(
+      Object.keys(account.persistentcharacters).map(
+        async persistentCharacterId => {
+          const persistentCharacter =
+            account.persistentcharacters[persistentCharacterId];
+          return await Store.Save(
+            Store.PersistentCharacters,
+            persistentCharacterId,
+            persistentCharacter
+          );
+        }
+      )
+    );
 
-    forIn(account.encounters, downloadedEncounter => {
-      const encounter = UpdateLegacySavedEncounter(downloadedEncounter);
-      LegacySynchronousLocalStore.Save(
-        LegacySynchronousLocalStore.SavedEncounters,
-        encounter.Id,
-        encounter
-      );
-    });
+    await Promise.all(
+      Object.keys(account.encounters).map(async encounterId => {
+        const spell = account.encounters[encounterId];
+        return await Store.Save(Store.SavedEncounters, encounterId, spell);
+      })
+    );
 
     location.reload();
   };

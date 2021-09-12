@@ -8,7 +8,6 @@ import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Library, useLibrary } from "./useLibrary";
 import React = require("react");
 import { Listable, ListingMeta } from "../../common/Listable";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import axios from "axios";
 
 export type UpdatePersistentCharacter = (
@@ -24,7 +23,7 @@ export const LibraryFriendlyNames = {
 };
 export type LibraryType = keyof typeof LibraryFriendlyNames;
 
-export function GetDefaultForLibrary(libraryType: LibraryType) {
+export function GetDefaultForLibrary(libraryType: LibraryType): Listable {
   if (libraryType === "StatBlocks") {
     return StatBlock.Default();
   }
@@ -68,7 +67,7 @@ export const LibrariesContext = React.createContext<Libraries>({
 
 export function useLibraries(
   accountClient: AccountClient,
-  loadingFinished?: (storeName: string) => void
+  loadingFinished?: (storeName: string, count: number) => void
 ): Libraries {
   const PersistentCharacters = useLibrary(
     Store.PersistentCharacters,
@@ -147,13 +146,12 @@ function getAccountOrSampleCharacters(
   PersistentCharacters: Library<PersistentCharacter>,
   libraries: Libraries
 ) {
-  accountClient.GetAccount(account => {
+  accountClient.GetAccount(async account => {
     if (!account) {
-      if (
-        LegacySynchronousLocalStore.List(
-          LegacySynchronousLocalStore.PersistentCharacters
-        ).length == 0
-      ) {
+      const persistentCharacterCount = await Store.Count(
+        Store.PersistentCharacters
+      );
+      if (persistentCharacterCount == 0) {
         getAndAddSamplePersistentCharacters(PersistentCharacters);
       }
       return;

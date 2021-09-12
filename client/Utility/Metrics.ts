@@ -21,17 +21,13 @@ declare let gtag: GoogleAnalyticsTag | undefined;
 export class Metrics {
   public static async TrackLoad() {
     const counts = {
-      Encounters: LegacySynchronousLocalStore.List(
-        LegacySynchronousLocalStore.SavedEncounters
-      ).length,
-      NpcStatBlocks: (await Store.LoadAllAndUpdateIds(Store.StatBlocks)).length,
+      Encounters: await Store.Count(Store.SavedEncounters),
+      NpcStatBlocks: await Store.Count(Store.StatBlocks),
       PcStatBlocks: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.PlayerCharacters
       ).length,
-      PersistentCharacters: LegacySynchronousLocalStore.List(
-        LegacySynchronousLocalStore.PersistentCharacters
-      ).length,
-      Spells: (await Store.LoadAllAndUpdateIds(Store.Spells)).length
+      PersistentCharacters: await Store.Count(Store.PersistentCharacters),
+      Spells: await Store.Count(Store.Spells)
     };
 
     Metrics.TrackEvent("AppLoad", counts);

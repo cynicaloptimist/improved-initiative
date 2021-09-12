@@ -2,7 +2,6 @@ import moment = require("moment");
 import React = require("react");
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
 import { probablyUniqueString } from "../../common/Toolbox";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
@@ -27,7 +26,7 @@ export function useLibrary<T extends Listable>(
     accountDelete: (listableId: string) => any;
     getSearchHint: (listable: T) => string;
     getFilterDimensions: (listable: T) => FilterDimensions;
-    loadingFinished?: (storeName: string) => void;
+    loadingFinished?: (storeName: string, count: number) => void;
   }
 ): Library<T> {
   // locals
@@ -170,21 +169,18 @@ export function useLibrary<T extends Listable>(
   const GetAllListings = React.useCallback(() => [...listings], [listings]);
 
   // Effects
+  if (callbacks.loadingFinished) {
+    React.useEffect(
+      () => callbacks.loadingFinished(storeName, listings.length),
+      [callbacks.loadingFinished, listings]
+    );
+  }
 
   React.useEffect(() => {
     Store.LoadAllAndUpdateIds(storeName).then(async storedListables => {
       if (storedListables.length > 0) {
         const listings = storedListables.map(makeListing);
         AddListings(listings, "localAsync");
-      } else {
-        const legacyListings = await LegacySynchronousLocalStore.LoadAllAndUpdateIds(
-          storeName
-        );
-        const listings = legacyListings.map(makeListing);
-        AddListings(listings, "localStorage");
-      }
-      if (callbacks.loadingFinished) {
-        callbacks.loadingFinished(storeName);
       }
     });
   }, [storeName]);
@@ -209,7 +205,7 @@ function useSaveListing<T extends Listable>(
     accountDelete: (listableId: string) => any;
     getSearchHint: (listable: T) => string;
     getFilterDimensions: (listable: T) => FilterDimensions;
-    loadingFinished?: (storeName: string) => void;
+    loadingFinished?: (storeName: string, count: number) => void;
   }
 ) {
   return React.useCallback(

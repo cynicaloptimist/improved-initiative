@@ -17,13 +17,14 @@ import { centerColumnView } from "./Layout/centerColumnView";
 import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
 import { LibraryManager } from "./Library/Manager/LibraryManager";
 import { LibrariesContext, useLibraries } from "./Library/Libraries";
+import { Store } from "./Utility/Store";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
  * TrackerViewModel was the top level Knockout viewmodel for binding to ko components.
  */
 
-export function App(props: { tracker: TrackerViewModel }) {
+export function App(props: { tracker: TrackerViewModel }): JSX.Element {
   const { tracker } = props;
   const settings = useSubscription(CurrentSettings);
 
@@ -44,7 +45,7 @@ export function App(props: { tracker: TrackerViewModel }) {
   );
 
   const libraries = useLibraries(new AccountClient(), storeName => {
-    if (storeName === LegacySynchronousLocalStore.PersistentCharacters) {
+    if (storeName === Store.PersistentCharacters) {
       tracker.LoadAutoSavedEncounterIfAvailable();
     }
   });

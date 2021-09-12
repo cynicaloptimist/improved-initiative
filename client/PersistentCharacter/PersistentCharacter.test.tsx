@@ -6,7 +6,6 @@ import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
 import { InitializeSettings } from "../Settings/Settings";
-import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { buildEncounter } from "../test/buildEncounter";
 import { useLibraries } from "../Library/Libraries";
 import { LibrariesCommander } from "../Commands/LibrariesCommander";
@@ -16,6 +15,7 @@ import { Library } from "../Library/useLibrary";
 import { Listing } from "../Library/Listing";
 
 import axios from "axios";
+import { Store } from "../Utility/Store";
 jest.mock("axios");
 
 function LibrariesCommanderHarness(props: {
@@ -29,12 +29,15 @@ function LibrariesCommanderHarness(props: {
 
 function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
-  loadingFinished: () => void;
+  loadingFinished: (count: number) => void;
 }) {
-  const libraries = useLibraries(new AccountClient(), props.loadingFinished);
-  useEffect(() => {
+  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
+    if (storeName !== Store.PersistentCharacters) {
+      return;
+    }
     props.setLibrary(libraries.PersistentCharacters);
-  }, [libraries]);
+    props.loadingFinished(count);
+  });
   return <div />;
 }
 
@@ -53,11 +56,11 @@ describe("PersistentCharacterLibrary", () => {
     (axios.get as jest.Mock).mockResolvedValue(null);
   });
 
-  function savePersistentCharacterWithName(name: string) {
+  async function savePersistentCharacterWithName(name: string) {
     const persistentCharacter = PersistentCharacter.Default();
     persistentCharacter.Name = name;
-    LegacySynchronousLocalStore.Save(
-      LegacySynchronousLocalStore.PersistentCharacters,
+    await Store.Save(
+      Store.PersistentCharacters,
       persistentCharacter.Id,
       persistentCharacter
     );
@@ -65,16 +68,16 @@ describe("PersistentCharacterLibrary", () => {
   }
 
   it("Should load stored PersistentCharacters", async () => {
-    let listings: Listing<PersistentCharacter>[];
+    let listings: Listing<PersistentCharacter>[] = null;
     let library: Library<PersistentCharacter>;
     await act(async () => {
-      savePersistentCharacterWithName("Persistent Character");
+      await savePersistentCharacterWithName("Persistent Character");
 
       await new Promise<void>(done => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={done}
+            loadingFinished={count => count === 1 && done()}
           />
         );
       });
@@ -91,13 +94,15 @@ describe("PersistentCharacterLibrary", () => {
 
     await act(async () => {
       InitializeSettings();
-      savePersistentCharacterWithName("Persistent Character");
+      await savePersistentCharacterWithName("Persistent Character");
       let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
         render(
           <PersistentCharacterLibraryHarness
-            setLibrary={r => (library = r)}
-            loadingFinished={done}
+            setLibrary={r => {
+              library = r;
+            }}
+            loadingFinished={count => count === 1 && done()}
           />
         );
       });
@@ -146,7 +151,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={done}
+            loadingFinished={_ => done()}
           />
         );
       });
@@ -188,7 +193,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={done}
+            loadingFinished={_ => done()}
           />
         );
       });

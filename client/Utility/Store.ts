@@ -17,7 +17,12 @@ export namespace Store {
 
   export const DefaultSavedEncounterId = "default";
 
-  export const SupportedLists = [StatBlocks, Spells];
+  export const SupportedLists = [
+    StatBlocks,
+    Spells,
+    PersistentCharacters,
+    SavedEncounters
+  ];
 
   export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
@@ -28,6 +33,11 @@ export namespace Store {
 
   export async function Load<T>(listName: string, key: string): Promise<T> {
     return await load(listName, key);
+  }
+
+  export async function Count(listName: string): Promise<number> {
+    const store = localforage.createInstance({ name: listName });
+    return await store.length();
   }
 
   export async function LoadAllAndUpdateIds<T extends Listable>(
