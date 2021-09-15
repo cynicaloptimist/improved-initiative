@@ -21,6 +21,14 @@ export const LibraryFriendlyNames = {
   Encounters: "Encounters",
   Spells: "Spells"
 };
+
+export const LibraryStoreNames = {
+  StatBlocks: Store.StatBlocks,
+  PersistentCharacters: Store.PersistentCharacters,
+  Encounters: Store.SavedEncounters,
+  Spells: Store.Spells
+};
+
 export type LibraryType = keyof typeof LibraryFriendlyNames;
 
 export function GetDefaultForLibrary(libraryType: LibraryType): Listable {

@@ -5,6 +5,7 @@ import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
+import { Listing } from "../Library/Listing";
 
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
@@ -140,6 +141,27 @@ export namespace Store {
     const importer = new DnDAppFilesImporter();
 
     importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+  }
+
+  export async function ExportListings(
+    listings: Listing<Listable>[],
+    listName: string
+  ) {
+    const exportedListings = {};
+
+    exportedListings[listName] = listings.map(l => l.Meta().Id);
+
+    for (const listing of listings) {
+      const fullKey = `${listName}.${listing.Meta().Id}`;
+      exportedListings[fullKey] = await listing.GetWithTemplate({
+        ...listing.Meta(),
+        Version: process.env.VERSION
+      });
+    }
+
+    return new Blob([JSON.stringify(exportedListings, null, 2)], {
+      type: "application/json"
+    });
   }
 
   async function save(listName: string, key: string, value) {

@@ -1,15 +1,23 @@
 import * as React from "react";
+import { saveAs } from "browser-filesaver";
+
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
-import { LibraryFriendlyNames, LibraryType, Libraries } from "../Libraries";
+import {
+  LibraryFriendlyNames,
+  LibraryType,
+  Libraries,
+  LibraryStoreNames
+} from "../Libraries";
 import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { DeletePrompt } from "./DeletePrompt";
 import { MovePrompt } from "./MovePrompt";
 import { SelectedItemsViewForActiveTab } from "./SelectedItemsViewForActiveTab";
-import { SelectionContext } from "./SelectionContext";
+import { Selection, SelectionContext } from "./SelectionContext";
 import { Library } from "../useLibrary";
+import { Store } from "../../Utility/Store";
 
 type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
@@ -52,6 +60,11 @@ export function SelectedItemsManager(props: {
               setPromptTypeAndTargets(["delete", selection.selected])
             }
           />
+          <Button
+            text="Export"
+            fontAwesomeIcon="download"
+            onClick={() => exportSelectedItems(selection, props.activeTab)}
+          />
         </div>
       )}
       <ActivePrompt
@@ -67,6 +80,28 @@ export function SelectedItemsManager(props: {
       </div>
     </div>
   );
+}
+
+async function exportSelectedItems(
+  selection: Selection<any>,
+  activeTab: LibraryType
+) {
+  if (selection.selected.length > 0) {
+    const blob = await Store.ExportListings(
+      selection.selected,
+      LibraryStoreNames[activeTab]
+    );
+    const firstListing: Listing<Listable> = selection.selected[0];
+    const firstListingName = firstListing
+      .Meta()
+      .Name.toLocaleLowerCase()
+      .replace(/ /gi, "-")
+      .replace(/[^\w\s-]/gi, "");
+    saveAs(
+      blob,
+      `improved-initiative-${firstListingName}-${selection.selected.length}.json`
+    );
+  }
 }
 
 function ActivePrompt(props: {
