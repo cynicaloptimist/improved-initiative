@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
+import { PersistentCharacter } from "../../../common/PersistentCharacter";
 import { StatBlock } from "../../../common/StatBlock";
 import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
 import { GetDefaultForLibrary, LibraryType } from "../Libraries";
@@ -49,6 +50,31 @@ export function EditorView(
         onSaveAsCopy={statBlock =>
           props.libraries.StatBlocks.SaveNewListing(statBlock)
         }
+        onClose={props.closeEditor}
+      />
+    );
+  }
+  if (editorType === "PersistentCharacters") {
+    const persistentCharacter = loadedTarget as PersistentCharacter;
+    const hpDown =
+      persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
+    return (
+      <StatBlockEditor
+        statBlock={persistentCharacter.StatBlock}
+        editorTarget="persistentcharacter"
+        onSave={(statBlock: StatBlock) =>
+          props.librariesCommander.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
+            persistentCharacter.Id,
+            statBlock,
+            hpDown
+          )
+        }
+        onDelete={() =>
+          props.libraries.PersistentCharacters.DeleteListing(
+            persistentCharacter.Id
+          )
+        }
+        currentListings={props.libraries.PersistentCharacters.GetAllListings()}
         onClose={props.closeEditor}
       />
     );
