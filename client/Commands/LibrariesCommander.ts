@@ -187,6 +187,21 @@ export class LibrariesCommander {
     this.tracker.EditPersistentCharacterStatBlock(persistentCharacterId);
   }
 
+  public UpdatePersistentCharacterStatBlockInLibraryAndEncounter = (
+    persistentCharacterId: string,
+    updatedStatBlock: StatBlock,
+    hpDifference?: number
+  ) => {
+    this.UpdatePersistentCharacter(persistentCharacterId, {
+      StatBlock: updatedStatBlock,
+      CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
+    });
+    this.tracker.Encounter.UpdatePersistentCharacterStatBlock(
+      persistentCharacterId,
+      updatedStatBlock
+    );
+  };
+
   public CreateAndEditSpell = () => {
     const newSpell = {
       ...Spell.Default(),

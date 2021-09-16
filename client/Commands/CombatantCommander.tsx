@@ -474,7 +474,7 @@ export class CombatantCommander {
       selectedCombatant,
       updatedStatBlock => {
         if (selectedCombatant.PersistentCharacterId) {
-          this.tracker.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
+          this.tracker.LibrariesCommander.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
             selectedCombatant.PersistentCharacterId,
             updatedStatBlock
           );

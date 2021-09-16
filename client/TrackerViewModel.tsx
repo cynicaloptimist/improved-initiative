@@ -174,7 +174,7 @@ export class TrackerViewModel {
       statBlock: newStatBlock || persistentCharacter.StatBlock,
       editorTarget: "persistentcharacter",
       onSave: (statBlock: StatBlock) =>
-        this.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
+        this.LibrariesCommander.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
           persistentCharacterId,
           statBlock,
           hpDown
@@ -186,21 +186,6 @@ export class TrackerViewModel {
       onClose: () => this.StatBlockEditorProps(null),
       currentListings: this.Libraries.PersistentCharacters.GetAllListings()
     });
-  }
-
-  public UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
-    persistentCharacterId: string,
-    updatedStatBlock: StatBlock,
-    hpDifference?: number
-  ) {
-    this.LibrariesCommander.UpdatePersistentCharacter(persistentCharacterId, {
-      StatBlock: updatedStatBlock,
-      CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
-    });
-    this.Encounter.UpdatePersistentCharacterStatBlock(
-      persistentCharacterId,
-      updatedStatBlock
-    );
   }
 
   public RepeatTutorial = () => {
