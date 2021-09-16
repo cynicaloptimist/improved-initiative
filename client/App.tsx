@@ -105,7 +105,6 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
                 <LibraryManager
                   libraries={libraries}
                   librariesCommander={tracker.LibrariesCommander}
-                  statBlockTextEnricher={tracker.StatBlockTextEnricher}
                   closeManager={() => tracker.LibraryManagerActive(false)}
                 />
               ) : (

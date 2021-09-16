@@ -8,7 +8,6 @@ import { StatBlock } from "../../../common/StatBlock";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { FilterCache } from "../FilterCache";
@@ -23,7 +22,6 @@ import { Selection, SelectionContext, useSelection } from "./SelectionContext";
 
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
-  statBlockTextEnricher: TextEnricher;
   libraries: Libraries;
   closeManager: () => void;
 };
