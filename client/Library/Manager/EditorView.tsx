@@ -2,7 +2,9 @@ import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
+import { SpellEditor } from "../../StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
 import { GetDefaultForLibrary, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
@@ -54,6 +56,7 @@ export function EditorView(
       />
     );
   }
+
   if (editorType === "PersistentCharacters") {
     const persistentCharacter = loadedTarget as PersistentCharacter;
     const hpDown =
@@ -75,6 +78,22 @@ export function EditorView(
           )
         }
         currentListings={props.libraries.PersistentCharacters.GetAllListings()}
+        onClose={props.closeEditor}
+      />
+    );
+  }
+
+  if (editorType === "Spells") {
+    const spellListing = editorTarget as Listing<Spell>;
+    const spell = loadedTarget as Spell;
+
+    return (
+      <SpellEditor
+        spell={spell}
+        onSave={spell =>
+          props.libraries.Spells.SaveEditedListing(spellListing, spell)
+        }
+        onDelete={props.libraries.Spells.DeleteListing}
         onClose={props.closeEditor}
       />
     );
