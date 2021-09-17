@@ -14,103 +14,81 @@ import { Metrics } from "../Utility/Metrics";
 import { EventLog } from "../Widgets/EventLog";
 import { PromptProps } from "./PendingPrompts";
 
-interface SaveEncounterPromptComponentProps {
-  autocompletePaths: string[];
-}
-interface SaveEncounterPromptComponentState {
-  advancedPrompt: boolean;
-}
-class SaveEncounterPromptComponent extends React.Component<
-  SaveEncounterPromptComponentProps,
-  SaveEncounterPromptComponentState
-> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      advancedPrompt: false
-    };
-  }
+function SaveEncounterPromptComponent(props: { autocompletePaths: string[] }) {
+  const fieldLabelId = probablyUniqueString();
+  const [advancedPrompt, setAdvancedPrompt] = React.useState(false);
 
-  public render() {
-    const fieldLabelId = probablyUniqueString();
-    return (
-      <>
-        <div className="p-save-encounter">
-          <div className="p-save-encounter__basic">
-            <label>
-              <div className="p-save-encounter__label">Save Encounter As</div>
-              <Field
-                id={fieldLabelId}
-                name="Name"
-                className="response"
-                type="text"
-              />
-            </label>
-            <Button
-              fontAwesomeIcon="wrench"
-              onClick={() =>
-                this.setState(oldState => ({
-                  advancedPrompt: !oldState.advancedPrompt
-                }))
-              }
-            />
-          </div>
-          {this.state.advancedPrompt && this.renderAdvanced()}
-        </div>
-        <SubmitButton />
-      </>
-    );
-  }
-
-  private renderAdvanced = () => {
-    return (
-      <div className="p-save-encounter__advanced">
-        <label>
-          <div className="p-save-encounter__label">Folder</div>
-          <AutocompleteTextInput
-            fieldName="Path"
-            options={this.props.autocompletePaths}
-            autoFocus
-          />
-        </label>
-        <div className="p-save-encounter__include-combatants">
-          <div className="p-save-encounter__label">Include Combatants</div>
-          <div className="p-save-encounter__character-combatants">
-            <Field name="CharacterCombatants">
-              {this.renderCombatantInclusionRow}
-            </Field>
-          </div>
-          <div className="p-save-encounter__non-character-combatants">
-            <Field name="NonCharacterCombatants">
-              {this.renderCombatantInclusionRow}
-            </Field>
-          </div>
-        </div>
-        {env.HasEpicInitiative && (
+  return (
+    <>
+      <div className="p-save-encounter">
+        <div className="p-save-encounter__basic">
           <label>
-            <div className="p-save-encounter__label">Background Image URL</div>
-            <Field type="text" name="BackgroundImageUrl" />
+            <div className="p-save-encounter__label">Save Encounter As</div>
+            <Field
+              id={fieldLabelId}
+              name="Name"
+              className="response"
+              type="text"
+            />
           </label>
-        )}
-      </div>
-    );
-  };
-
-  private renderCombatantInclusionRow = (fieldApi: FieldProps) =>
-    fieldApi.field.value.map((inclusion: CombatantInclusionModel, index) => {
-      return (
-        <label
-          className="p-save-encounter__include-combatant"
-          key={inclusion.CombatantId}
-        >
-          {inclusion.Name}{" "}
-          <ToggleButton
-            fieldName={`${fieldApi.field.name}[${index}].Include`}
+          <Button
+            fontAwesomeIcon="wrench"
+            onClick={() => setAdvancedPrompt(!advancedPrompt)}
           />
-        </label>
-      );
-    });
+        </div>
+        {advancedPrompt && renderAdvanced(props.autocompletePaths)}
+      </div>
+      <SubmitButton />
+    </>
+  );
 }
+
+const renderAdvanced = (autocompletePaths: string[]) => {
+  return (
+    <div className="p-save-encounter__advanced">
+      <label>
+        <div className="p-save-encounter__label">Folder</div>
+        <AutocompleteTextInput
+          fieldName="Path"
+          options={autocompletePaths}
+          autoFocus
+        />
+      </label>
+      <div className="p-save-encounter__include-combatants">
+        <div className="p-save-encounter__label">Include Combatants</div>
+        <div className="p-save-encounter__character-combatants">
+          <Field name="CharacterCombatants">
+            {renderCombatantInclusionRow}
+          </Field>
+        </div>
+        <div className="p-save-encounter__non-character-combatants">
+          <Field name="NonCharacterCombatants">
+            {renderCombatantInclusionRow}
+          </Field>
+        </div>
+      </div>
+      {env.HasEpicInitiative && (
+        <label>
+          <div className="p-save-encounter__label">Background Image URL</div>
+          <Field type="text" name="BackgroundImageUrl" />
+        </label>
+      )}
+    </div>
+  );
+};
+
+const renderCombatantInclusionRow = (fieldApi: FieldProps) =>
+  fieldApi.field.value.map((inclusion: CombatantInclusionModel, index) => {
+    return (
+      <label
+        className="p-save-encounter__include-combatant"
+        key={inclusion.CombatantId}
+      >
+        {inclusion.Name}{" "}
+        <ToggleButton fieldName={`${fieldApi.field.name}[${index}].Include`} />
+      </label>
+    );
+  });
 
 interface CombatantInclusionModel {
   Name: string;
