@@ -42,6 +42,7 @@ export class LibrariesCommander {
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
+  public OpenLibraryManager = () => this.tracker.LibraryManagerActive(true);
 
   public AddStatBlockFromListing = (
     listing: Listing<StatBlock>,

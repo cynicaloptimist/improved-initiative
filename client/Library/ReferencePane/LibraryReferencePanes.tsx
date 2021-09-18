@@ -74,9 +74,16 @@ export class LibraryReferencePanes extends React.Component<
         <div className="libraries__header">
           <LibraryHeader selectedLibrary={this.state.selectedLibrary} />
           <Button
+            additionalClassNames="button--library-manager"
+            fontAwesomeIcon="book-open"
+            onClick={this.props.librariesCommander.OpenLibraryManager}
+            tooltip="Open Library Manager"
+          />
+          <Button
             additionalClassNames="button--close"
             fontAwesomeIcon="times"
             onClick={this.hideLibraries}
+            tooltip="Close Library Reference Pane"
           />
         </div>
         <Tabs
@@ -110,7 +117,7 @@ function LibraryHeader(props: { selectedLibrary: LibraryType }) {
 
   const hasAccountSync = env.HasStorage;
   return (
-    <h2 style={{ flexShrink: 1 }}>
+    <h2 style={{ flexGrow: 1, flexShrink: 1 }}>
       {hasAccountSync && (
         <span className="fas fa-cloud" title="Account Sync is enabled" />
       )}
