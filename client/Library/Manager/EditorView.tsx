@@ -2,8 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 import { Listable } from "../../../common/Listable";
 import { PersistentCharacter } from "../../../common/PersistentCharacter";
+import { SavedEncounter } from "../../../common/SavedEncounter";
 import { Spell } from "../../../common/Spell";
 import { StatBlock } from "../../../common/StatBlock";
+import { SavedEncounterEditor } from "../../StatBlockEditor/SavedEncounterEditor";
 import { SpellEditor } from "../../StatBlockEditor/SpellEditor";
 import { StatBlockEditor } from "../../StatBlockEditor/StatBlockEditor";
 import { GetDefaultForLibrary, LibraryType } from "../Libraries";
@@ -38,6 +40,27 @@ export function EditorView(props: EditorViewProps) {
 
   if (editorType === "Spells") {
     return RenderSpellEditor(editorTarget, loadedTarget, props);
+  }
+
+  if (editorType === "Encounters") {
+    const savedEncounterListing = editorTarget as Listing<SavedEncounter>;
+    const savedEncounter = loadedTarget as SavedEncounter;
+    return (
+      <SavedEncounterEditor
+        savedEncounter={savedEncounter}
+        onSave={updatedEncounter =>
+          props.libraries.Encounters.SaveEditedListing(
+            savedEncounterListing,
+            updatedEncounter
+          )
+        }
+        onDelete={() =>
+          props.libraries.Encounters.DeleteListing(
+            savedEncounterListing.Meta().Id
+          )
+        }
+      />
+    );
   }
 
   return <div>Editor: {editorTarget.Meta().Name}</div>;
