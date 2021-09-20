@@ -48,17 +48,14 @@ export function EditorView(props: EditorViewProps) {
     return (
       <SavedEncounterEditor
         savedEncounter={savedEncounter}
-        onSave={updatedEncounter =>
+        onSave={updatedEncounter => {
           props.libraries.Encounters.SaveEditedListing(
             savedEncounterListing,
             updatedEncounter
-          )
-        }
-        onDelete={() =>
-          props.libraries.Encounters.DeleteListing(
-            savedEncounterListing.Meta().Id
-          )
-        }
+          );
+          props.closeEditor();
+        }}
+        onClose={props.closeEditor}
       />
     );
   }
