@@ -43,21 +43,7 @@ export function EditorView(props: EditorViewProps) {
   }
 
   if (editorType === "Encounters") {
-    const savedEncounterListing = editorTarget as Listing<SavedEncounter>;
-    const savedEncounter = loadedTarget as SavedEncounter;
-    return (
-      <SavedEncounterEditor
-        savedEncounter={savedEncounter}
-        onSave={updatedEncounter => {
-          props.libraries.Encounters.SaveEditedListing(
-            savedEncounterListing,
-            updatedEncounter
-          );
-          props.closeEditor();
-        }}
-        onClose={props.closeEditor}
-      />
-    );
+    return RenderSavedEncounterEditor(editorTarget, loadedTarget, props);
   }
 
   return <div>Editor: {editorTarget.Meta().Name}</div>;
@@ -140,6 +126,28 @@ function RenderSpellEditor(
         props.libraries.Spells.SaveEditedListing(spellListing, spell)
       }
       onDelete={props.libraries.Spells.DeleteListing}
+      onClose={props.closeEditor}
+    />
+  );
+}
+
+function RenderSavedEncounterEditor(
+  editorTarget: Listing<Listable>,
+  loadedTarget: Listable,
+  props: EditorViewProps
+) {
+  const savedEncounterListing = editorTarget as Listing<SavedEncounter>;
+  const savedEncounter = loadedTarget as SavedEncounter;
+  return (
+    <SavedEncounterEditor
+      savedEncounter={savedEncounter}
+      onSave={updatedEncounter => {
+        props.libraries.Encounters.SaveEditedListing(
+          savedEncounterListing,
+          updatedEncounter
+        );
+        props.closeEditor();
+      }}
       onClose={props.closeEditor}
     />
   );
