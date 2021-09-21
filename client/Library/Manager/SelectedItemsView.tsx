@@ -47,11 +47,10 @@ function LibraryManagerInfo() {
   return (
     <div className="c-library-manager__info">
       <p>
-        The Library Manager allows you to move and delete multiple items at the
-        same time. Select multiple rows by holding the control/meta key. You can
-        also edit a statblock while viewing a different statblock.
+        The Library Manager allows you to move, delete, or export multiple items
+        at the same time. Select multiple rows by holding the control/meta key.
+        You can also edit one item while viewing another item.
       </p>
-      <p>This UI is under active development and is subject to change.</p>
     </div>
   );
 }
