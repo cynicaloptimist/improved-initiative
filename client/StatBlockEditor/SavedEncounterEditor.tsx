@@ -2,6 +2,7 @@ import { Form, Formik } from "formik";
 import React = require("react");
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { Button } from "../Components/Button";
+import { env } from "../Environment";
 import { TextField } from "./components/TextField";
 
 export function SavedEncounterEditor(props: {
@@ -23,7 +24,7 @@ export function SavedEncounterEditor(props: {
           >
             <div className="c-statblock-editor__title-row">
               <h2 className="c-statblock-editor__title">
-                Edit Saved Encounter`
+                Edit Saved Encounter
               </h2>
               <Button
                 onClick={props.onClose}
@@ -39,6 +40,12 @@ export function SavedEncounterEditor(props: {
 
             <TextField label="Saved Encounter Name" fieldName="Name" />
             <TextField label="Folder" fieldName="Path" />
+            {env.HasEpicInitiative && (
+              <TextField
+                label="Background Image URL"
+                fieldName="BackgroundImageUrl"
+              />
+            )}
           </Form>
         );
       }}
