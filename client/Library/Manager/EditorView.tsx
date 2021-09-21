@@ -46,7 +46,7 @@ export function EditorView(props: EditorViewProps) {
     return RenderSavedEncounterEditor(editorTarget, loadedTarget, props);
   }
 
-  return <div>Editor: {editorTarget.Meta().Name}</div>;
+  return <div>No editor for {editorTarget.Meta().Name}</div>;
 }
 
 function RenderStatBlockEditor(
