@@ -59,24 +59,28 @@ function RenderStatBlockEditor(
     <StatBlockEditor
       statBlock={loadedTarget as StatBlock}
       editorTarget="library"
-      onSave={newStatBlock =>
+      onSave={newStatBlock => {
         props.libraries.StatBlocks.SaveEditedListing(
           statBlockListing,
           newStatBlock
-        )
-      }
-      onDelete={() =>
-        props.libraries.StatBlocks.DeleteListing(statBlockListing.Meta().Id)
-      }
-      onSaveAsCharacter={statBlock =>
+        );
+        props.closeEditor();
+      }}
+      onDelete={() => {
+        props.libraries.StatBlocks.DeleteListing(statBlockListing.Meta().Id);
+        props.closeEditor();
+      }}
+      onSaveAsCharacter={statBlock => {
         props.libraries.StatBlocks.SaveEditedListing(
           statBlockListing,
           statBlock
-        )
-      }
-      onSaveAsCopy={statBlock =>
-        props.libraries.StatBlocks.SaveNewListing(statBlock)
-      }
+        );
+        props.closeEditor();
+      }}
+      onSaveAsCopy={statBlock => {
+        props.libraries.StatBlocks.SaveNewListing(statBlock);
+        props.closeEditor();
+      }}
       onClose={props.closeEditor}
     />
   );
@@ -93,18 +97,20 @@ function RenderPersistentCharacterEditor(
     <StatBlockEditor
       statBlock={persistentCharacter.StatBlock}
       editorTarget="persistentcharacter"
-      onSave={(statBlock: StatBlock) =>
+      onSave={(statBlock: StatBlock) => {
         props.librariesCommander.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
           persistentCharacter.Id,
           statBlock,
           hpDown
-        )
-      }
-      onDelete={() =>
+        );
+        props.closeEditor();
+      }}
+      onDelete={() => {
         props.libraries.PersistentCharacters.DeleteListing(
           persistentCharacter.Id
-        )
-      }
+        );
+        props.closeEditor();
+      }}
       currentListings={props.libraries.PersistentCharacters.GetAllListings()}
       onClose={props.closeEditor}
     />
@@ -122,10 +128,14 @@ function RenderSpellEditor(
   return (
     <SpellEditor
       spell={spell}
-      onSave={spell =>
-        props.libraries.Spells.SaveEditedListing(spellListing, spell)
-      }
-      onDelete={props.libraries.Spells.DeleteListing}
+      onSave={spell => {
+        props.libraries.Spells.SaveEditedListing(spellListing, spell);
+        props.closeEditor();
+      }}
+      onDelete={spellId => {
+        props.libraries.Spells.DeleteListing(spellId);
+        props.closeEditor();
+      }}
       onClose={props.closeEditor}
     />
   );
