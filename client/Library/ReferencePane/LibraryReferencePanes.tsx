@@ -76,7 +76,11 @@ export class LibraryReferencePanes extends React.Component<
           <Button
             additionalClassNames="button--library-manager"
             fontAwesomeIcon="book-open"
-            onClick={this.props.librariesCommander.OpenLibraryManager}
+            onClick={() =>
+              this.props.librariesCommander.OpenLibraryManagerPane(
+                this.state.selectedLibrary
+              )
+            }
             tooltip="Open Library Manager"
           />
           <Button

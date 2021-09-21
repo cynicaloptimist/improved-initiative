@@ -11,7 +11,7 @@ import {
   probablyUniqueString
 } from "../../common/Toolbox";
 import { VariantMaximumHP } from "../Combatant/GetOrRollMaximumHP";
-import { Libraries } from "../Library/Libraries";
+import { Libraries, LibraryType } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { Metrics } from "../Utility/Metrics";
@@ -42,7 +42,8 @@ export class LibrariesCommander {
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
-  public OpenLibraryManager = () => this.tracker.LibraryManagerActive(true);
+  public OpenLibraryManagerPane = (startPane: LibraryType) =>
+    this.tracker.LibraryManagerPane(startPane);
 
   public AddStatBlockFromListing = (
     listing: Listing<StatBlock>,

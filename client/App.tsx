@@ -30,7 +30,7 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
 
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
-  const libraryManagerActive = useSubscription(tracker.LibraryManagerActive);
+  const libraryManagerPane = useSubscription(tracker.LibraryManagerPane);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
@@ -101,11 +101,12 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
                   Log In with Patreon
                 </a>
               )}
-              {libraryManagerActive ? (
+              {libraryManagerPane ? (
                 <LibraryManager
                   libraries={libraries}
                   librariesCommander={tracker.LibrariesCommander}
-                  closeManager={() => tracker.LibraryManagerActive(false)}
+                  closeManager={() => tracker.LibraryManagerPane(null)}
+                  initialPane={libraryManagerPane}
                 />
               ) : (
                 <ThreeColumnLayout tracker={tracker} />

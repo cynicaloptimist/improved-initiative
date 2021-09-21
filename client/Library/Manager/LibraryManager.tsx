@@ -17,7 +17,6 @@ import { Listing } from "../Listing";
 import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
-import { LibraryManagerToolbar } from "./LibraryManagerToolbar";
 import { SelectedItemsManager } from "./SelectedItemsManager";
 import { Selection, SelectionContext, useSelection } from "./SelectionContext";
 
@@ -25,10 +24,13 @@ export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
   libraries: Libraries;
   closeManager: () => void;
+  initialPane?: LibraryType;
 };
 
 export function LibraryManager(props: LibraryManagerProps) {
-  const [activeTab, setActiveTab] = useState<LibraryType>("StatBlocks");
+  const [activeTab, setActiveTab] = useState<LibraryType>(
+    props.initialPane || "StatBlocks"
+  );
   const [columnWidth, setColumnWidth] = useState(500);
   const selectionsByTab: Record<LibraryType, Selection<Listing<Listable>>> = {
     StatBlocks: useSelection<Listing<StatBlock>>(),

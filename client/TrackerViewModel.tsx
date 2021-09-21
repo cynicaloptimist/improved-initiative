@@ -20,7 +20,7 @@ import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
-import { Libraries } from "./Library/Libraries";
+import { Libraries, LibraryType } from "./Library/Libraries";
 import { PatreonPost } from "./Patreon/PatreonPost";
 import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
@@ -66,7 +66,14 @@ export class TrackerViewModel {
   );
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
-  public LibraryManagerActive = ko.observable(false);
+  public LibraryManagerPane = ko.observable<LibraryType | null>(null);
+  public ToggleLibraryManager = () => {
+    if (this.LibraryManagerPane() === null) {
+      this.LibraryManagerPane("StatBlocks");
+    } else {
+      this.LibraryManagerPane(null);
+    }
+  };
   public ToolbarWide = ko.observable(false);
 
   constructor(private Socket: SocketIOClient.Socket) {

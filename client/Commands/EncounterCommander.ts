@@ -38,8 +38,7 @@ export class EncounterCommander {
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
 
-  public ToggleLibraryManager = () =>
-    this.tracker.LibraryManagerActive(!this.tracker.LibraryManagerActive());
+  public ToggleLibraryManager = () => this.tracker.ToggleLibraryManager();
 
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
@@ -221,7 +220,7 @@ export class EncounterCommander {
     Metrics.TrackEvent("AllPlayerCharacterHPRestored");
   };
 
-  public LoadSavedEncounter = async (legacySavedEncounter: {}) => {
+  public LoadSavedEncounter = async (legacySavedEncounter: any) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
 
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
