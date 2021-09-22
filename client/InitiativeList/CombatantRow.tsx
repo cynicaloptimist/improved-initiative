@@ -144,7 +144,10 @@ export function CombatantRow(props: CombatantRowProps) {
         {renderHPText(props)}
         {DisplayHPBar && (
           <span className="combatant__hp-bar">
-            <span className="combatant__hp-bar--filled" style={renderHPBarStyle(props)}/>
+            <span
+              className="combatant__hp-bar--filled"
+              style={renderHPBarStyle(props)}
+            />
           </span>
         )}
       </td>
@@ -221,7 +224,7 @@ function getClassNames(props: CombatantRowProps) {
 
 function getDisplayName(props: CombatantRowProps) {
   let displayName = props.combatantState.StatBlock.Name;
-  if (props.combatantState.Alias.length) {
+  if (props.combatantState.Alias?.length) {
     displayName = props.combatantState.Alias;
   } else if (props.showIndexLabel) {
     displayName += " " + props.combatantState.IndexLabel;
@@ -249,5 +252,5 @@ function renderHPText(props: CombatantRowProps) {
 function renderHPBarStyle(props: CombatantRowProps) {
   const maxHP = props.combatantState.StatBlock.HP.Value,
     currentHP = props.combatantState.CurrentHP;
-  return {width: Math.floor((currentHP / maxHP) * 100) + "%" };
+  return { width: Math.floor((currentHP / maxHP) * 100) + "%" };
 }
