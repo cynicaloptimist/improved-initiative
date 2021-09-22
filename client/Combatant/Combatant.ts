@@ -6,7 +6,7 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
 import { UpdatePersistentCharacter } from "../Library/Libraries";
 import { CurrentSettings } from "../Settings/Settings";
-import { TutorialSpy } from "../Tutorial/TutorialSpy";
+import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { Metrics } from "../Utility/Metrics";
 import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
@@ -203,7 +203,7 @@ export class Combatant {
 
     this.CurrentHP(currHP);
     this.TemporaryHP(tempHP);
-    TutorialSpy("ApplyDamage");
+    NotifyTutorialOfAction("ApplyDamage");
   }
 
   public ApplyHealing(healing: number) {

@@ -3,7 +3,7 @@ import * as React from "react";
 import { TutorialSteps } from "./TutorialSteps";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
-import { TutorialSpy } from "./TutorialSpy";
+import { NotifyTutorialOfAction } from "./NotifyTutorialOfAction";
 import { useCallback } from "react";
 
 export function Tutorial(props: { onClose: () => void }) {
@@ -26,7 +26,7 @@ export function Tutorial(props: { onClose: () => void }) {
   const step = TutorialSteps[stepIndex];
 
   useEffect(() => {
-    const subscription = TutorialSpy.subscribe(action => {
+    const subscription = NotifyTutorialOfAction.subscribe(action => {
       if (step.AwaitAction === action) {
         advance();
       }

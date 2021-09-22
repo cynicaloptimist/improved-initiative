@@ -6,7 +6,7 @@ import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncoun
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { TutorialSpy } from "../Tutorial/TutorialSpy";
+import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { Metrics } from "../Utility/Metrics";
 import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "../Prompts/InitiativePrompt";
@@ -83,7 +83,7 @@ export class EncounterCommander {
   };
 
   public ShowSettings = () => {
-    TutorialSpy("ShowSettings");
+    NotifyTutorialOfAction("ShowSettings");
     this.tracker.SettingsVisible(true);
     Metrics.TrackEvent("SettingsOpened");
   };
@@ -115,7 +115,7 @@ export class EncounterCommander {
 
     this.rollInitiative();
 
-    TutorialSpy("ShowInitiativeDialog");
+    NotifyTutorialOfAction("ShowInitiativeDialog");
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {

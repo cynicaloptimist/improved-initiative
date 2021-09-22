@@ -4,7 +4,7 @@ import { Button } from "../../Components/Button";
 import { Info } from "../../Components/Info";
 import { Tabs } from "../../Components/Tabs";
 import { env } from "../../Environment";
-import { TutorialSpy } from "../../Tutorial/TutorialSpy";
+import { NotifyTutorialOfAction } from "../../Tutorial/NotifyTutorialOfAction";
 import { LibraryFriendlyNames, LibraryType, Libraries } from "../Libraries";
 import { EncounterLibraryReferencePane } from "./EncounterLibraryReferencePane";
 import { PersistentCharacterLibraryReferencePane } from "./PersistentCharacterLibraryReferencePane";
@@ -34,7 +34,7 @@ export class LibraryReferencePanes extends React.Component<
   private hideLibraries = () => this.props.librariesCommander.HideLibraries();
   private selectLibrary = (library: LibraryType) => {
     if (library == "PersistentCharacters") {
-      TutorialSpy("SelectCharactersTab");
+      NotifyTutorialOfAction("SelectCharactersTab");
     }
     this.setState({ selectedLibrary: library });
   };

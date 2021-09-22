@@ -4,7 +4,7 @@ import { toModifierString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
 import { SubmitButton } from "../Components/Button";
 import { CurrentSettings } from "../Settings/Settings";
-import { TutorialSpy } from "../Tutorial/TutorialSpy";
+import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { PromptProps } from "./PendingPrompts";
 import _ = require("lodash");
 import { Field } from "formik";
@@ -119,7 +119,7 @@ export function InitiativePrompt(
         }
       });
       startEncounter();
-      TutorialSpy("CompleteInitiativeRolls");
+      NotifyTutorialOfAction("CompleteInitiativeRolls");
       return true;
     }
   };
