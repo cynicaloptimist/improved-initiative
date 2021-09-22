@@ -22,7 +22,7 @@ export const LibraryFriendlyNames = {
   Spells: "Spells"
 };
 
-export const LibraryStoreNames = {
+export const LibraryStoreNames: Record<LibraryType, string> = {
   StatBlocks: Store.StatBlocks,
   PersistentCharacters: Store.PersistentCharacters,
   Encounters: Store.SavedEncounters,
