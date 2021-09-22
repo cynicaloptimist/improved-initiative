@@ -25,7 +25,7 @@ export function BuildListingTree<T extends Listable>(
 
   listings.forEach(listing => {
     const group = groupListingsBy(listing);
-    if (group.key == "") {
+    if (group.key == "" || group.key === undefined) {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
