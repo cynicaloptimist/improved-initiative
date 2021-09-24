@@ -86,14 +86,16 @@ export function LibraryManager(props: LibraryManagerProps) {
           libraries={props.libraries}
           editListing={setEditorTarget}
         />
-        {editorTypeAndTarget && (
-          <EditorView
-            key={editorTypeAndTarget[1].Meta().Id}
-            editorTypeAndTarget={editorTypeAndTarget}
-            closeEditor={() => setEditorTypeAndTarget(null)}
-            {...props}
-          />
-        )}
+        <div style={{ width: 600, flexGrow: 1, margin: 5 }}>
+          {editorTypeAndTarget && (
+            <EditorView
+              key={editorTypeAndTarget[1].Meta().Id}
+              editorTypeAndTarget={editorTypeAndTarget}
+              closeEditor={() => setEditorTypeAndTarget(null)}
+              {...props}
+            />
+          )}
+        </div>
       </div>
     </SelectionContext.Provider>
   );
