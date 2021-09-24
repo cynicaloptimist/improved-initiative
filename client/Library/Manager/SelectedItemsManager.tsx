@@ -33,7 +33,7 @@ export function SelectedItemsManager(props: {
   const selection = React.useContext(SelectionContext);
 
   return (
-    <div style={{ width: 600, margin: 5 }}>
+    <div className="c-library-manager__center">
       {selection.selected.length > 0 && (
         <div style={{ flexFlow: "row", alignItems: "center" }}>
           <h2 style={{ flexGrow: 1 }}>
