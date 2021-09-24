@@ -86,7 +86,7 @@ export function LibraryManager(props: LibraryManagerProps) {
           libraries={props.libraries}
           editListing={setEditorTarget}
         />
-        <div style={{ width: 600, flexGrow: 1, margin: 5 }}>
+        <div className="c-library-manager__editor">
           {editorTypeAndTarget && (
             <EditorView
               key={editorTypeAndTarget[1].Meta().Id}
