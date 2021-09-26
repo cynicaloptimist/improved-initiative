@@ -1,8 +1,9 @@
-import { Form, Formik } from "formik";
+import { FieldArray, Form, Formik } from "formik";
 import React = require("react");
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { Button } from "../Components/Button";
 import { env } from "../Environment";
+import { ListingButton } from "../Library/Components/ListingButton";
 import { TextField } from "./components/TextField";
 
 export function SavedEncounterEditor(props: {
@@ -46,6 +47,20 @@ export function SavedEncounterEditor(props: {
                 fieldName="BackgroundImageUrl"
               />
             )}
+            <FieldArray name="Combatants">
+              {fieldArrayApi => {
+                return api.values.Combatants.map((combatant, index) => (
+                  <div className="inline">
+                    <ListingButton
+                      onClick={() => fieldArrayApi.remove(index)}
+                      buttonClass="remove"
+                      faClass="times"
+                    />
+                    {combatant.StatBlock.Name}
+                  </div>
+                ));
+              }}
+            </FieldArray>
           </Form>
         );
       }}
