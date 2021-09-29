@@ -80,7 +80,9 @@ export function LibraryManager(props: LibraryManagerProps) {
           />
         </div>
         <VerticalResizer
-          adjustWidth={offset => setLeftColumnWidth(leftColumnWidth + offset)}
+          adjustWidth={offset =>
+            setLeftColumnWidth(leftColumnWidth + offset * 2)
+          }
         />
         <div
           className="c-library-manager__center"
@@ -94,7 +96,7 @@ export function LibraryManager(props: LibraryManagerProps) {
         </div>
         <VerticalResizer
           adjustWidth={offset =>
-            setCenterColumnWidth(centerColumnWidth + offset)
+            setCenterColumnWidth(centerColumnWidth + offset * 2)
           }
         />
         <div className="c-library-manager__editor">
