@@ -32,7 +32,7 @@ export function LibraryManager(props: LibraryManagerProps) {
     props.initialPane || "StatBlocks"
   );
   const [leftColumnWidth, setLeftColumnWidth] = useState(500);
-  const [centerColumnWidth, setCenterColumnWidth] = useState(500);
+  const [centerColumnWidth, setCenterColumnWidth] = useState(600);
   const selectionsByTab: Record<LibraryType, Selection<Listing<Listable>>> = {
     StatBlocks: useSelection<Listing<StatBlock>>(),
     PersistentCharacters: useSelection<Listing<PersistentCharacter>>(),
