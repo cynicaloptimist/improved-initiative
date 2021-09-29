@@ -30,7 +30,7 @@ export function SelectedItemsViewForActiveTab({
       <SelectedItemsView
         {...partialViewProps}
         renderListing={(listing: StatBlock) => (
-          <div style={{ width: 600 }}>
+          <div>
             <StatBlockComponent displayMode="default" statBlock={listing} />
           </div>
         )}
@@ -43,7 +43,7 @@ export function SelectedItemsViewForActiveTab({
       <SelectedItemsView
         {...partialViewProps}
         renderListing={(listing: PersistentCharacter) => (
-          <div style={{ width: 600 }}>
+          <div>
             <StatBlockComponent
               displayMode="default"
               statBlock={listing.StatBlock}
@@ -65,7 +65,7 @@ export function SelectedItemsViewForActiveTab({
           );
 
           return (
-            <div style={{ width: 600 }}>
+            <div>
               <h2>{listing.Name}</h2>
               <div>XP: {encounterDifficulty.EarnedExperience}</div>
               {listing.Combatants.map(c => (
