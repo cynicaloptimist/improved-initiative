@@ -31,7 +31,8 @@ export function LibraryManager(props: LibraryManagerProps) {
   const [activeTab, setActiveTab] = useState<LibraryType>(
     props.initialPane || "StatBlocks"
   );
-  const [columnWidth, setColumnWidth] = useState(500);
+  const [leftColumnWidth, setLeftColumnWidth] = useState(500);
+  const [centerColumnWidth, setCenterColumnWidth] = useState(500);
   const selectionsByTab: Record<LibraryType, Selection<Listing<Listable>>> = {
     StatBlocks: useSelection<Listing<StatBlock>>(),
     PersistentCharacters: useSelection<Listing<PersistentCharacter>>(),
@@ -52,7 +53,7 @@ export function LibraryManager(props: LibraryManagerProps) {
   return (
     <SelectionContext.Provider value={selection}>
       <div className="c-library-manager">
-        <div className="left-column" style={{ width: columnWidth }}>
+        <div className="left-column" style={{ width: leftColumnWidth }}>
           <div style={{ flexFlow: "row" }}>
             <h2 style={{ flexGrow: 1, flexShrink: 1 }}>
               <i className="fas fa-book-open" /> Library Manager
@@ -79,12 +80,22 @@ export function LibraryManager(props: LibraryManagerProps) {
           />
         </div>
         <VerticalResizer
-          adjustWidth={offset => setColumnWidth(columnWidth + offset)}
+          adjustWidth={offset => setLeftColumnWidth(leftColumnWidth + offset)}
         />
-        <SelectedItemsManager
-          activeTab={activeTab}
-          libraries={props.libraries}
-          editListing={setEditorTarget}
+        <div
+          className="c-library-manager__center"
+          style={{ width: centerColumnWidth }}
+        >
+          <SelectedItemsManager
+            activeTab={activeTab}
+            libraries={props.libraries}
+            editListing={setEditorTarget}
+          />
+        </div>
+        <VerticalResizer
+          adjustWidth={offset =>
+            setCenterColumnWidth(centerColumnWidth + offset)
+          }
         />
         <div className="c-library-manager__editor">
           {editorTypeAndTarget && (
