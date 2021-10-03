@@ -11,6 +11,7 @@ import { Tabs } from "../../Components/Tabs";
 import { VerticalResizer } from "../../Layout/VerticalResizer";
 import { BuildListingTree } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
+import { PaneHeader } from "../Components/PaneHeader";
 import { FilterCache } from "../FilterCache";
 import { Libraries, LibraryFriendlyNames, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
@@ -54,17 +55,18 @@ export function LibraryManager(props: LibraryManagerProps) {
     <SelectionContext.Provider value={selection}>
       <div className="c-library-manager">
         <div className="left-column" style={{ width: leftColumnWidth }}>
-          <div style={{ flexFlow: "row" }}>
-            <h2 style={{ flexGrow: 1, flexShrink: 1 }}>
-              <i className="fas fa-book-open" /> Library Manager
-            </h2>
-            <Button
-              additionalClassNames="button--close"
-              fontAwesomeIcon="times"
-              onClick={props.closeManager}
-              tooltip="Close Library Manager"
-            />
-          </div>
+          <PaneHeader
+            title="Library Manager"
+            fontAwesomeIcon="book-open"
+            buttons={
+              <Button
+                additionalClassNames="button--close"
+                fontAwesomeIcon="times"
+                onClick={props.closeManager}
+                tooltip="Close Library Manager"
+              />
+            }
+          />
           <Tabs
             optionNamesById={LibraryFriendlyNames}
             selected={activeTab}
