@@ -62,7 +62,7 @@ export namespace Store {
     }
   }
 
-  export async function GetAllKeys() {
+  export async function GetAllKeyPairs() {
     const storage = {};
     for (const listName of SupportedLists) {
       const store = localforage.createInstance({ name: listName });

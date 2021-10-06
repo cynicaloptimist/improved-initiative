@@ -5,7 +5,7 @@ import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLoca
 import { Store } from "../../Utility/Store";
 import { FileUploadButton } from "./FileUploadButton";
 
-export class LocalDataSettings extends React.Component<{}> {
+export class LocalDataSettings extends React.Component {
   public render() {
     return (
       <>
@@ -53,7 +53,7 @@ export class LocalDataSettings extends React.Component<{}> {
   }
 
   private exportData = async () => {
-    const asyncKeys = await Store.GetAllKeys();
+    const asyncKeys = await Store.GetAllKeyPairs();
     const blob = LegacySynchronousLocalStore.ExportAll(asyncKeys);
     saveAs(blob, "improved-initiative.json");
   };
