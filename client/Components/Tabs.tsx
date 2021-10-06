@@ -1,26 +1,20 @@
 import * as React from "react";
 
-interface TabsProps<T> {
-  options: T[];
+export function Tabs<T extends string>(props: {
+  optionNamesById: Record<T, string>;
   selected?: T;
   onChoose: (option: T) => void;
-}
+}) {
+  const buttonElements = Object.keys(props.optionNamesById).map((key: T, i) => (
+    <button
+      type="button"
+      key={key}
+      className={props.selected == key ? "c-tab s-selected" : "c-tab"}
+      onClick={() => props.onChoose(key)}
+    >
+      {props.optionNamesById[key]}
+    </button>
+  ));
 
-interface TabsState {}
-
-export class Tabs<T> extends React.Component<TabsProps<T>, TabsState> {
-  public render() {
-    const buttonElements = this.props.options.map((option, i) => (
-      <button
-        type="button"
-        key={i}
-        className={this.props.selected == option ? "c-tab s-selected" : "c-tab"}
-        onClick={() => this.props.onChoose(option)}
-      >
-        {option}
-      </button>
-    ));
-
-    return <div className="c-tabs">{buttonElements}</div>;
-  }
+  return <div className="c-tabs">{buttonElements}</div>;
 }

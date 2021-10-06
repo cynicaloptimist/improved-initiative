@@ -10,7 +10,7 @@ export interface PromptProps<T extends object> {
 
 class Prompt<T extends object> extends React.Component<
   PromptProps<T> & {
-    onCancel: () => void;
+    onCancel: () => void
   }
 > {
   private formElement: HTMLFormElement;
@@ -19,8 +19,11 @@ class Prompt<T extends object> extends React.Component<
     return (
       <Formik
         initialValues={this.props.initialValues || {}}
-        onSubmit={this.props.onSubmit}
-        render={(props: FormikProps<any>) => (
+        onSubmit={values => {
+          this.props.onSubmit(values);
+        }}
+      >
+        {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
             className="prompt"
@@ -34,7 +37,7 @@ class Prompt<T extends object> extends React.Component<
             {this.props.children}
           </form>
         )}
-      />
+      </Formik>
     );
   }
 
@@ -72,7 +75,8 @@ interface PendingPromptsProps {
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
-    const emptyClassName = this.props.promptsAndIds.length == 0 ? " empty" : "";
+    const emptyClassName =
+      this.props.promptsAndIds.length == 0 ? " empty" : " tutorial-focus";
     return (
       <div className={"prompts" + emptyClassName}>
         {this.props.promptsAndIds.map(promptAndId => {

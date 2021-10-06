@@ -1,3 +1,4 @@
+import axios from "axios";
 import _ = require("lodash");
 import retry = require("retry");
 
@@ -20,7 +21,7 @@ export class AccountClient {
       return callBack(null);
     }
 
-    $.getJSON("/my").done(callBack);
+    axios.get("/my").then(callBack);
 
     return true;
   }
@@ -30,10 +31,7 @@ export class AccountClient {
       return emptyPromise();
     }
 
-    return $.ajax({
-      type: "DELETE",
-      url: `/my`
-    });
+    return axios.delete("/my");
   }
 
   public async GetFullAccount() {
@@ -41,7 +39,7 @@ export class AccountClient {
       return emptyPromise();
     }
 
-    return await $.getJSON("/my/fullaccount");
+    return await axios.get("/my/fullaccount");
   }
 
   public async SaveAllUnsyncedItems(
@@ -54,27 +52,31 @@ export class AccountClient {
 
     const promises = [
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.StatBlocks.GetStatBlocks()),
+        await getUnsyncedItemsFromListings(
+          libraries.StatBlocks.GetAllListings()
+        ),
         "statblocks",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
         await getUnsyncedItemsFromListings(
-          libraries.PersistentCharacters.GetListings()
+          libraries.PersistentCharacters.GetAllListings()
         ),
         "persistentcharacters",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.Spells.GetSpells()),
+        await getUnsyncedItemsFromListings(libraries.Spells.GetAllListings()),
         "spells",
         DEFAULT_BATCH_SIZE,
         messageCallback
       ),
       saveEntitySet(
-        await getUnsyncedItemsFromListings(libraries.Encounters.Encounters()),
+        await getUnsyncedItemsFromListings(
+          libraries.Encounters.GetAllListings()
+        ),
         "encounters",
         ENCOUNTER_BATCH_SIZE,
         messageCallback
@@ -146,34 +148,33 @@ export class AccountClient {
   }
 }
 
-function emptyPromise(): JQuery.jqXHR {
-  const d: any = $.Deferred(); //TODO: anything but this.
-  d.resolve(null);
-  return d;
+function emptyPromise() {
+  return Promise.resolve(null);
 }
 
-function saveEntity<T extends object>(entity: T, entityType: string) {
+function saveEntity<T extends object>(
+  entity: T,
+  entityType: string
+): Promise<T | null> {
   if (!env.HasStorage) {
-    return Promise.resolve();
+    return Promise.resolve(null);
   }
 
   const saveOperation = retry.operation({ retries: 3 });
 
   return new Promise(resolve => {
     saveOperation.attempt(() => {
-      $.ajax({
-        type: "POST",
-        url: `/my/${entityType}/`,
-        data: JSON.stringify(entity),
-        contentType: "application/json"
-      })
-        .done(() => resolve())
-        .fail((_, err) => {
+      axios
+        .post(`/my/${entityType}/`, JSON.stringify(entity), {
+          headers: { "content-type": "application/json" }
+        })
+        .then(() => resolve(entity))
+        .catch(err => {
           if (saveOperation.retry(new Error(err))) {
             return;
           }
           console.warn(`Failed to save ${entityType}: ${err}`);
-          resolve();
+          resolve(null);
         });
     });
   });
@@ -187,7 +188,7 @@ export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
 async function getUnsyncedItems(items: Listing<Listable>[]) {
   const itemsByName: _.Dictionary<Listing<Listable>> = {};
   for (const item of items) {
-    const name = [item.Listing().Path + item.Listing().Name].toString();
+    const name = [item.Meta().Path + item.Meta().Name].toString();
     if (itemsByName[name] == undefined) {
       itemsByName[name] = item;
     } else {
@@ -205,9 +206,9 @@ async function getUnsyncedItems(items: Listing<Listable>[]) {
     unsynced.map(
       async listing =>
         await listing.GetWithTemplate({
-          Id: listing.Listing().Id,
-          Name: listing.Listing().Name,
-          Path: listing.Listing().Path,
+          Id: listing.Meta().Id,
+          Name: listing.Meta().Name,
+          Path: listing.Meta().Path,
           Version: process.env.VERSION || "unknown"
         })
     )
@@ -245,11 +246,8 @@ async function saveEntitySet<Listable>(
   for (let cursor = 0; cursor < entitySet.length; cursor += batchSize) {
     const batch = entitySet.slice(cursor, cursor + batchSize);
     try {
-      await $.ajax({
-        type: "POST",
-        url: `/my/${entityType}/`,
-        data: JSON.stringify(batch),
-        contentType: "application/json"
+      await axios.post(`/my/${entityType}/`, JSON.stringify(batch), {
+        headers: { "content-type": "application/json" }
       });
       messageCallback(`Syncing ${cursor}/${entitySet.length} ${entityType}`);
     } catch (err) {
@@ -263,8 +261,5 @@ function deleteEntity(entityId: string, entityType: string) {
     return emptyPromise();
   }
 
-  return $.ajax({
-    type: "DELETE",
-    url: `/my/${entityType}/${entityId}`
-  });
+  return axios.delete(`/my/${entityType}/${entityId}`);
 }

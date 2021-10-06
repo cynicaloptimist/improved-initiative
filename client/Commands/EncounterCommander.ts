@@ -6,7 +6,7 @@ import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncoun
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { TrackerViewModel } from "../TrackerViewModel";
-import { TutorialSpy } from "../Tutorial/TutorialSpy";
+import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { Metrics } from "../Utility/Metrics";
 import { CombatStatsPrompt } from "../Prompts/CombatStatsPrompt";
 import { InitiativePrompt } from "../Prompts/InitiativePrompt";
@@ -14,6 +14,7 @@ import { PlayerViewPrompt } from "../Prompts/PlayerViewPrompt";
 import { QuickAddPrompt } from "../Prompts/QuickAddPrompt";
 import { RollDicePrompt } from "../Prompts/RollDicePrompt";
 import { ToggleFullscreen } from "./ToggleFullscreen";
+import { PersistentCharacter } from "../../common/PersistentCharacter";
 
 export class EncounterCommander {
   constructor(private tracker: TrackerViewModel) {}
@@ -36,6 +37,8 @@ export class EncounterCommander {
 
   public ShowLibraries = () => this.tracker.LibrariesVisible(true);
   public HideLibraries = () => this.tracker.LibrariesVisible(false);
+
+  public ToggleLibraryManager = () => this.tracker.ToggleLibraryManager();
 
   public LaunchPlayerView = () => {
     const prompt = PlayerViewPrompt(
@@ -80,7 +83,7 @@ export class EncounterCommander {
   };
 
   public ShowSettings = () => {
-    TutorialSpy("ShowSettings");
+    NotifyTutorialOfAction("ShowSettings");
     this.tracker.SettingsVisible(true);
     Metrics.TrackEvent("SettingsOpened");
   };
@@ -112,7 +115,7 @@ export class EncounterCommander {
 
     this.rollInitiative();
 
-    TutorialSpy("ShowInitiativeDialog");
+    NotifyTutorialOfAction("ShowInitiativeDialog");
 
     this.tracker.EventLog.AddEvent("Encounter started.");
     Metrics.TrackEvent("EncounterStarted", {
@@ -217,7 +220,7 @@ export class EncounterCommander {
     Metrics.TrackEvent("AllPlayerCharacterHPRestored");
   };
 
-  public LoadSavedEncounter = async (legacySavedEncounter: {}) => {
+  public LoadSavedEncounter = async (legacySavedEncounter: any) => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
 
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
@@ -240,12 +243,15 @@ export class EncounterCommander {
     const persistentCharactersPromise = persistentCharacters.map(
       pc =>
         new Promise<void>(async resolve => {
-          const persistentCharacter = await this.tracker.Libraries.PersistentCharacters.GetPersistentCharacter(
+          const persistentCharacterListing = await this.tracker.Libraries.PersistentCharacters.GetOrCreateListingById(
             pc.PersistentCharacterId
+          );
+          const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
+            PersistentCharacter.Default()
           );
           this.tracker.Encounter.AddCombatantFromPersistentCharacter(
             persistentCharacter,
-            this.tracker.Libraries.PersistentCharacters
+            this.tracker.LibrariesCommander.UpdatePersistentCharacter
           );
           resolve();
         })

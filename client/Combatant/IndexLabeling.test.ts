@@ -84,7 +84,7 @@ describe("Index labeling", () => {
   test("When a saved encounter state is loaded, it keeps the correct index labels", () => {
     const encounterState = buildEncounterState();
     const newEncounter = buildEncounter();
-    newEncounter.LoadEncounterState(encounterState, null);
+    newEncounter.LoadEncounterState(encounterState, () => {}, null);
 
     const combatantDisplayNames = newEncounter
       .Combatants()

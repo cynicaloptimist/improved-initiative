@@ -3,13 +3,15 @@ import * as React from "react";
 import { TutorialSteps } from "./TutorialSteps";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
-import { TutorialSpy } from "./TutorialSpy";
+import { NotifyTutorialOfAction } from "./NotifyTutorialOfAction";
 import { useCallback } from "react";
 
 export function Tutorial(props: { onClose: () => void }) {
   const [stepIndex, setStepIndex] = useState(0);
   const close = useCallback(() => {
-    $(".tutorial-focus").removeClass("tutorial-focus");
+    document
+      .querySelectorAll(".tutorial-focus")
+      .forEach(e => e.classList.remove("tutorial-focus"));
     props.onClose();
   }, [props.onClose]);
 
@@ -24,7 +26,7 @@ export function Tutorial(props: { onClose: () => void }) {
   const step = TutorialSteps[stepIndex];
 
   useEffect(() => {
-    const subscription = TutorialSpy.subscribe(action => {
+    const subscription = NotifyTutorialOfAction.subscribe(action => {
       if (step.AwaitAction === action) {
         advance();
       }
@@ -34,21 +36,23 @@ export function Tutorial(props: { onClose: () => void }) {
   }, [stepIndex]);
 
   useLayoutEffect(() => {
-    $(".tutorial-focus").removeClass("tutorial-focus");
+    document
+      .querySelectorAll(".tutorial-focus")
+      .forEach(e => e.classList.remove("tutorial-focus"));
 
     const focusSelector = step.RaiseSelector;
-    const focusedElements = $(focusSelector);
+    const focusedElements = document.querySelectorAll<HTMLElement>(
+      focusSelector
+    );
     if (focusedElements.length === 0) {
       console.error("Tutorial binding broken");
       return;
     }
-    focusedElements.addClass("tutorial-focus");
-    const position: any = step.CalculatePosition(focusedElements);
-    if (stepIndex == 0) {
-      $(".tutorial").css(position);
-    } else {
-      $(".tutorial").animate(position);
-    }
+    focusedElements.forEach(e => e.classList.add("tutorial-focus"));
+    const position = step.CalculatePosition(focusedElements);
+    const tutorialWidget = document.querySelector<HTMLElement>(".tutorial");
+    tutorialWidget.style.setProperty("left", position.left + "px");
+    tutorialWidget.style.setProperty("top", position.top + "px");
   }, [stepIndex]);
 
   return (

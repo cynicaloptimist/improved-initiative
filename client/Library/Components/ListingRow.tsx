@@ -79,7 +79,7 @@ export class ListingRow<T extends Listable> extends React.Component<
     return (
       <li className="c-listing">
         <ListingButton
-          buttonClass="add"
+          buttonClass="add c-listing-button--wide"
           text={this.props.name}
           onClick={this.addFn}
         >

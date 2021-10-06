@@ -1,23 +1,22 @@
+import _ = require("lodash");
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { SpellImporter } from "./SpellImporter";
 import { StatBlockImporter } from "./StatBlockImporter";
 
 const getStatBlocksFromXml = (xmlString: string) => {
-  const statBlocks = $(xmlString)
-    .find("monster")
-    .toArray();
-  return statBlocks.map(xmlDoc => {
+  const parser = new DOMParser();
+  const fullDocument = parser.parseFromString(xmlString, "application/xml");
+  return _.map(fullDocument.querySelectorAll("monster"), xmlDoc => {
     const importer = new StatBlockImporter(xmlDoc);
     return importer.GetStatBlock();
   });
 };
 
 const getSpellsFromXml = (xmlString: string) => {
-  const spells = $(xmlString)
-    .find("spell")
-    .toArray();
-  return spells.map(xmlDoc => {
+  const parser = new DOMParser();
+  const fullDocument = parser.parseFromString(xmlString, "application/xml");
+  return _.map(fullDocument.querySelectorAll("spell"), xmlDoc => {
     const importer = new SpellImporter(xmlDoc);
     return importer.GetSpell();
   });

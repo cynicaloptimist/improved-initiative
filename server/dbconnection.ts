@@ -1,7 +1,7 @@
 import mongo = require("mongodb");
 
 import * as _ from "lodash";
-import { Listable, StoredListing } from "../common/Listable";
+import { Listable, ListingMeta } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { SavedEncounter } from "../common/SavedEncounter";
 import { Spell } from "../common/Spell";
@@ -162,7 +162,7 @@ async function updatePersistentCharactersIfNeeded(
 
 function getStatBlockListings(statBlocks: {
   [key: string]: {};
-}): StoredListing[] {
+}): ListingMeta[] {
   return Object.keys(statBlocks).map(key => {
     const c = { ...StatBlock.Default(), ...statBlocks[key] };
     return {
@@ -170,7 +170,7 @@ function getStatBlockListings(statBlocks: {
       Id: c.Id,
       Path: c.Path,
       SearchHint: StatBlock.GetSearchHint(c),
-      Metadata: StatBlock.GetMetadata(c),
+      FilterDimensions: StatBlock.FilterDimensions(c),
       Version: c.Version,
       Link: `/my/statblocks/${c.Id}`,
       LastUpdateMs: c.LastUpdateMs || 0
@@ -178,7 +178,7 @@ function getStatBlockListings(statBlocks: {
   });
 }
 
-function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
+function getSpellListings(spells: { [key: string]: {} }): ListingMeta[] {
   return Object.keys(spells).map(key => {
     const c = { ...Spell.Default(), ...spells[key] };
     return {
@@ -186,7 +186,7 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
       Id: c.Id,
       Path: c.Path,
       SearchHint: Spell.GetSearchHint(c),
-      Metadata: Spell.GetMetadata(c),
+      FilterDimensions: Spell.GetFilterDimensions(c),
       Version: c.Version,
       Link: `/my/spells/${c.Id}`,
       LastUpdateMs: c.LastUpdateMs || 0
@@ -196,7 +196,7 @@ function getSpellListings(spells: { [key: string]: {} }): StoredListing[] {
 
 function getEncounterListings(encounters: {
   [key: string]: {};
-}): StoredListing[] {
+}): ListingMeta[] {
   return Object.keys(encounters).map(key => {
     const c = {
       ...SavedEncounter.Default(),
@@ -207,7 +207,7 @@ function getEncounterListings(encounters: {
       Id: c.Id,
       Path: c.Path,
       SearchHint: SavedEncounter.GetSearchHint(c),
-      Metadata: {},
+      FilterDimensions: {},
       Version: c.Version,
       Link: `/my/encounters/${c.Id}`,
       LastUpdateMs: c.LastUpdateMs || 0
@@ -217,7 +217,7 @@ function getEncounterListings(encounters: {
 
 function getPersistentCharacterListings(persistentCharacters: {
   [key: string]: {};
-}): StoredListing[] {
+}): ListingMeta[] {
   return Object.keys(persistentCharacters).map(key => {
     const c = {
       ...PersistentCharacter.Default(),
@@ -228,7 +228,7 @@ function getPersistentCharacterListings(persistentCharacters: {
       Id: c.Id,
       Path: c.Path,
       SearchHint: PersistentCharacter.GetSearchHint(c),
-      Metadata: PersistentCharacter.GetMetadata(c),
+      FilterDimensions: PersistentCharacter.GetFilterDimensions(c),
       Version: c.Version,
       Link: `/my/persistentcharacters/${c.Id}`,
       LastUpdateMs: c.LastUpdateMs || 0
@@ -279,7 +279,7 @@ export async function getEntity(
   const user = await db.collection<User>("users").findOne(
     { _id: userId },
     {
-      fields: {
+      projection: {
         [`${entityPath}.${entityId}`]: true
       }
     }

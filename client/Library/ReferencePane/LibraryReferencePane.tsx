@@ -4,11 +4,14 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { BuildListingTree, ListingGroupFn } from "./BuildListingTree";
-import { LibraryFilter } from "./LibraryFilter";
-import { ListingButton } from "./ListingButton";
+import {
+  BuildListingTree,
+  ListingGroupFn
+} from "../Components/BuildListingTree";
+import { LibraryFilter } from "../Components/LibraryFilter";
+import { ListingButton } from "../Components/ListingButton";
 
-interface LibraryPaneProps<T extends Listable> {
+interface LibraryReferencePaneProps<T extends Listable> {
   listings: Listing<T>[];
   defaultItem: T;
   renderListingRow: (
@@ -20,6 +23,7 @@ interface LibraryPaneProps<T extends Listable> {
     onPreviewOut: () => void
   ) => JSX.Element;
   groupByFunctions: ListingGroupFn[];
+  addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
   launchQuickAddPrompt?: () => void;
@@ -35,13 +39,12 @@ interface State<T extends Listable> {
   previewPosition: { left: number; top: number };
 }
 
-export class LibraryPane<T extends Listable & object> extends React.Component<
-  LibraryPaneProps<T>,
-  State<T>
-> {
+export class LibraryReferencePane<
+  T extends Listable & object
+> extends React.Component<LibraryReferencePaneProps<T>, State<T>> {
   private filterCache: FilterCache<Listing<T>>;
 
-  constructor(props: LibraryPaneProps<T>) {
+  constructor(props: LibraryReferencePaneProps<T>) {
     super(props);
     this.state = {
       filter: "",
@@ -83,7 +86,10 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
             />
           )}
         </div>
-        <ul className="listings" onScroll={this.handleListingsScroll}>
+        <ul
+          className="listings zebra-stripe"
+          onScroll={this.handleListingsScroll}
+        >
           {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
           {this.props.launchQuickAddPrompt && (
             <li style={{ margin: 5, fontStyle: "italic" }}>
@@ -113,7 +119,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
         </ul>
         <div className="buttons">
           <Button
-            text="Add New"
+            text={this.props.addNewText || "Add New"}
             additionalClassNames="new"
             fontAwesomeIcon="plus"
             onClick={this.props.addNewItem}
@@ -161,7 +167,7 @@ export class LibraryPane<T extends Listable & object> extends React.Component<
 
     const outline: T = {
       ...this.props.defaultItem,
-      Name: l.Listing().Name
+      Name: l.Meta().Name
     };
 
     this.setState({

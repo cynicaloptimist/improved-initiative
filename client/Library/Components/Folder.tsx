@@ -1,37 +1,27 @@
 import * as React from "react";
 import { ListingButton } from "./ListingButton";
 
-export interface FolderProps {
-  name: string;
-}
-
-interface FolderState {
-  open: boolean;
-}
-
-export class Folder extends React.Component<FolderProps, FolderState> {
-  constructor(props: FolderProps) {
-    super(props);
-    this.state = {
-      open: false
-    };
-  }
-
-  private toggleState = () => this.setState({ open: !this.state.open });
-
-  public render() {
-    return (
-      <span className="c-folder">
-        <li className="c-listing">
-          <ListingButton
-            text={this.props.name}
-            buttonClass="toggle"
-            faClass={this.state.open ? "folder-open" : "folder"}
-            onClick={this.toggleState}
-          />
-        </li>
-        {this.state.open && this.props.children}
-      </span>
-    );
-  }
+export function Folder(props: { name: string; children: React.ReactNode }) {
+  const [isOpen, setOpen] = React.useState(false);
+  const toggleOpen = () => setOpen(!isOpen);
+  return (
+    <div
+      className={
+        "c-folder " +
+        (isOpen ? "c-folder--open zebra-stripe" : "c-folder--closed")
+      }
+    >
+      <li className="c-listing">
+        <ListingButton
+          text={props.name}
+          buttonClass="toggle"
+          faClass={
+            (isOpen ? "folder-open" : "folder") + " c-listing-button--wide"
+          }
+          onClick={toggleOpen}
+        />
+      </li>
+      {isOpen && props.children}
+    </div>
+  );
 }

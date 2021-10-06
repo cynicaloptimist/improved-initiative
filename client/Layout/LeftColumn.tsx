@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
-import { LibraryPanes } from "../Library/Components/LibraryPanes";
+import { LibraryReferencePanes } from "../Library/ReferencePane/LibraryReferencePanes";
 import { find } from "lodash";
 import { CombatantDetails } from "../Combatant/CombatantDetails";
 import { useVerticalResizerDrop } from "./VerticalResizer";
@@ -32,10 +32,9 @@ export function LeftColumn(props: {
       ref={useVerticalResizerDrop()}
     >
       {librariesVisible && (
-        <LibraryPanes
+        <LibraryReferencePanes
           librariesCommander={props.tracker.LibrariesCommander}
           libraries={props.tracker.Libraries}
-          statBlockTextEnricher={props.tracker.StatBlockTextEnricher}
         />
       )}
       {librariesVisible || (

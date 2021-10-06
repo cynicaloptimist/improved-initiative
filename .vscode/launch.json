@@ -26,7 +26,8 @@
       "name": "Debug Tests for this File",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest",
       "args": ["-i", "${fileBasenameNoExtension}"],
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "outFiles": ["${fileDirname}"]
     }
   ]
 }

@@ -8,48 +8,76 @@ export type ListingGroupFn = (
   l: Listing<any>
 ) => { label?: string; key: string };
 
+type Folder = {
+  label: string;
+  listings: Listing<any>[];
+  subFoldersByKey: Record<string, Folder>;
+};
+
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
   groupListingsBy: ListingGroupFn,
   listings: Listing<T>[]
 ): JSX.Element[] {
   const rootListingComponents: JSX.Element[] = [];
-  const foldersByKey: {
-    [key: string]: {
-      label: string;
-      listings: Listing<T>[];
-    };
-  } = {};
+
+  const foldersByKey: Record<string, Folder> = {};
 
   listings.forEach(listing => {
     const group = groupListingsBy(listing);
-    if (group.key == "") {
+    if (group.key == "" || group.key === undefined) {
       const component = buildListingComponent(listing);
 
       rootListingComponents.push(component);
     } else {
-      if (foldersByKey[group.key] == undefined) {
-        foldersByKey[group.key] = {
-          label: group.label || group.key,
-          listings: []
-        };
-      }
-      foldersByKey[group.key].listings.push(listing);
+      const innerFolder = ensureFolder(foldersByKey, group.key);
+      innerFolder.listings.push(listing);
     }
   });
 
-  const folderComponents = Object.keys(foldersByKey)
+  const folderComponents = buildFolderComponents<T>(
+    foldersByKey,
+    buildListingComponent
+  );
+
+  return folderComponents.concat(rootListingComponents);
+}
+
+function buildFolderComponents<T extends Listable>(
+  foldersByKey: Record<string, Folder>,
+  buildListingComponent: (listing: Listing<T>) => JSX.Element
+) {
+  return Object.keys(foldersByKey)
     .sort()
     .map(key => {
-      const folderLabel = foldersByKey[key].label;
-      const listings = foldersByKey[key].listings;
-      const listingComponents = listings.map(buildListingComponent);
+      const folder = foldersByKey[key];
+      const listingComponents = folder.listings.map(buildListingComponent);
       return (
-        <Folder key={folderLabel} name={folderLabel}>
+        <Folder key={folder.label} name={folder.label}>
+          {buildFolderComponents(folder.subFoldersByKey, buildListingComponent)}
           {listingComponents}
         </Folder>
       );
     });
+}
 
-  return folderComponents.concat(rootListingComponents);
+function ensureFolder(outerFolder: Record<string, Folder>, keyString: string) {
+  const path = keyString.split("/");
+  let folderCursor = outerFolder;
+  for (let i = 0; i < path.length; i++) {
+    const folderName = path[i];
+    if (folderCursor[folderName] === undefined) {
+      folderCursor[folderName] = {
+        label: folderName,
+        listings: [],
+        subFoldersByKey: {}
+      };
+    }
+
+    if (i === path.length - 1) {
+      return folderCursor[folderName];
+    }
+
+    folderCursor = folderCursor[folderName].subFoldersByKey;
+  }
 }

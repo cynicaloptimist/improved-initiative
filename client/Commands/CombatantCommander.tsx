@@ -59,11 +59,11 @@ export class CombatantCommander {
 
   public CombatantDetails = ko.pureComputed(() => {
     const selectedCombatants = this.SelectedCombatants();
-    if (selectedCombatants.length == 0) {
+    if (!this.HasSelected()) {
       return null;
     }
 
-    if (selectedCombatants.length == 1) {
+    if (this.HasOneSelected()) {
       const combatantViewModel = selectedCombatants[0];
       return (
         <TextEnricherContext.Provider
@@ -76,13 +76,15 @@ export class CombatantCommander {
           />
         </TextEnricherContext.Provider>
       );
+    } else {
+      return (
+        <TextEnricherContext.Provider
+          value={this.tracker.StatBlockTextEnricher}
+        >
+          <MultipleCombatantDetails combatants={selectedCombatants} />
+        </TextEnricherContext.Provider>
+      );
     }
-
-    return (
-      <TextEnricherContext.Provider value={this.tracker.StatBlockTextEnricher}>
-        <MultipleCombatantDetails combatants={selectedCombatants} />
-      </TextEnricherContext.Provider>
-    );
   });
 
   public Select = (data: CombatantViewModel, appendSelection?: boolean) => {
@@ -440,35 +442,29 @@ export class CombatantCommander {
   };
 
   public EditOwnStatBlock = () => {
-    if (!this.HasSelected()) {
+    if (!this.HasOneSelected()) {
       return;
     }
 
-    if (this.SelectedCombatants().length == 1) {
-      const selectedCombatant = this.SelectedCombatants()[0].Combatant;
-      if (selectedCombatant.PersistentCharacterId) {
-        this.tracker.EditPersistentCharacterStatBlock(
-          selectedCombatant.PersistentCharacterId
-        );
-      } else {
-        this.tracker.EditStatBlock({
-          editorTarget: "combatant",
-          statBlock: selectedCombatant.StatBlock(),
-          onSave: newStatBlock => {
-            selectedCombatant.StatBlock(newStatBlock);
-          },
-          onDelete: () => this.Remove()
-        });
-      }
+    const selectedCombatant = this.SelectedCombatants()[0].Combatant;
+    if (selectedCombatant.PersistentCharacterId) {
+      this.tracker.EditPersistentCharacterStatBlock(
+        selectedCombatant.PersistentCharacterId
+      );
+    } else {
+      this.tracker.EditStatBlock({
+        editorTarget: "combatant",
+        statBlock: selectedCombatant.StatBlock(),
+        onSave: newStatBlock => {
+          selectedCombatant.StatBlock(newStatBlock);
+        },
+        onDelete: () => this.Remove()
+      });
     }
   };
 
-  public QuickEditStatBlock = () => {
-    if (!this.HasSelected()) {
-      return;
-    }
-
-    if (this.SelectedCombatants().length !== 1) {
+  public QuickEditOwnStatBlock = () => {
+    if (!this.HasOneSelected()) {
       return;
     }
 
@@ -478,7 +474,7 @@ export class CombatantCommander {
       selectedCombatant,
       updatedStatBlock => {
         if (selectedCombatant.PersistentCharacterId) {
-          this.tracker.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
+          this.tracker.LibrariesCommander.UpdatePersistentCharacterStatBlockInLibraryAndEncounter(
             selectedCombatant.PersistentCharacterId,
             updatedStatBlock
           );

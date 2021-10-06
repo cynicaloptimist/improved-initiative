@@ -1,7 +1,8 @@
+import axios from "axios";
 import * as ko from "knockout";
 
 import _ = require("lodash");
-import { Listable, StoredListing } from "../../common/Listable";
+import { Listable, ListingMeta } from "../../common/Listable";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";
 
@@ -13,7 +14,7 @@ export type ListingOrigin =
 
 export class Listing<T extends Listable> {
   constructor(
-    private storedListing: StoredListing,
+    private listingMeta: ListingMeta,
     public Origin: ListingOrigin,
     value?: T
   ) {
@@ -24,7 +25,7 @@ export class Listing<T extends Listable> {
 
   private value = ko.observable<T>();
 
-  public SetValue = value => this.value(value);
+  public SetValue = (value: T) => this.value(value);
 
   public GetWithTemplate(template: T) {
     return new Promise<T>(done => {
@@ -40,53 +41,56 @@ export class Listing<T extends Listable> {
     }
 
     if (this.Origin === "localAsync") {
-      return Store.Load(this.storedListing.Link, this.storedListing.Id)
+      return Store.Load(this.listingMeta.Link, this.listingMeta.Id)
         .then(callback)
         .catch(err =>
           console.error(
-            `Couldn't load item keyed '${this.storedListing.Id}' from async localForage store:\n\n${err}`
+            `Couldn't load item keyed '${this.listingMeta.Id}' from async localForage store:\n\n${err}`
           )
         );
     }
 
     if (this.Origin === "localStorage") {
       const item = LegacySynchronousLocalStore.Load<T>(
-        this.storedListing.Link,
-        this.storedListing.Id
+        this.listingMeta.Link,
+        this.listingMeta.Id
       );
 
       if (item !== null) {
-        item.Id = this.storedListing.Id;
+        item.Id = this.listingMeta.Id;
         this.value(item);
         return callback(item);
       } else {
         console.error(
-          `Couldn't load item keyed '${this.storedListing.Id}' from localStorage.`
+          `Couldn't load item keyed '${this.listingMeta.Id}' from localStorage.`
         );
         return null;
       }
     }
 
-    return $.getJSON(this.storedListing.Link).done(item => {
-      item.Id = this.storedListing.Id;
-      this.value(item);
-      return callback(item);
-    });
+    return axios
+      .get(this.listingMeta.Link)
+      .then(r => r.data)
+      .then(item => {
+        item.Id = this.listingMeta.Id;
+        this.value(item);
+        return callback(item);
+      });
   }
 
-  public Listing = ko.pureComputed<StoredListing>(() => {
+  public Meta = ko.pureComputed<ListingMeta>(() => {
     const current = this.value();
     if (current !== undefined) {
       return {
         Id: current.Id,
         Name: current.Name,
         Path: current.Path || "",
-        Link: this.storedListing.Link,
-        SearchHint: this.storedListing.SearchHint,
-        Metadata: this.storedListing.Metadata,
+        Link: this.listingMeta.Link,
+        SearchHint: this.listingMeta.SearchHint,
+        FilterDimensions: this.listingMeta.FilterDimensions,
         LastUpdateMs: current.LastUpdateMs || 0
       };
     }
-    return this.storedListing;
+    return this.listingMeta;
   });
 }

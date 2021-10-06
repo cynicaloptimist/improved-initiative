@@ -50,21 +50,21 @@ export class AccountSyncSettings extends React.Component<
         <div className="sync-counts">
           {this.syncCount(
             "Statblocks",
-            this.getCounts(this.props.libraries.StatBlocks.GetStatBlocks())
+            this.getCounts(this.props.libraries.StatBlocks.GetAllListings())
           )}
           {this.syncCount(
             "Characters",
             this.getCounts(
-              this.props.libraries.PersistentCharacters.GetListings()
+              this.props.libraries.PersistentCharacters.GetAllListings()
             )
           )}
           {this.syncCount(
             "Spells",
-            this.getCounts(this.props.libraries.Spells.GetSpells())
+            this.getCounts(this.props.libraries.Spells.GetAllListings())
           )}
           {this.syncCount(
             "Encounters",
-            this.getCounts(this.props.libraries.Encounters.Encounters())
+            this.getCounts(this.props.libraries.Encounters.GetAllListings())
           )}
         </div>
         <div className="c-button-with-label">
@@ -115,7 +115,9 @@ export class AccountSyncSettings extends React.Component<
           >
             Account Sync
           </a>
-          {" reward level."}
+          {
+            " reward level. If you have recently updated your pledge, try logging out and back in again to propagate your rewards."
+          }
         </p>
         <a className="button logout" href="/logout">
           Log Out
@@ -164,22 +166,26 @@ export class AccountSyncSettings extends React.Component<
       })
     );
 
-    forIn(account.persistentcharacters, persistentCharacter => {
-      LegacySynchronousLocalStore.Save(
-        LegacySynchronousLocalStore.PersistentCharacters,
-        persistentCharacter.Id,
-        persistentCharacter
-      );
-    });
+    await Promise.all(
+      Object.keys(account.persistentcharacters).map(
+        async persistentCharacterId => {
+          const persistentCharacter =
+            account.persistentcharacters[persistentCharacterId];
+          return await Store.Save(
+            Store.PersistentCharacters,
+            persistentCharacterId,
+            persistentCharacter
+          );
+        }
+      )
+    );
 
-    forIn(account.encounters, downloadedEncounter => {
-      const encounter = UpdateLegacySavedEncounter(downloadedEncounter);
-      LegacySynchronousLocalStore.Save(
-        LegacySynchronousLocalStore.SavedEncounters,
-        encounter.Id,
-        encounter
-      );
-    });
+    await Promise.all(
+      Object.keys(account.encounters).map(async encounterId => {
+        const spell = account.encounters[encounterId];
+        return await Store.Save(Store.SavedEncounters, encounterId, spell);
+      })
+    );
 
     location.reload();
   };
@@ -200,7 +206,7 @@ export class AccountSyncSettings extends React.Component<
       items.filter(
         c => c.Origin === "localAsync" || c.Origin === "localStorage"
       ),
-      i => [i.Listing().Path, i.Listing().Name].toString()
+      i => [i.Meta().Path, i.Meta().Name].toString()
     ).length;
     const accountCount = items.filter(c => c.Origin === "account").length;
     return `${localCount} local, ${accountCount} synced`;

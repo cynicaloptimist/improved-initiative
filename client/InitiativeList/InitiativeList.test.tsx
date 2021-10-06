@@ -8,7 +8,7 @@ import { InitiativeList } from "./InitiativeList";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("InitiativeList", () => {
+describe.skip("InitiativeList", () => {
   it("Shows a pause icon when encounter is inactive", () => {
     const encounterState = EncounterState.Default<CombatantState>();
     const initiativeList = Enzyme.mount(

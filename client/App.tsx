@@ -15,18 +15,22 @@ import { DndProvider } from "react-dnd";
 import { interfacePriorityClass } from "./Layout/interfacePriorityClass";
 import { centerColumnView } from "./Layout/centerColumnView";
 import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
+import { LibraryManager } from "./Library/Manager/LibraryManager";
+import { LibrariesContext, useLibraries } from "./Library/Libraries";
+import { Store } from "./Utility/Store";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
  * TrackerViewModel was the top level Knockout viewmodel for binding to ko components.
  */
 
-export function App(props: { tracker: TrackerViewModel }) {
+export function App(props: { tracker: TrackerViewModel }): JSX.Element {
   const { tracker } = props;
   const settings = useSubscription(CurrentSettings);
 
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
+  const libraryManagerPane = useSubscription(tracker.LibraryManagerPane);
   const librariesVisible = useSubscription(tracker.LibrariesVisible);
   const statblockEditorProps = useSubscription(tracker.StatBlockEditorProps);
   const spellEditorProps = useSubscription(tracker.SpellEditorProps);
@@ -39,6 +43,14 @@ export function App(props: { tracker: TrackerViewModel }) {
   const isACombatantSelected = useSubscription(
     tracker.CombatantCommander.HasSelected
   );
+
+  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
+    if (storeName === Store.PersistentCharacters) {
+      tracker.LoadAutoSavedEncounterIfAvailable(count);
+    }
+  });
+
+  tracker.SetLibraries(libraries);
 
   const centerColumn = centerColumnView(statblockEditorProps, spellEditorProps);
   const interfacePriority = interfacePriorityClass(
@@ -55,41 +67,52 @@ export function App(props: { tracker: TrackerViewModel }) {
     <DndProvider backend={HTML5Backend}>
       <SettingsContext.Provider value={settings}>
         <TextEnricherContext.Provider value={tracker.StatBlockTextEnricher}>
-          <div className={"encounter-view " + interfacePriority}>
-            {blurVisible && (
-              <div className="modal-blur" onClick={tracker.CloseSettings} />
-            )}
-            {settingsVisible && (
-              <SettingsPane
-                handleNewSettings={tracker.SaveUpdatedSettings}
-                encounterCommands={tracker.EncounterToolbar}
-                combatantCommands={tracker.CombatantCommander.Commands}
-                reviewPrivacyPolicy={tracker.ReviewPrivacyPolicy}
-                repeatTutorial={tracker.RepeatTutorial}
-                closeSettings={() => tracker.SettingsVisible(false)}
-                libraries={tracker.Libraries}
-                accountClient={new AccountClient()}
-              />
-            )}
-            {tutorialVisible && (
-              <Tutorial
-                onClose={() => {
-                  tracker.TutorialVisible(false);
-                  LegacySynchronousLocalStore.Save(
-                    LegacySynchronousLocalStore.User,
-                    "SkipIntro",
-                    true
-                  );
-                }}
-              />
-            )}
-            {!env.IsLoggedIn && (
-              <a className="login button" href={env.PatreonLoginUrl}>
-                Log In with Patreon
-              </a>
-            )}
-            <ThreeColumnLayout tracker={tracker} />
-          </div>
+          <LibrariesContext.Provider value={libraries}>
+            <div className={"encounter-view " + interfacePriority}>
+              {blurVisible && (
+                <div className="modal-blur" onClick={tracker.CloseSettings} />
+              )}
+              {settingsVisible && (
+                <SettingsPane
+                  handleNewSettings={tracker.SaveUpdatedSettings}
+                  encounterCommands={tracker.EncounterToolbar}
+                  combatantCommands={tracker.CombatantCommander.Commands}
+                  reviewPrivacyPolicy={tracker.ReviewPrivacyPolicy}
+                  repeatTutorial={tracker.RepeatTutorial}
+                  closeSettings={() => tracker.SettingsVisible(false)}
+                  libraries={libraries}
+                  accountClient={new AccountClient()}
+                />
+              )}
+              {tutorialVisible && (
+                <Tutorial
+                  onClose={() => {
+                    tracker.TutorialVisible(false);
+                    LegacySynchronousLocalStore.Save(
+                      LegacySynchronousLocalStore.User,
+                      "SkipIntro",
+                      true
+                    );
+                  }}
+                />
+              )}
+              {!env.IsLoggedIn && (
+                <a className="login button" href={env.PatreonLoginUrl}>
+                  Log In with Patreon
+                </a>
+              )}
+              {libraryManagerPane ? (
+                <LibraryManager
+                  libraries={libraries}
+                  librariesCommander={tracker.LibrariesCommander}
+                  closeManager={() => tracker.LibraryManagerPane(null)}
+                  initialPane={libraryManagerPane}
+                />
+              ) : (
+                <ThreeColumnLayout tracker={tracker} />
+              )}
+            </div>
+          </LibrariesContext.Provider>
         </TextEnricherContext.Provider>
       </SettingsContext.Provider>
     </DndProvider>

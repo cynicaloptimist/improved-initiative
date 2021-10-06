@@ -5,6 +5,7 @@ import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { DnDAppFilesImporter } from "../Importers/DnDAppFilesImporter";
+import { Listing } from "../Library/Listing";
 
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
@@ -17,7 +18,12 @@ export namespace Store {
 
   export const DefaultSavedEncounterId = "default";
 
-  export const SupportedLists = [StatBlocks, Spells];
+  export const SupportedLists = [
+    StatBlocks,
+    Spells,
+    PersistentCharacters,
+    SavedEncounters
+  ];
 
   export async function Save<T>(listName: string, key: string, value: T) {
     if (typeof key !== "string") {
@@ -28,6 +34,11 @@ export namespace Store {
 
   export async function Load<T>(listName: string, key: string): Promise<T> {
     return await load(listName, key);
+  }
+
+  export async function Count(listName: string): Promise<number> {
+    const store = localforage.createInstance({ name: listName });
+    return await store.length();
   }
 
   export async function LoadAllAndUpdateIds<T extends Listable>(
@@ -68,7 +79,7 @@ export namespace Store {
   }
 
   export async function ImportAll(file: File) {
-    return new Promise((done, fail) => {
+    return new Promise<void>((done, fail) => {
       const reader = new FileReader();
       reader.onload = async (event: any) => {
         const json = event.target.result;
@@ -130,6 +141,27 @@ export namespace Store {
     const importer = new DnDAppFilesImporter();
 
     importer.ImportEntitiesFromXml(file, statBlocksCallback, spellsCallback);
+  }
+
+  export async function ExportListings(
+    listings: Listing<Listable>[],
+    listName: string
+  ) {
+    const exportedListings = {};
+
+    exportedListings[listName] = listings.map(l => l.Meta().Id);
+
+    for (const listing of listings) {
+      const fullKey = `${listName}.${listing.Meta().Id}`;
+      exportedListings[fullKey] = await listing.GetWithTemplate({
+        ...listing.Meta(),
+        Version: process.env.VERSION
+      });
+    }
+
+    return new Blob([JSON.stringify(exportedListings, null, 2)], {
+      type: "application/json"
+    });
   }
 
   async function save(listName: string, key: string, value) {

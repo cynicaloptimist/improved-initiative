@@ -47,9 +47,16 @@ export const BuildEncounterCommandList = (
     }),
     new Command({
       id: "open-library",
-      description: "Open Library",
+      description: "Library Reference Pane",
       actionBinding: c.ShowLibraries,
-      fontAwesomeIcon: "book"
+      fontAwesomeIcon: "book-medical"
+    }),
+    new Command({
+      id: "open-library-manager",
+      description: "Library Manager",
+      actionBinding: c.ToggleLibraryManager,
+      fontAwesomeIcon: "book-open",
+      defaultShowOnActionBar: false
     }),
     new Command({
       id: "roll-dice",

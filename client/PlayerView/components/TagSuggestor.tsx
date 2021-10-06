@@ -14,8 +14,11 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
           tagTimingId: this.props.activeCombatantId,
           tagTiming: StartOfTurn
         }}
-        onSubmit={this.applyTag}
-        render={(props: FormikProps<any>) => (
+        onSubmit={model => {
+          this.applyTag(model);
+        }}
+      >
+        {(props: FormikProps<any>) => (
           <form className="tag-suggestion" onSubmit={props.handleSubmit}>
             <TagPromptComponent
               targetDisplayNames={this.props.targetCombatant.Name}
@@ -24,7 +27,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
             />
           </form>
         )}
-      />
+      </Formik>
     );
   }
 
@@ -49,6 +52,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
       };
 
       this.props.onApply(tagState);
+      return true;
     } else {
       const tagState: TagState = {
         Text: model.tagText,
@@ -57,6 +61,7 @@ export class TagSuggestor extends React.Component<TagSuggestorProps> {
         DurationTiming: null
       };
       this.props.onApply(tagState);
+      return true;
     }
   };
 }

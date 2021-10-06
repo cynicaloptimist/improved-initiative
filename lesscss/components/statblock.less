@@ -4,7 +4,7 @@
 
   .c-statblock-header__portrait {
     max-height: 4rem;
-    padding: @small-spacer;
+    padding: 0 @small-spacer @small-spacer 0;
     cursor: zoom-in;
   }
 
@@ -30,7 +30,16 @@
 .c-combatant-details__hp,
 .c-combatant-details__tags {
   flex-direction: row;
+  margin-top: @extra-small-spacer;
+
+  .stat-label {
+  }
+  .stat-value {
+    display: block;
+    flex: 1;
+  }
 }
+
 
 .combatant-details__header {
   display: flex;
@@ -48,6 +57,10 @@
   .c-combatant-details {
     flex: 1 0 auto;
   }
+}
+
+.c-statblock > .c-statblock-header {
+  flex-direction: column;
 }
 
 .c-statblock-header {
@@ -75,9 +88,15 @@
 
 .stat-label {
   font-weight: bold;
-  margin: 0 @extra-small-spacer @extra-small-spacer 0;
+  margin: 0 @small-spacer 0 0;
   color: @primary-red;
 }
+.stat-value + .stat-value, .stat-value__item + .stat-value__item {
+  &::before {
+    content: ", ";
+  }
+}
+
 
 .c-statblock {
   display: block;
@@ -93,6 +112,10 @@
     align-items: center;
   }
 
+  p:not(:last-child), li:not(:last-child) {
+    margin-bottom: @extra-small-spacer;
+  }
+
   pre {
     white-space: pre-wrap;
   }
@@ -101,55 +124,58 @@
     flex-direction: row;
     flex-wrap: wrap;
     max-height: none;
-
-    span {
-      padding-right: @extra-small-spacer;
-    }
+  }
+  .stat-value + .notes {
+    margin-left: @small-spacer;
   }
 
   .power-content {
     white-space: pre-line;
   }
 
+  .AC, .HP {
+    margin-bottom: @extra-small-spacer;
+  }
+
   .Abilities {
-    justify-content: space-around;
-    margin: @medium-spacer;
+    justify-content: space-between;
+    margin: @medium-spacer 0;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
 
-    div {
-      flex-direction: row;
-      justify-content: center;
-      flex-wrap: wrap;
-      width: calc(80% / 6);
-
-      .stat-label {
-        display: inline-block;
-        width: 100%;
-        text-align: center;
-      }
-
-      .modifier,
-      .score {
-        display: inline-block;
-        flex: 1;
-        font-size: @font-size-small;
-        text-align: center;
-      }
-
-      .modifier {
-        &:before {
-          content: "(";
-        }
-
-        &:after {
-          content: ")";
-        }
-      }
+    .Ability {
+      flex-basis: calc(100% / 6);
+      display: block;
+      text-align: center;
     }
 
     .stat-label {
+      display: block;
+      text-align: center;
+      margin-right: 0;
+      flex-basis: 100%;
       margin-bottom: @extra-small-spacer;
       font-size: @font-size-small;
       text-transform: uppercase;
+    }
+
+    .modifier,
+    .score {
+      display: inline-block;
+      font-size: @font-size-small;
+      text-align: center;
+    }
+
+    .modifier {
+      &:before {
+        margin-left: @extra-small-spacer;
+        content: "(";
+      }
+
+      &:after {
+        content: ")";
+      }
     }
   }
 
@@ -166,12 +192,12 @@
   .Skills,
   .Saves {
     .rollable {
-      margin: 0 @small-spacer;
-
-      &:after {
-        content: ";";
-      }
+      margin-left: @small-spacer;
     }
+  }
+
+  .Skills, .Saves, .keyword-sets > div {
+    margin-bottom: @small-spacer;
   }
 
   .Actions,
@@ -183,7 +209,11 @@
     div {
       flex-direction: column;
       display: inline;
-      margin: 0 0 @medium-spacer 0;
+      margin: 0 0 @large-spacer 0;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
 
       > .stat-label {
         font-style: italic;

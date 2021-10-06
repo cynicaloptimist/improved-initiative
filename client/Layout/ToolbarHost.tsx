@@ -22,6 +22,8 @@ export function ToolbarHost(props: { tracker: TrackerViewModel }) {
 
   if (!oneCombatantSelected) {
     commandsToHideById.push("update-notes");
+    commandsToHideById.push("edit-statblock");
+    commandsToHideById.push("quick-edit-statblock");
   }
 
   const shouldShowCommand = (c: Command) =>

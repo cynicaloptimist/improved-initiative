@@ -5,30 +5,31 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { SpellLibrary } from "../SpellLibrary";
-import { ListingGroupFn } from "./BuildListingTree";
-import { LibraryPane } from "./LibraryPane";
-import { ListingRow } from "./ListingRow";
-import { SpellDetails } from "./SpellDetails";
+import { ListingGroupFn } from "../Components/BuildListingTree";
+import { LibraryReferencePane } from "./LibraryReferencePane";
+import { ListingRow } from "../Components/ListingRow";
+import { SpellDetails } from "../Components/SpellDetails";
+import { Library } from "../useLibrary";
 
-export type SpellLibraryPaneProps = {
+export type SpellLibraryReferencePaneProps = {
   librariesCommander: LibrariesCommander;
-  library: SpellLibrary;
-  textEnricher: TextEnricher;
+  library: Library<Spell>;
 };
 
 type SpellListing = Listing<Spell>;
 
-export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
-  constructor(props: SpellLibraryPaneProps) {
+export class SpellLibraryReferencePane extends React.Component<
+  SpellLibraryReferencePaneProps
+> {
+  constructor(props: SpellLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
   }
 
   public render() {
     return (
-      <LibraryPane
-        listings={this.props.library.GetSpells()}
+      <LibraryReferencePane
+        listings={this.props.library.GetAllListings()}
         renderListingRow={this.renderListingRow}
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}
@@ -39,31 +40,32 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
   }
 
   private groupByFunctions: ListingGroupFn[] = [
-    l => ({ key: l.Listing().Path }),
+    l => ({ key: l.Meta().Path }),
     l => ({
-      label: LevelOrCantrip(l.Listing().Metadata.Level),
-      key: GetAlphaSortableLevelString(l.Listing().Metadata.Level)
+      label: LevelOrCantrip(l.Meta().FilterDimensions.Level),
+      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
     }),
-    l => ({ key: l.Listing().Metadata.Type })
+    l => ({ key: l.Meta().FilterDimensions.Type })
   ];
 
-  private renderListingRow = (listing, onPreview, onPreviewOut) => (
-    <ListingRow
-      key={
-        listing.Listing().Id + listing.Listing().Path + listing.Listing().Name
-      }
-      name={listing.Listing().Name}
-      onAdd={this.loadSavedSpell}
-      onEdit={this.editSpell}
-      onPreview={onPreview}
-      onPreviewOut={onPreviewOut}
-      listing={listing}
-    />
-  );
+  private renderListingRow = (l: Listing<Spell>, onPreview, onPreviewOut) => {
+    const listingMeta = l.Meta();
+    return (
+      <ListingRow
+        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        name={listingMeta.Name}
+        onAdd={this.loadSavedSpell}
+        onEdit={this.editSpell}
+        onPreview={onPreview}
+        onPreviewOut={onPreviewOut}
+        listing={l}
+      />
+    );
+  };
 
   private renderPreview = (spell: Spell) => (
     <div className="spell-preview">
-      <SpellDetails Spell={spell} TextEnricher={this.props.textEnricher} />
+      <SpellDetails Spell={spell} />
     </div>
   );
 
@@ -72,7 +74,7 @@ export class SpellLibraryPane extends React.Component<SpellLibraryPaneProps> {
   };
 
   private editSpell = (l: Listing<Spell>) => {
-    l.Listing.subscribe(_ => this.forceUpdate());
+    l.Meta.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditSpell(l);
   };
 }
