@@ -35,7 +35,6 @@
     "@types/redis": "^2.8.32",
     "@types/request": "^2.47.0",
     "@types/serve-static": "^1.13.1",
-    "@types/socket.io": "^1.4.33",
     "@types/socket.io-client": "^1.4.32",
     "@types/socket.io-redis": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "4.27.0",
@@ -113,7 +112,7 @@
     "redis": "^3.1.2",
     "request": "^2.85.0",
     "retry": "^0.12.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^4.2.0",
     "socket.io-client": "^2.3.0",
     "socket.io-redis": "^6.1.1"
   },

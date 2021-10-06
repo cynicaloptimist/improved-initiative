@@ -1,6 +1,7 @@
 import express = require("express");
 import provideSessionToSocketIo = require("express-socket.io-session");
 import redis = require("socket.io-redis");
+import * as SocketIO from "socket.io";
 
 import { CombatStats } from "../common/CombatStats";
 import { PlayerViewSettings } from "../common/PlayerViewSettings";
