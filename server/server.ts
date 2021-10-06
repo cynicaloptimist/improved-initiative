@@ -57,7 +57,7 @@ async function improvedInitiativeServer() {
     console.log("Launched server without concurrency.");
   }
 
-  const io = new SocketIO.Server(server);
+  const io = SocketIO(server);
   ConfigureSockets(io, session, playerViews);
 
   if (cluster.worker) {
