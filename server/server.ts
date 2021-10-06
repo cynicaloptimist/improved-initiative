@@ -1,5 +1,5 @@
 import express = require("express");
-import socketIO = require("socket.io");
+import * as SocketIO from "socket.io";
 import http = require("http");
 import cluster = require("cluster");
 import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
@@ -57,7 +57,7 @@ async function improvedInitiativeServer() {
     console.log("Launched server without concurrency.");
   }
 
-  const io = socketIO(server);
+  const io = new SocketIO.Server(server);
   ConfigureSockets(io, session, playerViews);
 
   if (cluster.worker) {
