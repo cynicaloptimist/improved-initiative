@@ -9,14 +9,9 @@ import { Listing } from "../Library/Listing";
 
 export namespace Store {
   export const PersistentCharacters = "PersistentCharacters";
-  export const PlayerCharacters = "PlayerCharacters";
   export const StatBlocks = "Creatures";
   export const Spells = "Spells";
   export const SavedEncounters = "SavedEncounters";
-  export const AutoSavedEncounters = "AutoSavedEncounters";
-  export const User = "User";
-
-  export const DefaultSavedEncounterId = "default";
 
   export const SupportedLists = [
     StatBlocks,
@@ -67,7 +62,7 @@ export namespace Store {
     }
   }
 
-  export async function GetAllKeys() {
+  export async function GetAllKeyPairs() {
     const storage = {};
     for (const listName of SupportedLists) {
       const store = localforage.createInstance({ name: listName });

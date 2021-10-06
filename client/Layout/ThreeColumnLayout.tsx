@@ -7,15 +7,16 @@ import { CenterColumn } from "./CenterColumn";
 import { ToolbarHost } from "./ToolbarHost";
 import { LeftColumn } from "./LeftColumn";
 import { RightColumn } from "./RightColumn";
+import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 
 export function ThreeColumnLayout(props: { tracker: TrackerViewModel }) {
   const [leftColumnWidth, setLeftColumnWidth] = useStoreBackedState(
-    Store.User,
+    LegacySynchronousLocalStore.User,
     "columnWidth",
     375
   );
   const [rightColumnWidth, setRightColumnWidth] = useStoreBackedState(
-    Store.User,
+    LegacySynchronousLocalStore.User,
     "rightColumnWidth",
     375
   );

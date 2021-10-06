@@ -21,7 +21,7 @@ export class AccountClient {
       return callBack(null);
     }
 
-    axios.get("/my").then(callBack);
+    axios.get("/my").then(response => callBack(response.data));
 
     return true;
   }
@@ -152,10 +152,7 @@ function emptyPromise() {
   return Promise.resolve(null);
 }
 
-function saveEntity<T extends object>(
-  entity: T,
-  entityType: string
-): Promise<T | null> {
+function saveEntity<T>(entity: T, entityType: string): Promise<T | null> {
   if (!env.HasStorage) {
     return Promise.resolve(null);
   }
