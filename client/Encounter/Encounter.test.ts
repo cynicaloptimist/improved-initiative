@@ -6,8 +6,6 @@ import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
-console.log(process.version);
-
 describe("Encounter", () => {
   let encounter: Encounter;
   beforeEach(() => {
