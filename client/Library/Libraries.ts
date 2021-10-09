@@ -123,22 +123,8 @@ export function useLibraries(
   };
 
   React.useEffect(() => {
-    axios.get<ListingMeta[]>("../statblocks/").then(response => {
-      if (!response) {
-        return;
-      }
-      const listings = response.data;
-      StatBlocks.AddListings(listings, "server");
-    });
-
-    axios.get<ListingMeta[]>("../spells/").then(response => {
-      if (!response) {
-        return;
-      }
-      const listings = response.data;
-      Spells.AddListings(listings, "server");
-    });
-
+    preloadStatBlocks(StatBlocks);
+    preloadSpells(Spells);
     getAccountOrSampleCharacters(
       accountClient,
       PersistentCharacters,
@@ -147,6 +133,18 @@ export function useLibraries(
   }, []);
 
   return libraries;
+}
+
+async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
+  const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
+  const listings = serverResponse.data;
+  StatBlocks.AddListings(listings, "server");
+}
+
+async function preloadSpells(Spells: Library<Spell>) {
+  const serverResponse = await axios.get<ListingMeta[]>("../spells/");
+  const listings = serverResponse.data;
+  Spells.AddListings(listings, "server");
 }
 
 function getAccountOrSampleCharacters(
