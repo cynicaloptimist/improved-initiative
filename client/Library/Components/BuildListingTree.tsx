@@ -8,10 +8,10 @@ export type ListingGroupFn = (
   l: Listing<any>
 ) => { label?: string; key: string };
 
-type Folder = {
+type FolderModel = {
   label: string;
   listings: Listing<any>[];
-  subFoldersByKey: Record<string, Folder>;
+  subFoldersByKey: Record<string, FolderModel>;
 };
 
 export function BuildListingTree<T extends Listable>(
@@ -21,7 +21,7 @@ export function BuildListingTree<T extends Listable>(
 ): JSX.Element[] {
   const rootListingComponents: JSX.Element[] = [];
 
-  const foldersByKey: Record<string, Folder> = {};
+  const foldersByKey: Record<string, FolderModel> = {};
 
   listings.forEach(listing => {
     const group = groupListingsBy(listing);
@@ -30,7 +30,11 @@ export function BuildListingTree<T extends Listable>(
 
       rootListingComponents.push(component);
     } else {
-      const innerFolder = ensureFolder(foldersByKey, group.key);
+      const innerFolder = ensureFolder(
+        foldersByKey,
+        group.key,
+        group.label || group.key
+      );
       innerFolder.listings.push(listing);
     }
   });
@@ -44,7 +48,7 @@ export function BuildListingTree<T extends Listable>(
 }
 
 function buildFolderComponents<T extends Listable>(
-  foldersByKey: Record<string, Folder>,
+  foldersByKey: Record<string, FolderModel>,
   buildListingComponent: (listing: Listing<T>) => JSX.Element
 ) {
   return Object.keys(foldersByKey)
@@ -61,14 +65,18 @@ function buildFolderComponents<T extends Listable>(
     });
 }
 
-function ensureFolder(outerFolder: Record<string, Folder>, keyString: string) {
+function ensureFolder(
+  outerFolder: Record<string, FolderModel>,
+  keyString: string,
+  labelString: string
+) {
   const path = keyString.split("/");
   let folderCursor = outerFolder;
   for (let i = 0; i < path.length; i++) {
     const folderName = path[i];
     if (folderCursor[folderName] === undefined) {
       folderCursor[folderName] = {
-        label: folderName,
+        label: labelString,
         listings: [],
         subFoldersByKey: {}
       };
