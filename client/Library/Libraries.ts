@@ -137,14 +137,18 @@ export function useLibraries(
 
 async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
   const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
-  const listings = serverResponse.data;
-  StatBlocks.AddListings(listings, "server");
+  if (serverResponse) {
+    const listings = serverResponse.data;
+    StatBlocks.AddListings(listings, "server");
+  }
 }
 
 async function preloadSpells(Spells: Library<Spell>) {
   const serverResponse = await axios.get<ListingMeta[]>("../spells/");
-  const listings = serverResponse.data;
-  Spells.AddListings(listings, "server");
+  if (serverResponse) {
+    const listings = serverResponse.data;
+    Spells.AddListings(listings, "server");
+  }
 }
 
 function getAccountOrSampleCharacters(
