@@ -9,6 +9,10 @@ import { Library, useLibrary } from "./useLibrary";
 import React = require("react");
 import { Listable, ListingMeta } from "../../common/Listable";
 import axios from "axios";
+import {
+  GetOpen5eListings,
+  ImportOpen5eStatBlock
+} from "../Importers/Open5eImporter";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -136,16 +140,21 @@ export function useLibraries(
 }
 
 async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
-  const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
-  if (serverResponse) {
-    const listings = serverResponse.data;
-    StatBlocks.AddListings(listings, "server");
+  try {
+    const open5eListings: ListingMeta[] = await GetOpen5eListings();
+    StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
+  } catch (error) {
+    const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
+    if (serverResponse && serverResponse.data) {
+      const serverListings = serverResponse.data;
+      StatBlocks.AddListings(serverListings, "server");
+    }
   }
 }
 
 async function preloadSpells(Spells: Library<Spell>) {
   const serverResponse = await axios.get<ListingMeta[]>("../spells/");
-  if (serverResponse) {
+  if (serverResponse && serverResponse.data) {
     const listings = serverResponse.data;
     Spells.AddListings(listings, "server");
   }
