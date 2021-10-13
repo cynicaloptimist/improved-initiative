@@ -8,6 +8,7 @@ import { Store } from "../Utility/Store";
 
 export type ListingOrigin =
   | "server"
+  | "open5e"
   | "account"
   | "localAsync"
   | "localStorage";
@@ -16,7 +17,8 @@ export class Listing<T extends Listable> {
   constructor(
     private listingMeta: ListingMeta,
     public Origin: ListingOrigin,
-    value?: T
+    value?: T,
+    private mapLinkResponse?: (statBlockData: any) => T
   ) {
     if (value) {
       this.value(value);
@@ -35,7 +37,7 @@ export class Listing<T extends Listable> {
     });
   }
 
-  public GetAsyncWithUpdatedId(callback: (item: {}) => any) {
+  public GetAsyncWithUpdatedId(callback: (item: any) => any) {
     if (this.value()) {
       return callback(this.value());
     }
@@ -72,6 +74,10 @@ export class Listing<T extends Listable> {
       .get(this.listingMeta.Link)
       .then(r => r.data)
       .then(item => {
+        if (this.mapLinkResponse) {
+          item = this.mapLinkResponse(item);
+        }
+
         item.Id = this.listingMeta.Id;
         this.value(item);
         return callback(item);

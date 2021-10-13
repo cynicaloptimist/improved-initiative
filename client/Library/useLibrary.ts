@@ -6,7 +6,11 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export interface Library<T extends Listable> {
-  AddListings: (newListingMetas: ListingMeta[], source: ListingOrigin) => void;
+  AddListings: (
+    newListingMetas: ListingMeta[],
+    source: ListingOrigin,
+    mapLinkResponse?: (statBlockData: any) => T
+  ) => void;
   DeleteListing: (id: string) => Promise<void>;
   SaveNewListing: (newListable: T) => Promise<Listing<T>>;
   SaveEditedListing: (
@@ -67,10 +71,16 @@ export function useLibrary<T extends Listable>(
   //exported
 
   const AddListings = React.useCallback(
-    (newListingMetas: ListingMeta[], source: ListingOrigin) => {
+    (
+      newListingMetas: ListingMeta[],
+      source: ListingOrigin,
+      mapLinkResponse?: (statBlockData: any) => T
+    ) => {
       setListings(currentListings => [
         ...currentListings,
-        ...newListingMetas.map(m => new Listing<T>(m, source))
+        ...newListingMetas.map(
+          m => new Listing<T>(m, source, undefined, mapLinkResponse)
+        )
       ]);
     },
     [setListings]
