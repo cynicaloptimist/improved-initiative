@@ -83,8 +83,6 @@ function getAccountLevel(session) {
 
 export default function(
   app: express.Application,
-  statBlockLibrary: Library<StatBlock>,
-  spellLibrary: Library<Spell>,
   playerViews: PlayerViewManager
 ) {
   const mustacheEngine = mustacheExpress();
@@ -165,6 +163,13 @@ export default function(
     res.json(playerView);
   });
 
+  const statBlockLibrary = Library.FromFile<StatBlock>(
+    "ogl_creatures.json",
+    "/statblocks/",
+    StatBlock.GetSearchHint,
+    StatBlock.FilterDimensions
+  );
+
   app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
     res.json(statBlockLibrary.GetListings());
   });
@@ -172,6 +177,13 @@ export default function(
   app.get(statBlockLibrary.Route() + ":id", (req: Req, res: Res) => {
     res.json(statBlockLibrary.GetById(req.params.id));
   });
+
+  const spellLibrary = Library.FromFile<Spell>(
+    "ogl_spells.json",
+    "/spells/",
+    Spell.GetSearchHint,
+    Spell.GetFilterDimensions
+  );
 
   app.get(spellLibrary.Route(), (req: Req, res: Res) => {
     res.json(spellLibrary.GetListings());
