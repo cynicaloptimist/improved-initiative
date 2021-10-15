@@ -32,11 +32,8 @@
     "@types/react-color": "^3.0.4",
     "@types/react-dom": "^16.0.5",
     "@types/react-test-renderer": "^16.0.1",
-    "@types/redis": "^2.8.32",
     "@types/request": "^2.47.0",
     "@types/serve-static": "^1.13.1",
-    "@types/socket.io-client": "^1.4.32",
-    "@types/socket.io-redis": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "ajv": "^6.9.1",
@@ -77,7 +74,6 @@
     "@testing-library/react": "^11.2.7",
     "@tippyjs/react": "^4.0.2",
     "@types/retry": "^0.12.0",
-    "@types/socket.io": "^2.1.13",
     "@types/sticky-session": "^1.1.0",
     "awesomplete": "^1.1.2",
     "axios": "^0.21.1",
@@ -113,9 +109,9 @@
     "redis": "^3.1.2",
     "request": "^2.85.0",
     "retry": "^0.12.0",
-    "socket.io": "^2.4.1",
-    "socket.io-client": "^2.3.0",
-    "socket.io-redis": "^5.4.0"
+    "socket.io": "^4.3.0",
+    "socket.io-client": "^4.3.0",
+    "socket.io-redis": "^6.1.1"
   },
   "husky": {
     "hooks": {

@@ -10,10 +10,11 @@ import { PlayerViewState } from "../../common/PlayerViewState";
 import { getDefaultSettings } from "../../common/Settings";
 import { PlayerView } from "./components/PlayerView";
 import axios from "axios";
+import { Socket } from "socket.io-client";
 
 export class ReactPlayerView {
   private playerViewState: PlayerViewState;
-  private socket: SocketIOClient.Socket;
+  private socket: Socket;
 
   constructor(private element: Element, private encounterId: string) {
     this.renderPlayerView({
@@ -36,7 +37,7 @@ export class ReactPlayerView {
     } catch (e) {}
   }
 
-  public ConnectToSocket(socket: SocketIOClient.Socket) {
+  public ConnectToSocket(socket: Socket) {
     this.socket = socket;
     this.socket.on(
       "encounter updated",

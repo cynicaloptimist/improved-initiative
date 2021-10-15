@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import * as React from "react";
+import * as SocketIOClient from "socket.io-client";
 
 import * as compression from "json-url";
 import { TagState } from "../common/CombatantState";

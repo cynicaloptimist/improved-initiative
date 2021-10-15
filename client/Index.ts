@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 import * as React from "react";
-import * as io from "socket.io-client";
+import * as SocketIOClient from "socket.io-client";
 
 import { env, LoadEnvironment } from "./Environment";
 import { LauncherViewModel } from "./LauncherViewModel";
@@ -24,7 +24,7 @@ window.onload = async () => {
         env.EncounterId = customEncounterId;
       }
     }
-    const viewModel = new TrackerViewModel(io());
+    const viewModel = new TrackerViewModel(SocketIOClient.io());
 
     const container = document.getElementById("app__container");
     if (!container) {
@@ -45,7 +45,7 @@ window.onload = async () => {
     }
     const playerView = new ReactPlayerView(container, encounterId);
     playerView.LoadEncounterFromServer();
-    playerView.ConnectToSocket(io());
+    playerView.ConnectToSocket(SocketIOClient.io());
   }
 
   if (document.getElementById("landing")) {
