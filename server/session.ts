@@ -11,8 +11,13 @@ export default async function(redisConnectionString?: string) {
   let store = null;
 
   if (redisConnectionString) {
+    const sessionClient = redis.createClient(redisConnectionString);
+    sessionClient.on("error", error => {
+      console.error("Problem with Session store Redis Client: ");
+      console.error(error);
+    });
     store = new RedisStore({
-      client: redis.createClient(redisConnectionString)
+      client: sessionClient
     });
   }
 
