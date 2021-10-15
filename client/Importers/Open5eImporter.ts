@@ -11,7 +11,7 @@ export async function GetOpen5eListings() {
   const open5eResponse = await axios.get(
     "https://api.open5e.com/monsters/?limit=1500&fields=name,slug,size,type,subtype,alignment,challenge_rating,document__title"
   );
-  console.log(open5eResponse.data);
+
   const open5eListings: ListingMeta[] = open5eResponse.data.results.map(r => {
     const listingMeta: ListingMeta = {
       Id: "open5e-" + r.slug,
