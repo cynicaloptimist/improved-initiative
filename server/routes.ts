@@ -165,15 +165,6 @@ export default function(
     res.json(playerView);
   });
 
-  app.get("/templates/:name", (req: Req, res: Res) => {
-    const session = req.session;
-    if (session == null) {
-      throw "Session is not available";
-    }
-
-    res.render(`templates/${req.params.name}`, getClientOptions(session));
-  });
-
   app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
     res.json(statBlockLibrary.GetListings());
   });
