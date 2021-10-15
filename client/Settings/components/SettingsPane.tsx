@@ -91,7 +91,7 @@ export function SettingsPane(props: SettingsPaneProps) {
           <Tabs
             selected={currentTab}
             optionNamesById={SettingsTab}
-            onChoose={tab => setCurrentTab(SettingsTab[tab])}
+            onChoose={tab => setCurrentTab(tab)}
           />
           {getTabContent()}
           <button type="submit" className="c-button save-and-close">

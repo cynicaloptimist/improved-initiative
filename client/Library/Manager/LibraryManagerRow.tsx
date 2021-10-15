@@ -1,7 +1,8 @@
+import Tippy from "@tippyjs/react";
 import * as React from "react";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { ListingButton } from "../Components/ListingButton";
-import { Listing } from "../Listing";
+import { Listing, ListingOrigin } from "../Listing";
 import { SelectionContext, Selection } from "./SelectionContext";
 
 export function LibraryManagerRow(props: {
@@ -38,6 +39,7 @@ export function LibraryManagerRow(props: {
           }
         }}
       />
+      <SourceIndicator source={props.listing.Origin} />
       <ListingButton
         buttonClass="edit"
         faClass="edit"
@@ -45,7 +47,32 @@ export function LibraryManagerRow(props: {
           e.stopPropagation();
           props.setEditorTarget(props.listing);
         }}
-      ></ListingButton>
+      />
     </li>
   );
+}
+
+function SourceIndicator(props: { source: ListingOrigin }) {
+  if (props.source === "server")
+    return (
+      <Tippy content="Basic Rules">
+        <i className="fab fa-d-and-d c-listing-indicator" />
+      </Tippy>
+    );
+
+  if (props.source === "account")
+    return (
+      <Tippy content="Account Sync">
+        <i className="fas fa-cloud c-listing-indicator" />
+      </Tippy>
+    );
+
+  if (props.source === "localAsync")
+    return (
+      <Tippy content="Local Storage">
+        <i className="fas fa-hdd c-listing-indicator" />
+      </Tippy>
+    );
+
+  return null;
 }

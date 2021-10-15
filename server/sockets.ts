@@ -23,7 +23,7 @@ export default function(
   playerViews: PlayerViewManager
 ) {
   if (process.env.REDIS_URL) {
-    io.adapter(redis(process.env.REDIS_URL));
+    io.adapter(redis.createAdapter(process.env.REDIS_URL));
   }
 
   io.use(provideSessionToSocketIo(session));

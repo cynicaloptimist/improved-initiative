@@ -1,10 +1,11 @@
+import { Socket } from "socket.io-client";
 import { CombatStats } from "../../common/CombatStats";
 import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
 
 export class PlayerViewClient {
-  constructor(private socket: SocketIOClient.Socket) {}
+  constructor(private socket: Socket) {}
 
   public DisplayCombatStats(encounterId: string, stats: CombatStats) {
     this.socket.emit("combat stats", encounterId, stats);
