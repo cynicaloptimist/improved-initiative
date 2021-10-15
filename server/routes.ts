@@ -150,15 +150,6 @@ export default function(
     return res.render("tracker", options);
   });
 
-  async function updateSession(session: Express.Session) {
-    if (session.userId) {
-      const account = await getAccount(session.userId);
-      if (account) {
-        updateSessionAccountFeatures(session, account.accountStatus);
-      }
-    }
-  }
-
   app.get("/p/:id", (req: Req, res: Res) => {
     const session = req.session;
     if (session == null) {
@@ -254,4 +245,13 @@ async function setupLocalDefaultUser(session: Express.Session) {
   }
 
   return;
+}
+
+async function updateSession(session: Express.Session) {
+  if (session.userId) {
+    const account = await getAccount(session.userId);
+    if (account) {
+      updateSessionAccountFeatures(session, account.accountStatus);
+    }
+  }
 }
