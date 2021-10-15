@@ -4,11 +4,9 @@ import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
 import { ClientEnvironment } from "../common/ClientEnvironment";
-import { Spell } from "../common/Spell";
-import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
+import { configureBasicRulesContent } from "./configureBasicRulesContent";
 import { getAccount, upsertUser } from "./dbconnection";
-import { Library } from "./library";
 import { configureMetricsRoutes } from "./metrics";
 import {
   configureLoginRedirect,
@@ -27,8 +25,8 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 const twitterPixelId = process.env.TWITTER_PIXEL_ID || "";
 
-type Req = Express.Request & express.Request;
-type Res = Express.Response & express.Response;
+export type Req = Express.Request & express.Request;
+export type Res = Express.Response & express.Response;
 
 const appVersion = require("../package.json").version;
 
@@ -163,35 +161,7 @@ export default function(
     res.json(playerView);
   });
 
-  const statBlockLibrary = Library.FromFile<StatBlock>(
-    "ogl_creatures.json",
-    "/statblocks/",
-    StatBlock.GetSearchHint,
-    StatBlock.FilterDimensions
-  );
-
-  app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
-    res.json(statBlockLibrary.GetListings());
-  });
-
-  app.get(statBlockLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(statBlockLibrary.GetById(req.params.id));
-  });
-
-  const spellLibrary = Library.FromFile<Spell>(
-    "ogl_spells.json",
-    "/spells/",
-    Spell.GetSearchHint,
-    Spell.GetFilterDimensions
-  );
-
-  app.get(spellLibrary.Route(), (req: Req, res: Res) => {
-    res.json(spellLibrary.GetListings());
-  });
-
-  app.get(spellLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(spellLibrary.GetById(req.params.id));
-  });
+  configureBasicRulesContent(app);
 
   const importEncounter = async (req, res: Res) => {
     const newViewId = await playerViews.InitializeNew();
