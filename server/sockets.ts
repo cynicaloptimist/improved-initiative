@@ -1,6 +1,8 @@
 import express = require("express");
 import provideSessionToSocketIo = require("express-socket.io-session");
-import redis = require("socket.io-redis");
+import redis = require("redis");
+
+import * as socketIoRedisAdapter from "@socket.io/redis-adapter";
 import * as SocketIO from "socket.io";
 
 import { CombatStats } from "../common/CombatStats";
@@ -23,7 +25,9 @@ export default function(
   playerViews: PlayerViewManager
 ) {
   if (process.env.REDIS_URL) {
-    io.adapter(redis.createAdapter(process.env.REDIS_URL));
+    const pubClient = redis.createClient(process.env.REDIS_URL);
+    const subClient = pubClient.duplicate();
+    io.adapter(socketIoRedisAdapter.createAdapter(pubClient, subClient));
   }
 
   io.use(provideSessionToSocketIo(session));
