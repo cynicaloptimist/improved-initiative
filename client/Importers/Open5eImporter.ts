@@ -77,10 +77,10 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     Senses: commaSeparatedStrings(sb.senses),
     Languages: commaSeparatedStrings(sb.languages),
     Challenge: sb.challenge_rating,
-    Traits: sb.special_abilities.map(mapToNameAndContent),
-    Actions: sb.actions.map(mapToNameAndContent),
-    LegendaryActions: sb.legendary_actions.map(mapToNameAndContent),
-    Reactions: sb.reactions.map?.(mapToNameAndContent) || []
+    Traits: nameAndDescArrays(sb.special_abilities),
+    Actions: nameAndDescArrays(sb.actions),
+    LegendaryActions: nameAndDescArrays(sb.legendary_actions),
+    Reactions: nameAndDescArrays(sb.reactions)
   };
 }
 
@@ -91,8 +91,8 @@ function parenthetizeOrEmpty(input: string | undefined) {
   return `(${input})`;
 }
 
-function commaSeparatedStrings(input: string) {
-  if (input.length === 0) {
+function commaSeparatedStrings(input: string | undefined) {
+  if (!input || input.length === 0) {
     return [];
   }
   return input.split(", ");
@@ -145,7 +145,14 @@ function getSaves(sb: any): NameAndModifier[] {
   return saves;
 }
 
-function mapToNameAndContent(data: {
+function nameAndDescArrays(entries: any): NameAndContent[] {
+  if (!entries.content?.map) {
+    return [];
+  }
+  return entries.content.map(getNameAndContent);
+}
+
+function getNameAndContent(data: {
   name: string;
   desc: string;
 }): NameAndContent {
