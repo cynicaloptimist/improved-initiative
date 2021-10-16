@@ -8,31 +8,8 @@ import {
 } from "../../common/StatBlock";
 
 export async function GetOpen5eListings() {
-  const open5eResponse = await axios.get(
-    "https://api.open5e.com/monsters/?limit=1500&fields=name,slug,size,type,subtype,alignment,challenge_rating,document__title"
-  );
-
-  const open5eListings: ListingMeta[] = open5eResponse.data.results.map(r => {
-    const listingMeta: ListingMeta = {
-      Id: "open5e-" + r.slug,
-      Name: r.name,
-      Path: "",
-      Link: `https://api.open5e.com/monsters/${r.slug}`,
-      LastUpdateMs: 0,
-      SearchHint: `${r.name}
-                   ${r.type}
-                   ${r.subtype}
-                   ${r.alignment}`
-        .toLocaleLowerCase()
-        .replace(/[^\w\s]/g, ""),
-      FilterDimensions: {
-        Level: r.challenge_rating,
-        Source: r.document__title,
-        Type: `${r.type} (${r.subtype})`
-      }
-    };
-    return listingMeta;
-  });
+  const response = await axios.get("../open5e/monsters/");
+  const open5eListings: ListingMeta[] = response.data;
   return open5eListings;
 }
 
