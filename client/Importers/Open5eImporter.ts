@@ -1,6 +1,5 @@
 import axios from "axios";
 import _ = require("lodash");
-import { Db } from "mongodb";
 import { ListingMeta } from "../../common/Listable";
 import {
   NameAndContent,
@@ -70,7 +69,7 @@ function parenthetizeOrEmpty(input: string | undefined) {
 }
 
 function commaSeparatedStrings(input: string | undefined) {
-  if (!input || input.length === 0) {
+  if (!input || input.length === 0 || !input.split) {
     return [];
   }
   return input.split(", ");
