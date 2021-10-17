@@ -1,4 +1,5 @@
 import axios from "axios";
+import _ = require("lodash");
 import { Db } from "mongodb";
 import { ListingMeta } from "../../common/Listable";
 import {
@@ -47,7 +48,7 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     Saves: getSaves(sb),
     Skills: Object.keys(sb.skills).map(skillName => {
       return {
-        Name: skillName,
+        Name: _.startCase(skillName),
         Modifier: sb.skills[skillName]
       };
     }),
