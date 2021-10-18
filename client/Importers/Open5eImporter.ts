@@ -8,7 +8,7 @@ import {
 } from "../../common/StatBlock";
 
 export async function GetOpen5eListings() {
-  const response = await axios.get("../open5e/monsters/");
+  const response = await axios.get("../open5e/basicrules/");
   const open5eListings: ListingMeta[] = response.data;
   return open5eListings;
 }
