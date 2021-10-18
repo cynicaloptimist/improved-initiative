@@ -20,6 +20,10 @@ export interface PlayerViewManager {
 export function GetPlayerViewManager(): PlayerViewManager {
   if (process.env.REDIS_URL) {
     const client = redis.createClient(process.env.REDIS_URL);
+    client.on("error", error => {
+      console.error("Problem with PlayerViewManager Redis Client: ");
+      console.error(error);
+    });
     return new RedisPlayerViewManager(client);
   }
   return new InMemoryPlayerViewManager();
