@@ -7,12 +7,6 @@ import {
   StatBlock
 } from "../../common/StatBlock";
 
-export async function GetOpen5eListings() {
-  const response = await axios.get("../open5e/basicrules/");
-  const open5eListings: ListingMeta[] = response.data;
-  return open5eListings;
-}
-
 export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
   const sb = open5eStatBlock;
   return {

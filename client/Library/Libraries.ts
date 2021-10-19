@@ -1,3 +1,6 @@
+import React = require("react");
+import axios from "axios";
+
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { Account } from "../Account/Account";
@@ -6,13 +9,9 @@ import { Store } from "../Utility/Store";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { Library, useLibrary } from "./useLibrary";
-import React = require("react");
 import { Listable, ListingMeta } from "../../common/Listable";
-import axios from "axios";
-import {
-  GetOpen5eListings,
-  ImportOpen5eStatBlock
-} from "../Importers/Open5eImporter";
+import { ImportOpen5eStatBlock } from "../Importers/Open5eImporter";
+import { Settings } from "../../common/Settings";
 
 export type UpdatePersistentCharacter = (
   persistentCharacterId: string,
@@ -78,6 +77,7 @@ export const LibrariesContext = React.createContext<Libraries>({
 });
 
 export function useLibraries(
+  settings: Settings,
   accountClient: AccountClient,
   loadingFinished?: (storeName: string, count: number) => void
 ): Libraries {
@@ -127,8 +127,15 @@ export function useLibraries(
   };
 
   React.useEffect(() => {
-    preloadStatBlocks(StatBlocks);
-    preloadSpells(Spells);
+    if (settings.PreloadedContent.BasicRules) {
+      preloadStatBlocks(StatBlocks);
+      preloadSpells(Spells);
+    }
+
+    if (settings.PreloadedContent.Open5eContent) {
+      preloadAdditionalContent(StatBlocks);
+    }
+
     getAccountOrSampleCharacters(
       accountClient,
       PersistentCharacters,
@@ -141,7 +148,8 @@ export function useLibraries(
 
 async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
   try {
-    const open5eListings: ListingMeta[] = await GetOpen5eListings();
+    const response = await axios.get("/open5e/basicrules/");
+    const open5eListings: ListingMeta[] = response.data;
     StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
   } catch (error) {
     const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
@@ -150,6 +158,14 @@ async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
       StatBlocks.AddListings(serverListings, "server");
     }
   }
+}
+
+async function preloadAdditionalContent(StatBlocks: Library<StatBlock>) {
+  try {
+    const response = await axios.get("/open5e/additionalcontent/");
+    const open5eListings: ListingMeta[] = response.data;
+    StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
+  } catch (error) {}
 }
 
 async function preloadSpells(Spells: Library<Spell>) {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import express = require("express");
+import _ = require("lodash");
 import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
 
@@ -28,28 +29,27 @@ export function configureOpen5eContent(app: express.Application) {
 
   const includeFields =
     "name,slug,size,type,subtype,alignment,challenge_rating,document__title,document__slug";
-  configureOpen5eRoute(
-    app,
-    getMeta,
-    `https://api.open5e.com/monsters/?limit=1500&fields=${includeFields}&document__slug=wotc-srd`,
-    "/open5e/basicrules/"
-  );
-}
 
-function configureOpen5eRoute(
-  app: express.Application,
-  getMeta: (remoteItem: any) => ListingMeta,
-  sourceUrl: string,
-  route: string
-) {
-  let listings = [];
+  const sourceUrl = `https://api.open5e.com/monsters/?limit=1500&fields=${includeFields}`;
+
+  let basicRulesListings: ListingMeta[] = [];
+  let additionalListings: ListingMeta[] = [];
   axios.get(sourceUrl).then(response => {
-    if (response?.data?.results?.map) {
-      listings = response.data.results.map(getMeta);
+    if (Array.isArray(response?.data?.results)) {
+      const [basicRulesResults, additionalResults] = _.partition(
+        response.data.results,
+        r => r.document__slug == "wotc-srd"
+      );
+      basicRulesListings = basicRulesResults.map(getMeta);
+      additionalListings = additionalResults.map(getMeta);
     }
   });
 
-  app.get(route, (req: Req, res: Res) => {
-    res.json(listings);
+  app.get("/open5e/basicrules/", (req: Req, res: Res) => {
+    res.json(basicRulesListings);
+  });
+
+  app.get("/open5e/additionalcontent/", (req: Req, res: Res) => {
+    res.json(additionalListings);
   });
 }
