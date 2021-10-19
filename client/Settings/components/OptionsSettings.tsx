@@ -148,9 +148,6 @@ export function OptionsSettings(props: {
         </a>
       </p>
       <h3>Preloaded Content</h3>
-      <Toggle fieldName="PreloadedContent.SampleCharacters">
-        Sample Characters
-      </Toggle>
       <Toggle fieldName="PreloadedContent.BasicRules">
         Basic Rules (OGL) Creatures
       </Toggle>

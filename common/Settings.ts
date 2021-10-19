@@ -40,7 +40,6 @@ export interface Settings {
   };
   PlayerView: PlayerViewSettings;
   PreloadedContent: {
-    SampleCharacters: boolean;
     BasicRules: boolean;
     Open5eContent: boolean;
   };
@@ -91,7 +90,6 @@ export function getDefaultSettings(): Settings {
       CustomEncounterId: ""
     },
     PreloadedContent: {
-      SampleCharacters: true,
       BasicRules: true,
       Open5eContent: true
     },
