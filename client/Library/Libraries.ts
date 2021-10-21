@@ -150,9 +150,14 @@ async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
   try {
     const response = await axios.get("/open5e/basicrules/");
     const open5eListings: ListingMeta[] = response.data;
+    if (!open5eListings?.length) {
+      throw new Error("Could not load open5e listings.");
+    }
     StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
   } catch (error) {
+    console.warn(error.message, "Falling back to classic server listings.");
     const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
+
     if (serverResponse && serverResponse.data) {
       const serverListings = serverResponse.data;
       StatBlocks.AddListings(serverListings, "server");
