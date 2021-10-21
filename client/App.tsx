@@ -18,6 +18,7 @@ import { ThreeColumnLayout } from "./Layout/ThreeColumnLayout";
 import { LibraryManager } from "./Library/Manager/LibraryManager";
 import { LibrariesContext, useLibraries } from "./Library/Libraries";
 import { Store } from "./Utility/Store";
+import { Settings } from "../common/Settings";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -26,7 +27,7 @@ import { Store } from "./Utility/Store";
 
 export function App(props: { tracker: TrackerViewModel }): JSX.Element {
   const { tracker } = props;
-  const settings = useSubscription(CurrentSettings);
+  const settings = useSubscription<Settings>(CurrentSettings);
 
   const settingsVisible = useSubscription(tracker.SettingsVisible);
   const tutorialVisible = useSubscription(tracker.TutorialVisible);
@@ -44,11 +45,15 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
     tracker.CombatantCommander.HasSelected
   );
 
-  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
-    if (storeName === Store.PersistentCharacters) {
-      tracker.LoadAutoSavedEncounterIfAvailable(count);
+  const libraries = useLibraries(
+    settings,
+    new AccountClient(),
+    (storeName, count) => {
+      if (storeName === Store.PersistentCharacters) {
+        tracker.LoadAutoSavedEncounterIfAvailable(count);
+      }
     }
-  });
+  );
 
   tracker.SetLibraries(libraries);
 

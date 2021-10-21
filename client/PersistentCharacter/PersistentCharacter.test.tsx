@@ -5,7 +5,7 @@ import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { AccountClient } from "../Account/AccountClient";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
-import { InitializeSettings } from "../Settings/Settings";
+import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 import { useLibraries } from "../Library/Libraries";
 import { LibrariesCommander } from "../Commands/LibrariesCommander";
@@ -22,7 +22,11 @@ function LibrariesCommanderHarness(props: {
   librariesCommander: LibrariesCommander;
   loadingFinished: () => void;
 }) {
-  const libraries = useLibraries(new AccountClient(), props.loadingFinished);
+  const libraries = useLibraries(
+    CurrentSettings(),
+    new AccountClient(),
+    props.loadingFinished
+  );
   useEffect(() => props.librariesCommander.SetLibraries(libraries), []);
   return <div />;
 }
@@ -31,13 +35,17 @@ function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
   loadingFinished: (count: number) => void;
 }) {
-  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
-    if (storeName !== Store.PersistentCharacters) {
-      return;
+  const libraries = useLibraries(
+    CurrentSettings(),
+    new AccountClient(),
+    (storeName, count) => {
+      if (storeName !== Store.PersistentCharacters) {
+        return;
+      }
+      props.setLibrary(libraries.PersistentCharacters);
+      props.loadingFinished(count);
     }
-    props.setLibrary(libraries.PersistentCharacters);
-    props.loadingFinished(count);
-  });
+  );
   return <div />;
 }
 
@@ -53,6 +61,7 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
+    InitializeSettings();
     (axios.get as jest.Mock).mockResolvedValue(null);
   });
 

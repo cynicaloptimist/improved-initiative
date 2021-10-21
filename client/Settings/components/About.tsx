@@ -21,6 +21,10 @@ export class About extends React.Component<AboutProps> {
             <a href={env.BaseUrl + "/SRD-OGL_V1.1.pdf"} target="_blank">
               Open Gaming License Version 1.0a
             </a>
+            {". Additional content provided by "}
+            <a href="https://open5e.com/" target="_blank">
+              Open5e
+            </a>
             {"."}
           </p>
         </div>

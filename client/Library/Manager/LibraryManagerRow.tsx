@@ -60,6 +60,13 @@ function SourceIndicator(props: { source: ListingOrigin }) {
       </Tippy>
     );
 
+  if (props.source === "open5e")
+    return (
+      <Tippy content="Open5e">
+        <span className="fas fa-box-open c-listing-indicator" />
+      </Tippy>
+    );
+
   if (props.source === "account")
     return (
       <Tippy content="Account Sync">

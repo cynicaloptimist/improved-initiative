@@ -4,11 +4,9 @@ import moment = require("moment");
 import mustacheExpress = require("mustache-express");
 
 import { ClientEnvironment } from "../common/ClientEnvironment";
-import { Spell } from "../common/Spell";
-import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
+import { configureBasicRulesContent } from "./configureBasicRulesContent";
 import { getAccount, upsertUser } from "./dbconnection";
-import { Library } from "./library";
 import { configureMetricsRoutes } from "./metrics";
 import {
   configureLoginRedirect,
@@ -20,6 +18,7 @@ import {
 import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
 import { AccountStatus } from "./user";
+import { configureOpen5eContent } from "./configureOpen5eContent";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
@@ -27,8 +26,8 @@ const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 const twitterPixelId = process.env.TWITTER_PIXEL_ID || "";
 
-type Req = Express.Request & express.Request;
-type Res = Express.Response & express.Response;
+export type Req = Express.Request & express.Request;
+export type Res = Express.Response & express.Response;
 
 const appVersion = require("../package.json").version;
 
@@ -83,8 +82,6 @@ function getAccountLevel(session) {
 
 export default function(
   app: express.Application,
-  statBlockLibrary: Library<StatBlock>,
-  spellLibrary: Library<Spell>,
   playerViews: PlayerViewManager
 ) {
   const mustacheEngine = mustacheExpress();
@@ -150,15 +147,6 @@ export default function(
     return res.render("tracker", options);
   });
 
-  async function updateSession(session: Express.Session) {
-    if (session.userId) {
-      const account = await getAccount(session.userId);
-      if (account) {
-        updateSessionAccountFeatures(session, account.accountStatus);
-      }
-    }
-  }
-
   app.get("/p/:id", (req: Req, res: Res) => {
     const session = req.session;
     if (session == null) {
@@ -174,30 +162,8 @@ export default function(
     res.json(playerView);
   });
 
-  app.get("/templates/:name", (req: Req, res: Res) => {
-    const session = req.session;
-    if (session == null) {
-      throw "Session is not available";
-    }
-
-    res.render(`templates/${req.params.name}`, getClientOptions(session));
-  });
-
-  app.get(statBlockLibrary.Route(), (req: Req, res: Res) => {
-    res.json(statBlockLibrary.GetListings());
-  });
-
-  app.get(statBlockLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(statBlockLibrary.GetById(req.params.id));
-  });
-
-  app.get(spellLibrary.Route(), (req: Req, res: Res) => {
-    res.json(spellLibrary.GetListings());
-  });
-
-  app.get(spellLibrary.Route() + ":id", (req: Req, res: Res) => {
-    res.json(spellLibrary.GetById(req.params.id));
-  });
+  configureBasicRulesContent(app);
+  configureOpen5eContent(app);
 
   const importEncounter = async (req, res: Res) => {
     const newViewId = await playerViews.InitializeNew();
@@ -254,4 +220,13 @@ async function setupLocalDefaultUser(session: Express.Session) {
   }
 
   return;
+}
+
+async function updateSession(session: Express.Session) {
+  if (session.userId) {
+    const account = await getAccount(session.userId);
+    if (account) {
+      updateSessionAccountFeatures(session, account.accountStatus);
+    }
+  }
 }

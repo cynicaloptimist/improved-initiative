@@ -39,6 +39,10 @@ export interface Settings {
     PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
+  PreloadedContent: {
+    BasicRules: boolean;
+    Open5eContent: boolean;
+  };
   Version: string;
 }
 
@@ -84,6 +88,10 @@ export function getDefaultSettings(): Settings {
         backgroundUrl: ""
       },
       CustomEncounterId: ""
+    },
+    PreloadedContent: {
+      BasicRules: true,
+      Open5eContent: true
     },
     Version: process.env.VERSION || "0.0.0"
   };
