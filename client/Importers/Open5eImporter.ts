@@ -1,6 +1,4 @@
-import axios from "axios";
 import _ = require("lodash");
-import { ListingMeta } from "../../common/Listable";
 import {
   NameAndContent,
   NameAndModifier,
@@ -13,14 +11,14 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     ...StatBlock.Default(),
     Name: sb.name,
     Source: sb.document__title,
-    Type: sb.type + " " + parenthetizeOrEmpty(sb.subtype),
+    Type: sb.type + " " + parenthesizeOrEmpty(sb.subtype),
     HP: {
       Value: sb.hit_points,
-      Notes: parenthetizeOrEmpty(sb.hit_dice)
+      Notes: parenthesizeOrEmpty(sb.hit_dice)
     },
     AC: {
       Value: sb.armor_class,
-      Notes: parenthetizeOrEmpty(sb.armor_desc)
+      Notes: parenthesizeOrEmpty(sb.armor_desc)
     },
     InitiativeModifier: 0,
     Speed: Object.keys(sb.speed).map(speedType => {
@@ -55,8 +53,8 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
   };
 }
 
-function parenthetizeOrEmpty(input: string | undefined) {
-  if (!input) {
+function parenthesizeOrEmpty(input: string | undefined) {
+  if (!input || !input.length) {
     return "";
   }
   return `(${input})`;
