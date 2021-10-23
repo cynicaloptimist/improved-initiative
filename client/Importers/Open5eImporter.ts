@@ -115,10 +115,10 @@ function getSaves(sb: any): NameAndModifier[] {
 }
 
 function nameAndDescArrays(entries: any): NameAndContent[] {
-  if (!entries.content?.map) {
+  if (!entries?.map) {
     return [];
   }
-  return entries.content.map(getNameAndContent);
+  return entries.map(getNameAndContent);
 }
 
 function getNameAndContent(data: {
