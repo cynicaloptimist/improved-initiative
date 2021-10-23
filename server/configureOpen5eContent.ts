@@ -30,7 +30,7 @@ export function configureOpen5eContent(app: express.Application) {
   const includeFields =
     "name,slug,size,type,subtype,alignment,challenge_rating,document__title,document__slug";
 
-  const sourceUrl = `https://apix.open5e.com/monsters/?limit=1500&fields=${includeFields}`;
+  const sourceUrl = `https://api.open5e.com/monsters/?limit=1500&fields=${includeFields}`;
 
   let basicRulesListings: ListingMeta[] = [];
   let additionalListings: ListingMeta[] = [];
