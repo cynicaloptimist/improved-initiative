@@ -363,15 +363,7 @@ export class TrackerViewModel {
     });
   }
 
-  private didLoadAutosave = false;
-
-  public LoadAutoSavedEncounterIfAvailable(
-    loadedPersistentCharacterCount: number
-  ) {
-    if (this.didLoadAutosave) {
-      return;
-    }
-
+  public LoadAutoSavedEncounterIfAvailable() {
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
       LegacySynchronousLocalStore.DefaultSavedEncounterId
@@ -379,21 +371,12 @@ export class TrackerViewModel {
 
     if (autosavedEncounter) {
       const updatedState = UpdateLegacyEncounterState(autosavedEncounter);
-      const persistentCharacterCount = updatedState.Combatants.filter(
-        c => c.PersistentCharacterId
-      ).length;
-      if (persistentCharacterCount > loadedPersistentCharacterCount) {
-        return; //We can't load the autosaved encounter until PersistentCharacter library has loaded.
-      }
-
       this.Encounter.LoadEncounterState(
         updatedState,
         this.LibrariesCommander.UpdatePersistentCharacter,
         this.Libraries.PersistentCharacters
       );
     }
-
-    this.didLoadAutosave = true;
 
     this.Encounter.StartEncounterAutosaves();
   }
