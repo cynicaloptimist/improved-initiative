@@ -126,7 +126,7 @@ export function useLibraries(
       accountClient,
       PersistentCharacters,
       libraries,
-      () => loadingFinished("UserAccount", 1)
+      count => loadingFinished("UserAccount", count)
     );
   }, []);
 
@@ -153,7 +153,7 @@ function getAccountOrSampleCharacters(
   accountClient: AccountClient,
   PersistentCharacters: Library<PersistentCharacter>,
   libraries: Libraries,
-  callback: () => void
+  callback: (count: number) => void
 ) {
   accountClient.GetAccount(async account => {
     if (!account) {
@@ -163,12 +163,12 @@ function getAccountOrSampleCharacters(
       if (persistentCharacterCount == 0) {
         getAndAddSamplePersistentCharacters(PersistentCharacters);
       }
-      callback();
+      callback(0);
       return;
     }
 
     handleAccountSync(account, accountClient, libraries);
-    callback();
+    callback(1);
   });
 }
 
