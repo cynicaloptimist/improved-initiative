@@ -44,11 +44,41 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
     tracker.CombatantCommander.HasSelected
   );
 
-  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
-    if (storeName === Store.PersistentCharacters) {
-      tracker.LoadAutoSavedEncounterIfAvailable(count);
-    }
+  /* temporary patch to ensure that both character libraries load before loading autosave */
+  const loadedLibraries = React.useRef({
+    local: false,
+    account: false,
+    autosave: false
   });
+
+  const libraries = useLibraries(
+    new AccountClient(),
+    (librarySource, count) => {
+      const ll = loadedLibraries.current;
+      if (librarySource === Store.PersistentCharacters) {
+        ll.local = true;
+        console.log("Loaded persistent characters from local indexeddb store");
+      }
+
+      if (librarySource === "UserAccount") {
+        ll.account = true;
+        if (count > 0) {
+          console.log("Loaded persistent characters from UserAccount");
+        } else {
+          console.log("No UserAccount found for persistent characters");
+        }
+      }
+
+      if (ll.local && ll.account && !ll.autosave) {
+        ll.autosave = true;
+        const loadTimeout = 500;
+        console.log("Loading autosaved encounter in " + loadTimeout + " ms");
+        setTimeout(() => {
+          tracker.LoadAutoSavedEncounterIfAvailable();
+        }, loadTimeout);
+      }
+    }
+  );
 
   tracker.SetLibraries(libraries);
 

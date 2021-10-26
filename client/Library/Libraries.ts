@@ -94,16 +94,14 @@ export function useLibraries(
     accountSave: accountClient.SaveStatBlock,
     accountDelete: accountClient.DeleteStatBlock,
     getFilterDimensions: StatBlock.FilterDimensions,
-    getSearchHint: StatBlock.GetSearchHint,
-    loadingFinished
+    getSearchHint: StatBlock.GetSearchHint
   });
   const Encounters = useLibrary(Store.SavedEncounters, "encounters", {
     createEmptyListing: SavedEncounter.Default,
     accountSave: accountClient.SaveEncounter,
     accountDelete: accountClient.DeleteEncounter,
     getFilterDimensions: () => ({}),
-    getSearchHint: SavedEncounter.GetSearchHint,
-    loadingFinished
+    getSearchHint: SavedEncounter.GetSearchHint
   });
 
   const Spells = useLibrary(Store.Spells, "spells", {
@@ -111,8 +109,7 @@ export function useLibraries(
     accountSave: accountClient.SaveSpell,
     accountDelete: accountClient.DeleteSpell,
     getFilterDimensions: Spell.GetFilterDimensions,
-    getSearchHint: Spell.GetSearchHint,
-    loadingFinished
+    getSearchHint: Spell.GetSearchHint
   });
 
   const libraries: Libraries = {
@@ -128,7 +125,8 @@ export function useLibraries(
     getAccountOrSampleCharacters(
       accountClient,
       PersistentCharacters,
-      libraries
+      libraries,
+      count => loadingFinished("UserAccount", count)
     );
   }, []);
 
@@ -154,7 +152,8 @@ async function preloadSpells(Spells: Library<Spell>) {
 function getAccountOrSampleCharacters(
   accountClient: AccountClient,
   PersistentCharacters: Library<PersistentCharacter>,
-  libraries: Libraries
+  libraries: Libraries,
+  callback: (count: number) => void
 ) {
   accountClient.GetAccount(async account => {
     if (!account) {
@@ -164,10 +163,12 @@ function getAccountOrSampleCharacters(
       if (persistentCharacterCount == 0) {
         getAndAddSamplePersistentCharacters(PersistentCharacters);
       }
+      callback(0);
       return;
     }
 
     handleAccountSync(account, accountClient, libraries);
+    callback(1);
   });
 }
 
