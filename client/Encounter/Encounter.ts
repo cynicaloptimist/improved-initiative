@@ -385,11 +385,13 @@ export class Encounter {
       const combatant = this.AddCombatantFromState(savedCombatant);
 
       if (combatant.PersistentCharacterId !== null) {
+        const fallback = PersistentCharacter.Initialize(combatant.StatBlock());
         const persistentCharacterListing = await persistentCharacterLibrary.GetOrCreateListingById(
-          combatant.PersistentCharacterId
+          combatant.PersistentCharacterId,
+          fallback
         );
         const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
-          PersistentCharacter.Default()
+          fallback
         );
 
         combatant.StatBlock(persistentCharacter.StatBlock);

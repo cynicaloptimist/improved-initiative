@@ -17,7 +17,10 @@ export interface Library<T extends Listable> {
     listing: Listing<T>,
     newListable: T
   ) => Promise<Listing<T>>;
-  GetOrCreateListingById: (listingId: string) => Promise<Listing<T>>;
+  GetOrCreateListingById: (
+    listingId: string,
+    template?: T
+  ) => Promise<Listing<T>>;
   GetAllListings: () => Listing<T>[];
 }
 
@@ -159,9 +162,10 @@ export function useLibrary<T extends Listable>(
   );
 
   const GetOrCreateListingById = React.useCallback(
-    async (listingId: string) => {
-      const template: T = {
+    async (listingId: string, template?: T) => {
+      const newItem: T = {
         ...callbacks.createEmptyListing(),
+        ...template,
         Id: listingId
       };
       const currentListing = listings.find(l => l.Meta().Id === listingId);
@@ -170,7 +174,7 @@ export function useLibrary<T extends Listable>(
         return currentListing;
       }
 
-      const newListing = await SaveNewListing(template);
+      const newListing = await SaveNewListing(newItem);
       return newListing;
     },
     [callbacks.createEmptyListing, listings, SaveNewListing]
