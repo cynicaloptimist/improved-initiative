@@ -33,19 +33,12 @@ function LibrariesCommanderHarness(props: {
 
 function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
-  loadingFinished: (count: number) => void;
+  loadingFinished: () => void;
 }) {
-  const libraries = useLibraries(
-    CurrentSettings(),
-    new AccountClient(),
-    (storeName, count) => {
-      if (storeName !== Store.PersistentCharacters) {
-        return;
-      }
-      props.setLibrary(libraries.PersistentCharacters);
-      props.loadingFinished(count);
-    }
-  );
+  const libraries = useLibraries(CurrentSettings(), new AccountClient(), () => {
+    props.setLibrary(libraries.PersistentCharacters);
+    props.loadingFinished();
+  });
   return <div />;
 }
 
@@ -86,7 +79,7 @@ describe("PersistentCharacterLibrary", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={count => count === 1 && done()}
+            loadingFinished={done}
           />
         );
       });
@@ -111,7 +104,7 @@ describe("PersistentCharacterLibrary", () => {
             setLibrary={r => {
               library = r;
             }}
-            loadingFinished={count => count === 1 && done()}
+            loadingFinished={done}
           />
         );
       });
@@ -160,7 +153,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={_ => done()}
+            loadingFinished={done}
           />
         );
       });
@@ -202,7 +195,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={_ => done()}
+            loadingFinished={done}
           />
         );
       });
