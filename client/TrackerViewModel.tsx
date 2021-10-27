@@ -365,12 +365,11 @@ export class TrackerViewModel {
 
   private didLoadAutosave = false;
 
-  public LoadAutoSavedEncounterIfAvailable(
-    loadedPersistentCharacterCount: number
-  ) {
+  public LoadAutoSavedEncounterIfAvailable() {
     if (this.didLoadAutosave) {
       return;
     }
+    this.didLoadAutosave = true;
 
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
@@ -379,12 +378,6 @@ export class TrackerViewModel {
 
     if (autosavedEncounter) {
       const updatedState = UpdateLegacyEncounterState(autosavedEncounter);
-      const persistentCharacterCount = updatedState.Combatants.filter(
-        c => c.PersistentCharacterId
-      ).length;
-      if (persistentCharacterCount > loadedPersistentCharacterCount) {
-        return; //We can't load the autosaved encounter until PersistentCharacter library has loaded.
-      }
 
       this.Encounter.LoadEncounterState(
         updatedState,
@@ -392,8 +385,6 @@ export class TrackerViewModel {
         this.Libraries.PersistentCharacters
       );
     }
-
-    this.didLoadAutosave = true;
 
     this.Encounter.StartEncounterAutosaves();
   }

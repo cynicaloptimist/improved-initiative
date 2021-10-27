@@ -79,8 +79,23 @@ export const LibrariesContext = React.createContext<Libraries>({
 export function useLibraries(
   settings: Settings,
   accountClient: AccountClient,
-  loadingFinished?: (storeName: string, count: number) => void
+  allPersistentCharactersLoaded: () => void
 ): Libraries {
+  const isLoadingComplete = React.useRef({
+    localAsync: false,
+    account: false
+  });
+
+  const signalLoadComplete = (loadSource: "localAsync" | "account") => {
+    isLoadingComplete.current[loadSource] = true;
+    if (
+      isLoadingComplete.current.localAsync &&
+      isLoadingComplete.current.account
+    ) {
+      allPersistentCharactersLoaded();
+    }
+  };
+
   const PersistentCharacters = useLibrary(
     Store.PersistentCharacters,
     "persistentcharacters",
@@ -90,7 +105,7 @@ export function useLibraries(
       accountDelete: accountClient.DeletePersistentCharacter,
       getFilterDimensions: PersistentCharacter.GetFilterDimensions,
       getSearchHint: PersistentCharacter.GetSearchHint,
-      loadingFinished
+      signalLoadComplete
     }
   );
   const StatBlocks = useLibrary(Store.StatBlocks, "statblocks", {
@@ -98,16 +113,14 @@ export function useLibraries(
     accountSave: accountClient.SaveStatBlock,
     accountDelete: accountClient.DeleteStatBlock,
     getFilterDimensions: StatBlock.FilterDimensions,
-    getSearchHint: StatBlock.GetSearchHint,
-    loadingFinished
+    getSearchHint: StatBlock.GetSearchHint
   });
   const Encounters = useLibrary(Store.SavedEncounters, "encounters", {
     createEmptyListing: SavedEncounter.Default,
     accountSave: accountClient.SaveEncounter,
     accountDelete: accountClient.DeleteEncounter,
     getFilterDimensions: () => ({}),
-    getSearchHint: SavedEncounter.GetSearchHint,
-    loadingFinished
+    getSearchHint: SavedEncounter.GetSearchHint
   });
 
   const Spells = useLibrary(Store.Spells, "spells", {
@@ -115,8 +128,7 @@ export function useLibraries(
     accountSave: accountClient.SaveSpell,
     accountDelete: accountClient.DeleteSpell,
     getFilterDimensions: Spell.GetFilterDimensions,
-    getSearchHint: Spell.GetSearchHint,
-    loadingFinished
+    getSearchHint: Spell.GetSearchHint
   });
 
   const libraries: Libraries = {
@@ -139,7 +151,8 @@ export function useLibraries(
     getAccountOrSampleCharacters(
       accountClient,
       PersistentCharacters,
-      libraries
+      libraries,
+      signalLoadComplete
     );
   }, []);
 
@@ -184,7 +197,8 @@ async function preloadSpells(Spells: Library<Spell>) {
 function getAccountOrSampleCharacters(
   accountClient: AccountClient,
   PersistentCharacters: Library<PersistentCharacter>,
-  libraries: Libraries
+  libraries: Libraries,
+  signalLoadComplete: (string: "localAsync" | "account") => void
 ) {
   accountClient.GetAccount(async account => {
     if (!account) {
@@ -194,7 +208,11 @@ function getAccountOrSampleCharacters(
       if (persistentCharacterCount == 0) {
         getAndAddSamplePersistentCharacters(PersistentCharacters);
       }
+      signalLoadComplete("account");
       return;
+    }
+    if (account.persistentCharacters.length == 0) {
+      signalLoadComplete("account");
     }
 
     handleAccountSync(account, accountClient, libraries);

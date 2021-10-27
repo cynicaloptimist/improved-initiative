@@ -45,15 +45,9 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
     tracker.CombatantCommander.HasSelected
   );
 
-  const libraries = useLibraries(
-    settings,
-    new AccountClient(),
-    (storeName, count) => {
-      if (storeName === Store.PersistentCharacters) {
-        tracker.LoadAutoSavedEncounterIfAvailable(count);
-      }
-    }
-  );
+  const libraries = useLibraries(settings, new AccountClient(), () => {
+    tracker.LoadAutoSavedEncounterIfAvailable();
+  });
 
   tracker.SetLibraries(libraries);
 

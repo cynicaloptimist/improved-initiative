@@ -33,7 +33,7 @@ export function useLibrary<T extends Listable>(
     accountDelete: (listableId: string) => any;
     getSearchHint: (listable: T) => string;
     getFilterDimensions: (listable: T) => FilterDimensions;
-    loadingFinished?: (storeName: string, count: number) => void;
+    signalLoadComplete?: (string: "account" | "localAsync") => void;
   }
 ): Library<T> {
   // locals
@@ -183,11 +183,15 @@ export function useLibrary<T extends Listable>(
   const GetAllListings = React.useCallback(() => [...listings], [listings]);
 
   // Effects
-  if (callbacks.loadingFinished) {
-    React.useEffect(
-      () => callbacks.loadingFinished(storeName, listings.length),
-      [callbacks.loadingFinished, listings]
-    );
+  if (callbacks.signalLoadComplete) {
+    React.useEffect(() => {
+      if (listings.some(l => l.Origin === "localAsync")) {
+        callbacks.signalLoadComplete("localAsync");
+      }
+      if (listings.some(l => l.Origin === "account")) {
+        callbacks.signalLoadComplete("account");
+      }
+    }, [callbacks.signalLoadComplete, listings]);
   }
 
   React.useEffect(() => {
