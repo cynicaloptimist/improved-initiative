@@ -179,7 +179,14 @@ export class StatBlockEditor extends React.Component<
           <KeywordFields api={api} keywordType={keywordType} />
         </div>
       ))}
-      {["Traits", "Actions", "Reactions", "LegendaryActions"].map(powerType => (
+      {[
+        "Traits",
+        "Actions",
+        "BonusActions",
+        "Reactions",
+        "LegendaryActions",
+        "MythicActions"
+      ].map(powerType => (
         <div key={powerType} className="c-statblock-editor__powers">
           <PowerFields api={api} powerType={powerType} />
         </div>

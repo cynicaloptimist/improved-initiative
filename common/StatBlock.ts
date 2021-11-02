@@ -52,6 +52,8 @@ export interface StatBlock extends Listable {
   Actions: NameAndContent[];
   Reactions: NameAndContent[];
   LegendaryActions: NameAndContent[];
+  BonusActions?: NameAndContent[];
+  MythicActions?: NameAndContent[];
   Description: string;
   Player: string;
   ImageURL: string;
@@ -115,8 +117,10 @@ export namespace StatBlock {
     Challenge: "",
     Traits: [],
     Actions: [],
+    BonusActions: [],
     Reactions: [],
     LegendaryActions: [],
+    MythicActions: [],
     Description: "",
     Player: "",
     Version: process.env.VERSION || "0.0.0",

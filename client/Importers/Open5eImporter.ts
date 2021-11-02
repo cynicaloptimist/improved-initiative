@@ -48,7 +48,9 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     Challenge: sb.challenge_rating,
     Traits: nameAndDescArrays(sb.special_abilities),
     Actions: nameAndDescArrays(sb.actions),
+    BonusActions: nameAndDescArrays(sb.bonus_actions),
     LegendaryActions: nameAndDescArrays(sb.legendary_actions),
+    MythicActions: nameAndDescArrays(sb.mythic_actions),
     Reactions: nameAndDescArrays(sb.reactions)
   };
 }
