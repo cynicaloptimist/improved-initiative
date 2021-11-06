@@ -11,12 +11,13 @@ import { StatBlock } from "../../common/StatBlock";
 import { env } from "../Environment";
 import { Libraries } from "../Library/Libraries";
 import { Listing } from "../Library/Listing";
+import { Account } from "./Account";
 
 const DEFAULT_BATCH_SIZE = 10;
 const ENCOUNTER_BATCH_SIZE = 1;
 
 export class AccountClient {
-  public GetAccount(callBack: (user: any) => void) {
+  public GetAccount(callBack: (user: Account | null) => void) {
     if (!env.HasStorage) {
       return callBack(null);
     }

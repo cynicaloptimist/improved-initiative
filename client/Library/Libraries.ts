@@ -211,7 +211,7 @@ function getAccountOrSampleCharacters(
       signalLoadComplete("account");
       return;
     }
-    if (account.persistentCharacters.length == 0) {
+    if (account.persistentcharacters.length == 0) {
       signalLoadComplete("account");
     }
 
