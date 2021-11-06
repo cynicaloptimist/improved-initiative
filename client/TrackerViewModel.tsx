@@ -41,7 +41,6 @@ import axios from "axios";
 const codec = compression("lzma");
 
 export class TrackerViewModel {
-  private accountClient = new AccountClient();
   private rules = new DefaultRules();
 
   public PlayerViewClient = new PlayerViewClient(this.Socket);
