@@ -212,6 +212,7 @@ function getAccountOrSampleCharacters(
       return;
     }
     if (account.persistentcharacters.length == 0) {
+      // Normally useLibrary will only call signalLoadComplete if at least one loaded listing is from the account
       signalLoadComplete("account");
     }
 
