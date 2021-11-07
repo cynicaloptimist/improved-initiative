@@ -10,6 +10,7 @@ import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalSto
 import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
 import { useLibraries } from "./Library/Libraries";
 import { MockAccountClient } from "./MockAccountClient";
+import { InitializeTestSettings } from "./test/InitializeTestSettings";
 
 function CombatantStateWithName(name: string): CombatantState {
   const statBlock = StatBlock.Default();
@@ -34,7 +35,13 @@ function CombatantStateWithName(name: string): CombatantState {
 
 describe("Autosaved Encounters", () => {
   it("loads simple combatants", async () => {
-    InitializeSettings();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
+
     const encounter: EncounterState<CombatantState> = {
       ActiveCombatantId: null,
       RoundCounter: 0,
