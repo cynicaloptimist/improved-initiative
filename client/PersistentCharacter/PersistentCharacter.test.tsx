@@ -16,6 +16,7 @@ import { Listing } from "../Library/Listing";
 
 import axios from "axios";
 import { Store } from "../Utility/Store";
+import { MockAccountClient } from "../MockAccountClient";
 jest.mock("axios");
 
 function LibrariesCommanderHarness(props: {
@@ -24,7 +25,7 @@ function LibrariesCommanderHarness(props: {
 }) {
   const libraries = useLibraries(
     CurrentSettings(),
-    new AccountClient(),
+    MockAccountClient(),
     props.loadingFinished
   );
   useEffect(() => props.librariesCommander.SetLibraries(libraries), []);
@@ -35,7 +36,7 @@ function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
   loadingFinished: () => void;
 }) {
-  const libraries = useLibraries(CurrentSettings(), new AccountClient(), () => {
+  const libraries = useLibraries(CurrentSettings(), MockAccountClient(), () => {
     props.setLibrary(libraries.PersistentCharacters);
     props.loadingFinished();
   });

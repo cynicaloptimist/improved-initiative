@@ -9,7 +9,7 @@ import { probablyUniqueString } from "../common/Toolbox";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { CurrentSettings, InitializeSettings } from "./Settings/Settings";
 import { useLibraries } from "./Library/Libraries";
-import { AccountClient } from "./Account/AccountClient";
+import { MockAccountClient } from "./MockAccountClient";
 
 function CombatantStateWithName(name: string): CombatantState {
   const statBlock = StatBlock.Default();
@@ -51,7 +51,7 @@ describe("Autosaved Encounters", () => {
     const viewModel = new TrackerViewModel(io());
 
     const libraries = renderHook(() =>
-      useLibraries(CurrentSettings(), new AccountClient(), () => {})
+      useLibraries(CurrentSettings(), MockAccountClient(), () => {})
     );
 
     viewModel.SetLibraries(libraries.result.current);
