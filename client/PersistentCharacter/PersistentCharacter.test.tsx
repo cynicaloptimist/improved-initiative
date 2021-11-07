@@ -55,7 +55,12 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
-    InitializeTestSettings();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
     (axios.get as jest.Mock).mockResolvedValue(null);
   });
 
@@ -96,7 +101,12 @@ describe("PersistentCharacterLibrary", () => {
     let listing: Listing<PersistentCharacter>;
 
     await act(async () => {
-      InitializeTestSettings();
+      InitializeTestSettings({
+        PreloadedContent: {
+          BasicRules: false,
+          Open5eContent: false
+        }
+      });
       await savePersistentCharacterWithName("Persistent Character");
       let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
@@ -143,7 +153,12 @@ describe("PersistentCharacterLibrary", () => {
 describe("PersistentCharacter", () => {
   beforeEach(() => {
     (axios.get as jest.Mock).mockResolvedValue(null);
-    InitializeTestSettings();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
   });
 
   it("Should not save PersistentCharacters with Encounters", async () => {
