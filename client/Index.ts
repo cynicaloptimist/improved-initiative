@@ -11,6 +11,7 @@ import { TrackerViewModel } from "./TrackerViewModel";
 import { RegisterBindingHandlers } from "./Utility/CustomBindingHandlers";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { App } from "./App";
+import { Metrics } from "./Utility/Metrics";
 
 window.onload = async () => {
   LoadEnvironment();
@@ -35,6 +36,7 @@ window.onload = async () => {
     viewModel.ImportEncounterIfAvailable();
     viewModel.ImportStatBlockIfAvailable();
     viewModel.GetWhatsNewIfAvailable();
+    Metrics.TrackLoad();
   }
 
   if (document.getElementById("playerview")) {

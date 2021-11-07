@@ -89,8 +89,6 @@ export class TrackerViewModel {
     this.joinPlayerViewEncounter();
 
     this.showPrivacyNotificationAfterTutorial();
-
-    Metrics.TrackLoad();
   }
 
   public SetLibraries = (libraries: Libraries) => {
