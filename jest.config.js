@@ -6,7 +6,8 @@ module.exports = {
   },
   setupFiles: [
     "jest-localstorage-mock",
-    "./client/test/adapterSetup.ts"
+    "./client/test/adapterSetup.ts",
+    "./client/test/mocksSetup.ts"
   ],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
