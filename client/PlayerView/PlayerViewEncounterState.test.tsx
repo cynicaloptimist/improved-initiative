@@ -1,13 +1,13 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 
 describe("PlayerView State", () => {
   let encounter: Encounter;
 
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
     encounter = buildEncounter();
   });
 

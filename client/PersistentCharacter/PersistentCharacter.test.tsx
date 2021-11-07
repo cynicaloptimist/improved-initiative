@@ -3,9 +3,9 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
-import { AccountClient } from "../Account/AccountClient";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { buildEncounter } from "../test/buildEncounter";
 import { useLibraries } from "../Library/Libraries";
 import { LibrariesCommander } from "../Commands/LibrariesCommander";
@@ -55,7 +55,7 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
-    InitializeSettings();
+    InitializeTestSettings();
     (axios.get as jest.Mock).mockResolvedValue(null);
   });
 
@@ -96,7 +96,7 @@ describe("PersistentCharacterLibrary", () => {
     let listing: Listing<PersistentCharacter>;
 
     await act(async () => {
-      InitializeSettings();
+      InitializeTestSettings();
       await savePersistentCharacterWithName("Persistent Character");
       let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
@@ -143,7 +143,7 @@ describe("PersistentCharacterLibrary", () => {
 describe("PersistentCharacter", () => {
   beforeEach(() => {
     (axios.get as jest.Mock).mockResolvedValue(null);
-    InitializeSettings();
+    InitializeTestSettings();
   });
 
   it("Should not save PersistentCharacters with Encounters", async () => {

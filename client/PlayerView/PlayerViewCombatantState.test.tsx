@@ -1,14 +1,15 @@
 import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 
 describe("PlayerViewCombatantState", () => {
   let encounter: Encounter;
 
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
     encounter = buildEncounter();
   });
 

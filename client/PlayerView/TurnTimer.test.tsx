@@ -3,14 +3,14 @@ import * as React from "react";
 
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { InitializeSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { CombatFooter } from "./components/CombatFooter";
 
 describe("Turn Timer", () => {
   let encounter: Encounter;
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
     encounter = buildEncounter();
   });
   test("Player View round timer keeps time", () => {

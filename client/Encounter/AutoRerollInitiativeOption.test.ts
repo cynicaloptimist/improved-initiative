@@ -1,11 +1,11 @@
 import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { buildEncounter } from "../test/buildEncounter";
 
 describe("AutoRerollInitiativeOption", () => {
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
   });
 
   const runEncounter = promptReroll => {
@@ -27,18 +27,22 @@ describe("AutoRerollInitiativeOption", () => {
   });
 
   test("Prompt", () => {
-    const settings = CurrentSettings();
-    settings.Rules.AutoRerollInitiative = AutoRerollInitiativeOption.Prompt;
-    CurrentSettings(settings);
+    InitializeTestSettings({
+      Rules: {
+        AutoRerollInitiative: AutoRerollInitiativeOption.Prompt
+      }
+    });
     const promptReroll = jest.fn();
     runEncounter(promptReroll);
     expect(promptReroll).toBeCalled();
   });
 
   test("Automatic", () => {
-    const settings = CurrentSettings();
-    settings.Rules.AutoRerollInitiative = AutoRerollInitiativeOption.Automatic;
-    CurrentSettings(settings);
+    InitializeTestSettings({
+      Rules: {
+        AutoRerollInitiative: AutoRerollInitiativeOption.Automatic
+      }
+    });
     const promptReroll = jest.fn();
     Math.random = () => 1;
     const encounter = runEncounter(promptReroll);

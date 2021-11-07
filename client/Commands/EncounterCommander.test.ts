@@ -1,7 +1,7 @@
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { buildEncounter } from "../test/buildEncounter";
 import { EncounterCommander } from "./EncounterCommander";
@@ -12,7 +12,7 @@ describe.skip("EncounterCommander", () => {
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
     window.confirm = () => true;
-    InitializeSettings();
+    InitializeTestSettings();
 
     const mockIo: any = {
       on: jest.fn(),

@@ -5,8 +5,9 @@ import { TagState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { PlayerView } from "./components/PlayerView";
 import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
 import { PortraitWithCaption } from "./components/PortraitModal";
@@ -16,7 +17,7 @@ describe.skip("PlayerViewModel", () => {
   let playerView: Enzyme.ShallowWrapper;
 
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
 
     encounter = buildEncounter();
     playerView = Enzyme.shallow(
@@ -154,9 +155,11 @@ describe.skip("Tag Suggestor", () => {
   >;
 
   beforeEach(() => {
-    InitializeSettings();
-    const playerViewSettings = CurrentSettings().PlayerView;
-    playerViewSettings.AllowTagSuggestions = true;
+    InitializeTestSettings({
+      PlayerView: {
+        AllowTagSuggestions: true
+      }
+    });
 
     encounter = buildEncounter();
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
@@ -165,7 +168,7 @@ describe.skip("Tag Suggestor", () => {
     });
     playerView = Enzyme.mount(
       <PlayerView
-        settings={playerViewSettings}
+        settings={CurrentSettings().PlayerView}
         encounterState={encounter.GetPlayerView()}
         onSuggestDamage={jest.fn()}
         onSuggestTag={suggestTag}
