@@ -17,7 +17,6 @@ import { Listing } from "../Library/Listing";
 import axios from "axios";
 import { Store } from "../Utility/Store";
 import { MockAccountClient } from "../MockAccountClient";
-jest.mock("axios");
 
 function LibrariesCommanderHarness(props: {
   librariesCommander: LibrariesCommander;
