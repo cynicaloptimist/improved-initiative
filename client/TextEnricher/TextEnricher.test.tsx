@@ -1,4 +1,5 @@
-import * as Enzyme from "enzyme";
+import { fireEvent, render } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { Spell } from "../../common/Spell";
 import { concatenatedStringRegex } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
@@ -27,13 +28,12 @@ function getTestSpell() {
   return listing;
 }
 
-describe.skip("TextEnricher", () => {
-  test("Spell Reference", async done => {
+describe("TextEnricher", () => {
+  test("Spell Reference", async () => {
     const textEnricher = new TextEnricher(
       () => {},
       spell => {
         expect(spell.Meta().Name).toEqual("Test Spell");
-        done();
       },
       () => {},
       () => [getTestSpell()],
@@ -46,12 +46,14 @@ describe.skip("TextEnricher", () => {
 
     const enrichedText = textEnricher.EnrichText(inputText);
 
-    const tree = Enzyme.mount(enrichedText);
-    tree.find(".spell-reference").simulate("click");
+    const tree = render(enrichedText);
+    act(() => {
+      tree.getByText("Test Spell").click();
+    });
     expect.assertions(1);
   });
 
-  test("Counter", async done => {
+  test("Counter", async () => {
     const textEnricher = new TextEnricher(
       () => {},
       () => {},
@@ -63,15 +65,14 @@ describe.skip("TextEnricher", () => {
 
     const inputText = "[100/1000000] gp.";
 
-    const enrichedText = textEnricher.EnrichText(inputText, newText => {
-      expect(newText).toEqual("[200/1000000] gp.");
-      done();
+    const writeBack = jest.fn();
+    const enrichedText = textEnricher.EnrichText(inputText, writeBack);
+    const tree = render(enrichedText);
+    act(() => {
+      const input = tree.getByDisplayValue("100") as HTMLInputElement;
+      fireEvent.blur(input, { target: { value: 200 } });
     });
 
-    const tree = Enzyme.mount(enrichedText);
-    tree.find(".counter").simulate("blur", {
-      target: { value: "200" }
-    });
-    expect.assertions(1);
+    expect(writeBack).toHaveBeenCalledWith("[200/1000000] gp.");
   });
 });
