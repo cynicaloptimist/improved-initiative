@@ -7,7 +7,7 @@ import * as DB from "./dbconnection";
 import { handleCurrentUser } from "./patreon";
 import { AccountStatus } from "./user";
 
-describe.skip("User Accounts", () => {
+describe("User Accounts", () => {
   let mongod: MongodbMemoryServer;
   let uri;
   let userId: ObjectID;
@@ -31,7 +31,7 @@ describe.skip("User Accounts", () => {
   afterEach(async done => {
     await DB.close();
     done();
-  })
+  });
 
   afterAll(async () => {
     await mongod.stop();
