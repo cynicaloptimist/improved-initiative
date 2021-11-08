@@ -57,7 +57,7 @@ function buildFolderComponents<T extends Listable>(
       const folder = foldersByKey[key];
       const listingComponents = folder.listings.map(buildListingComponent);
       return (
-        <Folder key={folder.label} name={folder.label}>
+        <Folder key={key} name={folder.label}>
           {buildFolderComponents(folder.subFoldersByKey, buildListingComponent)}
           {listingComponents}
         </Folder>
@@ -76,7 +76,7 @@ function ensureFolder(
     const folderName = path[i];
     if (folderCursor[folderName] === undefined) {
       folderCursor[folderName] = {
-        label: labelString,
+        label: labelString.split("/")[i],
         listings: [],
         subFoldersByKey: {}
       };
