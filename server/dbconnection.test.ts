@@ -1,5 +1,5 @@
 import { ObjectID } from "mongodb";
-import MongodbMemoryServer from "mongodb-memory-server";
+import { MongoMemoryServer } from "mongodb-memory-server";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
@@ -8,13 +8,16 @@ import { handleCurrentUser } from "./patreon";
 import { AccountStatus } from "./user";
 
 describe("User Accounts", () => {
-  let mongod: MongodbMemoryServer;
+  let mongod: MongoMemoryServer;
   let uri;
   let userId: ObjectID;
 
-  beforeEach(async done => {
-    mongod = new MongodbMemoryServer();
+  beforeAll(async () => {
+    mongod = await MongoMemoryServer.create();
     uri = await mongod.getUri();
+  });
+
+  beforeEach(async () => {
     await DB.initialize(uri);
     const user = await DB.upsertUser(
       probablyUniqueString(),
@@ -22,13 +25,14 @@ describe("User Accounts", () => {
       ""
     );
     userId = user._id;
-    done();
   });
 
-  afterEach(async done => {
+  afterEach(async () => {
     await DB.close();
+  });
+
+  afterAll(async () => {
     await mongod.stop();
-    done();
   });
 
   test("Should initialize user with empty entity sets", async done => {
