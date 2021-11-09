@@ -1,4 +1,4 @@
-import * as Enzyme from "enzyme";
+import { fireEvent, render } from "@testing-library/react";
 import * as React from "react";
 
 import { TagState } from "../../common/CombatantState";
@@ -8,37 +8,38 @@ import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
 import { buildEncounter } from "../test/buildEncounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
-import { PlayerView } from "./components/PlayerView";
-import { PlayerViewCombatant } from "./components/PlayerViewCombatant";
-import { PortraitWithCaption } from "./components/PortraitModal";
+import { PlayerView, PlayerViewProps } from "./components/PlayerView";
 
-describe.skip("PlayerViewModel", () => {
+describe("PlayerViewModel", () => {
   let encounter: Encounter;
-  let playerView: Enzyme.ShallowWrapper;
-
+  let playerViewProps: PlayerViewProps;
   beforeEach(() => {
     InitializeTestSettings();
 
     encounter = buildEncounter();
-    playerView = Enzyme.shallow(
-      <PlayerView
-        settings={CurrentSettings().PlayerView}
-        encounterState={encounter.GetPlayerView()}
-        onSuggestDamage={jest.fn()}
-        onSuggestTag={jest.fn()}
-      />
-    );
+    playerViewProps = {
+      settings: CurrentSettings().PlayerView,
+      encounterState: encounter.GetPlayerView(),
+      onSuggestDamage: jest.fn(),
+      onSuggestTag: jest.fn()
+    };
   });
 
   test("Loading the encounter populates combatants", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
+      Name: "Test Combatant 1",
       HP: { Value: 10, Notes: "" }
     });
 
-    playerView.setProps({ encounterState: encounter.GetPlayerView() });
+    const playerView = render(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+      />
+    );
 
-    expect(playerView.find(PlayerViewCombatant).length).toBe(1);
+    expect(playerView.getByText("Test Combatant 1")).toBeTruthy();
   });
 
   test("Starting the encounter splashes combatant portraits when available", () => {
@@ -58,17 +59,27 @@ describe.skip("PlayerViewModel", () => {
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
 
-    playerView.setProps({
-      encounterState: encounter.GetPlayerView(),
-      settings: settings.PlayerView
-    });
+    const playerView = render(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+        settings={settings.PlayerView}
+      />
+    );
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(0);
+    expect(playerView.queryByTestId("combatant-portrait")).toBeFalsy();
 
     encounter.EncounterFlow.StartEncounter();
-    playerView.setProps({ encounterState: encounter.GetPlayerView() });
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(1);
+    playerView.rerender(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+        settings={settings.PlayerView}
+      />
+    );
+
+    expect(playerView.queryByTestId("combatant-portrait")).toBeTruthy();
   });
 
   test("Making no change does not splash combatant portraits", () => {
@@ -89,7 +100,7 @@ describe.skip("PlayerViewModel", () => {
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
 
-    playerView = Enzyme.shallow(
+    const playerView = render(
       <PlayerView
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
@@ -98,13 +109,18 @@ describe.skip("PlayerViewModel", () => {
       />
     );
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(0);
+    expect(playerView.queryByTestId("combatant-portrait")).toBeFalsy();
 
-    playerView.setProps({
-      encounterState: encounter.GetPlayerView()
-    });
+    playerView.rerender(
+      <PlayerView
+        settings={settings.PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
+      />
+    );
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(0);
+    expect(playerView.queryByTestId("combatant-portrait")).toBeFalsy();
   });
 
   test("Applying damage does not splash combatant portraits", () => {
@@ -125,7 +141,7 @@ describe.skip("PlayerViewModel", () => {
     settings.PlayerView.DisplayPortraits = true;
     settings.PlayerView.SplashPortraits = true;
 
-    playerView = Enzyme.shallow(
+    const playerView = render(
       <PlayerView
         settings={settings.PlayerView}
         encounterState={encounter.GetPlayerView()}
@@ -134,25 +150,25 @@ describe.skip("PlayerViewModel", () => {
       />
     );
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(0);
+    expect(playerView.queryByTestId("combatant-portrait")).toBeFalsy();
 
     combatant1.ApplyDamage(5);
-    playerView.setProps({
-      encounterState: encounter.GetPlayerView()
-    });
+    playerView.rerender(
+      <PlayerView
+        settings={settings.PlayerView}
+        encounterState={encounter.GetPlayerView()}
+        onSuggestDamage={jest.fn()}
+        onSuggestTag={jest.fn()}
+      />
+    );
 
-    expect(playerView.find(PortraitWithCaption).length).toBe(0);
+    expect(playerView.queryByTestId("combatant-portrait")).toBeFalsy();
   });
 });
 
-describe.skip("Tag Suggestor", () => {
+describe("Tag Suggestor", () => {
   let encounter: Encounter;
   let suggestTag: jest.Mock<void>;
-  let playerView: Enzyme.ReactWrapper<
-    any,
-    Readonly<{}>,
-    React.Component<{}, {}, any>
-  >;
 
   beforeEach(() => {
     InitializeTestSettings({
@@ -166,7 +182,10 @@ describe.skip("Tag Suggestor", () => {
     suggestTag = jest.fn(() => {
       console.log("suggestTag");
     });
-    playerView = Enzyme.mount(
+  });
+
+  test.skip("Should suggest simple tags", done => {
+    const playerView = render(
       <PlayerView
         settings={CurrentSettings().PlayerView}
         encounterState={encounter.GetPlayerView()}
@@ -174,9 +193,7 @@ describe.skip("Tag Suggestor", () => {
         onSuggestTag={suggestTag}
       />
     );
-  });
 
-  test("Should suggest simple tags", done => {
     expect.assertions(3);
 
     suggestTag.mockImplementation((combatantId: string, tagState: TagState) => {
@@ -186,12 +203,10 @@ describe.skip("Tag Suggestor", () => {
       done();
     });
 
-    playerView
-      .find(".combatant__add-tag-button .fa-clickable")
-      .simulate("click");
-    playerView
-      .find(`.tag-suggestion input[name="tagText"]`)
-      .simulate("change", { target: { name: "tagText", value: "Dazed" } });
-    playerView.find("form").simulate("submit");
+    playerView.getByAltText("Add Tag").click();
+    fireEvent.change(playerView.getByTestId("tag-text"), {
+      target: { value: "Dazed" }
+    });
+    fireEvent.submit(playerView.getByRole("form"));
   });
 });

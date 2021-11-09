@@ -31,10 +31,8 @@ interface OwnProps {
   combatStats?: CombatStats;
 }
 
-export class PlayerView extends React.Component<
-  PlayerViewState & OwnProps,
-  LocalState
-> {
+export type PlayerViewProps = PlayerViewState & OwnProps;
+export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
   private modalTimeout: number;
 
   constructor(props) {
@@ -199,7 +197,7 @@ export class PlayerView extends React.Component<
 
   private scrollToActiveCombatant() {
     const activeCombatantElement = document.getElementsByClassName("active")[0];
-    if (activeCombatantElement) {
+    if (activeCombatantElement?.scrollIntoView) {
       activeCombatantElement.scrollIntoView(false);
     }
   }
