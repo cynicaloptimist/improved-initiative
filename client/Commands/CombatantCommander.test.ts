@@ -4,7 +4,7 @@ import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { CombatantCommander } from "./CombatantCommander";
 
-describe.skip("CombatantCommander", () => {
+describe("CombatantCommander", () => {
   let encounter: Encounter;
   let combatantCommander: CombatantCommander;
   let trackerViewModel: TrackerViewModel;
