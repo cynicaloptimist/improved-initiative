@@ -12,12 +12,9 @@ describe("User Accounts", () => {
   let uri;
   let userId: ObjectID;
 
-  beforeAll(async () => {
+  beforeEach(async done => {
     mongod = new MongodbMemoryServer();
     uri = await mongod.getUri();
-  }, 60000);
-
-  beforeEach(async done => {
     await DB.initialize(uri);
     const user = await DB.upsertUser(
       probablyUniqueString(),
@@ -30,11 +27,8 @@ describe("User Accounts", () => {
 
   afterEach(async done => {
     await DB.close();
-    done();
-  });
-
-  afterAll(async () => {
     await mongod.stop();
+    done();
   });
 
   test("Should initialize user with empty entity sets", async done => {
