@@ -158,7 +158,7 @@ export function StatBlockComponent(props: StatBlockProps) {
   );
 
   const actionEntries = powerTypes
-    .filter(powerType => powerType.data.length > 0)
+    .filter(powerType => powerType?.data?.length > 0)
     .map(powerType => (
       <div key={powerType.name} className={powerType.name}>
         <h4 className="stat-label">{powerType.name}</h4>
