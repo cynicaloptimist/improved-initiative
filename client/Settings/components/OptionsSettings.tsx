@@ -84,8 +84,8 @@ export function OptionsSettings(props: {
       <Toggle fieldName="TrackerView.DisplayHPBar">
         Display HP Bar of Active or Selected Character
         <Info>
-          Show a small HP bar indicator for any selected combatant(s),
-          as well as for the currently-active combatant.
+          Show a small HP bar indicator for any selected combatant(s), as well
+          as for the currently-active combatant.
         </Info>
       </Toggle>
       <Dropdown
@@ -147,6 +147,14 @@ export function OptionsSettings(props: {
           Epic Initiative
         </a>
       </p>
+      <h3>Preloaded Content</h3>
+      <Toggle fieldName="PreloadedContent.BasicRules">
+        Basic Rules (OGL) Creatures
+      </Toggle>
+      <Toggle fieldName="PreloadedContent.Open5eContent">
+        Additional Open5e OGL Creatures
+        <Info>Includes Tome of Beasts and Creature Codex</Info>
+      </Toggle>
     </div>
   );
 }

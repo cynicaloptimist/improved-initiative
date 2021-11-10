@@ -1,25 +1,39 @@
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { buildEncounter } from "../test/buildEncounter";
 import { EncounterCommander } from "./EncounterCommander";
+import { act, renderHook } from "@testing-library/react-hooks";
+import { useLibraries } from "../Library/Libraries";
+import { CurrentSettings } from "../Settings/Settings";
+import { MockAccountClient } from "../MockAccountClient";
 
-describe.skip("EncounterCommander", () => {
+describe("EncounterCommander", () => {
   let encounter: Encounter;
   let encounterCommander: EncounterCommander;
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
     window.confirm = () => true;
-    InitializeSettings();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
 
     const mockIo: any = {
       on: jest.fn(),
       emit: jest.fn()
     };
 
+    const librariesHook = renderHook(() =>
+      useLibraries(CurrentSettings(), MockAccountClient(), () => {})
+    );
+    const libraries = librariesHook.result.current;
     trackerViewModel = new TrackerViewModel(mockIo);
+    trackerViewModel.SetLibraries(libraries);
     encounter = trackerViewModel.Encounter;
     encounterCommander = trackerViewModel.EncounterCommander;
   });
@@ -55,7 +69,7 @@ describe.skip("EncounterCommander", () => {
     expect(startEncounter).toBeCalled();
   });
 
-  test("CleanEncounter", async done => {
+  test.skip("CleanEncounter", async done => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
@@ -73,7 +87,7 @@ describe.skip("EncounterCommander", () => {
     return done();
   });
 
-  test("ClearEncounter", async done => {
+  test.skip("ClearEncounter", async done => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
@@ -91,7 +105,7 @@ describe.skip("EncounterCommander", () => {
     return done();
   });
 
-  test("Restore Player Character HP", async done => {
+  test.skip("Restore Player Character HP", async done => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
@@ -140,11 +154,13 @@ describe.skip("EncounterCommander", () => {
 
   test("LoadEncounter loads non-persistent combatants", () => {
     const savedEncounter = buildSavedEncounterWithPersistentCharacter();
-    encounterCommander.LoadSavedEncounter(savedEncounter);
+    act(() => {
+      encounterCommander.LoadSavedEncounter(savedEncounter);
+    });
     expect(encounter.Combatants()[0].DisplayName()).toEqual("Goblin");
   });
 
-  test("LoadEncounter loads the current version of persistent combatants", async done => {
+  test.skip("LoadEncounter loads the current version of persistent combatants", async () => {
     const savedEncounter = buildSavedEncounterWithPersistentCharacter();
 
     const persistentCharacter = PersistentCharacter.Initialize({
@@ -153,17 +169,15 @@ describe.skip("EncounterCommander", () => {
     });
     persistentCharacter.Id = savedEncounter.Combatants[1].PersistentCharacterId;
 
-    trackerViewModel.Libraries.PersistentCharacters.SaveNewListing(
+    await trackerViewModel.Libraries.PersistentCharacters.SaveNewListing(
       persistentCharacter
     );
-
     await encounterCommander.LoadSavedEncounter(savedEncounter);
 
     expect(encounter.Combatants()[1].DisplayName()).toEqual("Library Gregorr");
-    done();
   });
 
-  describe("Index Labelling and Saved Encounters", () => {
+  describe.skip("Index Labelling and Saved Encounters", () => {
     function buildEncounterState() {
       const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
       const oldEncounter = buildEncounter();

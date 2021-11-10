@@ -8,7 +8,6 @@ import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
-import * as L from "./library";
 import { GetPlayerViewManager } from "./playerviewmanager";
 import ConfigureRoutes from "./routes";
 import GetSessionMiddleware from "./session";
@@ -22,24 +21,12 @@ async function improvedInitiativeServer() {
   const dbConnectionString = await getDbConnectionString();
   await DB.initialize(dbConnectionString);
 
-  const statBlockLibrary = L.Library.FromFile<StatBlock>(
-    "ogl_creatures.json",
-    "/statblocks/",
-    StatBlock.GetSearchHint,
-    StatBlock.FilterDimensions
-  );
-  const spellLibrary = L.Library.FromFile<Spell>(
-    "ogl_spells.json",
-    "/spells/",
-    Spell.GetSearchHint,
-    Spell.GetFilterDimensions
-  );
   const playerViews = GetPlayerViewManager();
 
   const session = await GetSessionMiddleware(process.env.REDIS_URL);
   app.use(session);
 
-  ConfigureRoutes(app, statBlockLibrary, spellLibrary, playerViews);
+  ConfigureRoutes(app, playerViews);
 
   const defaultPort = parseInt(process.env.PORT || "80");
 

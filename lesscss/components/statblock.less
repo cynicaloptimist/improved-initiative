@@ -40,7 +40,6 @@
   }
 }
 
-
 .combatant-details__header {
   display: flex;
   flex-flow: row;
@@ -91,12 +90,12 @@
   margin: 0 @small-spacer 0 0;
   color: @primary-red;
 }
-.stat-value + .stat-value, .stat-value__item + .stat-value__item {
+.stat-value + .stat-value,
+.stat-value__item + .stat-value__item {
   &::before {
     content: ", ";
   }
 }
-
 
 .c-statblock {
   display: block;
@@ -112,7 +111,8 @@
     align-items: center;
   }
 
-  p:not(:last-child), li:not(:last-child) {
+  p:not(:last-child),
+  li:not(:last-child) {
     margin-bottom: @extra-small-spacer;
   }
 
@@ -133,7 +133,8 @@
     white-space: pre-line;
   }
 
-  .AC, .HP {
+  .AC,
+  .HP {
     margin-bottom: @extra-small-spacer;
   }
 
@@ -196,12 +197,16 @@
     }
   }
 
-  .Skills, .Saves, .keyword-sets > div {
+  .Skills,
+  .Saves,
+  .keyword-sets > div {
     margin-bottom: @small-spacer;
   }
 
   .Actions,
+  .BonusActions,
   .LegendaryActions,
+  .MythicActions,
   .Reactions,
   .Traits {
     flex-direction: column;

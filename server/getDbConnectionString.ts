@@ -1,4 +1,4 @@
-import MongodbMemoryServer from "mongodb-memory-server";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
 let mongod;
 
@@ -8,6 +8,6 @@ export async function getDbConnectionString() {
   }
 
   console.log("No connection string found, initializing in-memory DB");
-  mongod = new MongodbMemoryServer();
+  mongod = await MongoMemoryServer.create();
   return await mongod.getUri();
 }

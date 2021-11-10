@@ -41,7 +41,6 @@ import axios from "axios";
 const codec = compression("lzma");
 
 export class TrackerViewModel {
-  private accountClient = new AccountClient();
   private rules = new DefaultRules();
 
   public PlayerViewClient = new PlayerViewClient(this.Socket);
@@ -90,8 +89,6 @@ export class TrackerViewModel {
     this.joinPlayerViewEncounter();
 
     this.showPrivacyNotificationAfterTutorial();
-
-    Metrics.TrackLoad();
   }
 
   public SetLibraries = (libraries: Libraries) => {
@@ -363,7 +360,14 @@ export class TrackerViewModel {
     });
   }
 
+  private didLoadAutosave = false;
+
   public LoadAutoSavedEncounterIfAvailable() {
+    if (this.didLoadAutosave) {
+      return;
+    }
+    this.didLoadAutosave = true;
+
     const autosavedEncounter = LegacySynchronousLocalStore.Load(
       LegacySynchronousLocalStore.AutoSavedEncounters,
       LegacySynchronousLocalStore.DefaultSavedEncounterId
@@ -371,6 +375,7 @@ export class TrackerViewModel {
 
     if (autosavedEncounter) {
       const updatedState = UpdateLegacyEncounterState(autosavedEncounter);
+
       this.Encounter.LoadEncounterState(
         updatedState,
         this.LibrariesCommander.UpdatePersistentCharacter,

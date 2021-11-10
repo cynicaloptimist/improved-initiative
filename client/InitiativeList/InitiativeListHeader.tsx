@@ -15,7 +15,10 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
           <span className="screen-reader-only">Initiative Score</span>
           <div aria-hidden="true">
             <Tippy content={encounterStateTip}>
-              <span className={"fas " + encounterStateIcon}></span>
+              <span
+                data-testid="encounter-state-icon"
+                className={"fas " + encounterStateIcon}
+              ></span>
             </Tippy>
           </div>
         </th>

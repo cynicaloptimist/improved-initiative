@@ -6,14 +6,21 @@ import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
 export interface Library<T extends Listable> {
-  AddListings: (newListingMetas: ListingMeta[], source: ListingOrigin) => void;
+  AddListings: (
+    newListingMetas: ListingMeta[],
+    source: ListingOrigin,
+    mapLinkResponse?: (statBlockData: any) => T
+  ) => void;
   DeleteListing: (id: string) => Promise<void>;
   SaveNewListing: (newListable: T) => Promise<Listing<T>>;
   SaveEditedListing: (
     listing: Listing<T>,
     newListable: T
   ) => Promise<Listing<T>>;
-  GetOrCreateListingById: (listingId: string) => Promise<Listing<T>>;
+  GetOrCreateListingById: (
+    listingId: string,
+    template?: T
+  ) => Promise<Listing<T>>;
   GetAllListings: () => Listing<T>[];
 }
 
@@ -26,7 +33,7 @@ export function useLibrary<T extends Listable>(
     accountDelete: (listableId: string) => any;
     getSearchHint: (listable: T) => string;
     getFilterDimensions: (listable: T) => FilterDimensions;
-    loadingFinished?: (storeName: string, count: number) => void;
+    signalLoadComplete?: (string: "account" | "localAsync") => void;
   }
 ): Library<T> {
   // locals
@@ -67,10 +74,16 @@ export function useLibrary<T extends Listable>(
   //exported
 
   const AddListings = React.useCallback(
-    (newListingMetas: ListingMeta[], source: ListingOrigin) => {
+    (
+      newListingMetas: ListingMeta[],
+      source: ListingOrigin,
+      mapLinkResponse?: (statBlockData: any) => T
+    ) => {
       setListings(currentListings => [
         ...currentListings,
-        ...newListingMetas.map(m => new Listing<T>(m, source))
+        ...newListingMetas.map(
+          m => new Listing<T>(m, source, undefined, mapLinkResponse)
+        )
       ]);
     },
     [setListings]
@@ -149,9 +162,10 @@ export function useLibrary<T extends Listable>(
   );
 
   const GetOrCreateListingById = React.useCallback(
-    async (listingId: string) => {
-      const template: T = {
+    async (listingId: string, template?: T) => {
+      const newItem: T = {
         ...callbacks.createEmptyListing(),
+        ...template,
         Id: listingId
       };
       const currentListing = listings.find(l => l.Meta().Id === listingId);
@@ -160,7 +174,7 @@ export function useLibrary<T extends Listable>(
         return currentListing;
       }
 
-      const newListing = await SaveNewListing(template);
+      const newListing = await SaveNewListing(newItem);
       return newListing;
     },
     [callbacks.createEmptyListing, listings, SaveNewListing]
@@ -169,11 +183,15 @@ export function useLibrary<T extends Listable>(
   const GetAllListings = React.useCallback(() => [...listings], [listings]);
 
   // Effects
-  if (callbacks.loadingFinished) {
-    React.useEffect(
-      () => callbacks.loadingFinished(storeName, listings.length),
-      [callbacks.loadingFinished, listings]
-    );
+  if (callbacks.signalLoadComplete) {
+    React.useEffect(() => {
+      if (listings.some(l => l.Origin === "localAsync")) {
+        callbacks.signalLoadComplete("localAsync");
+      }
+      if (listings.some(l => l.Origin === "account")) {
+        callbacks.signalLoadComplete("account");
+      }
+    }, [callbacks.signalLoadComplete, listings]);
   }
 
   React.useEffect(() => {

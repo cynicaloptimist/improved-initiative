@@ -89,8 +89,10 @@ export class StatBlockImporter extends Importer {
 
     statBlock.Traits = this.getPowers("trait");
     statBlock.Actions = this.getPowers("action");
+    statBlock.BonusActions = this.getPowers("bonus");
     statBlock.Reactions = this.getPowers("reaction");
     statBlock.LegendaryActions = this.getPowers("legendary");
+    statBlock.MythicActions = this.getPowers("mythic");
 
     statBlock.Description = this.getString("description");
 

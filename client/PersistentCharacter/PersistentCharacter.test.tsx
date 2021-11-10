@@ -3,9 +3,9 @@ import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { StatBlock } from "../../common/StatBlock";
-import { AccountClient } from "../Account/AccountClient";
 import { SaveEncounterPrompt } from "../Prompts/SaveEncounterPrompt";
-import { InitializeSettings } from "../Settings/Settings";
+import { CurrentSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { buildEncounter } from "../test/buildEncounter";
 import { useLibraries } from "../Library/Libraries";
 import { LibrariesCommander } from "../Commands/LibrariesCommander";
@@ -16,27 +16,28 @@ import { Listing } from "../Library/Listing";
 
 import axios from "axios";
 import { Store } from "../Utility/Store";
-jest.mock("axios");
+import { MockAccountClient } from "../MockAccountClient";
 
 function LibrariesCommanderHarness(props: {
   librariesCommander: LibrariesCommander;
   loadingFinished: () => void;
 }) {
-  const libraries = useLibraries(new AccountClient(), props.loadingFinished);
+  const libraries = useLibraries(
+    CurrentSettings(),
+    MockAccountClient(),
+    props.loadingFinished
+  );
   useEffect(() => props.librariesCommander.SetLibraries(libraries), []);
   return <div />;
 }
 
 function PersistentCharacterLibraryHarness(props: {
   setLibrary: (library: Library<PersistentCharacter>) => void;
-  loadingFinished: (count: number) => void;
+  loadingFinished: () => void;
 }) {
-  const libraries = useLibraries(new AccountClient(), (storeName, count) => {
-    if (storeName !== Store.PersistentCharacters) {
-      return;
-    }
+  const libraries = useLibraries(CurrentSettings(), MockAccountClient(), () => {
     props.setLibrary(libraries.PersistentCharacters);
-    props.loadingFinished(count);
+    props.loadingFinished();
   });
   return <div />;
 }
@@ -53,6 +54,12 @@ describe("InitializeCharacter", () => {
 describe("PersistentCharacterLibrary", () => {
   beforeEach(() => {
     localStorage.clear();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
     (axios.get as jest.Mock).mockResolvedValue(null);
   });
 
@@ -77,7 +84,7 @@ describe("PersistentCharacterLibrary", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={count => count === 1 && done()}
+            loadingFinished={done}
           />
         );
       });
@@ -93,7 +100,12 @@ describe("PersistentCharacterLibrary", () => {
     let listing: Listing<PersistentCharacter>;
 
     await act(async () => {
-      InitializeSettings();
+      InitializeTestSettings({
+        PreloadedContent: {
+          BasicRules: false,
+          Open5eContent: false
+        }
+      });
       await savePersistentCharacterWithName("Persistent Character");
       let library: Library<PersistentCharacter>;
       await new Promise<void>(done => {
@@ -102,7 +114,7 @@ describe("PersistentCharacterLibrary", () => {
             setLibrary={r => {
               library = r;
             }}
-            loadingFinished={count => count === 1 && done()}
+            loadingFinished={done}
           />
         );
       });
@@ -140,7 +152,12 @@ describe("PersistentCharacterLibrary", () => {
 describe("PersistentCharacter", () => {
   beforeEach(() => {
     (axios.get as jest.Mock).mockResolvedValue(null);
-    InitializeSettings();
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
   });
 
   it("Should not save PersistentCharacters with Encounters", async () => {
@@ -151,7 +168,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={_ => done()}
+            loadingFinished={done}
           />
         );
       });
@@ -193,7 +210,7 @@ describe("PersistentCharacter", () => {
         render(
           <PersistentCharacterLibraryHarness
             setLibrary={r => (library = r)}
-            loadingFinished={_ => done()}
+            loadingFinished={done}
           />
         );
       });

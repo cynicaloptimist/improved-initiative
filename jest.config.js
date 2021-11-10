@@ -1,26 +1,16 @@
 module.exports = {
   globals: {
     "ts-jest": {
-      "tsconfig": "client/tsconfig.json"
+      tsconfig: "client/tsconfig.json"
     }
   },
-  setupFiles: [
-    "jest-localstorage-mock",
-    "./client/test/adapterSetup.ts"
-  ],
+  setupFiles: ["./client/test/adapterSetup.ts", "./client/test/mocksSetup.ts"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
     "^.+\\.md?$": "markdown-loader-jest"
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js",
-    "jsx",
-    "json",
-    "node"
-  ],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   moduleNameMapper: {
     "^dnd-core$": "dnd-core/dist/cjs",
     "^react-dnd$": "react-dnd/dist/cjs",

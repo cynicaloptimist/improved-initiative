@@ -57,7 +57,7 @@ export async function upsertUser(
     },
     {
       upsert: true,
-      returnOriginal: false
+      returnDocument: "after"
     }
   );
   const user = result.value;
@@ -161,7 +161,7 @@ async function updatePersistentCharactersIfNeeded(
 }
 
 function getStatBlockListings(statBlocks: {
-  [key: string]: {};
+  [key: string]: any;
 }): ListingMeta[] {
   return Object.keys(statBlocks).map(key => {
     const c = { ...StatBlock.Default(), ...statBlocks[key] };
@@ -178,7 +178,7 @@ function getStatBlockListings(statBlocks: {
   });
 }
 
-function getSpellListings(spells: { [key: string]: {} }): ListingMeta[] {
+function getSpellListings(spells: { [key: string]: any }): ListingMeta[] {
   return Object.keys(spells).map(key => {
     const c = { ...Spell.Default(), ...spells[key] };
     return {
@@ -195,7 +195,7 @@ function getSpellListings(spells: { [key: string]: {} }): ListingMeta[] {
 }
 
 function getEncounterListings(encounters: {
-  [key: string]: {};
+  [key: string]: any;
 }): ListingMeta[] {
   return Object.keys(encounters).map(key => {
     const c = {
@@ -216,7 +216,7 @@ function getEncounterListings(encounters: {
 }
 
 function getPersistentCharacterListings(persistentCharacters: {
-  [key: string]: {};
+  [key: string]: any;
 }): ListingMeta[] {
   return Object.keys(persistentCharacters).map(key => {
     const c = {

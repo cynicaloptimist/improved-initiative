@@ -34,8 +34,10 @@ export function StatBlockComponent(props: StatBlockProps) {
   const powerTypes = [
     { name: "Traits", data: statBlock.Traits },
     { name: "Actions", data: statBlock.Actions },
+    { name: "Bonus Actions", data: statBlock.BonusActions },
     { name: "Reactions", data: statBlock.Reactions },
-    { name: "Legendary Actions", data: statBlock.LegendaryActions }
+    { name: "Legendary Actions", data: statBlock.LegendaryActions },
+    { name: "Mythic Actions", data: statBlock.MythicActions }
   ];
 
   const headerEntries = (

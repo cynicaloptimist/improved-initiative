@@ -2,14 +2,14 @@ import { buildEncounter } from "../test/buildEncounter";
 
 import { StatBlock } from "../../common/StatBlock";
 import { Tag } from "../Combatant/Tag";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 describe("Encounter", () => {
   let encounter: Encounter;
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
     encounter = buildEncounter();
   });
 
@@ -188,8 +188,11 @@ describe("Encounter", () => {
   });
 
   test("ActiveCombatantOnTop shows player view combatants in shifted order", () => {
-    const settings = CurrentSettings();
-    settings.PlayerView.ActiveCombatantOnTop = true;
+    InitializeTestSettings({
+      PlayerView: {
+        ActiveCombatantOnTop: true
+      }
+    });
 
     for (let i = 0; i < 5; i++) {
       const thisCombatant = encounter.AddCombatantFromStatBlock(
@@ -227,7 +230,7 @@ describe("Encounter", () => {
 
 describe("Tags", () => {
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
   });
 
   test("Should appear in Player View", () => {

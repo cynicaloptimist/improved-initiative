@@ -1,12 +1,12 @@
 import { StatBlock } from "../../common/StatBlock";
-import { CurrentSettings, InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { GetOrRollMaximumHP, VariantMaximumHP } from "./GetOrRollMaximumHP";
 
 describe("GetOrRollMaximumHP", () => {
   let statBlock: StatBlock;
 
   beforeEach(() => {
-    InitializeSettings();
+    InitializeTestSettings();
     statBlock = StatBlock.Default();
     statBlock.HP = {
       Value: 12, // Lower than the minimum to test rolling dice vs. using value
@@ -20,9 +20,11 @@ describe("GetOrRollMaximumHP", () => {
   });
 
   test("Should roll stat block's HP if setting is enabled", () => {
-    const settings = CurrentSettings();
-    settings.Rules.RollMonsterHp = true;
-    CurrentSettings(settings);
+    InitializeTestSettings({
+      Rules: {
+        RollMonsterHp: true
+      }
+    });
 
     const hp = GetOrRollMaximumHP(statBlock, VariantMaximumHP.DEFAULT);
     expect(hp).toBeGreaterThanOrEqual(24);

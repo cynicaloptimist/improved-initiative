@@ -39,9 +39,10 @@ interface State<T extends Listable> {
   previewPosition: { left: number; top: number };
 }
 
-export class LibraryReferencePane<
-  T extends Listable & object
-> extends React.Component<LibraryReferencePaneProps<T>, State<T>> {
+export class LibraryReferencePane<T extends Listable> extends React.Component<
+  LibraryReferencePaneProps<T>,
+  State<T>
+> {
   private filterCache: FilterCache<Listing<T>>;
 
   constructor(props: LibraryReferencePaneProps<T>) {
@@ -95,14 +96,12 @@ export class LibraryReferencePane<
             <li style={{ margin: 5, fontStyle: "italic" }}>
               <p style={{ flexShrink: 1 }}>
                 Improved Initiative comes pre-loaded with statblocks and spells
-                from only the{" "}
-                <a
-                  href="https://dnd.wizards.com/articles/features/basicrules"
-                  target="_blank"
-                >
-                  D&amp;D Basic Rules
+                from the
+                <a href="https://open5e.com/" target="_blank">
+                  Open5e API
                 </a>
-                .
+                . Visit the Options tab on the Settings pane to configure
+                preloaded content.
               </p>
             </li>
           )}

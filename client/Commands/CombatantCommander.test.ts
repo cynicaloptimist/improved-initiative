@@ -1,17 +1,17 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
-import { InitializeSettings } from "../Settings/Settings";
+import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { CombatantCommander } from "./CombatantCommander";
 
-describe.skip("CombatantCommander", () => {
+describe("CombatantCommander", () => {
   let encounter: Encounter;
   let combatantCommander: CombatantCommander;
   let trackerViewModel: TrackerViewModel;
   beforeEach(() => {
     window.confirm = () => true;
 
-    InitializeSettings();
+    InitializeTestSettings();
 
     const mockIo: any = {
       on: jest.fn(),

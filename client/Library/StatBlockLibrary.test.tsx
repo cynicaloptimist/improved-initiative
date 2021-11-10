@@ -17,7 +17,7 @@ function LibraryTest(props: {
     accountDelete: () => {},
     getFilterDimensions: () => ({}),
     getSearchHint: () => "",
-    loadingFinished: props.loadingFinished
+    signalLoadComplete: props.loadingFinished
   });
 
   props.libraryRef(library);

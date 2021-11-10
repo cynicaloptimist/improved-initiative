@@ -1,5 +1,5 @@
 import { ObjectID } from "mongodb";
-import MongodbMemoryServer from "mongodb-memory-server";
+import { MongoMemoryServer } from "mongodb-memory-server";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
@@ -7,17 +7,17 @@ import * as DB from "./dbconnection";
 import { handleCurrentUser } from "./patreon";
 import { AccountStatus } from "./user";
 
-describe.skip("User Accounts", () => {
-  let mongod: MongodbMemoryServer;
+describe("User Accounts", () => {
+  let mongod: MongoMemoryServer;
   let uri;
   let userId: ObjectID;
 
   beforeAll(async () => {
-    mongod = new MongodbMemoryServer();
+    mongod = await MongoMemoryServer.create();
     uri = await mongod.getUri();
-  }, 60000);
+  });
 
-  beforeEach(async done => {
+  beforeEach(async () => {
     await DB.initialize(uri);
     const user = await DB.upsertUser(
       probablyUniqueString(),
@@ -25,13 +25,11 @@ describe.skip("User Accounts", () => {
       ""
     );
     userId = user._id;
-    done();
   });
 
-  afterEach(async done => {
+  afterEach(async () => {
     await DB.close();
-    done();
-  })
+  });
 
   afterAll(async () => {
     await mongod.stop();
