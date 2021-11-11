@@ -12,6 +12,7 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     "account",
     "localAsync",
     "localStorage",
+    "open5e",
     "server"
   ];
 
