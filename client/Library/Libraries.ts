@@ -263,5 +263,8 @@ const handleAccountSync = (
     libraries.Encounters.AddListings(account.encounters, "account");
   }
 
-  accountClient.SaveAllUnsyncedItems(libraries, () => {});
+  setTimeout(
+    () => accountClient.SaveAllUnsyncedItems(libraries, () => {}),
+    1000
+  );
 };
