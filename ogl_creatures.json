@@ -15188,13 +15188,22 @@
       "Cha": 12
     },
     "DamageVulnerabilities": ["fire"],
-    "DamageResistances": [],
-    "DamageImmunities": [
+    "DamageResistances": [
       "bludgeoning",
       "piercing",
       "and slashing from nonmagical weapons"
     ],
-    "ConditionImmunities": ["necrotic", "poisoned"],
+    "DamageImmunities": [
+      "necrotic",
+      "poison"
+    ],
+    "ConditionImmunities": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
     "Saves": [
       {
         "Name": "Wis",

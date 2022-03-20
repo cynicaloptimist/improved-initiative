@@ -151,23 +151,27 @@ export class AccountSyncSettings extends React.Component<
 
   private downloadAndSaveAllSyncedItems = async () => {
     const account = await this.props.accountClient.GetFullAccount();
+    if (!account) {
+      console.warn("No account from GetFullAccount");
+      return;
+    }
 
     await Promise.all(
-      Object.keys(account.statblocks).map(async statBlockId => {
+      Object.keys(account.statblocks ?? {}).map(async statBlockId => {
         const statBlock = account.statblocks[statBlockId];
         return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
       })
     );
 
     await Promise.all(
-      Object.keys(account.spells).map(async spellId => {
+      Object.keys(account.spells ?? {}).map(async spellId => {
         const spell = account.spells[spellId];
         return await Store.Save(Store.Spells, spellId, spell);
       })
     );
 
     await Promise.all(
-      Object.keys(account.persistentcharacters).map(
+      Object.keys(account.persistentcharacters ?? {}).map(
         async persistentCharacterId => {
           const persistentCharacter =
             account.persistentcharacters[persistentCharacterId];
@@ -181,7 +185,7 @@ export class AccountSyncSettings extends React.Component<
     );
 
     await Promise.all(
-      Object.keys(account.encounters).map(async encounterId => {
+      Object.keys(account.encounters ?? {}).map(async encounterId => {
         const spell = account.encounters[encounterId];
         return await Store.Save(Store.SavedEncounters, encounterId, spell);
       })

@@ -21,7 +21,7 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
       Notes: parenthesizeOrEmpty(sb.armor_desc)
     },
     InitiativeModifier: 0,
-    Speed: Object.keys(sb.speed).map(speedType => {
+    Speed: Object.keys(sb.speed ?? {}).map(speedType => {
       return `${speedType} ${sb.speed[speedType]} ft.`;
     }),
     Abilities: {
@@ -37,7 +37,7 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     DamageImmunities: commaSeparatedStrings(sb.damage_immunities),
     ConditionImmunities: commaSeparatedStrings(sb.condition_immunities),
     Saves: getSaves(sb),
-    Skills: Object.keys(sb.skills).map(skillName => {
+    Skills: Object.keys(sb.skills ?? {}).map(skillName => {
       return {
         Name: _.startCase(skillName),
         Modifier: sb.skills[skillName]
