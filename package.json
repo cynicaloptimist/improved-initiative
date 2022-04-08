@@ -93,7 +93,7 @@
     "knockout-mapping": "^2.6.0",
     "localforage": "^1.10.0",
     "lodash": "^4.17.20",
-    "moment": "^2.22.1",
+    "moment": "^2.29.2",
     "mongodb": "^3.7.3",
     "mongodb-memory-server": "^7.6.3",
     "mousetrap": "^1.5.3",
