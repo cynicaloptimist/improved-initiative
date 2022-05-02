@@ -27,7 +27,11 @@ export default function(
   if (process.env.REDIS_URL) {
     const pubClient = redis.createClient(process.env.REDIS_URL);
     const subClient = pubClient.duplicate();
-    io.adapter(socketIoRedisAdapter.createAdapter(pubClient, subClient));
+    const adapter: any = socketIoRedisAdapter.createAdapter(
+      pubClient,
+      subClient
+    );
+    io.adapter(adapter);
   }
 
   io.use(provideSessionToSocketIo(session));
