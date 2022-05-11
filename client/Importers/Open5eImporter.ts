@@ -11,7 +11,7 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     ...StatBlock.Default(),
     Name: sb.name,
     Source: sb.document__title,
-    Type: sb.type + " " + parenthesizeOrEmpty(sb.subtype),
+    Type: getType(sb) + " " + parenthesizeOrEmpty(sb.subtype),
     HP: {
       Value: sb.hit_points,
       Notes: parenthesizeOrEmpty(sb.hit_dice)
@@ -131,4 +131,23 @@ function getNameAndContent(data: {
     Name: data.name,
     Content: data.desc
   };
+}
+
+function getType(data: any): string {
+  // Strip any trailing text after the last comma,
+  // to remove any source information
+  let typeString = data.type;
+  const pos = typeString.lastIndexOf(",");
+  if (pos != -1) {
+    typeString = typeString.substr(0, pos);
+  }
+  const sizeString = data.size;
+  if (sizeString) {
+    typeString = sizeString + " " + typeString;
+  }
+  const alignment = data.alignment;
+  if (alignment) {
+    typeString = typeString + ", " + alignment;
+  }
+  return typeString;
 }
