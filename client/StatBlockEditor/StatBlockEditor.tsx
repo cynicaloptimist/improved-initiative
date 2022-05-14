@@ -302,7 +302,7 @@ export class StatBlockEditor extends React.Component<
 
     if (this.willOverwriteStatBlock(path, name)) {
       errors.PathAndName =
-        "Error: This will overwrite an existing custom statblock.";
+        "Error: This copy will overwrite an existing statblock. Please change the name or folder.";
     }
 
     return errors;
