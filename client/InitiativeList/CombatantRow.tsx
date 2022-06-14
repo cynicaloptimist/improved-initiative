@@ -26,8 +26,9 @@ export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
 
-  const { DisplayPortraits } = React.useContext(SettingsContext).TrackerView;
-  const { DisplayHPBar } = React.useContext(SettingsContext).TrackerView;
+  const { DisplayPortraits, DisplayHPBar } = React.useContext(
+    SettingsContext
+  ).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
