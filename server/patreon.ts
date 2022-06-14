@@ -14,8 +14,14 @@ import { AccountStatus } from "./user";
 type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
 
-const tiersWithAccountSyncEntitled = ["1322253", "1937132"];
-const tiersWithEpicEntitled = ["1937132"];
+const tiersWithAccountSyncEntitled = [
+  "1322253", // deprecated: "Improved Initiative"
+  "8750629", // "Account Sync"
+  "1937132", // deprecated: "Epic Initiative"
+  "8749940" // "Epic Tier"
+];
+
+const tiersWithEpicEntitled = ["1937132", "8749940"];
 
 const baseUrl = process.env.BASE_URL,
   patreonClientId = process.env.PATREON_CLIENT_ID,
