@@ -15,6 +15,7 @@ export interface CombatantState {
   PersistentCharacterId?: string;
   CurrentHP: number;
   CurrentNotes?: string;
+  Color?: string;
   TemporaryHP: number;
   Initiative: number;
   InitiativeGroup?: string;
