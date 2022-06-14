@@ -36,6 +36,7 @@ export interface Settings {
     DisplayTurnTimer: boolean;
     DisplayDifficulty: boolean;
     DisplayHPBar: boolean;
+    DisplayCombatantColor: boolean;
     PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
@@ -63,6 +64,7 @@ export function getDefaultSettings(): Settings {
       DisplayTurnTimer: false,
       DisplayDifficulty: true,
       DisplayHPBar: false,
+      DisplayCombatantColor: false,
       PostCombatStats: PostCombatStatsOption.None
     },
     PlayerView: {
@@ -75,6 +77,7 @@ export function getDefaultSettings(): Settings {
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayPortraits: false,
+      DisplayCombatantColor: false,
       SplashPortraits: false,
       CustomCSS: "",
       CustomStyles: {
