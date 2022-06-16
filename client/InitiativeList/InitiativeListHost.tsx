@@ -70,6 +70,14 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
     [tracker, combatants]
   );
 
+  const setCombatantColor = useCallback(
+    (combatantId: string, color: string) => {
+      const combatant = combatants.find(c => c.Id == combatantId);
+      combatant.Color(color);
+    },
+    [tracker, combatants]
+  );
+
   return (
     <CommandContext.Provider
       value={{
@@ -77,7 +85,8 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
         RemoveTagFromCombatant: removeCombatantTag,
         ApplyDamageToCombatant: applyDamageToCombatant,
         CombatantCommands: tracker.CombatantCommander.Commands,
-        MoveCombatantFromDrag: moveCombatantFromDrag
+        MoveCombatantFromDrag: moveCombatantFromDrag,
+        SetCombatantColor: setCombatantColor
       }}
     >
       <InitiativeList
