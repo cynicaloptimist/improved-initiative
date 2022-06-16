@@ -26,7 +26,8 @@ export function ToPlayerViewCombatantState(
         };
       }),
     ImageURL: sendImage ? combatant.StatBlock().ImageURL : "",
-    AC: combatant.RevealedAC() ? combatant.StatBlock().AC.Value : undefined
+    AC: combatant.RevealedAC() ? combatant.StatBlock().AC.Value : undefined,
+    Color: combatant.Color()
   };
 }
 
