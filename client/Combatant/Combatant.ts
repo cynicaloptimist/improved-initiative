@@ -55,6 +55,7 @@ export class Combatant {
   public Hidden = ko.observable(false);
   public RevealedAC = ko.observable(false);
   public IndexLabel = ko.observable(0);
+  public Color = ko.observable("");
 
   public CombatTimer = new CombatTimer();
 
@@ -87,6 +88,7 @@ export class Combatant {
     this.Tags(Tag.FromTagStates(savedCombatant.Tags, this));
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
+    this.Color(savedCombatant.Color || "");
     this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
     this.CombatTimer.SetElapsedSeconds(savedCombatant.ElapsedSeconds || 0);
   }
@@ -256,6 +258,7 @@ export class Combatant {
         .map(t => t.GetState()),
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
+      Color: this.Color(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),
       InterfaceVersion: process.env.VERSION || "unknown"
     };
