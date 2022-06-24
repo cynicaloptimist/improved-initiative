@@ -7,6 +7,7 @@ interface PlayerViewCombatantProps {
   isActive: boolean;
   portraitColumnVisible: boolean;
   acColumnVisible: boolean;
+  colorVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
   suggestDamage: (combatant: PlayerViewCombatantState) => void;
@@ -24,6 +25,8 @@ export class PlayerViewCombatant extends React.Component<
     if (this.props.combatant.IsPlayerCharacter) {
       classNames.push("playercharacter");
     }
+    const hasColor =
+      this.props.combatant.Color && this.props.combatant.Color.length > 0;
     return (
       <li className={classNames.join(" ")}>
         <div className="combatant__initiative">
@@ -39,7 +42,15 @@ export class PlayerViewCombatant extends React.Component<
             )}
           </div>
         )}
-        <div className="combatant__name">{this.props.combatant.Name}</div>
+        <div className="combatant__name">
+          {this.props.combatant.Color && hasColor && (
+            <span
+              className="combatant__color fas fa-circle"
+              style={{ color: this.props.combatant.Color }}
+            />
+          )}
+          {this.props.combatant.Name}
+        </div>
         <div
           className={
             "combatant__hp" +

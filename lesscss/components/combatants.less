@@ -59,8 +59,7 @@
 #tracker {
   .combatant {
     transition: box-shadow @transition-activation,
-      background-color @transition-hover,
-      border-color @transition-activation;
+      background-color @transition-hover, border-color @transition-activation;
 
     &:hover {
       background-color: @hover-white;
@@ -77,11 +76,11 @@
 
 .combatant__hp-bar {
   display: block;
-  height:3px;
+  height: 3px;
   background: #c00;
   text-align: left;
   position: relative;
-  margin-bottom:-3px;
+  margin-bottom: -3px;
   .combatant__hp-bar--filled {
     display: inline-block;
     height: inherit;
@@ -90,14 +89,14 @@
     left: 0;
     top: 0;
     width: 100%;
-    transition: width .5s;
+    transition: width 0.5s;
   }
 }
 
 // hidden from encounter view by default
 .combatant {
   .combatant__hp-bar {
-    transition: opacity .3s;
+    transition: opacity 0.3s;
     opacity: 0;
   }
 }
@@ -109,7 +108,6 @@
     opacity: 1;
   }
 }
-
 
 .combatant {
   padding: @medium-spacer;
@@ -185,8 +183,9 @@
   width: 1.4rem;
   border-left: @active-combatant-indicator-width solid transparent;
   cursor: grab;
-  opacity: .4;
-  transition: border-color @transition-automation, color @transition-automation, opacity @transition-hover;
+  opacity: 0.4;
+  transition: border-color @transition-automation, color @transition-automation,
+    opacity @transition-hover;
 
   .active & {
     color: @primary-red;
@@ -263,7 +262,8 @@
   max-width: 100%;
 }
 
-.combatant__hidden-icon {
+.combatant__hidden-icon,
+.combatant__color {
   margin-right: @medium-spacer;
 }
 

@@ -10,5 +10,6 @@ export const CommandContext = React.createContext({
     draggedCombatantId: string,
     droppedOntoCombatantId: string | null
   ) => {},
+  SetCombatantColor: (combatantId: string, color: string) => {},
   CombatantCommands: [] as Command[]
 });

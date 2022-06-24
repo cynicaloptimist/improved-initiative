@@ -81,6 +81,10 @@ export function OptionsSettings(props: {
           Creatures and Non Player Characters are counted as enemies.
         </Info>
       </Toggle>
+      <Toggle fieldName="TrackerView.DisplayCombatantColor">
+        Display Combatant Colors
+        <Info>Enables a widget to assign a color to each combatant.</Info>
+      </Toggle>
       <Toggle fieldName="TrackerView.DisplayHPBar">
         Display HP Bar of Active or Selected Character
         <Info>
@@ -105,6 +109,9 @@ export function OptionsSettings(props: {
       </Toggle>
       <Toggle fieldName="PlayerView.DisplayTurnTimer">
         Display Turn Timer
+      </Toggle>
+      <Toggle fieldName="PlayerView.DisplayCombatantColor">
+        Display Combatant Colors
       </Toggle>
       <Dropdown
         fieldName="PlayerView.MonsterHPVerbosity"

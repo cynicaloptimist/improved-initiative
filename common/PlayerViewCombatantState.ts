@@ -10,4 +10,5 @@ export interface PlayerViewCombatantState {
   IsPlayerCharacter: boolean;
   ImageURL: string;
   AC?: number;
+  Color?: string;
 }

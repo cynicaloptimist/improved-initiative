@@ -3,11 +3,13 @@ import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
 import { Tags } from "./Tags";
 import { CommandContext } from "./CommandContext";
-import Tippy from "@tippyjs/react";
 import { SettingsContext } from "../Settings/SettingsContext";
 import { Command } from "../Commands/Command";
 import { useSubscription } from "../Combatant/linkComponentToObservables";
 import { useDrag, useDrop, DropTargetMonitor } from "react-dnd";
+
+import Tippy from "@tippyjs/react";
+import { SketchPicker } from "react-color";
 
 type CombatantRowProps = {
   combatantState: CombatantState;
@@ -26,8 +28,11 @@ export function CombatantRow(props: CombatantRowProps) {
   const displayName = getDisplayName(props);
   const commandContext = React.useContext(CommandContext);
 
-  const { DisplayPortraits } = React.useContext(SettingsContext).TrackerView;
-  const { DisplayHPBar } = React.useContext(SettingsContext).TrackerView;
+  const {
+    DisplayPortraits,
+    DisplayHPBar,
+    DisplayCombatantColor
+  } = React.useContext(SettingsContext).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
   const { StatBlock } = combatantState;
@@ -111,6 +116,9 @@ export function CombatantRow(props: CombatantRowProps) {
         align="left"
         aria-current={isActive ? "true" : "false"}
       >
+        {DisplayCombatantColor && (
+          <CombatantColorPicker combatantState={props.combatantState} />
+        )}
         {props.combatantState.Hidden && (
           <Tippy content="Hidden from Player View">
             <span className="combatant__hidden-icon fas fa-eye-slash" />
@@ -176,6 +184,38 @@ export function CombatantRow(props: CombatantRowProps) {
         </div>
       </td>
     </tr>
+  );
+}
+
+function CombatantColorPicker(props: { combatantState: CombatantState }) {
+  const commandContext = React.useContext(CommandContext);
+  const hasColorSet =
+    props.combatantState.Color && props.combatantState.Color.length > 0;
+
+  return (
+    <Tippy
+      trigger="click"
+      interactive
+      appendTo={document.body}
+      content={
+        <SketchPicker
+          color={props.combatantState.Color || ""}
+          disableAlpha
+          onChangeComplete={color =>
+            commandContext.SetCombatantColor(props.combatantState.Id, color.hex)
+          }
+        />
+      }
+    >
+      {hasColorSet ? (
+        <span
+          className="combatant__color fas fa-circle"
+          style={{ color: props.combatantState.Color }}
+        />
+      ) : (
+        <span className="combatant__color far fa-circle" />
+      )}
+    </Tippy>
   );
 }
 
