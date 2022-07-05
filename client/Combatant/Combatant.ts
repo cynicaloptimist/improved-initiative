@@ -65,7 +65,9 @@ export class Combatant {
   private updatingGroup = false;
 
   private processStatBlock(oldStatBlockName?: string) {
-    this.UpdateIndexLabel(oldStatBlockName);
+    if (oldStatBlockName) {
+      this.UpdateIndexLabel(oldStatBlockName);
+    }
 
     this.setAutoInitiativeGroup();
     if (oldStatBlockName) {
