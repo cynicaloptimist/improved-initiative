@@ -13,17 +13,17 @@ import { Tag } from "./Tag";
 
 export class Combatant {
   constructor(combatantState: CombatantState, public Encounter: Encounter) {
-    let statBlock = combatantState.StatBlock;
+    let oldStatBlockName = combatantState.StatBlock.Name;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
     this.PersistentCharacterId = combatantState.PersistentCharacterId || null;
 
-    this.StatBlock(statBlock);
+    this.StatBlock(combatantState.StatBlock);
 
     this.processStatBlock();
 
     this.StatBlock.subscribe(newStatBlock => {
-      this.processStatBlock(statBlock);
-      statBlock = newStatBlock;
+      this.processStatBlock(oldStatBlockName);
+      oldStatBlockName = newStatBlock.Name;
     });
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
@@ -64,13 +64,11 @@ export class Combatant {
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
-  private processStatBlock(oldStatBlock?: StatBlock) {
-    if (oldStatBlock) {
-      this.UpdateIndexLabel(oldStatBlock.Name);
-    }
+  private processStatBlock(oldStatBlockName?: string) {
+    this.UpdateIndexLabel(oldStatBlockName);
 
     this.setAutoInitiativeGroup();
-    if (oldStatBlock) {
+    if (oldStatBlockName) {
       this.Encounter.Combatants.notifySubscribers();
     }
   }
