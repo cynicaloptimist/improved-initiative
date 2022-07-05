@@ -52,7 +52,7 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
       );
 
       if (combatantViewModel !== undefined) {
-        tracker.CombatantCommander.EditSingleCombatantHP(combatantViewModel);
+        tracker.CombatantCommander.ApplyDamageTargeted(combatantViewModel);
       }
     },
     [tracker, combatantViewModels]

@@ -7,7 +7,7 @@ export const BuildCombatantCommandList: (
   new Command({
     id: "apply-damage",
     description: "Apply Damage",
-    actionBinding: c.EditHP,
+    actionBinding: c.ApplyDamage,
     fontAwesomeIcon: "fist-raised"
   }),
   new Command({
