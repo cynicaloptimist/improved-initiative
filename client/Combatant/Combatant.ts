@@ -19,10 +19,10 @@ export class Combatant {
 
     this.StatBlock(statBlock);
 
-    this.processStatBlock(statBlock);
+    this.processStatBlock();
 
     this.StatBlock.subscribe(newStatBlock => {
-      this.processStatBlock(newStatBlock, statBlock);
+      this.processStatBlock(statBlock);
       statBlock = newStatBlock;
     });
 
@@ -64,7 +64,7 @@ export class Combatant {
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
-  private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
+  private processStatBlock(oldStatBlock?: StatBlock) {
     if (oldStatBlock) {
       this.UpdateIndexLabel(oldStatBlock.Name);
     }
