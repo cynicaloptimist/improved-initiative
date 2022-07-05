@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { CombatantState, TagState } from "../../common/CombatantState";
+import { CombatantState } from "../../common/CombatantState";
 import { InitiativeSpecialRoll, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
