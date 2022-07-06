@@ -38,6 +38,7 @@ type AddCombatantFromStatBlock = {
   payload: {
     combatantId: string;
     statBlock: StatBlock;
+    rolledHP?: number;
   };
 };
 type RemoveCombatant = {
@@ -64,7 +65,8 @@ function EncounterReducer(
   if (action.type === "AddCombatantFromStatBlock") {
     const combatant = InitializeCombatantFromStatBlock(
       action.payload.statBlock,
-      action.payload.combatantId
+      action.payload.combatantId,
+      action.payload.rolledHP
     );
     newState.Combatants.push(combatant);
   }
@@ -80,13 +82,14 @@ function EncounterReducer(
 
 function InitializeCombatantFromStatBlock(
   statBlock: StatBlock,
-  combatantId: string
+  combatantId: string,
+  rolledHP?: number
 ): CombatantState {
   return {
     StatBlock: statBlock,
     Id: combatantId,
     Alias: "",
-    CurrentHP: statBlock.HP.Value, //todo: roll for max
+    CurrentHP: rolledHP ?? statBlock.HP.Value,
     TemporaryHP: 0,
     Initiative: 0,
     IndexLabel: 0, //todo
