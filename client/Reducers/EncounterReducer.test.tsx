@@ -2,6 +2,7 @@ import { EncounterState } from "../../common/EncounterState";
 import { CombatantState } from "../../common/CombatantState";
 import { cloneDeep, remove } from "lodash";
 import { StatBlock } from "../../common/StatBlock";
+import { Action } from "./EncounterActions";
 
 describe("EncounterReducer", () => {
   it("Should add combatant from StatBlock", () => {
@@ -19,40 +20,6 @@ describe("EncounterReducer", () => {
     expect(insertedCombatant.Id).toEqual("goblinId");
   });
 });
-
-type Action =
-  | AddCombatantFromState
-  | AddCombatantFromStatBlock
-  | RemoveCombatant
-  | StartEncounter
-  | EndEncounter;
-
-type AddCombatantFromState = {
-  type: "AddCombatantFromState";
-  payload: {
-    combatantState: CombatantState;
-  };
-};
-type AddCombatantFromStatBlock = {
-  type: "AddCombatantFromStatBlock";
-  payload: {
-    combatantId: string;
-    statBlock: StatBlock;
-    rolledHP?: number;
-  };
-};
-type RemoveCombatant = {
-  type: "RemoveCombatant";
-  payload: {
-    combatantId: string;
-  };
-};
-type StartEncounter = {
-  type: "StartEncounter";
-};
-type EndEncounter = {
-  type: "EndEncounter";
-};
 
 function EncounterReducer(
   state: EncounterState<CombatantState>,
