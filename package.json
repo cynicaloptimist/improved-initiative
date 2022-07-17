@@ -90,7 +90,6 @@
     "ip": "^1.1.5",
     "json-url": "^2.4.2",
     "knockout": "^3.4.2",
-    "knockout-mapping": "^2.6.0",
     "localforage": "^1.10.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
