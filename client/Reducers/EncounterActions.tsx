@@ -30,6 +30,9 @@ type RemoveCombatant = {
 };
 type StartEncounter = {
   type: "StartEncounter";
+  payload: {
+    initiativesByCombatantId: Record<string, number>;
+  };
 };
 type EndEncounter = {
   type: "EndEncounter";
