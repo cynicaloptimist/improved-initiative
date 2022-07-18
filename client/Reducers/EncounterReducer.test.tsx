@@ -2,7 +2,6 @@ import { EncounterState } from "../../common/EncounterState";
 import { CombatantState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
 import { EncounterReducer } from "./EncounterReducer";
-import { initial } from "lodash";
 import { InitializeCombatantFromStatBlock } from "./InitializeCombatantFromStatBlock";
 
 describe("EncounterReducer", () => {
