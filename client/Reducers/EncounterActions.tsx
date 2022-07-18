@@ -14,6 +14,7 @@ type AddCombatantFromState = {
     combatantState: CombatantState;
   };
 };
+
 type AddCombatantFromStatBlock = {
   type: "AddCombatantFromStatBlock";
   payload: {
@@ -22,18 +23,21 @@ type AddCombatantFromStatBlock = {
     rolledHP?: number;
   };
 };
+
 type RemoveCombatant = {
   type: "RemoveCombatant";
   payload: {
     combatantId: string;
   };
 };
+
 type StartEncounter = {
   type: "StartEncounter";
   payload: {
     initiativesByCombatantId: Record<string, number>;
   };
 };
+
 type EndEncounter = {
   type: "EndEncounter";
 };
