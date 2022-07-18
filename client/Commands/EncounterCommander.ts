@@ -92,7 +92,7 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  private rollInitiative = () => {
+  private ShowInitiativePrompt = () => {
     this.tracker.PromptQueue.Add(
       InitiativePrompt(
         this.tracker.Encounter.Combatants(),
@@ -113,7 +113,7 @@ export class EncounterCommander {
       return;
     }
 
-    this.rollInitiative();
+    this.ShowInitiativePrompt();
 
     NotifyTutorialOfAction("ShowInitiativeDialog");
 
@@ -177,7 +177,7 @@ export class EncounterCommander {
   };
 
   public RerollInitiative = () => {
-    this.rollInitiative();
+    this.ShowInitiativePrompt();
     Metrics.TrackEvent("InitiativeRerolled");
 
     return false;
