@@ -10,9 +10,11 @@ export function EncounterReducer(
   action: Action
 ) {
   const newState = cloneDeep(state);
+
   if (action.type === "AddCombatantFromState") {
     newState.Combatants.push(action.payload.combatantState);
   }
+
   if (action.type === "AddCombatantFromStatBlock") {
     const combatant = InitializeCombatantFromStatBlock(
       action.payload.statBlock,
@@ -40,6 +42,10 @@ export function EncounterReducer(
     if (newState.Combatants[0]) {
       newState.ActiveCombatantId = newState.Combatants[0].Id;
     }
+  }
+
+  if (action.type === "EndEncounter") {
+    newState.ActiveCombatantId = null;
   }
 
   return newState;
