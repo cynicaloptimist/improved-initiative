@@ -1,6 +1,6 @@
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantState } from "../../common/CombatantState";
-import { cloneDeep, remove } from "lodash";
+import { cloneDeep, last, remove } from "lodash";
 import { Action } from "./EncounterActions";
 import { InitializeCombatantFromStatBlock } from "./InitializeCombatantFromStatBlock";
 import { GetCombatantsSorted } from "./GetCombatantsSorted";
@@ -49,6 +49,44 @@ export function EncounterReducer(
 
   if (action.type === "EndEncounter") {
     newState.ActiveCombatantId = null;
+  }
+
+  if (action.type === "NextTurn") {
+    if (newState.Combatants.length === 0) {
+      return newState;
+    }
+    const currentCombatantIndex = newState.Combatants.findIndex(
+      c => c.Id == newState.ActiveCombatantId
+    );
+    const noCombatantSelected = currentCombatantIndex == -1;
+    const finalCombatantSelected =
+      currentCombatantIndex + 1 == newState.Combatants.length;
+    if (noCombatantSelected || finalCombatantSelected) {
+      newState.ActiveCombatantId = newState.Combatants[0].Id;
+    } else {
+      newState.ActiveCombatantId =
+        newState.Combatants[currentCombatantIndex + 1].Id;
+    }
+  }
+
+  if (action.type === "PreviousTurn") {
+    if (newState.Combatants.length === 0) {
+      return newState;
+    }
+    const currentCombatantIndex = newState.Combatants.findIndex(
+      c => c.Id == newState.ActiveCombatantId
+    );
+    const noCombatantSelected = currentCombatantIndex == -1;
+    const firstCombatantSelected = currentCombatantIndex == 0;
+
+    if (noCombatantSelected) {
+      newState.ActiveCombatantId = newState.Combatants[0].Id;
+    } else if (firstCombatantSelected) {
+      newState.ActiveCombatantId = last(newState.Combatants).Id;
+    } else {
+      newState.ActiveCombatantId =
+        newState.Combatants[currentCombatantIndex + 1].Id;
+    }
   }
 
   return newState;

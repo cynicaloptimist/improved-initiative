@@ -49,4 +49,49 @@ describe("EncounterReducer", () => {
 
     expect(updatedEncounter.ActiveCombatantId).toEqual("fast");
   });
+
+  it("Should advance through the turn order", () => {
+    const activeEncounter = BuildActiveEncounter();
+    const nextTurn = EncounterReducer(activeEncounter, { type: "NextTurn" });
+    expect(nextTurn.ActiveCombatantId).toEqual("second");
+  });
+
+  it("Should wrap around the initiative order for next turn", () => {
+    const activeEncounter = BuildActiveEncounter();
+    activeEncounter.ActiveCombatantId = "third";
+    const nextTurn = EncounterReducer(activeEncounter, { type: "NextTurn" });
+    expect(nextTurn.ActiveCombatantId).toEqual("first");
+  });
+
+  it("Should wrap around the initiative order for previous turn", () => {
+    const activeEncounter = BuildActiveEncounter();
+    const nextTurn = EncounterReducer(activeEncounter, {
+      type: "PreviousTurn"
+    });
+    expect(nextTurn.ActiveCombatantId).toEqual("third");
+  });
 });
+
+function BuildActiveEncounter() {
+  const goblin = StatBlock.Default();
+  goblin.Name = "Goblin";
+  const initialState = EncounterState.Default<CombatantState>();
+  initialState.Combatants = [
+    InitializeCombatantFromStatBlock(goblin, "first"),
+    InitializeCombatantFromStatBlock(goblin, "second"),
+    InitializeCombatantFromStatBlock(goblin, "third")
+  ];
+
+  const activeEncounter = EncounterReducer(initialState, {
+    type: "StartEncounter",
+    payload: {
+      initiativesByCombatantId: {
+        first: 10,
+        second: 9,
+        third: 8
+      }
+    }
+  });
+
+  return activeEncounter;
+}
