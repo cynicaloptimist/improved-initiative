@@ -43,17 +43,12 @@ type EndEncounter = {
 };
 
 /* 
+    TODO:
     >EncounterActions
-    AddCombatantFromStatBlock
-    AddCombatantFromState
-    RemoveCombatant
-    StartEncounter
-    EndEncounter
     ClearEncounter
     CleanEncounter
     RestoreAllPlayerCharacterHP
-    NextTurn
-    PreviousTurn
+    ApplyInitiativesAndResetRound (for round-to-round encounter reroll)
 
     >CombatantActions
     SetStatBlock
