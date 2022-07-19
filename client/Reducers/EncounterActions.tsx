@@ -6,7 +6,9 @@ export type Action =
   | AddCombatantFromStatBlock
   | RemoveCombatant
   | StartEncounter
-  | EndEncounter;
+  | EndEncounter
+  | NextTurn
+  | PreviousTurn;
 
 type AddCombatantFromState = {
   type: "AddCombatantFromState";
@@ -40,6 +42,14 @@ type StartEncounter = {
 
 type EndEncounter = {
   type: "EndEncounter";
+};
+
+type NextTurn = {
+  type: "NextTurn";
+};
+
+type PreviousTurn = {
+  type: "PreviousTurn";
 };
 
 /* 
