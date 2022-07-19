@@ -32,6 +32,10 @@ export function EncounterReducer(
   }
 
   if (action.type === "StartEncounter") {
+    if (newState.Combatants.length === 0) {
+      return newState;
+    }
+
     for (const combatantId in action.payload.initiativesByCombatantId) {
       const combatant = newState.Combatants.find(c => c.Id === combatantId);
       const rolledInitiative =
@@ -39,9 +43,8 @@ export function EncounterReducer(
       combatant.Initiative = rolledInitiative;
     }
     newState.Combatants = GetCombatantsSorted(newState);
-    if (newState.Combatants[0]) {
-      newState.ActiveCombatantId = newState.Combatants[0].Id;
-    }
+    const firstCombatant = newState.Combatants[0];
+    newState.ActiveCombatantId = firstCombatant.Id;
   }
 
   if (action.type === "EndEncounter") {
