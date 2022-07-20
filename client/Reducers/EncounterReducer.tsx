@@ -4,6 +4,7 @@ import { cloneDeep, last, remove } from "lodash";
 import { Action } from "./EncounterActions";
 import { InitializeCombatantFromStatBlock } from "./InitializeCombatantFromStatBlock";
 import { GetCombatantsSorted } from "./GetCombatantsSorted";
+import { StatBlock } from "../../common/StatBlock";
 
 export function EncounterReducer(
   state: EncounterState<CombatantState>,
@@ -86,6 +87,26 @@ export function EncounterReducer(
     } else {
       newState.ActiveCombatantId =
         newState.Combatants[currentCombatantIndex + 1].Id;
+    }
+  }
+
+  if (action.type == "ClearEncounter") {
+    newState.Combatants = [];
+    newState.ActiveCombatantId = null;
+  }
+
+  if (action.type == "CleanEncounter") {
+    newState.Combatants = newState.Combatants.filter(c =>
+      StatBlock.IsPlayerCharacter(c.StatBlock)
+    );
+    newState.ActiveCombatantId = null;
+  }
+
+  if (action.type == "RestoreAllPlayerCharacterHP") {
+    for (const combatant of newState.Combatants) {
+      if (StatBlock.IsPlayerCharacter(combatant.StatBlock)) {
+        combatant.CurrentHP = combatant.StatBlock.HP.Value;
+      }
     }
   }
 

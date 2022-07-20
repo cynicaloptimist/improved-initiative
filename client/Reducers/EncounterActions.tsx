@@ -8,7 +8,10 @@ export type Action =
   | StartEncounter
   | EndEncounter
   | NextTurn
-  | PreviousTurn;
+  | PreviousTurn
+  | ClearEncounter
+  | CleanEncounter
+  | RestoreAllPlayerCharacterHP;
 
 type AddCombatantFromState = {
   type: "AddCombatantFromState";
@@ -52,12 +55,21 @@ type PreviousTurn = {
   type: "PreviousTurn";
 };
 
+type ClearEncounter = {
+  type: "ClearEncounter";
+};
+
+type CleanEncounter = {
+  type: "CleanEncounter";
+};
+
+type RestoreAllPlayerCharacterHP = {
+  type: "RestoreAllPlayerCharacterHP";
+};
+
 /* 
     TODO:
     >EncounterActions
-    ClearEncounter
-    CleanEncounter
-    RestoreAllPlayerCharacterHP
     ApplyInitiativesAndResetRound (for round-to-round encounter reroll)
 
     >CombatantActions
