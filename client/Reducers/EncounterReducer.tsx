@@ -1,7 +1,7 @@
 import { EncounterState } from "../../common/EncounterState";
 import { CombatantState } from "../../common/CombatantState";
 import { cloneDeep, last, remove } from "lodash";
-import { Action } from "./EncounterActions";
+import { Action } from "./Actions";
 import { InitializeCombatantFromStatBlock } from "./InitializeCombatantFromStatBlock";
 import { GetCombatantsSorted } from "./GetCombatantsSorted";
 import { StatBlock } from "../../common/StatBlock";

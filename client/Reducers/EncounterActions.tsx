@@ -1,7 +1,7 @@
 import { CombatantState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
 
-export type Action =
+export type EncounterAction =
   | AddCombatantFromState
   | AddCombatantFromStatBlock
   | RemoveCombatant
@@ -71,20 +71,4 @@ type RestoreAllPlayerCharacterHP = {
     TODO:
     >EncounterActions
     ApplyInitiativesAndResetRound (for round-to-round encounter reroll)
-
-    >CombatantActions
-    SetStatBlock
-    ApplyDamage
-    ApplyHealing
-    ApplyTemporaryHP
-    SetInitiative
-    LinkInitiative
-    AddTag
-    RemoveTag
-    UpdateNotes
-    SetAlias
-    ToggleHidden
-    ToggleRevealedAC
-    MoveDown
-    MoveUp
 */
