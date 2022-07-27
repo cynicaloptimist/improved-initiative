@@ -5,12 +5,15 @@ import { Action } from "./Actions";
 import { InitializeCombatantFromStatBlock } from "./InitializeCombatantFromStatBlock";
 import { GetCombatantsSorted } from "./GetCombatantsSorted";
 import { StatBlock } from "../../common/StatBlock";
+import { CombatantsReducer } from "./CombatantsReducer";
 
 export function EncounterReducer(
   state: EncounterState<CombatantState>,
   action: Action
 ) {
   const newState = cloneDeep(state);
+
+  newState.Combatants = CombatantsReducer(state.Combatants, action);
 
   if (action.type === "AddCombatantFromState") {
     newState.Combatants.push(action.payload.combatantState);
