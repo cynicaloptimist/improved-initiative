@@ -65,12 +65,12 @@ export class Combatant {
   private updatingGroup = false;
 
   private processStatBlock(oldStatBlockName?: string) {
-    if (oldStatBlockName) {
+    if (oldStatBlockName !== undefined) {
       this.UpdateIndexLabel(oldStatBlockName);
     }
 
     this.setAutoInitiativeGroup();
-    if (oldStatBlockName) {
+    if (oldStatBlockName !== undefined) {
       this.Encounter.Combatants.notifySubscribers();
     }
   }
