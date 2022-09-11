@@ -96,7 +96,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
             <li style={{ margin: 5, fontStyle: "italic" }}>
               <p style={{ flexShrink: 1 }}>
                 Improved Initiative comes pre-loaded with statblocks and spells
-                from the
+                from the{" "}
                 <a href="https://open5e.com/" target="_blank">
                   Open5e API
                 </a>
