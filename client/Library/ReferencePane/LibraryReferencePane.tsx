@@ -26,6 +26,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
   addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
+  showPreloadInfo?: boolean;
   launchQuickAddPrompt?: () => void;
 }
 
@@ -92,7 +93,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
           onScroll={this.handleListingsScroll}
         >
           {listingAndFolderComponents.slice(0, this.state.countOfItemsToRender)}
-          {this.props.launchQuickAddPrompt && (
+          {this.props.showPreloadInfo && (
             <li style={{ margin: 5, fontStyle: "italic" }}>
               <p style={{ flexShrink: 1 }}>
                 Improved Initiative comes pre-loaded with statblocks and spells

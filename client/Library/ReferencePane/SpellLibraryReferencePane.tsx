@@ -35,6 +35,7 @@ export class SpellLibraryReferencePane extends React.Component<
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}
         renderPreview={this.renderPreview}
         groupByFunctions={this.groupByFunctions}
+        showPreloadInfo
       />
     );
   }
