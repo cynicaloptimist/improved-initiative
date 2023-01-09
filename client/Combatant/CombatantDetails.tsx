@@ -18,7 +18,9 @@ interface CombatantDetailsProps {
 export function CombatantDetails(props: CombatantDetailsProps) {
   const TextEnricher = useContext(TextEnricherContext);
   const currentHp = useSubscription(props.combatantViewModel.HP);
-  const currentHPPercentage = useSubscription(props.combatantViewModel.HPPercentage);
+  const currentHPPercentage = useSubscription(
+    props.combatantViewModel.HPPercentage
+  );
   const name = useSubscription(props.combatantViewModel.Name);
   const tags = useSubscription(props.combatantViewModel.Combatant.Tags);
   const notes = useSubscription(
@@ -55,7 +57,10 @@ export function CombatantDetails(props: CombatantDetailsProps) {
           {currentHp}
           {DisplayHPBar && (
             <span className="combatant__hp-bar">
-              <span className="combatant__hp-bar--filled" style={renderHPBarStyle(currentHPPercentage)}/>
+              <span
+                className="combatant__hp-bar--filled"
+                style={renderHPBarStyle(currentHPPercentage)}
+              />
             </span>
           )}
         </span>
@@ -103,5 +108,5 @@ function TagDetails(props: { tag: Tag }) {
   return <span className="stat-value__item">{props.tag.Text}</span>;
 }
 function renderHPBarStyle(currentHPPercentage) {
-  return {width: currentHPPercentage };
+  return { width: currentHPPercentage };
 }
