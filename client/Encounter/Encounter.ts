@@ -168,10 +168,10 @@ export class Encounter {
   };
 
   public AddCombatantFromStatBlock = (
-    statBlockJson: {},
+    statBlockJson: Record<string, unknown>,
     hideOnAdd = false,
     variantMaximumHP: VariantMaximumHP = VariantMaximumHP.DEFAULT
-  ) => {
+  ): Combatant => {
     const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
     statBlock.HP = {
       ...statBlock.HP,
