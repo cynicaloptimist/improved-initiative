@@ -2,7 +2,7 @@
 
 _Combat tracker for Dungeons and Dragons (D&amp;D) 5th Edition_
 
-The official Improved Initiative app lives at https://www.improved-initiative.com
+The official Improved Initiative app lives at https://improvedinitiative.app/
 
 ## Local Development
 

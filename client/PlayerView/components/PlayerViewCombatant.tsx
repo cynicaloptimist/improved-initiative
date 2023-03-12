@@ -69,7 +69,11 @@ export class PlayerViewCombatant extends React.Component<
         )}
         <div className="combatant__tags">
           {this.props.combatant.Tags.map((tag, index) => (
-            <div className="tag" key={tag.Text + index}>
+            <div
+              className="tag"
+              data-tag={tag.Text.toLocaleLowerCase()}
+              key={tag.Text + index}
+            >
               {tag.Text}
             </div>
           ))}

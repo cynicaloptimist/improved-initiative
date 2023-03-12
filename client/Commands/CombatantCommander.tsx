@@ -198,7 +198,7 @@ export class CombatantCommander {
     this.selectByOffset(1);
   };
 
-  private editHPForCombatants(combatantViewModels: CombatantViewModel[]) {
+  private applyDamageForCombatants(combatantViewModels: CombatantViewModel[]) {
     const latestRollTotal = this.latestRoll?.Total || 0;
     const prompt = ApplyDamagePrompt(
       combatantViewModels,
@@ -208,17 +208,17 @@ export class CombatantCommander {
     this.tracker.PromptQueue.Add(prompt);
   }
 
-  public EditHP = () => {
+  public ApplyDamage = () => {
     if (!this.HasSelected()) {
       return;
     }
 
     const selectedCombatants = this.SelectedCombatants();
-    this.editHPForCombatants(selectedCombatants);
+    this.applyDamageForCombatants(selectedCombatants);
   };
 
-  public EditSingleCombatantHP = (combatantViewModel: CombatantViewModel) => {
-    this.editHPForCombatants([combatantViewModel]);
+  public ApplyDamageTargeted = (combatantViewModel: CombatantViewModel) => {
+    this.applyDamageForCombatants([combatantViewModel]);
   };
 
   public ApplyHealing = () => {

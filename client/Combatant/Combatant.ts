@@ -1,6 +1,6 @@
 import * as ko from "knockout";
 
-import { CombatantState, TagState } from "../../common/CombatantState";
+import { CombatantState } from "../../common/CombatantState";
 import { InitiativeSpecialRoll, StatBlock } from "../../common/StatBlock";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Encounter } from "../Encounter/Encounter";
@@ -13,17 +13,17 @@ import { Tag } from "./Tag";
 
 export class Combatant {
   constructor(combatantState: CombatantState, public Encounter: Encounter) {
-    let statBlock = combatantState.StatBlock;
+    let oldStatBlockName = combatantState.StatBlock.Name;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
     this.PersistentCharacterId = combatantState.PersistentCharacterId || null;
 
-    this.StatBlock(statBlock);
+    this.StatBlock(combatantState.StatBlock);
 
-    this.processStatBlock(statBlock);
+    this.processStatBlock();
 
     this.StatBlock.subscribe(newStatBlock => {
-      this.processStatBlock(newStatBlock, statBlock);
-      statBlock = newStatBlock;
+      this.processStatBlock(oldStatBlockName);
+      oldStatBlockName = newStatBlock.Name;
     });
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
@@ -64,13 +64,13 @@ export class Combatant {
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
 
-  private processStatBlock(newStatBlock: StatBlock, oldStatBlock?: StatBlock) {
-    if (oldStatBlock) {
-      this.UpdateIndexLabel(oldStatBlock.Name);
+  private processStatBlock(oldStatBlockName?: string) {
+    if (oldStatBlockName !== undefined) {
+      this.UpdateIndexLabel(oldStatBlockName);
     }
 
     this.setAutoInitiativeGroup();
-    if (oldStatBlock) {
+    if (oldStatBlockName !== undefined) {
       this.Encounter.Combatants.notifySubscribers();
     }
   }
