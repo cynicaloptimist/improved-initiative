@@ -13,13 +13,19 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     "localAsync",
     "localStorage",
     "open5e",
+    "open5e-additional",
     "server"
   ];
 
   parentSubset.forEach(listing => {
     const listingMeta = listing.Meta();
 
-    const dedupeKey = `${listingMeta.Path}-${listingMeta.Name}`.toLocaleLowerCase();
+    // Ensure that SRD listings appear first
+    const sourceSortable =
+      listingMeta.FilterDimensions.Source === "Systems Reference Document"
+        ? " Systems Reference Document"
+        : listingMeta.FilterDimensions.Source;
+    const dedupeKey = `${listingMeta.Path}-${listingMeta.Name} -${sourceSortable}`.toLocaleLowerCase();
 
     if (dedupedItems[dedupeKey] == undefined) {
       dedupedItems[dedupeKey] = listing;

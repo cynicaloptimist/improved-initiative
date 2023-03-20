@@ -9,6 +9,7 @@ import { Store } from "../Utility/Store";
 export type ListingOrigin =
   | "server"
   | "open5e"
+  | "open5e-additional"
   | "account"
   | "localAsync"
   | "localStorage";
