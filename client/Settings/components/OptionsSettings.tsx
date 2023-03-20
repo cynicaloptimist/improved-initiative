@@ -160,7 +160,9 @@ export function OptionsSettings(props: {
       </Toggle>
       <Toggle fieldName="PreloadedContent.Open5eContent">
         Additional Open5e OGL Creatures
-        <Info>Includes Tome of Beasts and Creature Codex</Info>
+        <Info>
+          Includes Tome of Beasts, Creature Codex, and Monstrous Menagerie
+        </Info>
       </Toggle>
     </div>
   );
