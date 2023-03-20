@@ -97,7 +97,12 @@ export class StatBlockLibraryReferencePane extends React.Component<
     const listingMeta = l.Meta();
     return (
       <ListingRow
-        key={listingMeta.Id + listingMeta.Path + listingMeta.Name}
+        key={
+          listingMeta.Id +
+          listingMeta.Path +
+          listingMeta.Name +
+          listingMeta.FilterDimensions.Source
+        }
         name={listingMeta.Name}
         showCount
         onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
