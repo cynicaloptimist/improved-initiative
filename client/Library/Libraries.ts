@@ -182,7 +182,11 @@ async function preloadAdditionalContent(StatBlocks: Library<StatBlock>) {
   try {
     const response = await axios.get("/open5e/additionalcontent/");
     const open5eListings: ListingMeta[] = response.data;
-    StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
+    StatBlocks.AddListings(
+      open5eListings,
+      "open5e-additional",
+      ImportOpen5eStatBlock
+    );
   } catch (error) {}
 }
 

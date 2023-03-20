@@ -39,7 +39,10 @@ export function LibraryManagerRow(props: {
           }
         }}
       />
-      <SourceIndicator source={props.listing.Origin} />
+      <SourceIndicator
+        origin={props.listing.Origin}
+        source={props.listing.Meta().FilterDimensions.Source}
+      />
       <ListingButton
         buttonClass="edit"
         faClass="edit"
@@ -52,29 +55,42 @@ export function LibraryManagerRow(props: {
   );
 }
 
-function SourceIndicator(props: { source: ListingOrigin }) {
-  if (props.source === "server")
+function SourceIndicator(props: { origin: ListingOrigin; source?: string }) {
+  if (props.origin === "server")
     return (
       <Tippy content="Basic Rules">
         <i className="fab fa-d-and-d c-listing-indicator" />
       </Tippy>
     );
 
-  if (props.source === "open5e")
+  if (props.origin === "open5e")
     return (
-      <Tippy content="Open5e">
+      <Tippy content="Basic Rules (Open5e)">
+        <span className="fas fa-d-and-d c-listing-indicator" />
+      </Tippy>
+    );
+
+  if (props.origin === "open5e-additional")
+    return (
+      <Tippy
+        content={
+          props.source
+            ? `${props.source} (Open5e)`
+            : `Open5e Additional Content`
+        }
+      >
         <span className="fas fa-box-open c-listing-indicator" />
       </Tippy>
     );
 
-  if (props.source === "account")
+  if (props.origin === "account")
     return (
       <Tippy content="Account Sync">
         <i className="fas fa-cloud c-listing-indicator" />
       </Tippy>
     );
 
-  if (props.source === "localAsync")
+  if (props.origin === "localAsync")
     return (
       <Tippy content="Local Storage">
         <i className="fas fa-hdd c-listing-indicator" />
