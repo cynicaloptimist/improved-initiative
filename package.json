@@ -50,10 +50,8 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-ts": "^6.0.0-beta.22",
     "grunt-webpack": "^3.1.3",
-    "husky": "^3.0.9",
     "jest": "^25.5.4",
     "less": "^3.11.1",
-    "lint-staged": "^10.5.3",
     "markdown-loader-jest": "^0.1.1",
     "prettier": "^1.19.0",
     "requirejs": "^2.3.5",
@@ -112,19 +110,6 @@
     "retry": "^0.12.0",
     "socket.io": "^4.5.0",
     "socket.io-client": "^4.5.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{less,html,ts,tsx,json}": [
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "eslint --fix"
-    ]
   },
   "scripts": {
     "postinstall": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/",
