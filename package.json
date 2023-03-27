@@ -114,7 +114,7 @@
   "scripts": {
     "postinstall": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/",
     "build": "grunt build_min",
-    "build-dev": "grunt build_dev",
+    "dev": "grunt build_dev",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest",
