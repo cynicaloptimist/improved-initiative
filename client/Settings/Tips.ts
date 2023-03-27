@@ -16,5 +16,6 @@ export const tips = [
   "You can get automatic Concentration reminders by using the tag 'Concentrating.' You can disable this feature in the settings.",
   "Want to contribute? Improved Initiative is written in TypeScript and runs on node.js. Fork it on <a href='http://github.com/cynicaloptimist/improved-initiative' target='_blank'>GitHub.</a>",
   "Account Sync will let you access your Characters and Encounters from any device. <a href='https://www.patreon.com/join/improvedinitiative/checkout?rid=1322253' target='_blank'>Pledge on Patreon</a> to unlock this benefit!",
-  "Epic Initiative lets you enhance your Player View with combatant portraits and custom colors. <a href='https://www.patreon.com/join/improvedinitiative/checkout?rid=1937132' target='_blank'>Pledge on Patreon</a> to support the app and get Epic Initiative!"
+  "Epic Initiative lets you enhance your Player View with combatant portraits and custom colors. <a href='https://www.patreon.com/join/improvedinitiative/checkout?rid=1937132' target='_blank'>Pledge on Patreon</a> to support the app and get Epic Initiative!",
+  "I also made <a href='http://paragondashboard.com' target='_blank'>Paragon Campaign Dashboard</a>, a powerful, customizable virtual GM screen and campaign prep app."
 ];
