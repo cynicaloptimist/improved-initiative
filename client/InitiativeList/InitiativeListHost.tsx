@@ -60,7 +60,9 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
   const moveCombatantFromDrag = useCallback(
     (draggedCombatantId: string, droppedOntoCombatantId: string | null) => {
-      const draggedCombatant = combatants.find(c => c.Id == draggedCombatantId);
+      const draggedCombatant = combatants?.find(
+        c => c.Id == draggedCombatantId
+      );
       const droppedCombatantIndex =
         droppedOntoCombatantId === null
           ? combatants.length
@@ -72,7 +74,7 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
   const setCombatantColor = useCallback(
     (combatantId: string, color: string) => {
-      const combatant = combatants.find(c => c.Id == combatantId);
+      const combatant = combatants?.find(c => c.Id == combatantId);
       combatant.Color(color);
     },
     [tracker, combatants]
