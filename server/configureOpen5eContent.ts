@@ -4,7 +4,7 @@ import _ = require("lodash");
 import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
 
-export function configureOpen5eContent(app: express.Application) {
+export function configureOpen5eContent(app: express.Application): void {
   const getMeta: (remoteItem: any) => ListingMeta = r => {
     const listingMeta: ListingMeta = {
       Id: "open5e-" + r.slug,
