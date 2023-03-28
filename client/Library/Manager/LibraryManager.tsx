@@ -138,7 +138,7 @@ function LibraryManagerListings(props: {
       <div className="search-controls">
         <LibraryFilter applyFilterFn={setFilter} />
       </div>
-      <ul className="listings zebra-stripe">{listingTree}</ul>;
+      <ul className="listings zebra-stripe">{listingTree}</ul>
     </div>
   );
 }
