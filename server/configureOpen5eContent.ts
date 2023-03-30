@@ -32,7 +32,6 @@ async function getAllListings(
   const additionalListings: ListingMeta[] = [];
   let nextUrl = sourceUrl;
   do {
-    console.log("Getting listings from ", nextUrl);
     const response = await axios.get(nextUrl);
     const [basicRulesResults, additionalResults] = _.partition(
       response.data.results,
