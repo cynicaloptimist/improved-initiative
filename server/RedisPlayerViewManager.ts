@@ -1,4 +1,4 @@
-import * as redis from "redis";
+import { createClient, RedisClientType } from "redis";
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../common/PlayerViewState";
@@ -7,55 +7,55 @@ import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export class RedisPlayerViewManager implements PlayerViewManager {
-  constructor(private redisClient: redis.RedisClient) {}
+  constructor(private redisUrl: string) {}
 
-  public Get = (id: string) =>
-    new Promise<PlayerViewState>(done =>
-      this.redisClient.hgetall(`playerviews_${id}`, (err, fields) => {
-        const defaultPlayerView = {
-          encounterState: EncounterState.Default<PlayerViewCombatantState>(),
-          settings: getDefaultSettings().PlayerView
-        };
-        if (err || !fields) {
-          return done(defaultPlayerView);
-        }
-        return done({
-          encounterState: ParseJSONOrDefault(
-            fields.encounterState,
-            defaultPlayerView.encounterState
-          ),
-          settings: ParseJSONOrDefault(
-            fields.settings,
-            defaultPlayerView.settings
-          )
-        });
-      })
-    );
+  public async Get(id: string): Promise<PlayerViewState> {
+    const redisClient = createClient({ url: this.redisUrl });
+    const fields = await redisClient.hGetAll(`playerviews_${id}`);
+    const defaultPlayerView = {
+      encounterState: EncounterState.Default<PlayerViewCombatantState>(),
+      settings: getDefaultSettings().PlayerView
+    };
 
-  public IdAvailable = (id: string) =>
-    new Promise<boolean>(done =>
-      this.redisClient.hgetall(`playerviews_${id}`, (err, fields) => {
-        return done(!fields);
-      })
-    );
+    return {
+      encounterState: ParseJSONOrDefault(
+        fields.encounterState,
+        defaultPlayerView.encounterState
+      ),
+      settings: ParseJSONOrDefault(fields.settings, defaultPlayerView.settings)
+    };
+  }
 
-  public UpdateEncounter = (id: string, newState: any) =>
-    this.redisClient.hset(
+  public async IdAvailable(id: string): Promise<boolean> {
+    const redisClient = createClient({ url: this.redisUrl });
+    const fields = await redisClient.hGetAll(`playerviews_${id}`);
+    return !fields;
+  }
+
+  public UpdateEncounter = (id: string, newState: any): void => {
+    const redisClient = createClient({ url: this.redisUrl });
+    redisClient.hSet(
       `playerviews_${id}`,
       "encounterState",
       JSON.stringify(newState)
     );
+  };
 
-  public UpdateSettings = (id: string, newSettings: any) =>
-    this.redisClient.hset(
+  public UpdateSettings = (id: string, newSettings: any): void => {
+    const redisClient = createClient({ url: this.redisUrl });
+
+    redisClient.hSet(
       `playerviews_${id}`,
       "settings",
       JSON.stringify(newSettings)
     );
+  };
 
-  public InitializeNew = async () => {
+  public InitializeNew = async (): Promise<string> => {
     const id = probablyUniqueString();
-    this.redisClient.hmset(`playerviews_${id}`, {
+    const redisClient = createClient({ url: this.redisUrl });
+
+    await redisClient.hSet(`playerviews_${id}`, {
       encounterState: JSON.stringify(
         EncounterState.Default<PlayerViewCombatantState>()
       ),
@@ -64,6 +64,9 @@ export class RedisPlayerViewManager implements PlayerViewManager {
     return id;
   };
 
-  public Destroy = (id: string) =>
-    this.redisClient.hdel(`playerviews_${id}`, "encounterState", "settings");
+  public Destroy = (id: string): void => {
+    const redisClient = createClient({ url: this.redisUrl });
+
+    redisClient.hDel(`playerviews_${id}`, ["encounterState", "settings"]);
+  };
 }
