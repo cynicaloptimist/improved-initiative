@@ -44,7 +44,7 @@ export class Metrics {
     }
 
     console.log(`Event ${name}`);
-    if (eventData !== {}) {
+    if (Object.keys(eventData).length > 0) {
       console.table(eventData);
     }
 
@@ -79,7 +79,7 @@ export class Metrics {
     eventData: EventData = {}
   ): void {
     console.log(`Anonymous Event ${name}`);
-    if (eventData !== {}) {
+    if (Object.keys(eventData).length > 0) {
       console.table(eventData);
     }
 

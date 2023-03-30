@@ -66,7 +66,7 @@ function SourceIndicator(props: { origin: ListingOrigin; source?: string }) {
   if (props.origin === "open5e")
     return (
       <Tippy content="Basic Rules (Open5e)">
-        <span className="fas fa-d-and-d c-listing-indicator" />
+        <span className="fab fa-d-and-d c-listing-indicator" />
       </Tippy>
     );
 
