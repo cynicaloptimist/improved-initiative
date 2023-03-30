@@ -6,11 +6,21 @@ import { getDefaultSettings } from "../common/Settings";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
+async function getClient(url: string) {
+  const redisClient = createClient({
+    url,
+    socket: { tls: false, rejectUnauthorized: false }
+  });
+  await redisClient.connect();
+  return redisClient;
+}
+
 export class RedisPlayerViewManager implements PlayerViewManager {
   constructor(private redisUrl: string) {}
 
   public async Get(id: string): Promise<PlayerViewState> {
-    const redisClient = createClient({ url: this.redisUrl });
+    const redisClient = await getClient(this.redisUrl);
+
     const fields = await redisClient.hGetAll(`playerviews_${id}`);
     const defaultPlayerView = {
       encounterState: EncounterState.Default<PlayerViewCombatantState>(),
@@ -27,33 +37,34 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   }
 
   public async IdAvailable(id: string): Promise<boolean> {
-    const redisClient = createClient({ url: this.redisUrl });
+    const redisClient = await getClient(this.redisUrl);
     const fields = await redisClient.hGetAll(`playerviews_${id}`);
     return !fields;
   }
 
-  public UpdateEncounter = (id: string, newState: any): void => {
-    const redisClient = createClient({ url: this.redisUrl });
+  public async UpdateEncounter(id: string, newState: any): Promise<void> {
+    const redisClient = await getClient(this.redisUrl);
+
     redisClient.hSet(
       `playerviews_${id}`,
       "encounterState",
       JSON.stringify(newState)
     );
-  };
+  }
 
-  public UpdateSettings = (id: string, newSettings: any): void => {
-    const redisClient = createClient({ url: this.redisUrl });
+  public async UpdateSettings(id: string, newSettings: any): Promise<void> {
+    const redisClient = await getClient(this.redisUrl);
 
     redisClient.hSet(
       `playerviews_${id}`,
       "settings",
       JSON.stringify(newSettings)
     );
-  };
+  }
 
-  public InitializeNew = async (): Promise<string> => {
+  public async InitializeNew(): Promise<string> {
     const id = probablyUniqueString();
-    const redisClient = createClient({ url: this.redisUrl });
+    const redisClient = await getClient(this.redisUrl);
 
     await redisClient.hSet(`playerviews_${id}`, {
       encounterState: JSON.stringify(
@@ -62,11 +73,11 @@ export class RedisPlayerViewManager implements PlayerViewManager {
       settings: JSON.stringify(getDefaultSettings().PlayerView)
     });
     return id;
-  };
+  }
 
-  public Destroy = (id: string): void => {
-    const redisClient = createClient({ url: this.redisUrl });
+  public async Destroy(id: string): Promise<void> {
+    const redisClient = await getClient(this.redisUrl);
 
     redisClient.hDel(`playerviews_${id}`, ["encounterState", "settings"]);
-  };
+  }
 }
