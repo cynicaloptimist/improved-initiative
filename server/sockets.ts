@@ -134,17 +134,6 @@ export default function(
       joinEncounter(id);
       socket.broadcast.to(id).emit("combat stats", combatStats);
     });
-
-    /*
-    socket.on("disconnect", function() {
-      const encounterId = socket.handshake.session.encounterId;
-      io.in(encounterId).clients((error, clients) => {
-        if (clients.length == 0) {
-          playerViews.Destroy(encounterId);
-        }
-      });
-    });
-    */
   });
 }
 
