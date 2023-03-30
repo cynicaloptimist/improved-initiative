@@ -12,6 +12,7 @@ export default async function(redisConnectionString?: string) {
 
   if (redisConnectionString) {
     const sessionClient = redis.createClient({
+      legacyMode: true,
       url: redisConnectionString,
       socket: { tls: false, rejectUnauthorized: false }
     });
@@ -19,10 +20,10 @@ export default async function(redisConnectionString?: string) {
       console.error("Problem with Session store Redis Client: ");
       console.error(error);
     });
+    sessionClient.connect();
     store = new RedisStore({
       client: sessionClient
     });
-    sessionClient.connect();
   }
 
   const cookie = {
