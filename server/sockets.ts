@@ -23,11 +23,14 @@ export default function(
   io: SocketIO.Server,
   session: express.RequestHandler,
   playerViews: PlayerViewManager
-) {
+): void {
   if (process.env.REDIS_URL) {
-    const pubClient = redis.createClient({ url: process.env.REDIS_URL });
+    const pubClient = redis.createClient({
+      url: process.env.REDIS_URL,
+      socket: { tls: true, rejectUnauthorized: false }
+    });
     const subClient = pubClient.duplicate();
-    const adapter: any = createAdapter(pubClient, subClient);
+    const adapter = createAdapter(pubClient, subClient);
     io.adapter(adapter);
   }
 
