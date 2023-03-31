@@ -5,7 +5,7 @@ export function CounterOrBracketedText(
   text: string,
   updateText?: (newText: string) => void
 ) {
-  return (props: { children: React.ReactChildren }) => {
+  return (props: { children: React.ReactNode }): JSX.Element => {
     const element = props.children[0];
     if (!element) {
       return <>[]</>;
@@ -48,7 +48,7 @@ export function BeanCounter(props: {
   current: number;
   maximum: number;
   onChange: (newValue: number) => void;
-}) {
+}): JSX.Element {
   return (
     <span className="bean-counter">
       <i className="fa-clickable fa-ban" onClick={_ => props.onChange(0)} />
@@ -73,7 +73,7 @@ export function Counter(props: {
   current: number;
   maximum: number;
   onChange: (newValue: number) => void;
-}) {
+}): JSX.Element {
   return (
     <input
       className="counter"
