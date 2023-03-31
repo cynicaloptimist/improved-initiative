@@ -1,4 +1,5 @@
 import connectRedis = require("connect-redis");
+import { RequestHandler } from "express";
 import expressSession = require("express-session");
 import moment = require("moment");
 import redis = require("redis");
@@ -7,7 +8,9 @@ const RedisStore = connectRedis(expressSession);
 
 import { probablyUniqueString } from "../common/Toolbox";
 
-export default async function(redisConnectionString?: string) {
+export default async function(
+  redisConnectionString?: string
+): Promise<RequestHandler> {
   let store = null;
 
   if (redisConnectionString) {
