@@ -1,21 +1,18 @@
-import connectRedis = require("connect-redis");
+const RedisStore = require("connect-redis/dist/cjs").default;
 import { RequestHandler } from "express";
 import expressSession = require("express-session");
 import moment = require("moment");
 import redis = require("redis");
-
-const RedisStore = connectRedis(expressSession);
 
 import { probablyUniqueString } from "../common/Toolbox";
 
 export default async function(
   redisConnectionString?: string
 ): Promise<RequestHandler> {
-  let store = null;
+  let store: any = null;
 
   if (redisConnectionString) {
     const sessionClient = redis.createClient({
-      legacyMode: true,
       url: redisConnectionString,
       socket: { tls: false, rejectUnauthorized: false }
     });
@@ -23,7 +20,6 @@ export default async function(
       console.error("Problem with Session store Redis Client: ");
       console.error(error);
     });
-    sessionClient.connect();
     store = new RedisStore({
       client: sessionClient
     });
