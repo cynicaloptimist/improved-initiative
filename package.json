@@ -9,7 +9,7 @@
   },
   "engines": {
     "npm": "^6.13.4",
-    "node": "^12.14.1"
+    "node": "^14.21.3"
   },
   "devDependencies": {
     "@types/awesomplete": "^1.1.11",
