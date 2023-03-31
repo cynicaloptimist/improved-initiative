@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Run Improved Initiative Server",
       "program": "${workspaceRoot}\\server\\server.js",
-      "runtimeVersion": "v14.21.3",
+      "runtimeVersion": "16.20.0",
       "autoAttachChildProcesses": true,
       "outFiles": [],
       "env": {
