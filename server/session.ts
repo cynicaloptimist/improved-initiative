@@ -14,7 +14,7 @@ export default async function(
   if (redisConnectionString) {
     const sessionClient = redis.createClient({
       url: redisConnectionString,
-      socket: { tls: false, rejectUnauthorized: false }
+      socket: { tls: true, rejectUnauthorized: false }
     });
     sessionClient.on("error", error => {
       console.error("Problem with Session store Redis Client: ");
