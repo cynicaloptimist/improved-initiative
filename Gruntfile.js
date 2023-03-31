@@ -43,5 +43,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask("build_dev", ["webpack:dev", "ts:server", "less"]);
   grunt.registerTask("build_min", ["webpack:prod", "ts:server", "less"]);
+  grunt.registerTask("server_watch", ["ts:server", "watch"]);
   grunt.registerTask("default", ["build_dev", "watch"]);
 };
