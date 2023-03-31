@@ -9,7 +9,7 @@ import { PlayerViewManager } from "./playerviewmanager";
 async function getClient(url: string) {
   const redisClient = createClient({
     url,
-    socket: { tls: false, rejectUnauthorized: false }
+    socket: { tls: true, rejectUnauthorized: false }
   });
   await redisClient.connect();
   return redisClient;
