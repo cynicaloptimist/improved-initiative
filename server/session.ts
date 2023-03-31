@@ -17,9 +17,8 @@ export default async function(
       url: redisConnectionString,
       socket: { tls: true, rejectUnauthorized: false }
     });
-    sessionClient.on("error", error => {
-      console.error("Problem with Session store Redis Client: ");
-      console.error(error);
+    sessionClient.on("error", err => {
+      console.warn("Session Store Redis Client:", err);
     });
     await sessionClient.connect();
     store = new RedisStore({
