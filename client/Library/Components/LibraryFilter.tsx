@@ -15,7 +15,7 @@ export function LibraryFilter(props: LibraryFilterProps) {
   const applyFilter = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const filterValue = event.currentTarget.value.toLocaleLowerCase();
-      setImmediate(() => props.applyFilterFn(filterValue));
+      setTimeout(() => props.applyFilterFn(filterValue));
     },
     [props.applyFilterFn]
   );
