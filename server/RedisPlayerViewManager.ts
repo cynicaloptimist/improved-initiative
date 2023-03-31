@@ -11,6 +11,9 @@ async function getClient(url: string) {
     url,
     socket: { tls: true, rejectUnauthorized: false }
   });
+  redisClient.on("error", error =>
+    console.warn("Player View Manager Redis Client:", error)
+  );
   await redisClient.connect();
   return redisClient;
 }
