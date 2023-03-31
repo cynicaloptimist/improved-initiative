@@ -19,17 +19,19 @@ interface SocketWithSessionData {
   };
 }
 
-export default function(
+export default async function(
   io: SocketIO.Server,
   session: express.RequestHandler,
   playerViews: PlayerViewManager
-): void {
+): Promise<void> {
   if (process.env.REDIS_URL) {
     const pubClient = redis.createClient({
       url: process.env.REDIS_URL,
       socket: { tls: true, rejectUnauthorized: false }
     });
     const subClient = pubClient.duplicate();
+    await pubClient.connect();
+    await subClient.connect();
     const adapter = createAdapter(pubClient, subClient);
     io.adapter(adapter);
   }
