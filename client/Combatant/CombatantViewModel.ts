@@ -33,7 +33,6 @@ export class CombatantViewModel {
       }
     });
     this.HPPercentage = ko.pureComputed(() => {
-      console.log(this.Combatant.CurrentHP());
       return Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP()) * 100)+'%';
     });
     this.Name = Combatant.DisplayName;
