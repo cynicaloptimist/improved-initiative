@@ -20,6 +20,7 @@ export default async function(
       console.error("Problem with Session store Redis Client: ");
       console.error(error);
     });
+    await sessionClient.connect();
     store = new RedisStore({
       client: sessionClient
     });
