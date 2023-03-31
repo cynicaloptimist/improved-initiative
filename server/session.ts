@@ -1,4 +1,5 @@
-const RedisStore = require("connect-redis/dist/cjs").default;
+const RedisStore = require("../local_node_modules/connect-redis/dist/cjs")
+  .default;
 import { RequestHandler } from "express";
 import expressSession = require("express-session");
 import moment = require("moment");

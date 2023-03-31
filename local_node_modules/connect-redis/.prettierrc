@@ -1,0 +1,5 @@
+{
+  "semi": false,
+  "bracketSpacing": false,
+  "plugins": ["prettier-plugin-organize-imports"]
+}
