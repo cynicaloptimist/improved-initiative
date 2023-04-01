@@ -1,8 +1,7 @@
-import { RedisClientType, createClient } from "redis";
 import { PlayerViewState } from "../common/PlayerViewState";
 import { InMemoryPlayerViewManager } from "./InMemoryPlayerViewManager";
 import { RedisPlayerViewManager } from "./RedisPlayerViewManager";
-
+import Redis from "ioredis";
 export interface PlayerViewManager {
   Get(id: string): Promise<PlayerViewState>;
 
@@ -23,30 +22,16 @@ export async function GetPlayerViewManager(): Promise<PlayerViewManager> {
     return playerViewManager;
   }
   if (process.env.REDIS_URL) {
-    const redisClient: RedisClientType<any> = createClient({
-      url: process.env.REDIS_URL,
-      socket: { tls: true, rejectUnauthorized: false }
+    const redisClient = new Redis(process.env.REDIS_URL, {
+      tls: { rejectUnauthorized: false }
     });
     redisClient.on("error", error =>
       console.warn("Player View Manager Redis Client:", error)
     );
-    await redisClient.connect();
     playerViewManager = new RedisPlayerViewManager(redisClient);
   } else {
     playerViewManager = new InMemoryPlayerViewManager();
   }
 
   return playerViewManager;
-}
-
-async function getClient(url: string) {
-  const redisClient = createClient({
-    url,
-    socket: { tls: true, rejectUnauthorized: false }
-  });
-  redisClient.on("error", error =>
-    console.warn("Player View Manager Redis Client:", error)
-  );
-  await redisClient.connect();
-  return redisClient;
 }

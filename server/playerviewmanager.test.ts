@@ -1,4 +1,4 @@
-import { createClient } from "fakeredis";
+import Redis from "ioredis-mock";
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { getDefaultSettings } from "../common/Settings";
@@ -60,5 +60,5 @@ TestPlayerViewManagerImplementation(
 );
 TestPlayerViewManagerImplementation(
   "RedisPlayerViewManager",
-  () => new RedisPlayerViewManager(createClient("test"))
+  () => new RedisPlayerViewManager(new Redis() as any)
 );

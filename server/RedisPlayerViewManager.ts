@@ -1,4 +1,4 @@
-import { createClient, RedisClientType } from "redis";
+import { Redis } from "ioredis";
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { PlayerViewState } from "../common/PlayerViewState";
@@ -7,10 +7,10 @@ import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export class RedisPlayerViewManager implements PlayerViewManager {
-  constructor(private redisClient: RedisClientType<any>) {}
+  constructor(private redisClient: Redis) {}
 
   public async Get(id: string): Promise<PlayerViewState> {
-    const fields = await this.redisClient.hGetAll(`playerviews_${id}`);
+    const fields = await this.redisClient.hgetall(`playerviews_${id}`);
     const defaultPlayerView = {
       encounterState: EncounterState.Default<PlayerViewCombatantState>(),
       settings: getDefaultSettings().PlayerView
@@ -26,12 +26,12 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   }
 
   public async IdAvailable(id: string): Promise<boolean> {
-    const fields = await this.redisClient.hGetAll(`playerviews_${id}`);
+    const fields = await this.redisClient.hgetall(`playerviews_${id}`);
     return !fields;
   }
 
   public async UpdateEncounter(id: string, newState: any): Promise<void> {
-    this.redisClient.hSet(
+    this.redisClient.hset(
       `playerviews_${id}`,
       "encounterState",
       JSON.stringify(newState)
@@ -39,7 +39,7 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   }
 
   public async UpdateSettings(id: string, newSettings: any): Promise<void> {
-    this.redisClient.hSet(
+    this.redisClient.hset(
       `playerviews_${id}`,
       "settings",
       JSON.stringify(newSettings)
@@ -49,7 +49,7 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   public async InitializeNew(): Promise<string> {
     const id = probablyUniqueString();
 
-    await this.redisClient.hSet(`playerviews_${id}`, {
+    await this.redisClient.hset(`playerviews_${id}`, {
       encounterState: JSON.stringify(
         EncounterState.Default<PlayerViewCombatantState>()
       ),
@@ -59,6 +59,6 @@ export class RedisPlayerViewManager implements PlayerViewManager {
   }
 
   public async Destroy(id: string): Promise<void> {
-    this.redisClient.hDel(`playerviews_${id}`, ["encounterState", "settings"]);
+    this.redisClient.hdel(`playerviews_${id}`, "encounterState", "settings");
   }
 }
