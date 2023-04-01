@@ -73,9 +73,9 @@ export class TextEnricher {
           return <p>{replacer(children)}</p>;
         }
         if (children.length == 1) {
-          return <p>{replacer(children[0])}</p>;
+          return replacer(children[0]);
         }
-        return <p>{children}</p>;
+        return children;
       }
     };
 
