@@ -24,7 +24,7 @@ describe("User Accounts", () => {
       AccountStatus.Pledge,
       ""
     );
-    userId = user._id;
+    userId = user!._id;
   });
 
   afterEach(async () => {
@@ -35,14 +35,13 @@ describe("User Accounts", () => {
     await mongod.stop();
   });
 
-  test("Should initialize user with empty entity sets", async done => {
+  test("Should initialize user with empty entity sets", async () => {
     const user = await DB.getAccount(userId);
-    expect(user.encounters).toHaveLength(0);
+    expect(user?.encounters).toHaveLength(0);
     expect(user).not.toHaveProperty("playercharacters");
-    expect(user.statblocks).toHaveLength(0);
-    expect(user.spells).toHaveLength(0);
-    expect(user.persistentcharacters).toHaveLength(0);
-    done();
+    expect(user?.statblocks).toHaveLength(0);
+    expect(user?.spells).toHaveLength(0);
+    expect(user?.persistentcharacters).toHaveLength(0);
   });
 
   test("Should save statblocks", async () => {
@@ -60,7 +59,7 @@ describe("User Accounts", () => {
     expect(savedStatBlock).toEqual(statBlock);
   });
 
-  test("Should copy playercharacters as persistentcharacters", async done => {
+  test("Should copy playercharacters as persistentcharacters", async () => {
     const playerCharacterStatBlock: StatBlock = {
       ...StatBlock.Default(),
       Name: "Test Player Character",
@@ -69,14 +68,14 @@ describe("User Accounts", () => {
     await DB.saveEntity("playercharacters", userId, playerCharacterStatBlock);
     const user = await DB.getAccount(userId);
     expect(user).not.toHaveProperty("playercharacters");
-    expect(user.persistentcharacters).toHaveLength(1);
-    const persistentCharacterListing = user.persistentcharacters[0];
-    expect(persistentCharacterListing.Name).toBe(playerCharacterStatBlock.Name);
-
-    done();
+    expect(user?.persistentcharacters).toHaveLength(1);
+    const persistentCharacterListing = user?.persistentcharacters[0];
+    expect(persistentCharacterListing?.Name).toBe(
+      playerCharacterStatBlock.Name
+    );
   });
 
-  test("Should save generated persistentcharacters back to account", async done => {
+  test("Should save generated persistentcharacters back to account", async () => {
     const playerCharacterStatBlock: StatBlock = {
       ...StatBlock.Default(),
       Name: "Test Player Character",
@@ -88,17 +87,16 @@ describe("User Accounts", () => {
 
     const user = await DB.getAccount(userId);
 
-    const persistentCharacterListing = user.persistentcharacters[0];
+    const persistentCharacterListing = user?.persistentcharacters[0];
     const savedPersistentCharacter = (await DB.getEntity(
       "persistentcharacters",
       userId,
-      persistentCharacterListing.Id
+      persistentCharacterListing!.Id
     )) as PersistentCharacter;
 
     expect(savedPersistentCharacter.StatBlock.Type).toEqual(
       playerCharacterStatBlock.Type
     );
-    done();
   });
 
   describe("Handle user account response from Patreon API", () => {
@@ -108,7 +106,7 @@ describe("User Accounts", () => {
       const res: any = { redirect: jest.fn() };
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
-      expect(user.accountStatus).toEqual("epic");
+      expect(user?.accountStatus).toEqual("epic");
     });
 
     test("No Pledge", async () => {
@@ -117,7 +115,7 @@ describe("User Accounts", () => {
       const res: any = { redirect: jest.fn() };
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
-      expect(user.accountStatus).toEqual("none");
+      expect(user?.accountStatus).toEqual("none");
     });
 
     test("Declined Pledge", async () => {
@@ -126,7 +124,7 @@ describe("User Accounts", () => {
       const res: any = { redirect: jest.fn() };
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
-      expect(user.accountStatus).toEqual("none");
+      expect(user?.accountStatus).toEqual("none");
     });
   });
 });
