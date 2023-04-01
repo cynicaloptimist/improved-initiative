@@ -1,5 +1,4 @@
-const RedisStore = require("../local_node_modules/connect-redis/dist/cjs")
-  .default;
+import RedisStore from "connect-redis";
 import { RequestHandler } from "express";
 import expressSession = require("express-session");
 import moment = require("moment");
@@ -10,7 +9,7 @@ import { probablyUniqueString } from "../common/Toolbox";
 export default async function(
   redisConnectionString?: string
 ): Promise<RequestHandler> {
-  let store: any = null;
+  let store: RedisStore | null = null;
 
   if (redisConnectionString) {
     const sessionClient = redis.createClient({
