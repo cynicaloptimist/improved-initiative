@@ -17,9 +17,28 @@ export interface PlayerViewManager {
   Destroy(id: string): void;
 }
 
-export function GetPlayerViewManager(): PlayerViewManager {
-  if (process.env.REDIS_URL) {
-    return new RedisPlayerViewManager(process.env.REDIS_URL);
+let playerViewManager: PlayerViewManager | null = null;
+export async function GetPlayerViewManager(): Promise<PlayerViewManager> {
+  if (playerViewManager) {
+    return playerViewManager;
   }
-  return new InMemoryPlayerViewManager();
+  if (process.env.REDIS_URL) {
+    playerViewManager = new RedisPlayerViewManager(process.env.REDIS_URL);
+  } else {
+    playerViewManager = new InMemoryPlayerViewManager();
+  }
+
+  return playerViewManager;
+}
+
+async function getClient(url: string) {
+  const redisClient = createClient({
+    url,
+    socket: { tls: true, rejectUnauthorized: false }
+  });
+  redisClient.on("error", error =>
+    console.warn("Player View Manager Redis Client:", error)
+  );
+  await redisClient.connect();
+  return redisClient;
 }
