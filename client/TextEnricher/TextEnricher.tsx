@@ -126,39 +126,62 @@ export class TextEnricher {
         )
       },
       counter: {
-        pattern: /\[(\d+\/\d+)\]/g,
+        pattern: /(.+\[\d+\/\d+\])/g,
         matcherFn: (rawText, processed, key) => {
-          console.log("counter", rawText, processed, key);
-          const matches = rawText.match(/\d+/g);
+          const bracketedCounterMatch = new RegExp(
+            /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/,
+            "gd"
+          );
+          const matches = bracketedCounterMatch.exec(rawText);
+          console.log(matches);
           if (
             updateTextSource === undefined ||
             !matches ||
             matches.length < 2
           ) {
-            return <p key={key}>[{rawText}]</p>;
+            return <span key={key}>{rawText}</span>;
           }
 
-          const current = parseInt(matches[0]);
-          const maximum = parseInt(matches[1]);
+          const label = matches.groups["label"] || "";
+          const current = parseInt(matches.groups["current"]);
+          const maximum = parseInt(matches.groups["maximum"]);
 
           if (maximum < 1) {
-            return <p key={key}>[{rawText}]</p>;
+            return <p key={key}>{rawText}</p>;
           }
 
           const counterProps = {
-            key,
             current,
             maximum,
             onChange: (newValue: number) => {
-              updateTextSource(originalText);
+              const matchStart = originalText.indexOf(rawText);
+              const [currentStart, currentEnd] = matches["indices"]["groups"][
+                "current"
+              ];
+
+              const updatedText =
+                originalText.slice(0, matchStart + currentStart) +
+                newValue +
+                originalText.slice(matchStart + currentEnd);
+              updateTextSource(updatedText);
             }
           };
 
           if (maximum <= 9) {
-            return <BeanCounter {...counterProps} />;
+            return (
+              <span key={key}>
+                {label}
+                <BeanCounter {...counterProps} />
+              </span>
+            );
           }
 
-          return <Counter {...counterProps} />;
+          return (
+            <span key={key}>
+              {label}
+              <Counter {...counterProps} />
+            </span>
+          );
         }
       }
     };
