@@ -23,7 +23,15 @@ export async function GetPlayerViewManager(): Promise<PlayerViewManager> {
     return playerViewManager;
   }
   if (process.env.REDIS_URL) {
-    playerViewManager = new RedisPlayerViewManager(process.env.REDIS_URL);
+    const redisClient: RedisClientType<any> = createClient({
+      url: process.env.REDIS_URL,
+      socket: { tls: true, rejectUnauthorized: false }
+    });
+    redisClient.on("error", error =>
+      console.warn("Player View Manager Redis Client:", error)
+    );
+    await redisClient.connect();
+    playerViewManager = new RedisPlayerViewManager(redisClient);
   } else {
     playerViewManager = new InMemoryPlayerViewManager();
   }
