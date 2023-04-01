@@ -1,8 +1,8 @@
 import RedisStore from "connect-redis";
 import { RequestHandler } from "express";
+import Redis from "ioredis";
 import expressSession = require("express-session");
 import moment = require("moment");
-import redis = require("redis");
 
 import { probablyUniqueString } from "../common/Toolbox";
 
@@ -12,14 +12,14 @@ export default async function(
   let store: RedisStore | null = null;
 
   if (redisConnectionString) {
-    const sessionClient = redis.createClient({
-      url: redisConnectionString,
-      socket: { tls: true, rejectUnauthorized: false }
+    const sessionClient = new Redis(redisConnectionString, {
+      tls: {
+        rejectUnauthorized: false
+      }
     });
     sessionClient.on("error", err => {
       console.warn("Session Store Redis Client:", err);
     });
-    await sessionClient.connect();
     store = new RedisStore({
       client: sessionClient
     });
