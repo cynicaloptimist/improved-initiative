@@ -133,7 +133,6 @@ export class TextEnricher {
             "gd"
           );
           const matches = bracketedCounterMatch.exec(rawText);
-          console.log(matches);
           if (
             updateTextSource === undefined ||
             !matches ||
