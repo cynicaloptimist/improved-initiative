@@ -1,6 +1,9 @@
 import * as _ from "lodash";
+import { isString } from "lodash";
 import * as React from "react";
-import ReactMarkdown = require("react-markdown");
+import { SpecialComponents } from "react-markdown/lib/ast-to-react";
+import { NormalComponents } from "react-markdown/lib/complex-types";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import * as ReactReplace from "react-string-replace-recursively";
 
 import { Spell } from "../../common/Spell";
@@ -60,19 +63,28 @@ export class TextEnricher {
   public EnrichText = (
     text: string,
     updateTextSource?: (newText: string) => void
-  ) => {
-    const replacer = this.buildReactReplacer();
+  ): JSX.Element => {
+    const replacer = this.buildReactReplacer(updateTextSource);
 
-    const renderers = {
-      text: props => replacer(props.children),
-      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: CounterOrBracketedText(text, updateTextSource)
+    const components: Partial<Omit<NormalComponents, keyof SpecialComponents> &
+      SpecialComponents> = {
+      p: ({ children }) => {
+        if (isString(children)) {
+          return <p>{replacer(children)}</p>;
+        }
+        if (children.length == 1) {
+          return <p>{replacer(children[0])}</p>;
+        }
+        return <p>{children}</p>;
+      }
     };
 
-    return <ReactMarkdown source={text} renderers={renderers} rawSourcePos />;
+    return (
+      <ReactMarkdown children={text} components={components} rawSourcePos />
+    );
   };
 
-  private buildReactReplacer() {
+  private buildReactReplacer(updateTextSource?: (newText: string) => void) {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -109,6 +121,14 @@ export class TextEnricher {
             {rawText}
           </span>
         )
+      },
+      counter: {
+        pattern: /\[(\d+\/\d+)\]/g,
+        matcherFn: (rawText, processed, key) => {
+          console.log("counter", rawText, processed, key);
+
+          return CounterOrBracketedText(rawText, key, updateTextSource);
+        }
       }
     };
 

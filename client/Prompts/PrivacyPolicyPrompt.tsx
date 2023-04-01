@@ -3,7 +3,7 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 import { Metrics } from "../Utility/Metrics";
 import { PromptProps } from "./PendingPrompts";
 import { SubmitButton } from "../Components/Button";
-import ReactMarkdown = require("react-markdown");
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const privacyPolicyText: string = require("../../PRIVACY.md").default;
 
@@ -43,10 +43,9 @@ function PrivacyPolicyComponent() {
         {privacyBrief} {moreInfoButton}
       </p>
       {displayFullText && (
-        <ReactMarkdown
-          className={promptClassName + "-full"}
-          source={privacyPolicyText}
-        />
+        <ReactMarkdown className={promptClassName + "-full"}>
+          {privacyPolicyText}
+        </ReactMarkdown>
       )}
       <div className={promptClassName + "-buttons"}>
         {noThanksButton}
