@@ -15,7 +15,7 @@ import { Listing } from "../Library/Listing";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules, DefaultRules } from "../Rules/Rules";
-import { CounterOrBracketedText } from "./Counter";
+import { BeanCounter, Counter } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -64,7 +64,7 @@ export class TextEnricher {
     text: string,
     updateTextSource?: (newText: string) => void
   ): JSX.Element => {
-    const replacer = this.buildReactReplacer(updateTextSource);
+    const replacer = this.buildReactReplacer(text, updateTextSource);
 
     const components: Partial<Omit<NormalComponents, keyof SpecialComponents> &
       SpecialComponents> = {
@@ -84,7 +84,10 @@ export class TextEnricher {
     );
   };
 
-  private buildReactReplacer(updateTextSource?: (newText: string) => void) {
+  private buildReactReplacer(
+    originalText: string,
+    updateTextSource?: (newText: string) => void
+  ) {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -126,8 +129,36 @@ export class TextEnricher {
         pattern: /\[(\d+\/\d+)\]/g,
         matcherFn: (rawText, processed, key) => {
           console.log("counter", rawText, processed, key);
+          const matches = rawText.match(/\d+/g);
+          if (
+            updateTextSource === undefined ||
+            !matches ||
+            matches.length < 2
+          ) {
+            return <p key={key}>[{rawText}]</p>;
+          }
 
-          return CounterOrBracketedText(rawText, key, updateTextSource);
+          const current = parseInt(matches[0]);
+          const maximum = parseInt(matches[1]);
+
+          if (maximum < 1) {
+            return <p key={key}>[{rawText}]</p>;
+          }
+
+          const counterProps = {
+            key,
+            current,
+            maximum,
+            onChange: (newValue: number) => {
+              updateTextSource(originalText);
+            }
+          };
+
+          if (maximum <= 9) {
+            return <BeanCounter {...counterProps} />;
+          }
+
+          return <Counter {...counterProps} />;
         }
       }
     };
