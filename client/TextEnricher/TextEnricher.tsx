@@ -46,12 +46,12 @@ export class TextEnricher {
     }
   };
 
-  public GetEnrichedModifierFromAbilityScore = (score: number) => {
+  public GetEnrichedModifierFromAbilityScore = (score: number): JSX.Element => {
     const modifier = this.rules.GetModifierFromScore(score);
     return this.EnrichModifier(modifier);
   };
 
-  public EnrichModifier = (modifier: number) => {
+  public EnrichModifier = (modifier: number): JSX.Element => {
     const modifierString = toModifierString(modifier);
     return (
       <span className="rollable" onClick={() => this.rollDice(modifierString)}>

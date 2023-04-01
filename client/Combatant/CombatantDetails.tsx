@@ -15,7 +15,7 @@ interface CombatantDetailsProps {
   key: string;
 }
 
-export function CombatantDetails(props: CombatantDetailsProps) {
+export function CombatantDetails(props: CombatantDetailsProps): JSX.Element {
   const TextEnricher = useContext(TextEnricherContext);
   const currentHp = useSubscription(props.combatantViewModel.HP);
   const currentHPPercentage = useSubscription(
