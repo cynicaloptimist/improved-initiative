@@ -27,7 +27,7 @@ export class RedisPlayerViewManager implements PlayerViewManager {
 
   public async IdAvailable(id: string): Promise<boolean> {
     const fields = await this.redisClient.hgetall(`playerviews_${id}`);
-    return !fields;
+    return Object.keys(fields).length == 0;
   }
 
   public async UpdateEncounter(id: string, newState: any): Promise<void> {

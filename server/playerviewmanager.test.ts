@@ -60,5 +60,5 @@ TestPlayerViewManagerImplementation(
 );
 TestPlayerViewManagerImplementation(
   "RedisPlayerViewManager",
-  () => new RedisPlayerViewManager(new Redis() as any)
+  () => new RedisPlayerViewManager(new Redis())
 );
