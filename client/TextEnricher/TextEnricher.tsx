@@ -73,9 +73,9 @@ export class TextEnricher {
           return <p>{replacer(children)}</p>;
         }
         if (children.length == 1) {
-          return replacer(children[0]);
+          return <p>{replacer(children[0])}</p>;
         }
-        return children;
+        return <p>{children}</p>;
       }
     };
 
@@ -146,7 +146,7 @@ export class TextEnricher {
           const maximum = parseInt(matches.groups["maximum"]);
 
           if (maximum < 1) {
-            return <p key={key}>{rawText}</p>;
+            return <span key={key}>{rawText}</span>;
           }
 
           const counterProps = {
