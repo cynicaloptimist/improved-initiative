@@ -72,7 +72,7 @@ export class TextEnricher {
         if (isString(children)) {
           return <p>{replacer(children)}</p>;
         }
-        if (children.length == 1) {
+        if (children.length == 1 && isString(children[0])) {
           return <p>{replacer(children[0])}</p>;
         }
         return <p>{children}</p>;
