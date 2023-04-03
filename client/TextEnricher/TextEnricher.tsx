@@ -1,6 +1,9 @@
 import * as _ from "lodash";
+import { isString } from "lodash";
 import * as React from "react";
-import ReactMarkdown = require("react-markdown");
+import { SpecialComponents } from "react-markdown/lib/ast-to-react";
+import { NormalComponents } from "react-markdown/lib/complex-types";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 import * as ReactReplace from "react-string-replace-recursively";
 
 import { Spell } from "../../common/Spell";
@@ -12,7 +15,7 @@ import { Listing } from "../Library/Listing";
 import { Conditions } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
 import { IRules, DefaultRules } from "../Rules/Rules";
-import { CounterOrBracketedText } from "./Counter";
+import { BeanCounter, Counter } from "./Counter";
 
 interface ReplaceConfig {
   [name: string]: {
@@ -43,12 +46,12 @@ export class TextEnricher {
     }
   };
 
-  public GetEnrichedModifierFromAbilityScore = (score: number) => {
+  public GetEnrichedModifierFromAbilityScore = (score: number): JSX.Element => {
     const modifier = this.rules.GetModifierFromScore(score);
     return this.EnrichModifier(modifier);
   };
 
-  public EnrichModifier = (modifier: number) => {
+  public EnrichModifier = (modifier: number): JSX.Element => {
     const modifierString = toModifierString(modifier);
     return (
       <span className="rollable" onClick={() => this.rollDice(modifierString)}>
@@ -60,19 +63,31 @@ export class TextEnricher {
   public EnrichText = (
     text: string,
     updateTextSource?: (newText: string) => void
-  ) => {
-    const replacer = this.buildReactReplacer();
+  ): JSX.Element => {
+    const replacer = this.buildReactReplacer(text, updateTextSource);
 
-    const renderers = {
-      text: props => replacer(props.children),
-      //Intercept rendering of [lone bracketed text] to capture [5/5] counter syntax.
-      linkReference: CounterOrBracketedText(text, updateTextSource)
+    const components: Partial<Omit<NormalComponents, keyof SpecialComponents> &
+      SpecialComponents> = {
+      p: ({ children }) => {
+        if (isString(children)) {
+          return <p>{replacer(children)}</p>;
+        }
+        if (children.length == 1) {
+          return <p>{replacer(children[0])}</p>;
+        }
+        return <p>{children}</p>;
+      }
     };
 
-    return <ReactMarkdown source={text} renderers={renderers} rawSourcePos />;
+    return (
+      <ReactMarkdown children={text} components={components} rawSourcePos />
+    );
   };
 
-  private buildReactReplacer() {
+  private buildReactReplacer(
+    originalText: string,
+    updateTextSource?: (newText: string) => void
+  ) {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
         pattern: Dice.GlobalDicePattern,
@@ -109,6 +124,64 @@ export class TextEnricher {
             {rawText}
           </span>
         )
+      },
+      counter: {
+        pattern: /(.+\[\d+\/\d+\])/g,
+        matcherFn: (rawText, processed, key) => {
+          const bracketedCounterMatch = new RegExp(
+            /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/,
+            "gd"
+          );
+          const matches = bracketedCounterMatch.exec(rawText);
+          if (
+            updateTextSource === undefined ||
+            !matches ||
+            matches.length < 2
+          ) {
+            return <span key={key}>{rawText}</span>;
+          }
+
+          const label = matches.groups["label"] || "";
+          const current = parseInt(matches.groups["current"]);
+          const maximum = parseInt(matches.groups["maximum"]);
+
+          if (maximum < 1) {
+            return <span key={key}>{rawText}</span>;
+          }
+
+          const counterProps = {
+            current,
+            maximum,
+            onChange: (newValue: number) => {
+              const matchStart = originalText.indexOf(rawText);
+              const [currentStart, currentEnd] = matches["indices"]["groups"][
+                "current"
+              ];
+
+              const updatedText =
+                originalText.slice(0, matchStart + currentStart) +
+                newValue +
+                originalText.slice(matchStart + currentEnd);
+              updateTextSource(updatedText);
+            }
+          };
+
+          if (maximum <= 9) {
+            return (
+              <span key={key}>
+                {label}
+                <BeanCounter {...counterProps} />
+              </span>
+            );
+          }
+
+          return (
+            <span key={key}>
+              {label}
+              <Counter {...counterProps} />
+            </span>
+          );
+        }
       }
     };
 

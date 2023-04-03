@@ -10,7 +10,7 @@ export interface PromptProps<T extends object> {
 
 class Prompt<T extends object> extends React.Component<
   PromptProps<T> & {
-    onCancel: () => void
+    onCancel: () => void;
   }
 > {
   private formElement: HTMLFormElement;
@@ -42,7 +42,7 @@ class Prompt<T extends object> extends React.Component<
   }
 
   public componentDidMount() {
-    setImmediate(this.delaySoAutoFocusedFieldDoesntSwallowHotkey);
+    setTimeout(this.delaySoAutoFocusedFieldDoesntSwallowHotkey);
   }
 
   private delaySoAutoFocusedFieldDoesntSwallowHotkey = () => {

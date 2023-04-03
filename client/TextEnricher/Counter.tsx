@@ -1,54 +1,11 @@
 import _ = require("lodash");
 import React = require("react");
 
-export function CounterOrBracketedText(
-  text: string,
-  updateText?: (newText: string) => void
-) {
-  return (props: { children: React.ReactChildren }) => {
-    const element = props.children[0];
-    if (!element) {
-      return <>[]</>;
-    }
-    const innerText: string = element.props.value || "";
-    const matches = innerText.match(/\d+/g);
-    if (updateText === undefined || !matches || matches.length < 2) {
-      return <>[{innerText}]</>;
-    }
-
-    const current = parseInt(matches[0]);
-    const maximum = parseInt(matches[1]);
-
-    if (maximum < 1) {
-      return <>[{innerText}]</>;
-    }
-
-    const counterProps = {
-      current,
-      maximum,
-      onChange: (newValue: number) => {
-        const location = element.props.sourcePosition.start.offset;
-        const newText =
-          text.substr(0, location) +
-          newValue.toString() +
-          text.substr(location + matches[0].length);
-        updateText(newText);
-      }
-    };
-
-    if (maximum <= 9) {
-      return <BeanCounter {...counterProps} />;
-    }
-
-    return <Counter {...counterProps} />;
-  };
-}
-
 export function BeanCounter(props: {
   current: number;
   maximum: number;
   onChange: (newValue: number) => void;
-}) {
+}): JSX.Element {
   return (
     <span className="bean-counter">
       <i className="fa-clickable fa-ban" onClick={_ => props.onChange(0)} />
@@ -73,7 +30,7 @@ export function Counter(props: {
   current: number;
   maximum: number;
   onChange: (newValue: number) => void;
-}) {
+}): JSX.Element {
   return (
     <input
       className="counter"

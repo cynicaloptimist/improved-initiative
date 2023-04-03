@@ -21,7 +21,7 @@ async function improvedInitiativeServer() {
   const dbConnectionString = await getDbConnectionString();
   await DB.initialize(dbConnectionString);
 
-  const playerViews = GetPlayerViewManager();
+  const playerViews = await GetPlayerViewManager();
 
   const session = await GetSessionMiddleware(process.env.REDIS_URL);
   app.use(session);

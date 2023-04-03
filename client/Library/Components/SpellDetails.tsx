@@ -35,8 +35,10 @@ export function SpellDetails(props: { Spell: Spell }) {
           <span className="spell-value">
             {props.Spell.Components.split(/\s*,\s*/).map((component, index) => {
               return (
-                <span className="spell-value__item">{component}</span>
-              )
+                <span key={index} className="spell-value__item">
+                  {component}
+                </span>
+              );
             })}
           </span>
         </div>
@@ -49,8 +51,10 @@ export function SpellDetails(props: { Spell: Spell }) {
           <span className="spell-value">
             {props.Spell.Classes.map((spellClass, index) => {
               return (
-                <span className="spell-value__item">{spellClass}</span>
-              )
+                <span key={index} className="spell-value__item">
+                  {spellClass}
+                </span>
+              );
             })}
           </span>
         </div>

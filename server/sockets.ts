@@ -29,6 +29,7 @@ export default async function(
       url: process.env.REDIS_URL,
       socket: { tls: true, rejectUnauthorized: false }
     });
+    pubClient.on("error", err => console.warn("Socket IO Redis Client:", err));
     const subClient = pubClient.duplicate();
     await pubClient.connect();
     await subClient.connect();

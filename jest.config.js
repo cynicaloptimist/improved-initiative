@@ -1,12 +1,12 @@
 module.exports = {
-  globals: {
-    "ts-jest": {
-      tsconfig: "client/tsconfig.json"
-    }
-  },
   setupFiles: ["./client/test/adapterSetup.ts", "./client/test/mocksSetup.ts"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.tsx?$": [
+      "ts-jest",
+      {
+        tsconfig: "client/tsconfig.json"
+      }
+    ],
     "^.+\\.md?$": "markdown-loader-jest"
   },
   testEnvironment: "jsdom",
