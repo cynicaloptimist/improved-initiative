@@ -40,7 +40,8 @@ export class AccountClient {
       return emptyPromise();
     }
 
-    return await axios.get("/my/fullaccount");
+    const response = await axios.get("/my/fullaccount");
+    return response.data;
   }
 
   public async SaveAllUnsyncedItems(
