@@ -20,7 +20,11 @@ export namespace Store {
     SavedEncounters
   ];
 
-  export async function Save<T>(listName: string, key: string, value: T) {
+  export async function Save<T>(
+    listName: string,
+    key: string,
+    value: T
+  ): Promise<void> {
     if (typeof key !== "string") {
       throw `Can't save to non-string key ${key}`;
     }
@@ -57,20 +61,20 @@ export namespace Store {
     return items;
   }
 
-  export async function Delete(listName: string, key: string) {
+  export async function Delete(listName: string, key: string): Promise<void> {
     const store = localforage.createInstance({ name: listName });
 
     return await store.removeItem(key);
   }
 
-  export async function DeleteAll() {
+  export async function DeleteAll(): Promise<void> {
     for (const listName of SupportedLists) {
       const store = localforage.createInstance({ name: listName });
       await store.clear();
     }
   }
 
-  export async function GetAllKeyPairs() {
+  export async function GetAllKeyPairs(): Promise<Record<string, unknown>> {
     const storage = {};
     for (const listName of SupportedLists) {
       const store = localforage.createInstance({ name: listName });
@@ -81,7 +85,7 @@ export namespace Store {
     return storage;
   }
 
-  export async function ImportAll(file: File) {
+  export async function ImportAll(file: File): Promise<void> {
     return new Promise<void>((done, fail) => {
       const reader = new FileReader();
       reader.onload = async (event: any) => {
@@ -126,7 +130,7 @@ export namespace Store {
     return Promise.all(savePromises);
   }
 
-  export function ImportFromDnDAppFile(file: File) {
+  export function ImportFromDnDAppFile(file: File): void {
     const statBlocksCallback = async (statBlocks: StatBlock[]) => {
       await Promise.all(
         statBlocks.map(statBlock =>
@@ -149,7 +153,7 @@ export namespace Store {
   export async function ExportListings(
     listings: Listing<Listable>[],
     listName: string
-  ) {
+  ): Promise<Blob> {
     const exportedListings = {};
 
     exportedListings[listName] = listings.map(l => l.Meta().Id);
