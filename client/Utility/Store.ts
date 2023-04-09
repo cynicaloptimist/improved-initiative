@@ -37,14 +37,22 @@ export namespace Store {
   }
 
   export async function LoadAllAndUpdateIds<T extends Listable>(
-    listName: string
+    listName: string,
+    getDefault: () => T
   ): Promise<T[]> {
     const store = localforage.createInstance({ name: listName });
     const items: T[] = [];
-    await store.iterate((item: T, key) => {
-      item.Id = key;
-      items.push(item);
+    await store.iterate((item: Partial<T>, key) => {
+      const filledItem = {
+        ...getDefault(),
+        item,
+        Id: key
+      };
+
+      items.push(filledItem);
     });
+
+    console.log(`loaded ${items.length} items from ${listName}`);
 
     return items;
   }
