@@ -87,7 +87,7 @@ export function configureLoginRedirect(app: express.Application) {
       const { rawJson } = await APIClient(`/current_user`);
       await handleCurrentUser(req, res, rawJson);
     } catch (e) {
-      console.error("Patreon login flow failed: " + e);
+      console.error("Patreon login flow failed: " + JSON.stringify(e));
       res.status(500).send(e);
     }
   });
