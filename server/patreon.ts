@@ -69,7 +69,7 @@ interface TokensResponse {
   token_type: string;
 }
 
-export function configureLoginRedirect(app: express.Application) {
+export function configureLoginRedirect(app: express.Application): void {
   const redirectPath = "/r/patreon";
   const redirectUri = baseUrl + redirectPath;
 
@@ -87,13 +87,17 @@ export function configureLoginRedirect(app: express.Application) {
       const { rawJson } = await APIClient(`/current_user`);
       await handleCurrentUser(req, res, rawJson);
     } catch (e) {
-      console.error("Patreon login flow failed: " + e);
+      console.error("Patreon login flow failed: " + JSON.stringify(e));
       res.status(500).send(e);
     }
   });
 }
 
-export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
+export async function handleCurrentUser(
+  req: Req,
+  res: Res,
+  apiResponse: Record<string, any>
+): Promise<void> {
   //console.log(`api response: ${JSON.stringify(apiResponse)}`);
   let encounterId = "";
   if (req.query && req.query.state) {
@@ -130,7 +134,7 @@ export async function handleCurrentUser(req: Req, res: Res, apiResponse: any) {
 export function updateSessionAccountFeatures(
   session: Express.Session,
   standing: AccountStatus
-) {
+): void {
   session.hasStorage = standing == "pledge" || standing == "epic";
   session.hasEpicInitiative = standing == "epic";
   session.isLoggedIn = true;
@@ -161,7 +165,7 @@ function getUserAccountLevel(
   return standing;
 }
 
-export function configureLogout(app: express.Application) {
+export function configureLogout(app: express.Application): void {
   const logoutPath = "/logout";
   app.get(logoutPath, (req: Req, res: Res) => {
     if (req.session == null) {
@@ -197,7 +201,7 @@ function updateLatestPost(latestPost: { post: Post | null }) {
   });
 }
 
-export function startNewsUpdates(app: express.Application) {
+export function startNewsUpdates(app: express.Application): void {
   const latest: { post: Post | null } = { post: null };
 
   app.get("/whatsnew/", (req, res) => {
@@ -225,7 +229,9 @@ export function startNewsUpdates(app: express.Application) {
   });
 }
 
-export function configurePatreonWebhookReceiver(app: express.Application) {
+export function configurePatreonWebhookReceiver(
+  app: express.Application
+): void {
   app.post("/patreon_webhook/", verifySender, handleWebhook);
 }
 
