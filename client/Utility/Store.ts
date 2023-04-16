@@ -49,7 +49,7 @@ export namespace Store {
     await store.iterate((item: Partial<T>, key) => {
       const filledItem = {
         ...getDefault(),
-        item,
+        ...item,
         Id: key
       };
 
