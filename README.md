@@ -8,7 +8,7 @@ The official Improved Initiative app lives at https://improvedinitiative.app/
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/en/) (v12+)
+- [Node.js](https://nodejs.org/en/) (see package.json for specific version)
 
 ### Setup
 
