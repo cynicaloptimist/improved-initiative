@@ -195,13 +195,15 @@ export function useLibrary<T extends Listable>(
   }
 
   React.useEffect(() => {
-    Store.LoadAllAndUpdateIds(storeName).then(async storedListables => {
-      if (storedListables.length > 0) {
-        const listings = storedListables.map(makeListing);
-        AddListings(listings, "localAsync");
+    Store.LoadAllAndUpdateIds(storeName, callbacks.createEmptyListing).then(
+      async storedListables => {
+        if (storedListables.length > 0) {
+          const listings = storedListables.map(makeListing);
+          AddListings(listings, "localAsync");
+        }
       }
-    });
-  }, [storeName]);
+    );
+  }, [storeName, callbacks.createEmptyListing]);
 
   return {
     AddListings,
