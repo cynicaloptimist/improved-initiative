@@ -79,7 +79,7 @@ export namespace StatBlock {
     "undead"
   ];
 
-  export const GetSearchHint = (statBlock: StatBlock) =>
+  export const GetSearchHint = (statBlock: StatBlock): string =>
     statBlock.Type.toLocaleLowerCase().replace(/[^\w\s]/g, "");
 
   export const FilterDimensions = (statBlock: StatBlock): FilterDimensions => {
@@ -91,7 +91,7 @@ export namespace StatBlock {
     };
   };
 
-  export const IsPlayerCharacter = (statBlock: StatBlock) =>
+  export const IsPlayerCharacter = (statBlock: StatBlock): boolean =>
     statBlock.Player.length > 0;
 
   export const Default = (): StatBlock => ({
