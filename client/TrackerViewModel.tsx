@@ -222,6 +222,24 @@ export class TrackerViewModel {
     window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
 
+    if (!env.IsLoggedIn) {
+      this.PromptQueue.Add({
+        autoFocusSelector: ".submit",
+        initialValues: {},
+        onSubmit: () => true,
+        children: (
+          <span className="not-logged-in-for-import">
+            {"Please login with "}
+            <a href={env.PatreonLoginUrl} target="_blank">
+              Patreon
+            </a>
+            {" to use the StatBlock Importer"}
+            <SubmitButton />
+          </span>
+        )
+      });
+    }
+
     if (!env.HasEpicInitiative) {
       this.PromptQueue.Add({
         autoFocusSelector: ".submit",
