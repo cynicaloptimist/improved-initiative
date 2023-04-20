@@ -8,7 +8,7 @@ import { SelectionContext, Selection } from "./SelectionContext";
 export function LibraryManagerRow(props: {
   listing: Listing<any>;
   setEditorTarget: (item: Listing<any>) => void;
-}) {
+}): JSX.Element {
   const listingMeta = useSubscription(props.listing.Meta);
   const selection = React.useContext<Selection<Listing<any>>>(SelectionContext);
   const isSelected = selection.selected.includes(props.listing);

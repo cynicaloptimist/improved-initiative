@@ -65,7 +65,7 @@ export class ListingRow<T extends Listable> extends React.Component<
     linkComponentToObservables(this);
   }
 
-  public render() {
+  public render(): JSX.Element {
     const addedCount = this.props.showCount && this.state && this.state.count;
     const countElements = addedCount
       ? _.range(addedCount).map(i => (
