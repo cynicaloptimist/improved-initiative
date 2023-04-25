@@ -60,9 +60,10 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
 
   const moveCombatantFromDrag = useCallback(
     (draggedCombatantId: string, droppedOntoCombatantId: string | null) => {
-      const draggedCombatant = combatants?.find(
-        c => c.Id == draggedCombatantId
-      );
+      if (!combatants) {
+        return;
+      }
+      const draggedCombatant = combatants.find(c => c.Id == draggedCombatantId);
       const droppedCombatantIndex =
         droppedOntoCombatantId === null
           ? combatants.length

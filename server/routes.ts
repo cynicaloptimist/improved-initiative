@@ -83,7 +83,7 @@ function getAccountLevel(session) {
 export default function(
   app: express.Application,
   playerViews: PlayerViewManager
-) {
+): void {
   const mustacheEngine = mustacheExpress();
 
   let cacheMaxAge = moment.duration(7, "days").asMilliseconds();

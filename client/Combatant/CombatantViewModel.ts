@@ -33,7 +33,11 @@ export class CombatantViewModel {
       }
     });
     this.HPPercentage = ko.pureComputed(() => {
-      return Math.floor((this.Combatant.CurrentHP() / this.Combatant.MaxHP()) * 100)+'%';
+      return (
+        Math.floor(
+          (this.Combatant.CurrentHP() / this.Combatant.MaxHP()) * 100
+        ) + "%"
+      );
     });
     this.Name = Combatant.DisplayName;
     setTimeout(() => animatedCombatantIds.push(this.Combatant.Id), 500);

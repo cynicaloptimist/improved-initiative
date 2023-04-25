@@ -53,7 +53,9 @@ export class Importer {
   public getPowers(selector: string) {
     return _.map(this.domElement.querySelectorAll(selector), p => ({
       Name: p.querySelector<Element>("name")?.innerHTML,
-      Content: Array.from(p.querySelectorAll<Element>("text")).map(pp => pp?.innerHTML).join("\n"),
+      Content: Array.from(p.querySelectorAll<Element>("text"))
+        .map(pp => pp?.innerHTML)
+        .join("\n"),
       Usage: ""
     }));
   }

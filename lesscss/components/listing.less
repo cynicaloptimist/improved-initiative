@@ -29,12 +29,17 @@
   flex-flow: row;
   align-items: center;
 
+  
+  .c-listing__counter {
+    // This is overridden in a single column layout
+    display: none;
+  }
+
   .c-listing-boss,
   .c-listing-minion,
   .c-listing-delete,
   .c-listing-edit,
-  .c-listing-move,
-  .c-listing__counter {
+  .c-listing-move {
     transition: opacity @transition-hover;
     opacity: 0;
   }

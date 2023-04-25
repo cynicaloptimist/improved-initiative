@@ -67,7 +67,7 @@ export class TrackerViewModel {
   public SettingsVisible = ko.observable(false);
   public LibrariesVisible = ko.observable(true);
   public LibraryManagerPane = ko.observable<LibraryType | null>(null);
-  public ToggleLibraryManager = () => {
+  public ToggleLibraryManager = (): void => {
     if (this.LibraryManagerPane() === null) {
       this.LibraryManagerPane("StatBlocks");
     } else {
@@ -91,7 +91,7 @@ export class TrackerViewModel {
     this.showPrivacyNotificationAfterTutorial();
   }
 
-  public SetLibraries = (libraries: Libraries) => {
+  public SetLibraries = (libraries: Libraries): void => {
     // I don't like this pattern, but it's my first stab at a partial
     // conversion to allow an observable-backed class to also depend
     // on a React hook. This will probably catch fire at some point.
@@ -134,25 +134,25 @@ export class TrackerViewModel {
   public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
   public SpellEditorProps = ko.observable<SpellEditorProps>(null);
 
-  public CloseSettings = () => {
+  public CloseSettings = (): void => {
     this.SettingsVisible(false);
     //this.TutorialVisible(false);
   };
 
-  public ReviewPrivacyPolicy = () => {
+  public ReviewPrivacyPolicy = (): void => {
     this.SettingsVisible(false);
     const prompt = PrivacyPolicyPrompt();
     this.PromptQueue.Add(prompt);
   };
 
-  public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">) {
+  public EditStatBlock(props: Omit<StatBlockEditorProps, "onClose">): void {
     this.StatBlockEditorProps({
       ...props,
       onClose: () => this.StatBlockEditorProps(null)
     });
   }
 
-  public EditSpell(props: Omit<SpellEditorProps, "onClose">) {
+  public EditSpell(props: Omit<SpellEditorProps, "onClose">): void {
     this.SpellEditorProps({
       ...props,
       onClose: () => this.SpellEditorProps(null)
@@ -162,7 +162,7 @@ export class TrackerViewModel {
   public async EditPersistentCharacterStatBlock(
     persistentCharacterId: string,
     newStatBlock?: StatBlock
-  ) {
+  ): Promise<void> {
     this.StatBlockEditorProps(null);
     const persistentCharacterListing = await this.Libraries.PersistentCharacters.GetOrCreateListingById(
       persistentCharacterId
@@ -193,14 +193,14 @@ export class TrackerViewModel {
     });
   }
 
-  public RepeatTutorial = () => {
+  public RepeatTutorial = (): void => {
     this.Encounter.EncounterFlow.EndEncounter();
     this.EncounterCommander.ShowLibraries();
     this.SettingsVisible(false);
     this.TutorialVisible(true);
   };
 
-  public ImportEncounterIfAvailable = () => {
+  public ImportEncounterIfAvailable = (): void => {
     const encounter = env.PostedEncounter;
     if (encounter) {
       this.TutorialVisible(false);
@@ -209,7 +209,7 @@ export class TrackerViewModel {
     }
   };
 
-  public ImportStatBlockIfAvailable = () => {
+  public ImportStatBlockIfAvailable = (): void => {
     if (!URLSearchParams) {
       return;
     }
@@ -221,6 +221,24 @@ export class TrackerViewModel {
 
     window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
+
+    if (!env.IsLoggedIn) {
+      this.PromptQueue.Add({
+        autoFocusSelector: ".submit",
+        initialValues: {},
+        onSubmit: () => true,
+        children: (
+          <span className="not-logged-in-for-import">
+            {"Please login with "}
+            <a href={env.PatreonLoginUrl} target="_blank">
+              Patreon
+            </a>
+            {" to use the StatBlock Importer"}
+            <SubmitButton />
+          </span>
+        )
+      });
+    }
 
     if (!env.HasEpicInitiative) {
       this.PromptQueue.Add({
@@ -295,7 +313,7 @@ export class TrackerViewModel {
     });
   };
 
-  public GetWhatsNewIfAvailable = () => {
+  public GetWhatsNewIfAvailable = (): void => {
     axios.get<PatreonPost>("/whatsnew/").then(response => {
       const latestPost = response.data;
       this.EventLog.AddEvent(
@@ -362,7 +380,7 @@ export class TrackerViewModel {
 
   private didLoadAutosave = false;
 
-  public LoadAutoSavedEncounterIfAvailable() {
+  public LoadAutoSavedEncounterIfAvailable(): void {
     if (this.didLoadAutosave) {
       return;
     }
@@ -415,7 +433,7 @@ export class TrackerViewModel {
     }
   };
 
-  public SaveUpdatedSettings(newSettings: Settings) {
+  public SaveUpdatedSettings(newSettings: Settings): void {
     CurrentSettings(newSettings);
     Metrics.TrackEvent("SettingsSaved", newSettings);
     LegacySynchronousLocalStore.Save(
