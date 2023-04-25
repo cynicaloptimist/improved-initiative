@@ -129,8 +129,7 @@ export class TextEnricher {
         pattern: /(.+\[\d+\/\d+\])/g,
         matcherFn: (rawText, processed, key) => {
           const bracketedCounterMatch = new RegExp(
-            /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/,
-            "gd"
+            /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/g
           );
           const matches = bracketedCounterMatch.exec(rawText);
           if (
