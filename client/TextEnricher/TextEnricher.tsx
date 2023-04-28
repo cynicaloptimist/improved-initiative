@@ -128,9 +128,18 @@ export class TextEnricher {
       counter: {
         pattern: /(.+\[\d+\/\d+\])/g,
         matcherFn: (rawText, processed, key) => {
-          const bracketedCounterMatch = new RegExp(
-            /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/g
-          );
+          let bracketedCounterMatch: RegExp;
+          try {
+            bracketedCounterMatch = new RegExp(
+              /(?<label>.*)\[(?<current>\d+)\/(?<maximum>\d+)\]/,
+              "gd"
+            );
+          } catch (err) {
+            console.warn("Dynamic counters are not supported on your browser:");
+            console.warn(err);
+            return;
+          }
+
           const matches = bracketedCounterMatch.exec(rawText);
           if (
             updateTextSource === undefined ||
@@ -153,9 +162,17 @@ export class TextEnricher {
             maximum,
             onChange: (newValue: number) => {
               const matchStart = originalText.indexOf(rawText);
-              const [currentStart, currentEnd] = matches["indices"]["groups"][
-                "current"
-              ];
+              const currentRange = _.get(
+                matches,
+                "indices.groups.current",
+                null
+              );
+              if (!currentRange) {
+                console.warn("Counter not found in matches");
+                console.table(matches);
+                return;
+              }
+              const [currentStart, currentEnd] = currentRange;
 
               const updatedText =
                 originalText.slice(0, matchStart + currentStart) +
