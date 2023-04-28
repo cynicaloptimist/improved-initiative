@@ -86,9 +86,13 @@ export function configureLoginRedirect(app: express.Application): void {
       const APIClient = patreon.patreon(tokens.access_token);
       const { rawJson } = await APIClient(`/current_user`);
       await handleCurrentUser(req, res, rawJson);
-    } catch (e) {
-      console.error("Patreon login flow failed: " + JSON.stringify(e));
-      res.status(500).send(e);
+    } catch (err) {
+      console.error("Patreon login flow failed:", JSON.stringify(err));
+      res
+        .status(500)
+        .send(
+          "There was a problem logging in via Patreon. This is probably a temporary issue with Patreon; please try again later."
+        );
     }
   });
 }
