@@ -22,6 +22,15 @@ export class Metrics {
     };
 
     Metrics.TrackEvent("AppLoad", counts);
+    const queryParams = new URLSearchParams(window.location.search);
+    const loginMethod = queryParams.get("login");
+    if (loginMethod) {
+      Metrics.TrackEvent("login", {
+        method: loginMethod
+      });
+      queryParams.delete("login");
+      window.history.replaceState(null, "", window.location.pathname);
+    }
   }
 
   public static TrackEvent(

@@ -132,7 +132,7 @@ export async function handleCurrentUser(
     throw "Failed to insert user into database";
   }
   session.userId = user._id;
-  res.redirect(`/e/${encounterId}`);
+  res.redirect(`/e/${encounterId}?login=patreon`);
 }
 
 export function updateSessionAccountFeatures(
