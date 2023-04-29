@@ -33,7 +33,10 @@ export class Metrics {
     Metrics.TrackEvent("AppLoad", counts);
   }
 
-  public static TrackEvent(name: string, eventData: EventData = {}): void {
+  public static TrackEvent(
+    name: string,
+    eventData?: Record<string, any>
+  ): void {
     if (
       !LegacySynchronousLocalStore.Load(
         LegacySynchronousLocalStore.User,
