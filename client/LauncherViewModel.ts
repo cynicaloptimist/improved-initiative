@@ -18,7 +18,7 @@ export class LauncherViewModel {
   public GeneratedEncounterId = env.EncounterId;
   public JoinEncounterInput = ko.observable<string>("");
 
-  public StartEncounter = () => {
+  public StartEncounter = (): void => {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
@@ -29,7 +29,7 @@ export class LauncherViewModel {
     window.location.href = `e/${encounterId || this.GeneratedEncounterId}`;
   };
 
-  public JoinEncounter = () => {
+  public JoinEncounter = (): void => {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
@@ -39,7 +39,7 @@ export class LauncherViewModel {
     }
   };
 
-  public JoinEncounterButtonClass = () => {
+  public JoinEncounterButtonClass = (): string => {
     const encounterId = this.JoinEncounterInput()
       .split("/")
       .pop();
