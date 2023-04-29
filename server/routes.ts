@@ -2,6 +2,7 @@ import bodyParser = require("body-parser");
 import express = require("express");
 import moment = require("moment");
 import mustacheExpress = require("mustache-express");
+import { URL } from "url";
 
 import { ClientEnvironment } from "../common/ClientEnvironment";
 import { probablyUniqueString, ParseJSONOrDefault } from "../common/Toolbox";
@@ -127,8 +128,10 @@ export default function(
       throw "Session is not available";
     }
     session.encounterId = req.params.id;
+    const urlObject = new URL(req.url, baseUrl);
+    const queryString = urlObject.search;
 
-    res.redirect("/e/");
+    res.redirect("/e/" + queryString);
   });
 
   app.get("/e/", async (req: Req, res: Res) => {
