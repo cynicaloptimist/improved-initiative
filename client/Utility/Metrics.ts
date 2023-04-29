@@ -7,16 +7,7 @@ interface EventData {
   [key: string]: any;
 }
 
-type GoogleAnalyticsTag = (
-  command: "send",
-  event: "event",
-  eventCategory: string,
-  eventAction: string,
-  eventLabel?: string,
-  eventValue?: number
-) => void;
-
-declare let gtag: GoogleAnalyticsTag | undefined;
+declare let gtag: Gtag.Gtag | undefined;
 
 export class Metrics {
   public static async TrackLoad() {
@@ -52,13 +43,7 @@ export class Metrics {
     }
 
     if (typeof gtag == "function") {
-      for (const key of Object.keys(eventData)) {
-        if (typeof eventData[key] == "number") {
-          gtag("send", "event", name, key, undefined, eventData[key]);
-        } else {
-          gtag("send", "event", name, key, JSON.stringify(eventData[key]));
-        }
-      }
+      gtag("event", name, eventData);
     }
 
     if (!env.SendMetrics) {
