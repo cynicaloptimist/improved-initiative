@@ -5,8 +5,9 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
 import { NotifyTutorialOfAction } from "./NotifyTutorialOfAction";
 import { useCallback } from "react";
+import { Metrics } from "../Utility/Metrics";
 
-export function Tutorial(props: { onClose: () => void }) {
+export function Tutorial(props: { onClose: () => void }): JSX.Element {
   const [stepIndex, setStepIndex] = useState(0);
   const close = useCallback(() => {
     document
@@ -16,8 +17,12 @@ export function Tutorial(props: { onClose: () => void }) {
   }, [props.onClose]);
 
   const advance = () => {
+    if (stepIndex == 0) {
+      Metrics.TrackEvent("tutorial_begin");
+    }
     const nextStepIndex = stepIndex + 1;
     if (nextStepIndex >= TutorialSteps.length) {
+      Metrics.TrackEvent("tutorial_complete");
       return close();
     }
     setStepIndex(nextStepIndex);
