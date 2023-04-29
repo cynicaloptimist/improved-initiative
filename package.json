@@ -74,6 +74,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/react-hooks": "^7.0.2",
     "@tippyjs/react": "^4.2.6",
+    "@types/gtag.js": "^0.0.12",
     "@types/retry": "^0.12.1",
     "@types/sticky-session": "^1.1.1",
     "awesomplete": "^1.1.2",
