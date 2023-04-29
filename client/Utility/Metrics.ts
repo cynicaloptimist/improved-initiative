@@ -10,7 +10,7 @@ interface EventData {
 declare let gtag: Gtag.Gtag | undefined;
 
 export class Metrics {
-  public static async TrackLoad() {
+  public static async TrackLoad(): Promise<void> {
     const counts = {
       Encounters: await Store.Count(Store.SavedEncounters),
       NpcStatBlocks: await Store.Count(Store.StatBlocks),
