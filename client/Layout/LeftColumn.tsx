@@ -10,7 +10,7 @@ import { CombatantViewModel } from "../Combatant/CombatantViewModel";
 export function LeftColumn(props: {
   tracker: TrackerViewModel;
   columnWidth: number;
-}) {
+}): JSX.Element {
   const librariesVisible = useSubscription(props.tracker.LibrariesVisible);
 
   const combatantViewModels = useSubscription(
