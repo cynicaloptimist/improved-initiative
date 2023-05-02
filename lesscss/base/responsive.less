@@ -68,7 +68,9 @@
 
   .encounter-view.show-left-center-right {
     .left-column {
-      max-width: initial;
+      // Override user setting from draggable border
+      width: unset !important;
+      max-width: unset !important;
       flex: 1;
     }
 
