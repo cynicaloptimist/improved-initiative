@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import Tippy from "@tippyjs/react";
 import { TagState } from "../../common/CombatantState";
 import { CommandContext } from "./CommandContext";

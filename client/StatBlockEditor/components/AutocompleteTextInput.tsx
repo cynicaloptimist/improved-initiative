@@ -1,4 +1,5 @@
-import Awesomplete = require("awesomplete");
+import * as Awesomplete from "awesomplete";
+
 import { Field, FieldProps } from "formik";
 import * as _ from "lodash";
 import * as React from "react";

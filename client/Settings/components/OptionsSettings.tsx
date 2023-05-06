@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import { HpVerbosityOption } from "../../../common/PlayerViewSettings";
 import {
   AutoGroupInitiativeOption,

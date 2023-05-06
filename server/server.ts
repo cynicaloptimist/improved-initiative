@@ -1,7 +1,10 @@
-import express = require("express");
+import * as express from "express";
+
 import * as SocketIO from "socket.io";
-import http = require("http");
-import cluster = require("cluster");
+import * as http from "http";
+
+import * as cluster from "cluster";
+
 import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
 
 import { Spell } from "../common/Spell";

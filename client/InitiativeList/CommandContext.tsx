@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import { TagState } from "../../common/CombatantState";
 import { Command } from "../Commands/Command";
 

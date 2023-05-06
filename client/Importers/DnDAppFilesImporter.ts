@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
 import { SpellImporter } from "./SpellImporter";

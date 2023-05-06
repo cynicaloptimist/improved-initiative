@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import { Field } from "formik";
 
 import { CombatantViewModel } from "../Combatant/CombatantViewModel";

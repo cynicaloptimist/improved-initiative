@@ -1,4 +1,5 @@
-import mongo = require("mongodb");
+import * as mongo from "mongodb";
+
 
 import * as _ from "lodash";
 import { Listable, ListingMeta } from "../common/Listable";

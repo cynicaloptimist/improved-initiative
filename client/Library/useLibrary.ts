@@ -1,5 +1,7 @@
-import moment = require("moment");
-import React = require("react");
+import * as moment from "moment";
+
+import * as React from "react";
+
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Store } from "../Utility/Store";

@@ -1,4 +1,5 @@
-import express = require("express");
+import * as express from "express";
+
 import { Spell } from "../common/Spell";
 import { StatBlock } from "../common/StatBlock";
 import { Library } from "./library";

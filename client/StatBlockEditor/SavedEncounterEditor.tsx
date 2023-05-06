@@ -1,5 +1,6 @@
 import { FieldArray, Form, Formik } from "formik";
-import React = require("react");
+import * as React from "react";
+
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { Button } from "../Components/Button";
 import { env } from "../Environment";

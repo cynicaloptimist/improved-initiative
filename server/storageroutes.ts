@@ -1,4 +1,5 @@
-import express = require("express");
+import * as express from "express";
+
 
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";

@@ -1,5 +1,6 @@
 import { ArrayHelpers, Field, FormikProps } from "formik";
-import React = require("react");
+import * as React from "react";
+
 import { StatBlock } from "../../../common/StatBlock";
 import { KeywordField } from "./KeywordField";
 import { NameAndModifierField } from "./NameAndModifierField";

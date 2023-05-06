@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import { CombatStats } from "../../common/CombatStats";
 import { SubmitButton } from "../Components/Button";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";

@@ -1,6 +1,8 @@
 import bodyParser = require("body-parser");
-import express = require("express");
-import moment = require("moment");
+import * as express from "express";
+
+import * as moment from "moment";
+
 import mustacheExpress = require("mustache-express");
 import { URL } from "url";
 

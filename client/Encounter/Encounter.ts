@@ -2,7 +2,8 @@ import * as ko from "knockout";
 import { find, max, sortBy } from "lodash";
 import * as React from "react";
 
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { CombatStats } from "../../common/CombatStats";
 import { CombatantState } from "../../common/CombatantState";
 import { EncounterState } from "../../common/EncounterState";

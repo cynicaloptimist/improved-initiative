@@ -1,4 +1,5 @@
-import moment = require("moment");
+import * as moment from "moment";
+
 import { Listable } from "../../common/Listable";
 import { Store } from "./Store";
 
