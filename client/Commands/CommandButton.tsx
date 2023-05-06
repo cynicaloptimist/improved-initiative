@@ -1,6 +1,7 @@
 import { Command } from "./Command";
 import { Button } from "../Components/Button";
-import React = require("react");
+import * as React from "react";
+
 import { useSubscription } from "../Combatant/linkComponentToObservables";
 
 export function CommandButton(props: { command: Command; showLabel: boolean }) {

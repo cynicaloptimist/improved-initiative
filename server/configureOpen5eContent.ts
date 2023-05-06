@@ -1,6 +1,8 @@
 import axios from "axios";
-import express = require("express");
-import _ = require("lodash");
+import * as express from "express";
+
+import * as _ from "lodash";
+
 import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
 

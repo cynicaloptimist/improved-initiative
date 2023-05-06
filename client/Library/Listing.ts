@@ -1,7 +1,8 @@
 import axios from "axios";
 import * as ko from "knockout";
 
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Listable, ListingMeta } from "../../common/Listable";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { Store } from "../Utility/Store";

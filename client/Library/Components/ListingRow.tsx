@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";

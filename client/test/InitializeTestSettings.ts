@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { getDefaultSettings, Settings } from "../../common/Settings";
 import { CurrentSettings } from "../Settings/Settings";
 

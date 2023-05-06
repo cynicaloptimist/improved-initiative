@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import { SubmitButton } from "../Components/Button";
 
 type Props = {

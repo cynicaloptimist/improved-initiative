@@ -1,6 +1,8 @@
-import express = require("express");
+import * as express from "express";
+
 import provideSessionToSocketIo = require("express-socket.io-session");
-import redis = require("redis");
+import * as redis from "redis";
+
 
 import { createAdapter } from "@socket.io/redis-adapter";
 import * as SocketIO from "socket.io";

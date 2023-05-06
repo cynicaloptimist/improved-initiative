@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from "formik";
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import * as React from "react";
 import { Settings } from "../../../common/Settings";
 import { AccountClient } from "../../Account/AccountClient";

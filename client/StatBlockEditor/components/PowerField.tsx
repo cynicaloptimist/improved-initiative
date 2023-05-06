@@ -1,5 +1,6 @@
 import { Field } from "formik";
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import * as React from "react";
 import { useDrag } from "react-dnd";
 import { useFocusIfEmpty } from "./useFocus";

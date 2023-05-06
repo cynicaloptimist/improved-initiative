@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Listable, FilterDimensions } from "./Listable";
 import { probablyUniqueString } from "./Toolbox";
 

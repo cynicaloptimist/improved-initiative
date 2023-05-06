@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 export function GetAlphaSortableLevelString(level: string) {
   if (level == "0") return "0001";
   if (level == "1/8") return "0002";

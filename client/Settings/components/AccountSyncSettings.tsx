@@ -2,7 +2,8 @@ import { saveAs } from "browser-filesaver";
 import { forIn } from "lodash";
 import * as React from "react";
 
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Listable } from "../../../common/Listable";
 import { AccountClient } from "../../Account/AccountClient";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";

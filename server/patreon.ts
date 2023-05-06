@@ -1,9 +1,12 @@
 import * as crypto from "crypto";
 
-import express = require("express");
+import * as express from "express";
+
 import * as _ from "lodash";
-import patreon = require("patreon");
-import request = require("request");
+import * as patreon from "patreon";
+
+import * as request from "request";
+
 
 import * as DB from "./dbconnection";
 
