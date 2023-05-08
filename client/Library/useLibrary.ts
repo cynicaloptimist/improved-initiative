@@ -126,13 +126,11 @@ export function useLibrary<T extends Listable>(
         "localAsync"
       );
 
-      const savedListing = await saveListing(listing, newListable);
-
       for (const listingToOverwrite of listingsToOverwrite) {
         await DeleteListing(listingToOverwrite.Meta().Id);
       }
 
-      return savedListing;
+      return await saveListing(listing, newListable);
     },
     [listings]
   );
