@@ -12,6 +12,8 @@
     "node": "^18.15.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
     "@types/awesomplete": "^1.1.11",
     "@types/body-parser": "^1.19.1",
     "@types/color": "^3.0.2",
