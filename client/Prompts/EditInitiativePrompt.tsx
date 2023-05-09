@@ -5,6 +5,7 @@ import { toModifierString, probablyUniqueString } from "../../common/Toolbox";
 import { SubmitButton } from "../Components/Button";
 import { Field } from "formik";
 import { StandardPromptLayout } from "./StandardPromptLayout";
+import { ToggleButton } from "../Settings/components/Toggle";
 
 type EditInitiativeModel = { initiativeRoll: number; breakLink: boolean };
 
@@ -21,12 +22,7 @@ export function EditInitiativePrompt(
   const breakLinkCheckbox = combatant.InitiativeGroup() && (
     <>
       <label htmlFor={breakLinkLabelId}>Break Link: </label>
-      <Field
-        name="breakLink"
-        type="checkbox"
-        value="break"
-        id={breakLinkLabelId}
-      />
+      <ToggleButton fieldName="breakLink" id={breakLinkLabelId} />
     </>
   );
 
