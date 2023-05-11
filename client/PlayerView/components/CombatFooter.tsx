@@ -1,5 +1,7 @@
-import _ = require("lodash");
-import moment = require("moment");
+import * as _ from "lodash";
+
+import * as moment from "moment";
+
 import * as React from "react";
 
 export class CombatFooter extends React.Component<

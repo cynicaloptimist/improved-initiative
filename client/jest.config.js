@@ -1,5 +1,5 @@
 module.exports = {
-  setupFiles: ["./client/test/adapterSetup.ts", "./client/test/mocksSetup.ts"],
+  setupFiles: ["./test/adapterSetup.ts", "./test/mocksSetup.ts"],
   transform: {
     "^.+\\.tsx?$": [
       "ts-jest",

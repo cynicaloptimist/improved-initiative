@@ -1,6 +1,7 @@
 import * as React from "react";
 
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { CombatStats } from "../../../common/CombatStats";
 import { TagState } from "../../../common/CombatantState";
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";

@@ -1,6 +1,7 @@
 import { Field } from "formik";
 import * as _ from "lodash";
-import React = require("react");
+import * as React from "react";
+
 
 export const Dropdown = (props: {
   fieldName: string;

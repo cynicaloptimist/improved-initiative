@@ -1,4 +1,5 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Spell } from "../../common/Spell";
 import { AccountClient } from "../Account/AccountClient";
 import { Importer } from "./Importer";

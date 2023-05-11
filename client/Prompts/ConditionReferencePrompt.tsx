@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Conditions } from "../Rules/Conditions";
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { PromptProps } from "./PendingPrompts";
 import { SubmitButton } from "../Components/Button";
 

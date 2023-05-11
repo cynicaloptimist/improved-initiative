@@ -1,4 +1,5 @@
-import React = require("react");
+import * as React from "react";
+
 import axios from "axios";
 
 import { Spell } from "../../common/Spell";

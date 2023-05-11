@@ -1,5 +1,6 @@
 import { ArrayHelpers, FieldArray, FormikProps } from "formik";
-import React = require("react");
+import * as React from "react";
+
 import { Button } from "../../Components/Button";
 import { DropZone } from "./UseDragDrop";
 

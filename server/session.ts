@@ -2,7 +2,8 @@ import RedisStore from "connect-redis";
 import { RequestHandler } from "express";
 import Redis from "ioredis";
 import expressSession = require("express-session");
-import moment = require("moment");
+import * as moment from "moment";
+
 
 import { probablyUniqueString } from "../common/Toolbox";
 

@@ -1,5 +1,7 @@
-import _ = require("lodash");
-import React = require("react");
+import * as _ from "lodash";
+
+import * as React from "react";
+
 
 export function BeanCounter(props: {
   current: number;

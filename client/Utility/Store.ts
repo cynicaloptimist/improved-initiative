@@ -1,6 +1,7 @@
 import * as localforage from "localforage";
 
-import moment = require("moment");
+import * as moment from "moment";
+
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";

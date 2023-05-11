@@ -1,6 +1,8 @@
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { useCallback, useState } from "react";
-import React = require("react");
+import * as React from "react";
+
 
 export type Selection<T> = {
   selected: T[];

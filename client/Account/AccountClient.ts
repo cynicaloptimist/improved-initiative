@@ -1,6 +1,7 @@
 import axios from "axios";
-import _ = require("lodash");
-import retry = require("retry");
+import * as _ from "lodash";
+
+import * as retry from "retry";
 
 import { Listable } from "../../common/Listable";
 import { PersistentCharacter } from "../../common/PersistentCharacter";

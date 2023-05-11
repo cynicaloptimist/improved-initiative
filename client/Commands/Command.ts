@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Settings } from "../../common/Settings";
 import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalStore";
 import { GetLegacyKeyBinding } from "./GetLegacyKeyBinding";

@@ -1,5 +1,7 @@
-import moment = require("moment");
-import React = require("react");
+import * as moment from "moment";
+
+import * as React from "react";
+
 import { FilterDimensions, Listable, ListingMeta } from "../../common/Listable";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { Store } from "../Utility/Store";
@@ -124,13 +126,11 @@ export function useLibrary<T extends Listable>(
         "localAsync"
       );
 
-      const savedListing = await saveListing(listing, newListable);
-
       for (const listingToOverwrite of listingsToOverwrite) {
         await DeleteListing(listingToOverwrite.Meta().Id);
       }
 
-      return savedListing;
+      return await saveListing(listing, newListable);
     },
     [listings]
   );

@@ -6,7 +6,8 @@ import { SubmitButton } from "../Components/Button";
 import { CurrentSettings } from "../Settings/Settings";
 import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { PromptProps } from "./PendingPrompts";
-import _ = require("lodash");
+import * as _ from "lodash";
+
 import { Field } from "formik";
 
 interface InitiativePromptComponentProps {
