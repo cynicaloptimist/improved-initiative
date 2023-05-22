@@ -47,7 +47,7 @@ export class Metrics {
     }
 
     console.log(`Event ${name}`);
-    if (Object.keys(eventData).length > 0) {
+    if (Object.keys(eventData ?? {}).length > 0) {
       console.table(eventData);
     }
 
@@ -76,8 +76,12 @@ export class Metrics {
     eventData: EventData = {}
   ): void {
     console.log(`Anonymous Event ${name}`);
-    if (Object.keys(eventData).length > 0) {
+    if (Object.keys(eventData ?? {}).length > 0) {
       console.table(eventData);
+    }
+
+    if (typeof gtag == "function") {
+      gtag("event", name, eventData);
     }
 
     if (!env.SendMetrics) {
