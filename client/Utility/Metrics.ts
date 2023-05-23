@@ -3,10 +3,6 @@ import { env } from "../Environment";
 import { LegacySynchronousLocalStore } from "./LegacySynchronousLocalStore";
 import { Store } from "./Store";
 
-interface EventData {
-  [key: string]: any;
-}
-
 declare let gtag: Gtag.Gtag | undefined;
 
 export class Metrics {
@@ -35,7 +31,7 @@ export class Metrics {
 
   public static TrackEvent(
     name: string,
-    eventData?: Record<string, any>
+    eventData: Record<string, any> = {}
   ): void {
     if (
       !LegacySynchronousLocalStore.Load(
@@ -47,7 +43,7 @@ export class Metrics {
     }
 
     console.log(`Event ${name}`);
-    if (Object.keys(eventData ?? {}).length > 0) {
+    if (Object.keys(eventData).length > 0) {
       console.table(eventData);
     }
 
@@ -73,10 +69,10 @@ export class Metrics {
 
   public static TrackAnonymousEvent(
     name: string,
-    eventData: EventData = {}
+    eventData: Record<string, any> = {}
   ): void {
     console.log(`Anonymous Event ${name}`);
-    if (Object.keys(eventData ?? {}).length > 0) {
+    if (Object.keys(eventData).length > 0) {
       console.table(eventData);
     }
 
