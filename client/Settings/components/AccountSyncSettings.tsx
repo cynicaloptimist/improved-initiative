@@ -157,56 +157,25 @@ export class AccountSyncSettings extends React.Component<
       return;
     }
 
-    await Promise.all(
-      Object.keys(account.statblocks ?? {}).map(async statBlockId => {
-        try {
-          const statBlock = account.statblocks[statBlockId];
-          return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
-        } catch (e) {
-          console.error(JSON.stringify(e));
-        }
-      })
-    );
+    const librariesStores = [
+      [account.statblocks, Store.StatBlocks],
+      [account.spells, Store.Spells],
+      [account.persistentcharacters, Store.PersistentCharacters],
+      [account.encounters, Store.SavedEncounters]
+    ] as const;
 
-    await Promise.all(
-      Object.keys(account.spells ?? {}).map(async spellId => {
-        try {
-          const spell = account.spells[spellId];
-          return await Store.Save(Store.Spells, spellId, spell);
-        } catch (e) {
-          console.error(JSON.stringify(e));
-        }
-      })
-    );
-
-    await Promise.all(
-      Object.keys(account.persistentcharacters ?? {}).map(
-        async persistentCharacterId => {
+    for (const [library, store] of librariesStores) {
+      await Promise.all(
+        Object.keys(library ?? {}).map(async itemId => {
           try {
-            const persistentCharacter =
-              account.persistentcharacters[persistentCharacterId];
-            return await Store.Save(
-              Store.PersistentCharacters,
-              persistentCharacterId,
-              persistentCharacter
-            );
+            const item = library[itemId];
+            return await Store.Save(store, itemId, item);
           } catch (e) {
             console.error(JSON.stringify(e));
           }
-        }
-      )
-    );
-
-    await Promise.all(
-      Object.keys(account.encounters ?? {}).map(async encounterId => {
-        try {
-          const spell = account.encounters[encounterId];
-          return await Store.Save(Store.SavedEncounters, encounterId, spell);
-        } catch (e) {
-          console.error(JSON.stringify(e));
-        }
-      })
-    );
+        })
+      );
+    }
 
     location.reload();
   };
