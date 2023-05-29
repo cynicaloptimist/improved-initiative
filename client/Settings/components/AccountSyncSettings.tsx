@@ -159,36 +159,52 @@ export class AccountSyncSettings extends React.Component<
 
     await Promise.all(
       Object.keys(account.statblocks ?? {}).map(async statBlockId => {
-        const statBlock = account.statblocks[statBlockId];
-        return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
+        try {
+          const statBlock = account.statblocks[statBlockId];
+          return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
+        } catch (e) {
+          console.error(JSON.stringify(e));
+        }
       })
     );
 
     await Promise.all(
       Object.keys(account.spells ?? {}).map(async spellId => {
-        const spell = account.spells[spellId];
-        return await Store.Save(Store.Spells, spellId, spell);
+        try {
+          const spell = account.spells[spellId];
+          return await Store.Save(Store.Spells, spellId, spell);
+        } catch (e) {
+          console.error(JSON.stringify(e));
+        }
       })
     );
 
     await Promise.all(
       Object.keys(account.persistentcharacters ?? {}).map(
         async persistentCharacterId => {
-          const persistentCharacter =
-            account.persistentcharacters[persistentCharacterId];
-          return await Store.Save(
-            Store.PersistentCharacters,
-            persistentCharacterId,
-            persistentCharacter
-          );
+          try {
+            const persistentCharacter =
+              account.persistentcharacters[persistentCharacterId];
+            return await Store.Save(
+              Store.PersistentCharacters,
+              persistentCharacterId,
+              persistentCharacter
+            );
+          } catch (e) {
+            console.error(JSON.stringify(e));
+          }
         }
       )
     );
 
     await Promise.all(
       Object.keys(account.encounters ?? {}).map(async encounterId => {
-        const spell = account.encounters[encounterId];
-        return await Store.Save(Store.SavedEncounters, encounterId, spell);
+        try {
+          const spell = account.encounters[encounterId];
+          return await Store.Save(Store.SavedEncounters, encounterId, spell);
+        } catch (e) {
+          console.error(JSON.stringify(e));
+        }
       })
     );
 
