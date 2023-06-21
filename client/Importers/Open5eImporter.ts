@@ -5,6 +5,7 @@ import {
   NameAndModifier,
   StatBlock
 } from "../../common/StatBlock";
+import { normalizeChallengeRating } from "../../common/Toolbox";
 
 export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
   const sb = open5eStatBlock;
@@ -46,7 +47,7 @@ export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
     }),
     Senses: commaSeparatedStrings(sb.senses),
     Languages: commaSeparatedStrings(sb.languages),
-    Challenge: sb.challenge_rating,
+    Challenge: normalizeChallengeRating(sb.challenge_rating),
     Traits: nameAndDescArrays(sb.special_abilities),
     Actions: nameAndDescArrays(sb.actions),
     BonusActions: nameAndDescArrays(sb.bonus_actions),

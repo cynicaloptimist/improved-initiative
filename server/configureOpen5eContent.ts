@@ -5,6 +5,7 @@ import * as _ from "lodash";
 
 import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
+import { normalizeChallengeRating } from "../common/Toolbox";
 
 export async function configureOpen5eContent(
   app: express.Application
@@ -68,7 +69,7 @@ function getMeta(r: any): ListingMeta {
       .toLocaleLowerCase()
       .replace(/[^\w\s]/g, ""),
     FilterDimensions: {
-      Level: r.challenge_rating,
+      Level: normalizeChallengeRating(r.challenge_rating),
       Source: r.document__title,
       Type: `${r.type}` + (r.subtype ? ` (${r.subtype})` : ``)
     }
