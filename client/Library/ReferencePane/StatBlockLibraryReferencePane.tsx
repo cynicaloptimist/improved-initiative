@@ -47,7 +47,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
     linkComponentToObservables(this);
   }
 
-  public render() {
+  public render(): JSX.Element {
     const listings = this.props.library.GetAllListings();
 
     return (
