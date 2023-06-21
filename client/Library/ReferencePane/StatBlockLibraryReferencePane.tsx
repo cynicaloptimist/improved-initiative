@@ -6,7 +6,6 @@ import { linkComponentToObservables } from "../../Combatant/linkComponentToObser
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { CurrentSettings } from "../../Settings/Settings";
-import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
 import { ListingGroupFn } from "../Components/BuildListingTree";
