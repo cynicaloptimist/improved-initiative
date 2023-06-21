@@ -70,7 +70,7 @@ function getMeta(r: any): ListingMeta {
     FilterDimensions: {
       Level: r.challenge_rating,
       Source: r.document__title,
-      Type: `${r.type} (${r.subtype})`
+      Type: `${r.type}` + (r.subtype ? ` (${r.subtype})` : ``)
     }
   };
   return listingMeta;
