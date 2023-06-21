@@ -33,16 +33,23 @@ async function getAllListings(
   const basicRulesListings: ListingMeta[] = [];
   const additionalListings: ListingMeta[] = [];
   let nextUrl = sourceUrl;
+  console.log("Loading listings from Open5e.");
   do {
-    const response = await axios.get(nextUrl);
-    const [basicRulesResults, additionalResults] = _.partition(
-      response.data.results,
-      r => r.document__slug == "wotc-srd"
-    );
-    basicRulesListings.push(...basicRulesResults.map(getMeta));
-    additionalListings.push(...additionalResults.map(getMeta));
-    nextUrl = response.data?.next;
+    console.log("Loading " + nextUrl);
+    try {
+      const response = await axios.get(nextUrl);
+      const [basicRulesResults, additionalResults] = _.partition(
+        response.data.results,
+        r => r.document__slug == "wotc-srd"
+      );
+      basicRulesListings.push(...basicRulesResults.map(getMeta));
+      additionalListings.push(...additionalResults.map(getMeta));
+      nextUrl = response.data?.next;
+    } catch (e) {
+      console.warn("Problem loading content", JSON.stringify(e));
+    }
   } while (nextUrl);
+  console.log("Done.");
 
   return [basicRulesListings, additionalListings];
 }
