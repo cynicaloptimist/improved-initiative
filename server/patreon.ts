@@ -51,27 +51,6 @@ interface Pledge {
   };
 }
 
-interface ApiResponse {
-  data: {
-    id: string;
-  };
-  included: (
-    | Pledge
-    | {
-        id: string;
-        type: string;
-      }
-  )[];
-}
-
-interface TokensResponse {
-  access_token: string;
-  refresh_token: string;
-  expires_in: string;
-  scope: string;
-  token_type: string;
-}
-
 export function configureLoginRedirect(app: express.Application): void {
   const redirectPath = "/r/patreon";
   const redirectUri = baseUrl + redirectPath;
