@@ -7,7 +7,9 @@ import {
 } from "../../common/StatBlock";
 import { normalizeChallengeRating } from "../../common/Toolbox";
 
-export function ImportOpen5eStatBlock(open5eStatBlock: any): StatBlock {
+export function ImportOpen5eStatBlock(
+  open5eStatBlock: Record<string, any>
+): StatBlock {
   const sb = open5eStatBlock;
   return {
     ...StatBlock.Default(),
