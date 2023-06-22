@@ -22,7 +22,7 @@ import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
 import { Libraries, LibraryType } from "./Library/Libraries";
-import { PatreonPost } from "./Patreon/PatreonPost";
+import { PatreonPost } from "../common/PatreonPost";
 import { PlayerViewClient } from "./PlayerView/PlayerViewClient";
 import { DefaultRules } from "./Rules/Rules";
 import {
