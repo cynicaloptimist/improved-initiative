@@ -19,7 +19,7 @@ export function probablyUniqueString(): string {
   return probablyUniqueString;
 }
 
-export function concatenatedStringRegex(strings: string[]) {
+export function concatenatedStringRegex(strings: string[]): RegExp {
   const allStrings = strings
     .map(s => escapeRegExp(s))
     .sort((a, b) => b.localeCompare(a));
