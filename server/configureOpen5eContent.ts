@@ -5,6 +5,7 @@ import * as _ from "lodash";
 
 import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
+import { normalizeChallengeRating } from "../common/Toolbox";
 
 export async function configureOpen5eContent(
   app: express.Application
@@ -33,16 +34,23 @@ async function getAllListings(
   const basicRulesListings: ListingMeta[] = [];
   const additionalListings: ListingMeta[] = [];
   let nextUrl = sourceUrl;
+  console.log("Loading listings from Open5e.");
   do {
-    const response = await axios.get(nextUrl);
-    const [basicRulesResults, additionalResults] = _.partition(
-      response.data.results,
-      r => r.document__slug == "wotc-srd"
-    );
-    basicRulesListings.push(...basicRulesResults.map(getMeta));
-    additionalListings.push(...additionalResults.map(getMeta));
-    nextUrl = response.data?.next;
+    console.log("Loading " + nextUrl);
+    try {
+      const response = await axios.get(nextUrl);
+      const [basicRulesResults, additionalResults] = _.partition(
+        response.data.results,
+        r => r.document__slug == "wotc-srd"
+      );
+      basicRulesListings.push(...basicRulesResults.map(getMeta));
+      additionalListings.push(...additionalResults.map(getMeta));
+      nextUrl = response.data?.next;
+    } catch (e) {
+      console.warn("Problem loading content", JSON.stringify(e));
+    }
   } while (nextUrl);
+  console.log("Done.");
 
   return [basicRulesListings, additionalListings];
 }
@@ -61,9 +69,9 @@ function getMeta(r: any): ListingMeta {
       .toLocaleLowerCase()
       .replace(/[^\w\s]/g, ""),
     FilterDimensions: {
-      Level: r.challenge_rating,
+      Level: normalizeChallengeRating(r.challenge_rating),
       Source: r.document__title,
-      Type: `${r.type} (${r.subtype})`
+      Type: `${r.type}` + (r.subtype ? ` (${r.subtype})` : ``)
     }
   };
   return listingMeta;

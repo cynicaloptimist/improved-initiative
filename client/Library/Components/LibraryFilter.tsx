@@ -6,7 +6,7 @@ interface LibraryFilterProps {
   applyFilterFn: (filter: string) => void;
 }
 
-export function LibraryFilter(props: LibraryFilterProps) {
+export function LibraryFilter(props: LibraryFilterProps): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current.focus();

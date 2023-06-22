@@ -61,7 +61,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     this.filterCache = new FilterCache(props.listings);
   }
 
-  public render() {
+  public render(): JSX.Element {
     this.filterCache.UpdateIfItemsChanged(this.props.listings);
 
     const filteredListings = this.filterCache.GetFilteredEntries(

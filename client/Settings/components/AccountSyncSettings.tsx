@@ -157,40 +157,25 @@ export class AccountSyncSettings extends React.Component<
       return;
     }
 
-    await Promise.all(
-      Object.keys(account.statblocks ?? {}).map(async statBlockId => {
-        const statBlock = account.statblocks[statBlockId];
-        return await Store.Save(Store.StatBlocks, statBlockId, statBlock);
-      })
-    );
+    const librariesStores = [
+      [account.statblocks, Store.StatBlocks],
+      [account.spells, Store.Spells],
+      [account.persistentcharacters, Store.PersistentCharacters],
+      [account.encounters, Store.SavedEncounters]
+    ] as const;
 
-    await Promise.all(
-      Object.keys(account.spells ?? {}).map(async spellId => {
-        const spell = account.spells[spellId];
-        return await Store.Save(Store.Spells, spellId, spell);
-      })
-    );
-
-    await Promise.all(
-      Object.keys(account.persistentcharacters ?? {}).map(
-        async persistentCharacterId => {
-          const persistentCharacter =
-            account.persistentcharacters[persistentCharacterId];
-          return await Store.Save(
-            Store.PersistentCharacters,
-            persistentCharacterId,
-            persistentCharacter
-          );
-        }
-      )
-    );
-
-    await Promise.all(
-      Object.keys(account.encounters ?? {}).map(async encounterId => {
-        const spell = account.encounters[encounterId];
-        return await Store.Save(Store.SavedEncounters, encounterId, spell);
-      })
-    );
+    for (const [library, store] of librariesStores) {
+      await Promise.all(
+        Object.keys(library ?? {}).map(async itemId => {
+          try {
+            const item = library[itemId];
+            return await Store.Save(store, itemId, item);
+          } catch (e) {
+            console.error(JSON.stringify(e));
+          }
+        })
+      );
+    }
 
     location.reload();
   };

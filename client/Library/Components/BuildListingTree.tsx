@@ -6,7 +6,7 @@ import { Folder } from "./Folder";
 
 export type ListingGroupFn = (
   l: Listing<any>
-) => { label?: string; key: string };
+) => { label?: string; key: string; ignoreSlashes?: boolean };
 
 type FolderModel = {
   label: string;
@@ -33,7 +33,8 @@ export function BuildListingTree<T extends Listable>(
       const innerFolder = ensureFolder(
         foldersByKey,
         group.key,
-        group.label || group.key
+        group.label || group.key,
+        group.ignoreSlashes || false
       );
       innerFolder.listings.push(listing);
     }
@@ -68,15 +69,17 @@ function buildFolderComponents<T extends Listable>(
 function ensureFolder(
   outerFolder: Record<string, FolderModel>,
   keyString: string,
-  labelString: string
+  labelString: string,
+  ignoreSlashes: boolean
 ) {
-  const path = keyString.split("/");
+  const pathDelimiter = ignoreSlashes ? undefined : "/";
+  const path = keyString.split(pathDelimiter);
   let folderCursor = outerFolder;
   for (let i = 0; i < path.length; i++) {
     const folderName = path[i];
     if (folderCursor[folderName] === undefined) {
       folderCursor[folderName] = {
-        label: labelString.split("/")[i],
+        label: labelString.split(pathDelimiter)[i],
         listings: [],
         subFoldersByKey: {}
       };

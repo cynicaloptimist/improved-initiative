@@ -7,7 +7,6 @@ import * as patreon from "patreon";
 
 import * as request from "request";
 
-
 import * as DB from "./dbconnection";
 
 import { ParseJSONOrDefault } from "../common/Toolbox";
@@ -51,26 +50,9 @@ interface Pledge {
   };
 }
 
-interface ApiResponse {
-  data: {
-    id: string;
-  };
-  included: (
-    | Pledge
-    | {
-        id: string;
-        type: string;
-      }
-  )[];
-}
-
-interface TokensResponse {
-  access_token: string;
-  refresh_token: string;
-  expires_in: string;
-  scope: string;
-  token_type: string;
-}
+type PatreonCampaign = {
+  data: Post[];
+};
 
 export function configureLoginRedirect(app: express.Application): void {
   const redirectPath = "/r/patreon";
@@ -199,7 +181,7 @@ function updateLatestPost(latestPost: { post: Post | null }) {
   }
 
   request.get(patreonUrl, (error, response, body) => {
-    const json = ParseJSONOrDefault(body, { data: [] });
+    const json = ParseJSONOrDefault<PatreonCampaign>(body, { data: [] });
     if (json.data?.length) {
       latestPost.post = json.data.filter(
         d => d.attributes.was_posted_by_campaign_owner
