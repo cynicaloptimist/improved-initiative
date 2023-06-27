@@ -82,7 +82,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
           <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
           {this.props.listingGroups.length > 1 && (
             <Button
-              tooltip={`Sorted by ${grouping.label}`}
+              tooltip={`Grouped by ${grouping.label}`}
               tooltipProps={{ hideOnClick: false }}
               additionalClassNames="group-by"
               fontAwesomeIcon="sort"
