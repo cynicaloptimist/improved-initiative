@@ -20,15 +20,6 @@ import { PersistentCharacter } from "../../common/PersistentCharacter";
 export class EncounterCommander {
   constructor(private tracker: TrackerViewModel) {}
 
-  public AddStatBlockFromListing = (
-    statBlock: StatBlock,
-    hideOnAdd: boolean
-  ): void => {
-    this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
-    Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
-    this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
-  };
-
   public QuickAddStatBlock = (): void => {
     const prompt = QuickAddPrompt(
       this.tracker.Encounter.AddCombatantFromStatBlock
