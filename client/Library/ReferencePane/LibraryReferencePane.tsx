@@ -4,10 +4,7 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import {
-  BuildListingTree,
-  ListingGroupFn
-} from "../Components/BuildListingTree";
+import { BuildListingTree, ListingGroup } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { ListingButton } from "../Components/ListingButton";
 
@@ -22,7 +19,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
     ) => void,
     onPreviewOut: () => void
   ) => JSX.Element;
-  groupByFunctions: ListingGroupFn[];
+  groupByFunctions: ListingGroup[];
   addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
@@ -67,9 +64,14 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     const filteredListings = this.filterCache.GetFilteredEntries(
       this.state.filter
     );
+
+    const grouping = this.props.groupByFunctions[
+      this.state.groupingFunctionIndex
+    ];
+
     const listingAndFolderComponents = BuildListingTree(
       l => this.props.renderListingRow(l, this.previewItem, this.onPreviewOut),
-      this.props.groupByFunctions[this.state.groupingFunctionIndex],
+      grouping,
       filteredListings
     );
 
@@ -82,6 +84,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
           <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
           {this.props.groupByFunctions.length > 1 && (
             <Button
+              tooltip={`Sorted by ${grouping.label}`}
+              tooltipProps={{ hideOnClick: false }}
               additionalClassNames="group-by"
               fontAwesomeIcon="sort"
               onClick={this.toggleGroupBy}

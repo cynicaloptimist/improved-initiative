@@ -8,7 +8,7 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { CurrentSettings } from "../../Settings/Settings";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "../Components/BuildListingTree";
+import { ListingGroup } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ExtraButton, ListingRow } from "../Components/ListingRow";
 import { Library } from "../useLibrary";
@@ -72,24 +72,36 @@ export class StatBlockLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupingFunctions: ListingGroupFn[] = [
-    l => ({
-      key: l.Meta().Path
-    }),
-    l => {
-      const meta = l.Meta();
-      return {
-        label: "Challenge " + meta.FilterDimensions.Level,
-        key: GetAlphaSortableLevelString(meta.FilterDimensions.Level),
-        ignoreSlashes: true
-      };
+  private groupingFunctions: ListingGroup[] = [
+    {
+      label: "Folder",
+      groupFn: l => ({
+        key: l.Meta().Path
+      })
     },
-    l => ({
-      key: l.Meta().FilterDimensions.Source?.split(",")[0]
-    }),
-    l => ({
-      key: l.Meta().FilterDimensions.Type
-    })
+    {
+      label: "Challenge",
+      groupFn: l => {
+        const meta = l.Meta();
+        return {
+          label: "Challenge " + meta.FilterDimensions.Level,
+          key: GetAlphaSortableLevelString(meta.FilterDimensions.Level),
+          ignoreSlashes: true
+        };
+      }
+    },
+    {
+      label: "Source",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Source?.split(",")[0]
+      })
+    },
+    {
+      label: "Type",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Type
+      })
+    }
   ];
 
   private renderListingRow = (settings: Settings) => (

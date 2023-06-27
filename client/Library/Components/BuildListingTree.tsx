@@ -4,9 +4,12 @@ import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
 import { Folder } from "./Folder";
 
-export type ListingGroupFn = (
-  l: Listing<any>
-) => { label?: string; key: string; ignoreSlashes?: boolean };
+export type ListingGroup = {
+  label?: string;
+  groupFn: (
+    l: Listing<any>
+  ) => { label?: string; key: string; ignoreSlashes?: boolean };
+};
 
 type FolderModel = {
   label: string;
@@ -16,7 +19,7 @@ type FolderModel = {
 
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (listing: Listing<T>) => JSX.Element,
-  groupListingsBy: ListingGroupFn,
+  listingGroup: ListingGroup,
   listings: Listing<T>[]
 ): JSX.Element[] {
   const rootListingComponents: JSX.Element[] = [];
@@ -24,7 +27,7 @@ export function BuildListingTree<T extends Listable>(
   const foldersByKey: Record<string, FolderModel> = {};
 
   listings.forEach(listing => {
-    const group = groupListingsBy(listing);
+    const group = listingGroup.groupFn(listing);
     if (group.key == "" || group.key === undefined) {
       const component = buildListingComponent(listing);
 
