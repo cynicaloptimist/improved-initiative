@@ -34,13 +34,13 @@ export class SpellLibraryReferencePane extends React.Component<
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}
         renderPreview={this.renderPreview}
-        groupByFunctions={this.groupByFunctions}
+        listingGroups={this.listingGroups}
         showPreloadInfo
       />
     );
   }
 
-  private groupByFunctions: ListingGroup[] = [
+  private listingGroups: ListingGroup[] = [
     {
       label: "Folder",
       groupFn: l => ({ key: l.Meta().Path })

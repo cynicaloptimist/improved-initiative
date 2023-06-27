@@ -30,7 +30,7 @@ export class EncounterLibraryReferencePane extends React.Component<
         listings={listings}
         defaultItem={SavedEncounter.Default()}
         renderListingRow={this.renderListingRow}
-        groupByFunctions={this.groupByFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={this.props.librariesCommander.SaveEncounter}
         addNewText="Save Current Encounter"
         renderPreview={this.renderPreview}
@@ -38,7 +38,7 @@ export class EncounterLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupByFunctions: ListingGroup[] = [
+  private listingGroups: ListingGroup[] = [
     { groupFn: l => ({ key: l.Meta().Path }) }
   ];
 

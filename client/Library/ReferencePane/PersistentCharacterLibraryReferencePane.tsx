@@ -80,7 +80,7 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
         defaultItem={PersistentCharacter.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow}
-        groupByFunctions={this.groupingFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={this.createAndEditStatBlock}
         renderPreview={character => (
           <StatBlockComponent
@@ -92,7 +92,7 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupingFunctions: ListingGroup[] = [
+  private listingGroups: ListingGroup[] = [
     {
       label: "Folder",
       groupFn: l => ({

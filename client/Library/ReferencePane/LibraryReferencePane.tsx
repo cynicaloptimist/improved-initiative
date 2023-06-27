@@ -19,7 +19,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
     ) => void,
     onPreviewOut: () => void
   ) => JSX.Element;
-  groupByFunctions: ListingGroup[];
+  listingGroups: ListingGroup[];
   addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
@@ -30,7 +30,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
 interface State<T extends Listable> {
   filter: string;
   countOfItemsToRender: number;
-  groupingFunctionIndex: number;
+  listingGroupIndex: number;
   previewedItem: T;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -48,7 +48,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     this.state = {
       filter: "",
       countOfItemsToRender: 100,
-      groupingFunctionIndex: 0,
+      listingGroupIndex: 0,
       previewedItem: props.defaultItem,
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -65,9 +65,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       this.state.filter
     );
 
-    const grouping = this.props.groupByFunctions[
-      this.state.groupingFunctionIndex
-    ];
+    const grouping = this.props.listingGroups[this.state.listingGroupIndex];
 
     const listingAndFolderComponents = BuildListingTree(
       l => this.props.renderListingRow(l, this.previewItem, this.onPreviewOut),
@@ -82,7 +80,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       <div className="library">
         <div className="search-controls">
           <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-          {this.props.groupByFunctions.length > 1 && (
+          {this.props.listingGroups.length > 1 && (
             <Button
               tooltip={`Sorted by ${grouping.label}`}
               tooltipProps={{ hideOnClick: false }}
@@ -146,8 +144,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
   private toggleGroupBy = () =>
     this.setState(state => {
       return {
-        groupingFunctionIndex:
-          (state.groupingFunctionIndex + 1) % this.props.groupByFunctions.length
+        listingGroupIndex:
+          (state.listingGroupIndex + 1) % this.props.listingGroups.length
       };
     });
 

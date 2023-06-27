@@ -22,7 +22,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
   filter: string;
-  groupingFunctionIndex: number;
+  listingGroupIndex: number;
   previewedStatBlock: StatBlock;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -37,7 +37,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
     super(props);
     this.state = {
       filter: "",
-      groupingFunctionIndex: 0,
+      listingGroupIndex: 0,
       previewedStatBlock: StatBlock.Default(),
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -55,7 +55,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
         defaultItem={StatBlock.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow(CurrentSettings())}
-        groupByFunctions={this.groupingFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={() =>
           this.props.librariesCommander.CreateAndEditStatBlock(
             this.props.library
@@ -72,7 +72,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupingFunctions: ListingGroup[] = [
+  private listingGroups: ListingGroup[] = [
     {
       label: "Folder",
       groupFn: l => ({
