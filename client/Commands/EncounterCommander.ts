@@ -23,25 +23,25 @@ export class EncounterCommander {
   public AddStatBlockFromListing = (
     statBlock: StatBlock,
     hideOnAdd: boolean
-  ) => {
+  ): void => {
     this.tracker.Encounter.AddCombatantFromStatBlock(statBlock, hideOnAdd);
     Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
     this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
   };
 
-  public QuickAddStatBlock = () => {
+  public QuickAddStatBlock = (): void => {
     const prompt = QuickAddPrompt(
       this.tracker.Encounter.AddCombatantFromStatBlock
     );
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public ShowLibraries = () => this.tracker.LibrariesVisible(true);
-  public HideLibraries = () => this.tracker.LibrariesVisible(false);
+  public ShowLibraries = (): void => this.tracker.LibrariesVisible(true);
+  public HideLibraries = (): void => this.tracker.LibrariesVisible(false);
 
-  public ToggleLibraryManager = () => this.tracker.ToggleLibraryManager();
+  public ToggleLibraryManager = (): void => this.tracker.ToggleLibraryManager();
 
-  public LaunchPlayerView = () => {
+  public LaunchPlayerView = (): void => {
     const prompt = PlayerViewPrompt(
       env.EncounterId,
       this.tracker.Encounter.TemporaryBackgroundImageUrl() ?? "",
@@ -77,23 +77,23 @@ export class EncounterCommander {
     return didGrantId;
   };
 
-  public ToggleFullScreen = () => {
+  public ToggleFullScreen = (): boolean => {
     ToggleFullscreen();
     Metrics.TrackEvent("FullscreenToggled");
     return false;
   };
 
-  public ShowSettings = () => {
+  public ShowSettings = (): void => {
     NotifyTutorialOfAction("ShowSettings");
     this.tracker.SettingsVisible(true);
     Metrics.TrackEvent("SettingsOpened");
   };
 
-  public ToggleToolbarWidth = () => {
+  public ToggleToolbarWidth = (): void => {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  private ShowInitiativePrompt = () => {
+  private ShowInitiativePrompt = (): void => {
     this.tracker.PromptQueue.Add(
       InitiativePrompt(
         this.tracker.Encounter.Combatants(),
@@ -102,7 +102,7 @@ export class EncounterCommander {
     );
   };
 
-  public StartEncounter = () => {
+  public StartEncounter = (): boolean => {
     if (this.tracker.Encounter.Combatants().length == 0) {
       this.tracker.EventLog.AddEvent("Cannot start empty encounter.");
       return;
@@ -126,7 +126,7 @@ export class EncounterCommander {
     return false;
   };
 
-  public EndEncounter = () => {
+  public EndEncounter = (): boolean => {
     if (this.tracker.Encounter.EncounterFlow.State() == "inactive") {
       return;
     }
@@ -177,14 +177,14 @@ export class EncounterCommander {
     return false;
   };
 
-  public RerollInitiative = () => {
+  public RerollInitiative = (): boolean => {
     this.ShowInitiativePrompt();
     Metrics.TrackEvent("InitiativeRerolled");
 
     return false;
   };
 
-  public ClearEncounter = () => {
+  public ClearEncounter = (): boolean => {
     if (confirm("Remove all combatants and end encounter?")) {
       this.tracker.Encounter.ClearEncounter();
       this.tracker.CombatantCommander.Deselect();
@@ -195,7 +195,7 @@ export class EncounterCommander {
     return false;
   };
 
-  public CleanEncounter = () => {
+  public CleanEncounter = (): boolean => {
     if (confirm("Remove NPCs and end encounter?")) {
       const npcViewModels = this.tracker
         .CombatantViewModels()
@@ -212,7 +212,7 @@ export class EncounterCommander {
     return false;
   };
 
-  public RestoreAllPlayerCharacterHP = () => {
+  public RestoreAllPlayerCharacterHP = (): void => {
     const playerCharacters = this.tracker.Encounter.Combatants().filter(c =>
       c.IsPlayerCharacter()
     );
@@ -270,7 +270,7 @@ export class EncounterCommander {
     return Promise.all(persistentCharactersPromise);
   };
 
-  public NextTurn = () => {
+  public NextTurn = (): boolean => {
     if (this.tracker.Encounter.EncounterFlow.State() != "active") {
       this.StartEncounter();
       return;
@@ -304,7 +304,7 @@ export class EncounterCommander {
     return false;
   };
 
-  public PreviousTurn = () => {
+  public PreviousTurn = (): boolean => {
     if (!this.tracker.Encounter.EncounterFlow.ActiveCombatant()) {
       return;
     }
@@ -318,7 +318,7 @@ export class EncounterCommander {
     return false;
   };
 
-  public PromptRollDice = () => {
+  public PromptRollDice = (): void => {
     this.tracker.PromptQueue.Add(
       RollDicePrompt(this.tracker.CombatantCommander.RollDice)
     );
