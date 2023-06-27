@@ -212,7 +212,9 @@ export class EncounterCommander {
     Metrics.TrackEvent("AllPlayerCharacterHPRestored");
   };
 
-  public LoadSavedEncounter = async (legacySavedEncounter: any) => {
+  public LoadSavedEncounter = async (
+    legacySavedEncounter: Record<string, any>
+  ): Promise<void[]> => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
 
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
