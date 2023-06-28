@@ -23,6 +23,7 @@ import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { now } from "moment";
 import { Library } from "../Library/useLibrary";
+import { CurrentSettings } from "../Settings/Settings";
 
 export class LibrariesCommander {
   private libraries: Libraries;
@@ -59,6 +60,12 @@ export class LibrariesCommander {
       );
       Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
+      const settings = CurrentSettings();
+      settings.RecentItemIds = [
+        statBlock.Id,
+        ...settings.RecentItemIds.filter(id => id !== statBlock.Id)
+      ];
+      this.tracker.SaveUpdatedSettings(settings);
     });
     return true;
   };

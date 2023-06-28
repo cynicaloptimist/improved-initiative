@@ -44,6 +44,7 @@ export interface Settings {
     BasicRules: boolean;
     Open5eContent: boolean;
   };
+  RecentItemIds: string[];
   Version: string;
 }
 
@@ -96,6 +97,7 @@ export function getDefaultSettings(): Settings {
       BasicRules: true,
       Open5eContent: true
     },
+    RecentItemIds: [],
     Version: process.env.VERSION || "0.0.0"
   };
 }
