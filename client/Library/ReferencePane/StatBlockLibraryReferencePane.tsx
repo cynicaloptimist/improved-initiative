@@ -68,6 +68,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
           <StatBlockComponent statBlock={statBlock} displayMode="default" />
         )}
         showPreloadInfo
+        showSortControl
       />
     );
   }
