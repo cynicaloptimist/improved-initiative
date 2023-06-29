@@ -119,7 +119,6 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
             <Button
               tooltip={`Grouped by ${grouping.label}`}
               tooltipProps={{ hideOnClick: false }}
-              additionalClassNames="group-by"
               fontAwesomeIcon="folder"
               onClick={this.toggleGroupBy}
             />
