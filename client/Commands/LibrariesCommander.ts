@@ -64,7 +64,7 @@ export class LibrariesCommander {
       settings.RecentItemIds = [
         statBlock.Id,
         ...settings.RecentItemIds.filter(id => id !== statBlock.Id)
-      ];
+      ].slice(0, 100);
       this.tracker.SaveUpdatedSettings(settings);
     });
     return true;
