@@ -16,7 +16,7 @@ export interface ButtonProps {
   disabled?: boolean;
 }
 
-export function Button(props: ButtonProps) {
+export function Button(props: ButtonProps): JSX.Element {
   const text = props.text || "";
 
   const classNames = ["c-button"];

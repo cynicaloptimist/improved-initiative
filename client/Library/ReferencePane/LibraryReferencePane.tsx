@@ -4,12 +4,10 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import {
-  BuildListingTree,
-  ListingGroupFn
-} from "../Components/BuildListingTree";
+import { BuildListingTree, ListingGroup } from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { ListingButton } from "../Components/ListingButton";
+import { CurrentSettings } from "../../Settings/Settings";
 
 interface LibraryReferencePaneProps<T extends Listable> {
   listings: Listing<T>[];
@@ -22,18 +20,20 @@ interface LibraryReferencePaneProps<T extends Listable> {
     ) => void,
     onPreviewOut: () => void
   ) => JSX.Element;
-  groupByFunctions: ListingGroupFn[];
+  listingGroups: ListingGroup[];
   addNewText?: string;
   addNewItem: () => void;
   renderPreview: (item: T) => JSX.Element;
   showPreloadInfo?: boolean;
+  showSortControl?: boolean;
   launchQuickAddPrompt?: () => void;
 }
 
 interface State<T extends Listable> {
   filter: string;
   countOfItemsToRender: number;
-  groupingFunctionIndex: number;
+  listingGroupIndex: number;
+  sortMethod: "alphabetical" | "recent";
   previewedItem: T;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -51,7 +51,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     this.state = {
       filter: "",
       countOfItemsToRender: 100,
-      groupingFunctionIndex: 0,
+      listingGroupIndex: 0,
+      sortMethod: "alphabetical",
       previewedItem: props.defaultItem,
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -64,12 +65,20 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
   public render(): JSX.Element {
     this.filterCache.UpdateIfItemsChanged(this.props.listings);
 
-    const filteredListings = this.filterCache.GetFilteredEntries(
+    let filteredListings = this.filterCache.GetFilteredEntries(
       this.state.filter
     );
+
+    if (this.state.sortMethod === "recent") {
+      const recentItemIds = CurrentSettings().RecentItemIds;
+      filteredListings = this.getRecentItems(filteredListings, recentItemIds);
+    }
+
+    const grouping = this.props.listingGroups[this.state.listingGroupIndex];
+
     const listingAndFolderComponents = BuildListingTree(
       l => this.props.renderListingRow(l, this.previewItem, this.onPreviewOut),
-      this.props.groupByFunctions[this.state.groupingFunctionIndex],
+      grouping,
       filteredListings
     );
 
@@ -80,10 +89,37 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       <div className="library">
         <div className="search-controls">
           <LibraryFilter applyFilterFn={filter => this.setState({ filter })} />
-          {this.props.groupByFunctions.length > 1 && (
+          {this.props.showSortControl && (
             <Button
-              additionalClassNames="group-by"
-              fontAwesomeIcon="sort"
+              tooltip={`Sorted by ${
+                this.state.sortMethod === "alphabetical"
+                  ? "name"
+                  : "recently used"
+              }`}
+              tooltipProps={{ hideOnClick: false }}
+              fontAwesomeIcon={
+                this.state.sortMethod === "alphabetical"
+                  ? "sort-alpha-down"
+                  : "clock"
+              }
+              onClick={() => {
+                if (this.state.sortMethod === "alphabetical") {
+                  this.setState({
+                    sortMethod: "recent"
+                  });
+                } else {
+                  this.setState({
+                    sortMethod: "alphabetical"
+                  });
+                }
+              }}
+            />
+          )}
+          {this.props.listingGroups.length > 1 && (
+            <Button
+              tooltip={`Grouped by ${grouping.label}`}
+              tooltipProps={{ hideOnClick: false }}
+              fontAwesomeIcon="folder"
               onClick={this.toggleGroupBy}
             />
           )}
@@ -139,11 +175,35 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     );
   }
 
+  private getRecentItems(
+    listings: Listing<any>[],
+    recentIds: string[]
+  ): Listing<any>[] {
+    const recentListingsById = new Map<string, Listing<any>>();
+
+    for (const listing of listings) {
+      const listingId = listing.Meta().Id;
+      if (recentIds.includes(listingId)) {
+        recentListingsById.set(listingId, listing);
+      }
+    }
+
+    const recentListings: Listing<any>[] = [];
+    for (const id of recentIds) {
+      const listing = recentListingsById.get(id);
+      if (listing) {
+        recentListings.push(listing);
+      }
+    }
+
+    return recentListings;
+  }
+
   private toggleGroupBy = () =>
     this.setState(state => {
       return {
-        groupingFunctionIndex:
-          (state.groupingFunctionIndex + 1) % this.props.groupByFunctions.length
+        listingGroupIndex:
+          (state.listingGroupIndex + 1) % this.props.listingGroups.length
       };
     });
 

@@ -5,7 +5,7 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { TextEnricher } from "../../TextEnricher/TextEnricher";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "../Components/BuildListingTree";
+import { ListingGroup } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { SpellDetails } from "../Components/SpellDetails";
@@ -26,7 +26,7 @@ export class SpellLibraryReferencePane extends React.Component<
     linkComponentToObservables(this);
   }
 
-  public render() {
+  public render(): JSX.Element {
     return (
       <LibraryReferencePane
         listings={this.props.library.GetAllListings()}
@@ -34,19 +34,28 @@ export class SpellLibraryReferencePane extends React.Component<
         defaultItem={Spell.Default()}
         addNewItem={this.props.librariesCommander.CreateAndEditSpell}
         renderPreview={this.renderPreview}
-        groupByFunctions={this.groupByFunctions}
+        listingGroups={this.listingGroups}
         showPreloadInfo
       />
     );
   }
 
-  private groupByFunctions: ListingGroupFn[] = [
-    l => ({ key: l.Meta().Path }),
-    l => ({
-      label: LevelOrCantrip(l.Meta().FilterDimensions.Level),
-      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
-    }),
-    l => ({ key: l.Meta().FilterDimensions.Type })
+  private listingGroups: ListingGroup[] = [
+    {
+      label: "Folder",
+      groupFn: l => ({ key: l.Meta().Path })
+    },
+    {
+      label: "Level",
+      groupFn: l => ({
+        label: LevelOrCantrip(l.Meta().FilterDimensions.Level),
+        key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
+      })
+    },
+    {
+      label: "Type",
+      groupFn: l => ({ key: l.Meta().FilterDimensions.Type })
+    }
   ];
 
   private renderListingRow = (l: Listing<Spell>, onPreview, onPreviewOut) => {

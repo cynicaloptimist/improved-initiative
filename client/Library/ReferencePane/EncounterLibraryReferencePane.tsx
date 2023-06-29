@@ -3,7 +3,7 @@ import { SavedEncounter } from "../../../common/SavedEncounter";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "../Components/BuildListingTree";
+import { ListingGroup } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { Library } from "../useLibrary";
@@ -23,14 +23,14 @@ export class EncounterLibraryReferencePane extends React.Component<
     linkComponentToObservables(this);
   }
 
-  public render() {
+  public render(): JSX.Element {
     const listings = this.props.library.GetAllListings();
     return (
       <LibraryReferencePane
         listings={listings}
         defaultItem={SavedEncounter.Default()}
         renderListingRow={this.renderListingRow}
-        groupByFunctions={this.groupByFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={this.props.librariesCommander.SaveEncounter}
         addNewText="Save Current Encounter"
         renderPreview={this.renderPreview}
@@ -38,7 +38,9 @@ export class EncounterLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupByFunctions: ListingGroupFn[] = [l => ({ key: l.Meta().Path })];
+  private listingGroups: ListingGroup[] = [
+    { groupFn: l => ({ key: l.Meta().Path }) }
+  ];
 
   private renderListingRow = (l: EncounterListing, onPreview, onPreviewOut) => {
     const listingMeta = l.Meta();

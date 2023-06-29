@@ -8,7 +8,7 @@ import { StatBlockComponent } from "../../Components/StatBlock";
 import { CurrentSettings } from "../../Settings/Settings";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "../Components/BuildListingTree";
+import { ListingGroup } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ExtraButton, ListingRow } from "../Components/ListingRow";
 import { Library } from "../useLibrary";
@@ -22,7 +22,7 @@ type StatBlockListing = Listing<StatBlock>;
 
 interface State {
   filter: string;
-  groupingFunctionIndex: number;
+  listingGroupIndex: number;
   previewedStatBlock: StatBlock;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
@@ -37,7 +37,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
     super(props);
     this.state = {
       filter: "",
-      groupingFunctionIndex: 0,
+      listingGroupIndex: 0,
       previewedStatBlock: StatBlock.Default(),
       previewIconHovered: false,
       previewWindowHovered: false,
@@ -55,7 +55,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
         defaultItem={StatBlock.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow(CurrentSettings())}
-        groupByFunctions={this.groupingFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={() =>
           this.props.librariesCommander.CreateAndEditStatBlock(
             this.props.library
@@ -68,28 +68,41 @@ export class StatBlockLibraryReferencePane extends React.Component<
           <StatBlockComponent statBlock={statBlock} displayMode="default" />
         )}
         showPreloadInfo
+        showSortControl
       />
     );
   }
 
-  private groupingFunctions: ListingGroupFn[] = [
-    l => ({
-      key: l.Meta().Path
-    }),
-    l => {
-      const meta = l.Meta();
-      return {
-        label: "Challenge " + meta.FilterDimensions.Level,
-        key: GetAlphaSortableLevelString(meta.FilterDimensions.Level),
-        ignoreSlashes: true
-      };
+  private listingGroups: ListingGroup[] = [
+    {
+      label: "Folder",
+      groupFn: l => ({
+        key: l.Meta().Path
+      })
     },
-    l => ({
-      key: l.Meta().FilterDimensions.Source?.split(",")[0]
-    }),
-    l => ({
-      key: l.Meta().FilterDimensions.Type
-    })
+    {
+      label: "Challenge",
+      groupFn: l => {
+        const meta = l.Meta();
+        return {
+          label: "Challenge " + meta.FilterDimensions.Level,
+          key: GetAlphaSortableLevelString(meta.FilterDimensions.Level),
+          ignoreSlashes: true
+        };
+      }
+    },
+    {
+      label: "Source",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Source?.split(",")[0]
+      })
+    },
+    {
+      label: "Type",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Type
+      })
+    }
   ];
 
   private renderListingRow = (settings: Settings) => (

@@ -23,6 +23,7 @@ import { ConditionReferencePrompt } from "../Prompts/ConditionReferencePrompt";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { now } from "moment";
 import { Library } from "../Library/useLibrary";
+import { CurrentSettings } from "../Settings/Settings";
 
 export class LibrariesCommander {
   private libraries: Libraries;
@@ -32,7 +33,7 @@ export class LibrariesCommander {
     private encounterCommander: EncounterCommander
   ) {}
 
-  public SetLibraries = (libraries: Libraries) => {
+  public SetLibraries = (libraries: Libraries): void => {
     // I don't like this pattern, but it's my first stab at a partial
     // conversion to allow an observable-backed class to also depend
     // on a React hook. This will probably catch fire at some point.
@@ -40,16 +41,16 @@ export class LibrariesCommander {
     this.libraries = libraries;
   };
 
-  public ShowLibraries = () => this.tracker.LibrariesVisible(true);
-  public HideLibraries = () => this.tracker.LibrariesVisible(false);
-  public OpenLibraryManagerPane = (startPane: LibraryType) =>
+  public ShowLibraries = (): void => this.tracker.LibrariesVisible(true);
+  public HideLibraries = (): void => this.tracker.LibrariesVisible(false);
+  public OpenLibraryManagerPane = (startPane: LibraryType): any =>
     this.tracker.LibraryManagerPane(startPane);
 
   public AddStatBlockFromListing = (
     listing: Listing<StatBlock>,
     hideOnAdd: boolean,
     variantMaximumHP: VariantMaximumHP
-  ) => {
+  ): boolean => {
     listing.GetAsyncWithUpdatedId(unsafeStatBlock => {
       const statBlock = { ...StatBlock.Default(), ...unsafeStatBlock };
       this.tracker.Encounter.AddCombatantFromStatBlock(
@@ -59,20 +60,26 @@ export class LibrariesCommander {
       );
       Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
+      const settings = CurrentSettings();
+      settings.RecentItemIds = [
+        statBlock.Id,
+        ...settings.RecentItemIds.filter(id => id !== statBlock.Id)
+      ].slice(0, 100);
+      this.tracker.SaveUpdatedSettings(settings);
     });
     return true;
   };
 
   public CanAddPersistentCharacter = (
     listing: Listing<PersistentCharacter>
-  ) => {
+  ): boolean => {
     return this.tracker.Encounter.CanAddCombatant(listing.Meta().Id);
   };
 
   public AddPersistentCharacterFromListing = async (
     listing: Listing<PersistentCharacter>,
     hideOnAdd: boolean
-  ) => {
+  ): Promise<void> => {
     const character = await listing.GetWithTemplate(
       PersistentCharacter.Default()
     );
@@ -90,7 +97,7 @@ export class LibrariesCommander {
   public UpdatePersistentCharacter = async (
     persistentCharacterId: string,
     updates: Partial<PersistentCharacter>
-  ) => {
+  ): Promise<Listing<PersistentCharacter>> => {
     if (updates.StatBlock) {
       updates.Name = updates.StatBlock.Name;
       updates.Path = updates.StatBlock.Path;
@@ -117,7 +124,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditStatBlock = (library: Library<StatBlock>) => {
+  public CreateAndEditStatBlock = (library: Library<StatBlock>): void => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -135,7 +142,7 @@ export class LibrariesCommander {
   public EditStatBlock = (
     listing: Listing<StatBlock>,
     library: Library<StatBlock>
-  ) => {
+  ): void => {
     if (this.tracker.TutorialVisible()) {
       return;
     }
@@ -168,7 +175,9 @@ export class LibrariesCommander {
     });
   };
 
-  public CreatePersistentCharacter = async () => {
+  public CreatePersistentCharacter = async (): Promise<
+    Listing<PersistentCharacter>
+  > => {
     const statBlock = StatBlock.Default();
     const newId = probablyUniqueString();
 
@@ -182,7 +191,9 @@ export class LibrariesCommander {
     );
   };
 
-  public EditPersistentCharacterStatBlock(persistentCharacterId: string) {
+  public EditPersistentCharacterStatBlock(
+    persistentCharacterId: string
+  ): Promise<void> {
     if (this.tracker.TutorialVisible()) {
       return;
     }
@@ -193,7 +204,7 @@ export class LibrariesCommander {
     persistentCharacterId: string,
     updatedStatBlock: StatBlock,
     hpDifference?: number
-  ) => {
+  ): void => {
     this.UpdatePersistentCharacter(persistentCharacterId, {
       StatBlock: updatedStatBlock,
       CurrentHP: updatedStatBlock.HP.Value - (hpDifference ?? 0)
@@ -204,7 +215,7 @@ export class LibrariesCommander {
     );
   };
 
-  public CreateAndEditSpell = () => {
+  public CreateAndEditSpell = (): void => {
     const newSpell = {
       ...Spell.Default(),
       Name: "New Spell",
@@ -218,7 +229,7 @@ export class LibrariesCommander {
     });
   };
 
-  public EditSpell = (listing: Listing<Spell>) => {
+  public EditSpell = (listing: Listing<Spell>): void => {
     listing.GetAsyncWithUpdatedId(spell => {
       this.tracker.EditSpell({
         spell: { ...Spell.Default(), ...spell },
@@ -229,7 +240,7 @@ export class LibrariesCommander {
     });
   };
 
-  public ReferenceSpell = (spellListing: Listing<Spell>) => {
+  public ReferenceSpell = (spellListing: Listing<Spell>): boolean => {
     spellListing.GetWithTemplate(Spell.Default()).then(spell => {
       const prompt = SpellPrompt(spell, this.tracker.StatBlockTextEnricher);
       this.tracker.PromptQueue.Add(prompt);
@@ -237,19 +248,22 @@ export class LibrariesCommander {
     return true;
   };
 
-  public GetSpellsByNameRegex = ko.pureComputed(() =>
-    concatenatedStringRegex(
-      this.libraries.Spells.GetAllListings() //TODO: Ensure that computed is updated with this
-        .map(s => s.Meta().Name)
-        .filter(n => n.length > 2)
-    )
+  public GetSpellsByNameRegex = ko.pureComputed(
+    (): RegExp =>
+      concatenatedStringRegex(
+        this.libraries.Spells.GetAllListings() //TODO: Ensure that computed is updated with this
+          .map(s => s.Meta().Name)
+          .filter(n => n.length > 2)
+      )
   );
 
-  public LoadEncounter = (savedEncounter: EncounterState<CombatantState>) => {
+  public LoadEncounter = (
+    savedEncounter: EncounterState<CombatantState>
+  ): void => {
     this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
 
-  public SaveEncounter = () => {
+  public SaveEncounter = (): void => {
     const prompt = SaveEncounterPrompt(
       this.tracker.Encounter.FullEncounterState(),
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
@@ -260,7 +274,9 @@ export class LibrariesCommander {
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public MoveEncounter = async (encounterListing: Listing<SavedEncounter>) => {
+  public MoveEncounter = async (
+    encounterListing: Listing<SavedEncounter>
+  ): Promise<void> => {
     const folderNames = _(this.libraries.Encounters.GetAllListings())
       .map(e => e.Meta().Path)
       .uniq()
@@ -280,18 +296,18 @@ export class LibrariesCommander {
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public ReferenceCondition = (conditionName: string) => {
+  public ReferenceCondition = (conditionName: string): void => {
     const promptProps = ConditionReferencePrompt(conditionName);
     if (promptProps) {
       this.tracker.PromptQueue.Add(promptProps);
     }
   };
 
-  public LaunchQuickAddPrompt = () => {
+  public LaunchQuickAddPrompt = (): void => {
     this.encounterCommander.QuickAddStatBlock();
   };
 
-  private deleteSavedStatBlock = (statBlockId: string) => () => {
+  private deleteSavedStatBlock = (statBlockId: string) => (): void => {
     this.libraries.StatBlocks.DeleteListing(statBlockId);
     Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
   };

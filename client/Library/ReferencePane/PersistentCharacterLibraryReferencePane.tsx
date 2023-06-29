@@ -6,7 +6,7 @@ import { LibrariesCommander } from "../../Commands/LibrariesCommander";
 import { StatBlockComponent } from "../../Components/StatBlock";
 import { GetAlphaSortableLevelString } from "../../Utility/GetAlphaSortableLevelString";
 import { Listing } from "../Listing";
-import { ListingGroupFn } from "../Components/BuildListingTree";
+import { ListingGroup } from "../Components/BuildListingTree";
 import { LibraryReferencePane } from "./LibraryReferencePane";
 import { ListingRow } from "../Components/ListingRow";
 import { Library } from "../useLibrary";
@@ -72,7 +72,7 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
     );
   };
 
-  public render() {
+  public render(): JSX.Element {
     const listings = this.props.library.GetAllListings();
 
     return (
@@ -80,7 +80,7 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
         defaultItem={PersistentCharacter.Default()}
         listings={listings}
         renderListingRow={this.renderListingRow}
-        groupByFunctions={this.groupingFunctions}
+        listingGroups={this.listingGroups}
         addNewItem={this.createAndEditStatBlock}
         renderPreview={character => (
           <StatBlockComponent
@@ -92,19 +92,31 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
     );
   }
 
-  private groupingFunctions: ListingGroupFn[] = [
-    l => ({
-      key: l.Meta().Path
-    }),
-    l => ({
-      label: "Level " + l.Meta().FilterDimensions.Level,
-      key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
-    }),
-    l => ({
-      key: l.Meta().FilterDimensions.Source
-    }),
-    l => ({
-      key: l.Meta().FilterDimensions.Type
-    })
+  private listingGroups: ListingGroup[] = [
+    {
+      label: "Folder",
+      groupFn: l => ({
+        key: l.Meta().Path
+      })
+    },
+    {
+      label: "Level",
+      groupFn: l => ({
+        label: "Level " + l.Meta().FilterDimensions.Level,
+        key: GetAlphaSortableLevelString(l.Meta().FilterDimensions.Level)
+      })
+    },
+    {
+      label: "Source",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Source
+      })
+    },
+    {
+      label: "Type",
+      groupFn: l => ({
+        key: l.Meta().FilterDimensions.Type
+      })
+    }
   ];
 }

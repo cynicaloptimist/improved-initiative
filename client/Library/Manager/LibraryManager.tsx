@@ -28,7 +28,7 @@ export type LibraryManagerProps = {
   initialPane?: LibraryType;
 };
 
-export function LibraryManager(props: LibraryManagerProps) {
+export function LibraryManager(props: LibraryManagerProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<LibraryType>(
     props.initialPane || "StatBlocks"
   );
@@ -129,7 +129,7 @@ function LibraryManagerListings(props: {
 
   const listingTree = BuildListingTree(
     l => <LibraryManagerRow key={l.Meta().Id} listing={l} {...props} />,
-    l => ({ key: l.Meta().Path }),
+    { groupFn: l => ({ key: l.Meta().Path }) },
     filteredListings
   );
 
