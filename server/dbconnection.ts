@@ -10,24 +10,23 @@ import { AccountStatus, User } from "./user";
 
 let mongoClient: mongo.MongoClient;
 
-export const initialize = async connectionString => {
+export const initialize = async (connectionString: string): Promise<void> => {
   if (!connectionString) {
     console.log("No connection string found.");
     return;
   }
-
   mongoClient = new mongo.MongoClient(connectionString);
   await mongoClient.connect();
   return;
 };
 
-export const close = async () => await mongoClient.close();
+export const close = async (): Promise<void> => await mongoClient.close();
 
 export async function upsertUser(
   patreonId: string,
   accountStatus: AccountStatus,
   emailAddress: string
-) {
+): Promise<mongo.WithId<User> | null> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
@@ -62,7 +61,9 @@ export async function upsertUser(
   return user;
 }
 
-export async function getAccount(userId: mongo.ObjectId) {
+export async function getAccount(
+  userId: mongo.ObjectId
+): Promise<Record<string, any> | null> {
   const user = await getFullAccount(userId);
   if (!user) {
     return null;
@@ -82,7 +83,9 @@ export async function getAccount(userId: mongo.ObjectId) {
   return userWithListings;
 }
 
-export async function getFullAccount(userId: mongo.ObjectId) {
+export async function getFullAccount(
+  userId: mongo.ObjectId
+): Promise<Record<string, any> | null> {
   if (!mongoClient) {
     throw "No mongo client initialized";
   }
@@ -113,7 +116,7 @@ export async function getFullAccount(userId: mongo.ObjectId) {
   return userAccount;
 }
 
-export async function deleteAccount(userId: mongo.ObjectId) {
+export async function deleteAccount(userId: mongo.ObjectId): Promise<number> {
   if (!mongoClient) {
     throw "No mongo client initialized";
   }
@@ -234,7 +237,10 @@ function getPersistentCharacterListings(persistentCharacters: {
   });
 }
 
-export async function setSettings(userId, settings) {
+export async function setSettings(
+  userId: string | mongo.ObjectId,
+  settings
+): Promise<number> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
@@ -262,7 +268,7 @@ export async function getEntity(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
   entityId: string
-) {
+): Promise<any> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
@@ -299,7 +305,7 @@ export async function deleteEntity(
   userId: mongo.ObjectId,
   entityId: string,
   callBack: (result: number) => void
-) {
+): Promise<void> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
@@ -330,7 +336,7 @@ export async function saveEntity<T extends Listable>(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
   entity: T
-) {
+): Promise<number> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
@@ -366,7 +372,7 @@ export async function saveEntitySet<T extends Listable>(
   entityPath: EntityPath,
   userId: mongo.ObjectId,
   entities: T[]
-) {
+): Promise<number | null> {
   if (!mongoClient) {
     console.error("No mongo client initialized");
     throw "No mongo client initialized";
