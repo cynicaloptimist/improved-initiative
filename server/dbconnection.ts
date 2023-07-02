@@ -1,6 +1,5 @@
 import * as mongo from "mongodb";
 
-
 import * as _ from "lodash";
 import { Listable, ListingMeta } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
@@ -17,9 +16,7 @@ export const initialize = async connectionString => {
     return;
   }
 
-  mongoClient = new mongo.MongoClient(connectionString, {
-    useNewUrlParser: true
-  });
+  mongoClient = new mongo.MongoClient(connectionString);
   await mongoClient.connect();
   return;
 };

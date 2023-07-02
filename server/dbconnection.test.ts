@@ -1,4 +1,4 @@
-import { ObjectID } from "mongodb";
+import { ObjectId } from "mongodb";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
@@ -10,7 +10,7 @@ import { AccountStatus } from "./user";
 describe("User Accounts", () => {
   let mongod: MongoMemoryServer;
   let uri;
-  let userId: ObjectID;
+  let userId: ObjectId;
 
   beforeAll(async () => {
     mongod = await MongoMemoryServer.create();
