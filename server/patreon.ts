@@ -113,7 +113,7 @@ export async function handleCurrentUser(
   updateSessionAccountFeatures(session, standing);
 
   const user = await DB.upsertUser(apiResponse.data.id, standing, emailAddress);
-  if (user === undefined) {
+  if (!user) {
     throw "Failed to insert user into database";
   }
   session.userId = user._id;

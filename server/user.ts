@@ -1,17 +1,17 @@
 import * as mongo from "mongodb";
-
+import { Listable } from "../common/Listable";
 
 export interface User {
-  _id: mongo.ObjectID;
+  _id: mongo.ObjectId;
   patreonId: string;
   accountStatus: AccountStatus;
   emailAddress: string;
   settings: any;
-  statblocks: { [id: string]: {} };
-  playercharacters?: { [id: string]: {} };
-  spells: { [id: string]: {} };
-  encounters: { [id: string]: {} };
-  persistentcharacters?: { [id: string]: {} };
+  statblocks: { [id: string]: any };
+  playercharacters?: { [id: string]: any };
+  spells: { [id: string]: any };
+  encounters: { [id: string]: any };
+  persistentcharacters?: { [id: string]: any };
 }
 
 export enum AccountStatus {
