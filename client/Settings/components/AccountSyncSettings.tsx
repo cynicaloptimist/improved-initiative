@@ -95,8 +95,9 @@ export class AccountSyncSettings extends React.Component<
     return (
       <>
         <p>
-          Log in with Patreon to access patron benefits. Account Sync allows you
-          to access your custom statblocks and encounters from anywhere!
+          Log in with Patreon to access patron benefits. Account Sync removes
+          banners, and allows you to access your custom statblocks and
+          encounters from anywhere!
         </p>
         <a className="login button" href={env.PatreonLoginUrl}>
           Log In with Patreon

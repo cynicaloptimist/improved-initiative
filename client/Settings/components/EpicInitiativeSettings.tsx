@@ -132,6 +132,8 @@ function upgradeMessage() {
 function epicInitiativeFeatures() {
   return (
     <ul className="bulleted">
+      <li>Account Sync</li>
+      <li>Remove Banners</li>
       <li>Get access to the D&amp;D Beyond Stat Block Importer</li>
       <li>Player View Enhancements:</li>
       <ul className="bulleted">
