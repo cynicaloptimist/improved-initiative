@@ -37,12 +37,8 @@ export function AutoPopulatedNotes(statBlock: StatBlock): string {
   notes.push(...GetDailyCounters(statBlock.Traits));
   notes.push(...GetDailyCounters(statBlock.Actions));
 
-  statBlock.Traits.filter(t => t.Name.includes("(Recharge")).forEach(t =>
-    notes.push(`${t.Name.replace(/\(.*?\)/, "")}[1/1]`)
-  );
-  statBlock.Actions.filter(t => t.Name.includes("(Recharge")).forEach(t =>
-    notes.push(`${t.Name.replace(/\(.*?\)/, "")}[1/1]`)
-  );
+  notes.push(...GetRechargeCounters(statBlock.Traits));
+  notes.push(...GetRechargeCounters(statBlock.Actions));
 
   return notes.join("\n\n");
 }
@@ -52,4 +48,10 @@ function GetDailyCounters(statBlockEntries: NameAndContent[]) {
   return statBlockEntries
     .filter(t => t.Name.match(perDayPattern))
     .map(t => `${t.Name.replace(perDayPattern, "[$1/$1]")}`);
+}
+
+function GetRechargeCounters(statBlockEntries: NameAndContent[]) {
+  return statBlockEntries
+    .filter(t => t.Name.includes("(Recharge"))
+    .map(t => `${t.Name.replace(/\(.*?\)/, "")}[1/1]`);
 }
