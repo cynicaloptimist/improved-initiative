@@ -1,4 +1,4 @@
-import { StatBlock } from "../../common/StatBlock";
+import { NameAndContent, StatBlock } from "../../common/StatBlock";
 
 export function AutoPopulatedNotes(statBlock: StatBlock): string {
   const notes = [];
@@ -34,17 +34,8 @@ export function AutoPopulatedNotes(statBlock: StatBlock): string {
     notes.push("Legendary Actions [3/3]");
   }
 
-  const perDayPattern = /\((\d)\/day\)/gim;
-
-  statBlock.Traits.filter(t => t.Name.match(perDayPattern)).forEach(t =>
-    notes.push(`${t.Name.replace(perDayPattern, "[$1/$1]")}`)
-  );
-
-  perDayPattern.lastIndex = 0;
-
-  statBlock.Actions.filter(t => t.Name.match(perDayPattern)).forEach(t =>
-    notes.push(`${t.Name.replace(perDayPattern, "[$1/$1]")}`)
-  );
+  notes.push(...GetDailyCounters(statBlock.Traits));
+  notes.push(...GetDailyCounters(statBlock.Actions));
 
   statBlock.Traits.filter(t => t.Name.includes("(Recharge")).forEach(t =>
     notes.push(`${t.Name.replace(/\(.*?\)/, "")}[1/1]`)
@@ -54,4 +45,11 @@ export function AutoPopulatedNotes(statBlock: StatBlock): string {
   );
 
   return notes.join("\n\n");
+}
+
+function GetDailyCounters(statBlockEntries: NameAndContent[]) {
+  const perDayPattern = /\((\d)\/day\)/gim;
+  return statBlockEntries
+    .filter(t => t.Name.match(perDayPattern))
+    .map(t => `${t.Name.replace(perDayPattern, "[$1/$1]")}`);
 }
