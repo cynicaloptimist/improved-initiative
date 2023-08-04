@@ -7,8 +7,7 @@ export function BannerHost(): JSX.Element {
     return null;
   }
 
-  const href =
-    "https://www.dmsguild.com/browse.php?filters=45680_0_0_0_0_0&affiliate_id=282190";
+  const href = "https://www.drivethrurpg.com/browse.php?affiliate_id=282190";
 
   return (
     <div className="footer-banner">
@@ -18,8 +17,8 @@ export function BannerHost(): JSX.Element {
         onClick={() => Metrics.TrackAnonymousEvent("BannerClick", { href })}
       >
         <img
-          src="https://www.dmsguild.com/images/site_resources/DMsGuild-GuildAdept-Banner-sm.png"
-          alt="Guild Adept PDFs - Available exclusively @ Dungeon Masters Guild"
+          src="https://www.drivethrurpg.com/themes/dtrpg/images/affiliatebanner10.png"
+          alt="Indie RPGs at DriveThruRPG.com"
         />
       </a>
     </div>
