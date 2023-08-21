@@ -18,7 +18,7 @@ const DEFAULT_BATCH_SIZE = 10;
 const ENCOUNTER_BATCH_SIZE = 1;
 
 export class AccountClient {
-  public GetAccount(callBack: (user: Account | null) => void) {
+  public GetAccount(callBack: (user: Account | null) => void): true | void {
     if (!env.HasStorage) {
       return callBack(null);
     }
@@ -28,7 +28,7 @@ export class AccountClient {
     return true;
   }
 
-  public async DeleteAccount() {
+  public async DeleteAccount(): Promise<any> {
     if (!env.HasStorage) {
       return emptyPromise();
     }
@@ -36,7 +36,7 @@ export class AccountClient {
     return axios.delete("/my");
   }
 
-  public async GetFullAccount() {
+  public async GetFullAccount(): Promise<any> {
     if (!env.HasStorage) {
       return emptyPromise();
     }
@@ -48,7 +48,7 @@ export class AccountClient {
   public async SaveAllUnsyncedItems(
     libraries: Libraries,
     messageCallback: (message: string) => void
-  ) {
+  ): Promise<void> {
     if (!env.HasStorage) {
       return;
     }
@@ -91,50 +91,54 @@ export class AccountClient {
     return messageCallback("Account Sync complete.");
   }
 
-  public SaveSettings(settings: Settings) {
+  public SaveSettings(settings: Settings): Promise<Settings> {
     return saveEntity<Settings>(settings, "settings");
   }
 
-  public SaveStatBlock(statBlock: StatBlock) {
+  public SaveStatBlock(statBlock: StatBlock): Promise<StatBlock> {
     return saveEntity<StatBlock>(statBlock, "statblocks");
   }
 
-  public DeleteStatBlock(statBlockId: string) {
+  public DeleteStatBlock(statBlockId: string): Promise<any> {
     return deleteEntity(statBlockId, "statblocks");
   }
 
-  public SavePlayerCharacter(playerCharacter: StatBlock) {
+  public SavePlayerCharacter(playerCharacter: StatBlock): Promise<StatBlock> {
     return saveEntity<StatBlock>(playerCharacter, "playercharacters");
   }
 
-  public DeletePlayerCharacter(statBlockId: string) {
+  public DeletePlayerCharacter(statBlockId: string): Promise<any> {
     return deleteEntity(statBlockId, "playercharacters");
   }
 
-  public SavePersistentCharacter(persistentCharacter: PersistentCharacter) {
+  public SavePersistentCharacter(
+    persistentCharacter: PersistentCharacter
+  ): Promise<PersistentCharacter> {
     return saveEntity<PersistentCharacter>(
       persistentCharacter,
       "persistentcharacters"
     );
   }
 
-  public DeletePersistentCharacter(persistentCharacterId: string) {
+  public DeletePersistentCharacter(
+    persistentCharacterId: string
+  ): Promise<any> {
     return deleteEntity(persistentCharacterId, "persistentcharacters");
   }
 
-  public SaveEncounter(encounter: SavedEncounter) {
+  public SaveEncounter(encounter: SavedEncounter): Promise<SavedEncounter> {
     return saveEntity<SavedEncounter>(encounter, "encounters");
   }
 
-  public DeleteEncounter(encounterId: string) {
+  public DeleteEncounter(encounterId: string): Promise<any> {
     return deleteEntity(encounterId, "encounters");
   }
 
-  public SaveSpell(spell: Spell) {
+  public SaveSpell(spell: Spell): Promise<Spell> {
     return saveEntity<Spell>(spell, "spells");
   }
 
-  public DeleteSpell(spellId: string) {
+  public DeleteSpell(spellId: string): Promise<any> {
     return deleteEntity(spellId, "spells");
   }
 
@@ -142,7 +146,7 @@ export class AccountClient {
     return str.replace(/ /g, "_").replace(/[^a-zA-Z0-9_]/g, "");
   }
 
-  public static MakeId(name: string, path?: string) {
+  public static MakeId(name: string, path?: string): string {
     if (path?.length) {
       return this.SanitizeForId(path) + "-" + this.SanitizeForId(name);
     } else {
@@ -180,7 +184,9 @@ function saveEntity<T>(entity: T, entityType: string): Promise<T | null> {
   });
 }
 
-export async function getUnsyncedItemsFromListings(items: Listing<Listable>[]) {
+export async function getUnsyncedItemsFromListings(
+  items: Listing<Listable>[]
+): Promise<Listable[]> {
   const unsynced = await getUnsyncedItems(items);
   return sanitizeItems(unsynced);
 }
