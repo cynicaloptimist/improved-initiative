@@ -23,7 +23,12 @@ export class AccountClient {
       return callBack(null);
     }
 
-    axios.get("/my").then(response => callBack(response.data));
+    axios
+      .get("/my")
+      .then(response => callBack(response.data))
+      .catch(err => {
+        console.error("Could not get account details", err);
+      });
 
     return true;
   }
