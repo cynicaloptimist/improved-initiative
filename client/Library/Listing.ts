@@ -83,6 +83,12 @@ export class Listing<T extends Listable> {
         item.Id = this.listingMeta.Id;
         this.value(item);
         return callback(item);
+      })
+      .catch(err => {
+        console.error(
+          `Couldn't load item keyed '${this.listingMeta.Id}' from http.`,
+          err
+        );
       });
   }
 
