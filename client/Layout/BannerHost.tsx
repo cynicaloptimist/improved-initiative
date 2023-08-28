@@ -1,13 +1,19 @@
 import * as React from "react";
 import { env } from "../Environment";
 import { Metrics } from "../Utility/Metrics";
+import * as _ from "lodash";
 
 export function BannerHost(): JSX.Element {
+  const [bannerIndex, setBannerIndex] = React.useState(0);
+  React.useEffect(() => {
+    setBannerIndex(_.random(0, Banners.length - 1));
+  }, []);
+
   if (env.IsLoggedIn && (env.HasStorage || env.HasEpicInitiative)) {
     return null;
   }
 
-  const banner = Banners[0];
+  const banner = Banners[bannerIndex];
 
   return (
     <div className="footer-banner">
