@@ -30,8 +30,7 @@ export function BannerHost(): JSX.Element {
 const Banners: { href: string; src: string; altText: string }[] = [
   {
     href: "https://www.drivethrurpg.com/browse.php?affiliate_id=282190",
-    src:
-      "https://www.drivethrurpg.com/themes/dtrpg/images/affiliatebanner10.png",
+    src: "https://www.drivethrurpg.com/themes/dtrpg/images/728x90indies.png",
     altText: "Indie RPGs at DriveThruRPG.com"
   }
 ];
