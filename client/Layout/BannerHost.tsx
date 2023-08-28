@@ -4,11 +4,14 @@ import { Metrics } from "../Utility/Metrics";
 import * as _ from "lodash";
 
 export function BannerHost(): JSX.Element {
-  const [bannerIndex, setBannerIndex] = React.useState(0);
+  const [bannerIndex, setBannerIndex] = React.useState(null);
   React.useEffect(() => {
     setBannerIndex(_.random(0, Banners.length - 1));
   }, []);
 
+  if (bannerIndex === null) {
+    return null;
+  }
   if (env.IsLoggedIn && (env.HasStorage || env.HasEpicInitiative)) {
     return null;
   }
