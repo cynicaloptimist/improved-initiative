@@ -29,6 +29,7 @@ export function BannerHost(): JSX.Element {
             imageUrl: banner.src
           })
         }
+        title="Affiliate banners support the free app, and are hidden for subscribed Patrons."
       >
         <img src={banner.src} alt={banner.altText} />
       </a>
