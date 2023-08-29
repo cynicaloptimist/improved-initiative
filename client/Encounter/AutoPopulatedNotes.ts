@@ -35,10 +35,18 @@ export function AutoPopulatedNotes(statBlock: StatBlock): string {
   }
 
   notes.push(...GetDailyCounters(statBlock.Traits));
-  notes.push(...GetDailyCounters(statBlock.Actions));
-
   notes.push(...GetRechargeCounters(statBlock.Traits));
+
+  notes.push(...GetDailyCounters(statBlock.Actions));
   notes.push(...GetRechargeCounters(statBlock.Actions));
+
+  notes.push(...GetDailyCounters(statBlock.Reactions));
+  notes.push(...GetRechargeCounters(statBlock.Reactions));
+
+  if (statBlock.BonusActions) {
+    notes.push(...GetDailyCounters(statBlock.BonusActions));
+    notes.push(...GetRechargeCounters(statBlock.BonusActions));
+  }
 
   return notes.join("\n\n");
 }

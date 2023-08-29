@@ -29,9 +29,9 @@ export class Listing<T extends Listable> {
 
   private value = ko.observable<T>();
 
-  public SetValue = (value: T) => this.value(value);
+  public SetValue = (value: T): any => this.value(value);
 
-  public GetWithTemplate(template: T) {
+  public GetWithTemplate(template: T): Promise<T> {
     return new Promise<T>(done => {
       return this.GetAsyncWithUpdatedId(item => {
         return done(_.merge(template, item));
@@ -39,7 +39,7 @@ export class Listing<T extends Listable> {
     });
   }
 
-  public GetAsyncWithUpdatedId(callback: (item: any) => any) {
+  public GetAsyncWithUpdatedId(callback: (item: any) => any): any {
     if (this.value()) {
       return callback(this.value());
     }
@@ -83,6 +83,12 @@ export class Listing<T extends Listable> {
         item.Id = this.listingMeta.Id;
         this.value(item);
         return callback(item);
+      })
+      .catch(err => {
+        console.error(
+          `Couldn't load item keyed '${this.listingMeta.Id}' from http.`,
+          err
+        );
       });
   }
 
