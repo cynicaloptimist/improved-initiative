@@ -87,7 +87,6 @@ export async function handleCurrentUser(
   res: Res,
   apiResponse: Record<string, any>
 ): Promise<void> {
-  //console.log(`api response: ${JSON.stringify(apiResponse)}`);
   let encounterId = "";
   if (req.query && req.query.state) {
     encounterId = (req.query.state as string).replace(/['"]/g, "");
@@ -104,6 +103,11 @@ export async function handleCurrentUser(
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, userRewards);
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
+  console.log(
+    `User login: ${emailAddress}, API response: ${JSON.stringify(
+      apiResponse
+    )}, resolved rewards: ${userRewards}`
+  );
 
   const session = req.session;
 
@@ -256,7 +260,7 @@ async function handleWebhook(req: Req, res: Res) {
           entitledTiers.map(tier => tier.id)
         );
     console.log(
-      `Updating account level for ${userEmail} to ${userAccountLevel}`
+      `Webhook: Updating account level for ${userEmail} to ${userAccountLevel}`
     );
     await DB.upsertUser(userId, userAccountLevel, userEmail);
     return res.send(201);
