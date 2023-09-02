@@ -48,7 +48,9 @@ export class Metrics {
     }
 
     if (typeof gtag == "function") {
-      gtag("event", name, eventData);
+      try {
+        gtag("event", name, eventData);
+      } catch (e) {}
     }
 
     if (!env.SendMetrics) {
@@ -77,7 +79,9 @@ export class Metrics {
     }
 
     if (typeof gtag == "function") {
-      gtag("event", name, eventData);
+      try {
+        gtag("event", name, eventData);
+      } catch (e) {}
     }
 
     if (!env.SendMetrics) {
