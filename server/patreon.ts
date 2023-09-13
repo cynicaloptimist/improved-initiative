@@ -25,10 +25,10 @@ const tiersWithAccountSyncEntitled = [
 
 const tiersWithEpicEntitled = ["1937132", "8749940"];
 
-const baseUrl = process.env.BASE_URL,
-  patreonClientId = process.env.PATREON_CLIENT_ID,
-  patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
-  patreonUrl = process.env.PATREON_URL;
+const baseUrl = process.env.BASE_URL;
+const patreonClientId = process.env.PATREON_CLIENT_ID;
+const patreonClientSecret = process.env.PATREON_CLIENT_SECRET;
+const patreonUrl = process.env.PATREON_URL;
 
 interface Post {
   attributes: {
