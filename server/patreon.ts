@@ -120,11 +120,6 @@ export async function handleCurrentUser(
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, entitledTierIds);
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
-  console.log(
-    `User login: ${emailAddress}, API response: ${JSON.stringify(
-      apiResponse
-    )}, resolved rewards: ${userRewards}`
-  );
 
   const session = req.session;
 
