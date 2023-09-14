@@ -3,7 +3,8 @@ import * as crypto from "crypto";
 import * as express from "express";
 
 import * as _ from "lodash";
-import * as patreon from "patreon";
+import axios from "axios";
+import * as querystring from "querystring";
 
 import * as request from "request";
 
@@ -60,17 +61,22 @@ export function configureLoginRedirect(app: express.Application): void {
 
   app.get(redirectPath, async (req: Req, res: Res) => {
     try {
-      console.log("req.query >" + JSON.stringify(req.query));
-      console.log("req.body >" + JSON.stringify(req.body));
-      const code = req.query.code;
+      const code = req.query.code as string;
 
-      const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
+      const tokens = await getTokens(code, redirectUri);
 
-      const tokens = await OAuthClient.getTokens(code, redirectUri);
+      const userResponse = await axios.get(
+        `https://www.patreon.com/api/oauth2/v2/identity` +
+          `?${encodeURIComponent("fields[user]")}=email` +
+          `&include=memberships.currently_entitled_tiers`,
+        {
+          headers: {
+            authorization: "Bearer " + tokens.access_token
+          }
+        }
+      );
 
-      const APIClient = patreon.patreon(tokens.access_token);
-      const { rawJson } = await APIClient(`/current_user`);
-      await handleCurrentUser(req, res, rawJson);
+      await handleCurrentUser(req, res, userResponse.data);
     } catch (err) {
       console.error("Patreon login flow failed:", JSON.stringify(err));
       res
@@ -82,27 +88,43 @@ export function configureLoginRedirect(app: express.Application): void {
   });
 }
 
+async function getTokens(code: string, redirectUri: string) {
+  const tokensResponse = await axios.post(
+    "https://www.patreon.com/api/oauth2/token",
+    querystring.stringify({
+      code: code,
+      grant_type: "authorization_code",
+      client_id: patreonClientId,
+      client_secret: patreonClientSecret,
+      redirect_uri: redirectUri
+    }),
+    { headers: { "content-type": "application/x-www-form-urlencoded" } }
+  );
+
+  const tokens = tokensResponse.data;
+  return tokens;
+}
+
 export async function handleCurrentUser(
   req: Req,
   res: Res,
   apiResponse: Record<string, any>
 ): Promise<void> {
-  //console.log(`api response: ${JSON.stringify(apiResponse)}`);
   let encounterId = "";
   if (req.query && req.query.state) {
     encounterId = (req.query.state as string).replace(/['"]/g, "");
   }
 
-  const pledges = (apiResponse.included || []).filter(
-    item => item.type == "pledge" && item.attributes.declined_since == null
-  );
-
-  const userRewards = pledges.map((r: Pledge) =>
-    _.get(r, "relationships.reward.data.id", "none")
-  );
+  const memberships = apiResponse.included.filter(i => i.type === "member");
+  const entitledTierIds = _.flatMap(
+    memberships,
+    m => m.relationships.currently_entitled_tiers.data
+  )
+    .filter(d => d.type === "tier")
+    .map(d => d.id);
 
   const userId = apiResponse.data.id;
-  const standing = getUserAccountLevel(userId, userRewards);
+  const standing = getUserAccountLevel(userId, entitledTierIds);
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
 
   const session = req.session;
