@@ -40,7 +40,8 @@ const getClientOptions = (session: Express.Session) => {
     "http://www.patreon.com/oauth2/authorize" +
     `?response_type=code&client_id=${patreonClientId}` +
     `&redirect_uri=${baseUrl}/r/patreon` +
-    `&scope=users pledges-to-me` +
+    `&scope=` +
+    encodeURIComponent(`identity identity.memberships identity[email]`) +
     `&state=${encounterId}`;
 
   const environment: ClientEnvironment = {

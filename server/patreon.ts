@@ -3,7 +3,8 @@ import * as crypto from "crypto";
 import * as express from "express";
 
 import * as _ from "lodash";
-import * as patreon from "patreon";
+import axios from "axios";
+import * as querystring from "querystring";
 
 import * as request from "request";
 
@@ -25,10 +26,10 @@ const tiersWithAccountSyncEntitled = [
 
 const tiersWithEpicEntitled = ["1937132", "8749940"];
 
-const baseUrl = process.env.BASE_URL,
-  patreonClientId = process.env.PATREON_CLIENT_ID,
-  patreonClientSecret = process.env.PATREON_CLIENT_SECRET,
-  patreonUrl = process.env.PATREON_URL;
+const baseUrl = process.env.BASE_URL;
+const patreonClientId = process.env.PATREON_CLIENT_ID;
+const patreonClientSecret = process.env.PATREON_CLIENT_SECRET;
+const patreonUrl = process.env.PATREON_URL;
 
 interface Post {
   attributes: {
@@ -60,17 +61,22 @@ export function configureLoginRedirect(app: express.Application): void {
 
   app.get(redirectPath, async (req: Req, res: Res) => {
     try {
-      console.log("req.query >" + JSON.stringify(req.query));
-      console.log("req.body >" + JSON.stringify(req.body));
-      const code = req.query.code;
+      const code = req.query.code as string;
 
-      const OAuthClient = patreon.oauth(patreonClientId, patreonClientSecret);
+      const tokens = await getTokens(code, redirectUri);
 
-      const tokens = await OAuthClient.getTokens(code, redirectUri);
+      const userResponse = await axios.get(
+        `https://www.patreon.com/api/oauth2/v2/identity` +
+          `?${encodeURIComponent("fields[user]")}=email` +
+          `&include=memberships.currently_entitled_tiers`,
+        {
+          headers: {
+            authorization: "Bearer " + tokens.access_token
+          }
+        }
+      );
 
-      const APIClient = patreon.patreon(tokens.access_token);
-      const { rawJson } = await APIClient(`/current_user`);
-      await handleCurrentUser(req, res, rawJson);
+      await handleCurrentUser(req, res, userResponse.data);
     } catch (err) {
       console.error("Patreon login flow failed:", JSON.stringify(err));
       res
@@ -80,6 +86,23 @@ export function configureLoginRedirect(app: express.Application): void {
         );
     }
   });
+}
+
+async function getTokens(code: string, redirectUri: string) {
+  const tokensResponse = await axios.post(
+    "https://www.patreon.com/api/oauth2/token",
+    querystring.stringify({
+      code: code,
+      grant_type: "authorization_code",
+      client_id: patreonClientId,
+      client_secret: patreonClientSecret,
+      redirect_uri: redirectUri
+    }),
+    { headers: { "content-type": "application/x-www-form-urlencoded" } }
+  );
+
+  const tokens = tokensResponse.data;
+  return tokens;
 }
 
 export async function handleCurrentUser(
@@ -92,16 +115,10 @@ export async function handleCurrentUser(
     encounterId = (req.query.state as string).replace(/['"]/g, "");
   }
 
-  const pledges = (apiResponse.included || []).filter(
-    item => item.type == "pledge" && item.attributes.declined_since == null
-  );
-
-  const userRewards = pledges.map((r: Pledge) =>
-    _.get(r, "relationships.reward.data.id", "none")
-  );
+  const entitledTierIds = getEntitledTierIds(apiResponse);
 
   const userId = apiResponse.data.id;
-  const standing = getUserAccountLevel(userId, userRewards);
+  const standing = getUserAccountLevel(userId, entitledTierIds);
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
   console.log(
     `User login: ${emailAddress}, API response: ${JSON.stringify(
@@ -124,13 +141,20 @@ export async function handleCurrentUser(
   res.redirect(`/e/${encounterId}?login=patreon`);
 }
 
-export function updateSessionAccountFeatures(
-  session: Express.Session,
-  standing: AccountStatus
-): void {
-  session.hasStorage = standing == "pledge" || standing == "epic";
-  session.hasEpicInitiative = standing == "epic";
-  session.isLoggedIn = true;
+function getEntitledTierIds(apiResponse: Record<string, any>) {
+  const memberships = apiResponse.included?.filter(i => i.type === "member");
+  if (!memberships) {
+    return [];
+  }
+
+  const entitledTierIds = _.flatMap(
+    memberships,
+    m => m.relationships?.currently_entitled_tiers?.data
+  )
+    .filter(d => d?.type === "tier")
+    .map(d => d.id);
+
+  return entitledTierIds;
 }
 
 function getUserAccountLevel(
@@ -156,6 +180,15 @@ function getUserAccountLevel(
     : AccountStatus.None;
 
   return standing;
+}
+
+export function updateSessionAccountFeatures(
+  session: Express.Session,
+  standing: AccountStatus
+): void {
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
+  session.isLoggedIn = true;
 }
 
 export function configureLogout(app: express.Application): void {
@@ -270,8 +303,6 @@ async function handleWebhook(req: Req, res: Res) {
 }
 
 function verifySender(req: Req, res: Res, next) {
-  console.log(req.rawBody);
-
   const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
   if (!webhookSecret) {
     return res.status(501).send("Webhook not configured");
@@ -279,12 +310,12 @@ function verifySender(req: Req, res: Res, next) {
 
   const signature = req.header("X-Patreon-Signature");
   if (!signature) {
-    console.log("Signature not found.");
+    console.warn("Signature not found.");
     return res.status(401).send("Signature not found.");
   }
 
   if (!verifySignature(signature, webhookSecret, req.rawBody)) {
-    console.log("Signature mismatch with provided signature: " + signature);
+    console.warn("Signature mismatch with provided signature: " + signature);
     return res.status(401).send("Signature mismatch.");
   }
 
