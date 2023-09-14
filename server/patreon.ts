@@ -266,8 +266,6 @@ async function handleWebhook(req: Req, res: Res) {
 }
 
 function verifySender(req: Req, res: Res, next) {
-  console.log(req.rawBody);
-
   const webhookSecret = process.env.PATREON_WEBHOOK_SECRET;
   if (!webhookSecret) {
     return res.status(501).send("Webhook not configured");
@@ -275,12 +273,12 @@ function verifySender(req: Req, res: Res, next) {
 
   const signature = req.header("X-Patreon-Signature");
   if (!signature) {
-    console.log("Signature not found.");
+    console.warn("Signature not found.");
     return res.status(401).send("Signature not found.");
   }
 
   if (!verifySignature(signature, webhookSecret, req.rawBody)) {
-    console.log("Signature mismatch with provided signature: " + signature);
+    console.warn("Signature mismatch with provided signature: " + signature);
     return res.status(401).send("Signature mismatch.");
   }
 
