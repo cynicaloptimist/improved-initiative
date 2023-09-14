@@ -115,13 +115,7 @@ export async function handleCurrentUser(
     encounterId = (req.query.state as string).replace(/['"]/g, "");
   }
 
-  const memberships = apiResponse.included.filter(i => i.type === "member");
-  const entitledTierIds = _.flatMap(
-    memberships,
-    m => m.relationships.currently_entitled_tiers.data
-  )
-    .filter(d => d.type === "tier")
-    .map(d => d.id);
+  const entitledTierIds = getEntitledTierIds(apiResponse);
 
   const userId = apiResponse.data.id;
   const standing = getUserAccountLevel(userId, entitledTierIds);
@@ -140,6 +134,22 @@ export async function handleCurrentUser(
   }
   session.userId = user._id;
   res.redirect(`/e/${encounterId}?login=patreon`);
+}
+
+function getEntitledTierIds(apiResponse: Record<string, any>) {
+  const memberships = apiResponse.included?.filter(i => i.type === "member");
+  if (!memberships) {
+    return [];
+  }
+
+  const entitledTierIds = _.flatMap(
+    memberships,
+    m => m.relationships?.currently_entitled_tiers?.data
+  )
+    .filter(d => d?.type === "tier")
+    .map(d => d.id);
+
+  return entitledTierIds;
 }
 
 export function updateSessionAccountFeatures(
