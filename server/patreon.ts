@@ -152,15 +152,6 @@ function getEntitledTierIds(apiResponse: Record<string, any>) {
   return entitledTierIds;
 }
 
-export function updateSessionAccountFeatures(
-  session: Express.Session,
-  standing: AccountStatus
-): void {
-  session.hasStorage = standing == "pledge" || standing == "epic";
-  session.hasEpicInitiative = standing == "epic";
-  session.isLoggedIn = true;
-}
-
 function getUserAccountLevel(
   userId: string,
   rewardIds: string[]
@@ -184,6 +175,15 @@ function getUserAccountLevel(
     : AccountStatus.None;
 
   return standing;
+}
+
+export function updateSessionAccountFeatures(
+  session: Express.Session,
+  standing: AccountStatus
+): void {
+  session.hasStorage = standing == "pledge" || standing == "epic";
+  session.hasEpicInitiative = standing == "epic";
+  session.isLoggedIn = true;
 }
 
 export function configureLogout(app: express.Application): void {
