@@ -4,7 +4,7 @@ import { EncounterCommander } from "./EncounterCommander";
 export const BuildEncounterCommandList = (
   c: EncounterCommander,
   saveEncounterFn: () => void
-) =>
+): Command[] =>
   [
     new Command({
       id: "toggle-menu",
