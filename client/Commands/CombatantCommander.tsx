@@ -425,6 +425,14 @@ export class CombatantCommander {
     return false;
   };
 
+  public ToggleSpentReaction = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
+    this.SelectedCombatants().forEach(c => c.ToggleSpentReaction());
+  };
+
   public ToggleHidden = () => {
     if (!this.HasSelected()) {
       return;

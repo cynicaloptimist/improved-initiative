@@ -52,6 +52,13 @@ export const BuildCombatantCommandList: (
     fontAwesomeIcon: "i-cursor"
   }),
   new Command({
+    id: "toggle-reaction",
+    description: "Toggle Spent Reaction",
+    actionBinding: c.ToggleSpentReaction,
+    fontAwesomeIcon: "reply",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
     id: "toggle-hidden",
     description: "Hide/Reveal in Player View",
     actionBinding: c.ToggleHidden,

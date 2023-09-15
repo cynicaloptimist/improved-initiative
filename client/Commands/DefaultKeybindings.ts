@@ -23,6 +23,7 @@ export const DefaultKeybindings: { [commandId: string]: string } = {
   "update-notes": "y",
   remove: "del",
   "set-alias": "f2",
+  "toggle-reaction": "r",
   "toggle-hidden": "h",
   "toggle-reveal-ac": "alt+h",
   "quick-edit-statblock": "e",
