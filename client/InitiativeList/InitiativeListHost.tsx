@@ -88,7 +88,7 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
       );
       combatantViewModel.ToggleSpentReaction();
     },
-    [combatants]
+    [combatantViewModels]
   );
 
   return (
