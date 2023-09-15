@@ -31,7 +31,8 @@ export function CombatantRow(props: CombatantRowProps) {
   const {
     DisplayPortraits,
     DisplayHPBar,
-    DisplayCombatantColor
+    DisplayCombatantColor,
+    DisplayReactionTracker
   } = React.useContext(SettingsContext).TrackerView;
 
   const { combatantState, isSelected, isActive } = props;
@@ -181,10 +182,41 @@ export function CombatantRow(props: CombatantRowProps) {
             combatantId={props.combatantState.Id}
           />
           <Commands />
+          {DisplayReactionTracker && (
+            <ReactionIndicator combatantState={props.combatantState} />
+          )}
         </div>
       </td>
     </tr>
   );
+}
+
+function ReactionIndicator(props: { combatantState: CombatantState }) {
+  const commandContext = React.useContext(CommandContext);
+
+  if (!props.combatantState.ReactionsSpent) {
+    return (
+      <Tippy content="Reaction">
+        <span
+          className="combatant__reaction-icon fas fa-reply"
+          onClick={() =>
+            commandContext.ToggleCombatantSpentReaction(props.combatantState.Id)
+          }
+        />
+      </Tippy>
+    );
+  } else {
+    return (
+      <Tippy content="Reaction">
+        <span
+          className="combatant__reaction-icon fas fa-minus"
+          onClick={() =>
+            commandContext.ToggleCombatantSpentReaction(props.combatantState.Id)
+          }
+        />
+      </Tippy>
+    );
+  }
 }
 
 function CombatantColorPicker(props: { combatantState: CombatantState }) {
