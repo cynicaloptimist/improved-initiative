@@ -16,6 +16,7 @@ export interface CombatantState {
   CurrentHP: number;
   CurrentNotes?: string;
   Color?: string;
+  ReactionsSpent?: number;
   TemporaryHP: number;
   Initiative: number;
   InitiativeGroup?: string;
