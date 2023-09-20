@@ -118,6 +118,14 @@ export class CombatantViewModel {
     this.EnqueuePrompt(prompt);
   }
 
+  public ToggleSpentReaction(): void {
+    if (this.Combatant.ReactionsSpent() == 0) {
+      this.Combatant.ReactionsSpent(1);
+    } else {
+      this.Combatant.ReactionsSpent(0);
+    }
+  }
+
   public ToggleHidden() {
     if (this.Combatant.Hidden()) {
       this.Combatant.Hidden(false);

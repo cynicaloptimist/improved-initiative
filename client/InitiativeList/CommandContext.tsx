@@ -12,5 +12,6 @@ export const CommandContext = React.createContext({
     droppedOntoCombatantId: string | null
   ) => {},
   SetCombatantColor: (combatantId: string, color: string) => {},
+  ToggleCombatantSpentReaction: (combatantId: string) => {},
   CombatantCommands: [] as Command[]
 });

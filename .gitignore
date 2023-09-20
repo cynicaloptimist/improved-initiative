@@ -5,6 +5,7 @@ public/webfonts/*
 *.js.map
 *.js
 *.js.LICENSE
+*.js.LICENSE.txt
 !jest.config.js
 *.css
 *.tmp.txt

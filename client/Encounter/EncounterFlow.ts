@@ -104,6 +104,8 @@ export class EncounterFlow {
       )
       .forEach(t => t.Decrement());
 
+    nextCombatant.ReactionsSpent(0);
+
     this.TurnTimer.Reset();
   };
 

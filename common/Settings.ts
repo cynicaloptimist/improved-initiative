@@ -37,6 +37,7 @@ export interface Settings {
     DisplayDifficulty: boolean;
     DisplayHPBar: boolean;
     DisplayCombatantColor: boolean;
+    DisplayReactionTracker: boolean;
     PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
@@ -66,6 +67,7 @@ export function getDefaultSettings(): Settings {
       DisplayDifficulty: true,
       DisplayHPBar: false,
       DisplayCombatantColor: false,
+      DisplayReactionTracker: false,
       PostCombatStats: PostCombatStatsOption.None
     },
     PlayerView: {

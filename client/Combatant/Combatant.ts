@@ -56,6 +56,7 @@ export class Combatant {
   public RevealedAC = ko.observable(false);
   public IndexLabel = ko.observable(0);
   public Color = ko.observable("");
+  public ReactionsSpent = ko.observable(0);
 
   public CombatTimer = new CombatTimer();
 
@@ -89,6 +90,7 @@ export class Combatant {
     this.Hidden(savedCombatant.Hidden);
     this.RevealedAC(savedCombatant.RevealedAC);
     this.Color(savedCombatant.Color || "");
+    this.ReactionsSpent(savedCombatant.ReactionsSpent || 0);
     this.CombatTimer.SetElapsedRounds(savedCombatant.RoundCounter || 0);
     this.CombatTimer.SetElapsedSeconds(savedCombatant.ElapsedSeconds || 0);
   }
@@ -259,6 +261,7 @@ export class Combatant {
       Hidden: this.Hidden(),
       RevealedAC: this.RevealedAC(),
       Color: this.Color(),
+      ReactionsSpent: this.ReactionsSpent(),
       RoundCounter: this.CombatTimer.ElapsedRounds(),
       InterfaceVersion: process.env.VERSION || "unknown"
     };

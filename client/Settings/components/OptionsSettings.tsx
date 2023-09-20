@@ -86,6 +86,9 @@ export function OptionsSettings(props: {
         Display Combatant Colors
         <Info>Enables a widget to assign a color to each combatant.</Info>
       </Toggle>
+      <Toggle fieldName="TrackerView.DisplayReactionTracker">
+        Display Reaction Tracker
+      </Toggle>
       <Toggle fieldName="TrackerView.DisplayHPBar">
         Display HP Bar of Active or Selected Character
         <Info>
