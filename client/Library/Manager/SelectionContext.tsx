@@ -3,7 +3,6 @@ import * as _ from "lodash";
 import { useCallback, useState } from "react";
 import * as React from "react";
 
-
 export type Selection<T> = {
   selected: T[];
   setSelected: (val: T) => void;

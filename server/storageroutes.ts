@@ -1,6 +1,5 @@
 import * as express from "express";
 
-
 import { Listable } from "../common/Listable";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Spell } from "../common/Spell";
@@ -26,7 +25,7 @@ const parsePossiblyMalformedIdFromParams = params => {
   return id;
 };
 
-export default function(app: express.Application) {
+export default function (app: express.Application) {
   app.get("/my", (req: Req, res: Res) => {
     if (!verifyStorage(req)) {
       return res.sendStatus(403);

@@ -104,9 +104,10 @@ export class LibrariesCommander {
       updates.Version = updates.StatBlock.Version;
     }
 
-    const currentCharacterListing = await this.libraries.PersistentCharacters.GetOrCreateListingById(
-      persistentCharacterId
-    );
+    const currentCharacterListing =
+      await this.libraries.PersistentCharacters.GetOrCreateListingById(
+        persistentCharacterId
+      );
 
     const currentCharacter = await currentCharacterListing.GetWithTemplate(
       PersistentCharacter.Default()

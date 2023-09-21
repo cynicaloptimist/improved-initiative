@@ -18,9 +18,7 @@ export type SpellLibraryReferencePaneProps = {
 
 type SpellListing = Listing<Spell>;
 
-export class SpellLibraryReferencePane extends React.Component<
-  SpellLibraryReferencePaneProps
-> {
+export class SpellLibraryReferencePane extends React.Component<SpellLibraryReferencePaneProps> {
   constructor(props: SpellLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);

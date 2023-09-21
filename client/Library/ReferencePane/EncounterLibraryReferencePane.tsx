@@ -15,9 +15,7 @@ export type EncounterLibraryReferencePaneProps = {
 
 type EncounterListing = Listing<SavedEncounter>;
 
-export class EncounterLibraryReferencePane extends React.Component<
-  EncounterLibraryReferencePaneProps
-> {
+export class EncounterLibraryReferencePane extends React.Component<EncounterLibraryReferencePaneProps> {
   constructor(props: EncounterLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);

@@ -12,7 +12,10 @@ import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
 
 export class Combatant {
-  constructor(combatantState: CombatantState, public Encounter: Encounter) {
+  constructor(
+    combatantState: CombatantState,
+    public Encounter: Encounter
+  ) {
     let oldStatBlockName = combatantState.StatBlock.Name;
     this.Id = "" + combatantState.Id; //legacy Id may be a number
     this.PersistentCharacterId = combatantState.PersistentCharacterId || null;

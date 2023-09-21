@@ -216,8 +216,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       top: e.pageY - 10
     };
 
-    const isSingleColumnLayout = window.matchMedia("(max-width: 650px)")
-      .matches;
+    const isSingleColumnLayout =
+      window.matchMedia("(max-width: 650px)").matches;
     if (isSingleColumnLayout) {
       previewPosition = {
         left: 0,

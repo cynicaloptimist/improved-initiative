@@ -7,9 +7,7 @@ interface MultipleCombatantDetailsProps {
   combatants: CombatantViewModel[];
 }
 
-export class MultipleCombatantDetails extends React.Component<
-  MultipleCombatantDetailsProps
-> {
+export class MultipleCombatantDetails extends React.Component<MultipleCombatantDetailsProps> {
   public render() {
     return (
       <div className="c-multiple-combatant-details">

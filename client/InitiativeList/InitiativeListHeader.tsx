@@ -1,7 +1,6 @@
 import Tippy from "@tippyjs/react";
 import * as React from "react";
 
-
 export function InitiativeListHeader(props: { encounterActive: boolean }) {
   const encounterStateIcon = props.encounterActive ? "fa-play" : "fa-pause";
   const encounterStateTip = props.encounterActive

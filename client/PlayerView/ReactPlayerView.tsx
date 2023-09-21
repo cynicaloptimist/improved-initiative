@@ -16,7 +16,10 @@ export class ReactPlayerView {
   private playerViewState: PlayerViewState;
   private socket: Socket;
 
-  constructor(private element: Element, private encounterId: string) {
+  constructor(
+    private element: Element,
+    private encounterId: string
+  ) {
     this.renderPlayerView({
       encounterState: EncounterState.Default<PlayerViewCombatantState>(),
       settings: getDefaultSettings().PlayerView

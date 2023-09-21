@@ -9,9 +9,8 @@ import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
 export class EncounterFlow {
-  public ActiveCombatant: KnockoutObservable<Combatant> = ko.observable<
-    Combatant
-  >();
+  public ActiveCombatant: KnockoutObservable<Combatant> =
+    ko.observable<Combatant>();
   public TurnTimer = new CombatTimer();
   public CombatTimer = new CombatTimer();
   public State: KnockoutObservable<"active" | "inactive"> = ko.observable<

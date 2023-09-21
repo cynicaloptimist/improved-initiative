@@ -84,7 +84,7 @@ function getAccountLevel(session) {
   return "EpicInitiative";
 }
 
-export default function(
+export default function (
   app: express.Application,
   playerViews: PlayerViewManager
 ): void {
@@ -104,7 +104,7 @@ export default function(
 
   app.use(
     bodyParser.json({
-      verify: function(req, res, buf, encoding) {
+      verify: function (req, res, buf, encoding) {
         req["rawBody"] = buf.toString();
       }
     })

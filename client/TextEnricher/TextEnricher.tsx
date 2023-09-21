@@ -66,8 +66,9 @@ export class TextEnricher {
   ): JSX.Element => {
     const replacer = this.buildReactReplacer(text, updateTextSource);
 
-    const components: Partial<Omit<NormalComponents, keyof SpecialComponents> &
-      SpecialComponents> = {
+    const components: Partial<
+      Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
+    > = {
       p: ({ children }) => {
         if (isString(children)) {
           return <p>{replacer(children)}</p>;

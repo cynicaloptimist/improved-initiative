@@ -274,9 +274,7 @@ describe("LoadEncounterState", () => {
     baseEncounter.EncounterFlow.StartEncounter();
 
     expect(baseEncounter.Combatants().map(c => c.Initiative())).toEqual([
-      15,
-      10,
-      5
+      15, 10, 5
     ]);
     expect(baseEncounter.EncounterFlow.State()).toEqual("active");
 
@@ -285,9 +283,7 @@ describe("LoadEncounterState", () => {
     encounter.LoadEncounterState(encounterState, () => {}, null);
 
     expect(encounter.Combatants().map(c => c.Initiative())).toEqual([
-      15,
-      10,
-      5
+      15, 10, 5
     ]);
     expect(encounter.EncounterFlow.State()).toEqual("active");
   });

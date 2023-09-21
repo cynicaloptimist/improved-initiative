@@ -105,44 +105,41 @@ export class StatBlockLibraryReferencePane extends React.Component<
     }
   ];
 
-  private renderListingRow = (settings: Settings) => (
-    l: Listing<StatBlock>,
-    onPreview,
-    onPreviewOut
-  ) => {
-    const listingMeta = l.Meta();
-    return (
-      <ListingRow
-        key={
-          listingMeta.Id +
-          listingMeta.Path +
-          listingMeta.Name +
-          listingMeta.FilterDimensions.Source
-        }
-        name={listingMeta.Name}
-        showCount
-        onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
-        onEdit={this.editStatBlock}
-        onPreview={onPreview}
-        onPreviewOut={onPreviewOut}
-        listing={l}
-        extraButtons={
-          settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
-        }
-      />
-    );
-  };
+  private renderListingRow =
+    (settings: Settings) =>
+    (l: Listing<StatBlock>, onPreview, onPreviewOut) => {
+      const listingMeta = l.Meta();
+      return (
+        <ListingRow
+          key={
+            listingMeta.Id +
+            listingMeta.Path +
+            listingMeta.Name +
+            listingMeta.FilterDimensions.Source
+          }
+          name={listingMeta.Name}
+          showCount
+          onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
+          onEdit={this.editStatBlock}
+          onPreview={onPreview}
+          onPreviewOut={onPreviewOut}
+          listing={l}
+          extraButtons={
+            settings.Rules.EnableBossAndMinionHP && this.bossAndMinionButtons
+          }
+        />
+      );
+    };
 
-  private loadSavedStatBlock = (variantMaximumHP: VariantMaximumHP) => (
-    listing: StatBlockListing,
-    hideOnAdd: boolean
-  ) => {
-    return this.props.librariesCommander.AddStatBlockFromListing(
-      listing,
-      hideOnAdd,
-      variantMaximumHP
-    );
-  };
+  private loadSavedStatBlock =
+    (variantMaximumHP: VariantMaximumHP) =>
+    (listing: StatBlockListing, hideOnAdd: boolean) => {
+      return this.props.librariesCommander.AddStatBlockFromListing(
+        listing,
+        hideOnAdd,
+        variantMaximumHP
+      );
+    };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
     l.Meta.subscribe(_ => this.forceUpdate());

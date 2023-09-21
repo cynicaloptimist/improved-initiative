@@ -58,8 +58,10 @@
 
 #tracker {
   .combatant {
-    transition: box-shadow @transition-activation,
-      background-color @transition-hover, border-color @transition-activation;
+    transition:
+      box-shadow @transition-activation,
+      background-color @transition-hover,
+      border-color @transition-activation;
 
     &:hover {
       background-color: @hover-white;
@@ -184,7 +186,9 @@
   border-left: @active-combatant-indicator-width solid transparent;
   cursor: grab;
   opacity: 0.4;
-  transition: border-color @transition-automation, color @transition-automation,
+  transition:
+    border-color @transition-automation,
+    color @transition-automation,
     opacity @transition-hover;
 
   .active & {

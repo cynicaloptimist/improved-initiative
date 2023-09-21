@@ -219,12 +219,8 @@ export class StatBlockEditor extends React.Component<
   );
 
   private saveAndClose = submittedValues => {
-    const {
-      SaveAs,
-      SaveAsCharacter,
-      StatBlockJSON,
-      ...submittedStatBlock
-    } = submittedValues;
+    const { SaveAs, SaveAsCharacter, StatBlockJSON, ...submittedStatBlock } =
+      submittedValues;
 
     let statBlockFromActiveEditor: StatBlock;
     if (this.state.editorMode == "standard") {

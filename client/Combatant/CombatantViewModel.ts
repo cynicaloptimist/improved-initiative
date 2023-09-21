@@ -46,8 +46,8 @@ export class CombatantViewModel {
   public ApplyDamage(inputDamage: string) {
     const damage = parseInt(inputDamage),
       healing = -damage,
-      shouldAutoCheckConcentration = CurrentSettings().Rules
-        .AutoCheckConcentration;
+      shouldAutoCheckConcentration =
+        CurrentSettings().Rules.AutoCheckConcentration;
 
     if (isNaN(damage)) {
       return;

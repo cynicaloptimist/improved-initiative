@@ -7,8 +7,5 @@
     "jsx": "react",
     "lib": ["esnext", "dom"]
   },
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ]
+  "exclude": ["**/*.test.ts", "**/*.test.tsx"]
 }

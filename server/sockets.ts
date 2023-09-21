@@ -3,7 +3,6 @@ import * as express from "express";
 import provideSessionToSocketIo = require("express-socket.io-session");
 import * as redis from "redis";
 
-
 import { createAdapter } from "@socket.io/redis-adapter";
 import * as SocketIO from "socket.io";
 
@@ -21,7 +20,7 @@ interface SocketWithSessionData {
   };
 }
 
-export default async function(
+export default async function (
   io: SocketIO.Server,
   session: express.RequestHandler,
   playerViews: PlayerViewManager
@@ -41,105 +40,123 @@ export default async function(
 
   io.use(provideSessionToSocketIo(session));
 
-  io.on("connection", function(
-    socket: SocketIO.Socket & SocketWithSessionData
-  ) {
-    function joinEncounter(id: string) {
-      socket.handshake.session.encounterId = id;
-      socket.join(id);
-    }
-
-    socket.on("update encounter", function(
-      id: string,
-      updatedEncounter: EncounterState<PlayerViewCombatantState>
-    ) {
-      if (!socket.handshake.session.hasEpicInitiative) {
-        resetEpicInitiativeEncounterFeatures(updatedEncounter);
+  io.on(
+    "connection",
+    function (socket: SocketIO.Socket & SocketWithSessionData) {
+      function joinEncounter(id: string) {
+        socket.handshake.session.encounterId = id;
+        socket.join(id);
       }
 
-      joinEncounter(id);
-      playerViews.UpdateEncounter(id, updatedEncounter);
+      socket.on(
+        "update encounter",
+        function (
+          id: string,
+          updatedEncounter: EncounterState<PlayerViewCombatantState>
+        ) {
+          if (!socket.handshake.session.hasEpicInitiative) {
+            resetEpicInitiativeEncounterFeatures(updatedEncounter);
+          }
 
-      socket.broadcast
-        .to(id)
-        .volatile.emit("encounter updated", updatedEncounter);
-    });
+          joinEncounter(id);
+          playerViews.UpdateEncounter(id, updatedEncounter);
 
-    socket.on(
-      "update settings",
-      (id: string, updatedSettings: PlayerViewSettings) => {
-        if (!socket.handshake.session.hasEpicInitiative) {
-          resetEpicInitiativeSettings(updatedSettings);
+          socket.broadcast
+            .to(id)
+            .volatile.emit("encounter updated", updatedEncounter);
         }
+      );
 
+      socket.on(
+        "update settings",
+        (id: string, updatedSettings: PlayerViewSettings) => {
+          if (!socket.handshake.session.hasEpicInitiative) {
+            resetEpicInitiativeSettings(updatedSettings);
+          }
+
+          joinEncounter(id);
+          playerViews.UpdateSettings(id, updatedSettings);
+          socket.broadcast
+            .to(id)
+            .volatile.emit("settings updated", updatedSettings);
+        }
+      );
+
+      socket.on("join encounter", function (id: string) {
         joinEncounter(id);
-        playerViews.UpdateSettings(id, updatedSettings);
-        socket.broadcast
-          .to(id)
-          .volatile.emit("settings updated", updatedSettings);
-      }
-    );
+      });
 
-    socket.on("join encounter", function(id: string) {
-      joinEncounter(id);
-    });
+      socket.on(
+        "request custom id",
+        async function (id: string, callback: (didGrantId: boolean) => void) {
+          if (
+            !socket.handshake.session.hasEpicInitiative ||
+            !ValidateEncounterId(id)
+          ) {
+            return callback(false);
+          }
 
-    socket.on("request custom id", async function(
-      id: string,
-      callback: (didGrantId: boolean) => void
-    ) {
-      if (
-        !socket.handshake.session.hasEpicInitiative ||
-        !ValidateEncounterId(id)
-      ) {
-        return callback(false);
-      }
+          const idAvailable = await playerViews.IdAvailable(id);
+          if (idAvailable) {
+            const oldId = socket.handshake.session.encounterId;
+            playerViews.Destroy(oldId);
+            joinEncounter(id);
+            return callback(true);
+          } else {
+            return callback(false);
+          }
+        }
+      );
 
-      const idAvailable = await playerViews.IdAvailable(id);
-      if (idAvailable) {
-        const oldId = socket.handshake.session.encounterId;
-        playerViews.Destroy(oldId);
-        joinEncounter(id);
-        return callback(true);
-      } else {
-        return callback(false);
-      }
-    });
+      socket.on(
+        "suggest damage",
+        function (
+          id: string,
+          suggestedCombatantIds: string[],
+          suggestedDamage: number,
+          suggester: string
+        ) {
+          joinEncounter(id);
+          socket.broadcast
+            .to(id)
+            .emit(
+              "suggest damage",
+              suggestedCombatantIds,
+              suggestedDamage,
+              suggester
+            );
+        }
+      );
 
-    socket.on("suggest damage", function(
-      id: string,
-      suggestedCombatantIds: string[],
-      suggestedDamage: number,
-      suggester: string
-    ) {
-      joinEncounter(id);
-      socket.broadcast
-        .to(id)
-        .emit(
-          "suggest damage",
-          suggestedCombatantIds,
-          suggestedDamage,
-          suggester
-        );
-    });
+      socket.on(
+        "suggest tag",
+        function (
+          id: string,
+          suggestedCombatantIds: string[],
+          suggestedTag: any,
+          suggester: string
+        ) {
+          joinEncounter(id);
+          socket.broadcast
+            .to(id)
+            .emit(
+              "suggest tag",
+              suggestedCombatantIds,
+              suggestedTag,
+              suggester
+            );
+        }
+      );
 
-    socket.on("suggest tag", function(
-      id: string,
-      suggestedCombatantIds: string[],
-      suggestedTag: any,
-      suggester: string
-    ) {
-      joinEncounter(id);
-      socket.broadcast
-        .to(id)
-        .emit("suggest tag", suggestedCombatantIds, suggestedTag, suggester);
-    });
-
-    socket.on("combat stats", function(id: string, combatStats: CombatStats) {
-      joinEncounter(id);
-      socket.broadcast.to(id).emit("combat stats", combatStats);
-    });
-  });
+      socket.on(
+        "combat stats",
+        function (id: string, combatStats: CombatStats) {
+          joinEncounter(id);
+          socket.broadcast.to(id).emit("combat stats", combatStats);
+        }
+      );
+    }
+  );
 }
 
 const emptyCustomStyles = getDefaultSettings().PlayerView.CustomStyles;

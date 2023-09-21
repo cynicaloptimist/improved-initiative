@@ -1,8 +1,6 @@
 import * as React from "react";
 
-export class PortraitWithCaption extends React.Component<
-  PortraitWithCaptionProps
-> {
+export class PortraitWithCaption extends React.Component<PortraitWithCaptionProps> {
   public render() {
     return (
       <div

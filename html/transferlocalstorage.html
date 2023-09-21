@@ -1,15 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <script type="text/javascript">
       function getHostNameTail(url) {
-        return new URL(url).hostname
-          .split(".")
-          .slice(-2)
-          .join(".");
+        return new URL(url).hostname.split(".").slice(-2).join(".");
       }
 
-      window.onmessage = function(event) {
+      window.onmessage = function (event) {
         console.log("message: " + JSON.stringify(event));
         var baseUrl = "{{{baseUrl}}}";
         if (!event) return;
@@ -29,8 +26,9 @@
         try {
           importedStorage = JSON.parse(transferredLocalStorage);
         } catch (error) {
-          throw "There was a problem importing transferred local storage: " +
-            error;
+          throw (
+            "There was a problem importing transferred local storage: " + error
+          );
         }
 
         for (key in importedStorage) {

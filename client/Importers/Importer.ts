@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 
-
 export class Importer {
   constructor(protected domElement: Element) {}
 
