@@ -362,8 +362,8 @@ export class Encounter {
   public GetPlayerView = ko.computed(
     (): EncounterState<PlayerViewCombatantState> => {
       const activeCombatantId = this.getPlayerViewActiveCombatantId();
-      const defaultBackgroundUrl = CurrentSettings().PlayerView.CustomStyles
-        .backgroundUrl;
+      const defaultBackgroundUrl =
+        CurrentSettings().PlayerView.CustomStyles.backgroundUrl;
       return {
         ActiveCombatantId: activeCombatantId,
         RoundCounter: this.EncounterFlow.CombatTimer.ElapsedRounds(),
@@ -388,13 +388,13 @@ export class Encounter {
 
       if (combatant.PersistentCharacterId !== null) {
         const fallback = PersistentCharacter.Initialize(combatant.StatBlock());
-        const persistentCharacterListing = await persistentCharacterLibrary.GetOrCreateListingById(
-          combatant.PersistentCharacterId,
-          fallback
-        );
-        const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
-          fallback
-        );
+        const persistentCharacterListing =
+          await persistentCharacterLibrary.GetOrCreateListingById(
+            combatant.PersistentCharacterId,
+            fallback
+          );
+        const persistentCharacter =
+          await persistentCharacterListing.GetWithTemplate(fallback);
 
         combatant.StatBlock(persistentCharacter.StatBlock);
         combatant.CurrentHP(persistentCharacter.CurrentHP);
@@ -449,13 +449,13 @@ export class Encounter {
   }
 
   private getCombatantsForPlayerView(activeCombatantId: string | null) {
-    const hideMonstersOutsideEncounter = CurrentSettings().PlayerView
-      .HideMonstersOutsideEncounter;
+    const hideMonstersOutsideEncounter =
+      CurrentSettings().PlayerView.HideMonstersOutsideEncounter;
 
     const combatants = this.combatants().slice();
 
-    const activeCombatantOnTop = CurrentSettings().PlayerView
-      .ActiveCombatantOnTop;
+    const activeCombatantOnTop =
+      CurrentSettings().PlayerView.ActiveCombatantOnTop;
     if (activeCombatantOnTop && activeCombatantId && combatants.length > 0) {
       let combatantsMoved = 0;
       while (

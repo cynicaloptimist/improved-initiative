@@ -87,9 +87,8 @@ export function StatBlockComponent(props: StatBlockProps) {
       <div className="Abilities">
         {Object.keys(StatBlock.Default().Abilities).map(abilityName => {
           const abilityScore = statBlock.Abilities[abilityName];
-          const abilityModifier = textEnricher.GetEnrichedModifierFromAbilityScore(
-            abilityScore
-          );
+          const abilityModifier =
+            textEnricher.GetEnrichedModifierFromAbilityScore(abilityScore);
           return (
             <div className="Ability" key={abilityName}>
               <div className="stat-label">{abilityName}</div>

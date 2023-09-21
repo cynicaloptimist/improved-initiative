@@ -3,21 +3,21 @@
     "Name": "Gregorr",
     "Type": "Human Fighter",
     "HP": {
-        "Value": 12,
-        "Notes": ""
+      "Value": 12,
+      "Notes": ""
     },
     "AC": {
-        "Value": 17,
-        "Notes": "(chain mail)"
+      "Value": 17,
+      "Notes": "(chain mail)"
     },
     "Speed": ["30 ft."],
     "Abilities": {
-        "Str": 16,
-        "Dex": 9,
-        "Con": 15,
-        "Cha": 14,
-        "Int": 11,
-        "Wis": 13
+      "Str": 16,
+      "Dex": 9,
+      "Con": 15,
+      "Cha": 14,
+      "Int": 11,
+      "Wis": 13
     },
     "Saves": [
       {
@@ -51,21 +51,21 @@
     "Name": "Shem",
     "Type": "Hill Dwarf Cleric",
     "HP": {
-        "Value": 11,
-        "Notes": ""
+      "Value": 11,
+      "Notes": ""
     },
     "AC": {
-        "Value": 18,
-        "Notes": "(chain mail, shield)"
+      "Value": 18,
+      "Notes": "(chain mail, shield)"
     },
     "Speed": ["25 ft."],
     "Abilities": {
-        "Str": 14,
-        "Dex": 8,
-        "Con": 15,
-        "Cha": 12,
-        "Int": 10,
-        "Wis": 16
+      "Str": 14,
+      "Dex": 8,
+      "Con": 15,
+      "Cha": 12,
+      "Int": 10,
+      "Wis": 16
     },
     "Saves": [
       {
@@ -99,21 +99,21 @@
     "Name": "Underfoot",
     "Type": "Lightfoot Halfling Rogue",
     "HP": {
-        "Value": 9,
-        "Notes": ""
+      "Value": 9,
+      "Notes": ""
     },
     "AC": {
-        "Value": 14,
-        "Notes": "(leather armor)"
+      "Value": 14,
+      "Notes": "(leather armor)"
     },
     "Speed": ["25 ft."],
     "Abilities": {
-        "Str": 8,
-        "Dex": 16,
-        "Con": 12,
-        "Cha": 16,
-        "Int": 13,
-        "Wis": 10
+      "Str": 8,
+      "Dex": 16,
+      "Con": 12,
+      "Cha": 16,
+      "Int": 13,
+      "Wis": 10
     },
     "Saves": [
       {
@@ -147,21 +147,21 @@
     "Name": "Ellumyr",
     "Type": "High Elf Wizard",
     "HP": {
-        "Value": 8,
-        "Notes": ""
+      "Value": 8,
+      "Notes": ""
     },
     "AC": {
-        "Value": 12,
-        "Notes": ""
+      "Value": 12,
+      "Notes": ""
     },
     "Speed": ["30 ft."],
     "Abilities": {
-        "Str": 10,
-        "Dex": 15,
-        "Con": 14,
-        "Cha": 8,
-        "Int": 16,
-        "Wis": 12
+      "Str": 10,
+      "Dex": 15,
+      "Con": 14,
+      "Cha": 8,
+      "Int": 16,
+      "Wis": 12
     },
     "Saves": [
       {

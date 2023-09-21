@@ -6,9 +6,11 @@ import { Folder } from "./Folder";
 
 export type ListingGroup = {
   label?: string;
-  groupFn: (
-    l: Listing<any>
-  ) => { label?: string; key: string; ignoreSlashes?: boolean };
+  groupFn: (l: Listing<any>) => {
+    label?: string;
+    key: string;
+    ignoreSlashes?: boolean;
+  };
 };
 
 type FolderModel = {

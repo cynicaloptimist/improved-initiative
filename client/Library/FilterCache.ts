@@ -25,7 +25,8 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
       listingMeta.FilterDimensions.Source === "Systems Reference Document"
         ? " Systems Reference Document"
         : listingMeta.FilterDimensions.Source;
-    const dedupeKey = `${listingMeta.Path}-${listingMeta.Name} -${sourceSortable}`.toLocaleLowerCase();
+    const dedupeKey =
+      `${listingMeta.Path}-${listingMeta.Name} -${sourceSortable}`.toLocaleLowerCase();
 
     if (dedupedItems[dedupeKey] == undefined) {
       dedupedItems[dedupeKey] = listing;
@@ -48,18 +49,10 @@ function DedupeByRankAndFilterListings<T extends Listing<Listable>>(
     .sort()
     .forEach(i => {
       const listing = dedupedItems[i];
-      if (
-        listing
-          .Meta()
-          .Name.toLocaleLowerCase()
-          .indexOf(filter) > -1
-      ) {
+      if (listing.Meta().Name.toLocaleLowerCase().indexOf(filter) > -1) {
         byName.push(listing);
       } else if (
-        listing
-          .Meta()
-          .SearchHint.toLocaleLowerCase()
-          .indexOf(filter) > -1
+        listing.Meta().SearchHint.toLocaleLowerCase().indexOf(filter) > -1
       ) {
         bySearchHint.push(listing);
       }

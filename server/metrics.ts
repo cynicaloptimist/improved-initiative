@@ -34,14 +34,11 @@ export function configureMetricsRoutes(app: express.Application) {
       anonymous: false
     };
 
-    await dbClient
-      .db()
-      .collection("events")
-      .insertOne({
-        name,
-        eventData,
-        meta
-      });
+    await dbClient.db().collection("events").insertOne({
+      name,
+      eventData,
+      meta
+    });
 
     return res.sendStatus(202);
   });
@@ -59,14 +56,11 @@ export function configureMetricsRoutes(app: express.Application) {
       anonymous: true
     };
 
-    await dbClient
-      .db()
-      .collection("events")
-      .insertOne({
-        eventName,
-        eventData,
-        meta
-      });
+    await dbClient.db().collection("events").insertOne({
+      eventName,
+      eventData,
+      meta
+    });
 
     return res.sendStatus(200);
   });

@@ -26,9 +26,8 @@ export function SelectedItemsManager(props: {
   libraries: Libraries;
   editListing: (listing: Listing<Listable>) => void;
 }) {
-  const [promptTypeAndTargets, setPromptTypeAndTargets] = useState<
-    PromptTypeAndTargets
-  >(null);
+  const [promptTypeAndTargets, setPromptTypeAndTargets] =
+    useState<PromptTypeAndTargets>(null);
 
   const selection = React.useContext(SelectionContext);
 

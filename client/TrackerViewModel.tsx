@@ -125,11 +125,10 @@ export class TrackerViewModel {
     this.rules
   );
 
-  public CombatantViewModels: ko.PureComputed<
-    CombatantViewModel[]
-  > = ko.pureComputed(() =>
-    this.Encounter.Combatants().map(this.buildCombatantViewModel)
-  );
+  public CombatantViewModels: ko.PureComputed<CombatantViewModel[]> =
+    ko.pureComputed(() =>
+      this.Encounter.Combatants().map(this.buildCombatantViewModel)
+    );
 
   public StatBlockEditorProps = ko.observable<StatBlockEditorProps>(null);
   public SpellEditorProps = ko.observable<SpellEditorProps>(null);
@@ -164,13 +163,15 @@ export class TrackerViewModel {
     newStatBlock?: StatBlock
   ): Promise<void> {
     this.StatBlockEditorProps(null);
-    const persistentCharacterListing = await this.Libraries.PersistentCharacters.GetOrCreateListingById(
-      persistentCharacterId
-    );
+    const persistentCharacterListing =
+      await this.Libraries.PersistentCharacters.GetOrCreateListingById(
+        persistentCharacterId
+      );
 
-    const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
-      PersistentCharacter.Default()
-    );
+    const persistentCharacter =
+      await persistentCharacterListing.GetWithTemplate(
+        PersistentCharacter.Default()
+      );
 
     const hpDown =
       persistentCharacter.StatBlock.HP.Value - persistentCharacter.CurrentHP;
@@ -285,7 +286,8 @@ export class TrackerViewModel {
           currentListings: this.Libraries.StatBlocks.GetAllListings()
         });
       } else {
-        const currentListings = this.Libraries.PersistentCharacters.GetAllListings();
+        const currentListings =
+          this.Libraries.PersistentCharacters.GetAllListings();
         const existingListing = currentListings.find(
           l => l.Meta().Name == statBlock.Name
         );
@@ -298,9 +300,8 @@ export class TrackerViewModel {
           this.EditStatBlock({
             editorTarget: "persistentcharacter",
             onSave: statBlock => {
-              const persistentCharacter = PersistentCharacter.Initialize(
-                statBlock
-              );
+              const persistentCharacter =
+                PersistentCharacter.Initialize(statBlock);
               this.Libraries.PersistentCharacters.SaveNewListing(
                 persistentCharacter
               );

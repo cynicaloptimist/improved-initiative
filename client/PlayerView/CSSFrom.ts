@@ -55,8 +55,9 @@ export function CSSFrom(
   }
   if (temporaryBackgroundImageUrl || customStyles.backgroundUrl) {
     declarations.push(
-      `#playerview { background-image: url(${temporaryBackgroundImageUrl ||
-        customStyles.backgroundUrl}); }`
+      `#playerview { background-image: url(${
+        temporaryBackgroundImageUrl || customStyles.backgroundUrl
+      }); }`
     );
   }
   if (customStyles.font) {

@@ -15193,10 +15193,7 @@
       "piercing",
       "and slashing from nonmagical weapons"
     ],
-    "DamageImmunities": [
-      "necrotic",
-      "poison"
-    ],
+    "DamageImmunities": ["necrotic", "poison"],
     "ConditionImmunities": [
       "charmed",
       "exhaustion",

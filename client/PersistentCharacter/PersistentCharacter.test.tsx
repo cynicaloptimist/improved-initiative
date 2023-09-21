@@ -260,7 +260,8 @@ describe("PersistentCharacter", () => {
       () => {}
     );
 
-    const encounterState: EncounterState<CombatantState> = encounter.ObservableEncounterState();
+    const encounterState: EncounterState<CombatantState> =
+      encounter.ObservableEncounterState();
     expect(encounterState.Combatants.length).toEqual(1);
   });
 });
@@ -271,9 +272,8 @@ describe("FilterDimensions.Level", () => {
       ...StatBlock.Default(),
       Challenge: "1"
     });
-    const filterDimensions = PersistentCharacter.GetFilterDimensions(
-      persistentCharacter
-    );
+    const filterDimensions =
+      PersistentCharacter.GetFilterDimensions(persistentCharacter);
     expect(filterDimensions.Level).toEqual("1");
   });
 
@@ -282,9 +282,8 @@ describe("FilterDimensions.Level", () => {
       ...StatBlock.Default(),
       Challenge: "Fighter 5"
     });
-    const filterDimensions = PersistentCharacter.GetFilterDimensions(
-      persistentCharacter
-    );
+    const filterDimensions =
+      PersistentCharacter.GetFilterDimensions(persistentCharacter);
     expect(filterDimensions.Level).toEqual("5");
   });
 
@@ -293,9 +292,8 @@ describe("FilterDimensions.Level", () => {
       ...StatBlock.Default(),
       Challenge: "Fighter 5, Rogue 5"
     });
-    const filterDimensions = PersistentCharacter.GetFilterDimensions(
-      persistentCharacter
-    );
+    const filterDimensions =
+      PersistentCharacter.GetFilterDimensions(persistentCharacter);
     expect(filterDimensions.Level).toEqual("10");
   });
 });

@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 
-
 interface Position {
   left: number;
   top: number;

@@ -16,7 +16,9 @@
     margin-left: 0;
   }
 
-  .spell { min-width: 100%; }
+  .spell {
+    min-width: 100%;
+  }
 }
 
 .spell {
@@ -71,15 +73,16 @@
     margin: @large-spacer 0 @medium-spacer;
     padding: 0 !important;
 
-    p:not(:last-child), li:not(:last-child) {
+    p:not(:last-child),
+    li:not(:last-child) {
       margin-bottom: @small-spacer;
     }
   }
 
-  .spell-value + .spell-value, .spell-value__item + .spell-value__item {
+  .spell-value + .spell-value,
+  .spell-value__item + .spell-value__item {
     &::before {
       content: ", ";
     }
   }
-
 }

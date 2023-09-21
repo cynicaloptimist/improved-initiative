@@ -46,9 +46,8 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
       .forEach(e => e.classList.remove("tutorial-focus"));
 
     const focusSelector = step.RaiseSelector;
-    const focusedElements = document.querySelectorAll<HTMLElement>(
-      focusSelector
-    );
+    const focusedElements =
+      document.querySelectorAll<HTMLElement>(focusSelector);
     if (focusedElements.length === 0) {
       console.error("Tutorial binding broken");
       return;

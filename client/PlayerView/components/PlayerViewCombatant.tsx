@@ -14,9 +14,7 @@ interface PlayerViewCombatantProps {
   suggestTag?: (combatant: PlayerViewCombatantState) => void;
 }
 
-export class PlayerViewCombatant extends React.Component<
-  PlayerViewCombatantProps
-> {
+export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProps> {
   public render() {
     const classNames = ["combatant"];
     if (this.props.isActive) {

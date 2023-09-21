@@ -1,6 +1,6 @@
 const appVersion = require("./package.json").version;
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-webpack");
   grunt.loadNpmTasks("grunt-contrib-less");

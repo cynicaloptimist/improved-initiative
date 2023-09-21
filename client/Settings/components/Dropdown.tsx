@@ -2,7 +2,6 @@ import { Field } from "formik";
 import * as _ from "lodash";
 import * as React from "react";
 
-
 export const Dropdown = (props: {
   fieldName: string;
   options: {};

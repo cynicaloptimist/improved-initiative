@@ -73,14 +73,12 @@ export class StatBlockImporter extends Importer {
     statBlock.Challenge = this.getString("cr");
 
     statBlock.Speed = this.getCommaSeparatedStrings("speed");
-    statBlock.ConditionImmunities = this.getCommaSeparatedStrings(
-      "conditionImmune"
-    );
+    statBlock.ConditionImmunities =
+      this.getCommaSeparatedStrings("conditionImmune");
     statBlock.DamageImmunities = this.getCommaSeparatedStrings("immune");
     statBlock.DamageResistances = this.getCommaSeparatedStrings("resist");
-    statBlock.DamageVulnerabilities = this.getCommaSeparatedStrings(
-      "vulnerable"
-    );
+    statBlock.DamageVulnerabilities =
+      this.getCommaSeparatedStrings("vulnerable");
     statBlock.Senses = this.getCommaSeparatedStrings("senses");
     statBlock.Languages = this.getCommaSeparatedStrings("languages");
 

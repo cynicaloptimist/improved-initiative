@@ -4,11 +4,11 @@ import { render as renderReact } from "react-dom";
 
 export function RegisterBindingHandlers() {
   ko.bindingHandlers.react = {
-    init: function() {
+    init: function () {
       return { controlsDescendantBindings: true };
     },
 
-    update: function(el, valueAccessor, allBindings) {
+    update: function (el, valueAccessor, allBindings) {
       const reactOptions = ko.unwrap(valueAccessor());
       const component = ko.unwrap(reactOptions.component);
 
@@ -17,7 +17,7 @@ export function RegisterBindingHandlers() {
   };
 
   ko.bindingHandlers.afterRender = {
-    init: function(
+    init: function (
       element,
       valueAccessor,
       allBindings,
@@ -28,7 +28,7 @@ export function RegisterBindingHandlers() {
       // Set up any initial state, event handlers, etc. here
       //if (bindingContext.$data.init) bindingContext.$data.init(element, valueAccessor, allBindings, viewModel, bindingContext);
     },
-    update: function(
+    update: function (
       element,
       valueAccessor,
       allBindings,

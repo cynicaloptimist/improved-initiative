@@ -140,12 +140,14 @@ export class CombatantCommander {
     );
 
     if (this.tracker.CombatantViewModels().length > combatantsToRemove.length) {
-      let activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+      let activeCombatant =
+        this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
         this.tracker.Encounter.EncounterFlow.NextTurn(
           this.tracker.EncounterCommander.RerollInitiative
         );
-        activeCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+        activeCombatant =
+          this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       }
     }
 
@@ -250,8 +252,8 @@ export class CombatantCommander {
     suggestedDamage: number,
     suggester: string
   ) => {
-    const allowPlayerSuggestions = CurrentSettings().PlayerView
-      .AllowPlayerSuggestions;
+    const allowPlayerSuggestions =
+      CurrentSettings().PlayerView.AllowPlayerSuggestions;
 
     if (!allowPlayerSuggestions) {
       return false;

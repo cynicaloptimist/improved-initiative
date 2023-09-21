@@ -16,9 +16,7 @@ export type PersistentCharacterLibraryReferencePaneProps = {
   library: Library<PersistentCharacter>;
 };
 
-export class PersistentCharacterLibraryReferencePane extends React.Component<
-  PersistentCharacterLibraryReferencePaneProps
-> {
+export class PersistentCharacterLibraryReferencePane extends React.Component<PersistentCharacterLibraryReferencePaneProps> {
   constructor(props: PersistentCharacterLibraryReferencePaneProps) {
     super(props);
     linkComponentToObservables(this);
@@ -48,7 +46,8 @@ export class PersistentCharacterLibraryReferencePane extends React.Component<
   };
 
   private createAndEditStatBlock = async () => {
-    const listing = await this.props.librariesCommander.CreatePersistentCharacter();
+    const listing =
+      await this.props.librariesCommander.CreatePersistentCharacter();
     this.editStatBlock(listing);
   };
 

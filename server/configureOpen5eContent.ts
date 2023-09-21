@@ -15,9 +15,8 @@ export async function configureOpen5eContent(
 
   const sourceUrl = `https://api.open5e.com/monsters/?limit=500&fields=${includeFields}`;
 
-  const [basicRulesListings, additionalListings] = await getAllListings(
-    sourceUrl
-  );
+  const [basicRulesListings, additionalListings] =
+    await getAllListings(sourceUrl);
 
   app.get("/open5e/basicrules/", (req: Req, res: Res) => {
     res.json(basicRulesListings);

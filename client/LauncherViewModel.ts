@@ -19,9 +19,7 @@ export class LauncherViewModel {
   public JoinEncounterInput = ko.observable<string>("");
 
   public StartEncounter = (): void => {
-    const encounterId = this.JoinEncounterInput()
-      .split("/")
-      .pop();
+    const encounterId = this.JoinEncounterInput().split("/").pop();
     LegacySynchronousLocalStore.Delete(
       LegacySynchronousLocalStore.AutoSavedEncounters,
       LegacySynchronousLocalStore.DefaultSavedEncounterId
@@ -30,9 +28,7 @@ export class LauncherViewModel {
   };
 
   public JoinEncounter = (): void => {
-    const encounterId = this.JoinEncounterInput()
-      .split("/")
-      .pop();
+    const encounterId = this.JoinEncounterInput().split("/").pop();
 
     if (encounterId) {
       window.location.href = `p/${encounterId}`;
@@ -40,9 +36,7 @@ export class LauncherViewModel {
   };
 
   public JoinEncounterButtonClass = (): string => {
-    const encounterId = this.JoinEncounterInput()
-      .split("/")
-      .pop();
+    const encounterId = this.JoinEncounterInput().split("/").pop();
     return encounterId ? "enabled" : "disabled";
   };
 }

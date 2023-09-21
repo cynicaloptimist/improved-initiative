@@ -4,10 +4,9 @@ import Redis from "ioredis";
 import expressSession = require("express-session");
 import * as moment from "moment";
 
-
 import { probablyUniqueString } from "../common/Toolbox";
 
-export default async function(
+export default async function (
   redisConnectionString?: string
 ): Promise<RequestHandler> {
   let store: RedisStore | null = null;

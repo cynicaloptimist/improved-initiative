@@ -1,6 +1,5 @@
 import * as React from "react";
 
-
 import { Field, FieldProps } from "formik";
 
 export function AutoHideField(props: AutoHideFieldProps) {

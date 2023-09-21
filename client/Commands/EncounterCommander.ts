@@ -50,9 +50,8 @@ export class EncounterCommander {
   private requestCustomEncounterIdAndUpdateEncounter = async (
     requestedId: string
   ) => {
-    const didGrantId = await this.tracker.PlayerViewClient.RequestCustomEncounterId(
-      requestedId
-    );
+    const didGrantId =
+      await this.tracker.PlayerViewClient.RequestCustomEncounterId(requestedId);
 
     if (didGrantId) {
       env.EncounterId = requestedId;
@@ -128,8 +127,8 @@ export class EncounterCommander {
       Combatants: this.tracker.Encounter.Combatants().length
     });
 
-    const displayPostCombatStats = CurrentSettings().TrackerView
-      .PostCombatStats;
+    const displayPostCombatStats =
+      CurrentSettings().TrackerView.PostCombatStats;
 
     if (displayPostCombatStats != PostCombatStatsOption.None) {
       const combatTimer = this.tracker.Encounter.EncounterFlow.CombatTimer;
@@ -237,12 +236,14 @@ export class EncounterCommander {
     const persistentCharactersPromise = persistentCharacters.map(
       pc =>
         new Promise<void>(async resolve => {
-          const persistentCharacterListing = await this.tracker.Libraries.PersistentCharacters.GetOrCreateListingById(
-            pc.PersistentCharacterId
-          );
-          const persistentCharacter = await persistentCharacterListing.GetWithTemplate(
-            PersistentCharacter.Default()
-          );
+          const persistentCharacterListing =
+            await this.tracker.Libraries.PersistentCharacters.GetOrCreateListingById(
+              pc.PersistentCharacterId
+            );
+          const persistentCharacter =
+            await persistentCharacterListing.GetWithTemplate(
+              PersistentCharacter.Default()
+            );
           this.tracker.Encounter.AddCombatantFromPersistentCharacter(
             persistentCharacter,
             this.tracker.LibrariesCommander.UpdatePersistentCharacter
@@ -280,7 +281,8 @@ export class EncounterCommander {
       return;
     }
 
-    const turnEndCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+    const turnEndCombatant =
+      this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     if (turnEndCombatant) {
       Metrics.TrackEvent("TurnCompleted", {
         Name: turnEndCombatant.DisplayName()
@@ -289,7 +291,8 @@ export class EncounterCommander {
 
     this.tracker.Encounter.EncounterFlow.NextTurn(this.RerollInitiative);
 
-    const turnStartCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+    const turnStartCombatant =
+      this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Start of turn for ${turnStartCombatant.DisplayName()}.`
     );
@@ -303,7 +306,8 @@ export class EncounterCommander {
     }
 
     this.tracker.Encounter.EncounterFlow.PreviousTurn();
-    const currentCombatant = this.tracker.Encounter.EncounterFlow.ActiveCombatant();
+    const currentCombatant =
+      this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     this.tracker.EventLog.AddEvent(
       `Initiative rewound to ${currentCombatant.DisplayName()}.`
     );
