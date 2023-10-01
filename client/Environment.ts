@@ -22,7 +22,8 @@ export function LoadEnvironment() {
   if (env.SentryDSN !== null) {
     Sentry.init({
       dsn: env.SentryDSN,
-      release: `improved-initiative@${process.env.VERSION}`
+      release: `improved-initiative@${process.env.VERSION}`,
+      ignoreErrors: ["TypeError: Failed to fetch"]
     });
   }
 }
