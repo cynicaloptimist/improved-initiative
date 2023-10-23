@@ -22,6 +22,7 @@ import { PlayerViewManager } from "./playerviewmanager";
 import configureStorageRoutes from "./storageroutes";
 import { AccountStatus } from "./user";
 import { configureOpen5eContent } from "./configureOpen5eContent";
+import { configureAffiliateRoutes } from "./configureAffiliateRoutes";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
@@ -124,6 +125,8 @@ export default function (
     const renderOptions = getClientOptions(session);
     return res.render("landing", renderOptions);
   });
+
+  configureAffiliateRoutes(app);
 
   app.get("/e/:id", (req: Req, res: Res) => {
     const session = req.session;
