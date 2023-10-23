@@ -12,7 +12,28 @@ export class LauncherViewModel {
     };
     Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
 
+    this.cleanAffiliateUrl();
+
     TransferLocalStorageToCanonicalURLIfNeeded(env.BaseUrl);
+  }
+
+  private cleanAffiliateUrl() {
+    if (window.URLSearchParams && window.history) {
+      const params = new URLSearchParams(window.location.search);
+      let didRemoveParams = false;
+      for (const key of Array.from(params.keys())) {
+        if (key.indexOf("utm_") === 0) {
+          didRemoveParams = true;
+          params.delete(key);
+        }
+      }
+      if (didRemoveParams) {
+        const query = params.toString() ? "?" + params.toString() : "";
+        const cleanUrl =
+          window.location.pathname + query + window.location.hash;
+        window.history.replaceState(null, "", cleanUrl);
+      }
+    }
   }
 
   public GeneratedEncounterId = env.EncounterId;
