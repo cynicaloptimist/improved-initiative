@@ -30,6 +30,9 @@ const baseUrl = process.env.BASE_URL;
 const patreonClientId = process.env.PATREON_CLIENT_ID;
 const patreonClientSecret = process.env.PATREON_CLIENT_SECRET;
 const patreonUrl = process.env.PATREON_URL;
+const additionalEpicUserIds = (process.env.PATREON_ADDITIONAL_EPIC_USERIDS || "")
+  .split(",")
+  .map(s => s.trim());
 
 interface Post {
   attributes: {
@@ -159,14 +162,15 @@ function getUserAccountLevel(
   const hasStorageReward =
     _.intersection(rewardIds, tiersWithAccountSyncEntitled).length > 0;
 
-  const hasEpicInitiativeThanks = _.includes(
-    thanks.map(t => t.PatreonId),
+  const hasEpicInitiativeSpecialGrant = _.includes(
+    { ...thanks.map(t => t.PatreonId), ...additionalEpicUserIds },
     userId
   );
   const hasEpicInitiativeReward =
     _.intersection(rewardIds, tiersWithEpicEntitled).length > 0;
 
-  const hasEpicInitiative = hasEpicInitiativeThanks || hasEpicInitiativeReward;
+  const hasEpicInitiative =
+    hasEpicInitiativeSpecialGrant || hasEpicInitiativeReward;
 
   const standing = hasEpicInitiative
     ? AccountStatus.Epic
