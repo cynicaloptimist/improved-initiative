@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 
 import { useCallback, useState } from "react";
-import * as React from "react";
 
 export type Selection<T> = {
   selected: T[];
@@ -10,14 +9,6 @@ export type Selection<T> = {
   removeSelected: (val: T) => void;
   clearSelected: () => void;
 };
-
-export const SelectionContext = React.createContext<Selection<any>>({
-  selected: [],
-  setSelected: () => {},
-  addSelected: () => {},
-  removeSelected: () => {},
-  clearSelected: () => {}
-});
 
 export function useSelection<T>(): Selection<T> {
   const [selected, setSelectedItems] = useState<T[]>([]);

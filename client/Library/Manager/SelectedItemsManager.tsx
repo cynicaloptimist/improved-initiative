@@ -15,9 +15,10 @@ import { ActiveLibrary } from "./ActiveLibrary";
 import { DeletePrompt } from "./DeletePrompt";
 import { MovePrompt } from "./MovePrompt";
 import { SelectedItemsViewForActiveTab } from "./SelectedItemsViewForActiveTab";
-import { Selection, SelectionContext } from "./SelectionContext";
+import { Selection } from "./useSelection";
 import { Library } from "../useLibrary";
 import { Store } from "../../Utility/Store";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
@@ -29,7 +30,7 @@ export function SelectedItemsManager(props: {
   const [promptTypeAndTargets, setPromptTypeAndTargets] =
     useState<PromptTypeAndTargets>(null);
 
-  const selection = React.useContext(SelectionContext);
+  const selection = React.useContext(ListingSelectionContext);
 
   return (
     <div>

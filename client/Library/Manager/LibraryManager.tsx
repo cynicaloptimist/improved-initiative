@@ -19,7 +19,8 @@ import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
 import { SelectedItemsManager } from "./SelectedItemsManager";
-import { Selection, SelectionContext, useSelection } from "./SelectionContext";
+import { Selection, useSelection } from "./useSelection";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
@@ -52,7 +53,7 @@ export function LibraryManager(props: LibraryManagerProps): JSX.Element {
   );
 
   return (
-    <SelectionContext.Provider value={selection}>
+    <ListingSelectionContext.Provider value={selection}>
       <div className="c-library-manager">
         <div className="left-column" style={{ width: leftColumnWidth }}>
           <PaneHeader
@@ -112,7 +113,7 @@ export function LibraryManager(props: LibraryManagerProps): JSX.Element {
           )}
         </div>
       </div>
-    </SelectionContext.Provider>
+    </ListingSelectionContext.Provider>
   );
 }
 

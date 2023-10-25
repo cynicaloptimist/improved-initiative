@@ -3,14 +3,14 @@ import { Listable } from "../../../common/Listable";
 import { Button } from "../../Components/Button";
 import { Listing } from "../Listing";
 import { Library } from "../useLibrary";
-import { SelectionContext } from "./SelectionContext";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 export function DeletePrompt(props: {
   targets: Listing<Listable>[];
   library: Library<Listable>;
   done: () => void;
 }) {
-  const selection = React.useContext(SelectionContext);
+  const selection = React.useContext(ListingSelectionContext);
   return (
     <div
       className="prompt"
