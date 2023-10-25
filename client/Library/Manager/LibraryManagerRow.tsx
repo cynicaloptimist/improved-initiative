@@ -3,7 +3,7 @@ import * as React from "react";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { ListingButton } from "../Components/ListingButton";
 import { Listing, ListingOrigin } from "../Listing";
-import { Selection, useSelection } from "./useSelection";
+import { Selection } from "./useSelection";
 import { ListingSelectionContext } from "./ListingSelectionContext";
 
 export function LibraryManagerRow(props: {
