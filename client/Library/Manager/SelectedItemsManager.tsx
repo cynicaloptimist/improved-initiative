@@ -32,6 +32,10 @@ export function SelectedItemsManager(props: {
 
   const selection = React.useContext(ListingSelectionContext);
 
+  const preloadedContentSelected = selection.selected.some(
+    l => l.Origin === "open5e" || l.Origin === "open5e-additional"
+  );
+
   return (
     <div>
       {selection.selected.length > 0 && (
@@ -52,12 +56,24 @@ export function SelectedItemsManager(props: {
             onClick={() =>
               setPromptTypeAndTargets(["move", selection.selected])
             }
+            disabled={preloadedContentSelected}
+            tooltip={
+              preloadedContentSelected
+                ? "Cannot move preloaded content."
+                : undefined
+            }
           />
           <Button
             text="Delete"
             fontAwesomeIcon="trash"
             onClick={() =>
               setPromptTypeAndTargets(["delete", selection.selected])
+            }
+            disabled={preloadedContentSelected}
+            tooltip={
+              preloadedContentSelected
+                ? "Cannot delete preloaded content. You can disable loading this content in the Options tab on the Settings pane."
+                : undefined
             }
           />
           <Button
