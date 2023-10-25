@@ -125,7 +125,7 @@ export class CombatantCommander {
     );
   };
 
-  public Remove = () => {
+  public Remove = async () => {
     if (!this.HasSelected()) {
       return;
     }
@@ -143,7 +143,7 @@ export class CombatantCommander {
       let activeCombatant =
         this.tracker.Encounter.EncounterFlow.ActiveCombatant();
       while (combatantsToRemove.some(c => c.Combatant === activeCombatant)) {
-        this.tracker.Encounter.EncounterFlow.NextTurn(
+        await this.tracker.Encounter.EncounterFlow.NextTurn(
           this.tracker.EncounterCommander.RerollInitiative
         );
         activeCombatant =
