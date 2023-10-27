@@ -1,6 +1,6 @@
 export const tips = [
   "You can set keybindings and explore advanced commands on the 'Commands' tab.",
-  "Encounters built in <a href='http://kobold.club' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
+  "Encounters built in <a href='https://koboldplus.club/' target='_blank'>Kobold Fight Club</a> can be imported into Improved Initiative.",
   "Improved Initiative is in a beta state. Please periodically export your user data for safe keeping!",
   "You can follow your Encounter on any device with the Player View URL.",
   `Creatures and Characters behave differently when added from the library. A Creature's Statblock is copied onto a single Combatant, which exists for the span of the Encounter. On the other hand, a Character's Statblock is unique and persists its changes across different Encounters.`,
