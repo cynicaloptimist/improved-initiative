@@ -15,35 +15,51 @@ export async function configureOpen5eContent(
 
   const sourceUrl = `https://api.open5e.com/monsters/?limit=500&fields=${includeFields}`;
 
-  const [basicRulesListings, additionalListings] =
-    await getAllListings(sourceUrl);
+  const listingsBySource = await getAllListings(sourceUrl);
 
-  app.get("/open5e/basicrules/", (req: Req, res: Res) => {
-    res.json(basicRulesListings);
+  app.get("/open5e/", (req: Req, res: Res) => {
+    res.json(_.mapValues(listingsBySource, v => v.sourceTitle));
   });
 
-  app.get("/open5e/additionalcontent/", (req: Req, res: Res) => {
-    res.json(additionalListings);
-  });
+  for (const sourceSlug in listingsBySource) {
+    app.get(`/open5e/${sourceSlug}/`, (req: Req, res: Res) => {
+      res.json(listingsBySource[sourceSlug].listings);
+    });
+  }
 }
+
+type ListingsWithSourceTitle = {
+  sourceTitle: string;
+  listings: ListingMeta[];
+};
 
 async function getAllListings(
   sourceUrl: string
-): Promise<[ListingMeta[], ListingMeta[]]> {
-  const basicRulesListings: ListingMeta[] = [];
-  const additionalListings: ListingMeta[] = [];
+): Promise<Record<string, ListingsWithSourceTitle>> {
   let nextUrl = sourceUrl;
+  const listingsBySource: Record<string, ListingsWithSourceTitle> = {};
   console.log("Loading listings from Open5e.");
   do {
     console.log("Loading " + nextUrl);
     try {
       const response = await axios.get(nextUrl);
-      const [basicRulesResults, additionalResults] = _.partition(
+      const newListingsBySlug = _.groupBy(
         response.data.results,
-        r => r.document__slug == "wotc-srd"
+        r => r.document__slug as string
       );
-      basicRulesListings.push(...basicRulesResults.map(getMeta));
-      additionalListings.push(...additionalResults.map(getMeta));
+
+      for (const slug in newListingsBySlug) {
+        const listingMetas = newListingsBySlug[slug].map(getMeta);
+        if (listingsBySource[slug]) {
+          listingsBySource[slug].listings.push(...listingMetas);
+        } else if (listingMetas.length) {
+          listingsBySource[slug] = {
+            sourceTitle: listingMetas[0].FilterDimensions.Source ?? "unknown",
+            listings: listingMetas
+          };
+        }
+      }
+
       nextUrl = response.data?.next;
     } catch (e) {
       console.warn("Problem loading content", JSON.stringify(e));
@@ -51,7 +67,7 @@ async function getAllListings(
   } while (nextUrl);
   console.log("Done.");
 
-  return [basicRulesListings, additionalListings];
+  return listingsBySource;
 }
 
 function getMeta(r: any): ListingMeta {
@@ -61,10 +77,7 @@ function getMeta(r: any): ListingMeta {
     Path: "",
     Link: `https://api.open5e.com/monsters/${r.slug}`,
     LastUpdateMs: 0,
-    SearchHint: `${r.name}
-                 ${r.type}
-                 ${r.subtype}
-                 ${r.alignment}`
+    SearchHint: `${r.name} ${r.type} ${r.subtype} ${r.alignment}`
       .toLocaleLowerCase()
       .replace(/[^\w\s]/g, ""),
     FilterDimensions: {

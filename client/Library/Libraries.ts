@@ -162,7 +162,7 @@ export function useLibraries(
 
 async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
   try {
-    const response = await axios.get("/open5e/basicrules/");
+    const response = await axios.get("/open5e/wotc-srd/");
     const open5eListings: ListingMeta[] = response.data;
     if (!open5eListings?.length) {
       throw new Error("Could not load open5e listings.");
@@ -181,13 +181,19 @@ async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
 
 async function preloadAdditionalContent(StatBlocks: Library<StatBlock>) {
   try {
-    const response = await axios.get("/open5e/additionalcontent/");
-    const open5eListings: ListingMeta[] = response.data;
-    StatBlocks.AddListings(
-      open5eListings,
-      "open5e-additional",
-      ImportOpen5eStatBlock
+    const sourcesResponse = await axios.get("/open5e/");
+    const sourceSlugs = Object.keys(sourcesResponse.data).filter(
+      slug => slug !== "wotc-srd"
     );
+    for (const sourceSlug of sourceSlugs) {
+      const response = await axios.get(`/open5e/${sourceSlug}/`);
+      const open5eListings: ListingMeta[] = response.data;
+      StatBlocks.AddListings(
+        open5eListings,
+        "open5e-additional",
+        ImportOpen5eStatBlock
+      );
+    }
   } catch (error) {}
 }
 
