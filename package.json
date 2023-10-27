@@ -118,7 +118,7 @@
     "postinstall": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/",
     "build": "grunt build_min",
     "dev": "grunt",
-    "start": "node --inspect=8080 server/server.js",
+    "start": "node --inspect=9222 server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "echo 'Tests are currently disabled due to node, jest, and ES modules interoperability.'",
     "lint": "eslint . --ext .ts,.tsx",
