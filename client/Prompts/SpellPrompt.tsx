@@ -3,13 +3,9 @@ import * as React from "react";
 import { Spell } from "../../common/Spell";
 import { SubmitButton } from "../Components/Button";
 import { SpellDetails } from "../Library/Components/SpellDetails";
-import { TextEnricher } from "../TextEnricher/TextEnricher";
 import { PromptProps } from "./PendingPrompts";
 
-export function SpellPrompt(
-  spell: Spell,
-  textEnricher: TextEnricher
-): PromptProps<{}> {
+export function SpellPrompt(spell: Spell): PromptProps<Record<string, never>> {
   return {
     autoFocusSelector: "button",
     children: (

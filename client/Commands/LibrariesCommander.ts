@@ -243,7 +243,7 @@ export class LibrariesCommander {
 
   public ReferenceSpell = (spellListing: Listing<Spell>): boolean => {
     spellListing.GetWithTemplate(Spell.Default()).then(spell => {
-      const prompt = SpellPrompt(spell, this.tracker.StatBlockTextEnricher);
+      const prompt = SpellPrompt(spell);
       this.tracker.PromptQueue.Add(prompt);
     });
     return true;
