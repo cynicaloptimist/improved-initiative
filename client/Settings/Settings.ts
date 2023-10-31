@@ -32,8 +32,16 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   });
 }
 
-export function UpdateSettings(settings: unknown): Settings {
-  return _.merge(getDefaultSettings(), settings);
+export function UpdateSettings(oldSettings: any): Settings {
+  const updatedSettings = _.merge(getDefaultSettings(), oldSettings);
+  if (_.get(oldSettings, "PreloadedContent.Open5eContent")) {
+    updatedSettings.PreloadedStatBlockSources["cc"] = true;
+    updatedSettings.PreloadedStatBlockSources["tob"] = true;
+    updatedSettings.PreloadedStatBlockSources["tob2"] = true;
+    updatedSettings.PreloadedStatBlockSources["tob3"] = true;
+    delete updatedSettings.PreloadedContent.Open5eContent;
+  }
+  return updatedSettings;
 }
 
 export function InitializeSettings() {
