@@ -64,8 +64,12 @@ export class StatBlockLibraryReferencePane extends React.Component<
         launchQuickAddPrompt={() =>
           this.props.librariesCommander.LaunchQuickAddPrompt()
         }
-        renderPreview={statBlock => (
-          <StatBlockComponent statBlock={statBlock} displayMode="default" />
+        renderPreview={(statBlock, isLoading) => (
+          <StatBlockComponent
+            statBlock={statBlock}
+            displayMode="default"
+            isLoading={isLoading}
+          />
         )}
         showPreloadInfo
         showSortControl

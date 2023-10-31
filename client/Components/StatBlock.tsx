@@ -11,6 +11,7 @@ interface StatBlockProps {
   statBlock: StatBlock;
   displayMode: "default" | "active";
   hideName?: boolean;
+  isLoading?: boolean;
 }
 
 export function StatBlockComponent(props: StatBlockProps) {
@@ -183,6 +184,15 @@ export function StatBlockComponent(props: StatBlockProps) {
   );
 
   let innerEntries;
+
+  if (props.isLoading) {
+    return (
+      <div className="c-statblock">
+        {headerEntries}
+        <LoadingIndicator />
+      </div>
+    );
+  }
   if (props.displayMode == "active") {
     innerEntries = (
       <>
@@ -203,6 +213,18 @@ export function StatBlockComponent(props: StatBlockProps) {
       {headerEntries}
       {innerEntries}
       {description}
+    </div>
+  );
+}
+
+function LoadingIndicator() {
+  return (
+    <div className="loading-indicator">
+      <img
+        src="../img/boot-white-on-darkred-192.png"
+        alt="Improved Initiative Flying Boot Logo"
+      />
+      <p>Loading</p>
     </div>
   );
 }
