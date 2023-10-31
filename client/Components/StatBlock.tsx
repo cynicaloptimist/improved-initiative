@@ -6,6 +6,7 @@ import {
 } from "../TextEnricher/TextEnricher";
 import { StatBlockHeader } from "./StatBlockHeader";
 import { useContext } from "react";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 interface StatBlockProps {
   statBlock: StatBlock;
@@ -213,18 +214,6 @@ export function StatBlockComponent(props: StatBlockProps) {
       {headerEntries}
       {innerEntries}
       {description}
-    </div>
-  );
-}
-
-function LoadingIndicator() {
-  return (
-    <div className="loading-indicator">
-      <img
-        src="../img/boot-white-on-darkred-192.png"
-        alt="Improved Initiative Flying Boot Logo"
-      />
-      <p>Loading</p>
     </div>
   );
 }
