@@ -137,7 +137,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
                 <a href="https://open5e.com/" target="_blank">
                   Open5e API
                 </a>
-                . Visit the Options tab on the Settings pane to configure
+                . Visit the Content tab on the Settings pane to configure
                 preloaded content.
               </p>
             </li>

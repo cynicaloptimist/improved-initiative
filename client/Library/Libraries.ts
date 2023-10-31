@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import axios from "axios";
+import * as _ from "lodash";
 
 import { Spell } from "../../common/Spell";
 import { StatBlock } from "../../common/StatBlock";
@@ -140,14 +141,8 @@ export function useLibraries(
   };
 
   React.useEffect(() => {
-    if (settings.PreloadedContent.BasicRules) {
-      preloadStatBlocks(StatBlocks);
-      preloadSpells(Spells);
-    }
-
-    if (settings.PreloadedContent.Open5eContent) {
-      preloadAdditionalContent(StatBlocks);
-    }
+    preloadSpells(Spells);
+    preloadStatBlocks(StatBlocks, settings);
 
     getAccountOrSampleCharacters(
       accountClient,
@@ -160,41 +155,27 @@ export function useLibraries(
   return libraries;
 }
 
-async function preloadStatBlocks(StatBlocks: Library<StatBlock>) {
-  try {
-    const response = await axios.get("/open5e/wotc-srd/");
-    const open5eListings: ListingMeta[] = response.data;
-    if (!open5eListings?.length) {
-      throw new Error("Could not load open5e listings.");
-    }
-    StatBlocks.AddListings(open5eListings, "open5e", ImportOpen5eStatBlock);
-  } catch (error) {
-    console.warn(error.message, "Falling back to classic server listings.");
-    const serverResponse = await axios.get<ListingMeta[]>("../statblocks/");
-
-    if (serverResponse && serverResponse.data) {
-      const serverListings = serverResponse.data;
-      StatBlocks.AddListings(serverListings, "server");
-    }
-  }
-}
-
-async function preloadAdditionalContent(StatBlocks: Library<StatBlock>) {
-  try {
-    const sourcesResponse = await axios.get("/open5e/");
-    const sourceSlugs = Object.keys(sourcesResponse.data).filter(
-      slug => slug !== "wotc-srd"
-    );
-    for (const sourceSlug of sourceSlugs) {
+async function preloadStatBlocks(
+  StatBlocks: Library<StatBlock>,
+  settings: Settings
+) {
+  const enabledSources = _.pickBy(
+    settings.PreloadedStatBlockSources,
+    isEnabled => isEnabled
+  );
+  for (const sourceSlug in enabledSources) {
+    try {
       const response = await axios.get(`/open5e/${sourceSlug}/`);
       const open5eListings: ListingMeta[] = response.data;
       StatBlocks.AddListings(
         open5eListings,
-        "open5e-additional",
+        sourceSlug === "wotc-srd" ? "open5e" : "open5e-additional",
         ImportOpen5eStatBlock
       );
+    } catch (error) {
+      console.warn(`Problem loading StatBlocks from ${sourceSlug}: ${error}`);
     }
-  } catch (error) {}
+  }
 }
 
 async function preloadSpells(Spells: Library<Spell>) {
