@@ -32,12 +32,12 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   });
 }
 
-export function UpdateSettings(settings: {}): Settings {
+export function UpdateSettings(settings: unknown): Settings {
   return _.merge(getDefaultSettings(), settings);
 }
 
 export function InitializeSettings() {
-  const localSettings = LegacySynchronousLocalStore.Load<any>(
+  const localSettings = LegacySynchronousLocalStore.Load<unknown>(
     LegacySynchronousLocalStore.User,
     "Settings"
   );
