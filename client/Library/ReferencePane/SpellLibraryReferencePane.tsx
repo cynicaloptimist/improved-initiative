@@ -70,9 +70,9 @@ export class SpellLibraryReferencePane extends React.Component<SpellLibraryRefer
     );
   };
 
-  private renderPreview = (spell: Spell) => (
+  private renderPreview = (spell: Spell, isLoading: boolean) => (
     <div className="spell-preview">
-      <SpellDetails Spell={spell} />
+      <SpellDetails Spell={spell} isLoading={isLoading} />
     </div>
   );
 

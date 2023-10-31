@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Spell } from "../../../common/Spell";
 import { TextEnricherContext } from "../../TextEnricher/TextEnricher";
+import { LoadingIndicator } from "../../Components/LoadingIndicator";
 
 const numberSuffixes = [
   "0th",
@@ -15,8 +16,16 @@ const numberSuffixes = [
   "9th"
 ];
 
-export function SpellDetails(props: { Spell: Spell }) {
+export function SpellDetails(props: { Spell: Spell; isLoading?: boolean }) {
   const textEnricher = React.useContext(TextEnricherContext);
+  if (props.isLoading) {
+    <div className="spell">
+      <h3>{props.Spell.Name}</h3>
+      <div className="spell-type">{getSpellType(props.Spell)}</div>
+      <LoadingIndicator />
+    </div>;
+  }
+  
   return (
     <div className="spell">
       <h3>{props.Spell.Name}</h3>
