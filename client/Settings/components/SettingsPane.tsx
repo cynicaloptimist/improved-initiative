@@ -22,7 +22,7 @@ const SettingsTab = {
   Options: "Options",
   Content: "Content",
   Account: "Account",
-  EpicInitiative: "Epic Tier"
+  EpicTier: "Epic Tier"
 };
 
 interface SettingsPaneProps {
@@ -69,7 +69,7 @@ export function SettingsPane(props: SettingsPaneProps) {
       return (
         <OptionsSettings
           goToEpicInitiativeSettings={() =>
-            setCurrentTab(SettingsTab.EpicInitiative)
+            setCurrentTab(SettingsTab.EpicTier)
           }
         />
       );
@@ -85,7 +85,7 @@ export function SettingsPane(props: SettingsPaneProps) {
         />
       );
     }
-    if (currentTab == SettingsTab.EpicInitiative) {
+    if (currentTab == SettingsTab.EpicTier) {
       return <EpicInitiativeSettings />;
     }
   };
