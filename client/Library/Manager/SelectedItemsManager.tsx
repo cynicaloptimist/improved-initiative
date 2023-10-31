@@ -72,7 +72,7 @@ export function SelectedItemsManager(props: {
             disabled={preloadedContentSelected}
             tooltip={
               preloadedContentSelected
-                ? "Cannot delete preloaded content. You can disable loading this content in the Options tab on the Settings pane."
+                ? "Cannot delete preloaded content. You can disable loading this content in the Content tab on the Settings pane."
                 : undefined
             }
           />
