@@ -41,10 +41,7 @@ export interface Settings {
     PostCombatStats: PostCombatStatsOption;
   };
   PlayerView: PlayerViewSettings;
-  PreloadedContent: {
-    BasicRules: boolean;
-    Open5eContent: boolean;
-  };
+  PreloadedStatBlockSources: Record<string, boolean | undefined>;
   RecentItemIds: string[];
   Version: string;
 }
@@ -95,9 +92,8 @@ export function getDefaultSettings(): Settings {
       },
       CustomEncounterId: ""
     },
-    PreloadedContent: {
-      BasicRules: true,
-      Open5eContent: true
+    PreloadedStatBlockSources: {
+      "wotc-srd": true
     },
     RecentItemIds: [],
     Version: process.env.VERSION || "0.0.0"

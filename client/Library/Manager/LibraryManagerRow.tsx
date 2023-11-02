@@ -3,14 +3,17 @@ import * as React from "react";
 import { useSubscription } from "../../Combatant/linkComponentToObservables";
 import { ListingButton } from "../Components/ListingButton";
 import { Listing, ListingOrigin } from "../Listing";
-import { SelectionContext, Selection } from "./SelectionContext";
+import { Selection } from "./useSelection";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 export function LibraryManagerRow(props: {
   listing: Listing<any>;
   setEditorTarget: (item: Listing<any>) => void;
 }): JSX.Element {
   const listingMeta = useSubscription(props.listing.Meta);
-  const selection = React.useContext<Selection<Listing<any>>>(SelectionContext);
+  const selection = React.useContext<Selection<Listing<any>>>(
+    ListingSelectionContext
+  );
   const isSelected = selection.selected.includes(props.listing);
   return (
     <li className={"c-listing" + (isSelected ? " c-listing--selected" : "")}>

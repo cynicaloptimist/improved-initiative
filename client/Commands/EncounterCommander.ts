@@ -83,13 +83,15 @@ export class EncounterCommander {
     this.tracker.ToolbarWide(!this.tracker.ToolbarWide());
   };
 
-  private ShowInitiativePrompt = (): void => {
-    this.tracker.PromptQueue.Add(
-      InitiativePrompt(
-        this.tracker.Encounter.Combatants(),
-        this.tracker.Encounter.EncounterFlow.StartEncounter
-      )
-    );
+  private ShowInitiativePrompt = (): Promise<void> => {
+    return new Promise<void>(done => {
+      this.tracker.PromptQueue.Add(
+        InitiativePrompt(this.tracker.Encounter.Combatants(), () => {
+          this.tracker.Encounter.EncounterFlow.StartEncounter();
+          done();
+        })
+      );
+    });
   };
 
   public StartEncounter = (): boolean => {
@@ -167,11 +169,9 @@ export class EncounterCommander {
     return false;
   };
 
-  public RerollInitiative = (): boolean => {
-    this.ShowInitiativePrompt();
+  public RerollInitiative = async (): Promise<void> => {
+    await this.ShowInitiativePrompt();
     Metrics.TrackEvent("InitiativeRerolled");
-
-    return false;
   };
 
   public ClearEncounter = (): boolean => {
@@ -264,7 +264,7 @@ export class EncounterCommander {
     return Promise.all(persistentCharactersPromise);
   };
 
-  public NextTurn = (): boolean => {
+  public NextTurn = async (): Promise<boolean> => {
     if (this.tracker.Encounter.EncounterFlow.State() != "active") {
       this.StartEncounter();
       return;
@@ -289,7 +289,7 @@ export class EncounterCommander {
       });
     }
 
-    this.tracker.Encounter.EncounterFlow.NextTurn(this.RerollInitiative);
+    await this.tracker.Encounter.EncounterFlow.NextTurn(this.RerollInitiative);
 
     const turnStartCombatant =
       this.tracker.Encounter.EncounterFlow.ActiveCombatant();

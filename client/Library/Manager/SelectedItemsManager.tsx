@@ -15,9 +15,10 @@ import { ActiveLibrary } from "./ActiveLibrary";
 import { DeletePrompt } from "./DeletePrompt";
 import { MovePrompt } from "./MovePrompt";
 import { SelectedItemsViewForActiveTab } from "./SelectedItemsViewForActiveTab";
-import { Selection, SelectionContext } from "./SelectionContext";
+import { Selection } from "./useSelection";
 import { Library } from "../useLibrary";
 import { Store } from "../../Utility/Store";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 type PromptTypeAndTargets = ["move" | "delete", Listing<Listable>[]] | null;
 
@@ -29,7 +30,11 @@ export function SelectedItemsManager(props: {
   const [promptTypeAndTargets, setPromptTypeAndTargets] =
     useState<PromptTypeAndTargets>(null);
 
-  const selection = React.useContext(SelectionContext);
+  const selection = React.useContext(ListingSelectionContext);
+
+  const preloadedContentSelected = selection.selected.some(
+    l => l.Origin === "open5e" || l.Origin === "open5e-additional"
+  );
 
   return (
     <div>
@@ -51,12 +56,24 @@ export function SelectedItemsManager(props: {
             onClick={() =>
               setPromptTypeAndTargets(["move", selection.selected])
             }
+            disabled={preloadedContentSelected}
+            tooltip={
+              preloadedContentSelected
+                ? "Cannot move preloaded content."
+                : undefined
+            }
           />
           <Button
             text="Delete"
             fontAwesomeIcon="trash"
             onClick={() =>
               setPromptTypeAndTargets(["delete", selection.selected])
+            }
+            disabled={preloadedContentSelected}
+            tooltip={
+              preloadedContentSelected
+                ? "Cannot delete preloaded content. You can disable loading this content in the Content tab on the Settings pane."
+                : undefined
             }
           />
           <Button

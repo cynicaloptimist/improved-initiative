@@ -68,6 +68,29 @@
     justify-content: flex-end;
     align-items: center;
   }
+
+  .loading-indicator {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    height: 80px;
+  }
+
+  .loading-indicator img {
+    max-height: 30px;
+    animation: short-bob 1s ease infinite;
+  }
+
+  @keyframes short-bob {
+    0% {
+      margin-top: 0;
+    }
+    50% {
+      margin-top: 5px;
+    }
+  }
 }
 
 .c-encounter-preview {

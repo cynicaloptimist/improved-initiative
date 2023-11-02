@@ -6,11 +6,13 @@ import {
 } from "../TextEnricher/TextEnricher";
 import { StatBlockHeader } from "./StatBlockHeader";
 import { useContext } from "react";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 interface StatBlockProps {
   statBlock: StatBlock;
   displayMode: "default" | "active";
   hideName?: boolean;
+  isLoading?: boolean;
 }
 
 export function StatBlockComponent(props: StatBlockProps) {
@@ -183,6 +185,15 @@ export function StatBlockComponent(props: StatBlockProps) {
   );
 
   let innerEntries;
+
+  if (props.isLoading) {
+    return (
+      <div className="c-statblock">
+        {headerEntries}
+        <LoadingIndicator />
+      </div>
+    );
+  }
   if (props.displayMode == "active") {
     innerEntries = (
       <>

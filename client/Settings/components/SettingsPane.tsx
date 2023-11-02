@@ -14,13 +14,15 @@ import { EpicInitiativeSettings } from "./EpicInitiativeSettings";
 import { OptionsSettings } from "./OptionsSettings";
 import { useContext, useState, useCallback } from "react";
 import { SettingsContext } from "../SettingsContext";
+import { ContentSettings } from "./ContentSettings";
 
 const SettingsTab = {
   About: "About",
   Commands: "Commands",
   Options: "Options",
+  Content: "Content",
   Account: "Account",
-  EpicInitiative: "Epic Initiative"
+  EpicTier: "Epic Tier"
 };
 
 interface SettingsPaneProps {
@@ -67,10 +69,13 @@ export function SettingsPane(props: SettingsPaneProps) {
       return (
         <OptionsSettings
           goToEpicInitiativeSettings={() =>
-            setCurrentTab(SettingsTab.EpicInitiative)
+            setCurrentTab(SettingsTab.EpicTier)
           }
         />
       );
+    }
+    if (currentTab == SettingsTab.Content) {
+      return <ContentSettings />;
     }
     if (currentTab == SettingsTab.Account) {
       return (
@@ -80,7 +85,7 @@ export function SettingsPane(props: SettingsPaneProps) {
         />
       );
     }
-    if (currentTab == SettingsTab.EpicInitiative) {
+    if (currentTab == SettingsTab.EpicTier) {
       return <EpicInitiativeSettings />;
     }
   };

@@ -23,7 +23,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
   listingGroups: ListingGroup[];
   addNewText?: string;
   addNewItem: () => void;
-  renderPreview: (item: T) => JSX.Element;
+  renderPreview: (item: T, isLoading: boolean) => JSX.Element;
   showPreloadInfo?: boolean;
   showSortControl?: boolean;
   launchQuickAddPrompt?: () => void;
@@ -35,6 +35,7 @@ interface State<T extends Listable> {
   listingGroupIndex: number;
   sortMethod: "alphabetical" | "recent";
   previewedItem: T;
+  previewLoading: boolean;
   previewIconHovered: boolean;
   previewWindowHovered: boolean;
   previewPosition: { left: number; top: number };
@@ -54,6 +55,7 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       listingGroupIndex: 0,
       sortMethod: "alphabetical",
       previewedItem: props.defaultItem,
+      previewLoading: false,
       previewIconHovered: false,
       previewWindowHovered: false,
       previewPosition: { left: 0, top: 0 }
@@ -132,12 +134,11 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
           {this.props.showPreloadInfo && (
             <li style={{ margin: 5, fontStyle: "italic" }}>
               <p style={{ flexShrink: 1 }}>
-                Improved Initiative comes pre-loaded with statblocks and spells
-                from the{" "}
+                Improved Initiative comes pre-loaded with statblocks from the{" "}
                 <a href="https://open5e.com/" target="_blank">
                   Open5e API
                 </a>
-                . Visit the Options tab on the Settings pane to configure
+                . Visit the Content tab on the Settings pane to configure
                 preloaded content.
               </p>
             </li>
@@ -168,7 +169,10 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
             left={this.state.previewPosition.left}
             top={this.state.previewPosition.top}
           >
-            {this.props.renderPreview(this.state.previewedItem)}
+            {this.props.renderPreview(
+              this.state.previewedItem,
+              this.state.previewLoading
+            )}
           </Overlay>
         )}
       </div>
@@ -227,12 +231,15 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
 
     const outline: T = {
       ...this.props.defaultItem,
-      Name: l.Meta().Name
+      Name: l.Meta().Name,
+      Source: l.Meta().FilterDimensions.Source,
+      Type: l.Meta().FilterDimensions.Type
     };
 
     this.setState({
       previewedItem: outline,
       previewIconHovered: true,
+      previewLoading: true,
       previewPosition
     });
 
@@ -243,7 +250,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
       };
 
       this.setState({
-        previewedItem: item
+        previewedItem: item,
+        previewLoading: false
       });
     });
   };

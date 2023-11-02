@@ -26,7 +26,7 @@ export default async function (
   }
 
   const cookie = {
-    maxAge: moment.duration(1, "weeks").asMilliseconds()
+    maxAge: moment.duration(4, "weeks").asMilliseconds()
   };
 
   const session = expressSession({

@@ -62,7 +62,7 @@ export class EncounterFlow {
     this.encounter.TemporaryBackgroundImageUrl(null);
   };
 
-  public NextTurn = (promptRerollInitiative: () => boolean) => {
+  public NextTurn = async (promptRerollInitiative: () => Promise<void>) => {
     const activeCombatant = this.ActiveCombatant();
 
     this.durationTags
@@ -79,7 +79,7 @@ export class EncounterFlow {
       nextIndex = 0;
       const autoRerollOption = CurrentSettings().Rules.AutoRerollInitiative;
       if (autoRerollOption == AutoRerollInitiativeOption.Prompt) {
-        promptRerollInitiative();
+        await promptRerollInitiative();
       }
       if (autoRerollOption == AutoRerollInitiativeOption.Automatic) {
         this.rerollInitiativeWithoutPrompt();

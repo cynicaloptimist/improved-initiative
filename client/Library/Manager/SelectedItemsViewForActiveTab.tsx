@@ -10,7 +10,7 @@ import { SpellDetails } from "../Components/SpellDetails";
 import { GetDefaultForLibrary, LibraryType } from "../Libraries";
 import { Listing } from "../Listing";
 import { SelectedItemsView } from "./SelectedItemsView";
-import { Selection } from "./SelectionContext";
+import { Selection } from "./useSelection";
 
 export function SelectedItemsViewForActiveTab({
   selection,

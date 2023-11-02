@@ -19,7 +19,8 @@ import { ActiveLibrary } from "./ActiveLibrary";
 import { EditorView } from "./EditorView";
 import { LibraryManagerRow } from "./LibraryManagerRow";
 import { SelectedItemsManager } from "./SelectedItemsManager";
-import { Selection, SelectionContext, useSelection } from "./SelectionContext";
+import { Selection, useSelection } from "./useSelection";
+import { ListingSelectionContext } from "./ListingSelectionContext";
 
 export type LibraryManagerProps = {
   librariesCommander: LibrariesCommander;
@@ -52,7 +53,7 @@ export function LibraryManager(props: LibraryManagerProps): JSX.Element {
   );
 
   return (
-    <SelectionContext.Provider value={selection}>
+    <ListingSelectionContext.Provider value={selection}>
       <div className="c-library-manager">
         <div className="left-column" style={{ width: leftColumnWidth }}>
           <PaneHeader
@@ -112,7 +113,7 @@ export function LibraryManager(props: LibraryManagerProps): JSX.Element {
           )}
         </div>
       </div>
-    </SelectionContext.Provider>
+    </ListingSelectionContext.Provider>
   );
 }
 
@@ -121,6 +122,7 @@ function LibraryManagerListings(props: {
   setEditorTarget: (item: Listing<any>) => void;
 }) {
   const [filter, setFilter] = React.useState("");
+  const [renderedListingCount, setRenderedListingCount] = useState(100);
 
   const filterCache = React.useRef(new FilterCache(props.listings)).current;
   filterCache.UpdateIfItemsChanged(props.listings);
@@ -133,12 +135,35 @@ function LibraryManagerListings(props: {
     filteredListings
   );
 
+  const truncatedListingTree = listingTree.slice(0, renderedListingCount);
+
   return (
     <div className="library">
       <div className="search-controls">
         <LibraryFilter applyFilterFn={setFilter} />
       </div>
-      <ul className="listings zebra-stripe">{listingTree}</ul>
+      <ul
+        className="listings zebra-stripe"
+        onScroll={scrollEvent =>
+          handleListingsScroll(scrollEvent, () =>
+            setRenderedListingCount(renderedListingCount + 100)
+          )
+        }
+      >
+        {truncatedListingTree}
+      </ul>
     </div>
   );
+}
+
+function handleListingsScroll(
+  scrollEvent: React.UIEvent<HTMLUListElement>,
+  increaseListingsLimit: () => void
+) {
+  const target = scrollEvent.target as HTMLUListElement;
+  const isScrolledToBottom =
+    target.offsetHeight + target.scrollTop > target.scrollHeight - 10;
+  if (isScrolledToBottom) {
+    increaseListingsLimit();
+  }
 }

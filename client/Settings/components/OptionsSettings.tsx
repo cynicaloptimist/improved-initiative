@@ -158,16 +158,6 @@ export function OptionsSettings(props: {
           Epic Initiative
         </a>
       </p>
-      <h3>Preloaded Content</h3>
-      <Toggle fieldName="PreloadedContent.BasicRules">
-        Basic Rules (OGL) Creatures
-      </Toggle>
-      <Toggle fieldName="PreloadedContent.Open5eContent">
-        Additional Open5e OGL Creatures
-        <Info>
-          Includes Tome of Beasts, Creature Codex, and Monstrous Menagerie
-        </Info>
-      </Toggle>
     </div>
   );
 }
