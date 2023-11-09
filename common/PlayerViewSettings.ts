@@ -17,6 +17,7 @@ export interface PlayerViewSettings {
   DisplayTurnTimer: boolean;
   DisplayPortraits: boolean;
   DisplayCombatantColor: boolean;
+  DisplayReactionTracker: boolean;
   SplashPortraits: boolean;
   CustomCSS: string;
   CustomStyles: PlayerViewCustomStyles;

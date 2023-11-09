@@ -9,6 +9,8 @@ import {
 import { Info } from "../../Components/Info";
 import { Dropdown } from "./Dropdown";
 import { Toggle } from "./Toggle";
+import { DisplaysToggle } from "./DisplaysToggle";
+import { DisplaysToggleHeader } from "./DisplaysToggle";
 
 export function OptionsSettings(props: {
   goToEpicInitiativeSettings: () => void;
@@ -63,16 +65,26 @@ export function OptionsSettings(props: {
         Automatically reroll initiative each round's end
       </Dropdown>
 
+      <DisplaysToggleHeader />
+      <DisplaysToggle fieldName="DisplayRoundCounter">
+        Round Counter
+      </DisplaysToggle>
+      <DisplaysToggle fieldName="DisplayTurnTimer">Turn Timer</DisplaysToggle>
+      <DisplaysToggle fieldName="DisplayCombatantColor">
+        Combatant Colors
+        <Info>Enables a widget to assign a color to each combatant.</Info>
+      </DisplaysToggle>
+      <DisplaysToggle fieldName="DisplayReactionTracker">
+        Reaction Tracker
+      </DisplaysToggle>
+      <DisplaysToggle
+        fieldName="DisplayPortraits"
+        requireEpicTierForPlayerViewToggle
+      >
+        Portraits
+      </DisplaysToggle>
+
       <h3>Encounter View</h3>
-      <Toggle fieldName="TrackerView.DisplayPortraits">
-        Display Character Portraits
-      </Toggle>
-      <Toggle fieldName="TrackerView.DisplayRoundCounter">
-        Display Round Counter
-      </Toggle>
-      <Toggle fieldName="TrackerView.DisplayTurnTimer">
-        Display Turn Timer
-      </Toggle>
       <Toggle fieldName="TrackerView.DisplayDifficulty">
         Display Encounter Difficulty
         <Info>
@@ -81,13 +93,6 @@ export function OptionsSettings(props: {
           in the combat, or assumes 4 characters if none are present. All
           Creatures and Non Player Characters are counted as enemies.
         </Info>
-      </Toggle>
-      <Toggle fieldName="TrackerView.DisplayCombatantColor">
-        Display Combatant Colors
-        <Info>Enables a widget to assign a color to each combatant.</Info>
-      </Toggle>
-      <Toggle fieldName="TrackerView.DisplayReactionTracker">
-        Display Reaction Tracker
       </Toggle>
       <Toggle fieldName="TrackerView.DisplayHPBar">
         Display HP Bar of Active or Selected Character
@@ -108,15 +113,6 @@ export function OptionsSettings(props: {
       </Dropdown>
 
       <h3>Player View</h3>
-      <Toggle fieldName="PlayerView.DisplayRoundCounter">
-        Display Round Counter
-      </Toggle>
-      <Toggle fieldName="PlayerView.DisplayTurnTimer">
-        Display Turn Timer
-      </Toggle>
-      <Toggle fieldName="PlayerView.DisplayCombatantColor">
-        Display Combatant Colors
-      </Toggle>
       <Dropdown
         fieldName="PlayerView.MonsterHPVerbosity"
         options={HpVerbosityOption}
@@ -153,7 +149,7 @@ export function OptionsSettings(props: {
         </Info>
       </Toggle>
       <p>
-        {"Additional player view options available with "}
+        {"Additional Player View customization options available with "}
         <a href="#" onClick={props.goToEpicInitiativeSettings}>
           Epic Initiative
         </a>
