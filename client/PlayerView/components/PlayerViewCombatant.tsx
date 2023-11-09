@@ -7,6 +7,7 @@ interface PlayerViewCombatantProps {
   isActive: boolean;
   portraitColumnVisible: boolean;
   acColumnVisible: boolean;
+  reactionTrackerVisible: boolean;
   colorVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
@@ -25,6 +26,9 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
     }
     const hasColor =
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
+    const someClassname =
+      "combatant__reaction-icon fas " +
+      (this.props.combatant.ReactionsSpent ? "fa-minus" : "fa-reply");
     return (
       <li className={classNames.join(" ")}>
         <div className="combatant__initiative">
@@ -62,6 +66,9 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
             dangerouslySetInnerHTML={{ __html: this.props.combatant.HPDisplay }}
           />
         </div>
+        {this.props.reactionTrackerVisible && (
+          <span className={someClassname} />
+        )}
         {this.props.acColumnVisible && (
           <div className="combatant__ac">{this.props.combatant.AC || ""}</div>
         )}

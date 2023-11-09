@@ -124,6 +124,9 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
               acColumnVisible={acColumnVisible}
+              reactionTrackerVisible={
+                this.props.settings.DisplayReactionTracker
+              }
               colorVisible={this.props.settings.DisplayCombatantColor}
               isActive={
                 this.props.encounterState.ActiveCombatantId == combatant.Id

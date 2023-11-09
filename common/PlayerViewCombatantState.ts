@@ -11,4 +11,5 @@ export interface PlayerViewCombatantState {
   ImageURL: string;
   AC?: number;
   Color?: string;
+  ReactionsSpent?: number;
 }
