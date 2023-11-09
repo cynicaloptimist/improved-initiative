@@ -164,10 +164,8 @@ function getUserAccountLevel(
     .split(",")
     .map(s => s.trim());
 
-  const hasEpicInitiativeSpecialGrant = _.includes(
-    { ...thanks.map(t => t.PatreonId), ...additionalEpicUserIds },
-    userId
-  );
+  const grantIds = [...thanks.map(t => t.PatreonId), ...additionalEpicUserIds];
+  const hasEpicInitiativeSpecialGrant = _.includes(grantIds, userId);
   const hasEpicInitiativeReward =
     _.intersection(rewardIds, tiersWithEpicEntitled).length > 0;
 
