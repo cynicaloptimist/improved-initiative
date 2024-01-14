@@ -116,7 +116,8 @@
     flex: 1 1;
   }
 
-  .options p, .content p {
+  .options p,
+  .content p {
     margin: @medium-spacer;
   }
 
@@ -163,6 +164,34 @@
       padding: @small-spacer;
       flex-shrink: 1;
     }
+  }
+
+  .c-display-toggles {
+    .full-width-row();
+  }
+
+  .c-display-toggles__label,
+  .c-display-toggles__headertext {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .c-display-toggles__toggle {
+    align-items: center;
+    border-left: 1px solid;
+  }
+
+  .c-display-toggles--header__label {
+    font-weight: bold;
+    text-align: center;
+    align-self: baseline;
+  }
+
+  .c-display-toggles__toggle,
+  .c-display-toggles--header__label {
+    margin: @small-spacer;
+    width: 80px;
   }
 
   .c-input-with-label {

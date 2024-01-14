@@ -34,6 +34,22 @@
     position: static;
   }
 
+  .fa-stack {
+    position: relative;
+    font-size: 50%;
+  }
+
+  .fa-stack * {
+    position: absolute;
+  }
+  
+  .reaction-tracker {
+    align-self: center;
+  }
+  .reaction-tracker__shadow {
+    color: @shadow;
+  }
+
   @media (max-width: @medium) {
     &,
     & tbody {

@@ -1,12 +1,14 @@
 import * as React from "react";
 
 import { PlayerViewCombatantState } from "../../../common/PlayerViewCombatantState";
+import { SpentReactionIndicator } from "./SpentReactionIndicator";
 
 interface PlayerViewCombatantProps {
   combatant: PlayerViewCombatantState;
   isActive: boolean;
   portraitColumnVisible: boolean;
   acColumnVisible: boolean;
+  reactionTrackerVisible: boolean;
   colorVisible: boolean;
   areSuggestionsAllowed: boolean;
   showPortrait: (state: PlayerViewCombatantState) => void;
@@ -85,6 +87,8 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
             </div>
           )}
         </div>
+        {this.props.reactionTrackerVisible &&
+          this.props.combatant.ReactionsSpent > 0 && <SpentReactionIndicator />}
       </li>
     );
   }

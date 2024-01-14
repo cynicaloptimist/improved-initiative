@@ -78,6 +78,7 @@ export function getDefaultSettings(): Settings {
       DisplayTurnTimer: false,
       DisplayPortraits: false,
       DisplayCombatantColor: false,
+      DisplayReactionTracker: false,
       SplashPortraits: false,
       CustomCSS: "",
       CustomStyles: {
