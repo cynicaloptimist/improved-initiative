@@ -114,17 +114,20 @@ export namespace Store {
   }
 
   async function importList(listName: string, importSource: any) {
-    const listings = Object.keys(importSource).filter(k =>
+    const listingFullKeys = Object.keys(importSource).filter(k =>
       k.startsWith(listName + ".")
     );
-    const savePromises = listings.map(async key => {
-      const listing = importSource[key];
+    const savePromises = listingFullKeys.map(async fullKey => {
+      const listing = importSource[fullKey];
       if (!listing) {
-        console.warn(`Couldn't import ${key} from JSON`);
+        console.warn(`Couldn't import ${fullKey} from JSON`);
         return;
       } else {
         listing.LastUpdateMs = moment.now();
-        return await Save(listName, key, listing);
+        const [, key] = fullKey.split(".", 2);
+        if (key) {
+          await Save(listName, key, listing);
+        }
       }
     });
 
