@@ -18,48 +18,46 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
   const combatantCountsByName = useSubscription(
     tracker.Encounter.CombatantCountsByName
   );
-  const combatantViewModels = useSubscription(tracker.CombatantViewModels);
-
-  const combatants = useSubscription(tracker.Encounter.Combatants);
 
   const selectCombatantById = useCallback(
     (combatantId: string, appendSelection: boolean) => {
-      const selectedViewModel = combatantViewModels.find(
-        c => c.Combatant.Id == combatantId
-      );
+      const selectedViewModel = tracker
+        .CombatantViewModels()
+        .find(c => c.Combatant.Id == combatantId);
 
       if (selectedViewModel !== undefined) {
         tracker.CombatantCommander.Select(selectedViewModel, appendSelection);
       }
     },
-    [tracker, combatantViewModels]
+    [tracker]
   );
 
   const removeCombatantTag = useCallback(
     (combatantId: string, tagState: TagState) => {
-      const combatantViewModel = combatantViewModels.find(
-        c => c.Combatant.Id == combatantId
-      );
+      const combatantViewModel = tracker
+        .CombatantViewModels()
+        .find(c => c.Combatant.Id == combatantId);
       combatantViewModel?.RemoveTagByState(tagState);
     },
-    [tracker, combatantViewModels]
+    [tracker]
   );
 
   const applyDamageToCombatant = useCallback(
     (combatantId: string) => {
-      const combatantViewModel = combatantViewModels.find(
-        c => c.Combatant.Id == combatantId
-      );
+      const combatantViewModel = tracker
+        .CombatantViewModels()
+        .find(c => c.Combatant.Id == combatantId);
 
       if (combatantViewModel !== undefined) {
         tracker.CombatantCommander.ApplyDamageTargeted(combatantViewModel);
       }
     },
-    [tracker, combatantViewModels]
+    [tracker]
   );
 
   const moveCombatantFromDrag = useCallback(
     (draggedCombatantId: string, droppedOntoCombatantId: string | null) => {
+      const combatants = tracker.Encounter.Combatants();
       if (!combatants) {
         return;
       }
@@ -70,25 +68,27 @@ export function InitiativeListHost(props: { tracker: TrackerViewModel }) {
           : combatants.findIndex(c => c.Id == droppedOntoCombatantId);
       tracker.Encounter.MoveCombatant(draggedCombatant, droppedCombatantIndex);
     },
-    [tracker, combatants]
+    [tracker]
   );
 
   const setCombatantColor = useCallback(
     (combatantId: string, color: string) => {
-      const combatant = combatants?.find(c => c.Id == combatantId);
+      const combatant = tracker.Encounter.Combatants().find(
+        c => c.Id == combatantId
+      );
       combatant.Color(color);
     },
-    [tracker, combatants]
+    [tracker]
   );
 
   const toggleCombatantSpentReaction = useCallback(
     (combatantId: string) => {
-      const combatantViewModel = combatantViewModels.find(
-        c => c.Combatant.Id == combatantId
-      );
+      const combatantViewModel = tracker
+        .CombatantViewModels()
+        .find(c => c.Combatant.Id == combatantId);
       combatantViewModel.ToggleSpentReaction();
     },
-    [combatantViewModels]
+    [tracker]
   );
 
   return (
