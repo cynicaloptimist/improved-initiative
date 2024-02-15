@@ -12,13 +12,13 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 1px @primary-grey solid;
+  border: 1px var(--primary-grey) solid;
   border-radius: 3px;
   vertical-align: middle;
   margin: @extra-small-spacer @medium-spacer @medium-spacer @extra-small-spacer;
 
   &:hover {
-    border-color: @hover-grey;
+    border-color: var(--hover-grey);
   }
 }
 
@@ -27,14 +27,14 @@
     font-weight: bold;
   }
   .c-color-block {
-    border: 2px @primary-red solid;
+    border: 2px var(--primary-red) solid;
   }
 }
 
 .c-styles-chooser-colors {
   flex-flow: row wrap;
   padding: @medium-spacer 0;
-  border-bottom: 1px solid @accent-white;
+  border-bottom: 1px solid var(--accent-white);
 }
 
 .c-styles-chooser-slot-chooser {

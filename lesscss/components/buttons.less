@@ -60,7 +60,7 @@
   .far();
 
   &:hover {
-    color: @primary-red;
+    color: var(--primary-red);
   }
 }
 
@@ -69,7 +69,7 @@
   .fas();
 
   &:hover {
-    color: @primary-red;
+    color: var(--primary-red);
   }
 }
 
@@ -83,14 +83,14 @@
   .fa-clickable();
   padding: @medium-spacer;
   border-radius: @border-radius;
-  border: 1px solid @primary-white;
+  border: 1px solid var(--primary-white);
 }
 
 .button() {
-  .colors(@button-text, @primary-white, @primary-black);
+  .colors(var(--button-text), var(--primary-white), var(--primary-black));
 
   &:hover {
-    .colors(@primary-red, @hover-white, @primary-red);
+    .colors(var(--primary-red), var(--hover-white), var(--primary-red));
   }
   cursor: pointer;
   display: inline-block;
@@ -116,10 +116,10 @@
 .commands-combatant,
 .commands-library-manager {
   .c-button {
-    .colors(@primary-white, @primary-grey, transparent);
+    .colors(var(--primary-white), var(--primary-grey), transparent);
 
     &:hover {
-      background-color: @hover-grey;
+      background-color: var(--hover-grey);
     }
   }
 }

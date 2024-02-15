@@ -6,9 +6,9 @@
   }
 
   .disabled {
-    color: @disabled-black;
+    color: var(--disabled-black);
     &:hover {
-      background-color: @button-face;
+      background-color: var(--button-face);
     }
   }
   .start-encounter .button {
@@ -41,7 +41,7 @@
     &:after {
       content: "";
       display: block;
-      background: @primary-red center;
+      background: var(--primary-red) center;
       background-size: 100% 100%;
       height: 6px;
       position: absolute;
@@ -86,7 +86,7 @@
         h4 {
           line-height: 1;
           margin: @medium-spacer 0 0 0;
-          color: @primary-black;
+          color: var(--primary-black);
         }
       }
     }
@@ -106,10 +106,10 @@
 
       .features {
         flex-direction: row;
-        background-color: @zebra-white;
+        background-color: var(--zebra-white);
         margin-bottom: @larger-spacer;
         padding: @large-spacer;
-        border: 1px solid @accent-white;
+        border: 1px solid var(--accent-white);
 
         .features-column {
           flex-direction: column;
@@ -143,13 +143,13 @@
 
         .start-encounter {
           .button {
-            .colors(@primary-white, @primary-red, @primary-red);
+            .colors(var(--primary-white), var(--primary-red), var(--primary-red));
             width: 100%;
             font-size: @font-size-h3;
             text-align: center;
 
             &:hover {
-              background-color: @accent-red;
+              background-color: var(--accent-red);
             }
           }
         }
@@ -160,7 +160,7 @@
           width: 100%;
           position: relative;
           overflow: hidden;
-          color: @hover-grey;
+          color: var(--hover-grey);
           text-align: center;
           text-transform: uppercase;
 
@@ -170,7 +170,7 @@
             top: 51%;
             overflow: hidden;
             height: 1px;
-            background-color: @hover-grey;
+            background-color: var(--hover-grey);
             content: "\a0";
             position: absolute;
           }
@@ -196,12 +196,12 @@
           }
 
           .button {
-            .colors(@primary-white, @primary-red, @primary-red);
+            .colors(var(--primary-white), var(--primary-red), var(--primary-red));
             cursor: pointer;
             padding: 1rem;
 
             &:hover {
-              background-color: @accent-red;
+              background-color: var(--accent-red);
             }
           }
         }
@@ -233,17 +233,17 @@
     a:hover,
     a:active,
     a:visited {
-      color: @primary-red;
+      color: var(--primary-red);
     }
 
     .support {
     }
     .patreon-button {
-      .colors(@primary-white, @primary-red, @primary-red);
+      .colors(var(--primary-white), var(--primary-red), var(--primary-red));
       padding: @large-spacer;
 
       &:hover {
-        background-color: @accent-red;
+        background-color: var(--accent-red);
       }
     }
   }

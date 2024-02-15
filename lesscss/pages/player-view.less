@@ -21,7 +21,7 @@
   }
 
   .combatant.active {
-    border-left: @active-combatant-indicator-width solid @primary-red;
+    border-left: @active-combatant-indicator-width solid var(--primary-red);
   }
 
   .combatant--header {
@@ -33,7 +33,7 @@
     flex-basis: 10%;
     align-items: center;
     &.show-hover:hover {
-      background-color: @hover-red;
+      background-color: var(--hover-red);
     }
   }
 
@@ -57,7 +57,7 @@
     flex-grow: 1;
 
     .tag {
-      .colors(@primary-white, @primary-red);
+      .colors(var(--primary-white), var(--primary-red));
       margin-right: @large-spacer;
       padding: @medium-spacer;
       text-transform: uppercase;
@@ -73,7 +73,7 @@
     flex-direction: row;
     justify-content: flex-end;
     margin: @medium-spacer;
-    color: @primary-white;
+    color: var(--primary-white);
     > span {
       padding-right: @medium-spacer;
     }
@@ -109,7 +109,7 @@
       justify-content: space-between;
     }
     .damage-suggestion__tip {
-      color: lighten(@primary-black, 50);
+      color: var(--light-grey);
       font-size: smaller;
     }
   }
@@ -154,7 +154,7 @@
       padding: @medium-spacer;
 
       &:nth-child(2n-1) {
-        background-color: @zebra-white;
+        background-color: var(--zebra-white);
       }
 
       span {

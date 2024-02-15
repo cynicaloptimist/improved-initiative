@@ -5,12 +5,12 @@
 }
 
 :focus {
-  outline: @primary-red auto 5px;
+  outline: var(--primary-red) auto 5px;
 }
 
 * {
-  border-color: @shadow;
-  box-shadow: @shadow;
+  border-color: var(--shadow);
+  box-shadow: var(--shadow);
   font-family: @font-family-body;
   position: relative;
   margin: 0;
@@ -21,7 +21,7 @@
 
 body,
 html {
-  color: @primary-black;
+  color: var(--primary-black);
   cursor: default;
   display: flex;
   flex-direction: column;

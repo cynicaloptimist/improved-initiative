@@ -1,64 +1,65 @@
-@primary-green: #00643c;
-@hover-green: lighten(@primary-green, 20);
-@active-green: lighten(@primary-green, 15);
-@accent-green: darken(@primary-green, 5);
+:root {
+  --primary-green: #00643c;
+  --hover-green: #339966;
+  --active-green: #2d9e62;
+  --accent-green: #005937;
 
-@primary-white: #fff;
-@input-white: @primary-white;
-@hover-white: darken(@primary-white, 10);
+  --primary-white: #fff;
+  --input-white: var(--primary-white);
+  --hover-white: #e6e6e6;
 
-@primary-white: white;
-@zebra-white: #f5f1eb;
-@accent-white: darken(@zebra-white, 20);
-@active-white: darken(@primary-white, 10);
-@selected-light: darken(@primary-white, 20);
+  --zebra-white: #f5f1eb;
+  --accent-white: #c2b7a5;
+  --active-white: #e6e6e6;
+  --selected-light: #cccccc;
 
-@primary-red: #822000;
-@hover-red: lighten(@primary-red, 20%);
-@active-red: lighten(@primary-red, 15);
-@accent-red: darken(@primary-red, 5);
+  --primary-red: #822000;
+  --hover-red: #a62d00;
+  --active-red: #993300;
+  --accent-red: #731a00;
 
-@primary-black: #0a0908;
-@hover-black: lighten(@primary-black, 10%);
-@disabled-black: lighten(@primary-black, 20);
+  --primary-black: #0a0908;
+  --hover-black: #1a1917;
+  --disabled-black: #2b2a28;
 
-@primary-grey: #212121;
-@hover-grey: lighten(@primary-grey, 15);
-@light-grey: lighten(@primary-grey, 40);
+  --primary-grey: #212121;
+  --hover-grey: #424242;
+  --light-grey: #9e9e9e;
 
-@button-face: @primary-red;
-@button-face-green: lighten(@primary-green, 15);
-@button-face-disabled: darken(@primary-white, 15);
-@button-text: @primary-black;
-@shadow: #999;
+  --button-face: var(--primary-red);
+  --button-face-green: #2d9e62;
+  --button-face-disabled: #b3b3b3;
+  --button-text: var(--primary-black);
+  --shadow: #999;
 
-@modal-background-color: rgba(0, 0, 0, 0.7);
+  --modal-background-color: rgba(0, 0, 0, 0.7);
+}
 
 // TODO: move all rules to associated .less module.
 
-.colors(@text, @background, @border: @shadow) {
+.colors(@text, @background, @border: var(--shadow)) {
   color: @text;
   background-color: @background;
   border-color: @border;
 }
 
 .green-button() {
-  .colors(@primary-white, @button-face-green, @shadow);
+  .colors(var(--primary-white), var(--button-face-green), var(--shadow));
 
   &:hover {
-    color: @primary-white;
-    background-color: @hover-green;
+    color: var(--primary-white);
+    background-color: var(--hover-green);
   }
 }
 
 .c-toolbar,
 .settings,
 .tutorial {
-  .colors(@primary-black, @primary-white);
+  .colors(var(--primary-black), var(--primary-white));
 }
 
 .c-toolbar {
-  .colors(@primary-white, @primary-grey);
+  .colors(var(--primary-white), var(--primary-grey));
 }
 
 .tutorial .next,
@@ -68,31 +69,31 @@ button.p-privacy-policy-optin {
 }
 
 .combat-footer {
-  background-color: @primary-grey;
+  background-color: var(--primary-grey);
   a {
-    color: @primary-white;
+    color: var(--primary-white);
   }
 }
 
 .combatant-portrait-caption {
-  color: @primary-white;
+  color: var(--primary-white);
 }
 
 input[type="checkbox"] {
-  color: @primary-white;
+  color: var(--primary-white);
 }
 
 .bordered {
-  border-color: @accent-green;
+  border-color: var(--accent-green);
 }
 
 .c-button.c-button--disabled,
 .c-button.c-button--disabled:hover {
-  color: @disabled-black;
-  background-color: @button-face-disabled;
-  border-color: @disabled-black;
+  color: var(--disabled-black);
+  background-color: var(--button-face-disabled);
+  border-color: var(--disabled-black);
 }
 
 div.awesomplete li {
-  color: @primary-black;
+  color: var(--primary-black);
 }

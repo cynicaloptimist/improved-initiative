@@ -4,20 +4,20 @@
   margin: @medium-spacer 0 0 0;
 
   .c-tab {
-    background-color: @active-white;
+    background-color: var(--active-white);
     transition: background-color @transition-hover;
     &:hover {
-      background-color: @selected-light;
+      background-color: var(--selected-light);
     }
     &.selected,
     &.s-selected {
-      background-color: @primary-red;
-      color: @primary-white;
+      background-color: var(--primary-red);
+      color: var(--primary-white);
       min-width: auto;
       overflow-x: unset;
 
       &:hover {
-        background-color: @accent-red;
+        background-color: var(--accent-red);
       }
     }
 

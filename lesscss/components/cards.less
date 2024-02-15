@@ -1,8 +1,8 @@
 .card-bg (@margin, @padding) {
-  .colors(@primary-black, @primary-white);
+  .colors(var(--primary-black), var(--primary-white));
   margin: @margin;
   padding: @padding;
-  background-color: @primary-white;
+  background-color: var(--primary-white);
   border-radius: 0;
   box-shadow:
     0 0 2px rgba(0, 0, 0, 0.25),
@@ -10,10 +10,10 @@
 }
 
 .card-bg-2 (@margin, @padding) {
-  .colors(@primary-black, @primary-white);
+  .colors(var(--primary-black), var(--primary-white));
   margin: @margin;
   padding: @padding;
-  background-color: @primary-white;
+  background-color: var(--primary-white);
   border-radius: 0;
   box-shadow:
     0 0 10px rgba(0, 0, 0, 0.25),
@@ -21,7 +21,7 @@
 }
 
 .card {
-  .colors(@primary-black, @primary-white);
+  .colors(var(--primary-black), var(--primary-white));
   margin: @medium-spacer;
   padding: @medium-spacer;
   border-width: 2px;
