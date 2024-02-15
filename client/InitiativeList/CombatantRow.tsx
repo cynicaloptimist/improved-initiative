@@ -230,13 +230,18 @@ function CombatantColorPicker(props: { combatantState: CombatantState }) {
       interactive
       appendTo={document.body}
       content={
-        <SketchPicker
-          color={props.combatantState.Color || ""}
-          disableAlpha
-          onChangeComplete={color =>
-            commandContext.SetCombatantColor(props.combatantState.Id, color.hex)
-          }
-        />
+        <div onClick={e => e.stopPropagation()}>
+          <SketchPicker
+            color={props.combatantState.Color || ""}
+            disableAlpha
+            onChangeComplete={color =>
+              commandContext.SetCombatantColor(
+                props.combatantState.Id,
+                color.hex
+              )
+            }
+          />
+        </div>
       }
     >
       {hasColorSet ? (
