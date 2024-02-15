@@ -1,8 +1,6 @@
 :root {
   --selection-green: #00643c;
-  --hover-green: #339966;
   --active-green: #2d9e62;
-  --accent-green: #005937;
 
   --primary-white: #fff;
   --input-white: var(--primary-white);
@@ -10,8 +8,8 @@
 
   --zebra-white: #f5f1eb;
   --accent-white: #c2b7a5;
-  --active-white: #e6e6e6;
-  --selected-light: #cccccc;
+  --tab-face-white: #e6e6e6;
+  --tab-face-selected-white: #cccccc;
 
   --primary-red: #822000;
   --hover-red: #a62d00;
@@ -27,6 +25,7 @@
 
   --button-face: var(--primary-red);
   --button-face-green: var(--active-green);
+  --button-face-hover-green: #339966;
   --button-face-disabled: #b3b3b3;
   --button-text: var(--primary-black);
   --shadow: #999;
@@ -47,7 +46,7 @@
 
   &:hover {
     color: var(--primary-white);
-    background-color: var(--hover-green);
+    background-color: var(--button-face-hover-green);
   }
 }
 
