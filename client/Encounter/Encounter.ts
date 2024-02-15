@@ -1,6 +1,7 @@
 import * as ko from "knockout";
 import { find, max, sortBy } from "lodash";
 import * as React from "react";
+import * as Sentry from "@sentry/browser";
 
 import * as _ from "lodash";
 
@@ -173,33 +174,38 @@ export class Encounter {
     statBlockJson: Record<string, unknown>,
     hideOnAdd = false,
     variantMaximumHP: VariantMaximumHP = VariantMaximumHP.DEFAULT
-  ): Combatant => {
-    const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
-    statBlock.HP = {
-      ...statBlock.HP,
-      Value: GetOrRollMaximumHP(statBlock, variantMaximumHP)
-    };
+  ): void => {
+    try {
+      const statBlock: StatBlock = { ...StatBlock.Default(), ...statBlockJson };
+      statBlock.HP = {
+        ...statBlock.HP,
+        Value: GetOrRollMaximumHP(statBlock, variantMaximumHP)
+      };
 
-    const initialState: CombatantState = {
-      Id: probablyUniqueString(),
-      StatBlock: statBlock,
-      Alias: "",
-      IndexLabel: null,
-      CurrentHP: statBlock.HP.Value,
-      CurrentNotes: AutoPopulatedNotes(statBlock),
-      TemporaryHP: 0,
-      Hidden: hideOnAdd,
-      RevealedAC: false,
-      Initiative: 0,
-      Tags: [],
-      RoundCounter: 0,
-      ElapsedSeconds: 0,
-      InterfaceVersion: process.env.VERSION || "unknown"
-    };
+      const initialState: CombatantState = {
+        Id: probablyUniqueString(),
+        StatBlock: statBlock,
+        Alias: "",
+        IndexLabel: null,
+        CurrentHP: statBlock.HP.Value,
+        CurrentNotes: AutoPopulatedNotes(statBlock),
+        TemporaryHP: 0,
+        Hidden: hideOnAdd,
+        RevealedAC: false,
+        Initiative: 0,
+        Tags: [],
+        RoundCounter: 0,
+        ElapsedSeconds: 0,
+        InterfaceVersion: process.env.VERSION || "unknown"
+      };
 
-    const combatant = this.AddCombatantFromState(initialState);
-
-    return combatant;
+      this.AddCombatantFromState(initialState);
+    } catch (e) {
+      console.warn("Couldn't add statblock: " + e);
+      console.warn(JSON.stringify(statBlockJson));
+      Sentry.captureException(e);
+      Sentry.captureMessage(JSON.stringify(statBlockJson));
+    }
   };
 
   public CanAddCombatant = (persistentCharacterId: string) => {
