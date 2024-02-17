@@ -7,9 +7,6 @@
 
   .disabled {
     color: var(--disabled-black);
-    &:hover {
-      background-color: var(--button-face);
-    }
   }
   .start-encounter .button {
     .green-button();
@@ -142,7 +139,7 @@
 
         .start-encounter {
           .button {
-            .colors(var(--primary-white), var(--primary-red), var(--primary-red));
+            .colors(var(--text-inverted), var(--primary-red), var(--primary-red));
             width: 100%;
             font-size: @font-size-h3;
             text-align: center;
@@ -195,7 +192,7 @@
           }
 
           .button {
-            .colors(var(--primary-white), var(--primary-red), var(--primary-red));
+            .colors(var(--text-inverted), var(--primary-red), var(--primary-red));
             cursor: pointer;
             padding: 1rem;
 
@@ -238,7 +235,7 @@
     .support {
     }
     .patreon-button {
-      .colors(var(--primary-white), var(--primary-red), var(--primary-red));
+      .colors(var(--text-inverted), var(--primary-red), var(--primary-red));
       padding: @large-spacer;
 
       &:hover {
