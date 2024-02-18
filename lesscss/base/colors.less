@@ -36,13 +36,13 @@
   --button-text-hover: var(--red);
 
   --selection-border: var(--dark-green);
+  --dark-border: var(--primary-grey);
 
   --button-face: var(--red);
   --button-face-green: var(--green);
   --button-face-hover-green: var(--green-2);
   --button-face-disabled: var(--white-2);
   --button-text: var(--primary-black);
-  --shadow: #999;
 
   --modal-background-color: rgba(0, 0, 0, 0.7);
 }
@@ -79,7 +79,7 @@
     --button-face-hover-green: #339966;
     --button-face-disabled: #b3b3b3;
     --button-text: var(--primary-black);
-    --shadow: #999;
+    --dark-border: #999;
 
     --modal-background-color: rgba(0, 0, 0, 0.7);
 
@@ -89,14 +89,14 @@
 
 // TODO: move all rules to associated .less module.
 
-.colors(@text, @background, @border: var(--shadow)) {
+.colors(@text, @background, @border: var(--dark-border)) {
   color: @text;
   background-color: @background;
   border-color: @border;
 }
 
 .green-button() {
-  .colors(var(--text-inverted), var(--button-face-green), var(--shadow));
+  .colors(var(--text-inverted), var(--button-face-green), var(--dark-border));
 
   &:hover {
     color: var(--text-inverted);
