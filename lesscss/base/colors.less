@@ -14,18 +14,22 @@
   --primary-black: #131b20;
   --disabled-black: #27373f;
 
-  --primary-grey: #1d2a2f;
-  --hover-grey: #364e59;
+  --grey: #1d2a2f;
+  --grey-2: #364e59;
   --light-grey: #557a8b;
 
   --khaki: #c2b7a5;
 
   --text-inverted: var(--white);
+  --text-faded: var(--light-grey);
+
   --input-bg: var(--white);
   --hover-white: var(--white-3);
+  --hover-grey: var(--grey-2);
 
   --page-background-white: var(--white-2);
   --card-background-white: var(--white);
+  --page-bg-inverted: var(--grey);
   --zebra-white: var(--white-2);
   --accent-white: var(--white-3);
   --tab-face-white: var(--white-2);
@@ -36,7 +40,36 @@
   --button-text-hover: var(--red);
 
   --selection-border: var(--dark-green);
-  --dark-border: var(--primary-grey);
+  --light-border: var(--white);
+  --dark-border: var(--grey);
+
+  --button-face: var(--red);
+  --button-face-green: var(--green);
+  --button-face-hover-green: var(--green-2);
+  --button-face-disabled: var(--white-2);
+  --button-text: var(--primary-black);
+
+  --modal-bg: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode {
+  --text-inverted: var(--white);
+  --input-bg: var(--white);
+  --hover-white: var(--white-3);
+
+  --page-background-white: var(--white-2);
+  --card-background-white: var(--text-faded);
+  --zebra-white: var(--white-2);
+  --accent-white: var(--white-3);
+  --tab-face-white: var(--white-2);
+  --tab-face-selected-white: var(--white-3);
+
+  --text-header: var(--red);
+  --hover-hp-red: var(--light-red);
+  --button-text-hover: var(--red);
+
+  --selection-border: var(--dark-green);
+  --dark-border: var(--grey);
 
   --button-face: var(--red);
   --button-face-green: var(--green);
@@ -71,7 +104,7 @@
 }
 
 .c-toolbar {
-  .colors(var(--text-inverted), var(--primary-grey));
+  .colors(var(--text-inverted), var(--grey));
 }
 
 .tutorial .next,
@@ -81,7 +114,7 @@ button.p-privacy-policy-optin {
 }
 
 .combat-footer {
-  background-color: var(--primary-grey);
+  background-color: var(--grey);
   a {
     color: var(--text-inverted);
   }
