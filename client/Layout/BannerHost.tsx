@@ -9,14 +9,21 @@ export function BannerHost(): JSX.Element {
     setBannerIndex(_.random(0, Banners.length - 1));
   }, []);
 
+  const banner = Banners[bannerIndex];
+
+  React.useEffect(() => {
+    if (banner?.href) {
+      fetch(banner.href, { mode: "no-cors" });
+    }
+  }, [bannerIndex]);
+
   if (bannerIndex === null) {
     return null;
   }
+  
   if (env.IsLoggedIn && (env.HasStorage || env.HasEpicInitiative)) {
     return null;
   }
-
-  const banner = Banners[bannerIndex];
 
   return (
     <div className="footer-banner">
