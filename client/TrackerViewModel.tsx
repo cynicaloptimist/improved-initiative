@@ -28,7 +28,8 @@ import { DefaultRules } from "./Rules/Rules";
 import {
   UpdateLegacyCommandSettingsAndSave,
   CurrentSettings,
-  SubscribeCommandsToSettingsChanges
+  SubscribeCommandsToSettingsChanges,
+  SubscribeToDarkModeChanges
 } from "./Settings/Settings";
 import { StatBlockEditorProps } from "./StatBlockEditor/StatBlockEditor";
 import { TextEnricher } from "./TextEnricher/TextEnricher";
@@ -83,6 +84,7 @@ export class TrackerViewModel {
     ];
     UpdateLegacyCommandSettingsAndSave(CurrentSettings(), allCommands);
     SubscribeCommandsToSettingsChanges(allCommands);
+    SubscribeToDarkModeChanges();
 
     this.subscribeToSocketMessages();
 
