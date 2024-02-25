@@ -54,11 +54,13 @@
 }
 
 .dark-mode {
+  --text-face: var(--white);
   --text-inverted: var(--primary-black);
   --input-bg: var(--grey);
   --hover-white: var(--grey);
 
   --page-background-white: var(--grey);
+  --page-bg-inverted: var(--light-grey);
   --card-background-white: var(--grey-2);
   --zebra-white: var(--light-grey);
   --accent-white: var(--primary-black);
@@ -101,7 +103,7 @@
 .c-toolbar,
 .settings,
 .tutorial {
-  .colors(var(--primary-black), var(--card-background-white));
+  .colors(var(--text-face), var(--card-background-white));
 }
 
 .c-toolbar {
@@ -137,5 +139,5 @@ input[type="checkbox"] {
 }
 
 div.awesomplete li {
-  color: var(--primary-black);
+  color: var(--text-face);
 }
