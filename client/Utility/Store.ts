@@ -1,6 +1,7 @@
 import * as localforage from "localforage";
 
 import * as moment from "moment";
+import * as _ from "lodash";
 
 import { Listable } from "../../common/Listable";
 import { Spell } from "../../common/Spell";
@@ -124,7 +125,7 @@ export namespace Store {
         return;
       } else {
         listing.LastUpdateMs = moment.now();
-        const [, key] = fullKey.split(".", 2);
+        const key = _.last(fullKey.split("."));
         if (key) {
           await Save(listName, key, listing);
         }
