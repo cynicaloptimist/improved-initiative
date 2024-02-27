@@ -12,7 +12,6 @@
   --white-3: #ded6ce;
 
   --primary-black: #131b20;
-  --disabled-black: #27373f;
 
   --grey: #1d2a2f;
   --grey-2: #364e59;
@@ -47,6 +46,7 @@
   --button-face: var(--red);
   --button-face-green: var(--green);
   --button-face-hover-green: var(--green-2);
+  --button-text-disabled: var(--grey-2);
   --button-face-disabled: var(--white-2);
   --button-text: var(--primary-black);
 
@@ -77,7 +77,8 @@
   --button-face: var(--red);
   --button-face-green: var(--green);
   --button-face-hover-green: var(--green-2);
-  --button-face-disabled: var(--white-2);
+  --button-text-disabled: var(--white-2);
+  --button-face-disabled: var(--grey);
   --button-text: var(--white-2);
 
   --modal-bg: rgba(0, 0, 0, 0.7);
@@ -137,9 +138,9 @@ input[type="checkbox"] {
 
 .c-button.c-button--disabled,
 .c-button.c-button--disabled:hover {
-  color: var(--disabled-black);
+  color: var(--button-text-disabled);
   background-color: var(--button-face-disabled);
-  border-color: var(--disabled-black);
+  border-color: var(--dark-border);
 }
 
 div.awesomplete li {
