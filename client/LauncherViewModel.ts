@@ -4,6 +4,7 @@ import { env } from "./Environment";
 import { LegacySynchronousLocalStore } from "./Utility/LegacySynchronousLocalStore";
 import { Metrics } from "./Utility/Metrics";
 import { TransferLocalStorageToCanonicalURLIfNeeded } from "./Utility/TransferLocalStorage";
+import { SubscribeToDarkModeChanges } from "./Settings/Settings";
 
 export class LauncherViewModel {
   constructor() {
@@ -15,6 +16,7 @@ export class LauncherViewModel {
     this.cleanAffiliateUrl();
 
     TransferLocalStorageToCanonicalURLIfNeeded(env.BaseUrl);
+    SubscribeToDarkModeChanges();
   }
 
   private cleanAffiliateUrl() {
