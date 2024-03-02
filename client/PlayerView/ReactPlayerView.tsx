@@ -72,6 +72,8 @@ export class ReactPlayerView {
 
   private renderPlayerView(newState: PlayerViewState) {
     this.playerViewState = newState;
+    document.body.classList.toggle("dark-mode", newState.settings.DarkMode);
+
     renderReact(
       <PlayerView
         encounterState={this.playerViewState.encounterState}

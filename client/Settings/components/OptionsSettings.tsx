@@ -114,6 +114,7 @@ export function OptionsSettings(props: {
       </Dropdown>
 
       <h3>Player View</h3>
+      <Toggle fieldName="PlayerView.DarkMode">Dark Mode</Toggle>
       <Dropdown
         fieldName="PlayerView.MonsterHPVerbosity"
         options={HpVerbosityOption}

@@ -76,6 +76,7 @@ export function getDefaultSettings(): Settings {
       MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
       PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,
+      DarkMode: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayPortraits: false,
