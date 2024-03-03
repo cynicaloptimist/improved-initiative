@@ -27,6 +27,7 @@
   .combatant--header {
     flex-direction: row;
     padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
+    border-left: @active-combatant-indicator-width solid transparent;
   }
 
   .combatant__hp {
@@ -67,6 +68,11 @@
 
   .combatant__header .combatant__tags {
     text-align: center;
+  }
+
+  .combatant__initiative {
+    align-items: flex-end;
+    padding-right: @medium-spacer;
   }
 
   .combat-footer {
