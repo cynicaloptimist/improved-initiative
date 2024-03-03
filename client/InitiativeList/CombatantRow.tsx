@@ -137,28 +137,31 @@ export function CombatantRow(props: CombatantRowProps) {
         </button>
       </td>
 
-      <td
-        className="combatant__hp"
-        style={getHPStyle(props)}
-        onClick={event => {
-          commandContext.ApplyDamageToCombatant(props.combatantState.Id);
-          event.stopPropagation();
-        }}
-      >
-        <span
-          className="combatant__mobile-icon fas fa-heart"
-          aria-hidden="true"
-        />
-
-        {renderHPText(props)}
-        {DisplayHPBar && (
-          <span className="combatant__hp-bar">
+      <td className="combatant__hp">
+        <div
+          className="combatant__hp-outer"
+          onClick={event => {
+            commandContext.ApplyDamageToCombatant(props.combatantState.Id);
+            event.stopPropagation();
+          }}
+        >
+          <div className="combatant__hp-inner" style={getHPStyle(props)}>
             <span
-              className="combatant__hp-bar--filled"
-              style={renderHPBarStyle(props)}
+              className="combatant__mobile-icon fas fa-heart"
+              aria-hidden="true"
             />
-          </span>
-        )}
+
+            {renderHPText(props)}
+            {DisplayHPBar && (
+              <span className="combatant__hp-bar">
+                <span
+                  className="combatant__hp-bar--filled"
+                  style={renderHPBarStyle(props)}
+                />
+              </span>
+            )}
+          </div>
+        </div>
       </td>
 
       <td className="combatant__ac">

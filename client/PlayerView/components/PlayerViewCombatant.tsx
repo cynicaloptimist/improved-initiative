@@ -53,12 +53,12 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
         </div>
         <div
           className={
-            "combatant__hp" +
+            "combatant__hp combatant__hp-outer" +
             (this.props.areSuggestionsAllowed ? " show-hover" : "")
           }
         >
           <span
-            className="current-hp"
+            className="combatant__hp-inner"
             style={{ color: this.props.combatant.HPColor }}
             onClick={() => this.props.suggestDamage(this.props.combatant)}
             dangerouslySetInnerHTML={{ __html: this.props.combatant.HPDisplay }}

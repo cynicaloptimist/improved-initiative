@@ -33,9 +33,14 @@
   .combatant__hp {
     flex-basis: 10%;
     align-items: center;
-    &.show-hover:hover {
-      background-color: var(--hover-hp-red);
-    }
+  }
+
+  .combatant__hp-outer {
+    transition: box-shadow @transition-hover;
+  }
+
+  .combatant__hp-outer.show-hover:hover {
+    box-shadow: 0 0 0 2px var(--hover-hp-red);
   }
 
   .combatant__portrait {

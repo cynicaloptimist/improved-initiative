@@ -84,10 +84,10 @@
     }
   }
 
-  .combatant .combatant__hp {
-    transition: border @transition-hover;
+  .combatant .combatant__hp-outer {
+    transition: box-shadow @transition-hover;
     &:hover {
-      border-color: unset;
+      box-shadow: 0 0 0 2px var(--hover-hp-red);
     }
   }
 }
@@ -291,7 +291,6 @@
 .combatant__hp {
   width: 5rem;
   justify-content: center;
-  border: 1px dashed transparent;
   grid-area: hp;
 
   @media (max-width: @medium) {
