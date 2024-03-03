@@ -63,9 +63,12 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
     <div className="tutorial">
       {stepIndex === 0 && <h3>Welcome to Improved Initiative!</h3>}
       <p dangerouslySetInnerHTML={{ __html: step.Message }} />
-      {step.AwaitAction === undefined && (
-        <Button onClick={advance} text="Next" additionalClassNames="next" />
-      )}
+      <Button
+        onClick={advance}
+        text="Next"
+        additionalClassNames="next"
+        disabled={step.AwaitAction !== undefined}
+      />
       <Button onClick={close} text="End Tutorial" />
     </div>
   );
