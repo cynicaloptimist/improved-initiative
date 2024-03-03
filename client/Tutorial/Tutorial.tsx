@@ -68,6 +68,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
         text="Next"
         additionalClassNames="next"
         disabled={step.AwaitAction !== undefined}
+        key={"next-button-" + stepIndex}
       />
       <Button onClick={close} text="End Tutorial" />
     </div>
