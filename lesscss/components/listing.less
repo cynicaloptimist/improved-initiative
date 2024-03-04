@@ -1,12 +1,12 @@
 .zebra-stripe > *:nth-child(2n-1) {
-  background-color: @zebra-white;
+  background-color: var(--zebra-white);
   > span:hover {
-    background-color: @hover-white;
+    background-color: var(--hover-white);
   }
 }
 
 .zebra-stripe > *:nth-child(2n) {
-  background-color: @primary-white;
+  background-color: var(--card-background-white);
 }
 
 .listings div {
@@ -14,13 +14,13 @@
 }
 
 .listings li.c-listing--selected {
-  background-color: @selected-light;
+  background-color: var(--page-bg-inverted);
 }
 
 .listings span {
   transition: background-color @transition-hover;
   &:hover {
-    background-color: @hover-white;
+    background-color: var(--hover-white);
   }
 }
 
@@ -64,7 +64,7 @@
 
 .c-folder--open {
   box-shadow: inset 0px -10px 5px -5px rgba(0, 0, 0, 0.25);
-  border-left: 1px solid @primary-black;
+  border-left: 1px solid var(--dark-border);
   padding-bottom: @medium-spacer;
   .c-folder--open {
     margin-left: @medium-spacer;

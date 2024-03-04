@@ -71,6 +71,16 @@ export function SubscribeCommandsToSettingsChanges(commands: Command[]) {
   );
 }
 
+export function SubscribeToDarkModeChanges() {
+  function applyDarkModeToBody(settings: Settings) {
+    const darkMode = settings.TrackerView.DarkMode;
+    document.body.classList.toggle("dark-mode", darkMode);
+  }
+
+  applyDarkModeToBody(CurrentSettings());
+  CurrentSettings.subscribe(applyDarkModeToBody);
+}
+
 export function UpdateLegacyCommandSettingsAndSave(
   settings: Settings,
   commands: Command[]

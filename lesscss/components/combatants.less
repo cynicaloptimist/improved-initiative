@@ -5,7 +5,7 @@
 }
 
 .combatants {
-  border: 1px solid @accent-white;
+  border: 1px solid var(--accent-white);
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
@@ -42,12 +42,12 @@
   .fa-stack * {
     position: absolute;
   }
-  
+
   .reaction-tracker {
     align-self: center;
   }
   .reaction-tracker__shadow {
-    color: @shadow;
+    color: var(--text-faded);
   }
 
   @media (max-width: @medium) {
@@ -80,14 +80,14 @@
       border-color @transition-activation;
 
     &:hover {
-      background-color: @hover-white;
+      background-color: var(--hover-white);
     }
   }
 
-  .combatant .combatant__hp {
-    transition: border @transition-hover;
+  .combatant .combatant__hp-outer {
+    transition: box-shadow @transition-hover;
     &:hover {
-      border-color: unset;
+      box-shadow: 0 0 0 2px var(--hover-hp-red);
     }
   }
 }
@@ -131,10 +131,10 @@
   padding: @medium-spacer;
   height: 2.2rem;
 
-  .colors(@primary-black, @primary-white, transparent);
+  .colors(var(--text-face), var(--card-background-white), transparent);
 
   &:nth-child(2n-1) {
-    background-color: @zebra-white;
+    background-color: var(--zebra-white);
   }
 
   &.animate {
@@ -146,15 +146,15 @@
   }
 
   &.selected {
-    box-shadow: inset 0 0 0 3px @primary-green;
+    box-shadow: inset 0 0 0 3px var(--selection-border);
   }
 
   &.drop-before {
-    border-top: 2px dashed @primary-green;
+    border-top: 2px dashed var(--selection-border);
   }
 
   &.drop-after {
-    border-bottom: 2px dashed @primary-green;
+    border-bottom: 2px dashed var(--selection-border);
   }
 
   @media (max-width: @medium) {
@@ -173,7 +173,7 @@
       content: "";
       display: block;
       grid-area: divider;
-      border-bottom: 1px solid @primary-red;
+      border-bottom: 1px solid var(--red);
     }
   }
 }
@@ -188,7 +188,7 @@
 }
 
 .combatant--header {
-  .colors(@primary-white, @primary-grey, @primary-grey);
+  .colors(var(--text-inverted), var(--page-bg-inverted), var(--page-bg-inverted));
   padding: @medium-spacer;
 
   .fa-clickable {
@@ -208,8 +208,8 @@
     opacity @transition-hover;
 
   .active & {
-    color: @primary-red;
-    border-color: @primary-red;
+    color: var(--red);
+    border-color: var(--red);
   }
 
   &:hover {
@@ -270,6 +270,7 @@
 }
 
 .combatant__selection-button {
+  color: var(--text-face);
   pointer-events: none;
   border: 0;
   background: transparent;
@@ -290,7 +291,6 @@
 .combatant__hp {
   width: 5rem;
   justify-content: center;
-  border: 1px dashed transparent;
   grid-area: hp;
 
   @media (max-width: @medium) {
@@ -409,6 +409,7 @@
 }
 
 .combatant__command-button {
+  color: var(--text-face);
   width: 25px;
   height: 25px;
   background: transparent;
@@ -429,6 +430,6 @@
   }
 
   &:hover {
-    box-shadow: 0 0 0 2px @primary-red;
+    box-shadow: 0 0 0 2px var(--red);
   }
 }

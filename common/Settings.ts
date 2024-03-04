@@ -31,6 +31,7 @@ export interface Settings {
     AutoRerollInitiative: AutoRerollInitiativeOption;
   };
   TrackerView: {
+    DarkMode: boolean;
     DisplayPortraits: boolean;
     DisplayRoundCounter: boolean;
     DisplayTurnTimer: boolean;
@@ -58,6 +59,7 @@ export function getDefaultSettings(): Settings {
       AutoRerollInitiative: AutoRerollInitiativeOption.No
     },
     TrackerView: {
+      DarkMode: false,
       DisplayPortraits: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
@@ -74,6 +76,7 @@ export function getDefaultSettings(): Settings {
       MonsterHPVerbosity: HpVerbosityOption.ColoredLabel,
       PlayerHPVerbosity: HpVerbosityOption.ActualHP,
       HideMonstersOutsideEncounter: false,
+      DarkMode: false,
       DisplayRoundCounter: false,
       DisplayTurnTimer: false,
       DisplayPortraits: false,

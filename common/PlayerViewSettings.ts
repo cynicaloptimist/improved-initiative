@@ -13,6 +13,7 @@ export interface PlayerViewSettings {
   MonsterHPVerbosity: HpVerbosityOption;
   PlayerHPVerbosity: HpVerbosityOption;
   HideMonstersOutsideEncounter: boolean;
+  DarkMode: boolean;
   DisplayRoundCounter: boolean;
   DisplayTurnTimer: boolean;
   DisplayPortraits: boolean;

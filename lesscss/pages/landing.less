@@ -6,10 +6,7 @@
   }
 
   .disabled {
-    color: @disabled-black;
-    &:hover {
-      background-color: @button-face;
-    }
+    color: var(--button-text-disabled);
   }
   .start-encounter .button {
     .green-button();
@@ -21,7 +18,6 @@
     min-height: 100vh;
     max-height: unset;
     width: 100%;
-    background: #f4efe7 url("../img/paper-bg.jpg") no-repeat top/cover;
   }
 
   .container {
@@ -41,7 +37,7 @@
     &:after {
       content: "";
       display: block;
-      background: @primary-red center;
+      background: var(--red) center;
       background-size: 100% 100%;
       height: 6px;
       position: absolute;
@@ -72,6 +68,7 @@
         img {
           width: 56px;
           height: 56px;
+          filter: var(--red-image-filter);
         }
       }
 
@@ -86,7 +83,7 @@
         h4 {
           line-height: 1;
           margin: @medium-spacer 0 0 0;
-          color: @primary-black;
+          color: var(--text-face);
         }
       }
     }
@@ -106,10 +103,10 @@
 
       .features {
         flex-direction: row;
-        background-color: @zebra-white;
+        background-color: var(--zebra-white);
         margin-bottom: @larger-spacer;
         padding: @large-spacer;
-        border: 1px solid @accent-white;
+        border: 1px solid var(--accent-white);
 
         .features-column {
           flex-direction: column;
@@ -127,6 +124,7 @@
 
           img {
             margin-bottom: @medium-spacer;
+            filter: var(--red-image-filter);
           }
 
           h4 {
@@ -143,13 +141,13 @@
 
         .start-encounter {
           .button {
-            .colors(@primary-white, @primary-red, @primary-red);
+            .colors(var(--text-inverted), var(--red), var(--red));
             width: 100%;
             font-size: @font-size-h3;
             text-align: center;
 
             &:hover {
-              background-color: @accent-red;
+              background-color: var(--dark-red);
             }
           }
         }
@@ -160,7 +158,7 @@
           width: 100%;
           position: relative;
           overflow: hidden;
-          color: @hover-grey;
+          color: var(--hover-grey);
           text-align: center;
           text-transform: uppercase;
 
@@ -170,7 +168,7 @@
             top: 51%;
             overflow: hidden;
             height: 1px;
-            background-color: @hover-grey;
+            background-color: var(--hover-grey);
             content: "\a0";
             position: absolute;
           }
@@ -196,12 +194,12 @@
           }
 
           .button {
-            .colors(@primary-white, @primary-red, @primary-red);
+            .colors(var(--text-inverted), var(--red), var(--red));
             cursor: pointer;
             padding: 1rem;
 
             &:hover {
-              background-color: @accent-red;
+              background-color: var(--dark-red);
             }
           }
         }
@@ -233,17 +231,17 @@
     a:hover,
     a:active,
     a:visited {
-      color: @primary-red;
+      color: var(--red);
     }
 
     .support {
     }
     .patreon-button {
-      .colors(@primary-white, @primary-red, @primary-red);
+      .colors(var(--text-inverted), var(--red), var(--red));
       padding: @large-spacer;
 
       &:hover {
-        background-color: @accent-red;
+        background-color: var(--dark-red);
       }
     }
   }

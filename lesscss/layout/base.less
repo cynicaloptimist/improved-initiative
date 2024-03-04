@@ -5,12 +5,12 @@
 }
 
 :focus {
-  outline: @primary-red auto 5px;
+  outline: var(--red) auto 5px;
 }
 
 * {
-  border-color: @shadow;
-  box-shadow: @shadow;
+  border-color: var(--dark-border);
+  box-shadow: var(--dark-border);
   font-family: @font-family-body;
   position: relative;
   margin: 0;
@@ -21,7 +21,7 @@
 
 body,
 html {
-  color: @primary-black;
+  color: var(--text-face);
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -29,6 +29,10 @@ html {
   max-height: 100%;
   max-width: 100%;
   touch-action: manipulation;
+}
+
+a {
+  color: var(--text-link);
 }
 
 div {

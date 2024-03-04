@@ -1,64 +1,129 @@
-@primary-green: #00643c;
-@hover-green: lighten(@primary-green, 20);
-@active-green: lighten(@primary-green, 15);
-@accent-green: darken(@primary-green, 5);
+:root {
+  --green: #3e885b;
+  --dark-green: #275439;
+  --green-2: #339966;
 
-@primary-white: #fff;
-@input-white: @primary-white;
-@hover-white: darken(@primary-white, 10);
+  --red: #802000;
+  --dark-red: #731a00;
+  --light-red: #ee4102;
+  --red-image-filter: hue-rotate(0deg);
 
-@primary-white: white;
-@zebra-white: #f5f1eb;
-@accent-white: darken(@zebra-white, 20);
-@active-white: darken(@primary-white, 10);
-@selected-light: darken(@primary-white, 20);
+  --white: #f7f5f3;
+  --white-2: #e7e0da;
+  --white-3: #ded6ce;
+  --khaki: #c2b7a5;
 
-@primary-red: #822000;
-@hover-red: lighten(@primary-red, 20%);
-@active-red: lighten(@primary-red, 15);
-@accent-red: darken(@primary-red, 5);
+  --black: #131b20;
+  --grey: #1d2a2f;
+  --grey-2: #364e59;
+  --light-grey: #708a96;
+  --lighter-grey: #8dabb9;
 
-@primary-black: #0a0908;
-@hover-black: lighten(@primary-black, 10%);
-@disabled-black: lighten(@primary-black, 20);
+  --text-face: var(--black);
+  --text-link: var(--green);
+  --text-inverted: var(--white);
+  --text-faded: var(--light-grey);
 
-@primary-grey: #212121;
-@hover-grey: lighten(@primary-grey, 15);
-@light-grey: lighten(@primary-grey, 40);
+  --input-bg: var(--white);
+  --hover-white: var(--white-3);
+  --hover-grey: var(--grey-2);
 
-@button-face: @primary-red;
-@button-face-green: lighten(@primary-green, 15);
-@button-face-disabled: darken(@primary-white, 15);
-@button-text: @primary-black;
-@shadow: #999;
+  --page-background-white: var(--white-2);
+  --card-background-white: var(--white);
+  --page-bg-inverted: var(--grey);
+  --zebra-white: var(--white-2);
+  --accent-white: var(--white-3);
+  --tab-face-white: var(--white-2);
 
-@modal-background-color: rgba(0, 0, 0, 0.7);
+  --text-header: var(--red);
+  --hover-hp-red: var(--light-red);
+  --button-text-hover: var(--red);
+
+  --selection-border: var(--dark-green);
+  --light-border: var(--white);
+  --dark-border: var(--grey);
+
+  --button-text: var(--black);
+  --button-text-disabled: var(--grey-2);
+  --button-face: var(--white);
+  --button-face-green: var(--green);
+  --button-face-hover-green: var(--green-2);
+  --button-face-disabled: var(--white-2);
+
+  --modal-bg: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode {
+  --red: #f33b16;
+  --dark-red: #ae2509;
+  --light-red: #f44b2a;
+  --red-image-filter: brightness(175%) hue-rotate(-5deg);
+
+  --text-face: var(--white-2);
+  --text-inverted: var(--black);
+  --text-faded: var(--khaki);
+  --text-link: var(--green-2);
+  --input-bg: var(--grey);
+  --hover-white: var(--black);
+  --hover-grey: var(--lighter-grey);
+
+  --page-background-white: var(--grey);
+  --card-background-white: var(--grey-2);
+  --page-bg-inverted: var(--light-grey);
+  --zebra-white: var(--grey);
+  --accent-white: var(--black);
+  --tab-face-white: var(--grey-2);
+
+  --text-header: var(--red);
+  --hover-hp-red: var(--light-red);
+  --button-text-hover: var(--red);
+
+  --selection-border: var(--green);
+  --light-border: var(--black);
+  --dark-border: var(--grey);
+
+  --button-text: var(--white-2);
+  --button-text-disabled: var(--light-grey);
+  --button-face: var(--light-grey);
+  --button-face-green: var(--green);
+  --button-face-hover-green: var(--green-2);
+  --button-face-disabled: var(--grey);
+
+  --modal-bg: rgba(0, 0, 0, 0.7);
+
+  .combatant__hp-inner {
+    filter: brightness(2.5);
+  }
+}
 
 // TODO: move all rules to associated .less module.
 
-.colors(@text, @background, @border: @shadow) {
+* {
+  scrollbar-color: var(--tab-face-white) var(--button-face);
+}
+
+.colors(@text, @background, @border: var(--dark-border)) {
   color: @text;
   background-color: @background;
   border-color: @border;
 }
 
 .green-button() {
-  .colors(@primary-white, @button-face-green, @shadow);
+  .colors(var(--text-inverted), var(--button-face-green), var(--dark-border));
 
   &:hover {
-    color: @primary-white;
-    background-color: @hover-green;
+    color: var(--text-inverted);
+    background-color: var(--button-face-hover-green);
   }
 }
 
-.c-toolbar,
 .settings,
 .tutorial {
-  .colors(@primary-black, @primary-white);
+  .colors(var(--text-face), var(--card-background-white));
 }
 
 .c-toolbar {
-  .colors(@primary-white, @primary-grey);
+  .colors(var(--text-inverted), var(--page-bg-inverted));
 }
 
 .tutorial .next,
@@ -68,31 +133,27 @@ button.p-privacy-policy-optin {
 }
 
 .combat-footer {
-  background-color: @primary-grey;
+  background-color: var(--grey);
   a {
-    color: @primary-white;
+    color: var(--text-inverted);
   }
 }
 
 .combatant-portrait-caption {
-  color: @primary-white;
+  color: var(--text-inverted);
 }
 
 input[type="checkbox"] {
-  color: @primary-white;
-}
-
-.bordered {
-  border-color: @accent-green;
+  color: var(--text-inverted);
 }
 
 .c-button.c-button--disabled,
 .c-button.c-button--disabled:hover {
-  color: @disabled-black;
-  background-color: @button-face-disabled;
-  border-color: @disabled-black;
+  color: var(--button-text-disabled);
+  background-color: var(--button-face-disabled);
+  border-color: var(--dark-border);
 }
 
 div.awesomplete li {
-  color: @primary-black;
+  color: var(--text-face);
 }

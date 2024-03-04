@@ -16,7 +16,7 @@
   select {
     padding: @medium-spacer;
     margin: @small-spacer 0;
-    border: 1px solid @primary-red;
+    border: 1px solid var(--red);
     border-radius: @border-radius;
     font-size: 1rem;
   }
@@ -135,7 +135,7 @@
   padding: @extra-small-spacer @small-spacer;
   font-size: @font-size-h4;
   font-family: @font-family-headers;
-  color: @primary-red;
+  color: var(--red);
 
   .c-add-button {
     width: 50px;
@@ -151,23 +151,15 @@
 .c-add-button {
   margin: @medium-spacer 0;
   padding: @medium-spacer;
-  border: 1px dashed @primary-red;
-  color: @primary-red;
+  border: 1px dashed var(--red);
+  color: var(--red);
   cursor: pointer;
 
   &:hover {
     border-style: solid;
-    border-color: @active-red;
-    color: @active-red;
+    border-color: var(--dark-red);
+    color: var(--dark-red);
   }
-}
-
-.bordered {
-  margin: @extra-small-spacer;
-  padding: @extra-small-spacer;
-  border-width: 2px;
-  border-style: solid;
-  border-radius: @border-radius;
 }
 
 .c-statblock-editor__abilityscores,
@@ -182,8 +174,8 @@
 .c-statblock-editor__stats {
   margin: @medium-spacer;
   padding: 1rem;
-  background-color: @primary-white;
-  border: 1px solid @accent-white;
+  background-color: var(--text-inverted);
+  border: 1px solid var(--accent-white);
 }
 
 .c-statblock-editor__json-section,
@@ -267,5 +259,5 @@
 
 .drop-zone--is-over--can-drop {
   height: 2.6rem;
-  border: 1px dashed @primary-red;
+  border: 1px dashed var(--red);
 }
