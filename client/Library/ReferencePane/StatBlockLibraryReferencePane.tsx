@@ -146,7 +146,6 @@ export class StatBlockLibraryReferencePane extends React.Component<
     };
 
   private editStatBlock = (l: Listing<StatBlock>) => {
-    l.Meta.subscribe(_ => this.forceUpdate());
     this.props.librariesCommander.EditStatBlock(l, this.props.library);
   };
 

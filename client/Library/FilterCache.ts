@@ -1,3 +1,4 @@
+import _ = require("lodash");
 import { Listable } from "../../common/Listable";
 import { Listing, ListingOrigin } from "./Listing";
 
@@ -70,10 +71,26 @@ export class FilterCache<T extends Listing<Listable>> {
 
   private filterCache: Record<string, T[]> = {};
 
-  public UpdateIfItemsChanged(newItems) {
-    if (newItems.length != this.initialLength) {
+  public UpdateIfItemsChanged(newItems: T[]) {
+    if (
+      newItems.length != this.initialLength ||
+      this.itemsHaveUpdatedMeta(newItems)
+    ) {
       this.filterCache = {};
       this.initializeItems(newItems);
+    }
+  }
+
+  private itemsHaveUpdatedMeta(newItems: T[]) {
+    for (let i = 0; i < newItems.length; i++) {
+      const newItem = newItems[i];
+      const currentItem = this.allItems[i];
+      if (!currentItem) {
+        return true;
+      }
+      if (_.isEqual(newItem.Meta(), currentItem.Meta())) {
+        return true;
+      }
     }
   }
 
