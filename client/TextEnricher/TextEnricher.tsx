@@ -77,6 +77,15 @@ export class TextEnricher {
           return <p>{replacer(children[0])}</p>;
         }
         return <p>{children}</p>;
+      },
+      li: ({ children, className, node, ...rest }) => {
+        if (isString(children)) {
+          return <li>{replacer(children)}</li>;
+        }
+        if (children.length == 1 && isString(children[0])) {
+          return <li>{replacer(children[0])}</li>;
+        }
+        return <li>{children}</li>;
       }
     };
 
