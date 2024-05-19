@@ -70,13 +70,16 @@ export class TextEnricher {
       Omit<NormalComponents, keyof SpecialComponents> & SpecialComponents
     > = {
       p: ({ children }) => {
-        if (isString(children)) {
-          return <p>{replacer(children)}</p>;
-        }
-        if (children.length == 1 && isString(children[0])) {
-          return <p>{replacer(children[0])}</p>;
-        }
-        return <p>{children}</p>;
+        return <p>{this.applyReplacer(replacer, children)}</p>;
+      },
+      li: ({ children }) => {
+        return <li>{this.applyReplacer(replacer, children)}</li>;
+      },
+      strong: ({ children }) => {
+        return <strong>{this.applyReplacer(replacer, children)}</strong>;
+      },
+      em: ({ children }) => {
+        return <em>{this.applyReplacer(replacer, children)}</em>;
       }
     };
 
@@ -84,6 +87,19 @@ export class TextEnricher {
       <ReactMarkdown children={text} components={components} rawSourcePos />
     );
   };
+
+  private applyReplacer(
+    replacer: any,
+    children: React.ReactNode & React.ReactNode[]
+  ) {
+    if (isString(children)) {
+      return replacer(children);
+    }
+    if (children.length == 1 && isString(children[0])) {
+      return replacer(children[0]);
+    }
+    return children;
+  }
 
   private buildReactReplacer(
     originalText: string,

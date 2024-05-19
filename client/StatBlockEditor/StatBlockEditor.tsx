@@ -74,11 +74,11 @@ export class StatBlockEditor extends React.Component<
 
     const buttons = (
       <>
-        <Button onClick={this.close} fontAwesomeIcon="times" />
+        <Button onClick={this.close} fontAwesomeIcon="times" tooltip="Close Editor" />
         {this.props.onDelete && (
-          <Button onClick={this.delete} fontAwesomeIcon="trash" />
+          <Button onClick={this.delete} fontAwesomeIcon="trash" tooltip="Delete StatBlock" />
         )}
-        <SubmitButton fontAwesomeIcon="save" />
+        <SubmitButton fontAwesomeIcon="save" tooltip="Save Changes" />
       </>
     );
 
