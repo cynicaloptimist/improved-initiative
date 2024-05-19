@@ -75,6 +75,12 @@ export class TextEnricher {
       li: ({ children }) => {
         return <li>{this.applyReplacer(replacer, children)}</li>;
       },
+      strong: ({ children }) => {
+        return <strong>{this.applyReplacer(replacer, children)}</strong>;
+      },
+      em: ({ children }) => {
+        return <em>{this.applyReplacer(replacer, children)}</em>;
+      }
     };
 
     return (
