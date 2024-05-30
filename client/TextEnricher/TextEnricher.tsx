@@ -92,6 +92,9 @@ export class TextEnricher {
     replacer: any,
     children: React.ReactNode & React.ReactNode[]
   ) {
+    if(!children) {
+      return null
+    }
     if (isString(children)) {
       return replacer(children);
     }
