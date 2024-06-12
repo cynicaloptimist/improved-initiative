@@ -9,6 +9,7 @@ import { Metrics } from "../Utility/Metrics";
 
 export function Tutorial(props: { onClose: () => void }): JSX.Element {
   const [stepIndex, setStepIndex] = useState(0);
+  const [isNextEnabled, setIsNextEnabled] = useState(false); // New state
   const [previousStepIndex, setPreviousStepIndex] = useState(-1); // Voeg vorige stap index toe
   const close = useCallback(() => {
     document
@@ -28,6 +29,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
     }
     setPreviousStepIndex(stepIndex); // Sla de vorige stap op voordat we naar de volgende gaan
     setStepIndex(nextStepIndex);
+    setIsNextEnabled(false); // Reset the state when advancing
   };
 
   const step = TutorialSteps[stepIndex];
@@ -35,7 +37,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
   useEffect(() => {
     const subscription = NotifyTutorialOfAction.subscribe(action => {
       if (step.AwaitAction === action) {
-        advance();
+        setIsNextEnabled(true); // Set the state to true when the awaited action occurs
       }
     });
 
@@ -107,7 +109,7 @@ useLayoutEffect(() => {
         onClick={advance}
         text="Next"
         additionalClassNames="next"
-        disabled={step.AwaitAction !== undefined}
+        disabled={!isNextEnabled} // Use the state to control the disabled property
         key={"next-button-" + stepIndex}
       />
       <Button onClick={close} text="End Tutorial" />

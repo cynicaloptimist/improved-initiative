@@ -26,20 +26,20 @@ export const TutorialSteps: TutorialStep[] = [
   {
     Message:
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
-    RaiseSelector: ".left-column, .prompt, .combatants, .listings, libraries",// check of listings of libraries 
+    RaiseSelector: ".left-column, .prompt, .combatants, .listings",// check of listings of libraries 
+    AwaitAction: "CreatureAdded", // toegevoegd
     CalculatePosition: elements => {
       const location = getLocation(elements.item(0));
       const left = location.left + location.width + 10;
       const top = location.top + 200;
       return { left, top };
     },
-    // Voeg de selector toe van het element dat je wilt highlighten
-    HighlightSelector: ".libraries",
+    HighlightSelector: ".libraries", // toegevoegd
   },
   {
     Message:
       "When you're ready to add some adventurers, select the <strong>Characters</strong> tab at the top of the library.",
-    RaiseSelector: ".libraries .c-tabs .c-tab:nth-child(2)",
+    RaiseSelector: ".c-tab:nth-child(2) ",
     AwaitAction: "SelectCharactersTab",
     CalculatePosition: elements => {
       const element = _.last(elements);
@@ -48,7 +48,7 @@ export const TutorialSteps: TutorialStep[] = [
       const top = location.top + 5;
       return { left, top };
     },
-    HighlightSelector: ".c-tab:nth-child(2)",
+    HighlightSelector: ".c-tab:nth-child(2)",// toegevoegd
   },
   {
     Message:
@@ -119,16 +119,6 @@ export const TutorialSteps: TutorialStep[] = [
       return { left, top };
     }
   },
-  /*{
-        Message: "Press 'n' or click 'Next Turn' to advance the tracker. The active combatant's statblock is displayed for convenience.",
-        RaiseSelector: ".c-button--next-turn, .left-column, .combatants",
-        CalculatePosition: elements => {
-            const element = elements.first();
-            const left = location.left + element.outerWidth() + 10;
-            const top = location.top + 5;
-            return { left, top };
-        }
-    },*/
   {
     Message:
       "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
