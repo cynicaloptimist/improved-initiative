@@ -33,11 +33,16 @@ export class LibraryReferencePanes extends React.Component<
 
   private hideLibraries = () => this.props.librariesCommander.HideLibraries();
   private selectLibrary = (library: LibraryType) => {
-    if (library == "PersistentCharacters") {
+    if (library === "PersistentCharacters") {
       NotifyTutorialOfAction("SelectCharactersTab");
+    } else if (library === "Encounters") {
+      NotifyTutorialOfAction("SelectEncountersTab");
+    } else if (library === "Spells") {
+      NotifyTutorialOfAction("SelectSpellsTab");
     }
     this.setState({ selectedLibrary: library });
   };
+  
 
   public render() {
     const libraries: Record<LibraryType, JSX.Element> = {

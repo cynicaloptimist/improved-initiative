@@ -10,7 +10,6 @@ export interface TutorialStep {
   RaiseSelector: string;
   AwaitAction?: string;
   CalculatePosition: (elements: NodeListOf<HTMLElement>) => Position;
-  // Nieuwe property voor animatieklasse
   HighlightSelector?: string;
 }
 
@@ -27,15 +26,15 @@ export const TutorialSteps: TutorialStep[] = [
   {
     Message:
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
-    RaiseSelector: ".left-column, .prompt, .combatants, .listings",// check of listings of libraries 
-    AwaitAction: "CreatureAdded", // toegevoegd
+    RaiseSelector: ".left-column, .prompt, .combatants, .listings, .c-tab:nth-child(1)",
+    AwaitAction: "CreatureAdded", 
     CalculatePosition: elements => {
       const location = getLocation(elements.item(0));
       const left = location.left + location.width + 10;
       const top = location.top + 200;
       return { left, top };
     },
-    HighlightSelector: ".libraries", // toegevoegd
+    HighlightSelector: ".libraries, .c-tab:nth-child(1)",
   },
   // step 2 - select characters tab
   {
@@ -50,7 +49,7 @@ export const TutorialSteps: TutorialStep[] = [
       const top = location.top + 5;
       return { left, top };
     },
-    HighlightSelector: ".c-tab:nth-child(2)",// toegevoegd
+    HighlightSelector: ".c-tab:nth-child(2)",
   },
   // step 3 - add sample characters
   {
@@ -61,11 +60,74 @@ export const TutorialSteps: TutorialStep[] = [
     CalculatePosition: elements => {
       const location = getLocation(elements[0]);
       const left = location.left + location.width + 10;
+      const top = location.top + 200;
+      return { left, top };
+    },
+    HighlightSelector: ".libraries",
+  },
+  // step 4 - select encounters tab
+  {
+    Message:
+      "Select the <strong>Encounters</strong> tab at the top of the library.",
+    RaiseSelector: ".c-tab:nth-child(3)",
+    AwaitAction: "SelectEncountersTab",
+    CalculatePosition: elements => {
+      const element = _.last(elements);
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
       const top = location.top + 5;
       return { left, top };
     },
-    HighlightSelector: ".libraries",// toegevoegd
+    HighlightSelector: ".c-tab:nth-child(3)",
   },
+  // step 5 - encounter tab explanation
+  {
+    Message:
+      "The Encounters tab is where you can <strong>save and load</strong> encounters.",
+    RaiseSelector: ".left-column",
+    CalculatePosition: elements => {
+      const element = _.last(elements);
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
+      return { left, top };
+    },
+    HighlightSelector: ".libraries",
+  },
+  // step 6 - select spells tab
+  {
+    Message:
+      "Select the <strong>Spells</strong> tab at the top of the library.",
+    RaiseSelector: ".c-tab:nth-child(4)",
+    AwaitAction: "SelectSpellsTab",
+    CalculatePosition: elements => {
+      const element = _.last(elements);
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
+      return { left, top };
+    },
+    HighlightSelector: ".c-tab:nth-child(4)",
+  },
+  // step 7 - spell tab explanation
+  {
+    Message:
+      "The Spells tab is where you can <strong>select and view</strong> spell information.",
+    RaiseSelector: ".left-column",
+    CalculatePosition: elements => {
+      const element = _.last(elements);
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
+      return { left, top };
+    },
+    HighlightSelector: ".libraries",
+  },
+
+
+
+
+
   {
     Message:
       "Press 'alt-r' or <strong>click 'Start Encounter'</strong> to roll initiative.",
