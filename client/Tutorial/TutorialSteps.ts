@@ -10,6 +10,8 @@ export interface TutorialStep {
   RaiseSelector: string;
   AwaitAction?: string;
   CalculatePosition: (elements: NodeListOf<HTMLElement>) => Position;
+  // Nieuwe property voor animatieklasse
+  HighlightSelector?: string;
 }
 
 function getLocation(element: HTMLElement) {
@@ -24,18 +26,20 @@ export const TutorialSteps: TutorialStep[] = [
   {
     Message:
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
-    RaiseSelector: ".left-column, .prompt, .combatants",
+    RaiseSelector: ".left-column, .prompt, .combatants, .listings, libraries",// check of listings of libraries 
     CalculatePosition: elements => {
       const location = getLocation(elements.item(0));
       const left = location.left + location.width + 10;
       const top = location.top + 200;
       return { left, top };
-    }
+    },
+    // Voeg de selector toe van het element dat je wilt highlighten
+    HighlightSelector: ".libraries",
   },
   {
     Message:
       "When you're ready to add some adventurers, select the <strong>Characters</strong> tab at the top of the library.",
-    RaiseSelector: ".libraries .c-tabs .c-tab",
+    RaiseSelector: ".libraries .c-tabs .c-tab:nth-child(2)",
     AwaitAction: "SelectCharactersTab",
     CalculatePosition: elements => {
       const element = _.last(elements);
@@ -43,16 +47,17 @@ export const TutorialSteps: TutorialStep[] = [
       const left = location.left + location.width + 10;
       const top = location.top + 5;
       return { left, top };
-    }
+    },
+    HighlightSelector: ".c-tab:nth-child(2)",
   },
   {
     Message:
       "It's easy to add your own player characters to Improved Initiative. For now, <strong>add a few sample characters</strong>.",
-    RaiseSelector: ".left-column, .combatants",
+    RaiseSelector: ".left-column",
     CalculatePosition: elements => {
       const location = getLocation(elements[0]);
       const left = location.left + location.width + 10;
-      const top = location.top + 200;
+      const top = location.top + 5;
       return { left, top };
     }
   },
