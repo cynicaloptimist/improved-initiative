@@ -23,6 +23,7 @@ function getLocation(element: HTMLElement) {
 }
 
 export const TutorialSteps: TutorialStep[] = [
+  // step 1, add creature
   {
     Message:
       "Let's start by adding a few creatures to the encounter. <strong>Click on any creature</strong> to add one to the encounter pane.",
@@ -36,6 +37,7 @@ export const TutorialSteps: TutorialStep[] = [
     },
     HighlightSelector: ".libraries", // toegevoegd
   },
+  // step 2 - select characters tab
   {
     Message:
       "When you're ready to add some adventurers, select the <strong>Characters</strong> tab at the top of the library.",
@@ -50,16 +52,19 @@ export const TutorialSteps: TutorialStep[] = [
     },
     HighlightSelector: ".c-tab:nth-child(2)",// toegevoegd
   },
+  // step 3 - add sample characters
   {
     Message:
       "It's easy to add your own player characters to Improved Initiative. For now, <strong>add a few sample characters</strong>.",
-    RaiseSelector: ".left-column",
+    RaiseSelector: ".left-column, .combatants",
+    AwaitAction: "PlayerCharacterAdded",
     CalculatePosition: elements => {
       const location = getLocation(elements[0]);
       const left = location.left + location.width + 10;
       const top = location.top + 5;
       return { left, top };
-    }
+    },
+    HighlightSelector: ".libraries",// toegevoegd
   },
   {
     Message:

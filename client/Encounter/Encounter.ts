@@ -249,6 +249,9 @@ export class Encounter {
 
     combatant.AttachToPersistentCharacterLibrary(updatePersistentCharacter);
 
+    NotifyTutorialOfAction("PlayerCharacterAdded"); // toegvoegd
+
+
     return combatant;
   }
 
