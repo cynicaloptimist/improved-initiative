@@ -91,6 +91,9 @@ useLayoutEffect(() => {
     if (previousHighlightedElements) {
       removeClasses(previousHighlightedElements, "tutorial-highlight", "glow");
     }
+
+    const glowingElements = document.querySelectorAll<HTMLElement>(".glow");
+    glowingElements.forEach(e => e.classList.remove("glow")); 
   };
 }, [stepIndex, previousStepIndex]);
 
