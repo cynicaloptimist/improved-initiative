@@ -124,61 +124,62 @@ export const TutorialSteps: TutorialStep[] = [
   //   HighlightSelector: ".libraries",
   // },
   // step 8 - start encounter
-  {
-    Message:
-      "Press 'alt-r' or <strong>click 'Start Encounter'</strong> to roll initiative.",
-    RaiseSelector: ".c-button--start-encounter",
-    AwaitAction: "ShowInitiativeDialog",
-    CalculatePosition: elements => {
-      const element = _.last(elements);
-      const location = getLocation(element);
-      const left = location.left + location.width + 10;
-      const top = location.top + 5;
-      return { left, top };
-    },
-    HighlightSelector: ".c-button--start-encounter",
-  },
-  // step 9 - initiative dialog
-  {
-    Message:
-      "Enter initiative rolls and <strong>press</strong> the button to continue.",
-    RaiseSelector: ".prompt",
-    AwaitAction: "CompleteInitiativeRolls",
-    CalculatePosition: elements => {
-      let element;
-      elements.forEach(e => {
-        if (e.classList.contains("combat-footer")) {
-          element = e;
-        }
-      });
-      const location = getLocation(element);
-      const left = location.left;
-      const top =
-        location.top +
-        (document.getElementsByClassName("tutorial")[0].clientHeight || 0 + 10);
-      return { left, top };
-    },
-    HighlightSelector: ".prompt",
-  },
-  // step 10 - view active combatant
-  {
-    Message:
-      "On the left, you can see the active combatant.",
-    RaiseSelector: ".left-column",
-    CalculatePosition: elements => {
-      const element = elements[0];
-      const location = getLocation(element);
-      const left = location.left + location.width + 10;
-      const top = location.top + 5;
-      return { left, top };
-    },
-    HighlightSelector: ".active-combatant",
-  },
+  // {
+  //   Message:
+  //     "Press 'alt-r' or <strong>click 'Start Encounter'</strong> to roll initiative.",
+  //   RaiseSelector: ".c-button--start-encounter",
+  //   AwaitAction: "ShowInitiativeDialog",
+  //   CalculatePosition: elements => {
+  //     const element = _.last(elements);
+  //     const location = getLocation(element);
+  //     const left = location.left + location.width + 10;
+  //     const top = location.top + 5;
+  //     return { left, top };
+  //   },
+  //   HighlightSelector: ".c-button--start-encounter",
+  // },
+  // // step 9 - initiative dialog
+  // {
+  //   Message:
+  //     "Enter initiative rolls and <strong>press</strong> the button to continue.",
+  //   RaiseSelector: ".prompt",
+  //   AwaitAction: "CompleteInitiativeRolls",
+  //   CalculatePosition: elements => {
+  //     let element;
+  //     elements.forEach(e => {
+  //       if (e.classList.contains("combat-footer")) {
+  //         element = e;
+  //       }
+  //     });
+  //     const location = getLocation(element);
+  //     const left = location.left + location.width + 10;
+  //     const top =
+  //       location.top +
+  //       (document.getElementsByClassName("tutorial")[0].clientHeight || 0 + 10);
+  //     return { left, top };
+  //   },
+  //   HighlightSelector: ".prompt",
+  // },
+  // // step 10 - view active combatant
+  // {
+  //   Message:
+  //     "On the left, you can see the active combatant.",
+  //   RaiseSelector: ".left-column",
+  //   CalculatePosition: elements => {
+  //     const element = elements[0];
+  //     const location = getLocation(element);
+  //     const left = location.left + location.width + 10;
+  //     const top = location.top + 5;
+  //     return { left, top };
+  //   },
+  //   HighlightSelector: ".active-combatant",
+  // },
   // step 11 - select combatant
   {
     Message:
-      "Select a combatant by clicking. You can select multiple combatants by holding the control key.",
+      "Select a combatant by <strong>clicking</strong> on a combatant. You can select multiple combatants by <strong>holding the control key</strong>.",
     RaiseSelector: ".combatants, .right-column",
+    AwaitAction: "combatant-click",
     CalculatePosition: elements => {
       const element = elements[0];
       const location = getLocation(element);
@@ -186,11 +187,12 @@ export const TutorialSteps: TutorialStep[] = [
       const top = location.top + location.height + 10;
       return { left, top };
     },
-    HighlightSelector: ".right-column",
+    HighlightSelector: ".selected-combatant, .combatant",
   },
+  // step 12 - apply damage
   {
     Message:
-      "Press 't' or click 'Apply Damage' to apply damage to selected combatants. You can enter a negative number to apply healing.",
+      "let's continue and apply some damage to a selected combatant.<strong>Click 'Apply Damage'</strong> to apply damage to selected combatants. You can enter a <strong>negative number</strong> to apply healing.",
     RaiseSelector: ".combatants, .c-button--apply-damage, .prompts, .prompt",
     AwaitAction: "ApplyDamage",
     CalculatePosition: elements => {
@@ -199,8 +201,15 @@ export const TutorialSteps: TutorialStep[] = [
       const left = location.left + location.width + 10;
       const top = location.top + 5;
       return { left, top };
-    }
+    },
+    HighlightSelector: ".c-button--apply-damage, .pronmpt",
   },
+
+
+
+
+
+  
   {
     Message:
       "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
