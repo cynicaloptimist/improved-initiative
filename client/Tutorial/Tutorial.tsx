@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { TutorialSteps } from "./TutorialSteps";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
@@ -9,7 +8,9 @@ import { Metrics } from "../Utility/Metrics";
 
 export function Tutorial(props: { onClose: () => void }): JSX.Element {
   const [stepIndex, setStepIndex] = useState(0);
-  const [previousStepIndex, setPreviousStepIndex] = useState(-1); // Voeg vorige stap index toe
+  const [previousStepIndex, setPreviousStepIndex] = useState(-1);
+  const [awaitActionCompleted, setAwaitActionCompleted] = useState(false); // New state
+
   const close = useCallback(() => {
     document
       .querySelectorAll(".tutorial-focus")
@@ -26,8 +27,9 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
       Metrics.TrackEvent("tutorial_complete");
       return close();
     }
-    setPreviousStepIndex(stepIndex); // Sla de vorige stap op voordat we naar de volgende gaan
+    setPreviousStepIndex(stepIndex);
     setStepIndex(nextStepIndex);
+    setAwaitActionCompleted(false); // Reset awaitActionCompleted when advancing
   };
 
   const step = TutorialSteps[stepIndex];
@@ -35,7 +37,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
   useEffect(() => {
     const subscription = NotifyTutorialOfAction.subscribe(action => {
       if (step.AwaitAction === action) {
-        advance();
+        setAwaitActionCompleted(true);
       }
     });
 
@@ -107,7 +109,7 @@ useLayoutEffect(() => {
         onClick={advance}
         text="Next"
         additionalClassNames="next"
-        disabled={step.AwaitAction !== undefined}
+        disabled={!awaitActionCompleted && step.AwaitAction !== undefined} // Dynamically set disabled
         key={"next-button-" + stepIndex}
       />
       <Button onClick={close} text="End Tutorial" />
