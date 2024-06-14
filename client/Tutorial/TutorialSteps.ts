@@ -192,22 +192,22 @@ export const TutorialSteps: TutorialStep[] = [
   // step 12 - view combatant action menu
   {
     Message:
-      "On the left side of the screen, you can see the combatant action menu.",
+      "On the left side of the screen, you can see the <strong>combatant action menu</strong>.",
     RaiseSelector: ".commands-combatant",
     CalculatePosition: elements => {
       const element = elements[0];
       const location = getLocation(element);
       const left = location.left + 5;
-      const top = location.top + location.height + 10;
+      const top = location.top + location.height - 525;
       return { left, top };
     },
-    HighlightSelector: ".commands-combatant",
+    HighlightSelector: ".commands-combatant, .scrollframe",
   },
   // step 13 - apply damage
   {
     Message:
       "let's continue and apply some damage to a selected combatant.<strong>Click 'Apply Damage'</strong> to apply damage to selected combatants. You can enter a <strong>negative number</strong> to apply healing.",
-    RaiseSelector: ".combatants, .c-button--apply-damage, .prompts, .prompt",
+    RaiseSelector: ".c-button--apply-damage, .combatants,  .prompts, .prompt",
     AwaitAction: "ApplyDamage",
     CalculatePosition: elements => {
       const element = elements[0];
@@ -218,15 +218,66 @@ export const TutorialSteps: TutorialStep[] = [
     },
     HighlightSelector: ".c-button--apply-damage, .pronmpt",
   },
-
-
-
-
-
-  
+  // step 14 - view remove from encounter button
   {
     Message:
-      "Click 'Settings' to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
+      "The next button in the combatant action menu is the <strong>Remove from Encounter</strong> button. This button will remove the <strong>selected combatants</strong> from the encounter.",
+    RaiseSelector: ".c-button--remove",
+    CalculatePosition: elements => {
+      const element = elements[0];
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
+      return { left, top };
+    },
+    HighlightSelector: ".c-button--remove",
+  },
+  // step 15 - view rename combatant button
+  {
+    Message:
+      "The next button in the combatant action menu is the <strong>Rename Combatant</strong> button. This button will allow you to rename the <strong>selected combatant</strong>.",
+    RaiseSelector: ".c-button--set-alias",
+    CalculatePosition: elements => {
+      const element = elements[0];
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top + 5;
+      return { left, top };
+    },
+    HighlightSelector: ".c-button--set-alias",
+  },
+  // step 16 - view quick edit combatant button
+  {
+    Message:
+      "The next button in the combatant action menu is the <strong>Quick Edit Combatant</strong> button. This button will allow you to quickly edit the <strong>selected combatant</strong>.",
+    RaiseSelector: ".c-button--quick-edit-statblock",
+    CalculatePosition: elements => {
+      const element = elements[0];
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top - 50;
+      return { left, top };
+    },
+    HighlightSelector: ".c-button--quick-edit-statblock",
+  },
+  // step 17 - view move up/down buttons
+  {
+    Message:
+      "The last buttons in the combatant action menu are the <strong>Move Up</strong> and <strong>Move Down</strong> buttons. These buttons will allow you to move the <strong>selected combatant</strong> up or down in the initiative order.",
+    RaiseSelector: ".c-button--move-up, .c-button--move-down",
+    CalculatePosition: elements => {
+      const element = elements[0];
+      const location = getLocation(element);
+      const left = location.left + location.width + 10;
+      const top = location.top - 75;
+      return { left, top };
+    },
+    HighlightSelector: ".c-button--move-up, .c-button--move-down",
+  },
+  // step 18 - view settings button
+  {
+    Message:
+      "Click <strong>'Settings'</strong> to set keyboard shortcuts and explore advanced features, or choose <strong>End Tutorial</strong>.",
     RaiseSelector: ".c-button--settings",
     AwaitAction: "ShowSettings",
     CalculatePosition: elements => {
