@@ -202,7 +202,7 @@ export class Encounter {
 
       this.AddCombatantFromState(initialState);
       
-      NotifyTutorialOfAction("CreatureAdded"); // toegevoegd
+      NotifyTutorialOfAction("CreatureAdded"); 
 
     } catch (e) {
       console.warn("Couldn't add statblock: " + e);
@@ -249,8 +249,7 @@ export class Encounter {
 
     combatant.AttachToPersistentCharacterLibrary(updatePersistentCharacter);
 
-    NotifyTutorialOfAction("PlayerCharacterAdded"); // toegvoegd
-
+    NotifyTutorialOfAction("PlayerCharacterAdded");
 
     return combatant;
   }
