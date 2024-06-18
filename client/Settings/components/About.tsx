@@ -41,7 +41,7 @@ export class About extends React.Component<AboutProps> {
           />
           <a
             className="pledge"
-            href="https://www.patreon.com/improvedinitiative"
+            href="https://www.patreon.com/join/improvedinitiative"
             target="_blank"
           >
             <img src="/img/become_a_patron_button.png" />
