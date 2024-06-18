@@ -20,7 +20,7 @@ export function BannerHost(): JSX.Element {
   if (bannerIndex === null) {
     return null;
   }
-  
+
   if (env.IsLoggedIn && (env.HasStorage || env.HasEpicInitiative)) {
     return null;
   }
@@ -79,5 +79,20 @@ const Banners: { href: string; src: string; altText: string }[] = [
     href: "https://www.dmsguild.com/product/247882/Wayfinders-Guide-to-Eberron-5e?filters=0_0_0_0_0_0_0_1000100&src=affiliate282190&affiliate_id=282190",
     src: "https://www.dmsguild.com/themes/dmg/images/affiliatebanner2.jpg",
     altText: "Eberron Adventures at DMsGuild.com"
+  },
+  {
+    href: "https://www.patreon.com/join/improvedinitiative",
+    src: "../img/banner-annual.png",
+    altText: "Improved Initiative Epic Tier Annual Subscriptions"
+  },
+  {
+    href: "https://www.patreon.com/join/improvedinitiative",
+    src: "../img/banner-features.png",
+    altText: "Improved Initiative Epic Tier Features"
+  },
+  {
+    href: "https://www.patreon.com/join/improvedinitiative",
+    src: "../img/banner-trial.png",
+    altText: "Improved Initiative Epic Tier Free Trial"
   }
 ];
