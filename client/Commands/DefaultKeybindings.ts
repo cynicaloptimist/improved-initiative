@@ -33,5 +33,6 @@ export const DefaultKeybindings: { [commandId: string]: string } = {
   "move-down": "alt+j",
   "move-up": "alt+k",
   "select-next": "j",
-  "select-previous": "k"
+  "select-previous": "k",
+  "duplicate-combatant": "alt+d"
 };
