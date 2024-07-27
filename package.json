@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "3.11.0",
+  "version": "3.11.1",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -118,6 +118,7 @@
     "build": "grunt build_min",
     "postbuild": "npm run copy-fonts",
     "dev": "grunt",
+    "build:digitalocean": "npm install --production=false && npm run build && npm ci",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "echo 'Tests are currently disabled due to node, jest, and ES modules interoperability.'",
