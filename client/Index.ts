@@ -25,7 +25,11 @@ window.onload = async () => {
         env.EncounterId = customEncounterId;
       }
     }
-    const viewModel = new TrackerViewModel(SocketIOClient.io());
+    const viewModel = new TrackerViewModel(
+      SocketIOClient.io({
+        transports: ["websocket"]
+      })
+    );
 
     const container = document.getElementById("app__container");
     if (!container) {
