@@ -126,5 +126,12 @@ export const BuildCombatantCommandList: (
     actionBinding: c.SelectPrevious,
     fontAwesomeIcon: "arrow-up",
     defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "duplicate-combatant",
+    description: "Duplicate Combatant",
+    actionBinding: c.Duplicate,
+    fontAwesomeIcon: "clone",
+    defaultShowOnActionBar: false
   })
 ];

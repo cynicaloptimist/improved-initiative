@@ -507,4 +507,26 @@ export class CombatantCommander {
     });
     this.tracker.PromptQueue.Add(prompt);
   };
+
+  public Duplicate = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
+    const selectedCombatants = this.SelectedCombatants();
+    selectedCombatants.forEach(c => {
+      if (c.Combatant.PersistentCharacterId) {
+        return;
+      }
+
+      this.tracker.Encounter.AddCombatantFromState({
+        ...c.Combatant.GetState(),
+        Id: probablyUniqueString()
+      });
+    });
+    
+    this.tracker.EventLog.AddEvent(
+      `${selectedCombatants.map(c => c.Name()).join(", ")} duplicated.`
+    );
+  };
 }

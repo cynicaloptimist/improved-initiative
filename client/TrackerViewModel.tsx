@@ -252,10 +252,7 @@ export class TrackerViewModel {
           <span className="no-epic-initiative-for-import">
             {"The D&D Beyond StatBlock Importer is available for "}
             <a
-              href={
-                "https://www.patreon.com/join/improvedinitiative/checkout" +
-                "?rid=1937132&amp;redirect_uri=%2Fposts%2F31705918"
-              }
+              href={"https://www.patreon.com/join/improvedinitiative"}
               target="_blank"
             >
               Epic Initiative

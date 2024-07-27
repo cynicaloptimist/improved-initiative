@@ -17,6 +17,12 @@ export const initialize = async (connectionString: string): Promise<void> => {
   }
   mongoClient = new mongo.MongoClient(connectionString);
   await mongoClient.connect();
+  const db = mongoClient.db();
+  await db.command({ ping: 1 });
+  const users = db.collection<User>("users");
+  // Ensure we can read from users
+  await users.findOne();
+  console.log("Connected successfully to database.");
   return;
 };
 

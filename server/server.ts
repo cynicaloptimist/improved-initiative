@@ -5,10 +5,6 @@ import * as http from "http";
 
 import * as cluster from "cluster";
 
-import sticky = require("../local_node_modules/sticky-session/lib/sticky-session");
-
-import { Spell } from "../common/Spell";
-import { StatBlock } from "../common/StatBlock";
 import * as DB from "./dbconnection";
 import { getDbConnectionString } from "./getDbConnectionString";
 import { GetPlayerViewManager } from "./playerviewmanager";
@@ -33,19 +29,8 @@ async function improvedInitiativeServer() {
 
   const defaultPort = parseInt(process.env.PORT || "80");
 
-  if (process.env.ENABLE_CONCURRENCY) {
-    await sticky.listen(server, defaultPort, {
-      workers: parseInt(process.env.WEB_CONCURRENCY || "1"),
-      proxyHeader: "x-forwarded-for",
-      env: {
-        DB_CONNECTION_STRING: dbConnectionString,
-        ...process.env
-      }
-    });
-  } else {
-    await server.listen(defaultPort);
-    console.log("Launched server without concurrency.");
-  }
+  await server.listen(defaultPort);
+  console.log("Launched server.");
 
   const io = new SocketIO.Server(server);
   ConfigureSockets(io, session, playerViews);

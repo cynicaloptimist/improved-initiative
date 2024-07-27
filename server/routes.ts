@@ -28,7 +28,6 @@ const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
 const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
 const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
-const twitterPixelId = process.env.TWITTER_PIXEL_ID || "";
 
 export type Req = Express.Request & express.Request;
 export type Res = Express.Response & express.Response;
@@ -67,7 +66,6 @@ const getClientOptions = (session: Express.Session) => {
     baseUrl,
     appVersion,
     googleAnalyticsId,
-    twitterPixelId,
     accountLevel: getAccountLevel(session)
   };
 };
