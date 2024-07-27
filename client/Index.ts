@@ -51,7 +51,11 @@ window.onload = async () => {
     }
     const playerView = new ReactPlayerView(container, encounterId);
     playerView.LoadEncounterFromServer();
-    playerView.ConnectToSocket(SocketIOClient.io());
+    playerView.ConnectToSocket(
+      SocketIOClient.io({
+        transports: ["websocket"]
+      })
+    );
   }
 
   if (document.getElementById("landing")) {
