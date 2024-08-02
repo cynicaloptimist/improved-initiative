@@ -220,11 +220,11 @@ export function StatBlockComponent(props: StatBlockProps) {
   } catch (error) {
     return (
       <div className="c-statblock">
-        <div className="c-statblock__error">
-          There was a problem with this StatBlock:
+        <div>
+          <p>There was a problem with this StatBlock:</p>
+          <pre className="c-statblock__error">{error.toString()}</pre>
+          <p>Please open it in the StatBlock Editor to check your JSON</p>
         </div>
-        <pre>{error.toString()}</pre>
-        <div>Please open it in the StatBlock Editor to check your JSON</div>
       </div>
     );
   }
