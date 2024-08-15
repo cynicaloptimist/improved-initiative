@@ -118,8 +118,8 @@ export async function handleCurrentUser(
 
   const entitledTierIds = getEntitledTierIds(apiResponse);
 
-  const userId = apiResponse.data.id;
-  const standing = getUserAccountLevel(userId, entitledTierIds);
+  const patreonId = apiResponse.data.id;
+  const standing = getUserAccountLevel(patreonId, entitledTierIds);
   const emailAddress = _.get(apiResponse, "data.attributes.email", "");
 
   const session = req.session;
@@ -129,7 +129,7 @@ export async function handleCurrentUser(
   }
   updateSessionAccountFeatures(session, standing);
 
-  const user = await DB.upsertUser(apiResponse.data.id, standing, emailAddress);
+  const user = await DB.upsertUser(patreonId, standing, emailAddress);
   if (!user) {
     throw "Failed to insert user into database";
   }
@@ -262,9 +262,9 @@ export function configurePatreonWebhookReceiver(
 
 async function handleWebhook(req: Req, res: Res) {
   try {
-    const userId = _.get(req.body, "data.relationships.user.data.id", null);
+    const patreonId = _.get(req.body, "data.relationships.user.data.id", null);
 
-    if (!userId) {
+    if (!patreonId) {
       return res.status(400).send("Missing data.relationships.user.data.id");
     }
 
@@ -288,13 +288,13 @@ async function handleWebhook(req: Req, res: Res) {
     const userAccountLevel = isDeletedPledge
       ? AccountStatus.None
       : getUserAccountLevel(
-          userId,
+          patreonId,
           entitledTiers.map(tier => tier.id)
         );
     console.log(
       `Webhook: Updating account level for ${userEmail} to ${userAccountLevel}`
     );
-    await DB.upsertUser(userId, userAccountLevel, userEmail);
+    await DB.upsertUser(patreonId, userAccountLevel, userEmail);
     return res.send(201);
   } catch (e) {
     return res.status(500).send(e);
