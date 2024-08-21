@@ -212,7 +212,7 @@ export class TrackerViewModel {
     }
   };
 
-  public ImportStatBlockIfAvailable = (): void => {
+  public ImportStatBlockIfAvailable = async (): Promise<void> => {
     if (!URLSearchParams) {
       return;
     }
@@ -266,51 +266,51 @@ export class TrackerViewModel {
       return;
     }
 
-    codec.decompress(compressedStatBlockJSON).then(json => {
-      const parsedStatBlock = ParseJSONOrDefault(json, {});
-      const statBlock: StatBlock = {
-        ...StatBlock.Default(),
-        ...parsedStatBlock
-      };
+    const json = await codec.decompress(compressedStatBlockJSON);
 
-      Metrics.TrackEvent("StatBlockImported", {
-        Name: statBlock.Name
-      });
+    const parsedStatBlock = ParseJSONOrDefault(json, {});
+    const statBlock: StatBlock = {
+      ...StatBlock.Default(),
+      ...parsedStatBlock
+    };
 
-      if (statBlock.Player == "") {
-        this.EditStatBlock({
-          editorTarget: "library",
-          onSave: this.Libraries.StatBlocks.SaveNewListing,
-          statBlock,
-          currentListings: this.Libraries.StatBlocks.GetAllListings()
-        });
-      } else {
-        const currentListings =
-          this.Libraries.PersistentCharacters.GetAllListings();
-        const existingListing = currentListings.find(
-          l => l.Meta().Name == statBlock.Name
-        );
-        if (existingListing) {
-          this.EditPersistentCharacterStatBlock(
-            existingListing.Meta().Id,
-            statBlock
-          );
-        } else {
-          this.EditStatBlock({
-            editorTarget: "persistentcharacter",
-            onSave: statBlock => {
-              const persistentCharacter =
-                PersistentCharacter.Initialize(statBlock);
-              this.Libraries.PersistentCharacters.SaveNewListing(
-                persistentCharacter
-              );
-            },
-            statBlock,
-            currentListings
-          });
-        }
-      }
+    Metrics.TrackEvent("StatBlockImported", {
+      Name: statBlock.Name
     });
+
+    if (statBlock.Player == "") {
+      this.EditStatBlock({
+        editorTarget: "library",
+        onSave: this.Libraries.StatBlocks.SaveNewListing,
+        statBlock,
+        currentListings: this.Libraries.StatBlocks.GetAllListings()
+      });
+    } else {
+      const currentListings =
+        this.Libraries.PersistentCharacters.GetAllListings();
+      const existingListing = currentListings.find(
+        l => l.Meta().Name == statBlock.Name
+      );
+      if (existingListing) {
+        this.EditPersistentCharacterStatBlock(
+          existingListing.Meta().Id,
+          statBlock
+        );
+      } else {
+        this.EditStatBlock({
+          editorTarget: "persistentcharacter",
+          onSave: statBlock => {
+            const persistentCharacter =
+              PersistentCharacter.Initialize(statBlock);
+            this.Libraries.PersistentCharacters.SaveNewListing(
+              persistentCharacter
+            );
+          },
+          statBlock,
+          currentListings
+        });
+      }
+    }
   };
 
   public GetWhatsNewIfAvailable = (): void => {
