@@ -3,6 +3,7 @@ import * as React from "react";
 import * as SocketIOClient from "socket.io-client";
 
 import * as compression from "json-url";
+import * as lzString from "lz-string";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
@@ -217,8 +218,9 @@ export class TrackerViewModel {
       return;
     }
     const urlParams = new URLSearchParams(window.location.search);
-    const compressedStatBlockJSON = urlParams.get("s");
-    if (!compressedStatBlockJSON) {
+    const compressedStatBlockJSONv1 = urlParams.get("s");
+    const compressedStatBlockJSONv2 = urlParams.get("i");
+    if (!compressedStatBlockJSONv1 && !compressedStatBlockJSONv2) {
       return;
     }
 
@@ -266,7 +268,18 @@ export class TrackerViewModel {
       return;
     }
 
-    const json = await codec.decompress(compressedStatBlockJSON);
+    let json = "";
+    if (compressedStatBlockJSONv1) {
+      json = await codec.decompress(compressedStatBlockJSONv1);
+    }
+    if (compressedStatBlockJSONv2) {
+      json = lzString.decompressFromEncodedURIComponent(
+        compressedStatBlockJSONv2
+      );
+    }
+    if (!json.length) {
+      return;
+    }
 
     const parsedStatBlock = ParseJSONOrDefault(json, {});
     const statBlock: StatBlock = {

@@ -91,6 +91,7 @@
     "knockout": "^3.5.1",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
+    "lz-string": "^1.5.0",
     "moment": "^2.29.4",
     "mongodb": "^4.17.1",
     "mongodb-memory-server": "^7.6.3",
