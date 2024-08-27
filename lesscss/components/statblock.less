@@ -32,8 +32,6 @@
   flex-direction: row;
   margin-top: @extra-small-spacer;
 
-  .stat-label {
-  }
   .stat-value {
     display: block;
     flex: 1;
@@ -254,4 +252,9 @@
 
 .c-overlay .c-statblock {
   max-width: @fixed-column-width;
+}
+
+.c-statblock__error {
+  color: var(--red);
+  font-family: "Courier New", Courier, monospace;
 }

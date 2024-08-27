@@ -3,6 +3,7 @@ import * as React from "react";
 import * as SocketIOClient from "socket.io-client";
 
 import * as compression from "json-url";
+import * as lzString from "lz-string";
 import { TagState } from "../common/CombatantState";
 import { PersistentCharacter } from "../common/PersistentCharacter";
 import { Settings } from "../common/Settings";
@@ -212,13 +213,14 @@ export class TrackerViewModel {
     }
   };
 
-  public ImportStatBlockIfAvailable = (): void => {
+  public ImportStatBlockIfAvailable = async (): Promise<void> => {
     if (!URLSearchParams) {
       return;
     }
     const urlParams = new URLSearchParams(window.location.search);
-    const compressedStatBlockJSON = urlParams.get("s");
-    if (!compressedStatBlockJSON) {
+    const compressedStatBlockJSONv1 = urlParams.get("s");
+    const compressedStatBlockJSONv2 = urlParams.get("i");
+    if (!compressedStatBlockJSONv1 && !compressedStatBlockJSONv2) {
       return;
     }
 
@@ -266,51 +268,62 @@ export class TrackerViewModel {
       return;
     }
 
-    codec.decompress(compressedStatBlockJSON).then(json => {
-      const parsedStatBlock = ParseJSONOrDefault(json, {});
-      const statBlock: StatBlock = {
-        ...StatBlock.Default(),
-        ...parsedStatBlock
-      };
+    let json = "";
+    if (compressedStatBlockJSONv1) {
+      json = await codec.decompress(compressedStatBlockJSONv1);
+    }
+    if (compressedStatBlockJSONv2) {
+      json = lzString.decompressFromEncodedURIComponent(
+        compressedStatBlockJSONv2
+      );
+    }
+    if (!json.length) {
+      return;
+    }
 
-      Metrics.TrackEvent("StatBlockImported", {
-        Name: statBlock.Name
-      });
+    const parsedStatBlock = ParseJSONOrDefault(json, {});
+    const statBlock: StatBlock = {
+      ...StatBlock.Default(),
+      ...parsedStatBlock
+    };
 
-      if (statBlock.Player == "") {
-        this.EditStatBlock({
-          editorTarget: "library",
-          onSave: this.Libraries.StatBlocks.SaveNewListing,
-          statBlock,
-          currentListings: this.Libraries.StatBlocks.GetAllListings()
-        });
-      } else {
-        const currentListings =
-          this.Libraries.PersistentCharacters.GetAllListings();
-        const existingListing = currentListings.find(
-          l => l.Meta().Name == statBlock.Name
-        );
-        if (existingListing) {
-          this.EditPersistentCharacterStatBlock(
-            existingListing.Meta().Id,
-            statBlock
-          );
-        } else {
-          this.EditStatBlock({
-            editorTarget: "persistentcharacter",
-            onSave: statBlock => {
-              const persistentCharacter =
-                PersistentCharacter.Initialize(statBlock);
-              this.Libraries.PersistentCharacters.SaveNewListing(
-                persistentCharacter
-              );
-            },
-            statBlock,
-            currentListings
-          });
-        }
-      }
+    Metrics.TrackEvent("StatBlockImported", {
+      Name: statBlock.Name
     });
+
+    if (statBlock.Player == "") {
+      this.EditStatBlock({
+        editorTarget: "library",
+        onSave: this.Libraries.StatBlocks.SaveNewListing,
+        statBlock,
+        currentListings: this.Libraries.StatBlocks.GetAllListings()
+      });
+    } else {
+      const currentListings =
+        this.Libraries.PersistentCharacters.GetAllListings();
+      const existingListing = currentListings.find(
+        l => l.Meta().Name == statBlock.Name
+      );
+      if (existingListing) {
+        this.EditPersistentCharacterStatBlock(
+          existingListing.Meta().Id,
+          statBlock
+        );
+      } else {
+        this.EditStatBlock({
+          editorTarget: "persistentcharacter",
+          onSave: statBlock => {
+            const persistentCharacter =
+              PersistentCharacter.Initialize(statBlock);
+            this.Libraries.PersistentCharacters.SaveNewListing(
+              persistentCharacter
+            );
+          },
+          statBlock,
+          currentListings
+        });
+      }
+    }
   };
 
   public GetWhatsNewIfAvailable = (): void => {

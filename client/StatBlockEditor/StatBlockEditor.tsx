@@ -56,7 +56,7 @@ export class StatBlockEditor extends React.Component<
   public componentDidCatch(error, info) {
     this.setState({
       editorMode: "json",
-      renderError: JSON.stringify(error)
+      renderError: error.toString()
     });
   }
 
@@ -74,9 +74,17 @@ export class StatBlockEditor extends React.Component<
 
     const buttons = (
       <>
-        <Button onClick={this.close} fontAwesomeIcon="times" tooltip="Close Editor" />
+        <Button
+          onClick={this.close}
+          fontAwesomeIcon="times"
+          tooltip="Close Editor"
+        />
         {this.props.onDelete && (
-          <Button onClick={this.delete} fontAwesomeIcon="trash" tooltip="Delete StatBlock" />
+          <Button
+            onClick={this.delete}
+            fontAwesomeIcon="trash"
+            tooltip="Delete StatBlock"
+          />
         )}
         <SubmitButton fontAwesomeIcon="save" tooltip="Save Changes" />
       </>
