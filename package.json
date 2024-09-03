@@ -1,6 +1,6 @@
 {
   "name": "improved-initiative",
-  "version": "3.11.4",
+  "version": "3.11.5",
   "description": "Combat tracker for Dungeons and Dragons (D&D) 5th Edition",
   "license": "MIT",
   "repository": {
@@ -62,7 +62,7 @@
     "ts-loader": "^6.2.2",
     "typescript": "^5.2.2",
     "uglify-js": "^3.17.4",
-    "webpack": "^5.88.2",
+    "webpack": "^5.94.0",
     "webpack-build-notifier": "^2.3.0",
     "webpack-cli": "^5.1.4",
     "webpack-merge": "^4.2.2"
