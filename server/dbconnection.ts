@@ -259,8 +259,17 @@ export async function setSettings(
   const db = mongoClient.db();
 
   const users = db.collection<User>("users");
-  const result = await users.updateOne({ _id: userId }, { $set: { settings } });
-  return result.modifiedCount;
+  try {
+    const result = await users.updateOne(
+      { _id: userId },
+      { $set: { settings } }
+    );
+    return result.modifiedCount;
+  } catch (error) {
+    console.error("Could not save settings for user: " + userId);
+    console.error(error);
+    return 0;
+  }
 }
 
 export type EntityPath =
@@ -362,16 +371,22 @@ export async function saveEntity<T extends Listable>(
     userId = new mongo.ObjectId(userId);
   }
 
-  const result = await db.collection("users").updateOne(
-    { _id: userId },
-    {
-      $set: {
-        [`${entityPath}.${entity.Id}`]: entity
+  try {
+    const result = await db.collection("users").updateOne(
+      { _id: userId },
+      {
+        $set: {
+          [`${entityPath}.${entity.Id}`]: entity
+        }
       }
-    }
-  );
+    );
 
-  return result.modifiedCount;
+    return result.modifiedCount;
+  } catch (error) {
+    console.error("Could not save item for user: " + userId);
+    console.error(error);
+    return 0;
+  }
 }
 
 export async function saveEntitySet<T extends Listable>(
@@ -408,18 +423,24 @@ export async function saveEntitySet<T extends Listable>(
     updatedEntities[entity.Id] = entity;
   }
 
-  const result = await users.updateOne(
-    { _id: userId },
-    {
-      $set: {
-        [`${entityPath}`]: updatedEntities
+  try {
+    const result = await users.updateOne(
+      { _id: userId },
+      {
+        $set: {
+          [`${entityPath}`]: updatedEntities
+        }
       }
-    }
-  );
+    );
 
-  if (!result) {
+    if (!result) {
+      return 0;
+    }
+
+    return result.matchedCount;
+  } catch (err) {
+    console.error("Could not save items for user: " + userId);
+    console.error("Item count: " + entities.length);
     return 0;
   }
-
-  return result.matchedCount;
 }
