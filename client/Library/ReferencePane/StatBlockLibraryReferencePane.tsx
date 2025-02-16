@@ -111,7 +111,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
 
   private renderListingRow =
     (settings: Settings) =>
-    (l: Listing<StatBlock>, onPreview, onPreviewOut) => {
+    (l: Listing<StatBlock>, onPreview, onPreviewOut, showSource) => {
       const listingMeta = l.Meta();
       return (
         <ListingRow
@@ -123,6 +123,7 @@ export class StatBlockLibraryReferencePane extends React.Component<
           }
           name={listingMeta.Name}
           showCount
+          showSource={showSource}
           onAdd={this.loadSavedStatBlock(VariantMaximumHP.DEFAULT)}
           onEdit={this.editStatBlock}
           onPreview={onPreview}

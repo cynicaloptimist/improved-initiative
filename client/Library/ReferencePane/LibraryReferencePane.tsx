@@ -18,7 +18,8 @@ interface LibraryReferencePaneProps<T extends Listable> {
       listing: Listing<T>,
       e: React.MouseEvent<HTMLDivElement>
     ) => void,
-    onPreviewOut: () => void
+    onPreviewOut: () => void,
+    showSource?: boolean
   ) => JSX.Element;
   listingGroups: ListingGroup[];
   addNewText?: string;
@@ -79,7 +80,22 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
     const grouping = this.props.listingGroups[this.state.listingGroupIndex];
 
     const listingAndFolderComponents = BuildListingTree(
-      l => this.props.renderListingRow(l, this.previewItem, this.onPreviewOut),
+      (listing, index, array) => {
+        // If an adjacent listing has the same name, show the source
+        let showSource = false;
+        if (
+          array[index - 1]?.Meta().Name === listing.Meta().Name ||
+          array[index + 1]?.Meta().Name === listing.Meta().Name
+        ) {
+          showSource = true;
+        }
+        return this.props.renderListingRow(
+          listing,
+          this.previewItem,
+          this.onPreviewOut,
+          showSource
+        );
+      },
       grouping,
       filteredListings
     );
