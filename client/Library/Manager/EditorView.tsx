@@ -71,10 +71,9 @@ function RenderStatBlockEditor(
         props.closeEditor();
       }}
       onSaveAsCharacter={statBlock => {
-        // Does this work?
-        props.libraries.StatBlocks.SaveEditedListing(
-          statBlockListing,
-          statBlock
+        const persistentCharacter = PersistentCharacter.Initialize(statBlock);
+        props.libraries.PersistentCharacters.SaveNewListing(
+          persistentCharacter
         );
         props.closeEditor();
       }}
