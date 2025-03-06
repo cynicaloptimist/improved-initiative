@@ -8,6 +8,7 @@ import { StatBlockHeader } from "./StatBlockHeader";
 import { useContext } from "react";
 import { LoadingIndicator } from "./LoadingIndicator";
 import ErrorBoundary from "./ErrorBoundary";
+import { DefaultRules } from "../Rules/Rules";
 
 interface StatBlockProps {
   statBlock: StatBlock;
@@ -36,6 +37,8 @@ export function StatBlockComponent(props: StatBlockProps) {
 
 function StatBlockComponentNoError(props: StatBlockProps) {
   const textEnricher = useContext(TextEnricherContext);
+  const rules = new DefaultRules();
+
   const statBlock = props.statBlock;
 
   const modifierTypes = [
@@ -170,6 +173,10 @@ function StatBlockComponentNoError(props: StatBlockProps) {
             {statBlock.Player == "player" ? "Level" : "Challenge"}
           </span>
           <span className="stat-value">{statBlock.Challenge}</span>
+          <span className="stat-label">Proficiency Bonus</span>
+          <span className="stat-value">
+            +{rules.GetProficiencyBonus(statBlock.Challenge)}
+          </span>
         </div>
       )}
 
