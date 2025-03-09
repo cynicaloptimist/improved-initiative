@@ -3,6 +3,7 @@ import { CombatStats } from "../../common/CombatStats";
 import { EncounterState } from "../../common/EncounterState";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { PlayerViewSettings } from "../../common/PlayerViewSettings";
+import _ = require("lodash");
 
 export class PlayerViewClient {
   constructor(private socket: Socket) {}
@@ -20,12 +21,15 @@ export class PlayerViewClient {
       this.socket.emit("request custom id", requestedId, done);
     });
 
-  public UpdateEncounter(
-    encounterId: string,
-    updatedEncounter: EncounterState<PlayerViewCombatantState>
-  ) {
-    this.socket.emit("update encounter", encounterId, updatedEncounter);
-  }
+  public UpdateEncounter = _.debounce(
+    (
+      encounterId: string,
+      updatedEncounter: EncounterState<PlayerViewCombatantState>
+    ) => {
+      this.socket.emit("update encounter", encounterId, updatedEncounter);
+    },
+    100
+  );
 
   public UpdateSettings(
     encounterId: string,
