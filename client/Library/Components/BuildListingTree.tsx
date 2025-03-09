@@ -20,7 +20,11 @@ type FolderModel = {
 };
 
 export function BuildListingTree<T extends Listable>(
-  buildListingComponent: (listing: Listing<T>) => JSX.Element,
+  buildListingComponent: (
+    listing: Listing<T>,
+    index: number,
+    array: Listing<T>[]
+  ) => JSX.Element,
   listingGroup: ListingGroup,
   listings: Listing<T>[]
 ): JSX.Element[] {
@@ -28,10 +32,10 @@ export function BuildListingTree<T extends Listable>(
 
   const foldersByKey: Record<string, FolderModel> = {};
 
-  listings.forEach(listing => {
+  listings.forEach((listing, index, array) => {
     const group = listingGroup.groupFn(listing);
     if (group.key == "" || group.key === undefined) {
-      const component = buildListingComponent(listing);
+      const component = buildListingComponent(listing, index, array);
 
       rootListingComponents.push(component);
     } else {
@@ -55,7 +59,11 @@ export function BuildListingTree<T extends Listable>(
 
 function buildFolderComponents<T extends Listable>(
   foldersByKey: Record<string, FolderModel>,
-  buildListingComponent: (listing: Listing<T>) => JSX.Element
+  buildListingComponent: (
+    listing: Listing<T>,
+    index: number,
+    array: Listing<T>[]
+  ) => JSX.Element
 ) {
   return Object.keys(foldersByKey)
     .sort()

@@ -2,7 +2,6 @@ import * as _ from "lodash";
 
 import { CombatStats } from "../../common/CombatStats";
 import { PostCombatStatsOption } from "../../common/Settings";
-import { StatBlock } from "../../common/StatBlock";
 import { UpdateLegacySavedEncounter } from "../Encounter/UpdateLegacySavedEncounter";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";

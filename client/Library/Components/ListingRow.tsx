@@ -27,6 +27,7 @@ export interface ListingProps<T extends Listable> {
   onPreviewOut?: (listing: Listing<T>) => void;
   extraButtons?: ExtraButton<T>[];
   showCount?: boolean;
+  showSource?: boolean;
 }
 
 interface ListingState {
@@ -76,12 +77,20 @@ export class ListingRow<T extends Listable> extends React.Component<
         ))
       : "";
 
+    let name = this.props.name;
+    if (this.props.showSource) {
+      const source = this.props.listing.Meta().FilterDimensions.Source;
+      if (source?.length) {
+        name += ` (${source})`;
+      }
+    }
+
     const extraButtons = this.props.extraButtons || [];
     return (
       <li className="c-listing">
         <ListingButton
           buttonClass="add c-listing-button--wide"
-          text={this.props.name}
+          text={name}
           onClick={this.addFn}
         >
           {countElements}
