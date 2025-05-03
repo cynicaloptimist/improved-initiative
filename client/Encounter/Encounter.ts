@@ -128,6 +128,8 @@ export class Encounter {
           c.Player = "";
         }
 
+        const statBlock = c.StatBlock ?? c;
+
         if (c.Id) {
           axios
             .get(`/statblocks/${c.Id}`)
@@ -135,13 +137,13 @@ export class Encounter {
             .then(statBlockFromLibrary => {
               const modifiedStatBlockFromLibrary = deepMerge(
                 statBlockFromLibrary,
-                c
+                statBlock
               );
               this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
             })
-            .catch(_ => defaultAdd(c));
+            .catch(_ => defaultAdd(statBlock));
         } else {
-          defaultAdd(c);
+          defaultAdd(statBlock);
         }
       });
     }
