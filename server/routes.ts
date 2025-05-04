@@ -23,6 +23,8 @@ import configureStorageRoutes from "./storageroutes";
 import { AccountStatus } from "./user";
 import { configureOpen5eContent } from "./configureOpen5eContent";
 import { configureAffiliateRoutes } from "./configureAffiliateRoutes";
+import request = require("request");
+import { configureImportRoutes } from "./configureImportRoutes";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
@@ -172,24 +174,7 @@ export default function (
   configureBasicRulesContent(app);
   configureOpen5eContent(app);
 
-  const importEncounter = async (req, res: Res) => {
-    const newViewId = await playerViews.InitializeNew();
-    const session = req.session;
-
-    if (typeof req.body.Combatants === "string") {
-      session.postedEncounter = {
-        Combatants: ParseJSONOrDefault(req.body.Combatants, [])
-      };
-    } else {
-      session.postedEncounter = req.body;
-    }
-
-    res.redirect("/e/" + newViewId);
-  };
-
-  app.post("/launchencounter/", importEncounter);
-  app.post("/importencounter/", importEncounter);
-
+  configureImportRoutes(app, playerViews);
   app.get("/transferlocalstorage/", (req: Req, res: Res) => {
     res.render("transferlocalstorage", { baseUrl });
   });

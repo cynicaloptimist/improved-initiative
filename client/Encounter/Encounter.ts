@@ -116,17 +116,19 @@ export class Encounter {
 
   public ImportEncounter = encounter => {
     const deepMerge = (a, b) => _.extend(true, {}, a, b);
-    const defaultAdd = c => {
-      if (c.TotalInitiativeModifier !== undefined) {
-        c.InitiativeModifier = c.TotalInitiativeModifier;
+    const defaultAdd = statBlock => {
+      if (statBlock.TotalInitiativeModifier !== undefined) {
+        statBlock.InitiativeModifier = statBlock.TotalInitiativeModifier;
       }
-      this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), c));
+      this.AddCombatantFromStatBlock(deepMerge(StatBlock.Default(), statBlock));
     };
     if (encounter.Combatants) {
       encounter.Combatants.forEach(c => {
         if (c.Player == "npc") {
           c.Player = "";
         }
+
+        const statBlock = c.StatBlock ?? c;
 
         if (c.Id) {
           axios
@@ -135,13 +137,13 @@ export class Encounter {
             .then(statBlockFromLibrary => {
               const modifiedStatBlockFromLibrary = deepMerge(
                 statBlockFromLibrary,
-                c
+                statBlock
               );
               this.AddCombatantFromStatBlock(modifiedStatBlockFromLibrary);
             })
-            .catch(_ => defaultAdd(c));
+            .catch(_ => defaultAdd(statBlock));
         } else {
-          defaultAdd(c);
+          defaultAdd(statBlock);
         }
       });
     }
