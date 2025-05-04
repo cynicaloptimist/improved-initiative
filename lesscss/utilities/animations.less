@@ -14,3 +14,16 @@
     transform: translateY(-5px);
   }
 }
+
+.glow {
+  animation-name: glow;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 3px rgba(227, 152, 43, 0.5); }
+  50% { box-shadow: 0 0 8px rgba(227, 152, 43, 1); }
+  100% { box-shadow: 0 0 3px rgba(227, 152, 43, 0.5); }
+}

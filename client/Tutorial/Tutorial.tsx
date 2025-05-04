@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { TutorialSteps } from "./TutorialSteps";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { Button } from "../Components/Button";
@@ -9,6 +8,9 @@ import { Metrics } from "../Utility/Metrics";
 
 export function Tutorial(props: { onClose: () => void }): JSX.Element {
   const [stepIndex, setStepIndex] = useState(0);
+  const [previousStepIndex, setPreviousStepIndex] = useState(-1);
+  const [awaitActionCompleted, setAwaitActionCompleted] = useState(false); 
+
   const close = useCallback(() => {
     document
       .querySelectorAll(".tutorial-focus")
@@ -17,7 +19,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
   }, [props.onClose]);
 
   const advance = () => {
-    if (stepIndex == 0) {
+    if (stepIndex === 0) {
       Metrics.TrackEvent("tutorial_begin");
     }
     const nextStepIndex = stepIndex + 1;
@@ -25,7 +27,9 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
       Metrics.TrackEvent("tutorial_complete");
       return close();
     }
+    setPreviousStepIndex(stepIndex);
     setStepIndex(nextStepIndex);
+    setAwaitActionCompleted(false); 
   };
 
   const step = TutorialSteps[stepIndex];
@@ -33,7 +37,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
   useEffect(() => {
     const subscription = NotifyTutorialOfAction.subscribe(action => {
       if (step.AwaitAction === action) {
-        advance();
+        setAwaitActionCompleted(true);
       }
     });
 
@@ -41,23 +45,59 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
   }, [stepIndex]);
 
   useLayoutEffect(() => {
-    document
-      .querySelectorAll(".tutorial-focus")
-      .forEach(e => e.classList.remove("tutorial-focus"));
+    // Function to remove specified classes from a list of elements
+    const removeClasses = (elements: NodeListOf<HTMLElement>, ...classes: string[]) => {
+      elements.forEach(e => classes.forEach(c => e.classList.remove(c)));
+    };
 
+    // Function to add specified classes to a list of elements
+    const addClasses = (elements: NodeListOf<HTMLElement>, ...classes: string[]) => {
+      elements.forEach(e => classes.forEach(c => e.classList.add(c)));
+    };
+
+    // Store previously highlighted elements to remove their classes later
+    let previousHighlightedElements: NodeListOf<HTMLElement> | null = null;
+    if (previousStepIndex !== -1) {
+      const previousStep = TutorialSteps[previousStepIndex];
+      previousHighlightedElements = document.querySelectorAll<HTMLElement>(previousStep.HighlightSelector);
+      removeClasses(previousHighlightedElements, "tutorial-highlight", "glow");
+    }
+
+    // Remove 'tutorial-focus' class from all elements
+    const tutorialFocusElements = document.querySelectorAll<HTMLElement>(".tutorial-focus");
+    removeClasses(tutorialFocusElements, "tutorial-focus");
+
+    // Add 'tutorial-focus' class to focused elements
     const focusSelector = step.RaiseSelector;
-    const focusedElements =
-      document.querySelectorAll<HTMLElement>(focusSelector);
+    const focusedElements = document.querySelectorAll<HTMLElement>(focusSelector);
     if (focusedElements.length === 0) {
       console.error("Tutorial binding broken");
       return;
     }
-    focusedElements.forEach(e => e.classList.add("tutorial-focus"));
+    addClasses(focusedElements, "tutorial-focus");
+
+    // Calculate and set position of the tutorial widget
     const position = step.CalculatePosition(focusedElements);
     const tutorialWidget = document.querySelector<HTMLElement>(".tutorial");
-    tutorialWidget.style.setProperty("left", position.left + "px");
-    tutorialWidget.style.setProperty("top", position.top + "px");
-  }, [stepIndex]);
+    tutorialWidget.style.setProperty("left", `${position.left}px`);
+    tutorialWidget.style.setProperty("top", `${position.top}px`);
+
+    // Highlight elements if specified
+    if (step.HighlightSelector) {
+      const highlightedElements = document.querySelectorAll<HTMLElement>(step.HighlightSelector);
+      addClasses(highlightedElements, "tutorial-highlight", "glow");
+    }
+
+    // Clean-up function to remove highlighted classes from previous step's elements
+    return () => {
+      if (previousHighlightedElements) {
+        removeClasses(previousHighlightedElements, "tutorial-highlight", "glow");
+      }
+
+      const glowingElements = document.querySelectorAll<HTMLElement>(".glow");
+      glowingElements.forEach(e => e.classList.remove("glow")); 
+    };
+  }, [stepIndex, previousStepIndex]);
 
   return (
     <div className="tutorial">
@@ -67,7 +107,7 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
         onClick={advance}
         text="Next"
         additionalClassNames="next"
-        disabled={step.AwaitAction !== undefined}
+        disabled={!awaitActionCompleted && step.AwaitAction !== undefined} 
         key={"next-button-" + stepIndex}
       />
       <Button onClick={close} text="End Tutorial" />

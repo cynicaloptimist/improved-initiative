@@ -32,6 +32,7 @@ import { UpdatePersistentCharacter } from "../Library/Libraries";
 import { Library } from "../Library/useLibrary";
 import axios from "axios";
 import { AutoPopulatedNotes } from "./AutoPopulatedNotes";
+import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
@@ -202,6 +203,9 @@ export class Encounter {
       };
 
       this.AddCombatantFromState(initialState);
+      
+      NotifyTutorialOfAction("CreatureAdded"); 
+
     } catch (e) {
       console.warn("Couldn't add statblock: " + e);
       console.warn(JSON.stringify(statBlockJson));
@@ -246,6 +250,8 @@ export class Encounter {
     const combatant = this.AddCombatantFromState(initialState);
 
     combatant.AttachToPersistentCharacterLibrary(updatePersistentCharacter);
+
+    NotifyTutorialOfAction("PlayerCharacterAdded");
 
     return combatant;
   }
