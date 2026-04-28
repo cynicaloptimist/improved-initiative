@@ -84,6 +84,11 @@ export default async function (
     cacheMaxAge = 0;
   }
 
+  if(!process.env.BASE_URL?.length) {
+    console.error("BASE_URL environment variable is not set. Cannot start server.");
+    process.exit(1);
+  }
+
   app.engine("html", mustacheEngine);
   app.set("view engine", "html");
   app.set("views", __dirname + "/../html");
