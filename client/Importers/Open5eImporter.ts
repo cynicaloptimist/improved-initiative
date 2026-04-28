@@ -230,7 +230,7 @@ export function ImportOpen5eV2StatBlock(
     }),
     Senses: getSensesV2(sb),
     Languages: commaSeparatedStrings(sb.languages.as_string),
-    Challenge: sb.challenge_rating_text,
+    Challenge: normalizeChallengeRating(sb.challenge_rating),
     Traits: nameAndDescArraysV2(sb.traits),
     Actions: nameAndDescArraysV2(
       sb.actions.filter(a => a.action_type === "ACTION")
