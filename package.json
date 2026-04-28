@@ -90,7 +90,7 @@
     "json-url": "^2.6.0",
     "knockout": "^3.5.1",
     "localforage": "^1.10.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "lz-string": "^1.5.0",
     "moment": "^2.29.4",
     "mongodb": "^4.17.1",
