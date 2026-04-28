@@ -37,17 +37,17 @@ export function ParseJSONOrDefault<T>(json: string, defaultValue: T): T {
   }
 }
 
-export function normalizeChallengeRating(challengeRating: string): string {
-  if (challengeRating == "0.125") {
+export function normalizeChallengeRating(challengeRating: number): string {
+  if (challengeRating == 0.125) {
     return "1/8";
   }
-  if (challengeRating == "0.25") {
+  if (challengeRating == 0.25) {
     return "1/4";
   }
-  if (challengeRating == "0.5") {
+  if (challengeRating == 0.5) {
     return "1/2";
   }
-  return challengeRating;
+  return challengeRating.toString();
 }
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

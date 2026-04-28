@@ -28,7 +28,7 @@ export async function configureOpen5eContent(
   }
 
   const includeMonsterFields =
-    "name,key,size,type,alignment,challenge_rating_text,document";
+    "name,key,size,type,alignment,challenge_rating,document";
   const includeSpellFields =
     "name,slug,level,school,document__title,document__slug";
 
@@ -125,13 +125,13 @@ function getMetaForMonster(r: any): ListingMeta {
     Id: "open5e-" + r.key,
     Name: r.name,
     Path: "",
-    Link: `https://api.open5e.com/v2/creatures/${r.key}`,
+    Link: `https://api.open5e.com/v2/creatures/${r.key}/`,
     LastUpdateMs: 0,
     SearchHint: `${r.name} ${r.type.name} ${r.alignment}`
       .toLocaleLowerCase()
       .replace(/[^\w\s]/g, ""),
     FilterDimensions: {
-      Level: r.challenge_rating_text,
+      Level: normalizeChallengeRating(r.challenge_rating),
       Source: r.document.display_name,
       Type: `${r.type.name}`
     }
@@ -144,7 +144,7 @@ function getMetaForSpell(r: any): ListingMeta {
     Id: "open5e-spell-" + r.slug,
     Name: r.name,
     Path: "",
-    Link: `https://api.open5e.com/v1/spells/${r.slug}`,
+    Link: `https://api.open5e.com/v1/spells/${r.slug}/`,
     LastUpdateMs: 0,
     SearchHint: `${r.name} ${r.level} ${r.school}`
       .toLocaleLowerCase()
