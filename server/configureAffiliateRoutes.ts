@@ -8,7 +8,7 @@ export function configureAffiliateRoutes(app: express.Application) {
     for (const route of routes) {
       app.get(`/${route}`, async (req: Req, res: Res) => {
         return res.redirect(
-          "/" + `?utm_source=affiliate&utm_campaign=${route}`
+          "/" + `?utm_source=affiliate_route&utm_medium=affiliate&utm_campaign=${route}`
         );
       });
     }
