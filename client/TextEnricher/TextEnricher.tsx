@@ -14,8 +14,11 @@ import {
 import { Listing } from "../Library/Listing";
 import { Conditions2025 } from "../Rules/Conditions";
 import { Dice } from "../Rules/Dice";
+
 import { IRules, DefaultRules } from "../Rules/Rules";
 import { BeanCounter, Counter } from "./Counter";
+
+const conditionsRegex = concatenatedStringRegex(_.keys(Conditions2025));
 
 interface ReplaceConfig {
   [name: string]: {
@@ -92,8 +95,8 @@ export class TextEnricher {
     replacer: any,
     children: React.ReactNode & React.ReactNode[]
   ) {
-    if(!children) {
-      return null
+    if (!children) {
+      return null;
     }
     if (isString(children)) {
       return replacer(children);
@@ -134,7 +137,7 @@ export class TextEnricher {
         )
       },
       conditions: {
-        pattern: concatenatedStringRegex(_.keys(Conditions2025)),
+        pattern: conditionsRegex,
         matcherFn: (rawText, processed, key) => (
           <span
             className="condition-reference"
