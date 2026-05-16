@@ -2,13 +2,13 @@ import * as React from "react";
 import { AutoGroupInitiativeOption } from "../../common/Settings";
 import { toModifierString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
-import { SubmitButton } from "../Components/Button";
+import { Button, SubmitButton } from "../Components/Button";
 import { CurrentSettings } from "../Settings/Settings";
 import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { PromptProps } from "./PendingPrompts";
 import * as _ from "lodash";
 
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
 
 interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];
@@ -22,12 +22,64 @@ function InitiativePromptComponent(props: InitiativePromptComponentProps) {
         <h4>Roll Initiative</h4>
         <SubmitButton />
       </div>
-      <ul className="playercharacters">
-        {props.playerCharacters.map(combatantInitiativeField)}
+      <InitiativeSide
+        combatants={props.playerCharacters}
+        sideLabel="PC"
+        sideClassName="playercharacters"
+      />
+      <InitiativeSide
+        combatants={props.nonPlayerCharacters}
+        sideLabel="Enemy"
+        sideClassName="nonplayercharacters"
+      />
+    </div>
+  );
+}
+
+function InitiativeSide(props: {
+  combatants: Combatant[];
+  sideLabel: "PC" | "Enemy";
+  sideClassName: string;
+}) {
+  const { setValues, values } = useFormikContext<InitiativeModel>();
+  const [rerolledType, setRerolledType] = React.useState<null | string>(null);
+  return (
+    <div className="roll-initiative__side">
+      <ul className={props.sideClassName}>
+        {props.combatants.map(combatantInitiativeField)}
       </ul>
-      <ul className="nonplayercharacters">
-        {props.nonPlayerCharacters.map(combatantInitiativeField)}
-      </ul>
+      {rerolledType ? (
+        <span className="roll-initiative__did-reroll">{`Rerolled with ${rerolledType}!`}</span>
+      ) : (
+        <div className="roll-initiative__buttons">
+          <Button
+            fontAwesomeIcon="star"
+            tooltip={`Reroll ${props.sideLabel} initiative with advantage`}
+            onClick={() => {
+              rerollInitiative(
+                props.combatants,
+                "advantage",
+                values,
+                setValues
+              );
+              setRerolledType("advantage");
+            }}
+          />
+          <Button
+            fontAwesomeIcon="exclamation-triangle"
+            tooltip={`Reroll ${props.sideLabel} initiative with disadvantage`}
+            onClick={() => {
+              rerollInitiative(
+                props.combatants,
+                "disadvantage",
+                values,
+                setValues
+              );
+              setRerolledType("disadvantage");
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
@@ -71,6 +123,32 @@ function combatantInitiativeField(combatant: Combatant) {
       </label>
     </li>
   );
+}
+
+function rerollInitiative(
+  combatants: Combatant[],
+  type: "advantage" | "disadvantage",
+  initiativeModel: InitiativeModel,
+  setValues: (values: InitiativeModel) => void
+) {
+  combatants.forEach(c => {
+    if (initiativeModel.initiativesById[c.Id] !== undefined) {
+      const newInitiativeRoll = c.GetInitiativeRoll();
+      if (
+        type === "advantage" &&
+        initiativeModel.initiativesById[c.Id] < newInitiativeRoll
+      ) {
+        initiativeModel.initiativesById[c.Id] = newInitiativeRoll;
+      }
+      if (
+        type === "disadvantage" &&
+        initiativeModel.initiativesById[c.Id] > newInitiativeRoll
+      ) {
+        initiativeModel.initiativesById[c.Id] = newInitiativeRoll;
+      }
+    }
+  });
+  setValues({ ...initiativeModel });
 }
 
 type InitiativeModel = {
