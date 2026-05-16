@@ -83,16 +83,18 @@
     }
 
     li {
-      display: flex;
-      margin: 0;
-      padding: @medium-spacer;
-
       &:last-of-type {
         margin-bottom: 0;
       }
 
       &:nth-child(2n-1) {
         background-color: var(--zebra-white);
+      }
+
+      label {
+        flex-grow: 1;
+        display: flex;
+        padding: @medium-spacer;
       }
 
       span {

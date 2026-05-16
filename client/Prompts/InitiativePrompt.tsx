@@ -59,14 +59,16 @@ function combatantInitiativeField(combatant: Combatant) {
   const className = combatant.InitiativeGroup() !== null ? "fas fa-link" : "";
   return (
     <li key={combatant.Id}>
-      <span
-        className={className}
-      >{`${combatant.DisplayName()} (${initiativeBonus})${specialRollIndicator}: `}</span>
-      <Field
-        className="response"
-        type="number"
-        name={`initiativesById.${combatant.Id}`}
-      />
+      <label>
+        <span
+          className={className}
+        >{`${combatant.DisplayName()} (${initiativeBonus})${specialRollIndicator}: `}</span>
+        <Field
+          className="response"
+          type="number"
+          name={`initiativesById.${combatant.Id}`}
+        />
+      </label>
     </li>
   );
 }
