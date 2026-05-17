@@ -56,7 +56,7 @@ function InitiativeSide(props: {
         )}
       </ul>
       {rerolledType ? (
-        <span className="roll-initiative__did-reroll">{`Rerolled with ${rerolledType}!`}</span>
+        <span className="roll-initiative__did-reroll">{`Rerolled with ${rerolledType}.`}</span>
       ) : (
         <div className="roll-initiative__buttons">
           <Button
