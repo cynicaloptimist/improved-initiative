@@ -12,6 +12,7 @@ import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
 import { RollResult } from "../Rules/RollResult";
 import { AbilityCheckResult } from "../Rules/Rules";
+import { AutoGroupInitiativeOption } from "../../common/Settings";
 
 export class Combatant {
   constructor(
@@ -276,15 +277,17 @@ export class Combatant {
   private setAutoInitiativeGroup = () => {
     const autoInitiativeGroup = CurrentSettings().Rules.AutoGroupInitiative;
     let lowestInitiativeCombatant: Combatant | null = null;
-    if (autoInitiativeGroup == "None") {
+    if (autoInitiativeGroup == AutoGroupInitiativeOption.None) {
       return;
     }
-    if (autoInitiativeGroup == "By Name") {
+    if (autoInitiativeGroup == AutoGroupInitiativeOption.ByName) {
       if (this.IsPlayerCharacter()) {
         return;
       }
       lowestInitiativeCombatant = this.findLowestInitiativeGroupByName();
-    } else if (autoInitiativeGroup == "Side Initiative") {
+    } else if (
+      autoInitiativeGroup == AutoGroupInitiativeOption.SideInitiative
+    ) {
       lowestInitiativeCombatant = this.findLowestInitiativeGroupBySide();
     }
 
