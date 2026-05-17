@@ -175,7 +175,8 @@ export class Combatant {
 
   public GetInitiativeRoll: () => AbilityCheckResult = () => {
     const sideInitiative =
-      CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
+      CurrentSettings().Rules.AutoGroupInitiative ==
+      AutoGroupInitiativeOption.SideInitiative;
 
     let initiativeSpecialRoll: InitiativeSpecialRoll | undefined = undefined;
     if (!sideInitiative) {

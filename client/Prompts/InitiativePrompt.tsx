@@ -198,12 +198,17 @@ export function InitiativePrompt(
   const playerCharacters = byGroup.filter(c => c.IsPlayerCharacter());
   const nonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter());
 
+  const sideInitiative =
+    CurrentSettings().Rules.AutoGroupInitiative ==
+    AutoGroupInitiativeOption.SideInitiative;
   const preRolledInitiatives: InitiativeModel = {
     initiativesById: _.mapValues(
       _.keyBy(byGroup, c => c.Id),
       c => ({
         ...c.GetInitiativeRoll(),
-        specialRoll: c.StatBlock().InitiativeSpecialRoll
+        specialRoll: sideInitiative
+          ? undefined
+          : c.StatBlock().InitiativeSpecialRoll
       })
     )
   };
