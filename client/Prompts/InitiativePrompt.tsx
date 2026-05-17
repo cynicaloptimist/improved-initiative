@@ -9,6 +9,8 @@ import { PromptProps } from "./PendingPrompts";
 import * as _ from "lodash";
 
 import { Field, useFormikContext } from "formik";
+import { InitiativeSpecialRoll } from "../../common/StatBlock";
+import { AbilityCheckResult } from "../Rules/Rules";
 
 interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];
@@ -46,7 +48,12 @@ function InitiativeSide(props: {
   return (
     <div className="roll-initiative__side">
       <ul className={props.sideClassName}>
-        {props.combatants.map(combatantInitiativeField)}
+        {props.combatants.map(combatant =>
+          combatantInitiativeField(
+            combatant,
+            values.initiativesById[combatant.Id]
+          )
+        )}
       </ul>
       {rerolledType ? (
         <span className="roll-initiative__did-reroll">{`Rerolled with ${rerolledType}!`}</span>
@@ -84,7 +91,10 @@ function InitiativeSide(props: {
   );
 }
 
-function combatantInitiativeField(combatant: Combatant) {
+function combatantInitiativeField(
+  combatant: Combatant,
+  initiativeResult: AbilityCheckResult & { specialRoll?: InitiativeSpecialRoll }
+) {
   const sideInitiative =
     CurrentSettings().Rules.AutoGroupInitiative ==
     AutoGroupInitiativeOption.SideInitiative;
@@ -94,16 +104,13 @@ function combatantInitiativeField(combatant: Combatant) {
 
   let specialRollIndicator = "";
   if (!sideInitiative) {
-    if (
-      combatant.StatBlock().InitiativeAdvantage ||
-      combatant.StatBlock().InitiativeSpecialRoll == "advantage"
-    ) {
+    if (initiativeResult.specialRoll == "advantage") {
       specialRollIndicator = " [advantage]";
     }
-    if (combatant.StatBlock().InitiativeSpecialRoll == "disadvantage") {
+    if (initiativeResult.specialRoll == "disadvantage") {
       specialRollIndicator = " [disadvantage]";
     }
-    if (combatant.StatBlock().InitiativeSpecialRoll == "take-ten") {
+    if (initiativeResult.specialRoll == "take-ten") {
       specialRollIndicator = " [take 10]";
     }
   }
@@ -118,7 +125,7 @@ function combatantInitiativeField(combatant: Combatant) {
         <Field
           className="response"
           type="number"
-          name={`initiativesById.${combatant.Id}`}
+          name={`initiativesById.${combatant.Id}.finalValue`}
         />
       </label>
     </li>
@@ -133,18 +140,28 @@ function rerollInitiative(
 ) {
   combatants.forEach(c => {
     if (initiativeModel.initiativesById[c.Id] !== undefined) {
-      const newInitiativeRoll = c.GetInitiativeRoll().finalValue;
-      if (
-        type === "advantage" &&
-        initiativeModel.initiativesById[c.Id] < newInitiativeRoll
-      ) {
-        initiativeModel.initiativesById[c.Id] = newInitiativeRoll;
-      }
-      if (
-        type === "disadvantage" &&
-        initiativeModel.initiativesById[c.Id] > newInitiativeRoll
-      ) {
-        initiativeModel.initiativesById[c.Id] = newInitiativeRoll;
+      const result = initiativeModel.initiativesById[c.Id];
+      const cancelAdvantage =
+        (result.specialRoll == "advantage" && type == "disadvantage") ||
+        (result.specialRoll == "disadvantage" && type == "advantage");
+      if (cancelAdvantage) {
+        result.rolls = [result.rolls[0]];
+        result.finalValue = result.rolls[0] + c.InitiativeBonus();
+        result.specialRoll = undefined;
+      } else {
+        if (result.specialRoll == "take-ten") {
+          return;
+        }
+        if (type == "advantage") {
+          result.rolls = [result.rolls[0], c.GetInitiativeRoll().rolls[0]];
+          result.specialRoll = "advantage";
+          result.finalValue = _.max(result.rolls) + c.InitiativeBonus();
+        }
+        if (type == "disadvantage") {
+          result.rolls = [result.rolls[0], c.GetInitiativeRoll().rolls[0]];
+          result.specialRoll = "disadvantage";
+          result.finalValue = _.min(result.rolls) + c.InitiativeBonus();
+        }
       }
     }
   });
@@ -153,7 +170,9 @@ function rerollInitiative(
 
 type InitiativeModel = {
   initiativesById: {
-    [combatantId: string]: number;
+    [combatantId: string]: AbilityCheckResult & {
+      specialRoll?: InitiativeSpecialRoll;
+    };
   };
 };
 
@@ -180,7 +199,10 @@ export function InitiativePrompt(
   const preRolledInitiatives: InitiativeModel = {
     initiativesById: _.mapValues(
       _.keyBy(byGroup, c => c.Id),
-      c => c.GetInitiativeRoll().finalValue
+      c => ({
+        ...c.GetInitiativeRoll(),
+        specialRoll: c.StatBlock().InitiativeSpecialRoll
+      })
     )
   };
 
@@ -196,7 +218,7 @@ export function InitiativePrompt(
     onSubmit: model => {
       combatants.forEach(c => {
         if (model.initiativesById[c.Id] !== undefined) {
-          c.Initiative(model.initiativesById[c.Id]);
+          c.Initiative(model.initiativesById[c.Id].finalValue);
         }
       });
       startEncounter();
