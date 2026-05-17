@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { isString } from "lodash";
+import { isArray, isString } from "lodash";
 import * as React from "react";
 import { SpecialComponents } from "react-markdown/lib/ast-to-react";
 import { NormalComponents } from "react-markdown/lib/complex-types";
@@ -93,7 +93,7 @@ export class TextEnricher {
 
   private applyReplacer(
     replacer: any,
-    children: React.ReactNode & React.ReactNode[]
+    children: React.ReactNode | React.ReactNode[]
   ) {
     if (!children) {
       return null;
@@ -101,8 +101,14 @@ export class TextEnricher {
     if (isString(children)) {
       return replacer(children);
     }
-    if (children.length == 1 && isString(children[0])) {
-      return replacer(children[0]);
+    if (isArray(children)) {
+      return children.map(child => {
+        if (isString(child)) {
+          return replacer(child);
+        } else {
+          return child;
+        }
+      });
     }
     return children;
   }
