@@ -99,20 +99,18 @@ function combatantInitiativeField(
     CurrentSettings().Rules.AutoGroupInitiative ==
     AutoGroupInitiativeOption.SideInitiative;
   const initiativeBonus = sideInitiative
-    ? null
+    ? ""
     : toModifierString(combatant.InitiativeBonus());
 
   let rollsString = `[${initiativeResult.rolls[0]}]`;
-  if (!sideInitiative) {
-    if (initiativeResult.specialRoll == "advantage") {
-      rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]a`;
-    }
-    if (initiativeResult.specialRoll == "disadvantage") {
-      rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]d`;
-    }
-    if (initiativeResult.specialRoll == "take-ten") {
-      rollsString = `[10]`;
-    }
+  if (initiativeResult.specialRoll == "advantage") {
+    rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]a`;
+  }
+  if (initiativeResult.specialRoll == "disadvantage") {
+    rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]d`;
+  }
+  if (initiativeResult.specialRoll == "take-ten") {
+    rollsString = `[10]`;
   }
 
   const className = combatant.InitiativeGroup() !== null ? "fas fa-link" : "";
