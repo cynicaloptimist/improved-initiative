@@ -29,6 +29,7 @@ export function PowerField(props: PowerFieldProps) {
           placeholder="Name"
           name={`${props.powerType}[${props.index}].Name`}
           innerRef={nameInput}
+          autoComplete="off"
         />
         <span
           className="fa-clickable fa-trash"

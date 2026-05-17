@@ -27,6 +27,7 @@ export function EditAliasPrompt(
           type="text"
           defaultValue={combatant.Alias()}
           id={labelId}
+          autoComplete="off"
         />
       </StandardPromptLayout>
     ),

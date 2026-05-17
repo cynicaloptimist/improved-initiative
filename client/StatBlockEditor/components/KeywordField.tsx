@@ -24,6 +24,7 @@ export function KeywordField(props: KeywordFieldProps) {
         className="name"
         name={`${props.keywordType}[${props.index}]`}
         innerRef={nameInput}
+        autoComplete="off"
       />
       <span
         className="fa-clickable fa-trash"

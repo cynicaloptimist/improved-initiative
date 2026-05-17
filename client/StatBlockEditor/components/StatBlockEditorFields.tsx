@@ -21,7 +21,12 @@ export const ValueAndNotesField = (props: {
         className="value"
         name={`${props.fieldName}.Value`}
       />
-      <Field type="text" className="notes" name={`${props.fieldName}.Notes`} />
+      <Field
+        type="text"
+        className="notes"
+        name={`${props.fieldName}.Notes`}
+        autoComplete="off"
+      />
     </div>
   </label>
 );
