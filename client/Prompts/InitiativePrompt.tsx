@@ -99,19 +99,19 @@ function combatantInitiativeField(
     CurrentSettings().Rules.AutoGroupInitiative ==
     AutoGroupInitiativeOption.SideInitiative;
   const initiativeBonus = sideInitiative
-    ? 0
+    ? null
     : toModifierString(combatant.InitiativeBonus());
 
-  let specialRollIndicator = "";
+  let rollsString = `[${initiativeResult.rolls[0]}]`;
   if (!sideInitiative) {
     if (initiativeResult.specialRoll == "advantage") {
-      specialRollIndicator = " [advantage]";
+      rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]a`;
     }
     if (initiativeResult.specialRoll == "disadvantage") {
-      specialRollIndicator = " [disadvantage]";
+      rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]d`;
     }
     if (initiativeResult.specialRoll == "take-ten") {
-      specialRollIndicator = " [take 10]";
+      rollsString = `[10]`;
     }
   }
 
@@ -121,7 +121,7 @@ function combatantInitiativeField(
       <label>
         <span
           className={className}
-        >{`${combatant.DisplayName()} (${initiativeBonus})${specialRollIndicator}: `}</span>
+        >{`${combatant.DisplayName()} (${rollsString}${initiativeBonus}): `}</span>
         <Field
           className="response"
           type="number"
