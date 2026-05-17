@@ -152,6 +152,10 @@ function rerollInitiative(
         if (result.specialRoll == "take-ten") {
           return;
         }
+        const specialRollAlreadyApplied = result.specialRoll == type;
+        if (specialRollAlreadyApplied) {
+          return;
+        }
         if (type == "advantage") {
           result.rolls = [result.rolls[0], c.GetInitiativeRoll().rolls[0]];
           result.specialRoll = "advantage";
