@@ -133,7 +133,7 @@ function rerollInitiative(
 ) {
   combatants.forEach(c => {
     if (initiativeModel.initiativesById[c.Id] !== undefined) {
-      const newInitiativeRoll = c.GetInitiativeRoll();
+      const newInitiativeRoll = c.GetInitiativeRoll().finalValue;
       if (
         type === "advantage" &&
         initiativeModel.initiativesById[c.Id] < newInitiativeRoll
@@ -180,7 +180,7 @@ export function InitiativePrompt(
   const preRolledInitiatives: InitiativeModel = {
     initiativesById: _.mapValues(
       _.keyBy(byGroup, c => c.Id),
-      c => c.GetInitiativeRoll()
+      c => c.GetInitiativeRoll().finalValue
     )
   };
 

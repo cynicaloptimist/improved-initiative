@@ -10,6 +10,8 @@ import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { Metrics } from "../Utility/Metrics";
 import { CombatTimer } from "../Widgets/CombatTimer";
 import { Tag } from "./Tag";
+import { RollResult } from "../Rules/RollResult";
+import { AbilityCheckResult } from "../Rules/Rules";
 
 export class Combatant {
   constructor(
@@ -170,7 +172,7 @@ export class Combatant {
 
   public MaxHP = ko.computed(() => this.StatBlock().HP.Value);
 
-  public GetInitiativeRoll: () => number = () => {
+  public GetInitiativeRoll: () => AbilityCheckResult = () => {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative == "Side Initiative";
 

@@ -153,7 +153,7 @@ export class EncounterFlow {
 
   private rerollInitiativeWithoutPrompt = () => {
     const combatants = this.encounter.Combatants();
-    combatants.forEach(c => c.Initiative(c.GetInitiativeRoll()));
+    combatants.forEach(c => c.Initiative(c.GetInitiativeRoll().finalValue));
     this.encounter.SortByInitiative(false);
   };
 }
