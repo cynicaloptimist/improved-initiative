@@ -6,6 +6,7 @@ import { KeywordField } from "./KeywordField";
 import { NameAndModifierField } from "./NameAndModifierField";
 import { PowerField } from "./PowerField";
 import { SortableList } from "./SortableList";
+import { Info } from "../../Components/Info";
 
 type FormApi = FormikProps<any>;
 
@@ -21,7 +22,12 @@ export const ValueAndNotesField = (props: {
         className="value"
         name={`${props.fieldName}.Value`}
       />
-      <Field type="text" className="notes" name={`${props.fieldName}.Notes`} />
+      <Field
+        type="text"
+        className="notes"
+        name={`${props.fieldName}.Notes`}
+        autoComplete="off"
+      />
     </div>
   </label>
 );
@@ -30,6 +36,7 @@ export const InitiativeField = () => (
   <div className="c-statblock-editor__text">
     <label className="c-statblock-editor__label" htmlFor="InitiativeModifier">
       Initiative Modifier
+      <Info>Additional modifier that stacks with Dexterity bonus</Info>
     </label>
     <div className="inline">
       <Field

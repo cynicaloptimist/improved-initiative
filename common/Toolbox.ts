@@ -22,7 +22,7 @@ export function probablyUniqueString(): string {
 export function concatenatedStringRegex(strings: string[]): RegExp {
   const allStrings = strings
     .map(s => escapeRegExp(s))
-    .sort((a, b) => b.localeCompare(a));
+    .sort((a, b) => b.length - a.length);
   if (allStrings.length === 0) {
     return new RegExp("a^");
   }

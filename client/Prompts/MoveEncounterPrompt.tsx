@@ -27,7 +27,7 @@ function MoveEncounterPromptComponent(props: MoveEncounterPromptProps) {
         fieldName="folderName"
         options={props.folderNames}
       />
-      <Field type="text" name="encounterName" />
+      <Field type="text" name="encounterName" autoComplete="off" />
     </StandardPromptLayout>
   );
 }

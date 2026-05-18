@@ -24,7 +24,7 @@ export function ConcentrationPrompt(
         <p className="p-standard-prompt__label">
           {combatant.DisplayName()} DC {<strong>{concentrationDC}</strong>}
           {" concentration check (Constitution save). Auto-roll: "}
-          {<strong>{autoRoll}</strong>}
+          {<strong>{autoRoll.finalValue}</strong>}
         </p>
         <SubmitButton
           text="Fail"

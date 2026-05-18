@@ -24,6 +24,7 @@ export function NameAndModifierField(props: NameAndModifierFieldProps) {
         className="name"
         name={`${props.modifierType}[${props.index}].Name`}
         innerRef={nameInput}
+        autoComplete="off"
       />
       <Field
         type="number"

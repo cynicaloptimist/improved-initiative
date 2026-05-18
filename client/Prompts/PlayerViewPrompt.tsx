@@ -62,6 +62,7 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
               <Field
                 type="text"
                 name="backgroundImageUrl"
+                autoComplete="off"
                 style={{ width: 200 }}
               />
             </label>

@@ -15,7 +15,7 @@ export function EditInitiativePrompt(
 ): PromptProps<EditInitiativeModel> {
   const currentInitiative = combatant.Initiative();
   const modifier = toModifierString(combatant.InitiativeBonus());
-  const preRoll = currentInitiative || combatant.GetInitiativeRoll();
+  const preRoll = currentInitiative || combatant.GetInitiativeRoll().finalValue;
   const initiativeLabelId = probablyUniqueString();
   const breakLinkLabelId = probablyUniqueString();
 

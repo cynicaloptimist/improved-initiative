@@ -2,13 +2,15 @@ import * as React from "react";
 import { AutoGroupInitiativeOption } from "../../common/Settings";
 import { toModifierString } from "../../common/Toolbox";
 import { Combatant } from "../Combatant/Combatant";
-import { SubmitButton } from "../Components/Button";
+import { Button, SubmitButton } from "../Components/Button";
 import { CurrentSettings } from "../Settings/Settings";
 import { NotifyTutorialOfAction } from "../Tutorial/NotifyTutorialOfAction";
 import { PromptProps } from "./PendingPrompts";
 import * as _ from "lodash";
 
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
+import { InitiativeSpecialRoll } from "../../common/StatBlock";
+import { AbilityCheckResult } from "../Rules/Rules";
 
 interface InitiativePromptComponentProps {
   playerCharacters: Combatant[];
@@ -22,58 +24,157 @@ function InitiativePromptComponent(props: InitiativePromptComponentProps) {
         <h4>Roll Initiative</h4>
         <SubmitButton />
       </div>
-      <ul className="playercharacters">
-        {props.playerCharacters.map(combatantInitiativeField)}
-      </ul>
-      <ul className="nonplayercharacters">
-        {props.nonPlayerCharacters.map(combatantInitiativeField)}
-      </ul>
+      <InitiativeSide
+        combatants={props.playerCharacters}
+        sideLabel="PC"
+        sideClassName="playercharacters"
+      />
+      <InitiativeSide
+        combatants={props.nonPlayerCharacters}
+        sideLabel="Enemy"
+        sideClassName="nonplayercharacters"
+      />
     </div>
   );
 }
 
-function combatantInitiativeField(combatant: Combatant) {
+function InitiativeSide(props: {
+  combatants: Combatant[];
+  sideLabel: "PC" | "Enemy";
+  sideClassName: string;
+}) {
+  const { setValues, values } = useFormikContext<InitiativeModel>();
+  const [rerolledType, setRerolledType] = React.useState<null | string>(null);
+  return (
+    <div className="roll-initiative__side">
+      <ul className={props.sideClassName}>
+        {props.combatants.map(combatant =>
+          combatantInitiativeField(
+            combatant,
+            values.initiativesById[combatant.Id]
+          )
+        )}
+      </ul>
+      {rerolledType ? (
+        <span className="roll-initiative__did-reroll">{`Rerolled with ${rerolledType}.`}</span>
+      ) : (
+        <div className="roll-initiative__buttons">
+          <Button
+            fontAwesomeIcon="star"
+            tooltip={`Reroll ${props.sideLabel} initiative with advantage`}
+            onClick={() => {
+              rerollInitiative(
+                props.combatants,
+                "advantage",
+                values,
+                setValues
+              );
+              setRerolledType("advantage");
+            }}
+          />
+          <Button
+            fontAwesomeIcon="exclamation-triangle"
+            tooltip={`Reroll ${props.sideLabel} initiative with disadvantage`}
+            onClick={() => {
+              rerollInitiative(
+                props.combatants,
+                "disadvantage",
+                values,
+                setValues
+              );
+              setRerolledType("disadvantage");
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function combatantInitiativeField(
+  combatant: Combatant,
+  initiativeResult: AbilityCheckResult & { specialRoll?: InitiativeSpecialRoll }
+) {
   const sideInitiative =
     CurrentSettings().Rules.AutoGroupInitiative ==
     AutoGroupInitiativeOption.SideInitiative;
   const initiativeBonus = sideInitiative
-    ? 0
+    ? ""
     : toModifierString(combatant.InitiativeBonus());
 
-  let specialRollIndicator = "";
-  if (!sideInitiative) {
-    if (
-      combatant.StatBlock().InitiativeAdvantage ||
-      combatant.StatBlock().InitiativeSpecialRoll == "advantage"
-    ) {
-      specialRollIndicator = " [advantage]";
-    }
-    if (combatant.StatBlock().InitiativeSpecialRoll == "disadvantage") {
-      specialRollIndicator = " [disadvantage]";
-    }
-    if (combatant.StatBlock().InitiativeSpecialRoll == "take-ten") {
-      specialRollIndicator = " [take 10]";
-    }
+  let rollsString = `[${initiativeResult.rolls[0]}]`;
+  if (initiativeResult.specialRoll == "advantage") {
+    rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]a`;
+  }
+  if (initiativeResult.specialRoll == "disadvantage") {
+    rollsString = `[${initiativeResult.rolls[0]}, ${initiativeResult.rolls[1]}]d`;
+  }
+  if (initiativeResult.specialRoll == "take-ten") {
+    rollsString = `[10]`;
   }
 
   const className = combatant.InitiativeGroup() !== null ? "fas fa-link" : "";
   return (
     <li key={combatant.Id}>
-      <span
-        className={className}
-      >{`${combatant.DisplayName()} (${initiativeBonus})${specialRollIndicator}: `}</span>
-      <Field
-        className="response"
-        type="number"
-        name={`initiativesById.${combatant.Id}`}
-      />
+      <label>
+        <span
+          className={className}
+        >{`${combatant.DisplayName()} (${rollsString}${initiativeBonus}): `}</span>
+        <Field
+          className="response"
+          type="number"
+          name={`initiativesById.${combatant.Id}.finalValue`}
+        />
+      </label>
     </li>
   );
 }
 
+function rerollInitiative(
+  combatants: Combatant[],
+  type: "advantage" | "disadvantage",
+  initiativeModel: InitiativeModel,
+  setValues: (values: InitiativeModel) => void
+) {
+  combatants.forEach(c => {
+    if (initiativeModel.initiativesById[c.Id] !== undefined) {
+      const result = initiativeModel.initiativesById[c.Id];
+      const cancelAdvantage =
+        (result.specialRoll == "advantage" && type == "disadvantage") ||
+        (result.specialRoll == "disadvantage" && type == "advantage");
+      if (cancelAdvantage) {
+        result.rolls = [result.rolls[0]];
+        result.finalValue = result.rolls[0] + c.InitiativeBonus();
+        result.specialRoll = undefined;
+      } else {
+        if (result.specialRoll == "take-ten") {
+          return;
+        }
+        const specialRollAlreadyApplied = result.specialRoll == type;
+        if (specialRollAlreadyApplied) {
+          return;
+        }
+        if (type == "advantage") {
+          result.rolls = [result.rolls[0], c.GetInitiativeRoll().rolls[0]];
+          result.specialRoll = "advantage";
+          result.finalValue = _.max(result.rolls) + c.InitiativeBonus();
+        }
+        if (type == "disadvantage") {
+          result.rolls = [result.rolls[0], c.GetInitiativeRoll().rolls[0]];
+          result.specialRoll = "disadvantage";
+          result.finalValue = _.min(result.rolls) + c.InitiativeBonus();
+        }
+      }
+    }
+  });
+  setValues({ ...initiativeModel });
+}
+
 type InitiativeModel = {
   initiativesById: {
-    [combatantId: string]: number;
+    [combatantId: string]: AbilityCheckResult & {
+      specialRoll?: InitiativeSpecialRoll;
+    };
   };
 };
 
@@ -97,10 +198,18 @@ export function InitiativePrompt(
   const playerCharacters = byGroup.filter(c => c.IsPlayerCharacter());
   const nonPlayerCharacters = byGroup.filter(c => !c.IsPlayerCharacter());
 
+  const sideInitiative =
+    CurrentSettings().Rules.AutoGroupInitiative ==
+    AutoGroupInitiativeOption.SideInitiative;
   const preRolledInitiatives: InitiativeModel = {
     initiativesById: _.mapValues(
       _.keyBy(byGroup, c => c.Id),
-      c => c.GetInitiativeRoll()
+      c => ({
+        ...c.GetInitiativeRoll(),
+        specialRoll: sideInitiative
+          ? undefined
+          : c.StatBlock().InitiativeSpecialRoll
+      })
     )
   };
 
@@ -116,7 +225,7 @@ export function InitiativePrompt(
     onSubmit: model => {
       combatants.forEach(c => {
         if (model.initiativesById[c.Id] !== undefined) {
-          c.Initiative(model.initiativesById[c.Id]);
+          c.Initiative(model.initiativesById[c.Id].finalValue);
         }
       });
       startEncounter();

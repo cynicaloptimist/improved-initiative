@@ -71,7 +71,7 @@ const renderAdvanced = (autocompletePaths: string[]) => {
       {env.HasEpicInitiative && (
         <label>
           <div className="p-save-encounter__label">Background Image URL</div>
-          <Field type="text" name="BackgroundImageUrl" />
+          <Field type="text" name="BackgroundImageUrl" autoComplete="off" />
         </label>
       )}
     </div>
