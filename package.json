@@ -111,8 +111,8 @@
     "redis": "^4.6.8",
     "request": "^2.85.0",
     "retry": "^0.13.1",
-    "socket.io": "^4.7.2",
-    "socket.io-client": "^4.7.2"
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "scripts": {
     "postinstall": "npm run copy-fonts",
