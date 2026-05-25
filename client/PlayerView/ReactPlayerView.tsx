@@ -42,6 +42,7 @@ export class ReactPlayerView {
 
   public ConnectToSocket(socket: Socket) {
     this.socket = socket;
+    this.socket.on("connect", this.joinEncounter);
     this.socket.on(
       "encounter updated",
       (encounter: EncounterState<PlayerViewCombatantState>) => {
@@ -67,8 +68,15 @@ export class ReactPlayerView {
       });
     });
 
-    this.socket.emit("join encounter", this.encounterId);
+    if (this.socket.connected) {
+      this.joinEncounter();
+    }
   }
+
+  private joinEncounter = () => {
+    this.socket.emit("join encounter", this.encounterId);
+    this.LoadEncounterFromServer();
+  };
 
   private renderPlayerView(newState: PlayerViewState) {
     this.playerViewState = newState;
