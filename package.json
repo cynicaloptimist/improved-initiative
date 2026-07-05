@@ -122,7 +122,7 @@
     "build:digitalocean": "npm install --production=false && npm run build && npm ci",
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
-    "test": "echo 'Tests are currently disabled due to node, jest, and ES modules interoperability.'",
+    "test": "jest --projects client/jest.config.js server/jest.config.js --runInBand",
     "lint": "eslint . --ext .ts,.tsx",
     "lint-and-fix": "eslint . --ext .ts,.tsx --fix",
     "copy-fonts": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/"

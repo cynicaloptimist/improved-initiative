@@ -11,13 +11,19 @@ function LibraryTest(props: {
   libraryRef: (library: Library<StatBlock>) => void;
   loadingFinished: () => void;
 }) {
+  const libraryCallbacks = React.useMemo(
+    () => ({
+      createEmptyListing: () => StatBlock.Default(),
+      accountSave: () => {},
+      accountDelete: () => {},
+      getFilterDimensions: () => ({}),
+      getSearchHint: () => "",
+      signalLoadComplete: props.loadingFinished
+    }),
+    [props.loadingFinished]
+  );
   const library = useLibrary(Store.StatBlocks, "statblocks", {
-    createEmptyListing: () => StatBlock.Default(),
-    accountSave: () => {},
-    accountDelete: () => {},
-    getFilterDimensions: () => ({}),
-    getSearchHint: () => "",
-    signalLoadComplete: props.loadingFinished
+    ...libraryCallbacks
   });
 
   props.libraryRef(library);
