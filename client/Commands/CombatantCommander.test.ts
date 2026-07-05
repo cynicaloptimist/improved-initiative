@@ -1,6 +1,7 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { TrackerViewModel } from "../TrackerViewModel";
 import { CombatantCommander } from "./CombatantCommander";
 
@@ -67,8 +68,8 @@ describe("CombatantCommander", () => {
   });
 
   test("Should maintain selection when initiative order changes", () => {
-    const combatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant1 = addCombatantFromStatBlock(encounter);
+    const combatant2 = addCombatantFromStatBlock(encounter);
 
     combatant1.Initiative(15);
     combatant2.Initiative(10);

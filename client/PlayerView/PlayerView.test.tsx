@@ -6,6 +6,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { PlayerView, PlayerViewProps } from "./components/PlayerView";
@@ -124,7 +125,7 @@ describe("PlayerViewModel", () => {
   });
 
   test("Applying damage does not splash combatant portraits", () => {
-    const combatant1 = encounter.AddCombatantFromStatBlock({
+    const combatant1 = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" },
       ImageURL: "http://combatant1.png"
