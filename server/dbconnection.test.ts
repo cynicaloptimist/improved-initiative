@@ -106,7 +106,7 @@ describe("User Accounts", () => {
       const res: any = { redirect: jest.fn() };
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
-      expect(user?.accountStatus).toEqual("epic");
+      expect(user?.accountStatus).toEqual(AccountStatus.Epic);
     });
 
     test("No Pledge", async () => {

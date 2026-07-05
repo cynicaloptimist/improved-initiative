@@ -25,7 +25,7 @@ describe("DefaultRules", () => {
       .mockReturnValueOnce(5 / 20)
       .mockReturnValueOnce(15 / 20);
     const roll = rules.AbilityCheck(0, "advantage");
-    expect(roll).toEqual(15);
+    expect(roll).toEqual({ rolls: [5, 15], finalValue: 15 });
   });
 
   test("Roll with disadvantage", () => {
@@ -34,7 +34,7 @@ describe("DefaultRules", () => {
       .mockReturnValueOnce(5 / 20)
       .mockReturnValueOnce(15 / 20);
     const roll = rules.AbilityCheck(0, "disadvantage");
-    expect(roll).toEqual(5);
+    expect(roll).toEqual({ rolls: [5, 15], finalValue: 5 });
   });
 
   test("Roll with take ten", () => {
@@ -43,6 +43,6 @@ describe("DefaultRules", () => {
       .mockReturnValueOnce(5 / 20)
       .mockReturnValueOnce(15 / 20);
     const roll = rules.AbilityCheck(0, "take-ten");
-    expect(roll).toEqual(10);
+    expect(roll).toEqual({ rolls: [], finalValue: 10 });
   });
 });

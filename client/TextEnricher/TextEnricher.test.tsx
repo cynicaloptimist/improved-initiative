@@ -63,7 +63,7 @@ describe("TextEnricher", () => {
       new DefaultRules()
     );
 
-    const inputText = "[100/1000000] gp.";
+    const inputText = "Gold [100/1000000] gp.";
 
     const writeBack = jest.fn();
     const enrichedText = textEnricher.EnrichText(inputText, writeBack);
@@ -73,6 +73,6 @@ describe("TextEnricher", () => {
       fireEvent.blur(input, { target: { value: 200 } });
     });
 
-    expect(writeBack).toHaveBeenCalledWith("[200/1000000] gp.");
+    expect(writeBack).toHaveBeenCalledWith("Gold [200/1000000] gp.");
   });
 });
