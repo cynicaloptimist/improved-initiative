@@ -44,7 +44,6 @@ describe("Index labeling", () => {
     const combatant1 = addCombatantFromStatBlock(encounter, statBlock);
     const combatant2 = addCombatantFromStatBlock(encounter, statBlock);
     encounter.RemoveCombatant(combatant1);
-    encounter.FlushCombatants();
     encounter.RemoveCombatant(combatant2);
     encounter.FlushCombatants();
 

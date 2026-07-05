@@ -223,6 +223,19 @@ describe("Encounter", () => {
     encounter.EncounterFlow.EndEncounter();
     expect(encounter.EncounterFlow.TurnTimerReadout()).toBe("0:00");
   });
+
+  test("FlushCombatants removes all pending combatants", () => {
+    const combatant1 = addCombatantFromStatBlock(encounter);
+    const combatant2 = addCombatantFromStatBlock(encounter);
+    const combatant3 = addCombatantFromStatBlock(encounter);
+
+    encounter.RemoveCombatant(combatant1);
+    encounter.RemoveCombatant(combatant2);
+
+    encounter.FlushCombatants();
+
+    expect(encounter.Combatants()).toEqual([combatant3]);
+  });
 });
 
 describe("Tags", () => {
