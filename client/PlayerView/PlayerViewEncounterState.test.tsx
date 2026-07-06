@@ -1,5 +1,6 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 
@@ -12,7 +13,7 @@ describe("PlayerView State", () => {
   });
 
   test("NPC HP is shown as qualitative indicator", () => {
-    const combatant = encounter.AddCombatantFromStatBlock({
+    const combatant = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       HP: { Value: 10 }
     });
@@ -40,17 +41,11 @@ describe("PlayerView State", () => {
   });
 
   test("Player View is only updated if next combatant is visible", () => {
-    const visibleCombatant1 = encounter.AddCombatantFromStatBlock(
-      StatBlock.Default()
-    );
+    const visibleCombatant1 = addCombatantFromStatBlock(encounter);
     visibleCombatant1.Initiative(20);
-    const visibleCombatant2 = encounter.AddCombatantFromStatBlock(
-      StatBlock.Default()
-    );
+    const visibleCombatant2 = addCombatantFromStatBlock(encounter);
     visibleCombatant2.Initiative(10);
-    const hiddenCombatant = encounter.AddCombatantFromStatBlock(
-      StatBlock.Default()
-    );
+    const hiddenCombatant = addCombatantFromStatBlock(encounter);
     hiddenCombatant.Hidden(true);
     hiddenCombatant.Initiative(1);
     encounter.EncounterFlow.StartEncounter();

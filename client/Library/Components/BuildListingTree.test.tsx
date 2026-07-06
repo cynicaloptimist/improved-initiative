@@ -9,8 +9,10 @@ describe("BuildListingTree", () => {
   it("Renders nested folders", () => {
     const listingTree = BuildListingTree(
       listing => <div key={listing.Meta().Id}>{listing.Meta().Name}</div>,
-      listing => {
-        return { key: listing.Meta().Path };
+      {
+        groupFn: listing => {
+          return { key: listing.Meta().Path };
+        }
       },
       [
         new Listing(

@@ -3,6 +3,7 @@ import { buildEncounter } from "../test/buildEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { Tag } from "../Combatant/Tag";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { Encounter } from "./Encounter";
 
@@ -29,8 +30,8 @@ describe("Encounter", () => {
   });
 
   test("NextTurn changes the active combatant and will return to the top of the initiative order", () => {
-    const combatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant1 = addCombatantFromStatBlock(encounter);
+    const combatant2 = addCombatantFromStatBlock(encounter);
     combatant1.Initiative(10);
     combatant2.Initiative(5);
     encounter.EncounterFlow.StartEncounter();
@@ -54,9 +55,7 @@ describe("Encounter", () => {
     jest.useFakeTimers();
 
     for (let i = 0; i < 2; i++) {
-      const thisCombatant = encounter.AddCombatantFromStatBlock(
-        StatBlock.Default()
-      );
+      const thisCombatant = addCombatantFromStatBlock(encounter);
       thisCombatant.Initiative(2 - i);
       thisCombatant.Alias(`Combatant ${i}`);
     }
@@ -88,7 +87,7 @@ describe("Encounter", () => {
   });
 
   test("Should properly populate beancounters for monsters", () => {
-    const combatant = encounter.AddCombatantFromStatBlock({
+    const combatant = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       Traits: [
         {
@@ -131,8 +130,8 @@ describe("Encounter", () => {
 
   describe("Initiative Ordering", () => {
     test("By roll", () => {
-      const slow = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-      const fast = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+      const slow = addCombatantFromStatBlock(encounter);
+      const fast = addCombatantFromStatBlock(encounter);
       expect(encounter.Combatants()).toEqual([slow, fast]);
 
       fast.Initiative(20);
@@ -142,11 +141,11 @@ describe("Encounter", () => {
     });
 
     test("By modifier", () => {
-      const slow = encounter.AddCombatantFromStatBlock({
+      const slow = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         InitiativeModifier: 0
       });
-      const fast = encounter.AddCombatantFromStatBlock({
+      const fast = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         InitiativeModifier: 2
       });
@@ -155,15 +154,15 @@ describe("Encounter", () => {
     });
 
     test("By group modifier", () => {
-      const slow = encounter.AddCombatantFromStatBlock({
+      const slow = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         InitiativeModifier: 0
       });
-      const fast = encounter.AddCombatantFromStatBlock({
+      const fast = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         InitiativeModifier: 2
       });
-      const loner = encounter.AddCombatantFromStatBlock({
+      const loner = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         InitiativeModifier: 1
       });
@@ -175,10 +174,10 @@ describe("Encounter", () => {
     });
 
     test("Favor player characters", () => {
-      const creature = encounter.AddCombatantFromStatBlock({
+      const creature = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default()
       });
-      const playerCharacter = encounter.AddCombatantFromStatBlock({
+      const playerCharacter = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         Player: "player"
       });
@@ -195,9 +194,7 @@ describe("Encounter", () => {
     });
 
     for (let i = 0; i < 5; i++) {
-      const thisCombatant = encounter.AddCombatantFromStatBlock(
-        StatBlock.Default()
-      );
+      const thisCombatant = addCombatantFromStatBlock(encounter);
       thisCombatant.Initiative(i);
     }
 
@@ -226,6 +223,19 @@ describe("Encounter", () => {
     encounter.EncounterFlow.EndEncounter();
     expect(encounter.EncounterFlow.TurnTimerReadout()).toBe("0:00");
   });
+
+  test("FlushCombatants removes all pending combatants", () => {
+    const combatant1 = addCombatantFromStatBlock(encounter);
+    const combatant2 = addCombatantFromStatBlock(encounter);
+    const combatant3 = addCombatantFromStatBlock(encounter);
+
+    encounter.RemoveCombatant(combatant1);
+    encounter.RemoveCombatant(combatant2);
+
+    encounter.FlushCombatants();
+
+    expect(encounter.Combatants()).toEqual([combatant3]);
+  });
 });
 
 describe("Tags", () => {
@@ -235,7 +245,7 @@ describe("Tags", () => {
 
   test("Should appear in Player View", () => {
     const encounter = buildEncounter();
-    const combatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant = addCombatantFromStatBlock(encounter);
     combatant.Tags.push(new Tag("Some Tag", combatant, false));
     const playerView = encounter.GetPlayerView();
     const playerViewCombatant = playerView.Combatants[0];
@@ -251,7 +261,7 @@ describe("Tags", () => {
 
   test("Should not appear in Player View when hidden", () => {
     const encounter = buildEncounter();
-    const combatant = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant = addCombatantFromStatBlock(encounter);
     combatant.Tags.push(new Tag("Some Tag", combatant, true));
     const playerView = encounter.GetPlayerView();
     const playerViewCombatant = playerView.Combatants[0];
@@ -264,7 +274,7 @@ describe("LoadEncounterState", () => {
     const baseEncounter = buildEncounter();
 
     for (const initiative of [10, 5, 15]) {
-      const combatant = baseEncounter.AddCombatantFromStatBlock({
+      const combatant = addCombatantFromStatBlock(baseEncounter, {
         ...StatBlock.Default(),
         Name: "Initiative " + initiative
       });

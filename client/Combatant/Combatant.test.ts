@@ -1,6 +1,7 @@
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 import { ToPlayerViewCombatantState } from "./ToPlayerViewCombatantState";
 
@@ -12,7 +13,7 @@ describe("Combatant", () => {
   });
 
   test("Should have its Max HP set from the statblock", () => {
-    const combatant = encounter.AddCombatantFromStatBlock({
+    const combatant = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" }
     });
@@ -21,7 +22,7 @@ describe("Combatant", () => {
   });
 
   test("Should update its Max HP when its statblock is updated", () => {
-    const combatant = encounter.AddCombatantFromStatBlock({
+    const combatant = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       Player: "player"
     });
@@ -34,7 +35,7 @@ describe("Combatant", () => {
   });
 
   test("Should notify the encounter when its statblock is updated", () => {
-    const combatant = encounter.AddCombatantFromStatBlock({
+    const combatant = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       Player: "player"
     });
@@ -50,7 +51,7 @@ describe("Combatant", () => {
 
   describe("ToPlayerViewCombatantState", () => {
     test("Should show full HP for player characters", () => {
-      const combatant = encounter.AddCombatantFromStatBlock({
+      const combatant = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default(),
         Player: "player"
       });
@@ -59,7 +60,7 @@ describe("Combatant", () => {
     });
 
     test("Should show qualitative HP for creatures", () => {
-      const combatant = encounter.AddCombatantFromStatBlock({
+      const combatant = addCombatantFromStatBlock(encounter, {
         ...StatBlock.Default()
       });
       const playerViewCombatantState = ToPlayerViewCombatantState(combatant);

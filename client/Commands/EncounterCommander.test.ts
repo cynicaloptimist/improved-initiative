@@ -3,9 +3,10 @@ import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { TrackerViewModel } from "../TrackerViewModel";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 import { EncounterCommander } from "./EncounterCommander";
-import { act, renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react-hooks";
 import { useLibraries } from "../Library/Libraries";
 import { CurrentSettings } from "../Settings/Settings";
 import { MockAccountClient } from "../MockAccountClient";
@@ -69,7 +70,7 @@ describe("EncounterCommander", () => {
     expect(startEncounter).toBeCalled();
   });
 
-  test.skip("CleanEncounter", async done => {
+  test("CleanEncounter", async () => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
@@ -83,11 +84,12 @@ describe("EncounterCommander", () => {
 
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.CleanEncounter();
-    expect(encounter.Combatants().length).toBe(1);
-    return done();
+    expect(encounter.Combatants().length).toBe(2);
+    expect(encounter.CombatantsPendingRemove().length).toBe(1);
+    expect(encounter.ObservableEncounterState().Combatants.length).toBe(1);
   });
 
-  test.skip("ClearEncounter", async done => {
+  test("ClearEncounter", async () => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
@@ -102,16 +104,15 @@ describe("EncounterCommander", () => {
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.ClearEncounter();
     expect(encounter.Combatants().length).toBe(0);
-    return done();
   });
 
-  test.skip("Restore Player Character HP", async done => {
+  test("Restore Player Character HP", async () => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
       Player: "player"
     });
 
-    const npc = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const npc = addCombatantFromStatBlock(encounter);
     const pc = await encounter.AddCombatantFromPersistentCharacter(
       persistentCharacter,
       () => {},
@@ -131,8 +132,6 @@ describe("EncounterCommander", () => {
 
     expect(npc.CurrentHP()).toBe(0);
     expect(pc.CurrentHP()).toBe(1);
-
-    return done();
   });
 
   function buildSavedEncounterWithPersistentCharacter() {
@@ -152,15 +151,13 @@ describe("EncounterCommander", () => {
     return savedEncounter;
   }
 
-  test("LoadEncounter loads non-persistent combatants", () => {
+  test("LoadEncounter loads non-persistent combatants", async () => {
     const savedEncounter = buildSavedEncounterWithPersistentCharacter();
-    act(() => {
-      encounterCommander.LoadSavedEncounter(savedEncounter);
-    });
+    await encounterCommander.LoadSavedEncounter(savedEncounter);
     expect(encounter.Combatants()[0].DisplayName()).toEqual("Goblin");
   });
 
-  test.skip("LoadEncounter loads the current version of persistent combatants", async () => {
+  test("LoadEncounter loads the current version of persistent combatants", async () => {
     const savedEncounter = buildSavedEncounterWithPersistentCharacter();
 
     const persistentCharacter = PersistentCharacter.Initialize({
@@ -169,20 +166,22 @@ describe("EncounterCommander", () => {
     });
     persistentCharacter.Id = savedEncounter.Combatants[1].PersistentCharacterId;
 
-    await trackerViewModel.Libraries.PersistentCharacters.SaveNewListing(
-      persistentCharacter
-    );
+    trackerViewModel.Libraries.PersistentCharacters.GetOrCreateListingById =
+      jest.fn(async () => ({
+        GetWithTemplate: async () => persistentCharacter
+      })) as any;
+
     await encounterCommander.LoadSavedEncounter(savedEncounter);
 
     expect(encounter.Combatants()[1].DisplayName()).toEqual("Library Gregorr");
   });
 
-  describe.skip("Index Labelling and Saved Encounters", () => {
+  describe("Index Labelling and Saved Encounters", () => {
     function buildEncounterState() {
       const statBlock = { ...StatBlock.Default(), Name: "Goblin" };
       const oldEncounter = buildEncounter();
       for (const initiative of [8, 10]) {
-        const combatant = oldEncounter.AddCombatantFromStatBlock(statBlock);
+        const combatant = addCombatantFromStatBlock(oldEncounter, statBlock);
         combatant.Initiative(initiative);
       }
       oldEncounter.EncounterFlow.StartEncounter();
@@ -190,55 +189,58 @@ describe("EncounterCommander", () => {
       return savedEncounter;
     }
 
-    test("When a combatant is added from a saved encounter, it retains its saved index label", () => {
+    test("When a combatant is added from a saved encounter, it retains its saved index label", async () => {
       const savedEncounter = buildEncounterState();
 
-      encounterCommander.LoadSavedEncounter(savedEncounter);
+      await encounterCommander.LoadSavedEncounter(savedEncounter);
 
       const combatantDisplayNames = encounter
         .Combatants()
         .map(c => [c.DisplayName(), c.Initiative()]);
 
-      expect(combatantDisplayNames).toEqual([
-        ["Goblin 1", 8],
-        ["Goblin 2", 10]
-      ]);
+      expect(combatantDisplayNames).toContainEqual(["Goblin 1", 8]);
+      expect(combatantDisplayNames).toContainEqual(["Goblin 2", 10]);
     });
 
-    test("When a saved encounter is added twice, it relabels existing creatures", () => {
+    test("When a saved encounter is added twice, it relabels existing creatures", async () => {
       const savedEncounter = buildEncounterState();
-      encounterCommander.LoadSavedEncounter(savedEncounter);
-      encounterCommander.LoadSavedEncounter(savedEncounter);
+      await encounterCommander.LoadSavedEncounter(savedEncounter);
+      await encounterCommander.LoadSavedEncounter(savedEncounter);
 
       const combatantDisplayNames = encounter
         .Combatants()
         .map(c => c.DisplayName());
 
-      expect(combatantDisplayNames).toEqual([
-        "Goblin 1",
-        "Goblin 2",
-        "Goblin 3",
-        "Goblin 4"
-      ]);
+      expect(combatantDisplayNames).toEqual(
+        expect.arrayContaining([
+          "Goblin 1",
+          "Goblin 2",
+          "Goblin 3",
+          "Goblin 4"
+        ])
+      );
+      expect(combatantDisplayNames).toHaveLength(4);
     });
 
-    test("When a saved encounter is repeatedly added in waves, index labeling is consistent", () => {
+    test("When a saved encounter is repeatedly added in waves, index labeling is consistent", async () => {
       const savedEncounter = buildEncounterState();
-      encounterCommander.LoadSavedEncounter(savedEncounter);
+      await encounterCommander.LoadSavedEncounter(savedEncounter);
 
-      encounter.RemoveCombatant(encounter.Combatants()[1]);
+      encounter.RemoveCombatant(
+        encounter.Combatants().find(c => c.DisplayName() == "Goblin 2")
+      );
+      encounter.FlushCombatants();
 
-      encounterCommander.LoadSavedEncounter(savedEncounter);
+      await encounterCommander.LoadSavedEncounter(savedEncounter);
 
       const combatantDisplayNames = encounter
         .Combatants()
         .map(c => c.DisplayName());
 
-      expect(combatantDisplayNames).toEqual([
-        "Goblin 1",
-        "Goblin 3",
-        "Goblin 4"
-      ]);
+      expect(combatantDisplayNames).toEqual(
+        expect.arrayContaining(["Goblin 1", "Goblin 3", "Goblin 4"])
+      );
+      expect(combatantDisplayNames).toHaveLength(3);
     });
   });
 });

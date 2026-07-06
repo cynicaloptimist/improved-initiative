@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import * as React from "react";
 
 import { TagState } from "../../common/CombatantState";
@@ -6,6 +6,7 @@ import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { PlayerView, PlayerViewProps } from "./components/PlayerView";
@@ -124,7 +125,7 @@ describe("PlayerViewModel", () => {
   });
 
   test("Applying damage does not splash combatant portraits", () => {
-    const combatant1 = encounter.AddCombatantFromStatBlock({
+    const combatant1 = addCombatantFromStatBlock(encounter, {
       ...StatBlock.Default(),
       HP: { Value: 10, Notes: "" },
       ImageURL: "http://combatant1.png"
@@ -184,7 +185,7 @@ describe("Tag Suggestor", () => {
     });
   });
 
-  test.skip("Should suggest simple tags", done => {
+  test("Should suggest simple tags", async () => {
     const playerView = render(
       <PlayerView
         settings={CurrentSettings().PlayerView}
@@ -194,19 +195,21 @@ describe("Tag Suggestor", () => {
       />
     );
 
-    expect.assertions(3);
-
     suggestTag.mockImplementation((combatantId: string, tagState: TagState) => {
       expect(combatantId).toEqual(encounter.Combatants()[0].Id);
       expect(tagState.Text).toEqual("Dazed");
       expect(tagState.DurationTiming).toBeNull();
-      done();
     });
 
-    playerView.getByAltText("Add Tag").click();
-    fireEvent.change(playerView.getByTestId("tag-text"), {
-      target: { value: "Dazed" }
-    });
-    fireEvent.submit(playerView.getByRole("form"));
+    playerView.getByTitle("Suggest a Tag").click();
+    fireEvent.change(
+      playerView.container.querySelector("input[name='tagText']"),
+      {
+        target: { value: "Dazed" }
+      }
+    );
+    fireEvent.submit(playerView.container.querySelector("form.tag-suggestion"));
+
+    await waitFor(() => expect(suggestTag).toBeCalledTimes(1));
   });
 });

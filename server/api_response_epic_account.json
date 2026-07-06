@@ -73,17 +73,16 @@
             "related": "https://www.patreon.com/api/user/TEST_PATRON_ID"
           }
         },
-        "reward": {
-          "data": {
-            "id": "1937132",
-            "type": "reward"
-          },
-          "links": {
-            "related": "https://www.patreon.com/api/rewards/1937132"
-          }
+        "currently_entitled_tiers": {
+          "data": [
+            {
+              "id": "1937132",
+              "type": "tier"
+            }
+          ]
         }
       },
-      "type": "pledge"
+      "type": "member"
     }
   ],
   "links": {
