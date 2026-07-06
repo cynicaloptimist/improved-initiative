@@ -29,9 +29,8 @@ incremental changes over broad rewrites.
   backward-compatible unless the user explicitly approves a migration plan.
 - `lesscss/`: LESS styles compiled into versioned CSS.
 - `public/`: static assets and compiled output targets.
-- `test/` and `*.test.ts(x)`: existing tests. The current top-level `npm test`
-  script is disabled due Node/Jest/ESM interoperability issues; getting tests
-  working again is a project priority.
+- `test/` and `*.test.ts(x)`: existing tests. The top-level `npm test` script
+  runs the client and server Jest projects.
 
 ## High-Risk Areas
 
@@ -73,6 +72,31 @@ include `useSubscription` in `client/Combatant/linkComponentToObservables.tsx`.
 
 The dev server defaults to port 80 and is viewed at `http://localhost`.
 
+When running inside Codex Desktop, `npm` may not be available on `PATH`. Use
+the bundled Node executable reported by `codex_app.load_workspace_dependencies`
+and invoke local binaries directly, for example:
+
+- Lint a touched file: `node node_modules/eslint/bin/eslint.js client/Index.ts --ext .ts,.tsx`
+- Run tests: `node node_modules/jest/bin/jest.js --projects client/jest.config.js server/jest.config.js --runInBand`
+- Build: `node node_modules/grunt-cli/bin/grunt build_min`
+
+The full build compiles the versioned client bundle in `public/js`, compiles the
+server TypeScript, and compiles LESS. LESS imports Google Fonts, so sandboxed
+network restrictions can block the first build attempt.
+
+For local manual testing without binding to port 80, waiting on Open5e
+preloads, or fighting cached static assets, start the server with:
+
+`NODE_ENV=development PORT=3000 BASE_URL=http://localhost:3000 SKIP_OPEN5E_API=1 node server/server.js`
+
+When Open5e behavior matters, omit `SKIP_OPEN5E_API` and set
+`OPEN5E_API_LIMIT` to cap how many remote entries are cached during startup,
+for example:
+
+`NODE_ENV=development PORT=3000 BASE_URL=http://localhost:3000 OPEN5E_API_LIMIT=500 node server/server.js`
+
+Then browse to `http://localhost:3000`.
+
 ## Coding Guidelines
 
 - Use TypeScript.
@@ -93,9 +117,8 @@ The dev server defaults to port 80 and is viewed at `http://localhost`.
 
 ## Testing and Verification
 
-The test suite needs repair. Until `npm test` is working again, add or update
-focused tests when practical, but be clear about whether they can currently be
-run through the normal script.
+Add or update focused tests when practical. `npm test` runs the current Jest
+suite, though Codex Desktop may need the direct bundled-Node command above.
 
 For TypeScript/TSX changes, run `npm run lint` when feasible. For behavior
 touching high-risk workflows, prefer a focused manual verification plan in
