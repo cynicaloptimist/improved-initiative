@@ -97,6 +97,14 @@ for example:
 
 Then browse to `http://localhost:3000`.
 
+When Codex starts a long-running local server, do not leave an untracked hidden
+Node process. Prefer an attached terminal when available, or a visible terminal
+window if the user needs to manage the process after Codex closes. If starting
+a background or detached process, make the server write its own PID to
+`.codex-runtime/dev-server.pid` and URL to `.codex-runtime/dev-server.url`,
+report both to the user, and stop the process when it is no longer needed.
+Do not rely on a detached hidden process without a PID file.
+
 ## Coding Guidelines
 
 - Use TypeScript.

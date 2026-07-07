@@ -17,3 +17,5 @@ public/webfonts/*
 !webpack.*.js
 !local_node_modules/**
 .idea
+.codex/
+.codex-runtime/
