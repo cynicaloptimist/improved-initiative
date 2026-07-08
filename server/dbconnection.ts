@@ -74,6 +74,44 @@ export async function upsertUser(
   return user;
 }
 
+export async function getUserByPatreonId(
+  patreonId: string
+): Promise<mongo.WithId<User> | null> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  const db = mongoClient.db();
+  const users = db.collection<User>("users");
+  return await users.findOne({ patreonId });
+}
+
+export async function setGoogleAnalyticsClientId(
+  userId: string | mongo.ObjectId,
+  googleAnalyticsClientId: string
+): Promise<number> {
+  if (!mongoClient) {
+    throw "No mongo client initialized";
+  }
+
+  if (typeof userId === "string") {
+    userId = new mongo.ObjectId(userId);
+  }
+
+  const db = mongoClient.db();
+  const users = db.collection<User>("users");
+  const result = await users.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        googleAnalyticsClientId
+      }
+    }
+  );
+
+  return result.modifiedCount;
+}
+
 export async function getAccount(
   userId: mongo.ObjectId
 ): Promise<Record<string, any> | null> {

@@ -6,6 +6,7 @@ export interface User {
   patreonId: string;
   accountStatus: AccountStatus;
   emailAddress: string;
+  googleAnalyticsClientId?: string;
   settings: any;
   statblocks: { [id: string]: any };
   playercharacters?: { [id: string]: any };
