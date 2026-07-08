@@ -9,6 +9,7 @@ import * as querystring from "querystring";
 import * as request from "request";
 
 import * as DB from "./dbconnection";
+import { recordServerEvent, trackGoogleAnalyticsEvent } from "./metrics";
 
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
@@ -58,6 +59,17 @@ interface Pledge {
 type PatreonCampaign = {
   data: Post[];
 };
+
+export type PatreonWebhookTrigger =
+  | "members:pledge:create"
+  | "members:pledge:update"
+  | "members:pledge:delete";
+
+const supportedPatreonWebhookTriggers: PatreonWebhookTrigger[] = [
+  "members:pledge:create",
+  "members:pledge:update",
+  "members:pledge:delete"
+];
 
 export function configureLoginRedirect(app: express.Application): void {
   const redirectPath = "/r/patreon";
@@ -197,7 +209,8 @@ export function updateSessionAccountFeatures(
   session: Express.Session,
   standing: AccountStatus
 ): void {
-  session.hasStorage = standing == "pledge" || standing == "epic" || standing == "mythic";
+  session.hasStorage =
+    standing == "pledge" || standing == "epic" || standing == "mythic";
   session.hasEpicInitiative = standing == "epic" || standing == "mythic";
   session.hasMythic = standing == "mythic";
   session.isLoggedIn = true;
@@ -275,6 +288,16 @@ export function configurePatreonWebhookReceiver(
 
 async function handleWebhook(req: Req, res: Res) {
   try {
+    const webhookEvent = req.header("X-Patreon-Event") || "";
+    if (!isSupportedPatreonWebhookTrigger(webhookEvent)) {
+      return res.status(400).send(`Unsupported Patreon event: ${webhookEvent}`);
+    }
+
+    const resourceType = _.get(req.body, "data.type", null);
+    if (resourceType != "member") {
+      return res.status(400).send("Expected Patreon member webhook payload");
+    }
+
     const patreonId = _.get(req.body, "data.relationships.user.data.id", null);
 
     if (!patreonId) {
@@ -293,25 +316,162 @@ async function handleWebhook(req: Req, res: Res) {
         .send("Missing data.relationships.currently_entitled_tiers.data");
     }
 
-    const userEmail = _.get(req.body, "data.attributes.email", "");
+    const userEmail = getWebhookUserEmail(req.body);
+    const userAccountLevel = getPatreonWebhookAccountStatus(
+      patreonId,
+      entitledTiers,
+      webhookEvent
+    );
+    const previousUser = await DB.getUserByPatreonId(patreonId);
+    const previousAccountStatus =
+      previousUser?.accountStatus || AccountStatus.None;
 
-    const isDeletedPledge =
-      req.header("X-Patreon-Event") == "members:pledge:delete";
-
-    const userAccountLevel = isDeletedPledge
-      ? AccountStatus.None
-      : getUserAccountLevel(
-          patreonId,
-          entitledTiers.map(tier => tier.id)
-        );
     console.log(
       `Webhook: Updating account level for ${userEmail} to ${userAccountLevel}`
     );
     await DB.upsertUser(patreonId, userAccountLevel, userEmail);
-    return res.send(201);
+    await recordPatreonAccountStatusChange(
+      patreonId,
+      previousUser?.googleAnalyticsClientId,
+      previousAccountStatus,
+      userAccountLevel,
+      webhookEvent
+    );
+    return res.sendStatus(201);
   } catch (e) {
     return res.status(500).send(e);
   }
+}
+
+function isSupportedPatreonWebhookTrigger(
+  trigger: string
+): trigger is PatreonWebhookTrigger {
+  return _.includes(supportedPatreonWebhookTriggers, trigger);
+}
+
+function getWebhookUserEmail(webhookBody: Record<string, any>): string {
+  const memberEmail = _.get(webhookBody, "data.attributes.email", "");
+  if (memberEmail) {
+    return memberEmail;
+  }
+
+  const user = webhookBody.included?.find(i => i.type == "user");
+  return _.get(user, "attributes.email", "");
+}
+
+export function getPatreonWebhookAccountStatus(
+  patreonId: string,
+  entitledTiers: { id: string }[],
+  webhookEvent: PatreonWebhookTrigger
+): AccountStatus {
+  if (webhookEvent == "members:pledge:delete") {
+    return AccountStatus.None;
+  }
+
+  return getUserAccountLevel(
+    patreonId,
+    entitledTiers.map(tier => tier.id)
+  );
+}
+
+export function getPatreonAccountStatusChange(
+  previousAccountStatus: AccountStatus,
+  currentAccountStatus: AccountStatus
+): "started" | "cancelled" | "changed" | null {
+  if (previousAccountStatus == currentAccountStatus) {
+    return null;
+  }
+
+  if (
+    !isPaidAccountStatus(previousAccountStatus) &&
+    isPaidAccountStatus(currentAccountStatus)
+  ) {
+    return "started";
+  }
+
+  if (
+    isPaidAccountStatus(previousAccountStatus) &&
+    !isPaidAccountStatus(currentAccountStatus)
+  ) {
+    return "cancelled";
+  }
+
+  return "changed";
+}
+
+function isPaidAccountStatus(accountStatus: AccountStatus): boolean {
+  return accountStatus != AccountStatus.None;
+}
+
+async function recordPatreonAccountStatusChange(
+  patreonId: string,
+  googleAnalyticsClientId: string | undefined,
+  previousAccountStatus: AccountStatus,
+  currentAccountStatus: AccountStatus,
+  webhookEvent: string
+): Promise<void> {
+  const statusChange = getPatreonAccountStatusChange(
+    previousAccountStatus,
+    currentAccountStatus
+  );
+
+  if (!statusChange) {
+    return;
+  }
+
+  const commonEventData = {
+    previousAccountStatus,
+    currentAccountStatus,
+    statusChange,
+    webhookEvent
+  };
+
+  await recordServerEvent("PatreonSubscriptionChanged", commonEventData, {
+    googleAnalyticsClientId: googleAnalyticsClientId || null,
+    patreonIdHash: hashPatreonId(patreonId)
+  });
+
+  const commonGoogleAnalyticsParams = {
+    lead_source: "patreon_webhook",
+    previous_account_status: previousAccountStatus,
+    account_status: currentAccountStatus,
+    patreon_status_change: statusChange,
+    patreon_event: webhookEvent,
+    items: [getPatreonAccountStatusItem(currentAccountStatus)]
+  };
+
+  await trackGoogleAnalyticsEvent({
+    name: `patreon_subscription_${statusChange}`,
+    clientId: googleAnalyticsClientId,
+    userId: hashPatreonId(patreonId),
+    params: commonGoogleAnalyticsParams
+  });
+
+  if (statusChange != "started") {
+    return;
+  }
+
+  await trackGoogleAnalyticsEvent({
+    name: "close_convert_lead",
+    clientId: googleAnalyticsClientId,
+    userId: hashPatreonId(patreonId),
+    params: commonGoogleAnalyticsParams
+  });
+}
+
+function getPatreonAccountStatusItem(accountStatus: AccountStatus) {
+  return {
+    item_id: `patreon_${accountStatus}`,
+    item_name: `Patreon ${accountStatus}`
+  };
+}
+
+function hashPatreonId(patreonId: string): string {
+  return crypto
+    .createHash("sha256")
+    .update(patreonId)
+    .digest("hex")
+    .substring(0, 36);
 }
 
 function verifySender(req: Req, res: Res, next) {
