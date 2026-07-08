@@ -13,6 +13,7 @@ import { env } from "../../Environment";
 import { Libraries } from "../../Library/Libraries";
 import { Listing } from "../../Library/Listing";
 import { LegacySynchronousLocalStore } from "../../Utility/LegacySynchronousLocalStore";
+import { Metrics } from "../../Utility/Metrics";
 import { Store } from "../../Utility/Store";
 
 interface AccountSyncSettingsProps {
@@ -114,6 +115,12 @@ export class AccountSyncSettings extends React.Component<
           <a
             href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
             target="_blank"
+            onClick={() =>
+              Metrics.TrackPatreonSignupIntent("account_sync_settings", {
+                link_url:
+                  "https://www.patreon.com/bePatron?c=716070&rid=1322253"
+              })
+            }
           >
             Account Sync
           </a>

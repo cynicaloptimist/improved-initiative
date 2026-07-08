@@ -51,6 +51,8 @@ You can configure your instance of Improved Initiative with these settings. All 
 - `DB_CONNECTION_STRING` - Provide a DB connection string for session and user account storage. In memory Mongo DB will be used otherwise, which is cleared on app restart.
 - `METRICS_DB_CONNECTION_STRING` - Provide a DB connection string to write metrics to.
 - `PATREON_URL`, `PATREON_CLIENT_ID`, `PATREON_CLIENT_SECRET` - Configuration for Patreon integration
+- `GOOGLE_ANALYTICS_ID` - GA4 measurement ID used by the browser tag and Measurement Protocol events.
+- `GOOGLE_ANALYTICS_API_SECRET` - GA4 Measurement Protocol API secret used for server-side Patreon subscription events.
 
 ### Docker
 

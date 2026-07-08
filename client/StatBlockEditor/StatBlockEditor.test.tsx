@@ -1,5 +1,6 @@
 import * as Enzyme from "enzyme";
 import * as React from "react";
+import { act } from "react-dom/test-utils";
 
 import { StatBlockEditor } from "./StatBlockEditor";
 
@@ -10,7 +11,7 @@ import { Listable } from "../../common/Listable";
 const CURRENT_APP_VERSION = require("../../package.json").version;
 process.env.VERSION = CURRENT_APP_VERSION;
 
-describe.skip("StatBlockEditor", () => {
+describe("StatBlockEditor", () => {
   let editor: Enzyme.ReactWrapper<any, any>;
   let saveCallback: jest.Mock<void>;
   let saveAsCallback: jest.Mock<void>;
@@ -46,139 +47,138 @@ describe.skip("StatBlockEditor", () => {
     );
   });
 
-  test("Calls saveCallback with the provided statblock", done => {
-    expect.assertions(1);
-    saveCallback.mockImplementation(editedStatBlock => {
-      expect(editedStatBlock).toEqual(statBlock);
-      done();
-    });
-
-    editor.simulate("submit");
+  afterEach(() => {
+    editor.unmount();
   });
 
-  test("Saves name changes", done => {
-    expect.assertions(1);
-
-    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.Name).toEqual("Snarf");
-      done();
+  function simulate(
+    selector: string,
+    event: string,
+    data?: Record<string, unknown>
+  ) {
+    act(() => {
+      editor.find(selector).simulate(event, data);
     });
+    editor.update();
+  }
 
-    editor
-      .find(`input[name="Name"]`)
-      .simulate("change", { target: { name: "Name", value: "Snarf" } });
+  async function submitEditor() {
+    await act(async () => {
+      editor.find("form.c-statblock-editor").simulate("submit");
+      await Promise.resolve();
+    });
+    editor.update();
+  }
 
-    editor.simulate("submit");
+  test("Calls saveCallback with the provided statblock", async () => {
+    await submitEditor();
+
+    expect(saveCallback).toHaveBeenCalledWith({
+      ...statBlock,
+      CustomFields: []
+    });
   });
 
-  test("Saves path changes", done => {
-    expect.assertions(1);
-
-    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.Path).toEqual("SomeFolder");
-      done();
+  test("Saves name changes", async () => {
+    simulate(`input[name="Name"]`, "change", {
+      target: { name: "Name", value: "Snarf" }
     });
 
-    editor.find(`.autohide-field__open-button`).simulate("click");
+    await submitEditor();
 
-    editor
-      .find(`input[name="Path"]`)
-      .simulate("change", { target: { name: "Path", value: "SomeFolder" } });
-
-    editor.simulate("submit");
+    expect(saveCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ Name: "Snarf" })
+    );
   });
 
-  test("Saves current version", done => {
-    expect.assertions(1);
-
-    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.Version).toEqual(CURRENT_APP_VERSION);
-      done();
+  test("Saves path changes", async () => {
+    simulate(`.autohide-field__open-button`, "click");
+    simulate(`input[name="Path"]`, "change", {
+      target: { name: "Path", value: "SomeFolder" }
     });
 
-    editor.simulate("submit");
+    await submitEditor();
+
+    expect(saveCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ Path: "SomeFolder" })
+    );
   });
 
-  test("Parses numeric fields", done => {
-    expect.assertions(1);
+  test("Saves current version", async () => {
+    await submitEditor();
 
-    saveCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.HP.Value).toEqual(10);
-      done();
+    expect(saveCallback).toHaveBeenCalledWith(
+      expect.objectContaining({ Version: CURRENT_APP_VERSION })
+    );
+  });
+
+  test("Parses numeric fields", async () => {
+    simulate(`input[name="HP.Value"]`, "change", {
+      target: { name: "HP.Value", value: "10" }
     });
 
-    editor
-      .find(`input[name="HP.Value"]`)
-      .simulate("change", { target: { name: "HP.Value", value: "10" } });
+    await submitEditor();
 
-    editor.simulate("submit");
+    expect(saveCallback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        HP: expect.objectContaining({ Value: 10 })
+      })
+    );
   });
 
-  test("calls saveAs when Save as a copy is checked", done => {
-    expect.assertions(3);
-
-    saveAsCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
-      expect(editedStatBlock.Name).toEqual("Snarf");
-      expect(editedStatBlock).not.toHaveProperty("SaveAs");
-      done();
+  test("calls saveAs when Save as a copy is checked", async () => {
+    simulate(`input[name="Name"]`, "change", {
+      target: { name: "Name", value: "Snarf" }
     });
-
-    editor
-      .find(`input[name="Name"]`)
-      .simulate("change", { target: { name: "Name", value: "Snarf" } });
-    editor
-      .find(`input[name="Name"]`)
-      .simulate("blur", { target: { name: "Name" } });
-    editor.instance().forceUpdate();
-
-    const saveAsButton = editor.find(`.c-toggle#toggle_SaveAs`);
-    saveAsButton.simulate("click");
-
-    editor.simulate("submit");
-  });
-
-  test("calls saveAsCharacter when Save as a character is checked", done => {
-    expect.assertions(3);
-
-    saveAsCharacterCallback.mockImplementation((editedStatBlock: StatBlock) => {
-      expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
-      expect(editedStatBlock.Name).toEqual("Snarf");
-      expect(editedStatBlock).not.toHaveProperty("SaveAs");
-      done();
+    simulate(`input[name="Name"]`, "blur", { target: { name: "Name" } });
+    act(() => {
+      editor.instance().forceUpdate();
     });
+    simulate(`.c-toggle#toggle_SaveAs`, "click");
 
-    editor
-      .find(`input[name="Name"]`)
-      .simulate("change", { target: { name: "Name", value: "Snarf" } });
-    editor
-      .find(`input[name="Name"]`)
-      .simulate("blur", { target: { name: "Name" } });
-    editor.instance().forceUpdate();
+    await submitEditor();
 
-    const saveAsButton = editor.find(`.c-toggle#toggle_SaveAsCharacter`);
-    saveAsButton.simulate("click");
-
-    editor.simulate("submit");
+    const editedStatBlock = saveAsCallback.mock.calls[0][0];
+    expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
+    expect(editedStatBlock.Name).toEqual("Snarf");
+    expect(editedStatBlock).not.toHaveProperty("SaveAs");
   });
 
-  test("parses JSON if JSON editor is used", done => {
+  test("calls saveAsCharacter when Save as a character is checked", async () => {
+    simulate(`input[name="Name"]`, "change", {
+      target: { name: "Name", value: "Snarf" }
+    });
+    simulate(`input[name="Name"]`, "blur", { target: { name: "Name" } });
+    act(() => {
+      editor.instance().forceUpdate();
+    });
+    simulate(`.c-toggle#toggle_SaveAsCharacter`, "click");
+
+    await submitEditor();
+
+    const editedStatBlock = saveAsCharacterCallback.mock.calls[0][0];
+    expect(editedStatBlock.Id).not.toEqual(statBlock.Id);
+    expect(editedStatBlock.Name).toEqual("Snarf");
+    expect(editedStatBlock).not.toHaveProperty("SaveAs");
+  });
+
+  test("parses JSON if JSON editor is used", async () => {
     const editedJSON = JSON.stringify({
       Type: "Edited in JSON"
     });
 
-    expect.assertions(2);
-    saveCallback.mockImplementation(editedStatBlock => {
-      expect(editedStatBlock.Name).toEqual("Creature");
-      expect(editedStatBlock.Type).toEqual("Edited in JSON");
-      done();
-    });
-
-    editor.find(`.c-statblock-editor__json-button`).simulate("click");
-    editor.find(`textarea[name="StatBlockJSON"]`).simulate("change", {
+    simulate(`.c-statblock-editor__json-button`, "click");
+    simulate(`textarea[name="StatBlockJSON"]`, "change", {
       target: { name: "StatBlockJSON", value: editedJSON }
     });
 
-    editor.simulate("submit");
+    await submitEditor();
+
+    expect(saveCallback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        Name: "Creature",
+        Type: "Edited in JSON"
+      })
+    );
   });
 });

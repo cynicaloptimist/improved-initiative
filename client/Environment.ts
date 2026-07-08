@@ -11,6 +11,7 @@ export const env: ClientEnvironment = {
   SendMetrics: false,
   BaseUrl: "",
   PatreonLoginUrl: "http://www.patreon.com/",
+  GoogleAnalyticsId: "",
   SentryDSN: null
 };
 

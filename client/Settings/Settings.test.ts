@@ -3,6 +3,10 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 import { CurrentSettings, InitializeSettings } from "./Settings";
 
 describe("Settings", () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   test("Initializes to default settings", () => {
     InitializeSettings();
     expect(CurrentSettings()).toEqual(getDefaultSettings());

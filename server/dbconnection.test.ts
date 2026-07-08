@@ -4,7 +4,11 @@ import { PersistentCharacter } from "../common/PersistentCharacter";
 import { StatBlock } from "../common/StatBlock";
 import { probablyUniqueString } from "../common/Toolbox";
 import * as DB from "./dbconnection";
-import { handleCurrentUser } from "./patreon";
+import {
+  getPatreonAccountStatusChange,
+  getPatreonWebhookAccountStatus,
+  handleCurrentUser
+} from "./patreon";
 import { AccountStatus } from "./user";
 
 describe("User Accounts", () => {
@@ -59,6 +63,17 @@ describe("User Accounts", () => {
     expect(savedStatBlock).toEqual(statBlock);
   });
 
+  test("Should store Google Analytics client id for user", async () => {
+    const patreonId = probablyUniqueString();
+    const user = await DB.upsertUser(patreonId, AccountStatus.Pledge, "");
+
+    await DB.setGoogleAnalyticsClientId(user!._id, "123456.789012");
+    await DB.upsertUser(patreonId, AccountStatus.Epic, "");
+
+    const updatedUser = await DB.getUserByPatreonId(patreonId);
+    expect(updatedUser?.googleAnalyticsClientId).toEqual("123456.789012");
+  });
+
   test("Should copy playercharacters as persistentcharacters", async () => {
     const playerCharacterStatBlock: StatBlock = {
       ...StatBlock.Default(),
@@ -106,7 +121,7 @@ describe("User Accounts", () => {
       const res: any = { redirect: jest.fn() };
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
-      expect(user?.accountStatus).toEqual("epic");
+      expect(user?.accountStatus).toEqual(AccountStatus.Epic);
     });
 
     test("No Pledge", async () => {
@@ -125,6 +140,60 @@ describe("User Accounts", () => {
       await handleCurrentUser(req, res, apiResponse);
       const user = await DB.getAccount(req.session.userId);
       expect(user?.accountStatus).toEqual("none");
+    });
+  });
+
+  describe("Patreon account status change classification", () => {
+    test("Paid account status starts are conversions", () => {
+      expect(
+        getPatreonAccountStatusChange(AccountStatus.None, AccountStatus.Pledge)
+      ).toEqual("started");
+    });
+
+    test("Paid account status cancellations are cancellations", () => {
+      expect(
+        getPatreonAccountStatusChange(AccountStatus.Epic, AccountStatus.None)
+      ).toEqual("cancelled");
+    });
+
+    test("Paid tier moves are changes", () => {
+      expect(
+        getPatreonAccountStatusChange(AccountStatus.Pledge, AccountStatus.Epic)
+      ).toEqual("changed");
+    });
+
+    test("Unchanged paid account statuses are ignored", () => {
+      expect(
+        getPatreonAccountStatusChange(AccountStatus.Epic, AccountStatus.Epic)
+      ).toBeNull();
+    });
+  });
+
+  describe("Patreon webhook account status", () => {
+    test("Uses currently entitled tiers for pledge create events", () => {
+      expect(
+        getPatreonWebhookAccountStatus(
+          "patreonId",
+          [{ id: "1937132" }],
+          "members:pledge:create"
+        )
+      ).toEqual(AccountStatus.Epic);
+    });
+
+    test("Revokes account access for pledge delete events", () => {
+      expect(
+        getPatreonWebhookAccountStatus(
+          "patreonId",
+          [{ id: "1937132" }],
+          "members:pledge:delete"
+        )
+      ).toEqual(AccountStatus.None);
+    });
+
+    test("Returns no account access for empty entitled tiers", () => {
+      expect(
+        getPatreonWebhookAccountStatus("patreonId", [], "members:pledge:update")
+      ).toEqual(AccountStatus.None);
     });
   });
 });

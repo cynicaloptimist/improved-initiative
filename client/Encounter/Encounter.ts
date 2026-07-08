@@ -289,10 +289,8 @@ export class Encounter {
   );
 
   public FlushCombatants = () => {
-    for (const combatant of this.combatants()) {
-      if (combatant.IsPendingRemoval()) {
-        this.flushCombatant(combatant);
-      }
+    for (const combatant of this.CombatantsPendingRemove()) {
+      this.flushCombatant(combatant);
     }
   };
 

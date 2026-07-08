@@ -1,6 +1,7 @@
 import { AutoRerollInitiativeOption } from "../../common/Settings";
 import { StatBlock } from "../../common/StatBlock";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
+import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { buildEncounter } from "../test/buildEncounter";
 
 describe("AutoRerollInitiativeOption", () => {
@@ -10,8 +11,8 @@ describe("AutoRerollInitiativeOption", () => {
 
   const runEncounter = promptReroll => {
     const encounter = buildEncounter();
-    const combatant1 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    const combatant2 = encounter.AddCombatantFromStatBlock(StatBlock.Default());
+    const combatant1 = addCombatantFromStatBlock(encounter);
+    const combatant2 = addCombatantFromStatBlock(encounter);
     combatant1.Initiative(10);
     combatant2.Initiative(5);
     encounter.EncounterFlow.StartEncounter();

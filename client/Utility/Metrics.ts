@@ -26,9 +26,26 @@ export class Metrics {
       Metrics.TrackEvent("login", {
         method: loginMethod
       });
+      Metrics.RecordGoogleAnalyticsClientId();
       queryParams.delete("login");
       window.history.replaceState(null, "", window.location.pathname);
     }
+  }
+
+  public static TrackPatreonSignupIntent(
+    source: string,
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackAnonymousEvent("generate_lead", {
+      lead_source: source,
+      items: [
+        {
+          item_id: "patreon_membership",
+          item_name: "Patreon Membership"
+        }
+      ],
+      ...eventData
+    });
   }
 
   public static TrackEvent(
@@ -107,6 +124,45 @@ export class Metrics {
         headers: { "content-type": "application/json" }
       }
     );
+  }
+
+  public static RecordGoogleAnalyticsClientId(): void {
+    if (!env.GoogleAnalyticsId || typeof gtag != "function") {
+      return;
+    }
+
+    if (
+      !LegacySynchronousLocalStore.Load(
+        LegacySynchronousLocalStore.User,
+        "AllowTracking"
+      )
+    ) {
+      return;
+    }
+
+    try {
+      gtag(
+        "get",
+        env.GoogleAnalyticsId,
+        "client_id",
+        googleAnalyticsClientId => {
+          if (typeof googleAnalyticsClientId !== "string") {
+            return;
+          }
+
+          axios.post(
+            "/recordGoogleAnalyticsClientId",
+            JSON.stringify({
+              googleAnalyticsClientId,
+              meta: Metrics.getLocalMeta()
+            }),
+            {
+              headers: { "content-type": "application/json" }
+            }
+          );
+        }
+      );
+    } catch (e) {}
   }
 
   private static getLocalMeta() {

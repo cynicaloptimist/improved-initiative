@@ -4,10 +4,11 @@ module.exports = {
     "^.+\\.tsx?$": [
       "ts-jest",
       {
-        tsconfig: "client/tsconfig.json"
+        tsconfig: "client/tsconfig.jest.json",
+        diagnostics: false
       }
     ],
-    "^.+\\.md?$": "markdown-loader-jest"
+    "^.+\\.md?$": "<rootDir>/test/markdownTransform.cjs"
   },
   testEnvironment: "jsdom",
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
@@ -18,6 +19,7 @@ module.exports = {
     "^react-dnd-html5-backend$": "react-dnd-html5-backend/dist/cjs",
     "^react-dnd-touch-backend$": "react-dnd-touch-backend/dist/cjs",
     "^react-dnd-test-backend$": "react-dnd-test-backend/dist/cjs",
-    "^react-dnd-test-utils$": "react-dnd-test-utils/dist/cjs"
+    "^react-dnd-test-utils$": "react-dnd-test-utils/dist/cjs",
+    "^react-markdown/lib/react-markdown$": "<rootDir>/test/reactMarkdownMock.tsx"
   }
 };
