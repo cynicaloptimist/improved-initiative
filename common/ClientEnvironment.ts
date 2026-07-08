@@ -1,6 +1,6 @@
 export interface ClientEnvironment {
   EncounterId: string;
-  PostedEncounter: { Combatants: {}[] } | null;
+  PostedEncounter: { Combatants: object[] } | null;
   IsLoggedIn: boolean;
   HasStorage: boolean;
   HasEpicInitiative: boolean;
@@ -8,5 +8,6 @@ export interface ClientEnvironment {
   BaseUrl: string;
   PatreonLoginUrl: string;
   SendMetrics: boolean;
+  GoogleAnalyticsId: string;
   SentryDSN: string | null;
 }

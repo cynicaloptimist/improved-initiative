@@ -3,6 +3,7 @@ import * as React from "react";
 import { Button } from "../../Components/Button";
 import { Info } from "../../Components/Info";
 import { env } from "../../Environment";
+import { Metrics } from "../../Utility/Metrics";
 import { StylesChooser } from "./StylesChooser";
 import { Toggle } from "./Toggle";
 import { StatBlockCustomFields } from "./StatBlockCustomFields";
@@ -115,12 +116,15 @@ function upgradeMessage() {
       {epicInitiativeFeatures()}
       <hr />
       <Button
-        onClick={() =>
+        onClick={() => {
+          Metrics.TrackPatreonSignupIntent("epic_initiative_settings", {
+            link_url: "https://www.patreon.com/bePatron?c=716070&rid=1937132"
+          });
           window.open(
             "https://www.patreon.com/bePatron?c=716070&rid=1937132",
             "_blank"
-          )
-        }
+          );
+        }}
         additionalClassNames="button--upgrade"
         text="Pledge Now!"
       />

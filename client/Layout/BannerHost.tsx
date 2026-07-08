@@ -24,12 +24,19 @@ export function BannerHost(): JSX.Element {
       <a
         href={banner.href}
         target="_blank"
-        onClick={() =>
+        onClick={() => {
           Metrics.TrackAnonymousEvent("BannerClick", {
             href: banner.href,
             imageUrl: banner.src
-          })
-        }
+          });
+
+          if (banner.href.indexOf("patreon.com") > -1) {
+            Metrics.TrackPatreonSignupIntent("footer_banner", {
+              link_url: banner.href,
+              creative_name: banner.src
+            });
+          }
+        }}
         title="Affiliate banners support the free app, and are hidden for subscribed Patrons."
       >
         <img src={banner.src} alt={banner.altText} />

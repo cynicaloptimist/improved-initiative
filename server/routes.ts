@@ -55,6 +55,7 @@ const getClientOptions = (session: Express.Session) => {
     HasEpicInitiative: session.hasEpicInitiative || false,
     HasMythic: session.hasMythic || false,
     SendMetrics: process.env.METRICS_DB_CONNECTION_STRING != undefined,
+    GoogleAnalyticsId: googleAnalyticsId,
     PostedEncounter: null,
     SentryDSN: process.env.SENTRY_DSN || null
   };
@@ -84,8 +85,10 @@ export default async function (
     cacheMaxAge = 0;
   }
 
-  if(!process.env.BASE_URL?.length) {
-    console.error("BASE_URL environment variable is not set. Cannot start server.");
+  if (!process.env.BASE_URL?.length) {
+    console.error(
+      "BASE_URL environment variable is not set. Cannot start server."
+    );
     process.exit(1);
   }
 
