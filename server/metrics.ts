@@ -36,7 +36,7 @@ export function configureMetricsRoutes(app: express.Application) {
       throw "Session is undefined.";
     }
 
-    const name = req.params.eventName;
+    const eventName = req.params.eventName;
     const eventData = req.body.eventData || {};
     const meta = {
       ...req.body.meta,
@@ -48,7 +48,7 @@ export function configureMetricsRoutes(app: express.Application) {
     };
 
     await dbClient.db().collection("events").insertOne({
-      name,
+      eventName,
       eventData,
       meta
     });
@@ -109,7 +109,7 @@ export function configureMetricsRoutes(app: express.Application) {
 }
 
 export async function recordServerEvent(
-  name: string,
+  eventName: string,
   eventData: Record<string, any>,
   meta: ServerEventMeta = {}
 ): Promise<void> {
@@ -122,7 +122,7 @@ export async function recordServerEvent(
       .db()
       .collection("events")
       .insertOne({
-        name,
+        eventName,
         eventData,
         meta: {
           ...meta,
