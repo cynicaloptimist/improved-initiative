@@ -209,7 +209,9 @@ export class Combatant {
     }
 
     if (currHP <= 0 && !allowNegativeHP) {
-      Metrics.TrackEvent("CombatantDefeated", { Name: this.DisplayName() });
+      Metrics.TrackEvent(Metrics.Event.CombatantDefeated, {
+        name: this.DisplayName()
+      });
       currHP = 0;
     }
 

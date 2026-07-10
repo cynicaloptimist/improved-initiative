@@ -32,9 +32,9 @@ export function UpdateNotesPrompt(
     initialValues: { Notes: combatant.CurrentNotes() },
     onSubmit: (model: NotesModel) => {
       combatant.CurrentNotes(model.Notes);
-      Metrics.TrackEvent("NotesUpdated", {
-        Name: combatant.DisplayName(),
-        Notes: model.Notes.substr(0, 100)
+      Metrics.TrackEvent(Metrics.Event.NotesUpdated, {
+        name: combatant.DisplayName(),
+        notes: model.Notes.substr(0, 100)
       });
       return true;
     },

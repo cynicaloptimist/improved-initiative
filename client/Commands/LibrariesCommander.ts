@@ -58,7 +58,9 @@ export class LibrariesCommander {
         hideOnAdd,
         variantMaximumHP
       );
-      Metrics.TrackEvent("CombatantAdded", { Name: statBlock.Name });
+      Metrics.TrackEvent(Metrics.Event.CombatantAdded, {
+        name: statBlock.Name
+      });
       this.tracker.EventLog.AddEvent(`${statBlock.Name} added to combat.`);
       const settings = CurrentSettings();
       settings.RecentItemIds = [
@@ -88,7 +90,9 @@ export class LibrariesCommander {
       this.UpdatePersistentCharacter,
       hideOnAdd
     );
-    Metrics.TrackEvent("PersistentCharacterAdded", { Name: character.Name });
+    Metrics.TrackEvent(Metrics.Event.PersistentCharacterAdded, {
+      name: character.Name
+    });
     this.tracker.EventLog.AddEvent(
       `Character ${character.Name} added to combat.`
     );
@@ -308,7 +312,7 @@ export class LibrariesCommander {
 
   private deleteSavedStatBlock = (statBlockId: string) => (): void => {
     this.libraries.StatBlocks.DeleteListing(statBlockId);
-    Metrics.TrackEvent("StatBlockDeleted", { Id: statBlockId });
+    Metrics.TrackEvent(Metrics.Event.StatBlockDeleted, { id: statBlockId });
   };
 
   private saveStatblockAsPersistentCharacter = (statBlock: StatBlock) => {

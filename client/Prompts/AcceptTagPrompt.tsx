@@ -49,14 +49,14 @@ export function AcceptTagPrompt(
 
         encounter.EncounterFlow.AddDurationTag(tag);
         combatant.Tags.push(tag);
-        Metrics.TrackEvent("TagAddedFromSuggestion", {
-          Text: tag.Text,
-          Duration: tag.DurationRemaining()
+        Metrics.TrackEvent(Metrics.Event.TagAddedFromSuggestion, {
+          text: tag.Text,
+          duration: tag.DurationRemaining()
         });
       } else {
         combatant.Tags.push(new Tag(tagState.Text, combatant, false));
-        Metrics.TrackEvent("TagAddedFromSuggestion", {
-          Text: tagState.Text
+        Metrics.TrackEvent(Metrics.Event.TagAddedFromSuggestion, {
+          text: tagState.Text
         });
       }
 

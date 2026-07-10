@@ -102,7 +102,7 @@ function loginMessage() {
         href={env.PatreonLoginUrl}
         onClick={() =>
           Metrics.TrackPatreonLoginStarted(
-            "epic_tab_existing_supporter_login"
+            Metrics.LeadSource.EpicTabExistingSupporterLogin
           )
         }
       >
@@ -125,9 +125,12 @@ function upgradeMessage() {
       <hr />
       <Button
         onClick={() => {
-          Metrics.TrackPatreonSignupIntent("epic_tab_unlock_epic", {
-            link_url: "https://www.patreon.com/bePatron?c=716070&rid=1937132"
-          });
+          Metrics.TrackPatreonSignupIntent(
+            Metrics.LeadSource.EpicTabUnlockEpic,
+            {
+              link_url: "https://www.patreon.com/bePatron?c=716070&rid=1937132"
+            }
+          );
           window.open(
             "https://www.patreon.com/bePatron?c=716070&rid=1937132",
             "_blank"

@@ -105,8 +105,8 @@ export class CombatantCommander {
 
     this.selectedCombatantIds(allSelected);
 
-    Metrics.TrackEvent("CombatantsSelected", {
-      Count: this.selectedCombatantIds().length
+    Metrics.TrackEvent(Metrics.Event.CombatantsSelected, {
+      count: this.selectedCombatantIds().length
     });
   };
 
@@ -167,7 +167,9 @@ export class CombatantCommander {
     this.tracker.EventLog.AddEvent(
       `${deletedCombatantNames.join(", ")} removed from encounter.`
     );
-    Metrics.TrackEvent("CombatantsRemoved", { Names: deletedCombatantNames });
+    Metrics.TrackEvent(Metrics.Event.CombatantsRemoved, {
+      names: deletedCombatantNames
+    });
   };
 
   public FlushCombatants = () => {
@@ -267,7 +269,9 @@ export class CombatantCommander {
       return false;
     }
 
-    Metrics.TrackEvent("DamageSuggested", { Amount: suggestedDamage });
+    Metrics.TrackEvent(Metrics.Event.DamageSuggested, {
+      amount: suggestedDamage
+    });
 
     const prompt = AcceptDamagePrompt(
       suggestedCombatants,
@@ -298,7 +302,7 @@ export class CombatantCommander {
     setTimeout(() => {
       const prompt = ConcentrationPrompt(combatant, damageAmount);
       this.tracker.PromptQueue.Add(prompt);
-      Metrics.TrackEvent("ConcentrationCheckTriggered");
+      Metrics.TrackEvent(Metrics.Event.ConcentrationCheckTriggered);
     }, 1);
   };
 
@@ -315,7 +319,9 @@ export class CombatantCommander {
         this.tracker.EventLog.AddEvent(
           `${model.hpAmount} temporary hit points granted to ${combatantNames}.`
         );
-        Metrics.TrackEvent("TemporaryHPAdded", { Amount: model.hpAmount });
+        Metrics.TrackEvent(Metrics.Event.TemporaryHpAdded, {
+          amount: model.hpAmount
+        });
       }
       return true;
     });
@@ -368,7 +374,7 @@ export class CombatantCommander {
     this.tracker.Encounter.CleanInitiativeGroups();
 
     this.tracker.Encounter.SortByInitiative();
-    Metrics.TrackEvent("InitiativeLinked");
+    Metrics.TrackEvent(Metrics.Event.InitiativeLinked);
   };
 
   public LinkInitiative = () => {
@@ -509,9 +515,9 @@ export class CombatantCommander {
     this.latestRoll = diceRoll;
     const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
 
-    Metrics.TrackEvent("DiceRolled", {
-      Expression: diceExpression,
-      Result: diceRoll.FormattedString
+    Metrics.TrackEvent(Metrics.Event.DiceRolled, {
+      expression: diceExpression,
+      result: diceRoll.FormattedString
     });
     this.tracker.PromptQueue.Add(prompt);
   };

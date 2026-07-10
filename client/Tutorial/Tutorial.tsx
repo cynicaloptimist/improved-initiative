@@ -18,11 +18,11 @@ export function Tutorial(props: { onClose: () => void }): JSX.Element {
 
   const advance = () => {
     if (stepIndex == 0) {
-      Metrics.TrackEvent("tutorial_begin");
+      Metrics.TrackEvent(Metrics.Event.TutorialBegin);
     }
     const nextStepIndex = stepIndex + 1;
     if (nextStepIndex >= TutorialSteps.length) {
-      Metrics.TrackEvent("tutorial_complete");
+      Metrics.TrackEvent(Metrics.Event.TutorialComplete);
       return close();
     }
     setStepIndex(nextStepIndex);

@@ -66,7 +66,7 @@ export const StatBlockCustomFields = () => {
           <Button
             type="button"
             onClick={() => {
-              Metrics.TrackEvent("CustomStatBlockFieldAdded");
+              Metrics.TrackEvent(Metrics.Event.CustomStatBlockFieldAdded);
               return arrayHelpers.push({
                 name: "",
                 type: "string",

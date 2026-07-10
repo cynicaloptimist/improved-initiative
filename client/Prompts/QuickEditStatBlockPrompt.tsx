@@ -47,7 +47,9 @@ export function QuickEditStatBlockPrompt(
       };
 
       updateStatBlock(updatedStatBlock);
-      Metrics.TrackEvent("CombatantStatBlockQuickEdited", { Name: model.Name });
+      Metrics.TrackEvent(Metrics.Event.CombatantStatBlockQuickEdited, {
+        name: model.Name
+      });
       return true;
     }
   };

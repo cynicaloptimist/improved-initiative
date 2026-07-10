@@ -65,8 +65,8 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
 
   React.useEffect(() => {
     if (!env.IsLoggedIn) {
-      Metrics.TrackPatreonCtaViewed("sticky_patreon_login", {
-        creative_name: "sticky_patreon_login_v1",
+      Metrics.TrackPatreonCtaViewed(Metrics.LeadSource.StickyPatreonLogin, {
+        creative_name: Metrics.CreativeName.StickyPatreonLoginV1,
         link_url: env.PatreonLoginUrl
       });
     }
@@ -110,9 +110,13 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
                   className="login button"
                   href={env.PatreonLoginUrl}
                   onClick={() =>
-                    Metrics.TrackPatreonLoginStarted("sticky_patreon_login", {
-                      creative_name: "sticky_patreon_login_v1"
-                    })
+                    Metrics.TrackPatreonLoginStarted(
+                      Metrics.LeadSource.StickyPatreonLogin,
+                      {
+                        creative_name:
+                          Metrics.CreativeName.StickyPatreonLoginV1
+                      }
+                    )
                   }
                 >
                   Log In with Patreon

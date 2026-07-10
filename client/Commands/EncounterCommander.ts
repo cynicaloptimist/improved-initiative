@@ -41,8 +41,8 @@ export class EncounterCommander {
     );
     this.tracker.PromptQueue.Add(prompt);
 
-    Metrics.TrackEvent("PlayerViewLaunched", {
-      Id: env.EncounterId
+    Metrics.TrackEvent(Metrics.Event.PlayerViewLaunched, {
+      id: env.EncounterId
     });
   };
 
@@ -68,14 +68,14 @@ export class EncounterCommander {
 
   public ToggleFullScreen = (): boolean => {
     ToggleFullscreen();
-    Metrics.TrackEvent("FullscreenToggled");
+    Metrics.TrackEvent(Metrics.Event.FullscreenToggled);
     return false;
   };
 
   public ShowSettings = (): void => {
     NotifyTutorialOfAction("ShowSettings");
     this.tracker.SettingsVisible(true);
-    Metrics.TrackEvent("SettingsOpened");
+    Metrics.TrackEvent(Metrics.Event.SettingsOpened);
   };
 
   public ToggleToolbarWidth = (): void => {
@@ -110,8 +110,8 @@ export class EncounterCommander {
     NotifyTutorialOfAction("ShowInitiativeDialog");
 
     this.tracker.EventLog.AddEvent("Encounter started.");
-    Metrics.TrackEvent("EncounterStarted", {
-      CombatantCount: this.tracker.Encounter.Combatants().length
+    Metrics.TrackEvent(Metrics.Event.EncounterStarted, {
+      combatant_count: this.tracker.Encounter.Combatants().length
     });
 
     return false;
@@ -124,8 +124,8 @@ export class EncounterCommander {
 
     this.tracker.Encounter.EncounterFlow.EndEncounter();
     this.tracker.EventLog.AddEvent("Encounter ended.");
-    Metrics.TrackEvent("EncounterEnded", {
-      Combatants: this.tracker.Encounter.Combatants().length
+    Metrics.TrackEvent(Metrics.Event.EncounterEnded, {
+      combatants: this.tracker.Encounter.Combatants().length
     });
 
     const displayPostCombatStats =
@@ -170,7 +170,7 @@ export class EncounterCommander {
 
   public RerollInitiative = async (): Promise<void> => {
     await this.ShowInitiativePrompt();
-    Metrics.TrackEvent("InitiativeRerolled");
+    Metrics.TrackEvent(Metrics.Event.InitiativeRerolled);
   };
 
   public ClearEncounter = (): boolean => {
@@ -178,7 +178,7 @@ export class EncounterCommander {
       this.tracker.Encounter.ClearEncounter();
       this.tracker.CombatantCommander.Deselect();
       this.tracker.EventLog.AddEvent("All combatants removed from encounter.");
-      Metrics.TrackEvent("EncounterCleared");
+      Metrics.TrackEvent(Metrics.Event.EncounterCleared);
     }
 
     return false;
@@ -195,7 +195,7 @@ export class EncounterCommander {
         this.tracker.Encounter.RemoveCombatant(vm.Combatant)
       );
       this.tracker.Encounter.CombatantCountsByName({});
-      Metrics.TrackEvent("EncounterCleaned");
+      Metrics.TrackEvent(Metrics.Event.EncounterCleaned);
     }
 
     return false;
@@ -207,7 +207,7 @@ export class EncounterCommander {
     );
     playerCharacters.forEach(pc => pc.CurrentHP(pc.MaxHP()));
     this.tracker.EventLog.AddEvent("All player character HP was restored.");
-    Metrics.TrackEvent("AllPlayerCharacterHPRestored");
+    Metrics.TrackEvent(Metrics.Event.AllPlayerCharacterHpRestored);
   };
 
   public LoadSavedEncounter = async (
@@ -257,9 +257,9 @@ export class EncounterCommander {
       savedEncounter.BackgroundImageUrl
     );
 
-    Metrics.TrackEvent("EncounterLoaded", {
-      Name: savedEncounter.Name,
-      Combatants: savedEncounter.Combatants.map(c => c.StatBlock.Name)
+    Metrics.TrackEvent(Metrics.Event.EncounterLoaded, {
+      name: savedEncounter.Name,
+      combatants: savedEncounter.Combatants.map(c => c.StatBlock.Name)
     });
 
     await Promise.all(persistentCharactersPromise);
@@ -287,8 +287,8 @@ export class EncounterCommander {
     const turnEndCombatant =
       this.tracker.Encounter.EncounterFlow.ActiveCombatant();
     if (turnEndCombatant) {
-      Metrics.TrackEvent("TurnCompleted", {
-        Name: turnEndCombatant.DisplayName()
+      Metrics.TrackEvent(Metrics.Event.TurnCompleted, {
+        name: turnEndCombatant.DisplayName()
       });
     }
 

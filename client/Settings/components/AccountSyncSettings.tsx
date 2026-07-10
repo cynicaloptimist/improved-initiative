@@ -105,7 +105,7 @@ export class AccountSyncSettings extends React.Component<
           href={env.PatreonLoginUrl}
           onClick={() =>
             Metrics.TrackPatreonLoginStarted(
-              "account_tab_existing_supporter_login"
+              Metrics.LeadSource.AccountTabExistingSupporterLogin
             )
           }
         >
@@ -124,10 +124,13 @@ export class AccountSyncSettings extends React.Component<
             href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
             target="_blank"
             onClick={() =>
-              Metrics.TrackPatreonSignupIntent("account_tab_save_sync", {
-                link_url:
-                  "https://www.patreon.com/bePatron?c=716070&rid=1322253"
-              })
+              Metrics.TrackPatreonSignupIntent(
+                Metrics.LeadSource.AccountTabSaveSync,
+                {
+                  link_url:
+                    "https://www.patreon.com/bePatron?c=716070&rid=1322253"
+                }
+              )
             }
           >
             Account Sync

@@ -72,7 +72,7 @@ export class TrackerViewModel {
   public LibraryManagerPane = ko.observable<LibraryType | null>(null);
   public ToggleLibraryManager = (): void => {
     if (this.LibraryManagerPane() === null) {
-      Metrics.TrackEvent("LibraryManagerOpened");
+      Metrics.TrackEvent(Metrics.Event.LibraryManagerOpened);
       this.LibraryManagerPane("StatBlocks");
     } else {
       this.LibraryManagerPane(null);
@@ -233,7 +233,7 @@ export class TrackerViewModel {
     this.TutorialVisible(false);
 
     if (!env.IsLoggedIn || !env.HasEpicInitiative) {
-      Metrics.TrackPatreonAccessDenied("importer_login_fail", {
+      Metrics.TrackPatreonAccessDenied(Metrics.LeadSource.ImporterLoginFail, {
         link_url: env.IsLoggedIn
           ? "https://www.patreon.com/join/improvedinitiative"
           : env.PatreonLoginUrl
@@ -252,7 +252,9 @@ export class TrackerViewModel {
               href={env.PatreonLoginUrl}
               target="_blank"
               onClick={() =>
-                Metrics.TrackPatreonLoginStarted("importer_login_fail")
+                Metrics.TrackPatreonLoginStarted(
+                  Metrics.LeadSource.ImporterLoginFail
+                )
               }
             >
               Patreon
@@ -276,9 +278,12 @@ export class TrackerViewModel {
               href={"https://www.patreon.com/join/improvedinitiative"}
               target="_blank"
               onClick={() =>
-                Metrics.TrackPatreonSignupIntent("importer_login_fail", {
-                  link_url: "https://www.patreon.com/join/improvedinitiative"
-                })
+                Metrics.TrackPatreonSignupIntent(
+                  Metrics.LeadSource.ImporterLoginFail,
+                  {
+                    link_url: "https://www.patreon.com/join/improvedinitiative"
+                  }
+                )
               }
             >
               Epic Initiative
@@ -321,8 +326,8 @@ export class TrackerViewModel {
       ...parsedPayload
     };
 
-    Metrics.TrackEvent("StatBlockImported", {
-      Name: statBlock.Name
+    Metrics.TrackEvent(Metrics.Event.StatBlockImported, {
+      name: statBlock.Name
     });
 
     if (statBlock.Player == "") {
@@ -365,8 +370,8 @@ export class TrackerViewModel {
       ...Spell.Default(),
       ...parsedPayload
     };
-    Metrics.TrackEvent("SpellImported", {
-      Name: spell.Name
+    Metrics.TrackEvent(Metrics.Event.SpellImported, {
+      name: spell.Name
     });
     this.EditSpell({
       onSave: this.Libraries.Spells.SaveNewListing,
@@ -497,7 +502,7 @@ export class TrackerViewModel {
 
   public SaveUpdatedSettings(newSettings: Settings): void {
     CurrentSettings(newSettings);
-    Metrics.TrackEvent("SettingsSaved", newSettings);
+    Metrics.TrackEvent(Metrics.Event.SettingsSaved, newSettings);
     LegacySynchronousLocalStore.Save(
       LegacySynchronousLocalStore.User,
       "Settings",

@@ -79,7 +79,7 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
               target="_blank"
               onClick={() =>
                 Metrics.TrackPatreonSignupIntent(
-                  "player_view_customization_gate",
+                  Metrics.LeadSource.PlayerViewCustomizationGate,
                   {
                     link_url:
                       "https://www.patreon.com/bePatron?c=716070&rid=1937132"

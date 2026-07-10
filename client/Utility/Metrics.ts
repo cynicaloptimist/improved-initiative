@@ -7,26 +7,116 @@ declare let gtag: Gtag.Gtag | undefined;
 
 let didSetConsent = false;
 
+enum MetricEvent {
+  AliasSet = "alias_set",
+  AllPlayerCharacterHpRestored = "all_player_character_hp_restored",
+  AppLoad = "app_load",
+  BannerClick = "banner_click",
+  CombatantAcHidden = "combatant_ac_hidden",
+  CombatantAcRevealed = "combatant_ac_revealed",
+  CombatantAdded = "combatant_added",
+  CombatantDefeated = "combatant_defeated",
+  CombatantHidden = "combatant_hidden",
+  CombatantQuickAdded = "combatant_quick_added",
+  CombatantRevealed = "combatant_revealed",
+  CombatantStatBlockQuickEdited = "combatant_statblock_quick_edited",
+  CombatantsRemoved = "combatants_removed",
+  CombatantsSelected = "combatants_selected",
+  ConcentrationCheckTriggered = "concentration_check_triggered",
+  CustomStatBlockFieldAdded = "custom_statblock_field_added",
+  DamageApplied = "damage_applied",
+  DamageSuggested = "damage_suggested",
+  DiceRolled = "dice_rolled",
+  EncounterCleaned = "encounter_cleaned",
+  EncounterCleared = "encounter_cleared",
+  EncounterEnded = "encounter_ended",
+  EncounterLoaded = "encounter_loaded",
+  EncounterMoved = "encounter_moved",
+  EncounterSaved = "encounter_saved",
+  EncounterStarted = "encounter_started",
+  FullscreenToggled = "fullscreen_toggled",
+  GenerateLead = "generate_lead",
+  InitiativeLinked = "initiative_linked",
+  InitiativeRerolled = "initiative_rerolled",
+  InitiativeSet = "initiative_set",
+  LandingPageLoad = "landing_page_load",
+  LibraryManagerOpened = "library_manager_opened",
+  Login = "login",
+  NotesUpdated = "notes_updated",
+  PatreonAccessDenied = "patreon_access_denied",
+  PersistentCharacterAdded = "persistent_character_added",
+  PlayerViewLaunched = "player_view_launched",
+  SettingsOpened = "settings_opened",
+  SettingsSaved = "settings_saved",
+  SpellImported = "spell_imported",
+  StatBlockDeleted = "statblock_deleted",
+  StatBlockImported = "statblock_imported",
+  TagAdded = "tag_added",
+  TagAddedFromSuggestion = "tag_added_from_suggestion",
+  TemporaryHpAdded = "temporary_hp_added",
+  TutorialBegin = "tutorial_begin",
+  TutorialComplete = "tutorial_complete",
+  TurnCompleted = "turn_completed",
+  ViewPromotion = "view_promotion"
+}
+
+enum MetricLeadSource {
+  AccountTabExistingSupporterLogin = "account_tab_existing_supporter_login",
+  AccountTabSaveSync = "account_tab_save_sync",
+  AboutTabSupporterBenefits = "about_tab_supporter_benefits",
+  EpicTabExistingSupporterLogin = "epic_tab_existing_supporter_login",
+  EpicTabUnlockEpic = "epic_tab_unlock_epic",
+  FooterBanner = "footer_banner",
+  ImporterLoginFail = "importer_login_fail",
+  PlayerViewCustomizationGate = "player_view_customization_gate",
+  StickyPatreonLogin = "sticky_patreon_login"
+}
+
+enum MetricCreativeName {
+  StickyPatreonLoginV1 = "sticky_patreon_login_v1"
+}
+
+enum MetricPatreonEvent {
+  ExtensionAccessDenied = "extension_access_denied",
+  JoinClicked = "join_clicked",
+  LoginStarted = "login_started",
+  LoginSucceeded = "login_succeeded"
+}
+
+enum MetricAccountStatus {
+  Anonymous = "anonymous",
+  LoggedInNoPatreon = "logged_in_no_patreon",
+  AccountSyncActive = "account_sync_active",
+  EpicActive = "epic_active",
+  MythicActive = "mythic_active"
+}
+
 export class Metrics {
+  public static readonly Event = MetricEvent;
+  public static readonly LeadSource = MetricLeadSource;
+  public static readonly CreativeName = MetricCreativeName;
+  public static readonly PatreonEvent = MetricPatreonEvent;
+  public static readonly AccountStatus = MetricAccountStatus;
+
   public static async TrackLoad(): Promise<void> {
     const counts = {
-      Encounters: await Store.Count(Store.SavedEncounters),
-      NpcStatBlocks: await Store.Count(Store.StatBlocks),
-      PcStatBlocks: LegacySynchronousLocalStore.List(
+      encounters: await Store.Count(Store.SavedEncounters),
+      npc_statblocks: await Store.Count(Store.StatBlocks),
+      pc_statblocks: LegacySynchronousLocalStore.List(
         LegacySynchronousLocalStore.PlayerCharacters
       ).length,
-      PersistentCharacters: await Store.Count(Store.PersistentCharacters),
-      Spells: await Store.Count(Store.Spells)
+      persistent_characters: await Store.Count(Store.PersistentCharacters),
+      spells: await Store.Count(Store.Spells)
     };
 
-    Metrics.TrackEvent("AppLoad", counts);
+    Metrics.TrackEvent(Metrics.Event.AppLoad, counts);
     const queryParams = new URLSearchParams(window.location.search);
     const loginMethod = queryParams.get("login");
     if (loginMethod) {
       if (loginMethod == "patreon") {
         Metrics.TrackPatreonLoginSucceeded();
       } else {
-        Metrics.TrackEvent("login", {
+        Metrics.TrackEvent(Metrics.Event.Login, {
           method: loginMethod
         });
       }
@@ -37,23 +127,23 @@ export class Metrics {
   }
 
   public static TrackPatreonSignupIntent(
-    source: string,
+    source: MetricLeadSource,
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackPatreonFunnelEvent("generate_lead", source, {
-      patreon_event: "join_clicked",
+    Metrics.TrackPatreonFunnelEvent(Metrics.Event.GenerateLead, source, {
+      patreon_event: Metrics.PatreonEvent.JoinClicked,
       ...eventData
     });
   }
 
   public static TrackPatreonLoginStarted(
-    source: string,
+    source: MetricLeadSource,
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackPatreonFunnelEvent("login", source, {
+    Metrics.TrackPatreonFunnelEvent(Metrics.Event.Login, source, {
       link_url: env.PatreonLoginUrl,
       method: "patreon",
-      patreon_event: "login_started",
+      patreon_event: Metrics.PatreonEvent.LoginStarted,
       ...eventData
     });
   }
@@ -61,34 +151,38 @@ export class Metrics {
   public static TrackPatreonLoginSucceeded(
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackEvent("login", {
+    Metrics.TrackEvent(Metrics.Event.Login, {
       account_status: Metrics.getAccountStatus(),
       method: "patreon",
-      patreon_event: "login_succeeded",
+      patreon_event: Metrics.PatreonEvent.LoginSucceeded,
       ...eventData
     });
   }
 
   public static TrackPatreonAccessDenied(
-    source: string,
+    source: MetricLeadSource,
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackPatreonFunnelEvent("patreon_access_denied", source, {
-      patreon_event: "extension_access_denied",
+    Metrics.TrackPatreonFunnelEvent(Metrics.Event.PatreonAccessDenied, source, {
+      patreon_event: Metrics.PatreonEvent.ExtensionAccessDenied,
       ...eventData
     });
   }
 
   public static TrackPatreonCtaViewed(
-    source: string,
+    source: MetricLeadSource,
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackPatreonFunnelEvent("view_promotion", source, eventData);
+    Metrics.TrackPatreonFunnelEvent(
+      Metrics.Event.ViewPromotion,
+      source,
+      eventData
+    );
   }
 
   public static TrackPatreonFunnelEvent(
-    eventName: string,
-    source: string,
+    eventName: MetricEvent,
+    source: MetricLeadSource,
     eventData: Record<string, any> = {}
   ): void {
     Metrics.TrackAnonymousEvent(eventName, {
@@ -105,7 +199,7 @@ export class Metrics {
   }
 
   public static TrackEvent(
-    name: string,
+    name: MetricEvent,
     eventData: Record<string, any> = {}
   ): void {
     if (
@@ -152,7 +246,7 @@ export class Metrics {
   }
 
   public static TrackAnonymousEvent(
-    name: string,
+    name: MetricEvent,
     eventData: Record<string, any> = {}
   ): void {
     console.log(`Anonymous Event ${name}`);
@@ -229,28 +323,23 @@ export class Metrics {
     };
   }
 
-  private static getAccountStatus():
-    | "anonymous"
-    | "logged_in_no_patreon"
-    | "account_sync_active"
-    | "epic_active"
-    | "mythic_active" {
+  private static getAccountStatus(): MetricAccountStatus {
     if (!env.IsLoggedIn) {
-      return "anonymous";
+      return Metrics.AccountStatus.Anonymous;
     }
 
     if (env.HasMythic) {
-      return "mythic_active";
+      return Metrics.AccountStatus.MythicActive;
     }
 
     if (env.HasEpicInitiative) {
-      return "epic_active";
+      return Metrics.AccountStatus.EpicActive;
     }
 
     if (env.HasStorage) {
-      return "account_sync_active";
+      return Metrics.AccountStatus.AccountSyncActive;
     }
 
-    return "logged_in_no_patreon";
+    return Metrics.AccountStatus.LoggedInNoPatreon;
   }
 }

@@ -46,7 +46,7 @@ export class About extends React.Component<AboutProps> {
             target="_blank"
             onClick={() =>
               Metrics.TrackPatreonSignupIntent(
-                "about_tab_supporter_benefits",
+                Metrics.LeadSource.AboutTabSupporterBenefits,
                 {
                   link_url: "https://www.patreon.com/join/improvedinitiative"
                 }

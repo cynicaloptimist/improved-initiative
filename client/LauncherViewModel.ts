@@ -9,9 +9,9 @@ import { SubscribeToDarkModeChanges } from "./Settings/Settings";
 export class LauncherViewModel {
   constructor() {
     const pageLoadData = {
-      userAgent: navigator.userAgent
+      user_agent: navigator.userAgent
     };
-    Metrics.TrackAnonymousEvent("LandingPageLoad", pageLoadData);
+    Metrics.TrackAnonymousEvent(Metrics.Event.LandingPageLoad, pageLoadData);
 
     this.cleanAffiliateUrl();
 

@@ -54,7 +54,9 @@ export class CombatantViewModel {
     }
 
     if (damage > 0) {
-      Metrics.TrackEvent("DamageApplied", { Amount: damage.toString() });
+      Metrics.TrackEvent(Metrics.Event.DamageApplied, {
+        amount: damage.toString()
+      });
       if (
         shouldAutoCheckConcentration &&
         this.Combatant.Tags().some(t => t.Text === ConcentrationTagText)
@@ -91,7 +93,9 @@ export class CombatantViewModel {
         this.LogEvent(
           `${this.Name()} initiative set to ${model.initiativeRoll}.`
         );
-        Metrics.TrackEvent("InitiativeSet", { Name: this.Name() });
+        Metrics.TrackEvent(Metrics.Event.InitiativeSet, {
+          name: this.Name()
+        });
         return true;
       }
       return false;
@@ -106,9 +110,9 @@ export class CombatantViewModel {
       this.Combatant.Alias(model.alias);
       if (model.alias) {
         this.LogEvent(`${currentName} alias changed to ${model.alias}.`);
-        Metrics.TrackEvent("AliasSet", {
-          StatBlockName: this.Combatant.StatBlock().Name,
-          Alias: model.alias
+        Metrics.TrackEvent(Metrics.Event.AliasSet, {
+          statblock_name: this.Combatant.StatBlock().Name,
+          alias: model.alias
         });
       } else {
         this.LogEvent(`${currentName} alias removed.`);
@@ -130,14 +134,14 @@ export class CombatantViewModel {
     if (this.Combatant.Hidden()) {
       this.Combatant.Hidden(false);
       this.LogEvent(`${this.Name()} revealed in player view.`);
-      Metrics.TrackEvent("CombatantRevealed", {
-        Name: this.Name()
+      Metrics.TrackEvent(Metrics.Event.CombatantRevealed, {
+        name: this.Name()
       });
     } else {
       this.Combatant.Hidden(true);
       this.LogEvent(`${this.Name()} hidden in player view.`);
-      Metrics.TrackEvent("CombatantHidden", {
-        Name: this.Name()
+      Metrics.TrackEvent(Metrics.Event.CombatantHidden, {
+        name: this.Name()
       });
     }
   }
@@ -146,14 +150,14 @@ export class CombatantViewModel {
     if (this.Combatant.RevealedAC()) {
       this.Combatant.RevealedAC(false);
       this.LogEvent(`${this.Name()} AC hidden in player view.`);
-      Metrics.TrackEvent("CombatantACHidden", {
-        Name: this.Name()
+      Metrics.TrackEvent(Metrics.Event.CombatantAcHidden, {
+        name: this.Name()
       });
     } else {
       this.Combatant.RevealedAC(true);
       this.LogEvent(`${this.Name()} AC revealed in player view.`);
-      Metrics.TrackEvent("CombatantACRevealed", {
-        Name: this.Name()
+      Metrics.TrackEvent(Metrics.Event.CombatantAcRevealed, {
+        name: this.Name()
       });
     }
   }
