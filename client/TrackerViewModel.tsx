@@ -232,6 +232,14 @@ export class TrackerViewModel {
     window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
 
+    if (!env.IsLoggedIn || !env.HasEpicInitiative) {
+      Metrics.TrackPatreonAccessDenied("importer_login_fail", {
+        link_url: env.IsLoggedIn
+          ? "https://www.patreon.com/join/improvedinitiative"
+          : env.PatreonLoginUrl
+      });
+    }
+
     if (!env.IsLoggedIn) {
       this.PromptQueue.Add({
         autoFocusSelector: ".submit",
@@ -240,7 +248,13 @@ export class TrackerViewModel {
         children: (
           <span className="not-logged-in-for-import">
             {"Please login with "}
-            <a href={env.PatreonLoginUrl} target="_blank">
+            <a
+              href={env.PatreonLoginUrl}
+              target="_blank"
+              onClick={() =>
+                Metrics.TrackPatreonLoginStarted("importer_login_fail")
+              }
+            >
               Patreon
             </a>
             {" to use the D&D Beyond Importer."}
@@ -261,6 +275,11 @@ export class TrackerViewModel {
             <a
               href={"https://www.patreon.com/join/improvedinitiative"}
               target="_blank"
+              onClick={() =>
+                Metrics.TrackPatreonSignupIntent("importer_login_fail", {
+                  link_url: "https://www.patreon.com/join/improvedinitiative"
+                })
+              }
             >
               Epic Initiative
             </a>
@@ -284,7 +303,10 @@ export class TrackerViewModel {
       return;
     }
 
-    const parsedPayload = ParseJSONOrDefault(json, {});
+    const parsedPayload = ParseJSONOrDefault<Record<string, unknown>>(
+      json,
+      {}
+    );
 
     if (entityType === "sp") {
       this.editImportedSpell(parsedPayload);
@@ -293,7 +315,7 @@ export class TrackerViewModel {
     }
   };
 
-  private editImportedStatBlock(parsedPayload: {}) {
+  private editImportedStatBlock(parsedPayload: Record<string, unknown>) {
     const statBlock: StatBlock = {
       ...StatBlock.Default(),
       ...parsedPayload
@@ -338,7 +360,7 @@ export class TrackerViewModel {
     }
   }
 
-  private editImportedSpell(parsedPayload: {}) {
+  private editImportedSpell(parsedPayload: Record<string, unknown>) {
     const spell: Spell = {
       ...Spell.Default(),
       ...parsedPayload

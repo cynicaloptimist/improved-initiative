@@ -19,6 +19,7 @@ import { LibraryManager } from "./Library/Manager/LibraryManager";
 import { LibrariesContext, useLibraries } from "./Library/Libraries";
 import { Store } from "./Utility/Store";
 import { Settings } from "../common/Settings";
+import { Metrics } from "./Utility/Metrics";
 
 /*
  * This file is new as of 05/2020. Most of the logic was extracted from TrackerViewModel.
@@ -62,6 +63,15 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
 
   const blurVisible = tutorialVisible || settingsVisible;
 
+  React.useEffect(() => {
+    if (!env.IsLoggedIn) {
+      Metrics.TrackPatreonCtaViewed("sticky_patreon_login", {
+        creative_name: "sticky_patreon_login_v1",
+        link_url: env.PatreonLoginUrl
+      });
+    }
+  }, []);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <SettingsContext.Provider value={settings}>
@@ -96,7 +106,15 @@ export function App(props: { tracker: TrackerViewModel }): JSX.Element {
                 />
               )}
               {!env.IsLoggedIn && (
-                <a className="login button" href={env.PatreonLoginUrl}>
+                <a
+                  className="login button"
+                  href={env.PatreonLoginUrl}
+                  onClick={() =>
+                    Metrics.TrackPatreonLoginStarted("sticky_patreon_login", {
+                      creative_name: "sticky_patreon_login_v1"
+                    })
+                  }
+                >
                   Log In with Patreon
                 </a>
               )}

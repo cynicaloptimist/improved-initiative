@@ -100,7 +100,15 @@ export class AccountSyncSettings extends React.Component<
           banners, and allows you to access your custom statblocks and
           encounters from anywhere!
         </p>
-        <a className="login button" href={env.PatreonLoginUrl}>
+        <a
+          className="login button"
+          href={env.PatreonLoginUrl}
+          onClick={() =>
+            Metrics.TrackPatreonLoginStarted(
+              "account_tab_existing_supporter_login"
+            )
+          }
+        >
           Log In with Patreon
         </a>
       </>
@@ -116,7 +124,7 @@ export class AccountSyncSettings extends React.Component<
             href="https://www.patreon.com/bePatron?c=716070&rid=1322253"
             target="_blank"
             onClick={() =>
-              Metrics.TrackPatreonSignupIntent("account_sync_settings", {
+              Metrics.TrackPatreonSignupIntent("account_tab_save_sync", {
                 link_url:
                   "https://www.patreon.com/bePatron?c=716070&rid=1322253"
               })

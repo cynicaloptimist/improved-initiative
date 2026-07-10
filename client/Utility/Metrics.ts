@@ -23,9 +23,13 @@ export class Metrics {
     const queryParams = new URLSearchParams(window.location.search);
     const loginMethod = queryParams.get("login");
     if (loginMethod) {
-      Metrics.TrackEvent("login", {
-        method: loginMethod
-      });
+      if (loginMethod == "patreon") {
+        Metrics.TrackPatreonLoginSucceeded();
+      } else {
+        Metrics.TrackEvent("login", {
+          method: loginMethod
+        });
+      }
       Metrics.RecordGoogleAnalyticsClientId();
       queryParams.delete("login");
       window.history.replaceState(null, "", window.location.pathname);
@@ -36,7 +40,59 @@ export class Metrics {
     source: string,
     eventData: Record<string, any> = {}
   ): void {
-    Metrics.TrackAnonymousEvent("generate_lead", {
+    Metrics.TrackPatreonFunnelEvent("generate_lead", source, {
+      patreon_event: "join_clicked",
+      ...eventData
+    });
+  }
+
+  public static TrackPatreonLoginStarted(
+    source: string,
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackPatreonFunnelEvent("login", source, {
+      link_url: env.PatreonLoginUrl,
+      method: "patreon",
+      patreon_event: "login_started",
+      ...eventData
+    });
+  }
+
+  public static TrackPatreonLoginSucceeded(
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackEvent("login", {
+      account_status: Metrics.getAccountStatus(),
+      method: "patreon",
+      patreon_event: "login_succeeded",
+      ...eventData
+    });
+  }
+
+  public static TrackPatreonAccessDenied(
+    source: string,
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackPatreonFunnelEvent("patreon_access_denied", source, {
+      patreon_event: "extension_access_denied",
+      ...eventData
+    });
+  }
+
+  public static TrackPatreonCtaViewed(
+    source: string,
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackPatreonFunnelEvent("view_promotion", source, eventData);
+  }
+
+  public static TrackPatreonFunnelEvent(
+    eventName: string,
+    source: string,
+    eventData: Record<string, any> = {}
+  ): void {
+    Metrics.TrackAnonymousEvent(eventName, {
+      account_status: Metrics.getAccountStatus(),
       lead_source: source,
       items: [
         {
@@ -171,5 +227,30 @@ export class Metrics {
       pageUrl: document.URL,
       localTime: new Date().getTime()
     };
+  }
+
+  private static getAccountStatus():
+    | "anonymous"
+    | "logged_in_no_patreon"
+    | "account_sync_active"
+    | "epic_active"
+    | "mythic_active" {
+    if (!env.IsLoggedIn) {
+      return "anonymous";
+    }
+
+    if (env.HasMythic) {
+      return "mythic_active";
+    }
+
+    if (env.HasEpicInitiative) {
+      return "epic_active";
+    }
+
+    if (env.HasStorage) {
+      return "account_sync_active";
+    }
+
+    return "logged_in_no_patreon";
   }
 }

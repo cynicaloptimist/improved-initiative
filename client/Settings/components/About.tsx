@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "../../Components/Button";
 import { env } from "../../Environment";
+import { Metrics } from "../../Utility/Metrics";
 import { TipCarousel } from "./TipCarousel";
 
 interface AboutProps {
@@ -43,6 +44,14 @@ export class About extends React.Component<AboutProps> {
             className="pledge"
             href="https://www.patreon.com/join/improvedinitiative"
             target="_blank"
+            onClick={() =>
+              Metrics.TrackPatreonSignupIntent(
+                "about_tab_supporter_benefits",
+                {
+                  link_url: "https://www.patreon.com/join/improvedinitiative"
+                }
+              )
+            }
           >
             <img src="/img/become_a_patron_button.png" />
           </a>
