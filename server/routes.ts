@@ -28,7 +28,7 @@ import { configureImportRoutes } from "./configureImportRoutes";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
-const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "free";
+const defaultAccountLevel = process.env.DEFAULT_ACCOUNT_LEVEL || "none";
 const googleAnalyticsId = process.env.GOOGLE_ANALYTICS_ID || "";
 
 export type Req = Express.Request & express.Request;
@@ -141,7 +141,7 @@ export default async function (
       throw "Session is not available";
     }
 
-    if (defaultAccountLevel !== "free") {
+    if (defaultAccountLevel !== "none") {
       await setupLocalDefaultUser(session);
     }
 
