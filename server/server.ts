@@ -30,7 +30,7 @@ async function improvedInitiativeServer() {
   const defaultPort = parseInt(process.env.PORT || "80");
 
   await server.listen(defaultPort);
-  console.log("Launched server.");
+  console.log("Launched Improved Initiative server.");
 
   const io = new SocketIO.Server(server);
   ConfigureSockets(io, session, playerViews);

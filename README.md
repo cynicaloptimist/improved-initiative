@@ -15,18 +15,24 @@ The official Improved Initiative app lives at https://improvedinitiative.app/
 - Clone the repo to a folder on your computer
 - Open the cloned folder in a code editor such as [Visual Studio Code](https://code.visualstudio.com/)
 - Open a terminal window (Powershell is the recommend terminal application for this project)
-- Run the following commands in the Terminal window to build the dev environment code:
+- Install dependencies and start the development environment:
 
 ```
 npm install
-npx grunt
+npm run dev
 ```
 
-- To get the dev server running, you can either:
-  - Press `F5` in Visual Studio Code _or_
-  - In a new terminal window run `npm run start`
-- Once the server is running, visit <http://localhost> in a web browser to view a development version of the UI that responds to your code changes.
-- Every time you make a change, wait for it to finish compiling then manually reload your browser.
+- Visit <http://localhost:3000> in a web browser. Client TypeScript and HTML
+  changes reload the page, while LESS changes are injected without a reload.
+  Server TypeScript changes restart the server automatically.
+- In Visual Studio Code, the `Develop Improved Initiative` launch configuration
+  starts the same workflow with the debugger attached to child processes.
+- Open5e preloading is skipped by default for a faster startup. Run the server
+  separately when developing Open5e behavior.
+- To override development server settings, copy `.env.example` to `.env` and
+  edit it. The file is optional and ignored by Git. Environment variables set
+  in the shell take precedence over `.env`, which takes precedence over the
+  development defaults.
 
 Development of Improved Initiative is supported through [Patreon](https://www.patreon.com/improvedinitiative).
 

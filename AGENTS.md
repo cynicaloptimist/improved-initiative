@@ -64,13 +64,22 @@ include `useSubscription` in `client/Combatant/linkComponentToObservables.tsx`.
 ## Development Commands
 
 - Install dependencies: `npm install`
-- Build/watch dev assets: `npx grunt` or `npm run dev`
+- Start the complete development workflow: `npm run dev`
+- Build/watch dev assets only: `npm run dev:build`
 - Start server: `npm run start`
 - Production build: `npm run build`
 - Lint: `npm run lint`
 - Auto-fix lint: `npm run lint-and-fix`
 
-The dev server defaults to port 80 and is viewed at `http://localhost`.
+The complete dev workflow runs Express on port 3001 behind a BrowserSync proxy
+at `http://localhost:3000`. It rebuilds assets, restarts the server after server
+TypeScript changes, injects changed CSS, and reloads after client or HTML
+changes. Open5e preloading is skipped in this workflow.
+
+The dev server optionally reads repository-root `.env` settings. Shell
+environment variables take precedence over `.env`, and `.env` takes precedence
+over the defaults in `scripts/dev-server.cjs`. Keep `.env` untracked and update
+`.env.example` when adding supported development settings.
 
 When running inside Codex Desktop, `npm` may not be available on `PATH`. Use
 the bundled Node executable reported by `codex_app.load_workspace_dependencies`
