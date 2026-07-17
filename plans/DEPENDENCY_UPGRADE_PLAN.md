@@ -7,8 +7,10 @@ Last reviewed: 2026-07-17
 The initial `npm audit` reported 56 vulnerabilities: 4 critical, 32 high,
 16 moderate, and 4 low. The validated dependency updates and package removals
 reduced that to 32 vulnerabilities: 0 critical, 13 high, 16 moderate, and
-3 low. The production-only audit reports 6 vulnerabilities: 0 critical,
-0 high, 3 moderate, and 3 low.
+3 low. Replacing the obsolete Socket.IO session bridge reduced that further to
+29 vulnerabilities: 0 critical, 13 high, 16 moderate, and 0 low. The
+production-only audit reports 3 moderate vulnerabilities and no low, high, or
+critical findings.
 
 The remaining findings need dependency replacement, major-version upgrades, or
 changes to legacy build and test infrastructure. Do not use
@@ -17,8 +19,8 @@ changes to legacy build and test infrastructure. Do not use
 
 ## Completed package cleanup
 
-The audited change set also reduces the installed tree from 1,892 to 1,819
-packages and removes 15 unnecessary direct dependency entries:
+The audited change set also reduces the installed tree from 1,892 to 1,813
+packages and removes 16 unnecessary direct dependency entries:
 
 - Removed unused `ip`, `patreon`, and `requirejs` packages.
 - Removed the redundant direct `mustache@2` dependency; `mustache-express`
@@ -67,19 +69,25 @@ redirect and concurrency limits, and safe route errors.
 Manual validation confirmed public encounter imports, rejected invalid and
 private targets, and the Patreon news fallback behavior.
 
-## Priority 2: replace `express-socket.io-session`
+## Completed: replace `express-socket.io-session`
 
 `express-socket.io-session` is unmaintained and pins vulnerable cookie parsing
 packages with no available fix. This code carries login and paid-feature state
 into Socket.IO, so it needs focused behavior validation.
 
-1. Replace the wrapper with the supported Express session middleware pattern
-   for the installed Socket.IO version.
-2. Add integration tests proving a socket sees the same session as HTTP,
-   anonymous sockets remain anonymous, and reconnects preserve session state.
-3. Verify Epic/Mythic feature enforcement, custom encounter IDs, Player View
-   joins, Redis-adapter operation, and session expiration.
-4. Remove `express-socket.io-session` after the compatibility tests pass.
+The wrapper has been replaced with Socket.IO's supported
+`io.engine.use(sessionMiddleware)` integration. Integration tests prove a
+socket sees the same session as HTTP, anonymous sockets remain anonymous,
+reconnects preserve paid access, custom encounter IDs enforce Epic access, and
+removing the stored session revokes access. The package and five now-unneeded
+transitive dependencies have been removed.
+
+Local manual validation confirmed normal and Epic encounter updates, Player
+View joins, and custom encounter IDs. A Redis-backed deployment was not
+manually exercised, but the replacement does not change the Redis adapter:
+Express sessions are still loaded from the shared Redis session store during
+each socket handshake, while the adapter only forwards socket broadcasts.
+Redis reconnection and startup hardening remain separate follow-up work.
 
 ## Priority 3: modernize the in-memory MongoDB path
 
