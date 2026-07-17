@@ -188,7 +188,7 @@ export function TagPrompt(
         for (const combatant of targetCombatants) {
           const tag = new Tag(model.tagText, combatant, model.tagHidden);
           combatant.Tags.push(tag);
-          Metrics.TrackEvent("TagAdded", { Text: tag.Text });
+          Metrics.TrackEvent(Metrics.Event.TagAdded, { text: tag.Text });
         }
       } else {
         // If tag is set to expire at the end of the current combatant's turn in one round,
@@ -214,9 +214,9 @@ export function TagPrompt(
           );
           encounter.EncounterFlow.AddDurationTag(tag);
           combatant.Tags.push(tag);
-          Metrics.TrackEvent("TagAdded", {
-            Text: tag.Text,
-            Duration: tag.DurationRemaining()
+          Metrics.TrackEvent(Metrics.Event.TagAdded, {
+            text: tag.Text,
+            duration: tag.DurationRemaining()
           });
         }
       }

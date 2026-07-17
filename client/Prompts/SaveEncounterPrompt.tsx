@@ -165,7 +165,7 @@ export function SaveEncounterPrompt(
 
       saveEncounterToLibrary(savedEncounter);
       logEvent(`Encounter saved as ${model.Name}.`);
-      Metrics.TrackEvent("EncounterSaved", { Name: model.Name });
+      Metrics.TrackEvent(Metrics.Event.EncounterSaved, { name: model.Name });
       return true;
     }
   };

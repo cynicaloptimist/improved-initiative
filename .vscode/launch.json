@@ -7,6 +7,16 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Develop Improved Initiative",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "autoAttachChildProcesses": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Run Improved Initiative Server",
       "program": "${workspaceRoot}\\server\\server.js",
       "runtimeVersion": "18.15.0",
@@ -14,11 +24,12 @@
       "outFiles": [],
       "env": {
         "NODE_ENV": "development",
-        "BASE_URL": "http://localhost",
+        "BASE_URL": "http://localhost:3000",
         "PATREON_URL": "https://api.patreon.com/campaigns/716070/posts",
         "DEFAULT_ACCOUNT_LEVEL": "free",
         //"DEFAULT_ACCOUNT_LEVEL": "epicinitiative",
-        "PORT": "80"
+        "PORT": "3001",
+        "SKIP_OPEN5E_API": "1"
       }
     },
     {

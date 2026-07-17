@@ -60,7 +60,9 @@ export function MoveEncounterPrompt(
         savedEncounter.Path
       );
       moveListingFn(savedEncounter, oldId);
-      Metrics.TrackEvent("EncounterMoved", { Path: model.folderName });
+      Metrics.TrackEvent(Metrics.Event.EncounterMoved, {
+        path: model.folderName
+      });
 
       return true;
     }

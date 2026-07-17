@@ -1,4 +1,5 @@
 node_modules/*
+.env
 typings/*
 public/webfonts/*
 *.log
@@ -15,6 +16,7 @@ public/webfonts/*
 .baseDir
 !Gruntfile.js
 !webpack.*.js
+!browser-sync.config.js
 !local_node_modules/**
 .idea
 .codex/

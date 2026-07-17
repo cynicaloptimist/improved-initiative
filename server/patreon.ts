@@ -9,7 +9,12 @@ import * as querystring from "querystring";
 import * as request from "request";
 
 import * as DB from "./dbconnection";
-import { recordServerEvent, trackGoogleAnalyticsEvent } from "./metrics";
+import {
+  recordServerEvent,
+  ServerMetricEvent,
+  ServerMetricLeadSource,
+  trackGoogleAnalyticsEvent
+} from "./metrics";
 
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
@@ -420,28 +425,37 @@ async function recordPatreonAccountStatusChange(
   }
 
   const commonEventData = {
-    previousAccountStatus,
-    currentAccountStatus,
-    statusChange,
-    webhookEvent
+    previous_account_status: previousAccountStatus,
+    current_account_status: currentAccountStatus,
+    status_change: statusChange,
+    webhook_event: webhookEvent
   };
 
-  await recordServerEvent("PatreonSubscriptionChanged", commonEventData, {
-    googleAnalyticsClientId: googleAnalyticsClientId || null,
-    patreonIdHash: hashPatreonId(patreonId)
-  });
+  await recordServerEvent(
+    ServerMetricEvent.PatreonSubscriptionChanged,
+    commonEventData,
+    {
+      googleAnalyticsClientId: googleAnalyticsClientId || null,
+      patreonIdHash: hashPatreonId(patreonId)
+    }
+  );
 
   const commonGoogleAnalyticsParams = {
-    lead_source: "patreon_webhook",
+    lead_source: ServerMetricLeadSource.PatreonWebhook,
     previous_account_status: previousAccountStatus,
     account_status: currentAccountStatus,
     patreon_status_change: statusChange,
     patreon_event: webhookEvent,
     items: [getPatreonAccountStatusItem(currentAccountStatus)]
   };
+  const subscriptionEventByStatusChange = {
+    cancelled: ServerMetricEvent.PatreonSubscriptionCancelled,
+    changed: ServerMetricEvent.PatreonSubscriptionChanged,
+    started: ServerMetricEvent.PatreonSubscriptionStarted
+  };
 
   await trackGoogleAnalyticsEvent({
-    name: `patreon_subscription_${statusChange}`,
+    name: subscriptionEventByStatusChange[statusChange],
     clientId: googleAnalyticsClientId,
     userId: hashPatreonId(patreonId),
     params: commonGoogleAnalyticsParams
@@ -452,7 +466,7 @@ async function recordPatreonAccountStatusChange(
   }
 
   await trackGoogleAnalyticsEvent({
-    name: "close_convert_lead",
+    name: ServerMetricEvent.CloseConvertLead,
     clientId: googleAnalyticsClientId,
     userId: hashPatreonId(patreonId),
     params: commonGoogleAnalyticsParams

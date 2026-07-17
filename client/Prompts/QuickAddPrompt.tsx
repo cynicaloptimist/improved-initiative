@@ -45,7 +45,9 @@ export function QuickAddPrompt(
       };
 
       addStatBlock(statBlock);
-      Metrics.TrackEvent("CombatantQuickAdded", { Name: model.Name });
+      Metrics.TrackEvent(Metrics.Event.CombatantQuickAdded, {
+        name: model.Name
+      });
       return true;
     }
   };

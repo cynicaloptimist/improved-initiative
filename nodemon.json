@@ -1,0 +1,7 @@
+{
+  "watch": ["server", "common"],
+  "ext": "js",
+  "ignore": ["**/*.test.js"],
+  "delay": 500,
+  "exec": "node scripts/dev-server.cjs"
+}

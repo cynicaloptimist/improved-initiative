@@ -25,13 +25,13 @@ export function BannerHost(): JSX.Element {
         href={banner.href}
         target="_blank"
         onClick={() => {
-          Metrics.TrackAnonymousEvent("BannerClick", {
+          Metrics.TrackAnonymousEvent(Metrics.Event.BannerClick, {
             href: banner.href,
-            imageUrl: banner.src
+            image_url: banner.src
           });
 
           if (banner.href.indexOf("patreon.com") > -1) {
-            Metrics.TrackPatreonSignupIntent("footer_banner", {
+            Metrics.TrackPatreonSignupIntent(Metrics.LeadSource.FooterBanner, {
               link_url: banner.href,
               creative_name: banner.src
             });

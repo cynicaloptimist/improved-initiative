@@ -72,7 +72,7 @@ export class TrackerViewModel {
   public LibraryManagerPane = ko.observable<LibraryType | null>(null);
   public ToggleLibraryManager = (): void => {
     if (this.LibraryManagerPane() === null) {
-      Metrics.TrackEvent("LibraryManagerOpened");
+      Metrics.TrackEvent(Metrics.Event.LibraryManagerOpened);
       this.LibraryManagerPane("StatBlocks");
     } else {
       this.LibraryManagerPane(null);
@@ -232,6 +232,14 @@ export class TrackerViewModel {
     window.history.replaceState({}, document.title, window.location.pathname);
     this.TutorialVisible(false);
 
+    if (!env.IsLoggedIn || !env.HasEpicInitiative) {
+      Metrics.TrackPatreonAccessDenied(Metrics.LeadSource.ImporterLoginFail, {
+        link_url: env.IsLoggedIn
+          ? "https://www.patreon.com/join/improvedinitiative"
+          : env.PatreonLoginUrl
+      });
+    }
+
     if (!env.IsLoggedIn) {
       this.PromptQueue.Add({
         autoFocusSelector: ".submit",
@@ -240,7 +248,15 @@ export class TrackerViewModel {
         children: (
           <span className="not-logged-in-for-import">
             {"Please login with "}
-            <a href={env.PatreonLoginUrl} target="_blank">
+            <a
+              href={env.PatreonLoginUrl}
+              target="_blank"
+              onClick={() =>
+                Metrics.TrackPatreonLoginStarted(
+                  Metrics.LeadSource.ImporterLoginFail
+                )
+              }
+            >
               Patreon
             </a>
             {" to use the D&D Beyond Importer."}
@@ -261,6 +277,14 @@ export class TrackerViewModel {
             <a
               href={"https://www.patreon.com/join/improvedinitiative"}
               target="_blank"
+              onClick={() =>
+                Metrics.TrackPatreonSignupIntent(
+                  Metrics.LeadSource.ImporterLoginFail,
+                  {
+                    link_url: "https://www.patreon.com/join/improvedinitiative"
+                  }
+                )
+              }
             >
               Epic Initiative
             </a>
@@ -284,7 +308,10 @@ export class TrackerViewModel {
       return;
     }
 
-    const parsedPayload = ParseJSONOrDefault(json, {});
+    const parsedPayload = ParseJSONOrDefault<Record<string, unknown>>(
+      json,
+      {}
+    );
 
     if (entityType === "sp") {
       this.editImportedSpell(parsedPayload);
@@ -293,14 +320,14 @@ export class TrackerViewModel {
     }
   };
 
-  private editImportedStatBlock(parsedPayload: {}) {
+  private editImportedStatBlock(parsedPayload: Record<string, unknown>) {
     const statBlock: StatBlock = {
       ...StatBlock.Default(),
       ...parsedPayload
     };
 
-    Metrics.TrackEvent("StatBlockImported", {
-      Name: statBlock.Name
+    Metrics.TrackEvent(Metrics.Event.StatBlockImported, {
+      name: statBlock.Name
     });
 
     if (statBlock.Player == "") {
@@ -338,13 +365,13 @@ export class TrackerViewModel {
     }
   }
 
-  private editImportedSpell(parsedPayload: {}) {
+  private editImportedSpell(parsedPayload: Record<string, unknown>) {
     const spell: Spell = {
       ...Spell.Default(),
       ...parsedPayload
     };
-    Metrics.TrackEvent("SpellImported", {
-      Name: spell.Name
+    Metrics.TrackEvent(Metrics.Event.SpellImported, {
+      name: spell.Name
     });
     this.EditSpell({
       onSave: this.Libraries.Spells.SaveNewListing,
@@ -475,7 +502,7 @@ export class TrackerViewModel {
 
   public SaveUpdatedSettings(newSettings: Settings): void {
     CurrentSettings(newSettings);
-    Metrics.TrackEvent("SettingsSaved", newSettings);
+    Metrics.TrackEvent(Metrics.Event.SettingsSaved, newSettings);
     LegacySynchronousLocalStore.Save(
       LegacySynchronousLocalStore.User,
       "Settings",

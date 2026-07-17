@@ -5,6 +5,7 @@ import { Button, SubmitButton } from "../Components/Button";
 import { env } from "../Environment";
 import { PromptProps } from "./PendingPrompts";
 import { ValidateEncounterId } from "../../common/ValidateEncounterId";
+import { Metrics } from "../Utility/Metrics";
 
 const promptClassName = "p-launch-player-view";
 const inputClassName = promptClassName + "-button";
@@ -76,6 +77,15 @@ function PlayerViewPromptComponent(props: PlayerViewPromptComponentProps) {
             <a
               href="https://www.patreon.com/bePatron?c=716070&amp;rid=1937132"
               target="_blank"
+              onClick={() =>
+                Metrics.TrackPatreonSignupIntent(
+                  Metrics.LeadSource.PlayerViewCustomizationGate,
+                  {
+                    link_url:
+                      "https://www.patreon.com/bePatron?c=716070&rid=1937132"
+                  }
+                )
+              }
             >
               Pledge on Patreon
             </a>

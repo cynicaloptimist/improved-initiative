@@ -97,7 +97,15 @@ function loginMessage() {
       <p>Log in with Patreon to access patron benefits.</p>
       {epicInitiativeFeatures()}
       <hr />
-      <a className="login button" href={env.PatreonLoginUrl}>
+      <a
+        className="login button"
+        href={env.PatreonLoginUrl}
+        onClick={() =>
+          Metrics.TrackPatreonLoginStarted(
+            Metrics.LeadSource.EpicTabExistingSupporterLogin
+          )
+        }
+      >
         Log In with Patreon
       </a>
     </div>
@@ -117,9 +125,12 @@ function upgradeMessage() {
       <hr />
       <Button
         onClick={() => {
-          Metrics.TrackPatreonSignupIntent("epic_initiative_settings", {
-            link_url: "https://www.patreon.com/bePatron?c=716070&rid=1937132"
-          });
+          Metrics.TrackPatreonSignupIntent(
+            Metrics.LeadSource.EpicTabUnlockEpic,
+            {
+              link_url: "https://www.patreon.com/bePatron?c=716070&rid=1937132"
+            }
+          );
           window.open(
             "https://www.patreon.com/bePatron?c=716070&rid=1937132",
             "_blank"
