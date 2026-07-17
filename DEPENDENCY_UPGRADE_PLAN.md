@@ -33,6 +33,16 @@ packages and removes 13 unnecessary direct dependency entries:
   `@types/mongodb-memory-server`, and `@types/body-parser` entries. The MongoDB
   packages and Express provide the types used by this project.
 
+## Completed runtime upgrade
+
+The supported runtime baseline is now Node.js 24 and npm 11. A clean install,
+the full Jest suite, the production build, and a development workflow smoke
+test passed on Node.js 24. The lockfile's dependency engine declarations did
+not identify any packages that block Node.js 24.
+
+The obsolete experimental Docker configuration and unused Travis CI
+configuration were removed. GitHub Actions now validates Node.js 24.
+
 ## Priority 1: replace `request`
 
 `request` is deprecated and accounts for both remaining critical findings, as
@@ -79,8 +89,7 @@ be coordinated with the supported Node and MongoDB driver versions.
 
 1. Decide whether the in-memory server should remain a runtime dependency or
    become a development-only service selected before server startup.
-2. Establish the next supported Node LTS version and confirm the production
-   deployment image before upgrading `mongodb-memory-server`.
+2. Upgrade `mongodb-memory-server` on the supported Node.js 24 runtime.
 3. Upgrade it in isolation and update its startup API, binary-cache settings,
    and shutdown lifecycle as needed.
 4. Run all database tests from a clean cache and test both an explicit

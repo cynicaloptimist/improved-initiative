@@ -60,38 +60,6 @@ You can configure your instance of Improved Initiative with these settings. All 
 - `GOOGLE_ANALYTICS_ID` - GA4 measurement ID used by the browser tag and Measurement Protocol events.
 - `GOOGLE_ANALYTICS_API_SECRET` - GA4 Measurement Protocol API secret used for server-side Patreon subscription events.
 
-### Docker
-
-Running Improved Initiative within Docker is possible, but completely optional and currently experimental. Proceed with caution and when in doubt, refer to the [Docker documentation](https://docs.docker.com/).
-
-#### Building the Docker Image
-
-To build the docker image with a development build, run:
-
-`docker build -t improved-initiative:latest .`
-
-To build the image with a production build, run:
-
-`docker build --build-arg NODE_ENV=production -t improved-initiative:prod .`
-
-#### Running the App in a Docker Container
-
-To start the application within the container, run:
-
-`docker run -p80:80 --name improved-initiative improved-initiative:latest`
-
-Or, to run the production build:
-
-`docker run -p80:80 --name improved-initiative improved-initiative:prod`
-
-#### Stopping and Removing the Container
-
-Assuming you started the container with the name `improved-initiative` as shown above, the following commands will stop the container and then remove it:
-
-`docker stop improved-initiative`
-
-`docker rm improved-initiative`
-
 ## License
 
 The Improved Initiative app is made available under the [MIT](license) license.

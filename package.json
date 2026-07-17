@@ -8,8 +8,8 @@
     "url": "https://github.com/cynicaloptimist/improved-initiative.git"
   },
   "engines": {
-    "npm": "^9.5.0",
-    "node": "^18.15.0"
+    "npm": "^11.3.0",
+    "node": "^24.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",
