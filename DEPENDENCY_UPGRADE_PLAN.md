@@ -5,9 +5,10 @@ Last reviewed: 2026-07-17
 ## Current state
 
 The initial `npm audit` reported 56 vulnerabilities: 4 critical, 32 high,
-16 moderate, and 4 low. A non-forced `npm audit fix` and removal of the unused
-`ip` and `patreon` packages reduced that to 36 vulnerabilities: 2 critical,
-13 high, 18 moderate, and 3 low.
+16 moderate, and 4 low. The validated dependency updates and package removals
+reduced that to 32 vulnerabilities: 0 critical, 13 high, 16 moderate, and
+3 low. The production-only audit reports 6 vulnerabilities: 0 critical,
+0 high, 3 moderate, and 3 low.
 
 The remaining findings need dependency replacement, major-version upgrades, or
 changes to legacy build and test infrastructure. Do not use
@@ -16,8 +17,8 @@ changes to legacy build and test infrastructure. Do not use
 
 ## Completed package cleanup
 
-The audited change set also reduces the installed tree from 1,892 to 1,852
-packages and removes 13 unnecessary direct dependency entries:
+The audited change set also reduces the installed tree from 1,892 to 1,819
+packages and removes 15 unnecessary direct dependency entries:
 
 - Removed unused `ip`, `patreon`, and `requirejs` packages.
 - Removed the redundant direct `mustache@2` dependency; `mustache-express`
@@ -32,6 +33,9 @@ packages and removes 13 unnecessary direct dependency entries:
 - Removed obsolete or redundant `@types/file-saver`, `@types/mongodb`,
   `@types/mongodb-memory-server`, and `@types/body-parser` entries. The MongoDB
   packages and Express provide the types used by this project.
+- Replaced deprecated `request` with the existing Axios client and removed
+  `request`, `@types/request`, and 35 packages from its obsolete dependency
+  chain.
 
 ## Completed runtime upgrade
 
@@ -43,29 +47,25 @@ not identify any packages that block Node.js 24.
 The obsolete experimental Docker configuration and unused Travis CI
 configuration were removed. GitHub Actions now validates Node.js 24.
 
-## Priority 1: replace `request`
+Upgrade `@types/node` from 12 to 24 as a separate type-checking change. The old
+definitions do not block execution, but they hide current runtime APIs and may
+expose compile work when upgraded.
 
-`request` is deprecated and accounts for both remaining critical findings, as
-well as transitive findings in `form-data`, `qs`, `tough-cookie`, and `uuid`.
-It is used by the remote encounter import route and Patreon news updates.
+## Completed: replace `request`
 
-1. Replace the calls in `server/configureImportRoutes.ts` and
-   `server/patreon.ts` with the already-installed Axios client.
-2. Remove the unused `request` import from `server/routes.ts`.
-3. Preserve timeouts, error handling, response status checks, and the 1 MB
-   response limit. Enforce the size limit while streaming or before buffering,
-   rather than only after the full response has been read.
-4. Treat `/encounterfrom/` as an SSRF-sensitive endpoint. Permit only `http:`
-   and `https:`, reject credentials and local/private/link-local destinations,
-   and repeat validation after redirects.
-5. Add route tests for valid imports, malformed JSON, oversized responses,
-   non-success status codes, redirects, timeouts, and blocked private targets.
-6. Exercise Patreon news refresh with a mocked success, invalid response, and
-   network failure. Then remove `request` and `@types/request`.
+`request` accounted for the remaining critical findings and transitive findings
+in `form-data`, `qs`, and `tough-cookie`. A bounded Axios text-fetching prototype
+removed that chain and passed automated validation, but its custom IP, DNS, and
+redirect security implementation should not be maintained in this repository.
 
-Validation: run the server tests and production build, then manually import an
-encounter from an allowed public URL and verify the Patreon news fallback and
-refresh paths.
+The prototype now uses `request-filtering-agent` for private, reserved, and
+link-local address filtering, including DNS rebinding protection. The local
+wrapper retains only application policy: a 10-second timeout, 1 MB response
+limit, standard-port enforcement on every redirect, HTTP status handling,
+redirect and concurrency limits, and safe route errors.
+
+Manual validation confirmed public encounter imports, rejected invalid and
+private targets, and the Patreon news fallback behavior.
 
 ## Priority 2: replace `express-socket.io-session`
 
@@ -127,6 +127,9 @@ coverage before removal:
 - Replace Moment incrementally with `Date`/`Intl` or small local duration
   helpers. Audit stored timestamp parsing and display output first; date
   behavior appears in persisted-library and combat-timer paths.
+- Replace or upgrade `json-url`, whose current version brings the unmaintained
+  `core-js@2` chain. Its encode/decode use needs persisted-data compatibility
+  tests before changing the serialization implementation.
 - Migrate the remaining Enzyme tests to Testing Library when React is upgraded.
   Removing Enzyme now would combine a test rewrite with React 16 compatibility
   work.

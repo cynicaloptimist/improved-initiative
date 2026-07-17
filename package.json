@@ -30,7 +30,6 @@
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^16.9.19",
     "@types/react-test-renderer": "^16.9.7",
-    "@types/request": "^2.48.8",
     "@types/serve-static": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
@@ -100,7 +99,7 @@
     "react-markdown": "^8.0.7",
     "react-string-replace-recursively": "^0.2.0",
     "redis": "^4.6.8",
-    "request": "^2.85.0",
+    "request-filtering-agent": "^3.2.1",
     "retry": "^0.13.1",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3"

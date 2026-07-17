@@ -22,7 +22,6 @@ import configureStorageRoutes from "./storageroutes";
 import { AccountStatus } from "./user";
 import { configureOpen5eContent } from "./configureOpen5eContent";
 import { configureAffiliateRoutes } from "./configureAffiliateRoutes";
-import request = require("request");
 import { configureImportRoutes } from "./configureImportRoutes";
 
 const baseUrl = process.env.BASE_URL || "";

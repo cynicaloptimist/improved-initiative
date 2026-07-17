@@ -1,7 +1,7 @@
 import * as express from "express";
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import { Res, Req } from "./routes";
-import request = require("request");
+import { fetchRemoteText } from "./fetchRemoteText";
 import { PlayerViewManager } from "./playerviewmanager";
 
 export function configureImportRoutes(
@@ -31,28 +31,32 @@ export function configureImportRoutes(
     if (typeof req.query.url !== "string") {
       return res.status(400).send("Missing url parameter.");
     }
-    request.get(req.query.url, async (error, _, body) => {
-      if (error) {
-        return res.status(400).send("Error fetching URL: " + error);
-      }
+    try {
+      const body = await fetchRemoteText(req.query.url);
       if (body.length > 1000000) {
         return res.status(400).send("Encounter JSON too large.");
       }
+      let json;
       try {
-        const json = JSON.parse(body);
-        if (typeof json.Combatants === "object" && json.Combatants.length > 0) {
-          session.postedEncounter = {
-            Combatants: json.Combatants
-          };
-          const newEncounterViewId = await playerViews.InitializeNew();
-          res.redirect("/e/" + newEncounterViewId);
-        } else {
-          return res.status(400).send("Invalid JSON: Missing Combatants.");
-        }
-      } catch (e) {
-        return res.status(400).send("Invalid JSON; could not parse: " + e);
+        json = JSON.parse(body);
+      } catch (error) {
+        return res
+          .status(400)
+          .send("Invalid JSON; could not parse: " + error);
       }
-    });
+      if (typeof json.Combatants === "object" && json.Combatants.length > 0) {
+        session.postedEncounter = {
+          Combatants: json.Combatants
+        };
+        const newEncounterViewId = await playerViews.InitializeNew();
+        return res.redirect("/e/" + newEncounterViewId);
+      } else {
+        return res.status(400).send("Invalid JSON: Missing Combatants.");
+      }
+    } catch (error) {
+      console.warn("Unable to import encounter URL:", error);
+      return res.status(400).send("Unable to fetch encounter URL.");
+    }
   });
 
   app.get("/sampleencounter/", async (req: Req, res: Res) => {
