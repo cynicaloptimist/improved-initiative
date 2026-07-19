@@ -75,7 +75,8 @@ export function UpdateLegacyEncounterState(
     RoundCounter: encounterState.RoundCounter || 0,
     ElapsedSeconds: encounterState.ElapsedSeconds || 0,
     ActiveCombatantId: null,
-    BackgroundImageUrl: encounterState.BackgroundImageUrl
+    BackgroundImageUrl: encounterState.BackgroundImageUrl,
+    SaveEncounterDefaults: encounterState.SaveEncounterDefaults || null
   };
 
   updatedEncounter.Combatants.forEach(updateLegacySavedCombatant);

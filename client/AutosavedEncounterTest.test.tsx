@@ -47,6 +47,10 @@ describe("Autosaved Encounters", () => {
       RoundCounter: 0,
       ElapsedSeconds: 0,
       BackgroundImageUrl: null,
+      SaveEncounterDefaults: {
+        Name: "Goblin Ambush",
+        Path: "Chapter 1"
+      },
       Combatants: [CombatantStateWithName("1"), CombatantStateWithName("2")]
     };
     LegacySynchronousLocalStore.Save(
@@ -65,6 +69,41 @@ describe("Autosaved Encounters", () => {
     viewModel.LoadAutoSavedEncounterIfAvailable();
     const combatants = viewModel.Encounter.Combatants();
     expect(combatants.map(c => c.DisplayName())).toEqual(["1", "2"]);
+    expect(viewModel.Encounter.SaveEncounterDefaults()).toEqual({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
+  });
+
+  it("autosaves save defaults", () => {
+    InitializeTestSettings({
+      PreloadedContent: {
+        BasicRules: false,
+        Open5eContent: false
+      }
+    });
+    const viewModel = new TrackerViewModel(io());
+    const libraries = renderHook(() =>
+      useLibraries(CurrentSettings(), MockAccountClient(), () => {})
+    );
+    viewModel.SetLibraries(libraries.result.current);
+    viewModel.LoadAutoSavedEncounterIfAvailable();
+
+    viewModel.Encounter.SaveEncounterDefaults({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
+
+    const autosavedEncounter = LegacySynchronousLocalStore.Load<
+      EncounterState<CombatantState>
+    >(
+      LegacySynchronousLocalStore.AutoSavedEncounters,
+      LegacySynchronousLocalStore.DefaultSavedEncounterId
+    );
+    expect(autosavedEncounter.SaveEncounterDefaults).toEqual({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
   });
 
   it.todo("loads persistent characters from account");
