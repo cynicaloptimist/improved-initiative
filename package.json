@@ -81,7 +81,7 @@
     "@types/gtag.js": "^0.0.13",
     "@types/retry": "^0.12.2",
     "awesomplete": "^1.1.5",
-    "axios": "^1.15.2",
+    "axios": "^1.18.0",
     "body-parser": "^1.20.3",
     "browser-filesaver": "^1.1.1",
     "color": "^3.2.1",
