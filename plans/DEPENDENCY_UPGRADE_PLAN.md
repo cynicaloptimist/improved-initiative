@@ -7,10 +7,10 @@ Last reviewed: 2026-07-17
 The initial `npm audit` reported 56 vulnerabilities: 4 critical, 32 high,
 16 moderate, and 4 low. The validated dependency updates and package removals
 reduced that to 32 vulnerabilities: 0 critical, 13 high, 16 moderate, and
-3 low. Replacing the obsolete Socket.IO session bridge reduced that further to
-29 vulnerabilities: 0 critical, 13 high, 16 moderate, and 0 low. The
-production-only audit reports 3 moderate vulnerabilities and no low, high, or
-critical findings.
+3 low. Replacing the obsolete Socket.IO session bridge and upgrading the
+in-memory MongoDB path reduced that further to 27 vulnerabilities: 0 critical,
+13 high, 14 moderate, and 0 low. The production-only audit reports no
+vulnerabilities.
 
 The remaining findings need dependency replacement, major-version upgrades, or
 changes to legacy build and test infrastructure. Do not use
@@ -19,7 +19,7 @@ changes to legacy build and test infrastructure. Do not use
 
 ## Completed package cleanup
 
-The audited change set also reduces the installed tree from 1,892 to 1,813
+The audited change set also reduces the installed tree from 1,892 to 1,816
 packages and removes 16 unnecessary direct dependency entries:
 
 - Removed unused `ip`, `patreon`, and `requirejs` packages.
@@ -89,19 +89,18 @@ Express sessions are still loaded from the shared Redis session store during
 each socket handshake, while the adapter only forwards socket broadcasts.
 Redis reconnection and startup hardening remain separate follow-up work.
 
-## Priority 3: modernize the in-memory MongoDB path
+## Completed: modernize the in-memory MongoDB path
 
 `mongodb-memory-server` is used by database tests and as the no-connection-string
-development fallback. The audited fix is version 11, a major upgrade that must
-be coordinated with the supported Node and MongoDB driver versions.
+development fallback. It has been upgraded from version 7.6 to 11.2 on the
+supported Node.js 24 runtime. Its existing `create`, `getUri`, and `stop`
+lifecycle remains compatible, so no application code changes were required.
 
-1. Decide whether the in-memory server should remain a runtime dependency or
-   become a development-only service selected before server startup.
-2. Upgrade `mongodb-memory-server` on the supported Node.js 24 runtime.
-3. Upgrade it in isolation and update its startup API, binary-cache settings,
-   and shutdown lifecycle as needed.
-4. Run all database tests from a clean cache and test both an explicit
-   `DB_CONNECTION_STRING` and the development fallback.
+The default MongoDB 8.2.6 binary downloaded and passed all 15 focused database
+tests. The full Jest suite and production build also pass. Production continues
+to use its explicit `DB_CONNECTION_STRING`; the in-memory fallback remains a
+runtime dependency because it is imported by the server when that setting is
+absent.
 
 ## Priority 4: retire vulnerable legacy build and test chains
 
