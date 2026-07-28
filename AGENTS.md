@@ -29,8 +29,17 @@ incremental changes over broad rewrites.
   backward-compatible unless the user explicitly approves a migration plan.
 - `lesscss/`: LESS styles compiled into versioned CSS.
 - `public/`: static assets and compiled output targets.
+- `plans/`: durable implementation, migration, and upgrade plans.
 - `test/` and `*.test.ts(x)`: existing tests. The top-level `npm test` script
   runs the client and server Jest projects.
+
+## Planning Documents
+
+Store implementation plans, migration plans, dependency upgrade plans, and
+similar work-tracking documents in `plans/`, not at the repository root.
+Before creating a plan or starting related work, search `plans/**/*.md` for an
+existing document and update it when appropriate. Keep completed plans there as
+historical context unless the user explicitly asks to remove them.
 
 ## High-Risk Areas
 

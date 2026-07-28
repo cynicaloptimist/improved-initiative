@@ -6,8 +6,6 @@ import * as _ from "lodash";
 import axios from "axios";
 import * as querystring from "querystring";
 
-import * as request from "request";
-
 import * as DB from "./dbconnection";
 import {
   recordServerEvent,
@@ -19,6 +17,7 @@ import {
 import { ParseJSONOrDefault } from "../common/Toolbox";
 import thanks from "../thanks";
 import { AccountStatus } from "./user";
+import { fetchRemoteText } from "./fetchRemoteText";
 
 type Req = Express.Request & express.Request & { rawBody: string };
 type Res = Express.Response & express.Response;
@@ -242,19 +241,22 @@ export function configureLogout(app: express.Application): void {
   });
 }
 
-function updateLatestPost(latestPost: { post: Post | null }) {
+async function updateLatestPost(latestPost: { post: Post | null }) {
   if (patreonUrl == null) {
     throw "Patreon URL is not configured.";
   }
 
-  request.get(patreonUrl, (error, response, body) => {
+  try {
+    const body = await fetchRemoteText(patreonUrl);
     const json = ParseJSONOrDefault<PatreonCampaign>(body, { data: [] });
     if (json.data?.length) {
       latestPost.post = json.data.filter(
         d => d.attributes.was_posted_by_campaign_owner
       )[0];
     }
-  });
+  } catch (error) {
+    console.warn("Unable to update Patreon news:", error);
+  }
 }
 
 export function startNewsUpdates(app: express.Application): void {
@@ -277,10 +279,10 @@ export function startNewsUpdates(app: express.Application): void {
     return;
   }
 
-  updateLatestPost(latest);
+  void updateLatestPost(latest);
 
   app.all("/updatenews/", (req: Req, res: Res) => {
-    updateLatestPost(latest);
+    void updateLatestPost(latest);
     res.sendStatus(200);
   });
 }

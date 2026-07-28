@@ -1,6 +1,5 @@
 import * as express from "express";
 
-import provideSessionToSocketIo = require("express-socket.io-session");
 import * as redis from "redis";
 
 import { createAdapter } from "@socket.io/redis-adapter";
@@ -13,12 +12,6 @@ import { PlayerViewManager } from "./playerviewmanager";
 import { EncounterState } from "../common/EncounterState";
 import { PlayerViewCombatantState } from "../common/PlayerViewCombatantState";
 import { ValidateEncounterId } from "../common/ValidateEncounterId";
-
-interface SocketWithSessionData {
-  handshake: {
-    session: Express.Session;
-  };
-}
 
 export default async function (
   io: SocketIO.Server,
@@ -38,13 +31,20 @@ export default async function (
     io.adapter(adapter);
   }
 
-  io.use(provideSessionToSocketIo(session));
+  io.engine.use(session);
 
   io.on(
     "connection",
-    function (socket: SocketIO.Socket & SocketWithSessionData) {
+    function (socket: SocketIO.Socket) {
+      const socketSession = (socket.request as express.Request).session;
+      if (socketSession === undefined) {
+        socket.disconnect(true);
+        return;
+      }
+      const activeSession: Express.Session = socketSession;
+
       function joinEncounter(id: string) {
-        socket.handshake.session.encounterId = id;
+        activeSession.encounterId = id;
         socket.join(id);
       }
 
@@ -54,7 +54,7 @@ export default async function (
           id: string,
           updatedEncounter: EncounterState<PlayerViewCombatantState>
         ) {
-          if (!socket.handshake.session.hasEpicInitiative) {
+          if (!activeSession.hasEpicInitiative) {
             resetEpicInitiativeEncounterFeatures(updatedEncounter);
           }
 
@@ -70,7 +70,7 @@ export default async function (
       socket.on(
         "update settings",
         (id: string, updatedSettings: PlayerViewSettings) => {
-          if (!socket.handshake.session.hasEpicInitiative) {
+          if (!activeSession.hasEpicInitiative) {
             resetEpicInitiativeSettings(updatedSettings);
           }
 
@@ -89,16 +89,13 @@ export default async function (
       socket.on(
         "request custom id",
         async function (id: string, callback: (didGrantId: boolean) => void) {
-          if (
-            !socket.handshake.session.hasEpicInitiative ||
-            !ValidateEncounterId(id)
-          ) {
+          if (!activeSession.hasEpicInitiative || !ValidateEncounterId(id)) {
             return callback(false);
           }
 
           const idAvailable = await playerViews.IdAvailable(id);
           if (idAvailable) {
-            const oldId = socket.handshake.session.encounterId;
+            const oldId = activeSession.encounterId;
             playerViews.Destroy(oldId);
             joinEncounter(id);
             return callback(true);

@@ -1,4 +1,3 @@
-import bodyParser = require("body-parser");
 import * as express from "express";
 
 import * as moment from "moment";
@@ -23,7 +22,6 @@ import configureStorageRoutes from "./storageroutes";
 import { AccountStatus } from "./user";
 import { configureOpen5eContent } from "./configureOpen5eContent";
 import { configureAffiliateRoutes } from "./configureAffiliateRoutes";
-import request = require("request");
 import { configureImportRoutes } from "./configureImportRoutes";
 
 const baseUrl = process.env.BASE_URL || "";
@@ -99,13 +97,13 @@ export default async function (
   app.use(express.static(__dirname + "/../public", { maxAge: cacheMaxAge }));
 
   app.use(
-    bodyParser.json({
+    express.json({
       verify: function (req, res, buf, encoding) {
         req["rawBody"] = buf.toString();
       }
     })
   );
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(express.urlencoded({ extended: false }));
 
   configureMetricsRoutes(app);
 

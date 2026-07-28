@@ -5,7 +5,7 @@ import { PromptProps } from "./PendingPrompts";
 import { SubmitButton } from "../Components/Button";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
-const privacyPolicyText: string = require("../../PRIVACY.md").default;
+const privacyPolicyText: string = require("../../PRIVACY.md");
 
 const promptClassName = "p-privacy-policy";
 
