@@ -1,7 +1,10 @@
 import { Field, FieldArray, FieldProps } from "formik";
 import * as React from "react";
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState } from "../../common/EncounterState";
+import {
+  EncounterSaveDefaults,
+  EncounterState
+} from "../../common/EncounterState";
 import { SavedEncounter } from "../../common/SavedEncounter";
 import { probablyUniqueString } from "../../common/Toolbox";
 import { AccountClient } from "../Account/AccountClient";
@@ -112,12 +115,13 @@ export function SaveEncounterPrompt(
     newEncounter: SavedEncounter
   ) => Promise<Listing<SavedEncounter>>,
   logEvent: typeof EventLog.prototype.AddEvent,
-  autocompletePaths: string[]
+  autocompletePaths: string[],
+  defaultEncounter?: EncounterSaveDefaults
 ): PromptProps<SaveEncounterModel> {
   return {
     initialValues: {
-      Name: "",
-      Path: "",
+      Name: defaultEncounter?.Name || "",
+      Path: defaultEncounter?.Path || "",
       BackgroundImageUrl: backgroundImageUrl,
       NonCharacterCombatants: encounterState.Combatants.filter(
         c => c.PersistentCharacterId == null

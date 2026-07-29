@@ -7,7 +7,10 @@ import * as _ from "lodash";
 
 import { CombatStats } from "../../common/CombatStats";
 import { CombatantState } from "../../common/CombatantState";
-import { EncounterState } from "../../common/EncounterState";
+import {
+  EncounterSaveDefaults,
+  EncounterState
+} from "../../common/EncounterState";
 import { PersistentCharacter } from "../../common/PersistentCharacter";
 import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
 import { StatBlock } from "../../common/StatBlock";
@@ -36,6 +39,9 @@ import { ConvertStringsToNumbersWhereNeeded } from "../StatBlockEditor/ConvertSt
 
 export class Encounter {
   public TemporaryBackgroundImageUrl = ko.observable<string>(null);
+  public SaveEncounterDefaults = ko.observable<EncounterSaveDefaults | null>(
+    null
+  );
 
   private lastVisibleActiveCombatantId: string | null = null;
 
@@ -381,7 +387,8 @@ export class Encounter {
         Combatants: this.combatants()
           .filter(c => !c.IsPendingRemoval())
           .map<CombatantState>(c => c.GetState()),
-        BackgroundImageUrl: this.TemporaryBackgroundImageUrl()
+        BackgroundImageUrl: this.TemporaryBackgroundImageUrl(),
+        SaveEncounterDefaults: this.SaveEncounterDefaults()
       };
     }
   );
@@ -465,12 +472,14 @@ export class Encounter {
       encounterState.ElapsedSeconds || 0
     );
     this.TemporaryBackgroundImageUrl(encounterState.BackgroundImageUrl || null);
+    this.SaveEncounterDefaults(encounterState.SaveEncounterDefaults || null);
   };
 
   public ClearEncounter = () => {
     this.combatants([]);
     this.CombatantCountsByName({});
     this.EncounterFlow.EndEncounter();
+    this.SaveEncounterDefaults(null);
   };
 
   private getPlayerViewActiveCombatantId() {

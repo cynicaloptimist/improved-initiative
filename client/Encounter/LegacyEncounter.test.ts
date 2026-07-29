@@ -86,6 +86,7 @@ describe("UpdateLegacyEncounterState", () => {
     const updatedEncounter = UpdateLegacyEncounterState(v1Encounter);
     expect(updatedEncounter.Combatants).toHaveLength(1);
     expect(updatedEncounter.RoundCounter).toEqual(0);
+    expect(updatedEncounter.SaveEncounterDefaults).toBeNull();
 
     const updatedCombatant = updatedEncounter.Combatants[0];
 

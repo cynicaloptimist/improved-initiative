@@ -195,6 +195,7 @@ export class EncounterCommander {
         this.tracker.Encounter.RemoveCombatant(vm.Combatant)
       );
       this.tracker.Encounter.CombatantCountsByName({});
+      this.tracker.Encounter.SaveEncounterDefaults(null);
       Metrics.TrackEvent(Metrics.Event.EncounterCleaned);
     }
 
@@ -214,6 +215,10 @@ export class EncounterCommander {
     legacySavedEncounter: Record<string, any>
   ): Promise<void> => {
     const savedEncounter = UpdateLegacySavedEncounter(legacySavedEncounter);
+    this.tracker.Encounter.SaveEncounterDefaults({
+      Name: savedEncounter.Name,
+      Path: savedEncounter.Path
+    });
 
     const nonCharacterCombatants = savedEncounter.Combatants.filter(
       c => !c.PersistentCharacterId
