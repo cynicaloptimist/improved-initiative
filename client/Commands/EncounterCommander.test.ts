@@ -1,4 +1,5 @@
 import { PersistentCharacter } from "../../common/PersistentCharacter";
+import { SavedEncounter } from "../../common/SavedEncounter";
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
@@ -43,31 +44,54 @@ describe("EncounterCommander", () => {
     encounter.ClearEncounter();
   });
 
+  function buildSavedEncounter(Name: string, Path: string): SavedEncounter {
+    return {
+      ...SavedEncounter.Default(),
+      Name,
+      Path,
+      Combatants: []
+    };
+  }
+
+  function getSavePrompt() {
+    trackerViewModel.LibrariesCommander.SaveEncounter();
+    const prompts = trackerViewModel.PromptQueue.GetPrompts();
+    return prompts[prompts.length - 1][0];
+  }
+
+  function submitSaveEncounter(Name: string, Path: string) {
+    trackerViewModel.Libraries.Encounters.SaveNewListing = jest.fn(
+      async () => null
+    );
+    const prompt = getSavePrompt();
+    prompt.onSubmit({ ...prompt.initialValues, Name, Path });
+  }
+
   test("Cannot start an empty encounter.", () => {
     encounterCommander.StartEncounter();
     expect(encounter.EncounterFlow.State()).toBe("inactive");
     expect(encounter.Combatants().length).toBe(0);
-    expect(!encounter.EncounterFlow.ActiveCombatant());
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBeFalsy();
   });
 
   test("Click Next Turn with no combatants.", () => {
     encounter.EncounterFlow.NextTurn = jest.fn(
       encounter.EncounterFlow.NextTurn
     );
-    expect(!encounter.EncounterFlow.ActiveCombatant());
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBeFalsy();
     encounterCommander.NextTurn();
-    expect(encounter.EncounterFlow.CombatTimer.ElapsedRounds() == 1);
-    expect(encounter.EncounterFlow.NextTurn).not.toBeCalled();
+    expect(encounter.EncounterFlow.CombatTimer.ElapsedRounds()).toBe(0);
+    expect(encounter.EncounterFlow.NextTurn).not.toHaveBeenCalled();
   });
 
   test("Calling Next Turn should start an inactive encounter.", () => {
     const startEncounter = (encounterCommander.StartEncounter = jest.fn());
 
     encounter.AddCombatantFromStatBlock(StatBlock.Default());
-    expect(!encounter.EncounterFlow.ActiveCombatant());
+    expect(encounter.EncounterFlow.ActiveCombatant()).toBeFalsy();
     encounterCommander.NextTurn();
 
-    expect(startEncounter).toBeCalled();
+    expect(startEncounter).toHaveBeenCalled();
   });
 
   test("CleanEncounter", async () => {
@@ -89,6 +113,114 @@ describe("EncounterCommander", () => {
     expect(encounter.ObservableEncounterState().Combatants.length).toBe(1);
   });
 
+  test("Save Encounter starts with empty defaults", () => {
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "",
+      Path: ""
+    });
+  });
+
+  test("Save Encounter keeps an empty folder as a default", () => {
+    submitSaveEncounter("New Encounter", "");
+
+    expect(encounter.SaveEncounterDefaults()).toEqual({
+      Name: "New Encounter",
+      Path: ""
+    });
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "New Encounter",
+      Path: ""
+    });
+  });
+
+  test("opening a saved encounter uses its name and folder as save defaults until cleaning", async () => {
+    const savedEncounter = buildSavedEncounter("Goblin Ambush", "Chapter 1");
+
+    await encounterCommander.LoadSavedEncounter(savedEncounter);
+
+    expect(encounter.SaveEncounterDefaults()).toEqual({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
+
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
+
+    encounterCommander.CleanEncounter();
+    expect(encounter.SaveEncounterDefaults()).toBeNull();
+
+    expect(getSavePrompt().initialValues).toMatchObject({ Name: "", Path: "" });
+
+    submitSaveEncounter("New Encounter", "New Folder");
+
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "New Encounter",
+      Path: "New Folder"
+    });
+  });
+
+  test("opening another saved encounter replaces the save defaults", async () => {
+    await encounterCommander.LoadSavedEncounter(
+      buildSavedEncounter("Goblin Ambush", "Chapter 1")
+    );
+    await encounterCommander.LoadSavedEncounter(
+      buildSavedEncounter("Dragon Attack", "Chapter 2")
+    );
+
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "Dragon Attack",
+      Path: "Chapter 2"
+    });
+  });
+
+  test("saving an opened encounter under a new name replaces the save defaults", async () => {
+    await encounterCommander.LoadSavedEncounter(
+      buildSavedEncounter("Goblin Ambush", "Chapter 1")
+    );
+
+    submitSaveEncounter("Dragon Attack", "Chapter 2");
+
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "Dragon Attack",
+      Path: "Chapter 2"
+    });
+  });
+
+  test("cancelling Save Encounter preserves its current defaults", async () => {
+    await encounterCommander.LoadSavedEncounter(
+      buildSavedEncounter("Goblin Ambush", "Chapter 1")
+    );
+
+    getSavePrompt();
+    const prompts = trackerViewModel.PromptQueue.GetPrompts();
+    trackerViewModel.PromptQueue.Remove(prompts[prompts.length - 1][1]);
+
+    expect(getSavePrompt().initialValues).toMatchObject({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
+  });
+
+  test("save defaults update before persistence completes", () => {
+    trackerViewModel.Libraries.Encounters.SaveNewListing = jest.fn(
+      () => new Promise(() => {})
+    );
+    const prompt = getSavePrompt();
+
+    prompt.onSubmit({
+      ...prompt.initialValues,
+      Name: "Optimistic Save",
+      Path: "Chapter 1"
+    });
+
+    expect(encounter.SaveEncounterDefaults()).toEqual({
+      Name: "Optimistic Save",
+      Path: "Chapter 1"
+    });
+  });
+
   test("ClearEncounter", async () => {
     const persistentCharacter = PersistentCharacter.Initialize({
       ...StatBlock.Default(),
@@ -101,9 +233,14 @@ describe("EncounterCommander", () => {
       false
     );
 
+    encounter.SaveEncounterDefaults({
+      Name: "Goblin Ambush",
+      Path: "Chapter 1"
+    });
     expect(encounter.Combatants().length).toBe(2);
     encounterCommander.ClearEncounter();
     expect(encounter.Combatants().length).toBe(0);
+    expect(encounter.SaveEncounterDefaults()).toBeNull();
   });
 
   test("Restore Player Character HP", async () => {

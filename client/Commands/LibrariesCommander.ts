@@ -267,12 +267,21 @@ export class LibrariesCommander {
   };
 
   public SaveEncounter = (): void => {
+    const saveEncounterDefaults = this.tracker.Encounter.SaveEncounterDefaults();
+    const saveEncounterToLibrary = (newEncounter: SavedEncounter) => {
+      this.tracker.Encounter.SaveEncounterDefaults({
+        Name: newEncounter.Name,
+        Path: newEncounter.Path
+      });
+      return this.libraries.Encounters.SaveNewListing(newEncounter);
+    };
     const prompt = SaveEncounterPrompt(
       this.tracker.Encounter.FullEncounterState(),
       this.tracker.Encounter.TemporaryBackgroundImageUrl(),
-      this.libraries.Encounters.SaveNewListing,
+      saveEncounterToLibrary,
       this.tracker.EventLog.AddEvent,
-      _.uniq(this.libraries.Encounters.GetAllListings().map(e => e.Meta().Path))
+      _.uniq(this.libraries.Encounters.GetAllListings().map(e => e.Meta().Path)),
+      saveEncounterDefaults
     );
     this.tracker.PromptQueue.Add(prompt);
   };
