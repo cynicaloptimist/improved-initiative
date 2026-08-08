@@ -70,7 +70,8 @@ function dummyLibrary<T extends Listable>(): Library<T> {
     GetAllListings: () => [],
     GetOrCreateListingById: () => Promise.resolve(null),
     SaveEditedListing: () => Promise.resolve(null),
-    SaveNewListing: () => Promise.resolve(null)
+    SaveNewListing: () => Promise.resolve(null),
+    UpdateListings: () => Promise.resolve()
   };
 }
 

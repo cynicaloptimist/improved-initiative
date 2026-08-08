@@ -4,7 +4,11 @@ import { Button } from "../../Components/Button";
 import { Overlay } from "../../Components/Overlay";
 import { FilterCache } from "../FilterCache";
 import { Listing } from "../Listing";
-import { BuildListingTree, ListingGroup } from "../Components/BuildListingTree";
+import {
+  BuildListingTree,
+  ListingGroup,
+  RenameFolder
+} from "../Components/BuildListingTree";
 import { LibraryFilter } from "../Components/LibraryFilter";
 import { ListingButton } from "../Components/ListingButton";
 import { CurrentSettings } from "../../Settings/Settings";
@@ -28,6 +32,7 @@ interface LibraryReferencePaneProps<T extends Listable> {
   showPreloadInfo?: boolean;
   showSortControl?: boolean;
   launchQuickAddPrompt?: () => void;
+  onRenameFolder?: RenameFolder;
 }
 
 interface State<T extends Listable> {
@@ -97,7 +102,8 @@ export class LibraryReferencePane<T extends Listable> extends React.Component<
         );
       },
       grouping,
-      filteredListings
+      filteredListings,
+      this.props.onRenameFolder
     );
 
     const previewVisible =
