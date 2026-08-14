@@ -24,6 +24,41 @@
   align-items: flex-start;
   justify-content: space-between;
   min-height: @prompt-minimum-height;
+  position: relative;
+
+  .prompt__utility-controls {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: -@small-spacer * 2;
+    transform: translateY(-50%);
+    flex-flow: row nowrap;
+  }
+
+  button.prompt__dismiss {
+    .colors(var(--text), var(--input-bg), var(--dark-border));
+    min-width: 1.3rem;
+    min-height: 1.3rem;
+    margin: 0;
+    padding: @extra-small-spacer;
+    font-size: 12px;
+    box-shadow:
+      0 0 5px rgba(0, 0, 0, 0.3),
+      0 4px 5px rgba(0, 0, 0, 0.28);
+
+    &:hover {
+      .colors(var(--text-inverted), var(--dark-red), var(--dark-red));
+    }
+  }
+
+  button.prompt__close-all {
+    padding-right: @small-spacer;
+    padding-left: @small-spacer;
+  }
+
+  button.prompt__close {
+    margin-left: @medium-spacer;
+  }
 
   div,
   p,

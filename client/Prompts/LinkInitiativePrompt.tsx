@@ -1,9 +1,10 @@
 import * as React from "react";
 import { PromptProps } from "./PendingPrompts";
-import { SubmitButton } from "../Components/Button";
 import { StandardPromptLayout } from "./StandardPromptLayout";
 
-export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
+export function LinkInitiativePrompt(
+  onDismiss: () => void
+): PromptProps<Record<string, never>> {
   return {
     children: (
       <StandardPromptLayout
@@ -17,11 +18,12 @@ export function LinkInitiativePrompt(onDismiss: () => void): PromptProps<{}> {
         }
         fieldsDoSubmit
       >
-        <SubmitButton fontAwesomeIcon="times" />
+        {null}
       </StandardPromptLayout>
     ),
-    autoFocusSelector: "button",
+    autoFocusSelector: ".prompt__close",
     initialValues: {},
+    onDismiss,
     onSubmit: () => {
       onDismiss();
       return true;
