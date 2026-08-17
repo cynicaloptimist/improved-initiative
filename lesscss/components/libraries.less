@@ -21,6 +21,16 @@
   padding-right: @small-spacer;
 }
 
+/* For showing inline inputs error */
+.tippy-box[data-theme~="error-message"] {
+  background-color: var(--dark-red);
+  color: var(--white);
+
+  > .tippy-arrow {
+      color: var(--dark-red);
+    }
+}
+
 .c-listing-indicator {
   min-width: 38px;
   text-align: center;

@@ -29,6 +29,7 @@ export class EncounterLibraryReferencePane extends React.Component<EncounterLibr
         defaultItem={SavedEncounter.Default()}
         renderListingRow={this.renderListingRow}
         listingGroups={this.listingGroups}
+        onRenameFolder={this.renameFolder}
         addNewItem={this.props.librariesCommander.SaveEncounter}
         addNewText="Save Current Encounter"
         renderPreview={this.renderPreview}
@@ -51,6 +52,7 @@ export class EncounterLibraryReferencePane extends React.Component<EncounterLibr
         onMove={this.moveListing}
         onPreview={onPreview}
         onPreviewOut={onPreviewOut}
+        onRename={this.renameListing}
         listing={l}
         showCount
       />
@@ -79,4 +81,10 @@ export class EncounterLibraryReferencePane extends React.Component<EncounterLibr
   private moveListing = (listing: EncounterListing) => {
     this.props.librariesCommander.MoveEncounter(listing);
   };
+
+  private renameListing = (listing: EncounterListing, newName: string) =>
+    this.props.librariesCommander.RenameEncounter(listing, newName);
+
+  private renameFolder = (path: string, newName: string) =>
+    this.props.librariesCommander.RenameEncounterFolder(path, newName);
 }

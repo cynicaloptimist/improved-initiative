@@ -1,3 +1,4 @@
+import Tippy from "@tippyjs/react";
 import * as React from "react";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
   children?: React.ReactNode;
 }
 
+/** Renders a library-row action using the existing icon and tooltip styles. */
 export function ListingButton(props: Props) {
   const text = props.text || "";
 
@@ -19,15 +21,16 @@ export function ListingButton(props: Props) {
     cssClasses.push("fas", `fa-${props.faClass}`);
   }
 
-  return (
+  const button = (
     <span
       className={cssClasses.join(" ")}
       onClick={props.onClick}
       onMouseEnter={props.onMouseEnter}
       onMouseLeave={props.onMouseLeave}
-      title={props.title}
     >
       {text} {props.children}
     </span>
   );
+
+  return props.title ? <Tippy content={props.title}>{button}</Tippy> : button;
 }
