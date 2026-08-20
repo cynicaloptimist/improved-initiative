@@ -59,7 +59,9 @@ export const InitiativeField = () => (
 
 export const abilityScoreField = (abilityName: string) => (
   <div key={abilityName} className="c-statblock-editor__ability">
-    <label htmlFor={`ability-${abilityName}`}>{abilityName}</label>
+    <label htmlFor={`ability-${abilityName}`}>
+      {StatBlock.AbilityDisplayNames[abilityName] || abilityName}
+    </label>
     <Field
       type="number"
       id={`ability-${abilityName}`}

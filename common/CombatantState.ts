@@ -14,6 +14,7 @@ export interface CombatantState {
   StatBlock: StatBlock;
   PersistentCharacterId?: string;
   CurrentHP: number;
+  CurrentMana?: number;
   CurrentNotes?: string;
   Color?: string;
   ReactionsSpent?: number;

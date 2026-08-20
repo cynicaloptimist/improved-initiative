@@ -39,7 +39,6 @@ window.onload = async () => {
 
     viewModel.ImportEncounterIfAvailable();
     viewModel.ImportFromQueryParamIfAvailable();
-    viewModel.GetWhatsNewIfAvailable();
     Metrics.TrackLoad();
   }
 

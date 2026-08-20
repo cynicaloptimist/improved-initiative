@@ -6,6 +6,9 @@ export const ConvertStringsToNumbersWhereNeeded = (statBlock: StatBlock) => {
   );
   statBlock.HP.Value = castToNumberOrZero(statBlock.HP.Value);
   statBlock.AC.Value = castToNumberOrZero(statBlock.AC.Value);
+  if (statBlock.Mana) {
+    statBlock.Mana.Value = castToNumberOrZero(statBlock.Mana.Value);
+  }
   statBlock.InitiativeModifier = castToNumberOrZero(
     statBlock.InitiativeModifier
   );

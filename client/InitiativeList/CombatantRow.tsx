@@ -17,6 +17,7 @@ type CombatantRowProps = {
   isSelected: boolean;
   showIndexLabel: boolean;
   initiativeIndex: number;
+  showManaColumn: boolean;
 };
 
 type CombatantDragData = {
@@ -95,11 +96,6 @@ export function CombatantRow(props: CombatantRowProps) {
           <i className="fas fa-grip-vertical" />
         </td>
       }
-      <td className="combatant__initiative" title="Initiative Roll">
-        {props.combatantState.InitiativeGroup && <i className="fas fa-link" />}
-        {props.combatantState.Initiative}
-      </td>
-
       <td aria-hidden="true" className="combatant__image-cell">
         {DisplayPortraits && (
           <img
@@ -164,6 +160,42 @@ export function CombatantRow(props: CombatantRowProps) {
           </div>
         </div>
       </td>
+
+      {props.showManaColumn && (
+        <td className="combatant__mana">
+          {props.combatantState.StatBlock.Mana ? (
+            <div
+              className="combatant__mana-outer"
+              onClick={event => {
+                commandContext.ApplyManaToCombatant(props.combatantState.Id);
+                event.stopPropagation();
+              }}
+            >
+              <div className="combatant__mana-inner" style={getManaStyle(props)}>
+                <span
+                  className="combatant__mobile-icon fas fa-hat-wizard"
+                  aria-hidden="true"
+                />
+
+                {renderManaText(props)}
+                {DisplayHPBar && (
+                  <span className="combatant__hp-bar">
+                    <span
+                      className="combatant__hp-bar--filled"
+                      style={renderManaBarStyle(props)}
+                    />
+                  </span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <span
+              className="combatant__mobile-icon fas fa-hat-wizard"
+              aria-hidden="true"
+            />
+          )}
+        </td>
+      )}
 
       <td className="combatant__ac">
         <span
@@ -352,4 +384,33 @@ function renderHPBarStyle(props: CombatantRowProps) {
   const maxHP = props.combatantState.StatBlock.HP.Value,
     currentHP = props.combatantState.CurrentHP;
   return { width: Math.floor((currentHP / maxHP) * 100) + "%" };
+}
+
+function getManaStyle(props: CombatantRowProps) {
+  const maxMana = props.combatantState.StatBlock.Mana?.Value;
+  if (!maxMana) {
+    return {};
+  }
+  const currentMana = props.combatantState.CurrentMana ?? 0;
+  // Do not set green any higher, low value is needed for contrast against light background
+  const green = Math.floor((currentMana / maxMana) * 120);
+  const red = Math.floor(((maxMana - currentMana) / maxMana) * 170);
+  return { color: "rgb(" + red + "," + green + ",0)" };
+}
+
+function renderManaText(props: CombatantRowProps) {
+  const maxMana = props.combatantState.StatBlock.Mana?.Value;
+  if (!maxMana) {
+    return "";
+  }
+  return `${props.combatantState.CurrentMana ?? 0}/${maxMana}`;
+}
+
+function renderManaBarStyle(props: CombatantRowProps) {
+  const maxMana = props.combatantState.StatBlock.Mana?.Value;
+  if (!maxMana) {
+    return { width: "0%" };
+  }
+  const currentMana = props.combatantState.CurrentMana ?? 0;
+  return { width: Math.floor((currentMana / maxMana) * 100) + "%" };
 }

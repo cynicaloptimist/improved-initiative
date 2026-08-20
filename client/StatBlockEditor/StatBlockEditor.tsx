@@ -190,11 +190,12 @@ export class StatBlockEditor extends React.Component<
             fieldName="Challenge"
           />
           <ValueAndNotesField label="Hit Points" fieldName="HP" />
-          <ValueAndNotesField label="Armor Class" fieldName="AC" />
+          <ValueAndNotesField label="Defense" fieldName="AC" />
+          <ValueAndNotesField label="Mana" fieldName="Mana" />
           <InitiativeField />
         </div>
         <div className="c-statblock-editor__abilityscores">
-          {StatBlock.AbilityNames.map(abilityScoreField)}
+          {StatBlock.VisibleAbilityNames.map(abilityScoreField)}
         </div>
         {settings.StatBlock.CustomFields.length > 0 && (
           <div className="c-statblock-editor__custom-fields">
@@ -215,9 +216,6 @@ export class StatBlockEditor extends React.Component<
         )}
         <div className="c-statblock-editor__saves">
           <NameAndModifierFields api={api} modifierType="Saves" />
-        </div>
-        <div className="c-statblock-editor__skills">
-          <NameAndModifierFields api={api} modifierType="Skills" />
         </div>
         {[
           "Speed",

@@ -31,10 +31,29 @@
 .c-combatant-details__tags {
   flex-direction: row;
   margin-top: @extra-small-spacer;
+}
 
+.c-combatant-details__hp {
+  .stat-label.Mana,
+  .stat-label.Level {
+    margin-left: @medium-spacer;
+  }
+}
+
+.c-combatant-details__tags {
   .stat-value {
     display: block;
     flex: 1;
+  }
+}
+
+.c-combatant-details > .HP.AC.speed.Challenge {
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: @extra-small-spacer;
+
+  .stat-label.Speed {
+    margin-left: @medium-spacer;
   }
 }
 
@@ -145,25 +164,27 @@
     margin-bottom: @extra-small-spacer;
   }
 
+  .stat-label.Speed {
+    margin-left: @medium-spacer;
+  }
+
   .Abilities {
-    justify-content: space-between;
-    margin: @medium-spacer 0;
+    margin: @extra-small-spacer 0;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
 
     .Ability {
-      flex-basis: calc(100% / 6);
+      flex: 0 0 auto;
       display: block;
-      text-align: center;
+      text-align: left;
+      margin-right: @medium-spacer;
     }
 
     .stat-label {
-      display: block;
+      display: inline-block;
       text-align: center;
-      margin-right: 0;
-      flex-basis: 100%;
-      margin-bottom: @extra-small-spacer;
+      margin-right: @small-spacer;
       font-size: @font-size-small;
       text-transform: uppercase;
     }
@@ -173,17 +194,6 @@
       display: inline-block;
       font-size: @font-size-small;
       text-align: center;
-    }
-
-    .modifier {
-      &:before {
-        margin-left: @extra-small-spacer;
-        content: "(";
-      }
-
-      &:after {
-        content: ")";
-      }
     }
   }
 
@@ -229,12 +239,7 @@
       }
 
       > .stat-label {
-        font-style: italic;
         color: var(--text-face);
-
-        &:after {
-          content: ".";
-        }
       }
       div {
         display: block;

@@ -9,6 +9,7 @@ export interface PersistentCharacter {
   Path: string;
   LastUpdateMs: number;
   CurrentHP: number;
+  CurrentMana?: number;
   StatBlock: StatBlock;
   Notes: string;
 }
@@ -22,6 +23,7 @@ export namespace PersistentCharacter {
       Path: statBlock.Path,
       LastUpdateMs: now(),
       CurrentHP: statBlock.HP.Value,
+      CurrentMana: statBlock.Mana?.Value,
       StatBlock: statBlock,
       Notes: ""
     };

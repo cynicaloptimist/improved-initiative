@@ -84,7 +84,8 @@
     }
   }
 
-  .combatant .combatant__hp-outer {
+  .combatant .combatant__hp-outer,
+  .combatant .combatant__mana-outer {
     transition: box-shadow @transition-hover;
     &:hover {
       box-shadow: 0 0 0 2px var(--hover-hp-red);
@@ -121,7 +122,8 @@
 // becomes visible for active/selected combatants, or on hover
 .combatant.active,
 .combatant.selected,
-.combatant__hp:hover {
+.combatant__hp:hover,
+.combatant__mana:hover {
   .combatant__hp-bar {
     opacity: 1;
   }
@@ -164,10 +166,10 @@
     display: grid;
     /* prettier-ignore */
     grid-template:
-      "leftgutter init image name           ac           hp"
-      "leftgutter init image divider        divider      divider"
-      "leftgutter init image tagsCommands   tagsCommands tagsCommands" /
-       auto auto auto  minmax(0, 1fr) auto     auto;
+      "leftgutter image name           mana         ac       hp"
+      "leftgutter image divider        divider      divider  divider"
+      "leftgutter image tagsCommands   tagsCommands tagsCommands tagsCommands" /
+       auto auto  minmax(0, 1fr) auto     auto     auto;
 
     &::before {
       content: "";
@@ -217,26 +219,6 @@
   }
 }
 
-.combatant__initiative {
-  width: 1.6rem;
-  justify-content: center;
-  grid-area: init;
-
-  .fa-link:before {
-    font-size: 60%;
-    vertical-align: top;
-  }
-}
-
-.initiative-list .combatant__initiative {
-  @media (max-width: @medium) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5em;
-  }
-}
-
 .combatant__image-cell {
   grid-area: image;
 
@@ -260,7 +242,7 @@
 }
 
 .combatant__name {
-  width: 30%;
+  width: 15%;
   grid-area: name;
 
   @media (max-width: @medium) {
@@ -289,7 +271,7 @@
 }
 
 .combatant__hp {
-  width: 5rem;
+  width: 4rem;
   justify-content: center;
   grid-area: hp;
 
@@ -305,6 +287,18 @@
   grid-area: ac;
   margin-left: 3px;
   position: relative;
+
+  @media (max-width: @medium) {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+  }
+}
+
+.combatant__mana {
+  width: 4rem;
+  justify-content: center;
+  grid-area: mana;
 
   @media (max-width: @medium) {
     display: flex;

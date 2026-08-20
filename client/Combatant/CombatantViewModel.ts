@@ -17,6 +17,8 @@ const animatedCombatantIds = ko.observableArray<string>([]);
 export class CombatantViewModel {
   public HP: ko.PureComputed<string>;
   public HPPercentage: ko.PureComputed<string>;
+  public Mana: ko.PureComputed<string>;
+  public ManaPercentage: ko.PureComputed<string>;
   public Name: ko.PureComputed<string>;
 
   constructor(
@@ -37,6 +39,22 @@ export class CombatantViewModel {
         Math.floor(
           (this.Combatant.CurrentHP() / this.Combatant.MaxHP()) * 100
         ) + "%"
+      );
+    });
+    this.Mana = ko.pureComputed(() => {
+      const maxMana = this.Combatant.MaxMana();
+      if (maxMana === undefined) {
+        return null;
+      }
+      return `${this.Combatant.CurrentMana()}/${maxMana}`;
+    });
+    this.ManaPercentage = ko.pureComputed(() => {
+      const maxMana = this.Combatant.MaxMana();
+      if (!maxMana) {
+        return "0%";
+      }
+      return (
+        Math.floor((this.Combatant.CurrentMana() / maxMana) * 100) + "%"
       );
     });
     this.Name = Combatant.DisplayName;
@@ -67,6 +85,15 @@ export class CombatantViewModel {
     } else {
       this.Combatant.ApplyHealing(healing);
     }
+  }
+
+  public ApplyManaChange(inputAmount: string) {
+    const amount = parseInt(inputAmount);
+    if (isNaN(amount)) {
+      return;
+    }
+
+    this.Combatant.ApplyManaChange(amount);
   }
 
   public ApplyTemporaryHP(newTemporaryHP: number) {

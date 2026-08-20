@@ -59,6 +59,10 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
       c => c.AC != undefined
     );
 
+    const manaColumnVisible = this.props.encounterState.Combatants.some(
+      c => c.ManaDisplay != undefined
+    );
+
     const modalVisible =
       this.state.showPortrait ||
       this.state.suggestDamageCombatant ||
@@ -110,6 +114,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
         <PlayerViewCombatantHeader
           portraitColumnVisible={this.hasImages()}
           acColumnVisible={acColumnVisible}
+          manaColumnVisible={manaColumnVisible}
         />
         <ul className="combatants">
           {this.props.encounterState.Combatants.map(combatant => (
@@ -124,6 +129,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
               areSuggestionsAllowed={this.props.settings.AllowPlayerSuggestions}
               portraitColumnVisible={this.hasImages()}
               acColumnVisible={acColumnVisible}
+              manaColumnVisible={manaColumnVisible}
               reactionTrackerVisible={
                 this.props.settings.DisplayReactionTracker
               }

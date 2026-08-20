@@ -12,6 +12,8 @@ export function ToPlayerViewCombatantState(
     Id: combatant.Id,
     HPDisplay: GetHPDisplay(combatant),
     HPColor: GetHPColor(combatant),
+    ManaDisplay: GetManaDisplay(combatant),
+    ManaColor: GetManaColor(combatant),
     Initiative: combatant.Initiative(),
     IsPlayerCharacter: combatant.IsPlayerCharacter(),
     Tags: combatant
@@ -60,6 +62,57 @@ function GetHPDisplay(combatant: Combatant): string {
     return "<span class='hurtHP'>Hurt</span>";
   }
   return "<span class='healthyHP'>Healthy</span>";
+}
+
+function GetManaDisplay(combatant: Combatant): string | undefined {
+  const maxMana = combatant.MaxMana();
+  if (maxMana === undefined) {
+    return undefined;
+  }
+
+  const manaVerbosity = combatant.IsPlayerCharacter()
+    ? CurrentSettings().PlayerView.PlayerHPVerbosity
+    : CurrentSettings().PlayerView.MonsterHPVerbosity;
+  const currentMana = combatant.CurrentMana();
+  if (manaVerbosity == "Actual HP") {
+    return `${currentMana}/${maxMana}`;
+  }
+  if (manaVerbosity == "Hide All") {
+    return "";
+  }
+  if (manaVerbosity == "Damage Taken") {
+    return (currentMana - maxMana).toString();
+  }
+  if (currentMana <= 0) {
+    return "<span class='defeatedHP'>Empty</span>";
+  } else if (currentMana < maxMana / 2) {
+    return "<span class='bloodiedHP'>Low</span>";
+  } else if (currentMana < maxMana) {
+    return "<span class='hurtHP'>Reduced</span>";
+  }
+  return "<span class='healthyHP'>Full</span>";
+}
+
+function GetManaColor(combatant: Combatant): string | undefined {
+  const maxMana = combatant.MaxMana();
+  if (maxMana === undefined) {
+    return undefined;
+  }
+
+  const manaVerbosity = combatant.IsPlayerCharacter()
+    ? CurrentSettings().PlayerView.PlayerHPVerbosity
+    : CurrentSettings().PlayerView.MonsterHPVerbosity;
+  if (
+    manaVerbosity == "Monochrome Label" ||
+    manaVerbosity == "Hide All" ||
+    manaVerbosity == "Damage Taken"
+  ) {
+    return "auto";
+  }
+  const currentMana = combatant.CurrentMana();
+  const green = Math.floor((currentMana / maxMana) * 170);
+  const red = Math.floor(((maxMana - currentMana) / maxMana) * 170);
+  return "rgb(" + red + "," + green + ",0)";
 }
 
 function GetHPColor(combatant: Combatant) {

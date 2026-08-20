@@ -8,6 +8,7 @@ interface PlayerViewCombatantProps {
   isActive: boolean;
   portraitColumnVisible: boolean;
   acColumnVisible: boolean;
+  manaColumnVisible: boolean;
   reactionTrackerVisible: boolean;
   colorVisible: boolean;
   areSuggestionsAllowed: boolean;
@@ -29,9 +30,6 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
     return (
       <li className={classNames.join(" ")}>
-        <div className="combatant__initiative">
-          {this.props.combatant.Initiative}
-        </div>
         {this.props.portraitColumnVisible && (
           <div className="combatant__portrait">
             {this.props.combatant.ImageURL && (
@@ -64,6 +62,16 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
             dangerouslySetInnerHTML={{ __html: this.props.combatant.HPDisplay }}
           />
         </div>
+        {this.props.manaColumnVisible && (
+          <div className="combatant__mana">
+            <span
+              style={{ color: this.props.combatant.ManaColor }}
+              dangerouslySetInnerHTML={{
+                __html: this.props.combatant.ManaDisplay || ""
+              }}
+            />
+          </div>
+        )}
         {this.props.acColumnVisible && (
           <div className="combatant__ac">{this.props.combatant.AC || ""}</div>
         )}

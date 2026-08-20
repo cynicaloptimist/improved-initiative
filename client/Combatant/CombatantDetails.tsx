@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { StatBlockComponent } from "../Components/StatBlock";
+import { StatBlock } from "../../common/StatBlock";
 import { StatBlockHeader } from "../Components/StatBlockHeader";
 import { TextEnricherContext } from "../TextEnricher/TextEnricher";
 import { CombatantViewModel } from "./CombatantViewModel";
@@ -20,6 +21,10 @@ export function CombatantDetails(props: CombatantDetailsProps): JSX.Element {
   const currentHp = useSubscription(props.combatantViewModel.HP);
   const currentHPPercentage = useSubscription(
     props.combatantViewModel.HPPercentage
+  );
+  const currentMana = useSubscription(props.combatantViewModel.Mana);
+  const currentManaPercentage = useSubscription(
+    props.combatantViewModel.ManaPercentage
   );
   const name = useSubscription(props.combatantViewModel.Name);
   const tags = useSubscription(props.combatantViewModel.Combatant.Tags);
@@ -52,7 +57,7 @@ export function CombatantDetails(props: CombatantDetailsProps): JSX.Element {
         imageUrl={statBlock.ImageURL}
       />
       <div className="c-combatant-details__hp">
-        <span className="stat-label">Current HP</span>
+        <span className="stat-label CurrentHP">HP</span>
         <span>
           {currentHp}
           {DisplayHPBar && (
@@ -64,6 +69,49 @@ export function CombatantDetails(props: CombatantDetailsProps): JSX.Element {
             </span>
           )}
         </span>
+        {currentMana && (
+          <>
+            <span className="stat-label Mana">Mana</span>
+            <span>
+              {currentMana}
+              {DisplayHPBar && (
+                <span className="combatant__hp-bar">
+                  <span
+                    className="combatant__hp-bar--filled"
+                    style={renderHPBarStyle(currentManaPercentage)}
+                  />
+                </span>
+              )}
+            </span>
+          </>
+        )}
+        {statBlock.Challenge && (
+          <>
+            <span className="stat-label Level">
+              {statBlock.Player == "player" ? "Level" : "Challenge"}
+            </span>
+            <span className="stat-value">{statBlock.Challenge}</span>
+          </>
+        )}
+      </div>
+      <div className="HP AC speed Challenge">
+        <span className="stat-label">Defense</span>
+        <span className="stat-value">{statBlock.AC.Value}</span>
+        {statBlock.Speed.length > 0 && (
+          <>
+            <span className="stat-label Speed">Speed</span>
+            <span className="stat-value">
+              {statBlock.Speed.map((speed, i) => (
+                <span
+                  className="stat-value__item"
+                  key={"stat-value__speed-" + i}
+                >
+                  {speed}
+                </span>
+              ))}
+            </span>
+          </>
+        )}
       </div>
       {tags.length > 0 && (
         <div className="c-combatant-details__tags">
@@ -78,11 +126,15 @@ export function CombatantDetails(props: CombatantDetailsProps): JSX.Element {
         </div>
       )}
       {props.displayMode !== "status-only" && (
-        <StatBlockComponent
-          statBlock={statBlock}
-          displayMode={props.displayMode}
-          hideName
-        />
+        <>
+          {StatBlock.IsPlayerCharacter(statBlock) && <hr />}
+          <StatBlockComponent
+            statBlock={statBlock}
+            displayMode={props.displayMode}
+            hideName
+            hideTopRow
+          />
+        </>
       )}
       {renderedNotes && (
         <div className="c-combatant-details__notes">{renderedNotes}</div>

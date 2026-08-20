@@ -8,13 +8,13 @@ import { StatBlockHeader } from "./StatBlockHeader";
 import { useContext } from "react";
 import { LoadingIndicator } from "./LoadingIndicator";
 import ErrorBoundary from "./ErrorBoundary";
-import { DefaultRules } from "../Rules/Rules";
 import { SettingsContext } from "../Settings/SettingsContext";
 
 interface StatBlockProps {
   statBlock: StatBlock;
   displayMode: "default" | "active";
   hideName?: boolean;
+  hideTopRow?: boolean;
   isLoading?: boolean;
 }
 
@@ -38,15 +38,11 @@ export function StatBlockComponent(props: StatBlockProps) {
 
 function StatBlockComponentNoError(props: StatBlockProps) {
   const textEnricher = useContext(TextEnricherContext);
-  const rules = new DefaultRules();
   const settings = useContext(SettingsContext);
 
   const statBlock = props.statBlock;
 
-  const modifierTypes = [
-    { name: "Saves", data: statBlock.Saves },
-    { name: "Skills", data: statBlock.Skills }
-  ];
+  const modifierTypes = [{ name: "Saves", data: statBlock.Saves }];
 
   const keywordSetTypes = [
     { name: "Senses", data: statBlock.Senses },
@@ -77,55 +73,53 @@ function StatBlockComponentNoError(props: StatBlockProps) {
         />
       )}
 
-      <hr />
+      {!props.hideTopRow && <hr />}
     </>
   );
 
   const statEntries = (
     <>
-      <div className="AC">
-        <span className="stat-label">Armor Class</span>
-        <span className="stat-value">{statBlock.AC.Value}</span>
-        <span className="notes">
-          {textEnricher.EnrichText(statBlock.AC.Notes)}
-        </span>
-      </div>
-
-      <div className="HP">
-        <span className="stat-label">Hit Points</span>
-        <span className="stat-value">{statBlock.HP.Value}</span>
-        <span className="notes">
-          {textEnricher.EnrichText(statBlock.HP.Notes)}
-        </span>
-      </div>
-
-      <div className="speed">
-        <span className="stat-label">Speed</span>
-        <span className="stat-value">
-          {statBlock.Speed.map((speed, i) => (
-            <span className="stat-value__item" key={"stat-value__speed-" + i}>
-              {speed}
-            </span>
-          ))}
-        </span>
-      </div>
-
-      <div className="Abilities">
-        {Object.keys(StatBlock.Default().Abilities).map(abilityName => {
-          const abilityScore = statBlock.Abilities[abilityName];
-          const abilityModifier =
-            textEnricher.GetEnrichedModifierFromAbilityScore(abilityScore);
-          return (
-            <div className="Ability" key={abilityName}>
-              <div className="stat-label">{abilityName}</div>
-              <span className={"score " + abilityName}>{abilityScore}</span>
-              <span className={"modifier " + abilityName}>
-                {abilityModifier}
+      {!props.hideTopRow && (
+        <div className="HP AC speed Challenge">
+          <span className="stat-label">Defense</span>
+          <span className="stat-value">{statBlock.AC.Value}</span>
+          {statBlock.Speed.length > 0 && (
+            <>
+              <span className="stat-label Speed">Speed</span>
+              <span className="stat-value">
+                {statBlock.Speed.map((speed, i) => (
+                  <span
+                    className="stat-value__item"
+                    key={"stat-value__speed-" + i}
+                  >
+                    {speed}
+                  </span>
+                ))}
               </span>
-            </div>
-          );
-        })}
-      </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {StatBlock.IsPlayerCharacter(statBlock) && (
+        <div className="Abilities">
+          {StatBlock.VisibleAbilityNames.map(abilityName => {
+            const abilityScore = statBlock.Abilities[abilityName];
+            const abilityModifier =
+              textEnricher.GetEnrichedModifierFromAbilityScore(abilityScore);
+            return (
+              <div className="Ability" key={abilityName}>
+                <div className="stat-label">
+                  {StatBlock.AbilityDisplayNames[abilityName] || abilityName}
+                </div>
+                <span className={"modifier " + abilityName}>
+                  {abilityModifier}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {settings.StatBlock.CustomFields.length > 0 && (
         <div className="custom-fields">
@@ -144,8 +138,6 @@ function StatBlockComponentNoError(props: StatBlockProps) {
           })}
         </div>
       )}
-
-      <hr />
 
       <div className="modifiers">
         {modifierTypes
@@ -186,19 +178,6 @@ function StatBlockComponentNoError(props: StatBlockProps) {
             </div>
           ))}
       </div>
-
-      {statBlock.Challenge && (
-        <div className="Challenge">
-          <span className="stat-label">
-            {statBlock.Player == "player" ? "Level" : "Challenge"}
-          </span>
-          <span className="stat-value">{statBlock.Challenge}</span>
-          <span className="stat-label">Proficiency Bonus</span>
-          <span className="stat-value">
-            +{rules.GetProficiencyBonus(statBlock.Challenge)}
-          </span>
-        </div>
-      )}
 
       <hr />
     </>

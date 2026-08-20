@@ -12,6 +12,9 @@ export function InitiativeList(props: {
   combatantCountsByName: { [name: string]: number };
 }) {
   const encounterState = props.encounterState;
+  const showManaColumn = encounterState.Combatants.some(
+    c => c.StatBlock.Mana
+  );
 
   return (
     <div className="initiative-list">
@@ -19,6 +22,7 @@ export function InitiativeList(props: {
       <table className="combatants">
         <InitiativeListHeader
           encounterActive={encounterState.ActiveCombatantId != null}
+          showManaColumn={showManaColumn}
         />
         <tbody>
           {encounterState.Combatants.map((combatantState, index) => {
@@ -37,6 +41,7 @@ export function InitiativeList(props: {
                 // creature with this name.
                 showIndexLabel={siblingCount > 1}
                 initiativeIndex={index}
+                showManaColumn={showManaColumn}
               />
             );
           })}

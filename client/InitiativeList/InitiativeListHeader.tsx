@@ -1,30 +1,16 @@
-import Tippy from "@tippyjs/react";
 import * as React from "react";
 import { SettingsContext } from "../Settings/SettingsContext";
 
-export function InitiativeListHeader(props: { encounterActive: boolean }) {
-  const encounterStateIcon = props.encounterActive ? "fa-play" : "fa-pause";
-  const encounterStateTip = props.encounterActive
-    ? "Encounter Active"
-    : "Encounter Inactive";
-
+export function InitiativeListHeader(props: {
+  encounterActive: boolean;
+  showManaColumn: boolean;
+}) {
   const settings = React.useContext(SettingsContext);
 
   return (
     <thead className="combatant--header">
       <tr>
         <th className="combatant__left-gutter" />
-        <th className="combatant__initiative">
-          <span className="screen-reader-only">Initiative Score</span>
-          <div aria-hidden="true">
-            <Tippy content={encounterStateTip}>
-              <span
-                data-testid="encounter-state-icon"
-                className={"fas " + encounterStateIcon}
-              ></span>
-            </Tippy>
-          </div>
-        </th>
 
         <th className="combatant__image" aria-hidden="true"></th>
 
@@ -41,11 +27,22 @@ export function InitiativeListHeader(props: { encounterActive: boolean }) {
           ></span>
         </th>
 
+        {props.showManaColumn && (
+          <th className="combatant__mana">
+            <span className="screen-reader-only">Mana</span>
+            <span
+              className="fas fa-hat-wizard"
+              title="Mana"
+              aria-hidden="true"
+            ></span>
+          </th>
+        )}
+
         <th className="combatant__ac">
-          <span className="screen-reader-only">Armor Class</span>
+          <span className="screen-reader-only">Defense</span>
           <span
             className="fas fa-shield-alt"
-            title="Armor Class"
+            title="Defense"
             aria-hidden="true"
           ></span>
         </th>

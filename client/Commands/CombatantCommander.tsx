@@ -18,6 +18,8 @@ import { AcceptDamagePrompt } from "../Prompts/AcceptDamagePrompt";
 import { AcceptTagPrompt } from "../Prompts/AcceptTagPrompt";
 import { ApplyDamagePrompt } from "../Prompts/ApplyDamagePrompt";
 import { ApplyHealingPrompt } from "../Prompts/ApplyHealingPrompt";
+import { ApplyManaPrompt } from "../Prompts/ApplyManaPrompt";
+import { RestoreManaPrompt } from "../Prompts/RestoreManaPrompt";
 import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
 import { ShowDiceRollPrompt } from "../Prompts/RollDicePrompt";
 import { TagPrompt } from "../Prompts/TagPrompt";
@@ -243,6 +245,41 @@ export class CombatantCommander {
       selectedCombatants,
       latestRollTotal.toString(),
       this.tracker.EventLog.LogHPChange
+    );
+    this.tracker.PromptQueue.Add(prompt);
+  };
+
+  private applyManaForCombatants(combatantViewModels: CombatantViewModel[]) {
+    const prompt = ApplyManaPrompt(
+      combatantViewModels,
+      "",
+      this.tracker.EventLog.LogManaChange
+    );
+    this.tracker.PromptQueue.Add(prompt);
+  }
+
+  public SpendMana = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+
+    const selectedCombatants = this.SelectedCombatants();
+    this.applyManaForCombatants(selectedCombatants);
+  };
+
+  public SpendManaTargeted = (combatantViewModel: CombatantViewModel) => {
+    this.applyManaForCombatants([combatantViewModel]);
+  };
+
+  public RestoreMana = () => {
+    if (!this.HasSelected()) {
+      return;
+    }
+    const selectedCombatants = this.SelectedCombatants();
+    const prompt = RestoreManaPrompt(
+      selectedCombatants,
+      "",
+      this.tracker.EventLog.LogManaChange
     );
     this.tracker.PromptQueue.Add(prompt);
   };

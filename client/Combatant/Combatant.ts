@@ -34,6 +34,9 @@ export class Combatant {
 
     this.CurrentHP = ko.observable(combatantState.CurrentHP);
     this.CurrentNotes = ko.observable(combatantState.CurrentNotes || "");
+    this.CurrentMana = ko.observable(
+      combatantState.CurrentMana ?? this.MaxMana() ?? 0
+    );
 
     this.processCombatantState(combatantState);
 
@@ -68,6 +71,7 @@ export class Combatant {
   public CombatTimer = new CombatTimer();
 
   public CurrentHP: KnockoutObservable<number>;
+  public CurrentMana: KnockoutObservable<number>;
   public CurrentNotes: KnockoutObservable<string>;
   public PlayerDisplayHP: KnockoutComputed<string>;
   private updatingGroup = false;
@@ -87,6 +91,7 @@ export class Combatant {
     this.IndexLabel(savedCombatant.IndexLabel || 0);
     this.CurrentHP(savedCombatant.CurrentHP);
     this.CurrentNotes(savedCombatant.CurrentNotes || "");
+    this.CurrentMana(savedCombatant.CurrentMana ?? this.MaxMana() ?? 0);
     this.TemporaryHP(savedCombatant.TemporaryHP);
     this.Initiative(savedCombatant.Initiative);
     this.InitiativeGroup(
@@ -113,6 +118,12 @@ export class Combatant {
     this.CurrentHP.subscribe(async c => {
       return await updatePersistentCharacter(persistentCharacterId, {
         CurrentHP: c
+      });
+    });
+
+    this.CurrentMana.subscribe(async m => {
+      return await updatePersistentCharacter(persistentCharacterId, {
+        CurrentMana: m
       });
     });
 
@@ -173,6 +184,8 @@ export class Combatant {
 
   public MaxHP = ko.computed(() => this.StatBlock().HP.Value);
 
+  public MaxMana = ko.computed(() => this.StatBlock().Mana?.Value);
+
   public GetInitiativeRoll: () => AbilityCheckResult = () => {
     const sideInitiative =
       CurrentSettings().Rules.AutoGroupInitiative ==
@@ -231,6 +244,20 @@ export class Combatant {
     this.CurrentHP(currHP);
   }
 
+  public ApplyManaChange(amount: number) {
+    const maxMana = this.MaxMana() ?? 0;
+    let currentMana = this.CurrentMana() - amount;
+
+    if (currentMana < 0) {
+      currentMana = 0;
+    }
+    if (currentMana > maxMana) {
+      currentMana = maxMana;
+    }
+
+    this.CurrentMana(currentMana);
+  }
+
   public ApplyTemporaryHP(tempHP: number) {
     if (tempHP > this.TemporaryHP()) {
       this.TemporaryHP(tempHP);
@@ -259,6 +286,7 @@ export class Combatant {
       PersistentCharacterId: this.PersistentCharacterId || undefined,
       StatBlock: this.StatBlock(),
       CurrentHP: this.CurrentHP(),
+      CurrentMana: this.CurrentMana(),
       CurrentNotes: this.CurrentNotes(),
       TemporaryHP: this.TemporaryHP(),
       Initiative: this.Initiative(),

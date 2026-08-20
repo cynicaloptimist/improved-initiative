@@ -15,4 +15,13 @@ export class EventLog {
       this.AddEvent(`${-damage} HP restored to ${combatantNames}.`);
     }
   };
+
+  public LogManaChange = (amount: number, combatantNames: string) => {
+    if (amount > 0) {
+      this.AddEvent(`${amount} mana spent by ${combatantNames}.`);
+    }
+    if (amount < 0) {
+      this.AddEvent(`${-amount} mana restored to ${combatantNames}.`);
+    }
+  };
 }

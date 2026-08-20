@@ -35,6 +35,7 @@ export interface StatBlock extends Listable {
   Type: string;
   HP: ValueAndNotes;
   AC: ValueAndNotes;
+  Mana?: ValueAndNotes;
   Speed: string[];
   Abilities: AbilityScores;
   InitiativeModifier?: number;
@@ -63,6 +64,13 @@ export interface StatBlock extends Listable {
 
 export namespace StatBlock {
   export const AbilityNames = ["Str", "Dex", "Con", "Int", "Wis", "Cha"];
+  export const VisibleAbilityNames = ["Str", "Dex", "Int", "Wis"];
+  export const AbilityDisplayNames: Record<string, string> = {
+    Str: "Str",
+    Dex: "Dex",
+    Int: "Int",
+    Wis: "Wil"
+  };
 
   const BaseTypes = [
     "aberration",

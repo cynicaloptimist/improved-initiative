@@ -25,6 +25,20 @@ export const BuildCombatantCommandList: (
     defaultShowOnActionBar: false
   }),
   new Command({
+    id: "spend-mana",
+    description: "Spend Mana",
+    actionBinding: c.SpendMana,
+    fontAwesomeIcon: "hat-wizard",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
+    id: "restore-mana",
+    description: "Restore Mana",
+    actionBinding: c.RestoreMana,
+    fontAwesomeIcon: "star",
+    defaultShowOnActionBar: false
+  }),
+  new Command({
     id: "add-tag",
     description: "Add Tag",
     actionBinding: c.AddTag,
