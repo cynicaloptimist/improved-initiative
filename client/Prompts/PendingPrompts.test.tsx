@@ -1,8 +1,13 @@
 import { fireEvent, render, waitFor, within } from "@testing-library/react";
 import * as React from "react";
 
+import { Spell } from "../../common/Spell";
+import { Listing } from "../Library/Listing";
+import { CombatStatsPrompt } from "./CombatStatsPrompt";
+import { ConditionReferencePrompt } from "./ConditionReferencePrompt";
 import { LinkInitiativePrompt } from "./LinkInitiativePrompt";
 import { PendingPrompts, PromptProps } from "./PendingPrompts";
+import { SpellPrompt } from "./SpellPrompt";
 
 type DismissiblePromptProps = PromptProps<Record<string, never>> & {
   onDismiss?: () => void;
@@ -50,7 +55,7 @@ describe("PendingPrompts", () => {
     expect(prompt.onSubmit).not.toHaveBeenCalled();
   });
 
-  test("shows Close all on every prompt when several are open", () => {
+  test("shows Close all only on the first prompt when several are open", () => {
     const rendered = RenderPrompts([
       [MockPrompt(), "first-prompt"],
       [MockPrompt(), "second-prompt"]
@@ -62,10 +67,10 @@ describe("PendingPrompts", () => {
       within(promptForms[0]).getByRole("button", { name: "Close all" })
     ).toBeTruthy();
     expect(
-      within(promptForms[1]).getByRole("button", { name: "Close all" })
-    ).toBeTruthy();
+      within(promptForms[1]).queryByRole("button", { name: "Close all" })
+    ).toBeNull();
     expect(rendered.getAllByRole("button", { name: "Close all" })).toHaveLength(
-      2
+      1
     );
   });
 
@@ -81,7 +86,7 @@ describe("PendingPrompts", () => {
     );
     const rendered = RenderPrompts(promptsAndIds);
 
-    fireEvent.click(rendered.getAllByRole("button", { name: "Close all" })[0]);
+    fireEvent.click(rendered.getByRole("button", { name: "Close all" }));
 
     expect(rendered.removePrompt.mock.calls).toEqual([
       ["first-prompt"],
@@ -130,6 +135,40 @@ describe("PendingPrompts", () => {
     );
 
     expect(rendered.queryByRole("button", { name: "Close all" })).toBeNull();
+  });
+
+  test("informational prompts rely on the shared Close control", () => {
+    const spell = { ...Spell.Default(), Name: "Fireball" };
+    const spellListing = new Listing<Spell>(
+      {
+        Id: spell.Id,
+        Link: "",
+        Name: spell.Name,
+        SearchHint: "",
+        FilterDimensions: {},
+        Path: "",
+        LastUpdateMs: 0
+      },
+      "localStorage",
+      spell
+    );
+    const rendered = RenderPrompts([
+      [
+        CombatStatsPrompt({
+          combatants: [],
+          elapsedRounds: 1,
+          elapsedSeconds: 1
+        }),
+        "combat-stats"
+      ],
+      [ConditionReferencePrompt("Prone")!, "condition-reference"],
+      [SpellPrompt(spellListing), "spell-reference"]
+    ]);
+
+    expect(
+      rendered.container.querySelectorAll("button[type='submit']")
+    ).toHaveLength(0);
+    expect(rendered.getAllByRole("button", { name: "Close" })).toHaveLength(3);
   });
 
   test("clears Link Initiative state through the shared Close control", () => {

@@ -3,11 +3,10 @@ import { Conditions2025 } from "../Rules/Conditions";
 import * as _ from "lodash";
 
 import { PromptProps } from "./PendingPrompts";
-import { SubmitButton } from "../Components/Button";
 
 export function ConditionReferencePrompt(
   conditionName: string
-): PromptProps<{}> | null {
+): PromptProps<object> | null {
   const casedConditionName = _.startCase(conditionName);
   const conditionReference = Conditions2025[casedConditionName];
   if (conditionReference === undefined) {
@@ -24,7 +23,6 @@ export function ConditionReferencePrompt(
             }}
           />
         </div>
-        <SubmitButton />
       </div>
     ),
     autoFocusSelector: "button",

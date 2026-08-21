@@ -112,11 +112,11 @@ export class PendingPrompts extends React.Component<PendingPromptsProps> {
   public render() {
     const emptyClassName =
       this.props.promptsAndIds.length == 0 ? " empty" : " tutorial-focus";
+    const canCloseAll = this.props.promptsAndIds.length > 1;
     return (
       <div className={"prompts" + emptyClassName}>
-        {this.props.promptsAndIds.map(promptAndId => {
+        {this.props.promptsAndIds.map((promptAndId, promptIndex) => {
           const [prompt, promptId] = promptAndId;
-          const canCloseAll = this.props.promptsAndIds.length > 1;
 
           return (
             <Prompt
@@ -132,7 +132,11 @@ export class PendingPrompts extends React.Component<PendingPromptsProps> {
               onCancel={() => {
                 this.dismissPrompt(prompt, promptId);
               }}
-              onCancelAll={canCloseAll ? this.dismissAllPrompts : undefined}
+              onCancelAll={
+                promptIndex == 0 && canCloseAll
+                  ? this.dismissAllPrompts
+                  : undefined
+              }
             />
           );
         })}

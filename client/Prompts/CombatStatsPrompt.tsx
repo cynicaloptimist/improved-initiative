@@ -1,11 +1,12 @@
 import * as React from "react";
 
 import { CombatStats } from "../../common/CombatStats";
-import { SubmitButton } from "../Components/Button";
 import { GetTimerReadout } from "../Widgets/GetTimerReadout";
 import { PromptProps } from "./PendingPrompts";
 
-export const CombatStatsPrompt = (stats: CombatStats): PromptProps<{}> => {
+export const CombatStatsPrompt = (
+  stats: CombatStats
+): PromptProps<object> => {
   const totalPlayerTime = stats.combatants
     .map(c => c.elapsedSeconds)
     .reduce((total, curr) => total + curr, 0);
@@ -22,7 +23,6 @@ export const CombatStatsPrompt = (stats: CombatStats): PromptProps<{}> => {
       <div className="combat-stats">
         <div className="combat-stats__header">
           <h4>Post-Combat Breakdown</h4>
-          <SubmitButton />
         </div>
         <ul className={"playercharacters"}>
           {stats.combatants.map((c, index) => (
