@@ -18,7 +18,6 @@ import { EncounterCommander } from "./Commands/EncounterCommander";
 import { LibrariesCommander } from "./Commands/LibrariesCommander";
 import { PrivacyPolicyPrompt } from "./Prompts/PrivacyPolicyPrompt";
 import { PromptQueue } from "./Commands/PromptQueue";
-import { SubmitButton } from "./Components/Button";
 import { Encounter } from "./Encounter/Encounter";
 import { UpdateLegacyEncounterState } from "./Encounter/UpdateLegacySavedEncounter";
 import { env } from "./Environment";
@@ -260,7 +259,6 @@ export class TrackerViewModel {
               Patreon
             </a>
             {" to use the D&D Beyond Importer."}
-            <SubmitButton />
           </span>
         )
       });
@@ -289,7 +287,6 @@ export class TrackerViewModel {
               Epic Initiative
             </a>
             {" Patrons."}
-            <SubmitButton />
           </span>
         )
       });

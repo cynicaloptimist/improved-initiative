@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Spell } from "../../common/Spell";
-import { SubmitButton } from "../Components/Button";
 import { SpellDetails } from "../Library/Components/SpellDetails";
 import { PromptProps } from "./PendingPrompts";
 import { Listing } from "../Library/Listing";
@@ -30,7 +29,6 @@ function SpellPromptComponent(props: {
           <h3>{props.spellListing.Meta().Name}</h3>
           <p>Error loading spell: {error}</p>
         </div>
-        <SubmitButton />
       </div>
     );
   }
@@ -42,7 +40,6 @@ function SpellPromptComponent(props: {
           <h3>{props.spellListing.Meta().Name}</h3>
           <p>Loading...</p>
         </div>
-        <SubmitButton />
       </div>
     );
   }
@@ -50,9 +47,6 @@ function SpellPromptComponent(props: {
   return (
     <div className="prompt-spell">
       <SpellDetails Spell={spell} />
-      <SubmitButton />
     </div>
   );
 }
-
-
