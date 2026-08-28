@@ -36,7 +36,7 @@
   }
 
   button.prompt__dismiss {
-    .colors(var(--text), var(--input-bg), var(--dark-border));
+    .colors(var(--text-face), var(--input-bg), var(--dark-border));
     min-width: 1.3rem;
     min-height: 1.3rem;
     margin: 0;
@@ -266,6 +266,95 @@
   }
 }
 
+.prompt--dice-roll-result {
+  border-left: @small-spacer solid var(--red);
+}
+
+.p-roll-dice-result {
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: flex-start;
+  gap: @large-spacer;
+}
+
+.p-roll-dice-result__score {
+  .colors(var(--text-inverted), var(--red), var(--red));
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 5rem;
+  min-height: 3rem;
+  padding: @medium-spacer;
+  white-space: nowrap;
+}
+
+.p-roll-dice-result__score-separator {
+  margin: 0 @small-spacer;
+}
+
+.p-roll-dice-result__score-die {
+  font-size: 1.1rem;
+}
+
+.p-roll-dice-result__total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.p-roll-dice-result__details {
+  flex-grow: 1;
+  gap: @small-spacer;
+  max-width: 28rem;
+}
+
+.p-roll-dice-result__expression {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.p-roll-dice-result__rolls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: @small-spacer;
+  width: 100%;
+}
+
+.p-roll-dice-result__roll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 @small-spacer;
+  border: 1px solid var(--dark-border);
+  background-color: var(--zebra-white);
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-right: @small-spacer;
+}
+
+.p-roll-dice-result__roll--max {
+  .colors(var(--text-inverted), var(--red), var(--red));
+}
+
+.p-roll-dice-result__roll--min {
+  border-color: var(--red);
+  color: var(--red);
+  background-color: color-mix(in srgb, var(--red) 10%, var(--input-bg));
+}
+
+.p-roll-dice-result__calculation {
+  font-weight: bold;
+  margin-left: @small-spacer;
+  white-space: nowrap;
+}
+
+button.p-roll-dice-result__reroll {
+  margin-left: auto
+}
+
 .p-standard-prompt.p-quick-add {
   .p-standard-prompt__fields {
     flex-flow: row wrap;
@@ -300,9 +389,6 @@
   }
 }
 
-.s-roll-max {
-  font-weight: bold;
-}
 
 .p-update-notes {
   flex-direction: row;

@@ -1,5 +1,6 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
+import { clsx } from "clsx";
 import { Button } from "../Components/Button";
 
 export interface PromptProps<T extends object> {
@@ -8,6 +9,7 @@ export interface PromptProps<T extends object> {
   children: React.ReactChild;
   autoFocusSelector: string;
   initialValues: T;
+  className?: string;
 }
 
 class Prompt<T extends object> extends React.Component<
@@ -29,7 +31,7 @@ class Prompt<T extends object> extends React.Component<
         {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
-            className="prompt"
+            className={clsx("prompt", this.props.className)}
             onSubmit={props.handleSubmit}
             onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
               if (e.key == "Escape") {

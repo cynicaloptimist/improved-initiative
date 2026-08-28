@@ -1,5 +1,9 @@
+import { fireEvent, render, within } from "@testing-library/react";
+import * as React from "react";
+
 import { StatBlock } from "../../common/StatBlock";
 import { Encounter } from "../Encounter/Encounter";
+import { PendingPrompts } from "../Prompts/PendingPrompts";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { TrackerViewModel } from "../TrackerViewModel";
@@ -92,5 +96,43 @@ describe("CombatantCommander", () => {
     expect(combatantCommander.SelectedCombatants()[0]).toBe(
       trackerViewModel.CombatantViewModels()[1]
     );
+  });
+
+  test("rerolls the original dice expression", () => {
+    const random = jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0.01)
+      .mockReturnValueOnce(0.2)
+      .mockReturnValue(1);
+
+    try {
+      combatantCommander.RollDice("2d6 + 3");
+      const rendered = render(
+        React.createElement(PendingPrompts, {
+          promptsAndIds: trackerViewModel.PromptQueue.GetPrompts(),
+          removePrompt: jest.fn()
+        })
+      );
+      const prompt =
+        rendered.container.querySelector<HTMLFormElement>("form.prompt")!;
+
+      expect(within(prompt).getByText("Rolled 2d6 + 3")).toBeTruthy();
+      expect(
+        Array.from(prompt.querySelectorAll(".p-roll-dice-result__roll")).map(
+          roll => roll.textContent
+        )
+      ).toEqual(["1", "2"]);
+
+      fireEvent.click(within(prompt).getByRole("button", { name: "Reroll" }));
+
+      expect(within(prompt).getByText("Rolled 2d6 + 3")).toBeTruthy();
+      expect(
+        Array.from(prompt.querySelectorAll(".p-roll-dice-result__roll")).map(
+          roll => roll.textContent
+        )
+      ).toEqual(["6", "6"]);
+    } finally {
+      random.mockRestore();
+    }
   });
 });
