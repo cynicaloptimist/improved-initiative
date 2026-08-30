@@ -148,7 +148,10 @@ export class TextEnricher {
           <span
             className="condition-reference"
             key={key}
-            onClick={() => this.referenceCondition(rawText)}
+            onClick={event => {
+              event.stopPropagation();
+              this.referenceCondition(rawText);
+            }}
           >
             {rawText}
           </span>
