@@ -23,6 +23,7 @@ import { AccountStatus } from "./user";
 import { configureOpen5eContent } from "./configureOpen5eContent";
 import { configureAffiliateRoutes } from "./configureAffiliateRoutes";
 import { configureImportRoutes } from "./configureImportRoutes";
+import { getBaseUrlError } from "./getBaseUrlError";
 
 const baseUrl = process.env.BASE_URL || "";
 const patreonClientId = process.env.PATREON_CLIENT_ID || "PATREON_CLIENT_ID";
@@ -83,10 +84,9 @@ export default async function (
     cacheMaxAge = 0;
   }
 
-  if (!process.env.BASE_URL?.length) {
-    console.error(
-      "BASE_URL environment variable is not set. Cannot start server."
-    );
+  const baseUrlError = getBaseUrlError(process.env.BASE_URL);
+  if (baseUrlError) {
+    console.error(baseUrlError);
     process.exit(1);
   }
 
