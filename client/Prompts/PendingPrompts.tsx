@@ -1,6 +1,5 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
-import { clsx } from "clsx";
 import { Button } from "../Components/Button";
 
 export interface PromptProps<T extends object> {
@@ -31,7 +30,9 @@ class Prompt<T extends object> extends React.Component<
         {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
-            className={clsx("prompt", this.props.className)}
+            className={`prompt${
+              this.props.className ? ` ${this.props.className}` : ""
+            }`}
             onSubmit={props.handleSubmit}
             onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
               if (e.key == "Escape") {

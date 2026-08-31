@@ -277,7 +277,7 @@
   gap: @large-spacer;
 }
 
-.p-roll-dice-result__score {
+.p-roll-dice-result__total {
   .colors(var(--text-inverted), var(--red), var(--red));
   flex-direction: row;
   align-items: center;
@@ -285,21 +285,10 @@
   min-width: 5rem;
   min-height: 3rem;
   padding: @medium-spacer;
-  white-space: nowrap;
-}
-
-.p-roll-dice-result__score-separator {
-  margin: 0 @small-spacer;
-}
-
-.p-roll-dice-result__score-die {
-  font-size: 1.1rem;
-}
-
-.p-roll-dice-result__total {
   font-size: 1.5rem;
   font-weight: bold;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .p-roll-dice-result__details {
@@ -352,7 +341,7 @@
 }
 
 button.p-roll-dice-result__reroll {
-  margin-left: auto
+  margin-left: auto;
 }
 
 .p-standard-prompt.p-quick-add {
@@ -388,7 +377,6 @@ button.p-roll-dice-result__reroll {
     list-style: none;
   }
 }
-
 
 .p-update-notes {
   flex-direction: row;

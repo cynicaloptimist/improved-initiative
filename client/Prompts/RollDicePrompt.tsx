@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import { Field } from "formik";
 import * as React from "react";
 
@@ -52,16 +51,15 @@ export const RollDicePrompt = (
 };
 
 const RollChip = ({ value, max }: { value: number; max: number }) => {
-  return (
-    <span
-      className={clsx("p-roll-dice-result__roll", {
-        "p-roll-dice-result__roll--min": value === 1,
-        "p-roll-dice-result__roll--max": value === max
-      })}
-    >
-      {value}
-    </span>
-  );
+  const classNames = ["p-roll-dice-result__roll"];
+  if (value === 1) {
+    classNames.push("p-roll-dice-result__roll--min");
+  }
+  if (value === max) {
+    classNames.push("p-roll-dice-result__roll--max");
+  }
+
+  return <span className={classNames.join(" ")}>{value}</span>;
 };
 
 const RollResultComponent = ({
@@ -74,17 +72,10 @@ const RollResultComponent = ({
   const [rollResult, setRollResult] = React.useState(initialResult);
   const normalizedExpression = `${rollResult.Rolls.length}d${rollResult.DieSize}${rollResult.ModifierText}`;
   const calculation = `${rollResult.ModifierText} = ${rollResult.Total}`.trim();
-  const dieIcon = rollResult.DieSize === 20 ? "dice-d20" : "dice";
 
   return (
     <div className="p-roll-dice-result">
-      <div className="p-roll-dice-result__score">
-        <span className={`p-roll-dice-result__score-die fas fa-${dieIcon}`} />
-        <span className="p-roll-dice-result__score-separator">:</span>
-        <span className="p-roll-dice-result__total">
-          {rollResult.Total}
-        </span>
-      </div>
+      <div className="p-roll-dice-result__total">{rollResult.Total}</div>
       <div className="p-roll-dice-result__details">
         <span className="p-roll-dice-result__expression">
           Rolled {normalizedExpression}
@@ -93,9 +84,7 @@ const RollResultComponent = ({
           {rollResult.Rolls.map((roll, index) => (
             <RollChip value={roll} max={rollResult.DieSize} key={index} />
           ))}
-          <span className="p-roll-dice-result__calculation">
-            {calculation}
-          </span>
+          <span className="p-roll-dice-result__calculation">{calculation}</span>
         </span>
       </div>
       <Button

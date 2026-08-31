@@ -86,25 +86,4 @@ describe("dice roll result prompt", () => {
       true
     );
   });
-
-  test("uses a d20 icon only for d20 rolls", () => {
-    const d20 = RenderRollResult(new RollResult([10], 0, 20));
-    const otherDie = RenderRollResult(new RollResult([4], 0, 8));
-
-    expect(
-      d20.container
-        .querySelector(".p-roll-dice-result__score-die")!
-        .classList.contains("fa-dice-d20")
-    ).toBe(true);
-    expect(
-      otherDie.container
-        .querySelector(".p-roll-dice-result__score-die")!
-        .classList.contains("fa-dice")
-    ).toBe(true);
-    expect(
-      otherDie.container
-        .querySelector(".p-roll-dice-result__score-die")!
-        .classList.contains("fa-dice-d20")
-    ).toBe(false);
-  });
 });
