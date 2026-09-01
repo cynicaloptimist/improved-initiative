@@ -26,6 +26,8 @@ describe("PlayerViewModel", () => {
     };
   });
 
+  afterEach(() => document.body.removeAttribute("id"));
+
   test("Loading the encounter populates combatants", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
@@ -41,6 +43,62 @@ describe("PlayerViewModel", () => {
     );
 
     expect(playerView.getByText("Test Combatant 1")).toBeTruthy();
+  });
+
+  test("Managed custom style selectors match Player View elements", () => {
+    encounter.AddCombatantFromStatBlock({
+      ...StatBlock.Default(),
+      Name: "Styled Combatant",
+      HP: { Value: 10, Notes: "" }
+    });
+    encounter.EncounterFlow.StartEncounter();
+
+    const settings = CurrentSettings();
+    settings.PlayerView.DisplayRoundCounter = true;
+    settings.PlayerView.CustomStyles = {
+      mainBackground: "#101010",
+      combatantBackground: "#202020",
+      combatantText: "#303030",
+      activeCombatantIndicator: "#404040",
+      headerBackground: "#505050",
+      headerText: "#606060",
+      backgroundUrl: "https://example.com/background.png",
+      font: "Custom Font"
+    };
+    document.body.id = "playerview";
+
+    const playerView = render(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+        settings={settings.PlayerView}
+      />
+    );
+
+    const managedStyles = playerView.container.querySelector("style");
+    const rules = Array.from(managedStyles.sheet.cssRules) as CSSStyleRule[];
+
+    rules.forEach(rule => {
+      rule.selectorText.split(",").forEach(selector => {
+        expect(document.querySelector(selector.trim())).toBeTruthy();
+      });
+    });
+
+    expect(
+      rules.some(
+        rule =>
+          rule.selectorText == "#playerview .combatant.active" &&
+          rule.style.getPropertyValue("border-left-color") == "#404040"
+      )
+    ).toBe(true);
+    expect(
+      rules.some(
+        rule =>
+          rule.selectorText ==
+            "#playerview .combatant--header, #playerview .combat-footer" &&
+          rule.style.getPropertyValue("color") == "#606060"
+      )
+    ).toBe(true);
   });
 
   test("Starting the encounter splashes combatant portraits when available", () => {
@@ -210,6 +268,6 @@ describe("Tag Suggestor", () => {
     );
     fireEvent.submit(playerView.container.querySelector("form.tag-suggestion"));
 
-    await waitFor(() => expect(suggestTag).toBeCalledTimes(1));
+    await waitFor(() => expect(suggestTag).toHaveBeenCalledTimes(1));
   });
 });

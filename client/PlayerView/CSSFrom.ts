@@ -37,7 +37,7 @@ export function CSSFrom(
   }
   if (customStyles.headerText) {
     declarations.push(
-      `.combatant--header, .combat-footer { color: ${customStyles.headerText}; }`
+      `#playerview .combatant--header, #playerview .combat-footer { color: ${customStyles.headerText}; }`
     );
   }
   if (customStyles.headerBackground) {
