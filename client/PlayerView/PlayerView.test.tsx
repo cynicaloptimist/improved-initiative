@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { TagState } from "../../common/CombatantState";
 import { StatBlock } from "../../common/StatBlock";
+import { Tag } from "../Combatant/Tag";
 import { Encounter } from "../Encounter/Encounter";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
@@ -41,6 +42,58 @@ describe("PlayerViewModel", () => {
     );
 
     expect(playerView.getByText("Test Combatant 1")).toBeTruthy();
+  });
+
+  test("Stable hooks expose visible combatant styling state", () => {
+    const combatant = addCombatantFromStatBlock(encounter, {
+      ...StatBlock.Default(),
+      Name: "Hook Sentinel",
+      HP: { Value: 10, Notes: "" }
+    });
+    combatant.Color("#123456");
+    combatant.Tags.push(new Tag("Concentrating", combatant, false));
+    encounter.EncounterFlow.StartEncounter();
+
+    const settings = CurrentSettings();
+    settings.PlayerView.DisplayCombatantColor = true;
+    const playerView = render(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+        settings={settings.PlayerView}
+      />
+    );
+
+    const combatantElement = playerView.container.querySelector(
+      '[data-ii-role="combatant"]'
+    ) as HTMLElement;
+    expect(combatantElement.dataset.iiHealth).toBe("healthy");
+    expect(
+      combatantElement.style.getPropertyValue(
+        "--ii-player-view-combatant-color"
+      )
+    ).toBe("#123456");
+
+    const tagElement = combatantElement.querySelector(
+      "[data-ii-tag]"
+    ) as HTMLElement;
+    expect(tagElement.getAttribute("data-ii-tag")).toBe("concentrating");
+    expect(tagElement.getAttribute("data-tag")).toBe("concentrating");
+
+    settings.PlayerView.DisplayCombatantColor = false;
+    playerView.rerender(
+      <PlayerView
+        {...playerViewProps}
+        encounterState={encounter.GetPlayerView()}
+        settings={settings.PlayerView}
+      />
+    );
+    expect(
+      combatantElement.style.getPropertyValue(
+        "--ii-player-view-combatant-color"
+      )
+    ).toBe("");
+    expect(combatantElement.querySelector(".combatant__color")).toBeNull();
   });
 
   test("Managed custom styles map to Player View theme properties", () => {

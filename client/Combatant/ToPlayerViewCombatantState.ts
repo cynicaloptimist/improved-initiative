@@ -1,4 +1,7 @@
-import { PlayerViewCombatantState } from "../../common/PlayerViewCombatantState";
+import {
+  PlayerViewCombatantState,
+  PlayerViewHealthState
+} from "../../common/PlayerViewCombatantState";
 import { HpVerbosityOption } from "../../common/PlayerViewSettings";
 import { env } from "../Environment";
 import { CurrentSettings } from "../Settings/Settings";
@@ -13,6 +16,7 @@ export function ToPlayerViewCombatantState(
     Id: combatant.Id,
     HPDisplay: GetHPDisplay(combatant),
     HPColor: GetHPColor(combatant),
+    HealthState: GetDisplayedHealthState(combatant),
     Initiative: combatant.Initiative(),
     IsPlayerCharacter: combatant.IsPlayerCharacter(),
     Tags: combatant
@@ -75,6 +79,31 @@ function GetHPColor(combatant: Combatant) {
   const green = Math.floor((currentHP / maxHP) * 170);
   const red = Math.floor(((maxHP - currentHP) / maxHP) * 170);
   return "rgb(" + red + "," + green + ",0)";
+}
+
+function GetDisplayedHealthState(
+  combatant: Combatant
+): PlayerViewHealthState | undefined {
+  const hpVerbosity = GetHPVerbosity(combatant);
+  if (
+    hpVerbosity == HpVerbosityOption.HideAll ||
+    hpVerbosity == HpVerbosityOption.DamageTaken
+  ) {
+    return undefined;
+  }
+
+  const currentHP = combatant.CurrentHP();
+  const maxHP = combatant.MaxHP();
+  if (currentHP <= 0) {
+    return "defeated";
+  }
+  if (currentHP < maxHP / 2) {
+    return "bloodied";
+  }
+  if (currentHP < maxHP) {
+    return "hurt";
+  }
+  return "healthy";
 }
 
 function GetHPVerbosity(combatant: Combatant): HpVerbosityOption {

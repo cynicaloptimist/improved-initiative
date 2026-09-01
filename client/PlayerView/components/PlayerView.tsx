@@ -72,7 +72,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
     const combatantNamesById = _.mapValues(combatantsById, c => c.Name);
 
     return (
-      <div className="c-player-view">
+      <div className="c-player-view" data-ii-role="player-view">
         <CustomStyles
           CustomCSS={this.props.settings.CustomCSS}
           CustomStyles={this.props.settings.CustomStyles}
@@ -111,7 +111,7 @@ export class PlayerView extends React.Component<PlayerViewProps, LocalState> {
           portraitColumnVisible={this.hasImages()}
           acColumnVisible={acColumnVisible}
         />
-        <ul className="combatants">
+        <ul className="combatants" data-ii-role="combatant-list">
           {this.props.encounterState.Combatants.map(combatant => (
             <PlayerViewCombatant
               showPortrait={this.showPortrait}

@@ -136,6 +136,14 @@ Do not rely on a detached hidden process without a PID file.
 - Keep changes scoped and incremental.
 - Use existing LESS styling conventions for now. Styled components may be a
   future direction, but do not introduce them without explicit confirmation.
+- Treat Player View `data-ii-*` styling hooks and `--ii-player-view-*` theme
+  properties as the public compatibility contract for premium custom CSS.
+  Update the browser coverage when changing that contract.
+- Do not expose hidden Player View combat information through styling hooks;
+  state attributes must respect the corresponding Player View visibility
+  setting.
+- Preserve `data-tag` as a legacy alias for the public `data-ii-tag` hook until
+  an explicit custom-CSS migration removes it.
 - Do not add new architectural elements, dependencies, build tools, databases,
   state-management systems, or frontend frameworks without explicit
   confirmation.

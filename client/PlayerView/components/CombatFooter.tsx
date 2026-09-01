@@ -19,12 +19,14 @@ export class CombatFooter extends React.Component<
 
   public render() {
     return (
-      <div className="combat-footer">
+      <div className="combat-footer" data-ii-role="footer">
         {this.props.timerVisible && (
-          <span className="turn-timer">{this.getTimerReadout()}</span>
+          <span className="turn-timer" data-ii-field="turn-timer">
+            {this.getTimerReadout()}
+          </span>
         )}
         {this.props.currentRound > 0 && (
-          <span className="round-counter">
+          <span className="round-counter" data-ii-field="round-counter">
             Current Round: {this.props.currentRound}
           </span>
         )}

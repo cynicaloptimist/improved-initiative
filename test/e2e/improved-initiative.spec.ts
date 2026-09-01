@@ -18,7 +18,9 @@ test("managed Player View styles apply and custom CSS can override them", async 
   page
 }) => {
   await seedPreferences(page, {
-    CustomCSS: ".combatant { color: rgb(1, 2, 3); }",
+    CustomCSS:
+      '[data-ii-role="combatant"][data-ii-health="healthy"] ' +
+      "{ color: rgb(1, 2, 3); }",
     CustomStyles: {
       mainBackground: "#101820",
       combatantBackground: "#202020",
@@ -41,8 +43,26 @@ test("managed Player View styles apply and custom CSS can override them", async 
   const playerPage = await playerContext.newPage();
   await playerPage.goto(`/p/${encounterId}`);
 
-  const activeCombatant = playerPage.locator("li.combatant.active");
+  await expect(
+    playerPage.locator('[data-ii-role="player-view"]')
+  ).toBeVisible();
+  await expect(
+    playerPage.locator('[data-ii-role="combatant-list"]')
+  ).toBeVisible();
+  const activeCombatant = playerPage.locator(
+    '[data-ii-role="combatant"][data-ii-state="active"]'
+  );
   await expect(activeCombatant).toContainText("Style Sentinel");
+  await expect(activeCombatant).toHaveAttribute(
+    "data-ii-kind",
+    "non-player-character"
+  );
+  await expect(activeCombatant).toHaveAttribute("data-ii-health", "healthy");
+  for (const field of ["initiative", "name", "hit-points", "tags"]) {
+    await expect(
+      activeCombatant.locator(`[data-ii-field="${field}"]`)
+    ).toBeVisible();
+  }
   await expect(activeCombatant).toHaveCSS(
     "background-color",
     "rgb(39, 39, 39)"
@@ -53,14 +73,12 @@ test("managed Player View styles apply and custom CSS can override them", async 
   );
   await expect(activeCombatant).toHaveCSS("color", "rgb(1, 2, 3)");
   await expect(activeCombatant).toHaveCSS("font-family", "Arial, sans-serif");
-  await expect(playerPage.locator(".combatant--header")).toHaveCSS(
-    "background-color",
-    "rgb(80, 96, 112)"
-  );
-  await expect(playerPage.locator(".combatant--header")).toHaveCSS(
-    "color",
-    "rgb(240, 241, 242)"
-  );
+  await expect(
+    playerPage.locator('[data-ii-role="combatant-header"]')
+  ).toHaveCSS("background-color", "rgb(80, 96, 112)");
+  await expect(
+    playerPage.locator('[data-ii-role="combatant-header"]')
+  ).toHaveCSS("color", "rgb(240, 241, 242)");
   await expect(playerPage.locator("body")).toHaveCSS(
     "background-color",
     "rgb(16, 24, 32)"
@@ -239,9 +257,12 @@ async function activeTrackerCombatantName(page: Page) {
 }
 
 function playerCombatant(page: Page, name: string) {
-  return page.locator("li.combatant").filter({ hasText: name });
+  return page.locator('[data-ii-role="combatant"]').filter({ hasText: name });
 }
 
 function activePlayerCombatant(page: Page) {
-  return page.locator("li.combatant.active .combatant__name");
+  return page.locator(
+    '[data-ii-role="combatant"][data-ii-state="active"] ' +
+      '[data-ii-field="name"]'
+  );
 }

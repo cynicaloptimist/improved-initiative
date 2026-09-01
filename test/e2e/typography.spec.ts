@@ -17,6 +17,7 @@ test("heading typography does not leak into nested tooltip content", async ({
             data-typography-test="tooltip-content"
           >
             Tooltip content
+            <code data-typography-test="code">[data-ii-role]</code>
           </div>
         </div>
       </div>
@@ -34,4 +35,8 @@ test("heading typography does not leak into nested tooltip content", async ({
   await expect(
     page.locator('[data-typography-test="tooltip-content"]')
   ).toHaveCSS("font-family", "Roboto, sans-serif");
+  await expect(page.locator('[data-typography-test="code"]')).toHaveCSS(
+    "font-family",
+    '"Courier New", Courier, monospace'
+  );
 });
