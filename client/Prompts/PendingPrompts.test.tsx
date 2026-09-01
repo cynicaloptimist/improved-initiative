@@ -3,10 +3,12 @@ import * as React from "react";
 
 import { Spell } from "../../common/Spell";
 import { Listing } from "../Library/Listing";
+import { RollResult } from "../Rules/RollResult";
 import { CombatStatsPrompt } from "./CombatStatsPrompt";
 import { ConditionReferencePrompt } from "./ConditionReferencePrompt";
 import { LinkInitiativePrompt } from "./LinkInitiativePrompt";
 import { PendingPrompts, PromptProps } from "./PendingPrompts";
+import { ShowDiceRollResultPrompt } from "./RollDicePrompt";
 import { SpellPrompt } from "./SpellPrompt";
 
 type DismissiblePromptProps = PromptProps<Record<string, never>> & {
@@ -40,7 +42,55 @@ function RenderPrompts(
   };
 }
 
+function ReadDiceResult(prompt: HTMLFormElement) {
+  return {
+    expression: within(prompt).getByText(/^Rolled /).textContent,
+    rolls: Array.from(
+      prompt.querySelectorAll<HTMLElement>(".p-roll-dice-result__roll")
+    ).map(roll => roll.textContent),
+    calculation: prompt.querySelector<HTMLElement>(
+      ".p-roll-dice-result__calculation"
+    )!.textContent,
+    total: prompt.querySelector<HTMLElement>(".p-roll-dice-result__total")!
+      .textContent
+  };
+}
+
 describe("PendingPrompts", () => {
+  test("adds the prompt-specific class name to the prompt form", () => {
+    const rendered = RenderPrompts([
+      [MockPrompt({ className: "prompt--custom" }), "custom-prompt"]
+    ]);
+
+    const promptForm = rendered.container.querySelector("form")!;
+
+    expect(promptForm.classList.contains("prompt")).toBe(true);
+    expect(promptForm.classList.contains("prompt--custom")).toBe(true);
+  });
+
+  test("adds several prompt-specific class names to the prompt form", () => {
+    const rendered = RenderPrompts([
+      [
+        MockPrompt({ className: "prompt--custom prompt--custom-2" }),
+        "custom-prompt"
+      ]
+    ]);
+
+    const promptForm = rendered.container.querySelector("form")!;
+
+    expect(promptForm.classList.contains("prompt")).toBe(true);
+    expect(promptForm.classList.contains("prompt--custom")).toBe(true);
+    expect(promptForm.classList.contains("prompt--custom-2")).toBe(true);
+  });
+
+  test("works without prompt-specific class names", () => {
+    const rendered = RenderPrompts([[MockPrompt(), "custom-prompt"]]);
+
+    const promptForm = rendered.container.querySelector("form")!;
+
+    expect(promptForm.classList.contains("prompt")).toBe(true);
+  });
+
   test("closes one prompt without submitting it", () => {
     const prompt = MockPrompt();
     const rendered = RenderPrompts([[prompt, "first-prompt"]]);
@@ -169,6 +219,54 @@ describe("PendingPrompts", () => {
       rendered.container.querySelectorAll("button[type='submit']")
     ).toHaveLength(0);
     expect(rendered.getAllByRole("button", { name: "Close" })).toHaveLength(3);
+  });
+
+  test("rerolls only the selected dice result prompt", () => {
+    const rendered = RenderPrompts([
+      [
+        ShowDiceRollResultPrompt(
+          new RollResult([2], 0, 6),
+          () => new RollResult([5], 0, 6)
+        ),
+        "first-dice-result"
+      ],
+      [
+        ShowDiceRollResultPrompt(
+          new RollResult([2, 3], 1, 8),
+          () => new RollResult([7, 8], 1, 8)
+        ),
+        "second-dice-result"
+      ],
+      [
+        ShowDiceRollResultPrompt(
+          new RollResult([4, 5, 6], -2, 10),
+          () => new RollResult([8, 9, 10], -2, 10)
+        ),
+        "third-dice-result"
+      ]
+    ]);
+    const promptForms = Array.from(
+      rendered.container.querySelectorAll<HTMLFormElement>("form.prompt")
+    );
+    const before = promptForms.map(ReadDiceResult);
+
+    fireEvent.click(
+      within(promptForms[1]).getByRole("button", { name: "Reroll" })
+    );
+
+    const rerolledPromptForms = Array.from(
+      rendered.container.querySelectorAll<HTMLFormElement>("form.prompt")
+    );
+    const after = rerolledPromptForms.map(ReadDiceResult);
+
+    expect(after[0]).toEqual(before[0]);
+    expect(after[1]).toEqual({
+      expression: "Rolled 2d8 + 1",
+      rolls: ["7", "8"],
+      calculation: "+ 1 = 16",
+      total: "16"
+    });
+    expect(after[2]).toEqual(before[2]);
   });
 
   test("clears Link Initiative state through the shared Close control", () => {

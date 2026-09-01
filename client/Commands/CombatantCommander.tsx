@@ -19,7 +19,7 @@ import { AcceptTagPrompt } from "../Prompts/AcceptTagPrompt";
 import { ApplyDamagePrompt } from "../Prompts/ApplyDamagePrompt";
 import { ApplyHealingPrompt } from "../Prompts/ApplyHealingPrompt";
 import { ConcentrationPrompt } from "../Prompts/ConcentrationPrompt";
-import { ShowDiceRollPrompt } from "../Prompts/RollDicePrompt";
+import { ShowDiceRollResultPrompt } from "../Prompts/RollDicePrompt";
 import { TagPrompt } from "../Prompts/TagPrompt";
 import { UpdateNotesPrompt } from "../Prompts/UpdateNotesPrompt";
 import { ApplyTemporaryHPPrompt } from "../Prompts/ApplyTemporaryHPPrompt";
@@ -510,15 +510,24 @@ export class CombatantCommander {
     this.tracker.PromptQueue.Add(prompt);
   };
 
-  public RollDice = (diceExpression: string) => {
+  private handleDiceRoll = (diceExpression: string): RollResult => {
     const diceRoll = Dice.RollDiceExpression(diceExpression);
     this.latestRoll = diceRoll;
-    const prompt = ShowDiceRollPrompt(diceExpression, diceRoll);
 
     Metrics.TrackEvent(Metrics.Event.DiceRolled, {
       expression: diceExpression,
-      result: diceRoll.FormattedString
+      result: diceRoll.ResultString
     });
+
+    return diceRoll;
+  };
+
+  public RollDice = (diceExpression: string) => {
+    const prompt = ShowDiceRollResultPrompt(
+      this.handleDiceRoll(diceExpression),
+      () => this.handleDiceRoll(diceExpression)
+    );
+
     this.tracker.PromptQueue.Add(prompt);
   };
 
