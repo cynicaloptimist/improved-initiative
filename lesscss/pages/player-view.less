@@ -13,7 +13,9 @@
 #playerview {
   margin: 0;
   font-size: 20px;
+}
 
+:where(#playerview) {
   .combatant {
     height: unset;
     display: flex;
@@ -71,7 +73,7 @@
     }
   }
 
-  .combatant__header .combatant__tags {
+  .combatant--header .combatant__tags {
     text-align: center;
   }
 
@@ -182,7 +184,7 @@
     flex-basis: 100%;
   }
 
-  /* Add Animation */
+  // Add animation
   .combatant-portrait__image,
   .combatant-portrait__caption {
     animation-name: zoom;
