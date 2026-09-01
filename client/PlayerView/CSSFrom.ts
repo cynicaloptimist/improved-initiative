@@ -32,7 +32,7 @@ export function CSSFrom(
   }
   if (customStyles.activeCombatantIndicator) {
     declarations.push(
-      `.combatant.active { border-color: ${customStyles.activeCombatantIndicator} }`
+      `#playerview .combatant.active { border-left-color: ${customStyles.activeCombatantIndicator} }`
     );
   }
   if (customStyles.headerText) {
