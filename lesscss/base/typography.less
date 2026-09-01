@@ -17,7 +17,11 @@ h3,
 h4 {
   font-family: @font-family-headers;
   color: var(--text-header);
-  * {
+
+  // The base stylesheet assigns the body font directly to every element, so
+  // heading children need an override. Keep it shallow so nested UI such as
+  // interactive tooltips can use the body font.
+  > * {
     font-family: @font-family-headers;
   }
 }
