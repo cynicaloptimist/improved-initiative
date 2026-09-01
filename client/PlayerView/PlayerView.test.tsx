@@ -26,8 +26,6 @@ describe("PlayerViewModel", () => {
     };
   });
 
-  afterEach(() => document.body.removeAttribute("id"));
-
   test("Loading the encounter populates combatants", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
@@ -45,7 +43,7 @@ describe("PlayerViewModel", () => {
     expect(playerView.getByText("Test Combatant 1")).toBeTruthy();
   });
 
-  test("Managed custom style selectors match Player View elements", () => {
+  test("Managed custom styles map to Player View theme properties", () => {
     encounter.AddCombatantFromStatBlock({
       ...StatBlock.Default(),
       Name: "Styled Combatant",
@@ -54,7 +52,6 @@ describe("PlayerViewModel", () => {
     encounter.EncounterFlow.StartEncounter();
 
     const settings = CurrentSettings();
-    settings.PlayerView.DisplayRoundCounter = true;
     settings.PlayerView.CustomStyles = {
       mainBackground: "#101010",
       combatantBackground: "#202020",
@@ -65,8 +62,6 @@ describe("PlayerViewModel", () => {
       backgroundUrl: "https://example.com/background.png",
       font: "Custom Font"
     };
-    document.body.id = "playerview";
-
     const playerView = render(
       <PlayerView
         {...playerViewProps}
@@ -84,21 +79,43 @@ describe("PlayerViewModel", () => {
       });
     });
 
+    const themeRule = rules.find(rule => rule.selectorText == ":root")!;
     expect(
-      rules.some(
-        rule =>
-          rule.selectorText == "#playerview .combatant.active" &&
-          rule.style.getPropertyValue("border-left-color") == "#404040"
-      )
-    ).toBe(true);
+      themeRule.style.getPropertyValue("--ii-player-view-main-background")
+    ).toBe("#101010");
     expect(
-      rules.some(
-        rule =>
-          rule.selectorText ==
-            "#playerview .combatant--header, #playerview .combat-footer" &&
-          rule.style.getPropertyValue("color") == "#606060"
+      themeRule.style.getPropertyValue("--ii-player-view-background-image")
+    ).toBe("url(https://example.com/background.png)");
+    expect(
+      themeRule.style.getPropertyValue("--ii-player-view-combatant-background")
+    ).toBe("#202020");
+    expect(
+      themeRule.style.getPropertyValue(
+        "--ii-player-view-combatant-zebra-background"
       )
-    ).toBe(true);
+    ).toBe("hsl(0, 0%, 13.8%)");
+    expect(
+      themeRule.style.getPropertyValue(
+        "--ii-player-view-active-combatant-background"
+      )
+    ).toBe("hsl(0, 0%, 15.1%)");
+    expect(
+      themeRule.style.getPropertyValue("--ii-player-view-combatant-text")
+    ).toBe("#303030");
+    expect(
+      themeRule.style.getPropertyValue(
+        "--ii-player-view-active-combatant-indicator"
+      )
+    ).toBe("#404040");
+    expect(
+      themeRule.style.getPropertyValue("--ii-player-view-header-background")
+    ).toBe("#505050");
+    expect(
+      themeRule.style.getPropertyValue("--ii-player-view-header-text")
+    ).toBe("#606060");
+    expect(
+      themeRule.style.getPropertyValue("--ii-player-view-font-family")
+    ).toBe('"Custom Font", sans-serif');
   });
 
   test("Starting the encounter splashes combatant portraits when available", () => {

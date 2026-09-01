@@ -5,9 +5,11 @@ export function CSSFrom(
   customStyles: PlayerViewCustomStyles,
   temporaryBackgroundImageUrl?: string
 ): string {
-  const declarations: string[] = [];
+  const customProperties: string[] = [];
   if (customStyles.combatantText) {
-    declarations.push(`li.combatant { color: ${customStyles.combatantText}; }`);
+    customProperties.push(
+      `--ii-player-view-combatant-text: ${customStyles.combatantText};`
+    );
   }
   if (customStyles.combatantBackground) {
     const baseColor = Color(customStyles.combatantBackground);
@@ -20,48 +22,52 @@ export function CSSFrom(
       zebraColor = baseColor.darken(0.1).string();
       activeColor = baseColor.darken(0.2).string();
     }
-    declarations.push(
-      `.combatant { background-color: ${customStyles.combatantBackground}; }`
+    customProperties.push(
+      `--ii-player-view-combatant-background: ${customStyles.combatantBackground};`
     );
-    declarations.push(
-      `.combatant:nth-child(2n-1) { background-color: ${zebraColor}; }`
+    customProperties.push(
+      `--ii-player-view-combatant-zebra-background: ${zebraColor};`
     );
-    declarations.push(
-      `.combatant.active { background-color: ${activeColor}; }`
+    customProperties.push(
+      `--ii-player-view-active-combatant-background: ${activeColor};`
     );
   }
   if (customStyles.activeCombatantIndicator) {
-    declarations.push(
-      `#playerview .combatant.active { border-left-color: ${customStyles.activeCombatantIndicator} }`
+    customProperties.push(
+      `--ii-player-view-active-combatant-indicator: ${customStyles.activeCombatantIndicator};`
     );
   }
   if (customStyles.headerText) {
-    declarations.push(
-      `#playerview .combatant--header, #playerview .combat-footer { color: ${customStyles.headerText}; }`
+    customProperties.push(
+      `--ii-player-view-header-text: ${customStyles.headerText};`
     );
   }
   if (customStyles.headerBackground) {
-    declarations.push(
-      `.combatant--header, .combat-footer { background-color: ${customStyles.headerBackground}; border-color: ${customStyles.headerBackground} }`
+    customProperties.push(
+      `--ii-player-view-header-background: ${customStyles.headerBackground};`
     );
   }
   if (customStyles.mainBackground) {
-    declarations.push(
-      `#playerview { background-color: ${customStyles.mainBackground}; }`
+    customProperties.push(
+      `--ii-player-view-main-background: ${customStyles.mainBackground};`
     );
-    if (!customStyles.backgroundUrl) {
-      declarations.push(`#playerview { background-image: none; }`);
-    }
   }
-  if (temporaryBackgroundImageUrl || customStyles.backgroundUrl) {
-    declarations.push(
-      `#playerview { background-image: url(${
-        temporaryBackgroundImageUrl || customStyles.backgroundUrl
-      }); }`
+  const backgroundImageUrl =
+    temporaryBackgroundImageUrl || customStyles.backgroundUrl;
+  if (backgroundImageUrl) {
+    customProperties.push(
+      `--ii-player-view-background-image: url(${backgroundImageUrl});`
     );
+  } else if (customStyles.mainBackground) {
+    customProperties.push("--ii-player-view-background-image: none;");
   }
   if (customStyles.font) {
-    declarations.push(`* { font-family: "${customStyles.font}", sans-serif; }`);
+    customProperties.push(
+      `--ii-player-view-font-family: "${customStyles.font}", sans-serif;`
+    );
   }
-  return declarations.join(" ");
+  if (customProperties.length == 0) {
+    return "";
+  }
+  return `:root { ${customProperties.join(" ")} }`;
 }
