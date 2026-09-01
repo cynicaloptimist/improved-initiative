@@ -14,6 +14,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-typescript": "^7.22.15",
+    "@playwright/test": "^1.62.1",
     "@types/awesomplete": "^1.1.11",
     "@types/color": "^3.0.4",
     "@types/enzyme": "^3.10.13",
@@ -115,6 +116,7 @@
     "start": "node server/server.js",
     "clean": "git clean -f -x -e node_modules/",
     "test": "jest --projects client/jest.config.js server/jest.config.js --runInBand",
+    "test:e2e": "grunt build_min && playwright test",
     "lint": "eslint . --ext .ts,.tsx",
     "lint-and-fix": "eslint . --ext .ts,.tsx --fix",
     "copy-fonts": "cp -r ./node_modules/@fortawesome/fontawesome-free/webfonts/ ./public/webfonts/"

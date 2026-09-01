@@ -243,6 +243,8 @@ export function useLibrary<T extends Listable>(
         if (storedListables.length > 0) {
           const listings = storedListables.map(makeListing);
           AddListings(listings, "localAsync");
+        } else {
+          callbacks.signalLoadComplete?.("localAsync");
         }
       }
     );

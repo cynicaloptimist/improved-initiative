@@ -21,3 +21,5 @@ public/webfonts/*
 .idea
 .codex/
 .codex-runtime/
+playwright-report/
+test-results/
