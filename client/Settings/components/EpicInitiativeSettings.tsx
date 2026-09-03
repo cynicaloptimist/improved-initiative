@@ -63,27 +63,42 @@ export function EpicInitiativeSettings() {
         <Field name="PlayerView.CustomStyles.backgroundUrl" />
       </div>
 
-      <h4>
-        Additional Player View CSS <strong>(experimental)</strong>
+      <div className="full-width-row">
+        <h4>Additional Player View CSS</h4>
         <Info
           tippyProps={{
             interactive: true,
             placement: "bottom"
           }}
         >
-          <span>
-            Cascading Style Sheets (CSS) is a web technology used to apply
-            visual styles to web pages. You can override the CSS used in the
-            Player View with your own.{" "}
-            <a
-              href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps"
-              target="_blank"
-            >
-              Learn yourself some CSS.
-            </a>
-          </span>
+          <>
+            <p>
+              Cascading Style Sheets (CSS) is a web technology used to apply
+              visual styles to web pages. You can override the CSS used in the
+              Player View with your own.
+            </p>
+            <p>
+              Stable styling hooks include{" "}
+              <code>[data-ii-role="combatant"]</code>,{" "}
+              <code>[data-ii-state="active"]</code>, and{" "}
+              <code>[data-ii-field="name"]</code>. Target visible combat state
+              with <code>[data-ii-health="bloodied"]</code> or{" "}
+              <code>[data-ii-tag="concentrating"]</code>, and reuse a visible
+              combatant color with{" "}
+              <code>var(--ii-player-view-combatant-color)</code>.{" "}
+              <p>
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps"
+                  target="_blank"
+                >
+                  More on CSS
+                </a>
+              </p>
+            </p>
+          </>
         </Info>
-      </h4>
+      </div>
+
       <Field component="textarea" rows={10} name="PlayerView.CustomCSS" />
       <StatBlockCustomFields />
     </div>

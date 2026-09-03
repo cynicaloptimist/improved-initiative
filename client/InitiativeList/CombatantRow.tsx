@@ -213,32 +213,26 @@ export function CombatantRow(props: CombatantRowProps) {
   );
 }
 
-function ReactionIndicator(props: { combatantState: CombatantState }) {
+function ReactionIndicator({
+  combatantState
+}: {
+  combatantState: CombatantState;
+}) {
   const commandContext = React.useContext(CommandContext);
+  const toggleReaction = (event: React.MouseEvent<HTMLSpanElement>) => {
+    event.stopPropagation();
+    commandContext.ToggleCombatantSpentReaction(combatantState.Id);
+  };
+  const icon = combatantState.ReactionsSpent ? "minus" : "reply";
 
-  if (!props.combatantState.ReactionsSpent) {
-    return (
-      <Tippy content="Reaction">
-        <span
-          className="combatant__reaction-icon fas fa-reply"
-          onClick={() =>
-            commandContext.ToggleCombatantSpentReaction(props.combatantState.Id)
-          }
-        />
-      </Tippy>
-    );
-  } else {
-    return (
-      <Tippy content="Reaction">
-        <span
-          className="combatant__reaction-icon fas fa-minus"
-          onClick={() =>
-            commandContext.ToggleCombatantSpentReaction(props.combatantState.Id)
-          }
-        />
-      </Tippy>
-    );
-  }
+  return (
+    <Tippy content="Reaction">
+      <span
+        className={`combatant__reaction-icon fas fa-${icon}`}
+        onClick={toggleReaction}
+      />
+    </Tippy>
+  );
 }
 
 function CombatantColorPicker(props: { combatantState: CombatantState }) {
@@ -303,7 +297,10 @@ function CommandButton(props: { command: Command }) {
         className={
           "combatant__command-button fa-clickable fa-" + fontAwesomeIcon
         }
-        onClick={command.ActionBinding}
+        onClick={event => {
+          event.stopPropagation();
+          command.ActionBinding();
+        }}
         aria-label={command.Description}
       ></button>
     </Tippy>

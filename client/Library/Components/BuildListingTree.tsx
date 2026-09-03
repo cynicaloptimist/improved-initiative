@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { Listing } from "../Listing";
+import { RenameResult } from "../RenameResult";
 import { Folder } from "./Folder";
 
 export type ListingGroup = {
@@ -19,6 +20,12 @@ type FolderModel = {
   subFoldersByKey: Record<string, FolderModel>;
 };
 
+/** Renames the folder identified by its complete slash-delimited path. */
+export type RenameFolder = (
+  path: string,
+  newName: string
+) => Promise<RenameResult>;
+
 export function BuildListingTree<T extends Listable>(
   buildListingComponent: (
     listing: Listing<T>,
@@ -26,7 +33,8 @@ export function BuildListingTree<T extends Listable>(
     array: Listing<T>[]
   ) => JSX.Element,
   listingGroup: ListingGroup,
-  listings: Listing<T>[]
+  listings: Listing<T>[],
+  onRenameFolder?: RenameFolder
 ): JSX.Element[] {
   const rootListingComponents: JSX.Element[] = [];
 
@@ -51,7 +59,9 @@ export function BuildListingTree<T extends Listable>(
 
   const folderComponents = buildFolderComponents<T>(
     foldersByKey,
-    buildListingComponent
+    buildListingComponent,
+    onRenameFolder,
+    ""
   );
 
   return folderComponents.concat(rootListingComponents);
@@ -63,16 +73,31 @@ function buildFolderComponents<T extends Listable>(
     listing: Listing<T>,
     index: number,
     array: Listing<T>[]
-  ) => JSX.Element
+  ) => JSX.Element,
+  onRenameFolder: RenameFolder | undefined,
+  parentPath: string
 ) {
   return Object.keys(foldersByKey)
     .sort()
     .map(key => {
       const folder = foldersByKey[key];
+      // Folder labels contain only one segment, while rename commands need the
+      // complete path so the correct nested subtree can be updated.
+      const path = parentPath ? `${parentPath}/${key}` : key;
       const listingComponents = folder.listings.map(buildListingComponent);
       return (
-        <Folder key={key} name={folder.label}>
-          {buildFolderComponents(folder.subFoldersByKey, buildListingComponent)}
+        <Folder
+          key={key}
+          name={folder.label}
+          path={path}
+          onRename={onRenameFolder}
+        >
+          {buildFolderComponents(
+            folder.subFoldersByKey,
+            buildListingComponent,
+            onRenameFolder,
+            path
+          )}
           {listingComponents}
         </Folder>
       );

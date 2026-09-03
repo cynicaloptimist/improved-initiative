@@ -24,6 +24,19 @@ import { SavedEncounter } from "../../common/SavedEncounter";
 import { now } from "moment";
 import { Library } from "../Library/useLibrary";
 import { CurrentSettings } from "../Settings/Settings";
+import { RenameResult } from "../Library/RenameResult";
+
+const makeRenameCollisionError = (name: string, path: string, type: string) => {
+  return `The ${type} named "${name}" already exists${
+    path ? ` in "${path}"` : ""
+  }. Rename that ${type} first, then try again.`;
+};
+
+const isPathUnderFolder = (path: string, target: string) =>
+  path === target || path.startsWith(`${target}/`);
+
+const isListingUnderFolder = (listing: Listing<any>, target: string) =>
+   isPathUnderFolder(listing.Meta().Path, target);
 
 export class LibrariesCommander {
   private libraries: Libraries;
@@ -266,6 +279,9 @@ export class LibrariesCommander {
     this.encounterCommander.LoadSavedEncounter(savedEncounter);
   };
 
+  // TODO(encounter-library-collisions): Maybe reuse the rename collision checks and
+  // add explicit handling before legacy save, move, or Library Manager
+  // overwrite. Make sure to allow saves of the same-ID encounters.
   public SaveEncounter = (): void => {
     const saveEncounterDefaults = this.tracker.Encounter.SaveEncounterDefaults();
     const saveEncounterToLibrary = (newEncounter: SavedEncounter) => {
@@ -306,6 +322,151 @@ export class LibrariesCommander {
       folderNames
     );
     this.tracker.PromptQueue.Add(prompt);
+  };
+
+  /**
+   * Renames one saved encounter in place.
+   * Could later be reused for inline renaming of other listings.
+   * Rejects a name/path collision before performing any write.
+   */
+  public RenameEncounter = async (
+    encounterListing: Listing<SavedEncounter>,
+    newName: string
+  ): Promise<RenameResult> => {
+    newName = newName.trim();
+    if (!newName) {
+      return { success: false, error: "Name cannot be empty." };
+    }
+
+    const source = encounterListing.Meta();
+    if (newName === source.Name) {
+      return { success: true };
+    }
+    const collision = this.libraries.Encounters.GetAllListings().some(target =>
+        target.Meta().Id !== source.Id &&
+        target.Meta().Path === source.Path &&
+        target.Meta().Name === newName
+    );
+    if (collision) {
+      return {
+        success: false,
+        error: makeRenameCollisionError(newName, source.Path, "encounter")
+      };
+    }
+
+    try {
+      const encounter = await encounterListing.GetWithTemplate(SavedEncounter.Default());
+      await this.libraries.Encounters.UpdateListings([
+        {
+          listing: encounterListing,
+          value: { ...encounter, Id: source.Id, Name: newName }
+        }
+      ]);
+      const defaults = this.tracker.Encounter.SaveEncounterDefaults();
+      // Defaults have no stable ID, so the complete old tuple is the safest
+      // available way to determine whether they refer to this encounter.
+      // TODO: add stable ID to the defaults and use that
+      if (defaults?.Name === source.Name && defaults.Path === source.Path) {
+        this.tracker.Encounter.SaveEncounterDefaults({
+          Name: newName,
+          Path: source.Path
+        });
+      }
+      return { success: true };
+    } catch (e) {
+      console.error("Encounter renaming error", e);
+      return {
+        success: false,
+        error:
+          "Unexpected error during renaming an encounter. Please try again."
+      };
+    }
+  };
+
+  /**
+   * Renames one virtual encounter folder and rewrites every descendant path.
+   * Could later be reused for inline renaming folders of other listings.
+   * Rejects an existing destination subtree before performing any write.
+   *
+   */
+  public RenameEncounterFolder = async (
+    sourcePath: string,
+    newName: string
+  ): Promise<RenameResult> => {
+    newName = newName.trim();
+    if (!newName) {
+      return { success: false, error: "Name cannot be empty." };
+    }
+    if (newName.includes("/")) {
+      return { success: false, error: "Folder names cannot contain a slash." };
+    }
+
+    const parentPath = sourcePath.split("/").slice(0, -1).join("/");
+    const targetPath = parentPath ? `${parentPath}/${newName}` : newName;
+    if (targetPath === sourcePath) {
+      return { success: true };
+    }
+
+    const listings = this.libraries.Encounters.GetAllListings();
+
+    // if any listings exist in the traget path - abort
+    const collision = listings.some(listing => isListingUnderFolder(listing, targetPath));
+    if (collision) {
+      return {
+        success: false,
+        error: makeRenameCollisionError(newName, parentPath, "folder")
+      };
+    }
+
+    const affectedListingsById = new Map<string, Listing<SavedEncounter>>();
+    // Account and local rows can share an ID. Prefer a local row when present
+    // and produce one update for each logical encounter.
+    for (const listing of listings) {
+      if (!isListingUnderFolder(listing, sourcePath)) {
+        continue;
+      }
+      const id = listing.Meta().Id;
+      const current = affectedListingsById.get(id);
+      if (!current || current.Origin === "account") {
+        affectedListingsById.set(id, listing);
+      }
+    }
+
+    try {
+      // Preserve the descendant path; only the selected folder
+      // segment and its parent prefix are replaced.
+      const getNewPath = (oldPath: string) =>
+        targetPath + oldPath.slice(sourcePath.length)
+
+      const updates = await Promise.all(
+        Array.from(affectedListingsById.values()).map(async listing => {
+          const encounter = await listing.GetWithTemplate(SavedEncounter.Default());
+          const {Id, Path} = listing.Meta();
+          return {
+            listing,
+            value: {...encounter, Id, Path: getNewPath(Path)
+            }
+          };
+        })
+      );
+      await this.libraries.Encounters.UpdateListings(updates);
+
+      const defaults = this.tracker.Encounter.SaveEncounterDefaults();
+      if (defaults && isPathUnderFolder(defaults.Path, sourcePath)) {
+        this.tracker.Encounter.SaveEncounterDefaults({
+          Name: defaults.Name,
+          Path: getNewPath(defaults.Path)
+        });
+      }
+      return { success: true };
+    } catch (e) {
+      console.error("Folder renaming error", e);
+      return {
+        success: false,
+        error:
+          "Unexpected error during renaming a folder. Please try again."
+      };
+    }
   };
 
   public ReferenceCondition = (conditionName: string): void => {

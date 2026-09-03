@@ -8,12 +8,46 @@ import { LegacySynchronousLocalStore } from "../Utility/LegacySynchronousLocalSt
 
 export const CurrentSettings = ko.observable<Settings>();
 
+/**
+ * MacBook keyboards report their Delete key as Backspace, while an external
+ * keyboard can still provide a forward Delete key.
+ */
+export function IsAppleBackspacePlatform(platform: string): boolean {
+  return platform.startsWith("Mac") || platform.startsWith("iPad");
+}
+
+/**
+ * Returns the Backspace equivalent of a Delete-based shortcut.
+ *
+ * @param keyBinding Configured Mousetrap key binding.
+ * @returns Equivalent Backspace binding, or `null` if it has no Delete key.
+ */
+export function GetAppleBackspaceAlias(keyBinding: string): string | null {
+  // Mousetrap sequences (for example, "g i") use spaces between consecutive
+  // key presses; each step can combine keys with "+".
+  const alias = keyBinding
+    .split(" ")
+    .map(keyCombination =>
+      keyCombination
+        .split("+")
+        .map(key => (key === "del" ? "backspace" : key))
+        .join("+")
+    )
+    .join(" ");
+  return alias === keyBinding ? null : alias;
+}
+
 function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
   Mousetrap.reset();
 
   Mousetrap.bind("backspace", e => {
     e.preventDefault();
   });
+
+  // we need to determine del->backspace alias only for some apple devices
+  const getAppleAlias = IsAppleBackspacePlatform(navigator.platform ?? "") ?
+    GetAppleBackspaceAlias :
+    () => null;
 
   commands.forEach(command => {
     const commandSetting = _.find(
@@ -25,7 +59,13 @@ function applyNewCommandSettings(newSettings: Settings, commands: Command[]) {
       command.ShowOnActionBar(commandSetting.ShowOnActionBar);
       command.ShowInCombatantRow(commandSetting.ShowInCombatantRow);
     }
-    Mousetrap.bind(command.KeyBinding, (e: Event) => {
+
+    const keys = [command.KeyBinding];
+    const appleAlias = getAppleAlias(command.KeyBinding);
+    if (appleAlias) {
+      keys.push(appleAlias);
+    }
+    Mousetrap.bind(keys, (e: Event) => {
       e.preventDefault();
       command.ActionBinding();
     });

@@ -79,6 +79,8 @@ include `useSubscription` in `client/Combatant/linkComponentToObservables.tsx`.
 - Production build: `npm run build`
 - Lint: `npm run lint`
 - Auto-fix lint: `npm run lint-and-fix`
+- Install the end-to-end test browser: `npx playwright install chromium`
+- Run browser tests: `npm run test:e2e`
 
 The complete dev workflow runs Express on port 3001 behind a BrowserSync proxy
 at `http://localhost:3000`. It rebuilds assets, restarts the server after server
@@ -101,6 +103,10 @@ and invoke local binaries directly, for example:
 The full build compiles the versioned client bundle in `public/js`, compiles the
 server TypeScript, and compiles LESS. LESS imports Google Fonts, so sandboxed
 network restrictions can block the first build attempt.
+
+The Playwright suite builds the app, starts an isolated server on port 3100,
+uses in-memory storage, and skips Open5e preloading. It runs in Chromium only
+and blocks external browser requests.
 
 For local manual testing without binding to port 80, waiting on Open5e
 preloads, or fighting cached static assets, start the server with:
@@ -130,6 +136,14 @@ Do not rely on a detached hidden process without a PID file.
 - Keep changes scoped and incremental.
 - Use existing LESS styling conventions for now. Styled components may be a
   future direction, but do not introduce them without explicit confirmation.
+- Treat Player View `data-ii-*` styling hooks and `--ii-player-view-*` theme
+  properties as the public compatibility contract for premium custom CSS.
+  Update the browser coverage when changing that contract.
+- Do not expose hidden Player View combat information through styling hooks;
+  state attributes must respect the corresponding Player View visibility
+  setting.
+- Preserve `data-tag` as a legacy alias for the public `data-ii-tag` hook until
+  an explicit custom-CSS migration removes it.
 - Do not add new architectural elements, dependencies, build tools, databases,
   state-management systems, or frontend frameworks without explicit
   confirmation.

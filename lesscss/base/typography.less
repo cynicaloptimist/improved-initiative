@@ -1,5 +1,6 @@
 @font-family-serif: "Spectral SC", serif;
 @font-family-sans-serif: "Roboto", sans-serif;
+@font-family-monospace: "Courier New", Courier, monospace;
 @font-family-headers: @font-family-serif;
 @font-family-body: @font-family-sans-serif;
 @font-size-h1: 2.75rem;
@@ -17,9 +18,17 @@ h3,
 h4 {
   font-family: @font-family-headers;
   color: var(--text-header);
-  * {
+
+  // The base stylesheet assigns the body font directly to every element, so
+  // heading children need an override. Keep it shallow so nested UI such as
+  // interactive tooltips can use the body font.
+  > * {
     font-family: @font-family-headers;
   }
+}
+
+code {
+  font-family: @font-family-monospace;
 }
 
 h1 {

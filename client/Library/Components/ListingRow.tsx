@@ -4,6 +4,8 @@ import * as React from "react";
 import { Listable } from "../../../common/Listable";
 import { linkComponentToObservables } from "../../Combatant/linkComponentToObservables";
 import { Listing } from "../Listing";
+import { RenameResult } from "../RenameResult";
+import { InlineNameEditor } from "./InlineNameEditor";
 import { ListingButton } from "./ListingButton";
 
 export interface ExtraButton<T extends Listable> {
@@ -28,10 +30,13 @@ export interface ListingProps<T extends Listable> {
   extraButtons?: ExtraButton<T>[];
   showCount?: boolean;
   showSource?: boolean;
+  /** Persists a rename and reports a recoverable result to the editor. */
+  onRename?: (listing: Listing<T>, newName: string) => Promise<RenameResult>;
 }
 
 interface ListingState {
   count: number;
+  isRenaming?: boolean;
 }
 
 export class ListingRow<T extends Listable> extends React.Component<
@@ -77,24 +82,33 @@ export class ListingRow<T extends Listable> extends React.Component<
         ))
       : "";
 
-    let name = this.props.name;
+    const listingName = this.props.listing.Meta().Name;
+    let displayName = listingName;
     if (this.props.showSource) {
       const source = this.props.listing.Meta().FilterDimensions.Source;
       if (source?.length) {
-        name += ` (${source})`;
+        displayName += ` (${source})`;
       }
     }
 
     const extraButtons = this.props.extraButtons || [];
     return (
       <li className="c-listing">
-        <ListingButton
-          buttonClass="add c-listing-button--wide"
-          text={name}
-          onClick={this.addFn}
-        >
-          {countElements}
-        </ListingButton>
+        {this.state?.isRenaming ? (
+          <InlineNameEditor
+            name={listingName}
+            onCancel={() => this.setState({ isRenaming: false })}
+            onCommit={(newName) => this.props.onRename(this.props.listing, newName)}
+          />
+        ) : (
+          <ListingButton
+            buttonClass="add c-listing-button--wide"
+            text={displayName}
+            onClick={this.addFn}
+          >
+            {countElements}
+          </ListingButton>
+        )}
         {extraButtons.map((button, index) => (
           <ListingButton
             key={index}
@@ -104,8 +118,17 @@ export class ListingRow<T extends Listable> extends React.Component<
             onClick={this.makeExtraButtonFn(button)}
           />
         ))}
+        {this.props.onRename && (
+          <ListingButton
+            title="Rename"
+            buttonClass="edit"
+            faClass="i-cursor"
+            onClick={() => this.setState({ isRenaming: true })}
+          />
+        )}
         {this.props.onDelete && (
           <ListingButton
+            title="Delete"
             buttonClass="delete"
             faClass="trash"
             onClick={this.deleteFn}
@@ -113,6 +136,7 @@ export class ListingRow<T extends Listable> extends React.Component<
         )}
         {this.props.onEdit && (
           <ListingButton
+            title="Edit"
             buttonClass="edit"
             faClass="edit"
             onClick={this.editFn}
@@ -120,6 +144,7 @@ export class ListingRow<T extends Listable> extends React.Component<
         )}
         {this.props.onMove && (
           <ListingButton
+            title="Move"
             buttonClass="move"
             faClass="folder"
             onClick={this.moveFn}

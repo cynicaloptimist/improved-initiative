@@ -22,6 +22,7 @@ describe("PlayerViewCombatantState", () => {
     encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
+    expect(playerViewState.Combatants[0].HealthState).toBe("healthy");
   });
 
   test("Creature HP is obfuscated", () => {
@@ -34,6 +35,7 @@ describe("PlayerViewCombatantState", () => {
     expect(playerViewState.Combatants[0].HPDisplay).toBe(
       "<span class='healthyHP'>Healthy</span>"
     );
+    expect(playerViewState.Combatants[0].HealthState).toBe("healthy");
   });
 
   test("Creature HP setting actual HP", () => {
@@ -46,6 +48,7 @@ describe("PlayerViewCombatantState", () => {
     encounter.EncounterFlow.StartEncounter();
     const playerViewState = encounter.GetPlayerView();
     expect(playerViewState.Combatants[0].HPDisplay).toBe("10/10");
+    expect(playerViewState.Combatants[0].HealthState).toBe("healthy");
   });
 
   test("Player HP setting obfuscated HP", () => {
@@ -61,4 +64,21 @@ describe("PlayerViewCombatantState", () => {
       "<span class='healthyHP'>Healthy</span>"
     );
   });
+
+  test.each([HpVerbosityOption.HideAll, HpVerbosityOption.DamageTaken])(
+    "Creature health state is omitted when HP is displayed as %s",
+    hpVerbosity => {
+      const settings = CurrentSettings();
+      settings.PlayerView.MonsterHPVerbosity = hpVerbosity;
+      encounter.AddCombatantFromStatBlock({
+        ...StatBlock.Default(),
+        HP: { Value: 10, Notes: "" }
+      });
+      encounter.EncounterFlow.StartEncounter();
+
+      expect(
+        encounter.GetPlayerView().Combatants[0].HealthState
+      ).toBeUndefined();
+    }
+  );
 });

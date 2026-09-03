@@ -13,21 +13,76 @@
 #playerview {
   margin: 0;
   font-size: 20px;
+  background: var(
+      --ii-player-view-main-background,
+      var(--page-background-white)
+    )
+    var(--ii-player-view-background-image, url("../img/paper-bg.jpg")) no-repeat
+    top/cover;
+
+  &.dark-mode {
+    background: var(
+        --ii-player-view-main-background,
+        var(--page-background-white)
+      )
+      var(--ii-player-view-background-image, url("../img/dark-texture.png"));
+  }
+}
+
+:where(#playerview) {
+  * {
+    font-family: var(--ii-player-view-font-family, @font-family-body);
+  }
 
   .combatant {
+    --ii-player-view-combatant-row-background: var(--card-background-white);
+    color: var(--ii-player-view-combatant-text, var(--text-face));
+    background-color: var(
+      --ii-player-view-combatant-background,
+      var(--ii-player-view-combatant-row-background)
+    );
     height: unset;
     display: flex;
     border-left: @active-combatant-indicator-width solid transparent;
+
+    &:nth-child(2n-1) {
+      --ii-player-view-combatant-row-background: var(--zebra-white);
+      background-color: var(
+        --ii-player-view-combatant-zebra-background,
+        var(
+          --ii-player-view-combatant-background,
+          var(--ii-player-view-combatant-row-background)
+        )
+      );
+    }
   }
 
   .combatant.active {
-    border-left: @active-combatant-indicator-width solid var(--red);
+    background-color: var(
+      --ii-player-view-active-combatant-background,
+      var(
+        --ii-player-view-combatant-background,
+        var(--ii-player-view-combatant-row-background)
+      )
+    );
+    border-left: @active-combatant-indicator-width solid
+      var(--ii-player-view-active-combatant-indicator, var(--red));
   }
 
   .combatant--header {
+    color: var(--ii-player-view-header-text, var(--text-inverted));
+    background-color: var(
+      --ii-player-view-header-background,
+      var(--page-bg-inverted)
+    );
+    border-color: var(
+      --ii-player-view-header-background,
+      var(--page-bg-inverted)
+    );
     flex-direction: row;
     padding: @large-spacer @medium-spacer @large-spacer @medium-spacer;
-    border-left: @active-combatant-indicator-width solid transparent;
+    border-left: @active-combatant-indicator-width solid
+      var(--ii-player-view-header-background, transparent);
   }
 
   .combatant__hp {
@@ -71,7 +126,7 @@
     }
   }
 
-  .combatant__header .combatant__tags {
+  .combatant--header .combatant__tags {
     text-align: center;
   }
 
@@ -81,10 +136,15 @@
   }
 
   .combat-footer {
+    color: var(--ii-player-view-header-text, var(--text-inverted));
+    background-color: var(
+      --ii-player-view-header-background,
+      var(--page-bg-inverted)
+    );
+    border-color: var(--ii-player-view-header-background, var(--dark-border));
     flex-direction: row;
     justify-content: flex-end;
     margin: @medium-spacer;
-    color: var(--text-inverted);
     > span {
       padding-right: @medium-spacer;
     }
@@ -182,7 +242,7 @@
     flex-basis: 100%;
   }
 
-  /* Add Animation */
+  // Add animation
   .combatant-portrait__image,
   .combatant-portrait__caption {
     animation-name: zoom;

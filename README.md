@@ -46,11 +46,11 @@ Linting happens automatically on commit, but you can also run it manually via: `
 
 ### App Settings
 
-You can configure your instance of Improved Initiative with these settings. All are optional, basic functionality should work if you don't specify any.
+You can configure your instance of Improved Initiative with these settings. They are optional under `npm run dev`, which supplies development defaults; when you run the server yourself, `BASE_URL` is required and the rest are optional.
 
 - `PORT` - Defaults to 80
 - `NODE_ENV` - Set to "production" to satisfy react, set to "development" to disable html view caching.
-- `BASE_URL` - Used in absolute URLs on client side. Falls back to relative urls if unavailable. This is the canonical URL for Patreon callback and browser localStorage.
+- `BASE_URL` - The canonical absolute URL of your instance, including the scheme, for example `http://localhost:3000`. Used in absolute URLs on the client side, the Patreon callback, and browser localStorage. The server refuses to start if it is missing or is not an absolute URL.
 - `SESSION_SECRET` - Used to keep session continuity through app restarts or something. Handed to express-session.
 - `DEFAULT_ACCOUNT_LEVEL` - Set to "accountsync" or "epicinitiative" to grant rewards to all users. Useful if you have no DB.
 - `DEFAULT_PATREON_ID` - Set the dummy Patreon user id when running with `DEFAULT_ACCOUNT_LEVEL` set.

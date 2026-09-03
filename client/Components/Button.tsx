@@ -11,6 +11,7 @@ export interface ButtonProps {
   text?: string;
   tooltip?: string;
   tooltipProps?: Omit<TippyProps, "children" | "content">;
+  ariaLabel?: string;
 
   type?: "button" | "submit";
   disabled?: boolean;
@@ -39,6 +40,7 @@ export function Button(props: ButtonProps): JSX.Element {
     <button
       type={props.type ?? "button"}
       className={classNames.join(" ")}
+      aria-label={props.ariaLabel}
       onClick={props.disabled ? undefined : props.onClick}
       onMouseOver={props.disabled ? undefined : props.onMouseOver}
       tabIndex={props.disabled ? -1 : 0}

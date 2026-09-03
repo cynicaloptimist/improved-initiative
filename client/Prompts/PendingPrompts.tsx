@@ -1,19 +1,23 @@
 import { Formik, FormikProps } from "formik";
 import * as React from "react";
+import { Button } from "../Components/Button";
 
 export interface PromptProps<T extends object> {
   onSubmit: (submittedValues: T) => boolean;
+  onDismiss?: () => void;
   children: React.ReactChild;
   autoFocusSelector: string;
   initialValues: T;
+  className?: string;
 }
 
 class Prompt<T extends object> extends React.Component<
   PromptProps<T> & {
     onCancel: () => void;
+    onCancelAll?: () => void;
   }
 > {
-  private formElement: HTMLFormElement;
+  private formElement: HTMLFormElement | null = null;
 
   public render() {
     return (
@@ -26,7 +30,9 @@ class Prompt<T extends object> extends React.Component<
         {(props: FormikProps<any>) => (
           <form
             ref={r => (this.formElement = r)}
-            className="prompt"
+            className={`prompt${
+              this.props.className ? ` ${this.props.className}` : ""
+            }`}
             onSubmit={props.handleSubmit}
             onKeyUp={(e: React.KeyboardEvent<HTMLFormElement>) => {
               if (e.key == "Escape") {
@@ -35,6 +41,25 @@ class Prompt<T extends object> extends React.Component<
             }}
           >
             {this.props.children}
+            <div className="prompt__utility-controls">
+              {this.props.onCancelAll && (
+                <Button
+                  additionalClassNames="prompt__dismiss prompt__close-all"
+                  ariaLabel="Close all"
+                  fontAwesomeIcon="times"
+                  onClick={this.props.onCancelAll}
+                  text="All"
+                  tooltip="Close all"
+                />
+              )}
+              <Button
+                additionalClassNames="prompt__dismiss prompt__close"
+                ariaLabel="Close"
+                fontAwesomeIcon="times"
+                onClick={this.props.onCancel}
+                tooltip="Close"
+              />
+            </div>
           </form>
         )}
       </Formik>
@@ -51,7 +76,7 @@ class Prompt<T extends object> extends React.Component<
     }
 
     //prevent mounted element from swallowing hotkey
-    const element: HTMLInputElement = this.formElement.querySelector(
+    const element = this.formElement.querySelector<HTMLInputElement>(
       this.props.autoFocusSelector
     );
 
@@ -69,17 +94,31 @@ class Prompt<T extends object> extends React.Component<
 }
 
 interface PendingPromptsProps {
-  promptsAndIds: [PromptProps<object>, string][];
+  promptsAndIds: [PromptProps<any>, string][];
   removePrompt: (promptId: string) => void;
 }
 
 export class PendingPrompts extends React.Component<PendingPromptsProps> {
+  private dismissPrompt = (prompt: PromptProps<any>, promptId: string) => {
+    if (prompt.onDismiss) {
+      prompt.onDismiss();
+    }
+    this.props.removePrompt(promptId);
+  };
+
+  private dismissAllPrompts = () => {
+    this.props.promptsAndIds
+      .slice()
+      .forEach(([prompt, promptId]) => this.dismissPrompt(prompt, promptId));
+  };
+
   public render() {
     const emptyClassName =
       this.props.promptsAndIds.length == 0 ? " empty" : " tutorial-focus";
+    const canCloseAll = this.props.promptsAndIds.length > 1;
     return (
       <div className={"prompts" + emptyClassName}>
-        {this.props.promptsAndIds.map(promptAndId => {
+        {this.props.promptsAndIds.map((promptAndId, promptIndex) => {
           const [prompt, promptId] = promptAndId;
 
           return (
@@ -94,8 +133,13 @@ export class PendingPrompts extends React.Component<PendingPromptsProps> {
                 return shouldResolve;
               }}
               onCancel={() => {
-                this.props.removePrompt(promptId);
+                this.dismissPrompt(prompt, promptId);
               }}
+              onCancelAll={
+                promptIndex == 0 && canCloseAll
+                  ? this.dismissAllPrompts
+                  : undefined
+              }
             />
           );
         })}

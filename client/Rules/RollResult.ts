@@ -10,33 +10,19 @@ export class RollResult {
   get Total(): number {
     return this.Rolls.reduce((p, c) => c + p, 0) + this.Modifier;
   }
-  get String(): string {
-    let output = `[${this.Rolls}]`;
-    if (this.Modifier > 0) {
-      output += ` + ${this.Modifier}`;
+
+  /**
+   * {@returns} empty string when the modifier is 0, " +X" or "-Y" otherwise (with a leading space)
+   */
+  get ModifierText(): string {
+    if (this.Modifier === 0) {
+      return ""
     }
-    if (this.Modifier < 0) {
-      output += ` - ${-this.Modifier}`;
-    }
-    return output + ` = ${this.Total}`;
+    const absModifier = Math.abs(this.Modifier);
+    return ` ${this.Modifier > 0 ? "+" : "-"} ${absModifier}`;
   }
-  get FormattedString(): string {
-    const formattedRolls = this.Rolls.map(r => {
-      if (r == this.DieSize) {
-        return `<span class='s-roll-max'>${r.toString()}</span>`;
-      }
-      if (r == 1) {
-        return `<span class='s-roll-min'>${r.toString()}</span>`;
-      }
-      return `<span class='s-roll'>${r.toString()}</span>`;
-    }).join(", ");
-    let output = `[${formattedRolls}]`;
-    if (this.Modifier > 0) {
-      output += ` + ${this.Modifier}`;
-    }
-    if (this.Modifier < 0) {
-      output += ` - ${-this.Modifier}`;
-    }
-    return output + ` = ${this.Total}`;
+
+  get ResultString(): string {
+    return `[${this.Rolls}]${this.ModifierText} = ${this.Total}`
   }
 }

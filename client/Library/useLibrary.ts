@@ -7,6 +7,12 @@ import { probablyUniqueString } from "../../common/Toolbox";
 import { Store } from "../Utility/Store";
 import { Listing, ListingOrigin } from "./Listing";
 
+/** A requested update for one logical library listing. */
+export interface ListingUpdate<T extends Listable> {
+  listing: Listing<T>;
+  value: T;
+}
+
 export interface Library<T extends Listable> {
   AddListings: (
     newListingMetas: ListingMeta[],
@@ -19,6 +25,7 @@ export interface Library<T extends Listable> {
     listing: Listing<T>,
     newListable: T
   ) => Promise<Listing<T>>;
+  UpdateListings: (updates: ListingUpdate<T>[]) => Promise<void>;
   GetOrCreateListingById: (
     listingId: string,
     template?: T
@@ -182,6 +189,42 @@ export function useLibrary<T extends Listable>(
 
   const GetAllListings = React.useCallback(() => [...listings], [listings]);
 
+  /**
+   * Applies every requested update.
+   * Logs every rejected update, then rejects if any update failed.
+   */
+  const UpdateListings = React.useCallback(
+    async (updates: ListingUpdate<T>[]) => {
+      // TODO(encounter-rename-persistence): SaveEditedListing can delete source
+      // account/local representations before the replacement save completes.
+      // It also leaves a local listing in the in-memory array before
+      // saveListing appends the same object again; storage still has one value
+      // because Store.Save overwrites the stable ID. We can replace array entries
+      // instead of appending.
+      const results = await Promise.allSettled(
+        updates.map(update => SaveEditedListing(update.listing, update.value))
+      );
+      const errorsCount = results
+        .filter(result => result.status === "rejected")
+        .reduce((count, result: PromiseRejectedResult) => {
+          console.error("Listing update error", result.reason);
+          return count+1
+        }, 0);
+
+      // SaveEditedListing mutates each Knockout-backed Listing in place, so
+      // React does not see a new listings value. Copy the array to rebuild
+      // consumers such as the path-derived folder tree with the updated meta.
+      setListings(currentListings => [...currentListings]);
+
+      if (errorsCount > 0) {
+        throw new Error(
+            `Could not update ${errorsCount} of ${updates.length} listings.`
+          );
+      }
+    },
+    [SaveEditedListing, setListings]
+  );
+
   // Effects
   if (callbacks.signalLoadComplete) {
     React.useEffect(() => {
@@ -200,6 +243,8 @@ export function useLibrary<T extends Listable>(
         if (storedListables.length > 0) {
           const listings = storedListables.map(makeListing);
           AddListings(listings, "localAsync");
+        } else {
+          callbacks.signalLoadComplete?.("localAsync");
         }
       }
     );
@@ -210,6 +255,7 @@ export function useLibrary<T extends Listable>(
     DeleteListing,
     SaveNewListing,
     SaveEditedListing,
+    UpdateListings,
     GetOrCreateListingById,
     GetAllListings
   } as const;

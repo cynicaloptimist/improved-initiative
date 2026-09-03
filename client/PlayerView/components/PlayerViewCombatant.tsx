@@ -27,13 +27,30 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
     }
     const hasColor =
       this.props.combatant.Color && this.props.combatant.Color.length > 0;
+    const customProperties =
+      this.props.colorVisible && hasColor
+        ? ({
+            "--ii-player-view-combatant-color": this.props.combatant.Color
+          } as React.CSSProperties)
+        : undefined;
     return (
-      <li className={classNames.join(" ")}>
-        <div className="combatant__initiative">
+      <li
+        className={classNames.join(" ")}
+        style={customProperties}
+        data-ii-role="combatant"
+        data-ii-state={this.props.isActive ? "active" : undefined}
+        data-ii-health={this.props.combatant.HealthState}
+        data-ii-kind={
+          this.props.combatant.IsPlayerCharacter
+            ? "player-character"
+            : "non-player-character"
+        }
+      >
+        <div className="combatant__initiative" data-ii-field="initiative">
           {this.props.combatant.Initiative}
         </div>
         {this.props.portraitColumnVisible && (
-          <div className="combatant__portrait">
+          <div className="combatant__portrait" data-ii-field="portrait">
             {this.props.combatant.ImageURL && (
               <img
                 src={this.props.combatant.ImageURL}
@@ -42,8 +59,8 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
             )}
           </div>
         )}
-        <div className="combatant__name">
-          {this.props.combatant.Color && hasColor && (
+        <div className="combatant__name" data-ii-field="name">
+          {this.props.colorVisible && hasColor && (
             <span
               className="combatant__color fas fa-circle"
               style={{ color: this.props.combatant.Color }}
@@ -56,6 +73,7 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
             "combatant__hp combatant__hp-outer" +
             (this.props.areSuggestionsAllowed ? " show-hover" : "")
           }
+          data-ii-field="hit-points"
         >
           <span
             className="combatant__hp-inner"
@@ -65,13 +83,16 @@ export class PlayerViewCombatant extends React.Component<PlayerViewCombatantProp
           />
         </div>
         {this.props.acColumnVisible && (
-          <div className="combatant__ac">{this.props.combatant.AC || ""}</div>
+          <div className="combatant__ac" data-ii-field="armor-class">
+            {this.props.combatant.AC || ""}
+          </div>
         )}
-        <div className="combatant__tags">
+        <div className="combatant__tags" data-ii-field="tags">
           {this.props.combatant.Tags.map((tag, index) => (
             <div
               className="tag"
               data-tag={tag.Text.toLocaleLowerCase()}
+              data-ii-tag={tag.Text.toLocaleLowerCase()}
               key={tag.Text + index}
             >
               {tag.Text}

@@ -22,22 +22,26 @@ describe("PlayerView State", () => {
     expect(combatantHP10.HPDisplay).toEqual(
       "<span class='healthyHP'>Healthy</span>"
     );
+    expect(combatantHP10.HealthState).toEqual("healthy");
 
     combatant.ApplyDamage(1);
     const combatantHP9 = encounter.GetPlayerView().Combatants[0];
     expect(combatantHP9.HPDisplay).toEqual("<span class='hurtHP'>Hurt</span>");
+    expect(combatantHP9.HealthState).toEqual("hurt");
 
     combatant.ApplyDamage(5);
     const combatantHP5 = encounter.GetPlayerView().Combatants[0];
     expect(combatantHP5.HPDisplay).toEqual(
       "<span class='bloodiedHP'>Bloodied</span>"
     );
+    expect(combatantHP5.HealthState).toEqual("bloodied");
 
     combatant.ApplyDamage(5);
     const combatantHP0 = encounter.GetPlayerView().Combatants[0];
     expect(combatantHP0.HPDisplay).toEqual(
       "<span class='defeatedHP'>Defeated</span>"
     );
+    expect(combatantHP0.HealthState).toEqual("defeated");
   });
 
   test("Player View is only updated if next combatant is visible", () => {
