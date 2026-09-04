@@ -3,12 +3,12 @@ import * as React from "react";
 
 import { Spell } from "../../common/Spell";
 import { Listing } from "../Library/Listing";
-import { RollResult } from "../Rules/RollResult";
+import { DiceRoll } from "../Rules/Dice";
 import { CombatStatsPrompt } from "./CombatStatsPrompt";
 import { ConditionReferencePrompt } from "./ConditionReferencePrompt";
 import { LinkInitiativePrompt } from "./LinkInitiativePrompt";
 import { PendingPrompts, PromptProps } from "./PendingPrompts";
-import { ShowDiceRollResultPrompt } from "./RollDicePrompt";
+import { DiceRollResultPrompt } from "./dice/RollResultsPrompt";
 import { SpellPrompt } from "./SpellPrompt";
 
 type DismissiblePromptProps = PromptProps<Record<string, never>> & {
@@ -57,6 +57,10 @@ function ReadDiceResult(prompt: HTMLFormElement) {
 }
 
 describe("PendingPrompts", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test("adds the prompt-specific class name to the prompt form", () => {
     const rendered = RenderPrompts([
       [MockPrompt({ className: "prompt--custom" }), "custom-prompt"]
@@ -222,26 +226,30 @@ describe("PendingPrompts", () => {
   });
 
   test("rerolls only the selected dice result prompt", () => {
+    const random = jest.spyOn(Math, "random");
+    const queueResult = (result: number, dieSize: number) =>
+      random.mockReturnValueOnce((result - 0.5) / dieSize);
+
+    queueResult(2, 6);
+    queueResult(2, 8);
+    queueResult(3, 8);
+    queueResult(4, 10);
+    queueResult(5, 10);
+    queueResult(6, 10);
+    queueResult(7, 8);
+    queueResult(8, 8);
+
     const rendered = RenderPrompts([
       [
-        ShowDiceRollResultPrompt(
-          new RollResult([2], 0, 6),
-          () => new RollResult([5], 0, 6)
-        ),
+        DiceRollResultPrompt(new DiceRoll(1, 6, 0), jest.fn()),
         "first-dice-result"
       ],
       [
-        ShowDiceRollResultPrompt(
-          new RollResult([2, 3], 1, 8),
-          () => new RollResult([7, 8], 1, 8)
-        ),
+        DiceRollResultPrompt(new DiceRoll(2, 8, 1), jest.fn()),
         "second-dice-result"
       ],
       [
-        ShowDiceRollResultPrompt(
-          new RollResult([4, 5, 6], -2, 10),
-          () => new RollResult([8, 9, 10], -2, 10)
-        ),
+        DiceRollResultPrompt(new DiceRoll(3, 10, -2), jest.fn()),
         "third-dice-result"
       ]
     ]);

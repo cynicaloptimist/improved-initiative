@@ -29,6 +29,27 @@ function getTestSpell() {
 }
 
 describe("TextEnricher", () => {
+  test("rolls dice expressions found in enriched text", () => {
+    const rollDice = jest.fn();
+    const textEnricher = new TextEnricher(
+      rollDice,
+      () => {},
+      () => {},
+      () => [],
+      () => new RegExp("never-match"),
+      new DefaultRules()
+    );
+    const tree = render(
+      textEnricher.EnrichText("Hit +7; damage 2d6 + 3 and penalty -2.")
+    );
+
+    fireEvent.click(tree.getByText("+7"));
+    fireEvent.click(tree.getByText("2d6 + 3"));
+    fireEvent.click(tree.getByText("-2"));
+
+    expect(rollDice.mock.calls).toEqual([["+7"], ["2d6 + 3"], ["-2"]]);
+  });
+
   test("Spell Reference", async () => {
     const textEnricher = new TextEnricher(
       () => {},

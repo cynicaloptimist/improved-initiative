@@ -1,35 +1,110 @@
-import { RollResult } from "./RollResult";
+export const RollModes = {
+  Advantage: "advantage",
+  Disadvantage: "disadvantage"
+} as const;
+
+export type RollMode = (typeof RollModes)[keyof typeof RollModes];
 
 export const rollDie = (size: number): number =>
   Math.floor(Math.random() * size) + 1;
 
-export class Dice {
-  public static readonly ValidDicePattern =
-    /(\d+)d(\d+)[\s]*([+-][\s]*\d+)?|([+-][\s]*\d+)/;
-  public static readonly GlobalDicePattern =
-    /(\d+d\d+(?:[\s]*[+-][\s]*\d+)?|[+-][\s]*\d+)/g;
-  public static readonly RollDiceExpression = (expression: string) => {
-    //Taken from http://codereview.stackexchange.com/a/40996
-    const match = Dice.ValidDicePattern.exec(expression);
-    if (!match) {
-      throw "Invalid dice notation: " + expression;
+export class DiceRoll {
+  public readonly Results: readonly number[];
+  public readonly Total: number;
+  public readonly ChosenIndex: number | undefined;
+
+  constructor(
+    public readonly DiceCount: number,
+    public readonly DieSize: number,
+    public readonly Modifier: number,
+    public readonly Mode: RollMode | undefined = undefined,
+    existingRoll?: number
+  ) {
+    if (
+      this.Mode !== undefined &&
+      (this.DieSize !== 20 || this.DiceCount !== 1)
+    ) {
+      throw new Error("A roll mode can only be added to a single d20 roll");
     }
-    const isLooseModifier = typeof match[4] == "string";
-    if (match[4] && isLooseModifier) {
-      const modifier = parseInt(match[4].replace(/[\s]*/g, ""));
-      const d20Roll = rollDie(20);
-      return new RollResult([d20Roll], modifier, 20);
+    this.Results = Object.freeze(this.roll(existingRoll));
+    this.ChosenIndex = this.chooseIndex();
+    this.Total = this.calculateTotal();
+  }
+
+  private roll(existingRoll?: number): readonly number[] {
+    const rollCount = this.Mode === undefined ? this.DiceCount : 2;
+    const rolls: number[] = existingRoll === undefined ? [] : [existingRoll];
+
+    while (rolls.length < rollCount) {
+      rolls.push(rollDie(this.DieSize));
     }
-    const howMany = typeof match[1] == "undefined" ? 1 : parseInt(match[1]);
-    const dieSize = parseInt(match[2]);
-    const rolls: number[] = [];
-    for (let i = 0; i < howMany; i++) {
-      rolls[i] = rollDie(dieSize);
+
+    return rolls;
+  }
+
+  private calculateTotal() {
+    const diceTotal =
+      this.ChosenIndex === undefined
+        ? this.Results.reduce((total, roll) => total + roll, 0)
+        : this.Results[this.ChosenIndex];
+
+    return diceTotal + this.Modifier;
+  }
+
+  private chooseIndex() {
+    if (this.Mode === undefined || this.Results.length !== 2) {
+      return undefined;
     }
-    const modifier =
-      typeof match[3] == "undefined"
-        ? 0
-        : parseInt(match[3].replace(/[\s]*/g, ""));
-    return new RollResult(rolls, modifier, dieSize);
-  };
+
+    const firstWins = this.Results[0] > this.Results[1];
+    if (firstWins) {
+      return this.Mode === RollModes.Advantage ? 0 : 1;
+    }
+
+    return this.Mode === RollModes.Advantage ? 1 : 0;
+  }
+
+  CanSelectMode(): boolean {
+    return (
+      this.Mode === undefined &&
+      this.DiceCount === 1 &&
+      this.DieSize === 20 &&
+      this.Results.length === 1
+    );
+  }
+
+  get ModifierText(): string {
+    if (this.Modifier === 0) {
+      return "";
+    }
+
+    const operator = this.Modifier > 0 ? "+" : "-";
+    return ` ${operator} ${Math.abs(this.Modifier)}`;
+  }
+
+  ToResultString(): string {
+    let modeSuffix = "";
+    if (this.Mode !== undefined) {
+      modeSuffix = this.Mode === RollModes.Advantage ? "a" : "d";
+    }
+    return `[${this.Results}]${modeSuffix}${this.ModifierText} = ${this.Total}`;
+  }
+
+  Reroll(): DiceRoll {
+    return new DiceRoll(this.DiceCount, this.DieSize, this.Modifier, this.Mode);
+  }
+
+  WithMode(mode: RollMode): DiceRoll {
+    if (!this.CanSelectMode()) {
+      throw new Error("A roll mode can only be added to a single d20 roll");
+    }
+
+    return new DiceRoll(
+      this.DiceCount,
+      this.DieSize,
+      this.Modifier,
+      mode,
+      this.Results[0]
+    );
+  }
 }
