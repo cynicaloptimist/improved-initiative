@@ -13,10 +13,10 @@ import {
 } from "../../common/Toolbox";
 import { Listing } from "../Library/Listing";
 import { Conditions2025 } from "../Rules/Conditions";
-import { Dice } from "../Rules/Dice";
 
 import { IRules, DefaultRules } from "../Rules/Rules";
 import { BeanCounter, Counter } from "./Counter";
+import { GlobalDicePattern } from "../Rules/DiceExpression";
 
 const conditionsRegex = concatenatedStringRegex(_.keys(Conditions2025));
 
@@ -119,7 +119,7 @@ export class TextEnricher {
   ) {
     const replaceConfig: ReplaceConfig = {
       diceExpression: {
-        pattern: Dice.GlobalDicePattern,
+        pattern: GlobalDicePattern,
         matcherFn: (rawText, processed, key) => (
           <span
             className="rollable"

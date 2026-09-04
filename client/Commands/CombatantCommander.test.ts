@@ -7,6 +7,7 @@ import { PendingPrompts } from "../Prompts/PendingPrompts";
 import { InitializeTestSettings } from "../test/InitializeTestSettings";
 import { addCombatantFromStatBlock } from "../test/addCombatant";
 import { TrackerViewModel } from "../TrackerViewModel";
+import { Metrics } from "../Utility/Metrics";
 import { CombatantCommander } from "./CombatantCommander";
 
 describe("CombatantCommander", () => {
@@ -30,6 +31,7 @@ describe("CombatantCommander", () => {
 
   afterEach(() => {
     encounter.ClearEncounter();
+    jest.restoreAllMocks();
   });
 
   test("Apply Damage", () => {
@@ -99,9 +101,10 @@ describe("CombatantCommander", () => {
   });
 
   test("rerolls the original dice expression", () => {
+    const trackEvent = jest.spyOn(Metrics, "TrackEvent").mockImplementation();
     const random = jest
       .spyOn(Math, "random")
-      .mockReturnValueOnce(0.01)
+      .mockReturnValueOnce(0)
       .mockReturnValueOnce(0.2)
       .mockReturnValue(0.999999);
 
@@ -131,8 +134,40 @@ describe("CombatantCommander", () => {
           roll => roll.textContent
         )
       ).toEqual(["6", "6"]);
+      expect(trackEvent.mock.calls).toEqual([
+        [
+          Metrics.Event.DiceRolled,
+          { expression: "2d6+3", result: "[1,2] + 3 = 6" }
+        ],
+        [
+          Metrics.Event.DiceRolled,
+          { expression: "2d6+3", result: "[6,6] + 3 = 15" }
+        ]
+      ]);
     } finally {
       random.mockRestore();
     }
+  });
+
+  test("records the selected roll mode", () => {
+    const trackEvent = jest.spyOn(Metrics, "TrackEvent").mockImplementation();
+    jest
+      .spyOn(Math, "random")
+      .mockReturnValueOnce((10 - 0.5) / 20)
+      .mockReturnValue(0.999999);
+    combatantCommander.RollDice("1d20 + 2");
+    const rendered = render(
+      React.createElement(PendingPrompts, {
+        promptsAndIds: trackerViewModel.PromptQueue.GetPrompts(),
+        removePrompt: jest.fn()
+      })
+    );
+
+    fireEvent.click(rendered.getByRole("button", { name: "Add advantage" }));
+
+    expect(trackEvent).toHaveBeenLastCalledWith(Metrics.Event.DiceRolled, {
+      expression: "adv:1d20+2",
+      result: "[10,20]a + 2 = 22"
+    });
   });
 });

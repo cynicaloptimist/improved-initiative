@@ -26,6 +26,11 @@
   min-height: @prompt-minimum-height;
   position: relative;
 
+  input,
+  button {
+    border-radius: 3px;
+  }
+
   .prompt__utility-controls {
     position: absolute;
     z-index: 1;
@@ -111,6 +116,85 @@
       display: flex;
       flex-direction: row;
       justify-content: center;
+    }
+
+    button.roll-initiative__mode-button,
+    button.roll-initiative__mode-button:hover {
+      overflow: hidden;
+      background-color: var(--button-face);
+      border-color: transparent;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    button.roll-initiative__mode-button .fas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: 0;
+      opacity: 0.2;
+      font-size: 2.2rem;
+      transform: translate(-50%, -50%);
+    }
+
+    button.roll-initiative__mode-button--advantage,
+    button.roll-initiative__mode-button--advantage:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    button.roll-initiative__mode-button--disadvantage,
+    button.roll-initiative__mode-button--disadvantage:hover {
+      color: var(--red);
+      border-color: var(--red);
+    }
+
+    button.roll-initiative__mode-button--hexagon,
+    button.roll-initiative__mode-button--hexagon:hover {
+      isolation: isolate;
+      padding: 0;
+      background-color: transparent;
+      border-color: transparent;
+      border-radius: 0;
+    }
+
+    button.roll-initiative__mode-button--hexagon::before,
+    button.roll-initiative__mode-button--hexagon::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      content: "";
+      clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+      transform: translate(-50%, -50%);
+    }
+
+    button.roll-initiative__mode-button--hexagon::before {
+      z-index: -2;
+      width: @button-inner;
+      height: @button-inner;
+    }
+
+    button.roll-initiative__mode-button--hexagon::after {
+      z-index: -1;
+      width: calc(@button-inner - 0.25rem);
+      height: calc(@button-inner - 0.25rem);
+      background-color: var(--button-face);
+    }
+
+    button.roll-initiative__mode-button--hexagon.roll-initiative__mode-button--advantage::before {
+      background-color: var(--green);
+    }
+
+    button.roll-initiative__mode-button--hexagon.roll-initiative__mode-button--disadvantage::before {
+      background-color: var(--red);
+    }
+
+    button.roll-initiative__mode-button--hexagon:hover::after {
+      background-color: var(--hover-white);
+    }
+
+    button.roll-initiative__mode-button:hover {
+      background-color: var(--hover-white);
     }
 
     .roll-initiative__did-reroll {
@@ -256,14 +340,23 @@
 .p-roll-dice {
   flex-flow: row;
   flex-grow: 1;
+
   div:first-child {
     flex-flow: row;
     flex-grow: 1;
     align-items: center;
   }
+
   input {
     width: 6rem;
   }
+}
+
+.p-roll-dice__notation-tip {
+  margin: @small-spacer;
+  color: var(--text-faded);
+  font-size: 0.8rem;
+  white-space: nowrap;
 }
 
 .prompt--dice-roll-result {
@@ -272,6 +365,7 @@
 
 .p-roll-dice-result {
   flex-direction: row;
+  flex-wrap: wrap;
   flex-grow: 1;
   align-items: flex-start;
   gap: @large-spacer;
@@ -334,15 +428,218 @@
   background-color: color-mix(in srgb, var(--red) 10%, var(--input-bg));
 }
 
+.p-roll-dice-result__roll--kept {
+  border-width: 2px;
+  border-color: var(--red);
+}
+
+.p-roll-dice-result--advantage .p-roll-dice-result__roll--kept {
+  border-color: var(--green);
+}
+
+.p-roll-dice-result__roll--discarded {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
 .p-roll-dice-result__calculation {
   font-weight: bold;
   margin-left: @small-spacer;
   white-space: nowrap;
 }
 
-button.p-roll-dice-result__reroll {
+.p-roll-dice-result__actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: @small-spacer;
+  max-width: 18rem;
   margin-left: auto;
 }
+
+.p-roll-dice-result__actions--comparison {
+  flex-basis: 100%;
+  max-width: none;
+  margin-left: 0;
+}
+
+button.p-roll-dice-result__mode-letter {
+  font-weight: bold;
+}
+
+button.p-roll-dice-result__mode-advantage {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+button.p-roll-dice-result__mode-advantage:hover {
+  color: var(--green);
+  background-color: var(--hover-white);
+  border-color: var(--green);
+}
+
+button.p-roll-dice-result__mode-advantage:hover::after {
+  background-color: var(--hover-white);
+}
+
+button.p-roll-dice-result__mode-disadvantage {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+button.p-roll-dice-result__mode-d20::after {
+  position: absolute;
+  top: @extra-small-spacer;
+  right: @extra-small-spacer;
+  padding: @extra-small-spacer;
+  background-color: var(--button-face);
+  font-family: @font-family-body;
+  font-size: 0.55rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+button.p-roll-dice-result__mode-d20.p-roll-dice-result__mode-advantage::after {
+  content: "A";
+}
+
+button.p-roll-dice-result__mode-d20.p-roll-dice-result__mode-disadvantage::after {
+  content: "D";
+}
+
+button.p-roll-dice-result__mode-d20-chevron::after {
+  position: absolute;
+  right: @extra-small-spacer;
+  bottom: @extra-small-spacer;
+  padding: @extra-small-spacer;
+  background-color: var(--button-face);
+  font-family: "Font Awesome 5 Free";
+  font-size: 0.55rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+button.p-roll-dice-result__mode-d20-chevron.p-roll-dice-result__mode-advantage::after {
+  top: @extra-small-spacer;
+  bottom: auto;
+  content: @fa-var-angle-double-up;
+}
+
+button.p-roll-dice-result__mode-d20-chevron.p-roll-dice-result__mode-disadvantage::after {
+  content: @fa-var-angle-double-down;
+}
+
+button.p-roll-dice-result__mode-d20-background {
+  overflow: hidden;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+button.p-roll-dice-result__mode-d20-background-letter,
+button.p-roll-dice-result__mode-d20-background-letter:hover {
+  border-color: transparent;
+  border-radius: 3px;
+}
+
+button.p-roll-dice-result__mode-d20-background-letter:hover {
+  background-color: var(--button-face);
+}
+
+button.p-roll-dice-result__mode-d20-background-letter.p-roll-dice-result__mode-advantage:hover {
+  border-color: var(--green);
+}
+
+button.p-roll-dice-result__mode-d20-background-letter.p-roll-dice-result__mode-disadvantage:hover {
+  border-color: var(--red);
+}
+
+button.p-roll-dice-result__mode-d20-background .fas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  opacity: 0.2;
+  font-size: 2.2rem;
+  transform: translate(-50%, -50%);
+}
+
+button.p-roll-dice-result__mode-d20-background-abbreviation {
+  font-size: 0.65rem;
+}
+
+button.p-roll-dice-result__mode-hexagon,
+button.p-roll-dice-result__mode-hexagon:hover {
+  isolation: isolate;
+  min-width: @button-inner;
+  min-height: @button-inner;
+  padding: 0;
+  background-color: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+button.p-roll-dice-result__mode-hexagon::before,
+button.p-roll-dice-result__mode-hexagon::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  content: "";
+  clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  transform: translate(-50%, -50%);
+}
+
+button.p-roll-dice-result__mode-hexagon::before {
+  z-index: -2;
+  width: @button-inner;
+  height: @button-inner;
+}
+
+button.p-roll-dice-result__mode-hexagon::after {
+  z-index: -1;
+  width: calc(@button-inner - 0.25rem);
+  height: calc(@button-inner - 0.25rem);
+  background-color: var(--button-face);
+}
+
+button.p-roll-dice-result__mode-hexagon .fas {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+button.p-roll-dice-result__mode-hexagon-advantage {
+  color: var(--green);
+}
+
+button.p-roll-dice-result__mode-hexagon-advantage::before {
+  background-color: var(--green);
+}
+
+button.p-roll-dice-result__mode-hexagon-advantage:hover {
+  color: var(--green);
+}
+
+button.p-roll-dice-result__mode-hexagon-advantage:hover::after {
+  background-color: var(--hover-white);
+}
+
+button.p-roll-dice-result__mode-hexagon-disadvantage {
+  color: var(--red);
+}
+
+button.p-roll-dice-result__mode-hexagon-disadvantage::before {
+  background-color: var(--red);
+}
+
+button.p-roll-dice-result__mode-hexagon-disadvantage:hover {
+  color: var(--red);
+}
+
+button.p-roll-dice-result__mode-hexagon-disadvantage:hover::after {
+  background-color: var(--hover-white);
+}
+
 
 .p-standard-prompt.p-quick-add {
   .p-standard-prompt__fields {
