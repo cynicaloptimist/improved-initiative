@@ -7,6 +7,8 @@ import { ListingMeta } from "../common/Listable";
 import { Req, Res } from "./routes";
 import { normalizeChallengeRating } from "../common/Toolbox";
 
+const open5eApiUrl = process.env.OPEN5E_API_URL ?? "https://api.open5e.com";
+
 export async function configureOpen5eContent(
   app: express.Application
 ): Promise<void> {
@@ -32,8 +34,8 @@ export async function configureOpen5eContent(
   const includeSpellFields =
     "name,slug,level,school,document__title,document__slug";
 
-  const monstersSourceUrl = `https://api.open5e.com/v2/creatures/?limit=500&fields=${includeMonsterFields}`;
-  const spellsSourceUrl = `https://api.open5e.com/v1/spells/?limit=500&fields=${includeSpellFields}`;
+  const monstersSourceUrl = `${open5eApiUrl}/v2/creatures/?limit=500&fields=${includeMonsterFields}`;
+  const spellsSourceUrl = `${open5eApiUrl}/v1/spells/?limit=500&fields=${includeSpellFields}`;
 
   console.log("Loading Open5e monsters");
   const monsterListingsBySource = await getAllListings(
@@ -125,7 +127,7 @@ function getMetaForMonster(r: any): ListingMeta {
     Id: "open5e-" + r.key,
     Name: r.name,
     Path: "",
-    Link: `https://api.open5e.com/v2/creatures/${r.key}/`,
+    Link: `${open5eApiUrl}/v2/creatures/${r.key}/`,
     LastUpdateMs: 0,
     SearchHint: `${r.name} ${r.type.name} ${r.alignment}`
       .toLocaleLowerCase()
@@ -144,7 +146,7 @@ function getMetaForSpell(r: any): ListingMeta {
     Id: "open5e-spell-" + r.slug,
     Name: r.name,
     Path: "",
-    Link: `https://api.open5e.com/v1/spells/${r.slug}/`,
+    Link: `${open5eApiUrl}/v1/spells/${r.slug}/`,
     LastUpdateMs: 0,
     SearchHint: `${r.name} ${r.level} ${r.school}`
       .toLocaleLowerCase()
