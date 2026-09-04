@@ -1,18 +1,13 @@
 const appVersion = require("./package.json").version;
+const { spawnSync } = require("child_process");
 
 module.exports = function (grunt) {
-  grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-webpack");
   grunt.loadNpmTasks("grunt-contrib-less");
   grunt.loadNpmTasks("grunt-contrib-watch");
 
   grunt.initConfig({
     pkg: grunt.file.readJSON("package.json"),
-    ts: {
-      server: {
-        tsconfig: "./server/tsconfig.json"
-      }
-    },
     webpack: {
       options: {
         keepalive: false
@@ -39,6 +34,24 @@ module.exports = function (grunt) {
         tasks: ["less"]
       }
     }
+  });
+
+  grunt.registerTask("ts:server", "Compile the server TypeScript", function () {
+    const result = spawnSync(
+      process.execPath,
+      [
+        require.resolve("typescript/bin/tsc"),
+        "--project",
+        "./server/tsconfig.json"
+      ],
+      { stdio: "inherit" }
+    );
+
+    if (result.error) {
+      grunt.log.error(result.error);
+    }
+
+    return result.status === 0;
   });
 
   grunt.registerTask("build_dev", ["webpack:dev", "ts:server", "less"]);

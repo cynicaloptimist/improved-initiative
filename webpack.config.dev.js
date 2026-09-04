@@ -17,7 +17,7 @@ module.exports = merge(baseConfig, {
       title: "Client",
       successIcon: path.resolve("./public/img/boot-transparent-white.png"),
       showDuration: true,
-      notifierOptions: {
+      notifyOptions: {
         timeout: 1
       }
     })
